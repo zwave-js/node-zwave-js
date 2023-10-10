@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Watts Auto-report Period",
+			"label": "Watts Auto-Report Period",
 			"description": "Allowable range: 60-32767",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Kwh Auto-report Period",
+			"label": "Kwh Auto-Report Period",
 			"description": "Allowable range: 60-32767",
 			"valueSize": 2,
 			"unit": "seconds",

@@ -35,7 +35,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"description": "Switch type (input I1)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -70,7 +70,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Input 3 contact type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -87,7 +87,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
@@ -117,7 +117,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts on power change",
+			"label": "Power Reporting in Watts on Power Change",
 			"description": "Set value means percentage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -126,7 +126,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by time interval",
+			"label": "Power Reporting in Watts by Time Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -135,7 +135,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Minimum dimming value",
+			"label": "Minimum Dimming Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -143,7 +143,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Maximum dimming value",
+			"label": "Maximum Dimming Value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -151,7 +151,7 @@
 		},
 		{
 			"#": "65",
-			"label": "Dimming time (soft on/off)",
+			"label": "Dimming Time (Soft On/off)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -160,7 +160,7 @@
 		},
 		{
 			"#": "66",
-			"label": "Dimming time when key pressed",
+			"label": "Dimming Time When Key Pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,

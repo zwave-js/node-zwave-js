@@ -59,7 +59,7 @@
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_1-100_nounit",
-			"label": "Set The Repetitions For Playing Doorbell Ringtone",
+			"label": "Doorbell Ringtone Repetitions",
 			"defaultValue": 2
 		},
 		{
@@ -117,7 +117,7 @@
 		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#base_options_nounit",
-			"label": "Define The Function of Button- and Button+",
+			"label": "Define the Function of Button- and Button+",
 			"options": [
 				{
 					"label": "Button- --> previous; Button+ --> next",
@@ -132,7 +132,7 @@
 		{
 			"#": "11",
 			"$import": "~/templates/master_template.json#base_options_nounit",
-			"label": "Short/Long Press Function of Button- And Button+",
+			"label": "Short/Long Press Function of Button- and Button+",
 			"options": [
 				{
 					"label": "Short --> volume; Long --> ringtone",
@@ -171,7 +171,7 @@
 		},
 		{
 			"#": "241",
-			"label": "Pair Wireless Button With Doorbell",
+			"label": "Pair Wireless Button with Doorbell",
 			"description": "Start the wireless button pairing mode",
 			"valueSize": 4,
 			"defaultValue": 0,

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Start-up status",
+			"label": "Start-Up Status",
 			"description": "Defines the status of the device, in term of light level, following a restart. Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "62",
-			"label": "Type of external switch",
+			"label": "Type of External Switch",
 			"description": "Defines the type of external switch connected to the device",
 			"valueSize": 1,
 			"defaultValue": 1,

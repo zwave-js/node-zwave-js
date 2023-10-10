@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Buttons 1 and 3 profile",
+			"label": "Buttons 1 and 3 Profile",
 			"description": "To set-up the profile of buttons 1 and 3",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Buttons 2 and 4 profile",
+			"label": "Buttons 2 and 4 Profile",
 			"description": "To set-up the profile of buttons 2 and 4",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Button 1 configuration",
+			"label": "Button 1 Configuration",
 			"description": "To set-up the how button 1 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -100,7 +100,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Button 2 configuration",
+			"label": "Button 2 Configuration",
 			"description": "To set-up the how button 2 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -122,7 +122,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Button 3 configuration",
+			"label": "Button 3 Configuration",
 			"description": "To set-up the how button 3 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -144,7 +144,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Button 4 configuration",
+			"label": "Button 4 Configuration",
 			"description": "To set-up the how button 4 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,

@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Report interval",
+			"label": "Report Interval",
 			"description": "Interval of unsolicited meter reports in 10s increments; 0 to disable.",
 			"valueSize": 2,
 			"unit": "10s",
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Energy meter report interval",
+			"label": "Energy Meter Report Interval",
 			"description": "Interval of active energy meter reports in minutes; 0 to disable.",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Button mode",
+			"label": "Button Mode",
 			"description": "Switching mode of the push buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Input S: Central Scene Events for multiple button presses",
+			"label": "Input S: Central Scene Events for Multiple Button Presses",
 			"description": "Which Central Scene to trigger on multiple button presses (2x-5x) of extension input S",
 			"valueSize": 1,
 			"defaultValue": 1,

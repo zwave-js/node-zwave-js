@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delayed OFF time",
+			"label": "Delayed OFF Time",
 			"description": "The time in seconds the switch will delay when trigger the delayed off feature",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Panic ON time",
+			"label": "Panic ON Time",
 			"description": "The time in seconds the switch will turn on for when panic mode is triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Panic OFF time",
+			"label": "Panic OFF Time",
 			"description": "The time in seconds the switch will turn off for when panic mode is triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -86,7 +86,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Panic mode enable",
+			"label": "Panic Mode Enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
 			"defaultValue": 1,

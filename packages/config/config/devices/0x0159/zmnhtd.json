@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Input 1 switch function selection",
+			"label": "Input 1 Switch Function Selection",
 			"description": "IR external relay or External Relay control mode",
 			"valueSize": 1,
 			"defaultValue": 4,
@@ -71,7 +71,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Timer turning off IR external relay",
+			"label": "Timer Turning Off IR External Relay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -86,7 +86,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Timer turning on IR external relay output",
+			"label": "Timer Turning on IR External Relay Output",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Timer turning off External relay output",
+			"label": "Timer Turning Off External Relay Output",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -104,7 +104,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Timer turning on External relay after output",
+			"label": "Timer Turning on External Relay After Output",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting (Watts) on power change",
+			"label": "Power Reporting (Watts) on Power Change",
 			"valueSize": 2,
 			"unit": "%",
 			"minValue": 0,
@@ -137,7 +137,7 @@
 		},
 		{
 			"#": "45",
-			"label": "Reset Power counters",
+			"label": "Reset Power Counters",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -193,7 +193,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Maximum Power auto off",
+			"label": "Maximum Power Auto Off",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 15000,
@@ -211,7 +211,7 @@
 		},
 		{
 			"#": "111",
-			"label": "Delay overpower off",
+			"label": "Delay Overpower Off",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -220,7 +220,7 @@
 		},
 		{
 			"#": "112",
-			"label": "Relay to power off",
+			"label": "Relay to Power Off",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

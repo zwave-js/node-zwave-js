@@ -40,7 +40,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input switch type",
+			"label": "Input Switch Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Working mode",
+			"label": "Working Mode",
 			"description": "Module presentation on the user interface.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -75,7 +75,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON / ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON / ALL OFF",
 			"description": "DIN dimmer module responds to commands ALL ON / ALL OFF",
 			"valueSize": 2,
 			"defaultValue": 255,
@@ -101,7 +101,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Automatic turning off output after set time",
+			"label": "Automatic Turning Off Output After Set Time",
 			"valueSize": 2,
 			"unit": "s",
 			"minValue": 0,
@@ -116,7 +116,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Automatic turning on output after set time",
+			"label": "Automatic Turning on Output After Set Time",
 			"valueSize": 2,
 			"unit": "s",
 			"minValue": 0,
@@ -132,7 +132,7 @@
 		{
 			"#": "21",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Double click function",
+			"label": "Double Click Function",
 			"description": "If Double click function is enabled, double click to maximum dimming power"
 		},
 		{
@@ -141,7 +141,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in watts on power change",
+			"label": "Power Reporting in Watts on Power Change",
 			"description": "Reporting the power in Watts on power change larger then the setpoint",
 			"valueSize": 1,
 			"unit": "%",
@@ -151,7 +151,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by time interval",
+			"label": "Power Reporting in Watts by Time Interval",
 			"valueSize": 2,
 			"unit": "s",
 			"minValue": 0,
@@ -160,7 +160,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Minimum dimming value",
+			"label": "Minimum Dimming Value",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 1,
@@ -169,7 +169,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Maximum dimming value",
+			"label": "Maximum Dimming Value",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 2,
@@ -178,7 +178,7 @@
 		},
 		{
 			"#": "65",
-			"label": "Dimming time (soft on/off)",
+			"label": "Dimming Time (Soft On/off)",
 			"description": "Set value means time of moving the Dimmer between min. and max. dimming",
 			"valueSize": 2,
 			"minValue": 1,
@@ -187,7 +187,7 @@
 		},
 		{
 			"#": "66",
-			"label": "Dimming time when key pressed",
+			"label": "Dimming Time When Key Pressed",
 			"description": "Time to moving the Dimmer between min. and max values (in seconds).",
 			"valueSize": 2,
 			"minValue": 1,
@@ -196,7 +196,7 @@
 		},
 		{
 			"#": "67",
-			"label": "Ignore start level",
+			"label": "Ignore Start Level",
 			"description": "Ignore or respect start level when used together with association group 3",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -214,7 +214,7 @@
 		},
 		{
 			"#": "68",
-			"label": "Dimming duration",
+			"label": "Dimming Duration",
 			"description": "This parameter is used with association group 3.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -223,7 +223,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Temperature sensor offset settings",
+			"label": "Temperature Sensor Offset Settings",
 			"description": "32536 = no offset; 1-100 = 0.1 °C added; 1001-1100 = 0.1 °C subtracted",
 			"valueSize": 2,
 			"unit": "°C",
@@ -233,7 +233,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Digital temperature sensor reporting",
+			"label": "Digital Temperature Sensor Reporting",
 			"description": "Reporting temperature when change is larger than defined by this parameter",
 			"valueSize": 1,
 			"unit": "°C",

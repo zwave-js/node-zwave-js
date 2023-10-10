@@ -47,7 +47,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Working mode",
+			"label": "Working Mode",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -79,7 +79,7 @@
 		{
 			"#": "5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Overcurrent protection",
+			"label": "Overcurrent Protection",
 			"defaultValue": 1
 		},
 		{

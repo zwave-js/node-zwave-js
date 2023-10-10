@@ -101,7 +101,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Command to Control Group No2 (association group 3)",
+			"label": "Command to Control Group No2 (Association Group 3)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -134,7 +134,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Command to Control Group No3 (association group 4)",
+			"label": "Command to Control Group No3 (Association Group 4)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -167,7 +167,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Command to Control Group No4 (association group 5)",
+			"label": "Command to Control Group No4 (Association Group 5)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -200,7 +200,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Command to Control Group No5 (association group 6)",
+			"label": "Command to Control Group No5 (Association Group 6)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -233,7 +233,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Command to Control Group No6 (association group 7)",
+			"label": "Command to Control Group No6 (Association Group 7)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -266,7 +266,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Command to Control Group No7 (association group 8)",
+			"label": "Command to Control Group No7 (Association Group 8)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -299,7 +299,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Command to Control Scene No1 (association group 9)",
+			"label": "Command to Control Scene No1 (Association Group 9)",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
@@ -398,7 +398,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Command to Control group All On/Off",
+			"label": "Command to Control Group All On/Off",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -431,7 +431,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Send the following Switch All commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,

@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Upper paddle buttons mode",
+			"label": "Upper Paddle Buttons Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Lower paddle buttons mode",
+			"label": "Lower Paddle Buttons Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -55,7 +55,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion <= 1.255",
-			"label": "LED indication #1",
+			"label": "LED Indication #1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -97,7 +97,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "LED indication #1",
+			"label": "LED Indication #1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -143,7 +143,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion <= 1.255",
-			"label": "LED indication #2",
+			"label": "LED Indication #2",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -185,7 +185,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "LED indication #2",
+			"label": "LED Indication #2",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -231,7 +231,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion <= 1.255",
-			"label": "LED indication #3",
+			"label": "LED Indication #3",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -273,7 +273,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "LED indication #3",
+			"label": "LED Indication #3",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -319,7 +319,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion <= 1.255",
-			"label": "LED indication #4",
+			"label": "LED Indication #4",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -361,7 +361,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "LED indication #4",
+			"label": "LED Indication #4",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -406,7 +406,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Percentage of light in the LED #1 when On",
+			"label": "Percentage of Light in the LED #1 When On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -414,7 +414,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Percentage of light in the LED #2 when On",
+			"label": "Percentage of Light in the LED #2 When On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -423,7 +423,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Percentage of light in the LED #3 when On",
+			"label": "Percentage of Light in the LED #3 When On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -431,7 +431,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Percentage of light in the LED #4 when On",
+			"label": "Percentage of Light in the LED #4 When On",
 			"description": "Configure the percentage of light in LED #4, when the LED is turned on.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -440,7 +440,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Percentage of light in the LED #1 when Off",
+			"label": "Percentage of Light in the LED #1 When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -448,7 +448,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Percentage of light in the LED #2 when Off",
+			"label": "Percentage of Light in the LED #2 When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -456,7 +456,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Percentage of light in the LED #3 when Off",
+			"label": "Percentage of Light in the LED #3 When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -464,7 +464,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Percentage of light in the LED #4 when Off",
+			"label": "Percentage of Light in the LED #4 When Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -472,7 +472,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Relay mode",
+			"label": "Relay Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -537,7 +537,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Indicator mode",
+			"label": "Indicator Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -554,7 +554,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Scene notification offset",
+			"label": "Scene Notification Offset",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -589,13 +589,13 @@
 		{
 			"#": "19[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Multilevel Switch (button #1)",
+			"label": "Multilevel Switch (Button #1)",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "19[0xff00]",
-			"label": "Upper switch value - (button #1)",
+			"label": "Upper Switch Value - (Button #1)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -604,7 +604,7 @@
 		},
 		{
 			"#": "19[0xff0000]",
-			"label": "Lower switch value - (button #1)",
+			"label": "Lower Switch Value - (Button #1)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -613,13 +613,13 @@
 		{
 			"#": "20[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Multilevel Switch (button #2)",
+			"label": "Multilevel Switch (Button #2)",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "20[0xff00]",
-			"label": "Upper switch value - (button #2)",
+			"label": "Upper Switch Value - (Button #2)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -628,7 +628,7 @@
 		},
 		{
 			"#": "20[0xff0000]",
-			"label": "Lower switch value - (button #2)",
+			"label": "Lower Switch Value - (Button #2)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -637,13 +637,13 @@
 		{
 			"#": "21[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Multilevel Switch (button #3)",
+			"label": "Multilevel Switch (Button #3)",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "21[0xff00]",
-			"label": "Upper switch value - (button #3)",
+			"label": "Upper Switch Value - (Button #3)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -652,7 +652,7 @@
 		},
 		{
 			"#": "21[0xff0000]",
-			"label": "Lower switch value - (button #3)",
+			"label": "Lower Switch Value - (Button #3)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -661,13 +661,13 @@
 		{
 			"#": "22[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Multilevel Switch (button #4)",
+			"label": "Multilevel Switch (Button #4)",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "22[0xff00]",
-			"label": "Upper switch value - (button #4)",
+			"label": "Upper Switch Value - (Button #4)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -676,7 +676,7 @@
 		},
 		{
 			"#": "22[0xff0000]",
-			"label": "Lower switch value - (button #4)",
+			"label": "Lower Switch Value - (Button #4)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -684,7 +684,7 @@
 		},
 		{
 			"#": "23",
-			"label": "Control of association groups (button #1)",
+			"label": "Control of Association Groups (Button #1)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -701,7 +701,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Control of association groups (button #2)",
+			"label": "Control of Association Groups (Button #2)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -718,7 +718,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Control of association groups (button #3)",
+			"label": "Control of Association Groups (Button #3)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -735,7 +735,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Control of association groups (button #4)",
+			"label": "Control of Association Groups (Button #4)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -753,7 +753,7 @@
 		{
 			"#": "28",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Threshold time for long-press",
+			"label": "Threshold Time for Long-Press",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -763,7 +763,7 @@
 		{
 			"#": "29",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Threshold time for keypress detection of button 1",
+			"label": "Threshold Time for Keypress Detection of Button 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -773,7 +773,7 @@
 		{
 			"#": "30",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Threshold time for keypress detection of button 2",
+			"label": "Threshold Time for Keypress Detection of Button 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -783,7 +783,7 @@
 		{
 			"#": "31",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Threshold time for keypress detection of button 3",
+			"label": "Threshold Time for Keypress Detection of Button 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -793,7 +793,7 @@
 		{
 			"#": "32",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Threshold time for keypress detection of button 4",
+			"label": "Threshold Time for Keypress Detection of Button 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -803,7 +803,7 @@
 		{
 			"#": "33",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Non-secure commands for AG in logical device 1",
+			"label": "Non-Secure Commands for AG in Logical Device 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -813,7 +813,7 @@
 		{
 			"#": "34",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Non-secure commands for AG in logical device 2",
+			"label": "Non-Secure Commands for AG in Logical Device 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -823,7 +823,7 @@
 		{
 			"#": "35",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Non-secure commands for AG in logical device 3",
+			"label": "Non-Secure Commands for AG in Logical Device 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -833,7 +833,7 @@
 		{
 			"#": "36",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Non-secure commands for AG in logical device 4",
+			"label": "Non-Secure Commands for AG in Logical Device 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

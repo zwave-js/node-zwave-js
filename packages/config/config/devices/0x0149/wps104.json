@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Device status upon receipt of a Basic Set command",
+			"label": "Device Status Upon Receipt of A Basic Set Command",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "34",
-			"label": "Energy flow",
+			"label": "Energy Flow",
 			"description": "Determines whether if energy consumed or energy produced.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -345,7 +345,7 @@
 		},
 		{
 			"#": "49",
-			"label": "Fall In Maximum Voltage",
+			"label": "Fall in Maximum Voltage",
 			"description": "Defines, the nominal value for max voltage fall permitted",
 			"valueSize": 1,
 			"minValue": 1,
@@ -354,7 +354,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Electric parameters",
+			"label": "Electric Parameters",
 			"description": "Defines which parameters will be subjected to notification",
 			"valueSize": 2,
 			"minValue": 0,
@@ -363,7 +363,7 @@
 		},
 		{
 			"#": "51",
-			"label": "Voltage RMS value",
+			"label": "Voltage RMS Value",
 			"description": "Reading of this parameter returns the value of voltage RMS",
 			"valueSize": 2,
 			"minValue": 0,
@@ -374,7 +374,7 @@
 		},
 		{
 			"#": "52",
-			"label": "Current RMS value",
+			"label": "Current RMS Value",
 			"description": "Returns the value of current RMS expressed in hundredths of Amperes.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -396,7 +396,7 @@
 		},
 		{
 			"#": "54",
-			"label": "Total energy consumed",
+			"label": "Total Energy Consumed",
 			"description": "Returns the value of total energy consumed expressed in Wh (thousandths of KWh).",
 			"valueSize": 4,
 			"minValue": 0,
@@ -407,7 +407,7 @@
 		},
 		{
 			"#": "55",
-			"label": "Total energy produced",
+			"label": "Total Energy Produced",
 			"description": "Returns the value of total energy consumed expressed in Wh (thousandths of KWh).",
 			"valueSize": 4,
 			"minValue": 0,
@@ -418,7 +418,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Start-up status",
+			"label": "Start-Up Status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -440,7 +440,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Configuration reset",
+			"label": "Configuration Reset",
 			"description": "Defines which parameters should be reset to default values.",
 			"valueSize": 1,
 			"defaultValue": 4,
@@ -466,7 +466,7 @@
 		},
 		{
 			"#": "62",
-			"label": "Type of external switch",
+			"label": "Type of External Switch",
 			"description": "Defines the type of external switch connected to the device.",
 			"valueSize": 1,
 			"defaultValue": 4,

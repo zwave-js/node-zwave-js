@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Led Indicator",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

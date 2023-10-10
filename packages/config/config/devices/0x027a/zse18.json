@@ -32,7 +32,7 @@
 		{
 			"#": "17",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Vibration sensor",
+			"label": "Vibration Sensor",
 			"defaultValue": 1
 		},
 		{

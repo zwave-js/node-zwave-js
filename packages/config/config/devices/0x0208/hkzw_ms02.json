@@ -39,7 +39,7 @@
 		},
 		{
 			"#": "15",
-			"label": "value of basic set command",
+			"label": "Value of Basic Set Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -57,7 +57,7 @@
 		{
 			"#": "17",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "shock alarm"
+			"label": "Shock Alarm"
 		},
 		{
 			"#": "18",
@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Level of low battery",
+			"label": "Level of Low Battery",
 			"description": "Define a battery level ad the \"low battery\"",
 			"valueSize": 1,
 			"minValue": 10,

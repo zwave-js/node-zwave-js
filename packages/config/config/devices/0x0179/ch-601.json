@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Auto Disabling With Delay",
+			"label": "Auto Disabling with Delay",
 			"description": "After opening, the tap will automatically close after a certain time.",
 			"valueSize": 2,
 			"minValue": 0,

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Door lock mode",
+			"label": "Door Lock Mode",
 			"description": "Set if the lock is in away mode and if automatic locking should be enabled",
 			"valueSize": 1,
 			"defaultValue": 1,

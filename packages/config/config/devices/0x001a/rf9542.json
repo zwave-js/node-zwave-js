@@ -28,7 +28,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delayed OFF time",
+			"label": "Delayed OFF Time",
 			"description": "Delay time in seconds",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -39,7 +39,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Panic ON time",
+			"label": "Panic ON Time",
 			"description": "Time in seconds for panic mode",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -50,7 +50,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Panic OFF time",
+			"label": "Panic OFF Time",
 			"description": "Off time in seconds for panic mode",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -93,7 +93,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Panic mode enable",
+			"label": "Panic Mode Enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
 			"defaultValue": 1,

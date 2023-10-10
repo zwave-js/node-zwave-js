@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatic switch off",
+			"label": "Automatic Switch Off",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -47,7 +47,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Function of RF off command",
+			"label": "Function of RF Off Command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Switch on/off by holding buttons",
+			"label": "Switch On/off by Holding Buttons",
 			"description": "Defines if the switch should change its state to on/off if being hold",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state after power cycle",
+			"label": "Restore Switch State After Power Cycle",
 			"description": "Defines if the switch should restore state to the last state",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -126,7 +126,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Switch by buttons",
+			"label": "Switch by Buttons",
 			"description": "If disabled, the local operations by buttons will not switch the load",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -148,7 +148,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on button single press or hold",
+			"label": "Action on Button Single Press or Hold",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -193,7 +193,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Action on button double press or hold",
+			"label": "Action on Button Double Press or Hold",
 			"description": "Defines which command should be sent on button double press or press-hold",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -239,7 +239,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Send the following switch all commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -261,7 +261,7 @@
 		},
 		{
 			"#": "16",
-			"label": "What to do on button Down press",
+			"label": "What to Do on Button Down Press",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -282,7 +282,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Energy consumption",
+			"label": "Energy Consumption",
 			"description": "Specify the consumption of the loads in watts (0=disabled)",
 			"valueSize": 2,
 			"minValue": 0,

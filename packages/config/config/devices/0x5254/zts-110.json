@@ -138,7 +138,7 @@
 		},
 		{
 			"#": "11",
-			"label": "AUTO report by room temperature",
+			"label": "AUTO Report by Room Temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -146,7 +146,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Sensor temperature calibration.",
+			"label": "Sensor Temperature Calibration.",
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,
@@ -154,7 +154,7 @@
 		},
 		{
 			"#": "13",
-			"label": "AUTO report by time interval.",
+			"label": "AUTO Report by Time Interval.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 16,

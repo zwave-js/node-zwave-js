@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Normally Wet vs Normally Dry",
+			"label": "Normally Wet Vs Normally Dry",
 			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor.",
 			"valueSize": 1,
 			"defaultValue": 0,

@@ -173,12 +173,12 @@
 		{
 			"#": "7[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "sending motion OFF report."
+			"label": "Sending Motion OFF Report."
 		},
 		{
 			"#": "7[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "PIR super sensitivity mode.",
+			"label": "PIR Super Sensitivity Mode.",
 			"defaultValue": 1
 		},
 		{
@@ -201,13 +201,13 @@
 		{
 			"#": "7[0x20]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Multi CC in auto report.",
+			"label": "Multi CC in Auto Report.",
 			"defaultValue": 0
 		},
 		{
 			"#": "7[0x40]",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Report battery state when device triggered",
+			"label": "Report Battery State When Device Triggered",
 			"defaultValue": 0
 		}
 	],

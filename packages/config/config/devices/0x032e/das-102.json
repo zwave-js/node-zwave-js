@@ -34,7 +34,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Switch behavior",
+			"label": "Switch Behavior",
 			"description": "Selects ON/OFF/BLINK modes",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -56,7 +56,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Relay closed interval",
+			"label": "Relay Closed Interval",
 			"description": "For blink mode for both S1 and S2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -66,7 +66,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Relay open interval",
+			"label": "Relay Open Interval",
 			"description": "For blink mode for both S1 and S2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "4",
-			"label": "S1 auto off delay",
+			"label": "S1 Auto Off Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "5",
-			"label": "S1 On delay",
+			"label": "S1 On Delay",
 			"description": "Delay after ON command received",
 			"valueSize": 2,
 			"minValue": 0,
@@ -107,7 +107,7 @@
 		},
 		{
 			"#": "6",
-			"label": "S1 smart delay",
+			"label": "S1 Smart Delay",
 			"description": "Smart off delay for S1",
 			"valueSize": 2,
 			"minValue": 0,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "8",
-			"label": "All ON/OFF behaviour",
+			"label": "All ON/OFF Behaviour",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Relay S2 mode",
+			"label": "Relay S2 Mode",
 			"description": "Relay S2 mode of operation",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -158,7 +158,7 @@
 		},
 		{
 			"#": "11",
-			"label": "S2 auto off time",
+			"label": "S2 Auto Off Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -173,7 +173,7 @@
 		},
 		{
 			"#": "12",
-			"label": "S2 turn on delay",
+			"label": "S2 Turn on Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -188,7 +188,7 @@
 		},
 		{
 			"#": "13",
-			"label": "S2 smart delay",
+			"label": "S2 Smart Delay",
 			"description": "Smart delay for S2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -209,7 +209,7 @@
 		},
 		{
 			"#": "15",
-			"label": "S1 button mode",
+			"label": "S1 Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -234,7 +234,7 @@
 		},
 		{
 			"#": "16",
-			"label": "S2 button mode",
+			"label": "S2 Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -259,7 +259,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Smart delay",
+			"label": "Smart Delay",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -267,7 +267,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Forced secure mode",
+			"label": "Forced Secure Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

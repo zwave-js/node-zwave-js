@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Meter Report duration",
+			"label": "Meter Report Duration",
 			"valueSize": 2,
 			"unit": "Minutes",
 			"minValue": 5,

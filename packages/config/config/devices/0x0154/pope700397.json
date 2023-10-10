@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Switching behavior",
+			"label": "Switching Behavior",
 			"description": "Switching behavior when receiving wireless OFF",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -92,7 +92,7 @@
 		},
 		{
 			"#": "21",
-			"label": "LED Color on OFF state",
+			"label": "LED Color on OFF State",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -113,7 +113,7 @@
 		},
 		{
 			"#": "22",
-			"label": "LED Color on ON state",
+			"label": "LED Color on ON State",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,

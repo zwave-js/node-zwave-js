@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Number of Liters per Pulse",
+			"label": "Number of Liters Per Pulse",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,

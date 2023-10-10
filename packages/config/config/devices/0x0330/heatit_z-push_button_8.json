@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "factory reset",
+			"label": "Factory Reset",
 			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Load type",
+			"label": "Load Type",
 			"description": "Dimmer load type",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Min dimming level",
+			"label": "Min Dimming Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 94,
@@ -54,7 +54,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Max dimming level",
+			"label": "Max Dimming Level",
 			"valueSize": 1,
 			"minValue": 6,
 			"maxValue": 99,
@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Dimming speed",
+			"label": "Dimming Speed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Auto Off delay",
+			"label": "Auto Off Delay",
 			"description": "Delay to turn device OFF after ON command received",
 			"valueSize": 2,
 			"minValue": 0,
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "6",
-			"label": "All ON/OFF behaviour",
+			"label": "All ON/OFF Behaviour",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -107,7 +107,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Lighting autolevel",
+			"label": "Lighting Autolevel",
 			"description": "Autolevel behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -129,7 +129,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Light level",
+			"label": "Light Level",
 			"description": "Light level to maintain",
 			"valueSize": 2,
 			"minValue": 0,
@@ -144,7 +144,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Lighting change trigger threshold",
+			"label": "Lighting Change Trigger Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 300,
@@ -166,7 +166,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Turn on delay",
+			"label": "Turn on Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,
@@ -180,7 +180,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Smart delay for dimmer",
+			"label": "Smart Delay for Dimmer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,
@@ -194,7 +194,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Smart delay mode",
+			"label": "Smart Delay Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -216,7 +216,7 @@
 		},
 		{
 			"#": "16",
-			"label": "S1 button mode",
+			"label": "S1 Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -245,7 +245,7 @@
 		},
 		{
 			"#": "17",
-			"label": "S2 button mode",
+			"label": "S2 Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -270,7 +270,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Double click to max",
+			"label": "Double Click to Max",
 			"description": "Level up to max on double click",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -288,7 +288,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Sensor driven dimmer",
+			"label": "Sensor Driven Dimmer",
 			"description": "Sets sensor for dimmer control",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -310,7 +310,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Sensor 1 ON command value",
+			"label": "Sensor 1 ON Command Value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
@@ -328,7 +328,7 @@
 		},
 		{
 			"#": "23",
-			"label": "Sensor 1 command OFF value",
+			"label": "Sensor 1 Command OFF Value",
 			"description": "Value to activate OFF command for Sensor 1",
 			"valueSize": 2,
 			"minValue": -60,
@@ -337,7 +337,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Sensor 1 ON/OFF command behavior",
+			"label": "Sensor 1 ON/OFF Command Behavior",
 			"description": "Behavior for ON/OFF command",
 			"valueSize": 1,
 			"minValue": 0,

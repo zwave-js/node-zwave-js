@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button 1 and 3 pair mode",
+			"label": "Button 1 and 3 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Button 2 and 4 pair mode",
+			"label": "Button 2 and 4 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Command to control Group A",
+			"label": "Command to Control Group A",
 			"valueSize": 1,
 			"defaultValue": 8,
 			"allowManualEntry": false,
@@ -103,7 +103,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Command to control Group B",
+			"label": "Command to Control Group B",
 			"valueSize": 1,
 			"defaultValue": 8,
 			"allowManualEntry": false,
@@ -148,7 +148,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Command to control Group C",
+			"label": "Command to Control Group C",
 			"valueSize": 1,
 			"defaultValue": 8,
 			"allowManualEntry": false,
@@ -193,7 +193,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Command to control Group D",
+			"label": "Command to Control Group D",
 			"valueSize": 1,
 			"defaultValue": 8,
 			"allowManualEntry": false,
@@ -238,7 +238,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Send the following switch all commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -260,7 +260,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -277,7 +277,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Block wake up even when Wake Up Interval is set",
+			"label": "Block Wake Up Even When Wake Up Interval Is Set",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -294,7 +294,7 @@
 		},
 		{
 			"#": "30",
-			"label": "End unsolicited battery report on Wake Up.",
+			"label": "End Unsolicited Battery Report on Wake Up.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

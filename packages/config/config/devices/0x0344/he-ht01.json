@@ -267,7 +267,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Mode To Switch After Dry Mode Operation Completion",
+			"label": "Mode to Switch After Dry Mode Operation Completion",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

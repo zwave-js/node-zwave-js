@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "(I1) Input 1 switch type",
+			"label": "(I1) Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "(I2) Input 2 contact type",
+			"label": "(I2) Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "3",
-			"label": "(I3) Input 3 contact type",
+			"label": "(I3) Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Automatic turning off",
+			"label": "Automatic Turning Off",
 			"description": "Automatic turning off output after set time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -110,7 +110,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Automatic turning on",
+			"label": "Automatic Turning on",
 			"description": "Automatic turning on output after set time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -146,7 +146,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting (W) on power change",
+			"label": "Power Reporting (W) on Power Change",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -161,7 +161,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting (W) by time interval",
+			"label": "Power Reporting (W) by Time Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -175,7 +175,7 @@
 		},
 		{
 			"#": "63",
-			"label": "Output Switch selection",
+			"label": "Output Switch Selection",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -268,7 +268,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Temperature sensor offset settings",
+			"label": "Temperature Sensor Offset Settings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32536,
@@ -276,7 +276,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Temperature sensor reporting",
+			"label": "Temperature Sensor Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

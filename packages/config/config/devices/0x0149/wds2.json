@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Numbers of clicks to control Channel 1",
+			"label": "Numbers of Clicks to Control Channel 1",
 			"description": "Define which sequences of clicks control the load connected to Channel 1/2.",
 			"valueSize": 1,
 			"defaultValue": 7,
@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Numbers of clicks to control Channel 2",
+			"label": "Numbers of Clicks to Control Channel 2",
 			"description": "Define which sequences of click control the load connected to Channel 2",
 			"valueSize": 1,
 			"defaultValue": 8,
@@ -108,7 +108,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Value used for devices belonging to Group 2",
+			"label": "Value Used for Devices Belonging to Group 2",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
@@ -130,7 +130,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Value used for devices belonging to Group 5",
+			"label": "Value Used for Devices Belonging to Group 5",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
@@ -152,7 +152,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Value used for devices belonging to Group 3",
+			"label": "Value Used for Devices Belonging to Group 3",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
@@ -174,7 +174,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Value used for devices belonging to Group 6",
+			"label": "Value Used for Devices Belonging to Group 6",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
@@ -196,7 +196,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Value used for devices belonging to Group 4",
+			"label": "Value Used for Devices Belonging to Group 4",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
@@ -218,7 +218,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Value used for devices belonging to Group 7",
+			"label": "Value Used for Devices Belonging to Group 7",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
@@ -240,7 +240,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Timer to switch OFF the Channel 1",
+			"label": "Timer to Switch OFF the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched OFF",
 			"valueSize": 2,
 			"minValue": 0,
@@ -249,7 +249,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Timer to switch OFF the Channel 2",
+			"label": "Timer to Switch OFF the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched OFF",
 			"valueSize": 2,
 			"minValue": 0,
@@ -258,7 +258,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Timer to switch ON the Channel 1",
+			"label": "Timer to Switch ON the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched ON",
 			"valueSize": 2,
 			"minValue": 0,
@@ -267,7 +267,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Timer to switch ON the Channel 2",
+			"label": "Timer to Switch ON the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched ON",
 			"valueSize": 2,
 			"minValue": 0,
@@ -298,7 +298,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Start-up status",
+			"label": "Start-Up Status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
 			"defaultValue": 4,
@@ -329,7 +329,7 @@
 		{
 			// This parameter is undocumented (the same as for the WDS)
 			"#": "61",
-			"label": "Configuration reset",
+			"label": "Configuration Reset",
 			"description": "Defines which parameters should be reset to default values",
 			"valueSize": 1,
 			"defaultValue": 4,
@@ -359,7 +359,7 @@
 		},
 		{
 			"#": "62",
-			"label": "Type of external switch both inputs",
+			"label": "Type of External Switch Both Inputs",
 			"description": "Defines the type of external switch connected both to input 1 and input 2.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -381,7 +381,7 @@
 		},
 		{
 			"#": "63",
-			"label": "Type of external switch input 2",
+			"label": "Type of External Switch Input 2",
 			"description": "Define the switch type connected to the input 2",
 			"valueSize": 1,
 			"defaultValue": 3,

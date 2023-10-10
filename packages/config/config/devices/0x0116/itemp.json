@@ -30,7 +30,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Reset to factory default",
+			"label": "Reset to Factory Default",
 			"description": "Delete configuration but keeps inclusion",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Command sent on external dry contact",
+			"label": "Command Sent on External Dry Contact",
 			"description": "Configure what the external contact sends when triggered",
 			"valueSize": 1,
 			"defaultValue": 0,

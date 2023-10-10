@@ -43,7 +43,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input 2 switch type",
+			"label": "Input 2 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -77,7 +77,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Input 3 switch type",
+			"label": "Input 3 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -94,7 +94,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Input 1 contact type",
+			"label": "Input 1 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -111,7 +111,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Parameter no. 6",
+			"label": "Parameter No. 6",
 			"description": "Input 3 contact type",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -146,7 +146,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Parameter no. 10",
+			"label": "Parameter No. 10",
 			"description": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 2,
 			"defaultValue": 255,
@@ -172,7 +172,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Parameter no. 11",
+			"label": "Parameter No. 11",
 			"description": "I1 Functionality selection",
 			"valueSize": 2,
 			"minValue": 0,
@@ -182,7 +182,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Parameter no. 12",
+			"label": "Parameter No. 12",
 			"description": "I2 Functionality selection",
 			"valueSize": 2,
 			"minValue": 0,
@@ -192,7 +192,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Parameter no. 13",
+			"label": "Parameter No. 13",
 			"description": "I3 Functionality selection",
 			"valueSize": 2,
 			"minValue": 0,
@@ -202,7 +202,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Parameter no. 40",
+			"label": "Parameter No. 40",
 			"description": "Power reporting in Watts on Power change",
 			"valueSize": 1,
 			"minValue": 0,
@@ -212,7 +212,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Parameter no. 42",
+			"label": "Parameter No. 42",
 			"description": "Power reporting in Watts by time interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
@@ -221,7 +221,7 @@
 		},
 		{
 			"#": "43",
-			"label": "Parameter no. 43",
+			"label": "Parameter No. 43",
 			"description": "Hysteresis On",
 			"valueSize": 2,
 			"minValue": 0,
@@ -231,7 +231,7 @@
 		},
 		{
 			"#": "44",
-			"label": "Parameter no. 44",
+			"label": "Parameter No. 44",
 			"description": "Hysteresis Off",
 			"valueSize": 2,
 			"minValue": 0,
@@ -241,7 +241,7 @@
 		},
 		{
 			"#": "45",
-			"label": "Parameter no. 45",
+			"label": "Parameter No. 45",
 			"description": "Antifreeze",
 			"valueSize": 2,
 			"minValue": 0,
@@ -251,7 +251,7 @@
 		},
 		{
 			"#": "59",
-			"label": "Parameter no. 59",
+			"label": "Parameter No. 59",
 			"description": "Thermostat Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -269,7 +269,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Parameter no. 60",
+			"label": "Parameter No. 60",
 			"description": "Too low temperature limit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -279,7 +279,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Parameter no. 61",
+			"label": "Parameter No. 61",
 			"description": "Too high temperature limit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -289,7 +289,7 @@
 		},
 		{
 			"#": "63",
-			"label": "Parameter no. 63",
+			"label": "Parameter No. 63",
 			"description": "Output Switch selection",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -307,7 +307,7 @@
 		},
 		{
 			"#": "70",
-			"label": "Input 1 status on delay",
+			"label": "Input 1 Status on Delay",
 			"description": "Switching reaction time on delay for I1",
 			"valueSize": 2,
 			"unit": "Seconds",
@@ -317,7 +317,7 @@
 		},
 		{
 			"#": "71",
-			"label": "Input 1 status off delay",
+			"label": "Input 1 Status Off Delay",
 			"description": "Switching reaction time off delay for I1",
 			"valueSize": 2,
 			"unit": "Seconds",
@@ -327,7 +327,7 @@
 		},
 		{
 			"#": "72",
-			"label": "Input 2 status on delay",
+			"label": "Input 2 Status on Delay",
 			"description": "Switching reaction time on delay for I2",
 			"valueSize": 2,
 			"unit": "Seconds",
@@ -337,7 +337,7 @@
 		},
 		{
 			"#": "73",
-			"label": "Input 2 status off delay",
+			"label": "Input 2 Status Off Delay",
 			"description": "Switching reaction time off delay for I2",
 			"valueSize": 2,
 			"unit": "Seconds",
@@ -347,7 +347,7 @@
 		},
 		{
 			"#": "74",
-			"label": "Input 3 status on delay",
+			"label": "Input 3 Status on Delay",
 			"description": "Switching reaction time on delay for I3",
 			"valueSize": 2,
 			"unit": "Seconds",
@@ -357,7 +357,7 @@
 		},
 		{
 			"#": "75",
-			"label": "Input 3 status off delay",
+			"label": "Input 3 Status Off Delay",
 			"description": "Switching reaction time off delay for I3",
 			"valueSize": 2,
 			"unit": "Seconds",
@@ -367,7 +367,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Parameter no. 100",
+			"label": "Parameter No. 100",
 			"description": "Enable / Disable Endpoint I1 or select Notification Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
@@ -377,7 +377,7 @@
 		},
 		{
 			"#": "101",
-			"label": "Parameter no. 101",
+			"label": "Parameter No. 101",
 			"description": "Enable / Disable Endpoint I2 or select Notification Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
@@ -387,7 +387,7 @@
 		},
 		{
 			"#": "102",
-			"label": "Parameter no. 102",
+			"label": "Parameter No. 102",
 			"description": "Enable / Disable Endpoint I3 or select Notification Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
@@ -397,7 +397,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Parameter no. 110",
+			"label": "Parameter No. 110",
 			"description": "Temperature sensor offset settings",
 			"valueSize": 2,
 			"minValue": 0,
@@ -407,7 +407,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Parameter no. 120",
+			"label": "Parameter No. 120",
 			"description": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -416,7 +416,7 @@
 		},
 		{
 			"#": "121",
-			"label": "Parameter no. 121",
+			"label": "Parameter No. 121",
 			"description": "Digital temperature sensor / setpoint selector",
 			"valueSize": 1,
 			"minValue": 0,
@@ -426,7 +426,7 @@
 		},
 		{
 			"#": "122",
-			"label": "Parameter no. 122",
+			"label": "Parameter No. 122",
 			"description": "Node ID of external battery powered room sensor",
 			"valueSize": 1,
 			"minValue": 0,

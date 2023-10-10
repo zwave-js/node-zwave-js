@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Temperature offset",
+			"label": "Temperature Offset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -110,7 +110,7 @@
 		},
 		{
 			"#": "7",
-			"label": "LED indicator mode",
+			"label": "LED Indicator Mode",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,

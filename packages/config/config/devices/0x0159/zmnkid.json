@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input I1 switch type",
+			"label": "Input I1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Input 1 contact type",
+			"label": "Input 1 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -66,7 +66,7 @@
 		},
 		{
 			"#": "43",
-			"label": "Hysteresis Upper temperature offset",
+			"label": "Hysteresis Upper Temperature Offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 450,
@@ -74,7 +74,7 @@
 		},
 		{
 			"#": "44",
-			"label": "Hysteresis Lower temperature offset",
+			"label": "Hysteresis Lower Temperature Offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 450,
@@ -90,7 +90,7 @@
 		},
 		{
 			"#": "59",
-			"label": "Thermostat mode",
+			"label": "Thermostat Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -107,7 +107,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Too low temperature limit",
+			"label": "Too Low Temperature Limit",
 			"valueSize": 2,
 			"minValue": -150,
 			"maxValue": 2120,
@@ -115,7 +115,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Too high temperature limit",
+			"label": "Too High Temperature Limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2120,
@@ -123,7 +123,7 @@
 		},
 		{
 			"#": "63",
-			"label": "Output switch selection",
+			"label": "Output Switch Selection",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

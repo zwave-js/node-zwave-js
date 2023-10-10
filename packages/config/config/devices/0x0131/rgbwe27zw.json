@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Color temperature",
+			"label": "Color Temperature",
 			"description": "Values range from 0 to 100 where 0 is cold white and 100 is warm white.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Shock sensor sensitivity",
+			"label": "Shock Sensor Sensitivity",
 			"description": "Range from 0 to 31 where 0 is minimum sensitivity and 31 is maximum sensitivity.",
 			"valueSize": 1,
 			"minValue": 0,

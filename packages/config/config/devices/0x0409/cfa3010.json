@@ -144,7 +144,7 @@
 		},
 		{
 			"#": "250",
-			"label": "Lock status",
+			"label": "Lock Status",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"readOnly": true,
@@ -182,7 +182,7 @@
 		},
 		{
 			"#": "251",
-			"label": "Drive cycles Trap",
+			"label": "Drive Cycles Trap",
 			"description": "Counter, how often the trap was activated.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -193,7 +193,7 @@
 		},
 		{
 			"#": "252",
-			"label": "Driving cycles unlocked",
+			"label": "Driving Cycles Unlocked",
 			"description": "Counter, how often it has been unlocked.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -204,7 +204,7 @@
 		},
 		{
 			"#": "253",
-			"label": "Driving cycles interlocked",
+			"label": "Driving Cycles Interlocked",
 			"description": "Counter, how often it has been interlocked.",
 			"valueSize": 4,
 			"minValue": 0,

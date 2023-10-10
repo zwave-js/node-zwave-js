@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "15",
-			"label": "value of the Basic Set",
+			"label": "Value of the Basic Set",
 			"description": "The flood sensor can send BASIC SET command to nodes associated",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Set the high temperature alarm trigger value",
+			"label": "Set the High Temperature Alarm Trigger Value",
 			"description": "Available setting(US):-67 °C to -257 °C",
 			"valueSize": 2,
 			"minValue": -670,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Set the low temperature alarm trigger value",
+			"label": "Set the Low Temperature Alarm Trigger Value",
 			"description": "Available setting(US):-67 °C to -257 °C",
 			"valueSize": 2,
 			"minValue": -670,
@@ -163,7 +163,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Level of low battery",
+			"label": "Level of Low Battery",
 			"description": "This parameter defines a battery level as the \"low battery\"",
 			"valueSize": 1,
 			"minValue": 10,

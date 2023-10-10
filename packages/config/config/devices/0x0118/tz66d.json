@@ -36,7 +36,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Ignore start level",
+			"label": "Ignore Start Level",
 			"description": "Ignore start level when transmitting a dim command to the switch",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Blue LED light Behavior",
+			"label": "Blue LED Light Behavior",
 			"description": "Blue LED light Behavior. Default is Night Light (led on when switch off)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -142,7 +142,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Blue LED light behavior on transmission",
+			"label": "Blue LED Light Behavior on Transmission",
 			"description": "Defines the behavior of the blue LED when transmission of data",
 			"valueSize": 1,
 			"defaultValue": 2,

@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "5",
-			"label": "EP 1 Button attribute",
+			"label": "EP 1 Button Attribute",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,

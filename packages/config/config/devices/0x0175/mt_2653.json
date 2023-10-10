@@ -40,7 +40,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button 1 And 3 Pair Mode",
+			"label": "Button 1 and 3 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Button 2 And 4 Pair Mode",
+			"label": "Button 2 and 4 Pair Mode",
 			"description": "works with group b, double click with group d",
 			"valueSize": 1,
 			"defaultValue": 1,

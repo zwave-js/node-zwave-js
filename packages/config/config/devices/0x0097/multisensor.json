@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set to default",
+			"label": "Set to Default",
 			"description": "Set all config values to default values (factory settings).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Switch off time",
+			"label": "Switch Off Time",
 			"description": "Switch off time starts after timeout.",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -70,7 +70,7 @@
 		},
 		{
 			"#": "6",
-			"label": "The temperature offset",
+			"label": "The Temperature Offset",
 			"description": "An offset for the temperature.",
 			"valueSize": 2,
 			"minValue": -10,

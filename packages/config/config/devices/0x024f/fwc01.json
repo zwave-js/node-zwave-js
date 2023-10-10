@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Dimming speed",
+			"label": "Dimming Speed",
 			"valueSize": 2,
 			"unit": "0.01s",
 			"minValue": 30,
@@ -52,7 +52,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Dimmer mode",
+			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

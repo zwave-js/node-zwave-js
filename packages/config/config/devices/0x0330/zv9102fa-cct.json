@@ -21,7 +21,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Enable/disable BASIC report",
+			"label": "Enable/disable Basic Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -29,7 +29,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Colour channels",
+			"label": "Colour Channels",
 			"description": "Set number of channels of LED load - single colour, CCT or RGBW",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Stage mode",
+			"label": "Stage Mode",
 			"description": "Set stage mode for lighting changes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +47,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Stage mode speed",
+			"label": "Stage Mode Speed",
 			"description": "Set speed of changes in stage mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Stage mode execution time",
+			"label": "Stage Mode Execution Time",
 			"description": "Set execution time for stage mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Stage mode hue",
+			"label": "Stage Mode Hue",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Set external switch function",
+			"label": "Set External Switch Function",
 			"description": "Enable / disable external switch for inclusion / exclusion",
 			"valueSize": 1,
 			"minValue": 0,

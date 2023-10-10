@@ -40,6 +40,7 @@
 		},
 		{
 			"#": "3",
+			// eslint-disable-next-line @zwave-js/consistent-config-labels
 			"label": "Co-Proc Status",
 			"description": "Check to see if the co-proc is operational",
 			"valueSize": 1,
@@ -150,20 +151,9 @@
 		},
 		{
 			"#": "13",
-			"label": "Enable / Disable Proximity mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "/ Proximity Mode",
+			"defaultValue": 1
 		},
 		{
 			"#": "14",
@@ -221,7 +211,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Number of Re-transmissions Attempts",
+			"label": "Number of Re-Transmissions Attempts",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -229,7 +219,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Wait Period Between Re-transmissions Attempts",
+			"label": "Wait Period Between Re-Transmissions Attempts",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -357,7 +347,7 @@
 		{
 			"#": "24[0xff0000]",
 			"$if": "productId === 0x0202",
-			"label": "Quantity of audio files",
+			"label": "Quantity of Audio Files",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
@@ -369,7 +359,7 @@
 		{
 			"#": "24[0xff00]",
 			"$if": "productId === 0x0202",
-			"label": "Audio file version",
+			"label": "Audio File Version",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
@@ -381,7 +371,7 @@
 		{
 			"#": "24[0xff]",
 			"$if": "productId === 0x0202",
-			"label": "Audio file sub version",
+			"label": "Audio File Sub Version",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,

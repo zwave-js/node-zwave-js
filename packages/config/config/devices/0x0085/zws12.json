@@ -27,7 +27,7 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Motor speed 1",
+			"label": "Motor Speed 1",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Close after time",
+			"label": "Close After Time",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,

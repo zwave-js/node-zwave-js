@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Blue LED Brightness Level while Switch is ON",
+			"label": "Blue LED Brightness Level While Switch Is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Blue LED Brightness Level while Switch is OFF",
+			"label": "Blue LED Brightness Level While Switch Is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

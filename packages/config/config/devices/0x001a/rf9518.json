@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delayed off",
+			"label": "Delayed Off",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,

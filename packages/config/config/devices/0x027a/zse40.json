@@ -80,7 +80,7 @@
 			// Initial release of HW version 1.0
 			"$if": "firmwareVersion >= 16.9 && firmwareVersion < 17.9",
 			"$import": "~/templates/master_template.json#base_1-255_nounit",
-			"label": "Re-trigger Interval",
+			"label": "Re-Trigger Interval",
 			"unit": "minutes",
 			"defaultValue": 3
 		},
@@ -88,7 +88,7 @@
 			"#": "5",
 			// Update 17.9 changed the unit to seconds
 			"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.16",
-			"label": "Re-trigger Interval",
+			"label": "Re-Trigger Interval",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 15,
@@ -98,7 +98,7 @@
 		{
 			"#": "5",
 			// Update 24.16 changed the range to 15-255, this also applies to HW version 1.0
-			"label": "Re-trigger Interval",
+			"label": "Re-Trigger Interval",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 15,

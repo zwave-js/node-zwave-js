@@ -238,7 +238,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Switch 2 Mode (Turbo mode)",
+			"label": "Switch 2 Mode (Turbo Mode)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Sensitivity level",
+			"label": "Sensitivity Level",
 			"description": "8 = Highest sensitivity, 255 = lowest sensitivity",
 			"valueSize": 1,
 			"minValue": 8,
@@ -35,7 +35,7 @@
 		},
 		{
 			"#": "3",
-			"label": "BASIC SET Level",
+			"label": "Basic Set Level",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "4",
-			"label": "PIR detection ENABLED / DISABLED",
+			"label": "PIR Detection ENABLED / DISABLED",
 			"description": "Enable og disable the PIR sensor",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Ambent illumination LUX level",
+			"label": "Ambent Illumination LUX Level",
 			"description": "Lux value which determines when the light sensor is activated",
 			"valueSize": 2,
 			"minValue": 0,
@@ -71,7 +71,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Light sensor polling interval",
+			"label": "Light Sensor Polling Interval",
 			"description": "How often should ambient illumination be evaluated",
 			"valueSize": 2,
 			"minValue": 60,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "8",
-			"label": "LUX level function enable",
+			"label": "LUX Level Function Enable",
 			"description": "See overview",
 			"valueSize": 1,
 			"minValue": 0,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Ambient illumination report",
+			"label": "Ambient Illumination Report",
 			"description": "when lux changes by the number in this setting it is reported",
 			"valueSize": 2,
 			"minValue": 0,

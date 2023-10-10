@@ -17,8 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set The Motor Rotation Direction",
-			"description": "",
+			"label": "Motor Rotation Direction",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -35,8 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Set To Start Holding Hands",
-			"description": "",
+			"label": "Set to Start Holding Hands",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -198,7 +196,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Delete The Limit Position",
+			"label": "Delete the Limit Position",
 			"description": "",
 			"valueSize": 1,
 			"defaultValue": 127,

@@ -44,7 +44,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input 2 switch type",
+			"label": "Input 2 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Input 3 switch type",
+			"label": "Input 3 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Input 1 contact type",
+			"label": "Input 1 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -129,7 +129,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Input 3 contact type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -146,7 +146,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Input 1 operation mode selection",
+			"label": "Input 1 Operation Mode Selection",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -183,7 +183,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Input 2 operation mode selection",
+			"label": "Input 2 Operation Mode Selection",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
@@ -220,7 +220,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Input 3 operation mode selection",
+			"label": "Input 3 Operation Mode Selection",
 			"valueSize": 1,
 			"defaultValue": 5,
 			"allowManualEntry": false,

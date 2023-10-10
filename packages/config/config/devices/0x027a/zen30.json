@@ -165,7 +165,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Enable/Disable Double-tap for Dimmer",
+			"label": "Enable/Disable Double-Tap for Dimmer",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

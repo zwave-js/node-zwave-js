@@ -36,7 +36,7 @@
 			"label": "KWH Meter Report Period",
 			"description": "number of 10 minute intervals",
 			"valueSize": 2,
-			"unit": "10m",
+			"unit": "10 min",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 6,
@@ -49,16 +49,16 @@
 		},
 		{
 			"#": "3",
-			"label": "Threshold of current for Load Caution",
-			"description": "1300*0.01A = 13A",
+			"label": "Threshold of Current for Load Caution",
 			"valueSize": 2,
+			"unit": "0.01 A",
 			"minValue": 10,
 			"maxValue": 1300,
 			"defaultValue": 1300
 		},
 		{
 			"#": "4",
-			"label": "Threshold of KWh for Load Caution",
+			"label": "Threshold of kWh for Load Caution",
 			"description": "load caution threshold",
 			"valueSize": 2,
 			"minValue": 1,
@@ -71,7 +71,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Mode of switch off function",
+			"label": "Mode of Switch Off Function",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "7",
-			"label": "LED indication mode",
+			"label": "LED Indication Mode",
 			"description": "Restore switch state mode.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -110,7 +110,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto off timer",
+			"label": "Auto Off Timer",
 			"description": "Auto off timer. 0 will disable the auto off function.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -125,7 +125,7 @@
 		},
 		{
 			"#": "9",
-			"label": "RF off command mode",
+			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

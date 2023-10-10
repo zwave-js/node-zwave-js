@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Reporting Trigger Threshold Of Shutter Position Change",
+			"label": "Reporting Trigger Threshold of Shutter Position Change",
 			"description": "Range 1-10%, 0 to disable reporting",
 			"valueSize": 1,
 			"unit": "%",
@@ -27,7 +27,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Stop By Block Function",
+			"label": "Stop by Block Function",
 			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -45,7 +45,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Learn mode",
+			"label": "Learn Mode",
 			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,

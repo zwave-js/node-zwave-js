@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Motor direction",
+			"label": "Motor Direction",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Enable tilt feature",
+			"label": "Enable Tilt Feature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

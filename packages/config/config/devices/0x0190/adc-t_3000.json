@@ -1348,7 +1348,7 @@
 		{
 			"#": "37",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Run Fan With Auxiliary Heat"
+			"label": "Run Fan with Auxiliary Heat"
 		},
 		{
 			"#": "38[0x00000001]",
@@ -1704,13 +1704,13 @@
 		{
 			"#": "50[0x80000000]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "System configuration: Aux Fan",
+			"label": "System Configuration: Aux Fan",
 			"valueSize": 4,
 			"readOnly": true
 		},
 		{
 			"#": "50[0x60000000]",
-			"label": "System configuration: Cool Stages",
+			"label": "System Configuration: Cool Stages",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -1719,7 +1719,7 @@
 		},
 		{
 			"#": "50[0x18000000]",
-			"label": "System configuration: Heat Stages",
+			"label": "System Configuration: Heat Stages",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -1728,7 +1728,7 @@
 		},
 		{
 			"#": "50[0x04000000]",
-			"label": "System configuration: Fuel",
+			"label": "System Configuration: Fuel",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1747,7 +1747,7 @@
 		},
 		{
 			"#": "50[0x03000000]",
-			"label": "System configuration: HVAC Type",
+			"label": "System Configuration: HVAC Type",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -1766,7 +1766,7 @@
 		},
 		{
 			"#": "50[0x00f00000]",
-			"label": "System configuration: Z2 Configuration",
+			"label": "System Configuration: Z2 Configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
@@ -1799,7 +1799,7 @@
 		},
 		{
 			"#": "50[0x000f0000]",
-			"label": "System configuration: Z1 Configuration",
+			"label": "System Configuration: Z1 Configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
@@ -1830,7 +1830,7 @@
 		},
 		{
 			"#": "50[0x00000100]",
-			"label": "System configuration: Override",
+			"label": "System Configuration: Override",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,

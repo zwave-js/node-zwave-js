@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set to default",
+			"label": "Set to Default",
 			"description": "Set all configuration to factory settings",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Feedback time",
+			"label": "Feedback Time",
 			"description": "To configure the time the beep is automatically turned off in seconds.",
 			"valueSize": 1,
 			"defaultValue": 15,
@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Feedback timeout",
+			"label": "Feedback Timeout",
 			"description": "Timeout beep",
 			"valueSize": 1,
 			"minValue": -128,
@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Feedback beeps per second",
+			"label": "Feedback Beeps Per Second",
 			"description": "To configure the number of beeps per second. Every beep is fixed about 10ms.",
 			"valueSize": 1,
 			"unit": "ms",
@@ -86,7 +86,7 @@
 		},
 		{
 			"#": "5",
-			"label": "The mode",
+			"label": "The Mode",
 			"description": "Operating mode",
 			"valueSize": 1,
 			"defaultValue": 1,

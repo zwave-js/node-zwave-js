@@ -80,7 +80,7 @@
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Range Test after double click",
+			"label": "Range Test After Double Click",
 			"description": "Allows to enable the activation of a Z-Wave range test"
 		},
 		{
@@ -129,7 +129,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Value sent to 2nd Association Group on On event",
+			"label": "Value Sent to 2nd Association Group on On Event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -139,7 +139,7 @@
 		},
 		{
 			"#": "8",
-			"label": "value sent to 2nd Association Group on Off event",
+			"label": "Value Sent to 2nd Association Group on Off Event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -148,7 +148,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Time Delay of On command frame",
+			"label": "Time Delay of On Command Frame",
 			"description": "sent after a delay",
 			"valueSize": 2,
 			"minValue": 0,
@@ -157,7 +157,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Time Delay of Off command frame",
+			"label": "Time Delay of Off Command Frame",
 			"description": "sent after a delay",
 			"valueSize": 2,
 			"minValue": 0,

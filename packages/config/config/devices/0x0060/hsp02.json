@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Re-trigger Interval Setting",
+			"label": "Re-Trigger Interval Setting",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 255,

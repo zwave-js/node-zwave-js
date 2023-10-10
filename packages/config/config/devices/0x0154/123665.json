@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Threshold of Watt for Load caution",
+			"label": "Threshold of Watt for Load Caution",
 			"description": "Warn when wattage of load over the preset threshold value",
 			"valueSize": 2,
 			"minValue": 0,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Threshold of KWh for Load caution",
+			"label": "Threshold of kWh for Load Caution",
 			"description": "Warn if Acc. Power Consumption exceeds the set value",
 			"valueSize": 2,
 			"minValue": 0,

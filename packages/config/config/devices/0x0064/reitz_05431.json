@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatic switch off",
+			"label": "Automatic Switch Off",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Function of RF off command",
+			"label": "Function of RF Off Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -92,7 +92,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Switch on dimming by buttons",
+			"label": "Switch on Dimming by Buttons",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "5",
-			"label": "restore switch state",
+			"label": "Restore Switch State",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -126,7 +126,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -134,7 +134,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -151,7 +151,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Switch by buttons",
+			"label": "Switch by Buttons",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -172,7 +172,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on button single press or hold",
+			"label": "Action on Button Single Press or Hold",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
@@ -205,7 +205,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Action on button double press or hold",
+			"label": "Action on Button Double Press or Hold",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -238,7 +238,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Send the following switch all commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -260,7 +260,7 @@
 		},
 		{
 			"#": "16",
-			"label": "What to do on button Down press",
+			"label": "What to Do on Button Down Press",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

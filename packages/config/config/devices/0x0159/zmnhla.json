@@ -43,7 +43,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input 2 switch type",
+			"label": "Input 2 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -77,7 +77,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Input 3 switch type",
+			"label": "Input 3 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -94,7 +94,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Input 1 contact type",
+			"label": "Input 1 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -111,7 +111,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Input 3 contact type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -145,7 +145,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON/ALL OFF",
 			"description": "Respond to ALL ON/ALL OFF",
 			"valueSize": 1,
 			"defaultValue": 255,
@@ -199,7 +199,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts on power change",
+			"label": "Power Reporting in Watts on Power Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -207,7 +207,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by timer interval",
+			"label": "Power Reporting in Watts by Timer Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -325,7 +325,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Too low temperature limit",
+			"label": "Too Low Temperature Limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
@@ -333,7 +333,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Too high temperature limit",
+			"label": "Too High Temperature Limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
@@ -358,7 +358,7 @@
 		},
 		{
 			"#": "70",
-			"label": "Input 1 Status on delay",
+			"label": "Input 1 Status on Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -366,7 +366,7 @@
 		},
 		{
 			"#": "71",
-			"label": "Input 1 Status off delay",
+			"label": "Input 1 Status Off Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -374,7 +374,7 @@
 		},
 		{
 			"#": "72",
-			"label": "Input 2 Status on delay",
+			"label": "Input 2 Status on Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -382,7 +382,7 @@
 		},
 		{
 			"#": "73",
-			"label": "Input 2 Status off delay",
+			"label": "Input 2 Status Off Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -390,7 +390,7 @@
 		},
 		{
 			"#": "74",
-			"label": "Input 3 Status on delay",
+			"label": "Input 3 Status on Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -398,7 +398,7 @@
 		},
 		{
 			"#": "75",
-			"label": "Input 3 Status off delay",
+			"label": "Input 3 Status Off Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,

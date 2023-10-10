@@ -55,7 +55,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Dim up/down rate",
+			"label": "Dim Up/down Rate",
 			"description": "Adjust the speed at which the ramps to a specific value",
 			"valueSize": 1,
 			"defaultValue": 0,

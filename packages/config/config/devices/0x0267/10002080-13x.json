@@ -200,7 +200,7 @@
 		},
 		{
 			"#": "27",
-			"label": "Lock long press",
+			"label": "Lock Long Press",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,

@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "80",
-			"label": "Send notifications to associated devices",
+			"label": "Send Notifications to Associated Devices",
 			"description": "To send notifications to (Group 1) when state change.0 = Nothing.1= Basic CC.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "81",
-			"label": "Adjust color temperature in warm white color comp",
+			"label": "Adjust Color Temperature in Warm White Color Comp",
 			"description": "available value: 0x0A8C-1387Warm White(0x0A8C(2700k) ~ 0x1387 (4999k))",
 			"valueSize": 2,
 			"minValue": 2700,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "82",
-			"label": "Color temperature in cold white color comp",
+			"label": "Color Temperature in Cold White Color Comp",
 			"description": "Available value:0x1388-0x1964Cold White (0x1388 (5000k) ~ 0x1964 (6500k))",
 			"valueSize": 2,
 			"minValue": 5000,

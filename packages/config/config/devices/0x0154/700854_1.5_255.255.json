@@ -39,7 +39,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Siren mode",
+			"label": "Siren Mode",
 			"description": "Determines how the Siren shall react on alarm",
 			"valueSize": 1,
 			"defaultValue": 2,

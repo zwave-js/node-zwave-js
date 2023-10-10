@@ -81,7 +81,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Blue LED Brightness Level while dimmer is ON",
+			"label": "Blue LED Brightness Level While Dimmer Is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Blue LED Brightness Level while dimmer is OFF",
+			"label": "Blue LED Brightness Level While Dimmer Is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Amber LED Brightness Level while dimmer is ON",
+			"label": "Amber LED Brightness Level While Dimmer Is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -105,7 +105,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Amber LED Brightness Level while dimmer is OFF",
+			"label": "Amber LED Brightness Level While Dimmer Is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

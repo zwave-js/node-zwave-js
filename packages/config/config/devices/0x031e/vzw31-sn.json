@@ -394,7 +394,7 @@
 		{
 			"#": "59[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Local Commands To Associated Devices",
+			"label": "Send Local Commands to Associated Devices",
 			"defaultValue": 1
 		},
 		{
@@ -671,7 +671,7 @@
 		{
 			"#": "162",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Double-tap Config to Clear Notification",
+			"label": "Double-Tap Config to Clear Notification",
 			"defaultValue": 0
 		}
 	],

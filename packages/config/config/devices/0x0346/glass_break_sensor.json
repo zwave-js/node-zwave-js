@@ -156,7 +156,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Mic-off Time",
+			"label": "Mic-Off Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,

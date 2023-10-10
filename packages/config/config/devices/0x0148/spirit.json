@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Battery report",
+			"label": "Battery Report",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Valve opening percentage report",
+			"label": "Valve Opening Percentage Report",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Window open detection",
+			"label": "Window Open Detection",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,

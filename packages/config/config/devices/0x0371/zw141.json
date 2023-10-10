@@ -125,7 +125,7 @@
 		},
 		{
 			"#": "37",
-			"label": "User Confirmation For Calibration",
+			"label": "User Confirmation for Calibration",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

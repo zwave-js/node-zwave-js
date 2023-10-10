@@ -34,7 +34,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED mode",
+			"label": "LED Mode",
 			"description": "Set LED indication mode",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatically switch off after",
+			"label": "Automatically Switch Off After",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -71,7 +71,7 @@
 		},
 		{
 			"#": "3",
-			"label": "What to do on RF off command",
+			"label": "What to Do on RF Off Command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -93,7 +93,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Ignore start level",
+			"label": "Ignore Start Level",
 			"description": "ignore start level in StartLevelChange",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -110,11 +110,11 @@
 			]
 		},
 		{
-			"units": "10 ms",
 			"#": "5",
-			"label": "Dimming speed",
+			"label": "Dimming Speed",
 			"description": "Time to dim on button presses",
 			"valueSize": 1,
+			"unit": "10 ms",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
@@ -122,7 +122,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Dimming long speed",
+			"label": "Dimming Long Speed",
 			"description": "Time to dim on button holds and StartLevelChange",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -133,7 +133,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Set maximum light level on On click",
+			"label": "Set Maximum Light Level on On Click",
 			"description": "set action on ON command",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -172,7 +172,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on button single press or hold",
+			"label": "Action on Button Single Press or Hold",
 			"description": "Defines which command should be sent on button single press or hold. Basic commands are sent to Association group. Switch All commands are sent broadcast.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -194,7 +194,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Action on button double press or hold",
+			"label": "Action on Button Double Press or Hold",
 			"description": "Defines which command should be sent on button double press or press-hold. Basic commands are sent to Association group. This will introduce a small delay for single click commands",
 			"valueSize": 1,
 			"defaultValue": 0,

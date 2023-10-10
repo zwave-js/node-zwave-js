@@ -32,7 +32,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Re-trigger Interval",
+			"label": "Re-Trigger Interval",
 			"valueSize": 2,
 			"unit": "Seconds",
 			"minValue": 5,

@@ -28,7 +28,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Energy minimum report time",
+			"label": "Energy Minimum Report Time",
 			"description": "Minimum time between two (non-requested) energy values",
 			"valueSize": 2,
 			"unit": "1s",
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Energy maximum report time",
+			"label": "Energy Maximum Report Time",
 			"description": "Maximum time between two energy values, independently of changes in the value",
 			"valueSize": 2,
 			"unit": "1s",
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Power minimum report time",
+			"label": "Power Minimum Report Time",
 			"description": "Minimum time between two (non-requested) power values",
 			"valueSize": 2,
 			"unit": "1s",
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Power maximum report time",
+			"label": "Power Maximum Report Time",
 			"description": "Maximum time between two power values, independently of changes in the value",
 			"valueSize": 2,
 			"unit": "1s",
@@ -68,7 +68,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Energy delta value",
+			"label": "Energy Delta Value",
 			"description": "Minimum change required for a new energy value to be transmitted.",
 			"valueSize": 2,
 			"unit": "0.1 Wh",
@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Power delta value",
+			"label": "Power Delta Value",
 			"description": "Minimum change required for a new power value to be transmitted.",
 			"valueSize": 2,
 			"unit": "0.1 Wh",
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Safety shutdown configuration",
+			"label": "Safety Shutdown Configuration",
 			"description": "Behaviour in the event of a safety shutdown",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -106,7 +106,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Reset of overcurrent shutdown",
+			"label": "Reset of Overcurrent Shutdown",
 			"description": "Activation despite 3x safety shutdown",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -125,7 +125,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Night mode",
+			"label": "Night Mode",
 			"description": "Set Night mode of the Status LED",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -143,7 +143,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Info LED colour",
+			"label": "Info LED Colour",
 			"description": "Set color of the Info LED",
 			"valueSize": 2,
 			"defaultValue": 0,

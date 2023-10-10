@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Ambient illumination Lux Level",
+			"label": "Ambient Illumination Lux Level",
 			"description": "Set a lux level value which determines when the light sensor is activated",
 			"valueSize": 2,
 			"unit": "Lux",
@@ -111,7 +111,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Ambient illumination Lux Level Report",
+			"label": "Ambient Illumination Lux Level Report",
 			"valueSize": 2,
 			"unit": "Lux",
 			"minValue": 0,
@@ -120,7 +120,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Led Flash Enable",
+			"label": "LED Flash Enable",
 			"description": "This parameter defines the Led on/off enable",
 			"valueSize": 1,
 			"minValue": 0,

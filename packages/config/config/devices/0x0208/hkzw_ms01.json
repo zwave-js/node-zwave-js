@@ -31,7 +31,7 @@
 		},
 		{
 			"#": "15",
-			"label": "value of basic set command",
+			"label": "Value of Basic Set Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

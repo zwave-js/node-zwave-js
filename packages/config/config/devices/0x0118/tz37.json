@@ -16,21 +16,10 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Night light",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Night Light",
 			"description": "Configure LED to reflect load's status",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
@@ -52,7 +41,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Invert switch",
+			"label": "Invert Switch",
 			"description": "Inverts switch's top/bottom",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -70,7 +59,7 @@
 		},
 		{
 			"#": "4",
-			"label": "LED transmission indication",
+			"label": "LED Transmission Indication",
 			"description": "LED flickers when transmitting data to any group",
 			"valueSize": 1,
 			"defaultValue": 1,

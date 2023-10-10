@@ -58,7 +58,7 @@
 		{
 			"#": "21",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Led Control (magnet Triggers Only)",
+			"label": "LED Control (Magnet Triggers Only)",
 			"description": "This parameter gives you the option to turn the LED off on magnetic triggers",
 			"defaultValue": 0
 		},

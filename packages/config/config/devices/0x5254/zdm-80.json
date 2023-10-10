@@ -59,12 +59,12 @@
 		{
 			"#": "13",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Double click option",
+			"label": "Double Click Option",
 			"defaultValue": 1
 		},
 		{
 			"#": "17",
-			"label": "Dimming time frame",
+			"label": "Dimming Time Frame",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Maximum Dimmer level control",
+			"label": "Maximum Dimmer Level Control",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -81,7 +81,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Minimum Dimmer level control",
+			"label": "Minimum Dimmer Level Control",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,

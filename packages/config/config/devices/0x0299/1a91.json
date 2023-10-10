@@ -16,25 +16,14 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Central Scene notifications",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Central Scene Notifications",
 			"description": "Enable/disable Central Scene notifications for 2x-5x button presses.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Enable Central Scene",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
-			"label": "Report interval",
+			"label": "Report Interval",
 			"description": "3 to 8640 - Interval of unsolicited reports in 10s increments, a value of 3 means 30 seconds (30 seconds - 1 day) 0 - Disable unsolicited meter reports of current wattage.",
 			"valueSize": 2,
 			"unit": "10s",
@@ -44,7 +33,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Energy meter report interval",
+			"label": "Energy Meter Report Interval",
 			"description": "Interval of active energy meter reports in minutes. - 10 to 30240 - Interval of active energy meter unsolicited reports in minutes (10 minutes - 3 weeks) - 0 - Disable unsolicited meter reports of active energy.",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -54,7 +43,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Button mode",
+			"label": "Button Mode",
 			"description": "Switching mode of the push buttons T1 ... T4",
 			"valueSize": 1,
 			"defaultValue": 0,

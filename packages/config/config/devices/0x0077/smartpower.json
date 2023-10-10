@@ -27,7 +27,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Report node",
+			"label": "Report Node",
 			"description": "Report changes in level to this node id",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +38,7 @@
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "BO IR support",
+			"label": "BO IR Support",
 			"defaultValue": 1
 		}
 	]

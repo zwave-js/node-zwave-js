@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "93",
-			"label": "Clear IR information",
+			"label": "Clear IR Information",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 1431655765,
@@ -30,7 +30,7 @@
 		},
 		{
 			"#": "254",
-			"label": "Enable/Disable configuration",
+			"label": "Enable/Disable Configuration",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -47,7 +47,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Reset & remove from Z-Wave network",
+			"label": "Reset & Remove From Z-Wave Network",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 1431655765,

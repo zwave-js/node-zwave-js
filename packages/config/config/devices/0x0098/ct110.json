@@ -253,7 +253,7 @@
 		},
 		{
 			"#": "10[0xffff]",
-			"label": "Temperature Reporting Filter (lower bound)",
+			"label": "Temperature Reporting Filter (Lower Bound)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
@@ -262,7 +262,7 @@
 		},
 		{
 			"#": "10[0x0fff0000]",
-			"label": "Temperature Reporting Filter (upper bound)",
+			"label": "Temperature Reporting Filter (Upper Bound)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,

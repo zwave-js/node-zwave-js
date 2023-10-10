@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Basic Set Command value",
+			"label": "Basic Set Command Value",
 			"description": "Defines value for Basic Set command",
 			"valueSize": 2,
 			"minValue": 0,
@@ -31,7 +31,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Delaying time Group 1",
+			"label": "Delaying Time Group 1",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 3,
@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Remember the last status",
+			"label": "Remember the Last Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Re-trigger Interval Setting",
+			"label": "Re-Trigger Interval Setting",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 5,
@@ -87,7 +87,7 @@
 		},
 		{
 			"#": "6",
-			"label": "On time",
+			"label": "On Time",
 			"description": "The amount of time the module/lighting should stay ON for.",
 			"valueSize": 1,
 			"unit": "seconds",

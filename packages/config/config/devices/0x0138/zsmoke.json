@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Send double alarms",
+			"label": "Send Double Alarms",
 			"description": "Causes the device to send double alarm messages",
 			"valueSize": 1,
 			"defaultValue": 0,

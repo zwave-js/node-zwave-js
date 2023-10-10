@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Night light",
+			"label": "Night Light",
 			"description": "LED behaviour control.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Memory function",
+			"label": "Memory Function",
 			"description": "Memory function behaviour control.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -56,7 +56,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Invert switch",
+			"label": "Invert Switch",
 			"description": "Swap top and bottom switch/button.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -74,7 +74,7 @@
 		},
 		{
 			"#": "4",
-			"label": "LED transmission indication",
+			"label": "LED Transmission Indication",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

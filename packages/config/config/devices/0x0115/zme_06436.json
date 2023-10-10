@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED mode",
+			"label": "LED Mode",
 			"description": "Set LED indication mode",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatically open or close after",
+			"label": "Automatically Open or Close After",
 			"valueSize": 2,
 			"unit": "Seconds",
 			"minValue": 0,
@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "3",
-			"label": "What to do on RF close command",
+			"label": "What to Do on RF Close Command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Full close time",
+			"label": "Full Close Time",
 			"description": "Time in seconds to go from opened to closed state.",
 			"valueSize": 1,
 			"unit": "Seconds",
@@ -105,7 +105,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Full open time",
+			"label": "Full Open Time",
 			"description": "Time in seconds to go from closed to open state.",
 			"valueSize": 1,
 			"unit": "Seconds",
@@ -122,7 +122,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Node ID of the blocking device",
+			"label": "Node ID of the Blocking Device",
 			"description": "Commands from this device will be interpreted as block/unblock instead of open/close",
 			"valueSize": 1,
 			"minValue": 0,
@@ -138,7 +138,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Unprotected command",
+			"label": "Unprotected Command",
 			"description": "Which command from the blocking Node should be interpreted as 'unprotected'",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -156,7 +156,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Opposite button reaction",
+			"label": "Opposite Button Reaction",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -173,7 +173,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Invert open and close relays",
+			"label": "Invert Open and Close Relays",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -190,7 +190,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"valueSize": 1,
 			"unit": "10 ms",
 			"minValue": 0,
@@ -199,7 +199,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"description": "Allows exchanging the functionality of the buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -217,7 +217,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Switch by buttons",
+			"label": "Switch by Buttons",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -238,7 +238,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on button single press or hold",
+			"label": "Action on Button Single Press or Hold",
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -260,7 +260,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Action on button double press or hold",
+			"label": "Action on Button Double Press or Hold",
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -282,7 +282,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Action to take on Switch All commands",
+			"label": "Action to Take on Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,

@@ -39,7 +39,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Temperature Report Interval (when Battery Operated)",
+			"label": "Temperature Report Interval (When Battery Operated)",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 1440,
@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "52",
-			"label": "Temperature Report Interval (when Usb Operated)",
+			"label": "Temperature Report Interval (When USB Operated)",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 360,

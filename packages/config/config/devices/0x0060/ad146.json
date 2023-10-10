@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Basic Set Command value",
+			"label": "Basic Set Command Value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Report time delay group 1",
+			"label": "Report Time Delay Group 1",
 			"description": "Delaying time to report to group 1.",
 			"valueSize": 1,
 			"minValue": 3,
@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Remember last status",
+			"label": "Remember Last Status",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Switching type",
+			"label": "Switching Type",
 			"description": "Edge or toggle switch mode.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -69,7 +69,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Output mode setting",
+			"label": "Output Mode Setting",
 			"description": "Dimming or On/Off Switch",
 			"valueSize": 1,
 			"defaultValue": 0,

@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Custom consumption limit",
+			"label": "Custom Consumption Limit",
 			"valueSize": 2,
 			"unit": "HEXADECIMAL",
 			"defaultValue": 0,

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Min. Temp. change",
+			"label": "Min. Temp. Change",
 			"description": "Minimum Temperature change to report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -31,7 +31,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Min humidity change.",
+			"label": "Min Humidity Change.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 20,

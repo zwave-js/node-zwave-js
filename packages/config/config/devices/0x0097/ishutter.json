@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatically close after",
+			"label": "Automatically Close After",
 			"description": "If not zero, automatically close blind after a user defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "3",
-			"label": "What to do on RF close command",
+			"label": "What to Do on RF Close Command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -98,7 +98,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"description": "time used to differentiate click, hold, double and triple clicks",
 			"valueSize": 1,
 			"minValue": 0,
@@ -107,7 +107,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -124,7 +124,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Action on button press or hold",
+			"label": "Action on Button Press or Hold",
 			"description": "Defines which command should be sent to Association group",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -142,7 +142,7 @@
 		},
 		{
 			"#": "7",
-			"label": "LED mode",
+			"label": "LED Mode",
 			"description": "Set LED indication mode",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -172,7 +172,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Full close time",
+			"label": "Full Close Time",
 			"description": "Time to go from opened to closed state.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -182,7 +182,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Full open time",
+			"label": "Full Open Time",
 			"description": "Time to go from closed to open state",
 			"valueSize": 1,
 			"minValue": 0,
@@ -192,7 +192,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Node Id of the blocking device",
+			"label": "Node Id of the Blocking Device",
 			"description": "Id of the device which commands would not be Open/Close, but as block/unblock.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -202,7 +202,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Protected command",
+			"label": "Protected Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -219,7 +219,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Invert open and close relays",
+			"label": "Invert Open and Close Relays",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

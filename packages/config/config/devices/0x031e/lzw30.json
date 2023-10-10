@@ -102,7 +102,7 @@
 		},
 		{
 			"#": "6",
-			"label": "LED Indicator Intensity (when on)",
+			"label": "LED Indicator Intensity (When on)",
 			"valueSize": 1,
 			"defaultValue": 5,
 			"allowManualEntry": false,
@@ -155,7 +155,7 @@
 		},
 		{
 			"#": "7",
-			"label": "LED Indicator Intensity (when Off)",
+			"label": "LED Indicator Intensity (When Off)",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,

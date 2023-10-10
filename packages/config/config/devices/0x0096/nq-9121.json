@@ -17,7 +17,7 @@
 		{
 			"#": "1",
 			"$if": "firmwareVersion <= 2.255",
-			"label": "Pulse factor",
+			"label": "Pulse Factor",
 			"description": "How many pulses * 10 per kWh",
 			"valueSize": 4,
 			"minValue": 0,
@@ -27,7 +27,7 @@
 		{
 			"#": "1",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Pulse factor",
+			"label": "Pulse Factor",
 			"description": "Impulse or Rotation factor (see NorthQ docs for Gas meters)",
 			"valueSize": 4,
 			"minValue": 0,
@@ -37,7 +37,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 2.255",
-			"label": "Sensor type",
+			"label": "Sensor Type",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -55,7 +55,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Sensor type",
+			"label": "Sensor Type",
 			"description": "Defines the type of sensor",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "3",
-			"label": "IR Listen period",
+			"label": "IR Listen Period",
 			"description": "Additional time for feedback measurement. Should always be 0.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Poll / Wake up frequency",
+			"label": "Poll / Wake Up Frequency",
 			"description": "Wake device up this many times per second. This value also controls number of measurements per second on mechanical meters",
 			"valueSize": 1,
 			"minValue": 1,
@@ -129,7 +129,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion <= 2.255",
-			"label": "Pulse count",
+			"label": "Pulse Count",
 			"description": "Current pulse count in device (pulse count / pulse factor = kWh)",
 			"valueSize": 4,
 			"minValue": 1,
@@ -139,7 +139,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Pulse count",
+			"label": "Pulse Count",
 			"description": "This register holds the total number of pulses.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -149,7 +149,7 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion <= 2.255",
-			"label": "Keep alive period",
+			"label": "Keep Alive Period",
 			"description": "How many ticks before going back to sleep in normal wakeup mode.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -159,7 +159,7 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Keep alive period",
+			"label": "Keep Alive Period",
 			"description": "How many ticks before going back to sleep in normal wakeup mode.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -168,7 +168,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Real-time mode",
+			"label": "Real-Time Mode",
 			"description": "Set this to enter real-time mode from remote. Contains seconds * poll frequency before going back to sleep. If you press the button once this value will be set.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -178,7 +178,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Serial number",
+			"label": "Serial Number",
 			"description": "Read-only serial number in decimal",
 			"valueSize": 4,
 			"minValue": 0,
@@ -198,7 +198,7 @@
 		{
 			"#": "15",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Calibration status",
+			"label": "Calibration Status",
 			"description": "Aplies to devices with firmware version 3.30 or higher",
 			"valueSize": 4,
 			"minValue": 0,

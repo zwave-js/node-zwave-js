@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "27",
-			"label": "Set IR Code From Built-in AC Library",
+			"label": "Set IR Code From Built-In AC Library",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2389,
@@ -79,7 +79,7 @@
 		{
 			"#": "32",
 			"$import": "~/templates/master_template.json#base_enable_disable_255",
-			"label": "Built-in IR Emitter Control",
+			"label": "Built-In IR Emitter Control",
 			"defaultValue": 255
 		},
 		{
@@ -207,7 +207,7 @@
 		},
 		{
 			"#": "160",
-			"label": "Reset to default settings",
+			"label": "Reset to Default Settings",
 			"description": "255 to reset device to defaults",
 			"valueSize": 1,
 			"defaultValue": 0,

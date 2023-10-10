@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Power up state",
+			"label": "Power Up State",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -73,11 +73,11 @@
 		{
 			"#": "6",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Panic mode"
+			"label": "Panic Mode"
 		},
 		{
 			"#": "13",
-			"label": "Blue LED brightness level when switch is ON",
+			"label": "Blue LED Brightness Level When Switch Is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -85,7 +85,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Blue LED brightness level when switch is OFF",
+			"label": "Blue LED Brightness Level When Switch Is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

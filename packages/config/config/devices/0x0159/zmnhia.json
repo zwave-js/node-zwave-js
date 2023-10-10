@@ -43,7 +43,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input 2 switch type",
+			"label": "Input 2 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -77,7 +77,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Input 3 switch type",
+			"label": "Input 3 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -94,7 +94,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -111,7 +111,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Input 3 contact type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON/ALL OFF",
 			"description": "Module responds to commands ALL ON / ALL OFF",
 			"valueSize": 1,
 			"defaultValue": 255,
@@ -155,7 +155,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Set point set by I2",
+			"label": "Set Point Set by I2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -164,7 +164,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Set point set by I3",
+			"label": "Set Point Set by I3",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -177,7 +177,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts on power change for Q1",
+			"label": "Power Reporting in Watts on Power Change for Q1",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -187,7 +187,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by time interval for Q1",
+			"label": "Power Reporting in Watts by Time Interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -224,7 +224,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Too low temperature limit",
+			"label": "Too Low Temperature Limit",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -233,7 +233,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Too high temperature limit",
+			"label": "Too High Temperature Limit",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -242,7 +242,7 @@
 		},
 		{
 			"#": "63",
-			"label": "Switch selection",
+			"label": "Switch Selection",
 			"description": "Connected device type can be (NO) or (NC)",
 			"valueSize": 2,
 			"minValue": 0,

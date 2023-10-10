@@ -259,7 +259,7 @@
 		{
 			"#": "47",
 			"$import": "~/templates/master_template.json#base_options_nounit",
-			"label": "Short/Long Press Function of Button- And Button+",
+			"label": "Short/Long Press Function of Button- and Button+",
 			"options": [
 				{
 					"label": "Short --> volume; Long --> next sound",

@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Memory function",
+			"label": "Memory Function",
 			"description": "Memory function behaviour control.",
 			"valueSize": 1,
 			"defaultValue": 1,

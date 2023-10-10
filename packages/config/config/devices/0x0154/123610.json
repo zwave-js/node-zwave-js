@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatic switch off time",
+			"label": "Automatic Switch Off Time",
 			"description": "If not zero, automatically switch off after a user defined time (in seconds)",
 			"valueSize": 2,
 			"minValue": 0,
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "3",
-			"label": "RF Off command",
+			"label": "RF Off Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input I1 switch type",
+			"label": "Input I1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input I2 switch type",
+			"label": "Input I2 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -50,7 +50,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Input I3 switch type",
+			"label": "Input I3 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Input 1 contact type",
+			"label": "Input 1 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -84,7 +84,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -101,7 +101,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Input 3 contact type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -118,7 +118,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate ALL ON/ALL OFF",
+			"label": "Activate / Deactivate ALL ON/ALL OFF",
 			"valueSize": 2,
 			"defaultValue": 255,
 			"allowManualEntry": false,
@@ -143,7 +143,7 @@
 		},
 		{
 			"#": "11",
-			"label": "I1 Functionality selection",
+			"label": "I1 Functionality Selection",
 			"valueSize": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -164,7 +164,7 @@
 		},
 		{
 			"#": "12",
-			"label": "I2 Functionality selection",
+			"label": "I2 Functionality Selection",
 			"valueSize": 2,
 			"defaultValue": 32767,
 			"allowManualEntry": false,
@@ -181,7 +181,7 @@
 		},
 		{
 			"#": "13",
-			"label": "I3 Functionality selection",
+			"label": "I3 Functionality Selection",
 			"valueSize": 2,
 			"defaultValue": 32767,
 			"allowManualEntry": false,
@@ -202,7 +202,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts on power change",
+			"label": "Power Reporting in Watts on Power Change",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -217,7 +217,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by time interval",
+			"label": "Power Reporting in Watts by Time Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -233,7 +233,7 @@
 		},
 		{
 			"#": "50",
-			"label": "PWM maximum value",
+			"label": "PWM Maximum Value",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 2,
@@ -242,7 +242,7 @@
 		},
 		{
 			"#": "51",
-			"label": "PWM minimum value",
+			"label": "PWM Minimum Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -250,7 +250,7 @@
 		},
 		{
 			"#": "52",
-			"label": "PWM cycle duration",
+			"label": "PWM Cycle Duration",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 5,
@@ -259,7 +259,7 @@
 		},
 		{
 			"#": "53",
-			"label": "PID value inside deadband",
+			"label": "PID Value Inside Deadband",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -267,7 +267,7 @@
 		},
 		{
 			"#": "54",
-			"label": "PID deadband",
+			"label": "PID Deadband",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 0,
@@ -276,7 +276,7 @@
 		},
 		{
 			"#": "55",
-			"label": "Integral sampling time",
+			"label": "Integral Sampling Time",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -285,7 +285,7 @@
 		},
 		{
 			"#": "56",
-			"label": "P parameter",
+			"label": "P Parameter",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -293,7 +293,7 @@
 		},
 		{
 			"#": "57",
-			"label": "I parameter",
+			"label": "I Parameter",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -301,7 +301,7 @@
 		},
 		{
 			"#": "58",
-			"label": "D parameter",
+			"label": "D Parameter",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -309,7 +309,7 @@
 		},
 		{
 			"#": "59",
-			"label": "Thermostat mode",
+			"label": "Thermostat Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -326,7 +326,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Too low temperature limit",
+			"label": "Too Low Temperature Limit",
 			"valueSize": 2,
 			"unit": "°C",
 			"minValue": 1,
@@ -335,7 +335,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Too high temperature limit",
+			"label": "Too High Temperature Limit",
 			"valueSize": 2,
 			"unit": "°C",
 			"minValue": 1,
@@ -344,7 +344,7 @@
 		},
 		{
 			"#": "63",
-			"label": "Output Switch selection",
+			"label": "Output Switch Selection",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -361,7 +361,7 @@
 		},
 		{
 			"#": "70",
-			"label": "Input I1 status on delay",
+			"label": "Input I1 Status on Delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -370,7 +370,7 @@
 		},
 		{
 			"#": "71",
-			"label": "Input I1 status off delay",
+			"label": "Input I1 Status Off Delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -379,7 +379,7 @@
 		},
 		{
 			"#": "72",
-			"label": "Input I2 status on delay",
+			"label": "Input I2 Status on Delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -388,7 +388,7 @@
 		},
 		{
 			"#": "73",
-			"label": "Input I2 status off delay",
+			"label": "Input I2 Status Off Delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -397,7 +397,7 @@
 		},
 		{
 			"#": "74",
-			"label": "Input 3 status ON delay",
+			"label": "Input 3 Status ON Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -405,7 +405,7 @@
 		},
 		{
 			"#": "75",
-			"label": "Input I3 status off delay",
+			"label": "Input I3 Status Off Delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -414,7 +414,7 @@
 		},
 		{
 			"#": "76",
-			"label": "Reporting on time interval",
+			"label": "Reporting on Time Interval",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
@@ -423,7 +423,7 @@
 		},
 		{
 			"#": "77",
-			"label": "Group 10 - delay before sending Basic Set ON",
+			"label": "Group 10 - Delay Before Sending Basic Set ON",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -449,7 +449,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Enable/Disable I1 or select Type and Event",
+			"label": "Enable/Disable I1 or Select Type and Event",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -490,7 +490,7 @@
 		},
 		{
 			"#": "101",
-			"label": "Enable/Disable Endpoint I2 or select type",
+			"label": "Enable/Disable Endpoint I2 or Select Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -531,7 +531,7 @@
 		},
 		{
 			"#": "102",
-			"label": "Enable/Disable Endpoint I3 or select type",
+			"label": "Enable/Disable Endpoint I3 or Select Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -572,7 +572,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Temperature sensor offset settings",
+			"label": "Temperature Sensor Offset Settings",
 			"valueSize": 2,
 			"unit": "°C",
 			"minValue": 0,
@@ -581,7 +581,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Digital temperature sensor reporting",
+			"label": "Digital Temperature Sensor Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -589,7 +589,7 @@
 		},
 		{
 			"#": "121",
-			"label": "Digital temperature sensor / setpoint selector",
+			"label": "Digital Temperature Sensor / Setpoint Selector",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -622,7 +622,7 @@
 		},
 		{
 			"#": "122",
-			"label": "Node Id of external battery powered sensor",
+			"label": "Node Id of External Battery Powered Sensor",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,

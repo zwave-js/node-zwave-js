@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Command value",
+			"label": "Command Value",
 			"description": "Set Basic Set Command value to be sent to group 2 when switch is turned on",
 			"valueSize": 2,
 			"minValue": 0,
@@ -35,7 +35,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Delaying time",
+			"label": "Delaying Time",
 			"description": "Set the delaying time to report to Group 1 in seconds",
 			"valueSize": 1,
 			"unit": "Seconds",
@@ -45,7 +45,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Remember status",
+			"label": "Remember Status",
 			"description": "Set whether to remember the last status",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Interval for wattage auto report",
+			"label": "Interval for Wattage Auto Report",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 0,
@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Interval for kW*h auto report",
+			"label": "Interval for kW*h Auto Report",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 0,
@@ -93,7 +93,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Auto report load surpasses value",
+			"label": "Auto Report Load Surpasses Value",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
@@ -108,7 +108,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Auto report change percentage",
+			"label": "Auto Report Change Percentage",
 			"description": "Auto report when the change of wattage surpasses the set percentage",
 			"valueSize": 1,
 			"unit": "Percent",

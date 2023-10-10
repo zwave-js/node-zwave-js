@@ -35,7 +35,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -52,7 +52,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -69,7 +69,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Input 3 contact type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -86,7 +86,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Automatic turning off relay after set time",
+			"label": "Automatic Turning Off Relay After Set Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -125,7 +125,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts on percentage change",
+			"label": "Power Reporting in Watts on Percentage Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -134,7 +134,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts on power change",
+			"label": "Power Reporting in Watts on Power Change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Digital input type",
+			"label": "Digital Input Type",
 			"description": "Defines the type of input device connected to digital input.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Turn off alarming",
+			"label": "Turn Off Alarming",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -59,7 +59,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Motion sensor memory timer",
+			"label": "Motion Sensor Memory Timer",
 			"description": "Time after which the output triggered by motion sensor is turned off.",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -69,7 +69,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Auto-on timer",
+			"label": "Auto-on Timer",
 			"description": "Defines the time after which the device is turned to last known state.",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Auto-off timer",
+			"label": "Auto-Off Timer",
 			"description": "Defines the time after which the device is turned to last known state.",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -93,7 +93,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Enable/disable beeper",
+			"label": "Enable/disable Beeper",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

@@ -48,7 +48,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button 1 and 3 pair mode",
+			"label": "Button 1 and 3 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -69,7 +69,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Button 2 and 4 pair mode",
+			"label": "Button 2 and 4 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -90,7 +90,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Action on group A",
+			"label": "Action on Group A",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -127,7 +127,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Action on group B",
+			"label": "Action on Group B",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -164,7 +164,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on group C",
+			"label": "Action on Group C",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -201,7 +201,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Action on group D",
+			"label": "Action on Group D",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -238,7 +238,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"description": "Typical time used to differentiate click, hold and double clicks in 10ms units",
 			"valueSize": 1,
 			"minValue": 0,
@@ -248,7 +248,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Send the following Switch All commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -270,7 +270,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -287,7 +287,7 @@
 		},
 		{
 			"#": "24",
-			"label": "LED confirmation mode",
+			"label": "LED Confirmation Mode",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -308,7 +308,7 @@
 		},
 		{
 			"#": "30",
-			"label": "Send unsolicited Battery Report on Wake Up",
+			"label": "Send Unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

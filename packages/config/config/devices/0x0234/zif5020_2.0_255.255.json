@@ -80,61 +80,61 @@
 		{
 			"#": "3",
 			"$import": "templates/logic_group_template.json#input_function_setup",
-			"label": "Function Setup Of Input 1"
+			"label": "Function Setup of Input 1"
 		},
 		{
 			"#": "4",
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 1"
+			"label": "Timer for Input 1"
 		},
 		{
 			"#": "5",
 			"$import": "templates/logic_group_template.json#input_function_setup",
-			"label": "Function Setup Of Input 2"
+			"label": "Function Setup of Input 2"
 		},
 		{
 			"#": "6",
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 2"
+			"label": "Timer for Input 2"
 		},
 		{
 			"#": "7",
 			"$import": "templates/logic_group_template.json#input_function_setup",
-			"label": "Function Setup Of Input 3"
+			"label": "Function Setup of Input 3"
 		},
 		{
 			"#": "8",
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 3"
+			"label": "Timer for Input 3"
 		},
 		{
 			"#": "9",
 			"$import": "templates/logic_group_template.json#input_function_setup",
-			"label": "Function Setup Of Input 4"
+			"label": "Function Setup of Input 4"
 		},
 		{
 			"#": "10",
 			"$import": "templates/logic_group_template.json#input_timer",
-			"label": "Timer For Input 4"
+			"label": "Timer for Input 4"
 		},
 		{
 			"#": "11",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Input Snubber-filter Time Constant.",
+			"label": "Input Snubber-Filter Time Constant.",
 			"unit": "50 ms",
 			"defaultValue": 5
 		},
 		{
 			"#": "12",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Threshold Value For Activation Of Inputs.",
+			"label": "Threshold Value for Activation of Inputs.",
 			"unit": "200 ms",
 			"defaultValue": 20
 		},
 		{
 			"#": "13",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Threshold For Input In Latched Mode.",
+			"label": "Threshold for Input in Latched Mode.",
 			"unit": "50 ms",
 			"defaultValue": 50
 		},

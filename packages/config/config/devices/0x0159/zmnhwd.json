@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input IN1 configuration",
+			"label": "Input IN1 Configuration",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
@@ -65,7 +65,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input IN2 configuration",
+			"label": "Input IN2 Configuration",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -114,7 +114,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Input IN3 configuration",
+			"label": "Input IN3 Configuration",
 			"valueSize": 1,
 			"defaultValue": 8,
 			"allowManualEntry": false,
@@ -163,7 +163,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Input IN4 configuration",
+			"label": "Input IN4 Configuration",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -212,7 +212,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Auto scene mode set",
+			"label": "Auto Scene Mode Set",
 			"description": "Activation of the programmed scene changing color shades.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -255,7 +255,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Memorize device status at power cut",
+			"label": "Memorize Device Status At Power Cut",
 			"description": "Device will be set to status memorized before power cut.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -273,7 +273,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Automatic turning off output after set time",
+			"label": "Automatic Turning Off Output After Set Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
@@ -281,7 +281,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Automatic turning on output after set time",
+			"label": "Automatic Turning on Output After Set Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
@@ -289,7 +289,7 @@
 		},
 		{
 			"#": "10",
-			"label": "MAX dimming value",
+			"label": "MAX Dimming Value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -297,7 +297,7 @@
 		},
 		{
 			"#": "11",
-			"label": "MIN dimming value",
+			"label": "MIN Dimming Value",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -305,7 +305,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Dimming time (soft on/off)",
+			"label": "Dimming Time (Soft On/off)",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 25,
@@ -313,7 +313,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Dimming time when key pressed",
+			"label": "Dimming Time When Key Pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -321,7 +321,7 @@
 		},
 		{
 			"#": "14",
-			"label": "4 Dimmers mode",
+			"label": "4 Dimmers Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

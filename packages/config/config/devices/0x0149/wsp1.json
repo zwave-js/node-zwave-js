@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Local load control",
+			"label": "Local Load Control",
 			"description": "Defines which sequences of click control the local load.",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Level used to control group 4",
+			"label": "Level Used to Control Group 4",
 			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Level used to control group 5",
+			"label": "Level Used to Control Group 5",
 			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Overvoltage level",
+			"label": "Overvoltage Level",
 			"valueSize": 2,
 			"minValue": 110,
 			"maxValue": 260,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Level used to control group 3",
+			"label": "Level Used to Control Group 3",
 			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
@@ -101,7 +101,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Overcurrent level",
+			"label": "Overcurrent Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 12,
@@ -134,7 +134,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Level used to control group 2",
+			"label": "Level Used to Control Group 2",
 			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,

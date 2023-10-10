@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Watt counter reporting period",
+			"label": "Watt Counter Reporting Period",
 			"description": "multiples of 5s",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -32,7 +32,7 @@
 		},
 		{
 			"#": "2",
-			"label": "KWh counter reporting period",
+			"label": "KWh Counter Reporting Period",
 			"description": "number of 10 minute intervals",
 			"valueSize": 2,
 			"unit": "10m",
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Definition of warning of current load (A)",
+			"label": "Definition of Warning of Current Load (A)",
 			"description": "1300*0.01A = 13A",
 			"valueSize": 2,
 			"unit": "0.01A",
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "4",
-			"label": "load caution threshold",
+			"label": "Load Caution Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
@@ -70,7 +70,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Switch OFF mode",
+			"label": "Switch OFF Mode",
 			"description": "Mode of switch off function.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "7",
-			"label": "LED display mode",
+			"label": "LED Display Mode",
 			"description": "Display device status",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -110,7 +110,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto off timer",
+			"label": "Auto Off Timer",
 			"description": "Auto off timer. 0 will disable the auto off function.",
 			"valueSize": 2,
 			"unit": "1s",
@@ -126,7 +126,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Device from command status",
+			"label": "Device From Command Status",
 			"description": "RF off command mode",
 			"valueSize": 1,
 			"defaultValue": 0,

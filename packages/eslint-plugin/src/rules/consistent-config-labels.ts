@@ -5,10 +5,11 @@ import {
 	insertBeforeJSONProperty,
 } from "../utils";
 
-// TODO: Title Case param labels, forbid . at the end of label and options, forbid The at the beginning of label, Avoid Enable/Disable in param labels
+// TODO: Title Case param labels, forbid . at the end of label and options, Avoid Enable/Disable in param labels
 // Avoid default in option labels, forbid numbers at the start of option labels (except units)
 // Sensor Binary -> Binary Sensor
 // Remove separators before the first actual word
+// Labels should not start with "Set" or "The"
 
 const ROOT = "Program > JSONExpressionStatement > JSONObjectExpression";
 const CONFIG_PARAM =
@@ -78,6 +79,7 @@ const titleCaseExceptions = [
 	"kW",
 	"kWh",
 	"Wh",
+	"via",
 	"RFID",
 	"LEDs",
 ];
@@ -196,6 +198,7 @@ const titleCaseIgnored: RegExp[] = [
 	// Units:
 	/^\d+(\.\d+)?°?[smCF]$/,
 	/^ms$/,
+	/^on$/i, // On/on has two different meanings, just leave it as-is
 ];
 
 const alwaysUppercase: RegExp[] = [

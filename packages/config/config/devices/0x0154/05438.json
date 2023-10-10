@@ -27,7 +27,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED indication mode",
+			"label": "LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatically switch off after x seconds.",
+			"label": "Automatically Switch Off After x Seconds.",
 			"description": "If not zero, automatically switch device off after a user defined time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "3",
-			"label": "What to do on RF off command.",
+			"label": "What to Do on RF Off Command.",
 			"description": "Defines how to interpret RF Off-Command.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -84,34 +84,21 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state after power cycle.",
-			"description": "Defines if the switch should restore switch state.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No, turn off",
-					"value": 0
-				},
-				{
-					"label": "Yes, default",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		{
 			"#": "20",
-			"label": "Specify the consumption of the load in watts",
+			"label": "Load Power",
 			"description": "Maximum load 3500 Watts",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 3500,
 			"defaultValue": 0
 		},
 		{
 			"#": "21",
-			"label": "LED Off color",
+			"label": "LED Off Color",
 			"description": "Color for Off state.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -141,7 +128,7 @@
 		},
 		{
 			"#": "22",
-			"label": "LED On color.",
+			"label": "LED On Color.",
 			"description": "Color for On state.",
 			"valueSize": 1,
 			"defaultValue": 3,

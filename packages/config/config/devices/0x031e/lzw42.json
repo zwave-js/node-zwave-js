@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "State after Power Loss",
+			"label": "State After Power Loss",
 			"description": "This state will be chosen when the power is restored",
 			"valueSize": 1,
 			"defaultValue": 0,

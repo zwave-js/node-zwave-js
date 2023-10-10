@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Upper paddle buttons mode",
+			"label": "Upper Paddle Buttons Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Middle paddle buttons mode",
+			"label": "Middle Paddle Buttons Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -50,7 +50,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Lower paddle buttons mode",
+			"label": "Lower Paddle Buttons Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -68,7 +68,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion <= 2.1",
-			"label": "LED #1 mode",
+			"label": "LED #1 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -110,7 +110,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 2.2",
-			"label": "LED #1 mode",
+			"label": "LED #1 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -156,7 +156,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion <= 2.1",
-			"label": "LED #2 mode",
+			"label": "LED #2 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -198,7 +198,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 2.2",
-			"label": "LED #2 mode",
+			"label": "LED #2 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -244,7 +244,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion <= 2.1",
-			"label": "LED #3 mode",
+			"label": "LED #3 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -286,7 +286,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 2.2",
-			"label": "LED #3 mode",
+			"label": "LED #3 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -332,7 +332,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion <= 2.1",
-			"label": "LED #4 mode",
+			"label": "LED #4 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -374,7 +374,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion >= 2.2",
-			"label": "LED #4 mode",
+			"label": "LED #4 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -420,7 +420,7 @@
 		{
 			"#": "8",
 			"$if": "firmwareVersion <= 2.1",
-			"label": "LED #5 mode",
+			"label": "LED #5 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -462,7 +462,7 @@
 		{
 			"#": "8",
 			"$if": "firmwareVersion >= 2.2",
-			"label": "LED #5 mode",
+			"label": "LED #5 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -508,7 +508,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion <= 2.1",
-			"label": "LED #6 mode",
+			"label": "LED #6 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -550,7 +550,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 2.2",
-			"label": "LED #6 mode",
+			"label": "LED #6 Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -595,7 +595,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Relay mode",
+			"label": "Relay Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -636,7 +636,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Disable Central Scene notification",
+			"label": "Disable Central Scene Notification",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -666,7 +666,7 @@
 		},
 		{
 			"#": "13[0xff00]",
-			"label": "Button #1: Multilevel Switch (upper value)",
+			"label": "Button #1: Multilevel Switch (Upper Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -681,7 +681,7 @@
 		},
 		{
 			"#": "13[0xff0000]",
-			"label": "Button #1: Multilevel Switch (lower value)",
+			"label": "Button #1: Multilevel Switch (Lower Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -702,7 +702,7 @@
 		},
 		{
 			"#": "14[0xff00]",
-			"label": "Button #2: Multilevel Switch (upper value)",
+			"label": "Button #2: Multilevel Switch (Upper Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -717,7 +717,7 @@
 		},
 		{
 			"#": "14[0xff0000]",
-			"label": "Button #2: Multilevel Switch (lower value)",
+			"label": "Button #2: Multilevel Switch (Lower Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -738,7 +738,7 @@
 		},
 		{
 			"#": "15[0xff00]",
-			"label": "Button #3: Multilevel Switch (upper value)",
+			"label": "Button #3: Multilevel Switch (Upper Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -753,7 +753,7 @@
 		},
 		{
 			"#": "15[0xff0000]",
-			"label": "Button #3: Multilevel Switch (lower value)",
+			"label": "Button #3: Multilevel Switch (Lower Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -774,7 +774,7 @@
 		},
 		{
 			"#": "16[0xff00]",
-			"label": "Button #4: Multilevel Switch (upper value)",
+			"label": "Button #4: Multilevel Switch (Upper Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -789,7 +789,7 @@
 		},
 		{
 			"#": "16[0xff0000]",
-			"label": "Button #4: Multilevel Switch (lower value)",
+			"label": "Button #4: Multilevel Switch (Lower Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -810,7 +810,7 @@
 		},
 		{
 			"#": "17[0xff00]",
-			"label": "Button #5: Multilevel Switch (upper value)",
+			"label": "Button #5: Multilevel Switch (Upper Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -825,7 +825,7 @@
 		},
 		{
 			"#": "17[0xff0000]",
-			"label": "Button #5: Multilevel Switch (lower value)",
+			"label": "Button #5: Multilevel Switch (Lower Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -846,7 +846,7 @@
 		},
 		{
 			"#": "18[0xff00]",
-			"label": "Button #6: Multilevel Switch (upper value)",
+			"label": "Button #6: Multilevel Switch (Upper Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -861,7 +861,7 @@
 		},
 		{
 			"#": "18[0xff0000]",
-			"label": "Button #6: Multilevel Switch (lower value)",
+			"label": "Button #6: Multilevel Switch (Lower Value)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 99,
@@ -875,7 +875,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Association groups for button 1",
+			"label": "Association Groups for Button 1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -892,7 +892,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Association groups for button 2",
+			"label": "Association Groups for Button 2",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -909,7 +909,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Association groups for button 3",
+			"label": "Association Groups for Button 3",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -926,7 +926,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Association groups for button 4",
+			"label": "Association Groups for Button 4",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -943,7 +943,7 @@
 		},
 		{
 			"#": "23",
-			"label": "Association groups for button 5",
+			"label": "Association Groups for Button 5",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -960,7 +960,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Association groups for button 6",
+			"label": "Association Groups for Button 6",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -977,7 +977,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Backlight control",
+			"label": "Backlight Control",
 			"description": "Configuration of backlight control.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -995,7 +995,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Basic Set for endpoint 0",
+			"label": "Basic Set for Endpoint 0",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

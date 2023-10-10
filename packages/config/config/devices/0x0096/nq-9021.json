@@ -18,7 +18,7 @@
 		{
 			"#": "1",
 			"$if": "firmwareVersion < 3.24",
-			"label": "Pulse factor",
+			"label": "Pulse Factor",
 			"description": "Impulse or Rotation factor per KWh * 10",
 			"valueSize": 2,
 			"minValue": 0,
@@ -29,7 +29,7 @@
 		{
 			"#": "1",
 			"$if": "firmwareVersion >= 3.24",
-			"label": "Pulse factor",
+			"label": "Pulse Factor",
 			"description": "Impulse or Rotation factor per KWh * 10",
 			"valueSize": 4,
 			"minValue": 0,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Sensor type",
+			"label": "Sensor Type",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -55,7 +55,7 @@
 		},
 		{
 			"#": "3",
-			"label": "IR Listen period",
+			"label": "IR Listen Period",
 			"description": "Additional time for feedback measurement. Should always be 0.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +74,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Poll / Wake up frequency",
+			"label": "Poll / Wake Up Frequency",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Pulse count",
+			"label": "Pulse Count",
 			"description": "Total pulse count (Meter reading / impulse factor)",
 			"valueSize": 4,
 			"minValue": 0,
@@ -121,7 +121,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Keep alive period",
+			"label": "Keep Alive Period",
 			"description": "How many seconds before going back to sleep in normal wakeup mode.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -131,7 +131,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Real-time mode",
+			"label": "Real-Time Mode",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -140,7 +140,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Serial number",
+			"label": "Serial Number",
 			"description": "Read-only serial number in decimal",
 			"valueSize": 4,
 			"minValue": 0,
@@ -149,7 +149,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Debug mode",
+			"label": "Debug Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -166,7 +166,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Calibration status",
+			"label": "Calibration Status",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,

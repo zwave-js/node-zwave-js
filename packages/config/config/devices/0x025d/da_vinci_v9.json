@@ -324,7 +324,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Button 1 attributes",
+			"label": "Button 1 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -497,7 +497,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Button 2 attributes",
+			"label": "Button 2 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -666,7 +666,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Button 3 attributes",
+			"label": "Button 3 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -835,7 +835,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Button 4 attributes",
+			"label": "Button 4 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1004,7 +1004,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Button 5 attributes",
+			"label": "Button 5 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1173,7 +1173,7 @@
 		},
 		{
 			"#": "30",
-			"label": "Button 6 attributes",
+			"label": "Button 6 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1342,7 +1342,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Button 7 attribute",
+			"label": "Button 7 Attribute",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1511,7 +1511,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Button 8 attribute",
+			"label": "Button 8 Attribute",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1680,7 +1680,7 @@
 		},
 		{
 			"#": "45",
-			"label": "Button 9 attributes",
+			"label": "Button 9 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1701,7 +1701,7 @@
 		},
 		{
 			"#": "46",
-			"label": "Device Led on intensity",
+			"label": "Device LED On Intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -1709,7 +1709,7 @@
 		},
 		{
 			"#": "47",
-			"label": "Device Led off intensity",
+			"label": "Device LED Off Intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -1717,7 +1717,7 @@
 		},
 		{
 			"#": "48",
-			"label": "Device Toggle or Pulse the output",
+			"label": "Device Toggle or Pulse the Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1734,7 +1734,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Device touch sensitivity",
+			"label": "Device Touch Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,

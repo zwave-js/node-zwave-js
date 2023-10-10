@@ -90,6 +90,7 @@
 		},
 		{
 			"#": "5",
+			// eslint-disable-next-line @zwave-js/consistent-config-labels
 			"label": "Delay In Time",
 			"valueSize": 1,
 			"unit": "seconds",

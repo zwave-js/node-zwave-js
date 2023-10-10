@@ -33,7 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "W meter report period",
+			"label": "W Meter Report Period",
 			"description": "Period for reporting W meter",
 			"valueSize": 2,
 			"minValue": 0,
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "2",
-			"label": "kWh meter report period",
+			"label": "kWh Meter Report Period",
 			"description": "Period for reporting kWh meter",
 			"valueSize": 2,
 			"minValue": 0,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Selected endpoint",
+			"label": "Selected Endpoint",
 			"description": "Which endpoint is addressed by the BASIC command class",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -75,7 +75,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Switch mode",
+			"label": "Switch Mode",
 			"description": "Change the external switch mode",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "9",
-			"label": "RF off command mode",
+			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

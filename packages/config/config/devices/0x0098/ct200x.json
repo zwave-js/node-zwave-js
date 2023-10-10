@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Temperature Reporting Threshold (8-bit)",
+			"label": "Temperature Reporting Threshold (8-Bit)",
 			"description": "This value determines the reporting threshold",
 			"valueSize": 1,
 			"defaultValue": 2,

@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Voltage delta",
+			"label": "Voltage Delta",
 			"description": "Voltage delta based configuration",
 			"valueSize": 2,
 			"unit": "V",
@@ -35,7 +35,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Current delta",
+			"label": "Current Delta",
 			"description": "Current delta based configuration",
 			"valueSize": 2,
 			"unit": "A",
@@ -85,7 +85,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Switch Status time",
+			"label": "Switch Status Time",
 			"valueSize": 2,
 			"unit": "sec",
 			"minValue": 0,
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Voltage time",
+			"label": "Voltage Time",
 			"description": "Voltage time interval based",
 			"valueSize": 2,
 			"unit": "sec",
@@ -106,7 +106,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Current time",
+			"label": "Current Time",
 			"description": "Current time interval based",
 			"valueSize": 2,
 			"unit": "sec",
@@ -117,7 +117,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Power Factor time",
+			"label": "Power Factor Time",
 			"valueSize": 2,
 			"unit": "sec",
 			"minValue": 0,
@@ -127,7 +127,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Active Power time",
+			"label": "Active Power Time",
 			"valueSize": 2,
 			"unit": "sec",
 			"minValue": 0,
@@ -137,7 +137,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Active Energy time",
+			"label": "Active Energy Time",
 			"valueSize": 2,
 			"unit": "sec",
 			"minValue": 0,
@@ -147,7 +147,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Apparent Energy time",
+			"label": "Apparent Energy Time",
 			"valueSize": 2,
 			"unit": "sec",
 			"minValue": 0,
@@ -157,7 +157,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Relay and LED configuration",
+			"label": "Relay and LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

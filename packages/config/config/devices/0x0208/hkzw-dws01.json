@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Value of BASIC SET",
+			"label": "Value of Basic Set",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

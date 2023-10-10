@@ -141,7 +141,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Load type",
+			"label": "Load Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
