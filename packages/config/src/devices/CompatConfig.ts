@@ -88,6 +88,23 @@ compat option disableBasicMapping must be true or omitted`,
 			this.disableBasicMapping = definition.disableBasicMapping;
 		}
 
+		if (definition.disableCallbackFunctionTypeCheck != undefined) {
+			if (
+				!isArray(definition.disableCallbackFunctionTypeCheck)
+				|| !definition.disableCallbackFunctionTypeCheck.every(
+					(d: any) => typeof d === "number" && d % 1 === 0 && d > 0,
+				)
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+when present, compat option disableCallbackFunctionTypeCheck msut be an array of positive integers`,
+				);
+			}
+			this.disableCallbackFunctionTypeCheck =
+				definition.disableCallbackFunctionTypeCheck;
+		}
+
 		if (definition.disableStrictEntryControlDataValidation != undefined) {
 			if (definition.disableStrictEntryControlDataValidation !== true) {
 				throwInvalidConfig(
@@ -568,6 +585,7 @@ compat option overrideQueries must be an object!`,
 	public readonly disableBasicMapping?: boolean;
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly disableStrictMeasurementValidation?: boolean;
+	public readonly disableCallbackFunctionTypeCheck?: number[];
 	public readonly enableBasicSetMapping?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
 	public readonly forceSceneControllerGroupCount?: number;
@@ -608,6 +626,7 @@ compat option overrideQueries must be an object!`,
 			"removeCCs",
 			"disableAutoRefresh",
 			"disableBasicMapping",
+			"disableCallbackFunctionTypeCheck",
 			"disableStrictEntryControlDataValidation",
 			"disableStrictMeasurementValidation",
 			"enableBasicSetMapping",

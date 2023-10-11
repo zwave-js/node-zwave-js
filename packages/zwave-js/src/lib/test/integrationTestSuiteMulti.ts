@@ -2,6 +2,7 @@ import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { noop } from "@zwave-js/shared";
 import {
 	type MockController,
+	type MockControllerOptions,
 	type MockNode,
 	type MockNodeOptions,
 } from "@zwave-js/testing";
@@ -12,7 +13,7 @@ import crypto from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveOptions } from "../driver/ZWaveOptions";
+import type { PartialZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";
 import { prepareDriver, prepareMocks } from "./integrationTestSuiteShared";
 
@@ -23,6 +24,7 @@ interface IntegrationTestOptions {
 	provisioningDirectory?: string;
 	/** Whether the recorded messages and frames should be cleared before executing the test body. Default: true. */
 	clearMessageStatsBeforeTest?: boolean;
+	controllerCapabilities?: MockControllerOptions["capabilities"];
 	nodeCapabilities?: Pick<MockNodeOptions, "id" | "capabilities">[];
 	customSetup?: (
 		driver: Driver,
@@ -36,7 +38,7 @@ interface IntegrationTestOptions {
 		mockController: MockController,
 		mockNodes: MockNode[],
 	) => Promise<void>;
-	additionalDriverOptions?: Partial<ZWaveOptions>;
+	additionalDriverOptions?: PartialZWaveOptions;
 }
 
 export interface IntegrationTestFn {
@@ -55,6 +57,7 @@ function suite(
 	modifier?: "only" | "skip",
 ) {
 	const {
+		controllerCapabilities,
 		nodeCapabilities,
 		customSetup,
 		testBody,
@@ -96,7 +99,9 @@ function suite(
 		));
 		({ mockController, mockNodes } = prepareMocks(
 			mockPort,
-			undefined,
+			{
+				capabilities: controllerCapabilities,
+			},
 			// TODO: This isn't ideal as it requires us to provide the
 			// node capabilities in addition to the provisioning directory
 			nodeCapabilities,

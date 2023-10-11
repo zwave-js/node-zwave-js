@@ -10,6 +10,10 @@ import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import Sinon from "sinon";
 import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
 import {
+	RequestNodeInfoRequest,
+	RequestNodeInfoResponse,
+} from "../../serialapi/network-mgmt/RequestNodeInfoMessages";
+import {
 	SendDataAbort,
 	SendDataRequest,
 	SendDataResponse,
@@ -315,6 +319,47 @@ integrationTest(
 			await followupCommand;
 
 			t.pass();
+		},
+	},
+);
+
+integrationTest(
+	"Missing callback recovery only kicks in for SendData commands",
+	{
+		// debug: true,
+
+		additionalDriverOptions: {
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+		},
+
+		customSetup: async (driver, mockController, mockNode) => {
+			// This is almost a 1:1 copy of the default behavior, except that the callback never gets sent
+			const handleBrokenRequestNodeInfo: MockControllerBehavior = {
+				async onHostMessage(host, controller, msg) {
+					if (msg instanceof RequestNodeInfoRequest) {
+						// Notify the host that the message was sent
+						const res = new RequestNodeInfoResponse(host, {
+							wasSent: true,
+						});
+						await controller.sendToHost(res.serialize());
+
+						// And never send a callback
+						return true;
+					}
+				},
+			};
+			mockController.defineBehavior(handleBrokenRequestNodeInfo);
+		},
+		testBody: async (t, driver, node, mockController, mockNode) => {
+			// Circumvent the options validation so the test doesn't take forever
+			driver.options.timeouts.sendDataCallback = 1500;
+
+			await assertZWaveError(t, () => node.requestNodeInfo(), {
+				errorCode: ZWaveErrorCodes.Controller_Timeout,
+				context: "callback",
+			});
 		},
 	},
 );

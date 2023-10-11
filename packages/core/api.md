@@ -1218,17 +1218,25 @@ export function isMessagePriority(val: unknown): val is MessagePriority;
 // Warning: (ae-missing-release-tag) "isMissingControllerACK" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function isMissingControllerACK(e: unknown): e is ZWaveError;
+export function isMissingControllerACK(e: unknown): e is ZWaveError & {
+    code: ZWaveErrorCodes.Controller_Timeout;
+    context: "ACK";
+};
 
 // Warning: (ae-missing-release-tag) "isMissingControllerCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function isMissingControllerCallback(e: unknown): e is ZWaveError;
+export function isMissingControllerCallback(e: unknown): e is ZWaveError & {
+    code: ZWaveErrorCodes.Controller_Timeout;
+    context: "callback";
+};
 
 // Warning: (ae-missing-release-tag) "isRecoverableZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function isRecoverableZWaveError(e: unknown): e is ZWaveError;
+export function isRecoverableZWaveError(e: unknown): e is ZWaveError & {
+    code: ZWaveErrorCodes.Controller_InterviewRestarted | ZWaveErrorCodes.Controller_NodeRemoved;
+};
 
 // Warning: (ae-missing-release-tag) "isRssiError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2626,6 +2634,14 @@ export enum TransmitStatus {
 //
 // @public
 export function tryParseDSKFromQRCodeString(qr: string): string | undefined;
+
+// Warning: (ae-missing-release-tag) "tryParseParamNumber" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function tryParseParamNumber(str: string): {
+    parameter: number;
+    valueBitMask?: number;
+} | undefined;
 
 // Warning: (ae-missing-release-tag) "TXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

@@ -144,6 +144,8 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     // (undocumented)
     readonly disableBasicMapping?: boolean;
     // (undocumented)
+    readonly disableCallbackFunctionTypeCheck?: number[];
+    // (undocumented)
     readonly disableStrictEntryControlDataValidation?: boolean;
     // (undocumented)
     readonly disableStrictMeasurementValidation?: boolean;

@@ -675,5 +675,15 @@
 				"text": "Firmware version 7.19.3 has a bug that causes the controller to randomly hang during transmission until it is restarted. It is currently unclear if this bug is fixed in a later firmware version."
 			}
 		]
+	},
+	"500_series_controller_compat_flags": {
+		// It seems that all 500 series controllers have a firmware bug:
+
+		// When failing, AssignSUCReturnRoute and DeleteSUCReturnRoute get answered with a wrong callback function type,
+		// triggering Z-Wave JS's unresponsive controller check.
+		"disableCallbackFunctionTypeCheck": [
+			81, // AssignSUCReturnRoute
+			85 // DeleteSUCReturnRoute
+		]
 	}
 }

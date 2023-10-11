@@ -226,6 +226,7 @@ export async function getAvailableFirmwareUpdates(
 	return result.map((update) => ({
 		device: deviceId,
 		...update,
+		channel: update.channel ?? "stable",
 	}));
 }
 

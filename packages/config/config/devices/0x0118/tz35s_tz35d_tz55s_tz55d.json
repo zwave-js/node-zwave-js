@@ -1,8 +1,8 @@
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
-	"label": "TZ55S",
-	"description": "Single Paddle Wall Dimmer",
+	"label": "TZ35S / TZ35D / TZ55S / TZ55D",
+	"description": "Single/Dual Paddle Wall Dimmer",
 	"devices": [
 		{
 			"productType": "0x0808",
@@ -97,5 +97,9 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// The right paddle sends its status via Basic Set commands
+		"treatBasicSetAsEvent": true
+	}
 }
