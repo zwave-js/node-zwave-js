@@ -1,8 +1,8 @@
 {
-	"manufacturer": "Zipato",
+	"manufacturer": "Alloy",
 	"manufacturerId": "0x0131",
-	"label": "NE-NAS-PD07U1",
-	"description": "Alloy 5 in 1 PIR Motion Sensor",
+	"label": "AH-NAS-PD07U1",
+	"description": "5 in 1 PIR Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0004",

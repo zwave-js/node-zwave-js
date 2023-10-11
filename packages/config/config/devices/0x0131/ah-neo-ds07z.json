@@ -1,8 +1,8 @@
 {
-	"manufacturer": "Zipato",
+	"manufacturer": "Alloy",
 	"manufacturerId": "0x0131",
-	"label": "NE-NEO-DS07Z",
-	"description": "Alloy Contact Sensor 2",
+	"label": "AH-NEO-DS07Z",
+	"description": "Contact Sensor 2",
 	"devices": [
 		{
 			"productType": "0x0004",
