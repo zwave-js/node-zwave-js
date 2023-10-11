@@ -71,11 +71,11 @@
 			"defaultValue": 99,
 			"options": [
 				{
-					"label": "Disable, Light OFF",
+					"label": "Disable, light off",
 					"value": 0
 				},
 				{
-					"label": "Disable, Light ON",
+					"label": "Disable, light on",
 					"value": 100
 				}
 			]
@@ -172,44 +172,18 @@
 		},
 		{
 			"#": "7[0x02]",
-			"label": "Bit1: Enable sending motion OFF report.",
-			"description": "0:Disable, 1:Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Sending Motion OFF Report"
 		},
 		{
 			"#": "7[0x04]",
-			"label": "Bit2: Enable PIR super sensitivity mode.",
-			"description": "0:Disable, 1:Enable",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "PIR Super Sensitivity Mode",
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x10]",
 			"label": "Bit4: Notification Type",
-			"description": "0: Notification Report. 1: Sensor Binary Report.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -219,46 +193,22 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor Binary Report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7[0x20]",
-			"label": "Bit5: Disable Multi CC in auto report.",
-			"description": "1:Disable, 0:Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Multi CC in Auto Report",
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x40]",
-			"label": "Bit6: Report battery state when device triggered",
-			"description": "1:Disable, 0 Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Report Battery State When Device Triggered",
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

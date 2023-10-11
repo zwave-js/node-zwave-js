@@ -79,7 +79,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Super Sensitivity/Binary Report/Motion Off Report",
+					"label": "Super sensitivity/binary report/motion off report",
 					"value": 22
 				}
 			]

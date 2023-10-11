@@ -2,7 +2,7 @@
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "NZW31",
-	"description": "In-wall Dimming Switch",
+	"description": "In-Wall Dimming Switch",
 	"devices": [
 		{
 			"productType": "0x1f00",

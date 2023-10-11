@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Re-trigger Interval",
+			"label": "Re-Trigger Interval",
 			"description": "Adjust the interval of being re-triggered after a trigger",
 			"valueSize": 2,
 			"minValue": 5,

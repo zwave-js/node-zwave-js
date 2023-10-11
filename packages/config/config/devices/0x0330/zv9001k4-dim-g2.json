@@ -2,7 +2,7 @@
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
 	"label": "ZV9001K4-DIM-G2",
-	"description": "2 group single color wall mounted remote",
+	"description": "2 Group Single Color Wall Mounted Remote",
 	"devices": [
 		{
 			"productType": "0x0300",

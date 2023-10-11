@@ -31,11 +31,11 @@
 					"value": 0
 				},
 				{
-					"label": "Enable All Off; Disable All On",
+					"label": "Enable all off; Disable all on",
 					"value": 1
 				},
 				{
-					"label": "Enable All On; Disable All Off",
+					"label": "Enable all on; Disable all off",
 					"value": 2
 				},
 				{
@@ -64,27 +64,27 @@
 					"value": 0
 				},
 				{
-					"label": "Auto off after 'Key on Duration' seconds",
+					"label": "Auto off after 'Key on duration' seconds",
 					"value": 1
 				},
 				{
-					"label": "Auto on after 'Key on Duration' seconds",
+					"label": "Auto on after 'Key on duration' seconds",
 					"value": 2
 				},
 				{
-					"label": "Held 3 seconds -> On; Release -> Off",
+					"label": "Held 3 seconds -> on; Release -> off",
 					"value": 3
 				},
 				{
-					"label": "Single click (On/Off); Held 3 seconds -> On; Release -> Off",
+					"label": "Single click (On/Off); Held 3 seconds -> on; Release -> off",
 					"value": 4
 				},
 				{
-					"label": "Momentary switch; Held -> On; Release -> Off",
+					"label": "Momentary switch; Held -> on; Release -> off",
 					"value": 5
 				},
 				{
-					"label": "Held 3 seconds -> On; Held 3 seconds -> Off",
+					"label": "Held 3 seconds -> on; Held 3 seconds -> off",
 					"value": 6
 				}
 			]
@@ -136,27 +136,27 @@
 					"value": 0
 				},
 				{
-					"label": "Auto off after 'Key on Duration' seconds",
+					"label": "Auto off after 'Key on duration' seconds",
 					"value": 1
 				},
 				{
-					"label": "Auto on after 'Key on Duration' seconds",
+					"label": "Auto on after 'Key on duration' seconds",
 					"value": 2
 				},
 				{
-					"label": "Held 3 seconds -> On; Release -> Off",
+					"label": "Held 3 seconds -> on; Release -> off",
 					"value": 3
 				},
 				{
-					"label": "Single click (On/Off); Held 3 seconds -> On; Release -> Off",
+					"label": "Single click (On/Off); Held 3 seconds -> on; Release -> off",
 					"value": 4
 				},
 				{
-					"label": "Momentary switch; Held -> On; Release -> Off",
+					"label": "Momentary switch; Held -> on; Release -> off",
 					"value": 5
 				},
 				{
-					"label": "Held 3 seconds -> On; Held 3 seconds -> Off",
+					"label": "Held 3 seconds -> on; Held 3 seconds -> off",
 					"value": 6
 				}
 			]
@@ -244,19 +244,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene activation disabled",
+					"label": "Scene Activation disabled",
 					"value": 0
 				},
 				{
-					"label": "Key 1 -> Scene ID1 (Any Key 1 relay state)",
+					"label": "Key 1 -> scene ID1 (Any key 1 relay state)",
 					"value": 1
 				},
 				{
-					"label": "Key 1 -> Scene ID 1 (Key 1 relay open)",
+					"label": "Key 1 -> scene id 1 (Key 1 relay open)",
 					"value": 2
 				},
 				{
-					"label": "Upon clicking Key 1, always activate scene ID1 when Key 1's relay output is closed",
+					"label": "Upon clicking key 1, always activate scene ID1 when key 1's relay output is closed",
 					"value": 3
 				}
 			]
@@ -271,7 +271,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Scene activation disabled",
+					"label": "Scene Activation disabled",
 					"value": 0
 				}
 			]
@@ -294,7 +294,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Factory reset",
+			"label": "Factory Reset",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,

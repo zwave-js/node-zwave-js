@@ -2,7 +2,8 @@
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
 	"label": "DCH-G020",
-	"description": "mydlink® Connected Home Hub",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
+	"description": "mydlink Connected Home Hub",
 	"devices": [
 		{
 			"productType": "0x0020",

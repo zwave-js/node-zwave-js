@@ -2,7 +2,7 @@
 	"manufacturer": "iControl",
 	"manufacturerId": "0x0106",
 	"label": "CH-1000",
-	"description": "iControl One Link controller",
+	"description": "iControl One Link Controller",
 	"devices": [
 		{
 			"productType": "0x0004",

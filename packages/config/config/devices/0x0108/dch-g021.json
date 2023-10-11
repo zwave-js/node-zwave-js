@@ -2,7 +2,7 @@
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
 	"label": "DCH-G021",
-	"description": "Staples Connect Hub powered by D-Link",
+	"description": "Staples Connect Hub Powered by D-Link",
 	"devices": [
 		{
 			"productType": "0x2801",

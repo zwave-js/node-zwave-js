@@ -123,11 +123,11 @@
 					"value": 0
 				},
 				{
-					"label": "Minimum Brightness",
+					"label": "Minimum brightness",
 					"value": 100
 				},
 				{
-					"label": "Maximum Brightness",
+					"label": "Maximum brightness",
 					"value": 101
 				},
 				{
@@ -187,7 +187,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default brightness (parameter 25)",
+					"label": "Default brightness (Parameter 25)",
 					"value": 0
 				},
 				{
@@ -195,7 +195,7 @@
 					"value": 1
 				},
 				{
-					"label": "Maximum brightness (parameter 18)",
+					"label": "Maximum brightness (Parameter 18)",
 					"value": 2
 				},
 				{

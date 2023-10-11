@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Toggle LED mode",
+			"label": "Toggle LED Mode",
 			"description": "Set to 1 for LED to be in sync with switch.",
 			"valueSize": 1,
 			"defaultValue": 0,

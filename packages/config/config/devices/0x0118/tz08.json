@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Watt meter report period",
+			"label": "Watt Meter Report Period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -32,7 +32,7 @@
 		},
 		{
 			"#": "2",
-			"label": "KWh meter report period",
+			"label": "KWh Meter Report Period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Watt load caution threshold",
+			"label": "Watt Load Caution Threshold",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1100,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "4",
-			"label": "KWh load caution threshold",
+			"label": "KWh Load Caution Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,

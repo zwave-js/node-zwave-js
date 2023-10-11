@@ -86,7 +86,7 @@
 			"#": "5",
 			"label": "Temperature Calibration",
 			"valueSize": 1,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0

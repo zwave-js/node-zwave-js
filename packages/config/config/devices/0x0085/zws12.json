@@ -27,25 +27,25 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Motor speed 1",
+			"label": "Motor Speed 1",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "lowest speed",
+					"label": "Lowest speed",
 					"value": 1
 				},
 				{
-					"label": "default speed",
+					"label": "Default speed",
 					"value": 2
 				},
 				{
-					"label": "higher speed",
+					"label": "Higher speed",
 					"value": 3
 				},
 				{
-					"label": "highest speed",
+					"label": "Highest speed",
 					"value": 4
 				}
 			]
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Close after time",
+			"label": "Close After Time",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,

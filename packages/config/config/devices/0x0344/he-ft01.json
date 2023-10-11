@@ -21,6 +21,7 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"readOnly": true,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "EU (868.4 MHz, 869.85 MHz)",
@@ -63,6 +64,7 @@
 					"value": 9
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "3",
@@ -106,11 +108,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -123,11 +125,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -140,11 +142,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -341,15 +343,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Heating and Cooling Mode",
+					"label": "Heating and cooling mode",
 					"value": 1
 				},
 				{
-					"label": "Heating Mode",
+					"label": "Heating mode",
 					"value": 2
 				},
 				{
-					"label": "Cooling Mode",
+					"label": "Cooling mode",
 					"value": 3
 				}
 			]
@@ -711,48 +713,50 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
-					"label": "No Action",
+					"label": "No action",
 					"value": 0
 				},
 				{
-					"label": "COM with Heating & Cooling Climate Mode",
+					"label": "COM with heating & cooling climate mode",
 					"value": 1
 				},
 				{
-					"label": "COM with Heating Climate Mode",
+					"label": "COM with heating climate mode",
 					"value": 2
 				},
 				{
-					"label": "COM with Cooling Climate Mode",
+					"label": "COM with cooling climate mode",
 					"value": 3
 				},
 				{
-					"label": "TIME with Heating & Cooling Climate Mode",
+					"label": "TIME with heating & cooling climate mode",
 					"value": 4
 				},
 				{
-					"label": "TIME with Heating Climate Mode",
+					"label": "TIME with heating climate mode",
 					"value": 5
 				},
 				{
-					"label": "TIME with Cooling Climate Mode",
+					"label": "TIME with cooling climate mode",
 					"value": 6
 				},
 				{
-					"label": "ECO with Heating Climate Mode",
+					"label": "ECO with heating climate mode",
 					"value": 7
 				},
 				{
-					"label": "ECO with Cooling Climate Mode",
+					"label": "ECO with cooling climate mode",
 					"value": 8
 				},
 				{
-					"label": "Ventilation Climate Mode",
+					"label": "Ventilation climate mode",
 					"value": 9
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		}
 	],
 	"compat": {

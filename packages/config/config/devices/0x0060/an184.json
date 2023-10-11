@@ -2,7 +2,7 @@
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
 	"label": "AN184",
-	"description": "Mini plug with metering",
+	"description": "Mini Plug with Metering",
 	"devices": [
 		{
 			"productType": "0x0004",

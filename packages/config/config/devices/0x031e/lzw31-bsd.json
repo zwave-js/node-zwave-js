@@ -277,15 +277,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single-Pole (One Switch)",
+					"label": "Single-Pole (One switch)",
 					"value": 0
 				},
 				{
-					"label": "Multi-Switch (Dumb Switch)",
+					"label": "Multi-Switch (Dumb switch)",
 					"value": 1
 				},
 				{
-					"label": "Multi-Switch (Auxiliary Switch)",
+					"label": "Multi-Switch (Auxiliary switch)",
 					"value": 2
 				}
 			]
@@ -331,11 +331,11 @@
 					"value": 0
 				},
 				{
-					"label": "On/Off Only",
+					"label": "On/Off only",
 					"value": 1
 				},
 				{
-					"label": "Smart Bulb",
+					"label": "Smart bulb",
 					"value": 2
 				}
 			]

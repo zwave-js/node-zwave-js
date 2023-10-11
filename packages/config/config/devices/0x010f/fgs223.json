@@ -56,19 +56,19 @@
 					"value": 0
 				},
 				{
-					"label": "Delay turn ON",
+					"label": "Delay turn on",
 					"value": 1
 				},
 				{
-					"label": "Delay turn OFF",
+					"label": "Delay turn off",
 					"value": 2
 				},
 				{
-					"label": "Automatically turn ON",
+					"label": "Automatically turn on",
 					"value": 3
 				},
 				{
-					"label": "Automatically turn OFF",
+					"label": "Automatically turn off",
 					"value": 4
 				},
 				{
@@ -89,11 +89,11 @@
 					"value": 0
 				},
 				{
-					"label": "Ignore - mode runs until it ends",
+					"label": "Ignore - Mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "Reset - start time from the beginning",
+					"label": "Reset - Start time from the beginning",
 					"value": 2
 				}
 			]
@@ -134,19 +134,19 @@
 					"value": 0
 				},
 				{
-					"label": "Delay turn ON",
+					"label": "Delay turn on",
 					"value": 1
 				},
 				{
-					"label": "Delay turn OFF",
+					"label": "Delay turn off",
 					"value": 2
 				},
 				{
-					"label": "Automatically turn ON",
+					"label": "Automatically turn on",
 					"value": 3
 				},
 				{
-					"label": "Automatically turn OFF",
+					"label": "Automatically turn off",
 					"value": 4
 				},
 				{
@@ -168,11 +168,11 @@
 					"value": 0
 				},
 				{
-					"label": "Ignore - mode runs until it ends",
+					"label": "Ignore - Mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "Reset - start time from the beginning",
+					"label": "Reset - Start time from the beginning",
 					"value": 2
 				}
 			]
@@ -213,11 +213,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch (status syncs with switch position)",
+					"label": "Switch (Status syncs with switch position)",
 					"value": 1
 				},
 				{
-					"label": "Switch (status changes when switch change)",
+					"label": "Switch (Status changes when switch change)",
 					"value": 2
 				}
 			]

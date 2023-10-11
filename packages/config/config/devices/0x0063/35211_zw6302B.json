@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Temperature And Light Sensor Sensing Frequency",
+			"label": "Temperature and Light Sensor Sensing Frequency",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 5,

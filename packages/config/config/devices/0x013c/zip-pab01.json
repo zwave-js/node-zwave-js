@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Power meter report period",
+			"label": "Power Meter Report Period",
 			"description": "Power meter report period, in 5 seconds unit. 720 -> 1 hour",
 			"valueSize": 2,
 			"unit": "5sec",
@@ -26,7 +26,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Energy meter report period",
+			"label": "Energy Meter Report Period",
 			"description": "The accumulated power consumption report period",
 			"valueSize": 2,
 			"unit": "5sec",
@@ -36,7 +36,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Selected default endpoint",
+			"label": "Selected Default Endpoint",
 			"description": "1 => CT1 and CT2, 2 => CT1, 3 => CT2",
 			"valueSize": 1,
 			"minValue": 1,

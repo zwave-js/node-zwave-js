@@ -18,26 +18,25 @@
 		{
 			"#": "1",
 			"label": "Hardware Combination Identifier",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 18,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "2-Pole 8A Relay",
+					"label": "2-Pole 8A relay",
 					"value": 16
 				},
 				{
-					"label": "1-10V Dimmer",
+					"label": "1-10V dimmer",
 					"value": 17
 				},
 				{
-					"label": "230V MOSFET Dimmer",
+					"label": "230V MOSFET dimmer",
 					"value": 18
 				},
 				{
-					"label": "1-Pole 16A Relay",
+					"label": "1-Pole 16A relay",
 					"value": 19
 				}
 			]
@@ -59,11 +58,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Leading Edge",
+					"label": "Leading edge",
 					"value": 0
 				},
 				{
-					"label": "Tailing Edge",
+					"label": "Tailing edge",
 					"value": 1
 				}
 			]
@@ -93,19 +92,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "2-Pole 8A Relay",
+					"label": "2-Pole 8A relay",
 					"value": 0
 				},
 				{
-					"label": "230V MOSFET Dimmer",
+					"label": "230V MOSFET dimmer",
 					"value": 2
 				},
 				{
-					"label": "1-10V Dimmer",
+					"label": "1-10V dimmer",
 					"value": 4
 				},
 				{
-					"label": "1-Pole 16A Relay",
+					"label": "1-Pole 16A relay",
 					"value": 6
 				}
 			]

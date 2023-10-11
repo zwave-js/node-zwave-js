@@ -2,6 +2,7 @@
 	"manufacturer": "Universal Devices, Inc",
 	"manufacturerId": "0x0193",
 	"label": "ISY-994ZW",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "Universal Devices ISY-994i ZW",
 	"devices": [
 		{

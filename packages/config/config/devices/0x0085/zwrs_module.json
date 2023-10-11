@@ -2,7 +2,7 @@
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "ZWRS MODULE",
-	"description": "Roller Shutter FLiRS module",
+	"description": "Roller Shutter FLiRS Module",
 	"devices": [
 		{
 			"productType": "0x0022",

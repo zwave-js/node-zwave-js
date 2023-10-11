@@ -2,7 +2,7 @@
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "ZEN23",
-	"description": "Wall mounted switch",
+	"description": "Wall Mounted Switch",
 	"devices": [
 		{
 			"productType": "0x1111",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Control mode",
+			"label": "Control Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

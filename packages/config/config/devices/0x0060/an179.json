@@ -52,36 +52,24 @@
 		},
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Restore State After Power Loss",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Switching type",
+			"label": "Switching Type",
 			"description": "Edge or toggle switch mode.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Edge Mode",
+					"label": "Edge mode",
 					"value": 0
 				},
 				{
-					"label": "Toggle Mode",
+					"label": "Toggle mode",
 					"value": 1
 				}
 			]

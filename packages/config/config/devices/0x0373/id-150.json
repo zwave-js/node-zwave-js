@@ -2,7 +2,7 @@
 	"manufacturer": "ID Lock AS",
 	"manufacturerId": "0x0373",
 	"label": "ID-150",
-	"description": "Z wave module for ID Lock 150 and 101",
+	"description": "Z Wave Module for ID Lock 150 and 101",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -16,26 +16,26 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Door lock mode",
+			"label": "Door Lock Mode",
 			"description": "Set if the lock is in away mode and if automatic locking should be enabled",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Away Manual Lock",
+					"label": "Disable away manual lock",
 					"value": 0
 				},
 				{
-					"label": "Disable Away Auto Lock",
+					"label": "Disable away auto lock",
 					"value": 1
 				},
 				{
-					"label": "Enable Away Manual Lock",
+					"label": "Enable away manual lock",
 					"value": 2
 				},
 				{
-					"label": "Enable Away Auto Lock",
+					"label": "Enable away auto lock",
 					"value": 3
 				}
 			]
@@ -109,7 +109,7 @@
 					"value": 5
 				},
 				{
-					"label": "Max. sound level",
+					"label": "Maximum",
 					"value": 6
 				}
 			]
@@ -202,15 +202,15 @@
 					"value": 4
 				},
 				{
-					"label": "Generate Random PIN 1x use",
+					"label": "Generate random PIN 1x use",
 					"value": 5
 				},
 				{
-					"label": "Generate Random PIN 24h use",
+					"label": "Generate random PIN 24h use",
 					"value": 6
 				},
 				{
-					"label": "Always Valid",
+					"label": "Always valid",
 					"value": 7
 				},
 				{
@@ -247,11 +247,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled (no sound)",
+					"label": "Disabled (No sound)",
 					"value": 0
 				},
 				{
-					"label": "Enabled (no sound)",
+					"label": "Enabled (No sound)",
 					"value": 1
 				},
 				{

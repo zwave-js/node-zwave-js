@@ -87,18 +87,18 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Status Change Signalled By LED",
+			"label": "Status Change Signalled by LED",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED turned Off",
+					"label": "LED turned off",
 					"value": 0
 				},
 				{
-					"label": "LED turned On",
+					"label": "LED turned on",
 					"value": 1
 				},
 				{
@@ -110,7 +110,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Door State when Magnet is Close",
+			"label": "Door State When Magnet Is Close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -192,7 +192,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "General purpose alarm (door/window)",
+					"label": "General purpose alarm (Door/Window)",
 					"value": 0
 				},
 				{
@@ -224,7 +224,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Forced Level of Dimming group 1",
+			"label": "Forced Level of Dimming Group 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -295,7 +295,7 @@
 			"#": "12",
 			"$if": "firmwareVersion <= 3.1",
 			"label": "Temperature Change Threshold",
-			"description": "Parameter / 16 = Celcius value.  Parameter / 80/9 = Fahrenheit value.",
+			"description": "Parameter / 16 = Celsius value.  Parameter / 80/9 = Fahrenheit value.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -409,7 +409,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "General purpose alarm (door/window)",
+					"label": "General purpose alarm (Door/Window)",
 					"value": 0
 				},
 				{

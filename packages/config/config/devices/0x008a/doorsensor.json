@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Reset to factory settings",
+			"label": "Reset to Factory Settings",
 			"description": "Set all configuration values to default values (factory settings).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "2",
-			"label": "External contact behavior",
+			"label": "External Contact Behavior",
 			"description": "Configure what the external contact sends when triggered.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -60,8 +60,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Operating mode.",
-			"description": "The main operating mode for the device.",
+			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -75,14 +74,14 @@
 					"value": 2
 				},
 				{
-					"label": "Always-on",
+					"label": "Always on",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Temperature offset",
+			"label": "Temperature Offset",
 			"description": "An offset for the temperature.",
 			"valueSize": 2,
 			"minValue": -32768,

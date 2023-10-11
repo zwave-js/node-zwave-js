@@ -2,7 +2,7 @@
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSA03XXX-ZW",
-	"description": "Minimote 4 button remote control",
+	"description": "Minimote 4 Button Remote Control",
 	"devices": [
 		{
 			"productType": "0x0001",

@@ -33,11 +33,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal OPEN",
+					"label": "Normal open",
 					"value": 0
 				},
 				{
-					"label": "Normal CLOSE",
+					"label": "Normal close",
 					"value": 1
 				}
 			]
@@ -63,7 +63,7 @@
 					"value": 0
 				},
 				{
-					"label": "Turn on at setpoint - hysteresis, turn off at setpoint",
+					"label": "Turn on at setpoint - Hysteresis, turn off at setpoint",
 					"value": 1
 				},
 				{
@@ -81,11 +81,11 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Relay OFF (recommended for electric floor heating)",
+					"label": "Relay off (Recommended for electric floor heating)",
 					"value": 0
 				},
 				{
-					"label": "Relay ON",
+					"label": "Relay on",
 					"value": 1
 				}
 			]
@@ -148,11 +148,11 @@
 					"value": 0
 				},
 				{
-					"label": "External temperature sensor (polling)",
+					"label": "External temperature sensor (Polling)",
 					"value": 1
 				},
 				{
-					"label": "External temperature sensor (listening)",
+					"label": "External temperature sensor (Listening)",
 					"value": 2
 				}
 			]
@@ -223,22 +223,22 @@
 					"value": 0
 				},
 				{
-					"label": "Bistable, fixed position 1 (contacts connected - ON, disconnected - OFF)",
+					"label": "Bistable, fixed position 1 (Contacts connected - On, disconnected - Off)",
 					"value": 1
 				},
 				{
-					"label": "Bistable, fixed position 2 (contacts disconnected - ON, connected - OFF)",
+					"label": "Bistable, fixed position 2 (Contacts disconnected - On, connected - Off)",
 					"value": 2
 				},
 				{
-					"label": "Bistable (every push will switch relay)",
+					"label": "Bistable (Every push will switch relay)",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "16",
-			"label": "Switch 2 Mode (Turbo mode)",
+			"label": "Switch 2 Mode (Turbo Mode)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -248,15 +248,15 @@
 					"value": 0
 				},
 				{
-					"label": "Bistable, fixed position 1 (contacts connected - ON, disconnected - OFF)",
+					"label": "Bistable, fixed position 1 (Contacts connected - On, disconnected - Off)",
 					"value": 1
 				},
 				{
-					"label": "Bistable, fixed position 2 (contacts disconnected - ON, connected - OFF)",
+					"label": "Bistable, fixed position 2 (Contacts disconnected - On, connected - Off)",
 					"value": 2
 				},
 				{
-					"label": "Bistable (every push will switch relay)",
+					"label": "Bistable (Every push will switch relay)",
 					"value": 3
 				}
 			]

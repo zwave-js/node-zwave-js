@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Triggering mode",
+			"label": "Triggering Mode",
 			"description": "Sets the tamper triggering mode when removed from the holder",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Temperature adjustments",
+			"label": "Temperature Adjustments",
 			"description": "Temperature correction with positive and negative offset values",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,9 +54,9 @@
 		},
 		{
 			"#": "3",
-			"label": "Send unsolicited temperature report",
-			"description": "Threshold temperature to send unsolicited report. 10 = 1°C",
+			"label": "Temperature Report Threshold",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
@@ -64,7 +64,7 @@
 		},
 		{
 			"#": "4",
-			"label": "temperature report",
+			"label": "Temperature Report",
 			"description": "Send unsolicited temperature report after N wake up",
 			"valueSize": 2,
 			"minValue": 0,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Switch mode",
+			"label": "Switch Mode",
 			"description": "Switch mode : siren only, flash only, flash + siren",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -95,7 +95,7 @@
 					"value": 1
 				},
 				{
-					"label": "Flash + Siren",
+					"label": "Flash + siren",
 					"value": 2
 				}
 			]

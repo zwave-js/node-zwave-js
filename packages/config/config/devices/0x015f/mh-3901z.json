@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Heating Time within Heating Cycle",
+			"label": "Heating Time Within Heating Cycle",
 			"description": "Must be less than Heating Cycle Duration (parameter 7)",
 			"valueSize": 1,
 			"unit": "minutes",

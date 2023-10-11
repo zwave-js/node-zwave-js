@@ -2,7 +2,7 @@
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
 	"label": "ZV9002T4-CCT",
-	"description": "4 group CCT touch panel secondary controller",
+	"description": "4 Group CCT Touch Panel Secondary Controller",
 	"devices": [
 		{
 			"productType": "0x0300",

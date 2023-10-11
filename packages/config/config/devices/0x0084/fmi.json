@@ -45,7 +45,7 @@
 			"#": "4",
 			"label": "Meter Report Interval",
 			"valueSize": 1,
-			"unit": "10s of Seconds",
+			"unit": "10s of seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 6,

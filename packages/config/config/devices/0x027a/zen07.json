@@ -34,7 +34,7 @@
 			"#": "3",
 			"label": "Overload Protection Threshold",
 			"valueSize": 1,
-			"unit": "Amperes",
+			"unit": "A",
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 13
@@ -43,7 +43,7 @@
 			"#": "4",
 			"label": "Overload Protection LED Notification Threshold",
 			"valueSize": 1,
-			"unit": "Amperes",
+			"unit": "A",
 			"minValue": 1,
 			"maxValue": 13,
 			"defaultValue": 12

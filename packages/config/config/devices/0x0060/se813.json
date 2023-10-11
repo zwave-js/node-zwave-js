@@ -42,7 +42,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Stop Playing",
+					"label": "Stop playing",
 					"value": 0
 				}
 			]

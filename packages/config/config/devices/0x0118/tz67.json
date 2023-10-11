@@ -36,11 +36,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "blue indicates off",
+					"label": "Blue indicates off",
 					"value": 0
 				},
 				{
-					"label": "blue indicates on",
+					"label": "Blue indicates on",
 					"value": 1
 				}
 			]

@@ -51,54 +51,54 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Reports type",
+			"label": "Reports Type",
 			"description": "value should be set to 1 if the module operates in Venetian Blind mode.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Blind position using Z-Wave Command",
+					"label": "Blind position using Z-Wave command",
 					"value": 0
 				},
 				{
-					"label": "Blind position via Fibar Command",
+					"label": "Blind position via Fibaro command",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "10",
-			"label": "Roller Shutter operating modes",
+			"label": "Roller Shutter Operating Modes",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Roller Blind Mode, without positioning",
+					"label": "Roller blind mode, without positioning",
 					"value": 0
 				},
 				{
-					"label": "Roller Blind Mode, with positioning",
+					"label": "Roller blind mode, with positioning",
 					"value": 1
 				},
 				{
-					"label": "Venetian Blind Mode, with positioning",
+					"label": "Venetian blind mode, with positioning",
 					"value": 2
 				},
 				{
-					"label": "Gate Mode, without positioning",
+					"label": "Gate mode, without positioning",
 					"value": 3
 				},
 				{
-					"label": "Gate Mode, with positioning",
+					"label": "Gate mode, with positioning",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "Turning time/ delay time",
+			"label": "Turning Time/ Delay Time",
 			"description": "depending on mode, turning time or delay time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -108,29 +108,29 @@
 		},
 		{
 			"#": "13",
-			"label": "Lamellas positioning mode",
+			"label": "Lamellas Positioning Mode",
 			"description": "Parameter influences the lamellas positioning in venetian blind mode",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "only in case of the main controller operation",
+					"label": "Only in case of the main controller operation",
 					"value": 0
 				},
 				{
-					"label": "default - controller+switchlimit",
+					"label": "Default - Controller+switchlimit",
 					"value": 1
 				},
 				{
-					"label": "like 1 + STOP control frame",
+					"label": "Like 1 + stop control frame",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Switch type",
+			"label": "Switch Type",
 			"description": "either Toggle switches or a single, momentary switch.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -145,14 +145,14 @@
 					"value": 1
 				},
 				{
-					"label": "Single, momentary switch.",
+					"label": "Single, momentary switch",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "17",
-			"label": "Delay time after S2",
+			"label": "Delay Time After S2",
 			"description": "delay till auto turned off or auto gate close",
 			"valueSize": 1,
 			"minValue": 0,
@@ -162,7 +162,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Motor operation detection",
+			"label": "Motor Operation Detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -172,7 +172,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Motor operation time",
+			"label": "Motor Operation Time",
 			"description": "Time period for the motor to continue operation.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -182,7 +182,7 @@
 		},
 		{
 			"#": "29",
-			"label": "Forced Roller Shutter calibration",
+			"label": "Forced Roller Shutter Calibration",
 			"description": "set to 1 will enter calibration mode",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -210,11 +210,11 @@
 					"value": 0
 				},
 				{
-					"label": "Open Blind",
+					"label": "Open blind",
 					"value": 1
 				},
 				{
-					"label": "Close Blind",
+					"label": "Close blind",
 					"value": 2
 				}
 			]
@@ -231,11 +231,11 @@
 					"value": 0
 				},
 				{
-					"label": "Open Blind",
+					"label": "Open blind",
 					"value": 1
 				},
 				{
-					"label": "Close Blind",
+					"label": "Close blind",
 					"value": 2
 				}
 			]
@@ -252,11 +252,11 @@
 					"value": 0
 				},
 				{
-					"label": "Open Blind",
+					"label": "Open blind",
 					"value": 1
 				},
 				{
-					"label": "Close Blind",
+					"label": "Close blind",
 					"value": 2
 				}
 			]
@@ -273,18 +273,18 @@
 					"value": 0
 				},
 				{
-					"label": "Open Blind",
+					"label": "Open blind",
 					"value": 1
 				},
 				{
-					"label": "Close Blind",
+					"label": "Close blind",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "35",
-			"label": "Managing lamellas in response to alarm",
+			"label": "Managing Lamellas in Response to Alarm",
 			"description": "0 no change, 1 extreme position",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -302,7 +302,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reports",
+			"label": "Power Reports",
 			"description": "change that needs to occur to trigger the power report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -311,7 +311,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Periodic power or energy reports",
+			"label": "Periodic Power or Energy Reports",
 			"description": "Time to the next report. Value of 0 means the reports are turned off.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -321,7 +321,7 @@
 		},
 		{
 			"#": "43",
-			"label": "Energy reports",
+			"label": "Energy Reports",
 			"description": "Energy threshold to trigger report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -331,7 +331,7 @@
 		},
 		{
 			"#": "44",
-			"label": "Self-measurement",
+			"label": "Self-Measurement",
 			"description": "if power and energy reports are to sent to the main controller",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -349,18 +349,18 @@
 		},
 		{
 			"#": "50",
-			"label": "Scenes/ Associations activation",
+			"label": "Scenes/ Associations Activation",
 			"description": "whether scenes or associations are activated by the switch keys",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Associations Active",
+					"label": "Associations active",
 					"value": 0
 				},
 				{
-					"label": "Scenes Active",
+					"label": "Scenes active",
 					"value": 1
 				}
 			]

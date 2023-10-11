@@ -2,7 +2,7 @@
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
 	"label": "ZW20RM",
-	"description": "In-wall Smart Meter Duplex Receptacle",
+	"description": "In-Wall Smart Meter Duplex Receptacle",
 	"devices": [
 		{
 			"productType": "0x0111",
@@ -34,7 +34,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Synchronization of load power and LED indicator",
+			"label": "Synchronization of Load Power and LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Instant Sensor Autosend interval",
+			"label": "Instant Sensor Autosend Interval",
 			"description": "Instant Energy Autosend interval (send SENSOR_MULTILEVEL_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Enable automatic notifications",
+			"label": "Enable Automatic Notifications",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -105,7 +105,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Minimum change in wattage to report",
+			"label": "Minimum Change in Wattage to Report",
 			"valueSize": 1,
 			"unit": "W",
 			"minValue": 0,

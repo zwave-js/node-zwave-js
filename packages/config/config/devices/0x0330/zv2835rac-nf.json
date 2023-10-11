@@ -90,7 +90,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Step Of Knob",
+			"label": "Step of Knob",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -181,7 +181,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Power Automatic Report Threshold,",
+			"label": "Power Automatic Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,

@@ -27,21 +27,11 @@
 		{
 			"#": "2",
 			"label": "Set Clock",
-			"description": "Configure panel hour and minute",
+			"description": "First byte = Hour, Second byte = Minute",
 			"valueSize": 2,
-			"unit": "hours",
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "First byte - hour",
-					"value": 23
-				},
-				{
-					"label": "Second byte - minute",
-					"value": 59
-				}
-			]
+			"minValue": 0,
+			"maxValue": 6203,
+			"defaultValue": 0
 		},
 		{
 			"#": "3",
@@ -160,7 +150,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "idle",
+					"label": "Idle",
 					"value": 0
 				},
 				{

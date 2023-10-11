@@ -79,7 +79,7 @@
 					"value": 0
 				},
 				{
-					"label": "Calibrate / calibrated",
+					"label": "Calibrate / Calibrated",
 					"value": 1
 				}
 			]
@@ -122,7 +122,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Send Central Scene Commands In Response To Inputs",
+			"label": "Send Central Scene Commands in Response to Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

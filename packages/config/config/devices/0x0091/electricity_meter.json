@@ -2,7 +2,7 @@
 	"manufacturer": "Kamstrup A/S",
 	"manufacturerId": "0x0091",
 	"label": "electricity_meter",
-	"description": "Electricity meters",
+	"description": "Electricity Meters",
 	"devices": [
 		{
 			"productType": "0x0001",

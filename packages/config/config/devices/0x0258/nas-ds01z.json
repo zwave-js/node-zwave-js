@@ -43,7 +43,7 @@
 			"label": "ON/OFF Delay",
 			"description": "Delay before the OFF command is transmitted",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,

@@ -46,11 +46,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) output type",
+					"label": "NO (Normally open) output type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally closed) output type",
+					"label": "NC (Normally closed) output type",
 					"value": 1
 				}
 			]

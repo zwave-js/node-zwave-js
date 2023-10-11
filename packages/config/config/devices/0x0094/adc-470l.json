@@ -2,7 +2,7 @@
 	"manufacturer": "Alarm.com",
 	"manufacturerId": "0x0094",
 	"label": "ADC-470L",
-	"description": "Alarm.com Rev4.7 Radio Module",
+	"description": "Rev4.7 Radio Module",
 	"devices": [
 		{
 			"productType": "0x000e",

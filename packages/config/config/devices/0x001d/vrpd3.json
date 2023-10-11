@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "VRPD3",
-	"description": "Scene Capable Plug-in Dimmer",
+	"description": "Scene Capable Plug-In Dimmer",
 	"devices": [
 		{
 			"productType": "0x1705",

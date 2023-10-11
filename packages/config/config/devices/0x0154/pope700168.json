@@ -71,7 +71,7 @@
 			"label": "Heavy Rain",
 			"description": "Threshold defines heavy rain condition",
 			"valueSize": 1,
-			"unit": "mm per hour",
+			"unit": "mm per hours",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,

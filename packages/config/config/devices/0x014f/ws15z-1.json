@@ -2,7 +2,7 @@
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "WS15Z-1",
-	"description": "In-wall Switch",
+	"description": "In-Wall Switch",
 	"devices": [
 		{
 			"productType": "0x5257",

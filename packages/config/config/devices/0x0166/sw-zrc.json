@@ -2,7 +2,7 @@
 	"manufacturer": "CBCC Domotique SAS",
 	"manufacturerId": "0x0166",
 	"label": "SW-ZRC",
-	"description": "RemSwiid Z-Wave remote controller",
+	"description": "RemSwiid Z-Wave Remote Controller",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -24,11 +24,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Association Group 1",
+					"label": "Association group 1",
 					"value": 1
 				},
 				{
-					"label": "Association Group 2",
+					"label": "Association group 2",
 					"value": 2
 				}
 			]

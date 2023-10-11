@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWOE-011",
-	"description": "Fibaro Walli Outlet type E/F",
+	"description": "Fibaro Walli Outlet Type E/F",
 	"devices": [
 		{
 			"productType": "0x1f01",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Remember device state",
+			"label": "Remember Device State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -24,7 +24,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Overload safety switch",
+			"label": "Overload Safety Switch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 36800,
@@ -32,7 +32,7 @@
 		},
 		{
 			"#": "10",
-			"label": "LED frame - power limit",
+			"label": "LED Frame - Power Limit",
 			"valueSize": 4,
 			"minValue": 500,
 			"maxValue": 36800,
@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "11",
-			"label": "LED frame - colour when ON",
+			"label": "LED Frame - Colour When ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "12",
-			"label": "LED frame - colour when OFF",
+			"label": "LED Frame - Colour When OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -56,7 +56,7 @@
 		},
 		{
 			"#": "13",
-			"label": "LED frame – brightness",
+			"label": "LED Frame – Brightness",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -65,7 +65,7 @@
 		},
 		{
 			"#": "30",
-			"label": "Alarm configuration - 1st slot",
+			"label": "Alarm Configuration - 1st Slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "31",
-			"label": "Alarm configuration - 2nd slot",
+			"label": "Alarm Configuration - 2nd Slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -81,7 +81,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Alarm configuration - 3rd slot",
+			"label": "Alarm Configuration - 3rd Slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "33",
-			"label": "Alarm configuration - 4th slot",
+			"label": "Alarm Configuration - 4th Slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "34",
-			"label": "Alarm configuration - 5th slot",
+			"label": "Alarm Configuration - 5th Slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -105,16 +105,16 @@
 		},
 		{
 			"#": "35",
-			"label": "Alarm configuration – duration",
+			"label": "Alarm Configuration – Duration",
 			"valueSize": 2,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
 		{
 			"#": "45",
-			"label": "Associations – 2nd group",
+			"label": "Associations – 2nd Group",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -122,7 +122,7 @@
 		},
 		{
 			"#": "46",
-			"label": "Associations – UP threshold",
+			"label": "Associations – UP Threshold",
 			"valueSize": 4,
 			"minValue": 100,
 			"maxValue": 36800,
@@ -130,7 +130,7 @@
 		},
 		{
 			"#": "47",
-			"label": "Associations – UP threshold frame value",
+			"label": "Associations – UP Threshold Frame Value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -138,7 +138,7 @@
 		},
 		{
 			"#": "48",
-			"label": "Associations – DOWN threshold",
+			"label": "Associations – DOWN Threshold",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 36700,
@@ -146,7 +146,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Power reports – include self-consumption",
+			"label": "Power Reports – Include Self-Consumption",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -154,7 +154,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Power reports – on change",
+			"label": "Power Reports – On Change",
 			"valueSize": 2,
 			"unit": "%",
 			"minValue": 0,
@@ -163,7 +163,7 @@
 		},
 		{
 			"#": "62",
-			"label": "Power reports – periodic",
+			"label": "Power Reports – Periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -171,7 +171,7 @@
 		},
 		{
 			"#": "65",
-			"label": "Energy reports – on change",
+			"label": "Energy Reports – On Change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -179,7 +179,7 @@
 		},
 		{
 			"#": "66",
-			"label": "Energy reports – periodic",
+			"label": "Energy Reports – Periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
