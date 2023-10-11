@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.1.0 (2023-10-11)
 ### Config file changes
 Almost 1000 device configuration files have been reworked to be more consistent, mostly affecting device labels, parameter labels, descriptions and predefined options.
 After updating, you should expect to see several notifications for changed device configurations, prompting you to re-interview the affected nodes.
