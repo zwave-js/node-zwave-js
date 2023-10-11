@@ -1,6 +1,6 @@
 {
   "name": "zwave-js",
-  "version": "12.0.0",
+  "version": "12.0.4",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "main": "build/index.js",
@@ -107,7 +107,7 @@
     "xstate": "4.38.2"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.36.4",
+    "@microsoft/api-extractor": "^7.37.3",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.17.14",
     "@types/proper-lockfile": "^4.1.2",

@@ -45,27 +45,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smoke Detected: 0xff (On), No Smoke: 0x00 (Off)",
+					"label": "Smoke detected: 0xff (On); No smoke: 0x00 (Off)",
 					"value": 0
 				},
 				{
-					"label": "Smoke Detected: 0x00 (Off), No Smoke: 0xff (On)",
+					"label": "Smoke detected: 0x00 (Off); No smoke: 0xff (On)",
 					"value": 1
 				},
 				{
-					"label": "Smoke Detected: 0xff (On), No Smoke: no command",
+					"label": "Smoke detected: 0xff (On); No smoke: No command",
 					"value": 2
 				},
 				{
-					"label": "Smoke Detected: 0x00 (Off), No Smoke: no command",
+					"label": "Smoke detected: 0x00 (Off); No smoke: No command",
 					"value": 3
 				},
 				{
-					"label": "Smoke Detected: no command, No Smoke: 0x00 (Off)",
+					"label": "Smoke detected: No command; No smoke: 0x00 (Off)",
 					"value": 4
 				},
 				{
-					"label": "Smoke Detected: no command, No Smoke: 0xff (On)",
+					"label": "Smoke detected: No command; No smoke: 0xff (On)",
 					"value": 5
 				}
 			]
@@ -78,27 +78,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "CO Detected: 0xff (On), No CO: 0x00 (Off)",
+					"label": "CO detected: 0xff (On); No CO: 0x00 (Off)",
 					"value": 0
 				},
 				{
-					"label": "CO Detected: 0x00 (Off), No CO: 0xff (On)",
+					"label": "CO detected: 0x00 (Off); No CO: 0xff (On)",
 					"value": 1
 				},
 				{
-					"label": "CO Detected: 0xff (On), No CO: no command",
+					"label": "CO detected: 0xff (On); No CO: No command",
 					"value": 2
 				},
 				{
-					"label": "CO Detected: 0x00 (Off), No CO: no command",
+					"label": "CO detected: 0x00 (Off); No CO: No command",
 					"value": 3
 				},
 				{
-					"label": "CO Detected: no command, No CO: 0x00 (Off)",
+					"label": "CO detected: No command; No CO: 0x00 (Off)",
 					"value": 4
 				},
 				{
-					"label": "CO Detected: no command, No CO: 0xff (On)",
+					"label": "CO detected: No command;( No CO: 0xff (On)",
 					"value": 5
 				}
 			]
@@ -112,27 +112,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smoke & CO Sensor",
+					"label": "Smoke & CO sensor",
 					"value": 1
 				},
 				{
-					"label": "CO Sensor",
+					"label": "CO sensor",
 					"value": 2
 				},
 				{
-					"label": "Smoke Sensor",
+					"label": "Smoke sensor",
 					"value": 3
 				},
 				{
-					"label": "Relay, Smoke & CO Sensor",
+					"label": "Relay, smoke & CO sensor",
 					"value": 4
 				},
 				{
-					"label": "Relay & CO Sensor",
+					"label": "Relay & CO sensor",
 					"value": 5
 				},
 				{
-					"label": "Relay & Smoke Sensor",
+					"label": "Relay & smoke sensor",
 					"value": 6
 				},
 				{

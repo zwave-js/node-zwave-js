@@ -38,7 +38,6 @@
 			"label": "Energy Detection Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -50,11 +49,11 @@
 					"value": 1
 				},
 				{
-					"label": "Positive power only (consumption)",
+					"label": "Positive power only (Consumption)",
 					"value": 2
 				},
 				{
-					"label": "Negative power only (generation)",
+					"label": "Negative power only (Generation)",
 					"value": 3
 				}
 			]

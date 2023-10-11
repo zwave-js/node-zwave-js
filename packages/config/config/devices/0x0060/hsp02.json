@@ -50,19 +50,18 @@
 			"label": "Sensor Detecting Function",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Group 1 Enabled / Group 2 Enabled",
+					"label": "Group 1 enabled / Group 2 enabled",
 					"value": 1
 				},
 				{
-					"label": "Group 1 Enabled / Group 2 Disabled",
+					"label": "Group 1 enabled / Group 2 disabled",
 					"value": 2
 				},
 				{
-					"label": "Group 1 Disabled / Group 2 Disabled",
+					"label": "Group 1 disabled / Group 2 disabled",
 					"value": 3
 				}
 			]
@@ -77,7 +76,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Re-trigger Interval Setting",
+			"label": "Re-Trigger Interval Setting",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 255,

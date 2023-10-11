@@ -16,11 +16,10 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button 1 and 3 pair mode",
+			"label": "Button 1 and 3 Pair Mode",
 			"description": "In separate mode button 1 works with Group A, button 3 with Group C.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -39,11 +38,10 @@
 		},
 		{
 			"#": "2",
-			"label": "Button 2 and 4 pair mode",
+			"label": "Button 2 and 4 Pair Mode",
 			"description": "In separate mode button 2 works with group B, button 4 with group D.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -62,11 +60,10 @@
 		},
 		{
 			"#": "11",
-			"label": "Command to control Group A",
+			"label": "Command to Control Group A",
 			"description": "This parameter defines the command to be sent to devices of control group A",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -74,11 +71,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -86,11 +83,11 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
@@ -102,18 +99,17 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "Command to control Group B",
+			"label": "Command to Control Group B",
 			"description": "This parameter defines the command to be sent to devices of control group B",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -121,11 +117,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -133,11 +129,11 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
@@ -149,18 +145,17 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "13",
-			"label": "Command to control Group C",
+			"label": "Command to Control Group C",
 			"description": "This parameter defines the command to be sent to devices of control group C",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -168,11 +163,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -180,11 +175,11 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
@@ -196,18 +191,17 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Command to control Group D",
+			"label": "Command to Control Group D",
 			"description": "This parameter defines the command to be sent to devices of control group D",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -215,11 +209,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -227,11 +221,11 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
@@ -243,25 +237,25 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Send the following Switch All commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normal Open)",
+					"label": "NO (Normal open)",
 					"value": 1
 				},
 				{
-					"label": "NC (Normal Close)",
+					"label": "NC (Normal close)",
 					"value": 2
 				},
 				{
@@ -272,10 +266,9 @@
 		},
 		{
 			"#": "22",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -290,13 +283,13 @@
 		},
 		{
 			"#": "25",
-			"label": "Blocks wake up even when Wake Up Interval is set",
+			"label": "Blocks Wake Up Even When Wake Up Interval Is Set",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Wake up is blocked (default)",
+					"label": "Wake up is blocked",
 					"value": 0
 				},
 				{
@@ -307,10 +300,9 @@
 		},
 		{
 			"#": "30",
-			"label": "Send unsolicited Battery Report on Wake Up",
+			"label": "Send Unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

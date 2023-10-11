@@ -2,7 +2,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHIA",
-	"description": "Flush on/off thermostat",
+	"description": "Flush On/off Thermostat",
 	"devices": [
 		{
 			"productType": "0x0005",
@@ -43,97 +43,92 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Input 2 switch type",
+			"label": "Input 2 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Input 3 switch type",
+			"label": "Input 3 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Input 3 contact type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON/ALL OFF",
 			"description": "Module responds to commands ALL ON / ALL OFF",
 			"valueSize": 1,
 			"defaultValue": 255,
@@ -141,26 +136,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF is not active",
+					"label": "All on active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Set point set by I2",
+			"label": "Set Point Set by I2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -169,7 +164,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Set point set by I3",
+			"label": "Set Point Set by I3",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -182,7 +177,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts on power change for Q1",
+			"label": "Power Reporting in Watts on Power Change for Q1",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -192,7 +187,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by time interval for Q1",
+			"label": "Power Reporting in Watts by Time Interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -229,7 +224,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Too low temperature limit",
+			"label": "Too Low Temperature Limit",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -238,7 +233,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Too high temperature limit",
+			"label": "Too High Temperature Limit",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -247,7 +242,7 @@
 		},
 		{
 			"#": "63",
-			"label": "Switch selection",
+			"label": "Switch Selection",
 			"description": "Connected device type can be (NO) or (NC)",
 			"valueSize": 2,
 			"minValue": 0,

@@ -49,8 +49,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 20,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "2",
@@ -59,15 +58,13 @@
 			"unit": "%",
 			"minValue": 5,
 			"maxValue": 20,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "3",
 			"label": "Invert Sensor",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,8 +84,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 3600,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "5",
@@ -97,8 +93,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 3600,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "6",
@@ -107,8 +102,7 @@
 			"unit": "0.5 °C",
 			"minValue": 1,
 			"maxValue": 9,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "7",
@@ -117,8 +111,7 @@
 			"unit": "%",
 			"minValue": 5,
 			"maxValue": 20,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "8",
@@ -127,8 +120,7 @@
 			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "9",
@@ -137,8 +129,7 @@
 			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "10",
@@ -147,8 +138,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "11",
@@ -157,8 +147,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "12",
@@ -169,7 +158,6 @@
 			"label": "Association Group 2 Function",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

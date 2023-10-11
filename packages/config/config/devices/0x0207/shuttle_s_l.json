@@ -2,7 +2,7 @@
 	"manufacturer": "Forest Group Nederland B.V",
 	"manufacturerId": "0x0207",
 	"label": "Shuttle S/L",
-	"description": "Drapery hardware",
+	"description": "Drapery Hardware",
 	"devices": [
 		{
 			"productType": "0x0027",

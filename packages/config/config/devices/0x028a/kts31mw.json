@@ -2,7 +2,7 @@
 	"manufacturer": "Askey Computer Corp.",
 	"manufacturerId": "0x028a",
 	"label": "KTS31MW",
-	"description": "Qua station",
+	"description": "Qua Station",
 	"devices": [
 		{
 			"productType": "0x0001",

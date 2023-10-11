@@ -16,59 +16,19 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Beeper",
-			"description": "Keypad beeper to be turned ON or OFF",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Beeper",
-					"value": 0
-				},
-				{
-					"label": "Enable Beeper",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Beeper"
 		},
 		{
 			"#": "4",
-			"label": "Vacation Mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Vacation Mode",
-					"value": 0
-				},
-				{
-					"label": "Enable Vacation Mode",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Vacation Mode"
 		},
 		{
 			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Lock and Leave Mode",
-			"description": "Controls button push for throwing the deadbolt.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Lock and Leave Mode",
-					"value": 0
-				},
-				{
-					"label": "Enable Lock and Leave Mode",
-					"value": 255
-				}
-			]
+			"description": "Controls button push for throwing the deadbolt."
 		},
 		{
 			"#": "6",
@@ -88,7 +48,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alarm Off",
+					"label": "Alarm off",
 					"value": 0
 				},
 				{
@@ -100,7 +60,7 @@
 					"value": 2
 				},
 				{
-					"label": "Forced Entry",
+					"label": "Forced entry",
 					"value": 3
 				}
 			]
@@ -113,23 +73,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Most Sensitive",
+					"label": "Most sensitive",
 					"value": 1
 				},
 				{
-					"label": "More Sensitive",
+					"label": "More sensitive",
 					"value": 2
 				},
 				{
-					"label": "Medium Sensitivity",
+					"label": "Medium sensitivity",
 					"value": 3
 				},
 				{
-					"label": "Less Sensitive",
+					"label": "Less sensitive",
 					"value": 4
 				},
 				{
-					"label": "Least Sensitive",
+					"label": "Least sensitive",
 					"value": 5
 				}
 			]
@@ -142,23 +102,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Most Sensitive",
+					"label": "Most sensitive",
 					"value": 1
 				},
 				{
-					"label": "More Sensitive",
+					"label": "More sensitive",
 					"value": 2
 				},
 				{
-					"label": "Medium Sensitivity",
+					"label": "Medium sensitivity",
 					"value": 3
 				},
 				{
-					"label": "Less Sensitive",
+					"label": "Less sensitive",
 					"value": 4
 				},
 				{
-					"label": "Least Sensitive",
+					"label": "Least sensitive",
 					"value": 5
 				}
 			]
@@ -171,23 +131,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Most Sensitive",
+					"label": "Most sensitive",
 					"value": 1
 				},
 				{
-					"label": "More Sensitive",
+					"label": "More sensitive",
 					"value": 2
 				},
 				{
-					"label": "Medium Sensitivity",
+					"label": "Medium sensitivity",
 					"value": 3
 				},
 				{
-					"label": "Less Sensitive",
+					"label": "Less sensitive",
 					"value": 4
 				},
 				{
-					"label": "Least Sensitive",
+					"label": "Least sensitive",
 					"value": 5
 				}
 			]
@@ -201,11 +161,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alarm Disable Local Controls",
+					"label": "Alarm disable local controls",
 					"value": 0
 				},
 				{
-					"label": "Alarm Enable Local Controls",
+					"label": "Alarm enable local controls",
 					"value": 255
 				}
 			]
@@ -239,22 +199,9 @@
 		},
 		{
 			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Auto Lock",
-			"description": "Automatically throws the deadbolt 30 after seconds",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Auto Lock",
-					"value": 0
-				},
-				{
-					"label": "Enable Auto Lock",
-					"value": 255
-				}
-			]
+			"description": "Automatically throws the deadbolt 30 after seconds"
 		},
 		{
 			"#": "16",

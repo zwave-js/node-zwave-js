@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZL7201",
-	"description": "Monoprice ZWave On/Off Plugin",
+	"description": "Monoprice Z-Wave On/Off Plugin",
 	"devices": [
 		{
 			"productType": "0x2007",

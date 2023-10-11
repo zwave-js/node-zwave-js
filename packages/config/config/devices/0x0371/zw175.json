@@ -96,7 +96,6 @@
 			"label": "Switch Action on Alarm",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -126,7 +125,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Tap action button 3x",
@@ -145,8 +143,7 @@
 			"unit": "Hz",
 			"minValue": 0,
 			"maxValue": 9,
-			"defaultValue": 2,
-			"unsigned": true
+			"defaultValue": 2
 		},
 		{
 			"#": "19",
@@ -244,7 +241,6 @@
 			"minValue": 0,
 			"maxValue": 2592000,
 			"defaultValue": 600,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

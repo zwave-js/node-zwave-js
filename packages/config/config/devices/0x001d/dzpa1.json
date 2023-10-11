@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "DZPA1",
-	"description": "Plug-in Appliance Module",
+	"description": "Plug-In Appliance Module",
 	"devices": [
 		{
 			"productType": "0x1a02",

@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN15-1-NES",
-	"description": "Smart Energy plug In switch",
+	"description": "Smart Energy Plug in Switch",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -21,15 +21,14 @@
 			"description": "Whenever the status of switches changes, it will send a binary switch report to the group1 node. the default setting is 1 (enable)",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "1 : enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -40,19 +39,18 @@
 			"description": "Whenever the ac power return from lost, pan15 will restore the switch state which could be switch off、last switch state、switch on. the default setting is last switch state",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : switch off",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
-					"label": "1 : last switch state",
+					"label": "Last switch state",
 					"value": 1
 				},
 				{
-					"label": "2 : switch on",
+					"label": "Switch on",
 					"value": 2
 				}
 			]
@@ -63,15 +61,14 @@
 			"description": "When the mode of switch on/off is set to 0, any command of switch off will be disabled and the on/off function of include button will be disabled. the default setting is enable mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "1 : enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -84,10 +81,9 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
-					"label": "0 : disable auto off function",
+					"label": "Disable auto off function",
 					"value": 0
 				}
 			]
@@ -98,23 +94,22 @@
 			"description": "Whenever a switch off command, basic_set、binary_switch_set、switch_all_off, is received, it could be interpreted as 4 variety of commands.  1.switch off：it switches to off state. the default setting is switch off.  2.ignore：the switch off command will be ignored.  3.switch toggle：it switches to the inverse of current state.  4.switch on：it switches to on state",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : switch off",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
-					"label": "1 : ignore",
+					"label": "Ignore",
 					"value": 1
 				},
 				{
-					"label": "2 : switch toggle",
+					"label": "Switch toggle",
 					"value": 2
 				},
 				{
-					"label": "3 : switch on",
+					"label": "Switch on",
 					"value": 3
 				}
 			]

@@ -37,15 +37,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle Normal Heating / Off",
+					"label": "Toggle normal heating / Off",
 					"value": 0
 				},
 				{
-					"label": "Toggle Normal Heating / Energy Save",
+					"label": "Toggle normal heating / Energy save",
 					"value": 1
 				},
 				{
-					"label": "Toggle Boost Dry",
+					"label": "Toggle boost dry",
 					"value": 2
 				}
 			]
@@ -58,19 +58,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle Normal Heating / Off",
+					"label": "Toggle normal heating / Off",
 					"value": 0
 				},
 				{
-					"label": "Toggle Normal Heating / Energy Save",
+					"label": "Toggle normal heating / Energy save",
 					"value": 1
 				},
 				{
-					"label": "Toggle Boost Dry",
+					"label": "Toggle boost dry",
 					"value": 2
 				},
 				{
-					"label": "Set Normal Heating set point temperature",
+					"label": "Set normal heating set point temperature",
 					"value": 3
 				},
 				{
@@ -83,7 +83,7 @@
 			"#": "4",
 			"label": "Temperature Control Interval",
 			"valueSize": 1,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 18

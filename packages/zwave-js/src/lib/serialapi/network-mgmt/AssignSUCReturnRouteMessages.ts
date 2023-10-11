@@ -53,8 +53,25 @@ export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 
+function testAssignSUCReturnRouteCallback(
+	sent: AssignSUCReturnRouteRequest,
+	callback: Message,
+): boolean {
+	// Some controllers have a bug where they incorrectly respond with DeleteSUCReturnRoute
+	if (
+		callback.host
+			.getDeviceConfig?.(callback.host.ownNodeId)
+			?.compat
+			?.disableCallbackFunctionTypeCheck
+			?.includes(FunctionType.AssignSUCReturnRoute)
+	) {
+		return true;
+	}
+	return callback.functionType === FunctionType.AssignSUCReturnRoute;
+}
+
 @expectedResponse(FunctionType.AssignSUCReturnRoute)
-@expectedCallback(FunctionType.AssignSUCReturnRoute)
+@expectedCallback(testAssignSUCReturnRouteCallback)
 export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 	implements INodeQuery
 {

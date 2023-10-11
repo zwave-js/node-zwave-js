@@ -101,6 +101,11 @@ export interface EnergyProductionCCCapabilities {
     };
 }
 
+// Warning: (ae-missing-release-tag) "getDefaultSupportedFunctionTypes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getDefaultSupportedFunctionTypes(): FunctionType[];
+
 // Warning: (ae-missing-release-tag) "LazyMockZWaveFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)

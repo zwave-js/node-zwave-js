@@ -150,14 +150,13 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
-					"label": "3 wire mode (Neutral, Line & Load)",
+					"label": "3 wire mode (Neutral, line & load)",
 					"value": 0
 				},
 				{
-					"label": "2 wire mode (Line & Load)",
+					"label": "2 wire mode (Line & load)",
 					"value": 1
 				}
 			]
@@ -186,7 +185,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top paddle turns on, Bottom paddle turns off",
+					"label": "Top paddle turns on; Bottom paddle turns off",
 					"value": 0
 				},
 				{
@@ -214,7 +213,7 @@
 			"#": "37",
 			"$if": "firmwareVersion >= 1.13",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Control Load With Paddle",
+			"label": "Control Load with Paddle",
 			"defaultValue": 0
 		}
 	],

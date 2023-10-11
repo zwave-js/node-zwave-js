@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZL7201DE-5",
-	"description": "Plug-in On/Off Module",
+	"description": "Plug-In On/Off Module",
 	"devices": [
 		{
 			"productType": "0x2007",

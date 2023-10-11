@@ -40,45 +40,43 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button 1 And 3 Pair Mode",
+			"label": "Button 1 and 3 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Button 1 -> Group A; Button 3 -> Group C",
+					"label": "Button 1 -> group A; Button 3 -> group c",
 					"value": 0
 				},
 				{
-					"label": "Button 1/3 -> Up/Down; Click -> Group A, without double clicks",
+					"label": "Button 1/3 -> up/down; Click -> group A, without double clicks",
 					"value": 1
 				},
 				{
-					"label": "Button 1/3 -> Up/Down; Click -> Group A; Double Click -> Group C",
+					"label": "Button 1/3 -> up/down; Click -> group A; Double click -> group c",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Button 2 And 4 Pair Mode",
-			"description": " works with group b, double click with group d",
+			"label": "Button 2 and 4 Pair Mode",
+			"description": "works with group b, double click with group d",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Button 2 -> Group B; Button 4 -> Group D",
+					"label": "Button 2 -> group b; Button 4 -> group d",
 					"value": 0
 				},
 				{
-					"label": "Button 2/4 -> Up/Down; Click -> Group B, without double clicks",
+					"label": "Button 2/4 -> up/down; Click -> group b, without double clicks",
 					"value": 1
 				},
 				{
-					"label": "Button 2/4 -> Up/Down; Click -> Group B; Double Click -> Group D",
+					"label": "Button 2/4 -> up/down; Click -> group b; Double click -> group d",
 					"value": 2
 				}
 			]
@@ -88,7 +86,6 @@
 			"label": "Command to Send Control Group A",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -96,11 +93,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (basic set)",
+					"label": "Switch on/off only (Basic Set)",
 					"value": 2
 				},
 				{
@@ -124,7 +121,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -134,7 +131,6 @@
 			"label": "Command to Send Control Group B",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -142,11 +138,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (basic set)",
+					"label": "Switch on/off only (Basic Set)",
 					"value": 2
 				},
 				{
@@ -170,7 +166,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -180,7 +176,6 @@
 			"label": "Command to Send Control Group C",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -188,11 +183,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (basic set)",
+					"label": "Switch on/off only (Basic Set)",
 					"value": 2
 				},
 				{
@@ -216,7 +211,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -226,7 +221,6 @@
 			"label": "Command to to Send Control Group D",
 			"valueSize": 1,
 			"defaultValue": 8,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -234,11 +228,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (basic set)",
+					"label": "Switch on/off only (Basic Set)",
 					"value": 2
 				},
 				{
@@ -262,7 +256,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -294,7 +288,6 @@
 			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -312,7 +305,6 @@
 			"label": "Block Wakeup",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -330,7 +322,6 @@
 			"label": "Send Battery Report On Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -24,54 +24,40 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Notification type",
+			"label": "Notification Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary sensor report & Notification report (Access Control)",
+					"label": "Binary Sensor Report & Notification Report (Access control)",
 					"value": 0
 				},
 				{
-					"label": "Notification report (Access Control)",
+					"label": "Notification Report (Access control)",
 					"value": 1
 				},
 				{
-					"label": "Notification report (Home Security)",
+					"label": "Notification Report (Home security)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Led Indicator",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator",
+			"defaultValue": 1
 		},
 		{
 			"#": "15",
 			"label": "Send Supervision Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Events with S2 Encapsulation only",
+					"label": "Events with S2 encapsulation only",
 					"value": 0
 				},
 				{
@@ -91,8 +77,7 @@
 			"unit": "ms",
 			"minValue": 500,
 			"maxValue": 30000,
-			"defaultValue": 10000,
-			"unsigned": true
+			"defaultValue": 10000
 		},
 		{
 			"#": "17",
@@ -101,7 +86,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "No retries",
@@ -116,8 +100,7 @@
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 6,
-			"unsigned": true
+			"defaultValue": 6
 		},
 		{
 			"#": "19",
@@ -126,23 +109,21 @@
 			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 70,
-			"defaultValue": 70,
-			"unsigned": true
+			"defaultValue": 70
 		},
 		{
 			"#": "22",
 			"label": "Security Level",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Standard Security",
+					"label": "Standard",
 					"value": 0
 				},
 				{
-					"label": "High Security",
+					"label": "High",
 					"value": 1
 				}
 			]

@@ -37,7 +37,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -56,7 +55,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Restore previous brightness",
@@ -72,7 +70,6 @@
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -88,7 +85,6 @@
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -104,7 +100,6 @@
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Instant",
@@ -119,18 +114,17 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Dimming",
 					"value": 0
 				},
 				{
-					"label": "Scene Controller",
+					"label": "Scene controller",
 					"value": 1
 				},
 				{
-					"label": "Scene Controller and dimming",
+					"label": "Scene controller and dimming",
 					"value": 2
 				},
 				{
@@ -146,18 +140,17 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Dimming",
 					"value": 0
 				},
 				{
-					"label": "Scene Controller",
+					"label": "Scene controller",
 					"value": 1
 				},
 				{
-					"label": "Scene Controller and dimming",
+					"label": "Scene controller and dimming",
 					"value": 2
 				},
 				{
@@ -174,7 +167,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Instant",
@@ -208,8 +200,7 @@
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 90,
-			"unsigned": true
+			"defaultValue": 90
 		},
 		{
 			"#": "12",
@@ -217,8 +208,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "13",

@@ -24,7 +24,7 @@ Click [here](https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js) to s
 
 For the best possible offline development experience, you should use [VSCode](https://code.visualstudio.com/).
 The repository comes with settings and recommended extensions to make your life easier when working on `node-zwave-js`. The snippets alone will save you a ton of typing.\
-It is **strongly recommended** to install the recommended extensions when VSCode asks you.
+It is **strongly recommended** to install the recommended extensions when VSCode asks you to.
 
 Since this repo uses `yarn` workspaces, you need to make sure you have `yarn` installed. If not, run `npm i -g yarn`.
 
@@ -41,7 +41,14 @@ to avoid downloading all these unnecessary files. The specifications can then (o
 git submodule update
 ```
 
-Afterwards just execute `yarn` in the cloned directory, which will install all required dependencies.
+After the repository has been cloned, install all dependencies and compile the code by executing
+
+```
+yarn
+yarn build
+```
+
+The last step is recommended, since we make heavy use of custom scripts and plugins meant to help with the development process and authoring config files.
 
 ---
 

@@ -22,28 +22,16 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
 			"label": "Set Clock",
-			"description": "Configure panel hour and minute",
+			"description": "First byte = Hour, Second byte = Minute",
 			"valueSize": 2,
-			"unit": "hours",
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "First byte - hour",
-					"value": 23
-				},
-				{
-					"label": "Second byte - minute",
-					"value": 59
-				}
-			]
+			"minValue": 0,
+			"maxValue": 6203,
+			"defaultValue": 0
 		},
 		{
 			"#": "3",
@@ -52,8 +40,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "4",
@@ -62,8 +49,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "5",
@@ -72,8 +58,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "6",
@@ -82,8 +67,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "7",
@@ -92,8 +76,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "8",
@@ -102,8 +85,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "9",
@@ -112,8 +94,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 29,
-			"unsigned": true
+			"defaultValue": 29
 		},
 		{
 			"#": "10",
@@ -122,8 +103,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 29,
-			"defaultValue": 29,
-			"unsigned": true
+			"defaultValue": 29
 		},
 		{
 			"#": "11",
@@ -132,8 +112,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 29,
-			"unsigned": true
+			"defaultValue": 29
 		},
 		{
 			"#": "12",
@@ -142,8 +121,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 29,
-			"unsigned": true
+			"defaultValue": 29
 		},
 		{
 			"#": "13",
@@ -152,8 +130,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 29,
-			"unsigned": true
+			"defaultValue": 29
 		},
 		{
 			"#": "14",
@@ -162,8 +139,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 29,
-			"unsigned": true
+			"defaultValue": 29
 		},
 		{
 			"#": "15",
@@ -174,7 +150,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "idle",
+					"label": "Idle",
 					"value": 0
 				},
 				{

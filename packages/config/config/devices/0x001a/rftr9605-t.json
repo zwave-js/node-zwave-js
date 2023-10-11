@@ -21,8 +21,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "2",
@@ -31,8 +30,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "3",
@@ -41,8 +39,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
@@ -50,7 +47,6 @@
 			"description": "1 = off 2 = on 3 = last state",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -72,7 +68,6 @@
 			"label": "Panic Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -87,11 +82,10 @@
 		},
 		{
 			"#": "13",
-			"label": "Blue LED Brightness Level While The Receptacle is On",
+			"label": "Blue LED Brightness Level While the Receptacle Is On",
 			"description": "Light intensity of indicator led",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -106,11 +100,10 @@
 		},
 		{
 			"#": "14",
-			"label": "Blue LED Brightness Level While The Receptacle is Off",
+			"label": "Blue LED Brightness Level While the Receptacle Is Off",
 			"description": "Light intensity of indicator led",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

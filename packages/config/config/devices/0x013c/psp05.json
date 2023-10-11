@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Re-detection interval",
+			"label": "Re-Detection Interval",
 			"description": "Multiples of 8 seconds to wait before re-detection",
 			"valueSize": 1,
 			"minValue": 1,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Turn off light time",
+			"label": "Turn Off Light Time",
 			"description": "Time to wait after lighting has been turned on before turning off again",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Battery level reporting interval",
+			"label": "Battery Level Reporting Interval",
 			"description": "How frequently battery status should be reported",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,31 +88,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Don't Send Report",
+					"label": "Don't send report",
 					"value": 0
 				},
 				{
-					"label": "Send Report",
+					"label": "Send report",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7[0x04]",
-			"label": "Bit 2: Enable PIR super sensitivity mode.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "PIR Super Sensitivity Mode",
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x10]",
@@ -123,7 +112,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Report Notification",
+					"label": "Notification Report",
 					"value": 0
 				},
 				{
@@ -134,38 +123,16 @@
 		},
 		{
 			"#": "7[0x20]",
-			"label": "Bit 5: Send Multi CC in auto report",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send Multi CC in Auto Report",
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x40]",
-			"label": "Bit 6: Send Battery Report when Triggered",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send Battery Report When Triggered",
 			"description": "Whether or not a battery status report should be sent when triggered",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		}
 	]
 }

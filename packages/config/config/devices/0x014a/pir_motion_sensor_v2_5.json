@@ -16,41 +16,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Send Basic Sets",
-			"description": "Send or do not send Basic Set commands to AG2",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do not send",
-					"value": 0
-				},
-				{
-					"label": "Send Basic Sets",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Send Basic Set",
+			"description": "Send or do not send Basic Set commands to AG2"
 		},
 		{
 			"#": "2",
-			"label": "Send Binary Reports",
-			"description": "Send Sensor Binary Reports for backward compatibility",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send Sensor Binary Reports",
-					"value": 0
-				},
-				{
-					"label": "Send only Notification Reports",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255_inverted",
+			"label": "Send Binary Sensor Report",
+			"defaultValue": 0
 		}
 	]
 }

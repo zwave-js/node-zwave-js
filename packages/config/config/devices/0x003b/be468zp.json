@@ -17,59 +17,22 @@
 	"paramInformation": [
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Beeper",
-			"valueSize": 1,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 255
-				},
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"defaultValue": 255
 		},
 		{
 			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Vacation Mode",
-			"description": "Enabling this disables all user codes on the keypad.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 255
-				},
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"description": "Enabling this disables all user codes on the keypad."
 		},
 		{
 			"#": "5",
-			"label": "Lock And Leave Mode",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Lock and Leave Mode",
 			"description": "Controls the use of the \"Schlage\" button on the keypad for single button push for throwing the deadbolt",
-			"valueSize": 1,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 255
-				},
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"defaultValue": 255
 		},
 		{
 			"#": "6",
@@ -77,7 +40,6 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -86,7 +48,6 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -95,7 +56,6 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -104,28 +64,13 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
 			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Auto Lock",
-			"description": "Automatically throws the deadbolt 30 seconds after a valid user code has been entered at the keypad",
-			"valueSize": 1,
-			"unit": "seconds",
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 255
-				},
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"description": "Automatically throws the deadbolt 30 seconds after a valid user code has been entered at the keypad"
 		},
 		{
 			"#": "16",
@@ -133,8 +78,7 @@
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 8,
-			"defaultValue": 4,
-			"unsigned": true
+			"defaultValue": 4
 		},
 		{
 			"#": "17",
@@ -142,7 +86,6 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -151,7 +94,6 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		}
 	],

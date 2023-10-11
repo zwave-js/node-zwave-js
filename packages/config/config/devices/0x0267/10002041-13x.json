@@ -30,14 +30,14 @@
 					"value": 0
 				},
 				{
-					"label": "Center LED ON",
+					"label": "Center LED on",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Custom consumption limit",
+			"label": "Custom Consumption Limit",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -85,11 +85,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 255
 				}
 			]
@@ -123,7 +123,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All parameters except Long Pulse Lock.",
+					"label": "All parameters except long pulse lock",
 					"value": 17170
 				},
 				{

@@ -2,7 +2,8 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA009",
-	"description": "aërQ Temperature and Humidity Sensor v1.0",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
+	"description": "aërQ Temperature and Humidity Sensor V1.0",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -57,7 +58,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -73,7 +73,6 @@
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -106,7 +105,6 @@
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -133,7 +131,6 @@
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -159,7 +156,6 @@
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -185,7 +181,6 @@
 			"minValue": 0,
 			"maxValue": 90,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -210,8 +205,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "64",

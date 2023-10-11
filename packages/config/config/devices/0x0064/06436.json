@@ -2,7 +2,7 @@
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "06436",
-	"description": "Insert blind control",
+	"description": "Insert Blind Control",
 	"devices": [
 		{
 			"productType": "0x1000",
@@ -31,11 +31,10 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED mode",
+			"label": "LED Mode",
 			"description": "Set LED indication mode",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,7 +50,7 @@
 					"value": 2
 				},
 				{
-					"label": "Operated by Indicator Command Class",
+					"label": "Operated by Indicator CC",
 					"value": 3
 				},
 				{
@@ -62,7 +61,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatically open or close after time",
+			"label": "Automatically Open or Close After Time",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -81,7 +80,6 @@
 			"label": "RF Close Command Interpretation",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -104,7 +102,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Full close time",
+			"label": "Full Close Time",
 			"description": "Time in seconds to go from opened to closed state.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,7 +118,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Full open time",
+			"label": "Full Open Time",
 			"description": "Time in seconds to go from closed to open state.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -136,7 +134,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Node ID of the blocking device",
+			"label": "Node ID of the Blocking Device",
 			"description": "Id of the device which can block the blinds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -152,33 +150,31 @@
 		},
 		{
 			"#": "7",
-			"label": "Protected command",
+			"label": "Protected Command",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "on On",
+					"label": "On on",
 					"value": 0
 				},
 				{
-					"label": "on Off",
+					"label": "On off",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "8",
-			"label": "Stop or Revert if opposite button is pressed",
+			"label": "Stop or Revert If Opposite Button Is Pressed",
 			"description": "Defines behaviour on open press while closing and vice versa.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Stop (by buttons and Binary)",
+					"label": "Stop (By buttons and binary)",
 					"value": 0
 				},
 				{
@@ -186,17 +182,16 @@
 					"value": 1
 				},
 				{
-					"label": "Stop (by buttons, Binary and Basic)",
+					"label": "Stop (By buttons, binary and basic)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "9",
-			"label": "Invert open and close relays",
+			"label": "Invert Open and Close Relays",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -211,7 +206,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -219,11 +214,10 @@
 		},
 		{
 			"#": "11",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"description": "Allows exchanging the functionality of the buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -238,11 +232,10 @@
 		},
 		{
 			"#": "12",
-			"label": "Switch by buttons",
+			"label": "Switch by Buttons",
 			"description": "Local operations by buttons will/will not/ switch the load",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -261,11 +254,10 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on button single press or hold",
+			"label": "Action on Button Single Press or Hold",
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
 			"defaultValue": 4,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -273,34 +265,33 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off (send Basic Set)",
+					"label": "Switch on/off (Send Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 3
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Action on button double press or hold",
+			"label": "Action on Button Double Press or Hold",
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -308,30 +299,30 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off (send Basic Set)",
+					"label": "Switch on/off (Send Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 3
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "15",
-			"label": "Action on Switch All command",
+			"label": "Action on Switch All Command",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -353,10 +344,9 @@
 		},
 		{
 			"#": "16",
-			"label": "What to do on button Down press",
+			"label": "What to Do on Button Down Press",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -375,11 +365,10 @@
 		},
 		{
 			"#": "17",
-			"label": "Action on Auto open or close function",
+			"label": "Action on Auto Open or Close Function",
 			"description": "Defines the action to perform upon auto open or auto close.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

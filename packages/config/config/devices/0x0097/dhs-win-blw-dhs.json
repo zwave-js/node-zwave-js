@@ -2,7 +2,7 @@
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "DHS-WIN-BLW-DHS",
-	"description": "Blind controller",
+	"description": "Blind Controller",
 	"devices": [
 		{
 			"productType": "0x0024",
@@ -28,7 +28,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Buttons mode",
+			"label": "Buttons Mode",
 			"description": "Set number and type of directly connected buttons",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -39,7 +39,7 @@
 					"value": 0
 				},
 				{
-					"label": "Two paddles with Power and Direction",
+					"label": "Two paddles with power and direction",
 					"value": 1
 				},
 				{
@@ -54,7 +54,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatically close after",
+			"label": "Automatically Close After",
 			"description": "If not zero, automatically close blind after a user defined time",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -64,7 +64,7 @@
 		},
 		{
 			"#": "3",
-			"label": "What to do on RF close command",
+			"label": "What to Do on RF Close Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -82,14 +82,14 @@
 					"value": 2
 				},
 				{
-					"label": "Open if closed, otherwise Close",
+					"label": "Open if closed, otherwise close",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"description": "Typical time used to differentiate click, hold, double and triple clicks",
 			"valueSize": 1,
 			"unit": "ms",
@@ -99,7 +99,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -116,7 +116,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Action on button press or hold",
+			"label": "Action on Button Press or Hold",
 			"description": "Which command sent to Association group on button press or hold.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -127,14 +127,14 @@
 					"value": 1
 				},
 				{
-					"label": "Send Scene",
+					"label": "Send scene",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -163,7 +163,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Full close time",
+			"label": "Full Close Time",
 			"description": "Time to go from opened to closed state",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -174,7 +174,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Full open time",
+			"label": "Full Open Time",
 			"description": "Time to go from closed to open state",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -185,7 +185,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Node Id of the blocking device",
+			"label": "Node Id of the Blocking Device",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 24,
@@ -193,7 +193,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Blocking mode command",
+			"label": "Blocking Mode Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -210,7 +210,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Invert open and close relays",
+			"label": "Invert Open and Close Relays",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

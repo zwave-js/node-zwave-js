@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "176",
-			"label": "Staircase timer byte 1",
+			"label": "Staircase Timer Byte 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -32,7 +32,7 @@
 		},
 		{
 			"#": "177",
-			"label": "Staircase timer byte 2",
+			"label": "Staircase Timer Byte 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "183",
-			"label": "Additional limit duration",
+			"label": "Additional Limit Duration",
 			"description": "(after brief interruption) Unsure what this does",
 			"valueSize": 1,
 			"minValue": 0,

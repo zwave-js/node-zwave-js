@@ -20,68 +20,38 @@
 	"paramInformation": [
 		{
 			"#": "21",
-			"label": "Status after power failure",
-			"description": "Define how the RGB BULB will react after the power supply is back on.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Memorizes its state",
-					"value": 0
-				},
-				{
-					"label": "ON",
-					"value": 1
-				},
-				{
-					"label": "OFF",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "24",
-			"label": "Notification when Load status change",
+			"label": "Notification When Load Status Change",
 			"description": "RGB BULB can send notifications to associated device",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Notifications Disabled",
+					"label": "Notifications disabled",
 					"value": 0
 				},
 				{
-					"label": "Send BASIC REPORT",
+					"label": "Send Basic Report",
 					"value": 1
 				},
 				{
-					"label": "Send BASIC REPORT only without status change",
+					"label": "Send Basic Report only without status change",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "51",
-			"label": "Enable/disable the function of using wall switch to turn on/off RGB BULB",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Use Wall Switch to Turn On/off RGB BULB"
 		},
 		{
 			"#": "61",
-			"label": "Advance mode",
+			"label": "Advance Mode",
 			"description": "RGB BULB can blink or cyclic/random change color automatically at set intervals.",
 			"valueSize": 4,
 			"defaultValue": 3072,
@@ -123,7 +93,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Resetting to factory default",
+			"label": "Resetting to Factory Default",
 			"description": "RGB BULB will exclude from the Z-Wave network with this particular command",
 			"valueSize": 4,
 			"minValue": 1,

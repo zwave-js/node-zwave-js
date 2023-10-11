@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN34",
-	"description": "In Wall Roller shutter Controller",
+	"description": "In Wall Roller Shutter Controller",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -30,7 +30,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 720,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -43,7 +42,6 @@
 			"label": "External Switch Mode",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -64,7 +62,6 @@
 			"minValue": 0,
 			"maxValue": 6000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Per calibration",
@@ -79,38 +76,23 @@
 			"unit": "W",
 			"minValue": 1,
 			"maxValue": 5,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Meter Reports",
 			"description": "Triggered by a greater than 5% power variation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "Timer Offset For Motor Start",
+			"label": "Timer Offset for Motor Start",
 			"valueSize": 2,
 			"unit": ".01 seconds",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		}
 	],
 	"metadata": {

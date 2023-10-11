@@ -20,19 +20,18 @@
 			"description": "Controls LED behavior when switch state is on/off",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "off/on",
+					"label": "Off/On",
 					"value": 0
 				},
 				{
-					"label": "on/off",
+					"label": "On/Off",
 					"value": 1
 				},
 				{
-					"label": "off",
+					"label": "Off",
 					"value": 2
 				}
 			]
@@ -43,7 +42,6 @@
 			"description": "Controls the on/off orientation of the rocker switch",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

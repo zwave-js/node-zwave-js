@@ -72,7 +72,6 @@
 			"label": "Color Change Report Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -84,7 +83,7 @@
 					"value": 1
 				},
 				{
-					"label": "Configuration report",
+					"label": "Configuration Report",
 					"value": 2
 				}
 			]
@@ -94,7 +93,6 @@
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Blue Color Value",
 			"valueSize": 4,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false
 		},
@@ -103,7 +101,6 @@
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Green Color Value",
 			"valueSize": 4,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false
 		},
@@ -112,7 +109,6 @@
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Red Color Value",
 			"valueSize": 4,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false
 		},
@@ -131,12 +127,11 @@
 			"label": "Reboot/Save/Exit Colorful Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Un-reboot colorful mode",
+					"label": "Un-Reboot colorful mode",
 					"value": 0
 				},
 				{
@@ -249,7 +244,7 @@
 					"value": 2
 				},
 				{
-					"label": "Random Mode",
+					"label": "Random mode",
 					"value": 3
 				},
 				{
@@ -281,11 +276,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smooth Color Transition",
+					"label": "Smooth color transition",
 					"value": 0
 				},
 				{
-					"label": "Fast/Direct Color Transition",
+					"label": "Fast/Direct color transition",
 					"value": 1
 				}
 			]
@@ -349,7 +344,6 @@
 			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -361,7 +355,8 @@
 					"value": 1
 				},
 				{
-					"label": "(Parabolic + Index) / 2",
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
+					"label": "(Parabolic + index) / 2",
 					"value": 2
 				},
 				{

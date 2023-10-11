@@ -18,10 +18,8 @@
 		{
 			"#": "1",
 			"label": "LED Light During Sending",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -37,46 +35,44 @@
 		{
 			"#": "2",
 			"label": "Temperature Report Threshold",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1° Celcius",
+					"label": "1 °C",
 					"value": 0
 				},
 				{
-					"label": "2° Celcius",
+					"label": "2 °C",
 					"value": 1
 				},
 				{
-					"label": "3° Celcius",
+					"label": "3 °C",
 					"value": 2
 				},
 				{
-					"label": "4° Celcius",
+					"label": "4 °C",
 					"value": 3
 				},
 				{
-					"label": "5° Celcius",
+					"label": "5 °C",
 					"value": 4
 				},
 				{
-					"label": "6° Celcius",
+					"label": "6 °C",
 					"value": 5
 				},
 				{
-					"label": "7° Celcius",
+					"label": "7 °C",
 					"value": 6
 				},
 				{
-					"label": "8° Celcius",
+					"label": "8 °C",
 					"value": 7
 				},
 				{
-					"label": "9° Celcius",
+					"label": "9 °C",
 					"value": 8
 				}
 			]

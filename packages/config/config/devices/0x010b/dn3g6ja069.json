@@ -21,7 +21,6 @@
 			"description": "Configure arbitrarily to send which sensor values. the sensor values can be selected from humidity, luminance, and temperature",
 			"valueSize": 1,
 			"defaultValue": 7,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -64,7 +63,6 @@
 			"description": "Configure to send which the sensor values arbitrarily. the sensor values can be selected from human detect and open/close",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -92,7 +90,6 @@
 			"valueSize": 1,
 			"unit": "%",
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -107,13 +104,12 @@
 		},
 		{
 			"#": "4",
-			"label": "Set Interval For Multilevel Sensor",
+			"label": "Set Interval for Multilevel Sensor",
 			"description": "Configure the sending interval time of the sensor value which is selected by configuration parameter number 1. \"0\" means especially synchronizing with wake up interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Synchronizing with wake up interval",

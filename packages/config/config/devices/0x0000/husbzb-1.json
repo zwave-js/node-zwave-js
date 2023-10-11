@@ -12,5 +12,9 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"compat": {
+		// Workaround for a firmware bug in 500 series controllers
+		"$import": "~/templates/master_template.json#500_series_controller_compat_flags"
 	}
 }

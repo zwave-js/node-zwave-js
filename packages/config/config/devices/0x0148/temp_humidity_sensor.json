@@ -33,7 +33,6 @@
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -49,7 +48,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -62,7 +60,6 @@
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,19 +77,18 @@
 			"label": "Temperature Resolution",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No resolution (example 22 °C)",
+					"label": "No resolution (Example 22 °C)",
 					"value": 0
 				},
 				{
-					"label": "1/10 resolution (example 22.3 °C)",
+					"label": "1/10 resolution (Example 22.3 °C)",
 					"value": 1
 				},
 				{
-					"label": "1/100 resolution (example 22.35 °C)",
+					"label": "1/100 resolution (Example 22.35 °C)",
 					"value": 2
 				}
 			]
@@ -102,19 +98,18 @@
 			"label": "Humidity Resolution",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No resolution (example 33 %)",
+					"label": "No resolution (Example 33 %)",
 					"value": 0
 				},
 				{
-					"label": "1/10 resolution (example 33.4 %)",
+					"label": "1/10 resolution (Example 33.4 %)",
 					"value": 1
 				},
 				{
-					"label": "1/100 resolution (example 33.45 %)",
+					"label": "1/100 resolution (Example 33.45 %)",
 					"value": 2
 				}
 			]

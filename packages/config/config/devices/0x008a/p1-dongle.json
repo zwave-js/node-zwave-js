@@ -2,7 +2,7 @@
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "P1-dongle",
-	"description": "P1-dongle",
+	"description": "P1-Dongle",
 	"devices": [
 		{
 			"productType": "0x002f",

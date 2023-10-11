@@ -22,8 +22,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "2",
@@ -32,8 +31,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		}
 	],
 	"metadata": {

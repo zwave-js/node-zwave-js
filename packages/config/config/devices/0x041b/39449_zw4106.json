@@ -2,7 +2,7 @@
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39449 / ZW4106",
-	"description": "Plug-in 2-Outlet Switch, Simultaneous, 500S",
+	"description": "Plug-In 2-Outlet Switch, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",
@@ -37,7 +37,6 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

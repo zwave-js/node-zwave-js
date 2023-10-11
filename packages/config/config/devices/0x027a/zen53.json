@@ -92,7 +92,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Calibration correction",
+			"label": "Calibration Correction",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -156,7 +156,6 @@
 			"label": "External Switch Type (S1)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,7 +173,6 @@
 			"label": "External Switch Type (S2)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

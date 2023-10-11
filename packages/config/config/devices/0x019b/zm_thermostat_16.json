@@ -31,11 +31,10 @@
 			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off,",
+					"label": "Off",
 					"value": 0
 				},
 				{
@@ -55,8 +54,7 @@
 			"unit": "0.1 °C",
 			"minValue": 3,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "3",
@@ -65,8 +63,7 @@
 			"unit": "0.1 °C",
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		},
 		{
 			"#": "4",
@@ -75,8 +72,7 @@
 			"unit": "0.1 °C",
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 400,
-			"unsigned": true
+			"defaultValue": 400
 		},
 		{
 			"#": "5",
@@ -84,8 +80,7 @@
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 210,
-			"unsigned": true
+			"defaultValue": 210
 		},
 		{
 			"#": "6",
@@ -114,7 +109,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

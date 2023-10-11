@@ -30,7 +30,6 @@
 			"label": "Status LED",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -49,7 +48,6 @@
 			"label": "Buzzer",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -68,7 +66,6 @@
 			"label": "User Program Button",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -88,7 +85,6 @@
 			"description": "Control the secure screen functionality (on touch locks only)",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -108,7 +104,6 @@
 			"description": "Indicates the direction of the lock. Set to 1 (Right handed lock) to initiate direction detection.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -130,16 +125,15 @@
 			"label": "Reset to Factory Default Settings",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Reset to Factory Defaults",
+					"label": "Reset to factory defaults",
 					"value": 1
 				},
 				{
@@ -155,7 +149,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		}
 	],

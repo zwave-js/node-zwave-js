@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "VRCZ4-MR",
-	"description": "4-Zone Controller with local load control",
+	"description": "4-Zone Controller with Local Load Control",
 	"devices": [
 		{
 			"productType": "0x1202",

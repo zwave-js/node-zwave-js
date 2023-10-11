@@ -37,19 +37,18 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED on when light is turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always Off",
+					"label": "LED always off",
 					"value": 2
 				},
 				{
@@ -64,7 +63,6 @@
 			"description": "Change the default exclusion behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -72,7 +70,7 @@
 					"value": 0
 				},
 				{
-					"label": "Press ON button 2x, then OFF button 2x",
+					"label": "Press on button 2x, then off button 2x",
 					"value": 1
 				}
 			]

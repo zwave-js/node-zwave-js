@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZS6301-5",
-	"description": "Carbon monoxide detector",
+	"description": "Carbon Monoxide Detector",
 	"devices": [
 		{
 			"productType": "0x200f",

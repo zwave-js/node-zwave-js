@@ -2,6 +2,7 @@
 	"manufacturer": "Building 36 Technologies",
 	"manufacturerId": "0x0190",
 	"label": "ADC-T 3000",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "Alarm.com Smart Thermostat",
 	"devices": [
 		{
@@ -27,7 +28,7 @@
 					"value": 0
 				},
 				{
-					"label": "Heat Pump",
+					"label": "Heat pump",
 					"value": 1
 				}
 			]
@@ -56,7 +57,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Fossil Fuel",
+					"label": "Fossil fuel",
 					"value": 0
 				},
 				{
@@ -70,7 +71,7 @@
 			"label": "Calibration Temperature",
 			"description": "Allowable range: -10 to 10 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0,
@@ -117,7 +118,7 @@
 			"label": "Swing",
 			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 30,
 			"defaultValue": 5,
@@ -164,7 +165,7 @@
 			"label": "Overshoot",
 			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 30,
 			"defaultValue": 0,
@@ -229,7 +230,7 @@
 			"label": "Balance Setpoint",
 			"description": "Allowable range: 0 to 95 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 300,
@@ -278,8 +279,7 @@
 			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 1440,
-			"defaultValue": 60,
-			"unsigned": true
+			"defaultValue": 60
 		},
 		{
 			"#": "13",
@@ -304,7 +304,7 @@
 			"label": "Maximum Heat Setpoint",
 			"description": "Allowable range: 35 to 95 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 950,
@@ -351,7 +351,7 @@
 			"label": "Minimum Heat Setpoint",
 			"description": "Allowable range: 35 to 95 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 350,
@@ -398,7 +398,7 @@
 			"label": "Maximum Cool Setpoint",
 			"description": "Allowable range: 50 to 95 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 950,
@@ -445,7 +445,7 @@
 			"label": "Minimum Cool Setpoint",
 			"description": "Allowable range: 50 to 95 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 500,
@@ -500,11 +500,11 @@
 					"value": 0
 				},
 				{
-					"label": "Full Lock",
+					"label": "Full lock",
 					"value": 1
 				},
 				{
-					"label": "Partial Lock",
+					"label": "Partial lock",
 					"value": 2
 				}
 			]
@@ -530,6 +530,7 @@
 			"valueSize": 1,
 			"defaultValue": 15,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Off, Heat",
@@ -560,6 +561,7 @@
 					"value": 31
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "25[0x00ff]",
@@ -573,19 +575,19 @@
 					"value": 0
 				},
 				{
-					"label": "W3, 3rd Stage Auxiliary Heat",
+					"label": "W3, 3rd stage auxiliary heat",
 					"value": 1
 				},
 				{
-					"label": "H, Humidifier",
+					"label": "H, humidifier",
 					"value": 2
 				},
 				{
-					"label": "DH, Dehumidifier",
+					"label": "Dh, dehumidifier",
 					"value": 3
 				},
 				{
-					"label": "External Air Baffle or Vent",
+					"label": "External air baffle or vent",
 					"value": 4
 				}
 			]
@@ -596,6 +598,7 @@
 			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "None",
@@ -618,6 +621,7 @@
 					"value": 4
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "26",
@@ -665,7 +669,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -684,7 +688,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -703,7 +707,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -722,7 +726,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -741,7 +745,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -760,7 +764,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -779,7 +783,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -798,7 +802,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -817,7 +821,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -836,7 +840,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -855,7 +859,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -874,7 +878,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -893,7 +897,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "No Load",
+					"label": "No load",
 					"value": 0
 				},
 				{
@@ -1136,11 +1140,11 @@
 					"value": 1
 				},
 				{
-					"label": "Inactive, timeout reached (see parameter 39)",
+					"label": "Inactive, timeout reached (See parameter 39)",
 					"value": 2
 				},
 				{
-					"label": "Inactive, temperature differential reached (see parameter 40)",
+					"label": "Inactive, temperature differential reached (See parameter 40)",
 					"value": 3
 				},
 				{
@@ -1154,7 +1158,7 @@
 			"label": "Heat Differential",
 			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 100,
 			"defaultValue": 30,
@@ -1201,7 +1205,7 @@
 			"label": "Cool Differential",
 			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 100,
 			"defaultValue": 30,
@@ -1248,7 +1252,7 @@
 			"label": "Temperature Reporting Threshold",
 			"description": "Allowable range: 0.5 to 2 in 0.5 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 20,
 			"defaultValue": 10,
@@ -1299,7 +1303,7 @@
 			"#": "36[0xffff00]",
 			"label": "C-Wire Power Thermistor Offset",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": -20,
@@ -1344,7 +1348,7 @@
 		{
 			"#": "37",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Run Fan With Auxiliary Heat"
+			"label": "Run Fan with Auxiliary Heat"
 		},
 		{
 			"#": "38[0x00000001]",
@@ -1557,15 +1561,14 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 130,
-			"unsigned": true
+			"defaultValue": 130
 		},
 		{
 			"#": "40[0xffff00]",
 			"label": "Remote Temperature Differential",
 			"description": "Allowable range: 0 to 99 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 990,
 			"defaultValue": 250,
@@ -1628,8 +1631,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 1440,
-			"unsigned": true
+			"defaultValue": 1440
 		},
 		{
 			"#": "45",
@@ -1645,7 +1647,7 @@
 			"label": "Dehumidify by AC Offset",
 			"description": "Allowable range: 0 to 10 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 100,
 			"defaultValue": 30,
@@ -1702,13 +1704,13 @@
 		{
 			"#": "50[0x80000000]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "System configuration: Aux Fan",
+			"label": "System Configuration: Aux Fan",
 			"valueSize": 4,
 			"readOnly": true
 		},
 		{
 			"#": "50[0x60000000]",
-			"label": "System configuration: Cool Stages",
+			"label": "System Configuration: Cool Stages",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -1717,7 +1719,7 @@
 		},
 		{
 			"#": "50[0x18000000]",
-			"label": "System configuration: Heat Stages",
+			"label": "System Configuration: Heat Stages",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -1726,7 +1728,7 @@
 		},
 		{
 			"#": "50[0x04000000]",
-			"label": "System configuration: Fuel",
+			"label": "System Configuration: Fuel",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1745,7 +1747,7 @@
 		},
 		{
 			"#": "50[0x03000000]",
-			"label": "System configuration: HVAC Type",
+			"label": "System Configuration: HVAC Type",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -1757,19 +1759,20 @@
 					"value": 0
 				},
 				{
-					"label": "Heat Pump",
+					"label": "Heat pump",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "50[0x00f00000]",
-			"label": "System configuration: Z2 Configuration",
+			"label": "System Configuration: Z2 Configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
 			"unsigned": true,
 			"readOnly": true,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "None",
@@ -1792,10 +1795,11 @@
 					"value": 4
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "50[0x000f0000]",
-			"label": "System configuration: Z1 Configuration",
+			"label": "System Configuration: Z1 Configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
@@ -1807,26 +1811,26 @@
 					"value": 0
 				},
 				{
-					"label": "W3, 3rd Stage Auxiliary Heat",
+					"label": "W3, 3rd stage auxiliary heat",
 					"value": 1
 				},
 				{
-					"label": "H, Humidifier",
+					"label": "H, humidifier",
 					"value": 2
 				},
 				{
-					"label": "DH, Dehumidifier",
+					"label": "Dh, dehumidifier",
 					"value": 3
 				},
 				{
-					"label": "External Air Baffle or Vent",
+					"label": "External air baffle or vent",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "50[0x00000100]",
-			"label": "System configuration: Override",
+			"label": "System Configuration: Override",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1895,7 +1899,7 @@
 			"label": "Vent Maximum Outdoor Temperature",
 			"description": "Allowable range: 0 to 99 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 990,
 			"defaultValue": -1,
@@ -1942,7 +1946,7 @@
 			"label": "Vent Minimum Outdoor Temperature",
 			"description": "Allowable range: 0 to 99 in 1 °F increments.",
 			"valueSize": 4,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 990,
 			"defaultValue": -1,
@@ -2025,19 +2029,19 @@
 					"value": 0
 				},
 				{
-					"label": "4 Milliseconds",
+					"label": "4 milliseconds",
 					"value": 2
 				},
 				{
-					"label": "8 Milliseconds",
+					"label": "8 milliseconds",
 					"value": 3
 				},
 				{
-					"label": "16 Milliseconds",
+					"label": "16 milliseconds",
 					"value": 4
 				},
 				{
-					"label": "32 Milliseconds",
+					"label": "32 milliseconds",
 					"value": 5
 				}
 			]
@@ -2103,7 +2107,7 @@
 					"value": 0
 				},
 				{
-					"label": "Only humidify when the thermostat operating state is heating, when in heat mode or when heating in auto mode. When in any other thermostat mode, the thermostat will humidify whenever it is necessary.",
+					"label": "Only humidify when the thermostat operating state is heating, when in heat mode or when heating in auto mode. When in any other Thermostat Mode, the thermostat will humidify whenever it is necessary",
 					"value": 1
 				}
 			]

@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatic switch off time",
+			"label": "Automatic Switch Off Time",
 			"description": "If not zero, automatically switch off after a user defined time (in seconds)",
 			"valueSize": 2,
 			"minValue": 0,
@@ -58,13 +58,13 @@
 		},
 		{
 			"#": "3",
-			"label": "RF Off command",
+			"label": "RF Off Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -72,7 +72,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{
@@ -83,7 +83,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Ignore start level",
+			"label": "Ignore Start Level",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -100,7 +100,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Speed for fast dimming",
+			"label": "Speed for Fast Dimming",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Speed for slow dimming",
+			"label": "Speed for Slow Dimming",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -118,7 +118,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Behavior when ON received",
+			"label": "Behavior When ON Received",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -139,7 +139,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Baby dimming time",
+			"label": "Baby Dimming Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -147,7 +147,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Baby target light level",
+			"label": "Baby Target Light Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -155,7 +155,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Baby target time level",
+			"label": "Baby Target Time Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -163,7 +163,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Limit minimum light level",
+			"label": "Limit Minimum Light Level",
 			"description": "Minimum level should be greater than maximum.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -172,7 +172,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Limit maximum light level",
+			"label": "Limit Maximum Light Level",
 			"description": "Maximum level should be greater than minimum. Set to 0 to act as a switch.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -189,7 +189,7 @@
 		},
 		{
 			"#": "51",
-			"label": "Pause before pulse",
+			"label": "Pause Before Pulse",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
@@ -197,7 +197,7 @@
 		},
 		{
 			"#": "52",
-			"label": "Pause after pulse",
+			"label": "Pause After Pulse",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
@@ -205,7 +205,7 @@
 		},
 		{
 			"#": "53",
-			"label": "Pulse width",
+			"label": "Pulse Width",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 20,
@@ -213,7 +213,7 @@
 		},
 		{
 			"#": "54",
-			"label": "Pulse type",
+			"label": "Pulse Type",
 			"description": "NB: Do not touch these settings if you are not sure what they mean!",
 			"valueSize": 1,
 			"defaultValue": 0,

@@ -37,7 +37,6 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -53,18 +52,17 @@
 					"value": 2
 				},
 				{
-					"label": "LED Always on",
+					"label": "LED always on",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Dim up/down rate",
+			"label": "Dim Up/down Rate",
 			"description": "Adjust the speed at which the ramps to a specific value",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -82,7 +80,6 @@
 			"label": "Switch Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -100,11 +97,10 @@
 			"label": "Alternate Exclusion",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Press any button on the Dimmer",
+					"label": "Press any button on the dimmer",
 					"value": 0
 				},
 				{
@@ -120,8 +116,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "31",
@@ -130,8 +125,7 @@
 			"unit": "%",
 			"minValue": 99,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "32",
@@ -141,8 +135,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"compat": {

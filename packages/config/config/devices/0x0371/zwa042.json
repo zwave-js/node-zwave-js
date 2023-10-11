@@ -27,7 +27,6 @@
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,7 +79,6 @@
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -96,7 +94,6 @@
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -127,15 +124,13 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 24,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "7",
 			"label": "Local & Z-Wave Control",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -159,7 +154,6 @@
 		{
 			"#": "30[0x01]",
 			"label": "React to Alarm: Smoke",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -169,7 +163,6 @@
 		{
 			"#": "30[0x02]",
 			"label": "React to Alarm: CO",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -179,7 +172,6 @@
 		{
 			"#": "30[0x04]",
 			"label": "React to Alarm: CO2",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -189,7 +181,6 @@
 		{
 			"#": "30[0x08]",
 			"label": "React to Alarm: Heat",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -199,7 +190,6 @@
 		{
 			"#": "30[0x10]",
 			"label": "React to Alarm: Water",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -209,7 +199,6 @@
 		{
 			"#": "30[0x20]",
 			"label": "React to Alarm: Access Control",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -219,7 +208,6 @@
 		{
 			"#": "30[0x40]",
 			"label": "React to Alarm: Home Security",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -229,7 +217,6 @@
 		{
 			"#": "30[0x80]",
 			"label": "React to Alarm: Motion Sensor",
-			"description": "0",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

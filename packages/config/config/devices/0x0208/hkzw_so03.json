@@ -38,7 +38,6 @@
 			"label": "Notification When Load Status Change",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -60,11 +59,10 @@
 			"label": "LED Power Indication",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Always On",
+					"label": "Always on",
 					"value": 0
 				},
 				{
@@ -113,7 +111,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 30,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -129,7 +126,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 300,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -145,7 +141,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -161,7 +156,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

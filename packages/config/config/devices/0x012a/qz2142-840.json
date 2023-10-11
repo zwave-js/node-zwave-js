@@ -41,8 +41,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "5",
@@ -50,8 +49,7 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "8",
@@ -73,10 +71,9 @@
 		},
 		{
 			"#": "25",
-			"label": "Brightness on Single Tap",
+			"label": "Brightness On Single Tap",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -99,10 +96,9 @@
 		},
 		{
 			"#": "12",
-			"label": "Brightness on Double Tap",
+			"label": "Brightness On Double Tap",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -147,15 +143,14 @@
 			"label": "Association Reports",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Multilevel report; basic report for long press with relay enabled",
+					"label": "Multilevel report; Basic Report for long press with relay enabled",
 					"value": 0
 				},
 				{
-					"label": "Multilevel report; basic report for long press with relay disabled",
+					"label": "Multilevel report; Basic Report for long press with relay disabled",
 					"value": 1
 				},
 				{
@@ -172,7 +167,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 20,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -182,10 +176,9 @@
 		},
 		{
 			"#": "23",
-			"label": "Led Indicator Color",
+			"label": "LED Indicator Color",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -208,10 +201,9 @@
 		},
 		{
 			"#": "24",
-			"label": "Led Indicator Brightness",
+			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

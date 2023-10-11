@@ -33,11 +33,10 @@
 			"description": "Defines the reaction of the siren",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Strobe and Siren",
+					"label": "Strobe and siren",
 					"value": 0
 				},
 				{
@@ -52,11 +51,10 @@
 		},
 		{
 			"#": "1",
-			"label": "Alarm auto stop",
+			"label": "Alarm Auto Stop",
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

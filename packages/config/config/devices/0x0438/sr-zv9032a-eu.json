@@ -43,7 +43,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 15,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -271,8 +270,7 @@
 			"unit": "lux",
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 200,
-			"unsigned": true
+			"defaultValue": 200
 		},
 		{
 			"#": "13",

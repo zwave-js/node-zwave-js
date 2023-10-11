@@ -106,37 +106,37 @@
 		},
 		"19": {
 			"label": "Hold I",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"20": {
 			"label": "Hold II",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"21": {
 			"label": "Hold III",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"22": {
 			"label": "Hold IV",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"23": {
 			"label": "Hold V",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"24": {
 			"label": "Hold VI",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"25": {
 			"label": "Hold VII",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"26": {
@@ -151,37 +151,37 @@
 		},
 		"28": {
 			"label": "Click followed by Hold I",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"29": {
 			"label": "Click followed by Hold II",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"30": {
 			"label": "Click followed by Hold III",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"31": {
 			"label": "Click followed by Hold IV",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"32": {
 			"label": "Click followed by Hold V",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"33": {
 			"label": "Click followed by Hold VI",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"34": {
 			"label": "Click followed by Hold VII",
-			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"description": "Multilevel Switch START LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"35": {
@@ -196,37 +196,37 @@
 		},
 		"37": {
 			"label": "Release I",
-			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"description": "Multilevel Switch STOP LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"38": {
 			"label": "Release II",
-			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"description": "Multilevel Switch STOP LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"39": {
 			"label": "Release III",
-			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"description": "Multilevel Switch STOP LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"40": {
 			"label": "Release IV",
-			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"description": "Multilevel Switch STOP LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"41": {
 			"label": "Release V",
-			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"description": "Multilevel Switch STOP LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"42": {
 			"label": "Release VI",
-			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"description": "Multilevel Switch STOP LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"43": {
 			"label": "Release VII",
-			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"description": "Multilevel Switch STOP LEVEL CHANGE",
 			"maxNodes": 30
 		},
 		"44": {

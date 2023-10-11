@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Setpoint Upper Limit (endpoint 1)",
+			"label": "Setpoint Upper Limit (Endpoint 1)",
 			"description": "In degree centigrade",
 			"valueSize": 1,
 			"unit": "°C",
@@ -28,7 +28,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Setpoint Lower Limit (endpoint 1)",
+			"label": "Setpoint Lower Limit (Endpoint 1)",
 			"description": "In degree centigrade",
 			"valueSize": 1,
 			"unit": "°C",
@@ -50,13 +50,12 @@
 		},
 		{
 			"#": "4",
-			"label": "Relay State On Power (switch Endpoint Only)",
+			"label": "Relay State On Power (Switch Endpoint Only)",
 			"description": "Boolean",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "5",
@@ -65,8 +64,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "6",
@@ -86,8 +84,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 2,
-			"unsigned": true
+			"defaultValue": 2
 		}
 	],
 	"metadata": {

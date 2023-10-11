@@ -4,6 +4,46 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.0.4 (2023-10-09)
+### Bugfixes
+* Normalize result of `Controller.getAvailableFirmwareUpdates` to always include `channel` field (#6359)
+* Fixed a crash that could happen while logging dropped sensor readings (#6379)
+* Increased the range and default of the `response` timeout to accomodate slower 500 series controllers (#6378)
+
+### Config file changes
+* Treat Basic Set as events for TKB TZ35S/D and TZ55S/D (#6381)
+* Add Zooz ZAC38 Range Extender (#6136)
+* Corrected the label of the notification event `0x0a` to be `Emergency Alarm` (#6368)
+
+## 12.0.3 (2023-10-05)
+The `v12` release was supposed to increase reliability of Z-Wave JS, primarily by detecting situations where the controller was unable to transmit due to excessive RF noise or being unresponsive and automatically taking the necessary steps to recover.
+
+Instead, it uncovered bugs and erratical behavior in the 500 series firmwares, which triggered the automatic recovery in situations where it was not necessary. In the worst case, this would cause Z-Wave JS to end up in an infinite loop or restart over and over.
+
+This patch should fix and/or work around most (if not all) of these issues. Really sorry for the inconvenience!
+
+### Bugfixes
+* Fixed an infinite loop caused by assuming the controller was temporarily unable to transmit when when sending a command results in the transmit status `Fail` (#6361)
+* Added a workaround to avoid a restart loop caused by 500 series controllers replying with invalid commands when assigning routes back to the controller (SUC) failed (#6370, #6372)
+* Automatically recovering an unresponsive controller by restarting it or Z-Wave JS in case of a missing callback is now only done for `SendData` commands. Previously some commands which were expecting a specific command to be received from a node could also trigger this, even if that command was not technically a command callback. (#6373)
+* Fixed an issue where rebuilding routes would throw an error because of calling the wrong method internally (#6362)
+
+## 12.0.2 (2023-09-29)
+### Bugfixes
+* The workaround from `v12.0.0` for the `7.19.x` SDK bug was not working correctly when the command that caused the controller to get stuck could be retried. This has now been fixed. (#6343)
+
+## 12.0.1 (2023-09-29)
+### Bugfixes
+* Ignore when a node reports `Security S0/S2 CC` to have version 0 (unsupported) although it is using that CC (#6333)
+
+### Config file changes
+* Add Shelly to manufacturers (#6339)
+* Add Shelly Wave 1, Wave 2PM, update Wave 1PM association labels (#6326)
+* Add Sunricher SR-ZV2833PAC (#6310)
+
+### Changes under the hood
+* Added an ESLint rule to help with deciding whether a config parameter needs to be `unsigned` or not (#6325, #6338)
+
 ## 12.0.0 (2023-09-26)
 ### Application compatibility
 Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
@@ -11,6 +51,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * `zwave-js-server` **1.32.0**
 
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v12)
+* Removed auto-disabling of soft-reset capability. If Z-Wave JS is no longer able to communicate with the controller after updating, please read [this issue](https://github.com/zwave-js/node-zwave-js/issues/6341) (#6256)
 * Remove support for Node.js 14 and 16 (#6245)
 * Subpath exports are now exposed using the `exports` field in `package.json` instead of `typesVersions` (#5839)
 * The `"notification"` event now includes a reference to the endpoint that sent the notification (#6083)
@@ -27,7 +68,6 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 
 ### Bugfixes
 * A bug in the `7.19.x` SDK has surfaced where the controller gets stuck in the middle of a transmission. Previously this would go unnoticed because the failed commands would cause the nodes to be marked dead until the controller finally recovered. Since `v11.12.0` however, Z-Wave JS would consider the controller jammed and retry the last command indefinitely. This situation is now detected and Z-Wave JS attempts to recover by soft-resetting the controller when this happens. (#6296)
-* Removed auto-disabling of soft-reset capability (#6256)
 * Default to RF protection state `Unprotected` if not given for `Protection CC` V2+ (#6257)
 
 ### Config file changes

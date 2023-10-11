@@ -39,7 +39,6 @@
 			"label": "Download Status Register",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -48,7 +47,7 @@
 					"value": 0
 				},
 				{
-					"label": "Ok",
+					"label": "OK",
 					"value": 1
 				},
 				{
@@ -80,7 +79,6 @@
 			"label": "Learning Status Register",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -89,7 +87,7 @@
 					"value": 0
 				},
 				{
-					"label": "Ok",
+					"label": "OK",
 					"value": 1
 				},
 				{
@@ -120,31 +118,30 @@
 			"label": "IR Port Mapping",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IR Port 1",
+					"label": "IR port 1",
 					"value": 1
 				},
 				{
-					"label": "IR Port 2",
+					"label": "IR port 2",
 					"value": 2
 				},
 				{
-					"label": "IR Port 3",
+					"label": "IR port 3",
 					"value": 3
 				},
 				{
-					"label": "IR Port 4",
+					"label": "IR port 4",
 					"value": 4
 				},
 				{
-					"label": "IR Port 5",
+					"label": "IR port 5",
 					"value": 5
 				},
 				{
-					"label": "IR Port 6",
+					"label": "IR port 6",
 					"value": 6
 				}
 			]
@@ -172,7 +169,6 @@
 			"label": "Endpoint Selection Control",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

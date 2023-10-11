@@ -2,7 +2,7 @@
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
 	"label": "ZW500",
-	"description": "ENERWAVE Z-WAVE Dimmer Switch",
+	"description": "ENERWAVE Z-Wave Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0x1112",

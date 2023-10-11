@@ -1,5 +1,4 @@
 import { type MockPortBinding } from "@zwave-js/serial/mock";
-import { type DeepPartial } from "@zwave-js/shared";
 import {
 	MockController,
 	type MockControllerOptions,
@@ -15,12 +14,12 @@ import {
 	type CreateAndStartDriverWithMockPortResult,
 	createAndStartDriverWithMockPort,
 } from "../driver/DriverMock";
-import { type ZWaveOptions } from "../driver/ZWaveOptions";
+import { type PartialZWaveOptions } from "../driver/ZWaveOptions";
 
 export function prepareDriver(
 	cacheDir: string = path.join(__dirname, "cache"),
 	logToFile: boolean = false,
-	additionalOptions: DeepPartial<ZWaveOptions> = {},
+	additionalOptions: PartialZWaveOptions = {},
 ): Promise<CreateAndStartDriverWithMockPortResult> {
 	return createAndStartDriverWithMockPort({
 		...additionalOptions,

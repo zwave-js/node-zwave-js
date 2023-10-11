@@ -152,7 +152,6 @@
 			"label": "Factory Reset",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -161,7 +160,7 @@
 					"value": 0
 				},
 				{
-					"label": "Factory Reset",
+					"label": "Factory reset",
 					"value": 85
 				}
 			]
