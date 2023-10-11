@@ -2,7 +2,7 @@
 	"manufacturer": "STEINEL GmbH",
 	"manufacturerId": "0x0271",
 	"label": "IS140-2",
-	"description": "PIR sensor with relay",
+	"description": "PIR Sensor with Relay",
 	"devices": [
 		{
 			"productType": "0x0002",

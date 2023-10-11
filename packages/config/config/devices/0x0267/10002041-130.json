@@ -2,7 +2,7 @@
 	"manufacturer": "SimonTech S.L.U",
 	"manufacturerId": "0x0267",
 	"label": "10002041-130",
-	"description": "iO Cover for the Simon 100 schuko plug socket",
+	"description": "iO Cover for the Simon 100 Schuko Plug Socket",
 	"devices": [
 		{
 			"productType": "0x0009",
@@ -30,14 +30,14 @@
 					"value": 0
 				},
 				{
-					"label": "Center LED ON",
+					"label": "Center LED on",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Custom consumption limit",
+			"label": "Custom Consumption Limit",
 			"valueSize": 2,
 			"unit": "HEXADECIMAL",
 			"defaultValue": 0,
@@ -48,7 +48,7 @@
 					"value": 0
 				},
 				{
-					"label": "Power in Watts",
+					"label": "Power in watts",
 					"value": 255
 				}
 			]
@@ -114,7 +114,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All parameters except Long Pulse Lock.",
+					"label": "All parameters except long pulse lock",
 					"value": 0
 				},
 				{
@@ -142,11 +142,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off After Reset",
+					"label": "Off after reset",
 					"value": 0
 				},
 				{
-					"label": "Activated After Reset",
+					"label": "Activated after reset",
 					"value": 255
 				}
 			]
@@ -163,11 +163,11 @@
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 2
 				}
 			]
@@ -207,7 +207,7 @@
 					"value": 0
 				},
 				{
-					"label": "Reset Config Parameters",
+					"label": "Reset config parameters",
 					"value": 255
 				}
 			]

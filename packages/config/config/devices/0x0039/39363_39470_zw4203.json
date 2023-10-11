@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39363 / 39470 / ZW4203",
-	"description": "Plug-in Outdoor Switch V2, 500S",
+	"description": "Plug-In Outdoor Switch V2, 500S",
 	"devices": [
 		{
 			"productType": "0x4f50",
@@ -37,19 +37,18 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED on when light is turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always Off",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
@@ -59,7 +58,6 @@
 			"label": "Alternate Exclusion",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

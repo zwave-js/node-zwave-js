@@ -2,7 +2,7 @@
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9642",
-	"description": "Z-Wave Plus smart accessory dimmer",
+	"description": "Z-Wave Plus Smart Accessory Dimmer",
 	"devices": [
 		{
 			"productType": "0x4441",
@@ -27,7 +27,7 @@
 			"#": "2",
 			"label": "Panic On Time",
 			"valueSize": 1,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -37,7 +37,7 @@
 			"#": "3",
 			"label": "Panic Off",
 			"valueSize": 1,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -59,33 +59,21 @@
 					"value": 2
 				},
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Panic Mode Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Panic Mode"
 		},
 		{
 			"#": "7",
 			"label": "Dimmer Ramp Time",
 			"valueSize": 1,
-			"unit": "sec",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
@@ -93,7 +81,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Blue LED Brightness Level while dimmer is ON",
+			"label": "Blue LED Brightness Level While Dimmer Is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -101,7 +89,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Blue LED Brightness Level while dimmer is OFF",
+			"label": "Blue LED Brightness Level While Dimmer Is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -109,7 +97,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Amber LED Brightness Level while dimmer is ON",
+			"label": "Amber LED Brightness Level While Dimmer Is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -117,7 +105,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Amber LED Brightness Level while dimmer is OFF",
+			"label": "Amber LED Brightness Level While Dimmer Is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

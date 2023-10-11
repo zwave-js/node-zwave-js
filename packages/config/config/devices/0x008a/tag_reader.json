@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Feedback time",
+			"label": "Feedback Time",
 			"description": "the time the beep goes to off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Feedback time-out",
+			"label": "Feedback Time-Out",
 			"description": "waiting for the wake-up-no-more command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,7 +54,7 @@
 		},
 		{
 			"#": "4",
-			"label": "feedback beeps per second",
+			"label": "Feedback Beeps Per Second",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "6",
-			"label": "RFID circuit start-up time",
+			"label": "RFID Circuit Start-Up Time",
 			"description": "The time the RFID will be started after pressing \"home\" or \"away\"",
 			"valueSize": 1,
 			"minValue": 0,

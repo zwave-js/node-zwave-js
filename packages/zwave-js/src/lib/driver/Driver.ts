@@ -249,11 +249,14 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		response: 10000,
+		// Ideally we'd want to have this as low as possible, but some
+		// 500 series controllers can take upwards of 10 seconds to respond sometimes.
+		response: 30000,
 		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
 		sendToSleep: 250, // The default should be enough time for applications to react to devices waking up
+		retryJammed: 1000,
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
 		refreshValueAfterTransition: 1000, // To account for delays in the device
 		serialAPIStarted: 5000,
@@ -262,6 +265,7 @@ const defaultOptions: ZWaveOptions = {
 		openSerialPort: 10,
 		controller: 3,
 		sendData: 3,
+		sendDataJammed: 5,
 		nodeInterview: 5,
 	},
 	disableOptimisticValueUpdate: false,
@@ -295,9 +299,9 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.response < 500 || options.timeouts.response > 20000) {
+	if (options.timeouts.response < 500 || options.timeouts.response > 60000) {
 		throw new ZWaveError(
-			`The Response timeout must be between 500 and 20000 milliseconds!`,
+			`The Response timeout must be between 500 and 60000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -310,6 +314,14 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.nonce < 3000 || options.timeouts.nonce > 20000) {
 		throw new ZWaveError(
 			`The Nonce timeout must be between 3000 and 20000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.retryJammed < 10 || options.timeouts.retryJammed > 5000
+	) {
+		throw new ZWaveError(
+			`The timeout for retrying while jammed must be between 10 and 5000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -366,6 +378,15 @@ function checkOptions(options: ZWaveOptions): void {
 	) {
 		throw new ZWaveError(
 			`The SendData attempts must be between 1 and ${MAX_SEND_ATTEMPTS}!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.attempts.sendDataJammed < 1
+		|| options.attempts.sendDataJammed > 10
+	) {
+		throw new ZWaveError(
+			`The SendData attempts while jammed must be between 1 and 10!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -4629,7 +4650,8 @@ ${handlers.length} left`,
 
 		// Step through the transaction as long as it gives us a next message
 		while ((msg = await transaction.generateNextMessage(prevResult))) {
-			// TODO: refactor this nested loop or make it part of executeSerialAPICommand
+			// Keep track of how often the controller failed to send a command, to prevent ending up in an infinite loop
+			let jammedAttempts = 0;
 			attemptMessage: for (let attemptNumber = 1;; attemptNumber++) {
 				try {
 					prevResult = await this.queueSerialAPICommand(
@@ -4647,11 +4669,34 @@ ${handlers.length} left`,
 							// Ensure the controller didn't actually transmit
 							&& prevResult.txReport?.txTicks === 0
 						) {
-							// The controller is jammed. Wait a second, then try again.
-							this.controller.setStatus(ControllerStatus.Jammed);
-							await wait(1000, true);
+							jammedAttempts++;
+							if (
+								jammedAttempts
+									< this.options.attempts.sendDataJammed
+							) {
+								// The controller is jammed. Wait a bit, then try again.
+								this.controller.setStatus(
+									ControllerStatus.Jammed,
+								);
+								await wait(
+									this.options.timeouts.retryJammed,
+									true,
+								);
 
-							continue attemptMessage;
+								continue attemptMessage;
+							} else {
+								// Maybe this isn't actually the controller being jammed. Give up on this command.
+								this.controller.setStatus(
+									ControllerStatus.Ready,
+								);
+
+								throw new ZWaveError(
+									`Failed to send the command after ${jammedAttempts} attempts`,
+									ZWaveErrorCodes.Controller_MessageDropped,
+									prevResult,
+									transaction.stack,
+								);
+							}
 						}
 
 						if (
@@ -4673,7 +4718,6 @@ ${handlers.length} left`,
 					// We got a result - it will be passed to the next iteration
 					break attemptMessage;
 				} catch (e: any) {
-					let delay = 0;
 					let zwError: ZWaveError;
 
 					if (!isZWaveError(e)) {
@@ -4691,28 +4735,31 @@ ${handlers.length} left`,
 							});
 							return;
 						} else if (
-							isSendData(msg)
-							&& e.code === ZWaveErrorCodes.Controller_Timeout
-							&& e.context === "callback"
+							isSendData(msg) && isMissingControllerCallback(e)
 						) {
 							// If the callback to SendData times out, we need to issue a SendDataAbort
 							await this.abortSendData();
-							// Wait a short amount of time so everything can settle
-							delay = 50;
+							// Reject the transaction - this will trigger the recovery mechanism and retry the command afterwards
+							throw e;
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
+							throw e;
+						} else if (
+							e.code === ZWaveErrorCodes.Controller_MessageDropped
+						) {
+							// We gave up on this command, so don't retry it
 							throw e;
 						}
 
 						if (
 							this.mayRetrySerialAPICommand(
 								msg,
-								attemptNumber,
+								// Ignore the number of attempts while jammed
+								attemptNumber - jammedAttempts,
 								e.code,
 							)
 						) {
 							// Retry the command
-							if (delay) await wait(delay, true);
 							continue attemptMessage;
 						}
 
@@ -5520,7 +5567,9 @@ ${handlers.length} left`,
 		if (this.isMissingNodeACK(transaction, error)) {
 			if (this.handleMissingNodeACK(transaction as any, error)) return;
 		} else if (
-			isMissingControllerACK(error) || isMissingControllerCallback(error)
+			isMissingControllerACK(error)
+			|| (isSendData(transaction.message)
+				&& isMissingControllerCallback(error))
 		) {
 			if (this.handleUnresponsiveController(transaction, error)) return;
 		}

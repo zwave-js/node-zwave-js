@@ -16,24 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Power On State",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Prior State",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "2",
@@ -56,7 +39,7 @@
 			"#": "3",
 			"label": "Auto Off Timer",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -119,7 +102,7 @@
 		},
 		{
 			"#": "6",
-			"label": "LED Indicator Intensity (when on)",
+			"label": "LED Indicator Intensity (When on)",
 			"valueSize": 1,
 			"defaultValue": 5,
 			"allowManualEntry": false,
@@ -172,7 +155,7 @@
 		},
 		{
 			"#": "7",
-			"label": "LED Indicator Intensity (when Off)",
+			"label": "LED Indicator Intensity (When Off)",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -233,7 +216,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Detect Load Type",
+					"label": "Detect load type",
 					"value": 0
 				},
 				{
@@ -248,11 +231,10 @@
 			"label": "Instant On",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enabled (no delay)",
+					"label": "Enabled (No delay)",
 					"value": 0
 				},
 				{

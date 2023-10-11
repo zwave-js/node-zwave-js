@@ -24,7 +24,7 @@
 			"maxNodes": 16
 		},
 		"3": {
-			"label": "Q1 switch binary",
+			"label": "Q1 Binary Switch",
 			"maxNodes": 16
 		},
 		"4": {
@@ -36,7 +36,7 @@
 			"maxNodes": 16
 		},
 		"6": {
-			"label": "Q2 switch binary",
+			"label": "Q2 Binary Switch",
 			"maxNodes": 16
 		},
 		"7": {
@@ -52,36 +52,34 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Input 2 switch type",
+			"label": "Input 2 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
@@ -95,26 +93,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF is not active",
+					"label": "All on active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Automatic turning off output Q1 after set time",
+			"label": "Automatic Turning Off Output Q1 After Set Time",
 			"description": "When relay Q1 is ON it goes automatically OFF after defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -123,7 +121,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Automatic turning on output Q1 after set time",
+			"label": "Automatic Turning on Output Q1 After Set Time",
 			"description": "When relay Q1 is OFF it goes automatically ON after defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -132,7 +130,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Automatic turning off relay Q2 after set time",
+			"label": "Automatic Turning Off Relay Q2 After Set Time",
 			"description": "When relay Q2 is ON it goes automatically OFF after defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -141,7 +139,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Automatic turning on output Q2 after set time",
+			"label": "Automatic Turning on Output Q2 After Set Time",
 			"description": "When relay Q2 is OFF it goes automatically ON after defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -150,7 +148,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Seconds or milliseconds selection",
+			"label": "Seconds or Milliseconds Selection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -163,7 +161,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts for Q1",
+			"label": "Power Reporting in Watts for Q1",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -172,7 +170,7 @@
 		},
 		{
 			"#": "41",
-			"label": "Power reporting in Watts for Q2",
+			"label": "Power Reporting in Watts for Q2",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -181,7 +179,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting time interval for Q1",
+			"label": "Power Reporting Time Interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -189,7 +187,7 @@
 		},
 		{
 			"#": "43",
-			"label": "Power reporting time interval for Q2",
+			"label": "Power Reporting Time Interval for Q2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -197,10 +195,9 @@
 		},
 		{
 			"#": "63",
-			"label": "Output Q1 Switch selection",
+			"label": "Output Q1 Switch Selection",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -215,10 +212,9 @@
 		},
 		{
 			"#": "64",
-			"label": "Output Q2 Switch selection",
+			"label": "Output Q2 Switch Selection",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -233,7 +229,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Temperature sensor offset",
+			"label": "Temperature Sensor Offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
@@ -241,7 +237,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Digital temperature sensor reporting",
+			"label": "Digital Temperature Sensor Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

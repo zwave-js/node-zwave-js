@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "0",
-			"label": "Motion timeout",
+			"label": "Motion Timeout",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,

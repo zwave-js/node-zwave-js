@@ -2,7 +2,7 @@
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39446 / ZW3107",
-	"description": "Plug-in 2-Outlet Dimmer, Simultaneous, 500S",
+	"description": "Plug-In 2-Outlet Dimmer, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",
@@ -37,7 +37,6 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -56,11 +55,10 @@
 		},
 		{
 			"#": "6",
-			"label": "Dim up/down rate",
+			"label": "Dim Up/down Rate",
 			"description": "Adjust the speed at which the ramps to a specific value",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,8 +78,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "8",
@@ -91,8 +88,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "9",
@@ -101,8 +97,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "10",
@@ -112,8 +107,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "11",
@@ -122,8 +116,7 @@
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "12",
@@ -133,8 +126,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		}
 	],
 	"compat": {

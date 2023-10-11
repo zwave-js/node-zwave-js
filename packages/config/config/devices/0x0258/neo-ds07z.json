@@ -50,8 +50,7 @@
 			"unit": "0.1 (°C/°F)",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "6",
@@ -60,8 +59,7 @@
 			"unit": "0.1 %rH",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "7",
@@ -70,7 +68,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off (0x00)",
@@ -90,7 +87,6 @@
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "No delay",
@@ -106,7 +102,6 @@
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

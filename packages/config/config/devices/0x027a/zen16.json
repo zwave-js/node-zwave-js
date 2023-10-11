@@ -38,7 +38,6 @@
 			"label": "Status After Power Failure",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -58,7 +57,7 @@
 					"value": 3
 				},
 				{
-					"label": "Relays 1/2 - Previous state, Relay 3 - On",
+					"label": "Relays 1/2 - Previous state, relay 3 - On",
 					"value": 4
 				}
 			]
@@ -104,7 +103,6 @@
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -146,7 +144,6 @@
 			"label": "Relay 1: Auto Turn-Off Timer Unit",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -281,7 +278,6 @@
 			"label": "Switch 1: Manual Control",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -293,7 +289,7 @@
 					"value": 1
 				},
 				{
-					"label": "Disable (with switch reports)",
+					"label": "Disable (With switch reports)",
 					"value": 2
 				}
 			]
@@ -330,19 +326,18 @@
 			"label": "Relay 1: Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally open (reports off when relay is open / on when relay is closed)",
+					"label": "Normally open (Reports off when relay is open / On when relay is closed)",
 					"value": 0
 				},
 				{
-					"label": "Normally closed (reports off when relay is open / on when relay is closed)",
+					"label": "Normally closed (Reports off when relay is open / On when relay is closed)",
 					"value": 1
 				},
 				{
-					"label": "Normally closed (reports off when relay is closed / on when relay is open)",
+					"label": "Normally closed (Reports off when relay is closed / On when relay is open)",
 					"value": 2
 				}
 			]

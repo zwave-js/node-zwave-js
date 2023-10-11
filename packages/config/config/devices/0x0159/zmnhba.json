@@ -2,7 +2,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHBA",
-	"description": "Flush 2 relays",
+	"description": "Flush 2 Relays",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -31,69 +31,67 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Input 2 switch type",
+			"label": "Input 2 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF is not active",
+					"label": "All on active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Automatic turning off relay Q1 after set time",
+			"label": "Automatic Turning Off Relay Q1 After Set Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -102,7 +100,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Automatic turning off relay Q2 after set time",
+			"label": "Automatic Turning Off Relay Q2 After Set Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -115,7 +113,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts on power change for Q1",
+			"label": "Power Reporting in Watts on Power Change for Q1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -124,7 +122,7 @@
 		},
 		{
 			"#": "41",
-			"label": "Power reporting in Watts on power change for Q2",
+			"label": "Power Reporting in Watts on Power Change for Q2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -133,7 +131,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by time interval for Q1",
+			"label": "Power Reporting in Watts by Time Interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -142,7 +140,7 @@
 		},
 		{
 			"#": "43",
-			"label": "Power reporting in Watts by time interval for Q2",
+			"label": "Power Reporting in Watts by Time Interval for Q2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

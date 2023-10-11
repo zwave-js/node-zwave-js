@@ -2,7 +2,7 @@
 	"manufacturer": "Haseman",
 	"manufacturerId": "0x0115",
 	"label": "R4D4",
-	"description": "4x Relay and 4x Universal Dimmer",
+	"description": "4X Relay and 4X Universal Dimmer",
 	"devices": [
 		{
 			"productType": "0xf222",

@@ -2,7 +2,7 @@
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "iPlugDim",
-	"description": "Wall Plug with dimming function",
+	"description": "Wall Plug with Dimming Function",
 	"devices": [
 		{
 			"productType": "0x6942",

@@ -17,13 +17,12 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Pir Trigger Off Period",
+			"label": "PIR Trigger Off Period",
 			"description": "Pir trigger off period can be set 8~720 secs",
 			"valueSize": 2,
 			"minValue": 8,
 			"maxValue": 720,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "2",
@@ -33,7 +32,6 @@
 			"minValue": 30,
 			"maxValue": 200,
 			"defaultValue": 50,
-			"unsigned": true,
 			"writeOnly": true
 		},
 		{
@@ -44,8 +42,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 1440,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

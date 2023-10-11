@@ -22,8 +22,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 30,
-			"unsigned": true
+			"defaultValue": 30
 		},
 		{
 			"#": "2",

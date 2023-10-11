@@ -2,7 +2,7 @@
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39453 / ZW4203",
-	"description": "Plug-in Outdoor Switch V2, 500S",
+	"description": "Plug-In Outdoor Switch V2, 500S",
 	"devices": [
 		{
 			"productType": "0x4f50",
@@ -37,7 +37,6 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -53,7 +52,7 @@
 					"value": 2
 				},
 				{
-					"label": "LED Always on",
+					"label": "LED always on",
 					"value": 3
 				}
 			]
@@ -63,7 +62,6 @@
 			"label": "Alternate Exclusion",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

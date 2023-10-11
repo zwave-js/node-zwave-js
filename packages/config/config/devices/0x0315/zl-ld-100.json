@@ -22,7 +22,6 @@
 			"valueSize": 1,
 			"unit": "minutes",
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -42,7 +41,6 @@
 		{
 			"#": "3",
 			"label": "Temperature Reporting Interval On Line Power",
-			"description": "",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 30,
@@ -53,10 +51,8 @@
 		{
 			"#": "4",
 			"label": "Notification Buzzer",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

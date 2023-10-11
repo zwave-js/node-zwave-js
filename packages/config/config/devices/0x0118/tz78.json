@@ -20,18 +20,18 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Change the state of indicator light",
+			"label": "Change the State of Indicator Light",
 			"description": "Default status of socket LED is on as indicator when the load is off",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is ON",
+					"label": "LED on when load is on",
 					"value": 0
 				},
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 1
 				}
 			]

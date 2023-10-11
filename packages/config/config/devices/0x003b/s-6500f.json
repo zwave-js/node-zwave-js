@@ -42,7 +42,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable ",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -58,8 +58,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1023,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "18",

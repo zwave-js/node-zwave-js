@@ -2,7 +2,7 @@
 	"manufacturer": "Poly-control",
 	"manufacturerId": "0x010e",
 	"label": "BTZW125",
-	"description": "Danalock v2 circle",
+	"description": "Danalock v2 Circle",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Turn degrees",
+			"label": "Turn Degrees",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Auto Latch time",
+			"label": "Auto Latch Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
@@ -104,20 +104,9 @@
 		},
 		{
 			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Sound",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable sound",
-					"value": 0
-				},
-				{
-					"label": "Enable Sound",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7",
@@ -127,11 +116,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "3,6V",
+					"label": "3.6 V",
 					"value": 0
 				},
 				{
-					"label": "3,0V",
+					"label": "3.0 V",
 					"value": 1
 				},
 				{
@@ -142,7 +131,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Battery alarm value",
+			"label": "Battery Alarm Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

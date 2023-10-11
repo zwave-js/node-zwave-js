@@ -30,15 +30,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Low Sensitivity",
+					"label": "Low sensitivity",
 					"value": 1
 				},
 				{
-					"label": "Medium Sensitivity",
+					"label": "Medium sensitivity",
 					"value": 2
 				},
 				{
-					"label": "High Sensitivity",
+					"label": "High sensitivity",
 					"value": 3
 				}
 			]
@@ -54,7 +54,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Test Mode [5 seconds]",
+					"label": "Test mode [5 seconds]",
 					"value": 255
 				}
 			]
@@ -64,19 +64,18 @@
 			"label": "Basic Set, Notification and Basic Report",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Motion Sensor will send out Notification",
+					"label": "Motion sensor will send out notification",
 					"value": 1
 				},
 				{
-					"label": "Motion Sensor will send out Basic Set",
+					"label": "Motion sensor will send out Basic Set",
 					"value": 2
 				},
 				{
-					"label": "Motion Sensor will sendout Basic Report",
+					"label": "Motion sensor will sendout Basic Report",
 					"value": 3
 				}
 			]

@@ -2,7 +2,7 @@
 	"manufacturer": "WeBeHome AB",
 	"manufacturerId": "0x0171",
 	"label": "HG2",
-	"description": "WeBeHome gateway",
+	"description": "WeBeHome Gateway",
 	"devices": [
 		{
 			"productType": "0x0001",

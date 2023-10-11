@@ -29,8 +29,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "26",
@@ -39,17 +38,15 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "27",
-			"label": "Set IR Code From Built-in AC Library",
+			"label": "Set IR Code From Built-In AC Library",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2389,
-			"defaultValue": 18,
-			"unsigned": true
+			"defaultValue": 18
 		},
 		{
 			"#": "28",
@@ -72,38 +69,24 @@
 		{
 			"#": "30",
 			"label": "Temperature Change Reporting Threshold",
-			"description": "1°F = 0.5°C",
+			"description": "1 °F = 0.5 °C",
 			"valueSize": 1,
 			"unit": "°F",
 			"minValue": 0,
 			"maxValue": 8,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "32",
-			"label": "Built-in IR Emitter Control",
-			"valueSize": 1,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Built-In IR Emitter Control",
+			"defaultValue": 255
 		},
 		{
 			"#": "33",
 			"label": "Air Conditioner Swing Function",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -121,7 +104,6 @@
 			"label": "Temperature & Humidity Reporting Interval",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -161,7 +143,7 @@
 		{
 			"#": "37",
 			"label": "Temperature Calibration",
-			"description": "1°F = 0.5°C",
+			"description": "1 °F = 0.5 °C",
 			"valueSize": 1,
 			"unit": "°F",
 			"minValue": -10,
@@ -175,7 +157,6 @@
 			"minValue": 2,
 			"maxValue": 4,
 			"defaultValue": 2,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Endpoint 2 (AV 1)",
@@ -212,7 +193,6 @@
 			"label": "BLE Advertising Timeout",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -227,7 +207,7 @@
 		},
 		{
 			"#": "160",
-			"label": "Reset to default settings",
+			"label": "Reset to Default Settings",
 			"description": "255 to reset device to defaults",
 			"valueSize": 1,
 			"defaultValue": 0,

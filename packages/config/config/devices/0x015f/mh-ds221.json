@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Reports To Group 2",
+			"label": "Reports to Group 2",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -114,7 +114,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Factory reset",
+			"label": "Factory Reset",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,

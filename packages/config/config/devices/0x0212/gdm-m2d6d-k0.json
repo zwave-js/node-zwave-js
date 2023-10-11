@@ -20,7 +20,6 @@
 			"label": "Silent Mode On/Off",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

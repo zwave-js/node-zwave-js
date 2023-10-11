@@ -2,7 +2,7 @@
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW088",
-	"description": "4 button keyfob - Gen 5",
+	"description": "4 Button Keyfob - Gen 5",
 	"devices": [
 		{
 			"productType": "0x0001",

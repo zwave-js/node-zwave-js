@@ -8,8 +8,5 @@ module.exports = {
 	plugins: [
 		"@zwave-js",
 	],
-	rules: {
-		"@zwave-js/consistent-device-config-property-order": "error",
-		"@zwave-js/no-unnecessary-min-max-value": "error"
-	}
+	extends: "plugin:@zwave-js/config-files"
 };

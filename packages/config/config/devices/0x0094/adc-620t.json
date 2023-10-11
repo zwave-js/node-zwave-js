@@ -2,7 +2,7 @@
 	"manufacturer": "Alarm.com",
 	"manufacturerId": "0x0094",
 	"label": "ADC-620T",
-	"description": "Alarm.com Module for DSC Panels",
+	"description": "Module for DSC Panels",
 	"devices": [
 		{
 			"productType": "0x000a",

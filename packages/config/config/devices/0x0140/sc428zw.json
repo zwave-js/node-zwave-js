@@ -43,8 +43,7 @@
 			"unit": "V",
 			"minValue": 1,
 			"maxValue": 200,
-			"defaultValue": 132,
-			"unsigned": true
+			"defaultValue": 132
 		},
 		{
 			"#": "6",
@@ -53,8 +52,7 @@
 			"unit": "mA",
 			"minValue": 1,
 			"maxValue": 15000,
-			"defaultValue": 15000,
-			"unsigned": true
+			"defaultValue": 15000
 		},
 		{
 			"#": "21",
@@ -63,8 +61,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "22",
@@ -73,8 +70,7 @@
 			"unit": "W",
 			"minValue": 1,
 			"maxValue": 1980,
-			"defaultValue": 1980,
-			"unsigned": true
+			"defaultValue": 1980
 		},
 		{
 			"#": "23",
@@ -83,8 +79,7 @@
 			"unit": "kWh",
 			"minValue": 1,
 			"maxValue": 327,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "24",
@@ -93,8 +88,7 @@
 			"unit": "seconds",
 			"minValue": 30,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"unsigned": true
+			"defaultValue": 3600
 		},
 		{
 			"#": "25",
@@ -104,7 +98,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 1980,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -120,7 +113,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -135,7 +127,6 @@
 			"minValue": 1,
 			"maxValue": 18,
 			"defaultValue": 12,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

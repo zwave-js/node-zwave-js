@@ -36,7 +36,6 @@
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

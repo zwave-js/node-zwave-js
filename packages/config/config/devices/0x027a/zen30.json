@@ -99,11 +99,11 @@
 					"value": 0
 				},
 				{
-					"label": "Dimmer off/Relay on",
+					"label": "Dimmer off/relay on",
 					"value": 1
 				},
 				{
-					"label": "Dimmer on/Relay off",
+					"label": "Dimmer on/relay off",
 					"value": 2
 				},
 				{
@@ -111,19 +111,19 @@
 					"value": 3
 				},
 				{
-					"label": "Restore Dimmer/Relay On",
+					"label": "Restore dimmer/relay on",
 					"value": 4
 				},
 				{
-					"label": "Restore Dimmer/Relay Off",
+					"label": "Restore dimmer/relay off",
 					"value": 5
 				},
 				{
-					"label": "Dimmer On/Restore Relay",
+					"label": "Dimmer on/restore relay",
 					"value": 6
 				},
 				{
-					"label": "Dimmer Off/Restore Relay",
+					"label": "Dimmer off/restore relay",
 					"value": 7
 				},
 				{
@@ -154,7 +154,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Full Brightness (99)",
+					"label": "Full brightness (99)",
 					"value": 0
 				},
 				{
@@ -165,7 +165,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Enable/Disable Double-tap for Dimmer",
+			"label": "Enable/Disable Double-Tap for Dimmer",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

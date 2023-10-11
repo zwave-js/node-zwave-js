@@ -2,7 +2,7 @@
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
 	"label": "AN184",
-	"description": "Mini plug with metering",
+	"description": "Mini Plug with Metering",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -23,7 +23,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "On",
@@ -39,8 +38,7 @@
 			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 25,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "3",
@@ -49,7 +47,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -68,8 +65,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
@@ -78,8 +74,7 @@
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 60,
-			"unsigned": true
+			"defaultValue": 60
 		},
 		{
 			"#": "6",
@@ -89,7 +84,6 @@
 			"minValue": 0,
 			"maxValue": 3500,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -104,7 +98,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

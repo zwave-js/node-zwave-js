@@ -22,10 +22,9 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Invert LCD orientation",
+			"label": "Invert LCD Orientation",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -46,7 +45,6 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Always on",
@@ -56,39 +54,15 @@
 		},
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Backlight",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Battery Report",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
@@ -98,7 +72,6 @@
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -114,7 +87,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -129,7 +101,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 2,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -160,7 +131,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Use External Temperature Sensor",
+					"label": "Use external temperature sensor",
 					"value": -128
 				}
 			]

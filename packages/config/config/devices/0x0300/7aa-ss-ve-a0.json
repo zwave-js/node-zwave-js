@@ -31,7 +31,6 @@
 			"label": "Magnetic Field Range",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,8 +50,7 @@
 			"unit": "µT",
 			"minValue": 1,
 			"maxValue": 192000,
-			"defaultValue": 640,
-			"unsigned": true
+			"defaultValue": 640
 		},
 		{
 			"#": "3",
@@ -61,8 +59,7 @@
 			"unit": "µT",
 			"minValue": 1,
 			"maxValue": 89600,
-			"defaultValue": 200,
-			"unsigned": true
+			"defaultValue": 200
 		},
 		{
 			"#": "10",
@@ -71,8 +68,7 @@
 			"unit": "%",
 			"minValue": 5,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "14",
@@ -97,8 +93,7 @@
 			"unit": "minutes",
 			"minValue": 15,
 			"maxValue": 127,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "254",

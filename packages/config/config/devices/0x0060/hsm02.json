@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Staying Awake (for testing)",
+			"label": "Staying Awake (For Testing)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

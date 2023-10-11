@@ -2,7 +2,7 @@
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "PS15EMZ5-1",
-	"description": "Plug-in Appliance Module",
+	"description": "Plug-In Appliance Module",
 	"devices": [
 		{
 			"productType": "0x5053",

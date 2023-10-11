@@ -35,7 +35,6 @@
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

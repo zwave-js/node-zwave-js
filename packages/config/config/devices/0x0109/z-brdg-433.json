@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "Z-BRDG-433",
-	"description": "Plug in Z-Wave to 433Mhz bridge plus lamp dimmer",
+	"description": "Plug in Z-Wave to 433Mhz Bridge Plus Lamp Dimmer",
 	"devices": [
 		{
 			"productType": "0x2014",

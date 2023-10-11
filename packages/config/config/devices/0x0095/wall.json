@@ -2,7 +2,7 @@
 	"manufacturer": "Qees",
 	"manufacturerId": "0x0095",
 	"label": "Wall",
-	"description": "Wall mountable mini 4 button remote",
+	"description": "Wall Mountable Mini 4 Button Remote",
 	"devices": [
 		{
 			"productType": "0x0002",

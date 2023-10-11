@@ -4,12 +4,15 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	SecurityClass,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLibraryTypes,
 	enumValuesToMetadataStates,
 	getCCName,
+	securityClassIsS2,
+	securityClassOrder,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -439,24 +442,42 @@ export class VersionCC extends CommandClass {
 				} else {
 					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
 					// Make sure this is not a critical CC, which must be supported though
-					switch (cc) {
-						case CommandClasses.Version:
-						case CommandClasses["Manufacturer Specific"]:
-							logMessage = `  claims NOT to support CC ${
-								CommandClasses[cc]
-							} (${num2hex(cc)}), but it must. Assuming the ${
-								this.endpointIndex === 0 ? "node" : "endpoint"
-							} supports version 1...`;
-							endpoint.addCC(cc, { version: 1 });
-							break;
 
-						default:
-							logMessage = `  does NOT support CC ${
-								CommandClasses[cc]
-							} (${num2hex(cc)})`;
-							endpoint.removeCC(cc);
+					if (
+						cc === CommandClasses.Version
+						|| cc === CommandClasses["Manufacturer Specific"]
+					) {
+						logMessage = `  claims NOT to support CC ${
+							CommandClasses[cc]
+						} (${num2hex(cc)}), but it must. Assuming the ${
+							this.endpointIndex === 0 ? "node" : "endpoint"
+						} supports version 1...`;
+						endpoint.addCC(cc, { version: 1 });
+					} else if (
+						(cc === CommandClasses.Security
+							&& node.hasSecurityClass(SecurityClass.S0_Legacy))
+						|| (cc === CommandClasses["Security 2"]
+							&& securityClassOrder.some((sc) =>
+								securityClassIsS2(sc)
+								&& node.hasSecurityClass(sc)
+							))
+					) {
+						logMessage = `  claims NOT to support CC ${
+							CommandClasses[cc]
+						} (${
+							num2hex(cc)
+						}), but it is known to support it. Assuming the ${
+							this.endpointIndex === 0 ? "node" : "endpoint"
+						} supports version 1...`;
+						endpoint.addCC(cc, { version: 1 });
+					} else {
+						logMessage = `  does NOT support CC ${
+							CommandClasses[cc]
+						} (${num2hex(cc)})`;
+						endpoint.removeCC(cc);
 					}
 				}
+
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,

@@ -17,23 +17,22 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Led Light",
+			"label": "LED Light",
 			"description": "Invert LED light",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Led on when load is off, LED off when load is on",
+					"label": "LED on when load is off, LED off when load is on",
 					"value": 0
 				},
 				{
-					"label": "Led on when load is on, LED off when load is off (default)",
+					"label": "LED on when load is on, LED off when load is off",
 					"value": 1
 				},
 				{
-					"label": "Led always off",
+					"label": "LED always off",
 					"value": 2
 				}
 			]

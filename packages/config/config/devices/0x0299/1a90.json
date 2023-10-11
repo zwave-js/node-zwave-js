@@ -1,8 +1,8 @@
 {
 	"manufacturer": "TechniSat",
 	"manufacturerId": "0x0299",
-	"label": "Single-Switch ",
-	"description": "Flush On/Off switch",
+	"label": "Single-Switch",
+	"description": "Flush On/Off Switch",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Report interval",
+			"label": "Report Interval",
 			"description": "Interval of unsolicited meter reports in 10s increments; 0 to disable.",
 			"valueSize": 2,
 			"unit": "10s",
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Energy meter report interval",
+			"label": "Energy Meter Report Interval",
 			"description": "Interval of active energy meter reports in minutes; 0 to disable.",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -53,14 +53,14 @@
 		},
 		{
 			"#": "4",
-			"label": "Button mode",
+			"label": "Button Mode",
 			"description": "Switching mode of the push buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top: turn off, Bottom: turn on",
+					"label": "Top: Turn off, bottom: Turn on",
 					"value": 0
 				},
 				{
@@ -78,18 +78,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle Switch",
+					"label": "Toggle switch",
 					"value": 0
 				},
 				{
-					"label": "Momentary Switch",
+					"label": "Momentary switch",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Input S: Central Scene Events for multiple button presses",
+			"label": "Input S: Central Scene Events for Multiple Button Presses",
 			"description": "Which Central Scene to trigger on multiple button presses (2x-5x) of extension input S",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -104,7 +104,7 @@
 					"value": 2
 				},
 				{
-					"label": "Central Scene 3 (exclusive to Input S)",
+					"label": "Central Scene 3 (Exclusive to input s)",
 					"value": 3
 				}
 			]

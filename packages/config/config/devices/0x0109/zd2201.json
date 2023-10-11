@@ -28,7 +28,6 @@
 			"description": "Choose °C or °F",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -48,8 +47,7 @@
 			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "3",
@@ -58,8 +56,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "4",
@@ -68,8 +65,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		}
 	],
 	"metadata": {

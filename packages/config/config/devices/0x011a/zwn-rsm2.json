@@ -26,11 +26,11 @@
 			"multiChannel": true
 		},
 		"2": {
-			"label": "Switch Binary Report EP1",
+			"label": "Binary Switch Report EP1",
 			"maxNodes": 3
 		},
 		"3": {
-			"label": "Switch Binary Report EP2",
+			"label": "Binary Switch Report EP2",
 			"maxNodes": 3
 		}
 	},
@@ -41,7 +41,6 @@
 			"description": "Send unsolicited status report to primary controller",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,7 +48,7 @@
 					"value": 0
 				},
 				{
-					"label": "Send Broadcast",
+					"label": "Send broadcast",
 					"value": 1
 				}
 			]

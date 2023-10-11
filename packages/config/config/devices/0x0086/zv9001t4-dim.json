@@ -26,11 +26,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Central scene",
+					"label": "Central Scene",
 					"value": 0
 				},
 				{
-					"label": "Scene activation",
+					"label": "Scene Activation",
 					"value": 1
 				}
 			]
@@ -47,7 +47,7 @@
 					"value": 0
 				},
 				{
-					"label": "Association Group",
+					"label": "Association group",
 					"value": 1
 				}
 			]

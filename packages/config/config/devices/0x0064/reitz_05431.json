@@ -2,7 +2,7 @@
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "ZW-ES-1000 / Reitz 05431",
-	"description": "Duewi ZW BJ ES 1000 / Reitz 05431 / ZWave.me 05457 Single button wall switch",
+	"description": "Duewi ZW BJ ES 1000 / Reitz 05431 / Z-Wave.Me 05457 Single Button Wall Switch",
 	"devices": [
 		{
 			"productType": "0x2001",
@@ -32,10 +32,9 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -51,14 +50,14 @@
 					"value": 2
 				},
 				{
-					"label": "Remote by indicator command class",
+					"label": "Remote by Indicator Command Class",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Automatic switch off",
+			"label": "Automatic Switch Off",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -68,14 +67,13 @@
 		},
 		{
 			"#": "3",
-			"label": "Function of RF off command",
+			"label": "Function of RF Off Command",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -83,7 +81,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{
@@ -94,10 +92,9 @@
 		},
 		{
 			"#": "4",
-			"label": "Switch on dimming by buttons",
+			"label": "Switch on Dimming by Buttons",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -112,10 +109,9 @@
 		},
 		{
 			"#": "5",
-			"label": "restore switch state",
+			"label": "Restore Switch State",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -130,7 +126,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -138,10 +134,9 @@
 		},
 		{
 			"#": "11",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -156,10 +151,9 @@
 		},
 		{
 			"#": "12",
-			"label": "Switch by buttons",
+			"label": "Switch by Buttons",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -178,10 +172,9 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on button single press or hold",
+			"label": "Action on Button Single Press or Hold",
 			"valueSize": 1,
 			"defaultValue": 4,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -189,33 +182,32 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim using Basic Set",
+					"label": "Switch on, off and dim using Basic Set",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 3
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Action on button double press or hold",
+			"label": "Action on Button Double Press or Hold",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -223,30 +215,30 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim using Basic Set",
+					"label": "Switch on, off and dim using Basic Set",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 3
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "15",
-			"label": "Send the following switch all commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -268,10 +260,9 @@
 		},
 		{
 			"#": "16",
-			"label": "What to do on button Down press",
+			"label": "What to Do on Button Down Press",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -279,7 +270,7 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On if load is Off, else switch Off",
+					"label": "Switch on if load is off, else switch off",
 					"value": 1
 				},
 				{

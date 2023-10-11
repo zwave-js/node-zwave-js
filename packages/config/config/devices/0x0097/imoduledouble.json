@@ -2,7 +2,7 @@
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "iModuleDouble",
-	"description": "Dual In-wall Switch",
+	"description": "Dual In-Wall Switch",
 	"devices": [
 		{
 			"productType": "0x1122",

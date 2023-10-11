@@ -72,21 +72,8 @@
 		},
 		{
 			"#": "6",
-			"label": "CH1 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH1 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH1 Auto Turn-Off Timer"
 		},
 		{
 			"#": "7",
@@ -100,21 +87,8 @@
 		},
 		{
 			"#": "8",
-			"label": "CH1 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH1 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH1 Auto Turn-On Timer"
 		},
 		{
 			"#": "9",
@@ -128,21 +102,8 @@
 		},
 		{
 			"#": "10",
-			"label": "CH2 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH2 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH2 Auto Turn-Off Timer"
 		},
 		{
 			"#": "11",
@@ -156,21 +117,8 @@
 		},
 		{
 			"#": "12",
-			"label": "CH2 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH2 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH2 Auto Turn-On Timer"
 		},
 		{
 			"#": "13",
@@ -184,21 +132,8 @@
 		},
 		{
 			"#": "14",
-			"label": "CH3 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH3 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH3 Auto Turn-Off Timer"
 		},
 		{
 			"#": "15",
@@ -212,21 +147,8 @@
 		},
 		{
 			"#": "16",
-			"label": "CH3 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH3 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH3 Auto Turn-On Timer"
 		},
 		{
 			"#": "17",
@@ -240,21 +162,8 @@
 		},
 		{
 			"#": "18",
-			"label": "CH4 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH4 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH4 Auto Turn-Off Timer"
 		},
 		{
 			"#": "19",
@@ -268,21 +177,8 @@
 		},
 		{
 			"#": "20",
-			"label": "CH4 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH4 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH4 Auto Turn-On Timer"
 		},
 		{
 			"#": "21",
@@ -296,21 +192,8 @@
 		},
 		{
 			"#": "22",
-			"label": "CH5 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH5 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH5 Auto Turn-Off Timer"
 		},
 		{
 			"#": "23",
@@ -324,21 +207,8 @@
 		},
 		{
 			"#": "24",
-			"label": "CH5 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH5 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH5 Auto Turn-On Timer"
 		},
 		{
 			"#": "25",
@@ -352,21 +222,10 @@
 		},
 		{
 			"#": "26",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Manual Control",
 			"description": "Enable / Disable Physical Button Functionality",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Manual control disabled for all outlets",
-					"value": 0
-				},
-				{
-					"label": "Manual control enabled for all outlets",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "27",

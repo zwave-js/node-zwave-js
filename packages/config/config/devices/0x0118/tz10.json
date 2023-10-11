@@ -16,21 +16,10 @@
 	"paramInformation": [
 		{
 			"#": "4",
-			"label": "Memory function",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Memory Function",
 			"description": "The thermostat will recover the operating mode after a power failure.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	]
 }

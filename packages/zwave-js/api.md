@@ -1658,6 +1658,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
     attempts: {
         controller: number;
         sendData: number;
+        sendDataJammed: number;
         nodeInterview: number;
     };
     disableOptimisticValueUpdate?: boolean;
@@ -1710,6 +1711,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         sendDataCallback: number;
         report: number;
         nonce: number;
+        retryJammed: number;
         sendToSleep: number;
         refreshValue: number;
         refreshValueAfterTransition: number;

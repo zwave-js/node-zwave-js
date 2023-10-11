@@ -2,7 +2,7 @@
 	"manufacturer": "Intermatic",
 	"manufacturerId": "0x0005",
 	"label": "HA18",
-	"description": "15-amp Wall Switch",
+	"description": "15-Amp Wall Switch",
 	"devices": [
 		{
 			"productType": "0x4841",

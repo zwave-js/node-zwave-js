@@ -31,8 +31,9 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Siren alarm sequence interval",
+			"label": "Siren Alarm Sequence Duration",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 129,
 			"defaultValue": 10,
@@ -40,8 +41,9 @@
 		},
 		{
 			"#": "2",
-			"label": "Siren alarm tone length",
+			"label": "Siren Alarm Tone Length",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 8

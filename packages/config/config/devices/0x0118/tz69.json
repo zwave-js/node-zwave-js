@@ -2,7 +2,7 @@
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ69",
-	"description": "Smart meter switch",
+	"description": "Smart Meter Switch",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -68,7 +68,7 @@
 		{
 			"#": "3",
 			"label": "Watt Meter Report Period",
-			"description": "5s x 720 (default) = 3600s = 1 hour",
+			"description": "5s x 720 = 3600s = 1 hour",
 			"valueSize": 2,
 			"unit": "5 seconds",
 			"minValue": 1,
@@ -78,7 +78,7 @@
 		{
 			"#": "4",
 			"label": "kWH Meter Report Period",
-			"description": "10m * 6 (default) = 60m = 1 hour",
+			"description": "10m * 6 = 60m = 1 hour",
 			"valueSize": 2,
 			"unit": "10 minutes",
 			"minValue": 0,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Threshold of kWH for Load Caution",
+			"label": "Threshold of kWh for Load Caution",
 			"description": "Over this level, unit with go into overload mode",
 			"valueSize": 2,
 			"unit": "kWH",

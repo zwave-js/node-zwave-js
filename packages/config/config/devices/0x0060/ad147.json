@@ -35,39 +35,33 @@
 			"unit": "%",
 			"minValue": 255,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"defaultValue": 255
 		},
 		{
 			"#": "2",
-			"label": "The Delaying Time to Report to Group 1",
+			"label": "Delaying Time to Report to Group 1",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 25,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "3",
-			"label": "Remember The Last Status",
+			"label": "Remember the Last Status",
 			"valueSize": 1,
-			"unit": "binary",
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
 			"label": "Output Mode Setting: Dimming, On/Off",
 			"description": "0 (dimmable) or 1 (on/off)",
 			"valueSize": 1,
-			"unit": "binary",
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

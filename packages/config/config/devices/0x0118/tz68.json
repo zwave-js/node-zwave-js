@@ -40,29 +40,29 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "blue indicates off (default)",
+					"label": "Blue indicates off",
 					"value": 0
 				},
 				{
-					"label": "blue indicates on",
+					"label": "Blue indicates on",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Memory function",
+			"label": "Memory Function",
 			"description": "Memory function behaviour control.",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "do not remember",
+					"label": "Do not remember",
 					"value": 0
 				},
 				{
-					"label": "do remember state (default)",
+					"label": "Do remember state",
 					"value": 1
 				}
 			]

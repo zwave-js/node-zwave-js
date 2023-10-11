@@ -18,35 +18,29 @@
 		{
 			"#": "1",
 			"label": "Valve Default Timeout",
-			"description": "",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 300,
 			"maxValue": 2400,
-			"defaultValue": 2400,
-			"unsigned": true
+			"defaultValue": 2400
 		},
 		{
 			"#": "3",
 			"label": "Remaining Time to Close",
-			"description": "",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 35400,
-			"defaultValue": 2400,
-			"unsigned": true
+			"defaultValue": 2400
 		},
 		{
 			"#": "100",
 			"label": "Valve Report Interval",
-			"description": "",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 600,
 			"maxValue": 16777215,
-			"defaultValue": 86400,
-			"unsigned": true
+			"defaultValue": 86400
 		}
 	],
 	"metadata": {

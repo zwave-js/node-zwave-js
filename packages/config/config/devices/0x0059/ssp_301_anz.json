@@ -30,12 +30,11 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "3",
-			"label": "Relay And LED Configuration",
+			"label": "Relay and LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN04",
-	"description": "In Wall Dual Relay Switch Module 2x1.5kW with power meter",
+	"description": "In Wall Dual Relay Switch Module 2x1.5kW with Power Meter",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -52,7 +52,6 @@
 			"description": "Which relay is addressed by the BASIC command class",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -74,7 +73,6 @@
 			"label": "External Switch Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -115,25 +113,7 @@
 		},
 		{
 			"#": "7",
-			"label": "State after Power Loss",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch off",
-					"value": 0
-				},
-				{
-					"label": "Last state",
-					"value": 1
-				},
-				{
-					"label": "Switch on",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "8",
@@ -143,7 +123,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -156,7 +135,6 @@
 			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -182,7 +160,6 @@
 			"label": "Endpoint 3",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -190,7 +167,7 @@
 					"value": 1
 				},
 				{
-					"label": "Doesn't Exist",
+					"label": "Doesn't exist",
 					"value": 2
 				}
 			]
@@ -230,7 +207,6 @@
 			"description": "Enable this to distinguish between the relays.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

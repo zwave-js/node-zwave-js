@@ -2,6 +2,7 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA022",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "illumino WallMote 7",
 	"devices": [
 		{
@@ -51,7 +52,6 @@
 			"label": "Define Button Output",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -59,11 +59,11 @@
 					"value": 0
 				},
 				{
-					"label": "Central scene only",
+					"label": "Central Scene only",
 					"value": 1
 				},
 				{
-					"label": "Group association and central scene",
+					"label": "Group association and Central Scene",
 					"value": 2
 				}
 			]
@@ -73,7 +73,6 @@
 			"label": "Association Group 2/4/6 Report Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -81,7 +80,7 @@
 					"value": 0
 				},
 				{
-					"label": "Binary switch set",
+					"label": "Binary Switch Set",
 					"value": 1
 				}
 			]
@@ -91,7 +90,6 @@
 			"label": "Association Group 3/5/7: Double Tap Behavior",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -114,8 +112,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		},
 		{
 			"#": "39",
@@ -124,8 +121,7 @@
 			"unit": "%",
 			"minValue": 5,
 			"maxValue": 50,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "81",

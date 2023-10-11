@@ -37,7 +37,6 @@
 			"description": "Only valid in Light Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -70,10 +69,9 @@
 		},
 		{
 			"#": "9",
-			"label": "Send Central Scene Commands In Response To Inputs",
+			"label": "Send Central Scene Commands in Response to Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -102,7 +100,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -118,7 +115,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -134,7 +130,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 2,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -150,7 +145,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 3600,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

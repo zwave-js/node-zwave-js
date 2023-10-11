@@ -22,27 +22,23 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"defaultValue": 255
 		},
 		{
 			"#": "2",
-			"label": "The Delaying Time To Report To Group 1",
-			"description": "",
+			"label": "Delaying Time to Report to Group 1",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 25,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "3",
-			"label": "Remember The Last Status",
+			"label": "Remember the Last Status",
 			"description": "Remember or not",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -58,10 +54,8 @@
 		{
 			"#": "4",
 			"label": "Switch 1 Switching Type",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -53,7 +53,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "ALL ON / ALL OFF function activation",
+			"label": "ALL ON / ALL OFF Function Activation",
 			"description": "Activation/deactivation of ALL ON/ALL OFF functions.",
 			"valueSize": 1,
 			"defaultValue": 255,
@@ -61,29 +61,28 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON active ALL OFF active",
+					"label": "All on active all off active",
 					"value": 255
 				},
 				{
-					"label": "ALL ON inactive ALL OFF inactive",
+					"label": "All on inactive all off inactive",
 					"value": 0
 				},
 				{
-					"label": "ALL ON inactive ALL OFF active",
+					"label": "All on inactive all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF inactive",
+					"label": "All on active all off inactive",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Associations command class choice",
+			"label": "Associations Command Class Choice",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -110,11 +109,10 @@
 		},
 		{
 			"#": "8",
-			"label": "Outputs state change mode",
+			"label": "Outputs State Change Mode",
 			"description": "MODE1, Example: change saturation level from 0% to 99%",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -129,7 +127,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Step value (for MODE1)",
+			"label": "Step Value (For MODE1)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -138,7 +136,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Time between steps (relevant for MODE1)",
+			"label": "Time Between Steps (Relevant for MODE1)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -147,7 +145,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Time for changing from start to end value",
+			"label": "Time for Changing From Start to End Value",
 			"description": "Step value (relevant for MODE1).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,7 +155,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Maximum Brightening level",
+			"label": "Maximum Brightening Level",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 255,
@@ -166,7 +164,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Minimum dim level",
+			"label": "Minimum Dim Level",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 255,
@@ -175,7 +173,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Inputs/Outputs configuration",
+			"label": "Inputs/Outputs Configuration",
 			"description": "Relevant for main controllers other than Home Center 2 only",
 			"valueSize": 2,
 			"minValue": 0,
@@ -189,32 +187,32 @@
 		},
 		{
 			"#": "30",
-			"label": "Alarm response",
+			"label": "Alarm Response",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "INACTIVE",
+					"label": "Inactive",
 					"value": 0
 				},
 				{
-					"label": "ALARM ON",
+					"label": "Alarm on",
 					"value": 1
 				},
 				{
-					"label": "ALARM OFF",
+					"label": "Alarm off",
 					"value": 2
 				},
 				{
-					"label": "ALARM PROGRAM",
+					"label": "Alarm program",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "38",
-			"label": "Alarm sequence program",
+			"label": "Alarm Sequence Program",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -222,7 +220,7 @@
 		},
 		{
 			"#": "39",
-			"label": "Active PROGRAM alarm time",
+			"label": "Active PROGRAM Alarm Time",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65534,
@@ -231,28 +229,28 @@
 		},
 		{
 			"#": "42",
-			"label": "Command class reporting Outputs status change",
+			"label": "Command Class Reporting Outputs Status Change",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inputs and controllers actions (SWITCH MULTILEVEL)",
+					"label": "Inputs and controllers actions (Multilevel Switch)",
 					"value": 0
 				},
 				{
-					"label": "Inputs actions (SWITCH MULTILEVEL)",
+					"label": "Inputs actions (Multilevel Switch)",
 					"value": 1
 				},
 				{
-					"label": "Inputs actions (COLOR CONTROL)",
+					"label": "Inputs actions (Color control)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "43",
-			"label": "Reporting 0-10v analog inputs change threshold",
+			"label": "Reporting 0-10V Analog Inputs Change Threshold",
 			"description": "Defines which input voltage must change to be reported",
 			"valueSize": 1,
 			"minValue": 1,
@@ -261,7 +259,7 @@
 		},
 		{
 			"#": "44",
-			"label": "Power load reporting frequency",
+			"label": "Power Load Reporting Frequency",
 			"description": "Parameter defines Time between reports.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -271,7 +269,7 @@
 		},
 		{
 			"#": "45",
-			"label": "Reporting energy consumption changes",
+			"label": "Reporting Energy Consumption Changes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -280,24 +278,24 @@
 		},
 		{
 			"#": "71",
-			"label": "Response to BRIGHTNESS set to 0%",
+			"label": "Response to BRIGHTNESS Set to 0%",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Set to white (all channels controlled together)",
+					"label": "Set to white (All channels controlled together)",
 					"value": 0
 				},
 				{
-					"label": "last set colour is memorized",
+					"label": "Last set colour is memorized",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "72",
-			"label": "Starting animation program",
+			"label": "Starting Animation Program",
 			"description": "Starting predefined program when device set to work in RGB/RGBW mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -306,18 +304,18 @@
 		},
 		{
 			"#": "73",
-			"label": "Triple click action",
+			"label": "Triple Click Action",
 			"description": "Triple click action, default setting: 0",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NODE INFO control frame is sent",
+					"label": "Node info control frame is sent",
 					"value": 0
 				},
 				{
-					"label": "starting favourite program",
+					"label": "Starting favourite program",
 					"value": 1
 				}
 			]

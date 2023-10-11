@@ -36,7 +36,6 @@
 			"label": "Switch Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -105,7 +104,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 1800,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

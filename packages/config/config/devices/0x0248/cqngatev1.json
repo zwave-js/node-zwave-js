@@ -2,7 +2,7 @@
 	"manufacturer": "neusta next GmbH & Co. KG",
 	"manufacturerId": "0x0248",
 	"label": "CQNGATEV1",
-	"description": "coqon qbox",
+	"description": "Coqon Qbox",
 	"devices": [
 		{
 			"productType": "0x0001",

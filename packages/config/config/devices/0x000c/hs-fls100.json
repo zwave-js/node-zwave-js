@@ -28,7 +28,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Never turn on floodlight",
@@ -48,7 +47,7 @@
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Basic Report on Trigger"
+			"label": "Send Basic Report On Trigger"
 		}
 	],
 	"compat": {
