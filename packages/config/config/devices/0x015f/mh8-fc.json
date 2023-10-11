@@ -1,7 +1,7 @@
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "MH8-FC",
+	"label": "MH8-FC / MH8-FC4",
 	"description": "Fan Coil Thermostat",
 	"devices": [
 		{
@@ -59,7 +59,8 @@
 					"value": 1
 				},
 				{
-					"label": "Follow Main Display",
+					"$if": "firmwareVersion >= 3.2",
+					"label": "Follow main display",
 					"value": 2
 				}
 			]
