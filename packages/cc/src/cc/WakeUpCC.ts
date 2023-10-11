@@ -309,7 +309,13 @@ controller node: ${wakeupResp.controllerNodeId}`;
 			const ownNodeId = applHost.ownNodeId;
 			// Only change the destination if necessary
 			if (currentControllerNodeId !== ownNodeId) {
-				if (minInterval != undefined && maxInterval != undefined) {
+				// Spec compliance: Limit the interval to the allowed range, but...
+				// ...try and preserve a "never wake up" configuration (#6367)
+				if (
+					desiredInterval !== 0
+					&& minInterval != undefined
+					&& maxInterval != undefined
+				) {
 					desiredInterval = clamp(
 						desiredInterval,
 						minInterval,
