@@ -1,10 +1,11 @@
 {
 	"manufacturer": "Eurotronics",
 	"manufacturerId": "0x0148",
-	"label": "COMET Z",
+	"label": "Comet Z",
 	"description": "Thermostatic Valve",
 	"devices": [
 		{
+			// 500 series
 			"productType": "0x0002",
 			"productId": "0x0001",
 			"zwaveAllianceId": [1601, 2200, 2201, 2202]
