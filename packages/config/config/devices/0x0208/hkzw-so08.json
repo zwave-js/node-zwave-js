@@ -1,0 +1,184 @@
+{
+	"manufacturer": "Hank",
+	"manufacturerId": "0x0208",
+	"label": "HKZW-SO08",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0019"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Overload Protection",
+			"description": "If current exceeds 11.5A over 5 seconds, relay will turn off.",
+			"defaultValue": 1
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
+		},
+		{
+			"#": "24",
+			"label": "Send Basic Report on State Change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				},
+				{
+					"label": "Only when controlled locally",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "27",
+			"label": "Indicator Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on for 5 seconds, then off",
+					"value": 0
+				},
+				{
+					"label": "On when load is on",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "151",
+			"label": "Power Change Report Threshold",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 200,
+			"defaultValue": 50,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "152",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Relative Power Change Report Threshold",
+			"unit": "%",
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "171",
+			"label": "Power (W) Report Interval",
+			"description": "Minimum value 3600, if not disabled",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "172",
+			"label": "Energy (kWh) Report Interval",
+			"description": "Minimum value 3600, if not disabled",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "173",
+			"label": "Voltage (V) Report Interval",
+			"description": "Minimum value 3600, if not disabled",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "174",
+			"label": "Current (A) Report Interval",
+			"description": "Minimum value 3600, if not disabled",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "254",
+			"label": "Lock Configuration",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlocked",
+					"value": 0
+				},
+				{
+					"label": "Locked",
+					"value": 1
+				}
+			]
+		}
+	]
+}
