@@ -1,22 +1,34 @@
 {
-	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
-	"manufacturerId": "0x0258",
-	"label": "NEO-DS07Z",
-	"description": "Door/Window Sensor Plus",
+	"manufacturer": "Alloy",
+	"manufacturerId": "0x0131",
+	"label": "AH-NEO-DS07Z",
+	"description": "Contact Sensor 2",
 	"devices": [
 		{
-			"productType": "0x0010",
-			"productId": "0x0702"
+			"productType": "0x0004",
+			"productId": "0x1118"
 		}
 	],
 	"firmwareVersion": {
 		"min": "2.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"$import": "~/templates/master_template.json#enable_led_indicator"
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
@@ -29,7 +41,7 @@
 			"valueSize": 1,
 			"unit": "0.1 (°C/°F)",
 			"minValue": -120,
-			"maxValue": 121,
+			"maxValue": 120,
 			"defaultValue": 0,
 			"unsigned": false
 		},
@@ -81,18 +93,12 @@
 		},
 		{
 			"#": "8",
-			"label": "Association Group 2: Basic Set Off Delay (Close)",
+			"label": "Association Group 2: Basic Set Off Delay Time (Close)",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 30000,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "No delay",
-					"value": 0
-				}
-			]
+			"defaultValue": 30
 		},
 		{
 			"#": "9",
@@ -101,7 +107,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 30000,
-			"defaultValue": 0,
+			"defaultValue": 180,
 			"options": [
 				{
 					"label": "Disable",
