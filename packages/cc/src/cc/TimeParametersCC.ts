@@ -54,7 +54,10 @@ export const TimeParametersCCValues = Object.freeze({
 /**
  * Determines if the node expects local time instead of UTC.
  */
-function shouldUseLocalTime(endpoint: IZWaveEndpoint): boolean {
+function shouldUseLocalTime(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
 	// so they need to interpret the set time as local time instead of UTC.
 	//
@@ -62,6 +65,12 @@ function shouldUseLocalTime(endpoint: IZWaveEndpoint): boolean {
 	// 1. DON'T control TimeCC V1, so they cannot request the local time
 	// 2. DON'T support TimeCC V2, so the controller cannot specify the timezone offset
 	// Incidentally, this is also true when they don't support TimeCC at all
+
+	// Use UTC though when the device config file explicitly requests it
+	const forceUTC = !!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
+		?.useUTCInTimeParametersCC;
+	if (forceUTC) return false;
+
 	const ccVersion = endpoint.getCCVersion(CommandClasses.Time);
 	if (ccVersion >= 1 && endpoint.controlsCC(CommandClasses.Time)) {
 		return false;
@@ -180,13 +189,13 @@ export class TimeParametersCCAPI extends CCAPI {
 			TimeParametersCommand.Set,
 		);
 
-		const useLocalTime = this.endpoint.virtual
-			? shouldUseLocalTime(
-				this.endpoint.node.physicalNodes[0].getEndpoint(
-					this.endpoint.index,
-				)!,
-			)
-			: shouldUseLocalTime(this.endpoint);
+		const endpointToCheck = this.endpoint.virtual
+			? this.endpoint.node.physicalNodes[0].getEndpoint(
+				this.endpoint.index,
+			)!
+			: this.endpoint;
+
+		const useLocalTime = shouldUseLocalTime(this.applHost, endpointToCheck);
 
 		const cc = new TimeParametersCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
@@ -259,11 +268,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// If necessary, fix the date and time before persisting it
-		const local = shouldUseLocalTime(
-			applHost.nodes
-				.get(this.nodeId as number)!
-				.getEndpoint(this.endpointIndex)!,
-		);
+		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
@@ -343,11 +348,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		// We do not actually persist anything here, but we need access to the node
 		// in order to interpret the date segments correctly
 
-		const local = shouldUseLocalTime(
-			applHost.nodes
-				.get(this.nodeId as number)!
-				.getEndpoint(this.endpointIndex)!,
-		);
+		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
