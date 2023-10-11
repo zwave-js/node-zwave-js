@@ -36,7 +36,7 @@
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Require Luminance Change for Basic Sets on Motion",
-			"description": "If enabled, a Basic Set will be set if the ambient light is below the level defined in Parameter 16"
+			"description": "If enabled, a Basic Set will be sent if the ambient light is below the level defined in Parameter 16"
 		},
 		{
 			"#": "5",

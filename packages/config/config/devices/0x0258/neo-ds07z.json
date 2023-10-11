@@ -35,9 +35,9 @@
 		},
 		{
 			"#": "4",
-			"label": "Humidity Offset Value",
+			"label": "Humidity Calibration",
 			"valueSize": 1,
-			"unit": "0.1 (RH%)",
+			"unit": "0.1 %rH",
 			"minValue": -120,
 			"maxValue": 120,
 			"defaultValue": 0,
