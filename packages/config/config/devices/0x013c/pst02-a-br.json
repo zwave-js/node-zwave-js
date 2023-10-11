@@ -168,7 +168,7 @@
 		{
 			"#": "7",
 			"label": "Customer Function",
-			"description": "Customer function switch, using bit control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: reserve. bit1: enable sending motion off report. (0:disable, 1:enable) bit2: enable PIR super sensitivity mode. (0:disable, 1:enable) bit3: disable send out basic off after door closed. (1:disable, 0:enable) bit4: notification type,  0: using notification report.  1: using sensor binary report. bit5: disable multi cc in auto report. (1:disable, 0:enable) bit6: disable to report battery state when the device triggered.(1:disable, 0:enable) bit7: reserve",
+			"description": "Customer function switch, using bit control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: reserve. bit1: enable sending motion off report. (0:disable, 1:enable) bit2: enable PIR super sensitivity mode. (0:disable, 1:enable) bit3: disable send out basic off after door closed. (1:disable, 0:enable) bit4: notification type,  0: using notification report.  1: using Binary Sensor report. bit5: disable multi cc in auto report. (1:disable, 0:enable) bit6: disable to report battery state when the device triggered.(1:disable, 0:enable) bit7: reserve",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
@@ -194,7 +194,7 @@
 					"value": 8
 				},
 				{
-					"label": "Bit4: Notification type, 0: Using Notification Report. 1: Using sensor binary report",
+					"label": "Bit4: Notification type, 0: Using Notification Report. 1: Using Binary Sensor Report",
 					"value": 10
 				},
 				{

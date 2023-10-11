@@ -235,11 +235,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inputs and controllers actions (Switch multilevel)",
+					"label": "Inputs and controllers actions (Multilevel Switch)",
 					"value": 0
 				},
 				{
-					"label": "Inputs actions (Switch multilevel)",
+					"label": "Inputs actions (Multilevel Switch)",
 					"value": 1
 				},
 				{

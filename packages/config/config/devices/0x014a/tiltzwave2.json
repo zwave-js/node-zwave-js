@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Sensor Binary Reports",
+			"label": "Binary Sensor Reports",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,

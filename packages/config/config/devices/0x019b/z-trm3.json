@@ -30,7 +30,7 @@
 					"value": 1
 				},
 				{
-					// eslint-disable-next-line @zwave-js/consistent-config-labels
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "AF-Mode, internal sensor and floor sensor mode",
 					"value": 2
 				},

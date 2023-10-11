@@ -24,11 +24,11 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch Multilevel Set",
+			"label": "Multilevel Switch Set",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Switch Multilevel Start/Stop",
+			"label": "Multilevel Switch Start/Stop",
 			"maxNodes": 5
 		}
 	},

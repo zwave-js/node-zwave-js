@@ -18,7 +18,7 @@
 		{
 			"#": "1",
 			"label": "Enable/Disable Fail Safe Timer",
-			"description": "For any non zero value fail safe timer of 60 minutes starts after valid 'switch binary set' or 'Basic Set' command, timer is reloaded with 60 minutes on every successful communication with the controller. in case of communication failure with the controller for 60 minutes. fail safe timer will switch off the relay and communication failure indicated on rf led",
+			"description": "For any non zero value fail safe timer of 60 minutes starts after valid 'Binary Switch set' or 'Basic Set' command, timer is reloaded with 60 minutes on every successful communication with the controller. in case of communication failure with the controller for 60 minutes. fail safe timer will switch off the relay and communication failure indicated on rf led",
 			"valueSize": 1,
 			"unit": "minutes",
 			"defaultValue": 0,

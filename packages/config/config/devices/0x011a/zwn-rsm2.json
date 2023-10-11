@@ -26,11 +26,11 @@
 			"multiChannel": true
 		},
 		"2": {
-			"label": "Switch Binary Report EP1",
+			"label": "Binary Switch Report EP1",
 			"maxNodes": 3
 		},
 		"3": {
-			"label": "Switch Binary Report EP2",
+			"label": "Binary Switch Report EP2",
 			"maxNodes": 3
 		}
 	},

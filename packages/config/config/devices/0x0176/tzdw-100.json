@@ -27,7 +27,7 @@
 					"value": 0
 				},
 				{
-					"label": "Switch binary",
+					"label": "Binary Switch",
 					"value": 1
 				},
 				{
@@ -35,7 +35,7 @@
 					"value": 2
 				},
 				{
-					"label": "Switch multilevel",
+					"label": "Multilevel Switch",
 					"value": 3
 				}
 			]
@@ -87,7 +87,7 @@
 					"value": 0
 				},
 				{
-					"label": "Switch binary",
+					"label": "Binary Switch",
 					"value": 1
 				},
 				{
@@ -95,7 +95,7 @@
 					"value": 2
 				},
 				{
-					"label": "Switch multilevel",
+					"label": "Multilevel Switch",
 					"value": 3
 				}
 			]
@@ -164,7 +164,7 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor binary",
+					"label": "Binary Sensor",
 					"value": 1
 				}
 			]

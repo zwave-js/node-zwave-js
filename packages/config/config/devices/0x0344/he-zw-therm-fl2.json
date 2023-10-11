@@ -45,7 +45,7 @@
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "COM",
@@ -72,7 +72,7 @@
 					"value": 6
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "4",
@@ -332,7 +332,7 @@
 			"valueSize": 1,
 			"defaultValue": 6,
 			"allowManualEntry": false,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "COM",
@@ -359,7 +359,7 @@
 					"value": 6
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "51",

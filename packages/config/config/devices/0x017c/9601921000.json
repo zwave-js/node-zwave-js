@@ -2,7 +2,7 @@
 	"manufacturer": "EbV",
 	"manufacturerId": "0x017c",
 	"label": "9601921000",
-	// eslint-disable-next-line @zwave-js/consistent-config-labels
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "heatapp! Repeater S2",
 	"devices": [
 		{

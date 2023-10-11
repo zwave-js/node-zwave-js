@@ -69,7 +69,7 @@
 		{
 			"#": "7",
 			"label": "Select Index Sound/light Mode",
-			"description": "The index of the sound mode when a switch binary/basic set frame been received",
+			"description": "The index of the sound mode when a Binary Switch/basic set frame been received",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,

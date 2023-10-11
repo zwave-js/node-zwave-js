@@ -74,7 +74,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Enable/Disable Switch Binary Report",
+			"label": "Enable/Disable Binary Switch Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

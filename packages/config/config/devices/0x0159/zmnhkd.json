@@ -377,7 +377,7 @@
 					"value": 6
 				},
 				{
-					"label": "Sensor binary",
+					"label": "Binary Sensor",
 					"value": 9
 				}
 			]
@@ -418,7 +418,7 @@
 					"value": 6
 				},
 				{
-					"label": "Sensor binary",
+					"label": "Binary Sensor",
 					"value": 9
 				}
 			]

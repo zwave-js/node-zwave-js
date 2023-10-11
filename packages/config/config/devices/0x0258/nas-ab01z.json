@@ -136,7 +136,7 @@
 			"valueSize": 1,
 			"defaultValue": 10,
 			"allowManualEntry": false,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Doorbell",
@@ -179,7 +179,7 @@
 					"value": 10
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "6",
@@ -187,7 +187,7 @@
 			"valueSize": 1,
 			"defaultValue": 9,
 			"allowManualEntry": false,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Doorbell",
@@ -230,7 +230,7 @@
 					"value": 10
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "7",

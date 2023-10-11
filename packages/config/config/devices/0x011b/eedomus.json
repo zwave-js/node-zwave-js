@@ -2,7 +2,7 @@
 	"manufacturer": "Connected Object",
 	"manufacturerId": "0x011b",
 	"label": "EEDOMUS+",
-	// eslint-disable-next-line @zwave-js/consistent-config-labels
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "eedomus",
 	"devices": [
 		{

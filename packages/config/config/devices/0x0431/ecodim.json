@@ -28,7 +28,7 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch Multilevel",
+			"label": "Multilevel Switch",
 			"maxNodes": 5
 		},
 		"4": {
@@ -55,11 +55,11 @@
 					"value": 0
 				},
 				{
-					"label": "Send switch multilevel report",
+					"label": "Send Multilevel Switch Report",
 					"value": 1
 				},
 				{
-					"label": "Send switch multilevel report only when load status is not changed by Z-Wave command",
+					"label": "Send Multilevel Switch Report only when load status is not changed by Z-Wave command",
 					"value": 2
 				}
 			]

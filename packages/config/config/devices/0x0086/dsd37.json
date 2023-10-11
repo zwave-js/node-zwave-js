@@ -36,7 +36,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Aeon Labs",
@@ -59,7 +59,7 @@
 					"value": 4
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "254",

@@ -94,7 +94,7 @@
 			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Don't change, just reboot",
@@ -141,12 +141,12 @@
 					"value": 2550
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "11",
 			"label": "Multilevel Report Interval",
-			"description": "Minimal time (in seconds) between Sensor Multilevel reports. See zunoSendReport(). Values less than 30 should not be used to conform to Z-Wave Plus, use them for debug only!",
+			"description": "Minimal time (in seconds) between Multilevel Sensor reports. See zunoSendReport(). Values less than 30 should not be used to conform to Z-Wave Plus, use them for debug only!",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -157,7 +157,7 @@
 		{
 			"#": "12",
 			"label": "Legacy Notification Channel Type",
-			"description": "Change channel type from Notification to legacy Sensor Binary to help Fibaro Home Center, Vera and some other controllers having problems with the latest Z-Wave Plus to understand the channel type",
+			"description": "Change channel type from Notification to legacy Binary Sensor to help Fibaro Home Center, Vera and some other controllers having problems with the latest Z-Wave Plus to understand the channel type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

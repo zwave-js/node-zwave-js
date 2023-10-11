@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "3",
-			// eslint-disable-next-line @zwave-js/consistent-config-labels
+			// eslint-disable-next-line @zwave-js/consistent-config-string-case
 			"label": "Co-Proc Status",
 			"description": "Check to see if the co-proc is operational",
 			"valueSize": 1,

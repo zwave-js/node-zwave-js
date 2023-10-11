@@ -2,7 +2,7 @@
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
 	"label": "DCH-Z112",
-	// eslint-disable-next-line @zwave-js/consistent-config-labels
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "mydlink Door/Window Sensor",
 	"devices": [
 		{

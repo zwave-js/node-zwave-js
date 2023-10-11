@@ -34,7 +34,7 @@
 					"value": 1
 				},
 				{
-					// eslint-disable-next-line @zwave-js/consistent-config-labels
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "HP",
 					"value": 2
 				}
@@ -63,7 +63,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "w/Cool",
@@ -74,7 +74,7 @@
 					"value": 1
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "4",

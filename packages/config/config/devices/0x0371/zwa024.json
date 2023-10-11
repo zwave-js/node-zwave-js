@@ -119,11 +119,11 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor binary report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				},
 				{
-					"label": "Notification and sensor binary report",
+					"label": "Notification and Binary Sensor Report",
 					"value": 2
 				}
 			]

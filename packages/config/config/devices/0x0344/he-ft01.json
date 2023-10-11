@@ -21,7 +21,7 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"readOnly": true,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "EU (868.4 MHz, 869.85 MHz)",
@@ -64,7 +64,7 @@
 					"value": 9
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "3",
@@ -713,7 +713,7 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
-			/* eslint-disable @zwave-js/consistent-config-labels */
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "No action",
@@ -756,7 +756,7 @@
 					"value": 9
 				}
 			]
-			/* eslint-enable @zwave-js/consistent-config-labels */
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		}
 	],
 	"compat": {

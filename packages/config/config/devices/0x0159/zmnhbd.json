@@ -24,7 +24,7 @@
 			"maxNodes": 16
 		},
 		"3": {
-			"label": "Q1 switch binary",
+			"label": "Q1 Binary Switch",
 			"maxNodes": 16
 		},
 		"4": {
@@ -36,7 +36,7 @@
 			"maxNodes": 16
 		},
 		"6": {
-			"label": "Q2 switch binary",
+			"label": "Q2 Binary Switch",
 			"maxNodes": 16
 		},
 		"7": {

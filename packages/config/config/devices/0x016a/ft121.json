@@ -132,7 +132,7 @@
 					"value": 1
 				},
 				{
-					// eslint-disable-next-line @zwave-js/consistent-config-labels
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "(Parabolic * index)/2",
 					"value": 2
 				},

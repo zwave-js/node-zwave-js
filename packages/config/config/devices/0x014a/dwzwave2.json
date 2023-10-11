@@ -36,7 +36,7 @@
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_enable_disable_255",
-			"label": "Sending Sensor Binary Report"
+			"label": "Sending Binary Sensor Report"
 		}
 	],
 	"metadata": {

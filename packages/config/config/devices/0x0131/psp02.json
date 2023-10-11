@@ -268,7 +268,7 @@
 		{
 			"#": "7[0x10]",
 			"label": "Door Closed Report Type",
-			"description": "notification or sensor binary report",
+			"description": "notification or Binary Sensor report",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

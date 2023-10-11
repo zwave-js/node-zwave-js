@@ -186,12 +186,12 @@
 					"value": 0
 				},
 				{
-					// eslint-disable-next-line @zwave-js/consistent-config-labels
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "Force auto-calibration without Fibaro Bypass",
 					"value": 1
 				},
 				{
-					// eslint-disable-next-line @zwave-js/consistent-config-labels
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "Force auto-calibration with Fibaro Bypass",
 					"value": 2
 				}
