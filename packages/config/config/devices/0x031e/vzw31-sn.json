@@ -290,6 +290,24 @@
 			"description": "Increase output power when in non-neutral mode. (May cause problems with high level flicker or aux switch detection. Adjust maximum level if you are having problems.)"
 		},
 		{
+			"#": "26",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Dimming Mode",
+			"valueSize": 1,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Leading edge",
+					"value": 0
+				},
+				{
+					"label": "Trailing edge",
+					"value": 1
+				}
+			]
+		},
+		{
 			"#": "50",
 			"label": "Button Delay Time",
 			"valueSize": 1,
