@@ -245,6 +245,7 @@
 			"label": "Power Type",
 			"valueSize": 1,
 			"defaultValue": 1,
+			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
