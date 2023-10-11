@@ -127,7 +127,8 @@ function titleCaseWord(
 const titleCaseCache = new Map<string, string>();
 
 export function toTitleCase(str: string, allowFinalSuffix = true): string {
-	if (titleCaseCache.has(str)) return titleCaseCache.get(str)!;
+	const cacheKey = `finalSuffix:${allowFinalSuffix}::${str}`;
+	if (titleCaseCache.has(cacheKey)) return titleCaseCache.get(cacheKey)!;
 
 	let words = splitIntoWords(str);
 
@@ -153,7 +154,7 @@ export function toTitleCase(str: string, allowFinalSuffix = true): string {
 			};
 		});
 	const ret = joinWords(titleCased);
-	titleCaseCache.set(str, ret);
+	titleCaseCache.set(cacheKey, ret);
 	return ret;
 }
 
@@ -218,8 +219,11 @@ function sentenceCaseWord(word: string, isFirstWord: boolean): string {
 
 const sentenceCaseCache = new Map<string, string>();
 
-export function toSentenceCase(str: string): string {
-	if (sentenceCaseCache.has(str)) return sentenceCaseCache.get(str)!;
+export function toSentenceCase(str: string, allowFinalSuffix = true): string {
+	const cacheKey = `finalSuffix:${allowFinalSuffix}::${str}`;
+	if (sentenceCaseCache.has(cacheKey)) {
+		return sentenceCaseCache.get(cacheKey)!;
+	}
 
 	let words = splitIntoWords(str);
 
@@ -231,12 +235,17 @@ export function toSentenceCase(str: string): string {
 		.map(({ word, suffix }, i, words) => {
 			const isFirstWord = i === 0
 				|| isEndOfSentence(words[i - 1].suffix, false);
+			let fixedSuffix = suffix;
+			if (!allowFinalSuffix && i === words.length - 1) {
+				// When allowFinalSuffix is false, the last word may not have any suffix, except ")"
+				fixedSuffix = suffix.includes(")") ? ")" : "";
+			}
 			return {
 				word: sentenceCaseWord(word, isFirstWord),
-				suffix: suffix,
+				suffix: fixedSuffix,
 			};
 		});
 	const ret = joinWords(sentenceCased);
-	sentenceCaseCache.set(str, ret);
+	sentenceCaseCache.set(cacheKey, ret);
 	return ret;
 }

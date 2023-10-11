@@ -139,11 +139,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unlock the direct control of load.",
+					"label": "Unlock the direct control of load",
 					"value": 0
 				},
 				{
-					"label": "Lock the direct control of load.",
+					"label": "Lock the direct control of load",
 					"value": 255
 				}
 			]
@@ -189,11 +189,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Calibration is not required.",
+					"label": "Calibration is not required",
 					"value": 0
 				},
 				{
-					"label": "It is necessary to calibrate the device.",
+					"label": "It is necessary to calibrate the device",
 					"value": 255
 				}
 			]
@@ -207,11 +207,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Long press works as default.",
+					"label": "Long press works as default",
 					"value": 0
 				},
 				{
-					"label": "Long press works as overview.",
+					"label": "Long press works as overview",
 					"value": 255
 				}
 			]

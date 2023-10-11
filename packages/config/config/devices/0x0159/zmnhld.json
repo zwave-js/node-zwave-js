@@ -350,11 +350,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "When system is turned off the output is 0V(NC).",
+					"label": "When system is turned off the output is 0V(NC)",
 					"value": 0
 				},
 				{
-					"label": "System off the output is 230V or 24V(NO).",
+					"label": "System off the output is 230V or 24V(NO)",
 					"value": 1
 				}
 			]

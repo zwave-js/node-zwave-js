@@ -72,7 +72,7 @@
 					"value": 0
 				},
 				{
-					"label": "Send battery status unsolicited once a day.",
+					"label": "Send battery status unsolicited once a day",
 					"value": 1
 				}
 			]

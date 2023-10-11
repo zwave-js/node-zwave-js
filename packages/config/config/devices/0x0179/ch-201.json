@@ -268,11 +268,11 @@
 					"value": 6
 				},
 				{
-					"label": "-2 °C;",
+					"label": "-2 °C",
 					"value": 7
 				},
 				{
-					"label": "-3 °C;",
+					"label": "-3 °C",
 					"value": 8
 				},
 				{
@@ -280,7 +280,7 @@
 					"value": 9
 				},
 				{
-					"label": "-5 °C;",
+					"label": "-5 °C",
 					"value": 10
 				}
 			]

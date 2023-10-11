@@ -158,11 +158,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0V (NC).",
+					"label": "0V (NC)",
 					"value": 0
 				},
 				{
-					"label": "230V or 240V (NO).",
+					"label": "230V or 240V (NO)",
 					"value": 1
 				}
 			]
@@ -204,7 +204,7 @@
 					"value": 6
 				},
 				{
-					"label": "Binary Sensor.",
+					"label": "Binary Sensor",
 					"value": 9
 				}
 			]
@@ -246,7 +246,7 @@
 					"value": 6
 				},
 				{
-					"label": "Binary Sensor.",
+					"label": "Binary Sensor",
 					"value": 9
 				}
 			]

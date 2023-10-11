@@ -23,7 +23,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when outlet is on,",
+					"label": "LED on when outlet is on",
 					"value": 0
 				},
 				{

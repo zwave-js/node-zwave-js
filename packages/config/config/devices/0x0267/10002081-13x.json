@@ -61,11 +61,11 @@
 			"writeOnly": true,
 			"options": [
 				{
-					"label": "Parameters, groups, and Z-Wave status are restored to default.",
+					"label": "Parameters, groups, and Z-Wave status are restored to default",
 					"value": 39015
 				},
 				{
-					"label": "Parameters, except lock long press are restored to default.",
+					"label": "Parameters, except lock long press are restored to default",
 					"value": 17170
 				}
 			]

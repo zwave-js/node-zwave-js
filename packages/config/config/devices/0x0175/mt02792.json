@@ -77,11 +77,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off commands received are ignored.",
+					"label": "Switch off commands received are ignored",
 					"value": 0
 				},
 				{
-					"label": "Switch off commands received are honored.",
+					"label": "Switch off commands received are honored",
 					"value": 1
 				}
 			]
@@ -95,7 +95,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The LED follows the state of the switch.",
+					"label": "The LED follows the state of the switch",
 					"value": 1
 				},
 				{
@@ -133,7 +133,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "When all off is received, MT2792 goes off.",
+					"label": "When all off is received, MT2792 goes off",
 					"value": 0
 				},
 				{
@@ -145,7 +145,7 @@
 					"value": 2
 				},
 				{
-					"label": "WhenALL off is received, the MT2792 goes on.",
+					"label": "WhenALL off is received, the MT2792 goes on",
 					"value": 3
 				}
 			]

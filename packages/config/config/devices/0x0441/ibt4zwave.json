@@ -128,7 +128,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Any notification,",
+					"label": "Any notification",
 					"value": 255
 				},
 				{

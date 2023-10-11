@@ -214,11 +214,11 @@
 					"value": 4
 				},
 				{
-					"label": "Turn devices on when power below down and off ...",
+					"label": "Turn devices on when power below down and off",
 					"value": 5
 				},
 				{
-					"label": "Turn devices off when power below down ...",
+					"label": "Turn devices off when power below down",
 					"value": 6
 				}
 			]

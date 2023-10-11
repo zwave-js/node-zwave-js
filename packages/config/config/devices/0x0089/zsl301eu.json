@@ -54,15 +54,15 @@
 					"value": 255
 				},
 				{
-					"label": "Disable both all on and all off command.",
+					"label": "Disable both all on and all off command",
 					"value": 0
 				},
 				{
-					"label": "Enable only all off command.",
+					"label": "Enable only all off command",
 					"value": 1
 				},
 				{
-					"label": "Enable only all on command.",
+					"label": "Enable only all on command",
 					"value": 2
 				}
 			]
@@ -75,7 +75,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "User can use button for on/off manual control.",
+					"label": "User can use button for on/off manual control",
 					"value": 0
 				},
 				{
@@ -83,7 +83,7 @@
 					"value": 1
 				},
 				{
-					"label": "Disable button from manual control.",
+					"label": "Disable button from manual control",
 					"value": 2
 				}
 			]

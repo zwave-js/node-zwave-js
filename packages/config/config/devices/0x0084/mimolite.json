@@ -159,19 +159,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Analog, trigger outside of thresholds.",
+					"label": "Analog, trigger outside of thresholds",
 					"value": 0
 				},
 				{
-					"label": "Analog, trigger between thresholds.",
+					"label": "Analog, trigger between thresholds",
 					"value": 1
 				},
 				{
-					"label": "Digital, trigger outside of thresholds.",
+					"label": "Digital, trigger outside of thresholds",
 					"value": 2
 				},
 				{
-					"label": "Digital, trigger between thresholds.",
+					"label": "Digital, trigger between thresholds",
 					"value": 3
 				}
 			]

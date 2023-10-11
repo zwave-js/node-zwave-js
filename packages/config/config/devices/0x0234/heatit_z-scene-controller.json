@@ -22,7 +22,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (Toggle mode).",
+					"label": "Separate mode (Toggle mode)",
 					"value": 0
 				},
 				{
@@ -39,7 +39,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (Toggle mode).",
+					"label": "Separate mode (Toggle mode)",
 					"value": 0
 				},
 				{
@@ -56,7 +56,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (Toggle mode).",
+					"label": "Separate mode (Toggle mode)",
 					"value": 0
 				},
 				{
@@ -120,7 +120,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED indicates the status of the corresponding button.",
+					"label": "LED indicates the status of the corresponding button",
 					"value": 1
 				},
 				{
@@ -208,7 +208,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED indicates the status of the corresponding button.",
+					"label": "LED indicates the status of the corresponding button",
 					"value": 1
 				},
 				{
@@ -296,7 +296,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED indicates the status of the corresponding button.",
+					"label": "LED indicates the status of the corresponding button",
 					"value": 1
 				},
 				{
@@ -384,7 +384,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED indicates the status of the corresponding button.",
+					"label": "LED indicates the status of the corresponding button",
 					"value": 1
 				},
 				{
@@ -472,7 +472,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED indicates the status of the corresponding button.",
+					"label": "LED indicates the status of the corresponding button",
 					"value": 1
 				},
 				{
@@ -560,7 +560,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED indicates the status of the corresponding button.",
+					"label": "LED indicates the status of the corresponding button",
 					"value": 1
 				},
 				{

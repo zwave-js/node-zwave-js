@@ -56,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Work in indicator mode.",
+					"label": "Work in indicator mode",
 					"value": 0
 				},
 				{
-					"label": "Indicate for 5 seconds after load has changed.",
+					"label": "Indicate for 5 seconds after load has changed",
 					"value": 1
 				}
 			]

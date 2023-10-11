@@ -403,7 +403,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Power threshold action is disable.",
+					"label": "Power threshold action is disable",
 					"value": 0
 				},
 				{

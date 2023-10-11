@@ -70,7 +70,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mode 1: No detection possible. Battery save mode.",
+					"label": "Mode 1: No detection possible. Battery save mode",
 					"value": 1
 				},
 				{

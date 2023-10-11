@@ -63,7 +63,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Shutter mode.",
+					"label": "Shutter mode",
 					"value": 0
 				},
 				{
@@ -125,7 +125,7 @@
 					"value": 0
 				},
 				{
-					"label": "Start calibration process.",
+					"label": "Start calibration process",
 					"value": 1
 				}
 			]

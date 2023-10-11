@@ -390,7 +390,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control the output loads of itself.",
+					"label": "Control the output loads of itself",
 					"value": 1
 				},
 				{

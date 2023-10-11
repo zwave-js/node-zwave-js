@@ -109,7 +109,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Short press S1: Toggle Q1. Hold down S1: Switch Q1 on. Release S1: Switch Q2 off. Short press S2: Toggle Q2. Hold down S2: Switch Q2 on. Release S2: Switch Q1 off.",
+					"label": "Short press S1: Toggle Q1. Hold down S1: Switch Q1 on. Release S1: Switch Q2 off. Short press S2: Toggle Q2. Hold down S2: Switch Q2 on. Release S2: Switch Q1 off",
 					"value": 0
 				},
 				{
@@ -117,7 +117,7 @@
 					"value": 1
 				},
 				{
-					"label": "Hold down S1: Switch Q1 on. Release S1: Switch Q2 off. Hold down S2: Switch Q2 on. Release S2: Switch Q1 off.",
+					"label": "Hold down S1: Switch Q1 on. Release S1: Switch Q2 off. Hold down S2: Switch Q2 on. Release S2: Switch Q1 off",
 					"value": 2
 				},
 				{

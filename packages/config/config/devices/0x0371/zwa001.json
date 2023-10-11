@@ -46,7 +46,7 @@
 			"defaultValue": 2700,
 			"options": [
 				{
-					"label": "Warm white(0x0A8C(2700k) ~ 0x1387 (4999k))",
+					"label": "Warm white(0x0A8C(2700k) ~ 0x1387 (4999k)",
 					"value": 2700
 				}
 			]
@@ -62,7 +62,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Cold white (0x1388 (5000k) ~ 0x1964 (6500k))",
+					"label": "Cold white (0x1388 (5000k) ~ 0x1964 (6500k)",
 					"value": 5000
 				}
 			]

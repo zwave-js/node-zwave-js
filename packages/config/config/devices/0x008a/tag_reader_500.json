@@ -67,7 +67,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal operating mode.",
+					"label": "Normal operating mode",
 					"value": 1
 				},
 				{

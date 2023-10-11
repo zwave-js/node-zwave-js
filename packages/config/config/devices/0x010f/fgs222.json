@@ -76,7 +76,7 @@
 					"value": 0
 				},
 				{
-					"label": "Manual override enabled.",
+					"label": "Manual override enabled",
 					"value": 1
 				}
 			]
@@ -122,15 +122,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Commands sent when device is turned on/off.",
+					"label": "Commands sent when device is turned on/off",
 					"value": 0
 				},
 				{
-					"label": "Commands sent when device turned off.",
+					"label": "Commands sent when device turned off",
 					"value": 1
 				},
 				{
-					"label": "Commands sent when device turned off.",
+					"label": "Commands sent when device turned off",
 					"value": 2
 				}
 			]

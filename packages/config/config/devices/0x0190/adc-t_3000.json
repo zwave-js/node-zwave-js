@@ -2107,7 +2107,7 @@
 					"value": 0
 				},
 				{
-					"label": "Only humidify when the thermostat operating state is heating, when in heat mode or when heating in auto mode. When in any other Thermostat Mode, the thermostat will humidify whenever it is necessary.",
+					"label": "Only humidify when the thermostat operating state is heating, when in heat mode or when heating in auto mode. When in any other Thermostat Mode, the thermostat will humidify whenever it is necessary",
 					"value": 1
 				}
 			]

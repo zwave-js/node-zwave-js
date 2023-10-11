@@ -53,7 +53,7 @@
 					"value": 0
 				},
 				{
-					"label": "Send reports when the temperature changes.",
+					"label": "Send reports when the temperature changes",
 					"value": 2
 				}
 			]

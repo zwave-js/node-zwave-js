@@ -306,7 +306,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The touch panel is not connected.",
+					"label": "The touch panel is not connected",
 					"value": 0
 				},
 				{

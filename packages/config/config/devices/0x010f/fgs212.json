@@ -100,11 +100,11 @@
 					"value": 0
 				},
 				{
-					"label": "Map off status to all devices in group 1 ...",
+					"label": "Map off status to all devices in group 1",
 					"value": 1
 				},
 				{
-					"label": "Map off status to all devices in group 1 ...",
+					"label": "Map off status to all devices in group 1",
 					"value": 2
 				}
 			]
@@ -187,7 +187,7 @@
 					"value": 2
 				},
 				{
-					"label": "Alarm flashing - Relay will turn on and off ...",
+					"label": "Alarm flashing - Relay will turn on and off",
 					"value": 3
 				}
 			]
@@ -212,7 +212,7 @@
 					"value": 2
 				},
 				{
-					"label": "Alarm flashing - Relay will turn on and off ...",
+					"label": "Alarm flashing - Relay will turn on and off",
 					"value": 3
 				}
 			]
@@ -237,7 +237,7 @@
 					"value": 2
 				},
 				{
-					"label": "Alarm flashing - Relay will turn on and off ...",
+					"label": "Alarm flashing - Relay will turn on and off",
 					"value": 3
 				}
 			]
@@ -262,7 +262,7 @@
 					"value": 2
 				},
 				{
-					"label": "Alarm flashing - Relay will turn on and off ...",
+					"label": "Alarm flashing - Relay will turn on and off",
 					"value": 3
 				}
 			]

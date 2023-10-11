@@ -63,11 +63,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal behaviour.",
+					"label": "Normal behaviour",
 					"value": 0
 				},
 				{
-					"label": "Switch top and bottom button.",
+					"label": "Switch top and bottom button",
 					"value": 1
 				}
 			]
@@ -80,7 +80,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Do not flicker.",
+					"label": "Do not flicker",
 					"value": 0
 				},
 				{
@@ -88,7 +88,7 @@
 					"value": 1
 				},
 				{
-					"label": "Flicker entire time when transmitting.",
+					"label": "Flicker entire time when transmitting",
 					"value": 2
 				}
 			]

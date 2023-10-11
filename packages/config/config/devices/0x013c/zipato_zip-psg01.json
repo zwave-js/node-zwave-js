@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Notification type, using Notification Report.",
+					"label": "Notification type, using Notification Report",
 					"value": 0
 				},
 				{
-					"label": "Notification type, using Binary Sensor Report.",
+					"label": "Notification type, using Binary Sensor Report",
 					"value": 16
 				}
 			]

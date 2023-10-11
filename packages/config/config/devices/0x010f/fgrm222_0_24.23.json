@@ -54,7 +54,7 @@
 					"value": 0
 				},
 				{
-					"label": "Blind position reports sent using Fibaro commands.",
+					"label": "Blind position reports sent using Fibaro commands",
 					"value": 1
 				}
 			]
@@ -136,7 +136,7 @@
 					"value": 1
 				},
 				{
-					"label": "Single, momentary switch.",
+					"label": "Single, momentary switch",
 					"value": 2
 				}
 			]

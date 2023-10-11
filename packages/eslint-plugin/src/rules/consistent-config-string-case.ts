@@ -99,7 +99,7 @@ export const consistentConfigStringCase: JSONCRule.RuleModule = {
 				const value = node.value;
 
 				const rawValue = value.raw.slice(1, -1);
-				const sentenceCase = toSentenceCase(rawValue);
+				const sentenceCase = toSentenceCase(rawValue, false);
 				if (rawValue === sentenceCase) return;
 
 				context.report({
