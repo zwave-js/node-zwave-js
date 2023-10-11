@@ -48,6 +48,8 @@
 			"label": "BASIC_SET Level",
 			"description": "Sets the value sent by the BASIC_SET command to Association Group 2",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"options": [

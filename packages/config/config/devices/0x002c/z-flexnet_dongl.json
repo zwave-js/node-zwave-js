@@ -29,7 +29,8 @@
 			"label": "Set Clock",
 			"description": "First byte = Hour, Second byte = Minute",
 			"valueSize": 2,
-			"unit": "hours",
+			"minValue": 0,
+			"maxValue": 6203,
 			"defaultValue": 0
 		},
 		{
