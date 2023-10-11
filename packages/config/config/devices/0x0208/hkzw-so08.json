@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Notification on State Change",
+			"label": "Send Basic Report on State Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -45,35 +45,37 @@
 					"value": 0
 				},
 				{
-					"label": "Send Basic Report",
+					"label": "Enabled",
 					"value": 1
 				},
 				{
-					"label": "Send Basic report only if not changed by Z-WAVE Command",
+					"label": "Only when controlled locally",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "27",
-			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Indicator Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "LED on for 5 seconds, then off",
 					"value": 0
 				},
 				{
-					"label": "LED same as Load",
+					"label": "On when load is on",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "151",
-			"label": "Threshold of Power Report",
+			"label": "Power Change Report Threshold",
 			"valueSize": 2,
-			"unit": "Watts",
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 200,
 			"defaultValue": 50,
@@ -87,7 +89,7 @@
 		{
 			"#": "152",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
-			"label": "Percentage Threshold of Power Report",
+			"label": "Relative Power Change Report Threshold",
 			"unit": "%",
 			"defaultValue": 10,
 			"options": [
@@ -99,10 +101,10 @@
 		},
 		{
 			"#": "171",
-			"label": "Power (Watts) Report Frequency",
+			"label": "Power (W) Report Interval",
 			"description": "Minimum value 3600, if not disabled",
 			"valueSize": 4,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 3600,
@@ -115,10 +117,10 @@
 		},
 		{
 			"#": "172",
-			"label": "Energy (KWH) Report Frequency",
+			"label": "Energy (kWh) Report Interval",
 			"description": "Minimum value 3600, if not disabled",
 			"valueSize": 4,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200,
@@ -131,10 +133,10 @@
 		},
 		{
 			"#": "173",
-			"label": "Voltage Report Frequency",
+			"label": "Voltage (V) Report Interval",
 			"description": "Minimum value 3600, if not disabled",
 			"valueSize": 4,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
@@ -147,10 +149,10 @@
 		},
 		{
 			"#": "174",
-			"label": "Electric Current Report Frequency",
+			"label": "Current (A) Report Interval",
 			"description": "Minimum value 3600, if not disabled",
 			"valueSize": 4,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
@@ -163,15 +165,17 @@
 		},
 		{
 			"#": "254",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable/disable the configuration command",
+			"label": "Lock Configuration",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unlock",
+					"label": "Unlocked",
 					"value": 0
 				},
 				{
-					"label": "Lock",
+					"label": "Locked",
 					"value": 1
 				}
 			]
