@@ -278,7 +278,7 @@ error in compat option treatBasicSetAsEvent`,
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-					error in compat option treatMultilevelSwitchSetAsEvent`,
+error in compat option treatMultilevelSwitchSetAsEvent`,
 				);
 			}
 
@@ -297,6 +297,18 @@ error in compat option treatDestinationEndpointAsSource`,
 
 			this.treatDestinationEndpointAsSource =
 				definition.treatDestinationEndpointAsSource;
+		}
+
+		if (definition.useUTCInTimeParametersCC != undefined) {
+			if (definition.useUTCInTimeParametersCC !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option useUTCInTimeParametersCC must be true or omitted`,
+				);
+			}
+
+			this.useUTCInTimeParametersCC = definition.useUTCInTimeParametersCC;
 		}
 
 		if (definition.manualValueRefreshDelayMs != undefined) {
@@ -605,6 +617,7 @@ compat option overrideQueries must be an object!`,
 	public readonly treatBasicSetAsEvent?: boolean;
 	public readonly treatMultilevelSwitchSetAsEvent?: boolean;
 	public readonly treatDestinationEndpointAsSource?: boolean;
+	public readonly useUTCInTimeParametersCC?: boolean;
 	public readonly queryOnWakeup?: readonly [
 		string,
 		string,
@@ -645,6 +658,7 @@ compat option overrideQueries must be an object!`,
 			"treatBasicSetAsEvent",
 			"treatMultilevelSwitchSetAsEvent",
 			"treatDestinationEndpointAsSource",
+			"useUTCInTimeParametersCC",
 			"queryOnWakeup",
 		]);
 		return stripUndefined(ret) as CompatConfig;

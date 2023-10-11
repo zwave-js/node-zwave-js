@@ -704,6 +704,9 @@
 				},
 				"treatDestinationEndpointAsSource": {
 					"const": true
+				},
+				"useUTCInTimeParametersCC": {
+					"const": true
 				}
 			},
 			"additionalProperties": false

@@ -506,3 +506,8 @@ By default, `Multilevel Switch CC::Set` commands are ignored, because they are m
 ### `treatDestinationEndpointAsSource`
 
 Some devices incorrectly use the multi channel **destination** endpoint in reports to indicate the **source** endpoint the report originated from. When this flag is `true`, the destination endpoint is instead interpreted to be the source and the original source endpoint gets ignored.
+
+### `useUTCInTimeParametersCC`
+
+When a device exposes no other way to configure timezone information, Z-Wave JS uses local time for setting the date and time using `Time Parameters CC`. Per the specification, UTC should be used for this, but it has been found that without timezone information, devices tend to falsely interpret UTC as local time in this case.
+By setting `useUTCInTimeParametersCC` to `true`, UTC is used anyways, so devices that get their timezone information from other sources can be configured correctly.
