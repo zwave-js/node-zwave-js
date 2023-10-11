@@ -2,7 +2,7 @@
 	"manufacturer": "EVA Logik",
 	"manufacturerId": "0x0312",
 	"label": "ZW30",
-	"description": "S2 In-wall Smart ON/OFF Switch",
+	"description": "S2 In-Wall Smart ON/OFF Switch",
 	"devices": [
 		{
 			"productType": "0xaa00",
@@ -48,7 +48,7 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable/Disable Auto Turn-off Timer"
+			"label": "Enable/Disable Auto Turn-Off Timer"
 		},
 		{
 			"#": "4",

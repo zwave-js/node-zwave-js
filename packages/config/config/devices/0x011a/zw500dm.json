@@ -2,7 +2,7 @@
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
 	"label": "ZW500DM",
-	"description": "In-wall Smart Meter Dimmer Switch",
+	"description": "In-Wall Smart Meter Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0x0111",
@@ -35,7 +35,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED is on when load is on",
+			"label": "LED Is On When Load Is On",
 			"description": "Synchronization of load power and LED indicator",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -81,7 +81,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Enable automatic notifications",
+			"label": "Enable Automatic Notifications",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -106,7 +106,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Minimum change in wattage triggering report",
+			"label": "Minimum Change in Wattage Triggering Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

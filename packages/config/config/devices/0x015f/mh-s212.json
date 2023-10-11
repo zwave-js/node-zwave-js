@@ -2,7 +2,7 @@
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
 	"label": "MH-S212",
-	"description": "Mini Combo Switch Two-load",
+	"description": "Mini Combo Switch Two-Load",
 	"devices": [
 		{
 			"productType": "0x2121",
@@ -37,11 +37,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary Buttons",
+					"label": "Momentary buttons",
 					"value": 0
 				},
 				{
-					"label": "2-State Switches",
+					"label": "2-State switches",
 					"value": 1
 				}
 			]
@@ -54,11 +54,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle Switch without specified on/off position",
+					"label": "Toggle switch without specified on/off position",
 					"value": 0
 				},
 				{
-					"label": "Toggle Switch with specified on/off position",
+					"label": "Toggle switch with specified on/off position",
 					"value": 1
 				}
 			]
@@ -118,11 +118,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch Immediately",
+					"label": "Switch immediately",
 					"value": 0
 				},
 				{
-					"label": "Zero Crossing Switch",
+					"label": "Zero crossing switch",
 					"value": 1
 				}
 			]
@@ -161,7 +161,7 @@
 					"value": 0
 				},
 				{
-					"label": "Factory Reset",
+					"label": "Factory reset",
 					"value": 85
 				}
 			]

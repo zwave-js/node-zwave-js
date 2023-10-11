@@ -2,7 +2,7 @@
 	"manufacturer": "Shenzhen iSurpass Technology Co., Ltd.",
 	"manufacturerId": "0x021c",
 	"label": "Smoke Detector",
-	"description": "Carbon monoxide detector, smoke detector",
+	"description": "Carbon Monoxide Detector, Smoke Detector",
 	"devices": [
 		{
 			"productType": "0x8002",

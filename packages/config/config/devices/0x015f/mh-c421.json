@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Read motor data on first use",
+			"label": "Read Motor Data On First Use",
 			"description": "Run the motor for 3 seconds to read motor data",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -137,7 +137,7 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle (2-state switches)",
+					"label": "Toggle (2-State switches)",
 					"value": 1
 				}
 			]
@@ -179,7 +179,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{

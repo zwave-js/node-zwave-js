@@ -44,7 +44,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 101
 				}
 			]
@@ -63,7 +63,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 101
 				}
 			]
@@ -82,7 +82,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 101
 				}
 			]
@@ -123,7 +123,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto-off Timer",
+			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -143,7 +143,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Previous State",
+					"label": "Previous state",
 					"value": 0
 				}
 			]
@@ -155,7 +155,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Previous State",
+					"label": "Previous state",
 					"value": 0
 				}
 			]
@@ -462,11 +462,11 @@
 					"value": 2
 				},
 				{
-					"label": "Fast Blink",
+					"label": "Fast blink",
 					"value": 3
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Slow blink",
 					"value": 4
 				},
 				{
@@ -526,7 +526,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Neutral",
+					"label": "No neutral",
 					"value": 0
 				},
 				{
@@ -543,15 +543,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single-Pole (One Switch)",
+					"label": "Single-Pole (One switch)",
 					"value": 0
 				},
 				{
-					"label": "Multi-Switch (Dumb Switch)",
+					"label": "Multi-Switch (Dumb switch)",
 					"value": 1
 				},
 				{
-					"label": "Multi-Switch (Auxiliary Switch)",
+					"label": "Multi-Switch (Auxiliary switch)",
 					"value": 2
 				}
 			]
@@ -586,11 +586,11 @@
 					"value": 0
 				},
 				{
-					"label": "On/Off Only",
+					"label": "On/Off only",
 					"value": 1
 				},
 				{
-					"label": "Smart Bulb",
+					"label": "Smart bulb",
 					"value": 2
 				}
 			]

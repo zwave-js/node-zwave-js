@@ -48,7 +48,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Led Indicator",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -59,11 +59,11 @@
 					"value": 0
 				},
 				{
-					"label": "On; no indication for associated nodes",
+					"label": "On; No indication for associated nodes",
 					"value": 1
 				},
 				{
-					"label": "On; indication for associated nodes",
+					"label": "On; Indication for associated nodes",
 					"value": 2
 				}
 			]
@@ -81,15 +81,15 @@
 					"value": 0
 				},
 				{
-					"label": "Enable - change threshold reporting",
+					"label": "Enable - Change threshold reporting",
 					"value": 1
 				},
 				{
-					"label": "Enable - timed reporting of actual values",
+					"label": "Enable - Timed reporting of actual values",
 					"value": 2
 				},
 				{
-					"label": "Enable - timed reporting of average values",
+					"label": "Enable - Timed reporting of average values",
 					"value": 3
 				}
 			]
@@ -206,7 +206,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary switch",
+					"label": "Binary Switch",
 					"value": 1
 				},
 				{
@@ -227,7 +227,7 @@
 		{
 			"#": "31",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Multi-command Encapsulation"
+			"label": "Multi-Command Encapsulation"
 		},
 		{
 			"#": "32",

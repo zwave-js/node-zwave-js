@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatic switch off",
+			"label": "Automatic Switch Off",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -47,13 +47,13 @@
 		},
 		{
 			"#": "3",
-			"label": "Function of RF off command",
+			"label": "Function of RF Off Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -61,7 +61,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{
@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state after power cycle",
+			"label": "Restore Switch State After Power Cycle",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Energy consumption",
+			"label": "Energy Consumption",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,

@@ -119,11 +119,11 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor Binary Report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				},
 				{
-					"label": "Notification and Sensor Binary Report",
+					"label": "Notification and Binary Sensor Report",
 					"value": 2
 				}
 			]
@@ -174,11 +174,11 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Battery Powered",
+					"label": "Battery powered",
 					"value": 0
 				},
 				{
-					"label": "USB Powered",
+					"label": "USB powered",
 					"value": 1
 				}
 			]
@@ -765,42 +765,42 @@
 		{
 			"#": "61[0x01]",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
-			"label": "Out-of-limit State: High Temperature"
+			"label": "Out-Of-Limit State: High Temperature"
 		},
 		{
 			"#": "61[0x02]",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
-			"label": "Out-of-limit State: High Humidity"
+			"label": "Out-Of-Limit State: High Humidity"
 		},
 		{
 			"#": "61[0x04]",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
-			"label": "Out-of-limit State: High Luminance"
+			"label": "Out-Of-Limit State: High Luminance"
 		},
 		{
 			"#": "61[0x08]",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
-			"label": "Out-of-limit State: High UV"
+			"label": "Out-Of-Limit State: High UV"
 		},
 		{
 			"#": "61[0x10]",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
-			"label": "Out-of-limit State: Low Temperature"
+			"label": "Out-Of-Limit State: Low Temperature"
 		},
 		{
 			"#": "61[0x20]",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
-			"label": "Out-of-limit State: Low Humidity"
+			"label": "Out-Of-Limit State: Low Humidity"
 		},
 		{
 			"#": "61[0x40]",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
-			"label": "Out-of-limit State: Low Luminance"
+			"label": "Out-Of-Limit State: Low Luminance"
 		},
 		{
 			"#": "61[0x80]",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
-			"label": "Out-of-limit State: Low UV"
+			"label": "Out-Of-Limit State: Low UV"
 		}
 	],
 	"metadata": {

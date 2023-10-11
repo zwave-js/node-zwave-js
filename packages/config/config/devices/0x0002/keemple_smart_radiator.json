@@ -2,7 +2,7 @@
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
 	"label": "Keemple smart radiator",
-	"description": "Electronic radiator thermostat, intended for use with water based room radiators.",
+	"description": "Electronic Radiator Thermostat, Intended for Use with Water Based Room Radiators.",
 	"devices": [
 		{
 			"productType": "0x5fff",

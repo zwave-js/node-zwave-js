@@ -31,11 +31,11 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Disable ",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable ",
+					"label": "Enable",
 					"value": 1
 				}
 			]

@@ -40,11 +40,11 @@
 					"value": 1
 				},
 				{
-					"label": "Timeout (readonly)",
+					"label": "Timeout (Readonly)",
 					"value": 2
 				},
 				{
-					"label": "Failure (readonly)",
+					"label": "Failure (Readonly)",
 					"value": 3
 				}
 			]

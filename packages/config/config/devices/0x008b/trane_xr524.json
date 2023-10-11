@@ -22,7 +22,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NONE",
+					"label": "None",
 					"value": 0
 				},
 				{
@@ -30,6 +30,7 @@
 					"value": 1
 				},
 				{
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "HP",
 					"value": 2
 				}
@@ -58,6 +59,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "w/Cool",
@@ -68,6 +70,7 @@
 					"value": 1
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "4",
@@ -98,11 +101,11 @@
 					"value": 0
 				},
 				{
-					"label": "1 Stage",
+					"label": "1 stage",
 					"value": 1
 				},
 				{
-					"label": "2 Stage",
+					"label": "2 stage",
 					"value": 2
 				}
 			]
@@ -217,7 +220,7 @@
 					"value": 0
 				},
 				{
-					"label": "Run Schedule",
+					"label": "Run schedule",
 					"value": 1
 				}
 			]
@@ -241,37 +244,13 @@
 		},
 		{
 			"#": "78",
-			"label": "Aux Heat Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "no aux heat",
-					"value": 0
-				},
-				{
-					"label": "aux heat enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Aux Heat"
 		},
 		{
 			"#": "79",
-			"label": "2nd Stage Cool Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "no 2nd stage cool",
-					"value": 0
-				},
-				{
-					"label": "2nd stage cool",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "2nd Stage Cool"
 		},
 		{
 			"#": "141",

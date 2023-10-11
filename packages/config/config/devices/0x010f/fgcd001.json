@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Z-Wave notifications",
+			"label": "Z-Wave Notifications",
 			"description": "Set the actions sent to controller",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -35,7 +35,7 @@
 					"value": 0
 				},
 				{
-					"label": "Tampering (opened casing)",
+					"label": "Tampering (Opened casing)",
 					"value": 1
 				},
 				{
@@ -50,7 +50,7 @@
 		},
 		{
 			"#": "3",
-			"label": "LED diode indications",
+			"label": "LED Diode Indications",
 			"description": "Set the actions which result in LED diode indications",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -61,7 +61,7 @@
 					"value": 0
 				},
 				{
-					"label": "Tampering (opened casing)",
+					"label": "Tampering (Opened casing)",
 					"value": 1
 				},
 				{
@@ -69,7 +69,7 @@
 					"value": 2
 				},
 				{
-					"label": "Tampering AND Exceeding the temperature",
+					"label": "Tampering and exceeding the temperature",
 					"value": 3
 				},
 				{
@@ -77,22 +77,22 @@
 					"value": 4
 				},
 				{
-					"label": "Tampering (opened casing) AND Lack of Z-Wave range",
+					"label": "Tampering (Opened casing) and lack of Z-Wave range",
 					"value": 5
 				},
 				{
-					"label": "Exceeding the temperature AND Lack of Z-Wave range",
+					"label": "Exceeding the temperature and lack of Z-Wave range",
 					"value": 6
 				},
 				{
-					"label": "Tampering AND Exceeding the temp AND Lack of range",
+					"label": "Tampering and exceeding the temp and lack of range",
 					"value": 7
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Acoustic signals",
+			"label": "Acoustic Signals",
 			"description": "Set the actions which result in acoustic signals",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -103,7 +103,7 @@
 					"value": 0
 				},
 				{
-					"label": "Tampering (opened casing)",
+					"label": "Tampering (Opened casing)",
 					"value": 1
 				},
 				{
@@ -111,7 +111,7 @@
 					"value": 2
 				},
 				{
-					"label": "Tampering AND Exceeding the temperature",
+					"label": "Tampering and exceeding the temperature",
 					"value": 3
 				},
 				{
@@ -119,22 +119,22 @@
 					"value": 4
 				},
 				{
-					"label": "Tampering AND Lack of Z-Wave range",
+					"label": "Tampering and lack of Z-Wave range",
 					"value": 5
 				},
 				{
-					"label": "Exceeding the temperature AND Lack of Z-Wave range",
+					"label": "Exceeding the temperature and lack of Z-Wave range",
 					"value": 6
 				},
 				{
-					"label": "Tampering AND Exceeding temp AND Lack of range",
+					"label": "Tampering and exceeding temp and lack of range",
 					"value": 7
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Associations in Z-Wave network security mode",
+			"label": "Associations in Z-Wave Network Security Mode",
 			"description": "Secure or non-secure commands to assoc groups",
 			"valueSize": 1,
 			"minValue": 0,
@@ -143,28 +143,28 @@
 		},
 		{
 			"#": "10",
-			"label": "Commands sent to 2nd association group (CO Alarm)",
+			"label": "Commands Sent to 2nd Association Group (CO Alarm)",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "BASIC ON",
+					"label": "Basic Set (On)",
 					"value": 1
 				},
 				{
-					"label": "BASIC OFF",
+					"label": "Basic Set (Off)",
 					"value": 2
 				},
 				{
-					"label": "BASIC ON & BASIC OFF",
+					"label": "Basic Set (On & off)",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Value of BASIC ON command sent to 2nd assoc group",
+			"label": "Value of BASIC ON Command Sent to 2nd Assoc Group",
 			"valueSize": 2,
 			"defaultValue": 255,
 			"allowManualEntry": false,
@@ -178,14 +178,14 @@
 					"value": 1
 				},
 				{
-					"label": "Setting assoc device to last value or ON",
+					"label": "Setting assoc device to last value or on",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "Value of BASIC OFF cmd sent to 2nd assoc group",
+			"label": "Value of BASIC OFF Cmd Sent to 2nd Assoc Group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -193,7 +193,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Commands sent to 4th association group (CO Level)",
+			"label": "Commands Sent to 4th Association Group (CO Level)",
 			"description": "Defines cmd sent to devices in 4th association group",
 			"valueSize": 1,
 			"minValue": 1,
@@ -203,7 +203,7 @@
 		},
 		{
 			"#": "14",
-			"label": "CO level for sending BASIC ON to 4th assoc group",
+			"label": "CO Level for Sending BASIC ON to 4th Assoc Group",
 			"description": "Defines min level of CO concentration starting timer",
 			"valueSize": 2,
 			"minValue": 25,
@@ -212,7 +212,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Time required for BASIC ON cmd to 4th assoc group",
+			"label": "Time Required for BASIC ON Cmd to 4th Assoc Group",
 			"description": "Defines time of CO concentration should remain above param values",
 			"valueSize": 2,
 			"minValue": 0,
@@ -221,7 +221,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Value of BASIC ON cmd sent to 4th assoc group",
+			"label": "Value of BASIC ON Cmd Sent to 4th Assoc Group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -229,7 +229,7 @@
 		},
 		{
 			"#": "17",
-			"label": "CO Level for sending BASIC OFF to 4th assoc group",
+			"label": "CO Level for Sending BASIC OFF to 4th Assoc Group",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 400,
@@ -237,7 +237,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Value of BASIC OFF cmd sent to 4th assoc group",
+			"label": "Value of BASIC OFF Cmd Sent to 4th Assoc Group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -246,7 +246,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Temperature reporting time interval",
+			"label": "Temperature Reporting Time Interval",
 			"description": "Time interval between consecutive reports of temperature",
 			"valueSize": 2,
 			"minValue": 0,
@@ -255,7 +255,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Temperature reporting hysteresis",
+			"label": "Temperature Reporting Hysteresis",
 			"description": "Min change in temperature resulting in a report being sent",
 			"valueSize": 1,
 			"minValue": 1,
@@ -264,7 +264,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Threshold of exceeding the temperature",
+			"label": "Threshold of Exceeding the Temperature",
 			"description": "Temp level resulting in sending actions (parameters 2, 3 and 4)",
 			"valueSize": 1,
 			"minValue": 1,
@@ -273,7 +273,7 @@
 		},
 		{
 			"#": "23",
-			"label": "CO meter activation",
+			"label": "CO Meter Activation",
 			"description": "Activates reporting of CO concentration to controller.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -282,7 +282,7 @@
 		},
 		{
 			"#": "25",
-			"label": "CO level reporting hysteresis",
+			"label": "CO Level Reporting Hysteresis",
 			"description": "Minchange in CO concentration resulting in sending new value to controller",
 			"valueSize": 1,
 			"minValue": 2,
@@ -291,7 +291,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Threshold of CO meter activation",
+			"label": "Threshold of CO Meter Activation",
 			"description": "Defines CO concentration level sending a new value to controller",
 			"valueSize": 2,
 			"minValue": 10,

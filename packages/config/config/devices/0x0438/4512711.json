@@ -2,7 +2,7 @@
 	"manufacturer": "Namron",
 	"manufacturerId": "0x0438",
 	"label": "4512711",
-	"description": "4-channel Remote Control",
+	"description": "4-Channel Remote Control",
 	"devices": [
 		{
 			"productType": "0x0300",

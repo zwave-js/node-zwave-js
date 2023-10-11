@@ -1,8 +1,8 @@
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "FGFS-101 ()",
-	"description": "FIBARO Flood Sensor",
+	"label": "FGFS-101",
+	"description": "Fibaro Flood Sensor",
 	"devices": [
 		{
 			"productType": "0x0000",

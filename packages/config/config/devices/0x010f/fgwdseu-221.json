@@ -194,11 +194,11 @@
 					"value": 2
 				},
 				{
-					"label": "S1 toggles channel 1, S2 toggles channel 2 (double switch mode only)",
+					"label": "S1 toggles channel 1, S2 toggles channel 2 (Double switch mode only)",
 					"value": 3
 				},
 				{
-					"label": "S1 single click turns channel 1 on, S1 double click turns channel 2 on, S2 single click turns both channels off (double switch mode only)",
+					"label": "S1 single click turns channel 1 on, S1 double click turns channel 2 on, S2 single click turns both channels off (Double switch mode only)",
 					"value": 4
 				}
 			]
@@ -263,7 +263,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Action",
+					"label": "No action",
 					"value": 0
 				},
 				{
@@ -283,7 +283,7 @@
 					"value": 4
 				},
 				{
-					"label": "Blink Red/White/Blue",
+					"label": "Blink red/white/blue",
 					"value": 15
 				}
 			]
@@ -296,7 +296,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Action",
+					"label": "No action",
 					"value": 0
 				},
 				{
@@ -435,7 +435,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Alarm configuration – duration",
+			"label": "Alarm Configuration – Duration",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -554,7 +554,7 @@
 					"value": 1
 				},
 				{
-					"label": "Pulse - turn on, then turn off after delay",
+					"label": "Pulse - Turn on, then turn off after delay",
 					"value": 2
 				}
 			]
@@ -576,11 +576,11 @@
 					"value": 0
 				},
 				{
-					"label": "Ignore - mode runs until it ends",
+					"label": "Ignore - Mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "Reset - start time from the beginning",
+					"label": "Reset - Start time from the beginning",
 					"value": 2
 				}
 			]

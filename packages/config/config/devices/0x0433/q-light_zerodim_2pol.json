@@ -31,7 +31,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Minimum brightness level",
+			"label": "Minimum Brightness Level",
 			"description": "Set the desired value from 1 to 98% for the minimum dim level that the dimmer is restricted to, the dimmer will not go lower than the value set here.",
 			"valueSize": 1,
 			"unit": "%",
@@ -41,7 +41,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Maximum brightness level",
+			"label": "Maximum Brightness Level",
 			"description": "Set the desired value from 2 to 99% for the maximum dim level that the dimmer is restricted to; the dimmer will not go higher than the value set here.",
 			"valueSize": 1,
 			"unit": "%",
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Automatic control - dimming step size",
+			"label": "Automatic Control - Dimming Step Size",
 			"description": "This parameter defines the percentage value of dimming step during the automatic control.",
 			"valueSize": 1,
 			"unit": "%",
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Automatic control - time of a dimming step",
+			"label": "Automatic Control - Time of A Dimming Step",
 			"description": "This parameter defines the time of single dimming step set in parameter 3 during the automatic control.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -71,7 +71,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Manual control - dimming step size",
+			"label": "Manual Control - Dimming Step Size",
 			"description": "This parameter defines the percentage value of dimming step during the manual control.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Manual control - time of a dimming step",
+			"label": "Manual Control - Time of A Dimming Step",
 			"description": "This parameter defines the time of single dimming step setin parameter 5 during the manual control.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -94,7 +94,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Scene ID set",
+			"label": "Scene ID Set",
 			"description": "Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCENE_ACTUATOR_CONF(0x26) command.",
 			"valueSize": 1,
 			"minValue": 1,

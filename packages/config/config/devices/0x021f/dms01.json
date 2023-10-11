@@ -59,15 +59,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "30 Seconds",
+					"label": "30 seconds",
 					"value": 1
 				},
 				{
-					"label": "1 Minute",
+					"label": "1 minute",
 					"value": 2
 				},
 				{
-					"label": "5 Minutes",
+					"label": "5 minutes",
 					"value": 3
 				},
 				{
@@ -123,6 +123,7 @@
 			"valueSize": 1,
 			"defaultValue": 9,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Ding dong",
@@ -165,6 +166,7 @@
 					"value": 10
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "6",
@@ -172,6 +174,7 @@
 			"valueSize": 1,
 			"defaultValue": 10,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Ding dong",
@@ -214,6 +217,7 @@
 					"value": 10
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "7",

@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "HCL",
-	"description": "FIBARO Home Center Lite",
+	"description": "Fibaro Home Center Lite",
 	"devices": [
 		{
 			"productType": "0x0002",

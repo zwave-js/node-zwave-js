@@ -28,17 +28,17 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Indicator Light",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "without Indicator Light",
+					"label": "Disable",
 					"value": 1
 				},
 				{
-					"label": "with Indicator Light",
+					"label": "Enable",
 					"value": 2
 				}
 			]

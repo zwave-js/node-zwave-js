@@ -47,7 +47,7 @@
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Basic Report on Trigger"
+			"label": "Send Basic Report On Trigger"
 		}
 	],
 	"compat": {

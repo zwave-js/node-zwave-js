@@ -2,7 +2,7 @@
 	"manufacturer": "DEFARO",
 	"manufacturerId": "0x032e",
 	"label": "DSI-101 binary switch",
-	"description": "DSI-101 binary switch",
+	"description": "DSI-101 Binary Switch",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "B1 operation mode",
+			"label": "B1 Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -24,7 +24,7 @@
 		},
 		{
 			"#": "2",
-			"label": "B2 operation mode",
+			"label": "B2 Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -32,7 +32,7 @@
 		},
 		{
 			"#": "3",
-			"label": "B3 operation mode",
+			"label": "B3 Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "4",
-			"label": "B4 operation mode",
+			"label": "B4 Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "5",
-			"label": "B5 operation mode",
+			"label": "B5 Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -56,7 +56,7 @@
 		},
 		{
 			"#": "6",
-			"label": "B6 operation mode",
+			"label": "B6 Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -64,7 +64,7 @@
 		},
 		{
 			"#": "7",
-			"label": "B7 operation mode",
+			"label": "B7 Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "8",
-			"label": "B8 operation mode",
+			"label": "B8 Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Long press delay",
+			"label": "Long Press Delay",
 			"description": "Delay for long press detection",
 			"valueSize": 1,
 			"minValue": 1,
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "10",
-			"label": "B1 value for AG 11",
+			"label": "B1 Value for AG 11",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "11",
-			"label": "B2 value to send",
+			"label": "B2 Value to Send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -105,7 +105,7 @@
 		},
 		{
 			"#": "12",
-			"label": "B3 value to send for AG 13",
+			"label": "B3 Value to Send for AG 13",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -113,7 +113,7 @@
 		},
 		{
 			"#": "13",
-			"label": "B4 value to send",
+			"label": "B4 Value to Send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -121,7 +121,7 @@
 		},
 		{
 			"#": "14",
-			"label": "B5 value to send",
+			"label": "B5 Value to Send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -129,7 +129,7 @@
 		},
 		{
 			"#": "15",
-			"label": "B6 value to send",
+			"label": "B6 Value to Send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -137,7 +137,7 @@
 		},
 		{
 			"#": "16",
-			"label": "B7 value to send",
+			"label": "B7 Value to Send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -145,7 +145,7 @@
 		},
 		{
 			"#": "17",
-			"label": "B8 value to send",
+			"label": "B8 Value to Send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -153,7 +153,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Sensor 1 turn on value",
+			"label": "Sensor 1 Turn on Value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
@@ -161,7 +161,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Sensor 1 command off value",
+			"label": "Sensor 1 Command Off Value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
@@ -169,7 +169,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Sensor 1 conversion rules",
+			"label": "Sensor 1 Conversion Rules",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -177,7 +177,7 @@
 		},
 		{
 			"#": "23",
-			"label": "Sensor 2 command on value",
+			"label": "Sensor 2 Command on Value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
@@ -185,7 +185,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Sensor 2 command off value",
+			"label": "Sensor 2 Command Off Value",
 			"valueSize": 2,
 			"minValue": -60,
 			"maxValue": 1000,
@@ -193,7 +193,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Sensor 2 conversion rules",
+			"label": "Sensor 2 Conversion Rules",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,

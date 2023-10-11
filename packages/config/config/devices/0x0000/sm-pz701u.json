@@ -2,7 +2,7 @@
 	"manufacturer": "Sigma Designs (Former Zensys)",
 	"manufacturerId": "0x0000",
 	"label": "SM-PZ701U",
-	"description": "Z-Wave power plug",
+	"description": "Z-Wave Power Plug",
 	"devices": [
 		{
 			"productType": "0x0003",

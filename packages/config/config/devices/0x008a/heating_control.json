@@ -2,7 +2,7 @@
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "Heating Control",
-	"description": "Thermostat for controlling the opentherm protocol",
+	"description": "Thermostat for Controlling the Opentherm Protocol",
 	"devices": [
 		{
 			"productType": "0x0021",
@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set to default",
+			"label": "Set to Default",
 			"description": "Set all configuration values to default values (factory settings)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -40,10 +40,10 @@
 		},
 		{
 			"#": "2",
-			"label": "Data request interval",
+			"label": "Data Request Interval",
 			"description": "Interval of updating data from thermostat and boiler",
 			"valueSize": 1,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 14,
@@ -51,10 +51,10 @@
 		},
 		{
 			"#": "3",
-			"label": "T room update difference",
+			"label": "T Room Update Difference",
 			"description": "Difference of temperature before new update",
 			"valueSize": 1,
-			"unit": "*0,1 degrees Celcius",
+			"unit": "0.1 °C",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
@@ -62,10 +62,10 @@
 		},
 		{
 			"#": "4",
-			"label": "T setpoint update difference",
+			"label": "T Setpoint Update Difference",
 			"description": "Difference in setpoint before new update",
 			"valueSize": 1,
-			"unit": "*0,1 degrees Celcius",
+			"unit": "0.1 °C",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 5,
@@ -92,7 +92,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Type of 'special' thermostat",
+			"label": "Type of 'special' Thermostat",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -102,66 +102,41 @@
 					"value": 0
 				},
 				{
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "Remeha Celcia 20",
 					"value": 1
 				},
 				{
-					"label": "Honeywell (rounded temperatures)",
+					"label": "Honeywell (Rounded temperatures)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Status auto report",
-			"description": "Status auto report boiler/thermostat report.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable messages auto report",
-					"value": 0
-				},
-				{
-					"label": "Enable status messages auto report",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Status Auto Report",
+			"description": "Status auto report boiler/thermostat report."
 		},
 		{
 			"#": "9",
-			"label": "Enable/Disable thermostat schedule",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable thermostat schedule",
-					"value": 0
-				},
-				{
-					"label": "Enable thermostat schedule",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Thermostat Schedule"
 		},
 		{
 			"#": "11",
-			"label": "Readout manual setpoint thermostat",
+			"label": "Readout Manual Setpoint Thermostat",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Readout OFF",
+					"label": "Readout off",
 					"value": 0
 				},
 				{
-					"label": "Readout ON",
+					"label": "Readout on",
 					"value": 255
 				}
 			]

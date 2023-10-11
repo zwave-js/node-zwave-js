@@ -24,11 +24,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Open/close off",
+					"label": "Open/Close off",
 					"value": 0
 				},
 				{
-					"label": "Open/close on",
+					"label": "Open/Close on",
 					"value": 1
 				}
 			]

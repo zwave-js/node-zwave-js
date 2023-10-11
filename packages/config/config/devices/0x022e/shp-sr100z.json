@@ -2,7 +2,7 @@
 	"manufacturer": "Samsung SDS",
 	"manufacturerId": "0x022e",
 	"label": "SHP-SR100Z",
-	"description": "Motion sensor",
+	"description": "Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0005",

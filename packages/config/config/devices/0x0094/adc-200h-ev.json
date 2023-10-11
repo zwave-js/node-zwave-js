@@ -2,7 +2,7 @@
 	"manufacturer": "Alarm.com",
 	"manufacturerId": "0x0094",
 	"label": "ADC-200H-EV",
-	"description": "Alarm.com Interlogix Simon XT/i Radio Module",
+	"description": "Interlogix Simon XT/i Radio Module",
 	"devices": [
 		{
 			"productType": "0x0001",

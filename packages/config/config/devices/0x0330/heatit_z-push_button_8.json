@@ -16,17 +16,17 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "factory reset",
+			"label": "Factory Reset",
 			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normal operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "factory reset",
+					"label": "Factory reset",
 					"value": 21930
 				}
 			]

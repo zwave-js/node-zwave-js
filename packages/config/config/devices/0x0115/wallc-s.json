@@ -39,7 +39,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button 1 and 3 pair mode",
+			"label": "Button 1 and 3 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Button 2 and 4 pair mode",
+			"label": "Button 2 and 4 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -81,7 +81,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Action on group A",
+			"label": "Action on Group A",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -91,11 +91,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -103,26 +103,26 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
-					"label": "Control Door Lock",
+					"label": "Control door lock",
 					"value": 7
 				},
 				{
-					"label": "Central Scene to Gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "Action on group B",
+			"label": "Action on Group B",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -132,11 +132,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -144,26 +144,26 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
-					"label": "Control Door Lock",
+					"label": "Control door lock",
 					"value": 7
 				},
 				{
-					"label": "Central Scene to Gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "13",
-			"label": "Action on group C",
+			"label": "Action on Group C",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -173,11 +173,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -185,26 +185,26 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
-					"label": "Control Door Lock",
+					"label": "Control door lock",
 					"value": 7
 				},
 				{
-					"label": "Central Scene to Gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Action on group D",
+			"label": "Action on Group D",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -214,11 +214,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -226,37 +226,37 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				},
 				{
-					"label": "Control Door Lock",
+					"label": "Control door lock",
 					"value": 7
 				},
 				{
-					"label": "Central Scene to Gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Send the following Switch All commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normal Open)",
+					"label": "NO (Normal open)",
 					"value": 1
 				},
 				{
-					"label": "NC (Normal Close)",
+					"label": "NC (Normal close)",
 					"value": 2
 				},
 				{
@@ -267,7 +267,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -284,7 +284,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Blocks wakeup even when wakeup interval is set",
+			"label": "Blocks Wakeup Even When Wakeup Interval Is Set",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -301,7 +301,7 @@
 		},
 		{
 			"#": "30",
-			"label": "Send unsolicited Battery Report on Wake Up",
+			"label": "Send Unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

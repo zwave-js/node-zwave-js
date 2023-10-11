@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "VRCZ4",
-	"description": "4 zone controller",
+	"description": "4 Zone Controller",
 	"devices": [
 		{
 			"productType": "0x0701",

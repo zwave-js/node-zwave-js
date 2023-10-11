@@ -113,7 +113,7 @@
 		{
 			"#": "81",
 			"label": "LED Indicator",
-			"description": "Configure whether the LED will flash or not when sending Basic Set, Sensor Binary Report, Notification Report (Access Control) or Wake Up Notification.",
+			"description": "Configure whether the LED will flash or not when sending Basic Set, Binary Sensor Report, Notification Report (Access Control) or Wake Up Notification.",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -123,15 +123,15 @@
 					"value": 0
 				},
 				{
-					"label": "Flash when transmitting (except Wake Up notifications)",
+					"label": "Flash when transmitting (Except wake up notifications)",
 					"value": 1
 				},
 				{
-					"label": "On when sending Wake Up notification",
+					"label": "On when sending wake up notification",
 					"value": 2
 				},
 				{
-					"label": "Flash when transmitting (including Wake Up notifications)",
+					"label": "Flash when transmitting (Including wake up notifications)",
 					"value": 3
 				}
 			]

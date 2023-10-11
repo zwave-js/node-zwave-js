@@ -2,7 +2,7 @@
 	"manufacturer": "Hoppe",
 	"manufacturerId": "0x0313",
 	"label": "FG-FR404-ZW-HF",
-	"description": "wireless handle",
+	"description": "Wireless Handle",
 	"devices": [
 		{
 			"productType": "0x0001",

@@ -139,7 +139,7 @@
 			"defaultValue": 3,
 			"options": [
 				{
-					"label": "Instant On/Off",
+					"label": "Instant on/off",
 					"value": 0
 				}
 			]
@@ -154,7 +154,7 @@
 			"defaultValue": 3,
 			"options": [
 				{
-					"label": "Instant On/Off",
+					"label": "Instant on/off",
 					"value": 0
 				}
 			]

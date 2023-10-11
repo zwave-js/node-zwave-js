@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Saving load state",
+			"label": "Saving Load State",
 			"description": "Saving load state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
@@ -29,7 +29,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Enable/disable basic report",
+			"label": "Enable/disable Basic Report",
 			"description": "Enables/disables to send Basic report to the Lifeline when load state changed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Cool light stage mode",
+			"label": "Cool Light Stage Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Stage mode speed",
+			"label": "Stage Mode Speed",
 			"description": "Speed of stage mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Enable/disable external switch",
+			"label": "Enable/disable External Switch",
 			"description": "Enable/disable external switch to be added to and removed from a network",
 			"valueSize": 1,
 			"minValue": 0,

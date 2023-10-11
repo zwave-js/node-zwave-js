@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set Door Open Notification On Or Off",
+			"label": "Set Door Open Notification On or Off",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,

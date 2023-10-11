@@ -24,41 +24,30 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Notification type",
+			"label": "Notification Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary sensor report & Notification report (Access Control)",
+					"label": "Binary Sensor Report & Notification Report (Access control)",
 					"value": 0
 				},
 				{
-					"label": "Notification report (Access Control)",
+					"label": "Notification Report (Access control)",
 					"value": 1
 				},
 				{
-					"label": "Notification report (Home Security)",
+					"label": "Notification Report (Home security)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Led Indicator",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator",
+			"defaultValue": 1
 		},
 		{
 			"#": "15",
@@ -68,7 +57,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Events with S2 Encapsulation only",
+					"label": "Events with S2 encapsulation only",
 					"value": 0
 				},
 				{
@@ -130,11 +119,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Standard Security",
+					"label": "Standard",
 					"value": 0
 				},
 				{
-					"label": "High Security",
+					"label": "High",
 					"value": 1
 				}
 			]

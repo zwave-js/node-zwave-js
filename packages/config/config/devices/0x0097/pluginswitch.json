@@ -2,7 +2,7 @@
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "PlugInSwitch",
-	"description": "PlugIn Switch with power monitoring",
+	"description": "PlugIn Switch with Power Monitoring",
 	"devices": [
 		{
 			"productType": "0x6943",

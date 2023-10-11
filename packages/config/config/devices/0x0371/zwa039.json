@@ -2,7 +2,8 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA039",
-	"description": "aërQ Temperature and Humidity Sensor v2.0",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
+	"description": "aërQ Temperature and Humidity Sensor V2.0",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -245,7 +246,7 @@
 		},
 		{
 			"#": "65[0x01]",
-			"label": "Sensor Report after Inclusion: Battery",
+			"label": "Sensor Report After Inclusion: Battery",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -254,7 +255,7 @@
 		},
 		{
 			"#": "65[0x02]",
-			"label": "Sensor Report after Inclusion: Temperature",
+			"label": "Sensor Report After Inclusion: Temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -263,7 +264,7 @@
 		},
 		{
 			"#": "65[0x04]",
-			"label": "Sensor Report after Inclusion: Humidity",
+			"label": "Sensor Report After Inclusion: Humidity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -272,7 +273,7 @@
 		},
 		{
 			"#": "65[0x08]",
-			"label": "Sensor Report after Inclusion: Dew Point",
+			"label": "Sensor Report After Inclusion: Dew Point",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

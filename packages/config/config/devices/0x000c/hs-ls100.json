@@ -38,7 +38,7 @@
 			"#": "19",
 			"label": "Temperature Report Interval",
 			"valueSize": 1,
-			"unit": "1/10 minute",
+			"unit": "1/10 minutes",
 			"minValue": 3,
 			"maxValue": 240,
 			"defaultValue": 144,
@@ -48,7 +48,7 @@
 			"#": "20",
 			"label": "Temperature (High) Alarm Trigger Threshold",
 			"valueSize": 2,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -670,
 			"maxValue": 2570,
 			"defaultValue": 1040
@@ -57,7 +57,7 @@
 			"#": "22",
 			"label": "Temperature (Low) Trigger Threshold",
 			"valueSize": 2,
-			"unit": "0.1°F",
+			"unit": "0.1 °F",
 			"minValue": -670,
 			"maxValue": 2570,
 			"defaultValue": 320

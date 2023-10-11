@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.0.4 (2023-10-09)
+### Bugfixes
+* Normalize result of `Controller.getAvailableFirmwareUpdates` to always include `channel` field (#6359)
+* Fixed a crash that could happen while logging dropped sensor readings (#6379)
+* Increased the range and default of the `response` timeout to accomodate slower 500 series controllers (#6378)
+
+### Config file changes
+* Treat Basic Set as events for TKB TZ35S/D and TZ55S/D (#6381)
+* Add Zooz ZAC38 Range Extender (#6136)
+* Corrected the label of the notification event `0x0a` to be `Emergency Alarm` (#6368)
+
 ## 12.0.3 (2023-10-05)
 The `v12` release was supposed to increase reliability of Z-Wave JS, primarily by detecting situations where the controller was unable to transmit due to excessive RF noise or being unresponsive and automatically taking the necessary steps to recover.
 
