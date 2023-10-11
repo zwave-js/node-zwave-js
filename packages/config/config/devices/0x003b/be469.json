@@ -24,57 +24,19 @@
 	"paramInformation": [
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Beeper",
-			"valueSize": 1,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Beeper",
-					"value": 0
-				},
-				{
-					"label": "Enable Beeper",
-					"value": 255
-				}
-			]
+			"defaultValue": 255
 		},
 		{
 			"#": "4",
-			"label": "Vacation Mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Vacation Mode",
-					"value": 0
-				},
-				{
-					"label": "Enable Vacation Mode",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Vacation Mode"
 		},
 		{
 			"#": "5",
-			"label": "Lock & Leave",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Lock & Leave",
-					"value": 0
-				},
-				{
-					"label": "Enable Lock & Leave",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Lock & Leave"
 		},
 		{
 			"#": "6",
@@ -94,7 +56,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alarm Off",
+					"label": "Alarm off",
 					"value": 0
 				},
 				{
@@ -106,7 +68,7 @@
 					"value": 2
 				},
 				{
-					"label": "Forced Entry",
+					"label": "Forced entry",
 					"value": 3
 				}
 			]
@@ -119,27 +81,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Not Supported",
+					"label": "Not supported",
 					"value": 0
 				},
 				{
-					"label": "Most Sensitive",
+					"label": "Most sensitive",
 					"value": 1
 				},
 				{
-					"label": "More Sensitive",
+					"label": "More sensitive",
 					"value": 2
 				},
 				{
-					"label": "Medium Sensitivity",
+					"label": "Medium sensitivity",
 					"value": 3
 				},
 				{
-					"label": "Less Sensitive",
+					"label": "Less sensitive",
 					"value": 4
 				},
 				{
-					"label": "Least Sensitive",
+					"label": "Least sensitive",
 					"value": 5
 				}
 			]
@@ -152,27 +114,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Not Supported",
+					"label": "Not supported",
 					"value": 0
 				},
 				{
-					"label": "Most Sensitive",
+					"label": "Most sensitive",
 					"value": 1
 				},
 				{
-					"label": "More Sensitive",
+					"label": "More sensitive",
 					"value": 2
 				},
 				{
-					"label": "Medium Sensitivity",
+					"label": "Medium sensitivity",
 					"value": 3
 				},
 				{
-					"label": "Less Sensitive",
+					"label": "Less sensitive",
 					"value": 4
 				},
 				{
-					"label": "Least Sensitive",
+					"label": "Least sensitive",
 					"value": 5
 				}
 			]
@@ -186,27 +148,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Not Supported",
+					"label": "Not supported",
 					"value": 0
 				},
 				{
-					"label": "Most Sensitive",
+					"label": "Most sensitive",
 					"value": 1
 				},
 				{
-					"label": "More Sensitive",
+					"label": "More sensitive",
 					"value": 2
 				},
 				{
-					"label": "Medium Sensitivity",
+					"label": "Medium sensitivity",
 					"value": 3
 				},
 				{
-					"label": "Less Sensitive",
+					"label": "Less sensitive",
 					"value": 4
 				},
 				{
-					"label": "Least Sensitive",
+					"label": "Least sensitive",
 					"value": 5
 				}
 			]
@@ -220,11 +182,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Local Control",
+					"label": "Disable local control",
 					"value": 0
 				},
 				{
-					"label": "Enable Local Control",
+					"label": "Enable local control",
 					"value": 255
 				}
 			]
@@ -258,21 +220,8 @@
 		},
 		{
 			"#": "15",
-			"label": "Auto Lock",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Auto Lock",
-					"value": 0
-				},
-				{
-					"label": "Enable Auto Lock",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Auto Lock"
 		},
 		{
 			"#": "16",

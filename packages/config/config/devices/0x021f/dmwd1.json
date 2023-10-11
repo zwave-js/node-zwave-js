@@ -2,7 +2,7 @@
 	"manufacturer": "Elexa Consumer Products Inc.",
 	"manufacturerId": "0x021f",
 	"label": "DMWD1",
-	"description": "Dome door & window sensor",
+	"description": "Dome Door & Window Sensor",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -48,16 +48,17 @@
 			"label": "BASIC_SET Level",
 			"description": "Sets the value sent by the BASIC_SET command to Association Group 2",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0/Turn Off Device",
+					"label": "Turn off",
 					"value": 0
 				},
 				{
-					"label": "Turn On Device",
+					"label": "Turn on",
 					"value": 255
 				}
 			]

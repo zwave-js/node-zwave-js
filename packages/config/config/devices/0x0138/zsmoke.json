@@ -24,18 +24,18 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Send double alarms",
+			"label": "Send Double Alarms",
 			"description": "Causes the device to send double alarm messages",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single Alarm",
+					"label": "Single alarm",
 					"value": 0
 				},
 				{
-					"label": "Double Alarm",
+					"label": "Double alarm",
 					"value": 1
 				}
 			]

@@ -2,7 +2,7 @@
 	"manufacturer": "Radio Thermostat Company of America (RTC)",
 	"manufacturerId": "0x0098",
 	"label": "CT200X",
-	"description": "Vivint Element Thermostat w/ other sensors",
+	"description": "Vivint Element Thermostat W/ Other Sensors",
 	"devices": [
 		{
 			"productType": "0xc801",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Temperature Reporting Threshold (8-bit)",
+			"label": "Temperature Reporting Threshold (8-Bit)",
 			"description": "This value determines the reporting threshold",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -28,19 +28,19 @@
 					"value": 0
 				},
 				{
-					"label": "Also Disabled",
+					"label": "Also disabled",
 					"value": 1
 				},
 				{
-					"label": "0.5 degrees F",
+					"label": "0.5 °F",
 					"value": 2
 				},
 				{
-					"label": "1.0 degrees F",
+					"label": "1.0 °F",
 					"value": 3
 				},
 				{
-					"label": "1.5 degrees F",
+					"label": "1.5 °F",
 					"value": 4
 				}
 			]
@@ -76,6 +76,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "Powered by C-Wire",
 					"value": 1
 				},
@@ -107,40 +108,40 @@
 			"label": "Thermostat Swing Temp",
 			"description": "Temperature spread between the on and off temperatures",
 			"valueSize": 1,
-			"unit": "degrees Fahrenheit",
+			"unit": "°F",
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0.5 degrees Fahrenheit",
+					"label": "0.5 °F",
 					"value": 1
 				},
 				{
-					"label": "1.0 degrees Fahrenheit",
+					"label": "1.0 °F",
 					"value": 2
 				},
 				{
-					"label": "1.5 degrees Fahrenheit",
+					"label": "1.5 °F",
 					"value": 3
 				},
 				{
-					"label": "2.0 degrees Fahrenheit",
+					"label": "2.0 °F",
 					"value": 4
 				},
 				{
-					"label": "2.5 degrees Fahrenheit",
+					"label": "2.5 °F",
 					"value": 5
 				},
 				{
-					"label": "3.0 degrees Fahrenheit",
+					"label": "3.0 °F",
 					"value": 6
 				},
 				{
-					"label": "3.5 degrees Fahrenheit",
+					"label": "3.5 °F",
 					"value": 7
 				},
 				{
-					"label": "4.0 degrees Fahrenheit",
+					"label": "4.0 °F",
 					"value": 8
 				}
 			]
@@ -154,23 +155,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "2.0 degrees Fahrenheit",
+					"label": "2.0 °F",
 					"value": 4
 				},
 				{
-					"label": "3.0 degrees Fahrenheit",
+					"label": "3.0 °F",
 					"value": 6
 				},
 				{
-					"label": "4.0 degrees Fahrenheit",
+					"label": "4.0 °F",
 					"value": 8
 				},
 				{
-					"label": "5.0 degrees Fahrenheit",
+					"label": "5.0 °F",
 					"value": 10
 				},
 				{
-					"label": "6.0 degrees Fahrenheit",
+					"label": "6.0 °F",
 					"value": 12
 				}
 			]
@@ -184,49 +185,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Fast Recovery Mode",
+					"label": "Fast",
 					"value": 1
 				},
 				{
-					"label": "Economy Recovery Mode",
+					"label": "Economy",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "11",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Simple UI Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "12",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Multicast",
-			"description": "Toggle Multicast Mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"description": "Toggle Multicast Mode"
 		},
 		{
 			"#": "13",
@@ -237,11 +215,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Show Temperature",
+					"label": "Show temperature",
 					"value": 1
 				},
 				{
-					"label": "Show (unknown)",
+					"label": "Show (Unknown)",
 					"value": 2
 				}
 			]
@@ -285,7 +263,7 @@
 					"value": 0
 				},
 				{
-					"label": "Celcius",
+					"label": "Celsius",
 					"value": 1
 				}
 			]

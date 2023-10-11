@@ -2,7 +2,7 @@
 	"manufacturer": "Home controls",
 	"manufacturerId": "0x0293",
 	"label": "Lumi LM-SxZW (C-L)",
-	"description": "Z-Wave Switch with 4 on/off light switches",
+	"description": "Z-Wave Switch with 4 On/off Light Switches",
 	"devices": [
 		{
 			"productType": "0x0003",

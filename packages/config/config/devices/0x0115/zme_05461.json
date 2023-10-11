@@ -2,7 +2,7 @@
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "ZME_05461",
-	"description": "Double switch",
+	"description": "Double Switch",
 	"devices": [
 		{
 			"productType": "0x1000",
@@ -31,7 +31,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -45,14 +45,14 @@
 					"value": 1
 				},
 				{
-					"label": "night light (inverted state)",
+					"label": "Night light (Inverted state)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Automatically switch off first channel after",
+			"label": "Automatically Switch Off First Channel After",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -62,13 +62,13 @@
 		},
 		{
 			"#": "3",
-			"label": "Function of RF off command on first channel",
+			"label": "Function of RF Off Command on First Channel",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -76,7 +76,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{
@@ -87,7 +87,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Switch on/off by holding buttons",
+			"label": "Switch On/off by Holding Buttons",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -97,22 +97,22 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (only for the first channel)",
+					"label": "Yes (Only for the first channel)",
 					"value": 1
 				},
 				{
-					"label": "Yes (only for the second channel)",
+					"label": "Yes (Only for the second channel)",
 					"value": 2
 				},
 				{
-					"label": "Yes (for both channels)",
+					"label": "Yes (For both channels)",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state after power cycle",
+			"label": "Restore Switch State After Power Cycle",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -122,22 +122,22 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (only for the first channel)",
+					"label": "Yes (Only for the first channel)",
 					"value": 1
 				},
 				{
-					"label": "Yes (only for the second channel)",
+					"label": "Yes (Only for the second channel)",
 					"value": 2
 				},
 				{
-					"label": "Yes (for both channels)",
+					"label": "Yes (For both channels)",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"description": "Allows for exchanging ON and OFF.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -155,7 +155,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Switch by buttons (first channel)",
+			"label": "Switch by Buttons (First Channel)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -176,7 +176,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on button single press or hold",
+			"label": "Action on Button Single Press or Hold",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -186,22 +186,22 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 2
 				},
 				{
-					"label": "Scene activation",
+					"label": "Scene Activation",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Action on button double press or hold",
+			"label": "Action on Button Double Press or Hold",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -211,22 +211,22 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 2
 				},
 				{
-					"label": "Scene activation",
+					"label": "Scene Activation",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "16",
-			"label": "What to do on button Down press (both)",
+			"label": "What to Do on Button Down Press (Both)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -236,7 +236,7 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On if load is Off, else switch Off",
+					"label": "Switch on if load is off, else switch off",
 					"value": 1
 				},
 				{
@@ -247,7 +247,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Energy consumption for first channel",
+			"label": "Energy Consumption for First Channel",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,
@@ -261,7 +261,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Automatically switch off second channel after",
+			"label": "Automatically Switch Off Second Channel After",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -271,13 +271,13 @@
 		},
 		{
 			"#": "23",
-			"label": "Function of RF off command on second channel",
+			"label": "Function of RF Off Command on Second Channel",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -285,7 +285,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{
@@ -296,7 +296,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Switch by buttons (second channel)",
+			"label": "Switch by Buttons (Second Channel)",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -317,7 +317,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Energy consumption for second channel",
+			"label": "Energy Consumption for Second Channel",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,

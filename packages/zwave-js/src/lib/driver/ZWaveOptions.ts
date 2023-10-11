@@ -18,7 +18,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 * How long to wait for a controller response. Usually this timeout should never elapse,
 		 * so this is merely a safeguard against the driver stalling.
 		 */
-		response: number; // [500...20000], default: 10000 ms
+		response: number; // [500...60000], default: 30000 ms
 
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms
@@ -28,6 +28,9 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
+
+		/** How long to wait before retrying a command when the controller is jammed */
+		retryJammed: number; // [10...5000], default: 1000 ms
 
 		/**
 		 * How long to wait without pending commands before sending a node back to sleep.
@@ -72,6 +75,9 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
+
+		/** How often the driver should retry SendData commands while the controller is jammed */
+		sendDataJammed: number; // [1...10], default: 5
 
 		/**
 		 * How many attempts should be made for each node interview before giving up

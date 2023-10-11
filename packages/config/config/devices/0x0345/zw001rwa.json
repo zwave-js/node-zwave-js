@@ -2,7 +2,7 @@
 	"manufacturer": "Swidget Corp",
 	"manufacturerId": "0x0345",
 	"label": "ZW000RW",
-	"description": "Swidget module with USB port",
+	"description": "Swidget Module with USB Port",
 	"devices": [
 		{
 			"productType": "0x0001",

@@ -40,15 +40,15 @@
 					"value": 0
 				},
 				{
-					"label": "Enable - change threshold reporting",
+					"label": "Enable - Change threshold reporting",
 					"value": 1
 				},
 				{
-					"label": "Enable - timed reporting of actual values",
+					"label": "Enable - Timed reporting of actual values",
 					"value": 2
 				},
 				{
-					"label": "Enable - timed reporting of average values",
+					"label": "Enable - Timed reporting of average values",
 					"value": 3
 				}
 			]

@@ -24,11 +24,11 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch MultiLevel Set Light",
+			"label": "Multilevel Switch Set Light",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Switch MultiLevel Start/Stop Light",
+			"label": "Multilevel Switch Start/Stop Light",
 			"maxNodes": 5
 		},
 		"5": {
@@ -36,20 +36,20 @@
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "Switch MultiLevel Set Fan",
+			"label": "Multilevel Switch Set Fan",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "Switch MultiLevel Start/Stop Fan",
+			"label": "Multilevel Switch Start/Stop Fan",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
-			"units": "seconds",
 			"#": "1",
 			"label": "Light Dimming Speed (Z-Wave)",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 4,
@@ -61,10 +61,10 @@
 			]
 		},
 		{
-			"units": "seconds",
 			"#": "2",
 			"label": "Light Dimming Speed",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
@@ -80,10 +80,10 @@
 			]
 		},
 		{
-			"units": "seconds",
 			"#": "3",
 			"label": "Light Ramp Rate (Z-Wave)",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
@@ -99,10 +99,10 @@
 			]
 		},
 		{
-			"units": "seconds",
 			"#": "4",
 			"label": "Light Ramp Rate",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
@@ -159,10 +159,10 @@
 			"defaultValue": 0
 		},
 		{
-			"units": "seconds",
 			"#": "11",
 			"label": "Auto Off Fan Timer",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -927,21 +927,21 @@
 			]
 		},
 		{
-			"units": "seconds",
 			"#": "29",
 			"label": "Periodic Power & Energy Reports",
 			"description": "Time period between consecutive power & energy reports being sent.",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600
 		},
 		{
-			"units": "%",
 			"#": "30",
 			"label": "Energy Reports",
 			"description": "The energy level change that will result in a new energy report being sent.",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
@@ -958,11 +958,11 @@
 					"value": 0
 				},
 				{
-					"label": "light",
+					"label": "Light",
 					"value": 1
 				},
 				{
-					"label": "fan",
+					"label": "Fan",
 					"value": 2
 				},
 				{

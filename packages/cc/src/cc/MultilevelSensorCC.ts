@@ -670,7 +670,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				if (supportedSensorTypes?.length) {
 					validatePayload.withReason(
 						`Unsupported sensor type ${
-							sensorType!.label
+							applHost.configManager.getSensorTypeName(this.type)
 						} or corrupted data`,
 					)(supportedSensorTypes.includes(this.type));
 				}

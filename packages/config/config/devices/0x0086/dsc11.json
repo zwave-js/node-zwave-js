@@ -362,11 +362,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Enter Meter Calibration Mode",
+					"label": "Enter meter calibration mode",
 					"value": 1
 				}
 			]

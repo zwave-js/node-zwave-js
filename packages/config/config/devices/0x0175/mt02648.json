@@ -55,11 +55,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable (Light OFF)",
+					"label": "Disable (Light off)",
 					"value": 0
 				},
 				{
-					"label": "Disable (Light ON)",
+					"label": "Disable (Light on)",
 					"value": 100
 				}
 			]
@@ -74,11 +74,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Celsius and LED off = Bits: 00001000 = 8",
+					"label": "Celsius and LED off = bits: 00001000 = 8",
 					"value": 8
 				},
 				{
-					"label": "Preset: Celsius and LED on = Bits: 00001010 = 10",
+					"label": "Preset: Celsius and LED on = bits: 00001010 = 10",
 					"value": 10
 				}
 			]
@@ -102,7 +102,7 @@
 			"defaultValue": 4,
 			"options": [
 				{
-					"label": "PIR Super Sensitivity and Binary Report",
+					"label": "PIR super sensitivity and binary report",
 					"value": 20
 				}
 			]

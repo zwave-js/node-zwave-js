@@ -50,26 +50,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON is inactive ALL OFF is inactive",
+					"label": "All on is inactive all off is inactive",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "40",
-			"label": "Reporting in Watts on power change for Q1 or Q2",
+			"label": "Reporting in Watts on Power Change for Q1 or Q2",
 			"description": "Power consumption change threshold for sending updates",
 			"valueSize": 1,
 			"minValue": 1,
@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Reporting in Watts by time interval for Q1 or Q2",
+			"label": "Reporting in Watts by Time Interval for Q1 or Q2",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
@@ -87,7 +87,7 @@
 		},
 		{
 			"#": "71",
-			"label": "Operating modes",
+			"label": "Operating Modes",
 			"description": "Operation Mode (Shutter or Venetian)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -98,14 +98,14 @@
 					"value": 0
 				},
 				{
-					"label": "Venetian mode (up/down and slate rotation)",
+					"label": "Venetian mode (Up/Down and slate rotation)",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "72",
-			"label": "Slats tilting full turn time",
+			"label": "Slats Tilting Full Turn Time",
 			"description": "Slat full turn time in tenths of a second.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -114,28 +114,28 @@
 		},
 		{
 			"#": "73",
-			"label": "Slats position",
+			"label": "Slats Position",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "previously set position only in case of UI control",
+					"label": "Previously set position only in case of UI control",
 					"value": 0
 				},
 				{
-					"label": "position in case of UI control, push",
+					"label": "Position in case of UI control, push",
 					"value": 1
 				},
 				{
-					"label": "position in case of UI control, push button",
+					"label": "Position in case of UI control, push button",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "74",
-			"label": "Motor moving up/down time",
+			"label": "Motor Moving Up/down Time",
 			"description": "Shutter motor moving time of complete opening or complete closing",
 			"valueSize": 2,
 			"minValue": 0,
@@ -144,7 +144,7 @@
 		},
 		{
 			"#": "76",
-			"label": "Motor operation detection",
+			"label": "Motor Operation Detection",
 			"description": "Power threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -153,7 +153,7 @@
 		},
 		{
 			"#": "78",
-			"label": "Forced Shutter calibration",
+			"label": "Forced Shutter Calibration",
 			"description": "0 to 1 a Shutter enters the calibration mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -162,24 +162,13 @@
 		},
 		{
 			"#": "80",
-			"label": "Reporting to controller",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "reporting to controller is disabled",
-					"value": 0
-				},
-				{
-					"label": "reporting to controller is enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Reporting to Controller",
+			"defaultValue": 1
 		},
 		{
 			"#": "85",
-			"label": "Power consumption max delay time",
+			"label": "Power Consumption Max Delay Time",
 			"description": "max time before motor power consumption is read",
 			"valueSize": 1,
 			"minValue": 0,
@@ -188,7 +177,7 @@
 		},
 		{
 			"#": "90",
-			"label": "Relay delay time",
+			"label": "Relay Delay Time",
 			"description": "This parameter defines the time delay between output relay switching",
 			"valueSize": 1,
 			"minValue": 1,

@@ -2,7 +2,7 @@
 	"manufacturer": "Ecolink",
 	"manufacturerId": "0x014a",
 	"label": "TILT-ZWAVE2.5-ECO",
-	"description": "Z-wave Plus Gold Plated Reliability Garage Door Tilt Sensor",
+	"description": "Z-Wave Plus Gold Plated Reliability Garage Door Tilt Sensor",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -16,40 +16,14 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Basic Sets for Association Group 2",
-			"description": "Send or not send Basic Set commands",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do Not Send Basic Sets",
-					"value": 0
-				},
-				{
-					"label": "Send Basic Sets",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Basic Sets for Association Group 2"
 		},
 		{
 			"#": "2",
-			"label": "Send Reports",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send Sensor Binary and Notification Reports",
-					"value": 0
-				},
-				{
-					"label": "Send Only Notification Reports",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255_inverted",
+			"label": "Send Binary Sensor Report",
+			"defaultValue": 0
 		}
 	]
 }

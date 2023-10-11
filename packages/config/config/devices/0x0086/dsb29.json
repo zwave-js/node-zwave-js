@@ -2,7 +2,7 @@
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSB29",
-	"description": "Door/Window sensor Gen2",
+	"description": "Door/Window Sensor Gen2",
 	"devices": [
 		{
 			"productType": "0x0002",

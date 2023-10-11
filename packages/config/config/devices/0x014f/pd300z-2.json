@@ -2,7 +2,7 @@
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "PD300Z-2",
-	"description": "Plug-in Wall Dimmer",
+	"description": "Plug-In Wall Dimmer",
 	"devices": [
 		{
 			"productType": "0x4450",

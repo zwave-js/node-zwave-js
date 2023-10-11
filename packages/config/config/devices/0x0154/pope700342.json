@@ -2,7 +2,7 @@
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
 	"label": "POPE700342",
-	"description": "10-Years Smoke Detector Without Siren",
+	"description": "10-Years Smoke Detector without Siren",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -50,7 +50,7 @@
 		}
 	],
 	"metadata": {
-		"wakeup": " A double click on the Z-Wave button wakes up the device.",
+		"wakeup": "A double click on the Z-Wave button wakes up the device.",
 		"inclusion": "Secure Inclusion: Push the button for 3 seconds, Unsecure Inclusion: Push the button for 1 seconds",
 		"exclusion": "Push the button for 1 second",
 		"reset": "To reset the device keep the button pushed for 10 seconds. After 5 seconds the led starts flashing and after another 5 seconds there is a short beep signaling the successful reset back to factory defaults.",

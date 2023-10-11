@@ -2,7 +2,7 @@
 	"manufacturer": "Essence Security",
 	"manufacturerId": "0x0160",
 	"label": "ES800ZWP_EU_MXX",
-	"description": "Z-Wave extender",
+	"description": "Z-Wave Extender",
 	"devices": [
 		{
 			"productType": "0x0001",

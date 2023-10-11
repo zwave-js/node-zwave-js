@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Buttons 1 and 3 profile",
+			"label": "Buttons 1 and 3 Profile",
 			"description": "To set-up the profile of buttons 1 and 3",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Buttons 2 and 4 profile",
+			"label": "Buttons 2 and 4 Profile",
 			"description": "To set-up the profile of buttons 2 and 4",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -78,7 +78,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Button 1 configuration",
+			"label": "Button 1 Configuration",
 			"description": "To set-up the how button 1 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -89,18 +89,18 @@
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "All switches on",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "All switches off",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Button 2 configuration",
+			"label": "Button 2 Configuration",
 			"description": "To set-up the how button 2 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -111,18 +111,18 @@
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "All switches on",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "All switches off",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Button 3 configuration",
+			"label": "Button 3 Configuration",
 			"description": "To set-up the how button 3 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -133,18 +133,18 @@
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "All switches on",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "All switches off",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Button 4 configuration",
+			"label": "Button 4 Configuration",
 			"description": "To set-up the how button 4 behaves, when set in MONO Profile",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -155,11 +155,11 @@
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "All switches on",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "All switches off",
 					"value": 2
 				}
 			]
@@ -177,7 +177,7 @@
 					"value": 0
 				},
 				{
-					"label": "Flash Blue after button press",
+					"label": "Flash blue after button press",
 					"value": 1
 				},
 				{
@@ -185,7 +185,7 @@
 					"value": 2
 				},
 				{
-					"label": "Flash Blue and blink to confirm command",
+					"label": "Flash blue and blink to confirm command",
 					"value": 3
 				}
 			]

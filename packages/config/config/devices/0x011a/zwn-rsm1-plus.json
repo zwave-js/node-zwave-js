@@ -27,7 +27,7 @@
 		},
 		"2": {
 			"label": "StatusReport_ EP",
-			"description": "Switch Binary Report",
+			"description": "Binary Switch Report",
 			"maxNodes": 3
 		}
 	},

@@ -2,7 +2,7 @@
 	"manufacturer": "Universal Electronics Inc.",
 	"manufacturerId": "0x0020",
 	"label": "8700BJ0-R",
-	"description": "Monster Revolution 200 remote",
+	"description": "Monster Revolution 200 Remote",
 	"devices": [
 		{
 			"productType": "0x8007",

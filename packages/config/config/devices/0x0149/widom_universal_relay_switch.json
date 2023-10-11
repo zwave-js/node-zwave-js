@@ -40,52 +40,52 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Device status 1 click",
+			"label": "Device Status 1 Click",
 			"description": "Device status when the external switch receives 1 click",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Device status 2 click",
+			"label": "Device Status 2 Click",
 			"description": "Device status when the external switch receives 2 clicks",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]

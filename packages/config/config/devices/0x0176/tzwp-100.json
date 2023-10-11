@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Countdown timer",
+			"label": "Countdown Timer",
 			"description": "Automatic turning off in minutes, 0 to disable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "3",
-			"label": "LED indicator",
+			"label": "LED Indicator",
 			"description": "Set the intensity of the LED indicator",
 			"valueSize": 1,
 			"minValue": 0,

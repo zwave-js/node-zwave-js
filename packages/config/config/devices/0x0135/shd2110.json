@@ -2,7 +2,7 @@
 	"manufacturer": "ZyXEL",
 	"manufacturerId": "0x0135",
 	"label": "SHD2110",
-	"description": "Plug-in On/Off Module",
+	"description": "Plug-In On/Off Module",
 	"devices": [
 		{
 			"productType": "0x0004",

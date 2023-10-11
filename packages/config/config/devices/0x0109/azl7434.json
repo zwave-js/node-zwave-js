@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZL7434-5",
-	"description": "In-wall Switch",
+	"description": "In-Wall Switch",
 	"devices": [
 		{
 			"productType": "0x200c",

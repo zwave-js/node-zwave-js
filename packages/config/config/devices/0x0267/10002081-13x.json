@@ -61,11 +61,11 @@
 			"writeOnly": true,
 			"options": [
 				{
-					"label": "Parameters, Groups, and Z-Wave status are restored to default.",
+					"label": "Parameters, groups, and Z-Wave status are restored to default",
 					"value": 39015
 				},
 				{
-					"label": "Parameters, except Lock long press are restored to default.",
+					"label": "Parameters, except lock long press are restored to default",
 					"value": 17170
 				}
 			]
@@ -98,7 +98,7 @@
 					"value": 4
 				},
 				{
-					"label": "Left button sends off value (parameter 25), right button sends on value (parameter 26)",
+					"label": "Left button sends off value (Parameter 25), right button sends on value (Parameter 26)",
 					"value": 6
 				},
 				{

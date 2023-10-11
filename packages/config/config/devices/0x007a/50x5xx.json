@@ -2,7 +2,7 @@
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
 	"label": "50x5xx",
-	"description": "Roller shutter push-button",
+	"description": "Roller Shutter Push-Button",
 	"devices": [
 		{
 			"productType": "0x4004",
@@ -31,7 +31,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Switching single-surface",
+			"label": "Switching Single-Surface",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -39,7 +39,7 @@
 		},
 		{
 			"#": "176",
-			"label": "Break (motor protection)",
+			"label": "Break (Motor Protection)",
 			"description": "Changeover delay (motor protection) Input (0 - 255) * 0.1 s",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "177",
-			"label": "Travel time UP, Byte 1",
+			"label": "Travel Time UP, Byte 1",
 			"description": "Input 1 (0 - 255)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "178",
-			"label": "Travel time UP, Byte 2",
+			"label": "Travel Time UP, Byte 2",
 			"description": "Input 2 (0 - 255)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -66,7 +66,7 @@
 		},
 		{
 			"#": "179",
-			"label": "Travel time DOWN, Byte 1",
+			"label": "Travel Time DOWN, Byte 1",
 			"description": "Input 1 (0 - 255)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -75,7 +75,7 @@
 		},
 		{
 			"#": "180",
-			"label": "Travel time DOWN, Byte 2",
+			"label": "Travel Time DOWN, Byte 2",
 			"description": "Input 2 (0 - 255)",
 			"valueSize": 1,
 			"minValue": 0,

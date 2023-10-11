@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delayed OFF time",
+			"label": "Delayed OFF Time",
 			"description": "time in seconds to delay OFF",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Panic ON time",
+			"label": "Panic ON Time",
 			"description": "Time in seconds for panic mode ON",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -54,7 +54,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Panic OFF time",
+			"label": "Panic OFF Time",
 			"description": "time in seconds for OFF in panic mode",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -82,33 +82,33 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Panic mode enable",
+			"label": "Panic Mode Enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				}
 			]
@@ -133,11 +133,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				}
 			]

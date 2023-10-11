@@ -39,11 +39,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Factory Reset",
+					"label": "Factory reset",
 					"value": 21930
 				}
 			]

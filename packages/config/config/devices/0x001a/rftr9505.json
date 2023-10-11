@@ -2,7 +2,7 @@
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RFTR9505-T / RFTR9605",
-	"description": "Duplex receptacle",
+	"description": "Duplex Receptacle",
 	"devices": [
 		{
 			"productType": "0x5244",
@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delayed off time",
+			"label": "Delayed Off Time",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,

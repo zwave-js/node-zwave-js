@@ -41,7 +41,7 @@
 		{
 			"#": "17",
 			"label": "Invert Water Valve Report",
-			"description": "When enabled, the device will report off (0x00) when the valve is open, and on (0xff) when the valve is closed; ",
+			"description": "When enabled, the device will report off (0x00) when the valve is open, and on (0xff) when the valve is closed;",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

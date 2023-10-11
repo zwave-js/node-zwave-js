@@ -2,7 +2,7 @@
 	"manufacturer": "Telldus Technologies AB",
 	"manufacturerId": "0x0176",
 	"label": "TZDW-100",
-	"description": "Door/window sensor",
+	"description": "Door/window Sensor",
 	"devices": [
 		{
 			"productType": "0x0005",
@@ -27,15 +27,15 @@
 					"value": 0
 				},
 				{
-					"label": "Switch Binary",
+					"label": "Binary Switch",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Switch Multilevel",
+					"label": "Multilevel Switch",
 					"value": 3
 				}
 			]
@@ -87,15 +87,15 @@
 					"value": 0
 				},
 				{
-					"label": "Switch Binary",
+					"label": "Binary Switch",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
-					"label": "Switch Multilevel",
+					"label": "Multilevel Switch",
 					"value": 3
 				}
 			]
@@ -153,7 +153,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Lifeline command Type",
+			"label": "Lifeline Command Type",
 			"description": "Select the type of command to be sent in the Lifeline",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -164,7 +164,7 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor binary",
+					"label": "Binary Sensor",
 					"value": 1
 				}
 			]

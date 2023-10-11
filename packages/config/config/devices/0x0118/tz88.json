@@ -28,7 +28,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Watt meter report interval (5s)",
+			"label": "Watt Meter Report Interval (5s)",
 			"description": "Interval (x5 seconds) to send out watt meter report",
 			"valueSize": 2,
 			"minValue": 1,
@@ -55,7 +55,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Threshold of KWh for Load Caution",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,

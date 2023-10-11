@@ -2,7 +2,7 @@
 	"manufacturer": "Residential Control Systems, Inc. (RCS)",
 	"manufacturerId": "0x0010",
 	"label": "HC",
-	"description": "FIBARO -2 Gateway",
+	"description": "Fibaro -2 Gateway",
 	"devices": [
 		{
 			"productType": "0x0001",

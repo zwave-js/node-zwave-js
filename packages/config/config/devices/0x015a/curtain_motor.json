@@ -2,7 +2,7 @@
 	"manufacturer": "Jin Tao Bao",
 	"manufacturerId": "0x015a",
 	"label": "Curtain Motor",
-	"description": "Curtain motor",
+	"description": "Curtain Motor",
 	"devices": [
 		{
 			"productType": "0x1007",
@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Motor revert direction",
+			"label": "Revert Motor Direction",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "23",
-			"label": "Clear motor lead tail endpoint setting",
+			"label": "Clear Motor Lead Tail Endpoint Setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -83,7 +83,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Return motor status flag",
+			"label": "Return Motor Status Flag",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -93,7 +93,7 @@
 		},
 		{
 			"#": "33",
-			"label": "Enable manual pulling function",
+			"label": "Enable Manual Pulling Function",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -103,7 +103,7 @@
 		},
 		{
 			"#": "34",
-			"label": "Disable manual pulling function",
+			"label": "Disable Manual Pulling Function",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,

@@ -23,15 +23,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Low Volume",
+					"label": "Low",
 					"value": 1
 				},
 				{
-					"label": "Medium Volume",
+					"label": "Medium",
 					"value": 2
 				},
 				{
-					"label": "High Volume",
+					"label": "High",
 					"value": 3
 				}
 			]
@@ -49,7 +49,7 @@
 					"value": 255
 				},
 				{
-					"label": "30 Sec",
+					"label": "30 seconds",
 					"value": 1
 				},
 				{
@@ -71,11 +71,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Chime Will Not Play",
+					"label": "Chime will not play",
 					"value": 255
 				},
 				{
-					"label": "Does Not Stop",
+					"label": "Does not stop",
 					"value": 0
 				},
 				{
@@ -83,11 +83,11 @@
 					"value": 1
 				},
 				{
-					"label": "Time 2 Min",
+					"label": "Time 2 min",
 					"value": 2
 				},
 				{
-					"label": "Time 5 Min",
+					"label": "Time 5 min",
 					"value": 5
 				}
 			]
@@ -100,15 +100,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Low Volume",
+					"label": "Low",
 					"value": 1
 				},
 				{
-					"label": "Medium Volume",
+					"label": "Medium",
 					"value": 2
 				},
 				{
-					"label": "High Volume",
+					"label": "High",
 					"value": 3
 				}
 			]
@@ -219,11 +219,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Primary Notification Will Play",
+					"label": "Primary notification will play",
 					"value": 1
 				},
 				{
-					"label": "Secondary Notification Will Play",
+					"label": "Secondary notification will play",
 					"value": 2
 				}
 			]

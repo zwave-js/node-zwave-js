@@ -364,6 +364,12 @@ Several command classes are refreshed regularly (every couple of hours) if they 
 
 By default, received `Basic CC::Report` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
 
+### `disableCallbackFunctionTypeCheck`
+
+By default, responses or callbacks for Serial API commands must have the same function type (command identifier) in order to be recognized. However, in some situations, certain controllers send a callback with an invalid function type. In this case, the faulty commands may be listed in the `disableCallbackFunctionTypeCheck` array to disable the check for a matching function type.
+
+> [!NOTE] This compat flag requires command-specific support and is not a generic escape hatch.
+
 ### `disableStrictEntryControlDataValidation`
 
 The specifications mandate strict rules for the data and sequence numbers in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.

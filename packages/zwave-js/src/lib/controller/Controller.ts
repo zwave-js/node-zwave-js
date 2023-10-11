@@ -215,7 +215,7 @@ import {
 } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
 import {
 	AssignSUCReturnRouteRequest,
-	type AssignSUCReturnRouteRequestTransmitReport,
+	AssignSUCReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
 import {
 	DeleteReturnRouteRequest,
@@ -223,7 +223,7 @@ import {
 } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
 import {
 	DeleteSUCReturnRouteRequest,
-	type DeleteSUCReturnRouteRequestTransmitReport,
+	DeleteSUCReturnRouteRequestTransmitReport,
 } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
 import {
 	GetPriorityRouteRequest,
@@ -4175,7 +4175,7 @@ supported CCs: ${
 			}
 
 			// 2. re-create the SUC return route, just in case
-			node.hasSUCReturnRoute ||= await this.assignSUCReturnRoutes(nodeId);
+			node.hasSUCReturnRoute = await this.assignSUCReturnRoutes(nodeId);
 
 			// 3. delete all return routes to get rid of potential priority return routes
 			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -4199,7 +4199,7 @@ supported CCs: ${
 				}
 			}
 
-			// 4. Assign return routes to all association destinations.
+			// 4. Assign return routes to all association destinations...
 			let associatedNodes: number[] = [];
 			try {
 				associatedNodes = distinct(
@@ -4208,14 +4208,14 @@ supported CCs: ${
 						(assocs: AssociationAddress[]) =>
 							assocs.map((a) => a.nodeId),
 					),
-				).sort();
+				)
+					// ...except the controller itself, which was handled by step 2
+					.filter((id) => id !== this._ownNodeId!)
+					.sort();
 			} catch {
 				/* ignore */
 			}
-			// One of those should probably be the controller. Not sure if the SUC return route is enough.
-			if (!associatedNodes.includes(this._ownNodeId!)) {
-				associatedNodes.unshift(this._ownNodeId!);
-			}
+
 			this.driver.controllerLog.logNode(nodeId, {
 				message: `assigning return routes to the following nodes:
 ${associatedNodes.join(", ")}`,
@@ -4319,13 +4319,22 @@ ${associatedNodes.join(", ")}`,
 		await this.deleteSUCReturnRoutes(nodeId);
 
 		try {
-			const result = await this.driver.sendMessage<
-				AssignSUCReturnRouteRequestTransmitReport
-			>(
+			const result = await this.driver.sendMessage(
 				new AssignSUCReturnRouteRequest(this.driver, {
 					nodeId,
 				}),
 			);
+
+			if (
+				!(result instanceof AssignSUCReturnRouteRequestTransmitReport)
+			) {
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`Assigning SUC return route failed: Invalid callback received`,
+					"error",
+				);
+				return false;
+			}
 
 			const success = this.handleRouteAssignmentTransmitReport(
 				result,
@@ -4492,13 +4501,22 @@ ${associatedNodes.join(", ")}`,
 		});
 
 		try {
-			const result = await this.driver.sendMessage<
-				DeleteSUCReturnRouteRequestTransmitReport
-			>(
+			const result = await this.driver.sendMessage(
 				new DeleteSUCReturnRouteRequest(this.driver, {
 					nodeId,
 				}),
 			);
+
+			if (
+				!(result instanceof DeleteSUCReturnRouteRequestTransmitReport)
+			) {
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`Deleting SUC return route failed: Invalid callback received`,
+					"error",
+				);
+				return false;
+			}
 
 			const success = this.handleRouteAssignmentTransmitReport(
 				result,
@@ -5244,7 +5262,11 @@ ${associatedNodes.join(", ")}`,
 			// Except to the controller itself - this route is already known
 		).filter((id) => id !== this.ownNodeId);
 		for (const id of destinationNodeIDs) {
-			await this.assignReturnRoutes(source.nodeId, id);
+			if (id === this._ownNodeId) {
+				await this.assignSUCReturnRoutes(source.nodeId);
+			} else {
+				await this.assignReturnRoutes(source.nodeId, id);
+			}
 		}
 	}
 

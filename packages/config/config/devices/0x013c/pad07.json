@@ -24,18 +24,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "1 : enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Led Indication Mode",
+			"label": "LED Indication Mode",
 			"description": "1. show dimmer state：when dimmer is on, LED is on. when dimmer is off, LED is off. the default setting is show dimmer state.  2. show night mode：when dimmer is on, LED is off. when dimmer is off, LED is on.  3. one flash mode : when dimmer on/off state changes, LED will light on one second and then off",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -43,15 +43,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1 : show dimmer state",
+					"label": "Show dimmer state",
 					"value": 1
 				},
 				{
-					"label": "2 : show night mode",
+					"label": "Show night mode",
 					"value": 2
 				},
 				{
-					"label": "3 : one flash mode",
+					"label": "One flash mode",
 					"value": 3
 				}
 			]
@@ -65,15 +65,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "1 : one switch mode",
+					"label": "One switch mode",
 					"value": 1
 				},
 				{
-					"label": "2 : two switch mode",
+					"label": "Two switch mode",
 					"value": 2
 				},
 				{
-					"label": "3: up/down switch mode",
+					"label": "Up/Down switch mode",
 					"value": 3
 				}
 			]
@@ -87,15 +87,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 : dimmer off",
+					"label": "Dimmer off",
 					"value": 0
 				},
 				{
-					"label": "1 : last dimmer state",
+					"label": "Last dimmer state",
 					"value": 1
 				},
 				{
-					"label": "2 : dimmer on",
+					"label": "Dimmer on",
 					"value": 2
 				}
 			]

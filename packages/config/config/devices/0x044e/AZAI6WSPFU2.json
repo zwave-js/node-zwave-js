@@ -2,7 +2,7 @@
 	"manufacturer": "Airzone",
 	"manufacturerId": "0x044e",
 	"label": "AZAI6WSPFU2",
-	"description": "Aidoo Control HVAC unit",
+	"description": "Aidoo Control HVAC Unit",
 	"devices": [
 		{
 			"productType": "0x0004",

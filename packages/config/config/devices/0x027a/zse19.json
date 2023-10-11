@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Temperature & Humidity reporting interval",
+			"label": "Temperature & Humidity Reporting Interval",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 1,

@@ -75,11 +75,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				}
 			]
@@ -96,11 +96,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				}
 			]
@@ -227,11 +227,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO: normally open",
+					"label": "NO: Normally open",
 					"value": 0
 				},
 				{
-					"label": "NC: normally closed",
+					"label": "NC: Normally closed",
 					"value": 1
 				}
 			]
@@ -244,11 +244,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO: normally open",
+					"label": "NO: Normally open",
 					"value": 0
 				},
 				{
-					"label": "NC: normally closed",
+					"label": "NC: Normally closed",
 					"value": 1
 				}
 			]

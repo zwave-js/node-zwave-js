@@ -34,7 +34,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button 1 and 3 pair mode",
+			"label": "Button 1 and 3 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -55,7 +55,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Button 2 and 4 pair mode",
+			"label": "Button 2 and 4 Pair Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Action on group 1",
+			"label": "Action on Group 1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -86,11 +86,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -98,18 +98,18 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "Action on group 2",
+			"label": "Action on Group 2",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -119,11 +119,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -131,18 +131,18 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "13",
-			"label": "Action on group 3",
+			"label": "Action on Group 3",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -152,11 +152,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -164,18 +164,18 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Action on group 4",
+			"label": "Action on Group 4",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -185,11 +185,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off and Dim",
+					"label": "Switch on/off and dim",
 					"value": 1
 				},
 				{
-					"label": "Switch On/Off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -197,18 +197,18 @@
 					"value": 3
 				},
 				{
-					"label": "Send Scenes",
+					"label": "Send scenes",
 					"value": 4
 				},
 				{
-					"label": "Send Preconfigured Scenes",
+					"label": "Send preconfigured scenes",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "20",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"description": "Typical time used to differentiate click, hold and double clicks in 10ms units",
 			"valueSize": 1,
 			"minValue": 0,
@@ -218,18 +218,18 @@
 		},
 		{
 			"#": "21",
-			"label": "Send the following Switch All commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normal Open)",
+					"label": "NO (Normal open)",
 					"value": 1
 				},
 				{
-					"label": "NC (Normal Close)",
+					"label": "NC (Normal close)",
 					"value": 2
 				},
 				{
@@ -240,7 +240,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -257,29 +257,29 @@
 		},
 		{
 			"#": "24",
-			"label": "Led Confirmation Mode",
+			"label": "LED Confirmation Mode",
 			"description": "This allows to save battery",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Confirmations",
+					"label": "No confirmations",
 					"value": 0
 				},
 				{
-					"label": "Confirm Button Press",
+					"label": "Confirm button press",
 					"value": 1
 				},
 				{
-					"label": "Confirm Button Press and delivery",
+					"label": "Confirm button press and delivery",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "30",
-			"label": "Send unsolicited Battery Report on Wake Up",
+			"label": "Send Unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

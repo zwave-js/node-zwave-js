@@ -2,7 +2,7 @@
 	"manufacturer": "Electronic Solutions",
 	"manufacturerId": "0x0033",
 	"label": "TZ 3300",
-	"description": "EU - Handheld remote control",
+	"description": "EU - Handheld Remote Control",
 	"devices": [
 		{
 			"productType": "0x545a",

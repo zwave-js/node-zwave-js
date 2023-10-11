@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Infrared sensor sensitivity adjustment",
+			"label": "Infrared Sensor Sensitivity Adjustment",
 			"description": "1 is most sensitive, 7 is least",
 			"valueSize": 1,
 			"minValue": 1,

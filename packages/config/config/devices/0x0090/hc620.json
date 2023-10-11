@@ -129,11 +129,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Reset to Factory Defaults",
+					"label": "Reset to factory defaults",
 					"value": 1
 				},
 				{

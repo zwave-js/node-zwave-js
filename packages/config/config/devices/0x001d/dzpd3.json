@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "DZPD3",
-	"description": "Plug-in Lamp Dimming Module",
+	"description": "Plug-In Lamp Dimming Module",
 	"devices": [
 		{
 			"productType": "0x1902",

@@ -36,7 +36,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Always on function",
+			"label": "Always On Function",
 			"description": "Once activated, Wall Plug will keep a connected device ...",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "34",
-			"label": "Reaction to alarms",
+			"label": "Reaction to Alarms",
 			"description": "Define Z-Wave network alarms to which the Wall Plug will respond.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Response to alarms",
+			"label": "Response to Alarms",
 			"description": "Parameter defines how the Wall Plug will respond to alarms ...",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -78,22 +78,22 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
-					"label": "Cycle ON/OFF",
+					"label": "Cycle on/off",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "39",
-			"label": "Alarm duration",
+			"label": "Alarm Duration",
 			"description": "Wall Plug's alarm mode duration. If a device sending an ...",
 			"valueSize": 2,
 			"minValue": 1,
@@ -103,7 +103,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Immediate power report",
+			"label": "Immediate Power Report",
 			"description": "Parameter defines by how much power load must change ...",
 			"valueSize": 1,
 			"minValue": 1,
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Standard power load report",
+			"label": "Standard Power Load Report",
 			"description": "Parameter defines by how much power load must change ..",
 			"valueSize": 1,
 			"minValue": 1,
@@ -121,7 +121,7 @@
 		},
 		{
 			"#": "43",
-			"label": "Power reporting frequency",
+			"label": "Power Reporting Frequency",
 			"description": "This parameter defines how frequently standard power ...",
 			"valueSize": 1,
 			"minValue": 1,
@@ -131,7 +131,7 @@
 		},
 		{
 			"#": "45",
-			"label": "Changes in energy consumed by controlled devices",
+			"label": "Changes in Energy Consumed by Controlled Devices",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -140,7 +140,7 @@
 		},
 		{
 			"#": "47",
-			"label": "Time between reports on power/energy consumption",
+			"label": "Time Between Reports On Power/energy Consumption",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65534,
@@ -149,7 +149,7 @@
 		},
 		{
 			"#": "49",
-			"label": "Metering energy consumed by the Wall Plug itself.",
+			"label": "Metering Energy Consumed by the Wall Plug Itself",
 			"description": "This parameter determines whether energy metering ...",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -167,7 +167,7 @@
 		},
 		{
 			"#": "50",
-			"label": "DOWN value",
+			"label": "DOWN Value",
 			"description": "Lower power threshold, used in parameter 52.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -177,7 +177,7 @@
 		},
 		{
 			"#": "51",
-			"label": "UP value",
+			"label": "UP Value",
 			"description": "Upper power threshold, used in parameter 52.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -187,7 +187,7 @@
 		},
 		{
 			"#": "52",
-			"label": "Action in case defined power values exceeded",
+			"label": "Action in Case Defined Power Values Exceeded",
 			"description": "Parameter defines the way 2nd association group devices ...",
 			"valueSize": 1,
 			"defaultValue": 6,
@@ -198,34 +198,34 @@
 					"value": 0
 				},
 				{
-					"label": "Turn devices ON when power below DOWN",
+					"label": "Turn devices on when power below down",
 					"value": 1
 				},
 				{
-					"label": "Turn devices OFF when power below DOWN",
+					"label": "Turn devices off when power below down",
 					"value": 2
 				},
 				{
-					"label": "Turn devices ON when power above UP",
+					"label": "Turn devices on when power above up",
 					"value": 3
 				},
 				{
-					"label": "Turn devices OFF when power above UP",
+					"label": "Turn devices off when power above up",
 					"value": 4
 				},
 				{
-					"label": "Turn devices ON when power below DOWN and off ...",
+					"label": "Turn devices on when power below down and off",
 					"value": 5
 				},
 				{
-					"label": "Turn devices OFF when power below DOWN ...",
+					"label": "Turn devices off when power below down",
 					"value": 6
 				}
 			]
 		},
 		{
 			"#": "60",
-			"label": "Power load to make red ring flash violet",
+			"label": "Power Load to Make Red Ring Flash Violet",
 			"description": "Function is active only when parameter 61 is set to 0 or 1.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -235,7 +235,7 @@
 		},
 		{
 			"#": "61",
-			"label": "LED color when device is on",
+			"label": "LED Color When Device Is On",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -284,7 +284,7 @@
 		},
 		{
 			"#": "62",
-			"label": "LED color when device is off",
+			"label": "LED Color When Device Is Off",
 			"valueSize": 1,
 			"defaultValue": 8,
 			"allowManualEntry": false,
@@ -329,7 +329,7 @@
 		},
 		{
 			"#": "63",
-			"label": "LED color when Z Wave alarm",
+			"label": "LED Color When Z Wave Alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -339,7 +339,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED flashes RED BLUE WHITE",
+					"label": "LED flashes red blue white",
 					"value": 1
 				},
 				{
@@ -378,7 +378,7 @@
 		},
 		{
 			"#": "70",
-			"label": "Overload safety switch",
+			"label": "Overload Safety Switch",
 			"description": "This function allows for turning off the controlled device...",
 			"valueSize": 2,
 			"minValue": 0,

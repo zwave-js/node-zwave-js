@@ -47,7 +47,7 @@
 					"value": 1
 				},
 				{
-					"label": "Roller Blind Switch - S1 -> Up; S2 -> Down",
+					"label": "Roller blind switch - S1 -> up; S2 -> down",
 					"value": 2
 				}
 			]
@@ -64,7 +64,7 @@
 					"value": 0
 				},
 				{
-					"label": "On/off switch",
+					"label": "On/Off switch",
 					"value": 1
 				}
 			]
@@ -82,11 +82,11 @@
 					"value": 0
 				},
 				{
-					"label": "Enable All Off; Disable All On",
+					"label": "Enable all off; Disable all on",
 					"value": 1
 				},
 				{
-					"label": "Enable All On; Disable All Off",
+					"label": "Enable all on; Disable all off",
 					"value": 2
 				},
 				{
@@ -155,7 +155,7 @@
 		},
 		{
 			"#": "13",
-			"label": "One click of S1",
+			"label": "One Click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -163,7 +163,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Double click of S1",
+			"label": "Double Click of S1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -199,7 +199,7 @@
 					"value": 0
 				},
 				{
-					"label": "On = Current dimmer value",
+					"label": "On = current dimmer value",
 					"value": 1
 				}
 			]
@@ -213,11 +213,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Wire with Roller Blinds Switch",
+					"label": "Wire with roller blinds switch",
 					"value": 0
 				},
 				{
-					"label": "Scene activation; Control Association Group 4",
+					"label": "Scene Activation; Control association group 4",
 					"value": 1
 				},
 				{
@@ -289,7 +289,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Factory reset",
+			"label": "Factory Reset",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"writeOnly": true,

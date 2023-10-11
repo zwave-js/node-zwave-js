@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "Smoke Sensor",
-	"description": "FIBARO Smoke Sensor",
+	"description": "Fibaro Smoke Sensor",
 	"devices": [
 		{
 			"productType": "0x0000",

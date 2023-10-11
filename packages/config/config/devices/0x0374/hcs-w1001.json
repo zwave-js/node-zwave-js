@@ -2,7 +2,7 @@
 	"manufacturer": "Hyundai Telecom",
 	"manufacturerId": "0x0374",
 	"label": "HCS-W1001",
-	"description": "Z-Wave Gateway Controller and hub",
+	"description": "Z-Wave Gateway Controller and Hub",
 	"devices": [
 		{
 			"productType": "0x0001",

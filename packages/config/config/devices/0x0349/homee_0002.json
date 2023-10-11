@@ -2,7 +2,7 @@
 	"manufacturer": "Codeatelier GmbH",
 	"manufacturerId": "0x0349",
 	"label": "HOMEE–0002",
-	"description": "homee Z-Wave Cube",
+	"description": "Homee Z-Wave Cube",
 	"devices": [
 		{
 			"productType": "0x0013",

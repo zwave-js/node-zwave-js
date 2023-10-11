@@ -2,7 +2,7 @@
 	"manufacturer": "SimonTech S.L.U",
 	"manufacturerId": "0x0267",
 	"label": "10002862-039",
-	"description": "Sensor de humo iO",
+	"description": "Sensor De Humo iO",
 	"devices": [
 		{
 			"productType": "0x0011",

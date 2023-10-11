@@ -89,7 +89,7 @@
 		{
 			"#": "100",
 			"$import": "templates/aeotec_template.json#reset_parameters",
-			"label": "Reset parameters 101-103 to Default Values",
+			"label": "Reset Parameters 101-103 to Default Values",
 			"valueSize": 4
 		},
 		{

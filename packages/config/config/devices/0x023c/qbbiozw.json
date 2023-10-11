@@ -2,7 +2,7 @@
 	"manufacturer": "SafeTech Products",
 	"manufacturerId": "0x023c",
 	"label": "QBBIOZW",
-	"description": "The Quickbox - Home Edition",
+	"description": "Quickbox - Home Edition",
 	"devices": [
 		{
 			"productType": "0x0001",

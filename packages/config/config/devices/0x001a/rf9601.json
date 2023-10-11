@@ -2,7 +2,7 @@
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9601",
-	"description": "Z-Wave Plus wireless switch",
+	"description": "Z-Wave Plus Wireless Switch",
 	"devices": [
 		{
 			"productType": "0x534c",
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Power up state",
+			"label": "Power Up State",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -65,31 +65,19 @@
 					"value": 2
 				},
 				{
-					"label": "Last State",
+					"label": "Last state",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Panic mode enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Panic Mode"
 		},
 		{
 			"#": "13",
-			"label": "Blue LED brightness level when switch is ON",
+			"label": "Blue LED Brightness Level When Switch Is ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -97,7 +85,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Blue LED brightness level when switch is OFF",
+			"label": "Blue LED Brightness Level When Switch Is OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

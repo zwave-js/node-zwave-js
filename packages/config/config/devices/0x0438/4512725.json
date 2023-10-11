@@ -30,11 +30,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch mode",
+					"label": "Switch",
 					"value": 0
 				},
 				{
-					"label": "Thermostat mode",
+					"label": "Thermostat",
 					"value": 1
 				}
 			]

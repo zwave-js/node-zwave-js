@@ -77,25 +77,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Restore Switch State",
-			"description": "Restore Switch State after AC power loss",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch OFF",
-					"value": 0
-				},
-				{
-					"label": "Last Switch State",
-					"value": 1
-				},
-				{
-					"label": "Switch ON",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "4",
@@ -114,19 +96,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
-					"label": "Switch Ignore",
+					"label": "Switch ignore",
 					"value": 1
 				},
 				{
-					"label": "Switch Toggle",
+					"label": "Switch toggle",
 					"value": 2
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 3
 				}
 			]
@@ -143,7 +125,7 @@
 					"value": 1
 				},
 				{
-					"label": "No Endpoint 3",
+					"label": "No endpoint 3",
 					"value": 2
 				}
 			]

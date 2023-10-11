@@ -43,50 +43,50 @@
 		},
 		{
 			"#": "2",
-			"label": "Alarm acoustic and visual signals",
+			"label": "Alarm Acoustic and Visual Signals",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "acoustic and visual alarms inactive",
+					"label": "Acoustic and visual alarms inactive",
 					"value": 0
 				},
 				{
-					"label": "acoustic alarm inactive, visual alarm active",
+					"label": "Acoustic alarm inactive, visual alarm active",
 					"value": 1
 				},
 				{
-					"label": "acoustic alarm active, visual alarm inactive",
+					"label": "Acoustic alarm active, visual alarm inactive",
 					"value": 2
 				},
 				{
-					"label": "acoustic and visual alarms active",
+					"label": "Acoustic and visual alarms active",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Type of alarm to 1st association group (SMOKE)",
+			"label": "Type of Alarm to 1st Association Group (SMOKE)",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALARM SENSOR (SMOKE)",
+					"label": "Alarm sensor (Smoke)",
 					"value": 0
 				},
 				{
-					"label": "BASIC_SET",
+					"label": "Basic Set",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Forced Level of Dimming group 1",
+			"label": "Forced Level of Dimming Group 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Interval between temperature readings",
+			"label": "Interval Between Temperature Readings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -103,7 +103,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Insensitiveness to temperature changes.",
+			"label": "Temperature Change Report Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -111,7 +111,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Frame broadcast mode",
+			"label": "Frame Broadcast Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -121,22 +121,22 @@
 					"value": 0
 				},
 				{
-					"label": "Smoke mode active, Tamper mode inactive",
+					"label": "Smoke mode active, tamper mode inactive",
 					"value": 1
 				},
 				{
-					"label": "Smoke mode inactive, Tamper mode active",
+					"label": "Smoke mode inactive, tamper mode active",
 					"value": 2
 				},
 				{
-					"label": "Smoke and Tamper broadcast mode active",
+					"label": "Smoke and tamper broadcast mode active",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "73",
-			"label": "Temperature measurement compensation",
+			"label": "Temperature Measurement Compensation",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
@@ -144,7 +144,7 @@
 		},
 		{
 			"#": "80",
-			"label": "Z-Wave range test interval",
+			"label": "Z-Wave Range Test Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -153,7 +153,7 @@
 		},
 		{
 			"#": "81",
-			"label": "Temperature alarm threshold",
+			"label": "Temperature Alarm Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -161,7 +161,7 @@
 		},
 		{
 			"#": "82",
-			"label": "Smoke Sensor sensitivity",
+			"label": "Smoke Sensor Sensitivity",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -182,7 +182,7 @@
 		},
 		{
 			"#": "83",
-			"label": "Black Box sensitivity level",
+			"label": "Black Box Sensitivity Level",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -203,7 +203,7 @@
 		},
 		{
 			"#": "84",
-			"label": "Malfunction alarm",
+			"label": "Malfunction Alarm",
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
@@ -211,7 +211,7 @@
 		},
 		{
 			"#": "85",
-			"label": "Temperature alarm",
+			"label": "Temperature Alarm",
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
@@ -219,7 +219,7 @@
 		},
 		{
 			"#": "86",
-			"label": "Lack of the Z-Wave range alarm",
+			"label": "Lack of the Z-Wave Range Alarm",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 17280,
@@ -227,7 +227,7 @@
 		},
 		{
 			"#": "87",
-			"label": "Low battery alarm",
+			"label": "Low Battery Alarm",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 17280,
@@ -235,7 +235,7 @@
 		},
 		{
 			"#": "88",
-			"label": "Temperature measurement compensation for report",
+			"label": "Temperature Measurement Compensation for Report",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -252,7 +252,7 @@
 		},
 		{
 			"#": "89",
-			"label": "Tamper alarm",
+			"label": "Tamper Alarm",
 			"description": "Activates/inactivates temper switch alarm",
 			"valueSize": 1,
 			"defaultValue": 1,

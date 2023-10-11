@@ -32,18 +32,18 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "“Always On” mode",
+			"label": "“Always On” Mode",
 			"description": "Will turn on connected device permanently",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "function inactive",
+					"label": "Function inactive",
 					"value": 0
 				},
 				{
-					"label": "function activated",
+					"label": "Function activated",
 					"value": 1
 				}
 			]
@@ -56,7 +56,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Overload safety switch",
+			"label": "Overload Safety Switch",
 			"description": "allows to turn off the controlled device in case of exceeding the defined power.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -64,7 +64,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "function inactive",
+					"label": "Function inactive",
 					"value": 0
 				}
 			]
@@ -72,7 +72,7 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "High priority power report",
+			"label": "High Priority Power Report",
 			"description": "minimum percentage change in active power",
 			"valueSize": 1,
 			"minValue": 1,
@@ -82,7 +82,7 @@
 		{
 			"#": "11",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Standard power report",
+			"label": "Standard Power Report",
 			"description": "minimum percentage change in active power",
 			"valueSize": 1,
 			"minValue": 1,
@@ -92,7 +92,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Power reporting interval",
+			"label": "Power Reporting Interval",
 			"description": "defines the time interval of sending at most 5 standard power reports",
 			"valueSize": 2,
 			"minValue": 5,
@@ -102,7 +102,7 @@
 		{
 			"#": "13",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Energy reporting threshold",
+			"label": "Energy Reporting Threshold",
 			"description": "specifies the minimum change in energy consumption",
 			"valueSize": 2,
 			"minValue": 0,
@@ -110,7 +110,7 @@
 			"defaultValue": 10,
 			"options": [
 				{
-					"label": "energy reports inactive",
+					"label": "Energy reports inactive",
 					"value": 0
 				}
 			]
@@ -118,7 +118,7 @@
 		{
 			"#": "14",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Power and energy periodic reports",
+			"label": "Power and Energy Periodic Reports",
 			"description": "defines time period between independent reports sent",
 			"valueSize": 2,
 			"minValue": 0,
@@ -126,7 +126,7 @@
 			"defaultValue": 3600,
 			"options": [
 				{
-					"label": "periodic reports inactive",
+					"label": "Periodic reports inactive",
 					"value": 0
 				}
 			]
@@ -134,18 +134,18 @@
 		{
 			"#": "15",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Measuring energy consumed by the Wall Plug itself",
+			"label": "Measuring Energy Consumed by the Wall Plug Itself",
 			"description": "determines whether power metering should include the amount of power",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "function inactive",
+					"label": "Function inactive",
 					"value": 0
 				},
 				{
-					"label": "function activated",
+					"label": "Function activated",
 					"value": 1
 				}
 			]
@@ -158,17 +158,17 @@
 		{
 			"#": "20",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "On/Off (Button)” association group (2)",
+			"label": "On/Off (Button)” Association Group (2)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control as the Wall Plug",
+					"label": "Control as the wall plug",
 					"value": 0
 				},
 				{
-					"label": "control opposite to the Wall Plug",
+					"label": "Control opposite to the wall plug",
 					"value": 1
 				}
 			]
@@ -176,7 +176,7 @@
 		{
 			"#": "21",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "DOWN value - association group (3)",
+			"label": "DOWN Value - Association Group (3)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 24900,
@@ -185,7 +185,7 @@
 		{
 			"#": "22",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "UP value - association group (3)",
+			"label": "UP Value - Association Group (3)",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 25000,
@@ -194,34 +194,34 @@
 		{
 			"#": "23",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "The response after exceeding defined power values",
+			"label": "Response After Exceeding Defined Power Values",
 			"description": "defines the way that 3rd association group devices are controlled.",
 			"valueSize": 1,
 			"defaultValue": 6,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "turn the associated devices ON (DOWN)",
+					"label": "Turn the associated devices on (Down)",
 					"value": 1
 				},
 				{
-					"label": "turn the associated devices OFF (DOWN)",
+					"label": "Turn the associated devices off (Down)",
 					"value": 2
 				},
 				{
-					"label": "turn the associated devices ON (UP)",
+					"label": "Turn the associated devices on (Up)",
 					"value": 3
 				},
 				{
-					"label": "turn the associated devices OFF (UP)",
+					"label": "Turn the associated devices off (Up)",
 					"value": 4
 				},
 				{
-					"label": "combination of 1 and 4",
+					"label": "Combination of 1 and 4",
 					"value": 5
 				},
 				{
-					"label": "combination of 2 and 3",
+					"label": "Combination of 2 and 3",
 					"value": 6
 				}
 			]
@@ -229,7 +229,7 @@
 		{
 			"#": "24",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "SWITCH ON value - „On/Off” association groups",
+			"label": "SWITCH ON Value - „On/Off” Association Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -244,18 +244,18 @@
 		{
 			"#": "30",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Active alarms",
+			"label": "Active Alarms",
 			"description": "Define Z-Wave network alarms to which the Wall Plug will respond",
 			"valueSize": 1,
 			"defaultValue": 63,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "general alarm",
+					"label": "General alarm",
 					"value": 1
 				},
 				{
-					"label": "smoke alarm",
+					"label": "Smoke alarm",
 					"value": 2
 				},
 				{
@@ -267,11 +267,11 @@
 					"value": 8
 				},
 				{
-					"label": "high temperature alarm",
+					"label": "High temperature alarm",
 					"value": 16
 				},
 				{
-					"label": "flood alarm",
+					"label": "Flood alarm",
 					"value": 32
 				},
 				{
@@ -283,7 +283,7 @@
 		{
 			"#": "31",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Response to alarm frames",
+			"label": "Response to Alarm Frames",
 			"description": "defines how the Wall Plug will respond to alarms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -293,7 +293,7 @@
 		{
 			"#": "32",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Alarm state duration",
+			"label": "Alarm State Duration",
 			"description": "specifies the duration of alarm state",
 			"valueSize": 2,
 			"minValue": 1,
@@ -303,7 +303,7 @@
 		{
 			"#": "34",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Reaction to alarms",
+			"label": "Reaction to Alarms",
 			"description": "Alarms to which the Wall Plug will respond",
 			"valueSize": 1,
 			"minValue": 0,
@@ -313,7 +313,7 @@
 		{
 			"#": "35",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Response to alarms",
+			"label": "Response to Alarms",
 			"description": "Defines responds to alarms (device's status change).",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -324,15 +324,15 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
-					"label": "Cycle ON/OFF",
+					"label": "Cycle on/off",
 					"value": 3
 				}
 			]
@@ -340,7 +340,7 @@
 		{
 			"#": "39",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Alarm duration",
+			"label": "Alarm Duration",
 			"description": "Wall Plug's alarm mode duration.",
 			"valueSize": 2,
 			"minValue": 1,
@@ -351,7 +351,7 @@
 		{
 			"#": "40",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Immediate power report",
+			"label": "Immediate Power Report",
 			"description": "Defines how much power load must change to be reported.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -361,7 +361,7 @@
 		{
 			"#": "40",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Power load for violet colour",
+			"label": "Power Load for Violet Colour",
 			"description": "determines maximum active power value",
 			"valueSize": 2,
 			"minValue": 1000,
@@ -371,49 +371,49 @@
 		{
 			"#": "41",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "LED ring colour (device is ON)",
+			"label": "LED Ring Colour (Device Is ON)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
-					"label": "colour changes depending on active power",
+					"label": "Colour changes depending on active power",
 					"value": 1
 				},
 				{
-					"label": "colour changes in steps depending on active power",
+					"label": "Colour changes in steps depending on active power",
 					"value": 2
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -421,7 +421,7 @@
 		{
 			"#": "42",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Standard power load report",
+			"label": "Standard Power Load Report",
 			"description": "Defines how much power load must change to be reported",
 			"valueSize": 1,
 			"minValue": 1,
@@ -431,13 +431,13 @@
 		{
 			"#": "42",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "LED ring colour (device is OFF)",
+			"label": "LED Ring Colour (Device Is OFF)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
@@ -445,31 +445,31 @@
 					"value": 1
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -477,7 +477,7 @@
 		{
 			"#": "43",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Power reporting frequency",
+			"label": "Power Reporting Frequency",
 			"description": "Frequence of standard power reports",
 			"valueSize": 1,
 			"minValue": 1,
@@ -488,17 +488,17 @@
 		{
 			"#": "43",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "LED ring colour (alarm detection)",
+			"label": "LED Ring Colour (Alarm Detection)",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
-					"label": "no change in colour",
+					"label": "No change in colour",
 					"value": 1
 				},
 				{
@@ -506,31 +506,31 @@
 					"value": 2
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -538,7 +538,7 @@
 		{
 			"#": "45",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Reporting Changes in energy consumed",
+			"label": "Reporting Changes in Energy Consumed",
 			"description": "Required change in power to generate power report.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -549,7 +549,7 @@
 		{
 			"#": "47",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Maximum Time Period between reports",
+			"label": "Maximum Time Period Between Reports",
 			"description": "Time between reports in power load not been recorded.",
 			"valueSize": 2,
 			"minValue": 1,
@@ -560,7 +560,7 @@
 		{
 			"#": "49",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Metering energy consumed by the Wall Plug itself.",
+			"label": "Metering Energy Consumed by the Wall Plug Itself",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -578,7 +578,7 @@
 		{
 			"#": "50",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "DOWN value",
+			"label": "DOWN Value",
 			"description": "Lower power threshold, used in parameter 52.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -589,14 +589,14 @@
 		{
 			"#": "50",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Associations in Z-Wave network security mode",
+			"label": "Associations in Z-Wave Network Security Mode",
 			"description": "defines how commands are sent in specified association groups",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "none of the groups sent as secure",
+					"label": "None of the groups sent as secure",
 					"value": 0
 				},
 				{
@@ -616,7 +616,7 @@
 		{
 			"#": "51",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "UP value",
+			"label": "UP Value",
 			"description": "Upper power threshold, used in parameter 52.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -627,7 +627,7 @@
 		{
 			"#": "52",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Action in case defined power values exceeded",
+			"label": "Action in Case Defined Power Values Exceeded",
 			"description": "Defines the way 2nd association group devices are controlled",
 			"valueSize": 1,
 			"defaultValue": 6,
@@ -638,27 +638,27 @@
 					"value": 0
 				},
 				{
-					"label": "Turn devices ON when power below DOWN",
+					"label": "Turn devices on when power below down",
 					"value": 1
 				},
 				{
-					"label": "Turn devices OFF when power below DOWN",
+					"label": "Turn devices off when power below down",
 					"value": 2
 				},
 				{
-					"label": "Turn devices ON when power above UP",
+					"label": "Turn devices on when power above up",
 					"value": 3
 				},
 				{
-					"label": "Turn devices OFF when power above UP",
+					"label": "Turn devices off when power above up",
 					"value": 4
 				},
 				{
-					"label": "Turn ON power below DOWN, OFF power above UP",
+					"label": "Turn on power below down, off power above up",
 					"value": 5
 				},
 				{
-					"label": "Turn OFF power below DOWN, ON when power above UP",
+					"label": "Turn off power below down, on when power above up",
 					"value": 6
 				}
 			]
@@ -666,7 +666,7 @@
 		{
 			"#": "60",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Power load to make red ring flash violet",
+			"label": "Power Load to Make Red Ring Flash Violet",
 			"description": "Red ring flashes violet when parameter 61 is set to 0 or 1.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -677,7 +677,7 @@
 		{
 			"#": "61",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "LED color when device is on",
+			"label": "LED Color When Device Is On",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -727,7 +727,7 @@
 		{
 			"#": "62",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "LED color when device is off",
+			"label": "LED Color When Device Is Off",
 			"valueSize": 1,
 			"defaultValue": 8,
 			"allowManualEntry": false,
@@ -773,7 +773,7 @@
 		{
 			"#": "63",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "LED color when Z Wave alarm",
+			"label": "LED Color When Z Wave Alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -783,7 +783,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED flashes RED BLUE WHITE",
+					"label": "LED flashes red blue white",
 					"value": 1
 				},
 				{
@@ -823,7 +823,7 @@
 		{
 			"#": "70",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Overload safety switch",
+			"label": "Overload Safety Switch",
 			"description": "Turns off controlled device in case of exceeding power.",
 			"valueSize": 2,
 			"minValue": 0,

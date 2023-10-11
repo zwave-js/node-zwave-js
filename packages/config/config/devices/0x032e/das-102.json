@@ -2,7 +2,7 @@
 	"manufacturer": "DEFARO",
 	"manufacturerId": "0x032e",
 	"label": "DAS-102",
-	"description": "Double relay Switch 2x1.7kW",
+	"description": "Double Relay Switch 2x1.7kW",
 	"devices": [
 		{
 			"productType": "0x0021",
@@ -34,7 +34,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Switch behavior",
+			"label": "Switch Behavior",
 			"description": "Selects ON/OFF/BLINK modes",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -56,7 +56,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Relay closed interval",
+			"label": "Relay Closed Interval",
 			"description": "For blink mode for both S1 and S2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -66,7 +66,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Relay open interval",
+			"label": "Relay Open Interval",
 			"description": "For blink mode for both S1 and S2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "4",
-			"label": "S1 auto off delay",
+			"label": "S1 Auto Off Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "5",
-			"label": "S1 On delay",
+			"label": "S1 On Delay",
 			"description": "Delay after ON command received",
 			"valueSize": 2,
 			"minValue": 0,
@@ -107,7 +107,7 @@
 		},
 		{
 			"#": "6",
-			"label": "S1 smart delay",
+			"label": "S1 Smart Delay",
 			"description": "Smart off delay for S1",
 			"valueSize": 2,
 			"minValue": 0,
@@ -123,25 +123,12 @@
 		},
 		{
 			"#": "7",
-			"label": "S1 powerfail recovery",
-			"description": "Powerfail recovery mode for S1",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Restore previous state",
-					"value": 0
-				},
-				{
-					"label": "Always set to OFF state",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "S1: State After Power Failure"
 		},
 		{
 			"#": "8",
-			"label": "All ON/OFF behaviour",
+			"label": "All ON/OFF Behaviour",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -149,7 +136,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Relay S2 mode",
+			"label": "Relay S2 Mode",
 			"description": "Relay S2 mode of operation",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -171,7 +158,7 @@
 		},
 		{
 			"#": "11",
-			"label": "S2 auto off time",
+			"label": "S2 Auto Off Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -186,7 +173,7 @@
 		},
 		{
 			"#": "12",
-			"label": "S2 turn on delay",
+			"label": "S2 Turn on Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65000,
@@ -201,7 +188,7 @@
 		},
 		{
 			"#": "13",
-			"label": "S2 smart delay",
+			"label": "S2 Smart Delay",
 			"description": "Smart delay for S2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -217,75 +204,62 @@
 		},
 		{
 			"#": "14",
-			"label": "S2 powerfail recovery",
-			"description": "Powerfail recovery mode for S2",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Restore state",
-					"value": 0
-				},
-				{
-					"label": "Set to OFF",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "S2: State After Power Failure"
 		},
 		{
 			"#": "15",
-			"label": "S1 button mode",
+			"label": "S1 Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Monostable (push button)",
+					"label": "Monostable (Push button)",
 					"value": 0
 				},
 				{
-					"label": "Bistable (switch)",
+					"label": "Bistable (Switch)",
 					"value": 1
 				},
 				{
-					"label": "Bistable (fixed switch)",
+					"label": "Bistable (Fixed switch)",
 					"value": 2
 				},
 				{
-					"label": "Bistable (reversed fixed switch)",
+					"label": "Bistable (Reversed fixed switch)",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "16",
-			"label": "S2 button mode",
+			"label": "S2 Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Monostable (push button)",
+					"label": "Monostable (Push button)",
 					"value": 0
 				},
 				{
-					"label": "Bistable (switch button)",
+					"label": "Bistable (Switch button)",
 					"value": 1
 				},
 				{
-					"label": "Bistable (fixed switch button)",
+					"label": "Bistable (Fixed switch button)",
 					"value": 2
 				},
 				{
-					"label": "Bistable (reversed fixed switch)",
+					"label": "Bistable (Reversed fixed switch)",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "18",
-			"label": "Smart delay",
+			"label": "Smart Delay",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -293,7 +267,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Forced secure mode",
+			"label": "Forced Secure Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -310,37 +284,13 @@
 		},
 		{
 			"#": "51",
-			"label": "Secure send for S1",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Non-secure",
-					"value": 0
-				},
-				{
-					"label": "Secure",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "S1: Send Secure Commands"
 		},
 		{
 			"#": "52",
-			"label": "Secure send for S2",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Non-secure",
-					"value": 0
-				},
-				{
-					"label": "Secure",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "S2: Send Secure Commands"
 		}
 	]
 }

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Motion timeout",
+			"label": "Motion Timeout",
 			"description": "Multiplier to wakeup timer interval",
 			"valueSize": 1,
 			"minValue": 1,

@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAT02-B",
-	"description": "Z-Wave room sensor",
+	"description": "Z-Wave Room Sensor",
 	"devices": [
 		{
 			"productType": "0x0002",

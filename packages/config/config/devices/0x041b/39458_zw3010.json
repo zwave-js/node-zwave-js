@@ -52,14 +52,14 @@
 					"value": 2
 				},
 				{
-					"label": "LED Always on",
+					"label": "LED always on",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Dim up/down rate",
+			"label": "Dim Up/down Rate",
 			"description": "Adjust the speed at which the ramps to a specific value",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -100,7 +100,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Press any button on the Dimmer",
+					"label": "Press any button on the dimmer",
 					"value": 0
 				},
 				{

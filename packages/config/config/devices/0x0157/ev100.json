@@ -2,7 +2,7 @@
 	"manufacturer": "EcoNet Controls",
 	"manufacturerId": "0x0157",
 	"label": "EV100",
-	"description": "Z-Vent ZWave Controlled HVAC Air Register",
+	"description": "Z-Vent Z-Wave Controlled HVAC Air Register",
 	"devices": [
 		{
 			"productType": "0x0100",

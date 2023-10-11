@@ -2,7 +2,7 @@
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MP20Z",
-	"description": "Zwave Plug 2 channel plugin outlet",
+	"description": "Zwave Plug 2 Channel Plugin Outlet",
 	"devices": [
 		{
 			"productType": "0xff00",
