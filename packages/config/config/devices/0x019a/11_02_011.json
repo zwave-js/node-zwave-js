@@ -17,17 +17,17 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "LED alarm event reporting",
+			"label": "LED Alarm Event Reporting",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "LED On",
+					"label": "LED on",
 					"value": 1
 				}
 			]
@@ -35,7 +35,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion <= 0.2",
-			"label": "Temperature reporting mode",
+			"label": "Temperature Reporting Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -49,7 +49,7 @@
 					"value": 1
 				},
 				{
-					"label": "High Accuracy",
+					"label": "High accuracy",
 					"value": 2
 				}
 			]
@@ -57,7 +57,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "Temperature & Light reporting frequency",
+			"label": "Temperature & Light Reporting Frequency",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -75,13 +75,13 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion <= 0.2",
-			"label": "Temperature reporting unit",
+			"label": "Temperature Reporting Unit",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Celcius",
+					"label": "Celsius",
 					"value": 0
 				},
 				{
@@ -93,7 +93,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "Temperature reporting",
+			"label": "Temperature Reporting",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -110,7 +110,7 @@
 		},
 		{
 			"#": "5",
-			"label": "High Temperature alarm",
+			"label": "High Temperature Alarm",
 			"description": "0:Off 1:On",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -129,7 +129,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion <= 0.2",
-			"label": "High Temperature alarm level",
+			"label": "High Temperature Alarm Level",
 			"description": "-20 to + 60 degree C",
 			"valueSize": 1,
 			"minValue": -20,
@@ -145,7 +145,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "Temperature alarms",
+			"label": "Temperature Alarms",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -163,7 +163,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion <= 0.2",
-			"label": "Low Temperature alarm",
+			"label": "Low Temperature Alarm",
 			"description": "0:Off 1:On",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -182,7 +182,7 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "High temperature alarm level",
+			"label": "High Temperature Alarm Level",
 			"valueSize": 1,
 			"minValue": -20,
 			"maxValue": 60,
@@ -190,7 +190,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Low Temperature alarm level",
+			"label": "Low Temperature Alarm Level",
 			"description": "-20 to + 60 degree C",
 			"valueSize": 1,
 			"minValue": -20,
@@ -206,7 +206,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion <= 0.2",
-			"label": "Ambient light reporting",
+			"label": "Ambient Light Reporting",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -224,7 +224,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "Ambient light reporting",
+			"label": "Ambient Light Reporting",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -246,7 +246,7 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion <= 0.2",
-			"label": "Leakage alarm",
+			"label": "Leakage Alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -264,7 +264,7 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "High ambient light report level",
+			"label": "High Ambient Light Report Level",
 			"valueSize": 4,
 			"minValue": 3,
 			"maxValue": 64000,
@@ -273,7 +273,7 @@
 		{
 			"#": "11",
 			"$if": "firmwareVersion <= 0.2",
-			"label": "Leakage alarm level",
+			"label": "Leakage Alarm Level",
 			"description": "1 to 100 (1= almost dry, 100 = soaking wet)",
 			"valueSize": 1,
 			"minValue": 1,
@@ -283,7 +283,7 @@
 		{
 			"#": "11",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "Low ambient light report level",
+			"label": "Low Ambient Light Report Level",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 42000,
@@ -292,7 +292,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion <= 0.2",
-			"label": "Moisture reporting period",
+			"label": "Moisture Reporting Period",
 			"description": "0-120: Number of hours between moisture reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -302,7 +302,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "Leakage alarm",
+			"label": "Leakage Alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -320,7 +320,7 @@
 		{
 			"#": "13",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "Leakage alarm level",
+			"label": "Leakage Alarm Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -329,7 +329,7 @@
 		{
 			"#": "14",
 			"$if": "firmwareVersion >= 0.3",
-			"label": "Moisture reporting period",
+			"label": "Moisture Reporting Period",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,

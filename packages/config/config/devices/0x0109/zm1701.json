@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZM1701",
-	"description": "Monoprice keypad door lock",
+	"description": "Monoprice Keypad Door Lock",
 	"devices": [
 		{
 			"productType": "0x2006",

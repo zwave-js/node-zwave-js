@@ -28,25 +28,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal detection(water detected)",
+					"label": "Normal detection(Water detected)",
 					"value": 1
 				},
 				{
-					"label": "Reverse detection(dry detected)",
+					"label": "Reverse detection(Dry detected)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "22",
-			"label": "Temperature Report Interval (when Battery Operated)",
+			"label": "Temperature Report Interval (When Battery Operated)",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 1440,
 			"defaultValue": 60,
 			"options": [
 				{
-					"label": "hourly",
+					"label": "Hourly",
 					"value": 60
 				},
 				{
@@ -67,14 +67,11 @@
 			"#": "23",
 			"label": "Battery Report Interval",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 1440,
 			"defaultValue": 1440,
 			"options": [
-				{
-					"label": "5...60 minutes",
-					"value": 60
-				},
 				{
 					"label": "Hourly",
 					"value": 360
@@ -84,7 +81,7 @@
 					"value": 720
 				},
 				{
-					"label": "(default) - daily",
+					"label": "Daily",
 					"value": 1440
 				}
 			]
@@ -109,21 +106,12 @@
 		},
 		{
 			"#": "52",
-			"label": "Temperature Report Interval (when Usb Operated)",
+			"label": "Temperature Report Interval (When USB Operated)",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 360,
-			"defaultValue": 60,
-			"options": [
-				{
-					"label": "5…360 minutes - sent every 5 minutes, up to 6 hours",
-					"value": 360
-				},
-				{
-					"label": "Hourly",
-					"value": 60
-				}
-			]
+			"defaultValue": 60
 		},
 		{
 			"#": "53",
@@ -133,7 +121,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) - red LED continuous flash and beeps",
+					"label": "Red LED continuous flash and beeps",
 					"value": 1
 				},
 				{
@@ -149,7 +137,7 @@
 					"value": 4
 				},
 				{
-					"label": "No led, no beeps",
+					"label": "No LED, no beeps",
 					"value": 5
 				}
 			]

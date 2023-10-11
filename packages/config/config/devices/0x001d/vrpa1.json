@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "VRPA1",
-	"description": "Vizia RF + Scene Capable Plug-in Module",
+	"description": "Vizia RF + Scene Capable Plug-In Module",
 	"devices": [
 		{
 			"productType": "0x1805",

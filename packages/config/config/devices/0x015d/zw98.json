@@ -2,7 +2,7 @@
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "ZW98",
-	"description": "Smart Plug(Built-in Energy Meter)",
+	"description": "Smart Plug with Built-In Energy Meter",
 	"devices": [
 		{
 			"productType": "0x0226",

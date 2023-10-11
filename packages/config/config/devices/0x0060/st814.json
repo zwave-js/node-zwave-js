@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Temperature Trigger ON value",
+			"label": "Temperature Trigger ON Value",
 			"description": "Temperature level when a ON command is sent out. Set to 99 to disable.",
 			"valueSize": 1,
 			"minValue": -20,
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Temperature Trigger OFF value",
+			"label": "Temperature Trigger OFF Value",
 			"description": "Temperature level when a OFF command is sent out. Set to 99 to disable.",
 			"valueSize": 1,
 			"minValue": -20,
@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Humidity Trigger ON value",
+			"label": "Humidity Trigger ON Value",
 			"description": "Humidity level when a ON command is sent out. Set to 99 to disable.",
 			"valueSize": 1,
 			"minValue": 20,
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Humidity Trigger OFF value",
+			"label": "Humidity Trigger OFF Value",
 			"description": "Humidity level when a OFF command is sent out. Set to 99 to disable.",
 			"valueSize": 1,
 			"minValue": 20,
@@ -103,7 +103,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Auto report time",
+			"label": "Auto Report Time",
 			"description": "Sets the time interval when a sensor report is sent",
 			"valueSize": 2,
 			"minValue": 0,
@@ -118,7 +118,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Auto report temperature",
+			"label": "Auto Report Temperature",
 			"description": "Sets the temperature change causing a sensor report.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -133,7 +133,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto report humidity",
+			"label": "Auto Report Humidity",
 			"description": "Sets the humidity change causing a sensor report.",
 			"valueSize": 1,
 			"minValue": 0,

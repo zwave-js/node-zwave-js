@@ -23,28 +23,28 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Notification type",
+			"label": "Notification Type",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary Sensor report",
+					"label": "Binary Sensor Report",
 					"value": 0
 				},
 				{
-					"label": "Notification report",
+					"label": "Notification Report",
 					"value": 1
 				},
 				{
-					"label": "Basic report",
+					"label": "Basic Report",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "LED indication",
+			"label": "LED Indication",
 			"description": "Specify if LED should indicate special event.",
 			"valueSize": 1,
 			"defaultValue": 1,

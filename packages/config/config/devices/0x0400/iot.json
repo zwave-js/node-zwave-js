@@ -2,7 +2,7 @@
 	"manufacturer": "Abode",
 	"manufacturerId": "0x0400",
 	"label": "IOT",
-	"description": "iota",
+	"description": "Iota",
 	"devices": [
 		{
 			"productType": "0x0001",

@@ -2,7 +2,7 @@
 	"manufacturer": "Chromagic Technologies Corporation",
 	"manufacturerId": "0x0116",
 	"label": "HAN01",
-	"description": "In wall single switch",
+	"description": "In Wall Single Switch",
 	"devices": [
 		{
 			"productType": "0x0011",

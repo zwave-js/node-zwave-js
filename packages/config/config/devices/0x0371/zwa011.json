@@ -56,7 +56,7 @@
 		{
 			"#": "3",
 			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report",
-			"label": "State when magnet is close to sensor",
+			"label": "State When Magnet Is Close to Sensor",
 			"options": [
 				{
 					"label": "Report closed when magnet is near",

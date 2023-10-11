@@ -2,7 +2,7 @@
 	"manufacturer": "Somfy",
 	"manufacturerId": "0x0047",
 	"label": "SY-IOT101",
-	"description": "Blind-curtain motor controller",
+	"description": "Blind-Curtain Motor Controller",
 	"devices": [
 		{
 			"productType": "0x2018",

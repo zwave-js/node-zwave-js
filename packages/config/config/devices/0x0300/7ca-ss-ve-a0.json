@@ -2,7 +2,7 @@
 	"manufacturer": "LEEDARSON LIGHTING CO., Ltd.",
 	"manufacturerId": "0x0300",
 	"label": "7CA-SS-VE-A0",
-	"description": "Z-WAVE 700 Motion Sensor Pet Immunity",
+	"description": "Z-Wave 700 Motion Sensor Pet Immunity",
 	"devices": [
 		{
 			"productType": "0x0301",
@@ -89,7 +89,7 @@
 					"value": 2
 				},
 				{
-					"label": "Lumens and Day/Night notification",
+					"label": "Lumens and day/night notification",
 					"value": 3
 				}
 			]

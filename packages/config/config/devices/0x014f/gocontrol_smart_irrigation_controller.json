@@ -26,7 +26,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Flow Sensor K value",
+			"label": "Flow Sensor K Value",
 			"description": "Unique to flow sensor",
 			"valueSize": 4,
 			"unit": "Number",
@@ -36,7 +36,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Flow Sensor Offset value",
+			"label": "Flow Sensor Offset Value",
 			"description": "Unique to the flow sensor",
 			"valueSize": 4,
 			"unit": "Number",

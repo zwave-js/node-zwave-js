@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Night light",
+			"label": "Night Light",
 			"description": "LED behaviour control.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Memory function",
+			"label": "Memory Function",
 			"description": "Memory function behaviour control.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -56,31 +56,31 @@
 		},
 		{
 			"#": "3",
-			"label": "Invert switch",
+			"label": "Invert Switch",
 			"description": "Swap top and bottom switch/button.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal behaviour.",
+					"label": "Normal behaviour",
 					"value": 0
 				},
 				{
-					"label": "Switch top and bottom button.",
+					"label": "Switch top and bottom button",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "LED transmission indication",
+			"label": "LED Transmission Indication",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Do not flicker.",
+					"label": "Do not flicker",
 					"value": 0
 				},
 				{
@@ -88,28 +88,16 @@
 					"value": 1
 				},
 				{
-					"label": "Flicker entire time when transmitting.",
+					"label": "Flicker entire time when transmitting",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Suspend group 4",
-			"description": "Group 4 command sending behaviour control.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Sending commands to Group 4 is enabled.",
-					"value": 0
-				},
-				{
-					"label": "Do not sen commands to Group 4.",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Send Commands to Group 4",
+			"defaultValue": 0
 		}
 	]
 }

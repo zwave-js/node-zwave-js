@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZL7435-5",
-	"description": "In-wall Two Relay",
+	"description": "In-Wall Two Relay",
 	"devices": [
 		{
 			"productType": "0x2017",
@@ -24,7 +24,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch mode (default)",
+					"label": "Switch mode",
 					"value": 0
 				},
 				{

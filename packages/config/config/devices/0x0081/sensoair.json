@@ -2,7 +2,7 @@
 	"manufacturer": "SIEGENIA-AUBI KG",
 	"manufacturerId": "0x0081",
 	"label": "SENSOAIR",
-	"description": "Air quality sensor for indoor use",
+	"description": "Air Quality Sensor for Indoor Use",
 	"devices": [
 		{
 			"productType": "0x00a0",
@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Interval for unsolicited Sensor Report Mode B",
+			"label": "Interval for Unsolicited Sensor Report Mode B",
 			"description": "defines how often a Sensor report is sent",
 			"valueSize": 2,
 			"minValue": 5,

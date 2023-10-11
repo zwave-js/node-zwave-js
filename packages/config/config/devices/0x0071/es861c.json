@@ -2,7 +2,7 @@
 	"manufacturer": "LS Control",
 	"manufacturerId": "0x0071",
 	"label": "ES861C",
-	"description": "Setpoint sensor",
+	"description": "Setpoint Sensor",
 	"devices": [
 		{
 			"productType": "0x0005",

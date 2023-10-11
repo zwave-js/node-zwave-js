@@ -2,7 +2,7 @@
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ79",
-	"description": "Insert switch module",
+	"description": "Insert Switch Module",
 	"devices": [
 		{
 			"productType": "0x0311",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Change the state of indicator light",
+			"label": "Change the State of Indicator Light",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -51,7 +51,7 @@
 		{
 			"#": "3",
 			"label": "Watt Meter Report Period",
-			"description": "5s x 720 (default) = 3600s = 1 hour",
+			"description": "5s x 720 = 3600s = 1 hour",
 			"valueSize": 2,
 			"unit": "5s",
 			"minValue": 1,
@@ -70,7 +70,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Threshold of Watt for load caution",
+			"label": "Threshold of Watt for Load Caution",
 			"valueSize": 2,
 			"unit": "1Watt",
 			"minValue": 10,
@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Threshold of kWH for load caution",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
 			"unit": "Kwh",
 			"minValue": 0,
@@ -88,21 +88,21 @@
 		},
 		{
 			"#": "7",
-			"label": "Edge, Pulse, or Edge-Toggle mode",
+			"label": "Edge, Pulse, or Edge-Toggle Mode",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Edge Mode",
+					"label": "Edge mode",
 					"value": 1
 				},
 				{
-					"label": "Pulse Mode",
+					"label": "Pulse mode",
 					"value": 2
 				},
 				{
-					"label": "Edge Toggle Mode",
+					"label": "Edge toggle mode",
 					"value": 3
 				}
 			]

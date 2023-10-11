@@ -132,11 +132,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Always On",
+					"label": "Always on",
 					"value": 0
 				},
 				{
-					"label": "Follow Outlet",
+					"label": "Follow outlet",
 					"value": 1
 				},
 				{
@@ -144,7 +144,7 @@
 					"value": 2
 				},
 				{
-					"label": "Always Off",
+					"label": "Always off",
 					"value": 3
 				}
 			]

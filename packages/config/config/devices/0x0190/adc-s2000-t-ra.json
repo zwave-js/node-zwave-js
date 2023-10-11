@@ -19,7 +19,7 @@
 			"label": "Wake Up Period",
 			"description": "Seconds to stay awake following button press",
 			"valueSize": 2,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 32767,
 			"defaultValue": 32768
@@ -53,7 +53,7 @@
 					"value": 0
 				},
 				{
-					"label": "Send reports when the temperature changes.",
+					"label": "Send reports when the temperature changes",
 					"value": 2
 				}
 			]

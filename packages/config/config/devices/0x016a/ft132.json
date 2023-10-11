@@ -20,69 +20,29 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Current Overload Protection.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Current Overload Protection",
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Overheat protection",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Overheat Protection"
 		},
 		{
 			"#": "20",
-			"label": "Configure the output status after re-power on it.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Last status",
-					"value": 0
-				},
-				{
-					"label": "Always on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "80",
-			"label": "Group 1 notifications",
+			"label": "Group 1 Notifications",
 			"description": "To set which notification would be sent to the associated devices (Group 1)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
@@ -90,7 +50,7 @@
 					"value": 1
 				},
 				{
-					"label": "Send Basic CC report",
+					"label": "Send Basic CC Report",
 					"value": 2
 				},
 				{
@@ -101,60 +61,48 @@
 		},
 		{
 			"#": "81",
-			"label": "Group 3 notifications",
+			"label": "Group 3 Notifications",
 			"description": "To set which notification would be sent to association group 3",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Send Basic Set cc",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "82",
-			"label": "Group 4 notifications",
+			"label": "Group 4 Notifications",
 			"description": "To set which notification would be sent to association group 4",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send Nothing",
+					"label": "Send nothing",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set CC",
+					"label": "Send Basic CC Set",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "90",
-			"label": "Enables/disables parameter 91 and 92 below",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/disable Parameters 91 and 92"
 		},
 		{
 			"#": "91",
-			"label": "Set the threshold value of wattage.",
+			"label": "Set the Threshold Value of Wattage",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -163,7 +111,7 @@
 		},
 		{
 			"#": "92",
-			"label": "Set the threshold value of percent power",
+			"label": "Set the Threshold Value of Percent Power",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -171,7 +119,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Set parameter 101-103 to default value",
+			"label": "Set Parameter 101-103 to Default Value",
 			"description": "Reset the parameter 101-103",
 			"valueSize": 1,
 			"minValue": 0,
@@ -181,7 +129,7 @@
 		},
 		{
 			"#": "101",
-			"label": "Set group 1 reports",
+			"label": "Set Group 1 Reports",
 			"description": "To set which reports need to be sent in Report group 1",
 			"valueSize": 4,
 			"defaultValue": 0,
@@ -204,42 +152,42 @@
 					"value": 8
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 1",
+					"label": "Meter Report of wattage (W) on channel 1",
 					"value": 256
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 2",
+					"label": "Meter Report of wattage (W) on channel 2",
 					"value": 512
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 1",
+					"label": "Meter Report of energy (kWh) on channel 1",
 					"value": 2048
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 2",
+					"label": "Meter Report of energy (kWh) on channel 2",
 					"value": 4096
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 1",
+					"label": "Meter Report of voltage (V) on channel 1",
 					"value": 65536
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 2",
+					"label": "Meter Report of voltage (V) on channel 2",
 					"value": 131072
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 1",
+					"label": "Meter Report of current (A) on channel 1",
 					"value": 524288
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 2",
+					"label": "Meter Report of current (A) on channel 2",
 					"value": 1048576
 				}
 			]
 		},
 		{
 			"#": "102",
-			"label": "Reports sent to Report group 2.",
+			"label": "Reports Sent to Report Group 2",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -261,42 +209,42 @@
 					"value": 8
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 1",
+					"label": "Meter Report of wattage (W) on channel 1",
 					"value": 256
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 2",
+					"label": "Meter Report of wattage (W) on channel 2",
 					"value": 512
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 1",
+					"label": "Meter Report of energy (kWh) on channel 1",
 					"value": 2048
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 2",
+					"label": "Meter Report of energy (kWh) on channel 2",
 					"value": 4096
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 1",
+					"label": "Meter Report of voltage (V) on channel 1",
 					"value": 65536
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 2",
+					"label": "Meter Report of voltage (V) on channel 2",
 					"value": 131072
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 1",
+					"label": "Meter Report of current (A) on channel 1",
 					"value": 524288
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 2",
+					"label": "Meter Report of current (A) on channel 2",
 					"value": 1048576
 				}
 			]
 		},
 		{
 			"#": "103",
-			"label": "Reports sent to Report group 3",
+			"label": "Reports Sent to Report Group 3",
 			"valueSize": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -318,42 +266,42 @@
 					"value": 8
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 1",
+					"label": "Meter Report of wattage (W) on channel 1",
 					"value": 256
 				},
 				{
-					"label": "Meter Report of wattage (W) on Channel 2",
+					"label": "Meter Report of wattage (W) on channel 2",
 					"value": 512
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 1",
+					"label": "Meter Report of energy (kWh) on channel 1",
 					"value": 2048
 				},
 				{
-					"label": "Meter Report of energy (kWh) on Channel 2",
+					"label": "Meter Report of energy (kWh) on channel 2",
 					"value": 4096
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 1",
+					"label": "Meter Report of voltage (V) on channel 1",
 					"value": 65536
 				},
 				{
-					"label": "Meter Report of voltage (V) on Channel 2",
+					"label": "Meter Report of voltage (V) on channel 2",
 					"value": 131072
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 1",
+					"label": "Meter Report of current (A) on channel 1",
 					"value": 524288
 				},
 				{
-					"label": "Meter Report of current (A) on Channel 2",
+					"label": "Meter Report of current (A) on channel 2",
 					"value": 1048576
 				}
 			]
 		},
 		{
 			"#": "110",
-			"label": "Set parameter 111-113 to default value.",
+			"label": "Set Parameter 111-113 to Default Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -362,7 +310,7 @@
 		},
 		{
 			"#": "111",
-			"label": "Automatic report interval for Report group 1.",
+			"label": "Automatic Report Interval for Report Group 1",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -370,7 +318,7 @@
 		},
 		{
 			"#": "112",
-			"label": "Automatic report interval for Report group 2",
+			"label": "Automatic Report Interval for Report Group 2",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -378,7 +326,7 @@
 		},
 		{
 			"#": "113",
-			"label": "Automatic report interval for Report group 3",
+			"label": "Automatic Report Interval for Report Group 3",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -386,7 +334,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Configure the external switch mode for S1",
+			"label": "Configure the External Switch Mode for S1",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -396,7 +344,7 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch mode",
+					"label": "2-State switch mode",
 					"value": 1
 				},
 				{
@@ -411,7 +359,7 @@
 		},
 		{
 			"#": "121",
-			"label": "Configure the external switch mode for S2.",
+			"label": "Configure the External Switch Mode for S2",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -421,7 +369,7 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch mode",
+					"label": "2-State switch mode",
 					"value": 1
 				},
 				{
@@ -436,28 +384,28 @@
 		},
 		{
 			"#": "122",
-			"label": "Set the control destination for external switch",
+			"label": "Set the Control Destination for External Switch",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "control the output loads of itself.",
+					"label": "Control the output loads of itself",
 					"value": 1
 				},
 				{
-					"label": "control the other nodes",
+					"label": "Control the other nodes",
 					"value": 2
 				},
 				{
-					"label": "control the output of itself and others",
+					"label": "Control the output of itself and others",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "252",
-			"label": "Lock/unlock configuration parameters",
+			"label": "Lock/unlock Configuration Parameters",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -484,7 +432,7 @@
 					"value": 0
 				},
 				{
-					"label": "Reset & Remove from Network",
+					"label": "Reset & remove from network",
 					"value": 1431655765
 				}
 			]

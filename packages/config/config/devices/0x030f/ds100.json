@@ -2,7 +2,7 @@
 	"manufacturer": "Vemmio",
 	"manufacturerId": "0x030f",
 	"label": "DS100",
-	"description": "Double Switch in a dual relay in-wall module.",
+	"description": "Double Switch in A Dual Relay In-Wall Module.",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -57,28 +57,28 @@
 		},
 		{
 			"#": "4",
-			"label": "Edge or Pulse mode or Edge-Toggle mode",
+			"label": "Edge or Pulse Mode or Edge-Toggle Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Edge Mode",
+					"label": "Edge mode",
 					"value": 1
 				},
 				{
-					"label": "Pulse Mode",
+					"label": "Pulse mode",
 					"value": 2
 				},
 				{
-					"label": "Edge-Toggle Mode",
+					"label": "Edge-Toggle mode",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Threshold of current for load caution",
+			"label": "Threshold of Current for Load Caution",
 			"description": "750*0.01A=7.5A",
 			"valueSize": 2,
 			"unit": "0.01A",
@@ -88,7 +88,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Threshold of KWH for load caution",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
 			"unit": "1KWh",
 			"minValue": 1,
@@ -97,16 +97,11 @@
 		},
 		{
 			"#": "7",
-			"label": "Restore switch state mode",
-			"description": "0: Switch off, 1: Last switch, 2: Switch on",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "8",
-			"label": "Auto off timer",
+			"label": "Auto Off Timer",
 			"description": "0: Disable auto off function, 1: 0x0-0x7FFF 1s-32767s",
 			"valueSize": 2,
 			"unit": "1s",
@@ -116,7 +111,7 @@
 		},
 		{
 			"#": "9",
-			"label": "RF off command mode",
+			"label": "RF Off Command Mode",
 			"description": "0: Switch off, 1: Ignore, 2: Switch toggle, 3: Switch on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -125,7 +120,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Existence of endpoint 3",
+			"label": "Existence of Endpoint 3",
 			"description": "1: endpoint 3 exists, 2: No endpoint 3",
 			"valueSize": 1,
 			"minValue": 1,

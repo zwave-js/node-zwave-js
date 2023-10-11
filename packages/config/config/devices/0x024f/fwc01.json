@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Dimming speed",
+			"label": "Dimming Speed",
 			"valueSize": 2,
 			"unit": "0.01s",
 			"minValue": 30,
@@ -52,18 +52,18 @@
 		},
 		{
 			"#": "11",
-			"label": "Dimmer mode",
+			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Leading Edge",
+					"label": "Leading edge",
 					"value": 0
 				},
 				{
-					"label": "Tailing Edge",
+					"label": "Tailing edge",
 					"value": 1
 				}
 			]
@@ -149,19 +149,19 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "1 Light Zone",
+					"label": "1 light zone",
 					"value": 0
 				},
 				{
-					"label": "2 Light Zones",
+					"label": "2 light zones",
 					"value": 1
 				},
 				{
-					"label": "3 Light Zones",
+					"label": "3 light zones",
 					"value": 2
 				},
 				{
-					"label": "4 Light Zones",
+					"label": "4 light zones",
 					"value": 3
 				}
 			]
@@ -176,11 +176,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Dimmer Mode",
+					"label": "Dimmer mode",
 					"value": 0
 				},
 				{
-					"label": "Switch Mode",
+					"label": "Switch mode",
 					"value": 1
 				}
 			]
@@ -194,11 +194,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Dimmer Mode",
+					"label": "Dimmer mode",
 					"value": 0
 				},
 				{
-					"label": "Switch Mode",
+					"label": "Switch mode",
 					"value": 1
 				}
 			]
@@ -212,11 +212,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Dimmer Mode",
+					"label": "Dimmer mode",
 					"value": 0
 				},
 				{
-					"label": "Switch Mode",
+					"label": "Switch mode",
 					"value": 1
 				}
 			]
@@ -230,11 +230,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Dimmer Mode",
+					"label": "Dimmer mode",
 					"value": 0
 				},
 				{
-					"label": "Switch Mode",
+					"label": "Switch mode",
 					"value": 1
 				}
 			]
@@ -248,11 +248,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Dimmer Mode",
+					"label": "Dimmer mode",
 					"value": 0
 				},
 				{
-					"label": "Switch Mode",
+					"label": "Switch mode",
 					"value": 1
 				}
 			]
@@ -266,15 +266,15 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Thermostat Controlled",
+					"label": "Thermostat controlled",
 					"value": 0
 				},
 				{
-					"label": "Light Zone Controlled",
+					"label": "Light zone controlled",
 					"value": 1
 				},
 				{
-					"label": "Remote Controlled",
+					"label": "Remote controlled",
 					"value": 2
 				}
 			]
@@ -288,19 +288,19 @@
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Light Zone 1",
+					"label": "Light zone 1",
 					"value": 1
 				},
 				{
-					"label": "Light Zone 2",
+					"label": "Light zone 2",
 					"value": 2
 				},
 				{
-					"label": "Light Zone 3",
+					"label": "Light zone 3",
 					"value": 3
 				},
 				{
-					"label": "Light Zone 4",
+					"label": "Light zone 4",
 					"value": 4
 				}
 			]
@@ -359,15 +359,15 @@
 			"defaultValue": 3,
 			"options": [
 				{
-					"label": "Local Room",
+					"label": "Local room",
 					"value": 1
 				},
 				{
-					"label": "Local Floor",
+					"label": "Local floor",
 					"value": 2
 				},
 				{
-					"label": "Room and Floor",
+					"label": "Room and floor",
 					"value": 3
 				}
 			]

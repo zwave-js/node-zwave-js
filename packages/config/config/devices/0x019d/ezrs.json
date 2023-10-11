@@ -20,14 +20,14 @@
 	"paramInformation": [
 		{
 			"#": "12",
-			"label": "Motor state mode",
+			"label": "Motor State Mode",
 			"description": "Allows to change motor state (normal/calibration/discalibration mode)",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal mode (default)",
+					"label": "Normal mode",
 					"value": 0
 				},
 				{
@@ -42,18 +42,18 @@
 		},
 		{
 			"#": "13",
-			"label": "BASIC SET Respone",
+			"label": "Basic Set Respone",
 			"description": "Allows to change motor behavior after receiving BASIC_SET with value 0xFF",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "last known non-zero position (default)",
+					"label": "Last known non-zero position",
 					"value": 0
 				},
 				{
-					"label": "max open",
+					"label": "Max open",
 					"value": 1
 				}
 			]

@@ -87,11 +87,11 @@
 					"value": 0
 				},
 				{
-					"label": "2-wire (no neutral)",
+					"label": "2-Wire (No neutral)",
 					"value": 1
 				},
 				{
-					"label": "3-wire (with neutral)",
+					"label": "3-Wire (With neutral)",
 					"value": 2
 				}
 			]

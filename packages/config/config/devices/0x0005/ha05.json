@@ -2,7 +2,7 @@
 	"manufacturer": "Intermatic",
 	"manufacturerId": "0x0005",
 	"label": "HA05",
-	"description": "Screw in lamp module",
+	"description": "Screw in Lamp Module",
 	"devices": [
 		{
 			"productType": "0x0005",

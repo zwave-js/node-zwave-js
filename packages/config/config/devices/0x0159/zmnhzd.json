@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Rain Gauge - Rate top value",
+			"label": "Rain Gauge - Rate Top Value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 30000,
@@ -157,7 +157,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Random ID enable",
+			"label": "Random ID Enable",
 			"description": "enables/disables random ID",
 			"valueSize": 1,
 			"minValue": 0,

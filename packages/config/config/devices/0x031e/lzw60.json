@@ -156,7 +156,7 @@
 			"#": "111",
 			"label": "Temperature Report Threshold",
 			"valueSize": 2,
-			"unit": "0.1°C",
+			"unit": "0.1 °C",
 			"minValue": 1,
 			"maxValue": 500,
 			"defaultValue": 10

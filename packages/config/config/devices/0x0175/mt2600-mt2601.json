@@ -2,7 +2,7 @@
 	"manufacturer": "Devolo",
 	"manufacturerId": "0x0175",
 	"label": "MT2600 / MT2601",
-	"description": "devolo Home Control Central Unit",
+	"description": "Devolo Home Control Central Unit",
 	"devices": [
 		{
 			"productType": "0x0000",

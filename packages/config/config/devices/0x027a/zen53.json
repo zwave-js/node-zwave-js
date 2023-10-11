@@ -92,7 +92,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Calibration correction",
+			"label": "Calibration Correction",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

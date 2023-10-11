@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39336 / 39443 / ZW3104",
-	"description": "Plug-in 1-Outlet Dimmer, 500S",
+	"description": "Plug-In 1-Outlet Dimmer, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",
@@ -40,22 +40,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED on when light is turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always Off",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Dim up/down rate",
+			"label": "Dim Up/down Rate",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -131,24 +131,12 @@
 		},
 		{
 			"#": "16",
-			"label": "Enable/disable switch mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch Mode"
 		},
 		{
 			"#": "20",
-			"label": "Minimum dim level",
+			"label": "Minimum Dim Level",
 			"description": "Number of Steps",
 			"valueSize": 1,
 			"minValue": 1,

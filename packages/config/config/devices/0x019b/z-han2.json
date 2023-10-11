@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Report Interval For (W)",
+			"label": "Report Interval for (W)",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 10,
@@ -150,7 +150,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Scaling factor",
+			"label": "Scaling Factor",
 			"description": "Allows for multiplication of the meter value in case of use with large electrical systems",
 			"valueSize": 2,
 			"minValue": 0,

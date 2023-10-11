@@ -2,7 +2,7 @@
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
 	"label": "BW8020S",
-	"description": "Wall plug switch",
+	"description": "Wall Plug Switch",
 	"devices": [
 		{
 			"productType": "0x8001",

@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Start up with last known socket status",
+			"label": "Start Up with Last Known Socket Status",
 			"description": "state in what the switch is when power is supplied",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Relay delay time",
+			"label": "Relay Delay Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Led indicator",
+			"label": "LED Indicator",
 			"description": "Show the led compared to the relay state",
 			"valueSize": 1,
 			"minValue": 0,

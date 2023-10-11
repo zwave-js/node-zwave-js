@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "4",
-			"label": "Switching single-surface",
+			"label": "Switching Single-Surface",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -32,7 +32,7 @@
 		},
 		{
 			"#": "44",
-			"label": "Doorbell function",
+			"label": "Doorbell Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "52",
-			"label": "LOWER shutter as long as button is pressed",
+			"label": "LOWER Shutter As Long As Button Is Pressed",
 			"description": "Direction of movement changes after each switching process",
 			"valueSize": 1,
 			"minValue": 0,
@@ -49,7 +49,7 @@
 		},
 		{
 			"#": "54",
-			"label": "Move shutter single-surface",
+			"label": "Move Shutter Single-Surface",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "55",
-			"label": "RAISE shutter as long as button is pressed",
+			"label": "RAISE Shutter As Long As Button Is Pressed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

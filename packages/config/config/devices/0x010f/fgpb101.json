@@ -158,7 +158,7 @@
 			"defaultValue": 99,
 			"options": [
 				{
-					"label": "Prior State",
+					"label": "Prior state",
 					"value": 255
 				}
 			]
@@ -204,7 +204,7 @@
 			"defaultValue": 99,
 			"options": [
 				{
-					"label": "Prior State",
+					"label": "Prior state",
 					"value": 255
 				}
 			]
@@ -244,7 +244,7 @@
 			"defaultValue": 99,
 			"options": [
 				{
-					"label": "Prior State",
+					"label": "Prior state",
 					"value": 255
 				}
 			]
@@ -290,7 +290,7 @@
 			"defaultValue": 99,
 			"options": [
 				{
-					"label": "Prior State",
+					"label": "Prior state",
 					"value": 255
 				}
 			]
@@ -330,7 +330,7 @@
 			"defaultValue": 99,
 			"options": [
 				{
-					"label": "Prior State",
+					"label": "Prior state",
 					"value": 255
 				}
 			]

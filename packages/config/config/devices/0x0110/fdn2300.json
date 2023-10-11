@@ -2,7 +2,7 @@
 	"manufacturer": "Frostdale",
 	"manufacturerId": "0x0110",
 	"label": "FDN2300",
-	"description": "3way switch with temp sensor",
+	"description": "3way Switch with Temp Sensor",
 	"devices": [
 		{
 			"productType": "0x7333",

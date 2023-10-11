@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWPG-111",
-	"description": "FIBARO Wall Plug UK",
+	"description": "Fibaro Wall Plug UK",
 	"devices": [
 		{
 			"productType": "0x1801",
@@ -125,7 +125,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -143,7 +143,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -200,7 +200,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -219,7 +219,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last State/On",
+					"label": "Last state/on",
 					"value": 255
 				}
 			]
@@ -227,42 +227,42 @@
 		{
 			"#": "30[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: General",
+			"label": "Respond to Alarms: General",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: Smoke",
+			"label": "Respond to Alarms: Smoke",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: Carbon Monoxide",
+			"label": "Respond to Alarms: Carbon Monoxide",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: Carbon Dioxide",
+			"label": "Respond to Alarms: Carbon Dioxide",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x10]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: High Temperature",
+			"label": "Respond to Alarms: High Temperature",
 			"defaultValue": 1
 		},
 		{
 			"#": "30[0x20]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Respond To Alarms: Flood",
+			"label": "Respond to Alarms: Flood",
 			"defaultValue": 1
 		},
 		{
 			"#": "31",
-			"label": "Response to alarm frames",
+			"label": "Response to Alarm Frames",
 			"description": "Wall plug response to alarms",
 			"valueSize": 1,
 			"minValue": 0,
@@ -270,7 +270,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "No Reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
@@ -294,7 +294,7 @@
 		},
 		{
 			"#": "40",
-			"label": "LED Indicator: Power Threshold For Violet Color",
+			"label": "LED Indicator: Power Threshold for Violet Color",
 			"valueSize": 2,
 			"unit": "0.1 W",
 			"minValue": 1000,
@@ -309,15 +309,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "Active Power (Smooth)",
+					"label": "Active power (Smooth)",
 					"value": 1
 				},
 				{
-					"label": "Active Power (Steps)",
+					"label": "Active power (Steps)",
 					"value": 2
 				},
 				{
@@ -358,11 +358,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "Last Measured Load",
+					"label": "Last measured load",
 					"value": 1
 				},
 				{
@@ -403,7 +403,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Off",
+					"label": "LED off",
 					"value": 0
 				},
 				{

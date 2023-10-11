@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Accumulated Energy Autosend Interval report",
+			"label": "Accumulated Energy Autosend Interval Report",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Power change notification",
+			"label": "Power Change Notification",
 			"description": "Enable automatic notifications whenever there is a wattage change",
 			"valueSize": 1,
 			"minValue": 0,
@@ -82,7 +82,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Power change notification threshold",
+			"label": "Power Change Notification Threshold",
 			"description": "Minimum change in wattage report",
 			"valueSize": 1,
 			"unit": "deciwatts",

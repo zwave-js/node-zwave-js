@@ -2,7 +2,7 @@
 	"manufacturer": "Dooya",
 	"manufacturerId": "0x030a",
 	"label": "DT82TV/F-1.2/14",
-	"description": "Curtain motor",
+	"description": "Curtain Motor",
 	"devices": [
 		{
 			"productType": "0x0103",
@@ -17,8 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set The Motor Rotation Direction",
-			"description": "",
+			"label": "Motor Rotation Direction",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -35,8 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Set To Start Holding Hands",
-			"description": "",
+			"label": "Set to Start Holding Hands",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -54,17 +52,16 @@
 		{
 			"#": "3",
 			"label": "Weak Electric Switch Mode",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Double-button reboundable switch",
+					"label": "Double-Button reboundable switch",
 					"value": 1
 				},
 				{
-					"label": "Double-button not reboundable switch",
+					"label": "Double-Button not reboundable switch",
 					"value": 2
 				},
 				{
@@ -72,7 +69,7 @@
 					"value": 3
 				},
 				{
-					"label": "Single-button cyclic switch mode",
+					"label": "Single-Button cyclic switch mode",
 					"value": 4
 				}
 			]
@@ -80,13 +77,12 @@
 		{
 			"#": "4",
 			"label": "Strong Electric Switch Mode",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Double-button not reboundable",
+					"label": "Double-Button not reboundable",
 					"value": 0
 				},
 				{
@@ -94,7 +90,7 @@
 					"value": 1
 				},
 				{
-					"label": "Double-button reboundable mode",
+					"label": "Double-Button reboundable mode",
 					"value": 2
 				}
 			]
@@ -102,7 +98,6 @@
 		{
 			"#": "5",
 			"label": "Limit Position Status",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"readOnly": true,
@@ -121,7 +116,6 @@
 		{
 			"#": "6",
 			"label": "Device Type",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"readOnly": true,
@@ -144,7 +138,6 @@
 		{
 			"#": "7",
 			"label": "Power Supply Type",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"readOnly": true,
@@ -163,7 +156,6 @@
 		{
 			"#": "8",
 			"label": "Manually Set / Cancel Open Borders",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -181,7 +173,6 @@
 		{
 			"#": "9",
 			"label": "Manually Set / Cancel Close Borders",
-			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -198,8 +189,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Delete The Limit Position",
-			"description": "",
+			"label": "Delete the Limit Position",
 			"valueSize": 1,
 			"defaultValue": 127,
 			"writeOnly": true,

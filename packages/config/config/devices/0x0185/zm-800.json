@@ -2,7 +2,7 @@
 	"manufacturer": "Ningbo Sentek Electronics Co., Ltd.",
 	"manufacturerId": "0x0185",
 	"label": "ZM-800",
-	"description": "PIR motion sensor",
+	"description": "PIR Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0003",

@@ -20,14 +20,14 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Numbers of clicks to control Channel 1",
+			"label": "Numbers of Clicks to Control Channel 1",
 			"description": "Define which sequences of clicks control the load connected to Channel 1/2.",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DISABLED",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
@@ -62,14 +62,14 @@
 		},
 		{
 			"#": "2",
-			"label": "Numbers of clicks to control Channel 2",
+			"label": "Numbers of Clicks to Control Channel 2",
 			"description": "Define which sequences of click control the load connected to Channel 2",
 			"valueSize": 1,
 			"defaultValue": 8,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DISABLED",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
@@ -108,18 +108,18 @@
 		},
 		{
 			"#": "4",
-			"label": "Value used for devices belonging to Group 2",
+			"label": "Value Used for Devices Belonging to Group 2",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Basic Set ON",
+					"label": "Basic Set on",
 					"value": 255
 				},
 				{
-					"label": "Basic Set OFF",
+					"label": "Basic Set off",
 					"value": 0
 				},
 				{
@@ -130,18 +130,18 @@
 		},
 		{
 			"#": "5",
-			"label": "Value used for devices belonging to Group 5",
+			"label": "Value Used for Devices Belonging to Group 5",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Basic Set ON",
+					"label": "Basic Set on",
 					"value": 255
 				},
 				{
-					"label": "Basic Set OFF",
+					"label": "Basic Set off",
 					"value": 0
 				},
 				{
@@ -152,18 +152,18 @@
 		},
 		{
 			"#": "6",
-			"label": "Value used for devices belonging to Group 3",
+			"label": "Value Used for Devices Belonging to Group 3",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Basic Set ON",
+					"label": "Basic Set on",
 					"value": 255
 				},
 				{
-					"label": "Basic Set OFF",
+					"label": "Basic Set off",
 					"value": 0
 				},
 				{
@@ -174,18 +174,18 @@
 		},
 		{
 			"#": "7",
-			"label": "Value used for devices belonging to Group 6",
+			"label": "Value Used for Devices Belonging to Group 6",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Basic Set ON",
+					"label": "Basic Set on",
 					"value": 255
 				},
 				{
-					"label": "Basic Set OFF",
+					"label": "Basic Set off",
 					"value": 0
 				},
 				{
@@ -196,18 +196,18 @@
 		},
 		{
 			"#": "8",
-			"label": "Value used for devices belonging to Group 4",
+			"label": "Value Used for Devices Belonging to Group 4",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Basic Set ON",
+					"label": "Basic Set on",
 					"value": 255
 				},
 				{
-					"label": "Basic Set OFF",
+					"label": "Basic Set off",
 					"value": 0
 				},
 				{
@@ -218,18 +218,18 @@
 		},
 		{
 			"#": "9",
-			"label": "Value used for devices belonging to Group 7",
+			"label": "Value Used for Devices Belonging to Group 7",
 			"valueSize": 1,
 			"defaultValue": 100,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Basic Set ON",
+					"label": "Basic Set on",
 					"value": 255
 				},
 				{
-					"label": "Basic Set OFF",
+					"label": "Basic Set off",
 					"value": 0
 				},
 				{
@@ -240,7 +240,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Timer to switch OFF the Channel 1",
+			"label": "Timer to Switch OFF the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched OFF",
 			"valueSize": 2,
 			"minValue": 0,
@@ -249,7 +249,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Timer to switch OFF the Channel 2",
+			"label": "Timer to Switch OFF the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched OFF",
 			"valueSize": 2,
 			"minValue": 0,
@@ -258,7 +258,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Timer to switch ON the Channel 1",
+			"label": "Timer to Switch ON the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched ON",
 			"valueSize": 2,
 			"minValue": 0,
@@ -267,7 +267,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Timer to switch ON the Channel 2",
+			"label": "Timer to Switch ON the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched ON",
 			"valueSize": 2,
 			"minValue": 0,
@@ -298,30 +298,30 @@
 		},
 		{
 			"#": "60",
-			"label": "Start-up status",
+			"label": "Start-Up Status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF_OFF - Both Channel 1 and Channel 2 OFF",
+					"label": "OFF_OFF - Both channel 1 and channel 2 off",
 					"value": 0
 				},
 				{
-					"label": "OFF_ON - Channel 1 OFF, Channel 2 ON",
+					"label": "OFF_ON - Channel 1 off, channel 2 on",
 					"value": 1
 				},
 				{
-					"label": "ON_OFF - Channel 1 ON, Channel 2 OFF",
+					"label": "ON_OFF - Channel 1 on, channel 2 off",
 					"value": 2
 				},
 				{
-					"label": "ON_ON - Both Channel 1 and Channel 2 ON",
+					"label": "ON_ON - Both channel 1 and channel 2 on",
 					"value": 3
 				},
 				{
-					"label": "PREVIOUS STATUS - Status prior to restart",
+					"label": "Previous status - Status prior to restart",
 					"value": 4
 				}
 			]
@@ -329,78 +329,78 @@
 		{
 			// This parameter is undocumented (the same as for the WDS)
 			"#": "61",
-			"label": "Configuration reset",
+			"label": "Configuration Reset",
 			"description": "Defines which parameters should be reset to default values",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "FACTORY RESET",
+					"label": "Factory reset",
 					"value": 0
 				},
 				{
-					"label": "ASSOCIATIONS RESET",
+					"label": "Associations reset",
 					"value": 1
 				},
 				{
-					"label": "CONFIGURATIONS RESET",
+					"label": "Configurations reset",
 					"value": 2
 				},
 				{
-					"label": "RESTART DEVICE",
+					"label": "Restart device",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "62",
-			"label": "Type of external switch both inputs",
+			"label": "Type of External Switch Both Inputs",
 			"description": "Defines the type of external switch connected both to input 1 and input 2.",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "BUTTON",
+					"label": "Button",
 					"value": 1
 				},
 				{
-					"label": "SWITCH",
+					"label": "Switch",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "63",
-			"label": "Type of external switch input 2",
+			"label": "Type of External Switch Input 2",
 			"description": "Define the switch type connected to the input 2",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "BUTTON",
+					"label": "Button",
 					"value": 1
 				},
 				{
-					"label": "SWITCH",
+					"label": "Switch",
 					"value": 2
 				},
 				{
-					"label": "EQUAL TO SWITCH 1",
+					"label": "Equal to switch 1",
 					"value": 3
 				}
 			]

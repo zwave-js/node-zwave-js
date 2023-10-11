@@ -2,7 +2,7 @@
 	"manufacturer": "HomeScenario",
 	"manufacturerId": "0x0162",
 	"label": "HSK-100Z",
-	"description": "AV Scenario Controller with universal IR",
+	"description": "AV Scenario Controller with Universal IR",
 	"devices": [
 		{
 			"productType": "0x0001",

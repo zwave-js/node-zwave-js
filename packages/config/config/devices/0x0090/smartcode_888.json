@@ -116,19 +116,19 @@
 					"value": 30
 				},
 				{
-					"label": "60 Seconds",
+					"label": "60 seconds",
 					"value": 60
 				},
 				{
-					"label": "90 Seconds",
+					"label": "90 seconds",
 					"value": 90
 				},
 				{
-					"label": "120 Seconds",
+					"label": "120 seconds",
 					"value": 120
 				},
 				{
-					"label": "180 Seconds",
+					"label": "180 seconds",
 					"value": 180
 				}
 			]

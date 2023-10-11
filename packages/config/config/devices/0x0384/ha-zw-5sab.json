@@ -175,7 +175,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Motion Re-trigger Wait Time",
+			"label": "Motion Re-Trigger Wait Time",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 5,

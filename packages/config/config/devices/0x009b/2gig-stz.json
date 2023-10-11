@@ -2,7 +2,7 @@
 	"manufacturer": "2gig Technologies Inc.",
 	"manufacturerId": "0x009b",
 	"label": "2GIG-STZ",
-	"description": "2GIG Z-Wave Plus 700-series Programmable Thermostat",
+	"description": "2GIG Z-Wave Plus 700-Series Programmable Thermostat",
 	"devices": [
 		{
 			"productType": "0x5354",

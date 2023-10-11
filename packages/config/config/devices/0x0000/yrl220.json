@@ -46,7 +46,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Auto Re-lock",
+			"label": "Auto Re-Lock",
 			"description": "When enabled, the unit will automatically re-lock",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -65,10 +65,10 @@
 		},
 		{
 			"#": "3",
-			"label": "Re-lock Time",
+			"label": "Re-Lock Time",
 			"description": "Time after unlocking that the device will lock",
 			"valueSize": 1,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 30,
@@ -110,7 +110,7 @@
 			"label": "Shutdown Time",
 			"description": "Number of times the device is locked out after the invalid retries are exceeded",
 			"valueSize": 1,
-			"unit": "Seconds",
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 30,
@@ -129,11 +129,11 @@
 					"value": 0
 				},
 				{
-					"label": "Vacation Mode",
+					"label": "Vacation mode",
 					"value": 1
 				},
 				{
-					"label": "Privacy Mode",
+					"label": "Privacy mode",
 					"value": 2
 				}
 			]

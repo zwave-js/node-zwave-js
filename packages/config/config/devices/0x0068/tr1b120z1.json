@@ -17,8 +17,8 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Led Light Up Time",
-			"description": "1~100:led light up 1 ~ 100 seconds. 127:always on",
+			"label": "LED Light Up Time",
+			"description": "Allowable range: 1-100, 127",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,

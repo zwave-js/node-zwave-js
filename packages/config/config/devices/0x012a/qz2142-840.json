@@ -71,7 +71,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Brightness on Single Tap",
+			"label": "Brightness On Single Tap",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Brightness on Double Tap",
+			"label": "Brightness On Double Tap",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -146,11 +146,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Multilevel report; basic report for long press with relay enabled",
+					"label": "Multilevel report; Basic Report for long press with relay enabled",
 					"value": 0
 				},
 				{
-					"label": "Multilevel report; basic report for long press with relay disabled",
+					"label": "Multilevel report; Basic Report for long press with relay disabled",
 					"value": 1
 				},
 				{
@@ -176,7 +176,7 @@
 		},
 		{
 			"#": "23",
-			"label": "Led Indicator Color",
+			"label": "LED Indicator Color",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -201,7 +201,7 @@
 		},
 		{
 			"#": "24",
-			"label": "Led Indicator Brightness",
+			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

@@ -77,37 +77,15 @@
 		},
 		{
 			"#": "5[0x10]",
-			"label": "Illumination Report on Trigger",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 1
-				},
-				{
-					"label": "Enable",
-					"value": 0
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Illumination Report On Trigger",
+			"defaultValue": 0
 		},
 		{
 			"#": "5[0x20]",
-			"label": "Temperature Report on Trigger",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 1
-				},
-				{
-					"label": "Enable",
-					"value": 0
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Temperature Report On Trigger",
+			"defaultValue": 0
 		},
 		{
 			"#": "6",
@@ -128,37 +106,14 @@
 		},
 		{
 			"#": "7[0x02]",
-			"label": "Send Motion Off Report",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Motion Off Report"
 		},
 		{
 			"#": "7[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "PIR Super Sensitivity Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x10]",
@@ -179,37 +134,14 @@
 		},
 		{
 			"#": "7[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Multi Command Encapsulated Auto Reports",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 1
-				},
-				{
-					"label": "Enable",
-					"value": 0
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x40]",
-			"label": "Report Battery State When Triggered",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 1
-				},
-				{
-					"label": "Enable",
-					"value": 0
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Report Battery State When Triggered"
 		},
 		{
 			"#": "8",
@@ -258,7 +190,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Auto Report Tick interval",
+			"label": "Auto Report Tick Interval",
 			"description": "The interval time for auto report each tick.",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -269,7 +201,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Temperature differential report.",
+			"label": "Temperature Differential Report",
 			"description": "The temperature differential to report. Not applicable to TSP01.",
 			"valueSize": 1,
 			"unit": "Fahrenheit",
@@ -279,10 +211,10 @@
 		},
 		{
 			"#": "22",
-			"label": "Illumination differential report.",
+			"label": "Illumination Differential Report",
 			"description": "The illumination differential to report. Not applicable to TSP01.",
 			"valueSize": 1,
-			"unit": "percentage",
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1

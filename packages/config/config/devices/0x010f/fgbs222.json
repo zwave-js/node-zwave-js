@@ -235,7 +235,7 @@
 		{
 			"#": "24",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Reverse inputs"
+			"label": "Reverse Inputs"
 		},
 		{
 			"#": "63",
@@ -329,7 +329,7 @@
 		},
 		{
 			"#": "154",
-			"label": "Output 1: Default State ",
+			"label": "Output 1: Default State",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -394,7 +394,7 @@
 		{
 			"#": "25",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Reverse outputs"
+			"label": "Reverse Outputs"
 		}
 	],
 	"metadata": {

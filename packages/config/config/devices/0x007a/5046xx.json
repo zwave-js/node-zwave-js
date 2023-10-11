@@ -2,7 +2,7 @@
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
 	"label": "5046XX",
-	"description": "5046xx - Radio sensor cover for in wall dimmer",
+	"description": "5046xx - Radio Sensor Cover for in Wall Dimmer",
 	"devices": [
 		{
 			"productType": "0x4003",

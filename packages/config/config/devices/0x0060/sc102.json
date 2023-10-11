@@ -2,7 +2,7 @@
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
 	"label": "SC102",
-	"description": "Z-Wave Gateway w/ Casiva Server Solution",
+	"description": "Z-Wave Gateway W/ Casiva Server Solution",
 	"devices": [
 		{
 			"productType": "0x000e",

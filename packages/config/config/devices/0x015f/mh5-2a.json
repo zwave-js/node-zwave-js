@@ -215,7 +215,7 @@
 		{
 			"#": "22",
 			"label": "Antifreeze Protection",
-			"description": "Automatic heating at 41°F/5°C",
+			"description": "Automatic heating at 41 °F/5 °C",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

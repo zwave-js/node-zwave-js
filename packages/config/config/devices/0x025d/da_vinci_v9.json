@@ -178,7 +178,7 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off",
+					"label": "Switch on/off",
 					"value": 1
 				},
 				{
@@ -194,11 +194,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -260,27 +260,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration 10 Seconds",
+					"label": "Duration 10 seconds",
 					"value": 10
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -324,7 +324,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Button 1 attributes",
+			"label": "Button 1 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -334,11 +334,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
@@ -351,7 +351,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On/Off",
+					"label": "Switch on/off",
 					"value": 1
 				},
 				{
@@ -367,11 +367,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -433,27 +433,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration10 Seconds",
+					"label": "Duration10 seconds",
 					"value": 10
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -497,7 +497,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Button 2 attributes",
+			"label": "Button 2 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -507,11 +507,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
@@ -524,7 +524,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On/Off",
+					"label": "Switch on/off",
 					"value": 1
 				},
 				{
@@ -540,11 +540,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -606,23 +606,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -666,7 +666,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Button 3 attributes",
+			"label": "Button 3 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -676,11 +676,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
@@ -693,7 +693,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On/Off",
+					"label": "Switch on/off",
 					"value": 1
 				},
 				{
@@ -709,11 +709,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -775,23 +775,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -835,7 +835,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Button 4 attributes",
+			"label": "Button 4 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -845,11 +845,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
@@ -862,7 +862,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On/Off",
+					"label": "Switch on/off",
 					"value": 1
 				},
 				{
@@ -878,11 +878,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -944,23 +944,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -1004,7 +1004,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Button 5 attributes",
+			"label": "Button 5 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1014,11 +1014,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
@@ -1031,7 +1031,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On/Off",
+					"label": "Switch on/off",
 					"value": 1
 				},
 				{
@@ -1047,11 +1047,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -1113,23 +1113,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -1173,7 +1173,7 @@
 		},
 		{
 			"#": "30",
-			"label": "Button 6 attributes",
+			"label": "Button 6 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1183,11 +1183,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
@@ -1200,7 +1200,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "On/Off Switch",
+					"label": "On/Off switch",
 					"value": 1
 				},
 				{
@@ -1216,11 +1216,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -1282,23 +1282,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -1342,7 +1342,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Button 7 attribute",
+			"label": "Button 7 Attribute",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1352,11 +1352,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
@@ -1369,7 +1369,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On/Off",
+					"label": "Switch on/off",
 					"value": 1
 				},
 				{
@@ -1385,11 +1385,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -1451,23 +1451,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -1511,7 +1511,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Button 8 attribute",
+			"label": "Button 8 Attribute",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1521,11 +1521,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
@@ -1538,7 +1538,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch On/Off",
+					"label": "Switch on/off",
 					"value": 1
 				},
 				{
@@ -1554,11 +1554,11 @@
 					"value": 4
 				},
 				{
-					"label": "Blind-up multiway",
+					"label": "Blind-Up multiway",
 					"value": 5
 				},
 				{
-					"label": "Blind-down multiway",
+					"label": "Blind-Down multiway",
 					"value": 6
 				}
 			]
@@ -1620,23 +1620,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Duration 3 Seconds",
+					"label": "Duration 3 seconds",
 					"value": 3
 				},
 				{
-					"label": "Duration 30 Seconds",
+					"label": "Duration 30 seconds",
 					"value": 30
 				},
 				{
-					"label": "Duration 60 Seconds",
+					"label": "Duration 60 seconds",
 					"value": 60
 				},
 				{
-					"label": "Duration 90 Seconds",
+					"label": "Duration 90 seconds",
 					"value": 90
 				},
 				{
-					"label": "Duration 120 Seconds",
+					"label": "Duration 120 seconds",
 					"value": 120
 				}
 			]
@@ -1680,7 +1680,7 @@
 		},
 		{
 			"#": "45",
-			"label": "Button 9 attributes",
+			"label": "Button 9 Attributes",
 			"valueSize": 1,
 			"defaultValue": 7,
 			"allowManualEntry": false,
@@ -1690,18 +1690,18 @@
 					"value": 0
 				},
 				{
-					"label": "Only Led",
+					"label": "Only LED",
 					"value": 1
 				},
 				{
-					"label": "Only Sound",
+					"label": "Only sound",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "46",
-			"label": "Device Led on intensity",
+			"label": "Device LED On Intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -1709,7 +1709,7 @@
 		},
 		{
 			"#": "47",
-			"label": "Device Led off intensity",
+			"label": "Device LED Off Intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -1717,7 +1717,7 @@
 		},
 		{
 			"#": "48",
-			"label": "Device Toggle or Pulse the output",
+			"label": "Device Toggle or Pulse the Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1734,7 +1734,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Device touch sensitivity",
+			"label": "Device Touch Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -1749,11 +1749,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Do NOT Save and Reset",
+					"label": "Do NOT save and reset",
 					"value": 0
 				},
 				{
-					"label": "Save and Reset",
+					"label": "Save and reset",
 					"value": 255
 				}
 			]

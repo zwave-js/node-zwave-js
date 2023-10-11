@@ -24,8 +24,8 @@
 	"paramInformation": [
 		{
 			"#": "196",
-			"label": "Dimmer speed",
-			"description": "Set dimming speed. fast=0 ... 240=slow.",
+			"label": "Dimmer Speed",
+			"description": "0 = fast, 240 = slow",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,

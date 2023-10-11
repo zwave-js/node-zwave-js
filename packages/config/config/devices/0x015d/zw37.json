@@ -2,7 +2,7 @@
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "ZW37",
-	"description": "Inovelli 2 channel smart plug",
+	"description": "Inovelli 2 Channel Smart Plug",
 	"devices": [
 		{
 			"productType": "0x0221",

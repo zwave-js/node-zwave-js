@@ -2,7 +2,7 @@
 	"manufacturer": "SafeTech Products",
 	"manufacturerId": "0x023c",
 	"label": "QLDLZW",
-	"description": "The Doorlock",
+	"description": "Doorlock",
 	"devices": [
 		{
 			"productType": "0x0001",

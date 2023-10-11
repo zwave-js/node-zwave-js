@@ -37,7 +37,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Selected endpoint",
+			"label": "Selected Endpoint",
 			"description": "Send Basic Command Class",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -59,7 +59,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Switch mode",
+			"label": "Switch Mode",
 			"description": "Change the external switch mode",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -82,25 +82,7 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "Restore Switch State Mode",
-			"description": "Switch state after repowering",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch OFF",
-					"value": 0
-				},
-				{
-					"label": "Last Switch state",
-					"value": 1
-				},
-				{
-					"label": "Switch ON",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "4",
@@ -114,13 +96,13 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "RF OFF command",
+			"label": "RF OFF Command",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -140,7 +122,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 1.8",
-			"label": "Existence of endpoint 3",
+			"label": "Existence of Endpoint 3",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

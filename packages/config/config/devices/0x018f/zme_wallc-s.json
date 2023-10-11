@@ -40,7 +40,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button 1 And 3 Pair Mode",
+			"label": "Button 1 and 3 Pair Mode",
 			"description": "In separate mode button 1 works with group a, button 3 with groups c. click is on, hold is dimming up, double click is off, click-hold is dimming down. in pair button 1/3 are up/down correspondingly. click is on/off, hold is dimming up/down. single clicks works with group a, double click with group c",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Button 2 And 4 Pair Mode",
+			"label": "Button 2 and 4 Pair Mode",
 			"description": "In separate mode button 2 works with control group b, button 4 with control group d. click is on, hold is dimming up, double click is off, click-hold is dimming down. in pair button b/d are up/down correspondingly. click is on/off, hold is dimming up/down. single clicks works with group b, double click with group d",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -95,11 +95,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and dim (send Basic Set and switch multilevel)",
+					"label": "Switch on/off and dim (Send Basic Set and Multilevel Switch)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -119,7 +119,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -137,11 +137,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and dim (send Basic Set and switch multilevel)",
+					"label": "Switch on/off and dim (Send Basic Set and Multilevel Switch)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -161,7 +161,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -179,11 +179,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and dim (send Basic Set and switch multilevel)",
+					"label": "Switch on/off and dim (Send Basic Set and Multilevel Switch)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -203,7 +203,7 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
@@ -221,11 +221,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and dim (send Basic Set and switch multilevel)",
+					"label": "Switch on/off and dim (Send Basic Set and Multilevel Switch)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch on/off only (Send Basic Set)",
 					"value": 2
 				},
 				{
@@ -245,14 +245,14 @@
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway",
+					"label": "Central Scene to gateway",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Send The Following Switch All Commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -291,7 +291,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Blocks Wakeup Even When Wakeup Interval is Set",
+			"label": "Blocks Wakeup Even When Wakeup Interval Is Set",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

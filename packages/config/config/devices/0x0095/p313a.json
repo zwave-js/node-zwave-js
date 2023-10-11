@@ -2,7 +2,7 @@
 	"manufacturer": "Qees",
 	"manufacturerId": "0x0095",
 	"label": "P313A",
-	"description": "Plug-in Socket Dimmer",
+	"description": "Plug-In Socket Dimmer",
 	"devices": [
 		{
 			"productType": "0x3103",

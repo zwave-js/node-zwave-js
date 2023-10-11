@@ -41,11 +41,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top-ON, Bottom-OFF",
+					"label": "Top-On, bottom-off",
 					"value": 0
 				},
 				{
-					"label": "Bottom--ON, Top-OFF",
+					"label": "Bottom--on, top-off",
 					"value": 1
 				}
 			]

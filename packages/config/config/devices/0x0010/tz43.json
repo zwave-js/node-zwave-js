@@ -61,6 +61,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "w/Cool",
@@ -71,6 +72,7 @@
 					"value": 1
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "4",
@@ -206,38 +208,13 @@
 		},
 		{
 			"#": "25",
-			"label": "SB Mode",
-			"description": "Setback mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No Setback",
-					"value": 0
-				},
-				{
-					"label": "Setback",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Setback Mode"
 		},
 		{
 			"#": "69",
-			"label": "Service Mode (Test)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No Service Mode",
-					"value": 0
-				},
-				{
-					"label": "Service Mode enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Service Mode (Test)"
 		},
 		{
 			"#": "75",
@@ -257,54 +234,18 @@
 		},
 		{
 			"#": "77",
-			"label": "2nd Stage Heat Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No 2nd Stage Heat",
-					"value": 0
-				},
-				{
-					"label": "2nd Stage Heat",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "2nd Stage Heat"
 		},
 		{
 			"#": "78",
-			"label": "Aux Heat Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No Aux Heat",
-					"value": 0
-				},
-				{
-					"label": "Aux Heat enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Aux Heat"
 		},
 		{
 			"#": "79",
-			"label": "2nd Stage Cool Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No 2nd Stage Cool",
-					"value": 0
-				},
-				{
-					"label": "2nd Stage Cool",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "2nd Stage Cool"
 		}
 	]
 }
