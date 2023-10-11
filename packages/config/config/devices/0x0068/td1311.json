@@ -2,7 +2,7 @@
 	"manufacturer": "Good Way Technology Co., Ltd.",
 	"manufacturerId": "0x0068",
 	"label": "TD1311",
-	"description": "In wall Power Monitor Switch",
+	"description": "In Wall Power Monitor Switch",
 	"devices": [
 		{
 			"productType": "0x0000",
@@ -16,9 +16,9 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Meter Report duration",
+			"label": "Meter Report Duration",
 			"valueSize": 2,
-			"unit": "Minutes",
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 1092,
 			"defaultValue": 30

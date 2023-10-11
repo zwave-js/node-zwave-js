@@ -36,7 +36,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Upload temperature format automatically",
+			"label": "Upload Temperature Format Automatically",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -57,13 +57,13 @@
 		},
 		{
 			"#": "2",
-			"label": "Upload temperature and humidity automatically",
+			"label": "Upload Temperature and Humidity Automatically",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				},
 				{
@@ -82,8 +82,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Upload temperature difference",
-			"description": "Base on 0.1°C unit, 5 by default, 5*0.1°C=0.5°C",
+			"label": "Upload Temperature Difference",
+			"description": "Base on 0.1 °C unit, 5 by default, 5*0.1 °C=0.5 °C",
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 1000,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Upload time interval regularly",
+			"label": "Upload Time Interval Regularly",
 			"description": "Base on 1s unit, it suggest to be set above 30s",
 			"valueSize": 2,
 			"minValue": 19,
@@ -101,7 +101,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Upload humidity difference",
+			"label": "Upload Humidity Difference",
 			"description": "Upload when percent difference exceeded",
 			"valueSize": 1,
 			"minValue": 2,
@@ -111,7 +111,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Factory setting",
+			"label": "Factory Setting",
 			"description": "Restore the factory setting - write only, set to 85 to reset",
 			"valueSize": 1,
 			"minValue": 0,

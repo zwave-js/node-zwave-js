@@ -2,7 +2,7 @@
 	"manufacturer": "Hyundai Telecom",
 	"manufacturerId": "0x0374",
 	"label": "HAS-R2071M",
-	"description": "Z-Wave Gateway Controller and hub",
+	"description": "Z-Wave Gateway Controller and Hub",
 	"devices": [
 		{
 			"productType": "0x0003",

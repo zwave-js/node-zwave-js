@@ -17,24 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Power On State",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Prior State",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "2",
@@ -229,52 +212,13 @@
 			"label": "LED Strip Timeout",
 			"valueSize": 1,
 			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 10,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Stay Off",
+					"label": "Stay off",
 					"value": 0
-				},
-				{
-					"label": "One Second",
-					"value": 1
-				},
-				{
-					"label": "Two Seconds",
-					"value": 2
-				},
-				{
-					"label": "Three Seconds",
-					"value": 3
-				},
-				{
-					"label": "Four Seconds",
-					"value": 4
-				},
-				{
-					"label": "Five Seconds",
-					"value": 5
-				},
-				{
-					"label": "Six Seconds",
-					"value": 6
-				},
-				{
-					"label": "Seven Seconds",
-					"value": 7
-				},
-				{
-					"label": "Eight Seconds",
-					"value": 8
-				},
-				{
-					"label": "Nine Seconds",
-					"value": 9
-				},
-				{
-					"label": "Ten Seconds",
-					"value": 10
 				}
 			]
 		},
@@ -465,11 +409,11 @@
 					"value": 1
 				},
 				{
-					"label": "Fast Blink",
+					"label": "Fast blink",
 					"value": 2
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Slow blink",
 					"value": 3
 				},
 				{

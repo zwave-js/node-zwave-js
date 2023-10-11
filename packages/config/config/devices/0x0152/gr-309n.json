@@ -2,7 +2,7 @@
 	"manufacturer": "UFairy G.R. Tech",
 	"manufacturerId": "0x0152",
 	"label": "GR-309N",
-	"description": "Door/Window detector",
+	"description": "Door/Window Detector",
 	"devices": [
 		{
 			"productType": "0x0500",

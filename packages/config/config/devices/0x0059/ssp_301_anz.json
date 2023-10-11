@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Relay And LED Configuration",
+			"label": "Relay and LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

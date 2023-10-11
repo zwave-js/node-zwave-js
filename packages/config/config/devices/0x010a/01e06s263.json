@@ -137,7 +137,7 @@
 		{
 			"#": "218",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Front-end Buttons Lock"
+			"label": "Front-End Buttons Lock"
 		}
 	],
 	"metadata": {

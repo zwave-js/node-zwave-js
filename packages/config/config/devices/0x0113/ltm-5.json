@@ -103,15 +103,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Flicker",
+					"label": "No flicker",
 					"value": 0
 				},
 				{
-					"label": "Flicker Whole Transmission",
+					"label": "Flicker whole transmission",
 					"value": 1
 				},
 				{
-					"label": "Flicker 1 Second",
+					"label": "Flicker 1 second",
 					"value": 2
 				}
 			]

@@ -36,7 +36,7 @@
 			"isLifeline": true
 		},
 		"5": {
-			"label": "Unsolicited Sensor Multilevel Reports",
+			"label": "Unsolicited Multilevel Sensor Reports",
 			"maxNodes": 4,
 			"isLifeline": true
 		}

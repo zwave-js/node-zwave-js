@@ -2,7 +2,7 @@
 	"manufacturer": "iControl",
 	"manufacturerId": "0x0106",
 	"label": "PIPER NV",
-	"description": "Piper NV Security camera / sensor",
+	"description": "Piper NV Security Camera / Sensor",
 	"devices": [
 		{
 			"productType": "0x0003",

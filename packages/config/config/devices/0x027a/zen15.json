@@ -94,11 +94,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Always On",
+					"label": "Always on",
 					"value": 0
 				},
 				{
-					"label": "Momentary (at status change)",
+					"label": "Momentary (At status change)",
 					"value": 1
 				}
 			]
@@ -113,7 +113,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Always On",
+					"label": "Always on",
 					"value": 0
 				},
 				{
@@ -125,7 +125,7 @@
 					"value": 2
 				},
 				{
-					"label": "Always off (except for inclusion, exclusion, and Z-Wave range test)",
+					"label": "Always off (Except for inclusion, exclusion, and Z-Wave range test)",
 					"value": 3
 				}
 			]

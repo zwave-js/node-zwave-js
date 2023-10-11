@@ -157,19 +157,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON not active, ALL OFF not active",
+					"label": "All on not active, all off not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON not active, ALL OFF active",
+					"label": "All on not active, all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active, ALL OFF not active",
+					"label": "All on active, all off not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
@@ -186,10 +186,12 @@
 					"value": 0
 				},
 				{
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "Force auto-calibration without Fibaro Bypass",
 					"value": 1
 				},
 				{
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "Force auto-calibration with Fibaro Bypass",
 					"value": 2
 				}
@@ -274,14 +276,14 @@
 					"value": 1
 				},
 				{
-					"label": "Roller blind switch (up / down)",
+					"label": "Roller blind switch (Up / Down)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Value Sent to Associated Devices on Single Click",
+			"label": "Value Sent to Associated Devices On Single Click",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -343,7 +345,7 @@
 			"#": "24[0x10]",
 			"$if": "firmwareVersion >= 3.5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value on Double Click"
+			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value On Double Click"
 		},
 		{
 			"#": "25[0x01]",
@@ -369,12 +371,12 @@
 			"#": "25[0x10]",
 			"$if": "firmwareVersion >= 3.5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value on Double Click"
+			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value On Double Click"
 		},
 		{
 			"#": "26",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "3-way Switch Function",
+			"label": "3-Way Switch Function",
 			"description": "Key S2 also controls the dimmer"
 		},
 		{
@@ -462,11 +464,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable (dimming possible)",
+					"label": "Disable (Dimming possible)",
 					"value": 0
 				},
 				{
-					"label": "Enable (dimming not possible)",
+					"label": "Enable (Dimming not possible)",
 					"value": 1
 				},
 				{
@@ -532,7 +534,7 @@
 					"value": 1
 				},
 				{
-					"label": "After each power On",
+					"label": "After each power on",
 					"value": 2
 				},
 				{
@@ -756,7 +758,7 @@
 		},
 		{
 			"#": "59",
-			"label": "Approximated Power at the Maximum Brightness Level",
+			"label": "Approximated Power At the Maximum Brightness Level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,

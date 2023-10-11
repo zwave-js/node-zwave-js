@@ -27,22 +27,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All Enabled",
+					"label": "All enabled",
 					"value": 0
 				},
 				{
-					"label": "Siren Only",
+					"label": "Siren only",
 					"value": 1
 				},
 				{
-					"label": "Strobe Only",
+					"label": "Strobe only",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "1",
-			"label": "Alarm auto stop",
+			"label": "Alarm Auto Stop",
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
 			"defaultValue": 0,

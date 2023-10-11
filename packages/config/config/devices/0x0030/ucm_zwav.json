@@ -2,7 +2,7 @@
 	"manufacturer": "Cytech Technology Pre Ltd.",
 	"manufacturerId": "0x0030",
 	"label": "UCM/ZWAV",
-	"description": "Cytech UCM/ZWave",
+	"description": "Cytech UCM/Z-Wave",
 	"devices": [
 		{
 			"productType": "0x0001",

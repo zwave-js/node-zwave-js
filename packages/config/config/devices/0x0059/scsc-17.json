@@ -47,7 +47,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Lower temperature limit",
+			"label": "Lower Temperature Limit",
 			"description": "Defines the minimum temperature. Steps are 1C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,7 +57,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Upper temperature limit",
+			"label": "Upper Temperature Limit",
 			"description": "Defines the maximum temperature. Steps are 1C",
 			"valueSize": 1,
 			"minValue": 0,

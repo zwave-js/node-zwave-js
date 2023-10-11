@@ -2,7 +2,7 @@
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x015d",
 	"label": "NZW31T",
-	"description": "In-wall Smart Dimmer",
+	"description": "In-Wall Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x1f02",

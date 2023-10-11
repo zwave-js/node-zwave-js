@@ -16,25 +16,14 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Central Scene notifications",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Central Scene Notifications",
 			"description": "Enable/disable central scene notifications for 2x-5x button presses.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Enable Central Scene",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
-			"label": "Report interval",
+			"label": "Report Interval",
 			"description": "Allowable range: 3-8640 (30 seconds to 1 day)",
 			"valueSize": 2,
 			"unit": "10s",
@@ -50,7 +39,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Energy meter report interval",
+			"label": "Energy Meter Report Interval",
 			"description": "Allowable range: 10-30240 (10 minutes to 3 weeks)",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -66,61 +55,63 @@
 		},
 		{
 			"#": "4",
-			"label": "Button operation mode",
+			"label": "Button Operation Mode",
 			"description": "Operations mode for push buttons controlling the output. - Normal Switch: In this mode the top button will turn the output on, while the bottom button will turn the output off. - Toggle Switch: In this mode any button press will toggle the output - when on it will be turned off, when off it will be turned on.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Switch",
+					"label": "Normal switch",
 					"value": 0
 				},
 				{
-					"label": "External Push Button",
+					"label": "External push button",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "External switch type",
+			"label": "External Switch Type",
 			"description": "Configuration of switch type connected to extension input S. - External Normal Switch: Use this value if a toggle switch is connected to extension input S. - External Push Button: Use this value if a push button switch is connected to extension input S.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "External Normal Switch",
+					"label": "External normal switch",
 					"value": 0
 				},
 				{
-					"label": "External Push Button",
+					"label": "External push button",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "External switch mapping",
+			"label": "External Switch Mapping",
 			"description": "Central Scene mapping of extension input S.",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
-					"label": "Map extension input S. on the central scene of T1.",
+					"label": "Map extension input S. On the Central Scene of T1.",
 					"value": 1
 				},
 				{
-					"label": "Map extension input S. on the central scene of T2.",
+					"label": "Map extension input S. On the Central Scene of T2.",
 					"value": 2
 				},
 				{
-					"label": "Map extension input S. on a custom central scene.",
+					"label": "Map extension input S. On a custom Central Scene.",
 					"value": 3
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		}
 	]
 }

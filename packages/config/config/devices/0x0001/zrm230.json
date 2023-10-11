@@ -2,7 +2,7 @@
 	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZRM230",
-	"description": "Wall Switch/Transmitter (2-gang)",
+	"description": "Wall Switch/Transmitter (2-Gang)",
 	"devices": [
 		{
 			"productType": "0x524d",

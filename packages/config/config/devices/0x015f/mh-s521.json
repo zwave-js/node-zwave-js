@@ -31,26 +31,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "forbid ALL ON, forbid ALL OFF",
+					"label": "Forbid all on, forbid all off",
 					"value": 0
 				},
 				{
-					"label": "forbid ALL ON, allow ALL OFF",
+					"label": "Forbid all on, allow all off",
 					"value": 1
 				},
 				{
-					"label": "allow ALL ON, forbid ALL OFF",
+					"label": "Allow all on, forbid all off",
 					"value": 2
 				},
 				{
-					"label": "allow ALL ON, allow ALL OFF",
+					"label": "Allow all on, allow all off",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "LED Backlit brightness level",
+			"label": "LED Backlit Brightness Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -64,7 +64,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "single click to switch on/off status",
+					"label": "Single click to switch on/off status",
 					"value": 0
 				},
 				{
@@ -76,18 +76,18 @@
 					"value": 2
 				},
 				{
-					"label": "hold >3s then key is on, and off once released",
+					"label": "Hold >3s then key is on, and off once released",
 					"value": 3
 				},
 				{
-					"label": "single click + hold >3s then key is on",
+					"label": "Single click + hold >3s then key is on",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Key On duration",
+			"label": "Key On Duration",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Basic CC integration setting",
+			"label": "Basic CC Integration Setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -105,7 +105,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Scene respond",
+			"label": "Scene Respond",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -127,11 +127,11 @@
 					"value": 1
 				},
 				{
-					"label": "only activate scene ID1 when key1's relay open",
+					"label": "Only activate scene ID1 when key1's relay open",
 					"value": 2
 				},
 				{
-					"label": "only activate scene ID1 when key1's relay closed",
+					"label": "Only activate scene ID1 when key1's relay closed",
 					"value": 3
 				}
 			]
@@ -166,15 +166,15 @@
 					"value": 0
 				},
 				{
-					"label": "always activate scene ID1",
+					"label": "Always activate scene ID1",
 					"value": 1
 				},
 				{
-					"label": "only activate scene ID1 when key2's relay open",
+					"label": "Only activate scene ID1 when key2's relay open",
 					"value": 2
 				},
 				{
-					"label": "nly activate scene ID1 when key2's relay closed",
+					"label": "Nly activate scene ID1 when key2's relay closed",
 					"value": 3
 				}
 			]
@@ -209,15 +209,15 @@
 					"value": 0
 				},
 				{
-					"label": "always activate scene ID1",
+					"label": "Always activate scene ID1",
 					"value": 1
 				},
 				{
-					"label": "only activate scene ID1 when key3's relay open",
+					"label": "Only activate scene ID1 when key3's relay open",
 					"value": 2
 				},
 				{
-					"label": "only activate scene ID1 when key3's relay closed",
+					"label": "Only activate scene ID1 when key3's relay closed",
 					"value": 3
 				}
 			]
@@ -242,7 +242,7 @@
 		},
 		{
 			"#": "32",
-			"label": "Scene respond ID 1-50",
+			"label": "Scene Respond ID 1-50",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -251,7 +251,7 @@
 		},
 		{
 			"#": "33",
-			"label": "Scene respond ID 51-100",
+			"label": "Scene Respond ID 51-100",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -260,7 +260,7 @@
 		},
 		{
 			"#": "34",
-			"label": "Scene respond ID 101-150",
+			"label": "Scene Respond ID 101-150",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -269,7 +269,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Scene respond ID 151-200",
+			"label": "Scene Respond ID 151-200",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -278,7 +278,7 @@
 		},
 		{
 			"#": "36",
-			"label": "Scene respond ID 201-250",
+			"label": "Scene Respond ID 201-250",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -296,7 +296,7 @@
 			"writeOnly": true,
 			"options": [
 				{
-					"label": "restore factory setting",
+					"label": "Restore factory setting",
 					"value": 85
 				}
 			]

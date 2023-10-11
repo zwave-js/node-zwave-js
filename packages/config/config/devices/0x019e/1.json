@@ -2,7 +2,7 @@
 	"manufacturer": "iEXERGY GmbH",
 	"manufacturerId": "0x019e",
 	"label": "Wibutler Pro",
-	"description": "Multiradio server for home automation with optional cloud connectivitiy",
+	"description": "Multiradio Server for Home Automation with Optional Cloud Connectivitiy",
 	"devices": [
 		{
 			"productType": "0x0001",

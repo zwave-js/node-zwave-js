@@ -555,7 +555,6 @@
 	"custom_brightness": {
 		"label": "Custom Brightness Level",
 		"valueSize": 1,
-		"units": "%",
 		"minValue": 0,
 		"maxValue": 99,
 		"defaultValue": 0,
@@ -591,7 +590,6 @@
 		"label": "Night Light Mode",
 		"description": "Set the brightness level the dimmer will turn on to when off and when lower paddle is held down for one second.",
 		"valueSize": 1,
-		"units": "%",
 		"minValue": 0,
 		"maxValue": 99,
 		"defaultValue": 20,

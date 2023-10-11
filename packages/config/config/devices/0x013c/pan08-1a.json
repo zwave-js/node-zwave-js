@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN08-1a",
-	"description": "Roller shutter controller",
+	"description": "Roller Shutter Controller",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Watt meter report interval (5s)",
+			"label": "Watt Meter Report Interval (5s)",
 			"description": "Interval (x5 seconds) to send out watt meter report",
 			"valueSize": 2,
 			"minValue": 1,
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Threshold of KWh for Load Caution",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
 			"unit": "kWh",
 			"minValue": 1,
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Level report mode",
+			"label": "Level Report Mode",
 			"description": "Sets the way the controller reports the shutter level",
 			"valueSize": 1,
 			"minValue": 1,

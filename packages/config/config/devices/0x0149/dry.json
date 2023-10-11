@@ -2,7 +2,7 @@
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
 	"label": "DRY",
-	"description": "Widom Smart Dry contact",
+	"description": "Widom Smart Dry Contact",
 	"devices": [
 		{
 			"productType": "0x1214",
@@ -35,7 +35,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Numbers of clicks to control the load",
+			"label": "Numbers of Clicks to Control the Load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Value used for devices belonging to Group 2",
+			"label": "Value Used for Devices Belonging to Group 2",
 			"description": "Value sent when the external switch receives 1 click. Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Value used for devices belonging to Group 3",
+			"label": "Value Used for Devices Belonging to Group 3",
 			"description": "Value sent when the external switch receives 2 clicks. Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Value used for devices belonging to Group 4",
+			"label": "Value Used for Devices Belonging to Group 4",
 			"description": "Value sent when external switch receives 3 clicks. Allowable range: 0-99, 255",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +73,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Timer to switch OFF the Relay",
+			"label": "Timer to Switch OFF the Relay",
 			"description": "Defines the time after which the relay is switched OFF",
 			"valueSize": 2,
 			"minValue": 0,
@@ -82,7 +82,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Timer to switch ON the Relay",
+			"label": "Timer to Switch ON the Relay",
 			"description": "Defines the time after which the relay is switched ON",
 			"valueSize": 2,
 			"minValue": 0,
@@ -91,7 +91,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Timer scale",
+			"label": "Timer Scale",
 			"description": "Defines the time unit used for parameters No.10 and No.11.",
 			"valueSize": 2,
 			"minValue": 1,
@@ -128,44 +128,44 @@
 		},
 		{
 			"#": "60",
-			"label": "Start-up Status",
+			"label": "Start-Up Status",
 			"description": "Defines the status of the device following a restart",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 2
 				},
 				{
-					"label": "PREVIOUS STATUS",
+					"label": "Previous status",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "62",
-			"label": "Type of external switch",
+			"label": "Type of External Switch",
 			"description": "Defines the type of external switch connected to the device",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "BUTTON",
+					"label": "Button",
 					"value": 1
 				},
 				{
-					"label": "SWITCH",
+					"label": "Switch",
 					"value": 2
 				}
 			]

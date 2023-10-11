@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN16",
-	"description": "Smart Energy Plug In Switch",
+	"description": "Smart Energy Plug in Switch",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -36,7 +36,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Threshold of current for Load caution",
+			"label": "Threshold of Current for Load Caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1300,
@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Threshold of KWh for Load caution",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
 			"unit": "Kwh",
 			"minValue": 1,
@@ -53,28 +53,11 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch off",
-					"value": 0
-				},
-				{
-					"label": "Last switch state",
-					"value": 1
-				},
-				{
-					"label": "Switch on",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "6",
-			"label": "Mode of Switch Off function",
+			"label": "Mode of Switch Off Function",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -91,7 +74,7 @@
 		},
 		{
 			"#": "7",
-			"label": "LED indication mode",
+			"label": "LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -112,7 +95,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto off timer",
+			"label": "Auto Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -120,7 +103,7 @@
 		},
 		{
 			"#": "9",
-			"label": "RF off command mode",
+			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

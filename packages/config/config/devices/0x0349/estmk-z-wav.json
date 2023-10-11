@@ -2,7 +2,7 @@
 	"manufacturer": "Codeatelier GmbH",
 	"manufacturerId": "0x0349",
 	"label": "ESTMK-Z-WAV",
-	"description": "homee Z-Wave Cube Green",
+	"description": "Homee Z-Wave Cube Green",
 	"devices": [
 		{
 			"productType": "0x0013",

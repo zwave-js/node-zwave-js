@@ -2,6 +2,7 @@
 	"manufacturer": "Clare Controls",
 	"manufacturerId": "0x0194",
 	"label": "CLIQ-MOSM-10",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "CLIQ.mini Controller",
 	"devices": [
 		{

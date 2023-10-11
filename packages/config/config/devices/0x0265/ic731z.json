@@ -2,7 +2,7 @@
 	"manufacturer": "StarVedia",
 	"manufacturerId": "0x0265",
 	"label": "IC731Z",
-	"description": "Smart home camera gateway",
+	"description": "Smart Home Camera Gateway",
 	"devices": [
 		{
 			"productType": "0x0001",

@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Z-Wave.me",
 	"manufacturerId": "0x0147",
-	"label": "RaZberry Controller 2016 ZWave+",
+	"label": "RaZberry Controller 2016 Z-Wave+",
 	"description": "Z-Wave.Me Razberry Daughtercard",
 	"devices": [
 		{

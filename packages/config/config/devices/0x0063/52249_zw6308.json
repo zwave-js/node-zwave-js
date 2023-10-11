@@ -28,7 +28,7 @@
 					"value": 0
 				},
 				{
-					"label": "Reverse event (open 16, close 17)",
+					"label": "Reverse event (Open 16, close 17)",
 					"value": 1
 				}
 			]
@@ -50,7 +50,7 @@
 					"value": 1
 				},
 				{
-					"label": "Notification and basic report",
+					"label": "Notification and Basic Report",
 					"value": 2
 				}
 			]

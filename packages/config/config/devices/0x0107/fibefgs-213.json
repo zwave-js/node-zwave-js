@@ -2,7 +2,7 @@
 	"manufacturer": "MegaChips",
 	"manufacturerId": "0x0107",
 	"label": "FIBEFGS-213",
-	"description": "FIBARO Single Relais Switch",
+	"description": "Fibaro Single Relais Switch",
 	"devices": [
 		{
 			"productType": "0x0403",
@@ -20,62 +20,62 @@
 		},
 		{
 			"#": "10",
-			"label": "First channel operating mode",
+			"label": "First Channel Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "standard operation",
+					"label": "Standard operation",
 					"value": 0
 				},
 				{
-					"label": "delay ON",
+					"label": "Delay on",
 					"value": 1
 				},
 				{
-					"label": "delay OFF",
+					"label": "Delay off",
 					"value": 2
 				},
 				{
-					"label": "auto ON",
+					"label": "Auto on",
 					"value": 3
 				},
 				{
-					"label": "auto OFF",
+					"label": "Auto off",
 					"value": 4
 				},
 				{
-					"label": "flashing mode",
+					"label": "Flashing mode",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "1st ch. reaction to switch",
+			"label": "1st Ch. Reaction to Switch",
 			"description": "First channel - reaction to switch for delay/auto ON/OFF modes",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "cancel mode and set target state",
+					"label": "Cancel mode and set target state",
 					"value": 0
 				},
 				{
-					"label": "no reaction to switch - mode runs until it ends",
+					"label": "No reaction to switch - Mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "reset timer - start counting from the beginning",
+					"label": "Reset timer - Start counting from the beginning",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "time parameter for delay/auto ON/OFF modes",
+			"label": "Time Parameter for Delay/auto ON/OFF Modes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -83,7 +83,7 @@
 		},
 		{
 			"#": "13",
-			"label": "1st ch. pulse time for flashing mode",
+			"label": "1st Ch. Pulse Time for Flashing Mode",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,
@@ -91,51 +91,51 @@
 		},
 		{
 			"#": "20",
-			"label": "Switch type",
+			"label": "Switch Type",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "momentary switch",
+					"label": "Momentary switch",
 					"value": 0
 				},
 				{
-					"label": "toggle switch stable",
+					"label": "Toggle switch stable",
 					"value": 1
 				},
 				{
-					"label": "toggle switch",
+					"label": "Toggle switch",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Flashing mode - reports",
+			"label": "Flashing Mode - Reports",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "the device does not send reports",
+					"label": "The device does not send reports",
 					"value": 0
 				},
 				{
-					"label": "the device sends reports",
+					"label": "The device sends reports",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "27",
-			"label": "Associations in Z-Wave network security mode",
+			"label": "Associations in Z-Wave Network Security Mode",
 			"valueSize": 1,
 			"defaultValue": 15,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no group sent as secure",
+					"label": "No group sent as secure",
 					"value": 0
 				},
 				{
@@ -155,21 +155,21 @@
 					"value": 8
 				},
 				{
-					"label": "all groups sent as secure",
+					"label": "All groups sent as secure",
 					"value": 15
 				}
 			]
 		},
 		{
 			"#": "28",
-			"label": "S1 switch - scenes sent",
+			"label": "S1 Switch - Scenes Sent",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "no scenes sent",
+					"label": "No scenes sent",
 					"value": 0
 				},
 				{
@@ -185,21 +185,21 @@
 					"value": 4
 				},
 				{
-					"label": "Key Hold Down and Key Released",
+					"label": "Key hold down and key released",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "29",
-			"label": "S2 switch - scenes sent",
+			"label": "S2 Switch - Scenes Sent",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "no scenes sent",
+					"label": "No scenes sent",
 					"value": 0
 				},
 				{
@@ -215,14 +215,14 @@
 					"value": 4
 				},
 				{
-					"label": "Key Hold Down and Key Released",
+					"label": "Key hold down and key released",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "30",
-			"label": "S1 assocs. sent to 2nd and 3rd group",
+			"label": "S1 Assocs. Sent to 2nd and 3rd Group",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -233,26 +233,26 @@
 					"value": 0
 				},
 				{
-					"label": "ignore turning ON with 1 click of the switch",
+					"label": "Ignore turning on with 1 click of the switch",
 					"value": 1
 				},
 				{
-					"label": "ignore turning OFF with 1 click of the switch",
+					"label": "Ignore turning off with 1 click of the switch",
 					"value": 2
 				},
 				{
-					"label": "ignore holding and releasing the switch",
+					"label": "Ignore holding and releasing the switch",
 					"value": 4
 				},
 				{
-					"label": "ignore double click of the switch",
+					"label": "Ignore double click of the switch",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "31",
-			"label": "S1 ON val sent to 2nd and 3rd groups",
+			"label": "S1 ON Val Sent to 2nd and 3rd Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -260,7 +260,7 @@
 		},
 		{
 			"#": "32",
-			"label": "S1 OFF val sent to 2nd and 3rd groups",
+			"label": "S1 OFF Val Sent to 2nd and 3rd Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -268,7 +268,7 @@
 		},
 		{
 			"#": "33",
-			"label": "S1 DblClick val sent to 2nd and 3rd groups",
+			"label": "S1 DblClick Val Sent to 2nd and 3rd Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -276,7 +276,7 @@
 		},
 		{
 			"#": "35",
-			"label": "S2 assocs. sent to 4th and 5th group",
+			"label": "S2 Assocs. Sent to 4th and 5th Group",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -287,26 +287,26 @@
 					"value": 0
 				},
 				{
-					"label": "ignore turning on with 1 click of the switch",
+					"label": "Ignore turning on with 1 click of the switch",
 					"value": 1
 				},
 				{
-					"label": "ignore turning off with 1 click of the switch",
+					"label": "Ignore turning off with 1 click of the switch",
 					"value": 2
 				},
 				{
-					"label": "ignore holding and releasing the switch",
+					"label": "Ignore holding and releasing the switch",
 					"value": 4
 				},
 				{
-					"label": "ignore double click of the switch",
+					"label": "Ignore double click of the switch",
 					"value": 8
 				}
 			]
 		},
 		{
 			"#": "36",
-			"label": "S2 switch ON value sent to 4th and 5th ass. groups",
+			"label": "S2 Switch ON Value Sent to 4th and 5th Ass. Groups",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -315,7 +315,7 @@
 		},
 		{
 			"#": "37",
-			"label": "S2 switch OFF sent to 4th and 5th groups",
+			"label": "S2 Switch OFF Sent to 4th and 5th Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -323,7 +323,7 @@
 		},
 		{
 			"#": "38",
-			"label": "S2 double click sent to 4th and 5th ass. grps.",
+			"label": "S2 Double Click Sent to 4th and 5th Ass. Grps",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -341,11 +341,11 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
@@ -366,11 +366,11 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
@@ -391,11 +391,11 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
@@ -416,11 +416,11 @@
 					"value": 0
 				},
 				{
-					"label": "Turn ON",
+					"label": "Turn on",
 					"value": 1
 				},
 				{
-					"label": "Turn OFF",
+					"label": "Turn off",
 					"value": 2
 				},
 				{
@@ -431,7 +431,7 @@
 		},
 		{
 			"#": "44",
-			"label": "Flashing alarm duration",
+			"label": "Flashing Alarm Duration",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,
@@ -439,7 +439,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Active power reports",
+			"label": "Active Power Reports",
 			"description": "Power level reporting threshold.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -448,7 +448,7 @@
 		},
 		{
 			"#": "51",
-			"label": "Minimal time between power report",
+			"label": "Minimal Time Between Power Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -456,7 +456,7 @@
 		},
 		{
 			"#": "53",
-			"label": "Energy reports",
+			"label": "Energy Reports",
 			"description": "Energy level change resulting in sending a new energy report.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -465,7 +465,7 @@
 		},
 		{
 			"#": "58",
-			"label": "Periodic power reports",
+			"label": "Periodic Power Reports",
 			"description": "Determines time interval for periodic power reports",
 			"valueSize": 2,
 			"minValue": 0,
@@ -474,7 +474,7 @@
 		},
 		{
 			"#": "59",
-			"label": "Periodic energy reports",
+			"label": "Periodic Energy Reports",
 			"description": "Determines time interval for periodic energy reports",
 			"valueSize": 2,
 			"minValue": 0,
@@ -483,18 +483,18 @@
 		},
 		{
 			"#": "60",
-			"label": "Measuring energy consumed by the device itself",
+			"label": "Measuring Energy Consumed by the Device Itself",
 			"description": "Determines if energy consumed by device should be included",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Self-measurement inactive",
+					"label": "Self-Measurement inactive",
 					"value": 0
 				},
 				{
-					"label": "Self-measurement active",
+					"label": "Self-Measurement active",
 					"value": 1
 				}
 			]

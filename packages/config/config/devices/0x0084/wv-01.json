@@ -40,11 +40,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alarm Mode",
+					"label": "Alarm mode",
 					"value": 0
 				},
 				{
-					"label": "Level Mode",
+					"label": "Level mode",
 					"value": 255
 				}
 			]

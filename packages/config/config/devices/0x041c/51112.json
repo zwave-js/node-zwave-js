@@ -2,7 +2,7 @@
 	"manufacturer": "Kjell & Co Elektronik",
 	"manufacturerId": "0x041c",
 	"label": "51112",
-	"description": "Smart Humidity And Temperature Sensor",
+	"description": "Smart Humidity and Temperature Sensor",
 	"devices": [
 		{
 			"productType": "0x8007",

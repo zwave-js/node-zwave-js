@@ -108,26 +108,26 @@
 		},
 		{
 			"#": "8",
-			"label": "Reaction To Broadcast Commands",
+			"label": "Reaction to Broadcast Commands",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Accept broadcast On and Off",
+					"label": "Accept broadcast on and off",
 					"value": 0
 				},
 				{
-					"label": "Ignore broadcast On and Off",
+					"label": "Ignore broadcast on and off",
 					"value": 1
 				},
 				{
-					"label": "Ignore broadcast On, accept Off",
+					"label": "Ignore broadcast on, accept off",
 					"value": 2
 				},
 				{
-					"label": "Accept broadcast On, ignore Off",
+					"label": "Accept broadcast on, ignore off",
 					"value": 3
 				}
 			]
@@ -170,7 +170,7 @@
 		{
 			"#": "15",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Control Relay 1 & 2 together",
+			"label": "Control Relay 1 & 2 Together",
 			"description": "When enabled, Relay 2 will be switched On when Relay 1 is switched."
 		},
 		{
@@ -181,12 +181,12 @@
 		{
 			"#": "20",
 			"$import": "templates/zconnect_template.json#sensor_relay_control",
-			"label": "Relay 1 And Connected Sensor Integration"
+			"label": "Relay 1 and Connected Sensor Integration"
 		},
 		{
 			"#": "21",
 			"$import": "templates/zconnect_template.json#sensor_relay_control",
-			"label": "Relay 2 And Connected Sensor Integration"
+			"label": "Relay 2 and Connected Sensor Integration"
 		},
 		{
 			"#": "24",

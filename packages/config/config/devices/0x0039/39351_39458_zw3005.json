@@ -40,15 +40,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED ON when load is ON",
+					"label": "LED on when load is on",
 					"value": 1
 				},
 				{
-					"label": "LED always OFF",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
@@ -62,11 +62,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Orientation",
+					"label": "Normal orientation",
 					"value": 0
 				},
 				{
-					"label": "Invert Switch",
+					"label": "Invert switch",
 					"value": 1
 				}
 			]

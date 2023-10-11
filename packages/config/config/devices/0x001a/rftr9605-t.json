@@ -82,7 +82,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Blue LED Brightness Level While The Receptacle is On",
+			"label": "Blue LED Brightness Level While the Receptacle Is On",
 			"description": "Light intensity of indicator led",
 			"valueSize": 1,
 			"defaultValue": 3,
@@ -100,7 +100,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Blue LED Brightness Level While The Receptacle is Off",
+			"label": "Blue LED Brightness Level While the Receptacle Is Off",
 			"description": "Light intensity of indicator led",
 			"valueSize": 1,
 			"defaultValue": 1,

@@ -2,7 +2,7 @@
 	"manufacturer": "SIEGENIA-AUBI KG",
 	"manufacturerId": "0x0081",
 	"label": "AEROPA",
-	"description": "C - Wall mounted ventilation unit",
+	"description": "C - Wall Mounted Ventilation Unit",
 	"devices": [
 		{
 			"productType": "0x0014",

@@ -2,7 +2,7 @@
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-TRM2fx",
-	"description": "Floor thermostat",
+	"description": "Floor Thermostat",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -16,13 +16,13 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Operation mode",
+			"label": "Operation Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off. (default)",
+					"label": "Off",
 					"value": 0
 				},
 				{
@@ -30,7 +30,7 @@
 					"value": 1
 				},
 				{
-					"label": "Cooling mode (not implemented)",
+					"label": "Cooling mode (Not implemented)",
 					"value": 2
 				},
 				{
@@ -41,13 +41,13 @@
 		},
 		{
 			"#": "2",
-			"label": "Sensor mode",
+			"label": "Sensor Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "F-mode, floor sensor mode",
+					"label": "F-Mode, floor sensor mode",
 					"value": 0
 				},
 				{
@@ -62,13 +62,13 @@
 		},
 		{
 			"#": "3",
-			"label": "Floor sensor type",
+			"label": "Floor Sensor Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "10K-NTC (default)",
+					"label": "10K-NTC",
 					"value": 0
 				},
 				{
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Temperature control hysteresis (DIFF I)",
+			"label": "Temperature Control Hysteresis (DIFF I)",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 30,
@@ -103,7 +103,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Floor minimum temperature limit (FLo)",
+			"label": "Floor Minimum Temperature Limit (FLo)",
 			"valueSize": 2,
 			"unit": "oC",
 			"minValue": 50,
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Floor maximum temperature (FHi)",
+			"label": "Floor Maximum Temperature (FHi)",
 			"valueSize": 2,
 			"unit": "oC",
 			"minValue": 50,
@@ -121,7 +121,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Air (A2) minimum temperature limit (ALo)",
+			"label": "Air (A2) Minimum Temperature Limit (ALo)",
 			"valueSize": 2,
 			"unit": "oC",
 			"minValue": 50,
@@ -130,7 +130,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Air (A2) maximum temperature limit (AHi)",
+			"label": "Air (A2) Maximum Temperature Limit (AHi)",
 			"valueSize": 2,
 			"unit": "oC",
 			"minValue": 50,
@@ -139,7 +139,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Heating mode setpoint (CO)",
+			"label": "Heating Mode Setpoint (CO)",
 			"valueSize": 2,
 			"unit": "oC",
 			"minValue": 50,
@@ -148,7 +148,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Energy saving mode setpoint (ECO)",
+			"label": "Energy Saving Mode Setpoint (ECO)",
 			"valueSize": 2,
 			"unit": "oC",
 			"minValue": 50,
@@ -157,7 +157,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Cooling setpoint (COOL)",
+			"label": "Cooling Setpoint (COOL)",
 			"valueSize": 2,
 			"unit": "oC",
 			"minValue": 50,
@@ -166,7 +166,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Floor sensor calibration",
+			"label": "Floor Sensor Calibration",
 			"valueSize": 1,
 			"unit": "oC",
 			"minValue": -40,
@@ -175,7 +175,7 @@
 		},
 		{
 			"#": "13",
-			"label": "External sensor calibration",
+			"label": "External Sensor Calibration",
 			"valueSize": 1,
 			"unit": "oC",
 			"minValue": -40,
@@ -184,13 +184,13 @@
 		},
 		{
 			"#": "14",
-			"label": "Temperature display",
+			"label": "Temperature Display",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Display setpoint temperature (default)",
+					"label": "Display setpoint temperature",
 					"value": 0
 				},
 				{
@@ -201,7 +201,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Button brightness - dimmed state",
+			"label": "Button Brightness - Dimmed State",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -210,7 +210,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Button brightness - active state",
+			"label": "Button Brightness - Active State",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -219,7 +219,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Display brightness - dimmed state",
+			"label": "Display Brightness - Dimmed State",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -228,7 +228,7 @@
 		},
 		{
 			"#": "18",
-			"label": "Display brightness - active state",
+			"label": "Display Brightness - Active State",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -237,7 +237,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Temperature report interval",
+			"label": "Temperature Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -246,7 +246,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Temperature report hysteresis",
+			"label": "Temperature Report Hysteresis",
 			"valueSize": 1,
 			"unit": "oC",
 			"minValue": 1,
@@ -255,7 +255,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Meter report interval",
+			"label": "Meter Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -264,7 +264,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Meter report delta value",
+			"label": "Meter Report Delta Value",
 			"valueSize": 1,
 			"unit": "kWh/10",
 			"minValue": 0,

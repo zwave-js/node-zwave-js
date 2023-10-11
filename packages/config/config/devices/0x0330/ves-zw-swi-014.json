@@ -69,7 +69,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Send Central Scene Commands In Response To Inputs",
+			"label": "Send Central Scene Commands in Response to Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

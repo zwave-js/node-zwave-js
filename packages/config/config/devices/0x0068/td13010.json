@@ -2,7 +2,7 @@
 	"manufacturer": "Good Way Technology Co., Ltd.",
 	"manufacturerId": "0x0068",
 	"label": "TD13010",
-	"description": "In-wall switch",
+	"description": "In-Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Watts Auto-report Period",
+			"label": "Watts Auto-Report Period",
 			"description": "Allowable range: 60-32767",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Kwh Auto-report Period",
+			"label": "Kwh Auto-Report Period",
 			"description": "Allowable range: 60-32767",
 			"valueSize": 2,
 			"unit": "seconds",

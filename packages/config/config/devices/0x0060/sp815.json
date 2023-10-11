@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Temperature And Humidity Auto Report Period Setting",
+			"label": "Temperature and Humidity Auto Report Period Setting",
 			"description": "Minutes",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -27,7 +27,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Re-trigger Interval Setting (for PIR Sensor Only)",
+			"label": "Re-Trigger Interval Setting (For PIR Sensor Only)",
 			"description": "Seconds",
 			"valueSize": 2,
 			"unit": "seconds",

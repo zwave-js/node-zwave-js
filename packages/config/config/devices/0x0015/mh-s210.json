@@ -2,7 +2,7 @@
 	"manufacturer": "Lexel",
 	"manufacturerId": "0x0015",
 	"label": "MH-S210",
-	"description": "Mini Energy switch",
+	"description": "Mini Energy Switch",
 	"devices": [
 		{
 			"productType": "0x0002",

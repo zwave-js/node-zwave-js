@@ -99,7 +99,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Un-reboot colorful mode",
+					"label": "Un-Reboot colorful mode",
 					"value": 0
 				},
 				{
@@ -212,7 +212,7 @@
 					"value": 2
 				},
 				{
-					"label": "Random Mode",
+					"label": "Random mode",
 					"value": 3
 				},
 				{
@@ -244,11 +244,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smooth Color Transition",
+					"label": "Smooth color transition",
 					"value": 0
 				},
 				{
-					"label": "Fast/Direct Color Transition",
+					"label": "Fast/Direct color transition",
 					"value": 1
 				}
 			]
@@ -320,15 +320,15 @@
 					"value": 2
 				},
 				{
-					"label": "Fade out and fade in (red)",
+					"label": "Fade out and fade in (Red)",
 					"value": 3
 				},
 				{
-					"label": "Fade out and fade in (green)",
+					"label": "Fade out and fade in (Green)",
 					"value": 4
 				},
 				{
-					"label": "Fade out and fade in (blue)",
+					"label": "Fade out and fade in (Blue)",
 					"value": 5
 				}
 			]
@@ -353,7 +353,8 @@
 					"value": 1
 				},
 				{
-					"label": "(Parabolic + Index) / 2",
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
+					"label": "(Parabolic + index) / 2",
 					"value": 2
 				},
 				{
