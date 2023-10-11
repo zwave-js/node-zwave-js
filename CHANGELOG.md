@@ -4,6 +4,30 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+Almost 1000 device configuration files have been reworked to be more consistent, mostly affecting device labels, parameter labels, descriptions and predefined options.
+After updating, you should expect to see several notifications for changed device configurations, prompting you to re-interview the affected nodes.
+Unless the device is mentioned below, there's no need to do this immediately.
+
+* Always set time for Namron 16A thermostats as UTC (#6388)
+* Add Alloy (Zipato) devices (#6331)
+* Parameter 21 of Inovelli VZW31-SN is readonly (#6389)
+* Add Shelly Wave Shutter (#6382)
+* Add Eurotronic Comet Z (700 series) (#6336)
+* Add params 7, 18, 19 to Zooz ZEN71 FW 10.20 (#6375)
+* Add Qubino Shades Remote Controller (#6335)
+* Add fingerprint for new MH8-FC version, add new option for param 1 (#6358)
+* Add Hank HKZW-SO08 (#6383)
+* Add link to manual of Honeywell T6 Pro Thermostat (#6353)
+
+### Bugfixes
+* When a device has a default wakeup interval of 0 (never wake up), this is now preserved during the interview, even when outside of the valid range advertised by the device (#6387)
+* Added a compat flag to always set the time using `Time Parameters CC` as UTC, even if the device exposes way to set the timezone (#6388)
+
+### Changes under the hood
+* Lots of config file requirements from the style guide, especially regarding **Title Case** and **Sentence case** of strings, are now automatically enforced using ESLint (#6345)
+
 ## 12.0.4 (2023-10-09)
 ### Bugfixes
 * Normalize result of `Controller.getAvailableFirmwareUpdates` to always include `channel` field (#6359)
