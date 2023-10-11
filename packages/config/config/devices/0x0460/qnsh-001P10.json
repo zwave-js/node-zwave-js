@@ -1,0 +1,220 @@
+{
+	"manufacturer": "Shelly Europe",
+	"manufacturerId": "0x0460",
+	"label": "QNSH-001P10",
+	"description": "Wave Shutter",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0082"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "SW1 Switch Type",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (Follow switch)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch (Change on toggle)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Swap Inputs",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal (SW1 - O1, SW2 - O2)",
+					"value": 0
+				},
+				{
+					"label": "Swapped (SW1 - O2, SW2 - O1)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Swap Outputs",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Swapped",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "40",
+			"label": "Power Change Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50
+		},
+		{
+			"#": "71",
+			"label": "Operating Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutter",
+					"value": 0
+				},
+				{
+					"label": "Venetian",
+					"value": 1
+				},
+				{
+					"label": "Manual time",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "72",
+			"label": "Venetian Mode: Turning Time",
+			"description": "Time required for the slats to make a full turn (180°)",
+			"valueSize": 2,
+			"unit": "0.01 seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 150,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "73",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Venetian Mode: Restore Slats Position After Moving",
+			"defaultValue": 1
+		},
+		{
+			"#": "76",
+			"label": "Motor Operation Detection",
+			"description": "Power consumption threshold at the end positions",
+			"valueSize": 1,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Auto",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "78",
+			"label": "Shutter Calibration",
+			"valueSize": 1,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Start calibration",
+					"value": 1
+				},
+				{
+					"label": "Calibrated (Read only)",
+					"value": 2
+				},
+				{
+					"label": "Not calibrated (Read only)",
+					"value": 3
+				},
+				{
+					"label": "Calibration error (Read only)",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "80",
+			"label": "Delay Motor Stop",
+			"description": "How long to wait before stopping the motor after reaching the end position",
+			"valueSize": 1,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "85",
+			"label": "Power Consumption Measurement Delay",
+			"description": "Allowable range: 0, 3-50",
+			"valueSize": 1,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "Auto",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "91",
+			"label": "Motor Moving Time",
+			"description": "Allowable range: 1-32000, 65000",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 120,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Unlimited",
+					"value": 65000
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "6.1 Adding the Device to a Z-Wave™ network (inclusion)\nNote! All Device outputs (O, O1, O2, etc. - depending on the Device type) will turn the load 1s on/1s off /1s on/1s off if the Device is successfully added to/removed from a Z-Wave™ network.\n\n6.1.1 SmartStart adding (inclusion)\nSmartStart enabled products can be added into a Z-Wave™ network by scanning the Z-Wave™ QR Code present on the Device with a gateway providing SmartStart inclusion. No further action is required, and the SmartStart device will be added automatically within 10 minutes of being switched on in the network vicinity.\n1. With the gateway application scan the QR code on the Device label and add the Security 2 (S2) Device Specific Key (DSK) to the provisioning list in the gateway.\n2. Connect the Device to a power supply.\n3. Check if the blue LED is blinking in Mode 1. If so, the Device is not added to a Z-Wave™ network.\n4. Adding will be initiated automatically within a few seconds after connecting the Device to a power supply, and the Device will be added to a Z-Wave™ network automatically.\n5. The blue LED will be blinking in Mode 2 during the adding process.\n6. The green LED will be blinking in Mode 1 if the Device is successfully added to a Z-Wave™ network.\n\n6.1.2 Adding (inclusion) with a switch/push-button\n1. Connect the Device to a power supply.\n2. Check if the blue LED is blinking in Mode 1. If so, the Device is not added to a Z-Wave™ network.\n3. Enable add/remove mode on the gateway.\n4. Toggle the switch/push-button connected to any of the SW terminals (SW, SW1, SW2, etc.) 3 times within 3 seconds (this procedure puts the Device in Learn mode*). The Device must receive on/off signal 3 times, which means pressing the momentary switch 3 times, or toggling the switch on and off 3 times.\n5. The blue LED will be blinking in Mode 2 during the adding process.\n6. The green LED will be blinking in Mode 1 if the Device is successfully added to a Z-Wave™ network.\n*Learn mode - a state that allows the Device to receive network information from the gateway.\n\n6.1.3 Adding (inclusion) with the S button\n1. Connect the Device to a power supply.\n2. Check if the blue LED is blinking in Mode 1. If so, the Device is not added to a Z-Wave™ network.\n3. Enable add/remove mode on the gateway.\n4. To enter the Setting mode, quickly press and hold the S button on the Device until the LED turns solid blue.\n5. Quickly release and then press and hold (> 2s) the S button on the Device until the blue LED starts blinking in Mode 3. Releasing the S button will start the Learn mode.\n6. The blue LED will be blinking in Mode 2 during the adding process.\n7. The green LED will be blinking in Mode 1 if the Device is successfully added to a Z-Wave™ network.\nNote! In Setting mode, the Device has a timeout of 10s before entering again into Normal mode",
+		"exclusion": "Removing the Device from a Z-Wave™ network (exclusion)\nNote! The Device will be removed from your Z-wave™ network, but any custom configuration parameters will not be erased.\nNote! All Device outputs (O, O1, O2, etc. - depending on the Device type) will turn the load 1s on/1s off /1s on/1s off if the Device is successfully added to/removed from a Z-Wave™ network.\n\n6.2.1 Removing (exclusion) with a switch/push-button\n1. Connect the Device to a power supply.\n2. Check if the green LED is blinking in Mode 1. If so, the Device is added to a Z-Wave™ network.\n3. Enable add/remove mode on the gateway.\n4. Toggle the switch/push-button connected to any of the SW terminals (SW, SW1, SW2,…) 3 times within 3 seconds (this procedure puts the Device in Learn mode). The Device must receive on/off signal 3 times, which means pressing the momentary switch 3 times, or toggling the switch on and off 3 times.\n5. The blue LED will be blinking in Mode 2 during the removing process.\n6. The blue LED will be blinking in Mode 1 if the Device is successfully removed from a Z-Wave™ network.\n\n6.2.2 Removing (exclusion) with the S button\n1. Connect the Device to a power supply.\n2. Check if the green LED is blinking in Mode 1. If so, the Device is added to a Z-Wave™ network.\n3. Enable add/remove mode on the gateway.\n4. To enter the Setting mode, quickly press and hold the S button on the Device until the LED turns solid blue.\n5. Quickly release and then press and hold (> 2s) the S button on the Device until the blue LED starts blinking in Mode 3. Releasing the S button will start the Learn mode.\n6. The blue LED will be blinking in Mode 2 during the removing process.\n7. The blue LED will be blinking in Mode 1 if the Device is successfully removed from a Z-Wave™ network.\nNote! In Setting mode, the Device has a timeout of 10s before entering again into Normal mode",
+		"reset": "6.3 Factory reset\n6.3.1 Factory reset general\nAfter Factory reset, all custom parameters and stored values (kWh, associations, routings, etc.) will return to their default state. HOME ID and NODE ID assigned to the Device will be deleted. Use this reset procedure only when the gateway is missing or otherwise inoperable.\n\n6.3.2 Factory reset with a switch/push-button\nNote! Factory reset with a switch/push-button is only possible within the first minute after the Device is connected to a power supply.\n1. Connect the Device to a power supply.\n2. Toggle the switch/push-button connected to any of the SW terminals (SW, SW1, SW2,…) 5 times within 3 seconds. The Device must receive on/off signal 5 times, which means pressing the push-button 5 times, or toggling the switch on and off 5 times.\n3. During factory reset, the LED will turn solid green for about 1s, then the blue and red LED will start blinking in Mode 3 for approx. 2s.\n4. The blue LED will be blinking in Mode 1 if the Factory reset is successful.\n\n6.3.3 Factory reset with the S button\nNote! Factory reset with the S button is possible anytime.\n1. To enter the Setting mode, quickly press and hold the S button on the Device until the LED turns solid blue.\n2. Press the S button multiple times until the LED turns solid red.\n3. Press and hold (> 2s) S button on the Device until the red LED starts blinking in Mode 3. Releasing the S button will start the factory reset.\n4. During factory reset, the LED will turn solid green for about 1s, then the blue and red LED will start blinking in Mode 3 for approx. 2s.\n5. The blue LED will be blinking in Mode 1 if the Factory reset is successful.\n\n6.3.4 Remote factory reset with parameter with the gateway\nFactory reset can be done remotely with the settings in Parameter No. 120"
+	}
+}
