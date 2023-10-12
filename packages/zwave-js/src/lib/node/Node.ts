@@ -4943,6 +4943,8 @@ protocol version:      ${this.protocolVersion}`;
 					this.id,
 					`Continuing with next part in ${conservativeWaitTime} seconds...`,
 				);
+
+				await wait(conservativeWaitTime * 1000, true);
 			}
 		}
 
