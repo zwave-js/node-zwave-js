@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a long standing issue that prevented multi-target firmware updates from being applied correctly (#6395)
+* Fixed an issue with multi-target firmware updates where the wrong update capabilities were exposed to applications, preventing manual updates of the additional targets (#6396)
+
+### Config file changes
+* Add parameter 26 to `Inovelli VZW31-SN` (#6391)
+
 ## 12.1.0 (2023-10-11)
 ### Config file changes
 Almost 1000 device configuration files have been reworked to be more consistent, mostly affecting device labels, parameter labels, descriptions and predefined options.
