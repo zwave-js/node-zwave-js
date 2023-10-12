@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.1.1 (2023-10-12)
 ### Bugfixes
 * Fixed a long standing issue that prevented multi-target firmware updates from being applied correctly (#6395)
 * Fixed an issue with multi-target firmware updates where the wrong update capabilities were exposed to applications, preventing manual updates of the additional targets (#6396)
