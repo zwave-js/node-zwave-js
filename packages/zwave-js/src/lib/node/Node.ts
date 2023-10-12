@@ -4657,8 +4657,6 @@ protocol version:      ${this.protocolVersion}`;
 		// Ensure all information was queried
 		if (
 			!firmwareUpgradable
-			|| supportsActivation == undefined
-			|| continuesToFunction == undefined
 			|| !isArray(additionalFirmwareIDs)
 		) {
 			return { firmwareUpgradable: false };
@@ -4666,7 +4664,9 @@ protocol version:      ${this.protocolVersion}`;
 
 		return {
 			firmwareUpgradable: true,
-			firmwareTargets: distinct([0, ...additionalFirmwareIDs]),
+			// TODO: Targets are not the list of IDs - maybe expose the IDs as well?
+			firmwareTargets: new Array(1 + additionalFirmwareIDs.length).fill(0)
+				.map((_, i) => i),
 			continuesToFunction,
 			supportsActivation,
 		};
@@ -4694,7 +4694,9 @@ protocol version:      ${this.protocolVersion}`;
 
 		return {
 			firmwareUpgradable: true,
-			firmwareTargets: [0, ...meta.additionalFirmwareIDs],
+			// TODO: Targets are not the list of IDs - maybe expose the IDs as well?
+			firmwareTargets: new Array(1 + meta.additionalFirmwareIDs.length)
+				.fill(0).map((_, i) => i),
 			continuesToFunction: meta.continuesToFunction,
 			supportsActivation: meta.supportsActivation,
 		};
