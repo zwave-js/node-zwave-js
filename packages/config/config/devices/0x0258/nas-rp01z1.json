@@ -23,7 +23,7 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "High (?) Temperature Basic Set",
+			"label": "High Temperature Basic Set",
 			"maxNodes": 5
 		},
 		"4": {
@@ -31,7 +31,7 @@
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "High (?) Humidity Basic Set",
+			"label": "High Humidity Basic Set",
 			"maxNodes": 5
 		}
 	},
