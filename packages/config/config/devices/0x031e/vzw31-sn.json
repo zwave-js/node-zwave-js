@@ -290,6 +290,27 @@
 			"description": "Increase output power when in non-neutral mode. (May cause problems with high level flicker or aux switch detection. Adjust maximum level if you are having problems.)"
 		},
 		{
+			"#": "26",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Dimming Mode",
+			"valueSize": 1,
+			// This parameter is actually writable, but Inovelli asked to have it readonly
+			// to prevent accidental changes that can damage the device:
+			// https://github.com/zwave-js/node-zwave-js/issues/6273#issuecomment-1714585107
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Leading edge",
+					"value": 0
+				},
+				{
+					"label": "Trailing edge",
+					"value": 1
+				}
+			]
+		},
+		{
 			"#": "50",
 			"label": "Button Delay Time",
 			"valueSize": 1,
