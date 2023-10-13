@@ -174,6 +174,12 @@ export enum FunctionType {
 
 	Shutdown = 0xd9, // Instruct the Z-Wave API to shut down in order to safely remove the power
 
+	// Long range controller support
+	GetLongRangeNodes = 0xda,
+	GetLongRangeChannel = 0xdb,
+	SetLongRangeChannel = 0xdc,
+	SetLongRangeShadowNodeIDs = 0xdd,
+
 	UNKNOWN_FUNC_UNKNOWN_0xEF = 0xef, // ??
 
 	// Special commands for Z-Wave.me sticks
