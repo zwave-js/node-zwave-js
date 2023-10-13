@@ -544,15 +544,16 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 		this: SinglecastCC<this>,
 		applHost: ZWaveApplicationHost,
 	): boolean {
-		// Check when any of the supported values was last updated longer than 6 hours ago.
-		// This may lead to some unnecessary queries, but at least the values are up to date then
+		// Poll the device when all of the supported values were last updated longer than 6 hours ago.
+		// This may lead to some values not being updated, but the user may have disabled some unnecessary
+		// reports to reduce traffic.
 		const valueDB = applHost.tryGetValueDB(this.nodeId);
 		if (!valueDB) return true;
 
 		const values = this.getDefinedValueIDs(applHost).filter((v) =>
 			MultilevelSensorCCValues.value.is(v)
 		);
-		return values.some((v) => {
+		return values.every((v) => {
 			const lastUpdated = valueDB.getTimestamp(v);
 			return (
 				lastUpdated == undefined
