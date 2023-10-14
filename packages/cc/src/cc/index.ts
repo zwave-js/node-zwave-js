@@ -652,6 +652,19 @@ export {
 	ZWaveProtocolCCTransferRangeInformation,
 } from "./ZWaveProtocolCC";
 export {
+	ZWaveLRProtocolCC,
+	ZWaveLRProtocolCCNOP,
+	ZWaveLRProtocolCCAssignIDs,
+	ZWaveLRProtocolCCExcludeRequest,
+	ZWaveLRProtocolCCNodeInformationFrame,
+	ZWaveLRProtocolCCRequestNodeInformationFrame,
+	ZWaveLRProtocolCCSmartStartIncludedNodeInformation,
+	ZWaveLRProtocolCCSmartStartInclusionRequest,
+	ZWaveLRProtocolCCSmartStartPrime,
+	ZWaveLRProtocolCCExcludeRequestConfirimation,
+	ZWaveLRProtocolCCNonSecureIncusionStepComplete,
+} from "./ZWaveLRProtocolCC";
+export {
 	fibaroCC,
 	fibaroCCCommand,
 	getFibaroCCCommand,
