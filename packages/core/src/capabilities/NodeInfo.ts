@@ -114,7 +114,7 @@ export function encodeCCId(
 	}
 }
 
-export function parseCCList(payload: Buffer): {
+export function parseCCList(payload: Buffer, isLongRange: boolean = false): {
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 } {
@@ -124,32 +124,48 @@ export function parseCCList(payload: Buffer): {
 	};
 	let offset = 0;
 	let isAfterMark = false;
-	while (offset < payload.length) {
+	let listEnd = payload.length;
+	if (isLongRange) {
+		validatePayload(payload.length >= offset + 1);
+		const listLength = payload[offset++];
+		listEnd = offset + listLength;
+		validatePayload(payload.length >= listEnd);
+	}
+	while (offset < listEnd) {
 		// Read either the normal or extended ccId
 		const { ccId: cc, bytesRead } = parseCCId(payload, offset);
 		offset += bytesRead;
 		// CCs before the support/control mark are supported
 		// CCs after the support/control mark are controlled
+		// BUGBUG: does the "mark" and support/control convention apply to isLongRange?
 		if (cc === CommandClasses["Support/Control Mark"]) {
 			isAfterMark = true;
 			continue;
 		}
 		(isAfterMark ? ret.controlledCCs : ret.supportedCCs).push(cc);
 	}
+	// BUGBUG: isLongRange prohibits CC from 0x00..0x20 from being advertised here, as does 4.3.2.1.1.17
+	// BUGBUG: how do >0xFF CC get advertised? I don't immediately see a mechanism for indicating a multi-byte CC
 	return ret;
 }
 
 export function encodeCCList(
 	supportedCCs: readonly CommandClasses[],
 	controlledCCs: readonly CommandClasses[],
+	isLongRange: boolean = false,
 ): Buffer {
 	const bufferLength =
-		sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)))
+	    (isLongRange ? 1 : 0)
+		+ sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)))
 		+ (controlledCCs.length > 0 ? 1 : 0) // support/control mark
 		+ sum(controlledCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)));
 
 	const ret = Buffer.allocUnsafe(bufferLength);
 	let offset = 0;
+	if (isLongRange) {
+		// BUGBUG: validate bufferLength - 1 is <= 0xFF
+		ret[offset++] = bufferLength - 1;
+	}
 	for (const cc of supportedCCs) {
 		offset += encodeCCId(cc, ret, offset);
 	}
@@ -215,34 +231,47 @@ export type NodeInformationFrame =
 export function parseNodeProtocolInfo(
 	buffer: Buffer,
 	offset: number,
+	isLongRange: boolean,
 ): NodeProtocolInfo {
 	validatePayload(buffer.length >= offset + 3);
 
 	const isListening = !!(buffer[offset] & 0b10_000_000);
-	const isRouting = !!(buffer[offset] & 0b01_000_000);
+	let isRouting = false;
+	if (!isLongRange) {
+		isRouting = !!(buffer[offset] & 0b01_000_000);
+	}
 
 	const supportedDataRates: DataRate[] = [];
-	const maxSpeed = buffer[offset] & 0b00_011_000;
-	const speedExtension = buffer[offset + 2] & 0b111;
-	if (maxSpeed & 0b00_010_000) {
-		supportedDataRates.push(40000);
-	}
-	if (maxSpeed & 0b00_001_000) {
-		supportedDataRates.push(9600);
-	}
-	if (speedExtension & 0b001) {
-		supportedDataRates.push(100000);
-	}
-	if (supportedDataRates.length === 0) {
-		supportedDataRates.push(9600);
+	if (isLongRange) {
+		const speedExtension = buffer[offset + 2] & 0b111;
+		if (speedExtension & 0b010) {
+			supportedDataRates.push(100000);
+		}
+	} else {
+		const maxSpeed = buffer[offset] & 0b00_011_000;
+		const speedExtension = buffer[offset + 2] & 0b111;
+		if (maxSpeed & 0b00_010_000) {
+			supportedDataRates.push(40000);
+		}
+		if (maxSpeed & 0b00_001_000) {
+			supportedDataRates.push(9600);
+		}
+		if (speedExtension & 0b001) {
+			supportedDataRates.push(100000);
+		}
+		if (supportedDataRates.length === 0) {
+			supportedDataRates.push(9600);
+		}
 	}
 
-	const protocolVersion = buffer[offset] & 0b111;
+	// BUGBUG: what's the correct protocol version here for long range?
+	const protocolVersion = isLongRange ? 0 
+	: buffer[offset] & 0b111;
 
 	const capability = buffer[offset + 1];
-	const optionalFunctionality = !!(capability & 0b1000_0000);
+	const optionalFunctionality = (!isLongRange) && !!(capability & 0b1000_0000);
 	let isFrequentListening: FLiRS;
-	switch (capability & 0b0110_0000) {
+	switch (capability & (isLongRange ? 0b0100_0000 : 0b0110_0000)) {
 		case 0b0100_0000:
 			isFrequentListening = "1000ms";
 			break;
@@ -252,21 +281,26 @@ export function parseNodeProtocolInfo(
 		default:
 			isFrequentListening = false;
 	}
-	const supportsBeaming = !!(capability & 0b0001_0000);
+	const supportsBeaming = (!isLongRange) && !!(capability & 0b0001_0000);
 
 	let nodeType: NodeType;
-	switch (capability & 0b1010) {
-		case 0b1000:
+
+	switch (isLongRange ? (0b1_0000_0000 | (capability & 0b0010)) : (capability &&  0b1010)) {
+		case 0b0_0000_1000:
+		case 0b1_0000_0000:	
 			nodeType = NodeType["End Node"];
 			break;
-		case 0b0010:
+		case 0b0_0000_0010:
+		case 0b1_0000_0010:
 		default:
+			// BUGBUG: is Controller correct for default && isLongRange?
 			nodeType = NodeType.Controller;
 			break;
 	}
 
-	const hasSpecificDeviceClass = !!(capability & 0b100);
-	const supportsSecurity = !!(capability & 0b1);
+	const hasSpecificDeviceClass = isLongRange || !!(capability & 0b100);
+	// BUGBUG: can we assume security is true?
+	const supportsSecurity = isLongRange || !!(capability & 0b1);
 
 	return {
 		isListening,
@@ -282,39 +316,53 @@ export function parseNodeProtocolInfo(
 	};
 }
 
-export function encodeNodeProtocolInfo(info: NodeProtocolInfo): Buffer {
+export function encodeNodeProtocolInfo(info: NodeProtocolInfo, isLongRange: boolean = false): Buffer {
 	const ret = Buffer.alloc(3, 0);
 	// Byte 0 and 2
 	if (info.isListening) ret[0] |= 0b10_000_000;
-	if (info.isRouting) ret[0] |= 0b01_000_000;
-	if (info.supportedDataRates.includes(40000)) ret[0] |= 0b00_010_000;
-	if (info.supportedDataRates.includes(9600)) ret[0] |= 0b00_001_000;
-	if (info.supportedDataRates.includes(100000)) ret[2] |= 0b001;
-	ret[0] |= info.protocolVersion & 0b111;
+	if (isLongRange) {
+		if (info.supportedDataRates.includes(100000)) ret[2] |= 0b010;
+	} else {
+		if (info.isRouting) ret[0] |= 0b01_000_000;
+		if (info.supportedDataRates.includes(40000)) ret[0] |= 0b00_010_000;
+		if (info.supportedDataRates.includes(9600)) ret[0] |= 0b00_001_000;
+		if (info.supportedDataRates.includes(100000)) ret[2] |= 0b001;
+		ret[0] |= info.protocolVersion & 0b111;
+	}
 
 	// Byte 1
-	if (info.optionalFunctionality) ret[1] |= 0b1000_0000;
+	if (!isLongRange) {
+		if (info.optionalFunctionality) ret[1] |= 0b1000_0000;
+	}
 	if (info.isFrequentListening === "1000ms") ret[1] |= 0b0100_0000;
-	else if (info.isFrequentListening === "250ms") ret[1] |= 0b0010_0000;
+	else if (!isLongRange && info.isFrequentListening === "250ms") ret[1] |= 0b0010_0000;
 
-	if (info.supportsBeaming) ret[1] |= 0b0001_0000;
-	if (info.supportsSecurity) ret[1] |= 0b1;
-	if (info.nodeType === NodeType["End Node"]) ret[1] |= 0b1000;
-	else ret[1] |= 0b0010; // Controller
+	if (!isLongRange) {
+		if (info.supportsBeaming) ret[1] |= 0b0001_0000;
+		if (info.supportsSecurity) ret[1] |= 0b1;
+	}
 
-	if (info.hasSpecificDeviceClass) ret[1] |= 0b100;
+	if (info.nodeType === NodeType["End Node"]) {
+		if (!isLongRange) ret[1] |= 0b1000;
+	} else ret[1] |= 0b0010; // Controller
+
+	if (!isLongRange && info.hasSpecificDeviceClass) ret[1] |= 0b100;
 
 	return ret;
 }
 
-export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
+export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer, isLongRange: boolean = false): {
 	info: NodeProtocolInfoAndDeviceClass;
 	bytesRead: number;
 } {
 	validatePayload(buffer.length >= 5);
-	const protocolInfo = parseNodeProtocolInfo(buffer, 0);
+	const protocolInfo = parseNodeProtocolInfo(buffer, 0, isLongRange);
 	let offset = 3;
-	const basic = buffer[offset++];
+	// BUGBUG: 4.3.2.1.1.14 says this is omitted if the Controller field is set to 0, yet we always parse it?
+	let basic = 0x100; // BUGBUG: is there an assume one here, or...?
+	if (!isLongRange) {
+		basic = buffer[offset++];
+	}
 	const generic = buffer[offset++];
 	let specific = 0;
 	if (protocolInfo.hasSpecificDeviceClass) {
@@ -334,24 +382,31 @@ export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
 
 export function encodeNodeProtocolInfoAndDeviceClass(
 	info: NodeProtocolInfoAndDeviceClass,
+	isLongRange: boolean = false
 ): Buffer {
+	const deviceClasses = isLongRange ? 
+	Buffer.from([
+		info.genericDeviceClass,
+		info.specificDeviceClass,
+	]) : Buffer.from([
+		info.basicDeviceClass,
+		info.genericDeviceClass,
+		info.specificDeviceClass,
+	]);
 	return Buffer.concat([
 		encodeNodeProtocolInfo({ ...info, hasSpecificDeviceClass: true }),
-		Buffer.from([
-			info.basicDeviceClass,
-			info.genericDeviceClass,
-			info.specificDeviceClass,
-		]),
+		deviceClasses,
 	]);
 }
 
 export function parseNodeInformationFrame(
 	buffer: Buffer,
+	isLongRange: boolean = false,
 ): NodeInformationFrame {
 	const { info, bytesRead: offset } = parseNodeProtocolInfoAndDeviceClass(
-		buffer,
+		buffer, isLongRange
 	);
-	const supportedCCs = parseCCList(buffer.subarray(offset)).supportedCCs;
+	const supportedCCs = parseCCList(buffer.subarray(offset), isLongRange).supportedCCs;
 
 	return {
 		...info,
@@ -359,10 +414,10 @@ export function parseNodeInformationFrame(
 	};
 }
 
-export function encodeNodeInformationFrame(info: NodeInformationFrame): Buffer {
+export function encodeNodeInformationFrame(info: NodeInformationFrame, isLongRange: boolean = false): Buffer {
 	return Buffer.concat([
-		encodeNodeProtocolInfoAndDeviceClass(info),
-		encodeCCList(info.supportedCCs, []),
+		encodeNodeProtocolInfoAndDeviceClass(info, isLongRange),
+		encodeCCList(info.supportedCCs, [], isLongRange),
 	]);
 }
 
