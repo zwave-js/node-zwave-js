@@ -44,6 +44,12 @@ export class SerialAPIParser extends Transform {
 						this.push(MessageHeaders.ACK);
 						break;
 					}
+					case 0x86: {
+						// This is _maybe_ a corrupted ACK byte from a ZST39 after a soft reset, transform it and keep it
+						this.logger?.ACK("inbound");
+						this.push(MessageHeaders.ACK);
+						break;
+					}
 					case MessageHeaders.NAK: {
 						this.logger?.NAK("inbound");
 						this.push(MessageHeaders.NAK);
