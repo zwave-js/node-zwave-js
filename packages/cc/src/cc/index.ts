@@ -106,6 +106,7 @@ export {
 	ColorSwitchCCSupportedReport,
 	ColorSwitchCCValues,
 } from "./ColorSwitchCC";
+export type { ConfigurationCCAPISetOptions } from "./ConfigurationCC";
 export {
 	ConfigurationCC,
 	ConfigurationCCBulkGet,
