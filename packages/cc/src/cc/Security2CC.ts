@@ -94,13 +94,26 @@ function getAuthenticationData(
 	commandLength: number,
 	unencryptedPayload: Buffer,
 ): Buffer {
-	const ret = Buffer.allocUnsafe(8 + unencryptedPayload.length);
-	ret[0] = sendingNodeId;
-	ret[1] = destination;
-	ret.writeUInt32BE(homeId, 2);
-	ret.writeUInt16BE(commandLength, 6);
+	const nodeIdSize = (sendingNodeId < 256 && destination < 256) ? 1 : 2;
+	const ret = Buffer.allocUnsafe(2*nodeIdSize + 6 + unencryptedPayload.length);
+	let offset = 0;
+	if (nodeIdSize == 1) {
+		ret[offset++] = sendingNodeId;
+		ret[offset++] = destination;	
+
+	} else {
+		ret.writeUint16BE(sendingNodeId, offset);
+		offset += 2;
+		ret.writeUint16BE(destination, offset);
+		offset += 2;
+	}
+
+	ret.writeUInt32BE(homeId, offset);
+	offset += 4;
+	ret.writeUInt16BE(commandLength, offset);
+	offset += 2;
 	// This includes the sequence number and all unencrypted extensions
-	unencryptedPayload.copy(ret, 8, 0);
+	unencryptedPayload.copy(ret, offset, 0);
 	return ret;
 }
 
