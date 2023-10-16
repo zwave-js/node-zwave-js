@@ -3493,37 +3493,33 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 	}
 
-	private handleUnresponsiveController(
+	/**
+	 * @internal
+	 * Handles the case that the controller didn't acknowledge a command in time
+	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
+	 */
+	private handleMissingControllerACK(
 		transaction: Transaction,
-		error: ZWaveError,
+		error: ZWaveError & {
+			code: ZWaveErrorCodes.Controller_Timeout;
+			context: "ACK";
+		},
 	): boolean {
 		if (!this._controller) return false;
 
 		const fail = (message: string) => {
 			this.rejectTransaction(transaction, error);
-
 			void this.destroyWithMessage(message);
 		};
 
-		if (
-			this._recoveryPhase
-				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
-		) {
-			// The controller is still timing out transmitting after a soft reset, don't try again.
-			// Reject the transaction and destroy the driver.
-			fail("Controller is still timing out. Restarting the driver...");
-
-			return true;
-		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
+		if (this._controller.status !== ControllerStatus.Unresponsive) {
 			// The controller was responsive before this transaction failed.
 			// Mark it as unresponsive and try to soft-reset it.
 			this.controller.setStatus(
 				ControllerStatus.Unresponsive,
 			);
 
-			this._recoveryPhase = isMissingControllerACK(error)
-				? ControllerRecoveryPhase.NoACK
-				: ControllerRecoveryPhase.CallbackTimeout;
+			this._recoveryPhase = ControllerRecoveryPhase.NoACK;
 
 			this.driverLog.print(
 				"Attempting to recover unresponsive controller...",
@@ -3539,16 +3535,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			void this.softReset().then(() => {
 				// The controller responded. It is no longer unresponsive
 				this._controller?.setStatus(ControllerStatus.Ready);
-
-				if (this._recoveryPhase === ControllerRecoveryPhase.NoACK) {
-					this._recoveryPhase = ControllerRecoveryPhase.None;
-				} else if (
-					this._recoveryPhase
-						=== ControllerRecoveryPhase.CallbackTimeout
-				) {
-					this._recoveryPhase =
-						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
-				}
+				this._recoveryPhase = ControllerRecoveryPhase.None;
 			}).catch(() => {
 				// Soft-reset failed. Reject the original transaction and try restarting the driver.
 				fail(
@@ -3560,6 +3547,112 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		} else {
 			// We already attempted to recover from an unresponsive controller.
 			// Ending up here means the soft-reset also failed and the driver is about to be destroyed
+			return false;
+		}
+	}
+
+	/**
+	 * @internal
+	 * Handles the case that the controller didn't send the callback for a SendData in time
+	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
+	 */
+	private handleMissingSendDataCallback(
+		transaction: Transaction,
+		error: ZWaveError & {
+			code: ZWaveErrorCodes.Controller_Timeout;
+			context: "callback";
+		},
+	): boolean {
+		if (!this._controller) return false;
+
+		if (
+			this._recoveryPhase
+				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
+		) {
+			const node = this.getNodeUnsafe(transaction.message);
+			if (!node) return false; // This should never happen, but whatever
+
+			// The controller is still timing out transmitting after a soft reset, don't try again.
+			// Real-world experience has shown that for older controllers this situation can be caused by unresponsive nodes.
+
+			// The following is essentially a copy of handleMissingNodeACK, but with updated error messages
+			const messagePart1 =
+				"The node is causing the controller to become unresponsive";
+
+			if (node.canSleep) {
+				if (node.status === NodeStatus.Asleep) {
+					// We already moved the messages to the wakeup queue before. If we end up here, this means a command
+					// was sent that may be sent to potentially asleep nodes - including pings.
+					return false;
+				}
+				this.controllerLog.logNode(
+					node.id,
+					`${messagePart1}. It is probably asleep, moving its messages to the wakeup queue.`,
+					"warn",
+				);
+
+				// There is no longer a reference to the current transaction. If it should be moved to the wakeup queue,
+				// it temporarily needs to be added to the queue again.
+				const handled = this.mayMoveToWakeupQueue(transaction);
+				if (handled) {
+					this.queue.add(transaction);
+				}
+
+				// Mark the node as asleep. This will move the messages to the wakeup queue
+				node.markAsAsleep();
+
+				return handled;
+			} else {
+				const errorMsg = `${messagePart1}, it is presumed dead`;
+				this.controllerLog.logNode(node.id, errorMsg, "warn");
+
+				node.markAsDead();
+
+				// There is no longer a reference to the current transaction on the queue, so we need to reject it separately.
+				transaction.setProgress({
+					state: TransactionState.Failed,
+					reason: errorMsg,
+				});
+
+				transaction.abort(error);
+				this.rejectAllTransactionsForNode(node.id, errorMsg);
+
+				return true;
+			}
+		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
+			// The controller was responsive before this transaction failed.
+			// Mark it as unresponsive and try to soft-reset it.
+			this.controller.setStatus(
+				ControllerStatus.Unresponsive,
+			);
+
+			this._recoveryPhase = ControllerRecoveryPhase.CallbackTimeout;
+
+			this.driverLog.print(
+				"Controller missed Send Data callback. Attempting to recover...",
+				"warn",
+			);
+
+			// Re-queue the transaction.
+			// Its message generator may have finished, so reset that too.
+			transaction.reset();
+			this.queue.add(transaction.clone());
+
+			// Execute the soft-reset asynchronously
+			void this.softReset().then(() => {
+				// The controller responded. It is no longer unresponsive
+				this._controller?.setStatus(ControllerStatus.Ready);
+
+				this._recoveryPhase =
+					ControllerRecoveryPhase.CallbackTimeoutAfterReset;
+			}).catch(() => {
+				// Soft-reset failed. Just reject the original transaction.
+				this.rejectTransaction(transaction, error);
+			});
+
+			return true;
+		} else {
+			// Not sure what to do here
 			return false;
 		}
 	}
@@ -5566,12 +5659,13 @@ ${handlers.length} left`,
 		// If a node failed to respond in time, it might be sleeping
 		if (this.isMissingNodeACK(transaction, error)) {
 			if (this.handleMissingNodeACK(transaction as any, error)) return;
+		} else if (isMissingControllerACK(error)) {
+			if (this.handleMissingControllerACK(transaction, error)) return;
 		} else if (
-			isMissingControllerACK(error)
-			|| (isSendData(transaction.message)
-				&& isMissingControllerCallback(error))
+			isSendData(transaction.message)
+			&& isMissingControllerCallback(error)
 		) {
-			if (this.handleUnresponsiveController(transaction, error)) return;
+			if (this.handleMissingSendDataCallback(transaction, error)) return;
 		}
 
 		this.rejectTransaction(transaction, error);

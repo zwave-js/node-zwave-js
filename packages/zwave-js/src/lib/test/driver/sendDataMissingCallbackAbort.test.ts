@@ -6,7 +6,7 @@ import {
 	MockControllerStateKeys,
 } from "../../controller/MockControllerState";
 
-import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
+import { NodeStatus, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import Sinon from "sinon";
 import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
 import {
@@ -90,7 +90,8 @@ integrationTest(
 					// Soft reset should restore normal operation
 					if (msg instanceof SoftResetRequest) {
 						shouldTimeOut = false;
-						return true;
+						// Delegate to the default behavior
+						return false;
 					}
 				},
 			};
@@ -124,8 +125,10 @@ integrationTest(
 );
 
 integrationTest(
-	"Destroy driver if SendData is still missing the callback after soft-reset",
+	"Mark node as dead if SendData is still missing the callback after soft-reset",
 	{
+		// Real-world experience has shown that for older controllers this situation can be caused by dead nodes
+		// We don't want to restart the driver in that case, but mark the node as dead instead
 		// debug: true,
 
 		// provisioningDirectory: path.join(
@@ -206,14 +209,14 @@ integrationTest(
 				(msg) => msg.functionType === FunctionType.SoftReset,
 			);
 
-			// The ping should eventually fail
+			// The ping should eventually fail and the node be marked dead
 			t.false(await pingPromise);
 
-			// The driver should have been destroyed
-			await wait(100);
-			assertZWaveError(t, errorSpy.getCall(0).args[0], {
-				errorCode: ZWaveErrorCodes.Driver_Failed,
-			});
+			t.is(node.status, NodeStatus.Dead);
+
+			// The error event should not have been emitted
+			await wait(300);
+			t.is(errorSpy.callCount, 0);
 		},
 	},
 );
@@ -286,7 +289,8 @@ integrationTest(
 					// Soft reset should restore normal operation
 					if (msg instanceof SoftResetRequest) {
 						shouldTimeOut = false;
-						return true;
+						// Delegate to the default behavior
+						return false;
 					}
 				},
 			};
