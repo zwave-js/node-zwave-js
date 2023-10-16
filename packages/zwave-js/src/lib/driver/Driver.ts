@@ -4936,7 +4936,8 @@ ${handlers.length} left`,
 		const machine = createSerialAPICommandMachine(
 			msg,
 			{
-				sendData: this.writeSerial.bind(this),
+				sendData: (data) => this.writeSerial(data),
+				sendDataAbort: () => this.abortSendData(false),
 				notifyUnsolicited: (msg) => {
 					void this.handleUnsolicitedMessage(msg);
 				},
@@ -5020,6 +5021,14 @@ ${handlers.length} left`,
 						cmdResult.result,
 						transactionSource,
 					),
+				);
+			}
+		});
+
+		this.serialAPIInterpreter.onTransition((state) => {
+			if (state.changed) {
+				this.driverLog.print(
+					`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
 				);
 			}
 		});

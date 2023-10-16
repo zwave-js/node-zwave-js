@@ -13,6 +13,7 @@ import {
 	createMachine,
 	raise,
 } from "xstate";
+import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
 /* eslint-disable @typescript-eslint/ban-types */
@@ -93,6 +94,7 @@ export type SerialAPICommandDoneData =
 export interface SerialAPICommandServiceImplementations {
 	timestamp: () => number;
 	sendData: (data: Buffer) => Promise<void>;
+	sendDataAbort: () => Promise<void>;
 	notifyRetry: (
 		lastError: SerialAPICommandError | undefined,
 		message: Message,
@@ -148,9 +150,13 @@ export function getSerialAPICommandMachineConfig(
 		timestamp,
 		logOutgoingMessage,
 		notifyUnsolicited,
+		sendDataAbort,
 	}: Pick<
 		SerialAPICommandServiceImplementations,
-		"timestamp" | "logOutgoingMessage" | "notifyUnsolicited"
+		| "timestamp"
+		| "logOutgoingMessage"
+		| "notifyUnsolicited"
+		| "sendDataAbort"
 	>,
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
 ): SerialAPICommandMachineConfig {
@@ -255,12 +261,33 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
-					RESPONSE_TIMEOUT: {
-						target: "retry",
-						actions: assign({
-							lastError: (_) => "response timeout",
-						}),
-					},
+					// Do not retry when a response times out
+					RESPONSE_TIMEOUT: [
+						{
+							cond: "isSendData",
+							target: "waitForCallback",
+							actions: [
+								() => sendDataAbort(),
+								assign({
+									lastError: (
+										_,
+									) => (console.log(
+										"lastError => callback NOK",
+									),
+										"response timeout"),
+								}),
+							],
+						},
+						{
+							target: "failure",
+							actions: assign({
+								lastError: (
+									_,
+								) => (console.log("lastError => callback NOK"),
+									"response timeout"),
+							}),
+						},
+					],
 				},
 			},
 			waitForCallback: {
@@ -271,7 +298,10 @@ export function getSerialAPICommandMachineConfig(
 							target: "failure",
 							cond: "callbackIsNOK",
 							actions: assign({
-								lastError: (_) => "callback NOK",
+								lastError: (
+									_,
+								) => (console.log("lastError => callback NOK"),
+									"callback NOK"),
 								result: (_, evt) => (evt as any).message,
 							}),
 						},
@@ -342,7 +372,10 @@ export function getSerialAPICommandMachineOptions(
 	{
 		sendData,
 		notifyRetry,
-	}: Pick<SerialAPICommandServiceImplementations, "sendData" | "notifyRetry">,
+	}: Pick<
+		SerialAPICommandServiceImplementations,
+		"sendData" | "sendDataAbort" | "notifyRetry"
+	>,
 	timeoutConfig: SerialAPICommandMachineParams["timeouts"],
 ): SerialAPICommandMachineOptions {
 	return {
@@ -365,10 +398,13 @@ export function getSerialAPICommandMachineOptions(
 		},
 		guards: {
 			mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
+			isSendData: (ctx) => isSendData(ctx.msg),
 			expectsNoResponse: (ctx) => !ctx.msg.expectsResponse(),
 			expectsNoCallback: (ctx) => !ctx.msg.expectsCallback(),
 			isExpectedMessage: (ctx, evt, meta) =>
-				meta.state.matches("waitForResponse")
+				ctx.lastError === "response timeout"
+					? false
+					: meta.state.matches("waitForResponse")
 					? ctx.msg.isExpectedResponse((evt as any).message)
 					: meta.state.matches("waitForCallback")
 					? ctx.msg.isExpectedCallback((evt as any).message)
