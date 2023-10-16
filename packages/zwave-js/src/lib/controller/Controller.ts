@@ -1650,7 +1650,6 @@ export class ZWaveController
 
 		this.setInclusionState(InclusionState.Including);
 		this._inclusionOptions = options;
-		// BUGBUG: todo: cache the options used to start inclusion so they can be re-used for stopping, etc
 		this._inclusionFlags = {
 			highPower: true,
 			networkWide: true,

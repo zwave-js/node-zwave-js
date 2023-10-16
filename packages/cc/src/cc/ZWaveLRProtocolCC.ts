@@ -7,7 +7,6 @@ import {
 	type ProtocolVersion,
 	ZWaveError,
 	ZWaveErrorCodes,
-	// parseBitMask,
 	encodeNodeInformationFrame,
 	parseNodeInformationFrame,
 	validatePayload,
@@ -26,10 +25,7 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
-	// type NetworkTransferStatus,
-	// WakeUpTime,
 	ZWaveLRProtocolCommand,
-	// parseWakeUpTime,
 } from "../lib/_Types";
 
 @commandClass(CommandClasses["Z-Wave Long Range Protocol"])
