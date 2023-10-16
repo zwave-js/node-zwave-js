@@ -15,10 +15,48 @@ import {
 const NUM_FUNCTIONS = 256;
 const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 
+export interface GetSerialApiCapabilitiesRequestOptions
+	extends MessageBaseOptions
+{
+	mysteryValue: number | undefined,
+}
+
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiCapabilities)
 @expectedResponse(FunctionType.GetSerialApiCapabilities)
 @priority(MessagePriority.Controller)
-export class GetSerialApiCapabilitiesRequest extends Message {}
+export class GetSerialApiCapabilitiesRequest extends Message {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| MessageDeserializationOptions
+			| GetSerialApiCapabilitiesRequestOptions,
+	) {
+		super(host, options);
+
+		if (gotDeserializationOptions(options)) {
+			if (this.payload.length >= 1) {
+			this.mysteryValue = this.payload[0];
+			} else {
+				this.mysteryValue = undefined;
+			}
+		} else {
+			this.mysteryValue = options.mysteryValue;
+		}
+	}
+
+	public mysteryValue: number | undefined;
+
+	public serialize(): Buffer {
+		if (this.mysteryValue !== undefined) {
+			this.payload = Buffer.allocUnsafe(1);
+			this.payload[0] = this.mysteryValue;
+		} else {
+			this.payload = Buffer.allocUnsafe(0);
+		}
+
+		return super.serialize();
+	}
+}
 
 export interface GetSerialApiCapabilitiesResponseOptions
 	extends MessageBaseOptions

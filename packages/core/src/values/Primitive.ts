@@ -1,4 +1,8 @@
-import { MAX_NODES, NUM_NODEMASK_BYTES } from "../consts";
+import {
+	MAX_NODES,
+	NUM_LR_NODES_PER_SEGMENT,
+	NUM_NODEMASK_BYTES,
+} from "../consts";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	getBitMaskWidth,
@@ -231,15 +235,17 @@ export function encodeFloatWithScale(
 }
 
 /** Parses a bit mask into a numeric array */
-export function parseBitMask(mask: Buffer, startValue: number = 1): number[] {
-	const numBits = mask.length * 8;
-
+export function parseBitMask(
+	mask: Buffer,
+	startValue: number = 1,
+	numBits: number = mask.length * 8,
+): number[] {
 	const ret: number[] = [];
-	for (let index = 1; index <= numBits; index++) {
-		const byteNum = (index - 1) >>> 3; // id / 8
-		const bitNum = (index - 1) % 8;
+	for (let index = 0; index < numBits; index++) {
+		const byteNum = index >>> 3; // id / 8
+		const bitNum = index % 8;
 		if ((mask[byteNum] & (2 ** bitNum)) !== 0) {
-			ret.push(index + startValue - 1);
+			ret.push(index + startValue);
 		}
 	}
 	return ret;
@@ -266,8 +272,26 @@ export function parseNodeBitMask(mask: Buffer): number[] {
 	return parseBitMask(mask.subarray(0, NUM_NODEMASK_BYTES));
 }
 
+export function parseLongRangeNodeBitMask(
+	mask: Buffer,
+	startValue: number,
+): number[] {
+	return parseBitMask(mask, startValue);
+}
+
 export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer {
 	return encodeBitMask(nodeIDs, MAX_NODES);
+}
+
+export function encodeLongRangeNodeBitMask(
+	nodeIDs: readonly number[],
+	startValue: number,
+): Buffer {
+	return encodeBitMask(
+		nodeIDs,
+		startValue + NUM_LR_NODES_PER_SEGMENT - 1,
+		startValue,
+	);
 }
 
 /**

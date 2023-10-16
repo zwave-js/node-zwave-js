@@ -119,6 +119,7 @@ export interface InclusionUserCallbacks {
 }
 
 /** Options for inclusion of a new node */
+// TODO: how should "preferLongRange" fit in here? We probably want the user to be able to control that?
 export type InclusionOptions =
 	| {
 		strategy: InclusionStrategy.Default;
@@ -132,6 +133,11 @@ export type InclusionOptions =
 		 * This is not recommended due to the overhead caused by S0.
 		 */
 		forceSecurity?: boolean;
+
+		/**
+		 * Force long range. If not provided, will default to long range iff the controller supports it, and not otherwise.
+		 */
+		isLongRange?: boolean;
 	}
 	| {
 		strategy: InclusionStrategy.Security_S2;
@@ -158,6 +164,11 @@ export type InclusionOptions =
 		strategy:
 			| InclusionStrategy.Insecure
 			| InclusionStrategy.Security_S0;
+
+		/**
+		 * Force long range. If not provided, will default to long range iff the controller supports it, and not otherwise.
+		 */
+		isLongRange?: boolean;
 	};
 
 /**
@@ -170,6 +181,13 @@ export type InclusionOptionsInternal =
 		strategy: InclusionStrategy.SmartStart;
 		provisioning: PlannedProvisioningEntry;
 	};
+
+// BUGBUG: better way to do this?
+export type InclusionFlagsInternal = {
+	highPower: boolean;
+	networkWide: boolean;
+	protocolLongRange: boolean;
+};
 
 export type ExclusionOptions = {
 	strategy:
@@ -218,6 +236,10 @@ export interface PlannedProvisioningEntry {
 
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
+
+	/** The device must be included via ZWave Long Range */
+	// BUGBUG: by adding this here we probably broke the API used by JSUI, etc...
+	isLongRange: boolean;
 
 	/** The security classes that have been **granted** by the user */
 	securityClasses: SecurityClass[];

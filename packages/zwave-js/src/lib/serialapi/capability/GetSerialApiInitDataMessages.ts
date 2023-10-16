@@ -1,9 +1,12 @@
 import {
 	MAX_NODES,
 	MessagePriority,
+	NUM_LR_NODEMASK_SEGMENT_BYTES,
+	NUM_LR_NODES_PER_SEGMENT,
 	NUM_NODEMASK_BYTES,
 	NodeType,
-	encodeBitMask,
+	encodeLongRangeNodeBitMask,
+	parseLongRangeNodeBitMask,
 	parseNodeBitMask,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
@@ -151,7 +154,7 @@ export class GetSerialApiInitDataResponse extends Message {
 		this.payload[1] = capabilities;
 
 		this.payload[2] = NUM_NODEMASK_BYTES;
-		const nodeBitMask = encodeBitMask(this.nodeIds, MAX_NODES);
+		const nodeBitMask = encodeLongRangeNodeBitMask(this.nodeIds, MAX_NODES);
 		nodeBitMask.copy(this.payload, 3);
 
 		if (chipType) {
@@ -215,3 +218,115 @@ export class GetSerialApiInitDataResponse extends Message {
 //                         is SUC:             true
 //                         chip type:          7
 //                         chip version:       0
+
+export interface GetLongRangeNodesRequestOptions extends MessageBaseOptions {
+	listStartOffset128: number;
+}
+
+@messageTypes(MessageType.Request, FunctionType.GetLongRangeNodes)
+@expectedResponse(FunctionType.GetLongRangeNodes)
+@priority(MessagePriority.Controller)
+export class GetLongRangeNodesRequest extends Message {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| MessageDeserializationOptions
+			| GetLongRangeNodesRequestOptions,
+	) {
+		super(host, options);
+
+		if (gotDeserializationOptions(options)) {
+			// BUGBUG: validate length at least
+			this.listStartOffset128 = this.payload[0];
+		} else {
+			this.listStartOffset128 = options.listStartOffset128;
+		}
+	}
+
+	public listStartOffset128: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(
+			1,
+		);
+
+		this.payload[0] = this.listStartOffset128;
+		return super.serialize();
+	}
+}
+
+export interface GetLongRangeNodesResponseOptions extends MessageBaseOptions {
+	moreNodes: boolean;
+	listStartOffset128: number;
+	nodeIds: number[];
+}
+
+@messageTypes(MessageType.Response, FunctionType.GetLongRangeNodes)
+export class GetLongRangeNodesResponse extends Message {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| MessageDeserializationOptions
+			| GetLongRangeNodesResponseOptions,
+	) {
+		super(host, options);
+
+		if (gotDeserializationOptions(options)) {
+			// BUGBUG: validate length at least
+			this.moreNodes = this.payload[0] != 0;
+			this.listStartOffset128 = this.payload[1];
+			const listLength = this.payload[2];
+
+			const listStart = 3;
+			const listEnd = listStart + listLength;
+			// BUGGUG validate listEnd <= this.payload.length
+			if (listEnd <= this.payload.length) {
+				const nodeBitMask = this.payload.subarray(
+					listStart,
+					listEnd,
+				);
+				this.nodeIds = parseLongRangeNodeBitMask(
+					nodeBitMask,
+					this.listStartNode(),
+				);
+			} else {
+				this.nodeIds = [];
+			}
+		} else {
+			this.moreNodes = options.moreNodes;
+			this.listStartOffset128 = options.listStartOffset128;
+			this.nodeIds = options.nodeIds;
+		}
+	}
+
+	public moreNodes: boolean;
+	public listStartOffset128: number;
+	public nodeIds: readonly number[];
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(
+			3 + NUM_LR_NODEMASK_SEGMENT_BYTES,
+		);
+
+		this.payload[0] = this.moreNodes ? 1 : 0;
+		this.payload[1] = this.listStartOffset128;
+		this.payload[2] = NUM_LR_NODEMASK_SEGMENT_BYTES;
+
+		const nodeBitMask = encodeLongRangeNodeBitMask(
+			this.nodeIds,
+			this.listStartNode(),
+		);
+		nodeBitMask.copy(this.payload, 3);
+
+		return super.serialize();
+	}
+
+	private listStartNode(): number {
+		return 256 + NUM_LR_NODES_PER_SEGMENT * 8 * this.listStartOffset128;
+	}
+
+	private listEndNode(): number {
+		return 256
+			+ NUM_LR_NODES_PER_SEGMENT * 8 * (1 + this.listStartOffset128);
+	}
+}

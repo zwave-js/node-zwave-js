@@ -48,12 +48,14 @@ export enum AddNodeStatus {
 enum AddNodeFlags {
 	HighPower = 0x80,
 	NetworkWide = 0x40,
+	ProtocolLongRange = 0x20,
 }
 
 interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
 	addNodeType?: AddNodeType;
 	highPower?: boolean;
 	networkWide?: boolean;
+	protocolLongRange?: boolean;
 }
 
 interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
@@ -61,6 +63,7 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 	authHomeId: Buffer;
 	highPower?: boolean;
 	networkWide?: boolean;
+	protocolLongRange?: boolean;
 }
 
 export function computeNeighborDiscoveryTimeout(
@@ -134,6 +137,7 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 		this.addNodeType = options.addNodeType;
 		this.highPower = !!options.highPower;
 		this.networkWide = !!options.networkWide;
+		this.protocolLongRange = !!options.protocolLongRange;
 	}
 
 	/** The type of node to add */
@@ -142,11 +146,14 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public highPower: boolean = false;
 	/** Whether to include network wide */
 	public networkWide: boolean = false;
+	/** Whether to include as long-range or not */
+	public protocolLongRange: boolean = false;
 
 	public serialize(): Buffer {
 		let data: number = this.addNodeType || AddNodeType.Any;
 		if (this.highPower) data |= AddNodeFlags.HighPower;
 		if (this.networkWide) data |= AddNodeFlags.NetworkWide;
+		if (this.protocolLongRange) data |= AddNodeFlags.ProtocolLongRange;
 
 		this.payload = Buffer.from([data, this.callbackId]);
 
@@ -166,6 +173,7 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 			...message,
 			"high power": this.highPower,
 			"network wide": this.networkWide,
+			"long range": this.protocolLongRange,
 		};
 
 		if (this.hasCallbackId()) {
@@ -210,6 +218,7 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 		this.authHomeId = options.authHomeId;
 		this.highPower = !!options.highPower;
 		this.networkWide = !!options.networkWide;
+		this.protocolLongRange = !!options.protocolLongRange;
 	}
 
 	/** The home IDs of node to add */
@@ -219,11 +228,14 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public highPower: boolean = false;
 	/** Whether to include network wide */
 	public networkWide: boolean = false;
+	/** Whether to include as long-range or not */
+	public protocolLongRange: boolean = false;
 
 	public serialize(): Buffer {
 		let control: number = AddNodeType.SmartStartDSK;
 		if (this.highPower) control |= AddNodeFlags.HighPower;
 		if (this.networkWide) control |= AddNodeFlags.NetworkWide;
+		if (this.protocolLongRange) control |= AddNodeFlags.ProtocolLongRange;
 
 		this.payload = Buffer.concat([
 			Buffer.from([control, this.callbackId]),
@@ -240,6 +252,7 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 			"NWI Home ID": buffer2hex(this.nwiHomeId),
 			"high power": this.highPower,
 			"network wide": this.networkWide,
+			"long range": this.protocolLongRange,
 		};
 		if (this.hasCallbackId()) {
 			message["callback id"] = this.callbackId;
