@@ -7,7 +7,7 @@ import {
 	type ProtocolVersion,
 	ZWaveError,
 	ZWaveErrorCodes,
-	//parseBitMask,
+	// parseBitMask,
 	encodeNodeInformationFrame,
 	parseNodeInformationFrame,
 	validatePayload,
@@ -26,10 +26,10 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
-	//type NetworkTransferStatus,
-	//WakeUpTime,
+	// type NetworkTransferStatus,
+	// WakeUpTime,
 	ZWaveLRProtocolCommand,
-	//parseWakeUpTime,
+	// parseWakeUpTime,
 } from "../lib/_Types";
 
 @commandClass(CommandClasses["Z-Wave Long Range Protocol"])
@@ -44,6 +44,7 @@ export class ZWaveLRProtocolCCNOP extends ZWaveLRProtocolCC {}
 interface ZWaveLRProtocolCCNodeInformationFrameOptions
 	extends CCCommandOptions, NodeInformationFrame
 {}
+
 // BUGBUG: how much of this can we share with existing stuff? Can we use a ZWaveProtocolCCNodeInformationFrameOptions field to do the `isLongRange` stuff?
 // BUGBUG: how much can we share also with the Smart Start things below that are VERY close to this stuff?
 @CCCommand(ZWaveLRProtocolCommand.NodeInformationFrame)
@@ -186,7 +187,6 @@ export class ZWaveLRProtocolCCSmartStartIncludedNodeInformation
 	}
 }
 
-
 // BUGBUG this needs to include support for Sensor256ms and BeamCapability fields, yet the GetNodeInfo reserves those
 @CCCommand(ZWaveLRProtocolCommand.SmartStartPrime)
 export class ZWaveLRProtocolCCSmartStartPrime
@@ -199,10 +199,11 @@ export class ZWaveLRProtocolCCSmartStartInclusionRequest
 	extends ZWaveLRProtocolCCNodeInformationFrame
 {}
 
-
 // BUGBUG: this is identical to the AssignNodeID message, except for the field names
 @CCCommand(ZWaveLRProtocolCommand.ExcludeRequestConfirimation)
-export class ZWaveLRProtocolCCExcludeRequestConfirimation extends ZWaveLRProtocolCC {
+export class ZWaveLRProtocolCCExcludeRequestConfirimation
+	extends ZWaveLRProtocolCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -232,5 +233,6 @@ export class ZWaveLRProtocolCCExcludeRequestConfirimation extends ZWaveLRProtoco
 }
 
 @CCCommand(ZWaveLRProtocolCommand.NonSecureIncusionStepComplete)
-export class ZWaveLRProtocolCCNonSecureIncusionStepComplete extends ZWaveLRProtocolCC {}
-
+export class ZWaveLRProtocolCCNonSecureIncusionStepComplete
+	extends ZWaveLRProtocolCC
+{}
