@@ -1295,7 +1295,7 @@ export class ZWaveController
 		// ignore the initVersion, no clue what to do with it
 
 		// BUGBUG: Dummy check? SimplicityStudio adds this extra 3 argument to this command. I suspect that's not the secret sauce for LR inclusion, but S2 encryption is.
-		const apiCaps = await this.driver.sendMessage<
+		await this.driver.sendMessage<
 			GetSerialApiCapabilitiesResponse
 		>(
 			new GetSerialApiCapabilitiesRequest(this.driver, {mysteryValue: 3}),
