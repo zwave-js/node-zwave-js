@@ -608,6 +608,19 @@ export {
 	WindowCoveringCCValues,
 } from "./WindowCoveringCC";
 export {
+	ZWaveLRProtocolCC,
+	ZWaveLRProtocolCCAssignIDs,
+	ZWaveLRProtocolCCExcludeRequest,
+	ZWaveLRProtocolCCExcludeRequestConfirimation,
+	ZWaveLRProtocolCCNOP,
+	ZWaveLRProtocolCCNodeInformationFrame,
+	ZWaveLRProtocolCCNonSecureIncusionStepComplete,
+	ZWaveLRProtocolCCRequestNodeInformationFrame,
+	ZWaveLRProtocolCCSmartStartIncludedNodeInformation,
+	ZWaveLRProtocolCCSmartStartInclusionRequest,
+	ZWaveLRProtocolCCSmartStartPrime,
+} from "./ZWaveLRProtocolCC";
+export {
 	ZWavePlusCC,
 	ZWavePlusCCGet,
 	ZWavePlusCCReport,
@@ -651,19 +664,6 @@ export {
 	ZWaveProtocolCCTransferPresentation,
 	ZWaveProtocolCCTransferRangeInformation,
 } from "./ZWaveProtocolCC";
-export {
-	ZWaveLRProtocolCC,
-	ZWaveLRProtocolCCNOP,
-	ZWaveLRProtocolCCAssignIDs,
-	ZWaveLRProtocolCCExcludeRequest,
-	ZWaveLRProtocolCCNodeInformationFrame,
-	ZWaveLRProtocolCCRequestNodeInformationFrame,
-	ZWaveLRProtocolCCSmartStartIncludedNodeInformation,
-	ZWaveLRProtocolCCSmartStartInclusionRequest,
-	ZWaveLRProtocolCCSmartStartPrime,
-	ZWaveLRProtocolCCExcludeRequestConfirimation,
-	ZWaveLRProtocolCCNonSecureIncusionStepComplete,
-} from "./ZWaveLRProtocolCC";
 export {
 	fibaroCC,
 	fibaroCCCommand,
