@@ -139,7 +139,7 @@ export type SerialAPICommandMachineOptions = Partial<
 export type SerialAPICommandMachineParams = {
 	timeouts: Pick<
 		ZWaveOptions["timeouts"],
-		"ack" | "response" | "sendDataCallback"
+		"ack" | "response" | "sendDataAbort" | "sendDataCallback"
 	>;
 	attempts: Pick<ZWaveOptions["attempts"], "controller">;
 };
@@ -312,6 +312,13 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
+					// Abort Send Data when it takes too long
+					SENDDATA_ABORT_TIMEOUT: {
+						cond: "isSendData",
+						actions: [
+							() => sendDataAbort(),
+						],
+					},
 					CALLBACK_TIMEOUT: {
 						target: "failure",
 						actions: assign({
@@ -446,6 +453,7 @@ export function getSerialAPICommandMachineOptions(
 					|| timeoutConfig.sendDataCallback
 				);
 			},
+			SENDDATA_ABORT_TIMEOUT: timeoutConfig.sendDataAbort,
 			ACK_TIMEOUT: timeoutConfig.ack,
 		},
 	};

@@ -20,8 +20,17 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 */
 		response: number; // [500...60000], default: 10000 ms
 
-		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number; // >=10000, default: 65000 ms
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before aborting the transmission.
+		 */
+		sendDataAbort: number; // >=5000, <=(sendDataCallback - 5000), default: 20000 ms
+
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before considering the controller unresponsive.
+		 */
+		sendDataCallback: number; // >=10000, default: 30000 ms
 
 		/** How much time a node gets to process a request and send a response */
 		report: number; // [500...10000], default: 1000 ms

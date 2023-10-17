@@ -255,7 +255,8 @@ const defaultOptions: ZWaveOptions = {
 		response: 10000,
 		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
-		sendDataCallback: 65000, // as defined in INS13954
+		sendDataAbort: 20000, // If a controller takes over 15s to reach a node, it's probably not going to happen
+		sendDataCallback: 30000, // INS13954 defines this to be 65000 ms, but waiting that long causes issues with reporting devices
 		sendToSleep: 250, // The default should be enough time for applications to react to devices waking up
 		retryJammed: 1000,
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
@@ -337,6 +338,18 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.sendDataCallback < 10000) {
 		throw new ZWaveError(
 			`The Send Data Callback timeout must be at least 10000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.sendDataAbort < 5000
+		|| options.timeouts.sendDataAbort
+			> options.timeouts.sendDataCallback - 5000
+	) {
+		throw new ZWaveError(
+			`The Send Data Abort Callback timeout must be between 5000 and ${
+				options.timeouts.sendDataCallback - 5000
+			} milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
