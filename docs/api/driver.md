@@ -16,11 +16,12 @@ The first constructor argument is the address of the serial port. On Windows, th
 For most scenarios the default configuration should be sufficient. For more control, the constructor optionally accepts a list of options objects or presets. Multiple sets of options are deep-merged where the later ones have higher priority. `PartialZWaveOptions` are a subset of [`ZWaveOptions`](#ZWaveOptions), allowing you to specify just what's necessary.
 
 Some curated presets are included in the library:
-| Preset | Description |
-| --- | --- |
-| `SAFE_MODE` | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly |
-| `BATTERY_SAVE` | Sends battery powered nodes to sleep more quickly in order to save battery. |
-| `AWAKE_LONGER` | Sends battery powered nodes to sleep less quickly to give applications more time between interactions. |
+
+| Preset         | Description                                                                                                                                                                                                                 |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SAFE_MODE`    | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly |
+| `BATTERY_SAVE` | Sends battery powered nodes to sleep more quickly in order to save battery.                                                                                                                                                 |
+| `AWAKE_LONGER` | Sends battery powered nodes to sleep less quickly to give applications more time between interactions.                                                                                                                      |
 
 These can be used like this:
 
