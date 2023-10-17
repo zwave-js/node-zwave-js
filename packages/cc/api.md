@@ -3963,6 +3963,25 @@ export class ConfigurationCC extends CommandClass {
     translatePropertyKey(applHost: ZWaveApplicationHost_2, property: string | number, propertyKey?: string | number): string | undefined;
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ConfigurationCCAPISetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ConfigurationCCAPISetOptions = {
+    parameter: number;
+} & ({
+    bitMask?: undefined;
+    value: ConfigValue;
+} | {
+    bitMask?: undefined;
+    value: ConfigValue;
+    valueSize: 1 | 2 | 4;
+    valueFormat: ConfigValueFormat;
+} | {
+    bitMask: number;
+    value: number;
+});
+
 // Warning: (ae-missing-release-tag) "ConfigurationCCBulkGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4065,7 +4084,6 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCInfoReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCInfoReportOptions);
     // (undocumented)
     expectMoreMessages(): boolean;
@@ -4087,6 +4105,19 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ConfigurationCCInfoReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
+    // (undocumented)
+    info: string;
+    // (undocumented)
+    parameter: number;
+    // (undocumented)
+    reportsToFollow: number;
+}
+
 // Warning: (ae-missing-release-tag) "ConfigurationCCNameGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4104,7 +4135,6 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCNameReport extends ConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCNameReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCNameReportOptions);
     // (undocumented)
     expectMoreMessages(): boolean;
@@ -4126,6 +4156,19 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ConfigurationCCNameReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    parameter: number;
+    // (undocumented)
+    reportsToFollow: number;
+}
+
 // Warning: (ae-missing-release-tag) "ConfigurationCCPropertiesGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4143,7 +4186,6 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCPropertiesReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCPropertiesReportOptions);
     // (undocumented)
     altersCapabilities: MaybeNotKnown<boolean>;
@@ -4175,11 +4217,39 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
     valueSize: number;
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ConfigurationCCPropertiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCPropertiesReportOptions extends CCCommandOptions {
+    // (undocumented)
+    altersCapabilities?: boolean;
+    // (undocumented)
+    defaultValue?: ConfigValue;
+    // (undocumented)
+    isAdvanced?: boolean;
+    // (undocumented)
+    isReadonly?: boolean;
+    // (undocumented)
+    maxValue?: ConfigValue;
+    // (undocumented)
+    minValue?: ConfigValue;
+    // (undocumented)
+    nextParameter: number;
+    // (undocumented)
+    noBulkSupport?: boolean;
+    // (undocumented)
+    parameter: number;
+    // (undocumented)
+    valueFormat: ConfigValueFormat;
+    // (undocumented)
+    valueSize: number;
+}
+
 // Warning: (ae-missing-release-tag) "ConfigurationCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ConfigurationCCReport extends ConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCReportOptions);
     // (undocumented)
     parameter: number;
@@ -4191,6 +4261,21 @@ export class ConfigurationCCReport extends ConfigurationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     value: ConfigValue;
+    // (undocumented)
+    valueSize: number;
+}
+
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
+// Warning: (ae-missing-release-tag) "ConfigurationCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    parameter: number;
+    // (undocumented)
+    value: ConfigValue;
+    // (undocumented)
+    valueFormat?: ConfigValueFormat;
     // (undocumented)
     valueSize: number;
 }
