@@ -22,7 +22,7 @@ let lastCallbackId: number;
 integrationTest(
 	"Abort transmission if the Send Data callback hasn't been received after the sendDataAbort timeout elapses",
 	{
-		debug: true,
+		// debug: true,
 
 		// provisioningDirectory: path.join(
 		// 	__dirname,
