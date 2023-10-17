@@ -5,7 +5,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"Accept corrupted ACKs with a random high nibble after Soft Reset",
 	{
-		debug: true,
+		// debug: true,
 
 		controllerCapabilities: {
 			libraryVersion: "Z-Wave 7.19.1",
