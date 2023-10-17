@@ -4,6 +4,24 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release includes several more fixes and workarounds for the problematic interaction between some controller firmware bugs and the automatic controller recovery introduced in the `v12` release:
+* Added a workaround to recognize corrupted `ACK` frames after soft-reset of controllers running an 7.19.x firmware or higher. Previously this triggered the unresponsive controller detection and recovery process. (#6409)
+* When the response to a `Send Data` command times out, the command is now aborted, instead of retrying and potentially putting the controller in a bad state due to not waiting for the command cycle to complete. When this happens, Z-Wave JS no longer attempts to recover the controller by restarting it, unless the callback is also missing. (#6408)
+* When the callback to a `Send Data` command continues to be missing after restarting the controller, Z-Wave JS no longer restarts itself. Instead the old behavior of marking the node as `dead` is now restored, as the node being unresponsive/unreachable is most likely the actual problem. (#6403)
+* In addition, the `Send Data` callback timeout has been reduced to 30 seconds and ongoing transmissions are now aborted before reaching this timeout. This should limit the impact of the controller taking excessively long to transmit, especially in busy networks with lots of unsolicited reporting and end nodes expecting a timely response (#6411)
+
+### Features
+* The `Driver` constructor now accepts multiple sets of options and curated presets are available (#6412)
+
+### Additional Bugfixes
+* Only auto-refresh `Meter` and `Multilevel Sensor CC` values if none were updated recently (#6398)
+* Export all option types for `Configuration CC` (#6413)
+
+### Config file changes
+* Add NEO Cool Cam Repeater (#6332)
+* Increase report timeout for Aeotec Multisensor 6 to 2s (#6397)
+
 ## 12.1.1 (2023-10-12)
 ### Bugfixes
 * Fixed a long standing issue that prevented multi-target firmware updates from being applied correctly (#6395)
