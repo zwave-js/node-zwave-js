@@ -1,3 +1,4 @@
+import { num2hex } from "@zwave-js/shared";
 import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../Logger";
 import { MessageHeaders } from "../MessageHeaders";
@@ -25,6 +26,9 @@ export class SerialAPIParser extends Transform {
 	}
 
 	private receiveBuffer = Buffer.allocUnsafe(0);
+
+	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
+	public ignoreAckHighNibble: boolean = false;
 
 	_transform(
 		chunk: any,
@@ -57,6 +61,24 @@ export class SerialAPIParser extends Transform {
 					default: {
 						// INS12350: A host or a Z-Wave chip waiting for new traffic MUST ignore all other
 						// byte values than 0x06 (ACK), 0x15 (NAK), 0x18 (CAN) or 0x01 (Data frame).
+
+						// Work around a bug in the 700 series firmware that causes the high nibble of an ACK
+						// to be corrupted after a soft reset
+						if (
+							this.ignoreAckHighNibble
+							&& (this.receiveBuffer[0] & 0x0f)
+								=== MessageHeaders.ACK
+						) {
+							this.logger?.message(
+								`received corrupted ACK: ${
+									num2hex(this.receiveBuffer[0])
+								}`,
+							);
+							this.logger?.ACK("inbound");
+							this.push(MessageHeaders.ACK);
+							this.ignoreAckHighNibble = false;
+							break;
+						}
 
 						// Scan ahead until the next valid byte and log the invalid bytes
 						while (skip < this.receiveBuffer.length) {
