@@ -251,8 +251,8 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		// Ideally we'd want to have this as low as possible, but some
-		// 500 series controllers can take upwards of 10 seconds to respond sometimes.
-		response: 30000,
+		// 500 series controllers can take several seconds to respond sometimes.
+		response: 10000,
 		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
@@ -5040,13 +5040,14 @@ ${handlers.length} left`,
 			}
 		});
 
-		this.serialAPIInterpreter.onTransition((state) => {
-			if (state.changed) {
-				this.driverLog.print(
-					`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
-				);
-			}
-		});
+		// Uncomment this for debugging state machine transitions
+		// this.serialAPIInterpreter.onTransition((state) => {
+		// 	if (state.changed) {
+		// 		this.driverLog.print(
+		// 			`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
+		// 		);
+		// 	}
+		// });
 
 		this.serialAPIInterpreter.start();
 

@@ -26,7 +26,7 @@ let lastCallbackId: number;
 integrationTest(
 	"Abort transmission and wait for callback if SendData is missing the response",
 	{
-		debug: true,
+		// debug: true,
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -113,6 +113,81 @@ integrationTest(
 
 			// And the node should be marked dead
 			t.is(node.status, NodeStatus.Dead);
+		},
+	},
+);
+
+integrationTest(
+	"Recover controller if callback times out after timed out SendData response",
+	{
+		// debug: true,
+
+		additionalDriverOptions: {
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+		},
+
+		customSetup: async (driver, mockController, mockNode) => {
+			// This is almost a 1:1 copy of the default behavior, except that the response and callback never get sent
+			const handleBrokenSendData: MockControllerBehavior = {
+				async onHostMessage(host, controller, msg) {
+					// If the controller is operating normally, defer to the default behavior
+					if (!shouldTimeOut) return false;
+
+					if (msg instanceof SendDataRequest) {
+						// Check if this command is legal right now
+						const state = controller.state.get(
+							MockControllerStateKeys.CommunicationState,
+						) as MockControllerCommunicationState | undefined;
+						if (
+							state != undefined
+							&& state !== MockControllerCommunicationState.Idle
+						) {
+							throw new Error(
+								"Received SendDataRequest while not idle",
+							);
+						}
+
+						lastCallbackId = msg.callbackId;
+
+						// Don't send the response or the callback
+
+						return true;
+					} else if (msg instanceof SendDataAbort) {
+						// Return to normal operation
+						shouldTimeOut = false;
+					}
+				},
+			};
+			mockController.defineBehavior(handleBrokenSendData);
+		},
+		testBody: async (t, driver, node, mockController, mockNode) => {
+			// Circumvent the options validation so the test doesn't take forever
+			driver.options.timeouts.response = 500;
+			driver.options.timeouts.sendDataCallback = 1500;
+
+			node.markAsAlive();
+			shouldTimeOut = true;
+
+			const basicSetPromise = node.commandClasses.Basic.set(99);
+
+			await wait(2000);
+
+			mockController.assertReceivedHostMessage(
+				(msg) => msg.functionType === FunctionType.SendDataAbort,
+			);
+			mockController.clearReceivedHostMessages();
+
+			// The stick should have been soft-reset
+			await wait(1000);
+			mockController.assertReceivedHostMessage(
+				(msg) => msg.functionType === FunctionType.SoftReset,
+			);
+
+			// And the command should eventually succeed
+			await basicSetPromise;
+			t.pass();
 		},
 	},
 );
