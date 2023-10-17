@@ -115,6 +115,11 @@ export class ZWaveSerialPortBase extends PassThrough {
 	// Allow switching between modes
 	public mode: ZWaveSerialMode | undefined;
 
+	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
+	public ignoreAckHighNibbleOnce(): void {
+		this.parser.ignoreAckHighNibble = true;
+	}
+
 	// Allow strongly-typed async iteration
 	declare public [Symbol.asyncIterator]: () => AsyncIterableIterator<
 		ZWaveSerialChunk
