@@ -103,6 +103,7 @@ export const ConfigurationCCValues = Object.freeze({
 	}),
 });
 
+/** @publicAPI */
 export type ConfigurationCCAPISetOptions =
 	& {
 		parameter: number;
@@ -1580,6 +1581,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 }
 
+/** @publicAPI */
 export interface ConfigurationCCReportOptions extends CCCommandOptions {
 	parameter: number;
 	value: ConfigValue;
@@ -2282,6 +2284,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 	}
 }
 
+/** @publicAPI */
 export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
 	parameter: number;
 	name: string;
@@ -2428,6 +2431,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 	}
 }
 
+/** @publicAPI */
 export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
 	parameter: number;
 	info: string;
@@ -2587,6 +2591,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 	}
 }
 
+/** @publicAPI */
 export interface ConfigurationCCPropertiesReportOptions
 	extends CCCommandOptions
 {
