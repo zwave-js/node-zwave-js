@@ -41,7 +41,8 @@ interface TestMachineStateSchema {
 		waitForACK: {};
 		waitForResponse: {};
 		waitForCallback: {};
-		waitForCallbackAfterTimeout: {};
+		// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+		// waitForCallbackAfterTimeout: {};
 		unsolicited: {};
 		success: {};
 		failure: {};
@@ -228,10 +229,11 @@ const testMachine = Machine<
 						{ target: "failure" },
 					],
 					RESPONSE_TIMEOUT: [
-						{
-							target: "waitForCallbackAfterTimeout",
-							cond: "expectsCallback",
-						},
+						// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+						// {
+						// 	target: "waitForCallbackAfterTimeout",
+						// 	cond: "expectsCallback",
+						// },
 						{ target: "failure" },
 					],
 					UNSOLICITED: "unsolicited",
@@ -251,13 +253,13 @@ const testMachine = Machine<
 					UNSOLICITED: "unsolicited",
 				},
 			},
-			waitForCallbackAfterTimeout: {
-				on: {
-					CALLBACK_NOK: "failure",
-					// FIXME: The callback should be able to time out too
-					// CALLBACK_TIMEOUT: "failure",
-				},
-			},
+			// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+			// waitForCallbackAfterTimeout: {
+			// 	on: {
+			// 		CALLBACK_NOK: "failure",
+			// 		CALLBACK_TIMEOUT: "failure",
+			// 	},
+			// },
 			unsolicited: {
 				meta: {
 					test: ({
@@ -397,13 +399,14 @@ testPlans.forEach((plan) => {
 	);
 
 	plan.paths.forEach((path) => {
-		if (
-			!path.description.includes(
-				`CREATE ({"resp":true,"cb":true}) → SEND_FAILURE → SEND_FAILURE → SEND_SUCCESS → ACK → RESPONSE_TIMEOUT → CALLBACK_TIMEOUT`,
-			)
-		) {
-			return;
-		}
+		// Uncomment this and change the path description to only run a single test
+		// if (
+		// 	!path.description.includes(
+		// 		`CREATE ({"resp":true,"cb":true}) → SEND_FAILURE → SEND_FAILURE → SEND_SUCCESS → ACK → RESPONSE_TIMEOUT → CALLBACK_NOK`,
+		// 	)
+		// ) {
+		// 	return;
+		// }
 		test.serial(`${planDescription} ${path.description}`, async (t) => {
 			// eslint-disable-next-line prefer-const
 			let context: TestContext;
@@ -455,9 +458,9 @@ testPlans.forEach((plan) => {
 			context.interpreter.onDone((evt) => {
 				context.machineResult = evt.data;
 			});
-			context.interpreter.onTransition((state) => {
-				if (state.changed) console.log(state.value);
-			});
+			// context.interpreter.onTransition((state) => {
+			// 	if (state.changed) console.log(state.value);
+			// });
 			context.interpreter.start();
 
 			if (plan.state.value === "failure") {

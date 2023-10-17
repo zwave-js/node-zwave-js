@@ -269,22 +269,14 @@ export function getSerialAPICommandMachineConfig(
 							actions: [
 								() => sendDataAbort(),
 								assign({
-									lastError: (
-										_,
-									) => (console.log(
-										"lastError => callback NOK",
-									),
-										"response timeout"),
+									lastError: (_) => "response timeout",
 								}),
 							],
 						},
 						{
 							target: "failure",
 							actions: assign({
-								lastError: (
-									_,
-								) => (console.log("lastError => callback NOK"),
-									"response timeout"),
+								lastError: (_) => "response timeout",
 							}),
 						},
 					],
@@ -295,13 +287,17 @@ export function getSerialAPICommandMachineConfig(
 				on: {
 					callback: [
 						{
+							// Preserve "response timeout" errors
+							// A NOK callback afterwards is expected, but we're not interested in it
+							target: "failure",
+							cond: "callbackIsNOKAfterTimedOutResponse",
+						},
+						{
 							target: "failure",
 							cond: "callbackIsNOK",
 							actions: assign({
-								lastError: (
-									_,
-								) => (console.log("lastError => callback NOK"),
-									"callback NOK"),
+								// Preserve "response timeout" errors
+								lastError: (_) => "callback NOK",
 								result: (_, evt) => (evt as any).message,
 							}),
 						},
@@ -402,9 +398,7 @@ export function getSerialAPICommandMachineOptions(
 			expectsNoResponse: (ctx) => !ctx.msg.expectsResponse(),
 			expectsNoCallback: (ctx) => !ctx.msg.expectsCallback(),
 			isExpectedMessage: (ctx, evt, meta) =>
-				ctx.lastError === "response timeout"
-					? false
-					: meta.state.matches("waitForResponse")
+				meta.state.matches("waitForResponse")
 					? ctx.msg.isExpectedResponse((evt as any).message)
 					: meta.state.matches("waitForCallback")
 					? ctx.msg.isExpectedCallback((evt as any).message)
@@ -414,6 +408,13 @@ export function getSerialAPICommandMachineOptions(
 				// assume responses without success indication to be OK
 				&& isSuccessIndicator(evt.message)
 				&& !evt.message.isOK(),
+			callbackIsNOKAfterTimedOutResponse: (ctx, evt) =>
+				evt.type === "callback"
+				// assume callbacks without success indication to be OK
+				&& isSuccessIndicator(evt.message)
+				&& !evt.message.isOK()
+				&& isSendData(ctx.msg)
+				&& ctx.lastError === "response timeout",
 			callbackIsNOK: (ctx, evt) =>
 				evt.type === "callback"
 				// assume callbacks without success indication to be OK

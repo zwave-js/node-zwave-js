@@ -87,7 +87,7 @@ integrationTest(
 				}),
 			);
 
-			await wait(100);
+			await wait(200);
 
 			const sensorValue = MultilevelSensorCCValues.value(
 				"Air temperature",

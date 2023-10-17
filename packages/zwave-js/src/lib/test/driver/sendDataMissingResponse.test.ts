@@ -7,6 +7,7 @@ import {
 } from "../../controller/MockControllerState";
 
 import {
+	NodeStatus,
 	TransmitStatus,
 	ZWaveErrorCodes,
 	assertZWaveError,
@@ -20,16 +21,12 @@ import {
 import { integrationTest } from "../integrationTestSuite";
 
 let shouldTimeOut: boolean;
+let lastCallbackId: number;
 
 integrationTest(
 	"Abort transmission and wait for callback if SendData is missing the response",
 	{
 		debug: true,
-
-		// provisioningDirectory: path.join(
-		// 	__dirname,
-		// 	"__fixtures/supervision_binary_switch",
-		// ),
 
 		additionalDriverOptions: {
 			testingHooks: {
@@ -58,11 +55,13 @@ integrationTest(
 							);
 						}
 
+						lastCallbackId = msg.callbackId;
+
 						return true;
 					} else if (msg instanceof SendDataAbort) {
 						// Finish the transmission by sending the callback
 						const cb = new SendDataRequestTransmitReport(host, {
-							callbackId: msg.callbackId,
+							callbackId: lastCallbackId,
 							transmitStatus: TransmitStatus.NoAck,
 						});
 
@@ -87,6 +86,7 @@ integrationTest(
 			driver.options.timeouts.response = 500;
 			driver.options.timeouts.sendDataCallback = 1500;
 
+			node.markAsAlive();
 			shouldTimeOut = true;
 
 			const basicSetPromise = node.commandClasses.Basic.set(99);
@@ -98,15 +98,21 @@ integrationTest(
 			);
 			mockController.clearReceivedHostMessages();
 
-			// // The stick should have been soft-reset
-			// await wait(1000);
-			// mockController.assertReceivedHostMessage(
-			// 	(msg) => msg.functionType === FunctionType.SoftReset,
-			// );
-
 			await assertZWaveError(t, () => basicSetPromise, {
-				errorCode: ZWaveErrorCodes.Controller_CallbackNOK,
+				errorCode: ZWaveErrorCodes.Controller_Timeout,
+				context: "response",
 			});
+
+			// The stick should NOT have been soft-reset
+			await wait(1000);
+			t.throws(() =>
+				mockController.assertReceivedHostMessage(
+					(msg) => msg.functionType === FunctionType.SoftReset,
+				)
+			);
+
+			// And the node should be marked dead
+			t.is(node.status, NodeStatus.Dead);
 		},
 	},
 );
