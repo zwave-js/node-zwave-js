@@ -5,12 +5,29 @@ The driver is the core of this library. It controls the serial interface, handle
 ## Constructor
 
 ```ts
-new (port: string, options?: PartialZWaveOptions) => Driver
+new (
+	port: string,
+	...optionsAndPresets: PartialZWaveOptions[]
+) => Driver
 ```
 
 The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Remote serial port over TCP](usage/tcp-connection.md).
 
-For more control, the constructor accepts an optional options object as the second argument. `PartialZWaveOptions` are a subset of [`ZWaveOptions`](#ZWaveOptions), allowing you to specify just what's necessary.
+For most scenarios the default configuration should be sufficient. For more control, the constructor optionally accepts a list of options objects or presets. Multiple sets of options are deep-merged where the later ones have higher priority. `PartialZWaveOptions` are a subset of [`ZWaveOptions`](#ZWaveOptions), allowing you to specify just what's necessary.
+
+Some curated presets are included in the library:
+| Preset | Description |
+| --- | --- |
+| `SAFE_MODE` | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly |
+| `BATTERY_SAVE` | Sends battery powered nodes to sleep more quickly in order to save battery. |
+| `AWAKE_LONGER` | Sends battery powered nodes to sleep less quickly to give applications more time between interactions. |
+
+These can be used like this:
+
+```ts
+import { Driver, driverPresets } from "zwave-js"; // Or from "zwave-js/Utils"
+const driver = new Driver("/path/to/serial", driverPresets.BATTERY_SAVE);
+```
 
 ## Driver methods
 

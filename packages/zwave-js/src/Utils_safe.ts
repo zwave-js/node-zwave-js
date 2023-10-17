@@ -14,6 +14,7 @@ export {
 	getEnumMemberName,
 	num2hex,
 } from "@zwave-js/shared/safe";
+export { driverPresets } from "./lib/driver/ZWaveOptions";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,
