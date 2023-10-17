@@ -2519,15 +2519,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			await this.sendMessage(new SoftResetRequest(this), {
 				supportCheck: false,
 				pauseSendThread: true,
-				// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble
-				onProgress: (progress) => {
-					// This was broken in 7.19, not fixed so far
-					if (this.controller.sdkVersionGte("7.19.0")) {
-						if (progress.state === TransactionState.Active) {
-							this.serial?.ignoreAckHighNibbleOnce();
-						}
-					}
-				},
 			});
 		} catch (e) {
 			this.controllerLog.print(
@@ -5021,6 +5012,15 @@ ${handlers.length} left`,
 		);
 
 		const result = createDeferredPromise<Message | undefined>();
+
+		// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble.
+		// This was broken in 7.19, not fixed so far
+		if (
+			msg.functionType === FunctionType.SoftReset
+			&& this.controller.sdkVersionGte("7.19.0")
+		) {
+			this.serial?.ignoreAckHighNibbleOnce();
+		}
 
 		this.serialAPIInterpreter = interpret(machine).onDone((evt) => {
 			this.serialAPIInterpreter?.stop();
