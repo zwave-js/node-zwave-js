@@ -46,6 +46,7 @@ export class SerialAPIParser extends Transform {
 					case MessageHeaders.ACK: {
 						this.logger?.ACK("inbound");
 						this.push(MessageHeaders.ACK);
+						this.ignoreAckHighNibble = false;
 						break;
 					}
 					case MessageHeaders.NAK: {
