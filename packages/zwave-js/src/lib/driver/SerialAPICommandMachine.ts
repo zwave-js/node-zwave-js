@@ -13,6 +13,7 @@ import {
 	createMachine,
 	raise,
 } from "xstate";
+import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
 /* eslint-disable @typescript-eslint/ban-types */
@@ -93,6 +94,7 @@ export type SerialAPICommandDoneData =
 export interface SerialAPICommandServiceImplementations {
 	timestamp: () => number;
 	sendData: (data: Buffer) => Promise<void>;
+	sendDataAbort: () => Promise<void>;
 	notifyRetry: (
 		lastError: SerialAPICommandError | undefined,
 		message: Message,
@@ -148,9 +150,13 @@ export function getSerialAPICommandMachineConfig(
 		timestamp,
 		logOutgoingMessage,
 		notifyUnsolicited,
+		sendDataAbort,
 	}: Pick<
 		SerialAPICommandServiceImplementations,
-		"timestamp" | "logOutgoingMessage" | "notifyUnsolicited"
+		| "timestamp"
+		| "logOutgoingMessage"
+		| "notifyUnsolicited"
+		| "sendDataAbort"
 	>,
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
 ): SerialAPICommandMachineConfig {
@@ -255,12 +261,25 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
-					RESPONSE_TIMEOUT: {
-						target: "retry",
-						actions: assign({
-							lastError: (_) => "response timeout",
-						}),
-					},
+					// Do not retry when a response times out
+					RESPONSE_TIMEOUT: [
+						{
+							cond: "isSendData",
+							target: "waitForCallback",
+							actions: [
+								() => sendDataAbort(),
+								assign({
+									lastError: (_) => "response timeout",
+								}),
+							],
+						},
+						{
+							target: "failure",
+							actions: assign({
+								lastError: (_) => "response timeout",
+							}),
+						},
+					],
 				},
 			},
 			waitForCallback: {
@@ -268,9 +287,16 @@ export function getSerialAPICommandMachineConfig(
 				on: {
 					callback: [
 						{
+							// Preserve "response timeout" errors
+							// A NOK callback afterwards is expected, but we're not interested in it
+							target: "failure",
+							cond: "callbackIsNOKAfterTimedOutResponse",
+						},
+						{
 							target: "failure",
 							cond: "callbackIsNOK",
 							actions: assign({
+								// Preserve "response timeout" errors
 								lastError: (_) => "callback NOK",
 								result: (_, evt) => (evt as any).message,
 							}),
@@ -342,7 +368,10 @@ export function getSerialAPICommandMachineOptions(
 	{
 		sendData,
 		notifyRetry,
-	}: Pick<SerialAPICommandServiceImplementations, "sendData" | "notifyRetry">,
+	}: Pick<
+		SerialAPICommandServiceImplementations,
+		"sendData" | "sendDataAbort" | "notifyRetry"
+	>,
 	timeoutConfig: SerialAPICommandMachineParams["timeouts"],
 ): SerialAPICommandMachineOptions {
 	return {
@@ -365,6 +394,7 @@ export function getSerialAPICommandMachineOptions(
 		},
 		guards: {
 			mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
+			isSendData: (ctx) => isSendData(ctx.msg),
 			expectsNoResponse: (ctx) => !ctx.msg.expectsResponse(),
 			expectsNoCallback: (ctx) => !ctx.msg.expectsCallback(),
 			isExpectedMessage: (ctx, evt, meta) =>
@@ -378,6 +408,13 @@ export function getSerialAPICommandMachineOptions(
 				// assume responses without success indication to be OK
 				&& isSuccessIndicator(evt.message)
 				&& !evt.message.isOK(),
+			callbackIsNOKAfterTimedOutResponse: (ctx, evt) =>
+				evt.type === "callback"
+				// assume callbacks without success indication to be OK
+				&& isSuccessIndicator(evt.message)
+				&& !evt.message.isOK()
+				&& isSendData(ctx.msg)
+				&& ctx.lastError === "response timeout",
 			callbackIsNOK: (ctx, evt) =>
 				evt.type === "callback"
 				// assume callbacks without success indication to be OK

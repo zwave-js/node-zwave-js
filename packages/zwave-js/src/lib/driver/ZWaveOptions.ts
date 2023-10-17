@@ -15,10 +15,10 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		byte: number; // >=1, default: 150 ms
 
 		/**
-		 * How long to wait for a controller response. Usually this timeout should never elapse,
-		 * so this is merely a safeguard against the driver stalling.
+		 * How long to wait for a controller response. Usually this should never elapse, but when it does,
+		 * the driver will abort the transmission and try to recover the controller if it is unresponsive.
 		 */
-		response: number; // [500...60000], default: 30000 ms
+		response: number; // [500...60000], default: 10000 ms
 
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms

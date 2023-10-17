@@ -86,6 +86,7 @@ import {
 	highResTimestamp,
 	isMissingControllerACK,
 	isMissingControllerCallback,
+	isMissingControllerResponse,
 	isZWaveError,
 	messageRecordToLines,
 	securityClassIsS2,
@@ -250,8 +251,8 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		// Ideally we'd want to have this as low as possible, but some
-		// 500 series controllers can take upwards of 10 seconds to respond sometimes.
-		response: 30000,
+		// 500 series controllers can take several seconds to respond sometimes.
+		response: 10000,
 		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
@@ -3556,17 +3557,21 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 * Handles the case that the controller didn't send the callback for a SendData in time
 	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
 	 */
-	private handleMissingSendDataCallback(
+	private handleMissingSendDataResponseOrCallback(
 		transaction: Transaction,
 		error: ZWaveError & {
 			code: ZWaveErrorCodes.Controller_Timeout;
-			context: "callback";
+			context: "callback" | "response";
 		},
 	): boolean {
 		if (!this._controller) return false;
 
 		if (
-			this._recoveryPhase
+			// The SendData response can time out on older controllers trying to reach a dead node.
+			// In this case, we do not want to reset the controller, but just mark the node as dead.
+			error.context === "response"
+			// Also do this if the callback is timing out even after restarting the controller
+			|| this._recoveryPhase
 				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
 		) {
 			const node = this.getNodeUnsafe(transaction.message);
@@ -4849,7 +4854,7 @@ ${handlers.length} left`,
 								msg,
 								// Ignore the number of attempts while jammed
 								attemptNumber - jammedAttempts,
-								e.code,
+								e,
 							)
 						) {
 							// Retry the command
@@ -4909,19 +4914,29 @@ ${handlers.length} left`,
 	private mayRetrySerialAPICommand(
 		msg: Message,
 		attemptNumber: number,
-		errorCode: ZWaveErrorCodes,
+		error: ZWaveError,
 	): boolean {
+		// Only retry Send Data, nothing else
 		if (!isSendData(msg)) return false;
+
+		// Don't try to resend SendData commands when the response times out
 		if (
-			msg instanceof SendDataMulticastRequest
-			|| msg instanceof SendDataMulticastBridgeRequest
+			error.code === ZWaveErrorCodes.Controller_Timeout
+			&& error.context === "response"
 		) {
-			// Don't try to resend multicast messages if they were already transmitted.
-			// One or more nodes might have already reacted
-			if (errorCode === ZWaveErrorCodes.Controller_CallbackNOK) {
-				return false;
-			}
+			return false;
 		}
+
+		// Don't try to resend multicast messages if they were already transmitted.
+		// One or more nodes might have already reacted
+		if (
+			(msg instanceof SendDataMulticastRequest
+				|| msg instanceof SendDataMulticastBridgeRequest)
+			&& error.code === ZWaveErrorCodes.Controller_CallbackNOK
+		) {
+			return false;
+		}
+
 		return attemptNumber < msg.maxSendAttempts;
 	}
 
@@ -4936,7 +4951,8 @@ ${handlers.length} left`,
 		const machine = createSerialAPICommandMachine(
 			msg,
 			{
-				sendData: this.writeSerial.bind(this),
+				sendData: (data) => this.writeSerial(data),
+				sendDataAbort: () => this.abortSendData(false),
 				notifyUnsolicited: (msg) => {
 					void this.handleUnsolicitedMessage(msg);
 				},
@@ -5023,6 +5039,15 @@ ${handlers.length} left`,
 				);
 			}
 		});
+
+		// Uncomment this for debugging state machine transitions
+		// this.serialAPIInterpreter.onTransition((state) => {
+		// 	if (state.changed) {
+		// 		this.driverLog.print(
+		// 			`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
+		// 		);
+		// 	}
+		// });
 
 		this.serialAPIInterpreter.start();
 
@@ -5663,9 +5688,12 @@ ${handlers.length} left`,
 			if (this.handleMissingControllerACK(transaction, error)) return;
 		} else if (
 			isSendData(transaction.message)
-			&& isMissingControllerCallback(error)
+			&& (isMissingControllerResponse(error)
+				|| isMissingControllerCallback(error))
 		) {
-			if (this.handleMissingSendDataCallback(transaction, error)) return;
+			if (
+				this.handleMissingSendDataResponseOrCallback(transaction, error)
+			) return;
 		}
 
 		this.rejectTransaction(transaction, error);
