@@ -539,7 +539,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
-		options?: PartialZWaveOptions,
+		...optionsAndPresets: (PartialZWaveOptions | undefined)[]
 	) {
 		super();
 
@@ -554,22 +554,30 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			);
 		}
 
-		// merge given options with defaults
+		// Deep-Merge all given options/presets
+		const definedOptionsAndPresets = optionsAndPresets.filter(
+			(o): o is PartialZWaveOptions => !!o,
+		);
+		let mergedOptions: PartialZWaveOptions = {};
+		for (const preset of definedOptionsAndPresets) {
+			mergedOptions = mergeDeep(mergedOptions, preset, true);
+		}
+		// Finally apply the defaults, without overwriting any existing settings
 		this._options = mergeDeep(
-			options,
+			mergedOptions,
 			cloneDeep(defaultOptions),
 		) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this._options);
-		if (options?.userAgent) {
-			if (!isObject(options.userAgent)) {
+		if (this._options.userAgent) {
+			if (!isObject(this._options.userAgent)) {
 				throw new ZWaveError(
 					`The userAgent property must be an object!`,
 					ZWaveErrorCodes.Driver_InvalidOptions,
 				);
 			}
 
-			this.updateUserAgent(options.userAgent);
+			this.updateUserAgent(this._options.userAgent);
 		}
 
 		// Initialize logging
