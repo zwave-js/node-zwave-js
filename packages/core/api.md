@@ -1231,6 +1231,14 @@ export function isMissingControllerCallback(e: unknown): e is ZWaveError & {
     context: "callback";
 };
 
+// Warning: (ae-missing-release-tag) "isMissingControllerResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isMissingControllerResponse(e: unknown): e is ZWaveError & {
+    code: ZWaveErrorCodes.Controller_Timeout;
+    context: "response";
+};
+
 // Warning: (ae-missing-release-tag) "isRecoverableZWaveError" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public

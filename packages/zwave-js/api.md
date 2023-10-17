@@ -319,7 +319,7 @@ export class DeviceClass {
 export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements ZWaveApplicationHost {
     // (undocumented)
     [util.inspect.custom](): string;
-    constructor(port: string | ZWaveSerialPortImplementation, options?: PartialZWaveOptions);
+    constructor(port: string | ZWaveSerialPortImplementation, ...optionsAndPresets: (PartialZWaveOptions | undefined)[]);
     get allNodesReady(): boolean;
     // (undocumented)
     readonly cacheDir: string;
@@ -456,6 +456,36 @@ export interface DriverLogContext extends LogContext<"driver"> {
     // (undocumented)
     direction?: DataDirection;
 }
+
+// Warning: (ae-missing-release-tag) "driverPresets" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const driverPresets: Readonly<{
+    readonly SAFE_MODE: {
+        readonly timeouts: {
+            readonly response: 60000;
+            readonly sendDataAbort: 60000;
+            readonly sendDataCallback: 65000;
+            readonly report: 10000;
+            readonly nonce: 20000;
+        };
+        readonly attempts: {
+            readonly sendData: 5;
+            readonly sendDataJammed: 10;
+            readonly nodeInterview: 10;
+        };
+    };
+    readonly BATTERY_SAVE: {
+        readonly timeouts: {
+            readonly sendToSleep: 100;
+        };
+    };
+    readonly AWAKE_LONGER: {
+        readonly timeouts: {
+            readonly sendToSleep: 1000;
+        };
+    };
+}>;
 
 export { Duration }
 
@@ -1708,6 +1738,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         ack: number;
         byte: number;
         response: number;
+        sendDataAbort: number;
         sendDataCallback: number;
         report: number;
         nonce: number;

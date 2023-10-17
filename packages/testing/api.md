@@ -147,6 +147,7 @@ export class MockController {
     // (undocumented)
     readonly capabilities: MockControllerCapabilities;
     clearReceivedHostMessages(): void;
+    corruptACK: boolean;
     // (undocumented)
     defineBehavior(...behaviors: MockControllerBehavior[]): void;
     // (undocumented)
