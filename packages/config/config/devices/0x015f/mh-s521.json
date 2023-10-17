@@ -8,10 +8,6 @@
 			"productType": "0xc321",
 			"productId": "0x5102"
 		},
-		{
-			"productType": "0xc521",
-			"productId": "0x5101"
-		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
