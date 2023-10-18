@@ -7,14 +7,14 @@
 		{
 			"productType": "0xc321",
 			"productId": "0x5102"
-		},
+		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
 	"paramInformation": [
-	{
+		{
 			"#": "1",
 			"label": "Watt Meter Report Period",
 			"valueSize": 2,
@@ -188,6 +188,5 @@
 				}
 			]
 		}
-	],
 	]
 }
