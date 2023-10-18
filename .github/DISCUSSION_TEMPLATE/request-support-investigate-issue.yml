@@ -6,27 +6,17 @@ body:
 
         ---
 
-        Since Z-Wave JS is used in multiple applications with a lot of moving
-        parts, your issue might actually be caused by something outside our
-        control.
+        Since Z-Wave JS is used in multiple applications with a lot of moving parts, your issue might actually be caused by something outside our control.
 
         Let's start by finding out if we are able to help you...
 
-        1. If this is about a **device** that is interviewed completely but
-        does not **get identified**, please 
-        [use this template](https://github.com/zwave-js/node-zwave-js/issues/new?assignees=&labels=config+%E2%9A%99&projects=&template=device_config.yml&title=Missing+device+configuration%3A+%3Center+manufacturer+and+device+name%3E) instead.
+        1. If this is about a **device** that is interviewed completely but does not **get identified**, please [use this template](https://github.com/zwave-js/node-zwave-js/issues/new?assignees=&labels=config+%E2%9A%99&projects=&template=device_config.yml&title=Missing+device+configuration%3A+%3Center+manufacturer+and+device+name%3E) instead.
 
-        1. Were you using **Z-Wave JS UI** (standalone or as an addon) when you
-        encountered the problem?\
-        If **yes**: please open your issue at
-        https://github.com/zwave-js/zwave-js-ui/issues instead, **unless** you
-        were told to report it here.
+        1. Were you using **Z-Wave JS UI** (standalone or as an addon) when you encountered the problem?
+        If **yes**: please open your issue at https://github.com/zwave-js/zwave-js-ui/issues instead, **unless** you were told to report it here.
 
-        1. Were you using **Home Assistant** (but not Z-Wave JS UI) when you
-        encountered the problem?\
-        If **yes**, please open your issue at
-        https://github.com/home-assistant/core/issues instead, **unless** you
-        were told to report it here.
+        1. Were you using **Home Assistant** (but not Z-Wave JS UI) when you encountered the problem?
+        If **yes**, please open your issue at https://github.com/home-assistant/core/issues instead, **unless** you were told to report it here.
 
   - type: checkboxes
     id: checklist
@@ -36,15 +26,10 @@ body:
         - label: I have read and followed the above instructions
           required: true
         - label: |
-            I have checked the [troubleshooting
-            section](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index)
-            and my problem is **not** described there.
+            I have checked the [troubleshooting section](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index) and my problem is **not** described there.
           required: true
         - label: |
-            I have read the
-            [changelog](https://github.com/zwave-js/node-zwave-js/blob/master/CHANGELOG.md)
-            and my problem was **not** mentioned there or the fix **did not
-            work**.
+            I have read the [changelog](https://github.com/zwave-js/node-zwave-js/blob/master/CHANGELOG.md) and my problem was **not** mentioned there or the fix **did not work**.
           required: true
 
   - type: markdown
@@ -56,7 +41,7 @@ body:
       label: Describe the issue
       description: |
         Please answer all questions that apply and remove the ones that don't.
-        Optionally share screenshots of what you're seeing.
+        You may share screenshots of what you're seeing.
       value: |
         What is happening?
 
@@ -111,9 +96,7 @@ body:
 
         ## Driver Logfile
 
-        We **need** a **driver** logfile on loglevel **DEBUG**. Many issues
-        simply cannot be investigated without the correct logfile. If you don't
-        provide one, the first thing we'll do is ask for one.
+        We **need** a **driver** logfile on loglevel **DEBUG**. Many issues simply cannot be investigated without the correct logfile. If you don't provide one, the first thing we'll do is ask for one.
 
         Here's how to create one:
 
@@ -123,19 +106,14 @@ body:
 
         Please...
 
-        - do not link to logs elsewhere, unless you absolutely cannot upload
-        them here.  If the logfile is too large, please try to **zip** it.
+        - do not link to logs elsewhere, unless you absolutely cannot upload them here. If the logfile is too large, please try to **zip** it.
         - do not truncate or filter logs
         - do not set the loglevel to anything but **DEBUG**, unless you're told to
         - **upload** the log as a **file** here
         - avoid copy-pasting if you can avoid it
 
-        **Note:**\
-        If the log is for a device included using **Security S0**, we need your
-        S0 key to decode the traffic.
-
-        You can send that via email to info@zwave-js.io - please include a link
-        to this request.
+        **Note:**
+        If the log is for a device included using **Security S0**, we need your S0 key to decode the traffic. You can send it via email to info@zwave-js.io - please include a link to this request.
 
   - type: checkboxes
     id: logfile_checklist
@@ -151,7 +129,7 @@ body:
             The log includes a re-interview of the problematic device _(if applicable)_.
           required: false
         - label: |
-            The log includes the problematic interaction with the device _(if applicable).
+            The log includes the problematic interaction with the device _(if applicable)_.
           required: false
         - label: |
             I provided the node ID of the problematic device _(if applicable)_.
@@ -169,5 +147,4 @@ body:
       value: |
         ---
 
-        Thanks for your patience. Filling this out completely saves us a lot of
-        time.
+        Thanks for your patience. Filling this out completely saves you and us a lot of time.
