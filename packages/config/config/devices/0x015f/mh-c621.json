@@ -1,12 +1,12 @@
 {
-	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturer": "McoHome Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "MH-C421",
+	"label": "MH-C621",
 	"description": "Shutter Panel",
 	"devices": [
 		{
-			"productType": "0xc421",
-			"productId": "0x5102"
+			"productType": "0xc621",
+			"productId": "0x5106"
 		}
 	],
 	"firmwareVersion": {
@@ -49,52 +49,6 @@
 		{
 			"#": "12",
 			"$import": "templates/mcohome_template.json#max_shutter_level"
-		},
-		{
-			"#": "13",
-			"label": "External Switch Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Button (Momentary buttons)",
-					"value": 0
-				},
-				{
-					"label": "Toggle (2-State switches)",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "14",
-			"label": "External Switch Input",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Function disabled",
-					"value": 0
-				},
-				{
-					"label": "External switch wired to S1",
-					"value": 1
-				},
-				{
-					"label": "External switch wired to S2",
-					"value": 2
-				},
-				{
-					"label": "Switches wired to S1 and S2, each control both directions",
-					"value": 3
-				},
-				{
-					"label": "Switches wired to S1 and S2, S1 for open, S2 for close",
-					"value": 4
-				}
-			]
 		},
 		{
 			"#": "255",

@@ -1,11 +1,11 @@
 {
 	"manufacturer": "McoHome Technology Co., Ltd.",
 	"manufacturerId": "0x015f",
-	"label": "MH-C421",
+	"label": "MH-C321",
 	"description": "Shutter Panel",
 	"devices": [
 		{
-			"productType": "0xc421",
+			"productType": "0xc321",
 			"productId": "0x5102"
 		}
 	],
