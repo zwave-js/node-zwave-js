@@ -1,0 +1,83 @@
+{
+	"manufacturer": "Dawon DNS",
+	"manufacturerId": "0x018c",
+	"label": "PM-B400ZW-N",
+	"description": "Power Manager",
+	"devices": [
+		{
+			"productType": "0x0042",
+			"productId": "0x0006",
+			"zwaveAllianceId": 1870
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Standy Power Setting Value",
+			"description": "This parameter determines whether to use the standby power cutoff function and determines the reference value of standby power cut off.  if ther power consumption is less than the reference value, switch is turned off.   this parameter value's size is 4 bytes.  first 3 bytes is for setting standby power reference value.  last 1 byte is for standby power monitoring function enable or disable. - standby power setting value : 3 byte - standby power enable/disble : 1 byte) standby power value example :   if the value is set by 300(0x00012c), standby power is 3.00w  standby power function enable/disable example : if standby power is enable, value is 0x01.   and, total 4 bytes is 0x00012c01,   ( default parameter value : 0 – 0.00w, standbypower disable) (max standby reference power is 600w, 0x00ea60)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Peridic Measurement Value Transmission",
+			"description": "If value is 0, plug do not transmit power value. if value is 1, plug transmits power value to hub",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Accumulation Start/Stop",
+			"description": "If value is 0, plug stop accumulating power value. if value is 1, plug start accumulating power value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Connected Device Use/Not Use",
+			"description": "If value is 0, connected device is not use, if value is 1, it is in use",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Periodic Time Intervals",
+			"description": "Unit is per 10 minutes.you can change this value using configuration command class",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "After mounting the UZB controller to your PC and running the PC Controller program, click the Add button in the PC Controller program. Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet and it will include to the network controller, while flashing the red button on the LED Smart Plug",
+		"exclusion": "After mounting the UZB controller to your PC and run the PC Controller program you can click the Remove button in the PC Controller program. Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet will Exclusion in the network controller, while the flashing red button LED Smart Plug",
+		"reset": "Press the button on the Smart Plug for more than 10 seconds after you plug the Smart Plug into a power outlet will make a Exclusion in the network controller, while the flashing red button LED Smart Plug. And all the variables are initialized.\n\n※ Please use this procedure only in the event that the network primary \n controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1870/PB-B400ZWN_Manual.pdf"
+	}
+}
