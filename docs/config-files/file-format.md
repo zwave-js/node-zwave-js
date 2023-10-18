@@ -503,6 +503,10 @@ By default, `Basic CC::Set` commands are interpreted as status updates. This fla
 
 By default, `Multilevel Switch CC::Set` commands are ignored, because they are meant to control end devices. This flag causes the driver to emit a `value event` for the `"event"` property instead, so applications can react to these commands, e.g. for remotes.
 
+### `treatSetAsReport`
+
+By default, `all CC::Set` commands are ignored, because they are meant to control end devices. This flag causes the driver to emit a `value report`, so applications can react to these commands, e.g. for BinarySwitchCCSet and ThermostatModeCCSet.
+
 ### `treatDestinationEndpointAsSource`
 
 Some devices incorrectly use the multi channel **destination** endpoint in reports to indicate the **source** endpoint the report originated from. When this flag is `true`, the destination endpoint is instead interpreted to be the source and the original source endpoint gets ignored.
