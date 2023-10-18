@@ -90,5 +90,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		"treatSetAsReport": ["BinarySwitchCCSet", "ThermostatModeCCSet"]
+	}
 }
