@@ -1,6 +1,3 @@
-name: Request Support / Investigate Issue
-description: |
-  To ask for support with a problem or to figure out if something is a bug or not
 body:
   - type: markdown
     attributes:
