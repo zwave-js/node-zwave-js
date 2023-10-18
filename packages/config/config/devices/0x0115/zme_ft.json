@@ -130,10 +130,10 @@
 					"extendMetadata": {
 						"thermostatMode": {
 							"states": {
-								"Off": 0,
-								"Heat": 1,
-								"Furnace": 7,
-								"Energy heat": 11
+								"0": "Off",
+								"1": "Heat",
+								"7": "Furnace",
+								"11": "Energy heat"
 							}
 						}
 					}
