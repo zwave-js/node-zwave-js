@@ -61,6 +61,16 @@ import {
 	BasicCCValues,
 } from "@zwave-js/cc/BasicCC";
 import {
+	BinarySwitchCC,
+	BinarySwitchCCSet,
+	BinarySwitchCCValues,
+} from "@zwave-js/cc/BinarySwitchCC";
+import {
+	ThermostatModeCC,
+	ThermostatModeCCSet,
+	ThermostatModeCCValues,
+} from "@zwave-js/cc/ThermostatModeCC";
+import {
 	CentralSceneCCNotification,
 	CentralSceneCCValues,
 } from "@zwave-js/cc/CentralSceneCC";
@@ -3008,6 +3018,10 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleBasicCommand(command);
 		} else if (command instanceof MultilevelSwitchCC) {
 			return this.handleMultilevelSwitchCommand(command);
+		} else if (command instanceof BinarySwitchCCSet) {
+			return this.handleBinarySwitchSetCommand(command);
+		} else if (command instanceof ThermostatModeCCSet) {
+			return this.handleThermostatModeSetCommand(command);
 		} else if (command instanceof CentralSceneCCNotification) {
 			return this.handleCentralSceneNotification(command);
 		} else if (command instanceof WakeUpCCWakeUpNotification) {
@@ -3730,6 +3744,32 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
+	private handleBinarySwitchSetCommand(command: BinarySwitchCC) : void {
+		if (command instanceof BinarySwitchCCSet && isArray(this._deviceConfig?.compat?.treatSetAsReport)) {
+			// Treat BinarySwitchCCSet as value report if desired
+			if (this._deviceConfig?.compat?.treatSetAsReport.indexOf("BinarySwitchCCSet")!=-1) {
+				this.driver.controllerLog.logNode(this.id, {
+					endpoint: command.endpointIndex,
+					message: "treating BinarySwitchCC::Set as a report",
+				});
+				this._valueDB.setValue(BinarySwitchCCValues.currentValue.endpoint(command.endpointIndex), command.targetValue);
+			}
+		}
+	}
+	
+	private handleThermostatModeSetCommand(command: ThermostatModeCC) : void {
+		if (command instanceof ThermostatModeCCSet && isArray(this._deviceConfig?.compat?.treatSetAsReport)) {
+			// Treat ThermostatModeCCSet as value report if desired
+			if (this._deviceConfig?.compat?.treatSetAsReport.indexOf("ThermostatModeCCSet")!=-1) {
+				this.driver.controllerLog.logNode(this.id, {
+					endpoint: command.endpointIndex,
+					message: "treating ThermostatModeCC::Set as a report",
+				});
+				this._valueDB.setValue(ThermostatModeCCValues.thermostatMode.endpoint(command.endpointIndex), command.mode);
+			}
+		}
+	}
+	
 	private async handleZWavePlusGet(command: ZWavePlusCCGet): Promise<void> {
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
