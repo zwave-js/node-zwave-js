@@ -1,0 +1,176 @@
+name: Request Support / Investigate Issue
+description: |
+  To ask for support with a problem or to figure out if something is a bug or not
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Hi there!
+
+        ---
+
+        Since Z-Wave JS is used in multiple applications with a lot of moving
+        parts, your issue might actually be caused by something outside our
+        control.
+
+        Let's start by finding out if we are able to help you...
+
+        1. If this is about a **device** that is interviewed completely but
+        does not **get identified**, please 
+        [use this template](https://github.com/zwave-js/node-zwave-js/issues/new?assignees=&labels=config+%E2%9A%99&projects=&template=device_config.yml&title=Missing+device+configuration%3A+%3Center+manufacturer+and+device+name%3E) instead.
+
+        1. Were you using **Z-Wave JS UI** (standalone or as an addon) when you
+        encountered the problem?\
+        If **yes**: please open your issue at
+        https://github.com/zwave-js/zwave-js-ui/issues instead, **unless** you
+        were told to report it here.
+
+        1. Were you using **Home Assistant** (but not Z-Wave JS UI) when you
+        encountered the problem?\
+        If **yes**, please open your issue at
+        https://github.com/home-assistant/core/issues instead, **unless** you
+        were told to report it here.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have read and followed the above instructions
+          required: true
+        - label: |
+            I have checked the [troubleshooting
+            section](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index)
+            and my problem is **not** described there.
+          required: true
+        - label: |
+            I have read the
+            [changelog](https://github.com/zwave-js/node-zwave-js/blob/master/CHANGELOG.md)
+            and my problem was **not** mentioned there or the fix **did not
+            work**.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: '---'
+
+  - type: textarea
+    attributes:
+      label: Describe the issue
+      description: |
+        Please answer all questions that apply and remove the ones that don't.
+        Optionally share screenshots of what you're seeing.
+      value: |
+        What is happening?
+
+
+        What did you expect to happen instead?
+
+
+        Steps to reproduce the behavior:
+          1. Go to '...'
+          2. Click on '...'
+          3. Scroll down to '...'
+          4. See error
+
+
+        Anything else we should know?
+
+  - type: textarea
+    id: software_versions
+    attributes:
+      label: Software versions
+      description: Please fill in the versions of each software you're using.
+      value: |
+        Driver (node-zwave-js): ...
+
+        Z-Wave JS UI: ...
+
+        Home Assistant Z-Wave Integration: ...
+
+        Home Assistant Z-Wave JS Addon: ...
+
+        ioBroker.zwave2 Adapter: ...
+
+        If you are using something non-standard, tell us here: ...
+
+  - type: textarea
+    id: devices
+    attributes:
+      label: Device information
+      description: |
+        If this is an issue with a specific device, please specify which one(s).
+        Please tell us which node ID the device has in your network (this is a number between 1 and 232).
+
+      value: |
+        Manufacturer: ...
+        Model name: ...
+        Node ID: ...
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## Driver Logfile
+
+        We **need** a **driver** logfile on loglevel **DEBUG**. Many issues
+        simply cannot be investigated without the correct logfile. If you don't
+        provide one, the first thing we'll do is ask for one.
+
+        Here's how to create one:
+
+        - [Z-Wave JS  UI](https://zwave-js.github.io/zwave-js-ui/#/troubleshooting/generating-logs?id=driver-logs)
+        - [Home Assistant Z-Wave Integration](https://www.home-assistant.io/integrations/zwave_js#how-do-i-access-the-z-wave-logs)
+        - [ioBroker.zwave2 Adapter](https://github.com/AlCalzone/ioBroker.zwave2/blob/master/docs/en/troubleshooting.md#providing-the-necessary-information-for-an-issue)
+
+        Please...
+
+        - do not link to logs elsewhere, unless you absolutely cannot upload
+        them here.  If the logfile is too large, please try to **zip** it.
+        - do not truncate or filter logs
+        - do not set the loglevel to anything but **DEBUG**, unless you're told to
+        - **upload** the log as a **file** here
+        - avoid copy-pasting if you can avoid it
+
+        **Note:**\
+        If the log is for a device included using **Security S0**, we need your
+        S0 key to decode the traffic.
+
+        You can send that via email to info@zwave-js.io - please include a link
+        to this request.
+
+  - type: checkboxes
+    id: logfile_checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: |
+            I [made
+            sure](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index?id=rule-1-use-the-driver-log-luke)
+            to provide a **driver log** on level **debug**.
+          required: true
+        - label: |
+            The log includes a re-interview of the problematic device _(if applicable)_.
+          required: false
+        - label: |
+            The log includes the problematic interaction with the device _(if applicable).
+          required: false
+        - label: |
+            I provided the node ID of the problematic device _(if applicable)_.
+          required: false
+
+  - type: textarea
+    id: logfile
+    attributes:
+      label: Upload Logfile
+      placeholder: |
+        Drag and drop the logfile here. Please do not copy/paste logs if possible.
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        Thanks for your patience. Filling this out completely saves us a lot of
+        time.

@@ -1,5 +1,11 @@
 # blank_issues_enabled: false
 contact_links:
+  - name: 🪲 Report a potential bug
+    url: https://github.com/zwave-js/node-zwave-js/discussions/new?category=request-support-investigate-issue
+    about: Start an investigation here. We'll create an issue if this is a confirmed bug.
+  - name: ⛑️ Troubleshoot
+    url: https://github.com/zwave-js/node-zwave-js/discussions/new?category=request-support-investigate-issue
+    about: Ask for help with troubleshooting
   - name: ❓ Ask a Question
     url: https://github.com/zwave-js/node-zwave-js/discussions/new
     about: If you have any questions about how to do something in zwave-js, ask it here.
