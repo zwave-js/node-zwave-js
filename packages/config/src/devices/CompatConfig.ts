@@ -289,7 +289,7 @@ error in compat option treatMultilevelSwitchSetAsEvent`,
 		if (definition.treatSetAsReport != undefined) {
 			if (!(isArray(definition.treatSetAsReport)
 					&& definition.treatSetAsReport.every(
-						(s) => typeof s === "string",
+						(stp: any) => typeof stp === "string",
 					))) {
 				throwInvalidConfig(
 					"devices",
