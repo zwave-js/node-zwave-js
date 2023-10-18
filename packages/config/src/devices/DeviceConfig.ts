@@ -866,6 +866,7 @@ export class DeviceConfig {
 					"removeEndpoints",
 					"treatBasicSetAsEvent",
 					"treatMultilevelSwitchSetAsEvent",
+					"treatSetAsReport",
 				] as const
 			) {
 				if (this.compat[prop] != undefined) {
