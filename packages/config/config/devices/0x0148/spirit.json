@@ -136,10 +136,29 @@
 			]
 		}
 	],
-	"metadata": {
-		"comments": {
-			"level": "warning",
-			"text": "The thermostat is missing \"Manufacturer Specific\" from its list of supported modes, although the mode is supported. Application-specific workarounds may be necessary to switch to \"Manufacturer Specific\" mode."
+	"compat": {
+		"overrideQueries": {
+			// The device does not report "Manufacturer specific" as a supported thermostat mode
+			"Thermostat Mode": [
+				{
+					"method": "getSupportedModes",
+					"result": [0, 1, 11, 15, 31], // Off / Heat / Energy heat / Full power / Manufacturer specific
+					"persistValues": {
+						"supportedModes": [0, 1, 11, 15, 31]
+					},
+					"extendMetadata": {
+						"thermostatMode": {
+							"states": {
+								"0": "Off",
+								"1": "Heat",
+								"11": "Energy heat",
+								"15": "Full power",
+								"31": "Manufacturer specific"
+							}
+						}
+					}
+				}
+			]
 		}
 	}
 }
