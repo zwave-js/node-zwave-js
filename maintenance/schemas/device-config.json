@@ -717,6 +717,7 @@
 				"$if": {
 					"$ref": "#/definitions/condition"
 				},
+				"$import": { "$ref": "#/definitions/import" },
 				"level": {
 					"type": "string",
 					"enum": ["info", "warning", "error"]
@@ -727,7 +728,14 @@
 				}
 			},
 			"additionalProperties": false,
-			"required": ["level", "text"]
+			"anyOf": [
+				{
+					"required": ["level", "text"]
+				},
+				{
+					"required": ["$import"]
+				}
+			]
 		}
 	}
 }
