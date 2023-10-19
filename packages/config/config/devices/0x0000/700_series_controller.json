@@ -16,6 +16,19 @@
 	},
 	"metadata": {
 		// 700/800 series firmware bugs that affect multiple controllers
-		"$import": "~/templates/master_template.json#7xx_firmware_bugs"
+		"comments": [
+			{
+				"$if": "firmwareVersion < 7.17.2",
+				"$import": "~/templates/master_template.json#7xx_firmware_bug_pre_7_17_2"
+			},
+			{
+				"$if": "firmwareVersion === 7.19.1",
+				"$import": "~/templates/master_template.json#7xx_firmware_bug_7_19_1"
+			},
+			{
+				"$if": "firmwareVersion === 7.19.3",
+				"$import": "~/templates/master_template.json#7xx_firmware_bug_7_19_3"
+			}
+		]
 	}
 }
