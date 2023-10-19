@@ -1,0 +1,26 @@
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        What you would like to see added and **why** you think the requested feature is useful. Since `zwave-js` is pretty low-level we often have to take a broader approach so many projects can benefit.
+        
+        **Explaining your use-case will go a long way in helping us understand.**
+      placeholder: I'm always frustrated when ...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Do you have a solution in mind?
+      description: |
+        For example, if you want to propose an API, share your thoughts how it could be used (syntax).
+
+  - type: textarea
+    attributes:
+      label: Describe alternatives you've considered
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context or screenshots about the feature request here.
