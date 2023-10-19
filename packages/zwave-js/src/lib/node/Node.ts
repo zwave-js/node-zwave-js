@@ -194,6 +194,7 @@ import {
 	getErrorMessage,
 	pick,
 	stringify,
+	throttle,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
@@ -4844,6 +4845,13 @@ protocol version:      ${this.protocolVersion}`;
 			return result;
 		}
 
+		// Throttle the progress emitter so applications can handle the load of events
+		const notifyProgress = throttle(
+			(progress) => this.emit("firmware update progress", this, progress),
+			250,
+			true,
+		);
+
 		// Perform all firmware updates in sequence
 		let updateResult!: Awaited<
 			ReturnType<ZWaveNode["doFirmwareUpdateInternal"]>
@@ -4890,7 +4898,7 @@ protocol version:      ${this.protocolVersion}`;
 							2,
 						),
 					};
-					this.emit("firmware update progress", this, progress);
+					notifyProgress(progress);
 
 					// When this file is done, add the fragments to the total, so we can compute the total progress correctly
 					if (fragment === total) {
