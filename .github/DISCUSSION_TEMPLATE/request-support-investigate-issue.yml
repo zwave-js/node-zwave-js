@@ -121,9 +121,7 @@ body:
       label: Checklist
       options:
         - label: |
-            I [made
-            sure](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index?id=rule-1-use-the-driver-log-luke)
-            to provide a **driver log** on level **debug**.
+            I [made sure](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index?id=rule-1-use-the-driver-log-luke) to provide a **driver log** on level **debug**.
           required: true
         - label: |
             The log includes a re-interview of the problematic device _(if applicable)_.
