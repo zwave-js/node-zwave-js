@@ -11,7 +11,11 @@ Until recently, 700 series Z-Wave Controllers had a bug that could cause the mes
 
 ## Upgrading the firmware
 
-OTW firmware upgrades of 700/800 series controllers can be done directly with Z-Wave JS. More details can be found under the following links:
+OTW firmware upgrades of 700/800 series controllers can be done directly with Z-Wave JS.
+
+> [!WARNING] Z-Wave controllers generally do not allow downgrading the firmware, at least not without compiling a custom bootloader. Be careful which firmware you choose to install and avoid the `_v255` upgrades available from Silicon Labs - those can not be upgraded either.
+
+More details can be found under the following links:
 
 ### Linux
 
