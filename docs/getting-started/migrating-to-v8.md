@@ -75,7 +75,7 @@ It is recommended to only query the necessary user codes on demand instead after
 
 Using the new `interview.queryAllUserCodes` property of `ZWaveOptions`, the interview behavior can be toggled back to query all codes if you wish to do so.
 
-## Restructing of the Driver's `ZWaveOptions` object
+## Restructuring of the Driver's `ZWaveOptions` object
 
 We have unified all interview behavior options under a single key (`interview`). This likely does not affect you, unless you were previously using the internal `skipInterview` property.
 The new structure simply wraps the prior key inside `interview` and adds additional options as seen below:

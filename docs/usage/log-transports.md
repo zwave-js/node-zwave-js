@@ -41,7 +41,7 @@ The transport format is responsible for formatting the log output and **MUST** b
 - `colorize`: Whether log outputs should be colorized using ANSI escape codes. This can be useful if you log to a terminal.
 - `shortTimestamps`: Whether the timestamps should include only the time (`true`) or also the date (`false`).
 
-The [`log-transports` repository](https://github.com/zwave-js/log-transports) cotnains a few predefined transports that you can use.
+The [`log-transports` repository](https://github.com/zwave-js/log-transports) contains a few predefined transports that you can use.
 
 ## `JSONTransport`
 

@@ -332,7 +332,7 @@ To get around this:
 
 ### `getKnownLifelineRoutes`
 
-The routing table of the controller is stored in its memory and not easily accessible during normal operation. Z-Wave JS gets around this by keeping statistics for each node that include the last used routes, the used repeaters, procotol and speed, as well as RSSI readings. This information can be read using
+The routing table of the controller is stored in its memory and not easily accessible during normal operation. Z-Wave JS gets around this by keeping statistics for each node that include the last used routes, the used repeaters, protocol and speed, as well as RSSI readings. This information can be read using
 
 ```ts
 getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>
@@ -635,7 +635,7 @@ interface Route {
 
 #### Manually assign custom return routes (nodes → controller or nodes → other nodes)
 
-As a last resort, the routes uses by a node can entirely be assigned manually. This uses the `Z-Wave Protocol` command class, which is used internally by the controller and Z-Wave protocol, so this should at least be considered an inofficial way to set return routes.
+As a last resort, the routes uses by a node can entirely be assigned manually. This uses the `Z-Wave Protocol` command class, which is used internally by the controller and Z-Wave protocol, so this should at least be considered an unofficial way to set return routes.
 
 Up to 4 routes for each combination of source and destination node can be set. If less routes are given, the remaining ones will be cleared. Optionally, a priority route can be set, which will always be used for the first transmission attempt. Up to 3 of the other routes will then be used as fallbacks, but no automatically determined routes will be used.
 
@@ -1554,4 +1554,4 @@ This is emitted when another node instructs Z-Wave JS to identify itself using t
 > [!NOTE] Although support for this seems to be a certification requirement, it is currently unclear how this requirement must be fulfilled for controllers. The specification only refers to nodes:
 > The node is RECOMMENDED to use a visible LED for an identify function if it has an LED. If the node is itself a light source, e.g. a light bulb, this MAY be used in place of a dedicated LED.
 >
-> The event signature may be extended to accomodate this after clarification.
+> The event signature may be extended to accommodate this after clarification.
