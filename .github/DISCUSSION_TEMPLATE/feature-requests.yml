@@ -4,7 +4,7 @@ body:
       label: Description
       description: |
         What you would like to see added and **why** you think the requested feature is useful. Since `zwave-js` is pretty low-level we often have to take a broader approach so many projects can benefit.
-        
+
         **Explaining your use-case will go a long way in helping us understand.**
       placeholder: I'm always frustrated when ...
     validations:
