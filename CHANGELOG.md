@@ -4,6 +4,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Add ESLint rule to ensure all types used in a public CC API are exported (#6438)
+* Throttle `firmware update progress` events for OTA updates (#6435)
+* Mark `Central Scene CC` `scene` property as stateless (#6424)
+
+### Config file changes
+* Override supported Thermostat modes for Eurotronics Spirit TRV (#6436)
+* Correct firmware warnings for Zooz controllers (#6433)
+* Correct overridden `thermostatMode` metadata for ZME_FT (#6420)
+* Add MCOHome C521/C621 shutters, fix C321, make shutters consistent (#6419)
+
+### Changes under the hood
+* Add all `EventListener` methods to `TypedEventEmitter` interface (#6437)
+* Bug reports, feature requests and request for tech support have been moved from issues to discussions. We'll escalate them to issues if necessary.
+
 ## 12.2.0 (2023-10-17)
 This release includes several more fixes and workarounds for the problematic interaction between some controller firmware bugs and the automatic controller recovery introduced in the `v12` release:
 * Added a workaround to recognize corrupted `ACK` frames after soft-reset of controllers running an 7.19.x firmware or higher. Previously this triggered the unresponsive controller detection and recovery process. (#6409)
