@@ -301,7 +301,8 @@ export class TimeParametersCCReport extends TimeParametersCC {
 @expectedCCResponse(TimeParametersCCReport)
 export class TimeParametersCCGet extends TimeParametersCC {}
 
-interface TimeParametersCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface TimeParametersCCSetOptions extends CCCommandOptions {
 	dateAndTime: Date;
 	useLocalTime?: boolean;
 }

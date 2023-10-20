@@ -479,7 +479,10 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 @expectedCCResponse(CentralSceneCCConfigurationReport)
 export class CentralSceneCCConfigurationGet extends CentralSceneCC {}
 
-interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface CentralSceneCCConfigurationSetOptions
+	extends CCCommandOptions
+{
 	slowRefresh: boolean;
 }
 

@@ -927,7 +927,8 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	}
 }
 
-interface ScheduleEntryLockCCEnableSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ScheduleEntryLockCCEnableSetOptions extends CCCommandOptions {
 	userId: number;
 	enabled: boolean;
 }
@@ -971,7 +972,10 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 	}
 }
 
-interface ScheduleEntryLockCCEnableAllSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ScheduleEntryLockCCEnableAllSetOptions
+	extends CCCommandOptions
+{
 	enabled: boolean;
 }
 
@@ -1010,7 +1014,10 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 	}
 }
 
-interface ScheduleEntryLockCCSupportedReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface ScheduleEntryLockCCSupportedReportOptions
+	extends CCCommandOptions
+{
 	numWeekDaySlots: number;
 	numYearDaySlots: number;
 	numDailyRepeatingSlots?: number;
@@ -1196,7 +1203,8 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 	}
 }
 
-type ScheduleEntryLockCCWeekDayScheduleReportOptions =
+// @publicAPI
+export type ScheduleEntryLockCCWeekDayScheduleReportOptions =
 	& CCCommandOptions
 	& ScheduleEntryLockSlotId
 	& AllOrNone<ScheduleEntryLockWeekDaySchedule>;
@@ -1321,7 +1329,8 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 	}
 }
 
-type ScheduleEntryLockCCWeekDayScheduleGetOptions =
+// @publicAPI
+export type ScheduleEntryLockCCWeekDayScheduleGetOptions =
 	& CCCommandOptions
 	& ScheduleEntryLockSlotId;
 
@@ -1502,7 +1511,8 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 	}
 }
 
-type ScheduleEntryLockCCYearDayScheduleReportOptions =
+// @publicAPI
+export type ScheduleEntryLockCCYearDayScheduleReportOptions =
 	& CCCommandOptions
 	& ScheduleEntryLockSlotId
 	& AllOrNone<ScheduleEntryLockYearDaySchedule>;
@@ -1665,7 +1675,8 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 	}
 }
 
-type ScheduleEntryLockCCYearDayScheduleGetOptions =
+// @publicAPI
+export type ScheduleEntryLockCCYearDayScheduleGetOptions =
 	& CCCommandOptions
 	& ScheduleEntryLockSlotId;
 
@@ -1708,7 +1719,10 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 	}
 }
 
-interface ScheduleEntryLockCCTimeOffsetSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ScheduleEntryLockCCTimeOffsetSetOptions
+	extends CCCommandOptions
+{
 	standardOffset: number;
 	dstOffset: number;
 }
@@ -1755,7 +1769,10 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 	}
 }
 
-interface ScheduleEntryLockCCTimeOffsetReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface ScheduleEntryLockCCTimeOffsetReportOptions
+	extends CCCommandOptions
+{
 	standardOffset: number;
 	dstOffset: number;
 }
@@ -1933,7 +1950,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 	}
 }
 
-type ScheduleEntryLockCCDailyRepeatingScheduleReportOptions =
+// @publicAPI
+export type ScheduleEntryLockCCDailyRepeatingScheduleReportOptions =
 	& ScheduleEntryLockSlotId
 	& AllOrNone<ScheduleEntryLockDailyRepeatingSchedule>;
 
@@ -2067,7 +2085,8 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 	}
 }
 
-type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions =
+// @publicAPI
+export type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions =
 	& CCCommandOptions
 	& ScheduleEntryLockSlotId;
 

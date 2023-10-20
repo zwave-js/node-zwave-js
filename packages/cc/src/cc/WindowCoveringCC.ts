@@ -675,6 +675,7 @@ ${
 	}
 }
 
+// @publicAPI
 export interface WindowCoveringCCSupportedReportOptions
 	extends CCCommandOptions
 {
@@ -798,7 +799,8 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 	}
 }
 
-interface WindowCoveringCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface WindowCoveringCCGetOptions extends CCCommandOptions {
 	parameter: WindowCoveringParameter;
 }
 
@@ -847,6 +849,7 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 	}
 }
 
+// @publicAPI
 export interface WindowCoveringCCSetOptions extends CCCommandOptions {
 	targetValues: {
 		parameter: WindowCoveringParameter;
@@ -917,6 +920,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 	}
 }
 
+// @publicAPI
 export interface WindowCoveringCCStartLevelChangeOptions
 	extends CCCommandOptions
 {
@@ -979,7 +983,10 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	}
 }
 
-interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
+// @publicAPI
+export interface WindowCoveringCCStopLevelChangeOptions
+	extends CCCommandOptions
+{
 	parameter: WindowCoveringParameter;
 }
 

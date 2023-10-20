@@ -267,7 +267,8 @@ export class HumidityControlModeCC extends CommandClass {
 	}
 }
 
-interface HumidityControlModeCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface HumidityControlModeCCSetOptions extends CCCommandOptions {
 	mode: HumidityControlMode;
 }
 

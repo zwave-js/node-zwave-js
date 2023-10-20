@@ -820,7 +820,8 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	}
 }
 
-interface ColorSwitchCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ColorSwitchCCGetOptions extends CCCommandOptions {
 	colorComponent: ColorComponent;
 }
 
@@ -882,6 +883,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 	}
 }
 
+// @publicAPI
 export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 	duration?: Duration | string;
 };
@@ -966,7 +968,8 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	}
 }
 
-type ColorSwitchCCStartLevelChangeOptions =
+// @publicAPI
+export type ColorSwitchCCStartLevelChangeOptions =
 	& {
 		colorComponent: ColorComponent;
 		direction: keyof typeof LevelChangeDirection;
@@ -1050,6 +1053,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	}
 }
 
+// @publicAPI
 export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
 	colorComponent: ColorComponent;
 }

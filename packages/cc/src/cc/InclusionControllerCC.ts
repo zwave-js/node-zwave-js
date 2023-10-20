@@ -86,7 +86,8 @@ export class InclusionControllerCCAPI extends CCAPI {
 	}
 }
 
-interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
+// @publicAPI
+export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
 	step: InclusionControllerStep;
 	status: InclusionControllerStatus;
 }
@@ -135,7 +136,8 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 	}
 }
 
-interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
+// @publicAPI
+export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
 	includedNodeId: number;
 	step: InclusionControllerStep;
 }

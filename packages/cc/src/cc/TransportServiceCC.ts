@@ -84,7 +84,10 @@ export class TransportServiceCC extends CommandClass
 	}
 }
 
-interface TransportServiceCCFirstSegmentOptions extends CCCommandOptions {
+// @publicAPI
+export interface TransportServiceCCFirstSegmentOptions
+	extends CCCommandOptions
+{
 	datagramSize: number;
 	sessionId: number;
 	headerExtension?: Buffer | undefined;
@@ -231,7 +234,8 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	}
 }
 
-interface TransportServiceCCSubsequentSegmentOptions
+// @publicAPI
+export interface TransportServiceCCSubsequentSegmentOptions
 	extends TransportServiceCCFirstSegmentOptions
 {
 	datagramOffset: number;
@@ -432,7 +436,10 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	}
 }
 
-interface TransportServiceCCSegmentRequestOptions extends CCCommandOptions {
+// @publicAPI
+export interface TransportServiceCCSegmentRequestOptions
+	extends CCCommandOptions
+{
 	sessionId: number;
 	datagramOffset: number;
 }
@@ -496,7 +503,10 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	}
 }
 
-interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptions {
+// @publicAPI
+export interface TransportServiceCCSegmentCompleteOptions
+	extends CCCommandOptions
+{
 	sessionId: number;
 }
 
@@ -532,7 +542,8 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 	}
 }
 
-interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
+// @publicAPI
+export interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
 	pendingSegments: number;
 }
 

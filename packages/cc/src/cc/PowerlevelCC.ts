@@ -172,7 +172,8 @@ export class PowerlevelCC extends CommandClass {
 	declare ccCommand: PowerlevelCommand;
 }
 
-type PowerlevelCCSetOptions =
+// @publicAPI
+export type PowerlevelCCSetOptions =
 	& CCCommandOptions
 	& (
 		| {
@@ -270,7 +271,8 @@ export class PowerlevelCCReport extends PowerlevelCC {
 @expectedCCResponse(PowerlevelCCReport)
 export class PowerlevelCCGet extends PowerlevelCC {}
 
-interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
 	testNodeId: number;
 	powerlevel: Powerlevel;
 	testFrameCount: number;

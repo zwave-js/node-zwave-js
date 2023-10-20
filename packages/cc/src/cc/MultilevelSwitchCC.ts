@@ -606,7 +606,8 @@ export class MultilevelSwitchCC extends CommandClass {
 	}
 }
 
-interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 	targetValue: number;
 	// Version >= 2:
 	duration?: Duration | string;
@@ -661,7 +662,8 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	}
 }
 
-interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
 	currentValue: number;
 	targetValue: number;
 	duration?: Duration | string;
@@ -739,7 +741,8 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 @expectedCCResponse(MultilevelSwitchCCReport)
 export class MultilevelSwitchCCGet extends MultilevelSwitchCC {}
 
-type MultilevelSwitchCCStartLevelChangeOptions =
+// @publicAPI
+export type MultilevelSwitchCCStartLevelChangeOptions =
 	& {
 		direction: keyof typeof LevelChangeDirection;
 	}

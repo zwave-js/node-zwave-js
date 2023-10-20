@@ -375,6 +375,7 @@ temperature:   ${batteryHealth.temperature} °C`;
 	}
 }
 
+// @publicAPI
 export type BatteryCCReportOptions =
 	& CCCommandOptions
 	& (

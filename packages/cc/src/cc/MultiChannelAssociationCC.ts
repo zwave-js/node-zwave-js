@@ -566,7 +566,8 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 	}
 }
 
-type MultiChannelAssociationCCSetOptions =
+// @publicAPI
+export type MultiChannelAssociationCCSetOptions =
 	& {
 		groupId: number;
 	}
@@ -639,7 +640,8 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	}
 }
 
-interface MultiChannelAssociationCCRemoveOptions {
+// @publicAPI
+export interface MultiChannelAssociationCCRemoveOptions {
 	/** The group from which to remove the nodes. If none is specified, the nodes will be removed from all groups. */
 	groupId?: number;
 	/** The nodes to remove. If no nodeIds and no endpoint addresses are specified, ALL nodes will be removed. */
@@ -803,7 +805,8 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	}
 }
 
-interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 	groupId: number;
 }
 

@@ -340,7 +340,8 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	}
 }
 
-interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
 	recordNumber: number;
 }
 

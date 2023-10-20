@@ -133,7 +133,8 @@ export class ClockCC extends CommandClass {
 	}
 }
 
-interface ClockCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ClockCCSetOptions extends CCCommandOptions {
 	weekday: Weekday;
 	hour: number;
 	minute: number;

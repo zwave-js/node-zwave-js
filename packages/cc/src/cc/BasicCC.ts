@@ -319,7 +319,8 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 	}
 }
 
-interface BasicCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface BasicCCSetOptions extends CCCommandOptions {
 	targetValue: number;
 }
 
@@ -354,7 +355,8 @@ export class BasicCCSet extends BasicCC {
 	}
 }
 
-type BasicCCReportOptions =
+// @publicAPI
+export type BasicCCReportOptions =
 	& CCCommandOptions
 	& {
 		currentValue: number;

@@ -125,7 +125,8 @@ export class SceneActivationCC extends CommandClass {
 	declare ccCommand: SceneActivationCommand;
 }
 
-interface SceneActivationCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SceneActivationCCSetOptions extends CCCommandOptions {
 	sceneId: number;
 	dimmingDuration?: Duration | string;
 }

@@ -87,7 +87,8 @@ export class CRC16CC extends CommandClass {
 	}
 }
 
-interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
+// @publicAPI
+export interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 

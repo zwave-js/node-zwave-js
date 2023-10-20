@@ -591,6 +591,7 @@ export class VersionCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export interface VersionCCReportOptions {
 	libraryType: ZWaveLibraryTypes;
 	protocolVersion: string;
@@ -726,7 +727,8 @@ export class VersionCCReport extends VersionCC {
 @expectedCCResponse(VersionCCReport)
 export class VersionCCGet extends VersionCC {}
 
-interface VersionCCCommandClassReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface VersionCCCommandClassReportOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 	ccVersion: number;
 }
@@ -769,7 +771,8 @@ export class VersionCCCommandClassReport extends VersionCC {
 	}
 }
 
-interface VersionCCCommandClassGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 

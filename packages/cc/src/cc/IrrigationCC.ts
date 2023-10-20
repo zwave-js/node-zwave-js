@@ -1815,6 +1815,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 	}
 }
 
+// @publicAPI
 export interface IrrigationCCValveInfoGetOptions extends CCCommandOptions {
 	valveId: ValveId;
 }
@@ -2096,7 +2097,8 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 	}
 }
 
-interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
 	valveId: ValveId;
 }
 
@@ -2144,7 +2146,8 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 	}
 }
 
-interface IrrigationCCValveRunOptions extends CCCommandOptions {
+// @publicAPI
+export interface IrrigationCCValveRunOptions extends CCCommandOptions {
 	valveId: ValveId;
 	duration: number;
 }
@@ -2201,7 +2204,8 @@ export class IrrigationCCValveRun extends IrrigationCC {
 	}
 }
 
-interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
 	tableId: number;
 	entries: ValveTableEntry[];
 }
@@ -2304,7 +2308,8 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 	}
 }
 
-interface IrrigationCCValveTableGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface IrrigationCCValveTableGetOptions extends CCCommandOptions {
 	tableId: number;
 }
 
@@ -2356,7 +2361,8 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 	}
 }
 
-interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
+// @publicAPI
+export interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
 	tableIDs: number[];
 }
 
@@ -2406,7 +2412,8 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 	}
 }
 
-interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
+// @publicAPI
+export interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
 	/**
 	 * The duration in minutes the system must stay off.
 	 * 255 or `undefined` will prevent schedules from running.

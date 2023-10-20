@@ -297,6 +297,7 @@ export class ThermostatModeCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export type ThermostatModeCCSetOptions =
 	& CCCommandOptions
 	& (
@@ -376,6 +377,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	}
 }
 
+// @publicAPI
 export type ThermostatModeCCReportOptions =
 	& CCCommandOptions
 	& (
@@ -501,6 +503,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 @expectedCCResponse(ThermostatModeCCReport)
 export class ThermostatModeCCGet extends ThermostatModeCC {}
 
+// @publicAPI
 export interface ThermostatModeCCSupportedReportOptions
 	extends CCCommandOptions
 {

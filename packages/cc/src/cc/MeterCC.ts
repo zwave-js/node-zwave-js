@@ -606,6 +606,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	}
 }
 
+// @publicAPI
 export interface MeterCCReportOptions extends CCCommandOptions {
 	type: number;
 	scale: number;
@@ -852,7 +853,8 @@ function testResponseForMeterGet(sent: MeterCCGet, received: MeterCCReport) {
 	);
 }
 
-interface MeterCCGetOptions {
+// @publicAPI
+export interface MeterCCGetOptions {
 	scale?: number;
 	rateType?: RateType;
 }
@@ -1041,7 +1043,8 @@ export class MeterCCSupportedReport extends MeterCC {
 @expectedCCResponse(MeterCCSupportedReport)
 export class MeterCCSupportedGet extends MeterCC {}
 
-type MeterCCResetOptions =
+// @publicAPI
+export type MeterCCResetOptions =
 	| {
 		type?: undefined;
 		targetValue?: undefined;

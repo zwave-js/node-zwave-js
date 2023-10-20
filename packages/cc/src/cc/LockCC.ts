@@ -172,7 +172,8 @@ export class LockCC extends CommandClass {
 	}
 }
 
-interface LockCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface LockCCSetOptions extends CCCommandOptions {
 	locked: boolean;
 }
 

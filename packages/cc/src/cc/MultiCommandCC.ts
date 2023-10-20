@@ -94,7 +94,10 @@ export class MultiCommandCC extends CommandClass {
 	}
 }
 
-interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiCommandCCCommandEncapsulationOptions
+	extends CCCommandOptions
+{
 	encapsulated: CommandClass[];
 }
 

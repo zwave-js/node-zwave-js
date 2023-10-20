@@ -257,7 +257,10 @@ export class NodeNamingAndLocationCC extends CommandClass {
 	}
 }
 
-interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NodeNamingAndLocationCCNameSetOptions
+	extends CCCommandOptions
+{
 	name: string;
 }
 
@@ -345,7 +348,10 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 @expectedCCResponse(NodeNamingAndLocationCCNameReport)
 export class NodeNamingAndLocationCCNameGet extends NodeNamingAndLocationCC {}
 
-interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NodeNamingAndLocationCCLocationSetOptions
+	extends CCCommandOptions
+{
 	location: string;
 }
 

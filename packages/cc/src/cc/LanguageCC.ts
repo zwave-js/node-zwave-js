@@ -153,7 +153,8 @@ export class LanguageCC extends CommandClass {
 	}
 }
 
-interface LanguageCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface LanguageCCSetOptions extends CCCommandOptions {
 	language: string;
 	country?: string;
 }

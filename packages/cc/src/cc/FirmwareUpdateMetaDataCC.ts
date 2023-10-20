@@ -410,7 +410,8 @@ export class FirmwareUpdateMetaDataCCRequestReport
 	}
 }
 
-type FirmwareUpdateMetaDataCCRequestGetOptions =
+// @publicAPI
+export type FirmwareUpdateMetaDataCCRequestGetOptions =
 	& {
 		manufacturerId: number;
 		firmwareId: number;
@@ -545,7 +546,10 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	}
 }
 
-interface FirmwareUpdateMetaDataCCReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCReportOptions
+	extends CCCommandOptions
+{
 	isLast: boolean;
 	reportNumber: number;
 	firmwareData: Buffer;
@@ -698,7 +702,8 @@ export class FirmwareUpdateMetaDataCCActivationReport
 	}
 }
 
-interface FirmwareUpdateMetaDataCCActivationSetOptions {
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCActivationSetOptions {
 	manufacturerId: number;
 	firmwareId: number;
 	checksum: number;
@@ -798,7 +803,10 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 	}
 }
 
-interface FirmwareUpdateMetaDataCCPrepareGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCPrepareGetOptions
+	extends CCCommandOptions
+{
 	manufacturerId: number;
 	firmwareId: number;
 	firmwareTarget: number;

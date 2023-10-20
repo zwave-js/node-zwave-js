@@ -360,6 +360,7 @@ tilt:     ${resp.tilt}`;
 	}
 }
 
+// @publicAPI
 export type FibaroVenetianBlindCCSetOptions =
 	& CCCommandOptions
 	& (

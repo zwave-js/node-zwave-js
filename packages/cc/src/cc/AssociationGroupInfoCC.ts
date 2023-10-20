@@ -452,6 +452,7 @@ profile:         ${
 	}
 }
 
+// @publicAPI
 export interface AssociationGroupInfoCCNameReportOptions
 	extends CCCommandOptions
 {
@@ -521,7 +522,8 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	}
 }
 
-interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 	groupId: number;
 }
 
@@ -565,6 +567,7 @@ export interface AssociationGroupInfo {
 	eventCode: number;
 }
 
+// @publicAPI
 export interface AssociationGroupInfoCCInfoReportSpecificOptions {
 	isListMode: boolean;
 	hasDynamicInfo: boolean;
@@ -675,7 +678,8 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	}
 }
 
-type AssociationGroupInfoCCInfoGetOptions =
+// @publicAPI
+export type AssociationGroupInfoCCInfoGetOptions =
 	& CCCommandOptions
 	& {
 		refreshCache: boolean;
@@ -745,6 +749,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	}
 }
 
+// @publicAPI
 export interface AssociationGroupInfoCCCommandListReportOptions
 	extends CCCommandOptions
 {
@@ -836,7 +841,10 @@ export class AssociationGroupInfoCCCommandListReport
 	}
 }
 
-interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface AssociationGroupInfoCCCommandListGetOptions
+	extends CCCommandOptions
+{
 	allowCache: boolean;
 	groupId: number;
 }
