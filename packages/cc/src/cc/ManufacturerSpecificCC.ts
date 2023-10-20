@@ -201,6 +201,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export interface ManufacturerSpecificCCReportOptions extends CCCommandOptions {
 	manufacturerId: number;
 	productType: number;
@@ -304,7 +305,8 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 	}
 }
 
-interface ManufacturerSpecificCCDeviceSpecificGetOptions
+// @publicAPI
+export interface ManufacturerSpecificCCDeviceSpecificGetOptions
 	extends CCCommandOptions
 {
 	deviceIdType: DeviceIdType;

@@ -337,7 +337,10 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	// }
 }
 
-interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SceneActuatorConfigurationCCSetOptions
+	extends CCCommandOptions
+{
 	sceneId: number;
 	dimmingDuration: Duration;
 	level?: number;
@@ -481,7 +484,10 @@ function testResponseForSceneActuatorConfigurationGet(
 	return sent.sceneId === 0 || received.sceneId === sent.sceneId;
 }
 
-interface SceneActuatorConfigurationCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SceneActuatorConfigurationCCGetOptions
+	extends CCCommandOptions
+{
 	sceneId: number;
 }
 

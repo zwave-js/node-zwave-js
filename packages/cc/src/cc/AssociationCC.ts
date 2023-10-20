@@ -430,7 +430,8 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 	}
 }
 
-interface AssociationCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface AssociationCCSetOptions extends CCCommandOptions {
 	groupId: number;
 	nodeIds: number[];
 }
@@ -487,7 +488,8 @@ export class AssociationCCSet extends AssociationCC {
 	}
 }
 
-interface AssociationCCRemoveOptions {
+// @publicAPI
+export interface AssociationCCRemoveOptions {
 	/** The group from which to remove the nodes. If none is specified, the nodes will be removed from all nodes. */
 	groupId?: number;
 	/** The nodes to remove. If none are specified, ALL nodes will be removed. */
@@ -559,6 +561,7 @@ export class AssociationCCRemove extends AssociationCC {
 	}
 }
 
+// @publicAPI
 export interface AssociationCCReportSpecificOptions {
 	groupId: number;
 	maxNodes: number;
@@ -648,7 +651,8 @@ export class AssociationCCReport extends AssociationCC {
 	}
 }
 
-interface AssociationCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface AssociationCCGetOptions extends CCCommandOptions {
 	groupId: number;
 }
 
@@ -689,6 +693,7 @@ export class AssociationCCGet extends AssociationCC {
 	}
 }
 
+// @publicAPI
 export interface AssociationCCSupportedGroupingsReportOptions
 	extends CCCommandOptions
 {

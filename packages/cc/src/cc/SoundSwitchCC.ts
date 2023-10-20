@@ -436,7 +436,10 @@ duration: ${info.duration} seconds`;
 	}
 }
 
-interface SoundSwitchCCTonesNumberReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCTonesNumberReportOptions
+	extends CCCommandOptions
+{
 	toneCount: number;
 }
 
@@ -476,7 +479,8 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 @expectedCCResponse(SoundSwitchCCTonesNumberReport)
 export class SoundSwitchCCTonesNumberGet extends SoundSwitchCC {}
 
-interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
 	toneId: number;
 	duration: number;
 	name: string;
@@ -539,7 +543,8 @@ const testResponseForSoundSwitchToneInfoGet: CCResponsePredicate<
 	return received.toneId === sent.toneId;
 };
 
-interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 	toneId: number;
 }
 
@@ -579,7 +584,8 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	}
 }
 
-interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
 	defaultVolume: number;
 	defaultToneId: number;
 }
@@ -625,7 +631,10 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	}
 }
 
-interface SoundSwitchCCConfigurationReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCConfigurationReportOptions
+	extends CCCommandOptions
+{
 	defaultVolume: number;
 	defaultToneId: number;
 }
@@ -675,7 +684,8 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 @expectedCCResponse(SoundSwitchCCConfigurationReport)
 export class SoundSwitchCCConfigurationGet extends SoundSwitchCC {}
 
-interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
 	toneId: ToneId | number;
 	// V2+
 	volume?: number;

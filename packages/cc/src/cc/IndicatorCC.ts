@@ -826,6 +826,7 @@ export interface IndicatorObject {
 	value: number | boolean;
 }
 
+// @publicAPI
 export type IndicatorCCSetOptions =
 	| {
 		value: number;
@@ -943,6 +944,7 @@ export class IndicatorCCSet extends IndicatorCC {
 	}
 }
 
+// @publicAPI
 export type IndicatorCCReportSpecificOptions =
 	| {
 		value: number;
@@ -1156,7 +1158,8 @@ export class IndicatorCCReport extends IndicatorCC {
 	}
 }
 
-interface IndicatorCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface IndicatorCCGetOptions extends CCCommandOptions {
 	indicatorId?: number;
 }
 
@@ -1199,6 +1202,7 @@ export class IndicatorCCGet extends IndicatorCC {
 	}
 }
 
+// @publicAPI
 export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
 	indicatorId: number;
 	nextIndicatorId: number;
@@ -1297,7 +1301,8 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	}
 }
 
-interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 	indicatorId: number;
 }
 
@@ -1394,7 +1399,8 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 	}
 }
 
-interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
 	indicatorId: number;
 }
 

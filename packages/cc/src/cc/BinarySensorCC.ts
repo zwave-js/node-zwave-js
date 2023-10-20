@@ -287,6 +287,7 @@ export class BinarySensorCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export interface BinarySensorCCReportOptions extends CCCommandOptions {
 	type?: BinarySensorType;
 	value: boolean;
@@ -356,7 +357,8 @@ function testResponseForBinarySensorGet(
 	);
 }
 
-interface BinarySensorCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface BinarySensorCCGetOptions extends CCCommandOptions {
 	sensorType?: BinarySensorType;
 }
 

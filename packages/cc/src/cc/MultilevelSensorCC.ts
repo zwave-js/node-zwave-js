@@ -757,7 +757,8 @@ interface MultilevelSensorCCGetSpecificOptions {
 	sensorType: number;
 	scale: number;
 }
-type MultilevelSensorCCGetOptions =
+// @publicAPI
+export type MultilevelSensorCCGetOptions =
 	| CCCommandOptions
 	| (CCCommandOptions & MultilevelSensorCCGetSpecificOptions);
 
@@ -916,7 +917,10 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	}
 }
 
-interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultilevelSensorCCGetSupportedScaleOptions
+	extends CCCommandOptions
+{
 	sensorType: number;
 }
 

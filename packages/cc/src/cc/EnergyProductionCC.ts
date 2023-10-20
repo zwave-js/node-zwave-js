@@ -179,6 +179,7 @@ export class EnergyProductionCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export interface EnergyProductionCCReportOptions extends CCCommandOptions {
 	parameter: EnergyProductionParameter;
 	scale: EnergyProductionScale;
@@ -253,7 +254,8 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 	}
 }
 
-interface EnergyProductionCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface EnergyProductionCCGetOptions extends CCCommandOptions {
 	parameter: EnergyProductionParameter;
 }
 

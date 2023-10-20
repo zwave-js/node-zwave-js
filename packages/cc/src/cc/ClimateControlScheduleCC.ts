@@ -213,7 +213,8 @@ export class ClimateControlScheduleCC extends CommandClass {
 	declare ccCommand: ClimateControlScheduleCommand;
 }
 
-interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 	weekday: Weekday;
 	switchPoints: Switchpoint[];
 }
@@ -334,7 +335,8 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	}
 }
 
-interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
 	weekday: Weekday;
 }
 
@@ -445,7 +447,10 @@ export class ClimateControlScheduleCCOverrideGet
 	extends ClimateControlScheduleCC
 {}
 
-interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ClimateControlScheduleCCOverrideSetOptions
+	extends CCCommandOptions
+{
 	overrideType: ScheduleOverrideType;
 	overrideState: SetbackState;
 }

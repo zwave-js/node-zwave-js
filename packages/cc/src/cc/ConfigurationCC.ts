@@ -1761,7 +1761,8 @@ function testResponseForConfigurationGet(
 	);
 }
 
-interface ConfigurationCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ConfigurationCCGetOptions extends CCCommandOptions {
 	parameter: number;
 	/**
 	 * If this is `true`, responses with different parameters than expected are accepted
@@ -1805,7 +1806,8 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	}
 }
 
-type ConfigurationCCSetOptions =
+// @publicAPI
+export type ConfigurationCCSetOptions =
 	& CCCommandOptions
 	& (
 		| {
@@ -1944,7 +1946,8 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	}
 }
 
-type ConfigurationCCBulkSetOptions =
+// @publicAPI
+export type ConfigurationCCBulkSetOptions =
 	& CCCommandOptions
 	& {
 		parameters: number[];
@@ -2233,7 +2236,8 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 	}
 }
 
-interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
 	parameters: number[];
 }
 

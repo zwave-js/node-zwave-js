@@ -863,7 +863,8 @@ export class NotificationCC extends CommandClass {
 	}
 }
 
-interface NotificationCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NotificationCCSetOptions extends CCCommandOptions {
 	notificationType: number;
 	notificationStatus: boolean;
 }
@@ -909,6 +910,7 @@ export class NotificationCCSet extends NotificationCC {
 	}
 }
 
+// @publicAPI
 export type NotificationCCReportOptions =
 	| {
 		alarmType: number;
@@ -1378,7 +1380,8 @@ type NotificationCCGetSpecificOptions =
 		notificationType: number;
 		notificationEvent?: number;
 	};
-type NotificationCCGetOptions =
+// @publicAPI
+export type NotificationCCGetOptions =
 	& CCCommandOptions
 	& NotificationCCGetSpecificOptions;
 
@@ -1455,6 +1458,7 @@ export class NotificationCCGet extends NotificationCC {
 	}
 }
 
+// @publicAPI
 export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
 	supportsV1Alarm: boolean;
 	supportedNotificationTypes: number[];
@@ -1539,6 +1543,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 @expectedCCResponse(NotificationCCSupportedReport)
 export class NotificationCCSupportedGet extends NotificationCC {}
 
+// @publicAPI
 export interface NotificationCCEventSupportedReportOptions
 	extends CCCommandOptions
 {
@@ -1678,7 +1683,10 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	}
 }
 
-interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NotificationCCEventSupportedGetOptions
+	extends CCCommandOptions
+{
 	notificationType: number;
 }
 

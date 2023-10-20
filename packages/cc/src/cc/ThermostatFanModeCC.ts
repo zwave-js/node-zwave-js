@@ -324,7 +324,8 @@ export class ThermostatFanModeCC extends CommandClass {
 	}
 }
 
-type ThermostatFanModeCCSetOptions = CCCommandOptions & {
+// @publicAPI
+export type ThermostatFanModeCCSetOptions = CCCommandOptions & {
 	mode: ThermostatFanMode;
 	off?: boolean;
 };

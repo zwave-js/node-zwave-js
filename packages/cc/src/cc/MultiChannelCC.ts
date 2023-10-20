@@ -815,6 +815,7 @@ supported CCs:`;
 	}
 }
 
+// @publicAPI
 export interface MultiChannelCCEndPointReportOptions extends CCCommandOptions {
 	countIsDynamic: boolean;
 	identicalCapabilities: boolean;
@@ -891,6 +892,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 @expectedCCResponse(MultiChannelCCEndPointReport)
 export class MultiChannelCCEndPointGet extends MultiChannelCC {}
 
+// @publicAPI
 export interface MultiChannelCCCapabilityReportOptions
 	extends CCCommandOptions
 {
@@ -1002,7 +1004,8 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 	}
 }
 
-interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
 	requestedEndpoint: number;
 }
 
@@ -1049,6 +1052,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	}
 }
 
+// @publicAPI
 export interface MultiChannelCCEndPointFindReportOptions
 	extends CCCommandOptions
 {
@@ -1146,7 +1150,8 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	}
 }
 
-interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
 	genericClass: number;
 	specificClass: number;
 }
@@ -1233,7 +1238,10 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	}
 }
 
-interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiChannelCCAggregatedMembersGetOptions
+	extends CCCommandOptions
+{
 	requestedEndpoint: number;
 }
 
@@ -1275,7 +1283,10 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 
 type MultiChannelCCDestination = number | (1 | 2 | 3 | 4 | 5 | 6 | 7)[];
 
-interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiChannelCCCommandEncapsulationOptions
+	extends CCCommandOptions
+{
 	encapsulated: CommandClass;
 	destination: MultiChannelCCDestination;
 }
@@ -1446,7 +1457,8 @@ function testResponseForMultiChannelV1Get(
 	return sent.requestedCC === received.requestedCC;
 }
 
-interface MultiChannelCCV1GetOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
@@ -1504,7 +1516,10 @@ function testResponseForV1CommandEncapsulation(
 	return false;
 }
 
-interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiChannelCCV1CommandEncapsulationOptions
+	extends CCCommandOptions
+{
 	encapsulated: CommandClass;
 }
 

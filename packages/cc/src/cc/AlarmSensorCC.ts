@@ -386,7 +386,8 @@ function testResponseForAlarmSensorGet(
 	);
 }
 
-interface AlarmSensorCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface AlarmSensorCCGetOptions extends CCCommandOptions {
 	sensorType?: AlarmSensorType;
 }
 

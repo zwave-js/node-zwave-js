@@ -487,7 +487,8 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 	}
 }
 
-interface ProtectionCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ProtectionCCSetOptions extends CCCommandOptions {
 	local: LocalProtectionState;
 	rf?: RFProtectionState;
 }
@@ -686,7 +687,10 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 @expectedCCResponse(ProtectionCCExclusiveControlReport)
 export class ProtectionCCExclusiveControlGet extends ProtectionCC {}
 
-interface ProtectionCCExclusiveControlSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ProtectionCCExclusiveControlSetOptions
+	extends CCCommandOptions
+{
 	exclusiveControlNodeId: number;
 }
 
@@ -755,7 +759,8 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 @expectedCCResponse(ProtectionCCTimeoutReport)
 export class ProtectionCCTimeoutGet extends ProtectionCC {}
 
-interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
 	timeout: Timeout;
 }
 
