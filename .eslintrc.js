@@ -180,6 +180,7 @@ module.exports = {
 			files: ["packages/cc/src/**/*CC.ts"],
 			rules: {
 				"@zwave-js/ccapi-validate-args": "error",
+				"@zwave-js/no-internal-cc-types": "error",
 			},
 		},
 		{
