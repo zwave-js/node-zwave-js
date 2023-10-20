@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.2.1 (2023-10-20)
 ### Bugfixes
 * Add ESLint rule to ensure all types used in a public CC API are exported (#6438)
 * Throttle `firmware update progress` events for OTA updates (#6435)
