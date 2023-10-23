@@ -195,8 +195,6 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     // (undocumented)
     readonly treatMultilevelSwitchSetAsEvent?: boolean;
     // (undocumented)
-    readonly treatSetAsReport?: readonly string[];
-    // (undocumented)
     readonly useUTCInTimeParametersCC?: boolean;
 }
 

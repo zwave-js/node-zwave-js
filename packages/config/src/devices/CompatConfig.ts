@@ -287,19 +287,20 @@ error in compat option treatMultilevelSwitchSetAsEvent`,
 		}
 
 		if (definition.treatSetAsReport != undefined) {
-			if (!(isArray(definition.treatSetAsReport)
+			if (
+				!(isArray(definition.treatSetAsReport)
 					&& definition.treatSetAsReport.every(
-						(stp: any) => typeof stp === "string",
-					))) {
+						(d: any) => typeof d === "string",
+					))
+			) {
 				throwInvalidConfig(
 					"devices",
 					`config/devices/${filename}:
-error in compat option treatSetAsReport must be array of string`,
+compat option treatSetAsReport must be an array of strings`,
 				);
 			}
 
-			this.treatSetAsReport =
-				definition.treatSetAsReport;
+			this.treatSetAsReport = new Set(definition.treatSetAsReport);
 		}
 
 		if (definition.treatDestinationEndpointAsSource != undefined) {
@@ -632,7 +633,7 @@ compat option overrideQueries must be an object!`,
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
 	public readonly treatMultilevelSwitchSetAsEvent?: boolean;
-	public readonly treatSetAsReport?: readonly string[];;
+	public readonly treatSetAsReport?: ReadonlySet<string>;
 	public readonly treatDestinationEndpointAsSource?: boolean;
 	public readonly useUTCInTimeParametersCC?: boolean;
 	public readonly queryOnWakeup?: readonly [

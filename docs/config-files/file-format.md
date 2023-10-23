@@ -505,7 +505,10 @@ By default, `Multilevel Switch CC::Set` commands are ignored, because they are m
 
 ### `treatSetAsReport`
 
-By default, `all CC::Set` commands are ignored, because they are meant to control end devices. This flag causes the driver to emit a `value report`, so applications can react to these commands, e.g. for BinarySwitchCCSet and ThermostatModeCCSet.
+By default, many `Set` CC commands are ignored, because they are meant to control end devices. For some devices, those commands are the only way to receive updates about some values though.
+This flag causes the driver treat the listed commands as a report instead and issue a `value report`, so applications can react to them.
+
+> [!NOTE] This mapping is CC specific and must be implemented for every CC that needs it. Currently, only `BinarySwitchCCSet` and `ThermostatModeCCSet` are supported.
 
 ### `treatDestinationEndpointAsSource`
 

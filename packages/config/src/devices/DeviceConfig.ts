@@ -866,7 +866,6 @@ export class DeviceConfig {
 					"removeEndpoints",
 					"treatBasicSetAsEvent",
 					"treatMultilevelSwitchSetAsEvent",
-					"treatSetAsReport",
 				] as const
 			) {
 				if (this.compat[prop] != undefined) {
@@ -890,6 +889,9 @@ export class DeviceConfig {
 			}
 			if (this.compat.removeCCs) {
 				c.removeCCs = Object.fromEntries(this.compat.removeCCs);
+			}
+			if (this.compat.treatSetAsReport) {
+				c.treatSetAsReport = [...this.compat.treatSetAsReport].sort();
 			}
 
 			c = sortObject(c);
