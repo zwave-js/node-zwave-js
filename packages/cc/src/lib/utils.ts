@@ -18,10 +18,7 @@ import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import { AssociationCC, AssociationCCValues } from "../cc/AssociationCC";
 import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC";
-import {
-	MultiChannelAssociationCC,
-	MultiChannelAssociationCCValues,
-} from "../cc/MultiChannelAssociationCC";
+import { MultiChannelAssociationCC } from "../cc/MultiChannelAssociationCC";
 import { CCAPI } from "./API";
 import {
 	type AssociationAddress,
@@ -738,7 +735,9 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 		});
 
 		// Figure out which associations exist and may need to be removed
-		const isAssignedAsNodeAssociation = (): boolean => {
+		const isAssignedAsNodeAssociation = (
+			endpoint: IZWaveEndpoint,
+		): boolean => {
 			if (groupSupportsMultiChannelAssociation && mcInstance) {
 				if (
 					// Only consider a group if it doesn't share its associations with the root endpoint
@@ -773,7 +772,9 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			return false;
 		};
 
-		const isAssignedAsEndpointAssociation = (): boolean => {
+		const isAssignedAsEndpointAssociation = (
+			endpoint: IZWaveEndpoint,
+		): boolean => {
 			if (mcInstance) {
 				if (
 					// Only consider a group if it doesn't share its associations with the root endpoint
@@ -841,7 +842,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 
 		// First try: node association
 		if (!mustUseMultiChannelAssociation) {
-			if (isAssignedAsNodeAssociation()) {
+			if (isAssignedAsNodeAssociation(endpoint)) {
 				// We already have the correct association
 				hasLifeline = true;
 				applHost.controllerLog.logNode(node.id, {
@@ -863,7 +864,10 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 						`Assigning lifeline group #${group} with a node association via Association CC...`,
 					direction: "outbound",
 				});
-				if (isAssignedAsEndpointAssociation() && mcAPI.isSupported()) {
+				if (
+					isAssignedAsEndpointAssociation(endpoint)
+					&& mcAPI.isSupported()
+				) {
 					await mcAPI.removeDestinations({
 						groupId: group,
 						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
@@ -907,7 +911,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 						`Assigning lifeline group #${group} with a node association via Multi Channel Association CC...`,
 					direction: "outbound",
 				});
-				if (isAssignedAsEndpointAssociation()) {
+				if (isAssignedAsEndpointAssociation(endpoint)) {
 					await mcAPI.removeDestinations({
 						groupId: group,
 						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
@@ -943,7 +947,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 		// Third try: Use an endpoint association (target endpoint 0)
 		// This is only supported starting in Multi Channel Association CC V3
 		if (!hasLifeline && !mustUseNodeAssociation) {
-			if (isAssignedAsEndpointAssociation()) {
+			if (isAssignedAsEndpointAssociation(endpoint)) {
 				// We already have the correct association
 				hasLifeline = true;
 				applHost.controllerLog.logNode(node.id, {
@@ -964,7 +968,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 						`Assigning lifeline group #${group} with a multi channel association...`,
 					direction: "outbound",
 				});
-				if (isAssignedAsNodeAssociation()) {
+				if (isAssignedAsNodeAssociation(endpoint)) {
 					// It has been found that some devices don't correctly share the node associations between
 					// Association CC and Multi Channel Association CC, so we remove the nodes from both lists
 					await mcAPI.removeDestinations({
@@ -1034,17 +1038,7 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 			});
 
 			if (!rootMustUseNodeAssociation) {
-				const rootNodesValueId =
-					MultiChannelAssociationCCValues.nodeIds(group).id;
-				const rootHasNodeAssociation = !!valueDB
-					.getValue<number[]>(rootNodesValueId)
-					?.some((a) => a === ownNodeId);
-				const rootEndpointsValueId =
-					MultiChannelAssociationCCValues.endpoints(group).id;
-				const rootHasEndpointAssociation = !!valueDB
-					.getValue<EndpointAddress[]>(rootEndpointsValueId)
-					?.some((a) => a.nodeId === ownNodeId && a.endpoint === 0);
-				if (rootHasEndpointAssociation) {
+				if (isAssignedAsEndpointAssociation(node)) {
 					// We already have the correct association
 					hasLifeline = true;
 					applHost.controllerLog.logNode(node.id, {
@@ -1059,6 +1053,11 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 						applHost,
 						node,
 					);
+					const rootAssocAPI = CCAPI.create(
+						CommandClasses.Association,
+						applHost,
+						node,
+					);
 					if (rootMCAPI.isSupported()) {
 						applHost.controllerLog.logNode(node.id, {
 							endpoint: endpoint.index,
@@ -1067,11 +1066,21 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 							direction: "outbound",
 						});
 						// Clean up node associations because they might prevent us from adding the endpoint association
-						if (rootHasNodeAssociation) {
+						if (isAssignedAsNodeAssociation(node)) {
+							// It has been found that some devices don't correctly share the node associations between
+							// Association CC and Multi Channel Association CC, so we remove the nodes from both lists
 							await rootMCAPI.removeDestinations({
 								groupId: group,
 								nodeIds: [ownNodeId],
 							});
+							if (rootAssocAPI.isSupported()) {
+								await rootAssocAPI.removeNodeIds({
+									groupId: group,
+									nodeIds: [ownNodeId],
+								});
+								// refresh the associations - don't trust that it worked
+								await rootAssocAPI.getGroup(group);
+							}
 						}
 						await rootMCAPI.addDestinations({
 							groupId: group,
