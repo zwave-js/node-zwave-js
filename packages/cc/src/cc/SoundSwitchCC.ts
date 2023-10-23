@@ -286,6 +286,23 @@ export class SoundSwitchCCAPI extends CCAPI {
 					0x00, /* keep current tone */
 					value,
 				);
+			} else if (property === "volume") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				// Allow playing a tone by first setting the volume, then the tone ID
+				this.tryGetValueDB()?.setValue(
+					SoundSwitchCCValues.volume.endpoint(
+						this.endpoint.index,
+					),
+					value,
+					{ source: "driver", updateTimestamp: false },
+				);
 			} else if (property === "toneId") {
 				if (typeof value !== "number") {
 					throwWrongValueType(
