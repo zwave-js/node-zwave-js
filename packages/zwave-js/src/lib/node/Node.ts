@@ -1652,6 +1652,10 @@ export class ZWaveNode extends Endpoint
 			&& this.canSleep
 			&& this.supportsCC(CommandClasses["Wake Up"])
 		) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Re-interview scheduled, waiting for node to wake up...",
+			);
 			didWakeUp = await this.waitForWakeup()
 				.then(() => true)
 				.catch(() => false);

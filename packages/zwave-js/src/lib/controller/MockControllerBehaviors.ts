@@ -644,6 +644,31 @@ const forwardCommandClassesToHost: MockControllerBehavior = {
 	},
 };
 
+const forwardUnsolicitedNIF: MockControllerBehavior = {
+	async onNodeFrame(host, controller, node, frame) {
+		if (
+			frame.type === MockZWaveFrameType.Request
+			&& frame.payload instanceof ZWaveProtocolCCNodeInformationFrame
+		) {
+			const updateRequest = new ApplicationUpdateRequestNodeInfoReceived(
+				host,
+				{
+					nodeInformation: {
+						...frame.payload,
+						nodeId: frame.payload.nodeId as number,
+					},
+				},
+			);
+			// Simulate a serialized frame being transmitted via radio
+			const data = updateRequest.serialize();
+			await wait(node.capabilities.txDelay);
+			// Then receive it
+			await controller.sendToHost(data);
+			return true;
+		}
+	},
+};
+
 /** Predefined default behaviors that are required for interacting with the driver correctly */
 export function createDefaultBehaviors(): MockControllerBehavior[] {
 	return [
@@ -660,5 +685,6 @@ export function createDefaultBehaviors(): MockControllerBehavior[] {
 		handleRequestNodeInfo,
 		handleAssignSUCReturnRoute,
 		forwardCommandClassesToHost,
+		forwardUnsolicitedNIF,
 	];
 }
