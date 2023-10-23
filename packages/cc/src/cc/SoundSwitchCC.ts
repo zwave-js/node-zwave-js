@@ -54,6 +54,7 @@ export const SoundSwitchCCValues = Object.freeze({
 				max: 100,
 				unit: "%",
 				label: "Volume",
+				allowManualEntry: true,
 				states: {
 					0: "default",
 				},
