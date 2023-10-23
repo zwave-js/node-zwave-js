@@ -890,6 +890,9 @@ export class DeviceConfig {
 			if (this.compat.removeCCs) {
 				c.removeCCs = Object.fromEntries(this.compat.removeCCs);
 			}
+			if (this.compat.treatSetAsReport) {
+				c.treatSetAsReport = [...this.compat.treatSetAsReport].sort();
+			}
 
 			c = sortObject(c);
 			if (Object.keys(c).length > 0) {

@@ -286,6 +286,23 @@ error in compat option treatMultilevelSwitchSetAsEvent`,
 				definition.treatMultilevelSwitchSetAsEvent;
 		}
 
+		if (definition.treatSetAsReport != undefined) {
+			if (
+				!(isArray(definition.treatSetAsReport)
+					&& definition.treatSetAsReport.every(
+						(d: any) => typeof d === "string",
+					))
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option treatSetAsReport must be an array of strings`,
+				);
+			}
+
+			this.treatSetAsReport = new Set(definition.treatSetAsReport);
+		}
+
 		if (definition.treatDestinationEndpointAsSource != undefined) {
 			if (definition.treatDestinationEndpointAsSource !== true) {
 				throwInvalidConfig(
@@ -616,6 +633,7 @@ compat option overrideQueries must be an object!`,
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
 	public readonly treatMultilevelSwitchSetAsEvent?: boolean;
+	public readonly treatSetAsReport?: ReadonlySet<string>;
 	public readonly treatDestinationEndpointAsSource?: boolean;
 	public readonly useUTCInTimeParametersCC?: boolean;
 	public readonly queryOnWakeup?: readonly [
@@ -657,6 +675,7 @@ compat option overrideQueries must be an object!`,
 			"skipConfigurationInfoQuery",
 			"treatBasicSetAsEvent",
 			"treatMultilevelSwitchSetAsEvent",
+			"treatSetAsReport",
 			"treatDestinationEndpointAsSource",
 			"useUTCInTimeParametersCC",
 			"queryOnWakeup",
