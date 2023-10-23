@@ -419,9 +419,7 @@ default volume: ${config.defaultVolume}`;
 			});
 		}
 
-		const metadataStates: Record<number, string> = {
-			0: "off",
-		};
+		const metadataStates: Record<number, string> = {};
 		for (let toneId = 1; toneId <= toneCount; toneId++) {
 			applHost.controllerLog.logNode(node.id, {
 				message: `requesting info for tone #${toneId}`,
@@ -438,14 +436,25 @@ duration: ${info.duration} seconds`;
 			});
 			metadataStates[toneId] = `${info.name} (${info.duration} sec)`;
 		}
-		metadataStates[0xff] = "default";
+
+		// Remember tone count and info on the default tone ID metadata
+		this.setMetadata(applHost, SoundSwitchCCValues.defaultToneId, {
+			...SoundSwitchCCValues.defaultToneId.meta,
+			min: 1,
+			max: toneCount,
+			states: metadataStates,
+		});
 
 		// Remember tone count and info on the tone ID metadata
 		this.setMetadata(applHost, SoundSwitchCCValues.toneId, {
 			...SoundSwitchCCValues.toneId.meta,
 			min: 0,
 			max: toneCount,
-			states: metadataStates,
+			states: {
+				0: "off",
+				...metadataStates,
+				[0xff]: "default",
+			},
 		});
 
 		// Remember that the interview is complete
