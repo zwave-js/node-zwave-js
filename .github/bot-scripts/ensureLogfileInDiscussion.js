@@ -96,6 +96,74 @@ Please consider uploading a logfile that captures your problem. As a reminder, h
 	// TODO: Consider if we want to delete outdated comments. That may delete replies as well though.
 	if (hasZjsLog || !message) return;
 
+	// Check if there is a comment from the bot already
+	const queryComments = /* GraphQL */ `
+		query Discussion($owner: String!, $repo: String!, $number: Int!) {
+			repository(owner: $owner, name: $repo) {
+				discussion(number: $number) {
+					comments(first: 100) {
+						nodes {
+							id
+							author {
+								login
+							}
+							body
+			
+							# replies(first: 100) {
+							#   nodes {
+							#     id
+							#     author {
+							#       login
+							#     }
+							#     body
+							#   }
+							# }
+						}
+					}
+				}
+			}
+		}
+	`;
+	const queryVars = {
+		owner: context.repo.owner,
+		repo: context.repo.repo,
+		number: discussion.number,
+	};
+
+	try {
+		// Existing comments are tagged with LOGFILE_COMMENT_TAG
+		const queryResult = await github.graphql(queryComments, queryVars);
+		const comments = queryResult.repository.discussion.comments.nodes;
+
+		const existing = comments.find(
+			(c) =>
+				c.author.login === "zwave-js-bot"
+				&& c.body.includes(LOGFILE_COMMENT_TAG),
+		);
+		if (existing) {
+			// Already have a comment, no need for another one
+			console.log("There already is a comment, no need for another one");
+			return;
+
+			// if (message) {
+			// 	// Comment found, update it
+			// 	await github.rest.issues.updateComment({
+			// 		...options,
+			// 		comment_id: existing.id,
+			// 		body: message,
+			// 	});
+			// } else {
+			// 	// No need to have a comment, all is ok
+			// 	await github.rest.issues.deleteComment({
+			// 		...options,
+			// 		comment_id: existing.id,
+			// 	});
+			// }
+		}
+	} catch {
+		// Ok make a new one maybe
+	}
+
 	// Tag the message so it's easier to find the comments later
 	message += LOGFILE_COMMENT_TAG;
 
@@ -103,7 +171,7 @@ Please consider uploading a logfile that captures your problem. As a reminder, h
 		mutation reply($discussionId: ID!, $body: String!) {
 			addDiscussionComment(input: {discussionId: $discussionId, body: $body}) {
 				comment {
-				id
+					id
 				}
 			}
 		}
@@ -114,39 +182,6 @@ Please consider uploading a logfile that captures your problem. As a reminder, h
 	};
 
 	await github.graphql(addCommentQuery, addCommentVars);
-
-	// TODO: Migrate to GraphQL if we want to do this
-	// // Existing comments are tagged with LOGFILE_COMMENT_TAG
-	// try {
-	// 	const { data: comments } = await github.rest.issues.listComments({
-	// 		...options,
-	// 		issue_number: context.issue.number,
-	// 	});
-	// 	const existing = comments.find(
-	// 		(c) =>
-	// 			c.user.login === "zwave-js-bot"
-	// 			&& c.body.includes(LOGFILE_COMMENT_TAG),
-	// 	);
-	// 	if (existing) {
-	// 		if (message) {
-	// 			// Comment found, update it
-	// 			await github.rest.issues.updateComment({
-	// 				...options,
-	// 				comment_id: existing.id,
-	// 				body: message,
-	// 			});
-	// 		} else {
-	// 			// No need to have a comment, all is ok
-	// 			await github.rest.issues.deleteComment({
-	// 				...options,
-	// 				comment_id: existing.id,
-	// 			});
-	// 		}
-	// 		return;
-	// 	}
-	// } catch {
-	// 	// Ok make a new one maybe
-	// }
 }
 
 module.exports = main;
