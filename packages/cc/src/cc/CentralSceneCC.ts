@@ -82,8 +82,8 @@ export const CentralSceneCCValues = Object.freeze({
 			(sceneNumber: number) => ({
 				...ValueMetadata.ReadOnlyUInt8,
 				label: `Scene ${padStart(sceneNumber.toString(), 3, "0")}`,
-				stateful: false,
 			} as const),
+			{ stateful: false } as const,
 		),
 	}),
 });
