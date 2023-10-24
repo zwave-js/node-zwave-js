@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
-	"label": "Ring Alarm Panic Button",
+	"label": "5F56E9",
 	"description": "Panic Button (2nd Gen)",
 	"devices": [
 		{
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Heartbeats",
+			"label": "Heartbeat Interval",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,
@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Number of Application Level Retries",
+			"label": "Message Retry Attempt Limit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Application Level Retry Base Wait Time Period",
+			"label": "Delay Between Retry Attempts",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Wait Time for A Supervisory Report Response",
+			"label": "Supervision Report Timeout",
 			"valueSize": 2,
 			"unit": "ms",
 			"minValue": 500,
