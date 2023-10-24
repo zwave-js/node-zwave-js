@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.2.2 (2023-10-24)
 ### Bugfixes
 * Fixed an issue where nodes would appear to have two lifeline associations, one with and one without target endpoint 0 (#6448)
 * Writing to the `volume` value of the `Sound Switch CC` no longer throws an error, but pre-sets the volume to use for the next tone to be played using the `toneId` value (#6450, #6451)
