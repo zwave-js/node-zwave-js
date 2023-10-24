@@ -167,7 +167,6 @@ export class AlarmSensorCC extends CommandClass {
 //
 // @public (undocumented)
 export class AlarmSensorCCGet extends AlarmSensorCC {
-    // Warning: (ae-forgotten-export) The symbol "AlarmSensorCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AlarmSensorCCGetOptions);
     // (undocumented)
     sensorType: AlarmSensorType;
@@ -175,6 +174,14 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "AlarmSensorCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AlarmSensorCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    sensorType?: AlarmSensorType;
 }
 
 // Warning: (ae-missing-release-tag) "AlarmSensorCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -449,7 +456,6 @@ export class AssociationCC extends CommandClass {
 //
 // @public (undocumented)
 export class AssociationCCGet extends AssociationCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationCCGetOptions);
     // (undocumented)
     groupId: number;
@@ -459,11 +465,18 @@ export class AssociationCCGet extends AssociationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AssociationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    groupId: number;
+}
+
 // Warning: (ae-missing-release-tag) "AssociationCCRemove" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AssociationCCRemove extends AssociationCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationCCRemoveOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (AssociationCCRemoveOptions & CCCommandOptions));
     // (undocumented)
     groupId?: number;
@@ -475,11 +488,18 @@ export class AssociationCCRemove extends AssociationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AssociationCCRemoveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationCCRemoveOptions {
+    groupId?: number;
+    nodeIds?: number[];
+}
+
 // Warning: (ae-missing-release-tag) "AssociationCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AssociationCCReport extends AssociationCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationCCReportSpecificOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (AssociationCCReportSpecificOptions & CCCommandOptions));
     // (undocumented)
     expectMoreMessages(): boolean;
@@ -501,11 +521,24 @@ export class AssociationCCReport extends AssociationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AssociationCCReportSpecificOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationCCReportSpecificOptions {
+    // (undocumented)
+    groupId: number;
+    // (undocumented)
+    maxNodes: number;
+    // (undocumented)
+    nodeIds: number[];
+    // (undocumented)
+    reportsToFollow: number;
+}
+
 // Warning: (ae-missing-release-tag) "AssociationCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AssociationCCSet extends AssociationCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationCCSetOptions);
     // (undocumented)
     groupId: number;
@@ -515,6 +548,16 @@ export class AssociationCCSet extends AssociationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "AssociationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    groupId: number;
+    // (undocumented)
+    nodeIds: number[];
 }
 
 // Warning: (ae-missing-release-tag) "AssociationCCSupportedGroupingsGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -527,7 +570,6 @@ export class AssociationCCSupportedGroupingsGet extends AssociationCC {
 //
 // @public (undocumented)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationCCSupportedGroupingsReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationCCSupportedGroupingsReportOptions);
     // (undocumented)
     groupCount: number;
@@ -535,6 +577,14 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "AssociationCCSupportedGroupingsReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationCCSupportedGroupingsReportOptions extends CCCommandOptions {
+    // (undocumented)
+    groupCount: number;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -702,7 +752,6 @@ export class AssociationGroupInfoCC extends CommandClass {
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCCommandListGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationGroupInfoCCCommandListGetOptions);
     // (undocumented)
     allowCache: boolean;
@@ -714,11 +763,20 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AssociationGroupInfoCCCommandListGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
+    // (undocumented)
+    allowCache: boolean;
+    // (undocumented)
+    groupId: number;
+}
+
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCCommandListReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCCommandListReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationGroupInfoCCCommandListReportOptions);
     // (undocumented)
     readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
@@ -730,11 +788,20 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AssociationGroupInfoCCCommandListReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationGroupInfoCCCommandListReportOptions extends CCCommandOptions {
+    // (undocumented)
+    commands: ReadonlyMap<CommandClasses, readonly number[]>;
+    // (undocumented)
+    groupId: number;
+}
+
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCInfoGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationGroupInfoCCInfoGetOptions);
     // (undocumented)
     groupId?: number;
@@ -748,11 +815,21 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
+    refreshCache: boolean;
+} & ({
+    listMode: boolean;
+} | {
+    groupId: number;
+});
+
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCInfoReportSpecificOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (AssociationGroupInfoCCInfoReportSpecificOptions & CCCommandOptions));
     // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfo" needs to be exported by the entry point index.d.ts
     //
@@ -770,11 +847,22 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AssociationGroupInfoCCInfoReportSpecificOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationGroupInfoCCInfoReportSpecificOptions {
+    // (undocumented)
+    groups: AssociationGroupInfo[];
+    // (undocumented)
+    hasDynamicInfo: boolean;
+    // (undocumented)
+    isListMode: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCNameGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCNameGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationGroupInfoCCNameGetOptions);
     // (undocumented)
     groupId: number;
@@ -784,11 +872,18 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "AssociationGroupInfoCCNameGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
+    // (undocumented)
+    groupId: number;
+}
+
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCNameReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
-    // Warning: (ae-forgotten-export) The symbol "AssociationGroupInfoCCNameReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | AssociationGroupInfoCCNameReportOptions);
     // (undocumented)
     readonly groupId: number;
@@ -800,6 +895,16 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "AssociationGroupInfoCCNameReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationGroupInfoCCNameReportOptions extends CCCommandOptions {
+    // (undocumented)
+    groupId: number;
+    // (undocumented)
+    name: string;
 }
 
 // Warning: (ae-missing-release-tag) "AssociationGroupInfoCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1303,7 +1408,6 @@ export class BarrierOperatorCC extends CommandClass {
 //
 // @public (undocumented)
 export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
-    // Warning: (ae-forgotten-export) The symbol "BarrierOperatorCCEventSignalingGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BarrierOperatorCCEventSignalingGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -1311,6 +1415,14 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
     subsystemType: SubsystemType;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BarrierOperatorCCEventSignalingGetOptions extends CCCommandOptions {
+    // (undocumented)
+    subsystemType: SubsystemType;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1332,7 +1444,6 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 //
 // @public (undocumented)
 export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
-    // Warning: (ae-forgotten-export) The symbol "BarrierOperatorCCEventSignalingSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BarrierOperatorCCEventSignalingSetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -1342,6 +1453,16 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
     subsystemType: SubsystemType;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "BarrierOperatorCCEventSignalingSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BarrierOperatorCCEventSignalingSetOptions extends CCCommandOptions {
+    // (undocumented)
+    subsystemState: SubsystemState;
+    // (undocumented)
+    subsystemType: SubsystemType;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1367,7 +1488,6 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 //
 // @public (undocumented)
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
-    // Warning: (ae-forgotten-export) The symbol "BarrierOperatorCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BarrierOperatorCCSetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -1375,6 +1495,14 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
     targetState: BarrierState.Open | BarrierState.Closed;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "BarrierOperatorCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BarrierOperatorCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    targetState: BarrierState.Open | BarrierState.Closed;
 }
 
 // Warning: (ae-missing-release-tag) "BarrierOperatorCCSignalingCapabilitiesGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1610,7 +1738,6 @@ export class BasicCCGet extends BasicCC {
 //
 // @public (undocumented)
 export class BasicCCReport extends BasicCC {
-    // Warning: (ae-forgotten-export) The symbol "BasicCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BasicCCReportOptions);
     // (undocumented)
     get currentValue(): MaybeUnknown<number> | undefined;
@@ -1624,11 +1751,20 @@ export class BasicCCReport extends BasicCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "BasicCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BasicCCReportOptions = CCCommandOptions & {
+    currentValue: number;
+} & AllOrNone<{
+    targetValue: number;
+    duration: Duration;
+}>;
+
 // Warning: (ae-missing-release-tag) "BasicCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BasicCCSet extends BasicCC {
-    // Warning: (ae-forgotten-export) The symbol "BasicCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BasicCCSetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -1636,6 +1772,14 @@ export class BasicCCSet extends BasicCC {
     targetValue: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "BasicCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BasicCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    targetValue: number;
 }
 
 // Warning: (ae-missing-release-tag) "BasicCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1842,7 +1986,6 @@ export class BatteryCCHealthReport extends BatteryCC {
 //
 // @public (undocumented)
 export class BatteryCCReport extends BatteryCC {
-    // Warning: (ae-forgotten-export) The symbol "BatteryCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BatteryCCReportOptions);
     // (undocumented)
     readonly backup: boolean | undefined;
@@ -1871,6 +2014,27 @@ export class BatteryCCReport extends BatteryCC {
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
+
+// Warning: (ae-missing-release-tag) "BatteryCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BatteryCCReportOptions = CCCommandOptions & ({
+    isLow?: false;
+    level: number;
+} | {
+    isLow: true;
+    level?: undefined;
+}) & AllOrNone<{
+    chargingStatus: BatteryChargingStatus;
+    rechargeable: boolean;
+    backup: boolean;
+    overheating: boolean;
+    lowFluid: boolean;
+    rechargeOrReplace: BatteryReplacementStatus;
+    disconnected: boolean;
+}> & AllOrNone<{
+    lowTemperatureStatus: boolean;
+}>;
 
 // Warning: (ae-missing-release-tag) "BatteryCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2265,7 +2429,6 @@ export class BinarySensorCC extends CommandClass {
 //
 // @public (undocumented)
 export class BinarySensorCCGet extends BinarySensorCC {
-    // Warning: (ae-forgotten-export) The symbol "BinarySensorCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BinarySensorCCGetOptions);
     // (undocumented)
     sensorType: BinarySensorType | undefined;
@@ -2275,11 +2438,18 @@ export class BinarySensorCCGet extends BinarySensorCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "BinarySensorCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BinarySensorCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    sensorType?: BinarySensorType;
+}
+
 // Warning: (ae-missing-release-tag) "BinarySensorCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BinarySensorCCReport extends BinarySensorCC {
-    // Warning: (ae-forgotten-export) The symbol "BinarySensorCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: BinarySensorCCReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
@@ -2289,6 +2459,16 @@ export class BinarySensorCCReport extends BinarySensorCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     type: BinarySensorType;
+    // (undocumented)
+    value: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "BinarySensorCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BinarySensorCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    type?: BinarySensorType;
     // (undocumented)
     value: boolean;
 }
@@ -2452,7 +2632,6 @@ export class BinarySwitchCCGet extends BinarySwitchCC {
 //
 // @public (undocumented)
 export class BinarySwitchCCReport extends BinarySwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "BinarySwitchCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BinarySwitchCCReportOptions);
     // (undocumented)
     readonly currentValue: MaybeUnknown<boolean> | undefined;
@@ -2466,11 +2645,20 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "BinarySwitchCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type BinarySwitchCCReportOptions = CCCommandOptions & {
+    currentValue: MaybeUnknown<boolean>;
+} & AllOrNone_2<{
+    targetValue: MaybeUnknown<boolean>;
+    duration: Duration | string;
+}>;
+
 // Warning: (ae-missing-release-tag) "BinarySwitchCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class BinarySwitchCCSet extends BinarySwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "BinarySwitchCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions);
     // (undocumented)
     duration: Duration | undefined;
@@ -2480,6 +2668,16 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
     targetValue: boolean;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "BinarySwitchCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BinarySwitchCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    duration?: Duration | string;
+    // (undocumented)
+    targetValue: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "BinarySwitchCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2886,7 +3084,6 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 //
 // @public (undocumented)
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
-    // Warning: (ae-forgotten-export) The symbol "CentralSceneCCConfigurationSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | CentralSceneCCConfigurationSetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -2894,6 +3091,14 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
     slowRefresh: boolean;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "CentralSceneCCConfigurationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
+    // (undocumented)
+    slowRefresh: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "CentralSceneCCNotification" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -2965,12 +3170,12 @@ export const CentralSceneCCValues: Readonly<{
     }) & {
         is: (valueId: ValueID_2) => boolean;
         readonly options: {
+            readonly secret: false;
             readonly internal: false;
             readonly minVersion: 1;
-            readonly secret: false;
-            readonly stateful: true;
             readonly supportsEndpoints: true;
             readonly autoCreate: true;
+            readonly stateful: false;
         };
     };
     slowRefresh: {
@@ -3144,12 +3349,19 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
-    // Warning: (ae-forgotten-export) The symbol "ClimateControlScheduleCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ClimateControlScheduleCCGetOptions);
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    weekday: Weekday;
+}
+
+// Warning: (ae-missing-release-tag) "ClimateControlScheduleCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
     // (undocumented)
     weekday: Weekday;
 }
@@ -3177,7 +3389,6 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleCC {
-    // Warning: (ae-forgotten-export) The symbol "ClimateControlScheduleCCOverrideSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ClimateControlScheduleCCOverrideSetOptions);
     // (undocumented)
     overrideState: SetbackState;
@@ -3187,6 +3398,16 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ClimateControlScheduleCCOverrideSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
+    // (undocumented)
+    overrideState: SetbackState;
+    // (undocumented)
+    overrideType: ScheduleOverrideType;
 }
 
 // Warning: (ae-missing-release-tag) "ClimateControlScheduleCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3206,7 +3427,6 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 //
 // @public (undocumented)
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
-    // Warning: (ae-forgotten-export) The symbol "ClimateControlScheduleCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ClimateControlScheduleCCSetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -3214,6 +3434,16 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
     switchPoints: Switchpoint[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    weekday: Weekday;
+}
+
+// Warning: (ae-missing-release-tag) "ClimateControlScheduleCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    switchPoints: Switchpoint[];
     // (undocumented)
     weekday: Weekday;
 }
@@ -3368,7 +3598,6 @@ export class ClockCCReport extends ClockCC {
 //
 // @public (undocumented)
 export class ClockCCSet extends ClockCC {
-    // Warning: (ae-forgotten-export) The symbol "ClockCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ClockCCSetOptions);
     // (undocumented)
     hour: number;
@@ -3378,6 +3607,18 @@ export class ClockCCSet extends ClockCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    weekday: Weekday;
+}
+
+// Warning: (ae-missing-release-tag) "ClockCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ClockCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    hour: number;
+    // (undocumented)
+    minute: number;
     // (undocumented)
     weekday: Weekday;
 }
@@ -3456,7 +3697,6 @@ export class ColorSwitchCC extends CommandClass {
 //
 // @public (undocumented)
 export class ColorSwitchCCGet extends ColorSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "ColorSwitchCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ColorSwitchCCGetOptions);
     // (undocumented)
     get colorComponent(): ColorComponent;
@@ -3465,6 +3705,14 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ColorSwitchCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ColorSwitchCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    colorComponent: ColorComponent;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3490,7 +3738,6 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 //
 // @public (undocumented)
 export class ColorSwitchCCSet extends ColorSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "ColorSwitchCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & ColorSwitchCCSetOptions));
     // (undocumented)
     colorTable: ColorTable;
@@ -3502,11 +3749,19 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "ColorSwitchCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ColorSwitchCCSetOptions = (ColorTable | {
+    hexColor: string;
+}) & {
+    duration?: Duration_2 | string;
+};
+
 // Warning: (ae-missing-release-tag) "ColorSwitchCCStartLevelChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "ColorSwitchCCStartLevelChangeOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & ColorSwitchCCStartLevelChangeOptions));
     // (undocumented)
     colorComponent: ColorComponent;
@@ -3524,11 +3779,26 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "ColorSwitchCCStartLevelChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ColorSwitchCCStartLevelChangeOptions = {
+    colorComponent: ColorComponent;
+    direction: keyof typeof LevelChangeDirection;
+} & ({
+    ignoreStartLevel: true;
+    startLevel?: number;
+} | {
+    ignoreStartLevel: false;
+    startLevel: number;
+}) & {
+    duration?: Duration_2 | string;
+};
+
 // Warning: (ae-missing-release-tag) "ColorSwitchCCStopLevelChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "ColorSwitchCCStopLevelChangeOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ColorSwitchCCStopLevelChangeOptions);
     // (undocumented)
     readonly colorComponent: ColorComponent;
@@ -3536,6 +3806,14 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ColorSwitchCCStopLevelChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
+    // (undocumented)
+    colorComponent: ColorComponent;
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3986,7 +4264,6 @@ export type ConfigurationCCAPISetOptions = {
 //
 // @public (undocumented)
 export class ConfigurationCCBulkGet extends ConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCBulkGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCBulkGetOptions);
     // (undocumented)
     get parameters(): number[];
@@ -3994,6 +4271,14 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ConfigurationCCBulkGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
+    // (undocumented)
+    parameters: number[];
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCBulkReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4025,7 +4310,6 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCBulkSet extends ConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCBulkSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCBulkSetOptions);
     // (undocumented)
     get handshake(): boolean;
@@ -4045,6 +4329,21 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
     get valueSize(): number;
 }
 
+// Warning: (ae-missing-release-tag) "ConfigurationCCBulkSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ConfigurationCCBulkSetOptions = CCCommandOptions & {
+    parameters: number[];
+    handshake?: boolean;
+} & ({
+    resetToDefault: true;
+} | {
+    resetToDefault?: false;
+    valueSize: number;
+    valueFormat?: ConfigValueFormat;
+    values: number[];
+});
+
 // Warning: (ae-missing-release-tag) "ConfigurationCCDefaultReset" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4055,7 +4354,6 @@ export class ConfigurationCCDefaultReset extends ConfigurationCC {
 //
 // @public (undocumented)
 export class ConfigurationCCGet extends ConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCGetOptions);
     // (undocumented)
     allowUnexpectedResponse: boolean;
@@ -4065,6 +4363,15 @@ export class ConfigurationCCGet extends ConfigurationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ConfigurationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ConfigurationCCGetOptions extends CCCommandOptions {
+    allowUnexpectedResponse?: boolean;
+    // (undocumented)
+    parameter: number;
 }
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCInfoGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4284,7 +4591,6 @@ export interface ConfigurationCCReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ConfigurationCCSet extends ConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "ConfigurationCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ConfigurationCCSetOptions);
     // (undocumented)
     parameter: number;
@@ -4301,6 +4607,20 @@ export class ConfigurationCCSet extends ConfigurationCC {
     // (undocumented)
     valueSize: number | undefined;
 }
+
+// Warning: (ae-missing-release-tag) "ConfigurationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ConfigurationCCSetOptions = CCCommandOptions & ({
+    parameter: number;
+    resetToDefault: true;
+} | {
+    parameter: number;
+    resetToDefault?: false;
+    valueSize: number;
+    valueFormat?: ConfigValueFormat;
+    value: ConfigValue;
+});
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4414,7 +4734,6 @@ export class CRC16CC extends CommandClass {
 //
 // @public (undocumented)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
-    // Warning: (ae-forgotten-export) The symbol "CRC16CCCommandEncapsulationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | CRC16CCCommandEncapsulationOptions);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
@@ -4424,6 +4743,14 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "CRC16CCCommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
+    // (undocumented)
+    encapsulated: CommandClass;
 }
 
 // Warning: (ae-missing-release-tag) "CRC16Command" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4438,6 +4765,22 @@ export enum CRC16Command {
 //
 // @public (undocumented)
 export function dataRate2ZWaveDataRate(dataRate: DataRate_2): ZWaveDataRate_2;
+
+// Warning: (ae-missing-release-tag) "DecryptionResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DecryptionResult {
+    // (undocumented)
+    authOK: boolean;
+    // (undocumented)
+    iv?: Buffer;
+    // (undocumented)
+    key?: Buffer;
+    // (undocumented)
+    plaintext: Buffer;
+    // (undocumented)
+    securityClass: SecurityClass | undefined;
+}
 
 // Warning: (ae-missing-release-tag) "defaultCCValueOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4584,7 +4927,6 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 //
 // @public (undocumented)
 export class DoorLockCCConfigurationSet extends DoorLockCC {
-    // Warning: (ae-forgotten-export) The symbol "DoorLockCCConfigurationSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & DoorLockCCConfigurationSetOptions));
     // (undocumented)
     autoRelockTime?: number;
@@ -4607,6 +4949,24 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
     // (undocumented)
     twistAssist?: boolean;
 }
+
+// Warning: (ae-missing-release-tag) "DoorLockCCConfigurationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type DoorLockCCConfigurationSetOptions = ({
+    operationType: DoorLockOperationType.Timed;
+    lockTimeoutConfiguration: number;
+} | {
+    operationType: DoorLockOperationType.Constant;
+    lockTimeoutConfiguration?: undefined;
+}) & {
+    outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
+    insideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
+    autoRelockTime?: number;
+    holdAndReleaseTime?: number;
+    twistAssist?: boolean;
+    blockToBlock?: boolean;
+};
 
 // Warning: (ae-missing-release-tag) "DoorLockCCOperationGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -4647,7 +5007,6 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 //
 // @public (undocumented)
 export class DoorLockCCOperationSet extends DoorLockCC {
-    // Warning: (ae-forgotten-export) The symbol "DoorLockCCOperationSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | DoorLockCCOperationSetOptions);
     // (undocumented)
     mode: DoorLockMode;
@@ -4655,6 +5014,14 @@ export class DoorLockCCOperationSet extends DoorLockCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "DoorLockCCOperationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DoorLockCCOperationSetOptions extends CCCommandOptions {
+    // (undocumented)
+    mode: DoorLockMode;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5391,7 +5758,6 @@ export class DoorLockLoggingCC extends CommandClass {
 //
 // @public (undocumented)
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
-    // Warning: (ae-forgotten-export) The symbol "DoorLockLoggingCCRecordGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | DoorLockLoggingCCRecordGetOptions);
     // (undocumented)
     recordNumber: number;
@@ -5399,6 +5765,14 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
+    // (undocumented)
+    recordNumber: number;
 }
 
 // Warning: (ae-missing-release-tag) "DoorLockLoggingCCRecordReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5670,7 +6044,6 @@ export class EnergyProductionCC extends CommandClass {
 //
 // @public (undocumented)
 export class EnergyProductionCCGet extends EnergyProductionCC {
-    // Warning: (ae-forgotten-export) The symbol "EnergyProductionCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | EnergyProductionCCGetOptions);
     // (undocumented)
     parameter: EnergyProductionParameter;
@@ -5680,11 +6053,18 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "EnergyProductionCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EnergyProductionCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    parameter: EnergyProductionParameter;
+}
+
 // Warning: (ae-missing-release-tag) "EnergyProductionCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class EnergyProductionCCReport extends EnergyProductionCC {
-    // Warning: (ae-forgotten-export) The symbol "EnergyProductionCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | EnergyProductionCCReportOptions);
     // (undocumented)
     readonly parameter: EnergyProductionParameter;
@@ -5698,6 +6078,18 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
     // (undocumented)
     readonly value: number;
+}
+
+// Warning: (ae-missing-release-tag) "EnergyProductionCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EnergyProductionCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    parameter: EnergyProductionParameter;
+    // (undocumented)
+    scale: EnergyProductionScale;
+    // (undocumented)
+    value: number;
 }
 
 // Warning: (ae-missing-release-tag) "EnergyProductionCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -5806,7 +6198,6 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 //
 // @public (undocumented)
 export class EntryControlCCConfigurationSet extends EntryControlCC {
-    // Warning: (ae-forgotten-export) The symbol "EntryControlCCConfigurationSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | EntryControlCCConfigurationSetOptions);
     // (undocumented)
     readonly keyCacheSize: number;
@@ -5816,6 +6207,16 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "EntryControlCCConfigurationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface EntryControlCCConfigurationSetOptions extends CCCommandOptions {
+    // (undocumented)
+    keyCacheSize: number;
+    // (undocumented)
+    keyCacheTimeout: number;
 }
 
 // Warning: (ae-missing-release-tag) "EntryControlCCEventSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6206,7 +6607,6 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 //
 // @public (undocumented)
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
-    // Warning: (ae-forgotten-export) The symbol "FibaroVenetianBlindCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | FibaroVenetianBlindCCSetOptions);
     // (undocumented)
     position: number | undefined;
@@ -6217,6 +6617,18 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
+
+// Warning: (ae-missing-release-tag) "FibaroVenetianBlindCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type FibaroVenetianBlindCCSetOptions = CCCommandOptions & ({
+    position: number;
+} | {
+    tilt: number;
+} | {
+    position: number;
+    tilt: number;
+});
 
 // Warning: (ae-missing-release-tag) "FirmwareDownloadStatus" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6321,7 +6733,6 @@ export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMeta
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDataCC {
-    // Warning: (ae-forgotten-export) The symbol "FirmwareUpdateMetaDataCCActivationSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (FirmwareUpdateMetaDataCCActivationSetOptions & CCCommandOptions));
     // (undocumented)
     checksum: number;
@@ -6337,6 +6748,22 @@ export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDat
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCActivationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaDataCCActivationSetOptions {
+    // (undocumented)
+    checksum: number;
+    // (undocumented)
+    firmwareId: number;
+    // (undocumented)
+    firmwareTarget: number;
+    // (undocumented)
+    hardwareVersion?: number;
+    // (undocumented)
+    manufacturerId: number;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6389,7 +6816,6 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC {
-    // Warning: (ae-forgotten-export) The symbol "FirmwareUpdateMetaDataCCPrepareGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | FirmwareUpdateMetaDataCCPrepareGetOptions);
     // (undocumented)
     firmwareId: number;
@@ -6405,6 +6831,22 @@ export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCPrepareGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaDataCCPrepareGetOptions extends CCCommandOptions {
+    // (undocumented)
+    firmwareId: number;
+    // (undocumented)
+    firmwareTarget: number;
+    // (undocumented)
+    fragmentSize: number;
+    // (undocumented)
+    hardwareVersion: number;
+    // (undocumented)
+    manufacturerId: number;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCPrepareReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6424,7 +6866,6 @@ export class FirmwareUpdateMetaDataCCPrepareReport extends FirmwareUpdateMetaDat
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
-    // Warning: (ae-forgotten-export) The symbol "FirmwareUpdateMetaDataCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | FirmwareUpdateMetaDataCCReportOptions);
     // (undocumented)
     firmwareData: Buffer;
@@ -6438,11 +6879,22 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaDataCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    firmwareData: Buffer;
+    // (undocumented)
+    isLast: boolean;
+    // (undocumented)
+    reportNumber: number;
+}
+
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCRequestGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC {
-    // Warning: (ae-forgotten-export) The symbol "FirmwareUpdateMetaDataCCRequestGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (FirmwareUpdateMetaDataCCRequestGetOptions & CCCommandOptions));
     // (undocumented)
     activation?: boolean;
@@ -6463,6 +6915,20 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCRequestGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type FirmwareUpdateMetaDataCCRequestGetOptions = {
+    manufacturerId: number;
+    firmwareId: number;
+    checksum: number;
+} & AllOrNone<{
+    firmwareTarget: number;
+    fragmentSize: number;
+    activation?: boolean;
+    hardwareVersion?: number;
+}>;
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCRequestReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6937,7 +7403,6 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 //
 // @public (undocumented)
 export class HumidityControlModeCCSet extends HumidityControlModeCC {
-    // Warning: (ae-forgotten-export) The symbol "HumidityControlModeCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | HumidityControlModeCCSetOptions);
     // (undocumented)
     mode: HumidityControlMode;
@@ -6945,6 +7410,14 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlModeCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlModeCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    mode: HumidityControlMode;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlModeCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7164,7 +7637,6 @@ export class HumidityControlSetpointCC extends CommandClass {
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCCapabilitiesGet extends HumidityControlSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "HumidityControlSetpointCCCapabilitiesGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | HumidityControlSetpointCCCapabilitiesGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -7172,6 +7644,14 @@ export class HumidityControlSetpointCCCapabilitiesGet extends HumidityControlSet
     setpointType: HumidityControlSetpointType;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlSetpointCCCapabilitiesGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
+    // (undocumented)
+    setpointType: HumidityControlSetpointType;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCCapabilitiesReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7199,7 +7679,6 @@ export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControl
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "HumidityControlSetpointCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | HumidityControlSetpointCCGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -7207,6 +7686,14 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
     setpointType: HumidityControlSetpointType;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlSetpointCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlSetpointCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    setpointType: HumidityControlSetpointType;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7230,7 +7717,6 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "HumidityControlSetpointCCScaleSupportedGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | HumidityControlSetpointCCScaleSupportedGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -7238,6 +7724,14 @@ export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlS
     setpointType: HumidityControlSetpointType;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlSetpointCCScaleSupportedGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlSetpointCCScaleSupportedGetOptions extends CCCommandOptions {
+    // (undocumented)
+    setpointType: HumidityControlSetpointType;
 }
 
 // Warning: (ae-missing-release-tag) "HumidityControlSetpointCCScaleSupportedReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7255,7 +7749,6 @@ export class HumidityControlSetpointCCScaleSupportedReport extends HumidityContr
 //
 // @public (undocumented)
 export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "HumidityControlSetpointCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | HumidityControlSetpointCCSetOptions);
     // (undocumented)
     scale: number;
@@ -7265,6 +7758,18 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
     setpointType: HumidityControlSetpointType;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    value: number;
+}
+
+// Warning: (ae-missing-release-tag) "HumidityControlSetpointCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface HumidityControlSetpointCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    scale: number;
+    // (undocumented)
+    setpointType: HumidityControlSetpointType;
     // (undocumented)
     value: number;
 }
@@ -7463,7 +7968,6 @@ export class InclusionControllerCC extends CommandClass {
 //
 // @public (undocumented)
 export class InclusionControllerCCComplete extends InclusionControllerCC {
-    // Warning: (ae-forgotten-export) The symbol "InclusionControllerCCCompleteOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | InclusionControllerCCCompleteOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -7475,11 +7979,20 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "InclusionControllerCCCompleteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
+    // (undocumented)
+    status: InclusionControllerStatus;
+    // (undocumented)
+    step: InclusionControllerStep;
+}
+
 // Warning: (ae-missing-release-tag) "InclusionControllerCCInitiate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class InclusionControllerCCInitiate extends InclusionControllerCC {
-    // Warning: (ae-forgotten-export) The symbol "InclusionControllerCCInitiateOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | InclusionControllerCCInitiateOptions);
     // (undocumented)
     includedNodeId: number;
@@ -7489,6 +8002,16 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
     step: InclusionControllerStep;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "InclusionControllerCCInitiateOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
+    // (undocumented)
+    includedNodeId: number;
+    // (undocumented)
+    step: InclusionControllerStep;
 }
 
 // Warning: (ae-missing-release-tag) "InclusionControllerCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7565,7 +8088,6 @@ export class IndicatorCC extends CommandClass {
 //
 // @public (undocumented)
 export class IndicatorCCDescriptionGet extends IndicatorCC {
-    // Warning: (ae-forgotten-export) The symbol "IndicatorCCDescriptionGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IndicatorCCDescriptionGetOptions);
     // (undocumented)
     indicatorId: number;
@@ -7573,6 +8095,14 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "IndicatorCCDescriptionGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
+    // (undocumented)
+    indicatorId: number;
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCDescriptionReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7594,7 +8124,6 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 //
 // @public (undocumented)
 export class IndicatorCCGet extends IndicatorCC {
-    // Warning: (ae-forgotten-export) The symbol "IndicatorCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IndicatorCCGetOptions);
     // (undocumented)
     indicatorId: number | undefined;
@@ -7604,11 +8133,18 @@ export class IndicatorCCGet extends IndicatorCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "IndicatorCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IndicatorCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    indicatorId?: number;
+}
+
 // Warning: (ae-missing-release-tag) "IndicatorCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IndicatorCCReport extends IndicatorCC {
-    // Warning: (ae-forgotten-export) The symbol "IndicatorCCReportSpecificOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (IndicatorCCReportSpecificOptions & CCCommandOptions));
     // (undocumented)
     readonly indicator0Value: number | undefined;
@@ -7624,11 +8160,19 @@ export class IndicatorCCReport extends IndicatorCC {
     readonly values: IndicatorObject[] | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "IndicatorCCReportSpecificOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type IndicatorCCReportSpecificOptions = {
+    value: number;
+} | {
+    values: IndicatorObject[];
+};
+
 // Warning: (ae-missing-release-tag) "IndicatorCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IndicatorCCSet extends IndicatorCC {
-    // Warning: (ae-forgotten-export) The symbol "IndicatorCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (IndicatorCCSetOptions & CCCommandOptions));
     // (undocumented)
     indicator0Value: number | undefined;
@@ -7640,11 +8184,19 @@ export class IndicatorCCSet extends IndicatorCC {
     values: IndicatorObject[] | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "IndicatorCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type IndicatorCCSetOptions = {
+    value: number;
+} | {
+    values: IndicatorObject[];
+};
+
 // Warning: (ae-missing-release-tag) "IndicatorCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IndicatorCCSupportedGet extends IndicatorCC {
-    // Warning: (ae-forgotten-export) The symbol "IndicatorCCSupportedGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IndicatorCCSupportedGetOptions);
     // (undocumented)
     indicatorId: number;
@@ -7654,11 +8206,18 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "IndicatorCCSupportedGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
+    // (undocumented)
+    indicatorId: number;
+}
+
 // Warning: (ae-missing-release-tag) "IndicatorCCSupportedReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IndicatorCCSupportedReport extends IndicatorCC {
-    // Warning: (ae-forgotten-export) The symbol "IndicatorCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IndicatorCCSupportedReportOptions);
     // (undocumented)
     readonly indicatorId: number;
@@ -7672,6 +8231,18 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
     readonly supportedProperties: readonly number[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "IndicatorCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    indicatorId: number;
+    // (undocumented)
+    nextIndicatorId: number;
+    // (undocumented)
+    supportedProperties: readonly number[];
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8040,7 +8611,6 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 //
 // @public (undocumented)
 export class IrrigationCCSystemShutoff extends IrrigationCC {
-    // Warning: (ae-forgotten-export) The symbol "IrrigationCCSystemShutoffOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IrrigationCCSystemShutoffOptions);
     // (undocumented)
     duration?: number;
@@ -8048,6 +8618,13 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "IrrigationCCSystemShutoffOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
+    duration?: number;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCSystemStatusGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9291,12 +9868,19 @@ export const IrrigationCCValues: Readonly<{
 //
 // @public (undocumented)
 export class IrrigationCCValveConfigGet extends IrrigationCC {
-    // Warning: (ae-forgotten-export) The symbol "IrrigationCCValveConfigGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IrrigationCCValveConfigGetOptions);
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    valveId: ValveId;
+}
+
+// Warning: (ae-missing-release-tag) "IrrigationCCValveConfigGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
     // (undocumented)
     valveId: ValveId;
 }
@@ -9373,12 +9957,19 @@ export type IrrigationCCValveConfigSetOptions = {
 //
 // @public (undocumented)
 export class IrrigationCCValveInfoGet extends IrrigationCC {
-    // Warning: (ae-forgotten-export) The symbol "IrrigationCCValveInfoGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IrrigationCCValveInfoGetOptions);
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    valveId: ValveId;
+}
+
+// Warning: (ae-missing-release-tag) "IrrigationCCValveInfoGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveInfoGetOptions extends CCCommandOptions {
     // (undocumented)
     valveId: ValveId;
 }
@@ -9416,7 +10007,6 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 //
 // @public (undocumented)
 export class IrrigationCCValveRun extends IrrigationCC {
-    // Warning: (ae-forgotten-export) The symbol "IrrigationCCValveRunOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IrrigationCCValveRunOptions);
     // (undocumented)
     duration: number;
@@ -9428,11 +10018,20 @@ export class IrrigationCCValveRun extends IrrigationCC {
     valveId: ValveId;
 }
 
+// Warning: (ae-missing-release-tag) "IrrigationCCValveRunOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveRunOptions extends CCCommandOptions {
+    // (undocumented)
+    duration: number;
+    // (undocumented)
+    valveId: ValveId;
+}
+
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IrrigationCCValveTableGet extends IrrigationCC {
-    // Warning: (ae-forgotten-export) The symbol "IrrigationCCValveTableGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IrrigationCCValveTableGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -9440,6 +10039,14 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
     tableId: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "IrrigationCCValveTableGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveTableGetOptions extends CCCommandOptions {
+    // (undocumented)
+    tableId: number;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9459,7 +10066,6 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 //
 // @public (undocumented)
 export class IrrigationCCValveTableRun extends IrrigationCC {
-    // Warning: (ae-forgotten-export) The symbol "IrrigationCCValveTableRunOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IrrigationCCValveTableRunOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -9469,11 +10075,18 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "IrrigationCCValveTableRunOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
+    // (undocumented)
+    tableIDs: number[];
+}
+
 // Warning: (ae-missing-release-tag) "IrrigationCCValveTableSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class IrrigationCCValveTableSet extends IrrigationCC {
-    // Warning: (ae-forgotten-export) The symbol "IrrigationCCValveTableSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | IrrigationCCValveTableSetOptions);
     // (undocumented)
     entries: ValveTableEntry[];
@@ -9483,6 +10096,16 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
     tableId: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "IrrigationCCValveTableSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
+    // (undocumented)
+    entries: ValveTableEntry[];
+    // (undocumented)
+    tableId: number;
 }
 
 // Warning: (ae-missing-release-tag) "IrrigationCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9648,7 +10271,6 @@ export class LanguageCCReport extends LanguageCC {
 //
 // @public (undocumented)
 export class LanguageCCSet extends LanguageCC {
-    // Warning: (ae-forgotten-export) The symbol "LanguageCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | LanguageCCSetOptions);
     // (undocumented)
     get country(): MaybeNotKnown<string>;
@@ -9660,6 +10282,16 @@ export class LanguageCCSet extends LanguageCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "LanguageCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LanguageCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    country?: string;
+    // (undocumented)
+    language: string;
 }
 
 // Warning: (ae-missing-release-tag) "LanguageCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9787,7 +10419,6 @@ export class LockCCReport extends LockCC {
 //
 // @public (undocumented)
 export class LockCCSet extends LockCC {
-    // Warning: (ae-forgotten-export) The symbol "LockCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | LockCCSetOptions);
     // (undocumented)
     locked: boolean;
@@ -9795,6 +10426,14 @@ export class LockCCSet extends LockCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "LockCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LockCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    locked: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "LockCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9858,7 +10497,6 @@ export const manufacturerProprietaryAPI: <TTarget extends CCAPI>(manufacturerId:
 //
 // @public (undocumented)
 export class ManufacturerProprietaryCC extends CommandClass {
-    // Warning: (ae-forgotten-export) The symbol "ManufacturerProprietaryCCOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ManufacturerProprietaryCCOptions);
     // (undocumented)
     ccCommand: undefined;
@@ -9872,6 +10510,16 @@ export class ManufacturerProprietaryCC extends CommandClass {
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ManufacturerProprietaryCCOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
+    // (undocumented)
+    manufacturerId?: number;
+    // (undocumented)
+    unspecifiedExpectsResponse?: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9890,7 +10538,6 @@ export class ManufacturerSpecificCC extends CommandClass {
 //
 // @public (undocumented)
 export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
-    // Warning: (ae-forgotten-export) The symbol "ManufacturerSpecificCCDeviceSpecificGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ManufacturerSpecificCCDeviceSpecificGetOptions);
     // (undocumented)
     deviceIdType: DeviceIdType;
@@ -9898,6 +10545,14 @@ export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecifi
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ManufacturerSpecificCCDeviceSpecificGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ManufacturerSpecificCCDeviceSpecificGetOptions extends CCCommandOptions {
+    // (undocumented)
+    deviceIdType: DeviceIdType;
 }
 
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCCDeviceSpecificReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -9923,7 +10578,6 @@ export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
 //
 // @public (undocumented)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
-    // Warning: (ae-forgotten-export) The symbol "ManufacturerSpecificCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: ManufacturerSpecificCCReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
     readonly manufacturerId: number;
@@ -9935,6 +10589,18 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ManufacturerSpecificCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ManufacturerSpecificCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    manufacturerId: number;
+    // (undocumented)
+    productId: number;
+    // (undocumented)
+    productType: number;
 }
 
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10102,7 +10768,6 @@ export class MeterCC extends CommandClass {
 //
 // @public (undocumented)
 export class MeterCCGet extends MeterCC {
-    // Warning: (ae-forgotten-export) The symbol "MeterCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (MeterCCGetOptions & CCCommandOptions));
     // (undocumented)
     rateType: RateType | undefined;
@@ -10114,11 +10779,20 @@ export class MeterCCGet extends MeterCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MeterCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MeterCCGetOptions {
+    // (undocumented)
+    rateType?: RateType;
+    // (undocumented)
+    scale?: number;
+}
+
 // Warning: (ae-missing-release-tag) "MeterCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MeterCCReport extends MeterCC {
-    // Warning: (ae-forgotten-export) The symbol "MeterCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MeterCCReportOptions);
     // (undocumented)
     deltaTime: MaybeUnknown_2<number>;
@@ -10140,11 +10814,28 @@ export class MeterCCReport extends MeterCC {
     value: number;
 }
 
+// Warning: (ae-missing-release-tag) "MeterCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MeterCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    deltaTime?: MaybeUnknown_2<number>;
+    // (undocumented)
+    previousValue?: MaybeNotKnown<number>;
+    // (undocumented)
+    rateType?: RateType;
+    // (undocumented)
+    scale: number;
+    // (undocumented)
+    type: number;
+    // (undocumented)
+    value: number;
+}
+
 // Warning: (ae-missing-release-tag) "MeterCCReset" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MeterCCReset extends MeterCC {
-    // Warning: (ae-forgotten-export) The symbol "MeterCCResetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (MeterCCResetOptions & CCCommandOptions));
     // (undocumented)
     serialize(): Buffer;
@@ -10155,6 +10846,17 @@ export class MeterCCReset extends MeterCC {
     // (undocumented)
     type: number | undefined;
 }
+
+// Warning: (ae-missing-release-tag) "MeterCCResetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type MeterCCResetOptions = {
+    type?: undefined;
+    targetValue?: undefined;
+} | {
+    type: number;
+    targetValue: number;
+};
 
 // Warning: (ae-missing-release-tag) "MeterCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -10451,6 +11153,17 @@ export class MPANExtension extends Security2Extension {
     toLogEntry(): string;
 }
 
+// Warning: (ae-missing-release-tag) "MulticastContext" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type MulticastContext = {
+    isMulticast: true;
+    groupId: number;
+} | {
+    isMulticast: false;
+    groupId?: number;
+};
+
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10472,7 +11185,6 @@ export class MultiChannelAssociationCC extends CommandClass {
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelAssociationCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelAssociationCCGetOptions);
     // (undocumented)
     groupId: number;
@@ -10482,11 +11194,18 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelAssociationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    groupId: number;
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCRemove" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelAssociationCCRemoveOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (MultiChannelAssociationCCRemoveOptions & CCCommandOptions));
     // (undocumented)
     endpoints?: EndpointAddress[];
@@ -10498,6 +11217,15 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultiChannelAssociationCCRemoveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelAssociationCCRemoveOptions {
+    endpoints?: EndpointAddress[];
+    groupId?: number;
+    nodeIds?: number[];
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10529,7 +11257,6 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelAssociationCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (MultiChannelAssociationCCSetOptions & CCCommandOptions));
     // (undocumented)
     endpoints: EndpointAddress[];
@@ -10542,6 +11269,20 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
+
+// Warning: (ae-missing-release-tag) "MultiChannelAssociationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type MultiChannelAssociationCCSetOptions = {
+    groupId: number;
+} & ({
+    nodeIds: number[];
+} | {
+    endpoints: EndpointAddress[];
+} | {
+    nodeIds: number[];
+    endpoints: EndpointAddress[];
+});
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCSupportedGroupingsGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -10711,7 +11452,6 @@ export class MultiChannelCC extends CommandClass {
 //
 // @public (undocumented)
 export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCAggregatedMembersGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCAggregatedMembersGetOptions);
     // (undocumented)
     requestedEndpoint: number;
@@ -10719,6 +11459,14 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultiChannelCCAggregatedMembersGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
+    // (undocumented)
+    requestedEndpoint: number;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCAggregatedMembersReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10738,7 +11486,6 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 //
 // @public (undocumented)
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCCapabilityGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCCapabilityGetOptions);
     // (undocumented)
     requestedEndpoint: number;
@@ -10748,11 +11495,18 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelCCCapabilityGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
+    // (undocumented)
+    requestedEndpoint: number;
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelCCCapabilityReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultiChannelCCCapabilityReport extends MultiChannelCC implements ApplicationNodeInformation {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCCapabilityReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCCapabilityReportOptions);
     // (undocumented)
     readonly genericDeviceClass: number;
@@ -10772,11 +11526,28 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC implements Ap
     readonly wasRemoved: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelCCCapabilityReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCCapabilityReportOptions extends CCCommandOptions {
+    // (undocumented)
+    endpointIndex: number;
+    // (undocumented)
+    genericDeviceClass: number;
+    // (undocumented)
+    isDynamic: boolean;
+    // (undocumented)
+    specificDeviceClass: number;
+    // (undocumented)
+    supportedCCs: CommandClasses[];
+    // (undocumented)
+    wasRemoved: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelCCCommandEncapsulation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCCommandEncapsulationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCCommandEncapsulationOptions);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
@@ -10790,11 +11561,20 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelCCCommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
+    // (undocumented)
+    destination: MultiChannelCCDestination;
+    // (undocumented)
+    encapsulated: CommandClass;
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointFind" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultiChannelCCEndPointFind extends MultiChannelCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCEndPointFindOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCEndPointFindOptions);
     // (undocumented)
     genericClass: number;
@@ -10806,11 +11586,20 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelCCEndPointFindOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
+    // (undocumented)
+    genericClass: number;
+    // (undocumented)
+    specificClass: number;
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointFindReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCEndPointFindReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCEndPointFindReportOptions);
     // (undocumented)
     expectMoreMessages(): boolean;
@@ -10832,6 +11621,20 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelCCEndPointFindReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCEndPointFindReportOptions extends CCCommandOptions {
+    // (undocumented)
+    foundEndpoints: number[];
+    // (undocumented)
+    genericClass: number;
+    // (undocumented)
+    reportsToFollow: number;
+    // (undocumented)
+    specificClass: number;
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelCCEndPointGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -10842,7 +11645,6 @@ export class MultiChannelCCEndPointGet extends MultiChannelCC {
 //
 // @public (undocumented)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCEndPointReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCEndPointReportOptions);
     // (undocumented)
     aggregatedCount: MaybeNotKnown<number>;
@@ -10858,11 +11660,24 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelCCEndPointReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCEndPointReportOptions extends CCCommandOptions {
+    // (undocumented)
+    aggregatedCount?: number;
+    // (undocumented)
+    countIsDynamic: boolean;
+    // (undocumented)
+    identicalCapabilities: boolean;
+    // (undocumented)
+    individualCount: number;
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelCCV1CommandEncapsulation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCV1CommandEncapsulationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCV1CommandEncapsulationOptions);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
@@ -10874,11 +11689,18 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultiChannelCCV1CommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
+    // (undocumented)
+    encapsulated: CommandClass;
+}
+
 // Warning: (ae-missing-release-tag) "MultiChannelCCV1Get" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultiChannelCCV1Get extends MultiChannelCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiChannelCCV1GetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelCCV1GetOptions);
     // (undocumented)
     requestedCC: CommandClasses;
@@ -10886,6 +11708,14 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultiChannelCCV1GetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelCCV1GetOptions extends CCCommandOptions {
+    // (undocumented)
+    requestedCC: CommandClasses;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelCCV1Report" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11155,7 +11985,6 @@ export class MultiCommandCC extends CommandClass {
 //
 // @public (undocumented)
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
-    // Warning: (ae-forgotten-export) The symbol "MultiCommandCCCommandEncapsulationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiCommandCCCommandEncapsulationOptions);
     // (undocumented)
     encapsulated: CommandClass[];
@@ -11163,6 +11992,14 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultiCommandCCCommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
+    // (undocumented)
+    encapsulated: CommandClass[];
 }
 
 // Warning: (ae-missing-release-tag) "MultiCommandCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11217,7 +12054,6 @@ export class MultilevelSensorCC extends CommandClass {
 //
 // @public (undocumented)
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
-    // Warning: (ae-forgotten-export) The symbol "MultilevelSensorCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultilevelSensorCCGetOptions);
     // (undocumented)
     scale: number | undefined;
@@ -11229,11 +12065,16 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-forgotten-export) The symbol "MultilevelSensorCCGetSpecificOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "MultilevelSensorCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type MultilevelSensorCCGetOptions = CCCommandOptions | (CCCommandOptions & MultilevelSensorCCGetSpecificOptions);
+
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCGetSupportedScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
-    // Warning: (ae-forgotten-export) The symbol "MultilevelSensorCCGetSupportedScaleOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultilevelSensorCCGetSupportedScaleOptions);
     // (undocumented)
     sensorType: number;
@@ -11241,6 +12082,14 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultilevelSensorCCGetSupportedScaleOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
+    // (undocumented)
+    sensorType: number;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCGetSupportedSensor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11454,7 +12303,6 @@ export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
 //
 // @public (undocumented)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "MultilevelSwitchCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultilevelSwitchCCReportOptions);
     // (undocumented)
     currentValue: MaybeUnknown<number> | undefined;
@@ -11468,11 +12316,22 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultilevelSwitchCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    currentValue: number;
+    // (undocumented)
+    duration?: Duration | string;
+    // (undocumented)
+    targetValue: number;
+}
+
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "MultilevelSwitchCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultilevelSwitchCCSetOptions);
     // (undocumented)
     duration: Duration | undefined;
@@ -11484,11 +12343,20 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultilevelSwitchCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    duration?: Duration | string;
+    // (undocumented)
+    targetValue: number;
+}
+
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCStartLevelChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "MultilevelSwitchCCStartLevelChangeOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions));
     // (undocumented)
     direction: keyof typeof LevelChangeDirection;
@@ -11503,6 +12371,21 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
+
+// Warning: (ae-missing-release-tag) "MultilevelSwitchCCStartLevelChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type MultilevelSwitchCCStartLevelChangeOptions = {
+    direction: keyof typeof LevelChangeDirection;
+} & ({
+    ignoreStartLevel: true;
+    startLevel?: number;
+} | {
+    ignoreStartLevel: false;
+    startLevel: number;
+}) & {
+    duration?: Duration | string;
+};
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCStopLevelChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -11879,7 +12762,6 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 //
 // @public (undocumented)
 export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC {
-    // Warning: (ae-forgotten-export) The symbol "NodeNamingAndLocationCCLocationSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | NodeNamingAndLocationCCLocationSetOptions);
     // (undocumented)
     location: string;
@@ -11887,6 +12769,14 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCLocationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
+    // (undocumented)
+    location: string;
 }
 
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCNameGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11910,7 +12800,6 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 //
 // @public (undocumented)
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
-    // Warning: (ae-forgotten-export) The symbol "NodeNamingAndLocationCCNameSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | NodeNamingAndLocationCCNameSetOptions);
     // (undocumented)
     name: string;
@@ -11918,6 +12807,14 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCNameSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
+    // (undocumented)
+    name: string;
 }
 
 // Warning: (ae-missing-release-tag) "NodeNamingAndLocationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12030,7 +12927,6 @@ export class NotificationCC extends CommandClass {
 //
 // @public (undocumented)
 export class NotificationCCEventSupportedGet extends NotificationCC {
-    // Warning: (ae-forgotten-export) The symbol "NotificationCCEventSupportedGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | NotificationCCEventSupportedGetOptions);
     // (undocumented)
     notificationType: number;
@@ -12040,11 +12936,18 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "NotificationCCEventSupportedGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
+    // (undocumented)
+    notificationType: number;
+}
+
 // Warning: (ae-missing-release-tag) "NotificationCCEventSupportedReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationCCEventSupportedReport extends NotificationCC {
-    // Warning: (ae-forgotten-export) The symbol "NotificationCCEventSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | NotificationCCEventSupportedReportOptions);
     // (undocumented)
     notificationType: number;
@@ -12058,11 +12961,20 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "NotificationCCEventSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NotificationCCEventSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    notificationType: number;
+    // (undocumented)
+    supportedEvents: number[];
+}
+
 // Warning: (ae-missing-release-tag) "NotificationCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationCCGet extends NotificationCC {
-    // Warning: (ae-forgotten-export) The symbol "NotificationCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | NotificationCCGetOptions);
     alarmType: number | undefined;
     // (undocumented)
@@ -12074,11 +12986,16 @@ export class NotificationCCGet extends NotificationCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-forgotten-export) The symbol "NotificationCCGetSpecificOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "NotificationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NotificationCCGetOptions = CCCommandOptions & NotificationCCGetSpecificOptions;
+
 // Warning: (ae-missing-release-tag) "NotificationCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationCCReport extends NotificationCC {
-    // Warning: (ae-forgotten-export) The symbol "NotificationCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (NotificationCCReportOptions & CCCommandOptions));
     // (undocumented)
     alarmLevel: number | undefined;
@@ -12104,11 +13021,23 @@ export class NotificationCCReport extends NotificationCC {
     readonly zensorNetSourceNodeId: number | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "NotificationCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NotificationCCReportOptions = {
+    alarmType: number;
+    alarmLevel: number;
+} | {
+    notificationType: number;
+    notificationEvent: number;
+    eventParameters?: Buffer;
+    sequenceNumber?: number;
+};
+
 // Warning: (ae-missing-release-tag) "NotificationCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class NotificationCCSet extends NotificationCC {
-    // Warning: (ae-forgotten-export) The symbol "NotificationCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | NotificationCCSetOptions);
     // (undocumented)
     notificationStatus: boolean;
@@ -12118,6 +13047,16 @@ export class NotificationCCSet extends NotificationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "NotificationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NotificationCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    notificationStatus: boolean;
+    // (undocumented)
+    notificationType: number;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12130,7 +13069,6 @@ export class NotificationCCSupportedGet extends NotificationCC {
 //
 // @public (undocumented)
 export class NotificationCCSupportedReport extends NotificationCC {
-    // Warning: (ae-forgotten-export) The symbol "NotificationCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: NotificationCCSupportedReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -12140,6 +13078,16 @@ export class NotificationCCSupportedReport extends NotificationCC {
     supportsV1Alarm: boolean;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "NotificationCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    supportedNotificationTypes: number[];
+    // (undocumented)
+    supportsV1Alarm: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12578,7 +13526,6 @@ export class PowerlevelCCReport extends PowerlevelCC {
 //
 // @public (undocumented)
 export class PowerlevelCCSet extends PowerlevelCC {
-    // Warning: (ae-forgotten-export) The symbol "PowerlevelCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | PowerlevelCCSetOptions);
     // (undocumented)
     powerlevel: Powerlevel;
@@ -12589,6 +13536,17 @@ export class PowerlevelCCSet extends PowerlevelCC {
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
+
+// Warning: (ae-missing-release-tag) "PowerlevelCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type PowerlevelCCSetOptions = CCCommandOptions & ({
+    powerlevel: Powerlevel;
+    timeout: number;
+} | {
+    powerlevel: (typeof Powerlevel)["Normal Power"];
+    timeout?: undefined;
+});
 
 // Warning: (ae-missing-release-tag) "PowerlevelCCTestNodeGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -12615,7 +13573,6 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 //
 // @public (undocumented)
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
-    // Warning: (ae-forgotten-export) The symbol "PowerlevelCCTestNodeSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | PowerlevelCCTestNodeSetOptions);
     // (undocumented)
     powerlevel: Powerlevel;
@@ -12627,6 +13584,18 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
     testNodeId: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "PowerlevelCCTestNodeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
+    // (undocumented)
+    powerlevel: Powerlevel;
+    // (undocumented)
+    testFrameCount: number;
+    // (undocumented)
+    testNodeId: number;
 }
 
 // Warning: (ae-missing-release-tag) "PowerlevelCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12692,7 +13661,6 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 //
 // @public (undocumented)
 export class ProtectionCCExclusiveControlSet extends ProtectionCC {
-    // Warning: (ae-forgotten-export) The symbol "ProtectionCCExclusiveControlSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ProtectionCCExclusiveControlSetOptions);
     // (undocumented)
     exclusiveControlNodeId: number;
@@ -12700,6 +13668,14 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ProtectionCCExclusiveControlSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ProtectionCCExclusiveControlSetOptions extends CCCommandOptions {
+    // (undocumented)
+    exclusiveControlNodeId: number;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12725,7 +13701,6 @@ export class ProtectionCCReport extends ProtectionCC {
 //
 // @public (undocumented)
 export class ProtectionCCSet extends ProtectionCC {
-    // Warning: (ae-forgotten-export) The symbol "ProtectionCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ProtectionCCSetOptions);
     // (undocumented)
     local: LocalProtectionState;
@@ -12735,6 +13710,16 @@ export class ProtectionCCSet extends ProtectionCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ProtectionCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ProtectionCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    local: LocalProtectionState;
+    // (undocumented)
+    rf?: RFProtectionState;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12783,7 +13768,6 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 //
 // @public (undocumented)
 export class ProtectionCCTimeoutSet extends ProtectionCC {
-    // Warning: (ae-forgotten-export) The symbol "ProtectionCCTimeoutSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ProtectionCCTimeoutSetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -12791,6 +13775,14 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
     timeout: Timeout;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ProtectionCCTimeoutSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
+    // (undocumented)
+    timeout: Timeout;
 }
 
 // Warning: (ae-missing-release-tag) "ProtectionCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13087,7 +14079,6 @@ export class SceneActivationCC extends CommandClass {
 //
 // @public (undocumented)
 export class SceneActivationCCSet extends SceneActivationCC {
-    // Warning: (ae-forgotten-export) The symbol "SceneActivationCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SceneActivationCCSetOptions);
     // (undocumented)
     dimmingDuration: Duration | undefined;
@@ -13097,6 +14088,16 @@ export class SceneActivationCCSet extends SceneActivationCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "SceneActivationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SceneActivationCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    dimmingDuration?: Duration | string;
+    // (undocumented)
+    sceneId: number;
 }
 
 // Warning: (ae-missing-release-tag) "SceneActivationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13182,7 +14183,6 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 //
 // @public (undocumented)
 export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "SceneActuatorConfigurationCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SceneActuatorConfigurationCCGetOptions);
     // (undocumented)
     sceneId: number;
@@ -13190,6 +14190,14 @@ export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationC
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SceneActuatorConfigurationCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    sceneId: number;
 }
 
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13213,7 +14221,6 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 //
 // @public (undocumented)
 export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "SceneActuatorConfigurationCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SceneActuatorConfigurationCCSetOptions);
     // (undocumented)
     dimmingDuration: Duration;
@@ -13225,6 +14232,18 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    dimmingDuration: Duration;
+    // (undocumented)
+    level?: number;
+    // (undocumented)
+    sceneId: number;
 }
 
 // Warning: (ae-missing-release-tag) "SceneActuatorConfigurationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13325,7 +14344,6 @@ export class SceneControllerConfigurationCC extends CommandClass {
 //
 // @public (undocumented)
 export class SceneControllerConfigurationCCGet extends SceneControllerConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "SceneControllerConfigurationCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SceneControllerConfigurationCCGetOptions);
     // (undocumented)
     groupId: number;
@@ -13333,6 +14351,14 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SceneControllerConfigurationCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    groupId: number;
 }
 
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13356,7 +14382,6 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 //
 // @public (undocumented)
 export class SceneControllerConfigurationCCSet extends SceneControllerConfigurationCC {
-    // Warning: (ae-forgotten-export) The symbol "SceneControllerConfigurationCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SceneControllerConfigurationCCSetOptions);
     // (undocumented)
     dimmingDuration: Duration;
@@ -13368,6 +14393,18 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    dimmingDuration?: Duration | string;
+    // (undocumented)
+    groupId: number;
+    // (undocumented)
+    sceneId: number;
 }
 
 // Warning: (ae-missing-release-tag) "SceneControllerConfigurationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13476,7 +14513,6 @@ export class ScheduleEntryLockCC extends CommandClass {
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCDailyRepeatingScheduleGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCDailyRepeatingScheduleGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -13488,11 +14524,15 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet extends ScheduleEntryL
     userId: number;
 }
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions = CCCommandOptions & ScheduleEntryLockSlotId;
+
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCDailyRepeatingScheduleReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | (CCCommandOptions & ScheduleEntryLockCCDailyRepeatingScheduleReportOptions));
     // (undocumented)
     durationHour?: number;
@@ -13515,6 +14555,11 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport extends ScheduleEnt
     // (undocumented)
     weekdays?: ScheduleEntryLockWeekday[];
 }
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCDailyRepeatingScheduleReportOptions = ScheduleEntryLockSlotId & AllOrNone_2<ScheduleEntryLockDailyRepeatingSchedule>;
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCDailyRepeatingScheduleSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13557,7 +14602,6 @@ export type ScheduleEntryLockCCDailyRepeatingScheduleSetOptions = CCCommandOptio
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCEnableAllSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCEnableAllSetOptions);
     // (undocumented)
     enabled: boolean;
@@ -13567,11 +14611,18 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableAllSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockCCEnableAllSetOptions extends CCCommandOptions {
+    // (undocumented)
+    enabled: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCEnableSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCEnableSetOptions);
     // (undocumented)
     enabled: boolean;
@@ -13579,6 +14630,16 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCEnableSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockCCEnableSetOptions extends CCCommandOptions {
+    // (undocumented)
+    enabled: boolean;
     // (undocumented)
     userId: number;
 }
@@ -13593,7 +14654,6 @@ export class ScheduleEntryLockCCSupportedGet extends ScheduleEntryLockCC {
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCSupportedReportOptions);
     // (undocumented)
     numDailyRepeatingSlots: number | undefined;
@@ -13607,6 +14667,18 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockCCSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    numDailyRepeatingSlots?: number;
+    // (undocumented)
+    numWeekDaySlots: number;
+    // (undocumented)
+    numYearDaySlots: number;
+}
+
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -13617,7 +14689,6 @@ export class ScheduleEntryLockCCTimeOffsetGet extends ScheduleEntryLockCC {
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCTimeOffsetReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCTimeOffsetReportOptions);
     // (undocumented)
     dstOffset: number;
@@ -13629,11 +14700,20 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockCCTimeOffsetReportOptions extends CCCommandOptions {
+    // (undocumented)
+    dstOffset: number;
+    // (undocumented)
+    standardOffset: number;
+}
+
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCTimeOffsetSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCTimeOffsetSetOptions);
     // (undocumented)
     dstOffset: number;
@@ -13643,6 +14723,16 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
     standardOffset: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCTimeOffsetSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScheduleEntryLockCCTimeOffsetSetOptions extends CCCommandOptions {
+    // (undocumented)
+    dstOffset: number;
+    // (undocumented)
+    standardOffset: number;
 }
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13814,7 +14904,6 @@ export const ScheduleEntryLockCCValues: Readonly<{
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCWeekDayScheduleGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -13826,11 +14915,15 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
     userId: number;
 }
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCWeekDayScheduleGetOptions = CCCommandOptions & ScheduleEntryLockSlotId;
+
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCWeekDayScheduleReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCWeekDayScheduleReportOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost): boolean;
@@ -13853,6 +14946,11 @@ export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockC
     // (undocumented)
     weekday?: ScheduleEntryLockWeekday;
 }
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCWeekDayScheduleReportOptions = CCCommandOptions & ScheduleEntryLockSlotId & AllOrNone_2<ScheduleEntryLockWeekDaySchedule>;
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCWeekDayScheduleSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13895,7 +14993,6 @@ export type ScheduleEntryLockCCWeekDayScheduleSetOptions = CCCommandOptions & Sc
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCYearDayScheduleGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -13907,11 +15004,15 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
     userId: number;
 }
 
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCYearDayScheduleGetOptions = CCCommandOptions & ScheduleEntryLockSlotId;
+
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockCC {
-    // Warning: (ae-forgotten-export) The symbol "ScheduleEntryLockCCYearDayScheduleReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ScheduleEntryLockCCYearDayScheduleReportOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost): boolean;
@@ -13944,6 +15045,11 @@ export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockC
     // (undocumented)
     userId: number;
 }
+
+// Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScheduleEntryLockCCYearDayScheduleReportOptions = CCCommandOptions & ScheduleEntryLockSlotId & AllOrNone_2<ScheduleEntryLockYearDaySchedule>;
 
 // Warning: (ae-missing-release-tag) "ScheduleEntryLockCCYearDayScheduleSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -14189,7 +15295,6 @@ export class Security2CCCommandsSupportedGet extends Security2CC {
 //
 // @public (undocumented)
 export class Security2CCCommandsSupportedReport extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCCommandsSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | Security2CCCommandsSupportedReportOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -14199,11 +15304,18 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "Security2CCCommandsSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCCommandsSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    supportedCCs: CommandClasses_2[];
+}
+
 // Warning: (ae-missing-release-tag) "Security2CCKEXFail" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Security2CCKEXFail extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCKEXFailOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | Security2CCKEXFailOptions);
     // (undocumented)
     failType: KEXFailType;
@@ -14211,6 +15323,14 @@ export class Security2CCKEXFail extends Security2CC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "Security2CCKEXFailOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCKEXFailOptions extends CCCommandOptions {
+    // (undocumented)
+    failType: KEXFailType;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCKEXGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14223,7 +15343,6 @@ export class Security2CCKEXGet extends Security2CC {
 //
 // @public (undocumented)
 export class Security2CCKEXReport extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCKEXReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & Security2CCKEXReportOptions));
     // (undocumented)
     readonly echo: boolean;
@@ -14243,11 +15362,28 @@ export class Security2CCKEXReport extends Security2CC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "Security2CCKEXReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCKEXReportOptions {
+    // (undocumented)
+    echo: boolean;
+    // (undocumented)
+    requestCSA: boolean;
+    // (undocumented)
+    requestedKeys: SecurityClass[];
+    // (undocumented)
+    _reserved?: number;
+    // (undocumented)
+    supportedECDHProfiles: ECDHProfiles[];
+    // (undocumented)
+    supportedKEXSchemes: KEXSchemes[];
+}
+
 // Warning: (ae-missing-release-tag) "Security2CCKEXSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Security2CCKEXSet extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCKEXSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & Security2CCKEXSetOptions));
     // (undocumented)
     echo: boolean;
@@ -14265,11 +15401,26 @@ export class Security2CCKEXSet extends Security2CC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "Security2CCKEXSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCKEXSetOptions {
+    // (undocumented)
+    echo: boolean;
+    // (undocumented)
+    grantedKeys: SecurityClass[];
+    // (undocumented)
+    permitCSA: boolean;
+    // (undocumented)
+    selectedECDHProfile: ECDHProfiles;
+    // (undocumented)
+    selectedKEXScheme: KEXSchemes;
+}
+
 // Warning: (ae-missing-release-tag) "Security2CCMessageEncapsulation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Security2CCMessageEncapsulation extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCMessageEncapsulationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | Security2CCMessageEncapsulationOptions);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
@@ -14298,11 +15449,23 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     readonly verifyDelivery: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "Security2CCMessageEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
+    // (undocumented)
+    encapsulated?: CommandClass;
+    // (undocumented)
+    extensions?: Security2Extension[];
+    securityClass?: S2SecurityClass;
+    // (undocumented)
+    verifyDelivery?: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Security2CCNetworkKeyGet extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCNetworkKeyGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | Security2CCNetworkKeyGetOptions);
     // (undocumented)
     requestedKey: SecurityClass;
@@ -14312,11 +15475,18 @@ export class Security2CCNetworkKeyGet extends Security2CC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "Security2CCNetworkKeyGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
+    // (undocumented)
+    requestedKey: SecurityClass;
+}
+
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Security2CCNetworkKeyReport extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCNetworkKeyReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | Security2CCNetworkKeyReportOptions);
     // (undocumented)
     grantedKey: SecurityClass;
@@ -14326,6 +15496,16 @@ export class Security2CCNetworkKeyReport extends Security2CC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "Security2CCNetworkKeyReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
+    // (undocumented)
+    grantedKey: SecurityClass;
+    // (undocumented)
+    networkKey: Buffer;
 }
 
 // Warning: (ae-missing-release-tag) "Security2CCNetworkKeyVerify" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14354,7 +15534,6 @@ export class Security2CCNonceGet extends Security2CC {
 //
 // @public (undocumented)
 export class Security2CCNonceReport extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCNonceReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & Security2CCNonceReportOptions));
     // (undocumented)
     host: ZWaveHost_2 & {
@@ -14373,11 +15552,23 @@ export class Security2CCNonceReport extends Security2CC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "Security2CCNonceReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type Security2CCNonceReportOptions = {
+    MOS: boolean;
+    SOS: true;
+    receiverEI: Buffer;
+} | {
+    MOS: true;
+    SOS: false;
+    receiverEI?: undefined;
+};
+
 // Warning: (ae-missing-release-tag) "Security2CCPublicKeyReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Security2CCPublicKeyReport extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCPublicKeyReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | Security2CCPublicKeyReportOptions);
     // (undocumented)
     includingNode: boolean;
@@ -14389,11 +15580,20 @@ export class Security2CCPublicKeyReport extends Security2CC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "Security2CCPublicKeyReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
+    // (undocumented)
+    includingNode: boolean;
+    // (undocumented)
+    publicKey: Buffer;
+}
+
 // Warning: (ae-missing-release-tag) "Security2CCTransferEnd" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class Security2CCTransferEnd extends Security2CC {
-    // Warning: (ae-forgotten-export) The symbol "Security2CCTransferEndOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | Security2CCTransferEndOptions);
     // (undocumented)
     keyRequestComplete: boolean;
@@ -14403,6 +15603,16 @@ export class Security2CCTransferEnd extends Security2CC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "Security2CCTransferEndOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Security2CCTransferEndOptions extends CCCommandOptions {
+    // (undocumented)
+    keyRequestComplete: boolean;
+    // (undocumented)
+    keyVerified: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "Security2Command" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14487,7 +15697,6 @@ export class SecurityCC extends CommandClass {
 //
 // @public (undocumented)
 export class SecurityCCCommandEncapsulation extends SecurityCC {
-    // Warning: (ae-forgotten-export) The symbol "SecurityCCCommandEncapsulationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SecurityCCCommandEncapsulationOptions);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
@@ -14515,6 +15724,16 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 export class SecurityCCCommandEncapsulationNonceGet extends SecurityCCCommandEncapsulation {
 }
 
+// Warning: (ae-missing-release-tag) "SecurityCCCommandEncapsulationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
+    // (undocumented)
+    alternativeNetworkKey?: Buffer;
+    // (undocumented)
+    encapsulated: CommandClass;
+}
+
 // Warning: (ae-missing-release-tag) "SecurityCCCommandsSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -14525,7 +15744,6 @@ export class SecurityCCCommandsSupportedGet extends SecurityCC {
 //
 // @public (undocumented)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
-    // Warning: (ae-forgotten-export) The symbol "SecurityCCCommandsSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SecurityCCCommandsSupportedReportOptions);
     // (undocumented)
     controlledCCs: CommandClasses_2[];
@@ -14545,16 +15763,33 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "SecurityCCCommandsSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SecurityCCCommandsSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    controlledCCs: CommandClasses_2[];
+    // (undocumented)
+    supportedCCs: CommandClasses_2[];
+}
+
 // Warning: (ae-missing-release-tag) "SecurityCCNetworkKeySet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SecurityCCNetworkKeySet extends SecurityCC {
-    // Warning: (ae-forgotten-export) The symbol "SecurityCCNetworkKeySetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SecurityCCNetworkKeySetOptions);
     // (undocumented)
     networkKey: Buffer;
     // (undocumented)
     serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "SecurityCCNetworkKeySetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
+    // (undocumented)
+    networkKey: Buffer;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityCCNetworkKeyVerify" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14783,7 +16018,6 @@ export class SoundSwitchCCConfigurationGet extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCConfigurationReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCConfigurationReportOptions);
     // (undocumented)
     defaultToneId: number;
@@ -14795,11 +16029,20 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "SoundSwitchCCConfigurationReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SoundSwitchCCConfigurationReportOptions extends CCCommandOptions {
+    // (undocumented)
+    defaultToneId: number;
+    // (undocumented)
+    defaultVolume: number;
+}
+
 // Warning: (ae-missing-release-tag) "SoundSwitchCCConfigurationSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCConfigurationSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCConfigurationSetOptions);
     // (undocumented)
     defaultToneId: number;
@@ -14811,11 +16054,20 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "SoundSwitchCCConfigurationSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
+    // (undocumented)
+    defaultToneId: number;
+    // (undocumented)
+    defaultVolume: number;
+}
+
 // Warning: (ae-missing-release-tag) "SoundSwitchCCToneInfoGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCToneInfoGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCToneInfoGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -14825,11 +16077,18 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
     toneId: number;
 }
 
+// Warning: (ae-missing-release-tag) "SoundSwitchCCToneInfoGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
+    // (undocumented)
+    toneId: number;
+}
+
 // Warning: (ae-missing-release-tag) "SoundSwitchCCToneInfoReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCToneInfoReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCToneInfoReportOptions);
     // (undocumented)
     readonly duration: number;
@@ -14841,6 +16100,18 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly toneId: number;
+}
+
+// Warning: (ae-missing-release-tag) "SoundSwitchCCToneInfoReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
+    // (undocumented)
+    duration: number;
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    toneId: number;
 }
 
 // Warning: (ae-missing-release-tag) "SoundSwitchCCTonePlayGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -14866,12 +16137,21 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCTonePlaySetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCTonePlaySetOptions);
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    toneId: ToneId | number;
+    // (undocumented)
+    volume?: number;
+}
+
+// Warning: (ae-missing-release-tag) "SoundSwitchCCTonePlaySetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
     // (undocumented)
     toneId: ToneId | number;
     // (undocumented)
@@ -14888,12 +16168,19 @@ export class SoundSwitchCCTonesNumberGet extends SoundSwitchCC {
 //
 // @public (undocumented)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
-    // Warning: (ae-forgotten-export) The symbol "SoundSwitchCCTonesNumberReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SoundSwitchCCTonesNumberReportOptions);
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    toneCount: number;
+}
+
+// Warning: (ae-missing-release-tag) "SoundSwitchCCTonesNumberReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SoundSwitchCCTonesNumberReportOptions extends CCCommandOptions {
     // (undocumented)
     toneCount: number;
 }
@@ -15004,6 +16291,7 @@ export const SoundSwitchCCValues: Readonly<{
             readonly max: 100;
             readonly unit: "%";
             readonly label: "Volume";
+            readonly allowManualEntry: true;
             readonly states: {
                 readonly 0: "default";
             };
@@ -15102,7 +16390,6 @@ export class SupervisionCC extends CommandClass {
 //
 // @public (undocumented)
 export class SupervisionCCGet extends SupervisionCC {
-    // Warning: (ae-forgotten-export) The symbol "SupervisionCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | SupervisionCCGetOptions);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
@@ -15118,11 +16405,20 @@ export class SupervisionCCGet extends SupervisionCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "SupervisionCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SupervisionCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    encapsulated: CommandClass;
+    // (undocumented)
+    requestStatusUpdates: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "SupervisionCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class SupervisionCCReport extends SupervisionCC {
-    // Warning: (ae-forgotten-export) The symbol "SupervisionCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & SupervisionCCReportOptions));
     // (undocumented)
     readonly duration: Duration | undefined;
@@ -15141,6 +16437,20 @@ export class SupervisionCCReport extends SupervisionCC {
     // (undocumented)
     toSupervisionResult(): SupervisionResult;
 }
+
+// Warning: (ae-missing-release-tag) "SupervisionCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SupervisionCCReportOptions = {
+    moreUpdatesFollow: boolean;
+    requestWakeUpOnDemand?: boolean;
+    sessionId: number;
+} & ({
+    status: SupervisionStatus.Working;
+    duration: Duration;
+} | {
+    status: SupervisionStatus.NoSupport | SupervisionStatus.Fail | SupervisionStatus.Success;
+});
 
 // Warning: (ae-missing-release-tag) "SupervisionCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -15290,7 +16600,6 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 //
 // @public (undocumented)
 export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatFanModeCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatFanModeCCSetOptions);
     // (undocumented)
     mode: ThermostatFanMode;
@@ -15301,6 +16610,14 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
+
+// Warning: (ae-missing-release-tag) "ThermostatFanModeCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ThermostatFanModeCCSetOptions = CCCommandOptions & {
+    mode: ThermostatFanMode;
+    off?: boolean;
+};
 
 // Warning: (ae-missing-release-tag) "ThermostatFanModeCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -15585,7 +16902,6 @@ export class ThermostatModeCCGet extends ThermostatModeCC {
 //
 // @public (undocumented)
 export class ThermostatModeCCReport extends ThermostatModeCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatModeCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatModeCCReportOptions);
     // (undocumented)
     readonly manufacturerData: Buffer | undefined;
@@ -15599,11 +16915,21 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ThermostatModeCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ThermostatModeCCReportOptions = CCCommandOptions & ({
+    mode: Exclude<ThermostatMode, (typeof ThermostatMode)["Manufacturer specific"]>;
+    manufacturerData?: undefined;
+} | {
+    mode: (typeof ThermostatMode)["Manufacturer specific"];
+    manufacturerData?: Buffer;
+});
+
 // Warning: (ae-missing-release-tag) "ThermostatModeCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ThermostatModeCCSet extends ThermostatModeCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatModeCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatModeCCSetOptions);
     // (undocumented)
     manufacturerData?: Buffer;
@@ -15615,6 +16941,16 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ThermostatModeCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ThermostatModeCCSetOptions = CCCommandOptions & ({
+    mode: Exclude<ThermostatMode, (typeof ThermostatMode)["Manufacturer specific"]>;
+} | {
+    mode: (typeof ThermostatMode)["Manufacturer specific"];
+    manufacturerData: Buffer;
+});
+
 // Warning: (ae-missing-release-tag) "ThermostatModeCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -15625,7 +16961,6 @@ export class ThermostatModeCCSupportedGet extends ThermostatModeCC {
 //
 // @public (undocumented)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatModeCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatModeCCSupportedReportOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
@@ -15635,6 +16970,14 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
     readonly supportedModes: ThermostatMode[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatModeCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatModeCCSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    supportedModes: ThermostatMode[];
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatModeCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15882,7 +17225,6 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 //
 // @public (undocumented)
 export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetbackCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetbackCCSetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -15891,6 +17233,16 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
     setbackType: SetbackType;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatSetbackCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    setbackState: SetbackState;
+    // (undocumented)
+    setbackType: SetbackType;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetbackCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15997,7 +17349,6 @@ export class ThermostatSetpointCC extends CommandClass {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCCapabilitiesGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCCapabilitiesGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -16007,11 +17358,18 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilitiesGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
+    // (undocumented)
+    setpointType: ThermostatSetpointType;
+}
+
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilitiesReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCCapabilitiesReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCCapabilitiesReportOptions);
     // (undocumented)
     maxValue: number;
@@ -16031,11 +17389,26 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
     type: ThermostatSetpointType;
 }
 
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCCapabilitiesReportOptions extends CCCommandOptions {
+    // (undocumented)
+    maxValue: number;
+    // (undocumented)
+    maxValueScale: number;
+    // (undocumented)
+    minValue: number;
+    // (undocumented)
+    minValueScale: number;
+    // (undocumented)
+    type: ThermostatSetpointType;
+}
+
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCGetOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -16045,11 +17418,18 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    setpointType: ThermostatSetpointType;
+}
+
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCReportOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
@@ -16065,11 +17445,22 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
     value: number;
 }
 
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    scale: number;
+    // (undocumented)
+    type: ThermostatSetpointType;
+    // (undocumented)
+    value: number;
+}
+
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCSetOptions);
     // (undocumented)
     scale: number;
@@ -16079,6 +17470,18 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
     setpointType: ThermostatSetpointType;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    value: number;
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    scale: number;
+    // (undocumented)
+    setpointType: ThermostatSetpointType;
     // (undocumented)
     value: number;
 }
@@ -16093,7 +17496,6 @@ export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
 //
 // @public (undocumented)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
-    // Warning: (ae-forgotten-export) The symbol "ThermostatSetpointCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | ThermostatSetpointCCSupportedReportOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -16101,6 +17503,14 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
     readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatSetpointCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetpointCCSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    supportedSetpointTypes: ThermostatSetpointType[];
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16328,7 +17738,6 @@ export class TimeCCDateGet extends TimeCC {
 //
 // @public (undocumented)
 export class TimeCCDateReport extends TimeCC {
-    // Warning: (ae-forgotten-export) The symbol "TimeCCDateReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TimeCCDateReportOptions);
     // (undocumented)
     day: number;
@@ -16338,6 +17747,18 @@ export class TimeCCDateReport extends TimeCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+    // (undocumented)
+    year: number;
+}
+
+// Warning: (ae-missing-release-tag) "TimeCCDateReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TimeCCDateReportOptions extends CCCommandOptions {
+    // (undocumented)
+    day: number;
+    // (undocumented)
+    month: number;
     // (undocumented)
     year: number;
 }
@@ -16358,7 +17779,6 @@ export class TimeCCTimeOffsetGet extends TimeCC {
 //
 // @public (undocumented)
 export class TimeCCTimeOffsetReport extends TimeCC {
-    // Warning: (ae-forgotten-export) The symbol "TimeCCTimeOffsetReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TimeCCTimeOffsetReportOptions);
     // (undocumented)
     dstEndDate: Date;
@@ -16374,11 +17794,24 @@ export class TimeCCTimeOffsetReport extends TimeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "TimeCCTimeOffsetReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
+    // (undocumented)
+    dstEnd: Date;
+    // (undocumented)
+    dstOffset: number;
+    // (undocumented)
+    dstStart: Date;
+    // (undocumented)
+    standardOffset: number;
+}
+
 // Warning: (ae-missing-release-tag) "TimeCCTimeOffsetSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TimeCCTimeOffsetSet extends TimeCC {
-    // Warning: (ae-forgotten-export) The symbol "TimeCCTimeOffsetSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TimeCCTimeOffsetSetOptions);
     // (undocumented)
     dstEndDate: Date;
@@ -16394,11 +17827,24 @@ export class TimeCCTimeOffsetSet extends TimeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "TimeCCTimeOffsetSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
+    // (undocumented)
+    dstEnd: Date;
+    // (undocumented)
+    dstOffset: number;
+    // (undocumented)
+    dstStart: Date;
+    // (undocumented)
+    standardOffset: number;
+}
+
 // Warning: (ae-missing-release-tag) "TimeCCTimeReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TimeCCTimeReport extends TimeCC {
-    // Warning: (ae-forgotten-export) The symbol "TimeCCTimeReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TimeCCTimeReportOptions);
     // (undocumented)
     hour: number;
@@ -16410,6 +17856,18 @@ export class TimeCCTimeReport extends TimeCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "TimeCCTimeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TimeCCTimeReportOptions extends CCCommandOptions {
+    // (undocumented)
+    hour: number;
+    // (undocumented)
+    minute: number;
+    // (undocumented)
+    second: number;
 }
 
 // Warning: (ae-missing-release-tag) "TimeCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16465,7 +17923,6 @@ export class TimeParametersCCReport extends TimeParametersCC {
 //
 // @public (undocumented)
 export class TimeParametersCCSet extends TimeParametersCC {
-    // Warning: (ae-forgotten-export) The symbol "TimeParametersCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TimeParametersCCSetOptions);
     // (undocumented)
     dateAndTime: Date;
@@ -16475,6 +17932,16 @@ export class TimeParametersCCSet extends TimeParametersCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "TimeParametersCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TimeParametersCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    dateAndTime: Date;
+    // (undocumented)
+    useLocalTime?: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "TimeParametersCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16564,7 +18031,6 @@ export class TransportServiceCC extends CommandClass implements SinglecastCC_2<T
 //
 // @public (undocumented)
 export class TransportServiceCCFirstSegment extends TransportServiceCC {
-    // Warning: (ae-forgotten-export) The symbol "TransportServiceCCFirstSegmentOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TransportServiceCCFirstSegmentOptions);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
@@ -16588,11 +18054,24 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "TransportServiceCCFirstSegmentOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TransportServiceCCFirstSegmentOptions extends CCCommandOptions {
+    // (undocumented)
+    datagramSize: number;
+    // (undocumented)
+    headerExtension?: Buffer | undefined;
+    // (undocumented)
+    partialDatagram: Buffer;
+    // (undocumented)
+    sessionId: number;
+}
+
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentComplete" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TransportServiceCCSegmentComplete extends TransportServiceCC {
-    // Warning: (ae-forgotten-export) The symbol "TransportServiceCCSegmentCompleteOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TransportServiceCCSegmentCompleteOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -16602,11 +18081,18 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "TransportServiceCCSegmentCompleteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptions {
+    // (undocumented)
+    sessionId: number;
+}
+
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TransportServiceCCSegmentRequest extends TransportServiceCC {
-    // Warning: (ae-forgotten-export) The symbol "TransportServiceCCSegmentRequestOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TransportServiceCCSegmentRequestOptions);
     // (undocumented)
     datagramOffset: number;
@@ -16618,11 +18104,20 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "TransportServiceCCSegmentRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TransportServiceCCSegmentRequestOptions extends CCCommandOptions {
+    // (undocumented)
+    datagramOffset: number;
+    // (undocumented)
+    sessionId: number;
+}
+
 // Warning: (ae-missing-release-tag) "TransportServiceCCSegmentWait" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TransportServiceCCSegmentWait extends TransportServiceCC {
-    // Warning: (ae-forgotten-export) The symbol "TransportServiceCCSegmentWaitOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TransportServiceCCSegmentWaitOptions);
     // (undocumented)
     pendingSegments: number;
@@ -16632,11 +18127,18 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "TransportServiceCCSegmentWaitOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
+    // (undocumented)
+    pendingSegments: number;
+}
+
 // Warning: (ae-missing-release-tag) "TransportServiceCCSubsequentSegment" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
-    // Warning: (ae-forgotten-export) The symbol "TransportServiceCCSubsequentSegmentOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TransportServiceCCSubsequentSegmentOptions);
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
@@ -16668,6 +18170,14 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
     sessionId: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "TransportServiceCCSubsequentSegmentOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface TransportServiceCCSubsequentSegmentOptions extends TransportServiceCCFirstSegmentOptions {
+    // (undocumented)
+    datagramOffset: number;
 }
 
 // Warning: (ae-missing-release-tag) "TransportServiceCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16729,7 +18239,6 @@ export class UserCodeCCCapabilitiesGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCCapabilitiesReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCCapabilitiesReportOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -16753,11 +18262,32 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "UserCodeCCCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
+    // (undocumented)
+    supportedASCIIChars: string;
+    // (undocumented)
+    supportedKeypadModes: readonly KeypadMode[];
+    // (undocumented)
+    supportedUserIDStatuses: readonly UserIDStatus[];
+    // (undocumented)
+    supportsMasterCode: boolean;
+    // (undocumented)
+    supportsMasterCodeDeactivation: boolean;
+    // (undocumented)
+    supportsMultipleUserCodeReport: boolean;
+    // (undocumented)
+    supportsMultipleUserCodeSet: boolean;
+    // (undocumented)
+    supportsUserCodeChecksum: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "UserCodeCCExtendedUserCodeGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCExtendedUserCodeGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCExtendedUserCodeGetOptions);
     // (undocumented)
     reportMore: boolean;
@@ -16765,6 +18295,16 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCExtendedUserCodeGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
+    // (undocumented)
+    reportMore?: boolean;
     // (undocumented)
     userId: number;
 }
@@ -16790,14 +18330,19 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCExtendedUserCodeSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCExtendedUserCodeSetOptions);
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCSetOptions" needs to be exported by the entry point index.d.ts
-    //
+    // (undocumented)
+    userCodes: UserCodeCCSetOptions[];
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCExtendedUserCodeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCExtendedUserCodeSetOptions extends CCCommandOptions {
     // (undocumented)
     userCodes: UserCodeCCSetOptions[];
 }
@@ -16806,12 +18351,19 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCGet extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCGetOptions);
     // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    userId: number;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCGetOptions extends CCCommandOptions {
     // (undocumented)
     userId: number;
 }
@@ -16826,7 +18378,6 @@ export class UserCodeCCKeypadModeGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCKeypadModeReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCKeypadModeReportOptions);
     // (undocumented)
     readonly keypadMode: KeypadMode;
@@ -16838,11 +18389,18 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "UserCodeCCKeypadModeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCKeypadModeReportOptions extends CCCommandOptions {
+    // (undocumented)
+    keypadMode: KeypadMode;
+}
+
 // Warning: (ae-missing-release-tag) "UserCodeCCKeypadModeSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCKeypadModeSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCKeypadModeSetOptions);
     // (undocumented)
     keypadMode: KeypadMode;
@@ -16850,6 +18408,14 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCKeypadModeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
+    // (undocumented)
+    keypadMode: KeypadMode;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16862,7 +18428,6 @@ export class UserCodeCCMasterCodeGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCMasterCodeReport extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCMasterCodeReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCMasterCodeReportOptions);
     // (undocumented)
     readonly masterCode: string;
@@ -16872,11 +18437,18 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCMasterCodeReportOptions extends CCCommandOptions {
+    // (undocumented)
+    masterCode: string;
+}
+
 // Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UserCodeCCMasterCodeSet extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCMasterCodeSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCMasterCodeSetOptions);
     // (undocumented)
     masterCode: string;
@@ -16886,12 +18458,19 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
+    // (undocumented)
+    masterCode: string;
+}
+
 // Warning: (ae-forgotten-export) The symbol "NotificationEventPayload" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "UserCodeCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class UserCodeCCReport extends UserCodeCC implements NotificationEventPayload {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCReportOptions);
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
@@ -16911,6 +18490,18 @@ export class UserCodeCCReport extends UserCodeCC implements NotificationEventPay
     readonly userIdStatus: UserIDStatus;
 }
 
+// Warning: (ae-missing-release-tag) "UserCodeCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCReportOptions extends CCCommandOptions {
+    // (undocumented)
+    userCode?: string | Buffer;
+    // (undocumented)
+    userId: number;
+    // (undocumented)
+    userIdStatus: UserIDStatus;
+}
+
 // Warning: (ae-missing-release-tag) "UserCodeCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -16928,6 +18519,23 @@ export class UserCodeCCSet extends UserCodeCC {
     userIdStatus: UserIDStatus;
 }
 
+// Warning: (ae-missing-release-tag) "UserCodeCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type UserCodeCCSetOptions = {
+    userId: 0;
+    userIdStatus: UserIDStatus.Available;
+    userCode?: undefined;
+} | {
+    userId: number;
+    userIdStatus: UserIDStatus.Available;
+    userCode?: undefined;
+} | {
+    userId: number;
+    userIdStatus: Exclude<UserIDStatus, UserIDStatus.Available | UserIDStatus.StatusNotAvailable>;
+    userCode: string | Buffer;
+};
+
 // Warning: (ae-missing-release-tag) "UserCodeCCUserCodeChecksumGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -16938,7 +18546,6 @@ export class UserCodeCCUserCodeChecksumGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCUserCodeChecksumReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCUserCodeChecksumReportOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -16946,6 +18553,14 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
     // (undocumented)
     readonly userCodeChecksum: number;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCUserCodeChecksumReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCUserCodeChecksumReportOptions extends CCCommandOptions {
+    // (undocumented)
+    userCodeChecksum: number;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCUsersNumberGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16958,7 +18573,6 @@ export class UserCodeCCUsersNumberGet extends UserCodeCC {
 //
 // @public (undocumented)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
-    // Warning: (ae-forgotten-export) The symbol "UserCodeCCUsersNumberReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCUsersNumberReportOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -16966,6 +18580,14 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
     readonly supportedUsers: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCUsersNumberReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
+    // (undocumented)
+    supportedUsers: number;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17481,7 +19103,6 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCCommandClassGet extends VersionCC {
-    // Warning: (ae-forgotten-export) The symbol "VersionCCCommandClassGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | VersionCCCommandClassGetOptions);
     // (undocumented)
     requestedCC: CommandClasses;
@@ -17491,11 +19112,18 @@ export class VersionCCCommandClassGet extends VersionCC {
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "VersionCCCommandClassGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface VersionCCCommandClassGetOptions extends CCCommandOptions {
+    // (undocumented)
+    requestedCC: CommandClasses;
+}
+
 // Warning: (ae-missing-release-tag) "VersionCCCommandClassReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class VersionCCCommandClassReport extends VersionCC {
-    // Warning: (ae-forgotten-export) The symbol "VersionCCCommandClassReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: VersionCCCommandClassReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
     ccVersion: number;
@@ -17505,6 +19133,16 @@ export class VersionCCCommandClassReport extends VersionCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "VersionCCCommandClassReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface VersionCCCommandClassReportOptions extends CCCommandOptions {
+    // (undocumented)
+    ccVersion: number;
+    // (undocumented)
+    requestedCC: CommandClasses;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17517,7 +19155,6 @@ export class VersionCCGet extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCReport extends VersionCC {
-    // Warning: (ae-forgotten-export) The symbol "VersionCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (VersionCCReportOptions & CCCommandOptions));
     // (undocumented)
     readonly firmwareVersions: string[];
@@ -17531,6 +19168,20 @@ export class VersionCCReport extends VersionCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "VersionCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface VersionCCReportOptions {
+    // (undocumented)
+    firmwareVersions: string[];
+    // (undocumented)
+    hardwareVersion?: number;
+    // (undocumented)
+    libraryType: ZWaveLibraryTypes;
+    // (undocumented)
+    protocolVersion: string;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18020,7 +19671,6 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 //
 // @public (undocumented)
 export class WakeUpCCIntervalSet extends WakeUpCC {
-    // Warning: (ae-forgotten-export) The symbol "WakeUpCCIntervalSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | WakeUpCCIntervalSetOptions);
     // (undocumented)
     controllerNodeId: number;
@@ -18028,6 +19678,16 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    wakeUpInterval: number;
+}
+
+// Warning: (ae-missing-release-tag) "WakeUpCCIntervalSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
+    // (undocumented)
+    controllerNodeId: number;
     // (undocumented)
     wakeUpInterval: number;
 }
@@ -18204,7 +19864,6 @@ export class WindowCoveringCC extends CommandClass {
 //
 // @public (undocumented)
 export class WindowCoveringCCGet extends WindowCoveringCC {
-    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCGetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCGetOptions);
     // (undocumented)
     parameter: WindowCoveringParameter;
@@ -18212,6 +19871,14 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCGetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WindowCoveringCCGetOptions extends CCCommandOptions {
+    // (undocumented)
+    parameter: WindowCoveringParameter;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18235,7 +19902,6 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 //
 // @public (undocumented)
 export class WindowCoveringCCSet extends WindowCoveringCC {
-    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCSetOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCSetOptions);
     // (undocumented)
     duration: Duration_2 | undefined;
@@ -18250,11 +19916,23 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "WindowCoveringCCSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WindowCoveringCCSetOptions extends CCCommandOptions {
+    // (undocumented)
+    duration?: Duration_2 | string;
+    // (undocumented)
+    targetValues: {
+        parameter: WindowCoveringParameter;
+        value: number;
+    }[];
+}
+
 // Warning: (ae-missing-release-tag) "WindowCoveringCCStartLevelChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
-    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCStartLevelChangeOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCStartLevelChangeOptions);
     // (undocumented)
     direction: keyof typeof LevelChangeDirection;
@@ -18268,11 +19946,22 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
 
+// Warning: (ae-missing-release-tag) "WindowCoveringCCStartLevelChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WindowCoveringCCStartLevelChangeOptions extends CCCommandOptions {
+    // (undocumented)
+    direction: keyof typeof LevelChangeDirection;
+    // (undocumented)
+    duration?: Duration_2 | string;
+    // (undocumented)
+    parameter: WindowCoveringParameter;
+}
+
 // Warning: (ae-missing-release-tag) "WindowCoveringCCStopLevelChange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
-    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCStopLevelChangeOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCStopLevelChangeOptions);
     // (undocumented)
     parameter: WindowCoveringParameter;
@@ -18280,6 +19969,14 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCStopLevelChangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WindowCoveringCCStopLevelChangeOptions extends CCCommandOptions {
+    // (undocumented)
+    parameter: WindowCoveringParameter;
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCSupportedGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18292,7 +19989,6 @@ export class WindowCoveringCCSupportedGet extends WindowCoveringCC {
 //
 // @public (undocumented)
 export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
-    // Warning: (ae-forgotten-export) The symbol "WindowCoveringCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | WindowCoveringCCSupportedReportOptions);
     // (undocumented)
     serialize(): Buffer;
@@ -18300,6 +19996,14 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
     readonly supportedParameters: readonly WindowCoveringParameter[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "WindowCoveringCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface WindowCoveringCCSupportedReportOptions extends CCCommandOptions {
+    // (undocumented)
+    supportedParameters: readonly WindowCoveringParameter[];
 }
 
 // Warning: (ae-missing-release-tag) "WindowCoveringCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18631,7 +20335,6 @@ export class ZWavePlusCCGet extends ZWavePlusCC {
 //
 // @public (undocumented)
 export class ZWavePlusCCReport extends ZWavePlusCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWavePlusCCReportOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & ZWavePlusCCReportOptions));
     // (undocumented)
     installerIcon: number;
@@ -18643,6 +20346,22 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+    // (undocumented)
+    userIcon: number;
+    // (undocumented)
+    zwavePlusVersion: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZWavePlusCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWavePlusCCReportOptions {
+    // (undocumented)
+    installerIcon: number;
+    // (undocumented)
+    nodeType: ZWavePlusNodeType;
+    // (undocumented)
+    roleType: ZWavePlusRoleType;
     // (undocumented)
     userIcon: number;
     // (undocumented)
@@ -18836,7 +20555,6 @@ export class ZWaveProtocolCC extends CommandClass {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCAcceptLost extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCAcceptLostOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCAcceptLostOptions);
     // (undocumented)
     accepted: boolean;
@@ -18844,11 +20562,18 @@ export class ZWaveProtocolCCAcceptLost extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCAcceptLostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCAcceptLostOptions extends CCCommandOptions {
+    // (undocumented)
+    accepted: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignIDs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCAssignIDsOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCAssignIDsOptions);
     // (undocumented)
     assignedNodeId: number;
@@ -18858,11 +20583,20 @@ export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignIDsOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCAssignIDsOptions extends CCCommandOptions {
+    // (undocumented)
+    assignedNodeId: number;
+    // (undocumented)
+    homeId: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignReturnRoute" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCAssignReturnRouteOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCAssignReturnRouteOptions);
     // (undocumented)
     destinationNodeId: number;
@@ -18878,16 +20612,41 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignReturnRouteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCAssignReturnRouteOptions extends CCCommandOptions {
+    // (undocumented)
+    destinationNodeId: number;
+    // (undocumented)
+    destinationSpeed: ZWaveDataRate;
+    // (undocumented)
+    destinationWakeUp: WakeUpTime;
+    // (undocumented)
+    repeaters: number[];
+    // (undocumented)
+    routeIndex: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignReturnRoutePriority" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCAssignReturnRoutePriority extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCAssignReturnRoutePriorityOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCAssignReturnRoutePriorityOptions);
     // (undocumented)
     routeNumber: number;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    targetNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCAssignReturnRoutePriorityOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCAssignReturnRoutePriorityOptions extends CCCommandOptions {
+    // (undocumented)
+    routeNumber: number;
     // (undocumented)
     targetNodeId: number;
 }
@@ -18914,12 +20673,19 @@ export class ZWaveProtocolCCAutomaticControllerUpdateStart extends ZWaveProtocol
 //
 // @public (undocumented)
 export class ZWaveProtocolCCCommandComplete extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCCommandCompleteOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCCommandCompleteOptions);
     // (undocumented)
     sequenceNumber: number;
     // (undocumented)
     serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCCommandCompleteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCCommandCompleteOptions extends CCCommandOptions {
+    // (undocumented)
+    sequenceNumber: number;
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCExcludeRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18932,7 +20698,6 @@ export class ZWaveProtocolCCExcludeRequest extends ZWaveProtocolCCNodeInformatio
 //
 // @public (undocumented)
 export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCFindNodesInRangeOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCFindNodesInRangeOptions);
     // (undocumented)
     candidateNodeIds: number[];
@@ -18940,6 +20705,18 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
     dataRate: ZWaveDataRate;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    wakeUpTime: WakeUpTime;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCFindNodesInRangeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCFindNodesInRangeOptions extends CCCommandOptions {
+    // (undocumented)
+    candidateNodeIds: number[];
+    // (undocumented)
+    dataRate?: ZWaveDataRate;
     // (undocumented)
     wakeUpTime: WakeUpTime;
 }
@@ -18954,7 +20731,6 @@ export class ZWaveProtocolCCGetNodesInRange extends ZWaveProtocolCC {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCLostOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCLostOptions);
     // (undocumented)
     lostNodeId: number;
@@ -18962,11 +20738,18 @@ export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCLostOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCLostOptions extends CCCommandOptions {
+    // (undocumented)
+    lostNodeId: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNewNodeRegistered" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC implements NodeInformationFrame {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCNewNodeRegisteredOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCNewNodeRegisteredOptions);
     // (undocumented)
     basicDeviceClass: number;
@@ -19000,11 +20783,18 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC implements
     supportsSecurity: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCNewNodeRegisteredOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCNewNodeRegisteredOptions extends CCCommandOptions, NodeInformationFrame {
+    // (undocumented)
+    newNodeId: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNewRangeRegistered" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCNewRangeRegisteredOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCNewRangeRegisteredOptions);
     // (undocumented)
     neighborNodeIds: number[];
@@ -19014,11 +20804,20 @@ export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
     testedNodeId: number;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCNewRangeRegisteredOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCNewRangeRegisteredOptions extends CCCommandOptions {
+    // (undocumented)
+    neighborNodeIds: number[];
+    // (undocumented)
+    testedNodeId: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNodeInformationFrame extends ZWaveProtocolCC implements NodeInformationFrame {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCNodeInformationFrameOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCNodeInformationFrameOptions);
     // (undocumented)
     basicDeviceClass: number;
@@ -19050,11 +20849,16 @@ export class ZWaveProtocolCCNodeInformationFrame extends ZWaveProtocolCC impleme
     supportsSecurity: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodeInformationFrameOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCNodeInformationFrameOptions extends CCCommandOptions, NodeInformationFrame {
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodesExist" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCNodesExistOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCNodesExistOptions);
     // (undocumented)
     nodeIDs: number[];
@@ -19064,11 +20868,20 @@ export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodesExistOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCNodesExistOptions extends CCCommandOptions {
+    // (undocumented)
+    nodeIDs: number[];
+    // (undocumented)
+    nodeMaskType: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodesExistReply" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNodesExistReply extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCNodesExistReplyOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCNodesExistReplyOptions);
     // (undocumented)
     nodeListUpdated: boolean;
@@ -19078,11 +20891,20 @@ export class ZWaveProtocolCCNodesExistReply extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCNodesExistReplyOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCNodesExistReplyOptions extends CCCommandOptions {
+    // (undocumented)
+    nodeListUpdated: boolean;
+    // (undocumented)
+    nodeMaskType: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCNOPPower" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCNOPPowerOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCNOPPowerOptions);
     // (undocumented)
     powerDampening: number;
@@ -19090,16 +20912,33 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCNOPPowerOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCNOPPowerOptions extends CCCommandOptions {
+    // (undocumented)
+    powerDampening: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCRangeInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCRangeInfoOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCRangeInfoOptions);
     // (undocumented)
     neighborNodeIds: number[];
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    wakeUpTime?: WakeUpTime;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCRangeInfoOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCRangeInfoOptions extends CCCommandOptions {
+    // (undocumented)
+    neighborNodeIds: number[];
     // (undocumented)
     wakeUpTime?: WakeUpTime;
 }
@@ -19114,7 +20953,6 @@ export class ZWaveProtocolCCRequestNodeInformationFrame extends ZWaveProtocolCC 
 //
 // @public (undocumented)
 export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCReservedIDsOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCReservedIDsOptions);
     // (undocumented)
     reservedNodeIDs: number[];
@@ -19122,11 +20960,18 @@ export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCReservedIDsOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCReservedIDsOptions extends CCCommandOptions {
+    // (undocumented)
+    reservedNodeIDs: number[];
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCReserveNodeIDs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCReserveNodeIDs extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCReserveNodeIDsOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCReserveNodeIDsOptions);
     // (undocumented)
     numNodeIDs: number;
@@ -19134,11 +20979,18 @@ export class ZWaveProtocolCCReserveNodeIDs extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCReserveNodeIDsOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCReserveNodeIDsOptions extends CCCommandOptions {
+    // (undocumented)
+    numNodeIDs: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSetNWIMode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSetNWIMode extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCSetNWIModeOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCSetNWIModeOptions);
     // (undocumented)
     enabled: boolean;
@@ -19148,11 +21000,20 @@ export class ZWaveProtocolCCSetNWIMode extends ZWaveProtocolCC {
     timeoutMinutes?: number;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCSetNWIModeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCSetNWIModeOptions extends CCCommandOptions {
+    // (undocumented)
+    enabled: boolean;
+    // (undocumented)
+    timeoutMinutes?: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSetSUC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSetSUC extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCSetSUCOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCSetSUCOptions);
     // (undocumented)
     enableSIS: boolean;
@@ -19164,7 +21025,6 @@ export class ZWaveProtocolCCSetSUC extends ZWaveProtocolCC {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSetSUCAck extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCSetSUCAckOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCSetSUCAckOptions);
     // (undocumented)
     accepted: boolean;
@@ -19174,16 +21034,41 @@ export class ZWaveProtocolCCSetSUCAck extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCSetSUCAckOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCSetSUCAckOptions extends CCCommandOptions {
+    // (undocumented)
+    accepted: boolean;
+    // (undocumented)
+    isSIS: boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCSetSUCOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCSetSUCOptions extends CCCommandOptions {
+    // (undocumented)
+    enableSIS: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSmartStartIncludedNodeInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSmartStartIncludedNodeInformation extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCSmartStartIncludedNodeInformationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCSmartStartIncludedNodeInformationOptions);
     // (undocumented)
     nwiHomeId: Buffer;
     // (undocumented)
     serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCSmartStartIncludedNodeInformationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCSmartStartIncludedNodeInformationOptions extends CCCommandOptions {
+    // (undocumented)
+    nwiHomeId: Buffer;
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSmartStartInclusionRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -19202,7 +21087,6 @@ export class ZWaveProtocolCCSmartStartPrime extends ZWaveProtocolCCNodeInformati
 //
 // @public (undocumented)
 export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCStaticRouteRequestOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCStaticRouteRequestOptions);
     // (undocumented)
     nodeIds: number[];
@@ -19210,11 +21094,18 @@ export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCStaticRouteRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCStaticRouteRequestOptions extends CCCommandOptions {
+    // (undocumented)
+    nodeIds: number[];
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCSUCNodeID" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCSUCNodeID extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCSUCNodeIDOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCSUCNodeIDOptions);
     // (undocumented)
     isSIS: boolean;
@@ -19224,14 +21115,31 @@ export class ZWaveProtocolCCSUCNodeID extends ZWaveProtocolCC {
     sucNodeId: number;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCSUCNodeIDOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCSUCNodeIDOptions extends CCCommandOptions {
+    // (undocumented)
+    isSIS: boolean;
+    // (undocumented)
+    sucNodeId: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferEnd" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferEnd extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCTransferEndOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferEndOptions);
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    status: NetworkTransferStatus;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferEndOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCTransferEndOptions extends CCCommandOptions {
     // (undocumented)
     status: NetworkTransferStatus;
 }
@@ -19240,7 +21148,6 @@ export class ZWaveProtocolCCTransferEnd extends ZWaveProtocolCC {
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferNewPrimaryControllerComplete extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions);
     // (undocumented)
     genericDeviceClass: number;
@@ -19248,11 +21155,18 @@ export class ZWaveProtocolCCTransferNewPrimaryControllerComplete extends ZWavePr
     serialize(): Buffer;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions extends CCCommandOptions {
+    // (undocumented)
+    genericDeviceClass: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferNodeInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC implements NodeProtocolInfoAndDeviceClass {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCTransferNodeInformationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferNodeInformationOptions);
     // (undocumented)
     basicDeviceClass: number;
@@ -19286,11 +21200,20 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC impl
     supportsSecurity: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferNodeInformationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCTransferNodeInformationOptions extends CCCommandOptions, NodeProtocolInfoAndDeviceClass {
+    // (undocumented)
+    sequenceNumber: number;
+    // (undocumented)
+    sourceNodeId: number;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferPresentation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCTransferPresentationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferPresentationOptions);
     // (undocumented)
     excludeNode: boolean;
@@ -19302,11 +21225,22 @@ export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
     supportsNWI: boolean;
 }
 
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferPresentationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCTransferPresentationOptions extends CCCommandOptions {
+    // (undocumented)
+    excludeNode: boolean;
+    // (undocumented)
+    includeNode: boolean;
+    // (undocumented)
+    supportsNWI: boolean;
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferRangeInformation" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
-    // Warning: (ae-forgotten-export) The symbol "ZWaveProtocolCCTransferRangeInformationOptions" needs to be exported by the entry point index.d.ts
     constructor(host: ZWaveHost, options: CommandClassDeserializationOptions | ZWaveProtocolCCTransferRangeInformationOptions);
     // (undocumented)
     neighborNodeIds: number[];
@@ -19314,6 +21248,18 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
     sequenceNumber: number;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    testedNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveProtocolCCTransferRangeInformationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveProtocolCCTransferRangeInformationOptions extends CCCommandOptions {
+    // (undocumented)
+    neighborNodeIds: number[];
+    // (undocumented)
+    sequenceNumber: number;
     // (undocumented)
     testedNodeId: number;
 }

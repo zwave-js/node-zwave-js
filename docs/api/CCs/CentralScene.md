@@ -41,7 +41,7 @@ async setConfiguration(
 - **min. CC version:** 1
 - **readable:** true
 - **writeable:** false
-- **stateful:** true
+- **stateful:** false
 - **secret:** false
 - **value type:** `"number"`
 - **min. value:** 0
