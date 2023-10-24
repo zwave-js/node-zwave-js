@@ -4,6 +4,19 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Mark `Central Scene CC` `scene` property as stateless. The previous fix wasn't working. (#6458)
+* Preserve `stateful` and `secret` flags for dynamic CC values (#6457)
+
+### Config file changes
+* Correct product id for Fakro ZWS12 (#6454)
+* add PM-B400ZW-N (#6421)
+* Ensure `kWh` is written consistently in parameter units (#6456)
+
+### Changes under the hood
+* Bot: Consider `zwave_js` to be a valid logfile name in issue reports (#6459)
+
 ## 12.2.2 (2023-10-24)
 ### Bugfixes
 * Fixed an issue where nodes would appear to have two lifeline associations, one with and one without target endpoint 0 (#6448)
