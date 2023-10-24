@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.2.3 (2023-10-24)
 ### Bugfixes
 * Mark `Central Scene CC` `scene` property as stateless. The previous fix wasn't working. (#6458)
 * Preserve `stateful` and `secret` flags for dynamic CC values (#6457)
