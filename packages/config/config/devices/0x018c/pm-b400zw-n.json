@@ -20,7 +20,7 @@
 	},
 	"paramInformation": [
 		{
-			"#": "1[0x01]",
+			"#": "1[0xff]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Standby Power Cutoff",
 			"valueSize": 4
