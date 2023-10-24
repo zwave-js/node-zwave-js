@@ -7,6 +7,7 @@ import {
 	CommandClass,
 	DeviceResetLocallyCommand,
 	DoorLockMode,
+	type DynamicCCValue,
 	EntryControlDataTypes,
 	type FirmwareUpdateCapabilities,
 	type FirmwareUpdateMetaData,
@@ -26,6 +27,7 @@ import {
 	ScheduleEntryLockCommand,
 	Security2Command,
 	type SetValueAPIOptions,
+	type StaticCCValue,
 	TimeCCDateGet,
 	TimeCCTimeGet,
 	TimeCCTimeOffsetGet,
@@ -1028,26 +1030,32 @@ export class ZWaveNode extends Endpoint
 		// Check if a corresponding CC value is defined for this value ID
 		// so we can extend the returned metadata
 		const definedCCValues = getCCValues(valueId.commandClass);
+		let valueDefinition: StaticCCValue | DynamicCCValue | undefined;
 		let valueOptions: Required<CCValueOptions> | undefined;
 		let meta: ValueMetadata | undefined;
 		if (definedCCValues) {
-			const value = Object.values(definedCCValues).find((v) =>
+			valueDefinition = Object.values(definedCCValues).find((v) =>
 				v?.is(valueId)
 			);
-			if (value && typeof value !== "function") {
-				meta = value.meta;
-				valueOptions = value.options;
+			if (valueDefinition && typeof valueDefinition !== "function") {
+				meta = valueDefinition.meta;
+				valueOptions = valueDefinition.options;
 			}
 		}
 
-		// The priority for returned metadata is valueDB > defined value > Any (default)
+		const existingMetadata = this._valueDB.getMetadata(valueId);
 		return {
-			...(this._valueDB.getMetadata(valueId)
-				?? meta
-				?? ValueMetadata.Any),
-			// Don't allow overriding these flags:
-			stateful: valueOptions?.stateful ?? defaultCCValueOptions.stateful,
-			secret: valueOptions?.secret ?? defaultCCValueOptions.secret,
+			// The priority for returned metadata is valueDB > defined value > Any (default)
+			...(existingMetadata ?? meta ?? ValueMetadata.Any),
+			// For static values, don't allow overriding these flags with dynamic metadata
+			stateful: (typeof valueDefinition === "function"
+				? existingMetadata?.stateful
+				: valueOptions?.stateful)
+				?? defaultCCValueOptions.stateful,
+			secret: (typeof valueDefinition === "function"
+				? existingMetadata?.secret
+				: valueOptions?.secret)
+				?? defaultCCValueOptions.secret,
 		};
 	}
 
