@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where nodes would appear to have two lifeline associations, one with and one without target endpoint 0 (#6448)
+* Writing to the `volume` value of the `Sound Switch CC` no longer throws an error, but pre-sets the volume to use for the next tone to be played using the `toneId` value (#6450, #6451)
+* The `defaultToneId` value of the `Sound Switch CC` now also lists the names for each possible tone (#6452)
+
+### Config file changes
+* Treat `Binary Switch Set` and `Thermostat Mode Set` as reports for `SRT321 HRT4-ZW` (#6423)
+
+### Changes under the hood
+* Add compat flag to treat `Set` commands as `Report` (#6423)
+
 ## 12.2.1 (2023-10-20)
 ### Bugfixes
 * Add ESLint rule to ensure all types used in a public CC API are exported (#6438)
