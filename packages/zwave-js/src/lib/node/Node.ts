@@ -1031,21 +1031,21 @@ export class ZWaveNode extends Endpoint
 		let valueOptions: Required<CCValueOptions> | undefined;
 		let meta: ValueMetadata | undefined;
 		if (definedCCValues) {
-			const value = Object.values(definedCCValues).find((v) =>
-				v?.is(valueId)
-			);
-			if (value && typeof value !== "function") {
-				meta = value.meta;
+			const value = Object.values(definedCCValues)
+				.find((v) => v?.is(valueId));
+			if (value) {
+				if (typeof value !== "function") {
+					meta = value.meta;
+				}
 				valueOptions = value.options;
 			}
 		}
 
-		// The priority for returned metadata is valueDB > defined value > Any (default)
+		const existingMetadata = this._valueDB.getMetadata(valueId);
 		return {
-			...(this._valueDB.getMetadata(valueId)
-				?? meta
-				?? ValueMetadata.Any),
-			// Don't allow overriding these flags:
+			// The priority for returned metadata is valueDB > defined value > Any (default)
+			...(existingMetadata ?? meta ?? ValueMetadata.Any),
+			// ...except for these flags, which are taken from defined values:
 			stateful: valueOptions?.stateful ?? defaultCCValueOptions.stateful,
 			secret: valueOptions?.secret ?? defaultCCValueOptions.secret,
 		};
