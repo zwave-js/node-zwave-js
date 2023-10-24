@@ -20,11 +20,6 @@ export {
 export * from "./lib/Security2/shared";
 export * from "./lib/SetValueResult";
 export { defaultCCValueOptions } from "./lib/Values";
-export type {
-	CCValue,
-	CCValueOptions,
-	DynamicCCValue,
-	StaticCCValue,
-} from "./lib/Values";
+export type { CCValueOptions } from "./lib/Values";
 export * from "./lib/_Types";
 export { utils };

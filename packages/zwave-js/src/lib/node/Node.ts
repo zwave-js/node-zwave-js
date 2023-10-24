@@ -7,7 +7,6 @@ import {
 	CommandClass,
 	DeviceResetLocallyCommand,
 	DoorLockMode,
-	type DynamicCCValue,
 	EntryControlDataTypes,
 	type FirmwareUpdateCapabilities,
 	type FirmwareUpdateMetaData,
@@ -27,7 +26,6 @@ import {
 	ScheduleEntryLockCommand,
 	Security2Command,
 	type SetValueAPIOptions,
-	type StaticCCValue,
 	TimeCCDateGet,
 	TimeCCTimeGet,
 	TimeCCTimeOffsetGet,
@@ -1030,17 +1028,16 @@ export class ZWaveNode extends Endpoint
 		// Check if a corresponding CC value is defined for this value ID
 		// so we can extend the returned metadata
 		const definedCCValues = getCCValues(valueId.commandClass);
-		let valueDefinition: StaticCCValue | DynamicCCValue | undefined;
 		let valueOptions: Required<CCValueOptions> | undefined;
 		let meta: ValueMetadata | undefined;
 		if (definedCCValues) {
-			valueDefinition = Object.values(definedCCValues)
+			const value = Object.values(definedCCValues)
 				.find((v) => v?.is(valueId));
-			if (valueDefinition) {
-				if (typeof valueDefinition !== "function") {
-					meta = valueDefinition.meta;
+			if (value) {
+				if (typeof value !== "function") {
+					meta = value.meta;
 				}
-				valueOptions = valueDefinition.options;
+				valueOptions = value.options;
 			}
 		}
 
@@ -1048,7 +1045,7 @@ export class ZWaveNode extends Endpoint
 		return {
 			// The priority for returned metadata is valueDB > defined value > Any (default)
 			...(existingMetadata ?? meta ?? ValueMetadata.Any),
-			// Don't allow overriding these flags:
+			// ...except for these flags, which are taken from defined values:
 			stateful: valueOptions?.stateful ?? defaultCCValueOptions.stateful,
 			secret: valueOptions?.secret ?? defaultCCValueOptions.secret,
 		};
