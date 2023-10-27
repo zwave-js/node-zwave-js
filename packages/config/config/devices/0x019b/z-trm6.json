@@ -47,6 +47,7 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Floor",
@@ -82,6 +83,7 @@
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "10",
@@ -208,6 +210,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Hysteresis",
@@ -235,6 +238,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Setpoint",
@@ -368,6 +372,7 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Off",
@@ -394,6 +399,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled",
