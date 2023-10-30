@@ -1679,7 +1679,7 @@
 		]
 	},
 	"association_group_2_command_type": {
-		"label": "Association Group 2: Command Type ",
+		"label": "Association Group 2: Command Type",
 		"valueSize": 1,
 		"defaultValue": 2,
 		"unsigned": true,
