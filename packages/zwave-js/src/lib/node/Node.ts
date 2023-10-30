@@ -2820,10 +2820,13 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	/**
-	 * Refreshes the values of all CCs that should be reporting regularly, but haven't been
+	 * Refreshes the values of all CCs that should be reporting regularly, but haven't been updated recently
 	 * @internal
 	 */
 	public async autoRefreshValues(): Promise<void> {
+		// Do not attempt to communicate with dead nodes automatically
+		if (this.status === NodeStatus.Dead) return;
+
 		for (const endpoint of this.getAllEndpoints()) {
 			for (
 				const cc of endpoint
