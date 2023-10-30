@@ -3647,34 +3647,50 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			}
 		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
 			// The controller was responsive before this transaction failed.
-			// Mark it as unresponsive and try to soft-reset it.
-			this.controller.setStatus(
-				ControllerStatus.Unresponsive,
-			);
 
-			this._recoveryPhase = ControllerRecoveryPhase.CallbackTimeout;
+			if (this.maySoftReset()) {
+				// Mark it as unresponsive and try to soft-reset it.
+				this.controller.setStatus(
+					ControllerStatus.Unresponsive,
+				);
 
-			this.driverLog.print(
-				"Controller missed Send Data callback. Attempting to recover...",
-				"warn",
-			);
+				this._recoveryPhase = ControllerRecoveryPhase.CallbackTimeout;
 
-			// Re-queue the transaction.
-			// Its message generator may have finished, so reset that too.
-			transaction.reset();
-			this.queue.add(transaction.clone());
+				this.driverLog.print(
+					"Controller missed Send Data callback. Attempting to recover...",
+					"warn",
+				);
 
-			// Execute the soft-reset asynchronously
-			void this.softReset().then(() => {
-				// The controller responded. It is no longer unresponsive
-				this._controller?.setStatus(ControllerStatus.Ready);
+				// Re-queue the transaction.
+				// Its message generator may have finished, so reset that too.
+				transaction.reset();
+				this.queue.add(transaction.clone());
 
-				this._recoveryPhase =
-					ControllerRecoveryPhase.CallbackTimeoutAfterReset;
-			}).catch(() => {
-				// Soft-reset failed. Just reject the original transaction.
+				// Execute the soft-reset asynchronously
+				void this.softReset().then(() => {
+					// The controller responded. It is no longer unresponsive
+					this._controller?.setStatus(ControllerStatus.Ready);
+
+					this._recoveryPhase =
+						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
+				}).catch(() => {
+					// Soft-reset failed. Just reject the original transaction.
+					this.rejectTransaction(transaction, error);
+
+					this.driverLog.print(
+						"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
+						"warn",
+					);
+					this._recoveryPhase = ControllerRecoveryPhase.None;
+					this._controller?.setStatus(ControllerStatus.Ready);
+				});
+			} else {
+				this.driverLog.print(
+					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled.",
+					"warn",
+				);
 				this.rejectTransaction(transaction, error);
-			});
+			}
 
 			return true;
 		} else {
