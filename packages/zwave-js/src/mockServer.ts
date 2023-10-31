@@ -35,12 +35,19 @@ export type MockServerNodeOptions =
 	& {
 		behaviors?: MockNodeBehavior[];
 	};
+
+export type MockServerInitHook = (
+	controller: MockController,
+	nodes: MockNode[],
+) => void;
+
 export interface MockServerOptions {
 	interface?: string;
 	port?: number;
 	config?: {
 		controller?: MockServerControllerOptions;
 		nodes?: MockServerNodeOptions[];
+		onInit?: MockServerInitHook;
 	};
 }
 
@@ -69,6 +76,11 @@ export class MockServer {
 				this.options.config?.controller,
 				this.options.config?.nodes,
 			));
+
+		// Call the init hook if it is defined
+		if (typeof this.options.config?.onInit === "function") {
+			this.options.config.onInit(this.mockController, this.mockNodes);
+		}
 
 		// Start a TCP server, listen for connections, and forward them to the serial port
 		this.server = createServer((socket) => {
