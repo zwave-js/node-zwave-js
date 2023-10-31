@@ -243,8 +243,9 @@ export class Endpoint implements IZWaveEndpoint {
 			this.supportsCC(CommandClasses.Basic)
 			&& actuatorCCs.some((cc) => this.supportsCC(cc))
 		) {
-			// We still want to know if BasicCC is controlled, so only mark it as not supported
+			// Mark the CC as not supported, but remember if it is controlled
 			this.addCC(CommandClasses.Basic, { isSupported: false });
+
 			// If the record is now only a dummy, remove the CC
 			if (
 				!this.supportsCC(CommandClasses.Basic)
