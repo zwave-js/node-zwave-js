@@ -475,6 +475,11 @@ export const driverPresets: Readonly<{
             readonly nodeInterview: 10;
         };
     };
+    readonly NO_CONTROLLER_RECOVERY: {
+        readonly features: {
+            readonly unresponsiveControllerRecovery: false;
+        };
+    };
     readonly BATTERY_SAVE: {
         readonly timeouts: {
             readonly sendToSleep: 100;
@@ -1693,7 +1698,13 @@ export interface ZWaveOptions extends ZWaveHostOptions {
     };
     disableOptimisticValueUpdate?: boolean;
     emitValueUpdateAfterSetValue?: boolean;
+    // @deprecated (undocumented)
     enableSoftReset?: boolean;
+    // (undocumented)
+    features: {
+        softReset?: boolean;
+        unresponsiveControllerRecovery?: boolean;
+    };
     inclusionUserCallbacks?: InclusionUserCallbacks;
     // (undocumented)
     interview: {
