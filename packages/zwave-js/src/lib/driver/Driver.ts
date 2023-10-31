@@ -513,7 +513,8 @@ type PrefixedNodeEvents = {
 
 const enum ControllerRecoveryPhase {
 	None,
-	NoACK,
+	ACKTimeout,
+	ACKTimeoutAfterReset,
 	CallbackTimeout,
 	CallbackTimeoutAfterReset,
 }
@@ -3529,46 +3530,73 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	): boolean {
 		if (!this._controller) return false;
 
-		const fail = (message: string) => {
-			this.rejectTransaction(transaction, error);
-			void this.destroyWithMessage(message);
+		const recoverByReopeningSerialport = async () => {
+			if (!this.serial) return;
+			this.driverLog.print(
+				"Attempting to recover unresponsive controller by reopening the serial port...",
+				"warn",
+			);
+			if (this.serial.isOpen) await this.serial.close();
+			await wait(1000);
+			await this.openSerialport();
+
+			this.driverLog.print(
+				"Serial port reopened. Returning to normal operation and hoping for the best...",
+				"warn",
+			);
+
+			// We don't know if this worked
+			// Go back to normal operation and hope for the best.
+			this._controller?.setStatus(ControllerStatus.Ready);
+			this._recoveryPhase = ControllerRecoveryPhase.None;
 		};
 
-		if (this._controller.status !== ControllerStatus.Unresponsive) {
+		if (
+			(this._controller.status !== ControllerStatus.Unresponsive
+				&& !this.maySoftReset())
+			|| this._recoveryPhase
+				=== ControllerRecoveryPhase.ACKTimeoutAfterReset
+		) {
+			// Either we can/could not do a soft reset or the controller is still timing out afterwards
+			void recoverByReopeningSerialport().catch(noop);
+
+			return true;
+		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
 			// The controller was responsive before this transaction failed.
 			// Mark it as unresponsive and try to soft-reset it.
 			this.controller.setStatus(
 				ControllerStatus.Unresponsive,
 			);
 
-			this._recoveryPhase = ControllerRecoveryPhase.NoACK;
+			this._recoveryPhase = ControllerRecoveryPhase.ACKTimeout;
 
 			this.driverLog.print(
-				"Attempting to recover unresponsive controller...",
+				"Attempting to recover unresponsive controller by restarting it...",
 				"warn",
 			);
-
-			// Re-queue the transaction.
-			// Its message generator may have finished, so reset that too.
-			transaction.reset();
-			this.queue.add(transaction.clone());
 
 			// Execute the soft-reset asynchronously
 			void this.softReset().then(() => {
 				// The controller responded. It is no longer unresponsive
+
+				// Re-queue the transaction, so it can get handled next.
+				// Its message generator may have finished, so reset that too.
+				transaction.reset();
+				this.queue.add(transaction.clone());
+
 				this._controller?.setStatus(ControllerStatus.Ready);
 				this._recoveryPhase = ControllerRecoveryPhase.None;
 			}).catch(() => {
-				// Soft-reset failed. Reject the original transaction and try restarting the driver.
-				fail(
-					"Recovering unresponsive controller failed. Restarting the driver...",
-				);
+				// Soft-reset failed. Reject the transaction
+				this.rejectTransaction(transaction, error);
+
+				// and reopen the serial port
+				return recoverByReopeningSerialport();
 			});
 
 			return true;
 		} else {
-			// We already attempted to recover from an unresponsive controller.
-			// Ending up here means the soft-reset also failed and the driver is about to be destroyed
+			// Not sure what to do here
 			return false;
 		}
 	}
@@ -3661,20 +3689,20 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					"warn",
 				);
 
-				// Re-queue the transaction.
-				// Its message generator may have finished, so reset that too.
-				transaction.reset();
-				this.queue.add(transaction.clone());
-
 				// Execute the soft-reset asynchronously
 				void this.softReset().then(() => {
-					// The controller responded. It is no longer unresponsive
-					this._controller?.setStatus(ControllerStatus.Ready);
+					// The controller responded. It is no longer unresponsive.
 
+					// Re-queue the transaction, so it can get handled next.
+					// Its message generator may have finished, so reset that too.
+					transaction.reset();
+					this.queue.add(transaction.clone());
+
+					this._controller?.setStatus(ControllerStatus.Ready);
 					this._recoveryPhase =
 						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
 				}).catch(() => {
-					// Soft-reset failed. Just reject the original transaction.
+					// Soft-reset failed. Just reject the transaction
 					this.rejectTransaction(transaction, error);
 
 					this.driverLog.print(
