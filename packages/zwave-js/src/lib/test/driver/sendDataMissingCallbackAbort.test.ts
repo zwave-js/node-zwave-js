@@ -588,3 +588,97 @@ integrationTest(
 		},
 	},
 );
+
+integrationTest(
+	"After a missing Send Data callback, Send Data Abort is not executed twice",
+	{
+		// debug: true,
+
+		// provisioningDirectory: path.join(
+		// 	__dirname,
+		// 	"__fixtures/supervision_binary_switch",
+		// ),
+
+		controllerCapabilities: {
+			// Soft-reset cannot be disabled on 700+ series
+			libraryVersion: "Z-Wave 6.84.0",
+		},
+
+		additionalDriverOptions: {
+			features: {
+				softReset: false,
+			},
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+		},
+
+		customSetup: async (driver, mockController, mockNode) => {
+			// This is almost a 1:1 copy of the default behavior, except that the callback never gets sent
+			const handleBrokenSendData: MockControllerBehavior = {
+				async onHostMessage(host, controller, msg) {
+					// If the controller is operating normally, defer to the default behavior
+					if (!shouldTimeOut) return false;
+
+					if (msg instanceof SendDataRequest) {
+						// Check if this command is legal right now
+						const state = controller.state.get(
+							MockControllerStateKeys.CommunicationState,
+						) as MockControllerCommunicationState | undefined;
+						if (
+							state != undefined
+							&& state !== MockControllerCommunicationState.Idle
+						) {
+							throw new Error(
+								"Received SendDataRequest while not idle",
+							);
+						}
+
+						// Put the controller into sending state
+						controller.state.set(
+							MockControllerStateKeys.CommunicationState,
+							MockControllerCommunicationState.Sending,
+						);
+
+						// Notify the host that the message was sent
+						const res = new SendDataResponse(host, {
+							wasSent: true,
+						});
+						await controller.sendToHost(res.serialize());
+
+						return true;
+					} else if (msg instanceof SendDataAbort) {
+						// Put the controller into idle state
+						controller.state.set(
+							MockControllerStateKeys.CommunicationState,
+							MockControllerCommunicationState.Idle,
+						);
+
+						// We only timeout once in this test
+						shouldTimeOut = false;
+
+						return true;
+					}
+				},
+			};
+			mockController.defineBehavior(handleBrokenSendData);
+		},
+		testBody: async (t, driver, node, mockController, mockNode) => {
+			// Circumvent the options validation so the test doesn't take forever
+			driver.options.timeouts.sendDataAbort = 1000;
+			driver.options.timeouts.sendDataCallback = 1500;
+
+			shouldTimeOut = true;
+
+			await assertZWaveError(t, () => node.commandClasses.Basic.set(99), {
+				errorCode: ZWaveErrorCodes.Controller_Timeout,
+				context: "callback",
+			});
+
+			const aborts = mockController.receivedHostMessages.filter((m) =>
+				m.functionType === FunctionType.SendDataAbort
+			);
+			t.is(aborts.length, 1);
+		},
+	},
+);

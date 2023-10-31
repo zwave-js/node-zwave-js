@@ -3747,7 +3747,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				});
 			} else {
 				this.driverLog.print(
-					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled.",
+					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled. Returning to normal operation and hoping for the best...",
 					"warn",
 				);
 				this.rejectTransaction(transaction, error);
@@ -4933,9 +4933,7 @@ ${handlers.length} left`,
 						} else if (
 							isSendData(msg) && isMissingControllerCallback(e)
 						) {
-							// If the callback to SendData times out, we need to issue a SendDataAbort
-							await this.abortSendData();
-							// Reject the transaction - this will trigger the recovery mechanism and retry the command afterwards
+							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
 							throw e;
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
