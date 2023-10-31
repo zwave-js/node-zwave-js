@@ -55,9 +55,15 @@ integrationTest(
 );
 
 integrationTest(
-	"When the controller is still unresponsive after soft reset, destroy the driver",
+	"When the controller is still unresponsive after soft reset, re-open the serial port",
 	{
 		// debug: true,
+
+		additionalDriverOptions: {
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+		},
 
 		async customSetup(driver, mockController, mockNode) {
 			const doNotRespond: MockControllerBehavior = {
@@ -74,8 +80,13 @@ integrationTest(
 			shouldRespond = false;
 			mockController.autoAckHostMessages = false;
 
-			const errorSpy = Sinon.spy();
-			driver.on("error", errorSpy);
+			const serialPortCloseSpy = Sinon.stub().callsFake(() => {
+				shouldRespond = true;
+				mockController.autoAckHostMessages = true;
+			});
+			mockController.serial.on("close", serialPortCloseSpy);
+
+			await wait(1000);
 
 			await assertZWaveError(
 				t,
@@ -90,11 +101,24 @@ integrationTest(
 				},
 			);
 
-			// The driver should have been destroyed
+			// The serial port should have been closed and reopened
 			await wait(100);
-			assertZWaveError(t, errorSpy.getCall(0).args[0], {
-				errorCode: ZWaveErrorCodes.Driver_Failed,
-			});
+			t.true(serialPortCloseSpy.called);
+
+			// FIXME: When closing the serial port, we lose the connection between the mock port instance and the controller
+			// Fix it at some point, then enable the below test.
+
+			// await wait(1000);
+
+			// // Sending a command should work again, assuming the controller is responsive again
+			// await t.notThrowsAsync(() =>
+			// 	driver.sendMessage<GetControllerIdResponse>(
+			// 		new GetControllerIdRequest(driver),
+			// 		{ supportCheck: false },
+			// 	)
+			// );
+
+			// driver.driverLog.print("TEST PASSED");
 		},
 	},
 );
