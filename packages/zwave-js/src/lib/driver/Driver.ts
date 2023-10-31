@@ -3747,7 +3747,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				});
 			} else {
 				this.driverLog.print(
-					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled.",
+					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled. Returning to normal operation and hoping for the best...",
 					"warn",
 				);
 				this.rejectTransaction(transaction, error);
@@ -4920,22 +4920,9 @@ ${handlers.length} left`,
 						zwError = createMessageDroppedUnexpectedError(e);
 					} else {
 						if (
-							e.code === ZWaveErrorCodes.Controller_CommandAborted
-						) {
-							// This transaction was aborted by the driver due to a controller timeout.
-							// Rejections, re-queuing etc. have been handled, so just drop it silently and
-							// continue with the next message
-							transaction.setProgress({
-								state: TransactionState.Failed,
-								reason: "Aborted due to controller timeout",
-							});
-							return;
-						} else if (
 							isSendData(msg) && isMissingControllerCallback(e)
 						) {
-							// If the callback to SendData times out, we need to issue a SendDataAbort
-							await this.abortSendData();
-							// Reject the transaction - this will trigger the recovery mechanism and retry the command afterwards
+							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
 							throw e;
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
@@ -5050,7 +5037,7 @@ ${handlers.length} left`,
 			msg,
 			{
 				sendData: (data) => this.writeSerial(data),
-				sendDataAbort: () => this.abortSendData(false),
+				sendDataAbort: () => this.abortSendData(),
 				notifyUnsolicited: (msg) => {
 					void this.handleUnsolicitedMessage(msg);
 				},
@@ -5589,9 +5576,7 @@ ${handlers.length} left`,
 		});
 	}
 
-	private async abortSendData(
-		abortInterpreter: boolean = false,
-	): Promise<void> {
+	private async abortSendData(): Promise<void> {
 		try {
 			const abort = new SendDataAbort(this);
 			await this.writeSerial(abort.serialize());
@@ -5602,16 +5587,6 @@ ${handlers.length} left`,
 			// We're bypassing the serial API machine, so we need to wait for the ACK ourselves
 			// This could also cause a NAK or CAN, but we don't really care
 			await this.waitForMessageHeader(() => true, 500).catch(noop);
-
-			// Abort the currently active command machine only if the controller has timed out.
-			// SendData commands we abort early MUST result in the normal callback.
-			if (
-				abortInterpreter
-				&& this.serialAPIInterpreter?.status
-					=== InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send("abort");
-			}
 		} catch {
 			// ignore
 		}

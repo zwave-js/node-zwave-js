@@ -126,7 +126,10 @@ export class MockController {
 	>();
 
 	/** Records the messages received from the host to perform assertions on them */
-	private receivedHostMessages: Message[] = [];
+	private _receivedHostMessages: Message[] = [];
+	public get receivedHostMessages(): readonly Readonly<Message>[] {
+		return this._receivedHostMessages;
+	}
 
 	private _nodes = new Map<number, MockNode>();
 	public get nodes(): ReadonlyMap<number, MockNode> {
@@ -190,7 +193,7 @@ export class MockController {
 				origin: MessageOrigin.Host,
 				parseCCs: false,
 			});
-			this.receivedHostMessages.push(msg);
+			this._receivedHostMessages.push(msg);
 			if (this.autoAckHostMessages) {
 				// all good, respond with ACK
 				this.ackHostMessage();
@@ -431,7 +434,7 @@ export class MockController {
 		},
 	): void {
 		const { errorMessage } = options ?? {};
-		const index = this.receivedHostMessages.findIndex(predicate);
+		const index = this._receivedHostMessages.findIndex(predicate);
 		if (index === -1) {
 			throw new Error(
 				`Did not receive a host message matching the predicate!${
@@ -443,7 +446,7 @@ export class MockController {
 
 	/** Forgets all recorded messages received from the host */
 	public clearReceivedHostMessages(): void {
-		this.receivedHostMessages = [];
+		this._receivedHostMessages = [];
 	}
 
 	public async execute(): Promise<void> {
