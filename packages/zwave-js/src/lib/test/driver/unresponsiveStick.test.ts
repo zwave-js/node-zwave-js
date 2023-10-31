@@ -1,4 +1,5 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
+import { FunctionType } from "@zwave-js/serial";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import Sinon from "sinon";
@@ -123,6 +124,63 @@ integrationTest(
 			// );
 
 			// driver.driverLog.print("TEST PASSED");
+		},
+	},
+);
+
+integrationTest.only(
+	"The unresponsive controller recovery does not kick in when it was enabled via config",
+	{
+		debug: true,
+
+		additionalDriverOptions: {
+			attempts: {
+				controller: 1,
+			},
+			features: {
+				unresponsiveControllerRecovery: false,
+			},
+		},
+
+		async customSetup(driver, mockController, mockNode) {
+			const doNotRespond: MockControllerBehavior = {
+				onHostMessage(host, controller, msg) {
+					if (!shouldRespond) {
+						return true;
+					}
+
+					return false;
+				},
+			};
+			mockController.defineBehavior(doNotRespond);
+		},
+
+		async testBody(t, driver, node, mockController, mockNode) {
+			shouldRespond = false;
+			mockController.autoAckHostMessages = false;
+
+			// The command fails
+			await assertZWaveError(
+				t,
+				() =>
+					driver.sendMessage<GetControllerIdResponse>(
+						new GetControllerIdRequest(driver),
+						{ supportCheck: false },
+					),
+				{
+					errorCode: ZWaveErrorCodes.Controller_Timeout,
+					context: "ACK",
+				},
+			);
+
+			await wait(500);
+
+			// And the controller does not get soft-reset
+			t.throws(() =>
+				mockController.assertReceivedHostMessage((msg) =>
+					msg.functionType === FunctionType.SoftReset
+				)
+			);
 		},
 	},
 );

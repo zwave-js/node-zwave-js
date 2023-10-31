@@ -17,11 +17,12 @@ For most scenarios the default configuration should be sufficient. For more cont
 
 Some curated presets are included in the library:
 
-| Preset         | Description                                                                                                                                                                                                                 |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SAFE_MODE`    | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly |
-| `BATTERY_SAVE` | Sends battery powered nodes to sleep more quickly in order to save battery.                                                                                                                                                 |
-| `AWAKE_LONGER` | Sends battery powered nodes to sleep less quickly to give applications more time between interactions.                                                                                                                      |
+| Preset                   | Description                                                                                                                                                                                                                                                                                       |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SAFE_MODE`              | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly                                                                       |
+| `NO_CONTROLLER_RECOVERY` | Disables the unresponsive controller recovery to be able to deal with controllers that frequently become unresponsive for seemingly no reason. This is meant as a last resort for unstable 500 series controllers, but will result in failed commands and nodes that randomly get marked as dead. |
+| `BATTERY_SAVE`           | Sends battery powered nodes to sleep more quickly in order to save battery.                                                                                                                                                                                                                       |
+| `AWAKE_LONGER`           | Sends battery powered nodes to sleep less quickly to give applications more time between interactions.                                                                                                                                                                                            |
 
 These can be used like this:
 
@@ -865,15 +866,32 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	emitValueUpdateAfterSetValue?: boolean;
 
-	/**
-	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
-	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
-	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
-	 *
-	 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
-	 */
-	enableSoftReset?: boolean;
+	features: {
+		/**
+		 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+		 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
+		 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
+		 *
+		 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
+		 */
+		softReset?: boolean;
 
+		/**
+		 * When enabled, the driver attempts to detect when the controller becomes unresponsive (meaning it did not
+		 * respond within the configured timeout) and performs appropriate recovery actions.
+		 *
+		 * This includes the following scenarios:
+		 * * A command was not acknowledged by the controller
+		 * * The callback for a Send Data command was not received, even after aborting a timed out transmission
+		 *
+		 * In certain environments however, this feature can interfere with the normal operation more than intended,
+		 * so it can be disabled. However disabling it means that commands can fail unnecessarily and nodes can be
+		 * incorrectly marked as dead.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
+		 */
+		unresponsiveControllerRecovery?: boolean;
+	};
 	preferences: {
 		/**
 		 * The preferred scales to use when querying sensors. The key is either:

@@ -184,7 +184,36 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	emitValueUpdateAfterSetValue?: boolean;
 
+	features: {
+		/**
+		 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+		 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
+		 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
+		 *
+		 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
+		 */
+		softReset?: boolean;
+
+		/**
+		 * When enabled, the driver attempts to detect when the controller becomes unresponsive (meaning it did not
+		 * respond within the configured timeout) and performs appropriate recovery actions.
+		 *
+		 * This includes the following scenarios:
+		 * * A command was not acknowledged by the controller
+		 * * The callback for a Send Data command was not received, even after aborting a timed out transmission
+		 *
+		 * In certain environments however, this feature can interfere with the normal operation more than intended,
+		 * so it can be disabled. However disabling it means that commands can fail unnecessarily and nodes can be
+		 * incorrectly marked as dead.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
+		 */
+		unresponsiveControllerRecovery?: boolean;
+	};
+
 	/**
+	 * @deprecated Use `features.softReset` instead.
+	 *
 	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
 	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
 	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
@@ -350,6 +379,16 @@ export const driverPresets = Object.freeze(
 				sendData: 5,
 				sendDataJammed: 10,
 				nodeInterview: 10,
+			},
+		},
+
+		/**
+		 * Disables the unresponsive controller recovery to be able to deal with controllers
+		 * that frequently become unresponsive for seemingly no reason.
+		 */
+		NO_CONTROLLER_RECOVERY: {
+			features: {
+				unresponsiveControllerRecovery: false,
 			},
 		},
 

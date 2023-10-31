@@ -232,7 +232,9 @@ test("merging multiple sets of options should work", (t) => {
 			sendDataCallback: 33000,
 		},
 		// This comes from the defaults:
-		enableSoftReset: true,
+		features: {
+			softReset: true,
+		},
 	});
 });
 

@@ -271,8 +271,13 @@ const defaultOptions: ZWaveOptions = {
 		nodeInterview: 5,
 	},
 	disableOptimisticValueUpdate: false,
-	// By default enable soft reset unless the env variable is set
-	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+	features: {
+		// By default enable soft reset unless the env variable is set
+		softReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+		// By default enable the unresponsive controller recovery unless the env variable is set
+		unresponsiveControllerRecovery: !process.env
+			.ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY,
+	},
 	interview: {
 		queryAllUserCodes: false,
 	},
@@ -568,6 +573,18 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			mergedOptions,
 			cloneDeep(defaultOptions),
 		) as ZWaveOptions;
+
+		// Normalize deprecated options
+		// TODO: Remove test in packages/zwave-js/src/lib/test/driver/sendDataMissingCallbackAbort.test.ts
+		// when the deprecated option is removed
+		if (
+			// eslint-disable-next-line deprecation/deprecation
+			this._options.enableSoftReset === false
+			&& this._options.features.softReset
+		) {
+			this._options.features.softReset = false;
+		}
+
 		// And make sure they contain valid values
 		checkOptions(this._options);
 		if (this._options.userAgent) {
@@ -1416,12 +1433,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			await this.initNetworkCache(this.controller.homeId!);
 
 			const maySoftReset = this.maySoftReset();
-			if (this._options.enableSoftReset && !maySoftReset) {
+			if (this._options.features.softReset && !maySoftReset) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
 				);
-				this._options.enableSoftReset = false;
+				this._options.features.softReset = false;
 			}
 
 			if (maySoftReset) {
@@ -2486,7 +2503,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		// No clear indication, make the result depend on the config option
-		return !!this._options.enableSoftReset;
+		return !!this._options.features.softReset;
 	}
 
 	/**
@@ -2616,6 +2633,18 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				new ZWaveError(restartReason, ZWaveErrorCodes.Driver_Failed),
 			);
 		});
+	}
+
+	/**
+	 * Checks whether recovering an unresponsive controller is enabled
+	 * and whether the driver is in a state where it makes sense.
+	 */
+	private mayRecoverUnresponsiveController(): boolean {
+		if (!this._options.features.unresponsiveControllerRecovery) {
+			return false;
+		}
+		// Only recover after we know the controller has been responsive
+		return this._controllerInterviewed;
 	}
 
 	private async ensureSerialAPI(): Promise<boolean> {
@@ -3528,7 +3557,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			context: "ACK";
 		},
 	): boolean {
-		if (!this._controller) return false;
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
 
 		const recoverByReopeningSerialport = async () => {
 			if (!this.serial) return;
@@ -3613,7 +3644,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			context: "callback" | "response";
 		},
 	): boolean {
-		if (!this._controller) return false;
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
 
 		if (
 			// The SendData response can time out on older controllers trying to reach a dead node.
