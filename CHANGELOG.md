@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.3.0 (2023-10-31)
 ### Features
 * Allow disabling the unresponsive controller recovery feature (#6480)
 
