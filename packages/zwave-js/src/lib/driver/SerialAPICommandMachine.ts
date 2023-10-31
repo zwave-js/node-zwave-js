@@ -27,7 +27,6 @@ export interface SerialAPICommandStateSchema {
 		retryWait: {};
 		failure: {};
 		success: {};
-		aborted: {};
 	};
 }
 /* eslint-enable @typescript-eslint/ban-types */
@@ -56,7 +55,6 @@ export type SerialAPICommandEvent =
 	| { type: "ACK" }
 	| { type: "CAN" }
 	| { type: "NAK" }
-	| { type: "abort" } // The serial API command was aborted by the driver
 	| { type: "message"; message: Message } // A message that might or might not be expected
 	| { type: "response"; message: Message } // Gets forwarded when a response-type message is expected
 	| { type: "callback"; message: Message }; // Gets forwarded when a callback-type message is expected
@@ -80,8 +78,7 @@ export type SerialAPICommandDoneData =
 					| "NAK"
 					| "ACK timeout"
 					| "response timeout"
-					| "callback timeout"
-					| "aborted";
+					| "callback timeout";
 				result?: undefined;
 			}
 			| {
@@ -185,7 +182,6 @@ export function getSerialAPICommandMachineConfig(
 					},
 				},
 			],
-			abort: "aborted",
 		},
 		states: {
 			sending: {
@@ -357,14 +353,6 @@ export function getSerialAPICommandMachineConfig(
 					type: "failure",
 					reason: (ctx: SerialAPICommandContext) => ctx.lastError,
 					result: (ctx: SerialAPICommandContext) => ctx.result!,
-				},
-			},
-			aborted: {
-				type: "final",
-				data: {
-					type: "failure",
-					reason: "aborted",
-					result: undefined,
 				},
 			},
 		},

@@ -4920,17 +4920,6 @@ ${handlers.length} left`,
 						zwError = createMessageDroppedUnexpectedError(e);
 					} else {
 						if (
-							e.code === ZWaveErrorCodes.Controller_CommandAborted
-						) {
-							// This transaction was aborted by the driver due to a controller timeout.
-							// Rejections, re-queuing etc. have been handled, so just drop it silently and
-							// continue with the next message
-							transaction.setProgress({
-								state: TransactionState.Failed,
-								reason: "Aborted due to controller timeout",
-							});
-							return;
-						} else if (
 							isSendData(msg) && isMissingControllerCallback(e)
 						) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
@@ -5048,7 +5037,7 @@ ${handlers.length} left`,
 			msg,
 			{
 				sendData: (data) => this.writeSerial(data),
-				sendDataAbort: () => this.abortSendData(false),
+				sendDataAbort: () => this.abortSendData(),
 				notifyUnsolicited: (msg) => {
 					void this.handleUnsolicitedMessage(msg);
 				},
@@ -5587,9 +5576,7 @@ ${handlers.length} left`,
 		});
 	}
 
-	private async abortSendData(
-		abortInterpreter: boolean = false,
-	): Promise<void> {
+	private async abortSendData(): Promise<void> {
 		try {
 			const abort = new SendDataAbort(this);
 			await this.writeSerial(abort.serialize());
@@ -5600,16 +5587,6 @@ ${handlers.length} left`,
 			// We're bypassing the serial API machine, so we need to wait for the ACK ourselves
 			// This could also cause a NAK or CAN, but we don't really care
 			await this.waitForMessageHeader(() => true, 500).catch(noop);
-
-			// Abort the currently active command machine only if the controller has timed out.
-			// SendData commands we abort early MUST result in the normal callback.
-			if (
-				abortInterpreter
-				&& this.serialAPIInterpreter?.status
-					=== InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send("abort");
-			}
 		} catch {
 			// ignore
 		}
