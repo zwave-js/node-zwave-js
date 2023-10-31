@@ -63,6 +63,10 @@ integrationTest(
 			testingHooks: {
 				skipNodeInterview: true,
 			},
+			attempts: {
+				// Spend less time waiting
+				controller: 1,
+			},
 		},
 
 		async customSetup(driver, mockController, mockNode) {
