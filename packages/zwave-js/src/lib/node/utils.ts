@@ -301,6 +301,7 @@ export function getDefinedValueIDs(
 ): TranslatedValueID[] {
 	let ret: ValueID[] = [];
 	const allowControlled: CommandClasses[] = [
+		CommandClasses.Basic,
 		CommandClasses["Scene Activation"],
 	];
 	for (const endpoint of getAllEndpoints(applHost, node)) {

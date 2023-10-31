@@ -18,7 +18,9 @@ const respondToBasicGet: MockNodeBehavior = {
 			&& frame.payload instanceof BasicCCGet
 		) {
 			// Do not respond if BasicCC is not explicitly listed as supported
-			if (!self.implementedCCs.has(CommandClasses.Basic)) return false;
+			if (!self.implementedCCs.get(CommandClasses.Basic)?.isSupported) {
+				return false;
+			}
 
 			const cc = new BasicCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,

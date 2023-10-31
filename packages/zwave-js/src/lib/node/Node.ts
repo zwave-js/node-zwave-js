@@ -2919,17 +2919,13 @@ protocol version:      ${this.protocolVersion}`;
 	private modifySupportedCCBeforeInterview(endpoint: Endpoint): void {
 		const compat = this._deviceConfig?.compat;
 
-		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
-		// to map the Basic CC to other CCs or expose Basic Set as an event
-		if (compat?.treatBasicSetAsEvent) {
-			if (endpoint.index === 0) {
-				// To create the compat event value, we need to force a Basic CC interview
-				endpoint.addCC(CommandClasses.Basic, {
-					isSupported: true,
-					version: 1,
-				});
-			}
-		} else if (!compat?.disableBasicMapping) {
+		// If the config file instructs us to expose Basic Set as an event, mark the CC as controlled
+		if (compat?.treatBasicSetAsEvent && endpoint.index === 0) {
+			endpoint.addCC(CommandClasses.Basic, { isControlled: true });
+		}
+
+		// Don't offer or interview the Basic CC if any actuator CC is supported
+		if (!compat?.disableBasicMapping) {
 			endpoint.hideBasicCCInFavorOfActuatorCCs();
 		}
 
