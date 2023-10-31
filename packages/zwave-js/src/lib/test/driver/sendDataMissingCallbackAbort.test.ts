@@ -370,7 +370,7 @@ integrationTest(
 
 // FIXME: Remove this test when the deprecated enableSoftReset option is removed
 integrationTest(
-	"With soft-reset disabled, transmissions do not get stuck after a missing Send Data callback",
+	"With soft-reset disabled, transmissions do not get stuck after a missing Send Data callback (LEGACY DRIVER OPTION)",
 	{
 		// debug: true,
 
