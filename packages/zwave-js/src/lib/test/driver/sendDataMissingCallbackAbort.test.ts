@@ -99,6 +99,7 @@ integrationTest(
 		},
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			// Circumvent the options validation so the test doesn't take forever
+			driver.options.timeouts.sendDataAbort = 1000;
 			driver.options.timeouts.sendDataCallback = 1500;
 
 			shouldTimeOut = true;
@@ -107,13 +108,12 @@ integrationTest(
 
 			await wait(2000);
 
+			// The abort should have been issued
 			mockController.assertReceivedHostMessage(
 				(msg) => msg.functionType === FunctionType.SendDataAbort,
 			);
-			mockController.clearReceivedHostMessages();
 
-			// The stick should have been soft-reset
-			await wait(1000);
+			// And the stick should have been soft-reset
 			mockController.assertReceivedHostMessage(
 				(msg) => msg.functionType === FunctionType.SoftReset,
 			);
@@ -188,6 +188,7 @@ integrationTest(
 		},
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			// Circumvent the options validation so the test doesn't take forever
+			driver.options.timeouts.sendDataAbort = 1000;
 			driver.options.timeouts.sendDataCallback = 1500;
 			shouldTimeOut = true;
 
@@ -198,13 +199,12 @@ integrationTest(
 
 			await wait(2000);
 
+			// The abort should have been issued
 			mockController.assertReceivedHostMessage(
 				(msg) => msg.functionType === FunctionType.SendDataAbort,
 			);
-			mockController.clearReceivedHostMessages();
 
-			// The stick should have been soft-reset
-			await wait(1000);
+			// And the stick should have been soft-reset
 			mockController.assertReceivedHostMessage(
 				(msg) => msg.functionType === FunctionType.SoftReset,
 			);
@@ -298,6 +298,7 @@ integrationTest(
 		},
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			// Circumvent the options validation so the test doesn't take forever
+			driver.options.timeouts.sendDataAbort = 1000;
 			driver.options.timeouts.sendDataCallback = 1500;
 
 			shouldTimeOut = true;
@@ -307,13 +308,12 @@ integrationTest(
 
 			await wait(2000);
 
+			// The abort should have been issued
 			mockController.assertReceivedHostMessage(
 				(msg) => msg.functionType === FunctionType.SendDataAbort,
 			);
-			mockController.clearReceivedHostMessages();
 
-			// The stick should have been soft-reset
-			await wait(1000);
+			// And the stick should have been soft-reset
 			mockController.assertReceivedHostMessage(
 				(msg) => msg.functionType === FunctionType.SoftReset,
 			);
@@ -358,6 +358,7 @@ integrationTest(
 		},
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			// Circumvent the options validation so the test doesn't take forever
+			driver.options.timeouts.sendDataAbort = 1000;
 			driver.options.timeouts.sendDataCallback = 1500;
 
 			await assertZWaveError(t, () => node.requestNodeInfo(), {
