@@ -17,11 +17,12 @@ For most scenarios the default configuration should be sufficient. For more cont
 
 Some curated presets are included in the library:
 
-| Preset         | Description                                                                                                                                                                                                                 |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SAFE_MODE`    | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly |
-| `BATTERY_SAVE` | Sends battery powered nodes to sleep more quickly in order to save battery.                                                                                                                                                 |
-| `AWAKE_LONGER` | Sends battery powered nodes to sleep less quickly to give applications more time between interactions.                                                                                                                      |
+| Preset                   | Description                                                                                                                                                                                                                                                                                       |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SAFE_MODE`              | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly                                                                       |
+| `NO_CONTROLLER_RECOVERY` | Disables the unresponsive controller recovery to be able to deal with controllers that frequently become unresponsive for seemingly no reason. This is meant as a last resort for unstable 500 series controllers, but will result in failed commands and nodes that randomly get marked as dead. |
+| `BATTERY_SAVE`           | Sends battery powered nodes to sleep more quickly in order to save battery.                                                                                                                                                                                                                       |
+| `AWAKE_LONGER`           | Sends battery powered nodes to sleep less quickly to give applications more time between interactions.                                                                                                                                                                                            |
 
 These can be used like this:
 

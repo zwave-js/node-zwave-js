@@ -383,6 +383,16 @@ export const driverPresets = Object.freeze(
 		},
 
 		/**
+		 * Disables the unresponsive controller recovery to be able to deal with controllers
+		 * that frequently become unresponsive for seemingly no reason.
+		 */
+		NO_CONTROLLER_RECOVERY: {
+			features: {
+				unresponsiveControllerRecovery: false,
+			},
+		},
+
+		/**
 		 * Sends battery powered nodes to sleep more quickly in order to save battery.
 		 */
 		BATTERY_SAVE: {
