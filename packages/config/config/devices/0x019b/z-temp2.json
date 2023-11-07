@@ -161,6 +161,7 @@
 		},
 		{
 			"#": "15",
+			"$if": "firmwareVersion >= 1.2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Invert Output",
 			"valueSize": 2
