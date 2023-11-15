@@ -1295,26 +1295,11 @@ export class ZWaveController
 		// ignore the initVersion, no clue what to do with it
 
 		// fetch the list of long range nodes until the controller reports no more
-		const lrNodeIds: Array<number> = [];
+		const lrNodeIds = await this.getLongRangeNodes();
 		let lrChannel : LongRangeChannel | undefined;
 		const maxPayloadSize = await this.getMaxPayloadSize();
 		let maxPayloadSizeLR : number | undefined;
 		if (this.isLongRange()) {
-			const segment = 0;
-			while (true) {
-				const nodesResponse = await this.driver.sendMessage<
-					GetLongRangeNodesResponse
-				>(
-					new GetLongRangeNodesRequest(this.driver, {
-						segmentNumber: segment,
-					}),
-				);
-				lrNodeIds.push(...nodesResponse.nodeIds);
-				if (!nodesResponse.moreNodes) {
-					break;
-				}
-			}
-
 			// TODO: restore/set the channel
 			const lrChannelResp = await this.driver.sendMessage<GetLongRangeChannelResponse>(new GetLongRangeChannelRequest(this.driver));
 			lrChannel = lrChannelResp.longRangeChannel;
@@ -1478,6 +1463,33 @@ export class ZWaveController
 			this.driver.metadataDB!,
 			ownKeys,
 		);
+	}
+
+	/**
+	 * Gets the list of long range nodes from the controller.
+	 * Warning: This only works when followed up by a hard-reset, so don't call this directly
+	 * @internal
+	 */
+	public async getLongRangeNodes(): Promise<Array<number>> {
+		const nodeIds: Array<number> = [];
+
+		if (this.isLongRange()) {
+			const segment = 0;
+			while (true) {
+				const nodesResponse = await this.driver.sendMessage<
+					GetLongRangeNodesResponse
+				>(
+					new GetLongRangeNodesRequest(this.driver, {
+						segmentNumber: segment,
+					}),
+				);
+				nodeIds.push(...nodesResponse.nodeIds);
+				if (!nodesResponse.moreNodes) {
+					break;
+				}
+			}
+		}
+		return nodeIds;
 	}
 
 	/**
