@@ -114,7 +114,7 @@ export function encodeCCId(
 	}
 }
 
-export function parseCCList(payload: Buffer, isLongRange: boolean = false): {
+export function parseCCList(payload: Buffer): {
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 } {
@@ -124,47 +124,32 @@ export function parseCCList(payload: Buffer, isLongRange: boolean = false): {
 	};
 	let offset = 0;
 	let isAfterMark = false;
-	let listEnd = payload.length;
-	if (isLongRange) {
-		validatePayload(payload.length >= offset + 1);
-		const listLength = payload[offset++];
-		listEnd = offset + listLength;
-		validatePayload(payload.length >= listEnd);
-	}
-	while (offset < listEnd) {
+	while (offset < payload.length) {
 		// Read either the normal or extended ccId
 		const { ccId: cc, bytesRead } = parseCCId(payload, offset);
 		offset += bytesRead;
 		// CCs before the support/control mark are supported
 		// CCs after the support/control mark are controlled
-		// BUGBUG: does the "mark" and support/control convention apply to isLongRange?
 		if (cc === CommandClasses["Support/Control Mark"]) {
 			isAfterMark = true;
 			continue;
 		}
 		(isAfterMark ? ret.controlledCCs : ret.supportedCCs).push(cc);
 	}
-	// BUGBUG: isLongRange prohibits CC from 0x00..0x20 from being advertised here, as does 4.3.2.1.1.17
-	// BUGBUG: how do >0xFF CC get advertised? I don't immediately see a mechanism for indicating a multi-byte CC
 	return ret;
 }
 
 export function encodeCCList(
 	supportedCCs: readonly CommandClasses[],
 	controlledCCs: readonly CommandClasses[],
-	isLongRange: boolean = false,
 ): Buffer {
-	const bufferLength = (isLongRange ? 1 : 0)
-		+ sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)))
+	const bufferLength =
+		sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)))
 		+ (controlledCCs.length > 0 ? 1 : 0) // support/control mark
 		+ sum(controlledCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1)));
 
 	const ret = Buffer.allocUnsafe(bufferLength);
 	let offset = 0;
-	if (isLongRange) {
-		// BUGBUG: validate bufferLength - 1 is <= 0xFF
-		ret[offset++] = bufferLength - 1;
-	}
 	for (const cc of supportedCCs) {
 		offset += encodeCCId(cc, ret, offset);
 	}
@@ -304,7 +289,6 @@ export function parseNodeProtocolInfo(
 	}
 
 	const hasSpecificDeviceClass = isLongRange || !!(capability & 0b100);
-	// BUGBUG: can we assume security is true?
 	const supportsSecurity = isLongRange || !!(capability & 0b1);
 
 	return {
@@ -417,12 +401,19 @@ export function parseNodeInformationFrame(
 	buffer: Buffer,
 	isLongRange: boolean = false,
 ): NodeInformationFrame {
-	const { info, bytesRead: offset } = parseNodeProtocolInfoAndDeviceClass(
+	let { info, bytesRead: offset } = parseNodeProtocolInfoAndDeviceClass(
 		buffer,
 		isLongRange,
 	);
+	var ccListLength;
+	if (isLongRange) {
+		ccListLength = buffer[offset];
+		offset += 1;
+	} else {
+		ccListLength = buffer.length - offset;
+	}
 	const supportedCCs =
-		parseCCList(buffer.subarray(offset), isLongRange).supportedCCs;
+		parseCCList(buffer.subarray(offset, ccListLength)).supportedCCs;
 
 	return {
 		...info,
@@ -434,10 +425,18 @@ export function encodeNodeInformationFrame(
 	info: NodeInformationFrame,
 	isLongRange: boolean = false,
 ): Buffer {
-	return Buffer.concat([
-		encodeNodeProtocolInfoAndDeviceClass(info, isLongRange),
-		encodeCCList(info.supportedCCs, [], isLongRange),
-	]);
+	const protocolInfo = encodeNodeProtocolInfoAndDeviceClass(info, isLongRange);
+	const ccList = 	encodeCCList(info.supportedCCs, []);
+
+	var buffers = [protocolInfo]
+	if (isLongRange) {
+		const ccListLength = Buffer.allocUnsafe(1);
+		ccListLength[0] = ccList.length;
+		buffers.concat(ccListLength);
+	}
+	buffers.concat(ccList);
+
+	return Buffer.concat(buffers);
 }
 
 export function parseNodeID(
