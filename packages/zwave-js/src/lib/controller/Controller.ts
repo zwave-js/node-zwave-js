@@ -163,8 +163,8 @@ import {
 import {
 	SerialAPISetupCommand,
 	SerialAPISetup_CommandUnsupportedResponse,
-	SerialAPISetup_GetLRMaximumPayloadSizeRequest,
-	type SerialAPISetup_GetLRMaximumPayloadSizeResponse,
+	SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest,
+	type SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse,
 	SerialAPISetup_GetMaximumPayloadSizeRequest,
 	type SerialAPISetup_GetMaximumPayloadSizeResponse,
 	SerialAPISetup_GetPowerlevel16BitRequest,
@@ -1298,9 +1298,19 @@ export class ZWaveController
 		// fetch the list of long range nodes until the controller reports no more
 		const lrNodeIds = await this.getLongRangeNodes();
 		let lrChannel: LongRangeChannel | undefined;
-		const maxPayloadSize = await this.getMaxPayloadSize();
+		let maxPayloadSize : number | undefined;
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetMaximumPayloadSize
+			)
+		) {
+			 maxPayloadSize = await this.getMaxPayloadSize();
+		}
 		let maxPayloadSizeLR: number | undefined;
-		if (this.isLongRange()) {
+		if (this.isLongRange() && 			this.isSerialAPISetupCommandSupported(
+			SerialAPISetupCommand.GetLongRangeMaximumPayloadSize
+		)
+) {
 			// TODO: restore/set the channel
 			const lrChannelResp = await this.driver.sendMessage<
 				GetLongRangeChannelResponse
@@ -5883,9 +5893,9 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async getMaxPayloadSizeLongRange(): Promise<number> {
 		const result = await this.driver.sendMessage<
-			| SerialAPISetup_GetLRMaximumPayloadSizeResponse
+			| SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse
 			| SerialAPISetup_CommandUnsupportedResponse
-		>(new SerialAPISetup_GetLRMaximumPayloadSizeRequest(this.driver));
+		>(new SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest(this.driver));
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
 				`Your hardware does not support getting the max. long range payload size!`,
