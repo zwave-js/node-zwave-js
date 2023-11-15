@@ -87,3 +87,22 @@ export function isEmptyRoute(route: Route): boolean {
 		&& route.routeSpeed === ZWaveDataRate["9k6"]
 	);
 }
+
+export enum LongRangeChannel {
+	Unknown = 0x00, // Reserved
+	A = 0x01,
+	B = 0x02,
+	// 0x03..0xFF are reserved and must not be used
+}
+
+export function longRangeChannelToString(channel: LongRangeChannel): string {
+	switch (channel) {
+		case LongRangeChannel.Unknown:
+			return "Unknown";
+		case LongRangeChannel.A:
+			return "Channel A (912MHz)";
+		case LongRangeChannel.B:
+			return "Channel B (920MHz)";
+	}
+	return `Unknown (${num2hex(channel)})`;
+}

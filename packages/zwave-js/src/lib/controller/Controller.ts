@@ -70,6 +70,7 @@ import {
 	nwiHomeIdFromDSK,
 	securityClassIsS2,
 	securityClassOrder,
+	LongRangeChannel,
 } from "@zwave-js/core";
 import { migrateNVM } from "@zwave-js/nvmedit";
 import {
@@ -182,7 +183,7 @@ import {
 	type SerialAPISetup_SetTXStatusReportResponse,
 } from "../serialapi/capability/SerialAPISetupMessages";
 import {
-	GetLongRangeChannelRequest, LongRangeChannel,
+	GetLongRangeChannelRequest,
 	type GetLongRangeChannelResponse,
 } from "../serialapi/capability/LongRangeSetupMessages";
 import { SetApplicationNodeInformationRequest } from "../serialapi/capability/SetApplicationNodeInformationRequest";

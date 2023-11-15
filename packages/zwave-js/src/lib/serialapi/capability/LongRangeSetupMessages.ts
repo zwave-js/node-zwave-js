@@ -13,13 +13,9 @@ import {
 	priority,
 } from "@zwave-js/serial";
 
-// TODO: move to header?
-export enum LongRangeChannel {
-	Unknown = 0x00, // Reserved
-	A = 0x01,
-	B = 0x02,
-	// 0x03..0xFF are reserved and must not be used
-}
+import {
+	LongRangeChannel
+} from "@zwave-js/core";
 
 @messageTypes(MessageType.Request, FunctionType.GetLongRangeChannel)
 @expectedResponse(FunctionType.GetLongRangeChannel)
