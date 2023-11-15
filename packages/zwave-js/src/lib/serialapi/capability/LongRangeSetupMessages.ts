@@ -85,13 +85,6 @@ export interface SetLongRangeChannelResponseOptions extends MessageBaseOptions {
 	responseStatus: number;
 }
 
-// BUGBUG:  move someplace common, see Spec 4.2.5
-//
-// Although, that section refers to a "callback message", and SetZWaveLongRangeChannel doesn't define a callback message...
-export enum ResponseStatus {
-	FAILED = 0x00,
-}
-
 export class ResponseStatusMessageBase extends Message
 	implements SuccessIndicator
 {
@@ -100,16 +93,13 @@ export class ResponseStatusMessageBase extends Message
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
-		this._status = this.payload[0];
+		this.success = this.payload[0] !== 0;
 	}
 
-	private _status: ResponseStatus;
-	public get getStatus(): ResponseStatus {
-		return this._status;
-	}
+	public readonly success: boolean;
 
 	public isOK(): boolean {
-		return this._status != ResponseStatus.FAILED;
+		return this.success;
 	}
 }
 
