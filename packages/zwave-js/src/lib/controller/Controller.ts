@@ -905,7 +905,7 @@ export class ZWaveController
 		const apiCaps = await this.driver.sendMessage<
 			GetSerialApiCapabilitiesResponse
 		>(
-			new GetSerialApiCapabilitiesRequest(this.driver, {mysteryValue: 3}),
+			new GetSerialApiCapabilitiesRequest(this.driver),
 			{
 				supportCheck: false,
 			},
@@ -1293,16 +1293,6 @@ export class ZWaveController
 		this._nodeType = initData.nodeType;
 		this._supportsTimers = initData.supportsTimers;
 		// ignore the initVersion, no clue what to do with it
-
-		// BUGBUG: Dummy check? SimplicityStudio adds this extra 3 argument to this command. I suspect that's not the secret sauce for LR inclusion, but S2 encryption is.
-		await this.driver.sendMessage<
-			GetSerialApiCapabilitiesResponse
-		>(
-			new GetSerialApiCapabilitiesRequest(this.driver, {mysteryValue: 3}),
-			{
-				supportCheck: false,
-			},
-		);
 
 		// fetch the list of long range nodes until the controller reports no more
 		const lrNodeIds: Array<number> = [];
