@@ -121,7 +121,7 @@ import {
 	ApplicationUpdateRequestNodeAdded,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeRemoved,
-	ApplicationUpdateRequestSmartStartHomeIDLRReceived,
+	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
 import {
@@ -2151,7 +2151,7 @@ export class ZWaveController
 			}
 		} else if (
 			msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
-			|| msg instanceof ApplicationUpdateRequestSmartStartHomeIDLRReceived
+			|| msg instanceof ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
 		) {
 			// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
 			this.driver.controllerLog.print(

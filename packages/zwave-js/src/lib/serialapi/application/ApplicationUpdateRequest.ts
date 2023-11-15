@@ -28,7 +28,7 @@ import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 export enum ApplicationUpdateTypes {
 	SmartStart_NodeInfo_Received = 0x86, // An included smart start node has been powered up
 	SmartStart_HomeId_Received = 0x85, // A smart start node requests inclusion
-	SmartStart_HomeId_LR_Received = 0x87, // A start start long range note requests inclusion
+	SmartStart_HomeId_LongRange_Received = 0x87, // A start start long range note requests inclusion
 	NodeInfo_Received = 0x84,
 	NodeInfo_RequestDone = 0x82,
 	NodeInfo_RequestFailed = 0x81,
@@ -229,7 +229,7 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived
 	extends ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 {}
 
-@applicationUpdateType(ApplicationUpdateTypes.SmartStart_HomeId_LR_Received)
-export class ApplicationUpdateRequestSmartStartHomeIDLRReceived
+@applicationUpdateType(ApplicationUpdateTypes.SmartStart_HomeId_LongRange_Received)
+export class ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
 	extends ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 {}
