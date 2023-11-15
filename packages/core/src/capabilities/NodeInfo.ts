@@ -274,7 +274,7 @@ export function parseNodeProtocolInfo(
 	switch (
 		isLongRange
 			? (0b1_0000_0000 | (capability & 0b0010))
-			: (capability && 0b1010)
+			: (capability & 0b1010)
 	) {
 		case 0b0_0000_1000:
 		case 0b1_0000_0000:
