@@ -220,7 +220,7 @@ export class GetSerialApiInitDataResponse extends Message {
 //                         chip version:       0
 
 export interface GetLongRangeNodesRequestOptions extends MessageBaseOptions {
-	listStartOffset128: number;
+	segmentNumber: number;
 }
 
 @messageTypes(MessageType.Request, FunctionType.GetLongRangeNodes)
@@ -236,28 +236,23 @@ export class GetLongRangeNodesRequest extends Message {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			// BUGBUG: validate length at least
-			this.listStartOffset128 = this.payload[0];
+			this.segmentNumber = this.payload[0];
 		} else {
-			this.listStartOffset128 = options.listStartOffset128;
+			this.segmentNumber = options.segmentNumber;
 		}
 	}
 
-	public listStartOffset128: number;
+	public segmentNumber: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.allocUnsafe(
-			1,
-		);
-
-		this.payload[0] = this.listStartOffset128;
+		this.payload = Buffer.from([this.segmentNumber]);
 		return super.serialize();
 	}
 }
 
 export interface GetLongRangeNodesResponseOptions extends MessageBaseOptions {
 	moreNodes: boolean;
-	listStartOffset128: number;
+	segmentNumber: number;
 	nodeIds: number[];
 }
 
@@ -272,14 +267,12 @@ export class GetLongRangeNodesResponse extends Message {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			// BUGBUG: validate length at least
 			this.moreNodes = this.payload[0] != 0;
-			this.listStartOffset128 = this.payload[1];
+			this.segmentNumber = this.payload[1];
 			const listLength = this.payload[2];
 
 			const listStart = 3;
 			const listEnd = listStart + listLength;
-			// BUGGUG validate listEnd <= this.payload.length
 			if (listEnd <= this.payload.length) {
 				const nodeBitMask = this.payload.subarray(
 					listStart,
@@ -294,13 +287,13 @@ export class GetLongRangeNodesResponse extends Message {
 			}
 		} else {
 			this.moreNodes = options.moreNodes;
-			this.listStartOffset128 = options.listStartOffset128;
+			this.segmentNumber = options.segmentNumber;
 			this.nodeIds = options.nodeIds;
 		}
 	}
 
 	public moreNodes: boolean;
-	public listStartOffset128: number;
+	public segmentNumber: number;
 	public nodeIds: readonly number[];
 
 	public serialize(): Buffer {
@@ -309,7 +302,7 @@ export class GetLongRangeNodesResponse extends Message {
 		);
 
 		this.payload[0] = this.moreNodes ? 1 : 0;
-		this.payload[1] = this.listStartOffset128;
+		this.payload[1] = this.segmentNumber;
 		this.payload[2] = NUM_LR_NODEMASK_SEGMENT_BYTES;
 
 		const nodeBitMask = encodeLongRangeNodeBitMask(
@@ -322,11 +315,6 @@ export class GetLongRangeNodesResponse extends Message {
 	}
 
 	private listStartNode(): number {
-		return 256 + NUM_LR_NODES_PER_SEGMENT * 8 * this.listStartOffset128;
-	}
-
-	private listEndNode(): number {
-		return 256
-			+ NUM_LR_NODES_PER_SEGMENT * 8 * (1 + this.listStartOffset128);
+		return 256 + NUM_LR_NODES_PER_SEGMENT * this.segmentNumber;
 	}
 }

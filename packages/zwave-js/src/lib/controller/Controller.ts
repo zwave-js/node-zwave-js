@@ -1300,13 +1300,13 @@ export class ZWaveController
 		const maxPayloadSize = await this.getMaxPayloadSize();
 		let maxPayloadSizeLR : number | undefined;
 		if (this.isLongRange()) {
-			const nodePage = 0;
+			const segment = 0;
 			while (true) {
 				const nodesResponse = await this.driver.sendMessage<
 					GetLongRangeNodesResponse
 				>(
 					new GetLongRangeNodesRequest(this.driver, {
-						listStartOffset128: nodePage,
+						segmentNumber: segment,
 					}),
 				);
 				lrNodeIds.push(...nodesResponse.nodeIds);
