@@ -97,17 +97,10 @@ function getAuthenticationData(
 	const nodeIdSize = (sendingNodeId < 256 && destination < 256) ? 1 : 2;
 	const ret = Buffer.allocUnsafe(2*nodeIdSize + 6 + unencryptedPayload.length);
 	let offset = 0;
-	if (nodeIdSize == 1) {
-		ret[offset++] = sendingNodeId;
-		ret[offset++] = destination;	
-
-	} else {
-		ret.writeUint16BE(sendingNodeId, offset);
-		offset += 2;
-		ret.writeUint16BE(destination, offset);
-		offset += 2;
-	}
-
+	ret.writeUIntBE(sendingNodeId, offset, nodeIdSize);
+	offset += nodeIdSize;
+	ret.writeUIntBE(destination, offset, nodeIdSize);
+	offset += nodeIdSize;
 	ret.writeUInt32BE(homeId, offset);
 	offset += 4;
 	ret.writeUInt16BE(commandLength, offset);

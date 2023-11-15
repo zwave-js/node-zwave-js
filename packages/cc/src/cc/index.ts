@@ -873,19 +873,6 @@ export {
 } from "./WindowCoveringCC";
 export type { ZWavePlusCCReportOptions } from "./ZWavePlusCC";
 export {
-	ZWaveLRProtocolCC,
-	ZWaveLRProtocolCCAssignIDs,
-	ZWaveLRProtocolCCExcludeRequest,
-	ZWaveLRProtocolCCExcludeRequestConfirimation,
-	ZWaveLRProtocolCCNOP,
-	ZWaveLRProtocolCCNodeInformationFrame,
-	ZWaveLRProtocolCCNonSecureIncusionStepComplete,
-	ZWaveLRProtocolCCRequestNodeInformationFrame,
-	ZWaveLRProtocolCCSmartStartIncludedNodeInformation,
-	ZWaveLRProtocolCCSmartStartInclusionRequest,
-	ZWaveLRProtocolCCSmartStartPrime,
-} from "./ZWaveLRProtocolCC";
-export {
 	ZWavePlusCC,
 	ZWavePlusCCGet,
 	ZWavePlusCCReport,

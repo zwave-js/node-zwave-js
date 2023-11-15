@@ -1670,22 +1670,6 @@ export enum ZWaveProtocolCommand {
 	SmartStartInclusionRequest = 0x28,
 }
 
-export enum ZWaveLRProtocolCommand {
-	NOP = 0x00,
-
-	// BUGBUG: all defined above, can they be shared?
-	NodeInformationFrame = 0x01,
-	RequestNodeInformationFrame = 0x02,
-	AssignIDs = 0x03,
-	ExcludeRequest = 0x23,
-	SmartStartIncludedNodeInformation = 0x26,
-	SmartStartPrime = 0x27,
-	SmartStartInclusionRequest = 0x28,
-
-	ExcludeRequestConfirimation = 0x29,
-	NonSecureIncusionStepComplete = 0x2A,
-}
-
 export enum WakeUpTime {
 	None,
 	"1000ms",
