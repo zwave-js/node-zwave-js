@@ -34,6 +34,7 @@ import {
 	ControllerStatus,
 	EMPTY_ROUTE,
 	type Firmware,
+	LongRangeChannel,
 	MAX_NODES,
 	type MaybeNotKnown,
 	type MaybeUnknown,
@@ -70,7 +71,6 @@ import {
 	nwiHomeIdFromDSK,
 	securityClassIsS2,
 	securityClassOrder,
-	LongRangeChannel,
 } from "@zwave-js/core";
 import { migrateNVM } from "@zwave-js/nvmedit";
 import {
@@ -122,8 +122,8 @@ import {
 	ApplicationUpdateRequestNodeAdded,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeRemoved,
-	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
+	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	type SerialAPIStartedRequest,
@@ -157,6 +157,10 @@ import {
 } from "../serialapi/capability/GetSerialApiInitDataMessages";
 import { HardResetRequest } from "../serialapi/capability/HardResetRequest";
 import {
+	GetLongRangeChannelRequest,
+	type GetLongRangeChannelResponse,
+} from "../serialapi/capability/LongRangeSetupMessages";
+import {
 	SerialAPISetupCommand,
 	SerialAPISetup_CommandUnsupportedResponse,
 	SerialAPISetup_GetLRMaximumPayloadSizeRequest,
@@ -182,10 +186,6 @@ import {
 	SerialAPISetup_SetTXStatusReportRequest,
 	type SerialAPISetup_SetTXStatusReportResponse,
 } from "../serialapi/capability/SerialAPISetupMessages";
-import {
-	GetLongRangeChannelRequest,
-	type GetLongRangeChannelResponse,
-} from "../serialapi/capability/LongRangeSetupMessages";
 import { SetApplicationNodeInformationRequest } from "../serialapi/capability/SetApplicationNodeInformationRequest";
 import {
 	GetControllerIdRequest,
@@ -1297,12 +1297,14 @@ export class ZWaveController
 
 		// fetch the list of long range nodes until the controller reports no more
 		const lrNodeIds = await this.getLongRangeNodes();
-		let lrChannel : LongRangeChannel | undefined;
+		let lrChannel: LongRangeChannel | undefined;
 		const maxPayloadSize = await this.getMaxPayloadSize();
-		let maxPayloadSizeLR : number | undefined;
+		let maxPayloadSizeLR: number | undefined;
 		if (this.isLongRange()) {
 			// TODO: restore/set the channel
-			const lrChannelResp = await this.driver.sendMessage<GetLongRangeChannelResponse>(new GetLongRangeChannelRequest(this.driver));
+			const lrChannelResp = await this.driver.sendMessage<
+				GetLongRangeChannelResponse
+			>(new GetLongRangeChannelRequest(this.driver));
 			lrChannel = lrChannelResp.longRangeChannel;
 
 			// TODO: fetch the long range max payload size and cache it
@@ -1334,7 +1336,11 @@ export class ZWaveController
   zwave nodes in the network: ${initData.nodeIds.join(", ")}
   max payload size:           ${maxPayloadSize}
   LR nodes in the network:    ${lrNodeIds.join(", ")}
-  LR channel:                 ${lrChannel ? getEnumMemberName(LongRangeChannel, lrChannel) : "<not set>"}
+  LR channel:                 ${
+				lrChannel
+					? getEnumMemberName(LongRangeChannel, lrChannel)
+					: "<not set>"
+			}
   LR max payload size:        ${maxPayloadSizeLR}`,
 		);
 
@@ -2154,7 +2160,8 @@ export class ZWaveController
 			}
 		} else if (
 			msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
-			|| msg instanceof ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
+			|| msg
+				instanceof ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
 		) {
 			// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
 			this.driver.controllerLog.print(
@@ -4423,7 +4430,7 @@ ${associatedNodes.join(", ")}`,
 			this.driver.controllerLog.logNode(nodeId, {
 				message: `Skipping SUC return route because isLR...`,
 				direction: "outbound",
-			});	
+			});
 			return true;
 		}
 

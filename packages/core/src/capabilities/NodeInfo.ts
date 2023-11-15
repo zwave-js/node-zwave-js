@@ -427,10 +427,13 @@ export function encodeNodeInformationFrame(
 	info: NodeInformationFrame,
 	isLongRange: boolean = false,
 ): Buffer {
-	const protocolInfo = encodeNodeProtocolInfoAndDeviceClass(info, isLongRange);
-	const ccList = 	encodeCCList(info.supportedCCs, []);
+	const protocolInfo = encodeNodeProtocolInfoAndDeviceClass(
+		info,
+		isLongRange,
+	);
+	const ccList = encodeCCList(info.supportedCCs, []);
 
-	const buffers = [protocolInfo]
+	const buffers = [protocolInfo];
 	if (isLongRange) {
 		const ccListLength = Buffer.allocUnsafe(1);
 		ccListLength[0] = ccList.length;

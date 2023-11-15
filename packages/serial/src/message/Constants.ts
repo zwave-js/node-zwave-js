@@ -53,7 +53,7 @@ export enum FunctionType {
 
 	EnterBootloader = 0x27, // Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
 	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ZW_NVRGetValue(offset, length) => NVRdata[], see INS13954-13
- 
+
 	GetNVMId = 0x29, // Returns information about the external NVM
 	ExtNVMReadLongBuffer = 0x2a, // Reads a buffer from the external NVM
 	ExtNVMWriteLongBuffer = 0x2b, // Writes a buffer to the external NVM

@@ -13,9 +13,7 @@ import {
 	priority,
 } from "@zwave-js/serial";
 
-import {
-	LongRangeChannel
-} from "@zwave-js/core";
+import { LongRangeChannel } from "@zwave-js/core";
 
 @messageTypes(MessageType.Request, FunctionType.GetLongRangeChannel)
 @expectedResponse(FunctionType.GetLongRangeChannel)

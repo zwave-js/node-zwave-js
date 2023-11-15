@@ -229,7 +229,9 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived
 	extends ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 {}
 
-@applicationUpdateType(ApplicationUpdateTypes.SmartStart_HomeId_LongRange_Received)
+@applicationUpdateType(
+	ApplicationUpdateTypes.SmartStart_HomeId_LongRange_Received,
+)
 export class ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
 	extends ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 {}

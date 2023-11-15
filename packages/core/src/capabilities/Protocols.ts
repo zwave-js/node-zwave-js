@@ -19,7 +19,7 @@ export function zwaveDataRateToString(rate: ZWaveDataRate): string {
 			return "40 kbit/s";
 		case ZWaveDataRate["100k"]:
 			return "100 kbit/s";
-		}
+	}
 	return `Unknown (${num2hex(rate)})`;
 }
 

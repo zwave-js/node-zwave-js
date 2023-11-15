@@ -95,7 +95,9 @@ function getAuthenticationData(
 	unencryptedPayload: Buffer,
 ): Buffer {
 	const nodeIdSize = (sendingNodeId < 256 && destination < 256) ? 1 : 2;
-	const ret = Buffer.allocUnsafe(2*nodeIdSize + 6 + unencryptedPayload.length);
+	const ret = Buffer.allocUnsafe(
+		2 * nodeIdSize + 6 + unencryptedPayload.length,
+	);
 	let offset = 0;
 	ret.writeUIntBE(sendingNodeId, offset, nodeIdSize);
 	offset += nodeIdSize;
