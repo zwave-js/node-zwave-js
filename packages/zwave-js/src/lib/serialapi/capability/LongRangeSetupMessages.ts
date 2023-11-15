@@ -36,7 +36,6 @@ export class LongRangeChannelMessageBase extends Message {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			// BUGBUG: verify length?
 			switch (this.payload[0]) {
 				case 0x01:
 					this.longRangeChannel = LongRangeChannel.A;
@@ -137,7 +136,6 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			// BUGBUG: verify length?
 			this.shadowNodeIds = parseBitMask(
 				this.payload.subarray(0, 1),
 				LONG_RANGE_SHADOW_NODE_IDS_START,
