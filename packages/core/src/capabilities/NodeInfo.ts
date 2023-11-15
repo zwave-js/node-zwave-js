@@ -432,9 +432,9 @@ export function encodeNodeInformationFrame(
 	if (isLongRange) {
 		const ccListLength = Buffer.allocUnsafe(1);
 		ccListLength[0] = ccList.length;
-		buffers.concat(ccListLength);
+		buffers.push(ccListLength);
 	}
-	buffers.concat(ccList);
+	buffers.push(ccList);
 
 	return Buffer.concat(buffers);
 }
