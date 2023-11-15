@@ -54,6 +54,7 @@ export const SoundSwitchCCValues = Object.freeze({
 				max: 100,
 				unit: "%",
 				label: "Volume",
+				allowManualEntry: true,
 				states: {
 					0: "default",
 				},
@@ -286,6 +287,23 @@ export class SoundSwitchCCAPI extends CCAPI {
 					0x00, /* keep current tone */
 					value,
 				);
+			} else if (property === "volume") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				// Allow playing a tone by first setting the volume, then the tone ID
+				this.tryGetValueDB()?.setValue(
+					SoundSwitchCCValues.volume.endpoint(
+						this.endpoint.index,
+					),
+					value,
+					{ source: "driver", updateTimestamp: false },
+				);
 			} else if (property === "toneId") {
 				if (typeof value !== "number") {
 					throwWrongValueType(
@@ -402,9 +420,7 @@ default volume: ${config.defaultVolume}`;
 			});
 		}
 
-		const metadataStates: Record<number, string> = {
-			0: "off",
-		};
+		const metadataStates: Record<number, string> = {};
 		for (let toneId = 1; toneId <= toneCount; toneId++) {
 			applHost.controllerLog.logNode(node.id, {
 				message: `requesting info for tone #${toneId}`,
@@ -421,14 +437,25 @@ duration: ${info.duration} seconds`;
 			});
 			metadataStates[toneId] = `${info.name} (${info.duration} sec)`;
 		}
-		metadataStates[0xff] = "default";
+
+		// Remember tone count and info on the default tone ID metadata
+		this.setMetadata(applHost, SoundSwitchCCValues.defaultToneId, {
+			...SoundSwitchCCValues.defaultToneId.meta,
+			min: 1,
+			max: toneCount,
+			states: metadataStates,
+		});
 
 		// Remember tone count and info on the tone ID metadata
 		this.setMetadata(applHost, SoundSwitchCCValues.toneId, {
 			...SoundSwitchCCValues.toneId.meta,
 			min: 0,
 			max: toneCount,
-			states: metadataStates,
+			states: {
+				0: "off",
+				...metadataStates,
+				[0xff]: "default",
+			},
 		});
 
 		// Remember that the interview is complete
@@ -436,7 +463,10 @@ duration: ${info.duration} seconds`;
 	}
 }
 
-interface SoundSwitchCCTonesNumberReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCTonesNumberReportOptions
+	extends CCCommandOptions
+{
 	toneCount: number;
 }
 
@@ -476,7 +506,8 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 @expectedCCResponse(SoundSwitchCCTonesNumberReport)
 export class SoundSwitchCCTonesNumberGet extends SoundSwitchCC {}
 
-interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
 	toneId: number;
 	duration: number;
 	name: string;
@@ -539,7 +570,8 @@ const testResponseForSoundSwitchToneInfoGet: CCResponsePredicate<
 	return received.toneId === sent.toneId;
 };
 
-interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 	toneId: number;
 }
 
@@ -579,7 +611,8 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	}
 }
 
-interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
 	defaultVolume: number;
 	defaultToneId: number;
 }
@@ -625,7 +658,10 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	}
 }
 
-interface SoundSwitchCCConfigurationReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCConfigurationReportOptions
+	extends CCCommandOptions
+{
 	defaultVolume: number;
 	defaultToneId: number;
 }
@@ -675,7 +711,8 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 @expectedCCResponse(SoundSwitchCCConfigurationReport)
 export class SoundSwitchCCConfigurationGet extends SoundSwitchCC {}
 
-interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
 	toneId: ToneId | number;
 	// V2+
 	volume?: number;

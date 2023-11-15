@@ -35,7 +35,6 @@ export enum ZWaveErrorCodes {
 	Controller_ResponseNOK,
 	Controller_CallbackNOK,
 	Controller_Jammed,
-	Controller_CommandAborted,
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
@@ -291,6 +290,17 @@ export function isMissingControllerACK(
 	return isZWaveError(e)
 		&& e.code === ZWaveErrorCodes.Controller_Timeout
 		&& e.context === "ACK";
+}
+
+export function isMissingControllerResponse(
+	e: unknown,
+): e is ZWaveError & {
+	code: ZWaveErrorCodes.Controller_Timeout;
+	context: "response";
+} {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Timeout
+		&& e.context === "response";
 }
 
 export function isMissingControllerCallback(

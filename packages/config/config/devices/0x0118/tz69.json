@@ -100,7 +100,7 @@
 			"label": "Threshold of kWh for Load Caution",
 			"description": "Over this level, unit with go into overload mode",
 			"valueSize": 2,
-			"unit": "kWH",
+			"unit": "kWh",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000

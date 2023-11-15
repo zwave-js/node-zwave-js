@@ -90,5 +90,9 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		// The device "reports" some of its state with Set commands
+		"treatSetAsReport": ["BinarySwitchCCSet", "ThermostatModeCCSet"]
+	}
 }

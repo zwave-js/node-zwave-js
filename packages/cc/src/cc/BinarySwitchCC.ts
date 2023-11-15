@@ -294,7 +294,8 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 	}
 }
 
-interface BinarySwitchCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface BinarySwitchCCSetOptions extends CCCommandOptions {
 	targetValue: boolean;
 	duration?: Duration | string;
 }
@@ -345,6 +346,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	}
 }
 
+// @publicAPI
 export type BinarySwitchCCReportOptions =
 	& CCCommandOptions
 	& {

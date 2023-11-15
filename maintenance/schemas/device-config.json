@@ -702,6 +702,14 @@
 				"treatMultilevelSwitchSetAsEvent": {
 					"const": true
 				},
+				"treatSetAsReport": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				},
 				"treatDestinationEndpointAsSource": {
 					"const": true
 				},
@@ -717,6 +725,7 @@
 				"$if": {
 					"$ref": "#/definitions/condition"
 				},
+				"$import": { "$ref": "#/definitions/import" },
 				"level": {
 					"type": "string",
 					"enum": ["info", "warning", "error"]
@@ -727,7 +736,14 @@
 				}
 			},
 			"additionalProperties": false,
-			"required": ["level", "text"]
+			"anyOf": [
+				{
+					"required": ["level", "text"]
+				},
+				{
+					"required": ["$import"]
+				}
+			]
 		}
 	}
 }

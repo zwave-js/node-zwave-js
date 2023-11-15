@@ -160,6 +160,7 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 	}
 }
 
+// @publicAPI
 export interface ZWavePlusCCReportOptions {
 	zwavePlusVersion: number;
 	nodeType: ZWavePlusNodeType;

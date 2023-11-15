@@ -104,6 +104,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	}
 }
 
+// @publicAPI
 export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
 	manufacturerId?: number;
 	unspecifiedExpectsResponse?: boolean;

@@ -44,9 +44,8 @@
 			"#": "2",
 			"label": "Sensor Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Floor",
@@ -79,9 +78,8 @@
 			"label": "External Sensor Resistance",
 			"valueSize": 1,
 			"unit": "kΩ",
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "10",
@@ -205,9 +203,8 @@
 			"#": "13",
 			"label": "Regulation Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Hysteresis",
@@ -232,9 +229,8 @@
 			"#": "15",
 			"label": "Temperature Display",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Setpoint",
@@ -365,9 +361,8 @@
 			"#": "27",
 			"label": "Operating Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Off",
@@ -391,9 +386,8 @@
 			"#": "28",
 			"label": "Open Window Detection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled",

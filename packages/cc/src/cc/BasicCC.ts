@@ -7,6 +7,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	type SupervisionResult,
+	type ValueID,
 	ValueMetadata,
 	maybeUnknownToString,
 	parseMaybeNumber,
@@ -70,7 +71,6 @@ export const BasicCCValues = Object.freeze({
 			},
 		}),
 
-		// TODO: This should really not be a static CC value, but depend on compat flags:
 		...V.staticPropertyWithName(
 			"compatEvent",
 			"event",
@@ -80,9 +80,7 @@ export const BasicCCValues = Object.freeze({
 			} as const,
 			{
 				stateful: false,
-				autoCreate: (applHost, endpoint) =>
-					!!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
-						?.treatBasicSetAsEvent,
+				autoCreate: false,
 			},
 		),
 	}),
@@ -262,12 +260,9 @@ export class BasicCC extends CommandClass {
 		// try to query the current state
 		await this.refreshValues(applHost);
 
-		// Remove Basic CC support when there was no response,
-		// but only if the compat event shouldn't be used.
+		// Remove Basic CC support when there was no response
 		if (
-			!applHost.getDeviceConfig?.(node.id)?.compat
-				?.treatBasicSetAsEvent
-			&& this.getValue(applHost, BasicCCValues.currentValue) == undefined
+			this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -276,7 +271,10 @@ export class BasicCC extends CommandClass {
 			});
 			// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
 			// endpoint) if no Basic Report is returned.
-			endpoint.removeCC(CommandClasses.Basic);
+			endpoint.addCC(CommandClasses.Basic, { isSupported: false });
+			if (!endpoint.controlsCC(CommandClasses.Basic)) {
+				endpoint.removeCC(CommandClasses.Basic);
+			}
 		}
 
 		// Remember that the interview is complete
@@ -317,9 +315,32 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			});
 		}
 	}
+
+	public override getDefinedValueIDs(
+		applHost: ZWaveApplicationHost,
+	): ValueID[] {
+		const ret: ValueID[] = [];
+
+		// Defer to the base implementation if Basic CC is supported
+		const endpoint = this.getEndpoint(applHost)!;
+		if (endpoint.supportsCC(this.ccId)) {
+			ret.push(...super.getDefinedValueIDs(applHost));
+		}
+
+		// Add the compat event value if it should be exposed
+		if (
+			!!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
+				?.treatBasicSetAsEvent
+		) {
+			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
+		}
+
+		return ret;
+	}
 }
 
-interface BasicCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface BasicCCSetOptions extends CCCommandOptions {
 	targetValue: number;
 }
 
@@ -354,7 +375,8 @@ export class BasicCCSet extends BasicCC {
 	}
 }
 
-type BasicCCReportOptions =
+// @publicAPI
+export type BasicCCReportOptions =
 	& CCCommandOptions
 	& {
 		currentValue: number;

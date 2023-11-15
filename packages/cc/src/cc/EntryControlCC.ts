@@ -653,7 +653,10 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 @expectedCCResponse(EntryControlCCConfigurationReport)
 export class EntryControlCCConfigurationGet extends EntryControlCC {}
 
-interface EntryControlCCConfigurationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface EntryControlCCConfigurationSetOptions
+	extends CCCommandOptions
+{
 	keyCacheSize: number;
 	keyCacheTimeout: number;
 }

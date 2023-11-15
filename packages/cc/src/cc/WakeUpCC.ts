@@ -346,7 +346,8 @@ controller node: ${wakeupResp.controllerNodeId}`;
 	}
 }
 
-interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
 	wakeUpInterval: number;
 	controllerNodeId: number;
 }

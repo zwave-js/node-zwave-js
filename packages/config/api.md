@@ -194,6 +194,10 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     readonly treatDestinationEndpointAsSource?: boolean;
     // (undocumented)
     readonly treatMultilevelSwitchSetAsEvent?: boolean;
+    // (undocumented)
+    readonly treatSetAsReport?: ReadonlySet<string>;
+    // (undocumented)
+    readonly useUTCInTimeParametersCC?: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "ConditionalConfigOption" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

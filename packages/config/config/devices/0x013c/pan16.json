@@ -46,7 +46,7 @@
 			"#": "4",
 			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
-			"unit": "Kwh",
+			"unit": "kWh",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000

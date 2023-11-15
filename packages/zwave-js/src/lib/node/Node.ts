@@ -61,6 +61,11 @@ import {
 	BasicCCValues,
 } from "@zwave-js/cc/BasicCC";
 import {
+	type BinarySwitchCC,
+	BinarySwitchCCSet,
+	BinarySwitchCCValues,
+} from "@zwave-js/cc/BinarySwitchCC";
+import {
 	CentralSceneCCNotification,
 	CentralSceneCCValues,
 } from "@zwave-js/cc/CentralSceneCC";
@@ -106,6 +111,11 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
+import {
+	type ThermostatModeCC,
+	ThermostatModeCCSet,
+	ThermostatModeCCValues,
+} from "@zwave-js/cc/ThermostatModeCC";
 import {
 	VersionCCCommandClassGet,
 	VersionCCGet,
@@ -194,6 +204,7 @@ import {
 	getErrorMessage,
 	pick,
 	stringify,
+	throttle,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
@@ -1020,21 +1031,21 @@ export class ZWaveNode extends Endpoint
 		let valueOptions: Required<CCValueOptions> | undefined;
 		let meta: ValueMetadata | undefined;
 		if (definedCCValues) {
-			const value = Object.values(definedCCValues).find((v) =>
-				v?.is(valueId)
-			);
-			if (value && typeof value !== "function") {
-				meta = value.meta;
+			const value = Object.values(definedCCValues)
+				.find((v) => v?.is(valueId));
+			if (value) {
+				if (typeof value !== "function") {
+					meta = value.meta;
+				}
 				valueOptions = value.options;
 			}
 		}
 
-		// The priority for returned metadata is valueDB > defined value > Any (default)
+		const existingMetadata = this._valueDB.getMetadata(valueId);
 		return {
-			...(this._valueDB.getMetadata(valueId)
-				?? meta
-				?? ValueMetadata.Any),
-			// Don't allow overriding these flags:
+			// The priority for returned metadata is valueDB > defined value > Any (default)
+			...(existingMetadata ?? meta ?? ValueMetadata.Any),
+			// ...except for these flags, which are taken from defined values:
 			stateful: valueOptions?.stateful ?? defaultCCValueOptions.stateful,
 			secret: valueOptions?.secret ?? defaultCCValueOptions.secret,
 		};
@@ -1641,6 +1652,10 @@ export class ZWaveNode extends Endpoint
 			&& this.canSleep
 			&& this.supportsCC(CommandClasses["Wake Up"])
 		) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Re-interview scheduled, waiting for node to wake up...",
+			);
 			didWakeUp = await this.waitForWakeup()
 				.then(() => true)
 				.catch(() => false);
@@ -2805,10 +2820,13 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	/**
-	 * Refreshes the values of all CCs that should be reporting regularly, but haven't been
+	 * Refreshes the values of all CCs that should be reporting regularly, but haven't been updated recently
 	 * @internal
 	 */
 	public async autoRefreshValues(): Promise<void> {
+		// Do not attempt to communicate with dead nodes automatically
+		if (this.status === NodeStatus.Dead) return;
+
 		for (const endpoint of this.getAllEndpoints()) {
 			for (
 				const cc of endpoint
@@ -2901,17 +2919,13 @@ protocol version:      ${this.protocolVersion}`;
 	private modifySupportedCCBeforeInterview(endpoint: Endpoint): void {
 		const compat = this._deviceConfig?.compat;
 
-		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
-		// to map the Basic CC to other CCs or expose Basic Set as an event
-		if (compat?.treatBasicSetAsEvent) {
-			if (endpoint.index === 0) {
-				// To create the compat event value, we need to force a Basic CC interview
-				endpoint.addCC(CommandClasses.Basic, {
-					isSupported: true,
-					version: 1,
-				});
-			}
-		} else if (!compat?.disableBasicMapping) {
+		// If the config file instructs us to expose Basic Set as an event, mark the CC as controlled
+		if (compat?.treatBasicSetAsEvent && endpoint.index === 0) {
+			endpoint.addCC(CommandClasses.Basic, { isControlled: true });
+		}
+
+		// Don't offer or interview the Basic CC if any actuator CC is supported
+		if (!compat?.disableBasicMapping) {
 			endpoint.hideBasicCCInFavorOfActuatorCCs();
 		}
 
@@ -3008,6 +3022,10 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleBasicCommand(command);
 		} else if (command instanceof MultilevelSwitchCC) {
 			return this.handleMultilevelSwitchCommand(command);
+		} else if (command instanceof BinarySwitchCCSet) {
+			return this.handleBinarySwitchCommand(command);
+		} else if (command instanceof ThermostatModeCCSet) {
+			return this.handleThermostatModeCommand(command);
 		} else if (command instanceof CentralSceneCCNotification) {
 			return this.handleCentralSceneNotification(command);
 		} else if (command instanceof WakeUpCCWakeUpNotification) {
@@ -3726,6 +3744,48 @@ protocol version:      ${this.protocolVersion}`;
 					eventType: MultilevelSwitchCommand.StopLevelChange,
 					eventTypeLabel: "Stop level change",
 				},
+			);
+		}
+	}
+
+	private handleBinarySwitchCommand(command: BinarySwitchCC): void {
+		// Treat BinarySwitchCCSet as a report if desired
+		if (
+			command instanceof BinarySwitchCCSet
+			&& this._deviceConfig?.compat?.treatSetAsReport?.has(
+				command.constructor.name,
+			)
+		) {
+			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
+				message: "treating BinarySwitchCC::Set as a report",
+			});
+			this._valueDB.setValue(
+				BinarySwitchCCValues.currentValue.endpoint(
+					command.endpointIndex,
+				),
+				command.targetValue,
+			);
+		}
+	}
+
+	private handleThermostatModeCommand(command: ThermostatModeCC): void {
+		// Treat ThermostatModeCCSet as a report if desired
+		if (
+			command instanceof ThermostatModeCCSet
+			&& this._deviceConfig?.compat?.treatSetAsReport?.has(
+				command.constructor.name,
+			)
+		) {
+			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
+				message: "treating ThermostatModeCC::Set as a report",
+			});
+			this._valueDB.setValue(
+				ThermostatModeCCValues.thermostatMode.endpoint(
+					command.endpointIndex,
+				),
+				command.mode,
 			);
 		}
 	}
@@ -4844,6 +4904,13 @@ protocol version:      ${this.protocolVersion}`;
 			return result;
 		}
 
+		// Throttle the progress emitter so applications can handle the load of events
+		const notifyProgress = throttle(
+			(progress) => this.emit("firmware update progress", this, progress),
+			250,
+			true,
+		);
+
 		// Perform all firmware updates in sequence
 		let updateResult!: Awaited<
 			ReturnType<ZWaveNode["doFirmwareUpdateInternal"]>
@@ -4890,7 +4957,7 @@ protocol version:      ${this.protocolVersion}`;
 							2,
 						),
 					};
-					this.emit("firmware update progress", this, progress);
+					notifyProgress(progress);
 
 					// When this file is done, add the fragments to the total, so we can compute the total progress correctly
 					if (fragment === total) {

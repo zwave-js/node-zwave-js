@@ -509,7 +509,8 @@ export class BarrierOperatorCC extends CommandClass {
 	}
 }
 
-interface BarrierOperatorCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface BarrierOperatorCCSetOptions extends CCCommandOptions {
 	targetState: BarrierState.Open | BarrierState.Closed;
 }
 
@@ -646,7 +647,10 @@ export class BarrierOperatorCCSignalingCapabilitiesGet
 	extends BarrierOperatorCC
 {}
 
-interface BarrierOperatorCCEventSignalingSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface BarrierOperatorCCEventSignalingSetOptions
+	extends CCCommandOptions
+{
 	subsystemType: SubsystemType;
 	subsystemState: SubsystemState;
 }
@@ -743,7 +747,10 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	}
 }
 
-interface BarrierOperatorCCEventSignalingGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface BarrierOperatorCCEventSignalingGetOptions
+	extends CCCommandOptions
+{
 	subsystemType: SubsystemType;
 }
 

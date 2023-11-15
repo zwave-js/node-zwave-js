@@ -601,6 +601,8 @@ export type ResponseRole = "unexpected" | "confirmation" | "final" | "fatal_cont
 export class SerialAPIParser extends Transform {
     constructor(logger?: SerialLogger | undefined, onDiscarded?: ((data: Buffer) => void) | undefined);
     // (undocumented)
+    ignoreAckHighNibble: boolean;
+    // (undocumented)
     _transform(chunk: any, encoding: string, callback: TransformCallback): void;
 }
 
@@ -717,6 +719,8 @@ export class ZWaveSerialPortBase extends PassThrough {
     constructor(implementation: ZWaveSerialPortImplementation, loggers: ZWaveLogContainer);
     // (undocumented)
     close(): Promise<void>;
+    // (undocumented)
+    ignoreAckHighNibbleOnce(): void;
     // (undocumented)
     get isOpen(): boolean;
     // (undocumented)

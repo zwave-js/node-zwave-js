@@ -151,6 +151,7 @@ export const MockBinding: MockBindingInterface = {
 
 interface MockPortBindingEvents {
 	write: (data: Buffer) => void;
+	close: () => void;
 }
 
 /**
@@ -221,6 +222,8 @@ export class MockPortBinding extends TypedEventEmitter<MockPortBindingEvents>
 		if (this.pendingRead) {
 			this.pendingRead(new CanceledError("port is closed"));
 		}
+
+		this.emit("close");
 	}
 
 	async read(

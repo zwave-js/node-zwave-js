@@ -256,6 +256,7 @@ export class SupervisionCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export type SupervisionCCReportOptions =
 	& {
 		moreUpdatesFollow: boolean;
@@ -359,7 +360,8 @@ export class SupervisionCCReport extends SupervisionCC {
 	}
 }
 
-interface SupervisionCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SupervisionCCGetOptions extends CCCommandOptions {
 	requestStatusUpdates: boolean;
 	encapsulated: CommandClass;
 }

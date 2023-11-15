@@ -10,6 +10,7 @@ import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { AsyncQueue } from "@zwave-js/shared";
 import { TimedExpectation, createWrappingCounter } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
+import { randomInt } from "node:crypto";
 import {
 	type MockControllerCapabilities,
 	getDefaultMockControllerCapabilities,
@@ -125,7 +126,10 @@ export class MockController {
 	>();
 
 	/** Records the messages received from the host to perform assertions on them */
-	private receivedHostMessages: Message[] = [];
+	private _receivedHostMessages: Message[] = [];
+	public get receivedHostMessages(): readonly Readonly<Message>[] {
+		return this._receivedHostMessages;
+	}
 
 	private _nodes = new Map<number, MockNode>();
 	public get nodes(): ReadonlyMap<number, MockNode> {
@@ -151,6 +155,8 @@ export class MockController {
 	public autoAckHostMessages: boolean = true;
 	/** Controls whether the controller automatically ACKs node frames before handling them */
 	public autoAckNodeFrames: boolean = true;
+	/** Allows reproducing issues with the 7.19.x firmware where the high nibble of the ACK after soft-reset is corrupted */
+	public corruptACK: boolean = false;
 
 	/** Gets called when parsed/chunked data is received from the serial port */
 	private async serialOnData(
@@ -187,7 +193,7 @@ export class MockController {
 				origin: MessageOrigin.Host,
 				parseCCs: false,
 			});
-			this.receivedHostMessages.push(msg);
+			this._receivedHostMessages.push(msg);
 			if (this.autoAckHostMessages) {
 				// all good, respond with ACK
 				this.ackHostMessage();
@@ -342,7 +348,14 @@ export class MockController {
 	 * Sends an ACK frame to the host
 	 */
 	public ackHostMessage(): void {
-		this.sendHeaderToHost(MessageHeaders.ACK);
+		if (this.corruptACK) {
+			const highNibble = randomInt(1, 0xf) << 4;
+			this.serial.emitData(
+				Buffer.from([highNibble | MessageHeaders.ACK]),
+			);
+		} else {
+			this.sendHeaderToHost(MessageHeaders.ACK);
+		}
 	}
 
 	/** Gets called when a {@link MockZWaveFrame} is received from a {@link MockNode} */
@@ -421,7 +434,7 @@ export class MockController {
 		},
 	): void {
 		const { errorMessage } = options ?? {};
-		const index = this.receivedHostMessages.findIndex(predicate);
+		const index = this._receivedHostMessages.findIndex(predicate);
 		if (index === -1) {
 			throw new Error(
 				`Did not receive a host message matching the predicate!${
@@ -433,7 +446,7 @@ export class MockController {
 
 	/** Forgets all recorded messages received from the host */
 	public clearReceivedHostMessages(): void {
-		this.receivedHostMessages = [];
+		this._receivedHostMessages = [];
 	}
 
 	public async execute(): Promise<void> {

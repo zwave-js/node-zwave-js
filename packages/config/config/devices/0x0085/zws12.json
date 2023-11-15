@@ -6,7 +6,7 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0001"
+			"productId": "0x0010"
 		},
 		{
 			"productType": "0x0011",

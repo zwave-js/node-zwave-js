@@ -1108,7 +1108,7 @@ readonly deviceConfig: DeviceConfig | undefined
 
 Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
 
-This information may change after an update of the config files. To check whether a change occured that requires a re-interview, use the [`hasDeviceConfigChanged`](#hasdeviceconfigchanged) method.
+This information may change after an update of the config files. To check whether a change occurred that requires a re-interview, use the [`hasDeviceConfigChanged`](#hasdeviceconfigchanged) method.
 
 ### `deviceDatabaseUrl`
 

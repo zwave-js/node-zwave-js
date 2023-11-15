@@ -5,12 +5,31 @@ The driver is the core of this library. It controls the serial interface, handle
 ## Constructor
 
 ```ts
-new (port: string, options?: PartialZWaveOptions) => Driver
+new (
+	port: string,
+	...optionsAndPresets: PartialZWaveOptions[]
+) => Driver
 ```
 
 The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Remote serial port over TCP](usage/tcp-connection.md).
 
-For more control, the constructor accepts an optional options object as the second argument. `PartialZWaveOptions` are a subset of [`ZWaveOptions`](#ZWaveOptions), allowing you to specify just what's necessary.
+For most scenarios the default configuration should be sufficient. For more control, the constructor optionally accepts a list of options objects or presets. Multiple sets of options are deep-merged where the later ones have higher priority. `PartialZWaveOptions` are a subset of [`ZWaveOptions`](#ZWaveOptions), allowing you to specify just what's necessary.
+
+Some curated presets are included in the library:
+
+| Preset                   | Description                                                                                                                                                                                                                                                                                       |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SAFE_MODE`              | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly                                                                       |
+| `NO_CONTROLLER_RECOVERY` | Disables the unresponsive controller recovery to be able to deal with controllers that frequently become unresponsive for seemingly no reason. This is meant as a last resort for unstable 500 series controllers, but will result in failed commands and nodes that randomly get marked as dead. |
+| `BATTERY_SAVE`           | Sends battery powered nodes to sleep more quickly in order to save battery.                                                                                                                                                                                                                       |
+| `AWAKE_LONGER`           | Sends battery powered nodes to sleep less quickly to give applications more time between interactions.                                                                                                                                                                                            |
+
+These can be used like this:
+
+```ts
+import { Driver, driverPresets } from "zwave-js"; // Or from "zwave-js/Utils"
+const driver = new Driver("/path/to/serial", driverPresets.BATTERY_SAVE);
+```
 
 ## Driver methods
 
@@ -684,13 +703,22 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		byte: number; // >=1, default: 150 ms
 
 		/**
-		 * How long to wait for a controller response. Usually this timeout should never elapse,
-		 * so this is merely a safeguard against the driver stalling.
+		 * How long to wait for a controller response. Usually this should never elapse, but when it does,
+		 * the driver will abort the transmission and try to recover the controller if it is unresponsive.
 		 */
-		response: number; // [500...60000], default: 30000 ms
+		response: number; // [500...60000], default: 10000 ms
 
-		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number; // >=10000, default: 65000 ms
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before aborting the transmission.
+		 */
+		sendDataAbort: number; // >=5000, <=(sendDataCallback - 5000), default: 20000 ms
+
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before considering the controller unresponsive.
+		 */
+		sendDataCallback: number; // >=10000, default: 30000 ms
 
 		/** How much time a node gets to process a request and send a response */
 		report: number; // [500...10000], default: 1000 ms
@@ -838,15 +866,32 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	emitValueUpdateAfterSetValue?: boolean;
 
-	/**
-	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
-	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
-	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
-	 *
-	 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
-	 */
-	enableSoftReset?: boolean;
+	features: {
+		/**
+		 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+		 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
+		 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
+		 *
+		 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
+		 */
+		softReset?: boolean;
 
+		/**
+		 * When enabled, the driver attempts to detect when the controller becomes unresponsive (meaning it did not
+		 * respond within the configured timeout) and performs appropriate recovery actions.
+		 *
+		 * This includes the following scenarios:
+		 * * A command was not acknowledged by the controller
+		 * * The callback for a Send Data command was not received, even after aborting a timed out transmission
+		 *
+		 * In certain environments however, this feature can interfere with the normal operation more than intended,
+		 * so it can be disabled. However disabling it means that commands can fail unnecessarily and nodes can be
+		 * incorrectly marked as dead.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
+		 */
+		unresponsiveControllerRecovery?: boolean;
+	};
 	preferences: {
 		/**
 		 * The preferred scales to use when querying sensors. The key is either:

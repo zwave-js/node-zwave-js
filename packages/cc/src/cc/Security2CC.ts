@@ -154,7 +154,8 @@ function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 
 const DECRYPT_ATTEMPTS = 5;
 
-interface DecryptionResult {
+// @publicAPI
+export interface DecryptionResult {
 	plaintext: Buffer;
 	authOK: boolean;
 	key?: Buffer;
@@ -824,7 +825,10 @@ export class Security2CC extends CommandClass {
 	}
 }
 
-interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
+// @publicAPI
+export interface Security2CCMessageEncapsulationOptions
+	extends CCCommandOptions
+{
 	/** Can be used to override the default security class for the command */
 	securityClass?: S2SecurityClass;
 	extensions?: Security2Extension[];
@@ -863,7 +867,8 @@ function failNoMPAN(): never {
 	throw validatePayload.fail(ZWaveErrorCodes.Security2CC_NoMPAN);
 }
 
-type MulticastContext =
+// @publicAPI
+export type MulticastContext =
 	| {
 		isMulticast: true;
 		groupId: number;
@@ -1685,6 +1690,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 }
 
+// @publicAPI
 export type Security2CCNonceReportOptions =
 	| {
 		MOS: boolean;
@@ -1851,7 +1857,8 @@ export class Security2CCNonceGet extends Security2CC {
 	}
 }
 
-interface Security2CCKEXReportOptions {
+// @publicAPI
+export interface Security2CCKEXReportOptions {
 	requestCSA: boolean;
 	echo: boolean;
 	_reserved?: number;
@@ -1952,7 +1959,8 @@ export class Security2CCKEXReport extends Security2CC {
 @expectedCCResponse(Security2CCKEXReport)
 export class Security2CCKEXGet extends Security2CC {}
 
-interface Security2CCKEXSetOptions {
+// @publicAPI
+export interface Security2CCKEXSetOptions {
 	permitCSA: boolean;
 	echo: boolean;
 	selectedKEXScheme: KEXSchemes;
@@ -2048,7 +2056,8 @@ export class Security2CCKEXSet extends Security2CC {
 	}
 }
 
-interface Security2CCKEXFailOptions extends CCCommandOptions {
+// @publicAPI
+export interface Security2CCKEXFailOptions extends CCCommandOptions {
 	failType: KEXFailType;
 }
 
@@ -2082,7 +2091,8 @@ export class Security2CCKEXFail extends Security2CC {
 	}
 }
 
-interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
 	includingNode: boolean;
 	publicKey: Buffer;
 }
@@ -2128,7 +2138,8 @@ export class Security2CCPublicKeyReport extends Security2CC {
 	}
 }
 
-interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
 	grantedKey: SecurityClass;
 	networkKey: Buffer;
 }
@@ -2180,7 +2191,8 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 	}
 }
 
-interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
 	requestedKey: SecurityClass;
 }
 
@@ -2225,7 +2237,8 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 @CCCommand(Security2Command.NetworkKeyVerify)
 export class Security2CCNetworkKeyVerify extends Security2CC {}
 
-interface Security2CCTransferEndOptions extends CCCommandOptions {
+// @publicAPI
+export interface Security2CCTransferEndOptions extends CCCommandOptions {
 	keyVerified: boolean;
 	keyRequestComplete: boolean;
 }
@@ -2270,7 +2283,10 @@ export class Security2CCTransferEnd extends Security2CC {
 	}
 }
 
-interface Security2CCCommandsSupportedReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface Security2CCCommandsSupportedReportOptions
+	extends CCCommandOptions
+{
 	supportedCCs: CommandClasses[];
 }
 

@@ -472,7 +472,10 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	}
 }
 
-interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SceneControllerConfigurationCCSetOptions
+	extends CCCommandOptions
+{
 	groupId: number;
 	sceneId: number;
 	dimmingDuration?: Duration | string;
@@ -591,7 +594,10 @@ function testResponseForSceneControllerConfigurationGet(
 	return sent.groupId === 0 || received.groupId === sent.groupId;
 }
 
-interface SceneControllerConfigurationCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SceneControllerConfigurationCCGetOptions
+	extends CCCommandOptions
+{
 	groupId: number;
 }
 

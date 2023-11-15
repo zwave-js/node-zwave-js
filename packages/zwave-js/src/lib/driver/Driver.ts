@@ -86,6 +86,7 @@ import {
 	highResTimestamp,
 	isMissingControllerACK,
 	isMissingControllerCallback,
+	isMissingControllerResponse,
 	isZWaveError,
 	messageRecordToLines,
 	securityClassIsS2,
@@ -237,12 +238,12 @@ export const libName: string = packageJson.name;
 
 // This is made with cfonts:
 const libNameString = `
-███████╗ ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗             ██╗ ███████╗
-╚══███╔╝ ██║    ██║ ██╔══██╗ ██║   ██║ ██╔════╝             ██║ ██╔════╝
-  ███╔╝  ██║ █╗ ██║ ███████║ ██║   ██║ █████╗   █████╗      ██║ ███████╗
- ███╔╝   ██║███╗██║ ██╔══██║ ╚██╗ ██╔╝ ██╔══╝   ╚════╝ ██   ██║ ╚════██║
-███████╗ ╚███╔███╔╝ ██║  ██║  ╚████╔╝  ███████╗        ╚█████╔╝ ███████║
-╚══════╝  ╚══╝╚══╝  ╚═╝  ╚═╝   ╚═══╝   ╚══════╝         ╚════╝  ╚══════╝
+███████╗        ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗          ██╗ ███████╗
+╚══███╔╝        ██║    ██║ ██╔══██╗ ██║   ██║ ██╔════╝          ██║ ██╔════╝
+  ███╔╝  █████╗ ██║ █╗ ██║ ███████║ ██║   ██║ █████╗            ██║ ███████╗
+ ███╔╝   ╚════╝ ██║███╗██║ ██╔══██║ ╚██╗ ██╔╝ ██╔══╝       ██   ██║ ╚════██║
+███████╗        ╚███╔███╔╝ ██║  ██║  ╚████╔╝  ███████╗     ╚█████╔╝ ███████║
+╚══════╝         ╚══╝╚══╝  ╚═╝  ╚═╝   ╚═══╝   ╚══════╝      ╚════╝  ╚══════╝
 `;
 
 const defaultOptions: ZWaveOptions = {
@@ -250,11 +251,12 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		// Ideally we'd want to have this as low as possible, but some
-		// 500 series controllers can take upwards of 10 seconds to respond sometimes.
-		response: 30000,
+		// 500 series controllers can take several seconds to respond sometimes.
+		response: 10000,
 		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
-		sendDataCallback: 65000, // as defined in INS13954
+		sendDataAbort: 20000, // If a controller takes over 15s to reach a node, it's probably not going to happen
+		sendDataCallback: 30000, // INS13954 defines this to be 65000 ms, but waiting that long causes issues with reporting devices
 		sendToSleep: 250, // The default should be enough time for applications to react to devices waking up
 		retryJammed: 1000,
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
@@ -269,8 +271,13 @@ const defaultOptions: ZWaveOptions = {
 		nodeInterview: 5,
 	},
 	disableOptimisticValueUpdate: false,
-	// By default enable soft reset unless the env variable is set
-	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+	features: {
+		// By default enable soft reset unless the env variable is set
+		softReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+		// By default enable the unresponsive controller recovery unless the env variable is set
+		unresponsiveControllerRecovery: !process.env
+			.ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY,
+	},
 	interview: {
 		queryAllUserCodes: false,
 	},
@@ -336,6 +343,18 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.sendDataCallback < 10000) {
 		throw new ZWaveError(
 			`The Send Data Callback timeout must be at least 10000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.sendDataAbort < 5000
+		|| options.timeouts.sendDataAbort
+			> options.timeouts.sendDataCallback - 5000
+	) {
+		throw new ZWaveError(
+			`The Send Data Abort Callback timeout must be between 5000 and ${
+				options.timeouts.sendDataCallback - 5000
+			} milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -499,7 +518,8 @@ type PrefixedNodeEvents = {
 
 const enum ControllerRecoveryPhase {
 	None,
-	NoACK,
+	ACKTimeout,
+	ACKTimeoutAfterReset,
 	CallbackTimeout,
 	CallbackTimeoutAfterReset,
 }
@@ -525,7 +545,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
-		options?: PartialZWaveOptions,
+		...optionsAndPresets: (PartialZWaveOptions | undefined)[]
 	) {
 		super();
 
@@ -540,22 +560,42 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			);
 		}
 
-		// merge given options with defaults
+		// Deep-Merge all given options/presets
+		const definedOptionsAndPresets = optionsAndPresets.filter(
+			(o): o is PartialZWaveOptions => !!o,
+		);
+		let mergedOptions: PartialZWaveOptions = {};
+		for (const preset of definedOptionsAndPresets) {
+			mergedOptions = mergeDeep(mergedOptions, preset, true);
+		}
+		// Finally apply the defaults, without overwriting any existing settings
 		this._options = mergeDeep(
-			options,
+			mergedOptions,
 			cloneDeep(defaultOptions),
 		) as ZWaveOptions;
+
+		// Normalize deprecated options
+		// TODO: Remove test in packages/zwave-js/src/lib/test/driver/sendDataMissingCallbackAbort.test.ts
+		// when the deprecated option is removed
+		if (
+			// eslint-disable-next-line deprecation/deprecation
+			this._options.enableSoftReset === false
+			&& this._options.features.softReset
+		) {
+			this._options.features.softReset = false;
+		}
+
 		// And make sure they contain valid values
 		checkOptions(this._options);
-		if (options?.userAgent) {
-			if (!isObject(options.userAgent)) {
+		if (this._options.userAgent) {
+			if (!isObject(this._options.userAgent)) {
 				throw new ZWaveError(
 					`The userAgent property must be an object!`,
 					ZWaveErrorCodes.Driver_InvalidOptions,
 				);
 			}
 
-			this.updateUserAgent(options.userAgent);
+			this.updateUserAgent(this._options.userAgent);
 		}
 
 		// Initialize logging
@@ -1393,12 +1433,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			await this.initNetworkCache(this.controller.homeId!);
 
 			const maySoftReset = this.maySoftReset();
-			if (this._options.enableSoftReset && !maySoftReset) {
+			if (this._options.features.softReset && !maySoftReset) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
 				);
-				this._options.enableSoftReset = false;
+				this._options.features.softReset = false;
 			}
 
 			if (maySoftReset) {
@@ -2463,7 +2503,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		// No clear indication, make the result depend on the config option
-		return !!this._options.enableSoftReset;
+		return !!this._options.features.softReset;
 	}
 
 	/**
@@ -2593,6 +2633,18 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				new ZWaveError(restartReason, ZWaveErrorCodes.Driver_Failed),
 			);
 		});
+	}
+
+	/**
+	 * Checks whether recovering an unresponsive controller is enabled
+	 * and whether the driver is in a state where it makes sense.
+	 */
+	private mayRecoverUnresponsiveController(): boolean {
+		if (!this._options.features.unresponsiveControllerRecovery) {
+			return false;
+		}
+		// Only recover after we know the controller has been responsive
+		return this._controllerInterviewed;
 	}
 
 	private async ensureSerialAPI(): Promise<boolean> {
@@ -3493,25 +3545,51 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 	}
 
-	private handleUnresponsiveController(
+	/**
+	 * @internal
+	 * Handles the case that the controller didn't acknowledge a command in time
+	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
+	 */
+	private handleMissingControllerACK(
 		transaction: Transaction,
-		error: ZWaveError,
+		error: ZWaveError & {
+			code: ZWaveErrorCodes.Controller_Timeout;
+			context: "ACK";
+		},
 	): boolean {
-		if (!this._controller) return false;
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
 
-		const fail = (message: string) => {
-			this.rejectTransaction(transaction, error);
+		const recoverByReopeningSerialport = async () => {
+			if (!this.serial) return;
+			this.driverLog.print(
+				"Attempting to recover unresponsive controller by reopening the serial port...",
+				"warn",
+			);
+			if (this.serial.isOpen) await this.serial.close();
+			await wait(1000);
+			await this.openSerialport();
 
-			void this.destroyWithMessage(message);
+			this.driverLog.print(
+				"Serial port reopened. Returning to normal operation and hoping for the best...",
+				"warn",
+			);
+
+			// We don't know if this worked
+			// Go back to normal operation and hope for the best.
+			this._controller?.setStatus(ControllerStatus.Ready);
+			this._recoveryPhase = ControllerRecoveryPhase.None;
 		};
 
 		if (
-			this._recoveryPhase
-				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
+			(this._controller.status !== ControllerStatus.Unresponsive
+				&& !this.maySoftReset())
+			|| this._recoveryPhase
+				=== ControllerRecoveryPhase.ACKTimeoutAfterReset
 		) {
-			// The controller is still timing out transmitting after a soft reset, don't try again.
-			// Reject the transaction and destroy the driver.
-			fail("Controller is still timing out. Restarting the driver...");
+			// Either we can/could not do a soft reset or the controller is still timing out afterwards
+			void recoverByReopeningSerialport().catch(noop);
 
 			return true;
 		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
@@ -3521,45 +3599,163 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				ControllerStatus.Unresponsive,
 			);
 
-			this._recoveryPhase = isMissingControllerACK(error)
-				? ControllerRecoveryPhase.NoACK
-				: ControllerRecoveryPhase.CallbackTimeout;
+			this._recoveryPhase = ControllerRecoveryPhase.ACKTimeout;
 
 			this.driverLog.print(
-				"Attempting to recover unresponsive controller...",
+				"Attempting to recover unresponsive controller by restarting it...",
 				"warn",
 			);
-
-			// Re-queue the transaction.
-			// Its message generator may have finished, so reset that too.
-			transaction.reset();
-			this.queue.add(transaction.clone());
 
 			// Execute the soft-reset asynchronously
 			void this.softReset().then(() => {
 				// The controller responded. It is no longer unresponsive
-				this._controller?.setStatus(ControllerStatus.Ready);
 
-				if (this._recoveryPhase === ControllerRecoveryPhase.NoACK) {
-					this._recoveryPhase = ControllerRecoveryPhase.None;
-				} else if (
-					this._recoveryPhase
-						=== ControllerRecoveryPhase.CallbackTimeout
-				) {
-					this._recoveryPhase =
-						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
-				}
+				// Re-queue the transaction, so it can get handled next.
+				// Its message generator may have finished, so reset that too.
+				transaction.reset();
+				this.queue.add(transaction.clone());
+
+				this._controller?.setStatus(ControllerStatus.Ready);
+				this._recoveryPhase = ControllerRecoveryPhase.None;
 			}).catch(() => {
-				// Soft-reset failed. Reject the original transaction and try restarting the driver.
-				fail(
-					"Recovering unresponsive controller failed. Restarting the driver...",
-				);
+				// Soft-reset failed. Reject the transaction
+				this.rejectTransaction(transaction, error);
+
+				// and reopen the serial port
+				return recoverByReopeningSerialport();
 			});
 
 			return true;
 		} else {
-			// We already attempted to recover from an unresponsive controller.
-			// Ending up here means the soft-reset also failed and the driver is about to be destroyed
+			// Not sure what to do here
+			return false;
+		}
+	}
+
+	/**
+	 * @internal
+	 * Handles the case that the controller didn't send the callback for a SendData in time
+	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
+	 */
+	private handleMissingSendDataResponseOrCallback(
+		transaction: Transaction,
+		error: ZWaveError & {
+			code: ZWaveErrorCodes.Controller_Timeout;
+			context: "callback" | "response";
+		},
+	): boolean {
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
+
+		if (
+			// The SendData response can time out on older controllers trying to reach a dead node.
+			// In this case, we do not want to reset the controller, but just mark the node as dead.
+			error.context === "response"
+			// Also do this if the callback is timing out even after restarting the controller
+			|| this._recoveryPhase
+				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
+		) {
+			const node = this.getNodeUnsafe(transaction.message);
+			if (!node) return false; // This should never happen, but whatever
+
+			// The controller is still timing out transmitting after a soft reset, don't try again.
+			// Real-world experience has shown that for older controllers this situation can be caused by unresponsive nodes.
+
+			// The following is essentially a copy of handleMissingNodeACK, but with updated error messages
+			const messagePart1 =
+				"The node is causing the controller to become unresponsive";
+
+			if (node.canSleep) {
+				if (node.status === NodeStatus.Asleep) {
+					// We already moved the messages to the wakeup queue before. If we end up here, this means a command
+					// was sent that may be sent to potentially asleep nodes - including pings.
+					return false;
+				}
+				this.controllerLog.logNode(
+					node.id,
+					`${messagePart1}. It is probably asleep, moving its messages to the wakeup queue.`,
+					"warn",
+				);
+
+				// There is no longer a reference to the current transaction. If it should be moved to the wakeup queue,
+				// it temporarily needs to be added to the queue again.
+				const handled = this.mayMoveToWakeupQueue(transaction);
+				if (handled) {
+					this.queue.add(transaction);
+				}
+
+				// Mark the node as asleep. This will move the messages to the wakeup queue
+				node.markAsAsleep();
+
+				return handled;
+			} else {
+				const errorMsg = `${messagePart1}, it is presumed dead`;
+				this.controllerLog.logNode(node.id, errorMsg, "warn");
+
+				node.markAsDead();
+
+				// There is no longer a reference to the current transaction on the queue, so we need to reject it separately.
+				transaction.setProgress({
+					state: TransactionState.Failed,
+					reason: errorMsg,
+				});
+
+				transaction.abort(error);
+				this.rejectAllTransactionsForNode(node.id, errorMsg);
+
+				return true;
+			}
+		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
+			// The controller was responsive before this transaction failed.
+
+			if (this.maySoftReset()) {
+				// Mark it as unresponsive and try to soft-reset it.
+				this.controller.setStatus(
+					ControllerStatus.Unresponsive,
+				);
+
+				this._recoveryPhase = ControllerRecoveryPhase.CallbackTimeout;
+
+				this.driverLog.print(
+					"Controller missed Send Data callback. Attempting to recover...",
+					"warn",
+				);
+
+				// Execute the soft-reset asynchronously
+				void this.softReset().then(() => {
+					// The controller responded. It is no longer unresponsive.
+
+					// Re-queue the transaction, so it can get handled next.
+					// Its message generator may have finished, so reset that too.
+					transaction.reset();
+					this.queue.add(transaction.clone());
+
+					this._controller?.setStatus(ControllerStatus.Ready);
+					this._recoveryPhase =
+						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
+				}).catch(() => {
+					// Soft-reset failed. Just reject the transaction
+					this.rejectTransaction(transaction, error);
+
+					this.driverLog.print(
+						"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
+						"warn",
+					);
+					this._recoveryPhase = ControllerRecoveryPhase.None;
+					this._controller?.setStatus(ControllerStatus.Ready);
+				});
+			} else {
+				this.driverLog.print(
+					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled. Returning to normal operation and hoping for the best...",
+					"warn",
+				);
+				this.rejectTransaction(transaction, error);
+			}
+
+			return true;
+		} else {
+			// Not sure what to do here
 			return false;
 		}
 	}
@@ -4724,22 +4920,9 @@ ${handlers.length} left`,
 						zwError = createMessageDroppedUnexpectedError(e);
 					} else {
 						if (
-							e.code === ZWaveErrorCodes.Controller_CommandAborted
-						) {
-							// This transaction was aborted by the driver due to a controller timeout.
-							// Rejections, re-queuing etc. have been handled, so just drop it silently and
-							// continue with the next message
-							transaction.setProgress({
-								state: TransactionState.Failed,
-								reason: "Aborted due to controller timeout",
-							});
-							return;
-						} else if (
 							isSendData(msg) && isMissingControllerCallback(e)
 						) {
-							// If the callback to SendData times out, we need to issue a SendDataAbort
-							await this.abortSendData();
-							// Reject the transaction - this will trigger the recovery mechanism and retry the command afterwards
+							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
 							throw e;
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
@@ -4756,7 +4939,7 @@ ${handlers.length} left`,
 								msg,
 								// Ignore the number of attempts while jammed
 								attemptNumber - jammedAttempts,
-								e.code,
+								e,
 							)
 						) {
 							// Retry the command
@@ -4816,19 +4999,29 @@ ${handlers.length} left`,
 	private mayRetrySerialAPICommand(
 		msg: Message,
 		attemptNumber: number,
-		errorCode: ZWaveErrorCodes,
+		error: ZWaveError,
 	): boolean {
+		// Only retry Send Data, nothing else
 		if (!isSendData(msg)) return false;
+
+		// Don't try to resend SendData commands when the response times out
 		if (
-			msg instanceof SendDataMulticastRequest
-			|| msg instanceof SendDataMulticastBridgeRequest
+			error.code === ZWaveErrorCodes.Controller_Timeout
+			&& error.context === "response"
 		) {
-			// Don't try to resend multicast messages if they were already transmitted.
-			// One or more nodes might have already reacted
-			if (errorCode === ZWaveErrorCodes.Controller_CallbackNOK) {
-				return false;
-			}
+			return false;
 		}
+
+		// Don't try to resend multicast messages if they were already transmitted.
+		// One or more nodes might have already reacted
+		if (
+			(msg instanceof SendDataMulticastRequest
+				|| msg instanceof SendDataMulticastBridgeRequest)
+			&& error.code === ZWaveErrorCodes.Controller_CallbackNOK
+		) {
+			return false;
+		}
+
 		return attemptNumber < msg.maxSendAttempts;
 	}
 
@@ -4843,7 +5036,8 @@ ${handlers.length} left`,
 		const machine = createSerialAPICommandMachine(
 			msg,
 			{
-				sendData: this.writeSerial.bind(this),
+				sendData: (data) => this.writeSerial(data),
+				sendDataAbort: () => this.abortSendData(),
 				notifyUnsolicited: (msg) => {
 					void this.handleUnsolicitedMessage(msg);
 				},
@@ -4904,6 +5098,15 @@ ${handlers.length} left`,
 
 		const result = createDeferredPromise<Message | undefined>();
 
+		// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble.
+		// This was broken in 7.19, not fixed so far
+		if (
+			msg.functionType === FunctionType.SoftReset
+			&& this.controller.sdkVersionGte("7.19.0")
+		) {
+			this.serial?.ignoreAckHighNibbleOnce();
+		}
+
 		this.serialAPIInterpreter = interpret(machine).onDone((evt) => {
 			this.serialAPIInterpreter?.stop();
 			this.serialAPIInterpreter = undefined;
@@ -4930,6 +5133,15 @@ ${handlers.length} left`,
 				);
 			}
 		});
+
+		// Uncomment this for debugging state machine transitions
+		// this.serialAPIInterpreter.onTransition((state) => {
+		// 	if (state.changed) {
+		// 		this.driverLog.print(
+		// 			`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
+		// 		);
+		// 	}
+		// });
 
 		this.serialAPIInterpreter.start();
 
@@ -5365,9 +5577,7 @@ ${handlers.length} left`,
 		});
 	}
 
-	private async abortSendData(
-		abortInterpreter: boolean = false,
-	): Promise<void> {
+	private async abortSendData(): Promise<void> {
 		try {
 			const abort = new SendDataAbort(this);
 			await this.writeSerial(abort.serialize());
@@ -5378,16 +5588,6 @@ ${handlers.length} left`,
 			// We're bypassing the serial API machine, so we need to wait for the ACK ourselves
 			// This could also cause a NAK or CAN, but we don't really care
 			await this.waitForMessageHeader(() => true, 500).catch(noop);
-
-			// Abort the currently active command machine only if the controller has timed out.
-			// SendData commands we abort early MUST result in the normal callback.
-			if (
-				abortInterpreter
-				&& this.serialAPIInterpreter?.status
-					=== InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send("abort");
-			}
 		} catch {
 			// ignore
 		}
@@ -5567,12 +5767,16 @@ ${handlers.length} left`,
 		// If a node failed to respond in time, it might be sleeping
 		if (this.isMissingNodeACK(transaction, error)) {
 			if (this.handleMissingNodeACK(transaction as any, error)) return;
+		} else if (isMissingControllerACK(error)) {
+			if (this.handleMissingControllerACK(transaction, error)) return;
 		} else if (
-			isMissingControllerACK(error)
-			|| (isSendData(transaction.message)
-				&& isMissingControllerCallback(error))
+			isSendData(transaction.message)
+			&& (isMissingControllerResponse(error)
+				|| isMissingControllerCallback(error))
 		) {
-			if (this.handleUnresponsiveController(transaction, error)) return;
+			if (
+				this.handleMissingSendDataResponseOrCallback(transaction, error)
+			) return;
 		}
 
 		this.rejectTransaction(transaction, error);

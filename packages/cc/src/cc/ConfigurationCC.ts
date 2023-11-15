@@ -103,6 +103,7 @@ export const ConfigurationCCValues = Object.freeze({
 	}),
 });
 
+/** @publicAPI */
 export type ConfigurationCCAPISetOptions =
 	& {
 		parameter: number;
@@ -1580,6 +1581,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 }
 
+/** @publicAPI */
 export interface ConfigurationCCReportOptions extends CCCommandOptions {
 	parameter: number;
 	value: ConfigValue;
@@ -1759,7 +1761,8 @@ function testResponseForConfigurationGet(
 	);
 }
 
-interface ConfigurationCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ConfigurationCCGetOptions extends CCCommandOptions {
 	parameter: number;
 	/**
 	 * If this is `true`, responses with different parameters than expected are accepted
@@ -1803,7 +1806,8 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	}
 }
 
-type ConfigurationCCSetOptions =
+// @publicAPI
+export type ConfigurationCCSetOptions =
 	& CCCommandOptions
 	& (
 		| {
@@ -1942,7 +1946,8 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	}
 }
 
-type ConfigurationCCBulkSetOptions =
+// @publicAPI
+export type ConfigurationCCBulkSetOptions =
 	& CCCommandOptions
 	& {
 		parameters: number[];
@@ -2231,7 +2236,8 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 	}
 }
 
-interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
 	parameters: number[];
 }
 
@@ -2282,6 +2288,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 	}
 }
 
+/** @publicAPI */
 export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
 	parameter: number;
 	name: string;
@@ -2428,6 +2435,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 	}
 }
 
+/** @publicAPI */
 export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
 	parameter: number;
 	info: string;
@@ -2587,6 +2595,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 	}
 }
 
+/** @publicAPI */
 export interface ConfigurationCCPropertiesReportOptions
 	extends CCCommandOptions
 {

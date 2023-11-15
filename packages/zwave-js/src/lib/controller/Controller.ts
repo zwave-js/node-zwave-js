@@ -2856,6 +2856,17 @@ supported CCs: ${
 				return SecurityBootstrapFailure.UserCanceled;
 			};
 
+			const abortTimeout = async () => {
+				this.driver.controllerLog.logNode(node.id, {
+					message:
+						`Security S2 bootstrapping failed: a secure inclusion timer has elapsed`,
+					level: "warn",
+				});
+
+				await abort();
+				return SecurityBootstrapFailure.Timeout;
+			};
+
 			// Ask the node for its desired security classes and key exchange params
 			const kexParams = await api
 				.withOptions({ reportTimeoutMs: inclusionTimeouts.TA1 })
@@ -2963,7 +2974,8 @@ supported CCs: ${
 					cc instanceof Security2CCPublicKeyReport
 					|| cc instanceof Security2CCKEXFail,
 				inclusionTimeouts.TA2,
-			);
+			).catch(() => "timeout" as const);
+			if (pubKeyResponse === "timeout") return abortTimeout();
 			if (
 				pubKeyResponse instanceof Security2CCKEXFail
 				|| pubKeyResponse.includingNode
@@ -3077,7 +3089,7 @@ supported CCs: ${
 				return abortUser();
 			}
 
-			const keySetEcho = await Promise.race([
+			const kexSetEcho = await Promise.race([
 				this.driver.waitForCommand<
 					Security2CCKEXSet | Security2CCKEXFail
 				>(
@@ -3085,17 +3097,18 @@ supported CCs: ${
 						cc instanceof Security2CCKEXSet
 						|| cc instanceof Security2CCKEXFail,
 					tai2RemainingMs,
-				),
+				).catch(() => "timeout" as const),
 				this.cancelBootstrapS2Promise,
 			]);
-			if (typeof keySetEcho === "number") {
+			if (kexSetEcho === "timeout") return abortTimeout();
+			if (typeof kexSetEcho === "number") {
 				// The bootstrapping process was canceled - this is most likely because the PIN was incorrect
 				// and the node's commands cannot be decoded
-				await abort(keySetEcho);
+				await abort(kexSetEcho);
 				return SecurityBootstrapFailure.S2IncorrectPIN;
 			}
 			// Validate that the received command contains the correct list of keys
-			if (keySetEcho instanceof Security2CCKEXFail) {
+			if (kexSetEcho instanceof Security2CCKEXFail) {
 				this.driver.controllerLog.logNode(node.id, {
 					message:
 						`The joining node canceled the Security S2 bootstrapping.`,
@@ -3104,7 +3117,7 @@ supported CCs: ${
 				});
 				await abort();
 				return SecurityBootstrapFailure.NodeCanceled;
-			} else if (!keySetEcho.echo) {
+			} else if (!kexSetEcho.echo) {
 				this.driver.controllerLog.logNode(node.id, {
 					message:
 						`Security S2 bootstrapping failed: KEXSet received without echo flag`,
@@ -3114,7 +3127,7 @@ supported CCs: ${
 				await abort(KEXFailType.WrongSecurityLevel);
 				return SecurityBootstrapFailure.NodeCanceled;
 			} else if (
-				!keySetEcho.isEncapsulatedWith(
+				!kexSetEcho.isEncapsulatedWith(
 					CommandClasses["Security 2"],
 					Security2Command.MessageEncapsulation,
 				)
@@ -3128,8 +3141,8 @@ supported CCs: ${
 				await abort(KEXFailType.WrongSecurityLevel);
 				return SecurityBootstrapFailure.S2WrongSecurityLevel;
 			} else if (
-				keySetEcho.grantedKeys.length !== grantedKeys.length
-				|| !keySetEcho.grantedKeys.every((k) => grantedKeys.includes(k))
+				kexSetEcho.grantedKeys.length !== grantedKeys.length
+				|| !kexSetEcho.grantedKeys.every((k) => grantedKeys.includes(k))
 			) {
 				this.driver.controllerLog.logNode(node.id, {
 					message:
@@ -3157,7 +3170,8 @@ supported CCs: ${
 						cc instanceof Security2CCNetworkKeyGet
 						|| cc instanceof Security2CCKEXFail,
 					inclusionTimeouts.TA3,
-				);
+				).catch(() => "timeout" as const);
+				if (keyRequest === "timeout") return abortTimeout();
 				if (keyRequest instanceof Security2CCKEXFail) {
 					this.driver.controllerLog.logNode(node.id, {
 						message:
@@ -3214,7 +3228,8 @@ supported CCs: ${
 						cc instanceof Security2CCNetworkKeyVerify
 						|| cc instanceof Security2CCKEXFail,
 					inclusionTimeouts.TA4,
-				);
+				).catch(() => "timeout" as const);
+				if (verify === "timeout") return abortTimeout();
 				if (verify instanceof Security2CCKEXFail) {
 					this.driver.controllerLog.logNode(node.id, {
 						message:
@@ -3256,7 +3271,8 @@ supported CCs: ${
 			>(
 				(cc) => cc instanceof Security2CCTransferEnd,
 				inclusionTimeouts.TA5,
-			);
+			).catch(() => "timeout" as const);
+			if (transferEnd === "timeout") return abortTimeout();
 			if (!transferEnd.keyRequestComplete) {
 				// S2 bootstrapping failed
 				this.driver.controllerLog.logNode(node.id, {
@@ -3296,10 +3312,12 @@ supported CCs: ${
 		} catch (e) {
 			let errorMessage =
 				`Security S2 bootstrapping failed, the node was not granted any S2 security class`;
+			let result = SecurityBootstrapFailure.Unknown;
 			if (!isZWaveError(e)) {
 				errorMessage += `: ${e as any}`;
 			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
 				errorMessage += ": a secure inclusion timer has elapsed.";
+				result = SecurityBootstrapFailure.Timeout;
 			} else if (
 				e.code !== ZWaveErrorCodes.Controller_MessageDropped
 				&& e.code !== ZWaveErrorCodes.Controller_NodeTimeout
@@ -3310,6 +3328,8 @@ supported CCs: ${
 			// Remember that the node was NOT granted any S2 security classes
 			unGrantSecurityClasses();
 			node.removeCC(CommandClasses["Security 2"]);
+
+			return result;
 		} finally {
 			// Whatever happens, no further communication needs the temporary key
 			deleteTempKey();

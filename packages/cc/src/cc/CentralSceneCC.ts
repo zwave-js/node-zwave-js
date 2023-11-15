@@ -83,6 +83,7 @@ export const CentralSceneCCValues = Object.freeze({
 				...ValueMetadata.ReadOnlyUInt8,
 				label: `Scene ${padStart(sceneNumber.toString(), 3, "0")}`,
 			} as const),
+			{ stateful: false } as const,
 		),
 	}),
 });
@@ -478,7 +479,10 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 @expectedCCResponse(CentralSceneCCConfigurationReport)
 export class CentralSceneCCConfigurationGet extends CentralSceneCC {}
 
-interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface CentralSceneCCConfigurationSetOptions
+	extends CCCommandOptions
+{
 	slowRefresh: boolean;
 }
 

@@ -513,7 +513,8 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 	}
 }
 
-interface HumidityControlSetpointCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface HumidityControlSetpointCCSetOptions extends CCCommandOptions {
 	setpointType: HumidityControlSetpointType;
 	value: number;
 	scale: number;
@@ -659,7 +660,8 @@ function testResponseForHumidityControlSetpointGet(
 	return received.type === sent.setpointType;
 }
 
-interface HumidityControlSetpointCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface HumidityControlSetpointCCGetOptions extends CCCommandOptions {
 	setpointType: HumidityControlSetpointType;
 }
 
@@ -789,7 +791,8 @@ export class HumidityControlSetpointCCScaleSupportedReport
 	}
 }
 
-interface HumidityControlSetpointCCScaleSupportedGetOptions
+// @publicAPI
+export interface HumidityControlSetpointCCScaleSupportedGetOptions
 	extends CCCommandOptions
 {
 	setpointType: HumidityControlSetpointType;
@@ -927,7 +930,8 @@ export class HumidityControlSetpointCCCapabilitiesReport
 	}
 }
 
-interface HumidityControlSetpointCCCapabilitiesGetOptions
+// @publicAPI
+export interface HumidityControlSetpointCCCapabilitiesGetOptions
 	extends CCCommandOptions
 {
 	setpointType: HumidityControlSetpointType;

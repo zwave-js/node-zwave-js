@@ -67,7 +67,8 @@ export class ZWaveProtocolCC extends CommandClass {
 	declare ccCommand: ZWaveProtocolCommand;
 }
 
-interface ZWaveProtocolCCNodeInformationFrameOptions
+// @publicAPI
+export interface ZWaveProtocolCCNodeInformationFrameOptions
 	extends CCCommandOptions, NodeInformationFrame
 {}
 
@@ -131,7 +132,8 @@ export class ZWaveProtocolCCRequestNodeInformationFrame
 	extends ZWaveProtocolCC
 {}
 
-interface ZWaveProtocolCCAssignIDsOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCAssignIDsOptions extends CCCommandOptions {
 	assignedNodeId: number;
 	homeId: number;
 }
@@ -166,7 +168,10 @@ export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCFindNodesInRangeOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCFindNodesInRangeOptions
+	extends CCCommandOptions
+{
 	candidateNodeIds: number[];
 	wakeUpTime: WakeUpTime;
 	dataRate?: ZWaveDataRate;
@@ -233,7 +238,8 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCRangeInfoOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCRangeInfoOptions extends CCCommandOptions {
 	neighborNodeIds: number[];
 	wakeUpTime?: WakeUpTime;
 }
@@ -286,7 +292,10 @@ export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
 @expectedCCResponse(ZWaveProtocolCCRangeInfo)
 export class ZWaveProtocolCCGetNodesInRange extends ZWaveProtocolCC {}
 
-interface ZWaveProtocolCCCommandCompleteOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCCommandCompleteOptions
+	extends CCCommandOptions
+{
 	sequenceNumber: number;
 }
 
@@ -315,7 +324,10 @@ export class ZWaveProtocolCCCommandComplete extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCTransferPresentationOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCTransferPresentationOptions
+	extends CCCommandOptions
+{
 	supportsNWI: boolean;
 	includeNode: boolean;
 	excludeNode: boolean;
@@ -363,7 +375,8 @@ export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCTransferNodeInformationOptions
+// @publicAPI
+export interface ZWaveProtocolCCTransferNodeInformationOptions
 	extends CCCommandOptions, NodeProtocolInfoAndDeviceClass
 {
 	sequenceNumber: number;
@@ -434,7 +447,8 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC
 	}
 }
 
-interface ZWaveProtocolCCTransferRangeInformationOptions
+// @publicAPI
+export interface ZWaveProtocolCCTransferRangeInformationOptions
 	extends CCCommandOptions
 {
 	sequenceNumber: number;
@@ -485,7 +499,8 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCTransferEndOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCTransferEndOptions extends CCCommandOptions {
 	status: NetworkTransferStatus;
 }
 
@@ -514,7 +529,10 @@ export class ZWaveProtocolCCTransferEnd extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCAssignReturnRouteOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCAssignReturnRouteOptions
+	extends CCCommandOptions
+{
 	destinationNodeId: number;
 	routeIndex: number;
 	repeaters: number[];
@@ -578,7 +596,8 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCNewNodeRegisteredOptions
+// @publicAPI
+export interface ZWaveProtocolCCNewNodeRegisteredOptions
 	extends CCCommandOptions, NodeInformationFrame
 {
 	newNodeId: number;
@@ -645,7 +664,10 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC
 	}
 }
 
-interface ZWaveProtocolCCNewRangeRegisteredOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCNewRangeRegisteredOptions
+	extends CCCommandOptions
+{
 	testedNodeId: number;
 	neighborNodeIds: number[];
 }
@@ -685,7 +707,8 @@ export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions
+// @publicAPI
+export interface ZWaveProtocolCCTransferNewPrimaryControllerCompleteOptions
 	extends CCCommandOptions
 {
 	genericDeviceClass: number;
@@ -723,7 +746,8 @@ export class ZWaveProtocolCCAutomaticControllerUpdateStart
 	extends ZWaveProtocolCC
 {}
 
-interface ZWaveProtocolCCSUCNodeIDOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCSUCNodeIDOptions extends CCCommandOptions {
 	sucNodeId: number;
 	isSIS: boolean;
 }
@@ -757,7 +781,8 @@ export class ZWaveProtocolCCSUCNodeID extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCSetSUCOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCSetSUCOptions extends CCCommandOptions {
 	enableSIS: boolean;
 }
 
@@ -788,7 +813,8 @@ export class ZWaveProtocolCCSetSUC extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCSetSUCAckOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCSetSUCAckOptions extends CCCommandOptions {
 	accepted: boolean;
 	isSIS: boolean;
 }
@@ -830,7 +856,10 @@ export class ZWaveProtocolCCAssignSUCReturnRoute
 	extends ZWaveProtocolCCAssignReturnRoute
 {}
 
-interface ZWaveProtocolCCStaticRouteRequestOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCStaticRouteRequestOptions
+	extends CCCommandOptions
+{
 	nodeIds: number[];
 }
 
@@ -870,7 +899,8 @@ export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCLostOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCLostOptions extends CCCommandOptions {
 	lostNodeId: number;
 }
 
@@ -899,7 +929,8 @@ export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCAcceptLostOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCAcceptLostOptions extends CCCommandOptions {
 	accepted: boolean;
 }
 
@@ -931,7 +962,8 @@ export class ZWaveProtocolCCAcceptLost extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCNOPPowerOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCNOPPowerOptions extends CCCommandOptions {
 	powerDampening: number;
 }
 
@@ -990,7 +1022,8 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCReservedIDsOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCReservedIDsOptions extends CCCommandOptions {
 	reservedNodeIDs: number[];
 }
 
@@ -1026,7 +1059,8 @@ export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCReserveNodeIDsOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCReserveNodeIDsOptions extends CCCommandOptions {
 	numNodeIDs: number;
 }
 
@@ -1056,7 +1090,10 @@ export class ZWaveProtocolCCReserveNodeIDs extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCNodesExistReplyOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCNodesExistReplyOptions
+	extends CCCommandOptions
+{
 	nodeMaskType: number;
 	nodeListUpdated: boolean;
 }
@@ -1099,7 +1136,8 @@ function testResponseForZWaveProtocolNodesExist(
 	return received.nodeMaskType === sent.nodeMaskType;
 }
 
-interface ZWaveProtocolCCNodesExistOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCNodesExistOptions extends CCCommandOptions {
 	nodeMaskType: number;
 	nodeIDs: number[];
 }
@@ -1142,7 +1180,8 @@ export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
 	}
 }
 
-interface ZWaveProtocolCCSetNWIModeOptions extends CCCommandOptions {
+// @publicAPI
+export interface ZWaveProtocolCCSetNWIModeOptions extends CCCommandOptions {
 	enabled: boolean;
 	timeoutMinutes?: number;
 }
@@ -1183,7 +1222,8 @@ export class ZWaveProtocolCCExcludeRequest
 	extends ZWaveProtocolCCNodeInformationFrame
 {}
 
-interface ZWaveProtocolCCAssignReturnRoutePriorityOptions
+// @publicAPI
+export interface ZWaveProtocolCCAssignReturnRoutePriorityOptions
 	extends CCCommandOptions
 {
 	targetNodeId: number;
@@ -1223,7 +1263,8 @@ export class ZWaveProtocolCCAssignSUCReturnRoutePriority
 	extends ZWaveProtocolCCAssignReturnRoutePriority
 {}
 
-interface ZWaveProtocolCCSmartStartIncludedNodeInformationOptions
+// @publicAPI
+export interface ZWaveProtocolCCSmartStartIncludedNodeInformationOptions
 	extends CCCommandOptions
 {
 	nwiHomeId: Buffer;

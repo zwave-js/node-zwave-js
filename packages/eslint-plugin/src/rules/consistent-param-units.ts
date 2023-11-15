@@ -13,6 +13,7 @@ const fixableUnits: FixableUnit[] = [
 	{ wrong: ["milliseconds", "millisecond", "msec", "msecs"], correct: "ms" },
 	{ wrong: ["watt", "watts"], correct: "W" },
 	{ wrong: ["kilowatt", "kilowatts"], correct: "kW" },
+	{ wrong: ["kwh"], correct: "kWh" },
 	{ wrong: ["volt", "volts"], correct: "V" },
 	{ wrong: ["millivolt", "millivolts"], correct: "mV" },
 	{ wrong: ["ampere", "amperes", "amps"], correct: "A" },

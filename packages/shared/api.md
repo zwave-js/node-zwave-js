@@ -331,15 +331,31 @@ export interface TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHa
     // (undocumented)
     emit<TEvent extends keyof TEvents>(event: TEvent, ...args: Parameters<TEvents[TEvent]>): boolean;
     // (undocumented)
+    eventNames(): Array<keyof TEvents>;
+    // (undocumented)
+    getMaxListeners(): number;
+    // (undocumented)
+    listenerCount<TEvent extends keyof TEvents>(event: TEvent, listener?: TEvents[TEvent]): number;
+    // (undocumented)
+    listeners<TEvent extends keyof TEvents>(eventName: TEvent): TEvents[TEvent][];
+    // (undocumented)
     off<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
     // (undocumented)
     on<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
     // (undocumented)
     once<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
     // (undocumented)
+    prependListener<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    prependOnceListener<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    rawListeners<TEvent extends keyof TEvents>(eventName: TEvent): TEvents[TEvent][];
+    // (undocumented)
     removeAllListeners(event?: keyof TEvents): this;
     // (undocumented)
     removeListener<TEvent extends keyof TEvents>(event: TEvent, callback: TEvents[TEvent]): this;
+    // (undocumented)
+    setMaxListeners(n: number): this;
 }
 
 // @public (undocumented)

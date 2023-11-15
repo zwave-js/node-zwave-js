@@ -810,7 +810,8 @@ latch status:       ${status.latchStatus}`;
 	}
 }
 
-interface DoorLockCCOperationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface DoorLockCCOperationSetOptions extends CCCommandOptions {
 	mode: DoorLockMode;
 }
 
@@ -1153,7 +1154,8 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 @expectedCCResponse(DoorLockCCConfigurationReport)
 export class DoorLockCCConfigurationGet extends DoorLockCC {}
 
-type DoorLockCCConfigurationSetOptions =
+// @publicAPI
+export type DoorLockCCConfigurationSetOptions =
 	& (
 		| {
 			operationType: DoorLockOperationType.Timed;

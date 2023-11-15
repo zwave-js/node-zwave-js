@@ -603,7 +603,8 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 	}
 }
 
-interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
 	value: number;
 	scale: number;
@@ -665,6 +666,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	}
 }
 
+// @publicAPI
 export interface ThermostatSetpointCCReportOptions extends CCCommandOptions {
 	type: ThermostatSetpointType;
 	value: number;
@@ -768,7 +770,8 @@ function testResponseForThermostatSetpointGet(
 	return received.type === sent.setpointType;
 }
 
-interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
 }
 
@@ -813,6 +816,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	}
 }
 
+// @publicAPI
 export interface ThermostatSetpointCCCapabilitiesReportOptions
 	extends CCCommandOptions
 {
@@ -908,7 +912,10 @@ export class ThermostatSetpointCCCapabilitiesReport
 	}
 }
 
-interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ThermostatSetpointCCCapabilitiesGetOptions
+	extends CCCommandOptions
+{
 	setpointType: ThermostatSetpointType;
 }
 
@@ -950,6 +957,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	}
 }
 
+// @publicAPI
 export interface ThermostatSetpointCCSupportedReportOptions
 	extends CCCommandOptions
 {

@@ -191,7 +191,8 @@ setback state: ${setbackResp.setbackState}`;
 	}
 }
 
-interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 	setbackType: SetbackType;
 	setbackState: SetbackState;
 }

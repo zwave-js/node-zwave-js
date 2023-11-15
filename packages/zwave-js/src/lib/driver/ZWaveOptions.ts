@@ -15,13 +15,22 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		byte: number; // >=1, default: 150 ms
 
 		/**
-		 * How long to wait for a controller response. Usually this timeout should never elapse,
-		 * so this is merely a safeguard against the driver stalling.
+		 * How long to wait for a controller response. Usually this should never elapse, but when it does,
+		 * the driver will abort the transmission and try to recover the controller if it is unresponsive.
 		 */
-		response: number; // [500...60000], default: 30000 ms
+		response: number; // [500...60000], default: 10000 ms
 
-		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number; // >=10000, default: 65000 ms
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before aborting the transmission.
+		 */
+		sendDataAbort: number; // >=5000, <=(sendDataCallback - 5000), default: 20000 ms
+
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before considering the controller unresponsive.
+		 */
+		sendDataCallback: number; // >=10000, default: 30000 ms
 
 		/** How much time a node gets to process a request and send a response */
 		report: number; // [500...10000], default: 1000 ms
@@ -175,7 +184,36 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	emitValueUpdateAfterSetValue?: boolean;
 
+	features: {
+		/**
+		 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+		 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
+		 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
+		 *
+		 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
+		 */
+		softReset?: boolean;
+
+		/**
+		 * When enabled, the driver attempts to detect when the controller becomes unresponsive (meaning it did not
+		 * respond within the configured timeout) and performs appropriate recovery actions.
+		 *
+		 * This includes the following scenarios:
+		 * * A command was not acknowledged by the controller
+		 * * The callback for a Send Data command was not received, even after aborting a timed out transmission
+		 *
+		 * In certain environments however, this feature can interfere with the normal operation more than intended,
+		 * so it can be disabled. However disabling it means that commands can fail unnecessarily and nodes can be
+		 * incorrectly marked as dead.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
+		 */
+		unresponsiveControllerRecovery?: boolean;
+	};
+
 	/**
+	 * @deprecated Use `features.softReset` instead.
+	 *
 	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
 	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
 	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
@@ -318,3 +356,59 @@ export type EditableZWaveOptions = Expand<
 		userAgent?: Record<string, string | null | undefined>;
 	}
 >;
+
+export const driverPresets = Object.freeze(
+	{
+		/**
+		 * Increases several timeouts to be able to deal with controllers
+		 * and/or nodes that have severe trouble communicating.
+		 */
+		SAFE_MODE: {
+			timeouts: {
+				// 500 series controllers that take long to respond instead of delaying the callback
+				response: 60000,
+				// Any controller having trouble reaching a node
+				sendDataAbort: 60000,
+				sendDataCallback: 65000,
+				// Slow nodes taking long to respond
+				report: 10000,
+				nonce: 20000,
+			},
+			attempts: {
+				// Increase communication attempts with nodes to their maximum
+				sendData: 5,
+				sendDataJammed: 10,
+				nodeInterview: 10,
+			},
+		},
+
+		/**
+		 * Disables the unresponsive controller recovery to be able to deal with controllers
+		 * that frequently become unresponsive for seemingly no reason.
+		 */
+		NO_CONTROLLER_RECOVERY: {
+			features: {
+				unresponsiveControllerRecovery: false,
+			},
+		},
+
+		/**
+		 * Sends battery powered nodes to sleep more quickly in order to save battery.
+		 */
+		BATTERY_SAVE: {
+			timeouts: {
+				sendToSleep: 100,
+			},
+		},
+
+		/**
+		 * Sends battery powered nodes to sleep less quickly to give applications
+		 * more time between interactions.
+		 */
+		AWAKE_LONGER: {
+			timeouts: {
+				sendToSleep: 1000,
+			},
+		},
+	} as const satisfies Record<string, PartialZWaveOptions>,
+);

@@ -4,6 +4,89 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.3.0 (2023-10-31)
+### Features
+* Allow disabling the unresponsive controller recovery feature (#6480)
+
+### Bugfixes
+* Do not abort timed out `Send Data` commands twice (#6484)
+* Ensure the default Basic CC values are only exposed if they should be, even with the compat `event` enabled (#6485)
+* Auto-remove failed SmartStart nodes when bootstrapping times out (#6483)
+* Do not attempt to poll values from nodes that are considered dead (#6470)
+* Fixed an issue where the send queue was blocked when recovering controller from missed Send Data callback failed (#6473)
+* Instead of restarting the driver, the serial port is now reopened if controller is still missing ACKs after soft-reset (#6477)
+* Do not attempt to recover an unresponsive controller before fully initializing (#6480)
+
+### Config file changes
+* Tweak Heatit Z-TRM6 options (#6464)
+* Add Ring Alarm Panic Button Gen2 (#6453)
+* Update fingerprints for Vesternet devices (#6460)
+
+### Changes under the hood
+* Added a `mock-server` hook to run code after initializing mocks (#6478)
+* Changed the headline in the logs from "ZWAVE-JS" to "Z-WAVE JS" (#6462)
+* Lint device config files as part of CI (#6471)
+* The `enableSoftReset` driver option is now deprecated in favor of `features.softReset` (#6480)
+
+## 12.2.3 (2023-10-24)
+### Bugfixes
+* Mark `Central Scene CC` `scene` property as stateless. The previous fix wasn't working. (#6458)
+* Preserve `stateful` and `secret` flags for dynamic CC values (#6457)
+
+### Config file changes
+* Correct product id for Fakro ZWS12 (#6454)
+* add PM-B400ZW-N (#6421)
+* Ensure `kWh` is written consistently in parameter units (#6456)
+
+### Changes under the hood
+* Bot: Consider `zwave_js` to be a valid logfile name in issue reports (#6459)
+
+## 12.2.2 (2023-10-24)
+### Bugfixes
+* Fixed an issue where nodes would appear to have two lifeline associations, one with and one without target endpoint 0 (#6448)
+* Writing to the `volume` value of the `Sound Switch CC` no longer throws an error, but pre-sets the volume to use for the next tone to be played using the `toneId` value (#6450, #6451)
+* The `defaultToneId` value of the `Sound Switch CC` now also lists the names for each possible tone (#6452)
+
+### Config file changes
+* Treat `Binary Switch Set` and `Thermostat Mode Set` as reports for `SRT321 HRT4-ZW` (#6423)
+
+### Changes under the hood
+* Add compat flag to treat `Set` commands as `Report` (#6423)
+
+## 12.2.1 (2023-10-20)
+### Bugfixes
+* Add ESLint rule to ensure all types used in a public CC API are exported (#6438)
+* Throttle `firmware update progress` events for OTA updates (#6435)
+* Mark `Central Scene CC` `scene` property as stateless (#6424)
+
+### Config file changes
+* Override supported Thermostat modes for Eurotronics Spirit TRV (#6436)
+* Correct firmware warnings for Zooz controllers (#6433)
+* Correct overridden `thermostatMode` metadata for ZME_FT (#6420)
+* Add MCOHome C521/C621 shutters, fix C321, make shutters consistent (#6419)
+
+### Changes under the hood
+* Add all `EventListener` methods to `TypedEventEmitter` interface (#6437)
+* Bug reports, feature requests and request for tech support have been moved from issues to discussions. We'll escalate them to issues if necessary.
+
+## 12.2.0 (2023-10-17)
+This release includes several more fixes and workarounds for the problematic interaction between some controller firmware bugs and the automatic controller recovery introduced in the `v12` release:
+* Added a workaround to recognize corrupted `ACK` frames after soft-reset of controllers running an 7.19.x firmware or higher. Previously this triggered the unresponsive controller detection and recovery process. (#6409)
+* When the response to a `Send Data` command times out, the command is now aborted, instead of retrying and potentially putting the controller in a bad state due to not waiting for the command cycle to complete. When this happens, Z-Wave JS no longer attempts to recover the controller by restarting it, unless the callback is also missing. (#6408)
+* When the callback to a `Send Data` command continues to be missing after restarting the controller, Z-Wave JS no longer restarts itself. Instead the old behavior of marking the node as `dead` is now restored, as the node being unresponsive/unreachable is most likely the actual problem. (#6403)
+* In addition, the `Send Data` callback timeout has been reduced to 30 seconds and ongoing transmissions are now aborted before reaching this timeout. This should limit the impact of the controller taking excessively long to transmit, especially in busy networks with lots of unsolicited reporting and end nodes expecting a timely response (#6411)
+
+### Features
+* The `Driver` constructor now accepts multiple sets of options and curated presets are available (#6412)
+
+### Additional Bugfixes
+* Only auto-refresh `Meter` and `Multilevel Sensor CC` values if none were updated recently (#6398)
+* Export all option types for `Configuration CC` (#6413)
+
+### Config file changes
+* Add NEO Cool Cam Repeater (#6332)
+* Increase report timeout for Aeotec Multisensor 6 to 2s (#6397)
+
 ## 12.1.1 (2023-10-12)
 ### Bugfixes
 * Fixed a long standing issue that prevented multi-target firmware updates from being applied correctly (#6395)

@@ -1146,7 +1146,8 @@ export class UserCodeCC extends CommandClass {
 	}
 }
 
-type UserCodeCCSetOptions =
+// @publicAPI
+export type UserCodeCCSetOptions =
 	| {
 		userId: 0;
 		userIdStatus: UserIDStatus.Available;
@@ -1251,6 +1252,7 @@ export class UserCodeCCSet extends UserCodeCC {
 	}
 }
 
+// @publicAPI
 export interface UserCodeCCReportOptions extends CCCommandOptions {
 	userId: number;
 	userIdStatus: UserIDStatus;
@@ -1359,7 +1361,8 @@ export class UserCodeCCReport extends UserCodeCC
 	}
 }
 
-interface UserCodeCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCGetOptions extends CCCommandOptions {
 	userId: number;
 }
 
@@ -1394,6 +1397,7 @@ export class UserCodeCCGet extends UserCodeCC {
 	}
 }
 
+// @publicAPI
 export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
 	supportedUsers: number;
 }
@@ -1445,6 +1449,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCUsersNumberReport)
 export class UserCodeCCUsersNumberGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
 	supportsMasterCode: boolean;
 	supportsMasterCodeDeactivation: boolean;
@@ -1627,7 +1632,8 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCCapabilitiesReport)
 export class UserCodeCCCapabilitiesGet extends UserCodeCC {}
 
-interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 	keypadMode: KeypadMode;
 }
 
@@ -1664,6 +1670,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	}
 }
 
+// @publicAPI
 export interface UserCodeCCKeypadModeReportOptions extends CCCommandOptions {
 	keypadMode: KeypadMode;
 }
@@ -1728,6 +1735,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCKeypadModeReport)
 export class UserCodeCCKeypadModeGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
 	masterCode: string;
 }
@@ -1772,6 +1780,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	}
 }
 
+// @publicAPI
 export interface UserCodeCCMasterCodeReportOptions extends CCCommandOptions {
 	masterCode: string;
 }
@@ -1820,6 +1829,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCMasterCodeReport)
 export class UserCodeCCMasterCodeGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCUserCodeChecksumReportOptions
 	extends CCCommandOptions
 {
@@ -1864,6 +1874,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCUserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCExtendedUserCodeSetOptions extends CCCommandOptions {
 	userCodes: UserCodeCCSetOptions[];
 }
@@ -1996,7 +2007,8 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	}
 }
 
-interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
 	userId: number;
 	reportMore?: boolean;
 }

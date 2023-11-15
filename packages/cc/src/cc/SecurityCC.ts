@@ -503,7 +503,10 @@ export class SecurityCCNonceReport extends SecurityCC {
 @expectedCCResponse(SecurityCCNonceReport)
 export class SecurityCCNonceGet extends SecurityCC {}
 
-interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
+// @publicAPI
+export interface SecurityCCCommandEncapsulationOptions
+	extends CCCommandOptions
+{
 	encapsulated: CommandClass;
 	alternativeNetworkKey?: Buffer;
 }
@@ -800,7 +803,8 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 @CCCommand(SecurityCommand.NetworkKeyVerify)
 export class SecurityCCNetworkKeyVerify extends SecurityCC {}
 
-interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
 	networkKey: Buffer;
 }
 
@@ -841,7 +845,10 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 	// @noLogEntry - The network key shouldn't be logged, so users can safely post their logs online
 }
 
-interface SecurityCCCommandsSupportedReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface SecurityCCCommandsSupportedReportOptions
+	extends CCCommandOptions
+{
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 }

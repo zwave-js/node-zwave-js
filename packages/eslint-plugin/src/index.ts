@@ -14,6 +14,7 @@ import { noValueInOptionLabel } from "./rules/no-value-in-option-label.js";
 import { preferDefaultValue } from "./rules/prefer-defaultvalue.js";
 
 import { configFiles as configFilesConfig } from "./configs/configFiles.js";
+import { noInternalCCTypes } from "./rules/no-internal-cc-types.js";
 
 module.exports = {
 	rules: {
@@ -32,6 +33,7 @@ module.exports = {
 		"no-useless-description": noUselessDescription,
 		"no-value-in-option-label": noValueInOptionLabel,
 		"prefer-defaultvalue": preferDefaultValue,
+		"no-internal-cc-types": noInternalCCTypes,
 	},
 	configs: {
 		"config-files": configFilesConfig,
