@@ -401,11 +401,13 @@ export function parseNodeInformationFrame(
 	buffer: Buffer,
 	isLongRange: boolean = false,
 ): NodeInformationFrame {
-	let { info, bytesRead: offset } = parseNodeProtocolInfoAndDeviceClass(
+	const result = parseNodeProtocolInfoAndDeviceClass(
 		buffer,
 		isLongRange,
 	);
-	var ccListLength;
+	const info = result.info;
+	let offset = result.bytesRead;
+	let ccListLength;
 	if (isLongRange) {
 		ccListLength = buffer[offset];
 		offset += 1;
@@ -428,7 +430,7 @@ export function encodeNodeInformationFrame(
 	const protocolInfo = encodeNodeProtocolInfoAndDeviceClass(info, isLongRange);
 	const ccList = 	encodeCCList(info.supportedCCs, []);
 
-	var buffers = [protocolInfo]
+	const buffers = [protocolInfo]
 	if (isLongRange) {
 		const ccListLength = Buffer.allocUnsafe(1);
 		ccListLength[0] = ccList.length;
