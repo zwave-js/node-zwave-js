@@ -5557,7 +5557,6 @@ ${handlers.length} left`,
 	}
 
 	/** @internal */
-	// BUGBUG: do we need to replicate this for Long Range?
 	public async sendZWaveProtocolCC(
 		command: ZWaveProtocolCC,
 		options: Pick<
