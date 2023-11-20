@@ -4973,18 +4973,9 @@ ${handlers.length} left`,
 					msg,
 					transactionSource,
 				);
-				this.driverLog.print("SerialAPI command succeeded");
 				result.resolve(ret);
 			} catch (e) {
-				this.driverLog.print(
-					"SerialAPI command failed: " + getErrorMessage(e),
-				);
 				result.reject(e);
-
-				// // We may want to handle the error before continuing with the next command
-				// // Ideally, we'd pause the queue here and resume it when the error was handled,
-				// // but this system isn't in place yet.
-				// await wait(250);
 			}
 		}
 	}

@@ -692,10 +692,10 @@ integrationTest(
 	},
 );
 
-integrationTestMulti.only(
+integrationTestMulti(
 	"When a command from the immediate queue to a sleeping node triggers the unresponsive controller recovery, the normal send queue does not get blocked",
 	{
-		debug: true,
+		// debug: true,
 
 		provisioningDirectory: path.join(
 			__dirname,
@@ -780,10 +780,6 @@ integrationTestMulti.only(
 			mockController.defineBehavior(handleBrokenSendData);
 		},
 		testBody: async (t, driver, nodes, mockController, mockNodes) => {
-			driver.driverLog.print("TEST START");
-			driver.driverLog.print("TEST START");
-			driver.driverLog.print("TEST START");
-			driver.driverLog.print("TEST START");
 			driver.driverLog.print("TEST START");
 			// Circumvent the options validation so the test doesn't take forever
 			driver.options.timeouts.sendDataAbort = 1000;
