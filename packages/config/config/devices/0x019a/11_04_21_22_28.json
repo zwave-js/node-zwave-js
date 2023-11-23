@@ -29,7 +29,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Temperature reporting type",
+			"label": "Temperature Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
