@@ -1,20 +1,16 @@
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRD450-F-ZW3",
+	"label": "YRD420-F-ZW3",
 	"description": "Assure 2 Lock Touch SL Key Free Touchscreen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8107",
-			"productId": "0x4913"
-		},
-		{
-			"productType": "0x8107",
-			"productId": "0x4928"
-		},
-		{
-			"productType": "0x8107",
 			"productId": "0x49d2"
+		},
+		{
+			"productType": "0x8107",
+			"productId": "0x4929"
 		}
 	],
 	"firmwareVersion": {
