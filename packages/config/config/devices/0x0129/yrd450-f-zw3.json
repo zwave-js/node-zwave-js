@@ -61,6 +61,6 @@
 		}
 	],
 	"metadata": {
-		"$import": "templates/yale_template.json#assure2__touch_zw3_metadata"
+		"$import": "templates/yale_template.json#assure2_touch_zw3_metadata"
 	}
 }
