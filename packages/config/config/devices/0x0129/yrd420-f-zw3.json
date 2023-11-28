@@ -1,12 +1,20 @@
 {
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRD420-F-ZW3",
-	"description": "Assure 2 Lock Touch SL Keyed Touchscreen Deadbolt",
+	"label": "YRD450-F-ZW3",
+	"description": "Assure 2 Lock Touch SL Key Free Touchscreen Deadbolt",
 	"devices": [
 		{
 			"productType": "0x8107",
-			"productId": "0x4929"
+			"productId": "0x4913"
+		},
+		{
+			"productType": "0x8107",
+			"productId": "0x4928"
+		},
+		{
+			"productType": "0x8107",
+			"productId": "0x49d2"
 		}
 	],
 	"firmwareVersion": {
@@ -56,9 +64,7 @@
 			"$import": "templates/yale_template.json#expiring_pin_lifetime"
 		}
 	],
-
-		"metadata": {
-			"$import": "templates/yale_template.json#assure2__touch_zw3_metadata"
-		}
+	"metadata": {
+		"$import": "templates/yale_template.json#assure2__touch_zw3_metadata"
 	}
-	
+}
