@@ -31,6 +31,7 @@ import { BasicCCBehaviors } from "./mockCCBehaviors/Basic";
 import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
 import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
+import { MultilevelSensorCCBehaviors } from "./mockCCBehaviors/MultilevelSensor";
 import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
 import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
@@ -293,6 +294,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		...ConfigurationCCBehaviors,
 		...EnergyProductionCCBehaviors,
 		...ManufacturerSpecificCCBehaviors,
+		...MultilevelSensorCCBehaviors,
 		...NotificationCCBehaviors,
 		...ScheduleEntryLockCCBehaviors,
 		...SoundSwitchCCBehaviors,

@@ -28,6 +28,16 @@ export interface NotificationCCCapabilities {
 	notificationTypesAndEvents: Record<number, number[]>;
 }
 
+export interface MultilevelSensorCCCapabilities {
+	sensors: Record<number, {
+		supportedScales: number[];
+	}>;
+	getValue?: (
+		sensorType: number | undefined,
+		scale: number | undefined,
+	) => number | undefined;
+}
+
 export interface SoundSwitchCCCapabilities {
 	defaultToneId: number;
 	defaultVolume: number;
@@ -105,6 +115,7 @@ export interface ScheduleEntryLockCCCapabilities {
 export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
+	[49 /* Multilevel Sensor */]: MultilevelSensorCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
 	[106 /* Window Covering */]: WindowCoveringCCCapabilities;
 	[144 /* Energy Production */]: EnergyProductionCCCapabilities;

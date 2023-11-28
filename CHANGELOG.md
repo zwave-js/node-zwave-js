@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.3.1 (2023-11-20)
+### Bugfixes
+* Fixed an issue where the unresponsive controller recovery could put "immediate" commands to a sleeping node on the wrong queue, blocking all outgoing communication (#6507)
+
+### Config file changes
+* Add missing units and firmware condition for Heatit Z-Temp2 (#6500)
+* Correct device label for Airzone Aidoo Control HVAC unit (#6493)
+
 ## 12.3.0 (2023-10-31)
 ### Features
 * Allow disabling the unresponsive controller recovery feature (#6480)

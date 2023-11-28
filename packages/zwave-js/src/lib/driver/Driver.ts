@@ -1827,6 +1827,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (
 			oldStatus === NodeStatus.Dead
 			&& node.interviewStage !== InterviewStage.Complete
+			&& !this._options.testingHooks?.skipNodeInterview
 		) {
 			void this.interviewNodeInternal(node);
 		}
@@ -3613,7 +3614,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				// Re-queue the transaction, so it can get handled next.
 				// Its message generator may have finished, so reset that too.
 				transaction.reset();
-				this.queue.add(transaction.clone());
+				this.getQueueForTransaction(transaction).add(
+					transaction.clone(),
+				);
 
 				this._controller?.setStatus(ControllerStatus.Ready);
 				this._recoveryPhase = ControllerRecoveryPhase.None;
@@ -3729,7 +3732,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					// Re-queue the transaction, so it can get handled next.
 					// Its message generator may have finished, so reset that too.
 					transaction.reset();
-					this.queue.add(transaction.clone());
+					this.getQueueForTransaction(transaction).add(
+						transaction.clone(),
+					);
 
 					this._controller?.setStatus(ControllerStatus.Ready);
 					this._recoveryPhase =
@@ -5148,6 +5153,17 @@ ${handlers.length} left`,
 		return result;
 	}
 
+	private getQueueForTransaction(t: Transaction): TransactionQueue {
+		if (
+			t.priority === MessagePriority.Immediate
+			|| t.priority === MessagePriority.ControllerImmediate
+		) {
+			return this.immediateQueue;
+		} else {
+			return this.queue;
+		}
+	}
+
 	/**
 	 * Sends a message to the Z-Wave stick.
 	 * @param msg The message to send
@@ -5257,14 +5273,7 @@ ${handlers.length} left`,
 		transaction.tag = options.tag;
 
 		// And queue it
-		if (
-			transaction.priority === MessagePriority.Immediate
-			|| transaction.priority === MessagePriority.ControllerImmediate
-		) {
-			this.immediateQueue.add(transaction);
-		} else {
-			this.queue.add(transaction);
-		}
+		this.getQueueForTransaction(transaction).add(transaction);
 		transaction.setProgress({ state: TransactionState.Queued });
 
 		// If the transaction should expire, start the timeout
