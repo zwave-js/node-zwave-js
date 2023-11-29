@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.3.2 (2023-11-29)
+### Config file changes
+* Correct firmware version condition for Zooz ZSE40 v3.0 (#6519)
+
+### Changes under the hood
+* Add mocks for `Multilevel Sensor CC`
+* Upgrade transitive dependency `axios` to a non-vulnerable version (#6520)
+
 ## 12.3.1 (2023-11-20)
 ### Bugfixes
 * Fixed an issue where the unresponsive controller recovery could put "immediate" commands to a sleeping node on the wrong queue, blocking all outgoing communication (#6507)
