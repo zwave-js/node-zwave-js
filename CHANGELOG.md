@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.4.0 (2023-11-30)
 ### Features
 * Expose rebuild routes progress as a controller property (#6525)
 
