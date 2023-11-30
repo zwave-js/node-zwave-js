@@ -328,7 +328,7 @@
 	"metadata": {
 		"inclusion": "Set your primary controller into inclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful inclusion into the network",
 		"exclusion": "Set your primary controller into exclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful exclusion from the network",
-		"reset": "Press and hold the \"Install\" button for 10 seconds. Factory Reset should only be used if the primary controller is missing or inoperable."
+		"reset": "Press and hold the \"Install\" button for 10 seconds. Factory Reset should only be used if the primary controller is missing or inoperable.",
 		"wakeup": "Press the \"Install\" button three times rapidly to send a \"BATTERY_REPORT\" and \"WAKE_UP_NOTIFICATION\" (if installed on a network). The sensor will stay awake for 30 seconds."
 	}
 }
