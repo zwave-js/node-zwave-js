@@ -1257,6 +1257,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     get protocolVersion(): MaybeNotKnown<string>;
     provisionSmartStartNode(entry: PlannedProvisioningEntry): void;
     rebuildNodeRoutes(nodeId: number): Promise<boolean>;
+    get rebuildRoutesProgress(): ReadonlyMap<number, RebuildRoutesStatus> | undefined;
     removeAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     removeFailedNode(nodeId: number): Promise<void>;

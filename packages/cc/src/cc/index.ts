@@ -444,6 +444,8 @@ export type {
 	MultilevelSensorCCGetOptions,
 	MultilevelSensorCCGetSupportedScaleOptions,
 	MultilevelSensorCCReportOptions,
+	MultilevelSensorCCSupportedScaleReportOptions,
+	MultilevelSensorCCSupportedSensorReportOptions,
 } from "./MultilevelSensorCC";
 export {
 	MultilevelSensorCC,
