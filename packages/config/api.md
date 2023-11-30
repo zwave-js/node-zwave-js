@@ -669,6 +669,8 @@ export class GenericDeviceClass {
     // (undocumented)
     readonly label: string;
     // (undocumented)
+    readonly maySupportBasicCC: boolean;
+    // (undocumented)
     readonly requiresSecurity?: boolean;
     // (undocumented)
     readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
@@ -974,6 +976,8 @@ export class SpecificDeviceClass {
     readonly key: number;
     // (undocumented)
     readonly label: string;
+    // (undocumented)
+    readonly maySupportBasicCC: boolean;
     // (undocumented)
     readonly requiresSecurity?: boolean;
     // (undocumented)

@@ -475,6 +475,11 @@ export const driverPresets: Readonly<{
             readonly nodeInterview: 10;
         };
     };
+    readonly NO_CONTROLLER_RECOVERY: {
+        readonly features: {
+            readonly unresponsiveControllerRecovery: false;
+        };
+    };
     readonly BATTERY_SAVE: {
         readonly timeouts: {
             readonly sendToSleep: 100;
@@ -531,7 +536,9 @@ export class Endpoint implements IZWaveEndpoint {
     invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : Omit<CCNameOrId, CommandClasses_2> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     isCCSecure(cc: CommandClasses_2): boolean;
     maybeAddBasicCCAsFallback(): void;
+    maySupportBasicCC(): boolean;
     readonly nodeId: number;
+    removeBasicCCSupportIfForbidden(): void;
     removeCC(cc: CommandClasses_2): void;
     protected reset(): void;
     supportsCC(cc: CommandClasses_2): boolean;
@@ -1252,6 +1259,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     get protocolVersion(): MaybeNotKnown<string>;
     provisionSmartStartNode(entry: PlannedProvisioningEntry): void;
     rebuildNodeRoutes(nodeId: number): Promise<boolean>;
+    get rebuildRoutesProgress(): ReadonlyMap<number, RebuildRoutesStatus> | undefined;
     removeAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     removeFailedNode(nodeId: number): Promise<void>;
@@ -1693,7 +1701,13 @@ export interface ZWaveOptions extends ZWaveHostOptions {
     };
     disableOptimisticValueUpdate?: boolean;
     emitValueUpdateAfterSetValue?: boolean;
+    // @deprecated (undocumented)
     enableSoftReset?: boolean;
+    // (undocumented)
+    features: {
+        softReset?: boolean;
+        unresponsiveControllerRecovery?: boolean;
+    };
     inclusionUserCallbacks?: InclusionUserCallbacks;
     // (undocumented)
     interview: {

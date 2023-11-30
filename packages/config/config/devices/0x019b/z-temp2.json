@@ -142,6 +142,7 @@
 			"label": "External Relay and Operating State Update Interval",
 			"description": "How often the devices sends Binary Switch State and Thermostat Mode in addition to change reports",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 240,
 			"defaultValue": 0,
@@ -160,6 +161,7 @@
 		},
 		{
 			"#": "15",
+			"$if": "firmwareVersion >= 1.2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Invert Output",
 			"valueSize": 2

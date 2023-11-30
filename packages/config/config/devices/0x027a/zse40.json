@@ -13,7 +13,7 @@
 	"manufacturerId": "0x027a",
 	"label": [
 		{
-			"$if": "firmwareVersion === 32.32 || firmwareVersion >= 1.10 && firmwareVersion < 16.9",
+			"$if": "firmwareVersion >= 32.32 || firmwareVersion >= 1.10 && firmwareVersion < 16.9",
 			"value": "ZSE40 700"
 		},
 		// Fallback for non-700 series

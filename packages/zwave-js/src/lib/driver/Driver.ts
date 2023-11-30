@@ -271,8 +271,13 @@ const defaultOptions: ZWaveOptions = {
 		nodeInterview: 5,
 	},
 	disableOptimisticValueUpdate: false,
-	// By default enable soft reset unless the env variable is set
-	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+	features: {
+		// By default enable soft reset unless the env variable is set
+		softReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+		// By default enable the unresponsive controller recovery unless the env variable is set
+		unresponsiveControllerRecovery: !process.env
+			.ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY,
+	},
 	interview: {
 		queryAllUserCodes: false,
 	},
@@ -513,7 +518,8 @@ type PrefixedNodeEvents = {
 
 const enum ControllerRecoveryPhase {
 	None,
-	NoACK,
+	ACKTimeout,
+	ACKTimeoutAfterReset,
 	CallbackTimeout,
 	CallbackTimeoutAfterReset,
 }
@@ -567,6 +573,18 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			mergedOptions,
 			cloneDeep(defaultOptions),
 		) as ZWaveOptions;
+
+		// Normalize deprecated options
+		// TODO: Remove test in packages/zwave-js/src/lib/test/driver/sendDataMissingCallbackAbort.test.ts
+		// when the deprecated option is removed
+		if (
+			// eslint-disable-next-line deprecation/deprecation
+			this._options.enableSoftReset === false
+			&& this._options.features.softReset
+		) {
+			this._options.features.softReset = false;
+		}
+
 		// And make sure they contain valid values
 		checkOptions(this._options);
 		if (this._options.userAgent) {
@@ -1415,12 +1433,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			await this.initNetworkCache(this.controller.homeId!);
 
 			const maySoftReset = this.maySoftReset();
-			if (this._options.enableSoftReset && !maySoftReset) {
+			if (this._options.features.softReset && !maySoftReset) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
 				);
-				this._options.enableSoftReset = false;
+				this._options.features.softReset = false;
 			}
 
 			if (maySoftReset) {
@@ -1809,6 +1827,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (
 			oldStatus === NodeStatus.Dead
 			&& node.interviewStage !== InterviewStage.Complete
+			&& !this._options.testingHooks?.skipNodeInterview
 		) {
 			void this.interviewNodeInternal(node);
 		}
@@ -2485,7 +2504,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		// No clear indication, make the result depend on the config option
-		return !!this._options.enableSoftReset;
+		return !!this._options.features.softReset;
 	}
 
 	/**
@@ -2615,6 +2634,18 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				new ZWaveError(restartReason, ZWaveErrorCodes.Driver_Failed),
 			);
 		});
+	}
+
+	/**
+	 * Checks whether recovering an unresponsive controller is enabled
+	 * and whether the driver is in a state where it makes sense.
+	 */
+	private mayRecoverUnresponsiveController(): boolean {
+		if (!this._options.features.unresponsiveControllerRecovery) {
+			return false;
+		}
+		// Only recover after we know the controller has been responsive
+		return this._controllerInterviewed;
 	}
 
 	private async ensureSerialAPI(): Promise<boolean> {
@@ -3527,48 +3558,79 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			context: "ACK";
 		},
 	): boolean {
-		if (!this._controller) return false;
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
 
-		const fail = (message: string) => {
-			this.rejectTransaction(transaction, error);
-			void this.destroyWithMessage(message);
+		const recoverByReopeningSerialport = async () => {
+			if (!this.serial) return;
+			this.driverLog.print(
+				"Attempting to recover unresponsive controller by reopening the serial port...",
+				"warn",
+			);
+			if (this.serial.isOpen) await this.serial.close();
+			await wait(1000);
+			await this.openSerialport();
+
+			this.driverLog.print(
+				"Serial port reopened. Returning to normal operation and hoping for the best...",
+				"warn",
+			);
+
+			// We don't know if this worked
+			// Go back to normal operation and hope for the best.
+			this._controller?.setStatus(ControllerStatus.Ready);
+			this._recoveryPhase = ControllerRecoveryPhase.None;
 		};
 
-		if (this._controller.status !== ControllerStatus.Unresponsive) {
+		if (
+			(this._controller.status !== ControllerStatus.Unresponsive
+				&& !this.maySoftReset())
+			|| this._recoveryPhase
+				=== ControllerRecoveryPhase.ACKTimeoutAfterReset
+		) {
+			// Either we can/could not do a soft reset or the controller is still timing out afterwards
+			void recoverByReopeningSerialport().catch(noop);
+
+			return true;
+		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
 			// The controller was responsive before this transaction failed.
 			// Mark it as unresponsive and try to soft-reset it.
 			this.controller.setStatus(
 				ControllerStatus.Unresponsive,
 			);
 
-			this._recoveryPhase = ControllerRecoveryPhase.NoACK;
+			this._recoveryPhase = ControllerRecoveryPhase.ACKTimeout;
 
 			this.driverLog.print(
-				"Attempting to recover unresponsive controller...",
+				"Attempting to recover unresponsive controller by restarting it...",
 				"warn",
 			);
-
-			// Re-queue the transaction.
-			// Its message generator may have finished, so reset that too.
-			transaction.reset();
-			this.queue.add(transaction.clone());
 
 			// Execute the soft-reset asynchronously
 			void this.softReset().then(() => {
 				// The controller responded. It is no longer unresponsive
+
+				// Re-queue the transaction, so it can get handled next.
+				// Its message generator may have finished, so reset that too.
+				transaction.reset();
+				this.getQueueForTransaction(transaction).add(
+					transaction.clone(),
+				);
+
 				this._controller?.setStatus(ControllerStatus.Ready);
 				this._recoveryPhase = ControllerRecoveryPhase.None;
 			}).catch(() => {
-				// Soft-reset failed. Reject the original transaction and try restarting the driver.
-				fail(
-					"Recovering unresponsive controller failed. Restarting the driver...",
-				);
+				// Soft-reset failed. Reject the transaction
+				this.rejectTransaction(transaction, error);
+
+				// and reopen the serial port
+				return recoverByReopeningSerialport();
 			});
 
 			return true;
 		} else {
-			// We already attempted to recover from an unresponsive controller.
-			// Ending up here means the soft-reset also failed and the driver is about to be destroyed
+			// Not sure what to do here
 			return false;
 		}
 	}
@@ -3585,7 +3647,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			context: "callback" | "response";
 		},
 	): boolean {
-		if (!this._controller) return false;
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
 
 		if (
 			// The SendData response can time out on older controllers trying to reach a dead node.
@@ -3661,20 +3725,22 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					"warn",
 				);
 
-				// Re-queue the transaction.
-				// Its message generator may have finished, so reset that too.
-				transaction.reset();
-				this.queue.add(transaction.clone());
-
 				// Execute the soft-reset asynchronously
 				void this.softReset().then(() => {
-					// The controller responded. It is no longer unresponsive
-					this._controller?.setStatus(ControllerStatus.Ready);
+					// The controller responded. It is no longer unresponsive.
 
+					// Re-queue the transaction, so it can get handled next.
+					// Its message generator may have finished, so reset that too.
+					transaction.reset();
+					this.getQueueForTransaction(transaction).add(
+						transaction.clone(),
+					);
+
+					this._controller?.setStatus(ControllerStatus.Ready);
 					this._recoveryPhase =
 						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
 				}).catch(() => {
-					// Soft-reset failed. Just reject the original transaction.
+					// Soft-reset failed. Just reject the transaction
 					this.rejectTransaction(transaction, error);
 
 					this.driverLog.print(
@@ -3686,7 +3752,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				});
 			} else {
 				this.driverLog.print(
-					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled.",
+					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled. Returning to normal operation and hoping for the best...",
 					"warn",
 				);
 				this.rejectTransaction(transaction, error);
@@ -4859,22 +4925,9 @@ ${handlers.length} left`,
 						zwError = createMessageDroppedUnexpectedError(e);
 					} else {
 						if (
-							e.code === ZWaveErrorCodes.Controller_CommandAborted
-						) {
-							// This transaction was aborted by the driver due to a controller timeout.
-							// Rejections, re-queuing etc. have been handled, so just drop it silently and
-							// continue with the next message
-							transaction.setProgress({
-								state: TransactionState.Failed,
-								reason: "Aborted due to controller timeout",
-							});
-							return;
-						} else if (
 							isSendData(msg) && isMissingControllerCallback(e)
 						) {
-							// If the callback to SendData times out, we need to issue a SendDataAbort
-							await this.abortSendData();
-							// Reject the transaction - this will trigger the recovery mechanism and retry the command afterwards
+							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
 							throw e;
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
@@ -4989,7 +5042,7 @@ ${handlers.length} left`,
 			msg,
 			{
 				sendData: (data) => this.writeSerial(data),
-				sendDataAbort: () => this.abortSendData(false),
+				sendDataAbort: () => this.abortSendData(),
 				notifyUnsolicited: (msg) => {
 					void this.handleUnsolicitedMessage(msg);
 				},
@@ -5098,6 +5151,17 @@ ${handlers.length} left`,
 		this.serialAPIInterpreter.start();
 
 		return result;
+	}
+
+	private getQueueForTransaction(t: Transaction): TransactionQueue {
+		if (
+			t.priority === MessagePriority.Immediate
+			|| t.priority === MessagePriority.ControllerImmediate
+		) {
+			return this.immediateQueue;
+		} else {
+			return this.queue;
+		}
 	}
 
 	/**
@@ -5209,14 +5273,7 @@ ${handlers.length} left`,
 		transaction.tag = options.tag;
 
 		// And queue it
-		if (
-			transaction.priority === MessagePriority.Immediate
-			|| transaction.priority === MessagePriority.ControllerImmediate
-		) {
-			this.immediateQueue.add(transaction);
-		} else {
-			this.queue.add(transaction);
-		}
+		this.getQueueForTransaction(transaction).add(transaction);
 		transaction.setProgress({ state: TransactionState.Queued });
 
 		// If the transaction should expire, start the timeout
@@ -5528,9 +5585,7 @@ ${handlers.length} left`,
 		});
 	}
 
-	private async abortSendData(
-		abortInterpreter: boolean = false,
-	): Promise<void> {
+	private async abortSendData(): Promise<void> {
 		try {
 			const abort = new SendDataAbort(this);
 			await this.writeSerial(abort.serialize());
@@ -5541,16 +5596,6 @@ ${handlers.length} left`,
 			// We're bypassing the serial API machine, so we need to wait for the ACK ourselves
 			// This could also cause a NAK or CAN, but we don't really care
 			await this.waitForMessageHeader(() => true, 500).catch(noop);
-
-			// Abort the currently active command machine only if the controller has timed out.
-			// SendData commands we abort early MUST result in the normal callback.
-			if (
-				abortInterpreter
-				&& this.serialAPIInterpreter?.status
-					=== InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send("abort");
-			}
 		} catch {
 			// ignore
 		}

@@ -4,6 +4,53 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.4.0 (2023-11-30)
+### Features
+* Expose rebuild routes progress as a controller property (#6525)
+
+### Bugfixes
+* On devices that should/must not support `Basic CC`, but use it for reporting, only the `currentValue` is now exposed. This allows applications to consider it a sensor, not an actor (#6526)
+
+## 12.3.2 (2023-11-29)
+### Config file changes
+* Correct firmware version condition for Zooz ZSE40 v3.0 (#6519)
+
+### Changes under the hood
+* Add mocks for `Multilevel Sensor CC`
+* Upgrade transitive dependency `axios` to a non-vulnerable version (#6520)
+
+## 12.3.1 (2023-11-20)
+### Bugfixes
+* Fixed an issue where the unresponsive controller recovery could put "immediate" commands to a sleeping node on the wrong queue, blocking all outgoing communication (#6507)
+
+### Config file changes
+* Add missing units and firmware condition for Heatit Z-Temp2 (#6500)
+* Correct device label for Airzone Aidoo Control HVAC unit (#6493)
+
+## 12.3.0 (2023-10-31)
+### Features
+* Allow disabling the unresponsive controller recovery feature (#6480)
+
+### Bugfixes
+* Do not abort timed out `Send Data` commands twice (#6484)
+* Ensure the default Basic CC values are only exposed if they should be, even with the compat `event` enabled (#6485)
+* Auto-remove failed SmartStart nodes when bootstrapping times out (#6483)
+* Do not attempt to poll values from nodes that are considered dead (#6470)
+* Fixed an issue where the send queue was blocked when recovering controller from missed Send Data callback failed (#6473)
+* Instead of restarting the driver, the serial port is now reopened if controller is still missing ACKs after soft-reset (#6477)
+* Do not attempt to recover an unresponsive controller before fully initializing (#6480)
+
+### Config file changes
+* Tweak Heatit Z-TRM6 options (#6464)
+* Add Ring Alarm Panic Button Gen2 (#6453)
+* Update fingerprints for Vesternet devices (#6460)
+
+### Changes under the hood
+* Added a `mock-server` hook to run code after initializing mocks (#6478)
+* Changed the headline in the logs from "ZWAVE-JS" to "Z-WAVE JS" (#6462)
+* Lint device config files as part of CI (#6471)
+* The `enableSoftReset` driver option is now deprecated in favor of `features.softReset` (#6480)
+
 ## 12.2.3 (2023-10-24)
 ### Bugfixes
 * Mark `Central Scene CC` `scene` property as stateless. The previous fix wasn't working. (#6458)

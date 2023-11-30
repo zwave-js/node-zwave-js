@@ -1,5 +1,5 @@
 import { Scale, getDefaultScale } from "@zwave-js/config";
-import { timespan } from "@zwave-js/core";
+import { encodeBitMask, timespan } from "@zwave-js/core";
 import type {
 	IZWaveEndpoint,
 	MessageOrCCLogEntry,
@@ -13,8 +13,6 @@ import {
 	type MaybeNotKnown,
 	MessagePriority,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 	encodeFloatWithScale,
 	parseBitMask,
 	parseFloatWithScale,
@@ -829,22 +827,41 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	}
 }
 
+// @publicAPI
+export interface MultilevelSensorCCSupportedSensorReportOptions
+	extends CCCommandOptions
+{
+	supportedSensorTypes: readonly number[];
+}
+
 @CCCommand(MultilevelSensorCommand.SupportedSensorReport)
 export class MultilevelSensorCCSupportedSensorReport
 	extends MultilevelSensorCC
 {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| MultilevelSensorCCSupportedSensorReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.supportedSensorTypes = parseBitMask(this.payload);
+
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.supportedSensorTypes = parseBitMask(this.payload);
+		} else {
+			this.supportedSensorTypes = options.supportedSensorTypes;
+		}
 	}
 
 	// TODO: Use this during interview to precreate values
 	@ccValue(MultilevelSensorCCValues.supportedSensorTypes)
-	public readonly supportedSensorTypes: readonly number[];
+	public supportedSensorTypes: readonly number[];
+
+	public serialize(): Buffer {
+		this.payload = encodeBitMask(this.supportedSensorTypes);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -869,20 +886,35 @@ export class MultilevelSensorCCSupportedSensorReport
 @expectedCCResponse(MultilevelSensorCCSupportedSensorReport)
 export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {}
 
+// @publicAPI
+export interface MultilevelSensorCCSupportedScaleReportOptions
+	extends CCCommandOptions
+{
+	sensorType: number;
+	supportedScales: readonly number[];
+}
+
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| MultilevelSensorCCSupportedScaleReportOptions,
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 2);
-		this.sensorType = this.payload[0];
-		this.supportedScales = parseBitMask(
-			Buffer.from([this.payload[1] & 0b1111]),
-			0,
-		);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.sensorType = this.payload[0];
+			this.supportedScales = parseBitMask(
+				Buffer.from([this.payload[1] & 0b1111]),
+				0,
+			);
+		} else {
+			this.sensorType = options.sensorType;
+			this.supportedScales = options.supportedScales;
+		}
 	}
 
 	public readonly sensorType: number;
@@ -893,6 +925,14 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 			[self.sensorType] as const,
 	)
 	public readonly supportedScales: readonly number[];
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.sensorType]),
+			encodeBitMask(this.supportedScales, 4, 0),
+		]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -935,11 +975,8 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.sensorType = this.payload[0];
 		} else {
 			this.sensorType = options.sensorType;
 		}
