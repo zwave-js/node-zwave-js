@@ -1816,6 +1816,13 @@ export class ZWaveNode extends Endpoint
 			if (this.interviewStage === InterviewStage.NodeInfo) {
 				// Only advance the interview if it was completed, otherwise abort
 				if (await this.interviewCCs()) {
+					// After interviewing the CCs, we may need to clean up the Basic CC values.
+					// Some device types are not allowed to support it, but there are devices that do.
+					// If a device type is forbidden to support Basic CC, remove the "support" portion of it
+					for (const endpoint of this.getAllEndpoints()) {
+						endpoint.removeBasicCCSupportIfForbidden();
+					}
+
 					this.setInterviewStage(InterviewStage.CommandClasses);
 				} else {
 					return false;
