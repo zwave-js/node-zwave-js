@@ -35,6 +35,7 @@ export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> = T ex
 export type CCSpecificCapabilities = {
     [CommandClasses.Configuration]: ConfigurationCCCapabilities;
     [CommandClasses.Notification]: NotificationCCCapabilities;
+    [49]: MultilevelSensorCCCapabilities;
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
     [144]: EnergyProductionCCCapabilities;
@@ -169,6 +170,8 @@ export class MockController {
     // (undocumented)
     get nodes(): ReadonlyMap<number, MockNode>;
     onNodeFrame(node: MockNode, frame: MockZWaveFrame): Promise<void>;
+    // (undocumented)
+    get receivedHostMessages(): readonly Readonly<Message>[];
     // (undocumented)
     removeNode(node: MockNode): void;
     sendToHost(data: Buffer): Promise<void>;
@@ -338,6 +341,18 @@ export interface MockZWaveRequestFrame {
     repeaters: number[];
     // (undocumented)
     type: MockZWaveFrameType.Request;
+}
+
+// Warning: (ae-missing-release-tag) "MultilevelSensorCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSensorCCCapabilities {
+    // (undocumented)
+    getValue?: (sensorType: number | undefined, scale: number | undefined) => number | undefined;
+    // (undocumented)
+    sensors: Record<number, {
+        supportedScales: number[];
+    }>;
 }
 
 // Warning: (ae-missing-release-tag) "NotificationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

@@ -1723,6 +1723,8 @@ export class BasicCC extends CommandClass {
     // (undocumented)
     ccCommand: BasicCommand;
     // (undocumented)
+    getDefinedValueIDs(applHost: ZWaveApplicationHost_2): ValueID_2[];
+    // (undocumented)
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
@@ -1811,7 +1813,7 @@ export const BasicCCValues: Readonly<{
             readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly stateful: false;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
+            readonly autoCreate: false;
         };
     };
     restorePrevious: {
@@ -12133,24 +12135,46 @@ export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultilevelSensorCCSupportedScaleReportOptions);
     // (undocumented)
     readonly sensorType: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly supportedScales: readonly number[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
 
+// Warning: (ae-missing-release-tag) "MultilevelSensorCCSupportedScaleReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSensorCCSupportedScaleReportOptions extends CCCommandOptions {
+    // (undocumented)
+    sensorType: number;
+    // (undocumented)
+    supportedScales: readonly number[];
+}
+
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCSupportedSensorReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultilevelSensorCCSupportedSensorReportOptions);
     // (undocumented)
-    readonly supportedSensorTypes: readonly number[];
+    serialize(): Buffer;
+    // (undocumented)
+    supportedSensorTypes: readonly number[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultilevelSensorCCSupportedSensorReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSensorCCSupportedSensorReportOptions extends CCCommandOptions {
+    // (undocumented)
+    supportedSensorTypes: readonly number[];
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSensorCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
