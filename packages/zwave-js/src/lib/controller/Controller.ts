@@ -3890,6 +3890,20 @@ supported CCs: ${
 	}
 
 	private _rebuildRoutesProgress = new Map<number, RebuildRoutesStatus>();
+	/**
+	 * If routes are currently being rebuilt for the entire network, this returns the current progress.
+	 * The information is the same as in the `"rebuild routes progress"` event.
+	 */
+	public get rebuildRoutesProgress():
+		| ReadonlyMap<
+			number,
+			RebuildRoutesStatus
+		>
+		| undefined
+	{
+		if (!this._isRebuildingRoutes) return undefined;
+		return new Map(this._rebuildRoutesProgress);
+	}
 
 	/**
 	 * Starts the process of rebuilding routes for all alive nodes in the network,
@@ -4053,6 +4067,7 @@ supported CCs: ${
 		}
 		// We're done!
 		this._isRebuildingRoutes = false;
+		this._rebuildRoutesProgress.clear();
 	}
 
 	/**
@@ -4072,6 +4087,8 @@ supported CCs: ${
 				|| t.message instanceof DeleteReturnRouteRequest
 				|| t.message instanceof AssignReturnRouteRequest,
 		);
+
+		this._rebuildRoutesProgress.clear();
 
 		return true;
 	}
