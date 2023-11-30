@@ -5,7 +5,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"On devices that MUST not support Basic CC, but use Basic Set to report status, ONLY currentValue should be exposed",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			// Routing Multilevel Sensor, MUST not support Basic CC
