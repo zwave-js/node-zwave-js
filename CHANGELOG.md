@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Expose rebuild routes progress as a controller property (#6525)
+
+### Bugfixes
+* On devices that should/must not support `Basic CC`, but use it for reporting, only the `currentValue` is now exposed. This allows applications to consider it a sensor, not an actor (#6526)
+
 ## 12.3.2 (2023-11-29)
 ### Config file changes
 * Correct firmware version condition for Zooz ZSE40 v3.0 (#6519)
