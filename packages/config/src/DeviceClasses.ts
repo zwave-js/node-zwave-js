@@ -152,6 +152,21 @@ export class GenericDeviceClass {
 			this.controlledCCs = [];
 		}
 
+		if (definition.maySupportBasicCC != undefined) {
+			if (definition.maySupportBasicCC !== false) {
+				throwInvalidConfig(
+					"device classes",
+					`maySupportBasicCC in device class ${this.label} (${
+						num2hex(this.key)
+					}) must be false or omitted (= true)!`,
+				);
+			} else {
+				this.maySupportBasicCC = false;
+			}
+		} else {
+			this.maySupportBasicCC = true;
+		}
+
 		const specific = new Map<number, SpecificDeviceClass>();
 		if (isObject(definition.specific)) {
 			for (
@@ -190,6 +205,7 @@ export class GenericDeviceClass {
 	public readonly requiresSecurity?: boolean;
 	public readonly supportedCCs: readonly CommandClasses[];
 	public readonly controlledCCs: readonly CommandClasses[];
+	public readonly maySupportBasicCC: boolean;
 	public readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
 }
 
@@ -312,6 +328,21 @@ export class SpecificDeviceClass {
 			...generic.controlledCCs,
 			...this.controlledCCs,
 		]);
+
+		if (definition.maySupportBasicCC != undefined) {
+			if (definition.maySupportBasicCC !== false) {
+				throwInvalidConfig(
+					"device classes",
+					`maySupportBasicCC in device class ${generic.label} -> ${this.label} (${
+						num2hex(this.key)
+					}) must be false or omitted (= true)!`,
+				);
+			} else {
+				this.maySupportBasicCC = false;
+			}
+		} else {
+			this.maySupportBasicCC = true;
+		}
 	}
 
 	public readonly key: number;
@@ -320,4 +351,5 @@ export class SpecificDeviceClass {
 	public readonly requiresSecurity?: boolean;
 	public readonly supportedCCs: readonly CommandClasses[];
 	public readonly controlledCCs: readonly CommandClasses[];
+	public readonly maySupportBasicCC: boolean;
 }
