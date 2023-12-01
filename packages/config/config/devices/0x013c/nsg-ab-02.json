@@ -1,0 +1,123 @@
+{
+	"manufacturer": "Safe Grow",
+	"manufacturerId": "0x013c",
+	"label": "NSG-AB-02",
+	"description": "Smart Outlet Plug",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x002f"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "5",
+			"label": "Restore Switch State Mode",
+			"description": "Whenever the AC power return from lost, plug will restore the switch state which could be switch off、last switch state、switch on. The default setting is last switch state.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off",
+					"value": 0
+				},
+				{
+					"label": "Last switch state",
+					"value": 1
+				},
+				{
+					"label": "Switch on",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Mode of Switch Off Function",
+			"description": "When the mode of switch on/off is set to 0, any command of switch off will be disabled and the on/off function of include button will be disabled. The default setting is enable mode.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "LED Indication Mode",
+			"description": "1: Show Switch State: When switch is on, LED is on. When switch is off, LED is off. The default setting is Show Switch State. 2: Show Night Mode: When switch is on, LED is off. When switch is off, LED is on.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Show switch state",
+					"value": 1
+				},
+				{
+					"label": "Show night mode",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Auto Off Timer",
+			"description": "Whenever plug switches to on, the auto off timer begin to count down. After the timer decrease to zero, it will switch to off automatically. However if auto off timer is set as 0, the auto off function will be disabled. The default setting is 0.",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable auto off function",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "RF Off Command Mode",
+			"description": "Whenever a switch off command, basic_set, binary_switch_set, switch_all_off, is received, it could be interpreted as 4 variety of commands. 1: Switch Off：It switches to off state. The default setting is switch off. 2: Ignore：The switch off command will be ignored. 3: Switch Toggle：It switches to the inverse of current state. 4: Switch On：It switches to on state.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch toggle",
+					"value": 2
+				},
+				{
+					"label": "Switch on",
+					"value": 3
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1.Put your Z-Wave controller into inclusion mode by following the instructions provided by the controller manufacturer. \n2. Pressing On/Off button three times within 2 seconds will enter inclusion mode.",
+		"exclusion": "1.Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer. \n 2.Pressing On/Off button three times within 2 seconds will enter exclusion mode. \n3.Node ID has been excluded",
+		"reset": "Use this procedure only in the event that the primary controller is lost or otherwise inoperable. \n1. Pressing On/Off button three times within 2 seconds will enter inclusion mode. \n2.Within 1 second, press On/Off button again for 5 seconds. \n3.IDs are excluded"
+	}
+}
