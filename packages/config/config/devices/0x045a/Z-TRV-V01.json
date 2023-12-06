@@ -41,6 +41,8 @@
 			"description": "Set away home mode",
 			"valueSize": 1,
 			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "No",
@@ -144,6 +146,7 @@
 			"description": "Use this parameter to send an external temperature value to TRV.",
 			"valueSize": 2,
 			"unit": "0.1°c",
+			"defaultValue": 0,
 			"minValue": -500,
 			"maxValue": 500
 		},
@@ -153,6 +156,7 @@
 			"description": "Timeout interval for TRV to receive temperature value from other devices of gateway. TRV will use this temperature value to act accordingly if the value is received befire this timeout. Otherwise, TRV will refer to its own internal temperature value.",
 			"valueSize": 2,
 			"unit": "minute",
+			"defaultValue": 30,
 			"minValue": 0,
 			"maxValue": 300,
 			"options": [
