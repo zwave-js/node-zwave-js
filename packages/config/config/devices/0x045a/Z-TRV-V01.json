@@ -1,0 +1,171 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "Z-TRV-V01",
+	"description": "Thermostatic radiator valve",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0400"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Open window detect function",
+			"description": "When use radiator to heating, the window is opened, when room temperature drop 6°c in 4 minutes, TRV will close valve automatic, display will show ”OP”. When window is closed, meanwhile room temperature increase 2°c, TRV will open valve automatic, back to operation mode",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "2",
+			"label": "Anti-freezing function",
+			"description": "The TRV is at “off” state, the screen show. Anti-freezing function: the valve will be opened when the temperature is below 5°c, when the temperature risees to 8°c, the valve will be closed.",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "3",
+			"label": "Mesured temperature offset",
+			"description": "Offsets the measured temperature by -6.0°c – 6.0°c.",
+			"valueSize": 1,
+			"minValue": -6,
+			"maxValue": 6,
+			"defaultValue": 0
+		},
+		{
+			"#": "4",
+			"label": "Set away home mode",
+			"description": "Set away home mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Anti-scale function",
+			"description": "If radiator not open within two weeks or long time not open will let valve clogged as scale, radiator will be damaged. In order to let radiator to use normally, TRV will open valave running 30 seconds every two weeks, display will show “AS”, when run finished will recovery running condition.",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "6",
+			"label": "Valve openning level report threshold",
+			"description": "Valve opening level change threshold.",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 1
+		},
+		{
+			"#": "7",
+			"label": "Temperature auto report interval time",
+			"description": "The time interval when to send the temperature report.",
+			"valueSize": 4,
+			"unit": "second",
+			"minValue": 0,
+			"maxValue": 267840,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Temperature change report threshold",
+			"description": "Temperature change threshold.",
+			"valueSize": 1,
+			"unit": "0.1°c",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5
+		},
+		{
+			"#": "9",
+			"label": "Battery auto report interval time",
+			"description": "The time interval when to send the battery report.",
+			"valueSize": 4,
+			"unit": "second",
+			"minValue": 0,
+			"maxValue": 267840,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Battery change report threshold",
+			"description": "Battery power change threshold.",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Enable child lock",
+			"description": "Enable or disable child lock.",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "12",
+			"label": "Enable or disable external temperature sensor",
+			"description": "Enable or disable TRV to use external temperature sensor's value as reference to control the  valve accordingly.",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "13",
+			"label": "External temperature value",
+			"description": "Use this parameter to send an external temperature value to TRV.",
+			"valueSize": 2,
+			"unit": "0.1°c",
+			"minValue": -500,
+			"maxValue": 500
+		},
+		{
+			"#": "14",
+			"label": "External temperature value timeout setting",
+			"description": "Timeout interval for TRV to receive temperature value from other devices of gateway. TRV will use this temperature value to act accordingly if the value is received befire this timeout. Otherwise, TRV will refer to its own internal temperature value.",
+			"valueSize": 2,
+			"unit": "minute",
+			"minValue": 0,
+			"maxValue": 300,
+			"options": [
+				{
+					"label": "No timeout",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Power on your TRV. \n2. Set your Z-Wave controller into add/inclusion mode.\n3. In ”OF” state, short press rotary plate three times unit this screen shows ”--”.\n4. The screen will show ”PA” after few seconds, whick meant the inclusion is successful. And the signal icon will light on. Otherwise, the inclusion is failed, which you will need to repeat the process.",
+		"exclusion": "1. Power on your TRV. \n2. Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer. \n3. In ”OF” state, short press rotary plate three times unit this screen shows ”--”.\n4. The screen will turn back to ”OF” after few seconds. which meant the exclusion is successful. The signal light turn off.",
+		"reset": "Use this procedure only in the event that the primary controller is lost or otherwise inoperable. \n1. In ”OF” state, hold rotary plate for at least 5 seconds and release when screen will blink ”OF”. When successful, the screen will show ”OF” in solid for 2 seconds then turn off."
+	}
+}
