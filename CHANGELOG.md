@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.4.1 (2023-12-09)
+### Bugfixes
+* Handle more cases of unexpected Serial API restarts (#6551)
+
+### Config file changes
+* Add wakeup instructions for Nexia ZSENS930 (#6545)
+* Correct parameter 5 size for Zooz ZEN34 (#6546)
+
 ## 12.4.0 (2023-11-30)
 ### Features
 * Expose rebuild routes progress as a controller property (#6525)
