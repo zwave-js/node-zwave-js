@@ -1,5 +1,5 @@
 {
-	"manufacturer": "ABUS Security-Center GmbH Co. KG",
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
 	"manufacturerId": "0x0403",
 	"label": "SHRM10000",
 	"description": "Smart Smoke Sensor",
@@ -27,5 +27,13 @@
 			"label": "Notification",
 			"maxNodes": 5
 		}
+	}
+	"metadata": {
+		"inclusion": "Set the gateway/controller to inclusion mode, then press the smoke detector's network button (the small hole, use a paperclip or something similar) 3 times within 1.5 seconds.",
+		"exclusion": "Set the gateway/controller to exclusion mode, , then press the network button 3 times within 1.5 seconds.",
+		"reset": "Only if the gateway/controller is inoperable. Remove the battery, press and hold the network button while re-inserting the battery. Device will reset to factory settings.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3089/Anleitung%20SHRM10000%20EN.pdf"
+		"wake-up": "Press the network button once."
+		"battery": "CR17335, CR123A (3V)"
 	}
 }
