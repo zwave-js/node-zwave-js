@@ -75,6 +75,13 @@
 			"label": "Switch 1: Type"
 		},
 		{
+			"#": "25",
+			"$if": "firmwareVersion >= 1.2",
+			"$import": "templates/zooz_template.json#zen16_switch_invert_v2",
+			"label": "Switch 1: Invert Value"
+			"description": "Invert the reported values for your selected switch type in Sw1 terminals (select the same value as you chose for parameter 2 to invert the values for open and closed circuit).",
+		},
+		{
 			"#": "3",
 			"$if": "firmwareVersion <= 1.1",
 			"$import": "templates/zooz_template.json#zen16_switch_type",
@@ -87,6 +94,13 @@
 			"label": "Switch 2: Type"
 		},
 		{
+			"#": "26",
+			"$if": "firmwareVersion >= 1.2",
+			"$import": "templates/zooz_template.json#zen16_switch_invert_v2",
+			"label": "Switch 2: Invert Value"
+			"description": "Invert the reported values for your selected switch type in Sw2 terminals (select the same value as you chose for parameter 3 to invert the values for open and closed circuit).",
+		},
+		{
 			"#": "4",
 			"$if": "firmwareVersion <= 1.1",
 			"$import": "templates/zooz_template.json#zen16_switch_type",
@@ -97,6 +111,13 @@
 			"$if": "firmwareVersion >= 1.2",
 			"$import": "templates/zooz_template.json#zen16_switch_type_v2",
 			"label": "Switch 3: Type"
+		},
+		{
+			"#": "27",
+			"$if": "firmwareVersion >= 1.2",
+			"$import": "templates/zooz_template.json#zen16_switch_invert_v2",
+			"label": "Switch 3: Invert Value"
+			"description": "Invert the reported values for your selected switch type in Sw3 terminals (select the same value as you chose for parameter 4 to invert the values for open and closed circuit).",
 		},
 		{
 			"#": "5",
