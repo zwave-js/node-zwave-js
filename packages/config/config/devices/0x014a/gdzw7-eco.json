@@ -25,42 +25,33 @@
 	"paramInformation": [
 		{
 			"#": "1",
+			"$import": "~/0x014a/templates/ecolink-template.json#ecolink_5-60_seconds",
 			"label": "Unattended Wait Period",
 			"description": "Unattended close operation wait period in seconds.",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 60,
 			"defaultValue": 5
 		},
 		{
 			"#": "2",
 			"label": "Relay Switch Period",
 			"description": "Number of milliseconds to turn on relay switch for.",
-			"unit": "milliseconds",
 			"valueSize": 2,
+			"unit": "ms",
 			"minValue": 100,
 			"maxValue": 5000,
 			"defaultValue": 1000
 		},
 		{
 			"#": "3",
+			"$import": "~/0x014a/templates/ecolink-template.json#ecolink_5-60_seconds",
 			"label": "Door Open Timeout",
 			"description": "Seconds allowed for garage door to open until timeout.",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 60,
 			"defaultValue": 20
 		},
 		{
 			"#": "4",
+			"$import": "~/0x014a/templates/ecolink-template.json#ecolink_5-60_seconds",
 			"label": "Door Close Timeout",
 			"description": "Seconds allowed for garage door to close until timeout.",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 60,
 			"defaultValue": 15
 		},
 		{
@@ -81,7 +72,7 @@
 	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions of the Z-Wave controller to put the Z-Wave controller into manual or classic Z-Wave inclusion mode.\n2. Locate and press the hub button on the device.\n3. When it is successfully added, the device will beep and blink green once.",
-		"exclusion": "1.Follow the Z-Wave controller's instructions on putting the Z-Wave controller into removal/exclusion mode.\n2.Locate and press the hub button.\n3. Device's status indicator will blink red and beep three times to indicate successful removal",
+		"exclusion": "1. Follow the Z-Wave controller's instructions on putting the Z-Wave controller into removal/exclusion mode.\n2. Locate and press the hub button.\n3. Device's status indicator will blink red and beep three times to indicate successful removal",
 		"reset": "Hold the reset button down for ten seconds. The status indicator will blink red while the reset button is pressed and will go out after ten seconds.\nThe device's status indicator will turn green when the reset operation is complete.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=cert_portal/certs/74/GarageDoorControllerUserManualV3.pdf"
 	}
