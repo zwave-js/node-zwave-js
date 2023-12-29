@@ -228,6 +228,45 @@
 			}
 		]
 	},
+	"led_indicator_color_extended_alternate_palette": {
+		"label": "LED Indicator Color",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "White",
+				"value": 0
+			},
+			{
+				"label": "Purple",
+				"value": 1
+			},
+			{
+				"label": "Orange",
+				"value": 2
+			},
+			{
+				"label": "Cyan",
+				"value": 3
+			},
+			{
+				"label": "Red",
+				"value": 4
+			},
+			{
+				"label": "Green",
+				"value": 5
+			},
+			{
+				"label": "Blue",
+				"value": 6
+			}
+		]
+	},
 	"led_indicator_brightness": {
 		"label": "LED Indicator Brightness",
 		"valueSize": 1,

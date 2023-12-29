@@ -1,0 +1,132 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN37",
+	"description": "Wall Remote 800LR",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xf003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control (Button 1 & 2)",
+			"description": "Basic for on (button 1: top large button) and off (button 2: bottom large button)",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "On/Off Control (Button 3 & 4)",
+			"description": "Basic for on (button 3: small left button) and off (button 4: small right button)",
+			"maxNodes": 10
+		},
+		"4": {
+			"label": "Dimmer Control (Button 1 & 2)",
+			"description": "Multilevel start level change (held) and stop level change (released) for buttons 1 and 2 (used for remote dimming)",
+			"maxNodes": 10
+		},
+		"5": {
+			"label": "Dimmer Control (Button 3 & 4)",
+			"description": "Multilevel start level change (held) and stop level change (released) for buttons 3 and 4 (used for remote dimming)",
+			"maxNodes": 10
+		},
+		"6": {
+			"label": "Toggle Control (Button 1)",
+			"description": "Basic to toggle device on and off in sequence when button 1 is pressed",
+			"maxNodes": 10
+		},
+		"7": {
+			"label": "Toggle Control (Button 2)",
+			"description": "Basic to toggle device on and off in sequence when button 2 is pressed",
+			"maxNodes": 10
+		},
+		"8": {
+			"label": "Toggle Control (Button 3)",
+			"description": "Basic to toggle device on and off in sequence when button 3 is pressed",
+			"maxNodes": 10
+		},
+		"9": {
+			"label": "Toggle Control (Button 4)",
+			"description": "Basic to toggle device on and off in sequence when button 4 is pressed",
+			"maxNodes": 10
+		}
+	},
+	// https://www.support.getzooz.com/kb/article/1511-zen37-wall-remote-advanced-settings
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Low Battery Alert Threshold",
+			"description": "Receive a low battery alert from your device. The value corresponds to the % battery level for the device.",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"unit": "%"
+		},
+		{
+			"#": "2",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended_alternate_palette",
+			"label": "LED Indicator Color (Button 1)",
+			"description": "Color of top left LED when button 1 pressed."
+		},
+		{
+			"#": "3",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended_alternate_palette",
+			"label": "LED Indicator Color (Button 2)",
+			"description": "Color of top left LED when button 2 pressed.",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended_alternate_palette",
+			"label": "LED Indicator Color (Button 3)",
+			"description": "Color of top left LED when button 3 pressed.",
+			"defaultValue": 2
+		},
+		{
+			"#": "5",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended_alternate_palette",
+			"label": "LED Indicator Color (Button 4)",
+			"description": "Color of top left LED when button 4 pressed.",
+			"defaultValue": 3
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_0-10_nounit",
+			"label": "LED Indicator Brightness",
+			"description": "Brightness level of the LED indicator or turn the LED off completely.",
+			"unit": "%",
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#base_1-99_nounit",
+			"label": "Remote Z-Wave Dimming Duration",
+			"description": "Set the time it takes to get from 0% to 100% brightness on dimmers and smart bulbs directly associated with your Wall Remote in Groups 4 and 5 when pressing and holding the buttons (physical dimming) on your Wall Remote. The number entered as value corresponds to the number of seconds.",
+			"unit": "seconds",
+			"defaultValue": 5
+		}
+	],
+	"metadata": {
+		"inclusion": "Put your Z-Wave hub into inclusion mode and click the upper paddle 6 times quickly. The LED indicator\nwill blink blue during the process and light up green once added successfully. It will light up red if failed",
+		"exclusion": "1. Bring the Remote Switch within direct range of your Z-Wave gateway (hub).\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Click the lower paddle 6 times very quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"wakeup": "1. Bring the Remote Switch within direct range of your Z-Wave gateway (hub).\n2. Click the lower left button 6 times as quickly as possible to wake the device up\n3. Your device's indicator light will remain on to indicate that the device is awake.",
+		"reset": "When your network's primary controller is missing or otherwise inoperable, you may need to reset the device to factory settings manually. In order to complete the process, make sure the device is powered, then click the bottom right small button 6 times quickly. The LED indicator will start blinking red, then immediately click the same button 6 more times. The LED indicator will stay red for 2 seconds.",
+		"manual": "https://cdn.shopify.com/s/files/1/0218/7704/files/zooz-800-series-z-wave-long-range-wall-remote-zen37-800lr-manual.pdf"
+	}
+}
