@@ -67,10 +67,10 @@
 			"label": "Low Battery Alert Threshold",
 			"description": "Receive a low battery alert from your device. The value corresponds to the % battery level for the device.",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 5,
 			"maxValue": 10,
-			"defaultValue": 5,
-			"unit": "%"
+			"defaultValue": 5
 		},
 		{
 			"#": "2",
