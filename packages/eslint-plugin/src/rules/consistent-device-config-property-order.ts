@@ -48,7 +48,7 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 							.filter(
 								(c) =>
 									c.loc?.start.line
-										=== prev.property.loc.end.line,
+									=== prev.property.loc.end.line,
 							);
 						prev.comments.trailing.push(
 							...wronglyAttributedComments,
@@ -80,8 +80,8 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 							0,
 							withRanges[0].property.loc.start.column,
 						);
-						// TODO: Change to .toSorted() once on node 20.
-						const desiredOrder = [...propsWithComments].sort((a, b) =>
+					// TODO: Change to .toSorted() once on node 20.
+					const desiredOrder = [...propsWithComments].sort((a, b) =>
 						a.index - b.index
 					).map((prop) => {
 						const start = Math.min(
@@ -161,8 +161,7 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 		schema: [],
 		messages: {
 			"parameter-ordering":
-				`For consistency, config param properties should follow the order ${
-					paramInfoPropertyOrder.map((p) => `"${p}"`).join(", ")
+				`For consistency, config param properties should follow the order ${paramInfoPropertyOrder.map((p) => `"${p}"`).join(", ")
 				}.`,
 		},
 		type: "problem",
