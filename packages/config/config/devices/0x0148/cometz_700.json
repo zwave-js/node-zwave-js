@@ -139,6 +139,13 @@
 					}
 				}
 			]
+		},
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
 		}
 	},
 	"metadata": {
