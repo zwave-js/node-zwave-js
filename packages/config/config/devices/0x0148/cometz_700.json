@@ -81,6 +81,17 @@
 			]
 		},
 		{
+			// Some devices report this param, some don't, may be related to firmware version.
+			// But even when not reported by the device, it is supported.
+			"#": "6",
+			"label": "Valve Opening Percentage Report",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
 			"#": "7",
 			"label": "Open Window Detection",
 			"valueSize": 1,
