@@ -300,7 +300,8 @@
 								"0x01": "No data",
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold",
-								"0x04": "Max"
+								"0x04": "Max",
+								"0x06": "No data"
 							}
 						}
 					}
@@ -317,7 +318,8 @@
 								"0x01": "No data",
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold",
-								"0x04": "Max"
+								"0x04": "Max",
+								"0x07": "No data"
 							}
 						}
 					}
@@ -333,7 +335,8 @@
 							"values": {
 								"0x01": "No data",
 								"0x02": "Below low threshold",
-								"0x03": "Above high threshold"
+								"0x03": "Above high threshold",
+								"0x08": "No data"
 							}
 						}
 					}
@@ -349,7 +352,8 @@
 							"values": {
 								"0x01": "No data",
 								"0x02": "Below low threshold",
-								"0x03": "Above high threshold"
+								"0x03": "Above high threshold",
+								"0x09": "No data"
 							}
 						}
 					}
@@ -1248,7 +1252,8 @@
 								"0x01": "No data",
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold",
-								"0x04": "Max"
+								"0x04": "Max",
+								"0x05": "No data"
 							}
 						}
 					}
@@ -1265,7 +1270,8 @@
 								"0x01": "No data",
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold",
-								"0x04": "Max"
+								"0x04": "Max",
+								"0x06": "No data"
 							}
 						}
 					}
