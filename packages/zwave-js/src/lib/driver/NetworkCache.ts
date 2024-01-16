@@ -2,6 +2,7 @@ import type { JsonlDB } from "@alcalzone/jsonl-db";
 import {
 	type CommandClasses,
 	NodeType,
+	Protocols,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -202,6 +203,10 @@ function tryParseProvisioningList(
 				parsed.status = ProvisioningEntryStatus[
 					entry.status as any
 				] as any as ProvisioningEntryStatus;
+			}
+			if (entry.protocol != undefined) {
+				parsed.protocol =
+					Protocols[entry.protocol as any] as any as Protocols;
 			}
 			ret.push(parsed);
 		} else {
@@ -450,6 +455,12 @@ export function serializeNetworkCacheValue(
 					serialized.status = getEnumMemberName(
 						ProvisioningEntryStatus,
 						entry.status,
+					);
+				}
+				if (entry.protocol != undefined) {
+					serialized.protocol = getEnumMemberName(
+						Protocols,
+						entry.protocol,
 					);
 				}
 				ret.push(serialized);

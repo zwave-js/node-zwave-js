@@ -334,7 +334,6 @@ import {
 	type ExclusionOptions,
 	ExclusionStrategy,
 	type FoundNode,
-	type InclusionFlagsInternal,
 	type InclusionOptions,
 	type InclusionOptionsInternal,
 	type InclusionResult,
@@ -1298,19 +1297,20 @@ export class ZWaveController
 		// fetch the list of long range nodes until the controller reports no more
 		const lrNodeIds = await this.getLongRangeNodes();
 		let lrChannel: LongRangeChannel | undefined;
-		let maxPayloadSize : number | undefined;
+		let maxPayloadSize: number | undefined;
 		if (
 			this.isSerialAPISetupCommandSupported(
-				SerialAPISetupCommand.GetMaximumPayloadSize
+				SerialAPISetupCommand.GetMaximumPayloadSize,
 			)
 		) {
-			 maxPayloadSize = await this.getMaxPayloadSize();
+			maxPayloadSize = await this.getMaxPayloadSize();
 		}
 		let maxPayloadSizeLR: number | undefined;
-		if (this.isLongRange() && 			this.isSerialAPISetupCommandSupported(
-			SerialAPISetupCommand.GetLongRangeMaximumPayloadSize
-		)
-) {
+		if (
+			this.isLongRange() && this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetLongRangeMaximumPayloadSize,
+			)
+		) {
 			// TODO: restore/set the channel
 			const lrChannelResp = await this.driver.sendMessage<
 				GetLongRangeChannelResponse
@@ -1617,7 +1617,6 @@ export class ZWaveController
 	private _includeController: boolean = false;
 	private _exclusionOptions: ExclusionOptions | undefined;
 	private _inclusionOptions: InclusionOptionsInternal | undefined;
-	private _inclusionFlags: InclusionFlagsInternal | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
 	private _nodePendingReplace: ZWaveNode | undefined;
@@ -1655,25 +1654,11 @@ export class ZWaveController
 			);
 		}
 
-		// BUGBUG: fix me
-		// if (options.isLongRange && !this.isLongRange()) {
-		// 	throw new ZWaveError(
-		// 		`Invalid long range inclusion on a non-LR host`,
-		// 		ZWaveErrorCodes.Argument_Invalid,
-		// 	)
-		// }
-		const isLongRange = this.isLongRange();
-
 		// Leave SmartStart listening mode so we can switch to exclusion mode
 		await this.pauseSmartStart();
 
 		this.setInclusionState(InclusionState.Including);
 		this._inclusionOptions = options;
-		this._inclusionFlags = {
-			highPower: true,
-			networkWide: true,
-			protocolLongRange: isLongRange,
-		};
 
 		try {
 			this.driver.controllerLog.print(
@@ -1689,7 +1674,8 @@ export class ZWaveController
 			await this.driver.sendMessage(
 				new AddNodeToNetworkRequest(this.driver, {
 					addNodeType: AddNodeType.Any,
-					...this._inclusionFlags,
+					highPower: true,
+					networkWide: true,
 				}),
 			);
 
@@ -1744,11 +1730,6 @@ export class ZWaveController
 			strategy: InclusionStrategy.SmartStart,
 			provisioning: provisioningEntry,
 		};
-		this._inclusionFlags = {
-			highPower: true,
-			networkWide: true,
-			protocolLongRange: provisioningEntry.isLongRange,
-		};
 
 		try {
 			this.driver.controllerLog.print(
@@ -1761,7 +1742,9 @@ export class ZWaveController
 				new AddNodeDSKToNetworkRequest(this.driver, {
 					nwiHomeId: nwiHomeIdFromDSK(dskBuffer),
 					authHomeId: authHomeIdFromDSK(dskBuffer),
-					...this._inclusionFlags,
+					protocol: provisioningEntry.protocol,
+					highPower: true,
+					networkWide: true,
 				}),
 			);
 
@@ -1789,7 +1772,8 @@ export class ZWaveController
 			new AddNodeToNetworkRequest(this.driver, {
 				callbackId: 0, // disable callbacks
 				addNodeType: AddNodeType.Stop,
-				...this._inclusionFlags,
+				highPower: true,
+				networkWide: true,
 			}),
 		);
 		this.driver.controllerLog.print(`The inclusion process was stopped`);
@@ -1808,7 +1792,8 @@ export class ZWaveController
 		>(
 			new AddNodeToNetworkRequest(this.driver, {
 				addNodeType: AddNodeType.Stop,
-				...this._inclusionFlags,
+				highPower: true,
+				networkWide: true,
 			}),
 		);
 		if (response.status === AddNodeStatus.Done) {
@@ -1841,7 +1826,8 @@ export class ZWaveController
 			await this.driver.sendMessage(
 				new AddNodeToNetworkRequest(this.driver, {
 					addNodeType: AddNodeType.Stop,
-					...this._inclusionFlags,
+					highPower: true,
+					networkWide: true,
 				}),
 			);
 			this.driver.controllerLog.print(
@@ -1939,7 +1925,8 @@ export class ZWaveController
 					new AddNodeToNetworkRequest(this.driver, {
 						callbackId: 0, // disable callbacks
 						addNodeType: AddNodeType.Stop,
-						...this._inclusionFlags,
+						highPower: true,
+						networkWide: true,
 					}),
 				);
 				this.driver.controllerLog.print(
@@ -1980,7 +1967,8 @@ export class ZWaveController
 					new AddNodeToNetworkRequest(this.driver, {
 						callbackId: 0, // disable callbacks
 						addNodeType: AddNodeType.Stop,
-						...this._inclusionFlags,
+						highPower: true,
+						networkWide: true,
 					}),
 				);
 				this.driver.controllerLog.print(
@@ -2022,32 +2010,19 @@ export class ZWaveController
 			return false;
 		}
 
-		// BUGBUG: fix me, same logic as beginInclusion, probably an incoming option...
-		// if (options.isLongRange && !this.isLongRange()) {
-		// 	throw new ZWaveError(
-		// 		`Invalid long range inclusion on a non-LR host`,
-		// 		ZWaveErrorCodes.Argument_Invalid,
-		// 	)
-		// }
-		const isLongRange = this.isLongRange();
-
 		// Leave SmartStart listening mode so we can switch to exclusion mode
 		await this.pauseSmartStart();
 
 		this.setInclusionState(InclusionState.Excluding);
 		this.driver.controllerLog.print(`starting exclusion process...`);
-		this._inclusionFlags = {
-			highPower: true,
-			networkWide: true,
-			protocolLongRange: isLongRange,
-		};
 
 		try {
 			// kick off the inclusion process
 			await this.driver.sendMessage(
 				new RemoveNodeFromNetworkRequest(this.driver, {
 					removeNodeType: RemoveNodeType.Any,
-					...this._inclusionFlags,
+					highPower: true,
+					networkWide: true,
 				}),
 			);
 			this.driver.controllerLog.print(
@@ -2084,7 +2059,8 @@ export class ZWaveController
 			new RemoveNodeFromNetworkRequest(this.driver, {
 				callbackId: 0, // disable callbacks
 				removeNodeType: RemoveNodeType.Stop,
-				...this._inclusionFlags,
+				highPower: true,
+				networkWide: true,
 			}),
 		);
 		this.driver.controllerLog.print(`the exclusion process was stopped`);
@@ -2107,7 +2083,8 @@ export class ZWaveController
 			await this.driver.sendMessage(
 				new RemoveNodeFromNetworkRequest(this.driver, {
 					removeNodeType: RemoveNodeType.Stop,
-					...this._inclusionFlags,
+					highPower: true,
+					networkWide: true,
 				}),
 			);
 			this.driver.controllerLog.print(
@@ -5895,7 +5872,11 @@ ${associatedNodes.join(", ")}`,
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse
 			| SerialAPISetup_CommandUnsupportedResponse
-		>(new SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest(this.driver));
+		>(
+			new SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest(
+				this.driver,
+			),
+		);
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
 				`Your hardware does not support getting the max. long range payload size!`,

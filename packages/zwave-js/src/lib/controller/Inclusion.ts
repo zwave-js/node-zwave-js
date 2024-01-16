@@ -1,4 +1,8 @@
-import type { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
+import type {
+	CommandClasses,
+	Protocols,
+	SecurityClass,
+} from "@zwave-js/core/safe";
 import type { DeviceClass } from "../node/DeviceClass";
 
 /** Additional information about the outcome of a node inclusion */
@@ -182,13 +186,6 @@ export type InclusionOptionsInternal =
 		provisioning: PlannedProvisioningEntry;
 	};
 
-// BUGBUG: better way to do this?
-export type InclusionFlagsInternal = {
-	highPower: boolean;
-	networkWide: boolean;
-	protocolLongRange: boolean;
-};
-
 export type ExclusionOptions = {
 	strategy:
 		| ExclusionStrategy.ExcludeOnly
@@ -237,9 +234,8 @@ export interface PlannedProvisioningEntry {
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
 
-	/** The device must be included via ZWave Long Range */
-	// BUGBUG: by adding this here we probably broke the API used by JSUI, etc...
-	isLongRange: boolean;
+	/** Which protocol to use for inclusion. Default: Z-Wave Classic */
+	protocol?: Protocols;
 
 	/** The security classes that have been **granted** by the user */
 	securityClasses: SecurityClass[];
