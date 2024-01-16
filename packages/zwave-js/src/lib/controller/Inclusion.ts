@@ -123,7 +123,6 @@ export interface InclusionUserCallbacks {
 }
 
 /** Options for inclusion of a new node */
-// TODO: how should "preferLongRange" fit in here? We probably want the user to be able to control that?
 export type InclusionOptions =
 	| {
 		strategy: InclusionStrategy.Default;

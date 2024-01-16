@@ -219,6 +219,7 @@ export class GetSerialApiInitDataResponse extends Message {
 //                         chip type:          7
 //                         chip version:       0
 
+// FIXME: Move these into their own file
 export interface GetLongRangeNodesRequestOptions extends MessageBaseOptions {
 	segmentNumber: number;
 }

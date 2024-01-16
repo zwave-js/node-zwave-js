@@ -100,9 +100,9 @@ export function longRangeChannelToString(channel: LongRangeChannel): string {
 		case LongRangeChannel.Unknown:
 			return "Unknown";
 		case LongRangeChannel.A:
-			return "Channel A (912MHz)";
+			return "Channel A (912 MHz)";
 		case LongRangeChannel.B:
-			return "Channel B (920MHz)";
+			return "Channel B (920 MHz)";
 	}
 	return `Unknown (${num2hex(channel)})`;
 }

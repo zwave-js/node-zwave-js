@@ -18,6 +18,7 @@ import {
 	encryptAES128CCM,
 	getCCName,
 	highResTimestamp,
+	isLongRangeNodeId,
 	isTransmissionError,
 	isZWaveError,
 	parseBitMask,
@@ -94,7 +95,10 @@ function getAuthenticationData(
 	commandLength: number,
 	unencryptedPayload: Buffer,
 ): Buffer {
-	const nodeIdSize = (sendingNodeId < 256 && destination < 256) ? 1 : 2;
+	const nodeIdSize =
+		isLongRangeNodeId(sendingNodeId) || isLongRangeNodeId(destination)
+			? 2
+			: 1;
 	const ret = Buffer.allocUnsafe(
 		2 * nodeIdSize + 6 + unencryptedPayload.length,
 	);
