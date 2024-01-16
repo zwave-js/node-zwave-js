@@ -212,6 +212,7 @@ export type NodeInformationFrame =
 	& NodeProtocolInfoAndDeviceClass
 	& ApplicationNodeInformation;
 
+// FIXME: Split these methods into two, one each for long range and one each for classic Z-Wave
 export function parseNodeProtocolInfo(
 	buffer: Buffer,
 	offset: number,

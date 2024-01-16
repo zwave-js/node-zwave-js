@@ -1428,6 +1428,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			// No need to initialize databases if skipInterview is true, because it is only used in some
 			// Driver unit tests that don't need access to them
 
+			// FIXME: Setting the node ID type, opening the cache and querying the controller ID should be done AFTER soft-resetting
+
 			// Identify the controller and determine if it supports soft reset
 			await this.controller.identify();
 			await this.initNetworkCache(this.controller.homeId!);
@@ -1444,6 +1446,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			if (maySoftReset) {
 				await this.softResetInternal(false);
 			}
+
+			// FIXME: We should now know if the controller supports ZWLR or not
+			// Also, set the node ID type to 16-bit here only if ZWLR is supported.
+
+			// FIXME: This block is unnecessary when setting the node ID type explicitly
 
 			// There are situations where a controller claims it has the ID 0,
 			// which isn't valid. In this case try again after having soft-reset the stick

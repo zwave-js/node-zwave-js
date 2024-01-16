@@ -106,3 +106,7 @@ export function longRangeChannelToString(channel: LongRangeChannel): string {
 	}
 	return `Unknown (${num2hex(channel)})`;
 }
+
+export function isLongRangeNodeId(nodeId: number): boolean {
+	return nodeId > 255;
+}

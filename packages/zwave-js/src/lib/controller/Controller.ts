@@ -44,6 +44,7 @@ import {
 	NodeType,
 	type ProtocolDataRate,
 	ProtocolType,
+	Protocols,
 	RFRegion,
 	type RSSI,
 	type Route,
@@ -66,6 +67,7 @@ import {
 	encodeX25519KeyDERSPKI,
 	indexDBsByNode,
 	isEmptyRoute,
+	isLongRangeNodeId,
 	isValidDSK,
 	isZWaveError,
 	nwiHomeIdFromDSK,
@@ -1368,10 +1370,8 @@ export class ZWaveController
 			);
 			nodeIds.unshift(this._ownNodeId!);
 		}
-
-		// BUGBUG: do nodes need to implicitly know that they were a long range node? Or are long range nodes determined 100% by their nodeID values being >= 256?
-		// The controller is the odd-man out, as it's both. Let's assume that apart from explicit exclusion we don't need to know for now.
 		nodeIds.push(...lrNodeIds);
+
 		for (const nodeId of nodeIds) {
 			this._nodes.set(
 				nodeId,
@@ -1470,6 +1470,7 @@ export class ZWaveController
 	}
 
 	private isLongRange(): boolean {
+		// FIXME: Rely on the SerialAPIStarted command, make sure the controller is soft-reset before we need to know this
 		return !!this._supportsLongRange;
 	}
 
@@ -2341,9 +2342,11 @@ supported CCs: ${
 						"no initiate command received, bootstrapping node...",
 					);
 
-					// Assign SUC return route to make sure the node knows where to get its routes from
-					newNode.hasSUCReturnRoute = await this
-						.assignSUCReturnRoutes(newNode.id);
+					if (newNode.protocol == Protocols.ZWave) {
+						// Assign SUC return route to make sure the node knows where to get its routes from
+						newNode.hasSUCReturnRoute = await this
+							.assignSUCReturnRoutes(newNode.id);
+					}
 
 					// Include using the default inclusion strategy:
 					// * Use S2 if possible,
@@ -3496,10 +3499,13 @@ supported CCs: ${
 				// If it is actually a sleeping device, it will be marked as such later
 				newNode.markAsAlive();
 
-				// Assign SUC return route to make sure the node knows where to get its routes from
-				newNode.hasSUCReturnRoute = await this.assignSUCReturnRoutes(
-					newNode.id,
-				);
+				if (newNode.protocol == Protocols.ZWave) {
+					// Assign SUC return route to make sure the node knows where to get its routes from
+					newNode.hasSUCReturnRoute = await this
+						.assignSUCReturnRoutes(
+							newNode.id,
+						);
+				}
 
 				const opts = this._inclusionOptions;
 
@@ -3767,9 +3773,11 @@ supported CCs: ${
 					// If it is actually a sleeping device, it will be marked as such later
 					newNode.markAsAlive();
 
-					// Assign SUC return route to make sure the node knows where to get its routes from
-					newNode.hasSUCReturnRoute = await this
-						.assignSUCReturnRoutes(newNode.id);
+					if (newNode.protocol == Protocols.ZWave) {
+						// Assign SUC return route to make sure the node knows where to get its routes from
+						newNode.hasSUCReturnRoute = await this
+							.assignSUCReturnRoutes(newNode.id);
+					}
 
 					// Try perform the security bootstrap process. When replacing a node, we don't know any supported CCs
 					// yet, so we need to trust the chosen inclusion strategy.
@@ -4046,6 +4054,8 @@ supported CCs: ${
 		const todoSleeping: number[] = [];
 
 		const addTodo = (nodeId: number) => {
+			if (isLongRangeNodeId(nodeId)) return;
+
 			if (pendingNodes.has(nodeId)) {
 				pendingNodes.delete(nodeId);
 				const node = this.nodes.getOrThrow(nodeId);
@@ -4177,6 +4187,13 @@ supported CCs: ${
 		}
 
 		const node = this.nodes.getOrThrow(nodeId);
+		// Z-Wave Long Range does not route
+		if (node.protocol == Protocols.ZWaveLongRange) {
+			throw new ZWaveError(
+				`Cannot rebuild routes for nodes using Z-Wave Long Range!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
 
 		// Don't start the process twice
 		if (this._isRebuildingRoutes) {
@@ -4413,12 +4430,13 @@ ${associatedNodes.join(", ")}`,
 	 * This will assign up to 4 routes, depending on the network topology (that the controller knows about).
 	 */
 	public async assignSUCReturnRoutes(nodeId: number): Promise<boolean> {
-		if (nodeId >= 0x100) {
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `Skipping SUC return route because isLR...`,
-				direction: "outbound",
-			});
-			return true;
+		if (isLongRangeNodeId(nodeId)) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Cannot manage routes for nodes using Z-Wave Long Range!`,
+				"error",
+			);
+			return false;
 		}
 
 		this.driver.controllerLog.logNode(nodeId, {
@@ -4508,6 +4526,15 @@ ${associatedNodes.join(", ")}`,
 		routes: Route[],
 		priorityRoute?: Route,
 	): Promise<boolean> {
+		if (isLongRangeNodeId(nodeId)) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Cannot manage routes for nodes using Z-Wave Long Range!`,
+				"error",
+			);
+			return false;
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Assigning custom SUC return routes...`,
 			direction: "outbound",
@@ -4607,6 +4634,15 @@ ${associatedNodes.join(", ")}`,
 	 * This will assign up to 4 routes, depending on the network topology (that the controller knows about).
 	 */
 	public async deleteSUCReturnRoutes(nodeId: number): Promise<boolean> {
+		if (isLongRangeNodeId(nodeId)) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Cannot manage routes for nodes using Z-Wave Long Range!`,
+				"error",
+			);
+			return false;
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Deleting SUC return route...`,
 			direction: "outbound",
@@ -4693,6 +4729,22 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 		destinationNodeId: number,
 	): Promise<boolean> {
+		if (isLongRangeNodeId(nodeId)) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Cannot manage routes for nodes using Z-Wave Long Range!`,
+				"error",
+			);
+			return false;
+		} else if (isLongRangeNodeId(destinationNodeId)) {
+			this.driver.controllerLog.logNode(
+				destinationNodeId,
+				`Cannot manage routes for nodes using Z-Wave Long Range!`,
+				"error",
+			);
+			return false;
+		}
+
 		// Make sure this is not misused by passing the controller's node ID
 		if (destinationNodeId === this.ownNodeId) {
 			throw new ZWaveError(
@@ -4765,6 +4817,22 @@ ${associatedNodes.join(", ")}`,
 		routes: Route[],
 		priorityRoute?: Route,
 	): Promise<boolean> {
+		if (isLongRangeNodeId(nodeId)) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Cannot manage routes for nodes using Z-Wave Long Range!`,
+				"error",
+			);
+			return false;
+		} else if (isLongRangeNodeId(destinationNodeId)) {
+			this.driver.controllerLog.logNode(
+				destinationNodeId,
+				`Cannot manage routes for nodes using Z-Wave Long Range!`,
+				"error",
+			);
+			return false;
+		}
+
 		// Make sure this is not misused by passing the controller's node ID
 		if (destinationNodeId === this.ownNodeId) {
 			throw new ZWaveError(
@@ -4889,6 +4957,15 @@ ${associatedNodes.join(", ")}`,
 	 * other end nodes, including the priority return routes.
 	 */
 	public async deleteReturnRoutes(nodeId: number): Promise<boolean> {
+		if (isLongRangeNodeId(nodeId)) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Cannot manage routes for nodes using Z-Wave Long Range!`,
+				"error",
+			);
+			return false;
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: `Deleting all return routes...`,
 			direction: "outbound",

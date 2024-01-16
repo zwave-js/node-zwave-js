@@ -153,6 +153,7 @@ import {
 	NodeType,
 	type NodeUpdatePayload,
 	type ProtocolVersion,
+	Protocols,
 	type RSSI,
 	RssiError,
 	SecurityClass,
@@ -176,6 +177,7 @@ import {
 	applicationCCs,
 	getCCName,
 	getDSTInfo,
+	isLongRangeNodeId,
 	isRssiError,
 	isSupervisionResult,
 	isTransmissionError,
@@ -882,6 +884,13 @@ export class ZWaveNode extends Endpoint
 				NodeNamingAndLocationCCValues.location.id,
 			);
 		}
+	}
+
+	/** Which protocol is used to communicate with this node */
+	public get protocol(): Protocols {
+		return isLongRangeNodeId(this.id)
+			? Protocols.ZWaveLongRange
+			: Protocols.ZWave;
 	}
 
 	/** Whether a SUC return route was configured for this node */

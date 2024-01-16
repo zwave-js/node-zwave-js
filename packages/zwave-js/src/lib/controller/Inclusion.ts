@@ -137,11 +137,6 @@ export type InclusionOptions =
 		 * This is not recommended due to the overhead caused by S0.
 		 */
 		forceSecurity?: boolean;
-
-		/**
-		 * Force long range. If not provided, will default to long range iff the controller supports it, and not otherwise.
-		 */
-		isLongRange?: boolean;
 	}
 	| {
 		strategy: InclusionStrategy.Security_S2;
@@ -168,11 +163,6 @@ export type InclusionOptions =
 		strategy:
 			| InclusionStrategy.Insecure
 			| InclusionStrategy.Security_S0;
-
-		/**
-		 * Force long range. If not provided, will default to long range iff the controller supports it, and not otherwise.
-		 */
-		isLongRange?: boolean;
 	};
 
 /**
@@ -236,6 +226,11 @@ export interface PlannedProvisioningEntry {
 
 	/** Which protocol to use for inclusion. Default: Z-Wave Classic */
 	protocol?: Protocols;
+	/**
+	 * The protocols that are **supported** by the device.
+	 * When this is not set, applications should default to Z-Wave classic.
+	 */
+	supportedProtocols?: readonly Protocols[];
 
 	/** The security classes that have been **granted** by the user */
 	securityClasses: SecurityClass[];
