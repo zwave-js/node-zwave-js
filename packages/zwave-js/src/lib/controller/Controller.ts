@@ -144,6 +144,10 @@ import {
 	type GetControllerVersionResponse,
 } from "../serialapi/capability/GetControllerVersionMessages";
 import {
+	GetLongRangeNodesRequest,
+	type GetLongRangeNodesResponse,
+} from "../serialapi/capability/GetLongRangeNodesMessages";
+import {
 	GetProtocolVersionRequest,
 	type GetProtocolVersionResponse,
 } from "../serialapi/capability/GetProtocolVersionMessages";
@@ -152,8 +156,6 @@ import {
 	type GetSerialApiCapabilitiesResponse,
 } from "../serialapi/capability/GetSerialApiCapabilitiesMessages";
 import {
-	GetLongRangeNodesRequest,
-	type GetLongRangeNodesResponse,
 	GetSerialApiInitDataRequest,
 	type GetSerialApiInitDataResponse,
 } from "../serialapi/capability/GetSerialApiInitDataMessages";
@@ -1547,8 +1549,7 @@ export class ZWaveController
 		const nodeIds: number[] = [];
 
 		if (this.supportsLongRange) {
-			const segment = 0;
-			while (true) {
+			for (let segment = 0;; segment++) {
 				const nodesResponse = await this.driver.sendMessage<
 					GetLongRangeNodesResponse
 				>(
@@ -1557,9 +1558,8 @@ export class ZWaveController
 					}),
 				);
 				nodeIds.push(...nodesResponse.nodeIds);
-				if (!nodesResponse.moreNodes) {
-					break;
-				}
+
+				if (!nodesResponse.moreNodes) break;
 			}
 		}
 		return nodeIds;
