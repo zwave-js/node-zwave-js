@@ -5,6 +5,7 @@ import {
 	NUM_LR_NODES_PER_SEGMENT,
 	NUM_NODEMASK_BYTES,
 	NodeType,
+	encodeBitMask,
 	encodeLongRangeNodeBitMask,
 	parseLongRangeNodeBitMask,
 	parseNodeBitMask,
@@ -154,7 +155,7 @@ export class GetSerialApiInitDataResponse extends Message {
 		this.payload[1] = capabilities;
 
 		this.payload[2] = NUM_NODEMASK_BYTES;
-		const nodeBitMask = encodeLongRangeNodeBitMask(this.nodeIds, MAX_NODES);
+		const nodeBitMask = encodeBitMask(this.nodeIds, MAX_NODES);
 		nodeBitMask.copy(this.payload, 3);
 
 		if (chipType) {
