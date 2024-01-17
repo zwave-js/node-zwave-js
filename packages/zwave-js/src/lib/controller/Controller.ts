@@ -1733,17 +1733,25 @@ export class ZWaveController
 		};
 
 		try {
-			this.driver.controllerLog.print(
-				`Including SmartStart node with DSK ${provisioningEntry.dsk}`,
-			);
-
 			// kick off the inclusion process
 			const dskBuffer = dskFromString(provisioningEntry.dsk);
+			const protocol = provisioningEntry.protocol
+				?? provisioningEntry.supportedProtocols?.[0]
+				?? Protocols.ZWave;
+
+			this.driver.controllerLog.print(
+				`Including SmartStart node with DSK ${provisioningEntry.dsk}${
+					protocol == Protocols.ZWaveLongRange
+						? " using Z-Wave Long Range"
+						: ""
+				}`,
+			);
+
 			await this.driver.sendMessage(
 				new AddNodeDSKToNetworkRequest(this.driver, {
 					nwiHomeId: nwiHomeIdFromDSK(dskBuffer),
 					authHomeId: authHomeIdFromDSK(dskBuffer),
-					protocol: provisioningEntry.protocol,
+					protocol,
 					highPower: true,
 					networkWide: true,
 				}),
