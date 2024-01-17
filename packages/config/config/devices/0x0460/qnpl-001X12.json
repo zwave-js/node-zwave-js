@@ -1,0 +1,105 @@
+{
+	"manufacturer": "Shelly Europe",
+	"manufacturerId": "0x0460",
+	"label": "QNPL-001X12",
+	"description": "Wave Plug UK",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0089"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "17",
+			"label": "O1: State After Power Failure",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "O1: Auto-Off Timer",
+			"$import": "templates/wave_template.json#auto_off_timer"
+		},
+		{
+			"#": "20",
+			"label": "O1: Auto-On Timer",
+			"$import": "templates/wave_template.json#auto_on_timer"
+		},
+		{
+			"#": "25",
+			"label": "O1: Auto-On/Off Timer Unit",
+			"$import": "templates/wave_template.json#timer_unit"
+		},
+		{
+			"#": "23",
+			"label": "O1: Relay Type",
+			"$import": "templates/wave_template.json#out_relay_type"
+		},
+        {
+			"#": "36",
+			"label": "O1: Power Change Report Threshold",
+			"$import": "templates/wave_template.json#power_change_report_treshold"
+		},
+        {
+			"#": "39",
+			"label": "O1: Minimum Time Between Power Reports",
+			"$import": "templates/wave_template.json#min_time_between_reports"
+		},
+		{
+			"#": "91",
+			"label": "Alarm Configuration: Water",
+			"$import": "templates/wave_template.json#alarm_configuration"
+
+		},
+		{
+			"#": "92",
+			"label": "Alarm Configuration: Smoke",
+			"$import": "templates/wave_template.json#alarm_configuration"
+		},
+		{
+			"#": "93",
+			"label": "Alarm Configuration: CO",
+			"$import": "templates/wave_template.json#alarm_configuration"
+		},
+		{
+			"#": "94",
+			"label": "Alarm Configuration: Heat",
+			"$import": "templates/wave_template.json#alarm_configuration"
+		},
+        {
+			"#": "105",
+			"label": "Signal LED Intensity",
+			"$import": "templates/wave_template.json#led_intensity"
+		},
+		{
+			"#": "120",
+			"label": "Factory Reset",
+			"$import": "templates/wave_template.json#factory_reset"
+		},	
+		{
+			"#": "201",
+			"label": "Serial Number: Part 1",
+			"$import": "templates/wave_template.json#serial_number"
+		},
+		{
+			"#": "202",
+			"label": "Serial Number: Part 2",
+			"$import": "templates/wave_template.json#serial_number"
+		},
+		{
+			"#": "203",
+			"label": "Serial Number: Part 3",
+			"$import": "templates/wave_template.json#serial_number"
+		}
+	],
+	"metadata": {
+		"$import": "templates/wave_template.json#default_metadata"
+	}
+}

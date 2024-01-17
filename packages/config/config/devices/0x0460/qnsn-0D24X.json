@@ -1,0 +1,66 @@
+{
+	"manufacturer": "Shelly Europe",
+	"manufacturerId": "0x0460",
+	"label": "QNSN-0D24X",
+	"description": "Wave i4 DC",
+	"devices": [
+		{
+			"productType": "0x0009",
+			"productId": "0x0082"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "SW1 Switch Type",
+			"$import": "templates/wave_template.json#switch_type"	
+		},
+		{
+			"#": "2",
+			"label": "SW2 Switch Type",
+			"$import": "templates/wave_template.json#switch_type"
+		},
+		{
+			"#": "3",
+			"label": "SW3 Switch Type",
+			"$import": "templates/wave_template.json#switch_type"	
+		},
+		{
+			"#": "4",
+			"label": "SW4 Switch Type",
+			"$import": "templates/wave_template.json#switch_type"
+		},
+        {
+			"#": "105",
+			"label": "Signal LED Intensity",
+			"$import": "templates/wave_template.json#led_intensity"
+		},
+		{
+			"#": "120",
+			"label": "Factory Reset",
+			"$import": "templates/wave_template.json#factory_reset"
+		},	
+		{
+			"#": "201",
+			"label": "Serial Number: Part 1",
+			"$import": "templates/wave_template.json#serial_number"
+		},
+		{
+			"#": "202",
+			"label": "Serial Number: Part 2",
+			"$import": "templates/wave_template.json#serial_number"
+		},
+		{
+			"#": "203",
+			"label": "Serial Number: Part 3",
+			"$import": "templates/wave_template.json#serial_number"
+		}
+	],
+	"metadata": {
+		"$import": "templates/wave_template.json#default_metadata"
+	}
+}
