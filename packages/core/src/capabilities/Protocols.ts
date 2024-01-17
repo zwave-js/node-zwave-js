@@ -95,18 +95,6 @@ export enum LongRangeChannel {
 	// 0x03..0xFF are reserved and must not be used
 }
 
-export function longRangeChannelToString(channel: LongRangeChannel): string {
-	switch (channel) {
-		case LongRangeChannel.Unknown:
-			return "Unknown";
-		case LongRangeChannel.A:
-			return "Channel A (912 MHz)";
-		case LongRangeChannel.B:
-			return "Channel B (920 MHz)";
-	}
-	return `Unknown (${num2hex(channel)})`;
-}
-
 export function isLongRangeNodeId(nodeId: number): boolean {
 	return nodeId > 255;
 }
