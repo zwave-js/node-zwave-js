@@ -1606,18 +1606,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 						// Ping non-sleeping nodes to determine their status
 						await node.ping();
 					}
-
-					// Previous versions of zwave-js didn't configure the SUC return route. Make sure each node has one
-					// and remember that we did. If the node is not responsive - tough luck, try again next time
-					if (
-						!node.hasSUCReturnRoute
-						&& node.status !== NodeStatus.Dead
-					) {
-						node.hasSUCReturnRoute = await this.controller
-							.assignSUCReturnRoutes(
-								node.id,
-							);
-					}
 				})();
 			}
 

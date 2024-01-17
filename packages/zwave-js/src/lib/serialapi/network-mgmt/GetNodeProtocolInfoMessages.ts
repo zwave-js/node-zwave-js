@@ -7,6 +7,8 @@ import {
 	type ProtocolVersion,
 	encodeNodeID,
 	encodeNodeProtocolInfo,
+	isLongRangeNodeId,
+	parseNodeID,
 	parseNodeProtocolInfo,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
@@ -38,7 +40,8 @@ export class GetNodeProtocolInfoRequest extends Message {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			this.requestedNodeId = this.payload[0];
+			this.requestedNodeId =
+				parseNodeID(this.payload, this.host.nodeIdType, 0).nodeId;
 		} else {
 			this.requestedNodeId = options.requestedNodeId;
 		}
@@ -72,6 +75,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 			const { hasSpecificDeviceClass, ...rest } = parseNodeProtocolInfo(
 				this.payload,
 				0,
+				isLongRangeNodeId(this.getNodeId()!),
 			);
 			this.isListening = rest.isListening;
 			this.isFrequentListening = rest.isFrequentListening;
