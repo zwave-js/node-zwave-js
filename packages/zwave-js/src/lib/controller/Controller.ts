@@ -1323,6 +1323,7 @@ export class ZWaveController
 			maxPayloadSizeLR = await this.getMaxPayloadSizeLongRange();
 		}
 
+		// FIXME: refactor this message
 		this.driver.controllerLog.print(
 			`received additional controller information:
   Z-Wave API version:         ${this._zwaveApiVersion.version} (${this._zwaveApiVersion.kind})${
@@ -1345,15 +1346,23 @@ export class ZWaveController
   controller role:            ${this._isPrimary ? "primary" : "secondary"}
   controller is the SIS:      ${this._isSIS}
   controller supports timers: ${this._supportsTimers}
-  zwave nodes in the network: ${initData.nodeIds.join(", ")}
-  max payload size:           ${maxPayloadSize}
-  LR nodes in the network:    ${lrNodeIds.join(", ")}
+  max. payload size:
+    Z-Wave:                   ${maxPayloadSize}
+    Long Range:               ${maxPayloadSizeLR ?? "(unknown)"}
+  nodes in the network:
+    Z-Wave:                   ${
+				initData.nodeIds.length > 0
+					? initData.nodeIds.join(", ")
+					: "(none)"
+			}
+    Long Range:               ${
+				lrNodeIds.length > 0 ? lrNodeIds.join(", ") : "(none)"
+			}
   LR channel:                 ${
 				lrChannel
 					? getEnumMemberName(LongRangeChannel, lrChannel)
 					: "<not set>"
-			}
-  LR max payload size:        ${maxPayloadSizeLR}`,
+			}`,
 		);
 
 		// Index the value DB for optimal performance
