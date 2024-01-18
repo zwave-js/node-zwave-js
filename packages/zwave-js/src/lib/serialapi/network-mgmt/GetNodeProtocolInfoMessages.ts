@@ -23,6 +23,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { isObject } from "alcalzone-shared/typeguards";
 
 interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 	requestedNodeId: number;
@@ -72,10 +73,21 @@ export class GetNodeProtocolInfoResponse extends Message {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
+			// The context should contain the node ID the protocol info was requested for.
+			// Use it to determine whether the node is long range
+			let isLongRange = false;
+			if (
+				isObject(options.context)
+				&& "nodeId" in options.context
+				&& typeof options.context.nodeId === "number"
+			) {
+				isLongRange = isLongRangeNodeId(options.context.nodeId);
+			}
+
 			const { hasSpecificDeviceClass, ...rest } = parseNodeProtocolInfo(
 				this.payload,
 				0,
-				isLongRangeNodeId(this.getNodeId()!),
+				isLongRange,
 			);
 			this.isListening = rest.isListening;
 			this.isFrequentListening = rest.isFrequentListening;

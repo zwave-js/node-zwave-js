@@ -695,6 +695,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.nodeSessions.get(nodeId)!;
 	}
 
+	private _requestContext: Map<FunctionType, Record<string, unknown>> =
+		new Map();
+	/**
+	 * @internal
+	 * Stores data from Serial API command requests to be used by their responses
+	 */
+	public get requestContext(): Map<FunctionType, Record<string, unknown>> {
+		return this._requestContext;
+	}
+
 	public readonly cacheDir: string;
 
 	private _valueDB: JsonlDB | undefined;
@@ -2980,7 +2990,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			msg = Message.from(this, {
 				data,
 				sdkVersion: this._controller?.sdkVersion,
-			});
+			}, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
 				const node = this.getNodeUnsafe(msg);
