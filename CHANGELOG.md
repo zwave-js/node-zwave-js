@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.5.0-beta.0 (2024-01-19)
 This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://github.com/zwave-js/node-zwave-js/blob/release-12.5.x/docs/getting-started/long-range.md) to get started.
 
 ### Features
