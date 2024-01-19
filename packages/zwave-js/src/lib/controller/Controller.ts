@@ -4034,29 +4034,52 @@ supported CCs: ${
 	private async handleSerialAPIStartedUnexpectedly(
 		msg: SerialAPIStartedRequest,
 	): Promise<boolean> {
-		// Normally, the soft reset command includes waiting for this message. If we end up here, it is unexpected.
+		// Normally, the soft reset command includes waiting for this message.
+		// If we end up here, it is unexpected.
 
-		if (msg.wakeUpReason === SerialAPIWakeUpReason.SoftwareReset) {
-			// The Serial API restarted
-			if (this._nodeIdType === NodeIDType.Long) {
-				this.driver.controllerLog.print(
-					`Serial API restarted unexpectedly.`,
-					"warn",
-				);
+		switch (msg.wakeUpReason) {
+			// All wakeup reasons that indicate a reset of the Serial API
+			// need to be handled here, so we interpret node IDs correctly.
+			case SerialAPIWakeUpReason.Reset:
+			case SerialAPIWakeUpReason.WatchdogReset:
+			case SerialAPIWakeUpReason.SoftwareReset:
+			case SerialAPIWakeUpReason.EmergencyWatchdogReset:
+			case SerialAPIWakeUpReason.BrownoutCircuit: {
+				// The Serial API restarted unexpectedly
+				if (this._nodeIdType === NodeIDType.Long) {
+					this.driver.controllerLog.print(
+						`Serial API restarted unexpectedly.`,
+						"warn",
+					);
 
-				// We previously used 16 bit node IDs, but the controller was reset.
-				// Remember this and try to go back to 16 bit.
-				this._nodeIdType = NodeIDType.Short;
-				await this.trySetNodeIDType(NodeIDType.Long);
+					// We previously used 16 bit node IDs, but the controller was reset.
+					// Remember this and try to go back to 16 bit.
+					this._nodeIdType = NodeIDType.Short;
+					await this.trySetNodeIDType(NodeIDType.Long);
+				}
+
+				return true; // Don't invoke any more handlers
 			}
-
-			return true; // Don't invoke any more handlers
 		}
 
 		return false; // Not handled
 	}
 
 	private _rebuildRoutesProgress = new Map<number, RebuildRoutesStatus>();
+	/**
+	 * If routes are currently being rebuilt for the entire network, this returns the current progress.
+	 * The information is the same as in the `"rebuild routes progress"` event.
+	 */
+	public get rebuildRoutesProgress():
+		| ReadonlyMap<
+			number,
+			RebuildRoutesStatus
+		>
+		| undefined
+	{
+		if (!this._isRebuildingRoutes) return undefined;
+		return new Map(this._rebuildRoutesProgress);
+	}
 
 	/**
 	 * Starts the process of rebuilding routes for all alive nodes in the network,
@@ -4223,6 +4246,7 @@ supported CCs: ${
 		}
 		// We're done!
 		this._isRebuildingRoutes = false;
+		this._rebuildRoutesProgress.clear();
 	}
 
 	/**
@@ -4242,6 +4266,8 @@ supported CCs: ${
 				|| t.message instanceof DeleteReturnRouteRequest
 				|| t.message instanceof AssignReturnRouteRequest,
 		);
+
+		this._rebuildRoutesProgress.clear();
 
 		return true;
 	}

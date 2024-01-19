@@ -12,6 +12,7 @@
 		"0x01": {
 			"label": "Remote Controller",
 			"controlledCCs": ["Basic"],
+			"maySupportBasicCC": false,
 			"specific": {
 				"0x01": {
 					"label": "Portable Remote Controller",
@@ -164,6 +165,7 @@
 				"0x07": {
 					"label": "Gateway",
 					"zwavePlusDeviceType": "Gateway",
+					"maySupportBasicCC": false,
 					"supportedCCs": [
 						"Manufacturer Specific",
 						// "Security", (some devices only support S2)
@@ -252,7 +254,8 @@
 			"specific": {
 				"0x01": {
 					"label": "Notification Sensor",
-					"zwavePlusDeviceType": "Sensor - Notification"
+					"zwavePlusDeviceType": "Sensor - Notification",
+					"maySupportBasicCC": false
 				}
 			}
 		},
@@ -327,11 +330,13 @@
 			"specific": {
 				"0x01": {
 					"label": "Repeater Slave",
-					"zwavePlusDeviceType": "Repeater"
+					"zwavePlusDeviceType": "Repeater",
+					"maySupportBasicCC": false
 				},
 				"0x03": {
 					"label": "IR Repeater",
 					"zwavePlusDeviceType": "IR Repeater",
+					"maySupportBasicCC": false,
 					"supportedCCs": [
 						"Association", // V2+
 						"Association Group Information",
@@ -624,7 +629,8 @@
 			"specific": {
 				"0x01": {
 					"label": "Basic Wall Controller",
-					"zwavePlusDeviceType": "Wall Controller"
+					"zwavePlusDeviceType": "Wall Controller",
+					"maySupportBasicCC": false
 				}
 			}
 		},
@@ -643,7 +649,8 @@
 			"specific": {
 				"0x01": {
 					"label": "Routing Multilevel Sensor",
-					"zwavePlusDeviceType": "Sensor - Multilevel"
+					"zwavePlusDeviceType": "Sensor - Multilevel",
+					"maySupportBasicCC": false
 				}
 			}
 		},
@@ -653,7 +660,7 @@
 		},
 		"0x31": {
 			"label": "Meter",
-			"supportedCCs": ["Basic"],
+			"maySupportBasicCC": false,
 			"specific": {
 				"0x01": {
 					"label": "Simple Meter",
@@ -843,6 +850,7 @@
 					"label": "Secure Keypad",
 					"zwavePlusDeviceType": "Entry Control Keypad",
 					"requiresSecurity": true,
+					"maySupportBasicCC": false,
 					"supportedCCs": [
 						// "Device Reset Locally", (we can't know if the device can be reset)
 						"Entry Control",

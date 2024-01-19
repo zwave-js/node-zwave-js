@@ -4,6 +4,37 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.4.1 (2023-12-09)
+### Bugfixes
+* Handle more cases of unexpected Serial API restarts (#6551)
+
+### Config file changes
+* Add wakeup instructions for Nexia ZSENS930 (#6545)
+* Correct parameter 5 size for Zooz ZEN34 (#6546)
+
+## 12.4.0 (2023-11-30)
+### Features
+* Expose rebuild routes progress as a controller property (#6525)
+
+### Bugfixes
+* On devices that should/must not support `Basic CC`, but use it for reporting, only the `currentValue` is now exposed. This allows applications to consider it a sensor, not an actor (#6526)
+
+## 12.3.2 (2023-11-29)
+### Config file changes
+* Correct firmware version condition for Zooz ZSE40 v3.0 (#6519)
+
+### Changes under the hood
+* Add mocks for `Multilevel Sensor CC`
+* Upgrade transitive dependency `axios` to a non-vulnerable version (#6520)
+
+## 12.3.1 (2023-11-20)
+### Bugfixes
+* Fixed an issue where the unresponsive controller recovery could put "immediate" commands to a sleeping node on the wrong queue, blocking all outgoing communication (#6507)
+
+### Config file changes
+* Add missing units and firmware condition for Heatit Z-Temp2 (#6500)
+* Correct device label for Airzone Aidoo Control HVAC unit (#6493)
+
 ## 12.3.0 (2023-10-31)
 ### Features
 * Allow disabling the unresponsive controller recovery feature (#6480)

@@ -1243,6 +1243,14 @@ readonly isRebuildingRoutes: boolean;
 
 Returns whether the routes are currently being rebuilt for one or more nodes.
 
+### `rebuildRoutesProgress`
+
+```ts
+readonly rebuildRoutesProgress: ReadonlyMap<number, RebuildRoutesStatus> | undefined;
+```
+
+If routes are currently being rebuilt for the entire network, this returns the current progress as a map of each node's ID and its status.
+
 ### `inclusionState`
 
 ```ts

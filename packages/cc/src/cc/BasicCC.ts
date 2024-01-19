@@ -327,12 +327,15 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			ret.push(...super.getDefinedValueIDs(applHost));
 		}
 
-		// Add the compat event value if it should be exposed
 		if (
 			!!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
 				?.treatBasicSetAsEvent
 		) {
+			// Add the compat event value if it should be exposed
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
+		} else if (endpoint.controlsCC(CommandClasses.Basic)) {
+			// Otherwise, only expose currentValue on devices that only control Basic CC
+			ret.push(BasicCCValues.currentValue.endpoint(endpoint.index));
 		}
 
 		return ret;

@@ -907,6 +907,7 @@ interface GenericDeviceClass {
 	readonly requiresSecurity?: boolean;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
+	readonly maySupportBasicCC: boolean;
 	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
 }
 ```
@@ -921,6 +922,7 @@ interface SpecificDeviceClass {
 	readonly requiresSecurity?: boolean;
 	readonly supportedCCs: readonly CommandClasses[];
 	readonly controlledCCs: readonly CommandClasses[];
+	readonly maySupportBasicCC: boolean;
 }
 ```
 

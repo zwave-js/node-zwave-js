@@ -28,6 +28,9 @@
 						"controlledCCs": {
 							"$ref": "#/definitions/CCs"
 						},
+						"maySupportBasicCC": {
+							"const": false
+						},
 						"specific": {
 							"type": "object",
 							"patternProperties": {
@@ -45,6 +48,9 @@
 										},
 										"controlledCCs": {
 											"$ref": "#/definitions/CCs"
+										},
+										"maySupportBasicCC": {
+											"const": false
 										}
 									},
 									"required": ["label"],
