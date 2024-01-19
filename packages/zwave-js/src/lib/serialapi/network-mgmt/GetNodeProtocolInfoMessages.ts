@@ -74,7 +74,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 
 		if (gotDeserializationOptions(options)) {
 			// The context should contain the node ID the protocol info was requested for.
-			// Use it to determine whether the node is long range
+			// We use it here to determine whether the node is long range.
 			let isLongRange = false;
 			if (
 				isObject(options.context)

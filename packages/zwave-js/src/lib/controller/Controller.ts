@@ -1199,13 +1199,11 @@ export class ZWaveController
 						)
 					}`,
 				);
-				this._supportsLongRange = resp == RFRegion["USA (Long Range)"];
 			} else {
 				this.driver.controllerLog.print(
 					`Querying the RF region failed!`,
 					"warn",
 				);
-				this._supportsLongRange = false;
 			}
 		}
 
@@ -1787,7 +1785,8 @@ export class ZWaveController
 		};
 
 		try {
-			// kick off the inclusion process
+			// Kick off the inclusion process using either the
+			// specified protocol or the first supported one
 			const dskBuffer = dskFromString(provisioningEntry.dsk);
 			const protocol = provisioningEntry.protocol
 				?? provisioningEntry.supportedProtocols?.[0]
@@ -2213,9 +2212,13 @@ export class ZWaveController
 			|| msg
 				instanceof ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
 		) {
-			// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
+			const isLongRange = msg
+				instanceof ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived;
+			// The controller is in Smart Start learn mode and a node requests inclusion via Smart Start
 			this.driver.controllerLog.print(
-				"Received Smart Start inclusion request",
+				`Received Smart Start inclusion request${
+					isLongRange ? " (Z-Wave Long Range)" : ""
+				}`,
 			);
 
 			if (
@@ -2229,11 +2232,21 @@ export class ZWaveController
 			}
 
 			// Check if the node is on the provisioning list
-			const provisioningEntry = this.provisioningList.find((entry) =>
-				nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
-					msg.nwiHomeId,
-				)
-			);
+			const provisioningEntry = this.provisioningList.find((entry) => {
+				if (
+					!nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
+						msg.nwiHomeId,
+					)
+				) {
+					return false;
+				}
+				// TODO: This is duplicated with the logic in beginInclusionSmartStart
+				const entryProtocol = entry.protocol
+					?? entry.supportedProtocols?.[0]
+					?? Protocols.ZWave;
+				return (entryProtocol === Protocols.ZWaveLongRange)
+					=== isLongRange;
+			});
 			if (!provisioningEntry) {
 				this.driver.controllerLog.print(
 					"NWI Home ID not found in provisioning list, ignoring request...",
@@ -4116,6 +4129,7 @@ supported CCs: ${
 		const todoSleeping: number[] = [];
 
 		const addTodo = (nodeId: number) => {
+			// Z-Wave Long Range does not route
 			if (isLongRangeNodeId(nodeId)) return;
 
 			if (pendingNodes.has(nodeId)) {

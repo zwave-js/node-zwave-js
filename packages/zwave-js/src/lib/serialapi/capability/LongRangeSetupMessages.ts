@@ -83,7 +83,8 @@ export interface SetLongRangeChannelResponseOptions extends MessageBaseOptions {
 	responseStatus: number;
 }
 
-export class ResponseStatusMessageBase extends Message
+@messageTypes(MessageType.Response, FunctionType.SetLongRangeChannel)
+export class SetLongRangeChannelResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
@@ -101,14 +102,12 @@ export class ResponseStatusMessageBase extends Message
 	}
 }
 
-@messageTypes(MessageType.Response, FunctionType.SetLongRangeChannel)
-export class SetLongRangeChannelResponse extends ResponseStatusMessageBase {}
-
 export interface LongRangeShadowNodeIDsRequestOptions
 	extends MessageBaseOptions
 {
 	shadowNodeIds: number[];
 }
+
 const LONG_RANGE_SHADOW_NODE_IDS_START = 2002;
 const NUM_LONG_RANGE_SHADOW_NODE_IDS = 4;
 

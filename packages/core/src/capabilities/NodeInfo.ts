@@ -296,8 +296,8 @@ export function encodeNodeProtocolInfo(
 	info: NodeProtocolInfo,
 	isLongRange: boolean = false,
 ): Buffer {
-	// Technically a lot of these fields are reserved in Z-Wave Long Range, but the
-	// only thing where it really matters is the speed bitmask
+	// Technically a lot of these fields are reserved/unused in Z-Wave Long Range,
+	// but the only thing where it really matters is the speed bitmask.
 	const ret = Buffer.alloc(3, 0);
 	// Byte 0 and 2
 	if (info.isListening) ret[0] |= 0b10_000_000;
