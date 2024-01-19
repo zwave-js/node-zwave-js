@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://github.com/zwave-js/node-zwave-js/blob/release-12.5.x/docs/getting-started/long-range.md) to get started.
+
+### Features
+* Support Z-Wave Long Range (#6401)
+
+### Config file changes
+* Add 2nd product ID for Ring Panic Button Gen2 (#6595)
+
+### Changes under the hood
+* Fix compatibility of ESLint plugin with Node.js 18 (#6580)
+
 ## 12.4.1 (2023-12-09)
 ### Bugfixes
 * Handle more cases of unexpected Serial API restarts (#6551)
