@@ -170,6 +170,7 @@ interface PlannedProvisioningEntry {
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
 	securityClasses: SecurityClass[];
+	// ...other fields are irrelevant for this inclusion procedure
 }
 ```
 
@@ -238,6 +239,7 @@ provisionSmartStartNode(entry: PlannedProvisioningEntry): void
 ```
 
 Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry. The node will be included out of band when it powers up.
+If the `protocol` field is set to `Protocols.ZWaveLongRange`, the node will be included using Z-Wave Long Range instead of Z-Wave Classic.
 
 > [!ATTENTION] This method will throw when SmartStart is not supported by the controller!
 
@@ -255,6 +257,14 @@ interface PlannedProvisioningEntry {
 
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
+
+	/** Which protocol to use for inclusion. Default: Z-Wave Classic */
+	protocol?: Protocols;
+	/**
+	 * The protocols that are **supported** by the device.
+	 * When this is not set, applications should default to Z-Wave classic.
+	 */
+	supportedProtocols?: readonly Protocols[];
 
 	/** The security classes that have been **granted** by the user */
 	securityClasses: SecurityClass[];
