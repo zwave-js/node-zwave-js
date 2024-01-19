@@ -1,4 +1,8 @@
-import type { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
+import type {
+	CommandClasses,
+	Protocols,
+	SecurityClass,
+} from "@zwave-js/core/safe";
 import type { DeviceClass } from "../node/DeviceClass";
 
 /** Additional information about the outcome of a node inclusion */
@@ -218,6 +222,14 @@ export interface PlannedProvisioningEntry {
 
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
+
+	/** Which protocol to use for inclusion. Default: Z-Wave Classic */
+	protocol?: Protocols;
+	/**
+	 * The protocols that are **supported** by the device.
+	 * When this is not set, applications should default to Z-Wave classic.
+	 */
+	supportedProtocols?: readonly Protocols[];
 
 	/** The security classes that have been **granted** by the user */
 	securityClasses: SecurityClass[];

@@ -153,6 +153,7 @@ import {
 	NodeType,
 	type NodeUpdatePayload,
 	type ProtocolVersion,
+	Protocols,
 	type RSSI,
 	RssiError,
 	SecurityClass,
@@ -176,6 +177,7 @@ import {
 	applicationCCs,
 	getCCName,
 	getDSTInfo,
+	isLongRangeNodeId,
 	isRssiError,
 	isSupervisionResult,
 	isTransmissionError,
@@ -193,7 +195,7 @@ import {
 	valueIdToString,
 } from "@zwave-js/core";
 import type { NodeSchedulePollOptions } from "@zwave-js/host";
-import type { Message } from "@zwave-js/serial";
+import { FunctionType, type Message } from "@zwave-js/serial";
 import {
 	Mixin,
 	ObjectKeyMap,
@@ -882,6 +884,13 @@ export class ZWaveNode extends Endpoint
 				NodeNamingAndLocationCCValues.location.id,
 			);
 		}
+	}
+
+	/** Which protocol is used to communicate with this node */
+	public get protocol(): Protocols {
+		return isLongRangeNodeId(this.id)
+			? Protocols.ZWaveLongRange
+			: Protocols.ZWave;
 	}
 
 	/** Whether a SUC return route was configured for this node */
@@ -1868,6 +1877,12 @@ export class ZWaveNode extends Endpoint
 		this.driver.controllerLog.logNode(this.id, {
 			message: "querying protocol info...",
 			direction: "outbound",
+		});
+		// The GetNodeProtocolInfoRequest needs to know the node ID to distinguish
+		// between ZWLR and ZW classic. We store it on the driver's context, so it
+		// can be retrieved when needed.
+		this.driver.requestContext.set(FunctionType.GetNodeProtocolInfo, {
+			nodeId: this.id,
 		});
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
 			new GetNodeProtocolInfoRequest(this.driver, {

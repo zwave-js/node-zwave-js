@@ -52,7 +52,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 0x24,
 
 	EnterBootloader = 0x27, // Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
-	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ZW_NVRGetValue(offset, length) => NVRdata[], see INS13954-13
 
 	GetNVMId = 0x29, // Returns information about the external NVM
 	ExtNVMReadLongBuffer = 0x2a, // Reads a buffer from the external NVM
@@ -173,6 +173,12 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0xD4 = 0xd4, // ??
 
 	Shutdown = 0xd9, // Instruct the Z-Wave API to shut down in order to safely remove the power
+
+	// Long range controller support
+	GetLongRangeNodes = 0xda, // Used after GetSerialApiInitData to get the nodes with IDs > 0xFF
+	GetLongRangeChannel = 0xdb,
+	SetLongRangeChannel = 0xdc,
+	SetLongRangeShadowNodeIDs = 0xdd,
 
 	UNKNOWN_FUNC_UNKNOWN_0xEF = 0xef, // ??
 

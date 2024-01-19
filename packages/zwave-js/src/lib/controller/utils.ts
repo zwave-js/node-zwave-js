@@ -1,5 +1,6 @@
 import {
 	type MaybeNotKnown,
+	Protocols,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -59,6 +60,25 @@ export function assertProvisioningEntry(
 			{
 				throw fail("requestedSecurityClasses contains invalid entries");
 			}
+		}
+	}
+
+	if (
+		arg.protocol != undefined
+		&& (typeof arg.protocol !== "number" || !(arg.protocol in Protocols))
+	) {
+		throw fail("protocol is not a valid");
+	}
+
+	if (arg.supportedProtocols != undefined) {
+		if (!isArray(arg.supportedProtocols)) {
+			throw fail("supportedProtocols must be an array");
+		} else if (
+			!arg.supportedProtocols.every(
+				(p: any) => typeof p === "number" && p in Protocols,
+			)
+		) {
+			throw fail("supportedProtocols contains invalid entries");
 		}
 	}
 }

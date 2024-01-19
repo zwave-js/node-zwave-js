@@ -695,6 +695,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.nodeSessions.get(nodeId)!;
 	}
 
+	private _requestContext: Map<FunctionType, Record<string, unknown>> =
+		new Map();
+	/**
+	 * @internal
+	 * Stores data from Serial API command requests to be used by their responses
+	 */
+	public get requestContext(): Map<FunctionType, Record<string, unknown>> {
+		return this._requestContext;
+	}
+
 	public readonly cacheDir: string;
 
 	private _valueDB: JsonlDB | undefined;
@@ -1421,17 +1431,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		if (!this._options.testingHooks?.skipControllerIdentification) {
-			// Determine controller IDs to open the Value DBs
-			// We need to do this first because some older controllers, especially the UZB1 and
-			// some 500-series sticks in virtualized environments don't respond after a soft reset
+			// Determine what the controller can do
+			const { nodeIds } = await this.controller.queryCapabilities();
 
-			// No need to initialize databases if skipInterview is true, because it is only used in some
-			// Driver unit tests that don't need access to them
+			// Configure the radio
+			await this.controller.queryAndConfigureRF();
 
-			// Identify the controller and determine if it supports soft reset
-			await this.controller.identify();
-			await this.initNetworkCache(this.controller.homeId!);
-
+			// Soft-reset the stick if possible.
+			// On 700+ series, we'll also learn about whether the stick supports
+			// Z-Wave Long Range in the current region.
 			const maySoftReset = this.maySoftReset();
 			if (this._options.features.softReset && !maySoftReset) {
 				this.driverLog.print(
@@ -1445,40 +1453,44 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				await this.softResetInternal(false);
 			}
 
-			// There are situations where a controller claims it has the ID 0,
-			// which isn't valid. In this case try again after having soft-reset the stick
-			// TODO: Check if this is still necessary now that we support 16-bit node IDs
-			if (this.controller.ownNodeId === 0 && maySoftReset) {
-				this.driverLog.print(
-					`Controller identification returned invalid node ID 0 - trying again...`,
-					"warn",
-				);
-				// We might end up with a different home ID, so close the cache before re-identifying the controller
-				await this._networkCache?.close();
-				await this.controller.identify();
-				await this.initNetworkCache(this.controller.homeId!);
+			let lrNodeIds: readonly number[] | undefined;
+			if (this.controller.supportsLongRange) {
+				// If the controller supports ZWLR, we need to query the node IDs again
+				// to get the full list of nodes
+				lrNodeIds = (await this.controller.queryLongRangeCapabilities())
+					.lrNodeIds;
 			}
 
-			if (this.controller.ownNodeId === 0) {
-				this.driverLog.print(
-					`Controller identification returned invalid node ID 0`,
-					"error",
-				);
-				await this.destroy();
-				return;
-			}
+			// If the controller supports ZWLR in the current region, switch to
+			// 16-bit node IDs. Otherwise, make sure that it is actually using 8-bit node IDs.
+			await this.controller.trySetNodeIDType(
+				this.controller.supportsLongRange
+					? NodeIDType.Long
+					: NodeIDType.Short,
+			);
+
+			// Now that we know the node ID type, we can identify the controller
+			await this.controller.identify();
+
+			// Perform additional configuration
+			await this.controller.configure();
 
 			// now that we know the home ID, we can open the databases
+			await this.initNetworkCache(this.controller.homeId!);
 			await this.initValueDBs(this.controller.homeId!);
 			await this.performCacheMigration();
 
-			// Interview the controller.
-			await this._controller.interview(async () => {
-				// Try to restore the network information from the cache
-				if (process.env.NO_CACHE !== "true") {
-					await this.restoreNetworkStructureFromCache();
-				}
-			});
+			// Initialize all nodes and restore the data from cache
+			await this._controller.initNodes(
+				nodeIds,
+				lrNodeIds ?? [],
+				async () => {
+					// Try to restore the network information from the cache
+					if (process.env.NO_CACHE !== "true") {
+						await this.restoreNetworkStructureFromCache();
+					}
+				},
+			);
 
 			// Auto-enable smart start inclusion
 			this._controller.autoProvisionSmartStart();
@@ -1603,18 +1615,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					} else if (node.isListening || node.isFrequentListening) {
 						// Ping non-sleeping nodes to determine their status
 						await node.ping();
-					}
-
-					// Previous versions of zwave-js didn't configure the SUC return route. Make sure each node has one
-					// and remember that we did. If the node is not responsive - tough luck, try again next time
-					if (
-						!node.hasSUCReturnRoute
-						&& node.status !== NodeStatus.Dead
-					) {
-						node.hasSUCReturnRoute = await this.controller
-							.assignSUCReturnRoutes(
-								node.id,
-							);
 					}
 				})();
 			}
@@ -2659,8 +2659,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		).catch(() => false as const);
 
 		if (waitResult) {
-			// Serial API did start, maybe do something with the information?
+			// Serial API did start
 			this.controllerLog.print("reconnected and restarted");
+			this.controller["_supportsLongRange"] =
+				waitResult.supportsLongRange;
 			return true;
 		}
 
@@ -2686,6 +2688,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (waitResult) {
 			// Serial API did start, maybe do something with the information?
 			this.controllerLog.print("Serial API started");
+			this.controller["_supportsLongRange"] =
+				waitResult.supportsLongRange;
 			return true;
 		}
 
@@ -2987,7 +2991,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			msg = Message.from(this, {
 				data,
 				sdkVersion: this._controller?.sdkVersion,
-			});
+			}, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
 				const node = this.getNodeUnsafe(msg);

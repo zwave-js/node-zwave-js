@@ -18,6 +18,7 @@ import {
 	encryptAES128CCM,
 	getCCName,
 	highResTimestamp,
+	isLongRangeNodeId,
 	isTransmissionError,
 	isZWaveError,
 	parseBitMask,
@@ -94,13 +95,24 @@ function getAuthenticationData(
 	commandLength: number,
 	unencryptedPayload: Buffer,
 ): Buffer {
-	const ret = Buffer.allocUnsafe(8 + unencryptedPayload.length);
-	ret[0] = sendingNodeId;
-	ret[1] = destination;
-	ret.writeUInt32BE(homeId, 2);
-	ret.writeUInt16BE(commandLength, 6);
+	const nodeIdSize =
+		isLongRangeNodeId(sendingNodeId) || isLongRangeNodeId(destination)
+			? 2
+			: 1;
+	const ret = Buffer.allocUnsafe(
+		2 * nodeIdSize + 6 + unencryptedPayload.length,
+	);
+	let offset = 0;
+	ret.writeUIntBE(sendingNodeId, offset, nodeIdSize);
+	offset += nodeIdSize;
+	ret.writeUIntBE(destination, offset, nodeIdSize);
+	offset += nodeIdSize;
+	ret.writeUInt32BE(homeId, offset);
+	offset += 4;
+	ret.writeUInt16BE(commandLength, offset);
+	offset += 2;
 	// This includes the sequence number and all unencrypted extensions
-	unencryptedPayload.copy(ret, 8, 0);
+	unencryptedPayload.copy(ret, offset, 0);
 	return ret;
 }
 
