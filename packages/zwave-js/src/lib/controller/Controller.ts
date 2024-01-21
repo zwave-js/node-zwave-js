@@ -755,6 +755,14 @@ export class ZWaveController
 			);
 		}
 
+		const firstNodeIsLR = isLongRangeNodeId(nodeIDs[0]);
+		if (nodeIDs.some((id) => isLongRangeNodeId(id) !== firstNodeIsLR)) {
+			throw new ZWaveError(
+				"Cannot create a multicast group with mixed Z-Wave Classic and Z-Wave Long Range nodes",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const nodes = nodeIDs.map((id) => this._nodes.getOrThrow(id));
 		return new VirtualNode(undefined, this.driver, nodes);
 	}
@@ -2817,7 +2825,11 @@ supported CCs: ${
 			}
 		};
 
-		if (!this.driver.securityManager2) {
+		const securityManager = node.protocol === Protocols.ZWaveLongRange
+			? this.driver.securityManagerLR
+			: this.driver.securityManager2;
+
+		if (!securityManager) {
 			// Remember that the node was NOT granted any S2 security classes
 			unGrantSecurityClasses();
 			return SecurityBootstrapFailure.NoKeysConfigured;
@@ -2889,8 +2901,8 @@ supported CCs: ${
 
 		const deleteTempKey = () => {
 			// Whatever happens, no further communication needs the temporary key
-			this.driver.securityManager2?.deleteNonce(node.id);
-			this.driver.securityManager2?.tempKeys.delete(node.id);
+			securityManager.deleteNonce(node.id);
+			securityManager.tempKeys.delete(node.id);
 		};
 
 		// Allow canceling the bootstrapping process
@@ -3146,8 +3158,8 @@ supported CCs: ${
 			const tempKeys = deriveTempKeys(
 				computePRK(sharedSecret, publicKey, nodePublicKey),
 			);
-			this.driver.securityManager2.deleteNonce(node.id);
-			this.driver.securityManager2.tempKeys.set(node.id, {
+			securityManager.deleteNonce(node.id);
+			securityManager.tempKeys.set(node.id, {
 				keyCCM: tempKeys.tempKeyCCM,
 				personalizationString: tempKeys.tempPersonalizationString,
 			});
@@ -3261,7 +3273,7 @@ supported CCs: ${
 				const securityClass = keyRequest.requestedKey;
 				// Ensure it was received encrypted with the temporary key
 				if (
-					!this.driver.securityManager2.hasUsedSecurityClass(
+					!securityManager.hasUsedSecurityClass(
 						node.id,
 						SecurityClass.Temporary,
 					)
@@ -3287,7 +3299,7 @@ supported CCs: ${
 				// Send the node the requested key
 				await api.sendNetworkKey(
 					securityClass,
-					this.driver.securityManager2.getKeysForSecurityClass(
+					securityManager.getKeysForSecurityClass(
 						securityClass,
 					).pnk,
 				);
@@ -3317,7 +3329,7 @@ supported CCs: ${
 				}
 
 				if (
-					!this.driver.securityManager2.hasUsedSecurityClass(
+					!securityManager.hasUsedSecurityClass(
 						node.id,
 						securityClass,
 					)
@@ -3336,7 +3348,7 @@ supported CCs: ${
 				// so our logic to use the highest security class for decryption might be problematic. Therefore delete the
 				// security class for now.
 				node.securityClasses.delete(securityClass);
-				this.driver.securityManager2.deleteNonce(node.id);
+				securityManager.deleteNonce(node.id);
 				await api.confirmKeyVerification();
 			}
 
