@@ -146,13 +146,21 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	};
 
 	/**
-	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
+	 * Specify the security keys to use for encryption (Z-Wave Classic). Each one must be a Buffer of exactly 16 bytes.
 	 */
 	securityKeys?: {
-		S2_Unauthenticated?: Buffer;
-		S2_Authenticated?: Buffer;
 		S2_AccessControl?: Buffer;
+		S2_Authenticated?: Buffer;
+		S2_Unauthenticated?: Buffer;
 		S0_Legacy?: Buffer;
+	};
+
+	/**
+	 * Specify the security keys to use for encryption (Z-Wave Long Range). Each one must be a Buffer of exactly 16 bytes.
+	 */
+	securityKeysLongRange?: {
+		S2_AccessControl?: Buffer;
+		S2_Authenticated?: Buffer;
 	};
 
 	/**

@@ -59,6 +59,7 @@ import {
 	type MaybeNotKnown,
 	MessagePriority,
 	type MessageRecord,
+	type MulticastDestination,
 	NodeIDType,
 	RFRegion,
 	SPANState,
@@ -84,6 +85,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	highResTimestamp,
+	isLongRangeNodeId,
 	isMissingControllerACK,
 	isMissingControllerCallback,
 	isMissingControllerResponse,
@@ -805,6 +807,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 */
 	public get securityManager2(): SecurityManager2 | undefined {
 		return this._securityManager2;
+	}
+
+	private _securityManagerLR: SecurityManager2 | undefined;
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public get securityManagerLR(): SecurityManager2 | undefined {
+		return this._securityManagerLR;
+	}
+
+	/** @internal */
+	public getSecurityManager2(
+		destination: number | MulticastDestination,
+	): SecurityManager2 | undefined {
+		const nodeId = isArray(destination) ? destination[0] : destination;
+		const isLongRange = isLongRangeNodeId(nodeId);
+		return isLongRange ? this.securityManagerLR : this.securityManager2;
 	}
 
 	/**
@@ -1551,6 +1572,33 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			);
 		}
 
+		if (
+			this._options.securityKeysLongRange?.S2_AccessControl
+			|| this._options.securityKeysLongRange?.S2_Authenticated
+		) {
+			this.driverLog.print(
+				"At least one network key for Z-Wave Long Range configured, enabling security manager...",
+			);
+			this._securityManagerLR = new SecurityManager2();
+			if (this._options.securityKeysLongRange?.S2_AccessControl) {
+				this._securityManagerLR.setKey(
+					SecurityClass.S2_AccessControl,
+					this._options.securityKeysLongRange.S2_AccessControl,
+				);
+			}
+			if (this._options.securityKeysLongRange?.S2_Authenticated) {
+				this._securityManagerLR.setKey(
+					SecurityClass.S2_Authenticated,
+					this._options.securityKeysLongRange.S2_Authenticated,
+				);
+			}
+		} else {
+			this.driverLog.print(
+				"No network key for Z-Wave Long Range configured, communication won't work!",
+				"warn",
+			);
+		}
+
 		// in any case we need to emit the driver ready event here
 		this._controllerInterviewed = true;
 		this.driverLog.print("driver ready");
@@ -2127,6 +2175,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// Remove the node from all security manager instances
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
+		this.securityManagerLR?.deleteNonce(node.id);
 
 		this.rejectAllTransactionsForNode(
 			node.id,
@@ -2196,6 +2245,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// Reset nonces etc. to prevent false-positive duplicates after the update
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
+		this.securityManagerLR?.deleteNonce(node.id);
 
 		// waitTime should always be defined, but just to be sure
 		const waitTime = result.waitTime ?? 5;
@@ -2433,7 +2483,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (securityClassIsS2(securityClass)) {
 			// Use secure communication if the CC is supported. This avoids silly things like S2-encapsulated pings
 			return (
-				!!this.securityManager2
+				!!this.getSecurityManager2(nodeId)
 				&& (isBasicCC || (endpoint ?? node).supportsCC(ccId))
 			);
 		}
@@ -3316,15 +3366,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		// With the MGRP extension present
 		const node = this.getNodeUnsafe(msg);
+		if (!node) return false;
 		const groupId = encapS2.getMulticastGroupId();
+		if (groupId == undefined) return false;
+		const securityManager = this.getSecurityManager2(node.id);
 		if (
-			node
-			&& groupId != undefined
 			// but where we don't have an MPAN stored
-			&& this.securityManager2?.getPeerMPAN(
-					msg.command.nodeId as number,
-					groupId,
-				).type !== MPANState.MPAN
+			securityManager?.getPeerMPAN(
+				msg.command.nodeId as number,
+				groupId,
+			).type !== MPANState.MPAN
 		) {
 			return true;
 		}
@@ -3375,11 +3426,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 			if (this.controller.bootstrappingS2NodeId === nodeId) {
 				// The node is currently being bootstrapped.
-				if (this.securityManager2?.tempKeys.has(nodeId)) {
+				const securityManager = this.getSecurityManager2(nodeId);
+				if (securityManager?.tempKeys.has(nodeId)) {
 					// The DSK has been verified, so we should be able to decode this command.
 					// If this is the first attempt, we need to request a nonce first
 					if (
-						this.securityManager2.getSPANState(nodeId).type
+						securityManager.getSPANState(nodeId).type
 							=== SPANState.None
 					) {
 						this.controllerLog.logNode(nodeId, {
@@ -4593,8 +4645,9 @@ ${handlers.length} left`,
 			if (node?.supportsCC(CommandClasses["Security 2"])) {
 				// ... the node supports S2 and has a valid security class
 				const nodeSecClass = node.getHighestSecurityClass();
+				const securityManager = this.getSecurityManager2(node.id);
 				maybeS2 = securityClassIsS2(nodeSecClass)
-					|| !!this.securityManager2?.tempKeys.has(node.id);
+					|| !!securityManager?.tempKeys.has(node.id);
 			} else if (options.s2MulticastGroupId != undefined) {
 				// ... or we're dealing with S2 multicast
 				maybeS2 = true;
