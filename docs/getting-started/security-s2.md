@@ -136,6 +136,12 @@ For modern devices, **SmartStart** makes the inclusion even easier for the user 
 
 > [!NOTE] Confirming the inclusion process like with normal S2 inclusion is recommended, so users can react to a failed bootstrapping attempt.
 
+## Z-Wave Long Range
+
+Devices using Z-Wave Long Range can only be included via SmartStart. Since not all devices support Long Range, the protocol choice in the above screenshot should only be available after scanning a QR code that indicates support for Long Range (see below), or when the provisioning entry was added manually. Note that the **S2 Unauthenticated** and **S0 Legacy** security classes are not available for Z-Wave Long Range.
+
+> [!NOTE] We recommend to **not** preselect Z-Wave Long Range, even on supporting devices. Z-Wave Long Range is a separate protocol and the devices are not part of the Z-Wave mesh, so this choice should be an opt-in rather than an opt-out.
+
 ## Using QR codes to include devices
 
 Scanning a QR code can further simplify the inclusion process, because it limits the user interaction to scanning the code (and pushing a button for conventional inclusion):
