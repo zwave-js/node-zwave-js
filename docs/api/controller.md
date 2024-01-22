@@ -1275,6 +1275,14 @@ readonly rfRegion: RFRegion | undefined
 Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet).
 This value is cached and updated automatically when using [`getRFRegion` or `setRFRegion`](#configure-rf-region).
 
+### `supportsLongRange`
+
+```ts
+readonly supportsLongRange: MaybeNotKnown<boolean>;
+```
+
+Returns whether the controller supports the Z-Wave Long Range protocol.
+
 ## Controller events
 
 The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are available:
