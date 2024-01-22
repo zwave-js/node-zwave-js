@@ -1158,7 +1158,7 @@ This can be done using the `defaultVolume` property. It accepts a volume between
 readonly protocol: Protocols
 ```
 
-Which protocol is used to communicate with this node
+Which protocol is used to communicate with this node, Z-Wave (Classic) or Z-Wave Long Range.
 
 ## ZWaveNode events
 

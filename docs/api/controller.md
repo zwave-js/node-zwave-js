@@ -1281,7 +1281,7 @@ This value is cached and updated automatically when using [`getRFRegion` or `set
 readonly supportsLongRange: MaybeNotKnown<boolean>;
 ```
 
-Returns whether the controller supports the Z-Wave Long Range protocol.
+Returns whether the controller supports the Z-Wave Long Range protocol. This depends on the configured RF region.
 
 ## Controller events
 
