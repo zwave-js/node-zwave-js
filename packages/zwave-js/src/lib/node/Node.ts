@@ -6601,6 +6601,9 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		// We can't know if the node is not fully interviewed
 		if (this.interviewStage !== InterviewStage.Complete) return NOT_KNOWN;
 
+		// The controller cannot be re-interviewed
+		if (this.isControllerNode) return false;
+
 		// If the hash was never stored, we can only (very likely) know if the config has not changed
 		const actualHash = this.deviceConfig?.getHash();
 		if (this.deviceConfigHash == undefined) {
