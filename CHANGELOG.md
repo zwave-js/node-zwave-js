@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The check for a changed device config now always returns `false` for the controller (#6625)
+
+### Config file changes
+* Disable Supervision for Alfred DB1 Digital Deadbolt Lock to work around battery drain issue (#6629)
+* Add 2nd product ID for Ring Panic Button Gen2 (#6595)
+
+### Changes under the hood
+* Fix compatibility of ESLint plugin with Node.js 18 (#6580)
+
 ## 12.4.1 (2023-12-09)
 ### Bugfixes
 * Handle more cases of unexpected Serial API restarts (#6551)
