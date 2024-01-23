@@ -1,12 +1,12 @@
 {
 	"manufacturer": "Shelly Europe",
 	"manufacturerId": "0x0460",
-	"label": "QPSW-0A1X16",
-	"description": "Wave Pro 1",
+	"label": "QNPL-001X16",
+	"description": "Wave Plug US",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x008A"
+			"productId": "0x0088"
 		}
 	],
 	"firmwareVersion": {
@@ -14,25 +14,6 @@
 		"max": "255.255"
 	},
 	"paramInformation": [
-
-		{
-			"#": "1",
-			"label": "SW1 Switch Type",
-			"$import": "templates/wave_template.json#switch_type"	
-		},
-		{
-			"#": "2",
-			"label": "SW2 Switch Type",
-			"$import": "templates/wave_template.json#switch_type"
-		},
-		{
-			"#": "17",
-			"label": "O1: State After Power Failure",
-			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
-			"minValue": 0,
-			"maxValue": 1,
-			"unsigned": true
-		},
 		{
 			"#": "19",
 			"label": "O1: Auto-Off Timer",
@@ -54,6 +35,16 @@
 			"$import": "templates/wave_template.json#out_relay_type"
 		},
 		{
+			"#": "36",
+			"label": "O1: Power Change Report Threshold",
+			"$import": "templates/wave_template.json#power_change_report_treshold"
+		},
+        {
+			"#": "39",
+			"label": "O1: Minimum Time Between Power Reports",
+			"$import": "templates/wave_template.json#min_time_between_reports"
+		},
+		{
 			"#": "91",
 			"label": "Alarm Configuration: Water",
 			"$import": "templates/wave_template.json#alarm_configuration"
@@ -73,6 +64,11 @@
 			"#": "94",
 			"label": "Alarm Configuration: Heat",
 			"$import": "templates/wave_template.json#alarm_configuration"
+		},
+		{
+			"#": "105",
+			"label": "Signal LED Intensity",
+			"$import": "templates/wave_template.json#led_intensity"
 		},
 		{
 			"#": "120",
