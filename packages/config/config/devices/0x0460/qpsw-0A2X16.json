@@ -119,8 +119,8 @@
 		},	
 		{
 			"#": "201",
-			"label": "Serial Number: Part 1",
-			"$import": "templates/wave_template.json#serial_number"
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 1"
 		},
 		{
 			"#": "202",

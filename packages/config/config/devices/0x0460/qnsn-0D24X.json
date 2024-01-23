@@ -2,7 +2,7 @@
 	"manufacturer": "Shelly Europe",
 	"manufacturerId": "0x0460",
 	"label": "QNSN-0D24X",
-	"description": "Wave i4 DC",
+	"description": "Wave I4 DC",
 	"devices": [
 		{
 			"productType": "0x0009",
