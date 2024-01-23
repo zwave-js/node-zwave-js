@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.4.2 (2024-01-23)
 ### Bugfixes
 * The check for a changed device config now always returns `false` for the controller (#6625)
 
