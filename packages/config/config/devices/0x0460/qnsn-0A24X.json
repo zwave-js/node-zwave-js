@@ -16,48 +16,48 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "SW1 Switch Type",
-			"$import": "templates/wave_template.json#switch_type"	
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW1 Switch Type"
 		},
 		{
 			"#": "2",
-			"label": "SW2 Switch Type",
-			"$import": "templates/wave_template.json#switch_type"
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW2 Switch Type"
 		},
 		{
 			"#": "3",
-			"label": "SW3 Switch Type",
-			"$import": "templates/wave_template.json#switch_type"	
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW3 Switch Type"
 		},
 		{
 			"#": "4",
-			"label": "SW4 Switch Type",
-			"$import": "templates/wave_template.json#switch_type"
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW4 Switch Type"
 		},
         {
 			"#": "105",
-			"label": "Signal LED Intensity",
-			"$import": "templates/wave_template.json#led_intensity"
+			"$import": "templates/wave_template.json#led_intensity",
+			"label": "Signal LED Intensity"
+
 		},
 		{
 			"#": "120",
-			"label": "Factory Reset",
 			"$import": "templates/wave_template.json#factory_reset"
 		},	
 		{
-			"#": "201",
-			"label": "Serial Number: Part 1",
-			"$import": "templates/wave_template.json#serial_number"
+			"#": "201",			
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 1"
 		},
 		{
 			"#": "202",
-			"label": "Serial Number: Part 2",
-			"$import": "templates/wave_template.json#serial_number"
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 2"
 		},
 		{
 			"#": "203",
-			"label": "Serial Number: Part 3",
-			"$import": "templates/wave_template.json#serial_number"
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 3"
 		}
 	],
 	"metadata": {
