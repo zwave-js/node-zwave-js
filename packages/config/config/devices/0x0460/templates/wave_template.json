@@ -105,7 +105,6 @@
 		"defaultValue": 50
 	},
 		"min_time_between_reports": {
-		"label": "O1: Minimum Time Between Power Reports",
 		"valueSize": 1,
 		"unit": "seconds",
 		"minValue": 0,

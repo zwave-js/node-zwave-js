@@ -16,104 +16,105 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "SW1 Switch Type",
-			"$import": "templates/wave_template.json#switch_type"	
+			"$import": "templates/wave_template.json#switch_type",	
+			"label": "SW1 Switch Type"
 		},
 		{
 			"#": "2",
-			"label": "SW2 Switch Type",
-			"$import": "templates/wave_template.json#switch_type"
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW2 Switch Type"
 		},
 		{
 			"#": "6",
-			"label": "Swap Inputs",
-			"$import": "templates/wave_template.json#sw1_sw2_swap"
+			"$import": "templates/wave_template.json#sw1_sw2_swap",
+			"label": "Swap Inputs"
+
 		},
 		{
+			
 			"#": "16",
-			"label": "Swap Outputs",
-			"$import": "templates/wave_template.json#o1_o2_swap"
+			"$import": "templates/wave_template.json#o1_o2_swap",
+			"label": "Swap Outputs"
+
 		},
 		{
 			"#": "17",
-			"label": "O1: State After Power Failure",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O1: State After Power Failure",
 			"minValue": 0,
 			"maxValue": 1,
 			"unsigned": true
 		},
 		{
 			"#": "18",
-			"label": "O2: State After Power Failure",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O2: State After Power Failure",
 			"minValue": 0,
 			"maxValue": 1,
 			"unsigned": true
 		},
 		{
 			"#": "19",
-			"label": "O1: Auto-Off Timer",
-			"$import": "templates/wave_template.json#auto_off_timer"
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O1: Auto-Off Timer"
 		},
 		{
-			"#": "20",
-			"label": "O1: Auto-On Timer",
-			"$import": "templates/wave_template.json#auto_on_timer"
+			"#": "20",			
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O1: Auto-On Timer"
 		},
 		{
 			"#": "25",
-			"label": "O1: Auto-On/Off Timer Unit",
-			"$import": "templates/wave_template.json#timer_unit"
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O1: Auto-On/Off Timer Unit"
 		},
 		{
 			"#": "21",
-			"label": "O2: Auto-Off Timer",
-			"$import": "templates/wave_template.json#auto_off_timer"
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O2: Auto-Off Timer"
 		},
 		{
-			"#": "22",
-			"label": "O2: Auto-On Timer",
-			"$import": "templates/wave_template.json#auto_on_timer"
+			"#": "22",			
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O2: Auto-On Timer"
 		},
 		{
 			"#": "26",
-			"label": "O2: Auto-On/Off Timer Unit",
-			"$import": "templates/wave_template.json#timer_unit"
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O2: Auto-On/Off Timer Unit"
 		},
 		{
 			"#": "23",
-			"label": "O1: Relay Type",
-			"$import": "templates/wave_template.json#out_relay_type"
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O1: Relay Type"
 		},
 		{
 			"#": "24",
-			"label": "O2: Relay Type",
-			"$import": "templates/wave_template.json#out_relay_type"
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O2: Relay Type"
 		},
 		{
 			"#": "91",
-			"label": "Alarm Configuration: Water",
-			"$import": "templates/wave_template.json#alarm_configuration"
-
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Water"
 		},
 		{
 			"#": "92",
-			"label": "Alarm Configuration: Smoke",
-			"$import": "templates/wave_template.json#alarm_configuration"
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Smoke"
 		},
 		{
 			"#": "93",
-			"label": "Alarm Configuration: CO",
-			"$import": "templates/wave_template.json#alarm_configuration"
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: CO"
 		},
 		{
 			"#": "94",
-			"label": "Alarm Configuration: Heat",
-			"$import": "templates/wave_template.json#alarm_configuration"
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Heat"
 		},
 		{
 			"#": "120",
-			"label": "Factory Reset",
 			"$import": "templates/wave_template.json#factory_reset"
 		},	
 		{
@@ -123,13 +124,13 @@
 		},
 		{
 			"#": "202",
-			"label": "Serial Number: Part 2",
-			"$import": "templates/wave_template.json#serial_number"
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 2"
 		},
 		{
 			"#": "203",
-			"label": "Serial Number: Part 3",
-			"$import": "templates/wave_template.json#serial_number"
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 3"
 		}
 	],
 	"metadata": {
