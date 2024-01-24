@@ -34,18 +34,17 @@
 			"$import": "templates/wave_template.json#switch_type",
 			"label": "SW4 Switch Type"
 		},
-        {
+		{
 			"#": "105",
 			"$import": "templates/wave_template.json#led_intensity",
 			"label": "Signal LED Intensity"
-
 		},
 		{
 			"#": "120",
 			"$import": "templates/wave_template.json#factory_reset"
-		},	
+		},
 		{
-			"#": "201",			
+			"#": "201",
 			"$import": "templates/wave_template.json#serial_number",
 			"label": "Serial Number: Part 1"
 		},

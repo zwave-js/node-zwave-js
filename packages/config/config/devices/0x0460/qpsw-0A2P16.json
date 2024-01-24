@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$import": "templates/wave_template.json#switch_type",	
+			"$import": "templates/wave_template.json#switch_type",
 			"label": "SW1 Switch Type"
 		},
 		{
@@ -56,7 +56,7 @@
 			"label": "O1: Auto-Off Timer"
 		},
 		{
-			"#": "20",			
+			"#": "20",
 			"$import": "templates/wave_template.json#auto_on_timer",
 			"label": "O1: Auto-On Timer"
 		},
@@ -71,7 +71,7 @@
 			"label": "O2: Auto-Off Timer"
 		},
 		{
-			"#": "22",			
+			"#": "22",
 			"$import": "templates/wave_template.json#auto_on_timer",
 			"label": "O2: Auto-On Timer"
 		},
@@ -95,17 +95,17 @@
 			"$import": "templates/wave_template.json#power_change_report_treshold",
 			"label": "O1: Power Change Report Threshold"
 		},
-        {
+		{
 			"#": "39",
 			"$import": "templates/wave_template.json#min_time_between_reports",
 			"label": "O1: Minimum Time Between Power Reports"
 		},
-        {
+		{
 			"#": "37",
 			"$import": "templates/wave_template.json#power_change_report_treshold",
 			"label": "O2: Power Change Report Threshold"
 		},
-        {
+		{
 			"#": "40",
 			"$import": "templates/wave_template.json#min_time_between_reports",
 			"label": "O2: Minimum Time Between Power Reports"
@@ -133,7 +133,7 @@
 		{
 			"#": "120",
 			"$import": "templates/wave_template.json#factory_reset"
-		},	
+		},
 		{
 			"#": "201",
 			"$import": "templates/wave_template.json#serial_number",
