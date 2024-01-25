@@ -8,6 +8,7 @@ export * from "./capabilities/NodeInfo";
 export * from "./capabilities/Protocols";
 export * from "./capabilities/RFRegion";
 export * from "./capabilities/ZWaveApiVersion";
+export * from "./capabilities/ZWaveChipTypes";
 export * from "./consts";
 export * from "./error/ZWaveError";
 export * from "./log/Controller";

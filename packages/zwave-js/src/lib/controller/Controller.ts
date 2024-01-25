@@ -53,6 +53,7 @@ import {
 	type SinglecastCC,
 	TransmitStatus,
 	UNKNOWN_STATE,
+	type UnknownZWaveChipType,
 	ValueDB,
 	type ZWaveDataRate,
 	ZWaveError,
@@ -352,7 +353,6 @@ import {
 	type SmartStartProvisioningEntry,
 } from "./Inclusion";
 import { determineNIF } from "./NodeInformationFrame";
-import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import {
 	type ControllerFirmwareUpdateProgress,

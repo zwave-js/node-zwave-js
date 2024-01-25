@@ -1,3 +1,5 @@
+import { ZnifferMessageHeaders } from "../MessageHeaders";
+
 /** Indicates the type of a data message */
 export enum MessageType {
 	Request = 0x0,
@@ -188,4 +190,27 @@ export enum FunctionType {
 	UNKNOWN_FUNC_ZMEBootloaderFlash = 0xf4,
 	UNKNOWN_FUNC_ZMECapabilities = 0xf5,
 	UNKNOWN_FUNC_ZMESerialAPIOptions = 0xf8,
+}
+
+export enum ZnifferFunctionType {
+	GetVersion = 0x01,
+	SetFrequency = 0x02,
+	GetFrequencies = 0x03,
+	Start = 0x04,
+	Stop = 0x05,
+	SetBaudRate = 0x0e,
+	GetFrequencyInfo = 0x13,
+}
+
+export enum ZnifferMessageType {
+	Command = ZnifferMessageHeaders.SOCF,
+	Data = ZnifferMessageHeaders.SODF,
+}
+
+export enum ZnifferFrameType {
+	Command = 0x00,
+	Data = 0x01,
+	BeamFrame = 0x02,
+	BeamStart = 0x04,
+	BeamStop = 0x05,
 }

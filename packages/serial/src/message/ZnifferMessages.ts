@@ -1,0 +1,363 @@
+import {
+	type RFRegion,
+	type UnknownZWaveChipType,
+	ZWaveError,
+	ZWaveErrorCodes,
+	getZWaveChipType,
+} from "@zwave-js/core";
+import { ZnifferFunctionType, ZnifferMessageType } from "./Constants";
+
+export type ZnifferMessageConstructor<T extends ZnifferMessage> = new (
+	options: ZnifferMessageOptions,
+) => T;
+
+export type DeserializingZnifferMessageConstructor<T extends ZnifferMessage> =
+	new (
+		options: ZnifferMessageDeserializationOptions,
+	) => T;
+
+export interface ZnifferMessageDeserializationOptions {
+	data: Buffer;
+}
+
+/**
+ * Tests whether the given message constructor options contain a buffer for deserialization
+ */
+function gotDeserializationOptions(
+	options: Record<any, any> | undefined,
+): options is ZnifferMessageDeserializationOptions {
+	return options != undefined && Buffer.isBuffer(options.data);
+}
+
+export interface ZnifferMessageBaseOptions {
+	// Intentionally empty
+}
+
+export interface ZnifferMessageCreationOptions
+	extends ZnifferMessageBaseOptions
+{
+	messageType: ZnifferMessageType;
+	functionType?: ZnifferFunctionType;
+	payload?: Buffer;
+}
+
+export type ZnifferMessageOptions =
+	| ZnifferMessageCreationOptions
+	| ZnifferMessageDeserializationOptions;
+
+/**
+ * Represents a Zniffer message for communication with the serial interface
+ */
+export class ZnifferMessage {
+	public constructor(
+		// public readonly host: ZWaveHost,
+		options: ZnifferMessageOptions,
+	) {
+		// decide which implementation we follow
+		if (gotDeserializationOptions(options)) {
+			// #1: deserialize from payload
+			const payload = options.data;
+
+			// Assume that we're dealing with a complete frame
+			this.type = payload[0];
+			if (this.type === ZnifferMessageType.Command) {
+				this.functionType = payload[1];
+				const length = payload[2];
+				this.payload = payload.subarray(3, 3 + length);
+			} else if (this.type === ZnifferMessageType.Data) {
+				// TODO: Having the header etc. be part of the payload is a bit awkward
+				const length = payload[9];
+				this.payload = payload.subarray(1, 10 + length);
+			} else {
+				throw new ZWaveError(
+					`Invalid Zniffer message type ${this.type as any}`,
+					ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				);
+			}
+		} else {
+			this.type = options.messageType;
+			this.functionType = options.functionType;
+			this.payload = options.payload || Buffer.allocUnsafe(0);
+		}
+	}
+
+	public type: ZnifferMessageType;
+	public functionType?: ZnifferFunctionType;
+	public payload: Buffer; // TODO: Length limit 255
+
+	/** Serializes this message into a Buffer */
+	public serialize(): Buffer {
+		if (this.type === ZnifferMessageType.Command) {
+			return Buffer.concat([
+				Buffer.from([
+					this.type,
+					this.functionType!,
+					this.payload.length,
+				]),
+				this.payload,
+			]);
+		} else if (this.type === ZnifferMessageType.Data) {
+			const ret = Buffer.allocUnsafe(this.payload.length + 1);
+			ret[0] = this.type;
+			this.payload.copy(ret, 1);
+			this.payload[9] = this.payload.length - 10;
+			return ret;
+		} else {
+			throw new ZWaveError(
+				`Invalid Zniffer message type ${this.type as any}`,
+				ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			);
+		}
+	}
+
+	/**
+	 * Retrieves the correct constructor for the next message in the given Buffer.
+	 * It is assumed that the buffer has been checked beforehand
+	 */
+	public static getConstructor(
+		data: Buffer,
+	): ZnifferMessageConstructor<ZnifferMessage> {
+		const type = data[0];
+		// We hardcode the list of constructors here, since the Zniffer protocol has
+		// a very limited list of messages
+		if (type === ZnifferMessageType.Command) {
+			const functionType = data[1];
+			switch (functionType) {
+				case ZnifferFunctionType.GetVersion:
+					return ZnifferGetVersionResponse;
+				case ZnifferFunctionType.SetFrequency:
+					return ZnifferSetFrequencyResponse;
+				case ZnifferFunctionType.GetFrequencies:
+					return ZnifferGetFrequenciesResponse;
+				case ZnifferFunctionType.Start:
+					return ZnifferStartResponse;
+				case ZnifferFunctionType.Stop:
+					return ZnifferStopResponse;
+				case ZnifferFunctionType.SetBaudRate:
+					return ZnifferSetBaudRateResponse;
+				case ZnifferFunctionType.GetFrequencyInfo:
+					return ZnifferGetFrequencyInfoResponse;
+				default:
+					return ZnifferMessage;
+			}
+		} else if (type === ZnifferMessageType.Data) {
+			return ZnifferDataMessage;
+		} else {
+			return ZnifferMessage;
+		}
+	}
+
+	/** Creates an instance of the message that is serialized in the given buffer */
+	public static from(
+		options: ZnifferMessageDeserializationOptions,
+	): ZnifferMessage {
+		const Constructor = ZnifferMessage.getConstructor(options.data);
+		const ret = new Constructor(options);
+		return ret;
+	}
+
+	// /** Generates a representation of this Message for the log */
+	// public toLogEntry(): MessageOrCCLogEntry {
+	// 	const tags = [
+	// 		this.type === MessageType.Request ? "REQ" : "RES",
+	// 		FunctionType[this.functionType],
+	// 	];
+	// 	const nodeId = this.getNodeId();
+	// 	if (nodeId) tags.unshift(getNodeTag(nodeId));
+
+	// 	return {
+	// 		tags,
+	// 		message: this.payload.length > 0
+	// 			? { payload: `0x${this.payload.toString("hex")}` }
+	// 			: undefined,
+	// 	};
+	// }
+}
+
+export class ZnifferDataMessage extends ZnifferMessage {
+}
+
+export class ZnifferGetVersionRequest extends ZnifferMessage {
+	public constructor() {
+		super({
+			messageType: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.GetVersion,
+		});
+	}
+}
+
+export class ZnifferGetVersionResponse extends ZnifferMessage {
+	public constructor(options: ZnifferMessageOptions) {
+		super(options);
+
+		if (gotDeserializationOptions(options)) {
+			this.chipType = getZWaveChipType(this.payload[0], this.payload[1]);
+			this.majorVersion = this.payload[2];
+			this.minorVersion = this.payload[3];
+		} else {
+			throw new ZWaveError(
+				`Sending ${this.constructor.name} is not supported!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+	}
+
+	public readonly chipType: string | UnknownZWaveChipType;
+	public readonly majorVersion: number;
+	public readonly minorVersion: number;
+}
+
+export interface ZnifferSetFrequencyRequestOptions
+	extends ZnifferMessageCreationOptions
+{
+	frequency: RFRegion;
+}
+
+export class ZnifferSetFrequencyRequest extends ZnifferMessage {
+	public constructor(options: ZnifferSetFrequencyRequestOptions) {
+		super({
+			messageType: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.SetFrequency,
+		});
+
+		this.frequency = options.frequency;
+	}
+
+	public frequency: RFRegion;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.frequency]);
+		return super.serialize();
+	}
+}
+export class ZnifferSetFrequencyResponse extends ZnifferMessage {
+	// No payload
+}
+
+export class ZnifferGetFrequenciesRequest extends ZnifferMessage {
+	public constructor() {
+		super({
+			messageType: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.GetFrequencies,
+		});
+	}
+}
+export class ZnifferGetFrequenciesResponse extends ZnifferMessage {
+	public constructor(options: ZnifferMessageOptions) {
+		super(options);
+
+		if (gotDeserializationOptions(options)) {
+			this.currentFrequency = this.payload[0];
+			this.supportedFrequencies = [
+				...this.payload.subarray(1),
+			];
+		} else {
+			throw new ZWaveError(
+				`Sending ${this.constructor.name} is not supported!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+	}
+
+	public readonly currentFrequency: RFRegion;
+	public readonly supportedFrequencies: readonly RFRegion[];
+}
+
+export class ZnifferStartRequest extends ZnifferMessage {
+	public constructor() {
+		super({
+			messageType: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.Start,
+		});
+	}
+}
+export class ZnifferStartResponse extends ZnifferMessage {
+	// No payload
+}
+
+export class ZnifferStopRequest extends ZnifferMessage {
+	public constructor() {
+		super({
+			messageType: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.Stop,
+		});
+	}
+}
+export class ZnifferStopResponse extends ZnifferMessage {
+	// No payload
+}
+
+export interface ZnifferSetBaudRateRequestOptions
+	extends ZnifferMessageCreationOptions
+{
+	// No clue - the open source firmware only accepts 0
+	baudrate: 0;
+}
+
+export class ZnifferSetBaudRateRequest extends ZnifferMessage {
+	public constructor(options: ZnifferSetBaudRateRequestOptions) {
+		super({
+			messageType: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.SetBaudRate,
+		});
+
+		this.baudrate = options.baudrate;
+	}
+
+	public baudrate: 0;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.baudrate]);
+		return super.serialize();
+	}
+}
+export class ZnifferSetBaudRateResponse extends ZnifferMessage {
+	// No payload
+}
+
+export interface ZnifferGetFrequencyInfoRequestOptions
+	extends ZnifferMessageCreationOptions
+{
+	frequency: RFRegion;
+}
+
+export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
+	public constructor(options: ZnifferGetFrequencyInfoRequestOptions) {
+		super({
+			messageType: ZnifferMessageType.Command,
+			functionType: ZnifferFunctionType.GetFrequencyInfo,
+		});
+
+		this.frequency = options.frequency;
+	}
+
+	public frequency: RFRegion;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.frequency]);
+		return super.serialize();
+	}
+}
+
+export class ZnifferGetFrequencyInfoResponse extends ZnifferMessage {
+	public constructor(options: ZnifferMessageOptions) {
+		super(options);
+
+		if (gotDeserializationOptions(options)) {
+			this.frequency = this.payload[0];
+			this.numChannels = this.payload[1];
+			this.frequencyName = this.payload
+				.subarray(2)
+				.toString("ascii");
+		} else {
+			throw new ZWaveError(
+				`Sending ${this.constructor.name} is not supported!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+	}
+
+	public readonly frequency: RFRegion;
+	public readonly numChannels: number;
+	public readonly frequencyName: string;
+}

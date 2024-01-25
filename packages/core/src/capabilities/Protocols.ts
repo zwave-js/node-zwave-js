@@ -53,6 +53,31 @@ export enum RouteProtocolDataRate {
 	LongRange_100k = 0x04,
 }
 
+// Like ProtocolDataRate, but for use in the Zniffer protocol, which
+// shifts the values by one for some reason
+export enum ZnifferProtocolDataRate {
+	ZWave_9k6 = 0x00,
+	ZWave_40k = 0x01,
+	ZWave_100k = 0x02,
+	LongRange_100k = 0x03,
+}
+
+export function znifferProtocolDataRateToString(
+	rate: ZnifferProtocolDataRate,
+): string {
+	switch (rate) {
+		case ZnifferProtocolDataRate.ZWave_9k6:
+			return "Z-Wave, 9.6 kbit/s";
+		case ZnifferProtocolDataRate.ZWave_40k:
+			return "Z-Wave, 40 kbit/s";
+		case ZnifferProtocolDataRate.ZWave_100k:
+			return "Z-Wave, 100 kbit/s";
+		case ZnifferProtocolDataRate.LongRange_100k:
+			return "Z-Wave Long Range, 100 kbit/s";
+	}
+	return `Unknown (${num2hex(rate)})`;
+}
+
 export const protocolDataRateMask = 0b111;
 
 export enum ProtocolType {
