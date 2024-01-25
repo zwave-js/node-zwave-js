@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.4.3 (2024-01-25)
+### Bugfixes
+* Reduce idle CPU load (#6640)
+
+### Config file changes
+* Extend version range for Vesternet VES-ZW-DIM-001 (#6636)
+
 ## 12.4.2 (2024-01-23)
 ### Bugfixes
 * The check for a changed device config now always returns `false` for the controller (#6625)
