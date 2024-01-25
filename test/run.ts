@@ -52,15 +52,6 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-		await wait(10000);
-		console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-		console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-		console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-		console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-
-		await driver["writeSerial"](Buffer.from("010800130201002503c1", "hex"));
-		await wait(3);
-		await driver["writeSerial"](Buffer.from("01030016ea", "hex"));
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader
