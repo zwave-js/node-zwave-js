@@ -24,7 +24,7 @@ const zniffer = new Zniffer(port, {})
 		// Test code goes here
 		await zniffer.start();
 
-		await wait(10000);
+		await wait(120000);
 
 		await zniffer.stop();
 		process.exit(0);

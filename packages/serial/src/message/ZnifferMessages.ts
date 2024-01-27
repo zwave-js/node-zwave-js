@@ -1,11 +1,20 @@
 import {
-	type RFRegion,
+	type BeamingInfo,
+	CRC16_CCITT,
+	type MPDUHeaderType,
 	type UnknownZWaveChipType,
 	ZWaveError,
 	ZWaveErrorCodes,
+	ZnifferProtocolDataRate,
+	ZnifferRegion,
 	getZWaveChipType,
+	validatePayload,
 } from "@zwave-js/core";
-import { ZnifferFunctionType, ZnifferMessageType } from "./Constants";
+import {
+	type ZnifferFrameType,
+	ZnifferFunctionType,
+	ZnifferMessageType,
+} from "./Constants";
 
 export type ZnifferMessageConstructor<T extends ZnifferMessage> = new (
 	options: ZnifferMessageOptions,
@@ -174,7 +183,138 @@ export class ZnifferMessage {
 	// }
 }
 
+function computeChecksumXOR(buffer: Buffer): number {
+	let ret = 0xff;
+	for (let i = 0; i < buffer.length; i++) {
+		ret ^= buffer[i];
+	}
+	return ret;
+}
+
+function getChannelConfiguration(region: ZnifferRegion): "1/2" | "3" | "4" {
+	switch (region) {
+		case ZnifferRegion.Japan:
+		case ZnifferRegion.Korea:
+			return "3";
+		case ZnifferRegion["USA (Long Range)"]:
+		case ZnifferRegion["USA (Long Range, backup)"]:
+		case ZnifferRegion["USA (Long Range, end device)"]:
+			return "4";
+		default:
+			return "1/2";
+	}
+}
+
 export class ZnifferDataMessage extends ZnifferMessage {
+	public constructor(options: ZnifferMessageOptions) {
+		super(options);
+
+		if (gotDeserializationOptions(options)) {
+			// FIXME: Find out which differences channel configuration 4 (ZWLR) has
+			// FIXME: Multicast has a bitmask instead of a destination node ID
+
+			this.frameType = this.payload[0];
+			// bytes 1-2 are 0
+			this.channel = this.payload[3] >>> 5;
+			this.protocolDataRate = this.payload[3] & 0b11111;
+			const checksumLength =
+				this.protocolDataRate >= ZnifferProtocolDataRate.ZWave_100k
+					? 2
+					: 1;
+			this.region = this.payload[4];
+			const channelConfig = getChannelConfiguration(this.region);
+			this.rssiRaw = this.payload[5];
+
+			validatePayload(this.payload[6] === 0x21);
+			validatePayload(this.payload[7] === 0x03);
+			// Length is already validated, so we just skip the length byte
+
+			const homeIdOffset = 9;
+			this.homeId = this.payload.readUInt32BE(homeIdOffset);
+			this.sourceNodeId = this.payload[13];
+			let destinationOffset = 17;
+			const frameControl = this.payload.subarray(14, 16);
+			switch (channelConfig) {
+				case "1/2": {
+					this.routed = !!(frameControl[0] & 0b1000_0000);
+					this.ackRequested = !!(frameControl[0] & 0b0100_0000);
+					this.lowPower = !!(frameControl[0] & 0b0010_0000);
+					this.speedModified = !!(frameControl[0] & 0b0001_0000);
+					this.headerType = frameControl[0] & 0b0000_1111;
+					this.beamingInfo = frameControl[1] & 0b0110_0000;
+					this.sequenceNumber = frameControl[1] & 0b0000_1111;
+					break;
+				}
+				case "3": {
+					this.routed = false;
+					this.ackRequested = !!(frameControl[0] & 0b1000_0000);
+					this.lowPower = !!(frameControl[0] & 0b0100_0000);
+					this.speedModified = false;
+					this.headerType = frameControl[0] & 0b0000_1111;
+					this.beamingInfo = frameControl[1] & 0b0111_0000;
+					this.sequenceNumber = this.payload[destinationOffset];
+					destinationOffset++;
+					break;
+				}
+				default: {
+					validatePayload.fail(
+						`Unsupported channel configuration ${channelConfig}`,
+					);
+				}
+			}
+			// another length byte we just skip
+			this.destinationNodeId = this.payload[destinationOffset];
+			this.data = this.payload.subarray(
+				destinationOffset + 1,
+				this.payload.length - checksumLength,
+			);
+			this.checksum = this.payload.readUIntBE(
+				this.payload.length - checksumLength,
+				checksumLength,
+			);
+
+			// Compute checksum from HOMEID to start of checksum
+			const expectedChecksum = checksumLength === 1
+				? computeChecksumXOR(
+					this.payload.subarray(homeIdOffset, -checksumLength),
+				)
+				: CRC16_CCITT(
+					this.payload.subarray(homeIdOffset, -checksumLength),
+				);
+			if (this.checksum !== expectedChecksum) {
+				throw new ZWaveError(
+					"CRC error",
+					ZWaveErrorCodes.PacketFormat_Checksum,
+				);
+			}
+		} else {
+			throw new ZWaveError(
+				`Sending ${this.constructor.name} is not supported!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+	}
+
+	public readonly frameType: ZnifferFrameType;
+	public readonly channel: number;
+	public readonly protocolDataRate: ZnifferProtocolDataRate;
+	public readonly region: ZnifferRegion;
+	public readonly rssiRaw: number;
+	public readonly homeId: number;
+	public readonly sourceNodeId: number;
+
+	// Frame control:
+	public readonly routed: boolean;
+	public readonly ackRequested: boolean;
+	public readonly lowPower: boolean;
+	public readonly speedModified: boolean;
+	public readonly headerType: MPDUHeaderType;
+	public readonly beamingInfo: BeamingInfo;
+	public readonly sequenceNumber: number;
+
+	public readonly destinationNodeId: number;
+	public readonly data: Buffer;
+	public readonly checksum: number;
 }
 
 export class ZnifferGetVersionRequest extends ZnifferMessage {
@@ -207,10 +347,8 @@ export class ZnifferGetVersionResponse extends ZnifferMessage {
 	public readonly minorVersion: number;
 }
 
-export interface ZnifferSetFrequencyRequestOptions
-	extends ZnifferMessageCreationOptions
-{
-	frequency: RFRegion;
+export interface ZnifferSetFrequencyRequestOptions {
+	frequency: ZnifferRegion;
 }
 
 export class ZnifferSetFrequencyRequest extends ZnifferMessage {
@@ -223,7 +361,7 @@ export class ZnifferSetFrequencyRequest extends ZnifferMessage {
 		this.frequency = options.frequency;
 	}
 
-	public frequency: RFRegion;
+	public frequency: ZnifferRegion;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.frequency]);
@@ -259,8 +397,8 @@ export class ZnifferGetFrequenciesResponse extends ZnifferMessage {
 		}
 	}
 
-	public readonly currentFrequency: RFRegion;
-	public readonly supportedFrequencies: readonly RFRegion[];
+	public readonly currentFrequency: ZnifferRegion;
+	public readonly supportedFrequencies: readonly ZnifferRegion[];
 }
 
 export class ZnifferStartRequest extends ZnifferMessage {
@@ -287,9 +425,7 @@ export class ZnifferStopResponse extends ZnifferMessage {
 	// No payload
 }
 
-export interface ZnifferSetBaudRateRequestOptions
-	extends ZnifferMessageCreationOptions
-{
+export interface ZnifferSetBaudRateRequestOptions {
 	// No clue - the open source firmware only accepts 0
 	baudrate: 0;
 }
@@ -315,10 +451,8 @@ export class ZnifferSetBaudRateResponse extends ZnifferMessage {
 	// No payload
 }
 
-export interface ZnifferGetFrequencyInfoRequestOptions
-	extends ZnifferMessageCreationOptions
-{
-	frequency: RFRegion;
+export interface ZnifferGetFrequencyInfoRequestOptions {
+	frequency: ZnifferRegion;
 }
 
 export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
@@ -331,7 +465,7 @@ export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
 		this.frequency = options.frequency;
 	}
 
-	public frequency: RFRegion;
+	public frequency: ZnifferRegion;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.frequency]);
@@ -357,7 +491,7 @@ export class ZnifferGetFrequencyInfoResponse extends ZnifferMessage {
 		}
 	}
 
-	public readonly frequency: RFRegion;
+	public readonly frequency: ZnifferRegion;
 	public readonly numChannels: number;
 	public readonly frequencyName: string;
 }

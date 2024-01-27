@@ -1,8 +1,8 @@
 import {
-	RFRegion,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
+	ZnifferRegion,
 } from "@zwave-js/core";
 import {
 	type ZWaveSerialPortImplementation,
@@ -123,18 +123,22 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		await this.setBaudrate(0);
 
 		const freqs = await this.getFrequencies();
-		console.log(`Current frequency: ${freqs.currentFrequency}`);
+		console.log(
+			`Current frequency: ${
+				getEnumMemberName(ZnifferRegion, freqs.currentFrequency)
+			}`,
+		);
 		console.log(
 			`Supported frequencies: ${
 				freqs.supportedFrequencies.map((f) =>
-					getEnumMemberName(RFRegion, f)
+					getEnumMemberName(ZnifferRegion, f)
 				).join(", ")
 			}`,
 		);
 
 		// TODO: Make configurable
-		if (freqs.currentFrequency !== RFRegion.Europe) {
-			await this.setFrequency(RFRegion.Europe);
+		if (freqs.currentFrequency !== ZnifferRegion.Europe) {
+			await this.setFrequency(ZnifferRegion.Europe);
 		}
 
 		this.emit("ready");
@@ -179,6 +183,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	 * Is called when a Request-type message was received
 	 */
 	private async handleDataMessage(msg: ZnifferDataMessage): Promise<void> {
+		if (msg.homeId !== 0xd14ca7c9) return;
 		console.dir(msg);
 	}
 
@@ -249,7 +254,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		]);
 	}
 
-	public async setFrequency(frequency: RFRegion): Promise<void> {
+	public async setFrequency(frequency: ZnifferRegion): Promise<void> {
 		const req = new ZnifferSetFrequencyRequest({ frequency });
 		await this.serial?.writeAsync(req.serialize());
 		await this.waitForMessage<ZnifferSetFrequencyResponse>(
@@ -259,7 +264,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getFrequencyInfo(frequency: RFRegion) {
+	public async getFrequencyInfo(frequency: ZnifferRegion) {
 		const req = new ZnifferGetFrequencyInfoRequest({ frequency });
 		await this.serial?.writeAsync(req.serialize());
 		const res = await this.waitForMessage<ZnifferGetFrequencyInfoResponse>(
