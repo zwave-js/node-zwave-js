@@ -30,6 +30,17 @@ import {
 } from "@zwave-js/serial";
 import { TypedEventEmitter, getEnumMemberName, pick } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import { ZnifferLogger } from "../log/Zniffer";
+import { MPDU, MPDUHeaderType } from "./MPDU";
+
+const logo: string = `
+███████╗ ███╗   ██╗ ██╗ ██████╗ ██████╗ ███████╗ ██████╗          ██╗ ███████╗
+╚══███╔╝ ████╗  ██║ ██║ ██╔═══╝ ██╔═══╝ ██╔════╝ ██╔══██╗         ██║ ██╔════╝
+  ███╔╝  ██╔██╗ ██║ ██║ ████╗   ████╗   █████╗   ██████╔╝         ██║ ███████╗
+ ███╔╝   ██║╚██╗██║ ██║ ██╔═╝   ██╔═╝   ██╔══╝   ██╔══██╗    ██   ██║ ╚════██║
+███████╗ ██║ ╚████║ ██║ ██║     ██║     ███████╗ ██║  ██║    ╚█████╔╝ ███████║
+╚══════╝ ╚═╝  ╚═══╝ ╚═╝ ╚═╝     ╚═╝     ╚══════╝ ╚═╝  ╚═╝     ╚════╝  ╚══════╝
+`.trim();
 
 export interface ZnifferEventCallbacks {
 	ready: () => void;
@@ -65,12 +76,14 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(/*this._options.logConfig*/);
+		this.znifferLog = new ZnifferLogger(this._logContainer);
 	}
 
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
 
 	private _logContainer: ZWaveLogContainer;
+	private znifferLog: ZnifferLogger;
 
 	/** A list of awaited messages */
 	private awaitedMessages: AwaitedMessageEntry[] = [];
@@ -112,28 +125,32 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 		await this.serial.open();
 
+		this.znifferLog.print(logo, "info");
+
 		await this.stop();
 
 		const versionInfo = await this.getVersion();
-		console.log(`Chip type: ${versionInfo.chipType}`);
-		console.log(
-			`Zniffer version: ${versionInfo.majorVersion}.${versionInfo.minorVersion}`,
+		this.znifferLog.print(
+			`received Zniffer info:
+  Chip type:       ${versionInfo.chipType}
+  Zniffer version: ${versionInfo.majorVersion}.${versionInfo.minorVersion}`,
+			"info",
 		);
 
 		await this.setBaudrate(0);
 
 		const freqs = await this.getFrequencies();
-		console.log(
-			`Current frequency: ${
+		this.znifferLog.print(
+			`received frequency info:
+  current frequency:     ${
 				getEnumMemberName(ZnifferRegion, freqs.currentFrequency)
-			}`,
-		);
-		console.log(
-			`Supported frequencies: ${
+			}
+  supported frequencies: ${
 				freqs.supportedFrequencies.map((f) =>
-					getEnumMemberName(ZnifferRegion, f)
-				).join(", ")
+					`\n  · ${getEnumMemberName(ZnifferRegion, f)}`
+				).join("")
 			}`,
+			"info",
 		);
 
 		// TODO: Make configurable
@@ -183,8 +200,20 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	 * Is called when a Request-type message was received
 	 */
 	private async handleDataMessage(msg: ZnifferDataMessage): Promise<void> {
-		if (msg.homeId !== 0xd14ca7c9) return;
-		console.dir(msg);
+		try {
+			const mpdu = MPDU.from(msg);
+			this.znifferLog.mpdu(mpdu);
+
+			if (
+				mpdu.homeId !== 0xd14ca7c9
+				&& mpdu.headerType !== MPDUHeaderType.Explorer
+				&& mpdu.headerType !== MPDUHeaderType.Routed
+				&& !mpdu.routed
+			) return;
+			console.dir({ mpdu });
+		} catch (e: any) {
+			console.error(e);
+		}
 	}
 
 	/**
