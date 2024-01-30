@@ -2,7 +2,7 @@ import { getImplementedVersion } from "@zwave-js/cc";
 import {
 	type CommandClasses,
 	type MaybeNotKnown,
-	type SecurityClass,
+	SecurityClass,
 	type SecurityManager,
 	type SecurityManager2,
 } from "@zwave-js/core";
@@ -12,10 +12,10 @@ export class ZnifferCCParsingContext implements ZWaveHost {
 	public constructor(
 		public readonly ownNodeId: number,
 		public readonly homeId: number,
+		public readonly securityManager: SecurityManager | undefined,
+		public readonly securityManager2: SecurityManager2 | undefined,
+		public readonly securityManagerLR: SecurityManager2 | undefined,
 	) {}
-
-	securityManager: SecurityManager | undefined;
-	securityManager2: SecurityManager2 | undefined;
 
 	getSafeCCVersion(
 		cc: CommandClasses,
@@ -45,14 +45,15 @@ export class ZnifferCCParsingContext implements ZWaveHost {
 	}
 
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass> {
-		throw new Error("Method not implemented.");
+		return SecurityClass.S2_AccessControl;
 	}
 
 	hasSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
 	): MaybeNotKnown<boolean> {
-		throw new Error("Method not implemented.");
+		// We don't actually know. Attempt parsing with all security classes
+		return true;
 	}
 
 	setSecurityClass(
@@ -60,7 +61,7 @@ export class ZnifferCCParsingContext implements ZWaveHost {
 		securityClass: SecurityClass,
 		granted: boolean,
 	): void {
-		throw new Error("Method not implemented.");
+		// Do nothing
 	}
 
 	getNextCallbackId(): number {

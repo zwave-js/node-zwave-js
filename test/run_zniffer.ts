@@ -18,13 +18,39 @@ process.on("unhandledRejection", (_r) => {
 // const port = require("node:os").platform() === "win32" ? "COM5" : "/dev/serial/by-id/usb-1a86_USB_Single_Serial_5479014030-if00";
 const port = "/dev/serial/by-id/usb-Silicon_Labs_J-Link_OB_000440300307-if00";
 
-const zniffer = new Zniffer(port, {})
+const zniffer = new Zniffer(port, {
+	securityKeys: {
+		S2_AccessControl: Buffer.from(
+			"31132050077310B6F7032F91C79C2EB8",
+			"hex",
+		),
+		S2_Authenticated: Buffer.from(
+			"656EF5C0F020F3C14238C04A1748B7E1",
+			"hex",
+		),
+		S2_Unauthenticated: Buffer.from(
+			"5369389EFA18EE2A4894C7FB48347FEA",
+			"hex",
+		),
+		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
+	},
+	securityKeysLongRange: {
+		S2_AccessControl: Buffer.from(
+			"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+			"hex",
+		),
+		S2_Authenticated: Buffer.from(
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			"hex",
+		),
+	},
+})
 	.on("error", console.error)
 	.once("ready", async () => {
 		// Test code goes here
 		await zniffer.start();
 
-		await wait(120000);
+		await wait(600000);
 
 		await zniffer.stop();
 		process.exit(0);

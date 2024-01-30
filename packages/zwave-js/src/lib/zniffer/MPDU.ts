@@ -24,6 +24,11 @@ import {
 import { padStart } from "alcalzone-shared/strings";
 import { parseRSSI } from "../serialapi/transport/SendDataShared";
 
+// FIXME: What are those?
+// 0x21010000210933210316d14ca7c901050116ff2000fa40000000000122010058
+// 0x2101000021092f210313d14ca7c901550213022000fa400000000000d1
+// 0x2101000063093121031fd14ca7c90011011f01029ffa9f03e700d7e3440b929fb3e3d7ed5c0fd0d7a9
+
 function getChannelConfiguration(region: ZnifferRegion): "1/2" | "3" | "4" {
 	switch (region) {
 		case ZnifferRegion.Japan:
@@ -134,7 +139,7 @@ export class LongRangeMPDU implements MPDU {
 		const frameControl = data[8];
 		this.ackRequested = !!(frameControl & 0b1000_0000);
 		const hasExtendedHeader = !!(frameControl & 0b0100_0000);
-		this.headerType = frameControl & 0b0000_1111;
+		this.headerType = frameControl & 0b0000_0111;
 
 		this.sequenceNumber = data[9];
 		this.noiseFloor = parseRSSI(data, 10);
@@ -142,11 +147,28 @@ export class LongRangeMPDU implements MPDU {
 
 		let offset = 12;
 		if (hasExtendedHeader) {
-			const extensionPreamble = data[offset++];
-			const extensionLength = extensionPreamble & 0b1111; // not sure if 4 bits?
-			// const discardUnknown = extensionPreamble & 0b0001_0000; // not sure if this bit?
+			const extensionControl = data[offset++];
+			const extensionLength = extensionControl & 0b111;
+			// const discardUnknown = extensionControl & 0b0000_1000;
+			// const extensionType = (extensionControl & 0b0111_0000) >>> 4;
 			// TODO: Parse extension (once there is a definition)
 			offset += extensionLength;
+		}
+
+		const Constructor = this.headerType === MPDUHeaderType.Acknowledgement
+			? AckLongRangeMPDU
+			: this.headerType === MPDUHeaderType.Singlecast
+			? SinglecastLongRangeMPDU
+			: undefined;
+		if (!Constructor) {
+			validatePayload.fail(
+				`Unsupported Long Range MPDU header type ${this.headerType}`,
+			);
+		} else if (
+			new.target !== Constructor
+			&& !staticExtends(new.target, Constructor)
+		) {
+			return new Constructor(options);
 		}
 
 		this.payload = data.subarray(offset);
@@ -161,7 +183,7 @@ export class LongRangeMPDU implements MPDU {
 	public readonly sequenceNumber: number;
 	public readonly noiseFloor: RSSI;
 	public readonly txPower: number;
-	public payload: Buffer;
+	public payload!: Buffer;
 
 	public static from(msg: ZnifferDataMessage): LongRangeMPDU {
 		return new LongRangeMPDU({
@@ -200,6 +222,49 @@ export class LongRangeMPDU implements MPDU {
 		if (this.payload.length > 0) {
 			message.payload = buffer2hex(this.payload);
 		}
+		return {
+			tags,
+			message,
+		};
+	}
+}
+
+export class SinglecastLongRangeMPDU extends LongRangeMPDU {
+	public toLogEntry(): MessageOrCCLogEntry {
+		const { tags, message: original } = super.toLogEntry();
+
+		const message: MessageRecord = {
+			...original,
+			payload: buffer2hex(this.payload),
+		};
+		return {
+			tags,
+			message,
+		};
+	}
+}
+
+export class AckLongRangeMPDU extends LongRangeMPDU {
+	public constructor(options: MPDUOptions) {
+		super(options);
+
+		this.incomingRSSI = parseRSSI(this.payload, 0);
+		this.payload = this.payload.subarray(1);
+	}
+
+	public readonly incomingRSSI: RSSI;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const { tags, message: original } = super.toLogEntry();
+
+		const message: MessageRecord = {
+			...original,
+			"incoming RSSI": rssiToString(this.incomingRSSI),
+		};
+		if (this.payload.length > 0) {
+			message.payload = buffer2hex(this.payload);
+		}
+
 		return {
 			tags,
 			message,

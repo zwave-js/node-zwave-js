@@ -1,9 +1,21 @@
-import { CommandClass } from "@zwave-js/cc";
 import {
+	CommandClass,
+	Security2CCMessageEncapsulation,
+	Security2CCNonceGet,
+	Security2CCNonceReport,
+} from "@zwave-js/cc";
+import {
+	CommandClasses,
+	SPANState,
+	SecurityClass,
+	SecurityManager,
+	SecurityManager2,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 	ZnifferRegion,
+	isLongRangeNodeId,
+	securityClassIsS2,
 } from "@zwave-js/core";
 import {
 	type ZWaveSerialPortImplementation,
@@ -31,9 +43,10 @@ import {
 } from "@zwave-js/serial";
 import { TypedEventEmitter, getEnumMemberName, pick } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
 import { ZnifferCCParsingContext } from "./CCParsingContext";
-import { parseMPDU } from "./MPDU";
+import { MPDUHeaderType, parseMPDU } from "./MPDU";
 
 const logo: string = `
 ███████╗ ███╗   ██╗ ██╗ ██████╗ ██████╗ ███████╗ ██████╗          ██╗ ███████╗
@@ -59,9 +72,15 @@ interface AwaitedThing<T> {
 
 type AwaitedMessageEntry = AwaitedThing<ZnifferMessage>;
 
+export interface ZnifferOptions {
+	securityKeys?: ZWaveOptions["securityKeys"];
+	securityKeysLongRange?: ZWaveOptions["securityKeysLongRange"];
+}
+
 export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
+		options: ZnifferOptions = {},
 	) {
 		super();
 
@@ -77,15 +96,26 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		}
 
 		// Initialize logging
-		this._logContainer = new ZWaveLogContainer(/*this._options.logConfig*/);
+		this._logContainer = new ZWaveLogContainer(/*options.logConfig*/);
 		this.znifferLog = new ZnifferLogger(this, this._logContainer);
+
+		this._options = options;
 	}
+
+	private _options: ZnifferOptions;
 
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
 
 	private _logContainer: ZWaveLogContainer;
 	private znifferLog: ZnifferLogger;
+
+	/** The security managers for each node */
+	private securityManagers: Map<number, {
+		securityManager: SecurityManager | undefined;
+		securityManager2: SecurityManager2 | undefined;
+		securityManagerLR: SecurityManager2 | undefined;
+	}> = new Map();
 
 	/** A list of awaited messages */
 	private awaitedMessages: AwaitedMessageEntry[] = [];
@@ -95,7 +125,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		if (typeof this.port === "string") {
 			if (this.port.startsWith("tcp://")) {
 				const url = new URL(this.port);
-				// this.driverLog.print(`opening serial port ${this.port}`);
+				// this.znifferLog.print(`opening serial port ${this.port}`);
 				this.serial = new ZnifferSocket(
 					{
 						host: url.hostname,
@@ -104,14 +134,14 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 					this._logContainer,
 				);
 			} else {
-				// this.driverLog.print(`opening serial port ${this.port}`);
+				// this.znifferLog.print(`opening serial port ${this.port}`);
 				this.serial = new ZnifferSerialPort(
 					this.port,
 					this._logContainer,
 				);
 			}
 		} else {
-			// this.driverLog.print(
+			// this.znifferLog.print(
 			// 	"opening serial port using the provided custom implementation",
 			// );
 			this.serial = new ZnifferSerialPortBase(
@@ -204,12 +234,39 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private async handleDataMessage(msg: ZnifferDataMessage): Promise<void> {
 		try {
 			const mpdu = parseMPDU(msg);
+
+			// Try to decode the CC while assuming the role of the receiver
+			let destSecurityManager: SecurityManager | undefined;
+			let destSecurityManager2: SecurityManager2 | undefined;
+			let destSecurityManagerLR: SecurityManager2 | undefined;
+			// Only frames with a destination node id contains something that requires access to the own node ID
+			let destNodeId = 0xff;
+
 			let cc: CommandClass | undefined;
-			if (mpdu.payload.length > 0) {
+
+			// FIXME: Cache data => parsed CC, so we can understand re-transmitted S2 frames
+
+			if (
+				mpdu.payload.length > 0
+				&& mpdu.headerType !== MPDUHeaderType.Acknowledgement
+			) {
+				if ("destinationNodeId" in mpdu) {
+					destNodeId = mpdu.destinationNodeId;
+					({
+						securityManager: destSecurityManager,
+						securityManager2: destSecurityManager2,
+						securityManagerLR: destSecurityManagerLR,
+					} = this.getSecurityManagers(mpdu.destinationNodeId));
+				}
+
+				// TODO: Support parsing multicast S2 frames
+
 				const ctx = new ZnifferCCParsingContext(
-					// TODO: Is this correct?
-					mpdu.sourceNodeId,
+					destNodeId,
 					mpdu.homeId,
+					destSecurityManager,
+					destSecurityManager2,
+					destSecurityManagerLR,
 				);
 				try {
 					cc = CommandClass.from(ctx, {
@@ -223,6 +280,56 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 				}
 			}
 			this.znifferLog.mpdu(mpdu, cc);
+
+			// FIXME: Support S0 nonce exchange
+
+			if (cc?.ccId === CommandClasses["Security 2"]) {
+				const securityManagers = this.getSecurityManagers(
+					mpdu.sourceNodeId,
+				);
+				const isLR = isLongRangeNodeId(mpdu.sourceNodeId)
+					|| isLongRangeNodeId(destNodeId);
+				const senderSecurityManager = isLR
+					? securityManagers.securityManagerLR
+					: securityManagers.securityManager2;
+				const destSecurityManager = isLR
+					? destSecurityManagerLR
+					: destSecurityManager2;
+
+				if (senderSecurityManager && destSecurityManager) {
+					if (cc instanceof Security2CCNonceGet) {
+						// Nonce Get -> all nonces are now invalid
+						senderSecurityManager.deleteNonce(destNodeId);
+						destSecurityManager.deleteNonce(mpdu.sourceNodeId);
+					} else if (cc instanceof Security2CCNonceReport && cc.SOS) {
+						// Nonce Report (SOS) -> We only know the receiver's nonce
+						senderSecurityManager.setSPANState(destNodeId, {
+							type: SPANState.LocalEI,
+							receiverEI: cc.receiverEI!,
+						});
+						destSecurityManager.storeRemoteEI(
+							mpdu.sourceNodeId,
+							cc.receiverEI!,
+						);
+					} else if (cc instanceof Security2CCMessageEncapsulation) {
+						const senderEI = cc.getSenderEI();
+						if (senderEI) {
+							// The receiver should now have a valid SPAN state, since decoding the S2 CC updates it.
+							// The security manager for the sender however, does not. Therefore, update it manually,
+							// if the receiver SPAN is indeed valid.
+
+							const receiverSPANState = destSecurityManager
+								.getSPANState(mpdu.sourceNodeId);
+							if (receiverSPANState.type === SPANState.SPAN) {
+								senderSecurityManager.setSPANState(
+									destNodeId,
+									receiverSPANState,
+								);
+							}
+						}
+					}
+				}
+			}
 		} catch (e: any) {
 			console.error(e);
 		}
@@ -343,5 +450,113 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 			(msg) => msg instanceof ZnifferSetBaudRateResponse,
 			1000,
 		);
+	}
+
+	private getSecurityManagers(
+		sourceNodeId: number,
+	) {
+		if (this.securityManagers.has(sourceNodeId)) {
+			return this.securityManagers.get(sourceNodeId)!;
+		}
+		// Initialize security
+		// Set up the S0 security manager. We can only do that after the controller
+		// interview because we need to know the controller node id.
+		const S0Key = this._options.securityKeys?.S0_Legacy;
+		let securityManager: SecurityManager | undefined;
+		if (S0Key) {
+			// this.znifferLog.print(
+			// 	"Network key for S0 configured, enabling S0 security manager...",
+			// );
+			securityManager = new SecurityManager({
+				networkKey: S0Key,
+				// FIXME: Track nonces separately for each destination node
+				ownNodeId: sourceNodeId,
+				nonceTimeout: Number.POSITIVE_INFINITY,
+			});
+			// } else {
+			// 	this.znifferLog.print(
+			// 		"No network key for S0 configured, cannot decrypt communication from secure (S0) devices!",
+			// 		"warn",
+			// 	);
+		}
+
+		let securityManager2: SecurityManager2 | undefined;
+		if (
+			this._options.securityKeys
+			// Only set it up if we have security keys for at least one S2 security class
+			&& Object.keys(this._options.securityKeys).some(
+				(key) =>
+					key.startsWith("S2_")
+					&& key in SecurityClass
+					&& securityClassIsS2((SecurityClass as any)[key]),
+			)
+		) {
+			// this.znifferLog.print(
+			// 	"At least one network key for S2 configured, enabling S2 security manager...",
+			// );
+			securityManager2 = new SecurityManager2();
+			// Small hack: Zniffer does not care about S2 duplicates
+			securityManager2.isDuplicateSinglecast = () => false;
+
+			// Set up all keys
+			for (
+				const secClass of [
+					"S2_Unauthenticated",
+					"S2_Authenticated",
+					"S2_AccessControl",
+					"S0_Legacy",
+				] as const
+			) {
+				const key = this._options.securityKeys[secClass];
+				if (key) {
+					securityManager2.setKey(SecurityClass[secClass], key);
+				}
+			}
+			// } else {
+			// 	this.znifferLog.print(
+			// 		"No network key for S2 configured, cannot decrypt communication from secure (S2) devices!",
+			// 		"warn",
+			// 	);
+		}
+
+		let securityManagerLR: SecurityManager2 | undefined;
+		if (
+			this._options.securityKeysLongRange?.S2_AccessControl
+			|| this._options.securityKeysLongRange?.S2_Authenticated
+		) {
+			// this.znifferLog.print(
+			// 	"At least one network key for Z-Wave Long Range configured, enabling security manager...",
+			// );
+			securityManagerLR = new SecurityManager2();
+			// Small hack: Zniffer does not care about S2 duplicates
+			securityManagerLR.isDuplicateSinglecast = () => false;
+
+			// Set up all keys
+			if (this._options.securityKeysLongRange?.S2_AccessControl) {
+				securityManagerLR.setKey(
+					SecurityClass.S2_AccessControl,
+					this._options.securityKeysLongRange.S2_AccessControl,
+				);
+			}
+			if (this._options.securityKeysLongRange?.S2_Authenticated) {
+				securityManagerLR.setKey(
+					SecurityClass.S2_Authenticated,
+					this._options.securityKeysLongRange.S2_Authenticated,
+				);
+			}
+			// } else {
+			// 	this.znifferLog.print(
+			// 		"No network key for Z-Wave Long Range configured, cannot decrypt Long Range communication!",
+			// 		"warn",
+			// 	);
+		}
+
+		const ret = {
+			securityManager,
+			securityManager2,
+			securityManagerLR,
+		};
+		this.securityManagers.set(sourceNodeId, ret);
+		return ret;
 	}
 }
