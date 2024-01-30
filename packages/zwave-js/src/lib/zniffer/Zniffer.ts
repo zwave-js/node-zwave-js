@@ -1,3 +1,4 @@
+import { CommandClass } from "@zwave-js/cc";
 import {
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -31,7 +32,8 @@ import {
 import { TypedEventEmitter, getEnumMemberName, pick } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { ZnifferLogger } from "../log/Zniffer";
-import { MPDU, MPDUHeaderType } from "./MPDU";
+import { ZnifferCCParsingContext } from "./CCParsingContext";
+import { parseMPDU } from "./MPDU";
 
 const logo: string = `
 ███████╗ ███╗   ██╗ ██╗ ██████╗ ██████╗ ███████╗ ██████╗          ██╗ ███████╗
@@ -76,7 +78,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(/*this._options.logConfig*/);
-		this.znifferLog = new ZnifferLogger(this._logContainer);
+		this.znifferLog = new ZnifferLogger(this, this._logContainer);
 	}
 
 	/** The serial port instance */
@@ -154,8 +156,8 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		);
 
 		// TODO: Make configurable
-		if (freqs.currentFrequency !== ZnifferRegion.Europe) {
-			await this.setFrequency(ZnifferRegion.Europe);
+		if (freqs.currentFrequency !== ZnifferRegion["USA (Long Range)"]) {
+			await this.setFrequency(ZnifferRegion["USA (Long Range)"]);
 		}
 
 		this.emit("ready");
@@ -201,16 +203,26 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	 */
 	private async handleDataMessage(msg: ZnifferDataMessage): Promise<void> {
 		try {
-			const mpdu = MPDU.from(msg);
-			this.znifferLog.mpdu(mpdu);
-
-			if (
-				mpdu.homeId !== 0xd14ca7c9
-				&& mpdu.headerType !== MPDUHeaderType.Explorer
-				&& mpdu.headerType !== MPDUHeaderType.Routed
-				&& !mpdu.routed
-			) return;
-			console.dir({ mpdu });
+			const mpdu = parseMPDU(msg);
+			let cc: CommandClass | undefined;
+			if (mpdu.payload.length > 0) {
+				const ctx = new ZnifferCCParsingContext(
+					// TODO: Is this correct?
+					mpdu.sourceNodeId,
+					mpdu.homeId,
+				);
+				try {
+					cc = CommandClass.from(ctx, {
+						data: mpdu.payload,
+						fromEncapsulation: false,
+						nodeId: mpdu.sourceNodeId,
+					});
+				} catch (e: any) {
+					// Ignore
+					console.error(e.stack);
+				}
+			}
+			this.znifferLog.mpdu(mpdu, cc);
 		} catch (e: any) {
 			console.error(e);
 		}

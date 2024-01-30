@@ -2,8 +2,12 @@ import {
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	type RSSI,
+	ZWaveError,
+	ZWaveErrorCodes,
+	type ZnifferProtocolDataRate,
 	ZnifferRegion,
 	parseNodeBitMask,
+	rssiToString,
 	validatePayload,
 	znifferProtocolDataRateToString,
 } from "@zwave-js/core";
@@ -11,7 +15,12 @@ import {
 	type ZnifferDataMessage,
 	type ZnifferFrameInfo,
 } from "@zwave-js/serial";
-import { buffer2hex, pick, staticExtends } from "@zwave-js/shared";
+import {
+	type AllOrNone,
+	buffer2hex,
+	pick,
+	staticExtends,
+} from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import { parseRSSI } from "../serialapi/transport/SendDataShared";
 
@@ -73,7 +82,132 @@ export enum ExplorerFrameCommand {
 	SearchResult = 0x02,
 }
 
-export class MPDU {
+export interface MPDU {
+	frameInfo: ZnifferFrameInfo;
+	homeId: number;
+	sourceNodeId: number;
+	ackRequested: boolean;
+	headerType: MPDUHeaderType;
+	sequenceNumber: number;
+	payload: Buffer;
+}
+
+export function parseMPDU(
+	frame: ZnifferDataMessage,
+): ZWaveMPDU | LongRangeMPDU {
+	const channelConfig = getChannelConfiguration(frame.region);
+	switch (channelConfig) {
+		case "1/2":
+		case "3":
+			return ZWaveMPDU.from(frame);
+		case "4":
+			return LongRangeMPDU.from(frame);
+		default:
+			validatePayload.fail(
+				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+				`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
+					buffer2hex(frame.payload)
+				}`,
+			);
+	}
+}
+
+export class LongRangeMPDU implements MPDU {
+	public constructor(options: MPDUOptions) {
+		const data = options.data;
+		this.frameInfo = options.frameInfo;
+
+		const channelConfig = getChannelConfiguration(this.frameInfo.region);
+		if (channelConfig !== "4") {
+			validatePayload.fail(
+				`Unsupported channel configuration ${channelConfig} for LongRangeMPDU`,
+			);
+		}
+
+		this.homeId = data.readUInt32BE(0);
+		const nodeIds = data.readUIntBE(4, 3);
+		this.sourceNodeId = nodeIds >>> 12;
+		this.destinationNodeId = nodeIds & 0xfff;
+
+		// skip length byte
+
+		const frameControl = data[8];
+		this.ackRequested = !!(frameControl & 0b1000_0000);
+		const hasExtendedHeader = !!(frameControl & 0b0100_0000);
+		this.headerType = frameControl & 0b0000_1111;
+
+		this.sequenceNumber = data[9];
+		this.noiseFloor = parseRSSI(data, 10);
+		this.txPower = data.readInt8(11);
+
+		let offset = 12;
+		if (hasExtendedHeader) {
+			const extensionPreamble = data[offset++];
+			const extensionLength = extensionPreamble & 0b1111; // not sure if 4 bits?
+			// const discardUnknown = extensionPreamble & 0b0001_0000; // not sure if this bit?
+			// TODO: Parse extension (once there is a definition)
+			offset += extensionLength;
+		}
+
+		this.payload = data.subarray(offset);
+	}
+
+	public readonly frameInfo: ZnifferFrameInfo;
+	public readonly homeId: number;
+	public readonly sourceNodeId: number;
+	public readonly destinationNodeId: number;
+	public readonly ackRequested: boolean;
+	public readonly headerType: MPDUHeaderType;
+	public readonly sequenceNumber: number;
+	public readonly noiseFloor: RSSI;
+	public readonly txPower: number;
+	public payload: Buffer;
+
+	public static from(msg: ZnifferDataMessage): LongRangeMPDU {
+		return new LongRangeMPDU({
+			data: msg.payload,
+			frameInfo: pick(msg, [
+				"channel",
+				"frameType",
+				"region",
+				"protocolDataRate",
+				"rssiRaw",
+			]),
+		});
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const tags = [
+			formatRoute(this.sourceNodeId, [], this.destinationNodeId, 0),
+		];
+		if (this.headerType === MPDUHeaderType.Acknowledgement) {
+			tags.unshift("ACK");
+		}
+
+		const message: MessageRecord = {
+			"sequence no.": this.sequenceNumber,
+			channel: this.frameInfo.channel,
+			"protocol/data rate": znifferProtocolDataRateToString(
+				this.frameInfo.protocolDataRate,
+			),
+			"TX power": `${this.txPower} dBm`,
+			RSSI: `${this.frameInfo.rssiRaw}`,
+			"noise floor": rssiToString(this.noiseFloor),
+		};
+		if (this.headerType !== MPDUHeaderType.Acknowledgement) {
+			message["ack requested"] = this.ackRequested;
+		}
+		if (this.payload.length > 0) {
+			message.payload = buffer2hex(this.payload);
+		}
+		return {
+			tags,
+			message,
+		};
+	}
+}
+
+export class ZWaveMPDU implements MPDU {
 	public constructor(options: MPDUOptions) {
 		const data = options.data;
 		this.frameInfo = options.frameInfo;
@@ -104,25 +238,33 @@ export class MPDU {
 				destinationOffset++;
 				break;
 			}
+			case "4": {
+				validatePayload.fail(
+					`Channel configuration 4 (ZWLR) must be parsed as a LongRangeMPDU!`,
+				);
+			}
 			default: {
 				validatePayload.fail(
-					`Unsupported channel configuration ${channelConfig}`,
+					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+					`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
+						buffer2hex(data)
+					}`,
 				);
 			}
 		}
 
 		const Constructor = this.headerType === MPDUHeaderType.Acknowledgement
-			? AckMPDU
+			? AckZWaveMPDU
 			: (this.headerType === MPDUHeaderType.Routed
 					|| (this.headerType === MPDUHeaderType.Singlecast
 						&& this.routed))
-			? RoutedMPDU
+			? RoutedZWaveMPDU
 			: this.headerType === MPDUHeaderType.Singlecast
-			? SinglecastMPDU
+			? SinglecastZWaveMPDU
 			: this.headerType === MPDUHeaderType.Multicast
-			? MulticastMPDU
+			? MulticastZWaveMPDU
 			: this.headerType === MPDUHeaderType.Explorer
-			? ExplorerMPDU
+			? ExplorerZWaveMPDU
 			: undefined;
 		if (!Constructor) {
 			validatePayload.fail(
@@ -135,7 +277,6 @@ export class MPDU {
 			return new Constructor(options);
 		}
 
-		// FIXME: Find out which differences channel configuration 4 (ZWLR) has
 		// FIXME: Parse Beams
 
 		this.homeId = data.readUInt32BE(0);
@@ -169,8 +310,8 @@ export class MPDU {
 	protected readonly destinationBuffer!: Buffer;
 	public payload!: Buffer;
 
-	public static from(msg: ZnifferDataMessage): MPDU {
-		return new MPDU({
+	public static from(msg: ZnifferDataMessage): ZWaveMPDU {
+		return new ZWaveMPDU({
 			data: msg.payload,
 			frameInfo: pick(msg, [
 				"channel",
@@ -190,7 +331,7 @@ export class MPDU {
 			channel: this.frameInfo.channel,
 			"protocol/data rate":
 				znifferProtocolDataRateToString(this.frameInfo.protocolDataRate)
-				+ (this.speedModified ? " (modified)" : ""),
+				+ (this.speedModified ? " (reduced)" : ""),
 			RSSI: `${this.frameInfo.rssiRaw}`,
 		};
 		return {
@@ -200,7 +341,7 @@ export class MPDU {
 	}
 }
 
-export class SinglecastMPDU extends MPDU {
+export class SinglecastZWaveMPDU extends ZWaveMPDU {
 	public constructor(options: MPDUOptions) {
 		super(options);
 
@@ -215,6 +356,7 @@ export class SinglecastMPDU extends MPDU {
 
 		const message: MessageRecord = {
 			...original,
+			"ack requested": this.ackRequested,
 			payload: buffer2hex(this.payload),
 		};
 		return {
@@ -224,7 +366,7 @@ export class SinglecastMPDU extends MPDU {
 	}
 }
 
-export class AckMPDU extends MPDU {
+export class AckZWaveMPDU extends ZWaveMPDU {
 	public constructor(options: MPDUOptions) {
 		super(options);
 
@@ -245,7 +387,7 @@ export class AckMPDU extends MPDU {
 	}
 }
 
-export class RoutedMPDU extends MPDU {
+export class RoutedZWaveMPDU extends ZWaveMPDU {
 	public constructor(options: MPDUOptions) {
 		super(options);
 
@@ -310,13 +452,19 @@ export class RoutedMPDU extends MPDU {
 	public readonly repeaterRSSI?: readonly RSSI[];
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const { tags, message } = super.toLogEntry();
+		const { tags, message: original } = super.toLogEntry();
 		tags[0] = formatRoute(
 			this.sourceNodeId,
 			this.repeaters,
 			this.destinationNodeId,
 			this.hop,
 		);
+
+		const message: MessageRecord = {
+			...original,
+			"ack requested": this.ackRequested,
+			payload: buffer2hex(this.payload),
+		};
 
 		return {
 			tags,
@@ -325,7 +473,7 @@ export class RoutedMPDU extends MPDU {
 	}
 }
 
-export class MulticastMPDU extends MPDU {
+export class MulticastZWaveMPDU extends ZWaveMPDU {
 	public constructor(options: MPDUOptions) {
 		super(options);
 
@@ -356,7 +504,7 @@ export class MulticastMPDU extends MPDU {
 	}
 }
 
-export class ExplorerMPDU extends MPDU {
+export class ExplorerZWaveMPDU extends ZWaveMPDU {
 	public constructor(options: MPDUOptions) {
 		super(options);
 		this.version = this.payload[0] >>> 5;
@@ -371,11 +519,11 @@ export class ExplorerMPDU extends MPDU {
 
 		// Make sure the correct constructor gets called
 		const Constructor = this.command === ExplorerFrameCommand.Normal
-			? NormalExplorerMPDU
+			? NormalExplorerZWaveMPDU
 			: this.command === ExplorerFrameCommand.InclusionRequest
-			? InclusionRequestExplorerMPDU
+			? InclusionRequestExplorerZWaveMPDU
 			: this.command === ExplorerFrameCommand.SearchResult
-			? SearchResultExplorerMPDU
+			? SearchResultExplorerZWaveMPDU
 			: undefined;
 
 		if (!Constructor) {
@@ -403,15 +551,26 @@ export class ExplorerMPDU extends MPDU {
 	public readonly randomTXInterval: number;
 	public readonly ttl: number;
 	public readonly repeaters: readonly number[];
+}
+
+export class NormalExplorerZWaveMPDU extends ExplorerZWaveMPDU {
+	public constructor(options: MPDUOptions) {
+		super(options);
+	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const { tags, message: original } = super.toLogEntry();
-		tags[0] = formatRoute(this.sourceNodeId, [], this.destinationNodeId, 0);
+		tags[0] = formatRoute(
+			this.sourceNodeId,
+			this.repeaters,
+			this.destinationNodeId,
+			4 - this.ttl,
+		);
 		tags.unshift("EXPLORER");
 
 		const message: MessageRecord = {
 			...original,
-			// TODO: Add other fields, and specialization for the subcommands
+			"ack requested": this.ackRequested,
 			payload: buffer2hex(this.payload),
 		};
 		return {
@@ -421,13 +580,7 @@ export class ExplorerMPDU extends MPDU {
 	}
 }
 
-export class NormalExplorerMPDU extends ExplorerMPDU {
-	public constructor(options: MPDUOptions) {
-		super(options);
-	}
-}
-
-export class InclusionRequestExplorerMPDU extends ExplorerMPDU {
+export class InclusionRequestExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 	public constructor(options: MPDUOptions) {
 		super(options);
 
@@ -437,13 +590,38 @@ export class InclusionRequestExplorerMPDU extends ExplorerMPDU {
 
 	/** The home ID of the repeating node */
 	public readonly networkHomeId: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const { tags, message: original } = super.toLogEntry();
+		tags[0] = formatRoute(
+			this.sourceNodeId,
+			this.repeaters,
+			this.destinationNodeId,
+			4 - this.ttl,
+		);
+		tags.unshift("INCL REQUEST");
+
+		const message: MessageRecord = {
+			...original,
+			"network home ID": padStart(
+				this.networkHomeId.toString(16),
+				8,
+				"0",
+			),
+			payload: buffer2hex(this.payload),
+		};
+		return {
+			tags,
+			message,
+		};
+	}
 }
 
-export class SearchResultExplorerMPDU extends ExplorerMPDU {
+export class SearchResultExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 	public constructor(options: MPDUOptions) {
 		super(options);
 
-		this.explorerNodeId = this.payload[0];
+		this.searchingNodeId = this.payload[0];
 		this.frameHandle = this.payload[1];
 		this.resultTTL = this.payload[2] >>> 4;
 		const numRepeaters = this.payload[2] & 0b1111;
@@ -456,9 +634,214 @@ export class SearchResultExplorerMPDU extends ExplorerMPDU {
 	}
 
 	/** The node ID that sent the explorer frame that's being answered here */
-	public readonly explorerNodeId?: number;
+	public readonly searchingNodeId: number;
 	/** The sequence number of the original explorer frame */
-	public readonly frameHandle?: number;
-	public readonly resultTTL?: number;
-	public readonly resultRepeaters?: readonly number[];
+	public readonly frameHandle: number;
+	public readonly resultTTL: number;
+	public readonly resultRepeaters: readonly number[];
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const { tags, message: original } = super.toLogEntry();
+		tags[0] = formatRoute(
+			this.sourceNodeId,
+			this.repeaters,
+			this.destinationNodeId,
+			4 - this.ttl,
+		);
+		tags.unshift("EXPLORER RESULT");
+
+		const message: MessageRecord = {
+			...original,
+			"frame handle": this.frameHandle,
+			"result TTL": this.resultTTL,
+			"result repeaters": this.resultRepeaters.join(", "),
+		};
+		return {
+			tags,
+			message,
+		};
+	}
+}
+
+export enum ZWaveFrameType {
+	Singlecast,
+	Multicast,
+	AckDirect,
+	ExplorerNormal,
+	ExplorerSearchResult,
+	ExplorerInclusionRequest,
+}
+
+/** An application-oriented representation of a Z-Wave frame that was captured by the Zniffer */
+export type ZWaveFrame =
+	& {
+		channel: number;
+		region: ZnifferRegion;
+		rssiRaw: number;
+
+		protocolDataRate: ZnifferProtocolDataRate;
+		speedModified: boolean;
+
+		sequenceNumber: number;
+
+		homeId: number;
+		sourceNodeId: number;
+	}
+	& (
+		| (
+			// Singlecast frame, either routed or not
+			& {
+				type: ZWaveFrameType.Singlecast;
+				destinationNodeId: number;
+				ackRequested: boolean;
+				payload: Buffer;
+			}
+			& AllOrNone<
+				& {
+					direction: "outbound" | "inbound";
+					hop: number;
+					repeaters: number[];
+					repeaterRSSI?: RSSI[];
+				}
+				& (
+					| {
+						routedAck: false;
+						routedError: false;
+						failedHop?: undefined;
+					}
+					| {
+						routedAck: true;
+						routedError: false;
+						failedHop?: undefined;
+					}
+					| {
+						routedAck: false;
+						routedError: true;
+						failedHop: number;
+					}
+				)
+			>
+		)
+		| {
+			// Multicast frame, not routed
+			type: ZWaveFrameType.Multicast;
+			destinationNodeIds: number[];
+			payload: Buffer;
+		}
+		| {
+			// Ack frame, not routed
+			type: ZWaveFrameType.AckDirect;
+			destinationNodeId: number;
+		}
+		| (
+			// Different kind of explorer frames
+			& ({
+				type: ZWaveFrameType.ExplorerNormal;
+			} | {
+				type: ZWaveFrameType.ExplorerSearchResult;
+				searchingNodeId: number;
+				frameHandle: number;
+				resultTTL: number;
+				resultRepeaters: readonly number[];
+			} | {
+				type: ZWaveFrameType.ExplorerInclusionRequest;
+				networkHomeId: number;
+			})
+			& {
+				destinationNodeId: number;
+				ackRequested: boolean;
+				direction: "outbound" | "inbound";
+				repeaters: number[];
+				ttl: number;
+			}
+		)
+	);
+
+export function mpduToZWaveFrame(mpdu: ZWaveMPDU): ZWaveFrame {
+	const retBase = {
+		channel: mpdu.frameInfo.channel,
+		region: mpdu.frameInfo.region,
+		rssiRaw: mpdu.frameInfo.rssiRaw,
+
+		protocolDataRate: mpdu.frameInfo.protocolDataRate,
+		speedModified: mpdu.speedModified,
+
+		sequenceNumber: mpdu.sequenceNumber,
+
+		homeId: mpdu.homeId,
+		sourceNodeId: mpdu.sourceNodeId,
+	};
+
+	if (mpdu instanceof SinglecastZWaveMPDU) {
+		return {
+			type: ZWaveFrameType.Singlecast,
+			...retBase,
+			destinationNodeId: mpdu.destinationNodeId,
+			ackRequested: mpdu.ackRequested,
+			payload: mpdu.payload,
+		};
+	} else if (mpdu instanceof AckZWaveMPDU) {
+		return {
+			type: ZWaveFrameType.AckDirect,
+			...retBase,
+			destinationNodeId: mpdu.destinationNodeId,
+		};
+	} else if (mpdu instanceof MulticastZWaveMPDU) {
+		return {
+			type: ZWaveFrameType.Multicast,
+			...retBase,
+			destinationNodeIds: [...mpdu.destinationNodeIds],
+			payload: mpdu.payload,
+		};
+	} else if (mpdu instanceof RoutedZWaveMPDU) {
+		return {
+			type: ZWaveFrameType.Singlecast,
+			...retBase,
+			destinationNodeId: mpdu.destinationNodeId,
+			ackRequested: mpdu.ackRequested,
+			payload: mpdu.payload,
+			direction: mpdu.direction,
+			hop: mpdu.hop,
+			repeaters: [...mpdu.repeaters],
+			repeaterRSSI: mpdu.repeaterRSSI && [...mpdu.repeaterRSSI],
+			routedAck: mpdu.routedAck as any,
+			routedError: mpdu.routedError as any,
+			failedHop: mpdu.failedHop,
+		};
+	} else if (mpdu instanceof ExplorerZWaveMPDU) {
+		const explorerBase = {
+			...retBase,
+			destinationNodeId: mpdu.destinationNodeId,
+			ackRequested: mpdu.ackRequested,
+			direction: mpdu.direction,
+			repeaters: [...mpdu.repeaters],
+			ttl: mpdu.ttl,
+		};
+		if (mpdu instanceof NormalExplorerZWaveMPDU) {
+			return {
+				type: ZWaveFrameType.ExplorerNormal,
+				...explorerBase,
+			};
+		} else if (mpdu instanceof SearchResultExplorerZWaveMPDU) {
+			return {
+				type: ZWaveFrameType.ExplorerSearchResult,
+				...explorerBase,
+				searchingNodeId: mpdu.searchingNodeId,
+				frameHandle: mpdu.frameHandle,
+				resultTTL: mpdu.resultTTL,
+				resultRepeaters: [...mpdu.resultRepeaters],
+			};
+		} else if (mpdu instanceof InclusionRequestExplorerZWaveMPDU) {
+			return {
+				type: ZWaveFrameType.ExplorerInclusionRequest,
+				...explorerBase,
+				networkHomeId: mpdu.networkHomeId,
+			};
+		}
+	}
+
+	throw new ZWaveError(
+		`mpduToZWaveFrame not supported for ${mpdu.constructor.name}`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
 }
