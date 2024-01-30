@@ -81,7 +81,7 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^3.1.0",
+    "@alcalzone/jsonl-db": "^3.1.1",
     "@alcalzone/pak": "^0.10.1",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",

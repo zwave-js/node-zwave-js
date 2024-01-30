@@ -14,7 +14,19 @@ This release adds support for Z-Wave Long Range thanks to the amazing work of @j
 ### Features
 * Support Z-Wave Long Range (#6401)
 
+## 12.4.3 (2024-01-25)
+### Bugfixes
+* Reduce idle CPU load (#6640)
+
 ### Config file changes
+* Extend version range for Vesternet VES-ZW-DIM-001 (#6636)
+
+## 12.4.2 (2024-01-23)
+### Bugfixes
+* The check for a changed device config now always returns `false` for the controller (#6625)
+
+### Config file changes
+* Disable Supervision for Alfred DB1 Digital Deadbolt Lock to work around battery drain issue (#6629)
 * Add 2nd product ID for Ring Panic Button Gen2 (#6595)
 
 ### Changes under the hood
