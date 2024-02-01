@@ -1,6 +1,8 @@
+import { type CommandClass } from "@zwave-js/cc";
 import {
 	type MessageOrCCLogEntry,
 	type MessageRecord,
+	Protocols,
 	type RSSI,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -28,6 +30,9 @@ import { parseRSSI } from "../serialapi/transport/SendDataShared";
 // 0x21010000210933210316d14ca7c901050116ff2000fa40000000000122010058
 // 0x2101000021092f210313d14ca7c901550213022000fa400000000000d1
 // 0x2101000063093121031fd14ca7c90011011f01029ffa9f03e700d7e3440b929fb3e3d7ed5c0fd0d7a9
+// 0x2101000021092d210316d14ca7c901050116ff2000fa40000000000122010058
+// 0x2101000002093121030cd14ca7c90141010c020084cb
+// 0x2101000002093121030cd14ca7c90141010c020084cb
 
 function getChannelConfiguration(region: ZnifferRegion): "1/2" | "3" | "4" {
 	switch (region) {
@@ -213,7 +218,9 @@ export class LongRangeMPDU implements MPDU {
 				this.frameInfo.protocolDataRate,
 			),
 			"TX power": `${this.txPower} dBm`,
-			RSSI: `${this.frameInfo.rssiRaw}`,
+			RSSI: this.frameInfo.rssi != undefined
+				? rssiToString(this.frameInfo.rssi)
+				: this.frameInfo.rssiRaw.toString(),
 			"noise floor": rssiToString(this.noiseFloor),
 		};
 		if (this.headerType !== MPDUHeaderType.Acknowledgement) {
@@ -397,7 +404,9 @@ export class ZWaveMPDU implements MPDU {
 			"protocol/data rate":
 				znifferProtocolDataRateToString(this.frameInfo.protocolDataRate)
 				+ (this.speedModified ? " (reduced)" : ""),
-			RSSI: `${this.frameInfo.rssiRaw}`,
+			RSSI: this.frameInfo.rssi != undefined
+				? rssiToString(this.frameInfo.rssi)
+				: this.frameInfo.rssiRaw.toString(),
 		};
 		return {
 			tags,
@@ -740,9 +749,12 @@ export enum ZWaveFrameType {
 /** An application-oriented representation of a Z-Wave frame that was captured by the Zniffer */
 export type ZWaveFrame =
 	& {
+		protocol: Protocols.ZWave;
+
 		channel: number;
 		region: ZnifferRegion;
 		rssiRaw: number;
+		rssi?: RSSI;
 
 		protocolDataRate: ZnifferProtocolDataRate;
 		speedModified: boolean;
@@ -759,7 +771,7 @@ export type ZWaveFrame =
 				type: ZWaveFrameType.Singlecast;
 				destinationNodeId: number;
 				ackRequested: boolean;
-				payload: Buffer;
+				payload: Buffer | CommandClass;
 			}
 			& AllOrNone<
 				& {
@@ -791,7 +803,7 @@ export type ZWaveFrame =
 			// Multicast frame, not routed
 			type: ZWaveFrameType.Multicast;
 			destinationNodeIds: number[];
-			payload: Buffer;
+			payload: Buffer | CommandClass;
 		}
 		| {
 			// Ack frame, not routed
@@ -802,6 +814,7 @@ export type ZWaveFrame =
 			// Different kind of explorer frames
 			& ({
 				type: ZWaveFrameType.ExplorerNormal;
+				payload: Buffer | CommandClass;
 			} | {
 				type: ZWaveFrameType.ExplorerSearchResult;
 				searchingNodeId: number;
@@ -822,8 +835,64 @@ export type ZWaveFrame =
 		)
 	);
 
-export function mpduToZWaveFrame(mpdu: ZWaveMPDU): ZWaveFrame {
+export enum LongRangeFrameType {
+	Singlecast,
+	Ack,
+}
+
+export type LongRangeFrame =
+	& {
+		protocol: Protocols.ZWaveLongRange;
+
+		channel: number;
+		region: ZnifferRegion;
+		protocolDataRate: ZnifferProtocolDataRate;
+
+		rssiRaw: number;
+		rssi?: RSSI;
+		noiseFloor: RSSI;
+		txPower: number;
+
+		sequenceNumber: number;
+
+		homeId: number;
+		sourceNodeId: number;
+		destinationNodeId: number;
+	}
+	& (
+		{
+			type: LongRangeFrameType.Singlecast;
+			ackRequested: boolean;
+			payload: Buffer | CommandClass;
+		} | {
+			type: LongRangeFrameType.Ack;
+			incomingRSSI: RSSI;
+			payload: Buffer;
+		}
+	);
+
+export type Frame = ZWaveFrame | LongRangeFrame;
+
+export function mpduToFrame(mpdu: MPDU, payloadCC?: CommandClass): Frame {
+	if (mpdu instanceof ZWaveMPDU) {
+		return mpduToZWaveFrame(mpdu, payloadCC);
+	} else if (mpdu instanceof LongRangeMPDU) {
+		return mpduToLongRangeFrame(mpdu, payloadCC);
+	}
+
+	throw new ZWaveError(
+		`mpduToFrame not supported for ${mpdu.constructor.name}`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
+}
+
+export function mpduToZWaveFrame(
+	mpdu: ZWaveMPDU,
+	payloadCC?: CommandClass,
+): ZWaveFrame {
 	const retBase = {
+		protocol: Protocols.ZWave as const,
+
 		channel: mpdu.frameInfo.channel,
 		region: mpdu.frameInfo.region,
 		rssiRaw: mpdu.frameInfo.rssiRaw,
@@ -843,7 +912,7 @@ export function mpduToZWaveFrame(mpdu: ZWaveMPDU): ZWaveFrame {
 			...retBase,
 			destinationNodeId: mpdu.destinationNodeId,
 			ackRequested: mpdu.ackRequested,
-			payload: mpdu.payload,
+			payload: payloadCC ?? mpdu.payload,
 		};
 	} else if (mpdu instanceof AckZWaveMPDU) {
 		return {
@@ -856,7 +925,7 @@ export function mpduToZWaveFrame(mpdu: ZWaveMPDU): ZWaveFrame {
 			type: ZWaveFrameType.Multicast,
 			...retBase,
 			destinationNodeIds: [...mpdu.destinationNodeIds],
-			payload: mpdu.payload,
+			payload: payloadCC ?? mpdu.payload,
 		};
 	} else if (mpdu instanceof RoutedZWaveMPDU) {
 		return {
@@ -885,6 +954,7 @@ export function mpduToZWaveFrame(mpdu: ZWaveMPDU): ZWaveFrame {
 		if (mpdu instanceof NormalExplorerZWaveMPDU) {
 			return {
 				type: ZWaveFrameType.ExplorerNormal,
+				payload: payloadCC ?? mpdu.payload,
 				...explorerBase,
 			};
 		} else if (mpdu instanceof SearchResultExplorerZWaveMPDU) {
@@ -907,6 +977,51 @@ export function mpduToZWaveFrame(mpdu: ZWaveMPDU): ZWaveFrame {
 
 	throw new ZWaveError(
 		`mpduToZWaveFrame not supported for ${mpdu.constructor.name}`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
+}
+
+export function mpduToLongRangeFrame(
+	mpdu: LongRangeMPDU,
+	payloadCC?: CommandClass,
+): LongRangeFrame {
+	const retBase = {
+		protocol: Protocols.ZWaveLongRange as const,
+
+		channel: mpdu.frameInfo.channel,
+		region: mpdu.frameInfo.region,
+		protocolDataRate: mpdu.frameInfo.protocolDataRate,
+
+		rssiRaw: mpdu.frameInfo.rssiRaw,
+		rssi: mpdu.frameInfo.rssi,
+		noiseFloor: mpdu.noiseFloor,
+		txPower: mpdu.txPower,
+
+		sequenceNumber: mpdu.sequenceNumber,
+
+		homeId: mpdu.homeId,
+		sourceNodeId: mpdu.sourceNodeId,
+		destinationNodeId: mpdu.destinationNodeId,
+	};
+
+	if (mpdu instanceof SinglecastLongRangeMPDU) {
+		return {
+			...retBase,
+			type: LongRangeFrameType.Singlecast,
+			ackRequested: mpdu.ackRequested,
+			payload: payloadCC ?? mpdu.payload,
+		};
+	} else if (mpdu instanceof AckLongRangeMPDU) {
+		return {
+			type: LongRangeFrameType.Ack,
+			...retBase,
+			incomingRSSI: mpdu.incomingRSSI,
+			payload: mpdu.payload,
+		};
+	}
+
+	throw new ZWaveError(
+		`mpduToLongRangeFrame not supported for ${mpdu.constructor.name}`,
 		ZWaveErrorCodes.Argument_Invalid,
 	);
 }

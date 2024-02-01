@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getImplementedVersion } from "@zwave-js/cc";
 import {
 	type CommandClasses,

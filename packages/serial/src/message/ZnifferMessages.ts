@@ -1,5 +1,6 @@
 import {
 	CRC16_CCITT,
+	type RSSI,
 	type UnknownZWaveChipType,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -195,6 +196,7 @@ export interface ZnifferFrameInfo {
 	readonly protocolDataRate: ZnifferProtocolDataRate;
 	readonly region: ZnifferRegion;
 	readonly rssiRaw: number;
+	rssi?: RSSI;
 }
 
 export class ZnifferDataMessage extends ZnifferMessage

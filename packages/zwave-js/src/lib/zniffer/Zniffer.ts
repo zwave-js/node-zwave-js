@@ -3,17 +3,21 @@ import {
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
+	SecurityCCNonceReport,
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
+	type LogConfig,
 	SPANState,
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
+	type UnknownZWaveChipType,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 	ZnifferRegion,
+	getChipTypeAndVersion,
 	isLongRangeNodeId,
 	securityClassIsS2,
 } from "@zwave-js/core";
@@ -41,12 +45,17 @@ import {
 	ZnifferStopResponse,
 	isZWaveSerialPortImplementation,
 } from "@zwave-js/serial";
-import { TypedEventEmitter, getEnumMemberName, pick } from "@zwave-js/shared";
+import {
+	TypedEventEmitter,
+	getEnumMemberName,
+	num2hex,
+	pick,
+} from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
 import { ZnifferCCParsingContext } from "./CCParsingContext";
-import { MPDUHeaderType, parseMPDU } from "./MPDU";
+import { type Frame, MPDUHeaderType, mpduToFrame, parseMPDU } from "./MPDU";
 
 const logo: string = `
 ███████╗ ███╗   ██╗ ██╗ ██████╗ ██████╗ ███████╗ ██████╗          ██╗ ███████╗
@@ -60,6 +69,7 @@ const logo: string = `
 export interface ZnifferEventCallbacks {
 	ready: () => void;
 	error: (err: Error) => void;
+	frame: (frame: Frame) => void;
 }
 
 export type ZnifferEvents = Extract<keyof ZnifferEventCallbacks, string>;
@@ -73,8 +83,38 @@ interface AwaitedThing<T> {
 type AwaitedMessageEntry = AwaitedThing<ZnifferMessage>;
 
 export interface ZnifferOptions {
+	logConfig?: Partial<LogConfig>;
 	securityKeys?: ZWaveOptions["securityKeys"];
 	securityKeysLongRange?: ZWaveOptions["securityKeysLongRange"];
+	/**
+	 * The RSSI values reported by the Zniffer are not actual RSSI values.
+	 * They can be converted to dBm, but the conversion is chip dependent and not documented for 700/800 series Zniffers.
+	 *
+	 * Set this option to `true` enable the conversion. Otherwise the raw values from the Zniffer will be used.
+	 */
+	convertRSSI?: boolean;
+}
+
+function tryConvertRSSI(
+	rssi: number,
+	chipType: string | UnknownZWaveChipType,
+): number {
+	if (typeof chipType !== "string") return rssi; // no idea how to convert
+	const chipTypeNumeric = getChipTypeAndVersion(chipType);
+	if (!chipTypeNumeric) return rssi; // no idea how to convert
+
+	switch (chipTypeNumeric.type) {
+		// For 400/500 series, the conversion is documented in the Zniffer user guide
+		case 0x04:
+		case 0x05:
+			return rssi * 1.5 - 153.5;
+		case 0x07:
+		case 0x08:
+			// Reverse-engineered from the Zniffer firmware
+			return rssi * 4 - 256;
+	}
+
+	return rssi;
 }
 
 export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
@@ -96,7 +136,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		}
 
 		// Initialize logging
-		this._logContainer = new ZWaveLogContainer(/*options.logConfig*/);
+		this._logContainer = new ZWaveLogContainer(options.logConfig);
 		this.znifferLog = new ZnifferLogger(this, this._logContainer);
 
 		this._options = options;
@@ -106,6 +146,8 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
+
+	private _chipType: string | UnknownZWaveChipType | undefined;
 
 	private _logContainer: ZWaveLogContainer;
 	private znifferLog: ZnifferLogger;
@@ -162,9 +204,16 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		await this.stop();
 
 		const versionInfo = await this.getVersion();
+		this._chipType = versionInfo.chipType;
 		this.znifferLog.print(
 			`received Zniffer info:
-  Chip type:       ${versionInfo.chipType}
+  Chip type:       ${
+				typeof versionInfo.chipType === "string"
+					? versionInfo.chipType
+					: `unknown (${num2hex(versionInfo.chipType.type)}, ${
+						num2hex(versionInfo.chipType.version)
+					})`
+			}
   Zniffer version: ${versionInfo.majorVersion}.${versionInfo.minorVersion}`,
 			"info",
 		);
@@ -196,9 +245,9 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	/**
 	 * Is called when the serial port has received a Zniffer frame
 	 */
-	private async serialport_onData(
+	private serialport_onData(
 		data: Buffer,
-	): Promise<void> {
+	): void {
 		let msg: ZnifferMessage | undefined;
 		try {
 			msg = ZnifferMessage.from({ data });
@@ -208,16 +257,16 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		}
 
 		if (msg.type === ZnifferMessageType.Command) {
-			await this.handleResponse(msg);
+			this.handleResponse(msg);
 		} else {
-			await this.handleDataMessage(msg as ZnifferDataMessage);
+			this.handleDataMessage(msg as ZnifferDataMessage);
 		}
 	}
 
 	/**
 	 * Is called when a Request-type message was received
 	 */
-	private async handleResponse(msg: ZnifferMessage): Promise<void> {
+	private handleResponse(msg: ZnifferMessage): void {
 		// Check if we have a dynamic handler waiting for this message
 		for (const entry of this.awaitedMessages) {
 			if (entry.predicate(msg)) {
@@ -231,7 +280,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	/**
 	 * Is called when a Request-type message was received
 	 */
-	private async handleDataMessage(msg: ZnifferDataMessage): Promise<void> {
+	private handleDataMessage(msg: ZnifferDataMessage): void {
 		try {
 			const mpdu = parseMPDU(msg);
 
@@ -279,10 +328,22 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 					console.error(e.stack);
 				}
 			}
+
+			if (this._options.convertRSSI && this._chipType) {
+				mpdu.frameInfo.rssi = tryConvertRSSI(
+					mpdu.frameInfo.rssiRaw,
+					this._chipType,
+				);
+			}
+
 			this.znifferLog.mpdu(mpdu, cc);
 
-			// FIXME: Support S0 nonce exchange
+			// Emit the captured frame in a format that's easier to work with for applications.
+			const frame = mpduToFrame(mpdu, cc);
+			this.emit("frame", frame);
 
+			// Update the security managers when nonces are exchanged, so we can
+			// decrypt the communication
 			if (cc?.ccId === CommandClasses["Security 2"]) {
 				const securityManagers = this.getSecurityManagers(
 					mpdu.sourceNodeId,
@@ -328,6 +389,45 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 							}
 						}
 					}
+				}
+			} else if (
+				cc?.ccId === CommandClasses.Security
+				&& cc instanceof SecurityCCNonceReport
+			) {
+				const senderSecurityManager =
+					this.getSecurityManagers(mpdu.sourceNodeId).securityManager;
+				const destSecurityManager =
+					this.getSecurityManagers(destNodeId).securityManager;
+
+				if (senderSecurityManager && destSecurityManager) {
+					// Both nodes have a shared nonce now
+					senderSecurityManager.setNonce(
+						{
+							issuer: mpdu.sourceNodeId,
+							nonceId: senderSecurityManager.getNonceId(
+								cc.nonce,
+							),
+						},
+						{
+							nonce: cc.nonce,
+							receiver: destNodeId,
+						},
+						{ free: true },
+					);
+
+					destSecurityManager.setNonce(
+						{
+							issuer: mpdu.sourceNodeId,
+							nonceId: senderSecurityManager.getNonceId(
+								cc.nonce,
+							),
+						},
+						{
+							nonce: cc.nonce,
+							receiver: destNodeId,
+						},
+						{ free: true },
+					);
 				}
 			}
 		} catch (e: any) {

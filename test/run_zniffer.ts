@@ -19,6 +19,7 @@ process.on("unhandledRejection", (_r) => {
 const port = "/dev/serial/by-id/usb-Silicon_Labs_J-Link_OB_000440300307-if00";
 
 const zniffer = new Zniffer(port, {
+	convertRSSI: true,
 	securityKeys: {
 		S2_AccessControl: Buffer.from(
 			"31132050077310B6F7032F91C79C2EB8",
@@ -49,6 +50,10 @@ const zniffer = new Zniffer(port, {
 	.once("ready", async () => {
 		// Test code goes here
 		await zniffer.start();
+
+		zniffer.on("frame", (frame) => {
+			console.debug(frame);
+		});
 
 		await wait(600000);
 
