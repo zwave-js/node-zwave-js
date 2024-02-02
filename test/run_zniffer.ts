@@ -16,10 +16,11 @@ process.on("unhandledRejection", (_r) => {
 // const port = require("os").platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 // 800 series
 // const port = require("node:os").platform() === "win32" ? "COM5" : "/dev/serial/by-id/usb-1a86_USB_Single_Serial_5479014030-if00";
-const port = "/dev/serial/by-id/usb-Silicon_Labs_J-Link_OB_000440300307-if00";
+const port = "/dev/serial/by-id/usb-0658_0200-if00";
 
 const zniffer = new Zniffer(port, {
 	convertRSSI: true,
+	defaultFrequency: 0, // EU
 	securityKeys: {
 		S2_AccessControl: Buffer.from(
 			"31132050077310B6F7032F91C79C2EB8",

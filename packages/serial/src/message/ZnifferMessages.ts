@@ -5,7 +5,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZnifferProtocolDataRate,
-	type ZnifferRegion,
 	getZWaveChipType,
 	validatePayload,
 } from "@zwave-js/core";
@@ -194,7 +193,7 @@ export interface ZnifferFrameInfo {
 	readonly frameType: ZnifferFrameType;
 	readonly channel: number;
 	readonly protocolDataRate: ZnifferProtocolDataRate;
-	readonly region: ZnifferRegion;
+	readonly region: number;
 	readonly rssiRaw: number;
 	rssi?: RSSI;
 }
@@ -258,7 +257,7 @@ export class ZnifferDataMessage extends ZnifferMessage
 	public readonly frameType: ZnifferFrameType;
 	public readonly channel: number;
 	public readonly protocolDataRate: ZnifferProtocolDataRate;
-	public readonly region: ZnifferRegion;
+	public readonly region: number;
 	public readonly rssiRaw: number;
 }
 
@@ -293,7 +292,7 @@ export class ZnifferGetVersionResponse extends ZnifferMessage {
 }
 
 export interface ZnifferSetFrequencyRequestOptions {
-	frequency: ZnifferRegion;
+	frequency: number;
 }
 
 export class ZnifferSetFrequencyRequest extends ZnifferMessage {
@@ -306,7 +305,7 @@ export class ZnifferSetFrequencyRequest extends ZnifferMessage {
 		this.frequency = options.frequency;
 	}
 
-	public frequency: ZnifferRegion;
+	public frequency: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.frequency]);
@@ -342,8 +341,8 @@ export class ZnifferGetFrequenciesResponse extends ZnifferMessage {
 		}
 	}
 
-	public readonly currentFrequency: ZnifferRegion;
-	public readonly supportedFrequencies: readonly ZnifferRegion[];
+	public readonly currentFrequency: number;
+	public readonly supportedFrequencies: readonly number[];
 }
 
 export class ZnifferStartRequest extends ZnifferMessage {
@@ -397,7 +396,7 @@ export class ZnifferSetBaudRateResponse extends ZnifferMessage {
 }
 
 export interface ZnifferGetFrequencyInfoRequestOptions {
-	frequency: ZnifferRegion;
+	frequency: number;
 }
 
 export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
@@ -410,7 +409,7 @@ export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
 		this.frequency = options.frequency;
 	}
 
-	public frequency: ZnifferRegion;
+	public frequency: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.frequency]);
@@ -436,7 +435,7 @@ export class ZnifferGetFrequencyInfoResponse extends ZnifferMessage {
 		}
 	}
 
-	public readonly frequency: ZnifferRegion;
+	public readonly frequency: number;
 	public readonly numChannels: number;
 	public readonly frequencyName: string;
 }

@@ -93,28 +93,45 @@ export interface ZnifferOptions {
 	 * Set this option to `true` enable the conversion. Otherwise the raw values from the Zniffer will be used.
 	 */
 	convertRSSI?: boolean;
+
+	/**
+	 * The frequency to initialize the Zniffer with. If not specified, the current setting will be kept.
+	 *
+	 * On 700/800 series Zniffers, this value matches the {@link ZnifferRegion}.
+	 *
+	 * On 400/500 series Zniffers, the value is firmware-specific.
+	 * Supported regions and their names have to be queried using the `getFrequencies` and `getFrequencyInfo(frequency)` commands.
+	 */
+	defaultFrequency?: number;
+}
+
+function is700PlusSeries(
+	chipType: string | UnknownZWaveChipType,
+): boolean {
+	if (typeof chipType !== "string") {
+		return chipType.type >= 0x07;
+	}
+
+	const chipTypeNumeric = getChipTypeAndVersion(chipType);
+	if (chipTypeNumeric) {
+		return chipTypeNumeric.type >= 0x07;
+	}
+
+	return false;
 }
 
 function tryConvertRSSI(
 	rssi: number,
 	chipType: string | UnknownZWaveChipType,
 ): number {
-	if (typeof chipType !== "string") return rssi; // no idea how to convert
-	const chipTypeNumeric = getChipTypeAndVersion(chipType);
-	if (!chipTypeNumeric) return rssi; // no idea how to convert
-
-	switch (chipTypeNumeric.type) {
-		// For 400/500 series, the conversion is documented in the Zniffer user guide
-		case 0x04:
-		case 0x05:
-			return rssi * 1.5 - 153.5;
-		case 0x07:
-		case 0x08:
-			// Reverse-engineered from the Zniffer firmware
-			return rssi * 4 - 256;
+	// For 400/500 series, the conversion is documented in the Zniffer user guide.
+	// The conversion for 700/800 series was reverse-engineered from the Zniffer firmware.
+	// Here, we assume that only these two representations exist:
+	if (is700PlusSeries(chipType)) {
+		return rssi * 4 - 256;
+	} else {
+		return rssi * 1.5 - 153.5;
 	}
-
-	return rssi;
 }
 
 export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
@@ -148,6 +165,12 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private serial: ZnifferSerialPortBase | undefined;
 
 	private _chipType: string | UnknownZWaveChipType | undefined;
+
+	private _supportedFrequencies: Map<number, string> = new Map();
+	/** A map of supported frequency identifiers and their names */
+	public get supportedFrequencies(): ReadonlyMap<number, string> {
+		return this._supportedFrequencies;
+	}
 
 	private _logContainer: ZWaveLogContainer;
 	private znifferLog: ZnifferLogger;
@@ -221,22 +244,54 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		await this.setBaudrate(0);
 
 		const freqs = await this.getFrequencies();
-		this.znifferLog.print(
-			`received frequency info:
+		if (is700PlusSeries(this._chipType)) {
+			// The frequencies match the ZnifferRegion enum
+			this.znifferLog.print(
+				`received frequency info:
   current frequency:     ${
-				getEnumMemberName(ZnifferRegion, freqs.currentFrequency)
-			}
+					getEnumMemberName(ZnifferRegion, freqs.currentFrequency)
+				}
   supported frequencies: ${
-				freqs.supportedFrequencies.map((f) =>
-					`\n  · ${getEnumMemberName(ZnifferRegion, f)}`
-				).join("")
-			}`,
-			"info",
-		);
+					freqs.supportedFrequencies.map((f) =>
+						`\n  · ${getEnumMemberName(ZnifferRegion, f)}`
+					).join("")
+				}`,
+				"info",
+			);
 
-		// TODO: Make configurable
-		if (freqs.currentFrequency !== ZnifferRegion["USA (Long Range)"]) {
-			await this.setFrequency(ZnifferRegion["USA (Long Range)"]);
+			for (const freq of freqs.supportedFrequencies) {
+				this._supportedFrequencies.set(
+					freq,
+					getEnumMemberName(ZnifferRegion, freq),
+				);
+			}
+		} else {
+			// The frequencies are firmware-specific. Query them from the Zniffer
+			for (const freq of freqs.supportedFrequencies) {
+				const freqInfo = await this.getFrequencyInfo(freq);
+				this._supportedFrequencies.set(freq, freqInfo.frequencyName);
+			}
+			this.znifferLog.print(
+				`received frequency info:
+  current frequency:     ${this._supportedFrequencies.get(
+					freqs.currentFrequency,
+				)!}
+  supported frequencies: ${
+					freqs.supportedFrequencies.map((f) =>
+						`\n  · ${f.toString().padStart(2, " ")}: ${this
+							._supportedFrequencies.get(f)!}`
+					).join("")
+				}`,
+				"info",
+			);
+		}
+
+		if (
+			typeof this._options.defaultFrequency === "number"
+			&& freqs.currentFrequency !== this._options.defaultFrequency
+			&& this._supportedFrequencies.has(this._options.defaultFrequency)
+		) {
+			await this.setFrequency(this._options.defaultFrequency);
 		}
 
 		this.emit("ready");
@@ -502,7 +557,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		]);
 	}
 
-	public async setFrequency(frequency: ZnifferRegion): Promise<void> {
+	public async setFrequency(frequency: number): Promise<void> {
 		const req = new ZnifferSetFrequencyRequest({ frequency });
 		await this.serial?.writeAsync(req.serialize());
 		await this.waitForMessage<ZnifferSetFrequencyResponse>(
@@ -512,7 +567,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getFrequencyInfo(frequency: ZnifferRegion) {
+	public async getFrequencyInfo(frequency: number) {
 		const req = new ZnifferGetFrequencyInfoRequest({ frequency });
 		await this.serial?.writeAsync(req.serialize());
 		const res = await this.waitForMessage<ZnifferGetFrequencyInfoResponse>(
