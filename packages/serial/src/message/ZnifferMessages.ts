@@ -238,13 +238,8 @@ export class ZnifferDataMessage extends ZnifferMessage
 				: CRC16_CCITT(
 					this.payload.subarray(mpduOffset, -checksumLength),
 				);
-			if (checksum !== expectedChecksum) {
-				throw new ZWaveError(
-					"CRC error",
-					ZWaveErrorCodes.PacketFormat_Checksum,
-				);
-			}
 
+			this.checksumOK = checksum === expectedChecksum;
 			this.payload = this.payload.subarray(mpduOffset, -checksumLength);
 		} else {
 			throw new ZWaveError(
@@ -259,6 +254,8 @@ export class ZnifferDataMessage extends ZnifferMessage
 	public readonly protocolDataRate: ZnifferProtocolDataRate;
 	public readonly region: number;
 	public readonly rssiRaw: number;
+
+	public readonly checksumOK: boolean;
 }
 
 export class ZnifferGetVersionRequest extends ZnifferMessage {

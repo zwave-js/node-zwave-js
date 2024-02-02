@@ -873,6 +873,17 @@ export type LongRangeFrame =
 
 export type Frame = ZWaveFrame | LongRangeFrame;
 
+export type CorruptedFrame = {
+	channel: number;
+	region: ZnifferRegion;
+	rssiRaw: number;
+	rssi?: RSSI;
+
+	protocolDataRate: ZnifferProtocolDataRate;
+
+	payload: Buffer;
+};
+
 export function mpduToFrame(mpdu: MPDU, payloadCC?: CommandClass): Frame {
 	if (mpdu instanceof ZWaveMPDU) {
 		return mpduToZWaveFrame(mpdu, payloadCC);
@@ -1024,4 +1035,25 @@ export function mpduToLongRangeFrame(
 		`mpduToLongRangeFrame not supported for ${mpdu.constructor.name}`,
 		ZWaveErrorCodes.Argument_Invalid,
 	);
+}
+
+export function znifferDataMessageToCorruptedFrame(
+	msg: ZnifferDataMessage,
+	rssi?: RSSI,
+): CorruptedFrame {
+	if (msg.checksumOK) {
+		throw new ZWaveError(
+			`znifferDataMessageToCorruptedFrame expects the checksum to be incorrect`,
+			ZWaveErrorCodes.Argument_Invalid,
+		);
+	}
+
+	return {
+		channel: msg.channel,
+		region: msg.region,
+		rssiRaw: msg.rssiRaw,
+		rssi,
+		protocolDataRate: msg.protocolDataRate,
+		payload: msg.payload,
+	};
 }

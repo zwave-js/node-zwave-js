@@ -52,9 +52,9 @@ const zniffer = new Zniffer(port, {
 		// Test code goes here
 		await zniffer.start();
 
-		zniffer.on("frame", (frame) => {
-			console.debug(frame);
-		});
+		// zniffer.on("frame", (frame) => {
+		// 	console.debug(frame);
+		// });
 
 		await wait(600000);
 

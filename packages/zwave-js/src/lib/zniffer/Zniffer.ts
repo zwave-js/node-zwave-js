@@ -8,6 +8,7 @@ import {
 import {
 	CommandClasses,
 	type LogConfig,
+	type RSSI,
 	SPANState,
 	SecurityClass,
 	SecurityManager,
@@ -55,7 +56,14 @@ import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
 import { ZnifferCCParsingContext } from "./CCParsingContext";
-import { type Frame, MPDUHeaderType, mpduToFrame, parseMPDU } from "./MPDU";
+import {
+	type CorruptedFrame,
+	type Frame,
+	MPDUHeaderType,
+	mpduToFrame,
+	parseMPDU,
+	znifferDataMessageToCorruptedFrame,
+} from "./MPDU";
 
 const logo: string = `
 ███████╗ ███╗   ██╗ ██╗ ██████╗ ██████╗ ███████╗ ██████╗          ██╗ ███████╗
@@ -70,6 +78,7 @@ export interface ZnifferEventCallbacks {
 	ready: () => void;
 	error: (err: Error) => void;
 	frame: (frame: Frame) => void;
+	"corrupted frame": (err: CorruptedFrame) => void;
 }
 
 export type ZnifferEvents = Extract<keyof ZnifferEventCallbacks, string>;
@@ -337,7 +346,26 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	 */
 	private handleDataMessage(msg: ZnifferDataMessage): void {
 		try {
+			let convertedRSSI: RSSI | undefined;
+			if (this._options.convertRSSI && this._chipType) {
+				convertedRSSI = tryConvertRSSI(
+					msg.rssiRaw,
+					this._chipType,
+				);
+			}
+
+			// Only handle messages with a valid checksum, expose the others as CRC errors
+			if (!msg.checksumOK) {
+				this.znifferLog.crcError(msg);
+				this.emit(
+					"corrupted frame",
+					znifferDataMessageToCorruptedFrame(msg),
+				);
+				return;
+			}
+
 			const mpdu = parseMPDU(msg);
+			mpdu.frameInfo.rssi = convertedRSSI;
 
 			// Try to decode the CC while assuming the role of the receiver
 			let destSecurityManager: SecurityManager | undefined;
@@ -382,13 +410,6 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 					// Ignore
 					console.error(e.stack);
 				}
-			}
-
-			if (this._options.convertRSSI && this._chipType) {
-				mpdu.frameInfo.rssi = tryConvertRSSI(
-					mpdu.frameInfo.rssiRaw,
-					this._chipType,
-				);
 			}
 
 			this.znifferLog.mpdu(mpdu, cc);

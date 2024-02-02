@@ -6,12 +6,18 @@ import {
 import {
 	type DataDirection,
 	type LogContext,
+	type MessageOrCCLogEntry,
+	type RSSI,
 	type ZWaveLogContainer,
 	ZWaveLoggerBase,
 	getDirectionPrefix,
 	messageRecordToLines,
+	rssiToString,
 	tagify,
+	znifferProtocolDataRateToString,
 } from "@zwave-js/core";
+import { type ZnifferDataMessage } from "@zwave-js/serial";
+import { buffer2hex } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import { type LongRangeMPDU, type ZWaveMPDU } from "../zniffer/MPDU";
 import { type Zniffer } from "../zniffer/Zniffer";
@@ -49,6 +55,44 @@ export class ZnifferLogger extends ZWaveLoggerBase<ZnifferLogContext> {
 			direction: getDirectionPrefix("none"),
 			context: { source: "zniffer", direction: "none" },
 		});
+	}
+
+	public crcError(
+		frame: ZnifferDataMessage,
+		rssi?: RSSI,
+	): void {
+		if (!this.isLogVisible()) return;
+
+		const logEntry: MessageOrCCLogEntry = {
+			tags: ["CRC ERROR"],
+			message: {
+				channel: frame.channel,
+				"protocol/data rate": znifferProtocolDataRateToString(
+					frame.protocolDataRate,
+				),
+				RSSI: rssi != undefined
+					? rssiToString(rssi)
+					: frame.rssiRaw.toString(),
+				payload: buffer2hex(frame.payload),
+			},
+		};
+
+		const msg: string[] = [tagify(logEntry.tags)];
+		msg.push(
+			...messageRecordToLines(logEntry.message!).map(
+				(line) => "  " + line,
+			),
+		);
+
+		try {
+			// If possible, include information about the CCs
+			this.logger.log({
+				level: "warn",
+				message: msg,
+				direction: getDirectionPrefix("inbound"),
+				context: { source: "zniffer", direction: "inbound" },
+			});
+		} catch {}
 	}
 
 	public mpdu(
