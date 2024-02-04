@@ -68,7 +68,7 @@
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3613/LZW42%20Manual.pdf"
 	},
 	"compat": {
-		// The device supports Color Switch V2, despite the Version query saying
+		// The device supports Color Switch V2, despite only reporting support for V1
 		"commandClasses": {
 			"add": {
 				"Color Switch": {
