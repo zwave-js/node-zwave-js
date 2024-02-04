@@ -53,6 +53,7 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import fs from "node:fs/promises";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
 import { ZnifferCCParsingContext } from "./CCParsingContext";
@@ -92,9 +93,16 @@ interface AwaitedThing<T> {
 type AwaitedMessageEntry = AwaitedThing<ZnifferMessage>;
 
 export interface ZnifferOptions {
+	/**
+	 * Optional log configuration
+	 */
 	logConfig?: Partial<LogConfig>;
+
+	/** Security keys for decrypting Z-Wave traffic */
 	securityKeys?: ZWaveOptions["securityKeys"];
+	/** Security keys for decrypting Z-Wave Long Range traffic */
 	securityKeysLongRange?: ZWaveOptions["securityKeysLongRange"];
+
 	/**
 	 * The RSSI values reported by the Zniffer are not actual RSSI values.
 	 * They can be converted to dBm, but the conversion is chip dependent and not documented for 700/800 series Zniffers.
@@ -143,6 +151,11 @@ function tryConvertRSSI(
 	}
 }
 
+interface CapturedData {
+	timestamp: Date;
+	data: Buffer;
+}
+
 export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
@@ -166,6 +179,8 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		this.znifferLog = new ZnifferLogger(this, this._logContainer);
 
 		this._options = options;
+
+		this._active = false;
 	}
 
 	private _options: ZnifferOptions;
@@ -174,6 +189,12 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private serial: ZnifferSerialPortBase | undefined;
 
 	private _chipType: string | UnknownZWaveChipType | undefined;
+
+	private _currentFrequency: number | undefined;
+	/** The currently configured frequency */
+	public get currentFrequency(): number | undefined {
+		return this._currentFrequency;
+	}
 
 	private _supportedFrequencies: Map<number, string> = new Map();
 	/** A map of supported frequency identifiers and their names */
@@ -193,6 +214,11 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 	/** A list of awaited messages */
 	private awaitedMessages: AwaitedMessageEntry[] = [];
+
+	private _active: boolean;
+
+	/** A list of raw captured frames that can be saved to a .zlf file later */
+	private capturedDataFrames: CapturedData[] = [];
 
 	public async init(): Promise<void> {
 		// Open the serial port
@@ -253,6 +279,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		await this.setBaudrate(0);
 
 		const freqs = await this.getFrequencies();
+		this._currentFrequency = freqs.currentFrequency;
 		if (is700PlusSeries(this._chipType)) {
 			// The frequencies match the ZnifferRegion enum
 			this.znifferLog.print(
@@ -323,6 +350,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		if (msg.type === ZnifferMessageType.Command) {
 			this.handleResponse(msg);
 		} else {
+			this.capturedDataFrames.push({ timestamp: new Date(), data });
 			this.handleDataMessage(msg as ZnifferDataMessage);
 		}
 	}
@@ -516,7 +544,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming messages.
 	 */
-	public waitForMessage<T extends ZnifferMessage>(
+	private waitForMessage<T extends ZnifferMessage>(
 		predicate: (msg: ZnifferMessage) => boolean,
 		timeout: number,
 	): Promise<T> {
@@ -551,8 +579,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getVersion() {
+	private async getVersion() {
 		const req = new ZnifferGetVersionRequest();
 		await this.serial?.writeAsync(req.serialize());
 		const res = await this.waitForMessage<ZnifferGetVersionResponse>(
@@ -563,8 +590,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		return pick(res, ["chipType", "majorVersion", "minorVersion"]);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getFrequencies() {
+	private async getFrequencies() {
 		const req = new ZnifferGetFrequenciesRequest();
 		await this.serial?.writeAsync(req.serialize());
 		const res = await this.waitForMessage<ZnifferGetFrequenciesResponse>(
@@ -585,10 +611,10 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 			(msg) => msg instanceof ZnifferSetFrequencyResponse,
 			1000,
 		);
+		this._currentFrequency = frequency;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getFrequencyInfo(frequency: number) {
+	private async getFrequencyInfo(frequency: number) {
 		const req = new ZnifferGetFrequencyInfoRequest({ frequency });
 		await this.serial?.writeAsync(req.serialize());
 		const res = await this.waitForMessage<ZnifferGetFrequencyInfoResponse>(
@@ -601,7 +627,12 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		return pick(res, ["numChannels", "frequencyName"]);
 	}
 
+	/** Starts the capture and discards all previously captured frames */
 	public async start(): Promise<void> {
+		if (this._active) return;
+		this.capturedDataFrames = [];
+		this._active = true;
+
 		const req = new ZnifferStartRequest();
 		await this.serial?.writeAsync(req.serialize());
 		await this.waitForMessage<ZnifferStartResponse>(
@@ -611,6 +642,9 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	}
 
 	public async stop(): Promise<void> {
+		if (!this._active) return;
+		this._active = false;
+
 		const req = new ZnifferStopRequest();
 		await this.serial?.writeAsync(req.serialize());
 		await this.waitForMessage<ZnifferStopResponse>(
@@ -619,7 +653,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		);
 	}
 
-	public async setBaudrate(baudrate: 0): Promise<void> {
+	private async setBaudrate(baudrate: 0): Promise<void> {
 		const req = new ZnifferSetBaudRateRequest({ baudrate });
 		await this.serial?.writeAsync(req.serialize());
 		await this.waitForMessage<ZnifferSetBaudRateResponse>(
@@ -735,4 +769,37 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		this.securityManagers.set(sourceNodeId, ret);
 		return ret;
 	}
+
+	/** Saves the captured frames in a `.zlf` file that can be read by the official Zniffer application. */
+	public async saveCaptureToFile(filePath: string): Promise<void> {
+		// Mimics the current Zniffer software, without using features like sessions and comments
+		const header = Buffer.alloc(2048, 0);
+		header[0] = 0x68; // zniffer version
+		header.writeUInt16BE(0x2312, 0x07fe); // checksum
+
+		await fs.writeFile(filePath, header);
+		for (const frame of this.capturedDataFrames) {
+			await fs.appendFile(filePath, captureToZLFEntry(frame));
+		}
+	}
+}
+
+function captureToZLFEntry(
+	capture: CapturedData,
+): Buffer {
+	const buffer = Buffer.alloc(14 + capture.data.length, 0);
+	// Convert the date to a .NET datetime
+	let ticks = BigInt(capture.timestamp.getTime()) * 10000n
+		+ 621355968000000000n;
+	ticks = ticks | 4000000000000000n; // marks the time as .NET DateTimeKind.Local
+
+	buffer.writeBigUInt64LE(ticks, 0);
+	const direction = 0b0000_0000; // inbound, outbound would be 0b1000_0000
+
+	buffer[8] = direction | 0x01; // dir + session ID
+	buffer[9] = capture.data.length;
+	// bytes 10-12 are empty
+	capture.data.copy(buffer, 13);
+	buffer[buffer.length - 1] = 0xfe; // end of frame
+	return buffer;
 }

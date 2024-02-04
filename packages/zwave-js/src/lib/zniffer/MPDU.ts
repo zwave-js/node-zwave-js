@@ -748,11 +748,12 @@ export enum ZWaveFrameType {
 
 /** An application-oriented representation of a Z-Wave frame that was captured by the Zniffer */
 export type ZWaveFrame =
+	// Common fields for all Z-Wave frames
 	& {
 		protocol: Protocols.ZWave;
 
 		channel: number;
-		region: ZnifferRegion;
+		region: number;
 		rssiRaw: number;
 		rssi?: RSSI;
 
@@ -764,6 +765,7 @@ export type ZWaveFrame =
 		homeId: number;
 		sourceNodeId: number;
 	}
+	// Different kinds of Z-Wave frames:
 	& (
 		| (
 			// Singlecast frame, either routed or not
@@ -773,6 +775,7 @@ export type ZWaveFrame =
 				ackRequested: boolean;
 				payload: Buffer | CommandClass;
 			}
+			// Only present in routed frames:
 			& AllOrNone<
 				& {
 					direction: "outbound" | "inbound";
@@ -780,17 +783,21 @@ export type ZWaveFrame =
 					repeaters: number[];
 					repeaterRSSI?: RSSI[];
 				}
+				// Different kinds of routed frames:
 				& (
+					// Normal frame
 					| {
 						routedAck: false;
 						routedError: false;
 						failedHop?: undefined;
 					}
+					// Routed acknowledgement
 					| {
 						routedAck: true;
 						routedError: false;
 						failedHop?: undefined;
 					}
+					// Routed error
 					| {
 						routedAck: false;
 						routedError: true;
@@ -825,6 +832,7 @@ export type ZWaveFrame =
 				type: ZWaveFrameType.ExplorerInclusionRequest;
 				networkHomeId: number;
 			})
+			// Common fields for all explorer frames
 			& {
 				destinationNodeId: number;
 				ackRequested: boolean;
@@ -841,6 +849,7 @@ export enum LongRangeFrameType {
 }
 
 export type LongRangeFrame =
+	// Common fields for all Long Range frames
 	& {
 		protocol: Protocols.ZWaveLongRange;
 
@@ -859,12 +868,15 @@ export type LongRangeFrame =
 		sourceNodeId: number;
 		destinationNodeId: number;
 	}
+	// Different kinds of Long Range frames:
 	& (
 		{
+			// Singlecast frame
 			type: LongRangeFrameType.Singlecast;
 			ackRequested: boolean;
 			payload: Buffer | CommandClass;
 		} | {
+			// Acknowledgement frame
 			type: LongRangeFrameType.Ack;
 			incomingRSSI: RSSI;
 			payload: Buffer;
@@ -875,7 +887,7 @@ export type Frame = ZWaveFrame | LongRangeFrame;
 
 export type CorruptedFrame = {
 	channel: number;
-	region: ZnifferRegion;
+	region: number;
 	rssiRaw: number;
 	rssi?: RSSI;
 
