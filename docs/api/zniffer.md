@@ -1,8 +1,6 @@
 # Zniffer
 
-A Zniffer is a Z-Wave controller with special firmware that can capture Z-Wave traffic from any nearby Z-Wave device. This is useful for troubleshooting, as it allows you to see exactly what is being sent and received by the devices in your network.
-
-Using the `Zniffer` class, you can connect to a Zniffer and start capturing traffic. The captured traffic can be saved to a file, or processed by the application in real-time.
+Using the `Zniffer` class, you can connect to a [Zniffer](troubleshooting/zniffer.md) and start capturing traffic. The captured traffic can be saved to a file, or processed by the application in real-time.
 
 ## Constructor
 
