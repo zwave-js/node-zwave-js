@@ -315,7 +315,25 @@ enum Protocols {
 
 <!-- #import ZWaveFrameType from "zwave-js" -->
 
+```ts
+enum ZWaveFrameType {
+	Singlecast,
+	Multicast,
+	AckDirect,
+	ExplorerNormal,
+	ExplorerSearchResult,
+	ExplorerInclusionRequest,
+}
+```
+
 <!-- #import LongRangeFrameType from "zwave-js" -->
+
+```ts
+enum LongRangeFrameType {
+	Singlecast,
+	Ack,
+}
+```
 
 <!-- #import ZnifferProtocolDataRate from "@zwave-js/core" -->
 

@@ -113,6 +113,7 @@
   - [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
   - [Some values are missing](troubleshooting/missing-values.md)
   - [Upgrading the controller firmware](troubleshooting/otw-upgrade.md)
+  - [Creating a Zniffer](troubleshooting/zniffer.md)
 
 - Device Configuration Files
 
