@@ -119,6 +119,29 @@
 			],
 			"console": "integratedTerminal",
 			"disableOptimisticBPs": true
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Run Zniffer",
+			"port": 9229,
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": [
+				"node",
+				"--async-stack-traces",
+				"-r",
+				"./maintenance/esbuild-register.js",
+				"${workspaceFolder}/test/run_zniffer.ts"
+			],
+			"env": {
+				"NODE_ENV": "development"
+				// "NO_CACHE": "true"
+				// "LOGLEVEL": "info"
+			},
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
 		}
 	]
 }

@@ -122,9 +122,10 @@ function getSecurityManager(
 	host: ZWaveHost,
 	destination: MulticastDestination | number,
 ): SecurityManager2 | undefined {
-	const longRange = isLongRangeNodeId(
-		isArray(destination) ? destination[0]! : destination,
-	);
+	const longRange = isLongRangeNodeId(host.ownNodeId)
+		|| isLongRangeNodeId(
+			isArray(destination) ? destination[0]! : destination,
+		);
 	return longRange
 		? host.securityManagerLR
 		: host.securityManager2;
@@ -1281,7 +1282,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
-	private getSenderEI(): Buffer | undefined {
+	public getSenderEI(): Buffer | undefined {
 		const spanExtension = this.extensions.find(
 			(e): e is SPANExtension => e instanceof SPANExtension,
 		);

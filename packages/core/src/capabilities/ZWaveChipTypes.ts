@@ -1,4 +1,4 @@
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import { type MaybeNotKnown } from "../values/Primitive";
 
 const chipTypes = Object.freeze({
 	[0x0102]: "ZW0102",

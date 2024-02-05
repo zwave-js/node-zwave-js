@@ -6,6 +6,11 @@ import {
 	encodeBitMask,
 	parseNodeBitMask,
 } from "@zwave-js/core";
+import {
+	type UnknownZWaveChipType,
+	getChipTypeAndVersion,
+	getZWaveChipType,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
@@ -18,11 +23,6 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import {
-	type UnknownZWaveChipType,
-	getChipTypeAndVersion,
-	getZWaveChipType,
-} from "../../controller/ZWaveChipTypes";
 import type { ZWaveApiVersion } from "../_Types";
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiInitData)

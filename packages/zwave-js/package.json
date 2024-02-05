@@ -42,6 +42,10 @@
       "types": "./build/Values.d.ts",
       "default": "./build/Values.js"
     },
+    "./Zniffer": {
+      "types": "./build/Zniffer.d.ts",
+      "default": "./build/Zniffer.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

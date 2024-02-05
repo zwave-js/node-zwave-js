@@ -3,100 +3,70 @@ import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "node:events";
 import { PassThrough, type Readable, type Writable } from "node:stream";
 import { SerialLogger } from "./Logger";
-import { MessageHeaders } from "./MessageHeaders";
 import { type ZWaveSerialPortImplementation } from "./ZWaveSerialPortImplementation";
-import {
-	type BootloaderChunk,
-	BootloaderParser,
-	BootloaderScreenParser,
-	bootloaderMenuPreamble,
-} from "./parsers/BootloaderParsers";
-import { SerialAPIParser } from "./parsers/SerialAPIParser";
+import { ZnifferParser } from "./parsers/ZnifferParser";
 
-export type ZWaveSerialChunk =
-	| MessageHeaders.ACK
-	| MessageHeaders.NAK
-	| MessageHeaders.CAN
-	| Buffer;
-
-export enum ZWaveSerialMode {
-	SerialAPI,
-	Bootloader,
-}
-
-export interface ZWaveSerialPortEventCallbacks {
+export interface ZnifferSerialPortEventCallbacks {
 	error: (e: Error) => void;
-	data: (data: ZWaveSerialChunk) => void;
+	data: (data: Buffer) => void;
 	discardedData: (data: Buffer) => void;
-	bootloaderData: (data: BootloaderChunk) => void;
 }
 
-export type ZWaveSerialPortEvents = Extract<
-	keyof ZWaveSerialPortEventCallbacks,
+export type ZnifferSerialPortEvents = Extract<
+	keyof ZnifferSerialPortEventCallbacks,
 	string
 >;
 
-export interface ZWaveSerialPortBase {
-	on<TEvent extends ZWaveSerialPortEvents>(
+export interface ZnifferSerialPortBase {
+	on<TEvent extends ZnifferSerialPortEvents>(
 		event: TEvent,
-		callback: ZWaveSerialPortEventCallbacks[TEvent],
+		callback: ZnifferSerialPortEventCallbacks[TEvent],
 	): this;
-	addListener<TEvent extends ZWaveSerialPortEvents>(
+	addListener<TEvent extends ZnifferSerialPortEvents>(
 		event: TEvent,
-		callback: ZWaveSerialPortEventCallbacks[TEvent],
+		callback: ZnifferSerialPortEventCallbacks[TEvent],
 	): this;
-	once<TEvent extends ZWaveSerialPortEvents>(
+	once<TEvent extends ZnifferSerialPortEvents>(
 		event: TEvent,
-		callback: ZWaveSerialPortEventCallbacks[TEvent],
+		callback: ZnifferSerialPortEventCallbacks[TEvent],
 	): this;
-	off<TEvent extends ZWaveSerialPortEvents>(
+	off<TEvent extends ZnifferSerialPortEvents>(
 		event: TEvent,
-		callback: ZWaveSerialPortEventCallbacks[TEvent],
+		callback: ZnifferSerialPortEventCallbacks[TEvent],
 	): this;
-	removeListener<TEvent extends ZWaveSerialPortEvents>(
+	removeListener<TEvent extends ZnifferSerialPortEvents>(
 		event: TEvent,
-		callback: ZWaveSerialPortEventCallbacks[TEvent],
+		callback: ZnifferSerialPortEventCallbacks[TEvent],
 	): this;
-	removeAllListeners(event?: ZWaveSerialPortEvents): this;
+	removeAllListeners(event?: ZnifferSerialPortEvents): this;
 
-	emit<TEvent extends ZWaveSerialPortEvents>(
+	emit<TEvent extends ZnifferSerialPortEvents>(
 		event: TEvent,
-		...args: Parameters<ZWaveSerialPortEventCallbacks[TEvent]>
+		...args: Parameters<ZnifferSerialPortEventCallbacks[TEvent]>
 	): boolean;
 }
 
 const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;
 
 // This is basically a duplex transform stream wrapper around any stream (network, serial, ...)
-// 0 ┌─────────────────┐ ┌─────────────────┐ ┌──
-// 1 <--               <--   PassThrough   <-- write
-// 1 │    any stream   │ │ ZWaveSerialPort │ │
-// 0 -->               -->     Parsers     --> read
-// 1 └─────────────────┘ └─────────────────┘ └──
+// 0 ┌─────────────────┐ ┌───────────────────┐ ┌──
+// 1 <--               <--    PassThrough    <-- write
+// 1 │    any stream   │ │ ZnifferSerialPort │ │
+// 0 -->               -->      Parsers      --> read
+// 1 └─────────────────┘ └───────────────────┘ └──
 // The implementation idea is based on https://stackoverflow.com/a/17476600/10179833
 
 @Mixin([EventEmitter])
-export class ZWaveSerialPortBase extends PassThrough {
+export class ZnifferSerialPortBase extends PassThrough {
 	protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
 	protected logger: SerialLogger;
 
-	// Serial API parser
-	private parser: SerialAPIParser;
-	// Bootloader parsers
-	private bootloaderScreenParser: BootloaderScreenParser;
-	private bootloaderParser: BootloaderParser;
-
-	// Allow switching between modes
-	public mode: ZWaveSerialMode | undefined;
-
-	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
-	public ignoreAckHighNibbleOnce(): void {
-		this.parser.ignoreAckHighNibble = true;
-	}
+	// Zniffer frame parser
+	private parser: ZnifferParser;
 
 	// Allow strongly-typed async iteration
 	declare public [Symbol.asyncIterator]: () => AsyncIterableIterator<
-		ZWaveSerialChunk
+		Buffer
 	>;
 
 	constructor(
@@ -121,9 +91,6 @@ export class ZWaveSerialPortBase extends PassThrough {
 				if (event === "data") {
 					// @ts-expect-error
 					this.parser[method]("data", ...args);
-				} else if (event === "bootloaderData") {
-					// @ts-expect-error
-					this.bootloaderParser[method]("data", ...args);
 				} else {
 					(original as any)(event, ...args);
 				}
@@ -138,42 +105,20 @@ export class ZWaveSerialPortBase extends PassThrough {
 			this.emit("error", e);
 		});
 
-		// Prepare parsers to hook up to the serial port
-		// -> Serial API mode
-		this.parser = new SerialAPIParser(
+		// Prepare parser to hook up to the serial port
+		this.parser = new ZnifferParser(
 			this.logger,
 			(discarded) => this.emit("discardedData", discarded),
 		);
 
-		// -> Bootloader mode
-		// This one looks for NUL chars which terminate each bootloader output screen
-		this.bootloaderScreenParser = new BootloaderScreenParser(this.logger);
-		// This one parses the bootloader output into a more usable format
-		this.bootloaderParser = new BootloaderParser();
-		// this.bootloaderParser.pipe(this.output);
-		this.bootloaderScreenParser.pipe(this.bootloaderParser);
-
 		// Check the incoming messages and route them to the correct parser
 		this.serial.on("data", (data) => {
-			if (this.mode == undefined) {
-				// If we haven't figured out the startup mode yet,
-				// inspect the chunk to see if it contains the bootloader preamble
-				const str = (data as Buffer).toString("ascii").trim();
-				this.mode = str.startsWith(bootloaderMenuPreamble)
-					? ZWaveSerialMode.Bootloader
-					: ZWaveSerialMode.SerialAPI;
-			}
-
 			// On Windows, writing to the parsers immediately seems to lag the event loop
 			// long enough that the state machine sometimes has not transitioned to the next state yet.
 			// By using setImmediate, we "break" the work into manageable chunks.
 			// We have some tests that don't like this though, so we don't do it in tests
 			const write = () => {
-				if (this.mode === ZWaveSerialMode.Bootloader) {
-					this.bootloaderScreenParser.write(data);
-				} else {
-					this.parser.write(data);
-				}
+				this.parser.write(data);
 			};
 
 			if (IS_TEST) {
@@ -221,22 +166,7 @@ export class ZWaveSerialPortBase extends PassThrough {
 			throw new Error("The serial port is not open!");
 		}
 
-		// Only log in Serial API mode
-		if (this.mode === ZWaveSerialMode.SerialAPI && data.length === 1) {
-			switch (data[0]) {
-				case MessageHeaders.ACK:
-					this.logger.ACK("outbound");
-					break;
-				case MessageHeaders.CAN:
-					this.logger.CAN("outbound");
-					break;
-				case MessageHeaders.NAK:
-					this.logger.NAK("outbound");
-					break;
-			}
-		} else {
-			this.logger.data("outbound", data);
-		}
+		this.logger.data("outbound", data);
 
 		return new Promise((resolve, reject) => {
 			this.serial.write(data, (err) => {
