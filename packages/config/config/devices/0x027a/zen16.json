@@ -126,17 +126,15 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion < 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
-			"label": "Relay 1: Auto Turn-Off Timer",
-			"description": "Sets the time after which relay 1 turns off once it has been turned on.",
-			"unit": "minutes"
+			"$import": "templates/zooz_template.json#auto_off_timer_0x_1x_3x_7x",
+			"label": "Relay 1: Auto Turn-Off Timer"
 		},
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
 			"label": "Relay 1: Auto Turn-Off Timer",
-			"description": "Sets the time after which relay 1 turns off once it has been turned on. Using the units defined in parameter 15."
+			"description": "Unit defined in parameter 15."
 		},
 		{
 			"#": "15",
@@ -163,17 +161,15 @@
 		{
 			"#": "7",
 			"$if": "firmwareVersion < 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
-			"label": "Relay 1: Auto Turn-On Timer",
-			"description": "Sets the time after which relay 1 turns on once it has been turned off.",
-			"unit": "minutes"
+			"$import": "templates/zooz_template.json#auto_on_timer_0x_1x_3x_7x",
+			"label": "Relay 1: Auto Turn-On Timer"
 		},
 		{
 			"#": "7",
 			"$if": "firmwareVersion >= 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
 			"label": "Relay 1: Auto Turn-On Timer",
-			"description": "Sets the time after which relay 1 turns on once it has been turned off. Using the units defined in parameter 16."
+			"description": "Unit defined in parameter 16."
 		},
 		{
 			"#": "16",
@@ -184,17 +180,15 @@
 		{
 			"#": "8",
 			"$if": "firmwareVersion < 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
-			"label": "Relay 2: Auto Turn-Off Timer",
-			"description": "Sets the time after which relay 2 turns off once it has been turned on.",
-			"unit": "minutes"
+			"$import": "templates/zooz_template.json#auto_off_timer_0x_1x_3x_7x",
+			"label": "Relay 2: Auto Turn-Off Timer"
 		},
 		{
 			"#": "8",
 			"$if": "firmwareVersion >= 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
 			"label": "Relay 2: Auto Turn-Off Timer",
-			"description": "Sets the time after which relay 2 turns off once it has been turned on. Using the units defined in parameter 17."
+			"description": "Unit defined in parameter 17."
 		},
 		{
 			"#": "17",
@@ -205,17 +199,15 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion < 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
-			"label": "Relay 2: Auto Turn-On Timer",
-			"description": "Sets the time after which relay 2 turns on once it has been turned off.",
-			"unit": "minutes"
+			"$import": "templates/zooz_template.json#auto_on_timer_0x_1x_3x_7x",
+			"label": "Relay 2: Auto Turn-On Timer"
 		},
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
 			"label": "Relay 2: Auto Turn-On Timer",
-			"description": "Sets the time after which relay 2 turns on once it has been turned off. Using the units defined in parameter 18."
+			"description": "Unit defined in parameter 18."
 		},
 		{
 			"#": "18",
@@ -226,17 +218,15 @@
 		{
 			"#": "10",
 			"$if": "firmwareVersion < 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
-			"label": "Relay 3: Auto Turn-Off Timer",
-			"description": "Sets the time after which relay 3 turns off once it has been turned on.",
-			"unit": "minutes"
+			"$import": "templates/zooz_template.json#auto_off_timer_0x_1x_3x_7x",
+			"label": "Relay 3: Auto Turn-Off Timer"
 		},
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
 			"label": "Relay 3: Auto Turn-Off Timer",
-			"description": "Sets the time after which relay 3 turns off once it has been turned on. Using the units defined in parameter 19."
+			"description": "Unit defined in parameter 19."
 		},
 		{
 			"#": "19",
@@ -247,17 +237,15 @@
 		{
 			"#": "11",
 			"$if": "firmwareVersion < 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
-			"label": "Relay 3: Auto Turn-On Timer",
-			"description": "Sets the time after which relay 3 turns on once it has been turned off.",
-			"unit": "minutes"
+			"$import": "templates/zooz_template.json#auto_on_timer_0x_1x_3x_7x",
+			"label": "Relay 3: Auto Turn-On Timer"
 		},
 		{
 			"#": "11",
 			"$if": "firmwareVersion >= 1.1",
-			"$import": "~/templates/master_template.json#base_0-65535",
-			"label": "Relay 3: Auto Turn-On Timer",
-			"description": "Sets the time after which relay 3 turns on once it has been turned off. Using the units defined in parameter 20."
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
+			"label": "Relay 2: Auto Turn-On Timer",
+			"description": "Unit defined in parameter 20."
 		},
 		{
 			"#": "20",

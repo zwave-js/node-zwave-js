@@ -42,11 +42,11 @@
 		},
 		{
 			"#": "2",
-			"$import": "templates/zooz_template.json#auto_off_timer_0x_3x_7x"
+			"$import": "templates/zooz_template.json#auto_off_timer_0x_1x_3x_7x"
 		},
 		{
 			"#": "4",
-			"$import": "templates/zooz_template.json#auto_on_timer_0x_3x_7x"
+			"$import": "templates/zooz_template.json#auto_on_timer_0x_1x_3x_7x"
 		},
 		{
 			"#": "6",
