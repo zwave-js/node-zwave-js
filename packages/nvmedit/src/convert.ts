@@ -903,8 +903,8 @@ export function jsonToNVMObjects_v7_11_0(
 
 	// The protocol version file only seems to be updated when the format of the protocol file system changes
 	// Once again, we simply set the highest version we support here and let the controller handle any potential migration
-	if (semver.gte(targetSDKVersion, HIGHEST_SUPPORTED_SDK_VERSION)) {
-		targetProtocolVersion = semver.parse(HIGHEST_SUPPORTED_SDK_VERSION)!;
+	if (semver.gte(targetSDKVersion, "7.19.0")) {
+		targetProtocolVersion = semver.parse("7.19.0")!;
 		targetProtocolFormat = 5;
 	} else if (semver.gte(targetSDKVersion, "7.17.0")) {
 		targetProtocolVersion = semver.parse("7.17.0")!;
@@ -1091,7 +1091,10 @@ export function nvmToJSON(
 	const sharedFileSystem = nvm.applicationObjects.size > 0
 		&& nvm.protocolObjects.size === 0;
 	const ret = nvmObjectsToJSON(objects);
-	ret.meta = getNVMMeta(nvm.protocolPages[0], sharedFileSystem);
+	const firstPage = sharedFileSystem
+		? nvm.applicationPages[0]
+		: nvm.protocolPages[0];
+	ret.meta = getNVMMeta(firstPage, sharedFileSystem);
 	return ret as Required<NVMJSON>;
 }
 

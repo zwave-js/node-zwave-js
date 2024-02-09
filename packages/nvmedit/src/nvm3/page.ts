@@ -59,7 +59,13 @@ export function readPage(
 		// page start.
 		for (let exponent = 0; exponent < 0b111; exponent++) {
 			const testPageSize = pageSizeFromBits(exponent);
-			if (isValidPageHeaderAtOffset(buffer, offset + testPageSize)) {
+			const nextOffset = offset + testPageSize;
+			if (
+				// exactly end of NVM OR
+				buffer.length === nextOffset
+				// next page
+				|| isValidPageHeaderAtOffset(buffer, nextOffset)
+			) {
 				pageSize = testPageSize;
 				break;
 			}
