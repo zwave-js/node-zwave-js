@@ -1,8 +1,8 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN37",
-	"description": "Wall Remote 800LR",
+	"label": "ZEN37 800LR",
+	"description": "Wall Remote",
 	"devices": [
 		{
 			"productType": "0x7000",
