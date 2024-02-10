@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.4.4 (2024-02-10)
 ### Bugfixes
 * NVM backups can now be restored onto 800 series controllers (#6670)
 
