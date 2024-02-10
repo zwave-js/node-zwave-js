@@ -104,12 +104,53 @@
 			"$import": "~/templates/master_template.json#base_0-10_nounit",
 			"label": "LED Indicator Brightness",
 			"description": "Brightness level of the LED indicator or turn the LED off completely.",
-			"unit": "%",
 			"defaultValue": 5,
+			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Off",
 					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
 				}
 			]
 		},
