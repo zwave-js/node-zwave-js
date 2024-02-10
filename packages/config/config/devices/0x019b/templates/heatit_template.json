@@ -1,0 +1,21 @@
+{
+	"association_group_control": {
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Basic Set on (0xff)",
+				"value": 1
+			},
+			{
+				"label": "Basic Set off (0x00)",
+				"value": 2
+			}
+		]
+	}
+}
