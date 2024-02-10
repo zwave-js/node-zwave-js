@@ -443,8 +443,7 @@ interface LogConfig {
 By default, Z-Wave JS has two internal transports, a file transport and a console transport. Both share the following options:
 
 - `enable`: If `false`, the internal transports will be disabled. Default: `true`.
-- `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.
-  \
+- `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.\
   For convenience, the numeric loglevels `0` (`"error"`) to `6` (`"silly"`) can be used instead, but will be converted to their string counterpart internally.
 - `nodeFilter`: If set, only messages regarding the given node IDs are logged
 
