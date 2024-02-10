@@ -38,28 +38,28 @@
 			"unit": "ms",
 			"minValue": 100,
 			"maxValue": 5000,
-			"defaultValue": 1000
+			"defaultValue": 1000 // firmware had default: 2000
 		},
 		{
 			"#": "3",
 			"$import": "~/0x014a/templates/ecolink-template.json#ecolink_5-60_seconds",
 			"label": "Door Open Timeout",
 			"description": "Seconds allowed for garage door to open until timeout.",
-			"defaultValue": 20
+			"defaultValue": 20 // firmware had default: 30
 		},
 		{
 			"#": "4",
 			"$import": "~/0x014a/templates/ecolink-template.json#ecolink_5-60_seconds",
 			"label": "Door Close Timeout",
 			"description": "Seconds allowed for garage door to close until timeout.",
-			"defaultValue": 15
+			"defaultValue": 15 // firmware had default: 30
 		},
 		{
 			"#": "5",
 			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Accelerometer Sensitivity",
 			"description": "Accelerometer vibration detection sensitivity: 1 is least sensitive, 100 is most sensitive.",
-			"defaultValue": 96
+			"defaultValue": 96 // firmware had default:  26
 		},
 		{
 			"#": "6",
