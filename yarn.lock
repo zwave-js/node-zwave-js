@@ -1348,6 +1348,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ts-morph/common@npm:~0.19.0":
+  version: 0.19.0
+  resolution: "@ts-morph/common@npm:0.19.0"
+  dependencies:
+    fast-glob: ^3.2.12
+    minimatch: ^7.4.3
+    mkdirp: ^2.1.6
+    path-browserify: ^1.0.1
+  checksum: 6b02a63ded0ce77e2bf86e135c17a6d5126307bbb926a4085d3cc2acaf28cb732780cf8d16961e9600efcc599876f706a2c9e8d135f7668704bb04a1a6fd37ec
+  languageName: node
+  linkType: hard
+
 "@ts-morph/common@npm:~0.21.0":
   version: 0.21.0
   resolution: "@ts-morph/common@npm:0.21.0"
@@ -1961,7 +1973,7 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.5.4
     sinon: ^15.2.0
-    ts-pegjs: ^0.3.1
+    ts-pegjs: ^4.2.1
     typescript: 5.2.2
     winston: ^3.10.0
     xml2js: ^0.6.2
@@ -7241,6 +7253,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier@npm:^2.8.8":
+  version: 2.8.8
+  resolution: "prettier@npm:2.8.8"
+  bin:
+    prettier: bin-prettier.js
+  checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
+  languageName: node
+  linkType: hard
+
 "pretty-ms@npm:^8.0.0":
   version: 8.0.0
   resolution: "pretty-ms@npm:8.0.0"
@@ -8501,6 +8522,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-morph@npm:^18.0.0":
+  version: 18.0.0
+  resolution: "ts-morph@npm:18.0.0"
+  dependencies:
+    "@ts-morph/common": ~0.19.0
+    code-block-writer: ^12.0.0
+  checksum: e3d3099b9a632dfcea2ddc75f00e0d0866b4f6d27b73f9e0ff96cf64fe24ce8074098d6709873afce9edb852c2127c40ad4013f54fdf68dafe0231f1a71827c8
+  languageName: node
+  linkType: hard
+
 "ts-morph@npm:^20.0.0":
   version: 20.0.0
   resolution: "ts-morph@npm:20.0.0"
@@ -8566,16 +8597,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-pegjs@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "ts-pegjs@npm:0.3.1"
+"ts-pegjs@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "ts-pegjs@npm:4.2.1"
   dependencies:
-    pegjs: ^0.10.0
+    prettier: ^2.8.8
+    ts-morph: ^18.0.0
   peerDependencies:
-    pegjs: ~0.10.0
+    peggy: ^3.0.2
   bin:
-    tspegjs: src/cli.js
-  checksum: 4eed1a3a6d33107580b6031bb0f19ec5c94bb0cb6bf7acac35f5fc5fdd45c9f2eee3cbedd016c055524495a08474e17e23aabe62ec65cef4c1a837ea8284b66f
+    tspegjs: dist/cli.mjs
+  checksum: a06a8c5770f5301f73851b1323dc834b4026c03bd3e06c0e8570323821ae2afc5770ed89d2f67cf08cd7f7b0e36381c2142adfe260d8894dad56eb28295ba842
   languageName: node
   linkType: hard
 
