@@ -1,0 +1,209 @@
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "AD370",
+	"description": "Z-Wave 700 MOS Dimmer",
+	"devices": [
+		{
+			"productType": "0x0033",
+			"productId": "0x0033",
+			"zwaveAllianceId": [4514, 4648]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Switch Type",
+			"description": "Def 0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Auto-on time",
+			"description": "Def 0, second",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Auto-off time",
+			"description": "Def 0, second",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Remember last status",
+			"description": "Def 1, save last state",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Interval for wattage/kWh auto report",
+			"description": "Def 600, second",
+			"valueSize": 2,
+			"minValue": 60,
+			"maxValue": 32767,
+			"defaultValue": 600,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Report when exceed % change of wattage",
+			"description": "Def 25, percent",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 100,
+			"defaultValue": 25,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Maximum dimming value",
+			"description": "Def 100",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Minimum dimming value",
+			"description": "Def 10",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "MOS operation mode",
+			"description": "Def 2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Calibration Mode",
+			"description": "Def 0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Auto Calibration",
+			"description": "Def 1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Dimming speed",
+			"description": "Def 4, second",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 600,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Set voltage when in 2-wire",
+			"description": "Def 230, voltage",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 500,
+			"defaultValue": 230,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"label": "Use external switch for inclusion and exclusion",
+			"description": "Def 1, switch can includ/exculd/reset",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "15",
+			"label": "Lamp type detected",
+			"description": "0: unknow, 1 non dimmable, 2 dimmable",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		{
+			"#": "16",
+			"label": "Wire connection type",
+			"description": "0: unknow, 1:2 wire, 2:3 wire",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		{
+			"#": "17",
+			"label": "Power auto report threshold",
+			"description": "Def 0, 0: disable",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 300,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "18",
+			"label": "Dimming curve",
+			"description": "Def 0, 0:linear, 1:log",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Load type detected",
+			"description": "Def 0: unknow, 1: Resistive, 2: Capacitive, 3: Inductive",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	]
+}
