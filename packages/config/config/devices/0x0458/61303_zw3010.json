@@ -1,0 +1,174 @@
+{
+	"manufacturerId": "0x0458",
+	"label": "61303/ZW3010",
+	"description": "In-Wall Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3236",
+			"zwaveAllianceId": 4319
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "Led Indication",
+			"description": "Led indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Device is on, LED is off; device is off, LED is on",
+					"value": 0
+				},
+				{
+					"label": "Device is on, LED is on; device is off, LED is off",
+					"value": 1
+				},
+				{
+					"label": "Led always off",
+					"value": 2
+				},
+				{
+					"label": "Led always on",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Dim Up/Down Rate",
+			"description": "Dim up/down rate",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Dim up/down the light to the specified level quickly by command except value 0 and ff",
+					"value": 0
+				},
+				{
+					"label": "Dim up/down the light to the specified level slowly by command except value 0 and ff",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Switch Mode",
+			"description": "Switch mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Disable- normal operation",
+					"value": 0
+				},
+				{
+					"label": "Press two times on button and two times off button, LED will flash 5 times if device is successfully excluded",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Alternate Exclusion",
+			"description": "Alternate exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Normal operation, press any button to exclude device",
+					"value": 0
+				},
+				{
+					"label": "Press two times on button and two times off button, LED will flash 5 times if device is successfully excluded",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30",
+			"label": "Minimum Dim Threshold",
+			"description": "Set the minimum dimmer threshold when manually or remotely controlled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "31",
+			"label": "Maximum Brightness Threshold",
+			"description": "Set the maximum brightness threshold when manually or remotely controlled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "32",
+			"label": "Default Brightness Level",
+			"description": "Default brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				}
+			]
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "Adding your device to a Z-Wave network\n1. Follow the instructions for your Z-Wave certified controller to\nadd a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker)",
+		"exclusion": "To remove and reset the device\n1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker)",
+		"reset": "1. Quickly press ON (top) button three times then immediately\npress the OFF (bottom) button three times. The LED will flash\nON/OFF five times when completed successfully.\nNote: This should only be used if your network’s primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4319/61303-1%20EnFrSp%20QSG%20v1.pdf"
+	}
+}
