@@ -2,7 +2,7 @@
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MP21ZD",
-	"description": "Smart Plug Dimmer (800S)",
+	"description": "Smart Plug Dimmer",
 	"devices": [
 		{
 			"productType": "0xff00",
