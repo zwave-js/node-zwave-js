@@ -81,6 +81,16 @@
 			]
 		},
 		{
+			// Option avaliable in firmware from v14.3.4
+			"#": "6",
+			"label": "Valve Opening Percentage Report",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
 			"#": "7",
 			"label": "Open Window Detection",
 			"valueSize": 1,
