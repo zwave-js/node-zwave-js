@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.4.4 (2024-02-10)
+### Bugfixes
+* NVM backups can now be restored onto 800 series controllers (#6670)
+
+### Config file changes
+* Use Color Switch V2 for Inovelli LZW42 (#6654)
+* Correct Zooz ZEN1x timer config params (#6648)
+
 ## 12.4.3 (2024-01-25)
 ### Bugfixes
 * Reduce idle CPU load (#6640)

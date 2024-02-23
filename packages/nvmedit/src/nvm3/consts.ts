@@ -1,6 +1,9 @@
 // NVM area sizes
 export const ZWAVE_APPLICATION_NVM_SIZE = 0x3000;
 export const ZWAVE_PROTOCOL_NVM_SIZE = 0xc000 - ZWAVE_APPLICATION_NVM_SIZE;
+// The 800 series has a shared application/protocol NVM, which is 8 KB smaller
+// than the 700 series
+export const ZWAVE_SHARED_NVM_SIZE = 0xA000;
 
 // Everything must be word-aligned
 export const NVM3_WORD_SIZE = 4;
@@ -11,7 +14,9 @@ export const NVM3_PAGE_HEADER_SIZE = 20;
 export const NVM3_PAGE_COUNTER_SIZE = 27;
 export const NVM3_PAGE_COUNTER_MASK = (1 << NVM3_PAGE_COUNTER_SIZE) - 1;
 export const NVM3_PAGE_MAGIC = 0xb29a;
-export const FLASH_MAX_PAGE_SIZE = 2048;
+
+export const FLASH_MAX_PAGE_SIZE_700 = 2048; // not sure if this is true for all 700 series chips
+export const FLASH_MAX_PAGE_SIZE_800 = 8192;
 
 export enum PageStatus {
 	OK = 0xffffffff,
