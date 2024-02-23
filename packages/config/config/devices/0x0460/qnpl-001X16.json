@@ -74,6 +74,11 @@
 			"label": "Alarm Configuration: Heat"
 		},
 		{
+			"#": "105",
+			"$import": "templates/wave_template.json#led_intensity",
+			"label": "Signal LED Intensity"
+		},
+		{
 			"#": "120",
 			"$import": "templates/wave_template.json#factory_reset"
 		},

@@ -120,6 +120,26 @@
 			"label": "O2: Auto-Off Timer"
 		},
 		{
+			"#": "22",
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O2: Auto-On Timer"
+		},
+		{
+			"#": "26",
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O2: Auto-On/Off Timer Unit"
+		},
+		{
+			"#": "23",
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O1: Relay Type"
+		},
+		{
+			"#": "24",
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O2: Relay Type"
+		},
+		{
 			"#": "36",
 			"$import": "templates/wave_template.json#power_change_report_treshold",
 			"label": "O1: Power Change Report Threshold"

@@ -2,7 +2,7 @@
 	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
 	"label": "QPSW-0A1P16",
-	"description": "Wave Pro 1 PM",
+	"description": "Wave Pro 1PM",
 	"devices": [
 		{
 			"productType": "0x0002",
