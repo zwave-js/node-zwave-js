@@ -5,7 +5,7 @@
 	"description": "Wave PM Mini",
 	"devices": [
 		{
-			"productType": "0x0002",
+			"productType": "0x0007",
 			"productId": "0x0081"
 		}
 	],
