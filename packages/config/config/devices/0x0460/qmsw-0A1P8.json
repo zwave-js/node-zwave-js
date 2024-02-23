@@ -1,12 +1,13 @@
 {
-	"manufacturer": "Shelly Europe",
+	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
-	"label": "QPSW-0A2P16",
-	"description": "Wave Pro 2PM",
+	"label": "QMSW-0A1P8",
+	"description": "Wave 1PM Mini",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x008d"
+			"productId": "0x008f",
+			"zwaveAllianceId": 5024
 		}
 	],
 	"firmwareVersion": {
@@ -20,27 +21,9 @@
 			"label": "SW1 Switch Type"
 		},
 		{
-			"#": "2",
-			"$import": "templates/wave_template.json#switch_type",
-			"label": "SW2 Switch Type"
-		},
-		{
-			"#": "16",
-			"$import": "templates/wave_template.json#o1_o2_swap",
-			"label": "Swap Outputs"
-		},
-		{
 			"#": "17",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
 			"label": "O1: State After Power Failure",
-			"minValue": 0,
-			"maxValue": 1,
-			"unsigned": true
-		},
-		{
-			"#": "18",
-			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
-			"label": "O2: State After Power Failure",
 			"minValue": 0,
 			"maxValue": 1,
 			"unsigned": true
@@ -61,29 +44,9 @@
 			"label": "O1: Auto-On/Off Timer Unit"
 		},
 		{
-			"#": "21",
-			"$import": "templates/wave_template.json#auto_off_timer",
-			"label": "O2: Auto-Off Timer"
-		},
-		{
-			"#": "22",
-			"$import": "templates/wave_template.json#auto_on_timer",
-			"label": "O2: Auto-On Timer"
-		},
-		{
-			"#": "26",
-			"$import": "templates/wave_template.json#timer_unit",
-			"label": "O2: Auto-On/Off Timer Unit"
-		},
-		{
 			"#": "23",
 			"$import": "templates/wave_template.json#out_relay_type",
 			"label": "O1: Relay Type"
-		},
-		{
-			"#": "24",
-			"$import": "templates/wave_template.json#out_relay_type",
-			"label": "O2: Relay Type"
 		},
 		{
 			"#": "36",
@@ -94,16 +57,6 @@
 			"#": "39",
 			"$import": "templates/wave_template.json#min_time_between_reports",
 			"label": "O1: Minimum Time Between Power Reports"
-		},
-		{
-			"#": "37",
-			"$import": "templates/wave_template.json#power_change_report_treshold",
-			"label": "O2: Power Change Report Threshold"
-		},
-		{
-			"#": "40",
-			"$import": "templates/wave_template.json#min_time_between_reports",
-			"label": "O2: Minimum Time Between Power Reports"
 		},
 		{
 			"#": "91",

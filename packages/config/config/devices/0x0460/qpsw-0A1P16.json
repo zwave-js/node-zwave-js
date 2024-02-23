@@ -1,12 +1,12 @@
 {
 	"manufacturer": "Shelly Europe",
 	"manufacturerId": "0x0460",
-	"label": "QPSW-0A1P16",
-	"description": "Wave Pro 1PM",
+	"label": "QPSW-0A1X16",
+	"description": "Wave Pro 1",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x008b"
+			"productId": "0x008a"
 		}
 	],
 	"firmwareVersion": {
@@ -51,16 +51,6 @@
 			"#": "23",
 			"$import": "templates/wave_template.json#out_relay_type",
 			"label": "O1: Relay Type"
-		},
-		{
-			"#": "36",
-			"$import": "templates/wave_template.json#power_change_report_treshold",
-			"label": "O1: Power Change Report Threshold"
-		},
-		{
-			"#": "39",
-			"$import": "templates/wave_template.json#min_time_between_reports",
-			"label": "O1: Minimum Time Between Power Reports"
 		},
 		{
 			"#": "91",
