@@ -1,12 +1,13 @@
 {
-	"manufacturer": "Shelly Europe",
+	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
 	"label": "QNSN-0A24X",
 	"description": "Wave I4",
 	"devices": [
 		{
 			"productType": "0x0009",
-			"productId": "0x0081"
+			"productId": "0x0081",
+			"zwaveAllianceId": 5008
 		}
 	],
 	"firmwareVersion": {

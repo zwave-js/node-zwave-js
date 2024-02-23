@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Shelly Europe",
+	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
 	"label": "QPSW-0A2P16",
 	"description": "Wave Pro 2PM",
@@ -23,6 +23,11 @@
 			"#": "2",
 			"$import": "templates/wave_template.json#switch_type",
 			"label": "SW2 Switch Type"
+		},
+		{
+			"#": "6",
+			"$import": "templates/wave_template.json#sw1_sw2_swap",
+			"label": "Swap Inputs"
 		},
 		{
 			"#": "16",

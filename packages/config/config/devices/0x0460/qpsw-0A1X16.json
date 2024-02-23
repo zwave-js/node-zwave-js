@@ -1,12 +1,13 @@
 {
-	"manufacturer": "Shelly Europe",
+	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
 	"label": "QPSW-0A1X16",
 	"description": "Wave Pro 1",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x008a"
+			"productId": "0x008a",
+			"zwaveAllianceId": 5015
 		}
 	],
 	"firmwareVersion": {

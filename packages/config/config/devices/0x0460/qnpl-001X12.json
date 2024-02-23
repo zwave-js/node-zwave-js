@@ -1,12 +1,13 @@
 {
-	"manufacturer": "Shelly Europe",
+	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
 	"label": "QNPL-001X12",
 	"description": "Wave Plug UK",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0089"
+			"productId": "0x0089",
+			"zwaveAllianceId": 5009
 		}
 	],
 	"firmwareVersion": {
