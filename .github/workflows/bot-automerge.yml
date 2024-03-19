@@ -19,7 +19,7 @@ jobs:
     runs-on: [ubuntu-latest]
 
     steps:
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         with:
           github-token: ${{secrets.BOT_TOKEN}}
           script: |
@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: Check if auto-merging should be enabled
         id: should-automerge
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{secrets.BOT_TOKEN}}
           result-encoding: string
@@ -76,7 +76,7 @@ jobs:
 
       - name: Approve PR
         if: ${{ steps.should-automerge.outputs.result == 'true' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |

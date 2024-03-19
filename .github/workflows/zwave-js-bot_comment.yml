@@ -18,7 +18,7 @@ jobs:
         node-version: [18] # This should be LTS
 
     steps:
-    - uses: actions/github-script@v6
+    - uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -97,7 +97,7 @@ jobs:
 
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -109,7 +109,7 @@ jobs:
     - name: Retrieve PR information
       if: steps.check-permissions.outputs.result == 'true'
       id: pr-info
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
@@ -170,7 +170,7 @@ jobs:
 
     - name: Give feedback
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
         PENDING: ${{ fromJSON(steps.pr-info.outputs.result).pending }}
@@ -201,7 +201,7 @@ jobs:
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -212,7 +212,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Retrieve PR information
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       id: get-pr
       with:
         script: |
@@ -269,7 +269,7 @@ jobs:
 
     - name: Give feedback
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
       with:
@@ -298,7 +298,7 @@ jobs:
  
   #   - name: Check permissions and necessity
   #     id: check-permissions
-  #     uses: actions/github-script@v6
+  #     uses: actions/github-script@v7
   #     with:
   #       github-token: ${{secrets.BOT_TOKEN}}
   #       result-encoding: string
@@ -312,7 +312,7 @@ jobs:
   #   # These steps only run if the check was successful
   #   - name: Retrieve PR information
   #     if: steps.check-permissions.outputs.result == 'true'
-  #     uses: actions/github-script@v6
+  #     uses: actions/github-script@v7
   #     id: get-pr
   #     with:
   #       script: |
@@ -360,7 +360,7 @@ jobs:
 
   #   - name: Give feedback
   #     if: steps.check-permissions.outputs.result == 'true'
-  #     uses: actions/github-script@v6
+  #     uses: actions/github-script@v7
   #     env:
   #       FEEDBACK: ${{ steps.fix.outputs.result }}
   #     with:
@@ -388,7 +388,7 @@ jobs:
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -416,7 +416,7 @@ jobs:
     - name: Get config file ID
       if: steps.check-permissions.outputs.result == 'true'
       id: config-id
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -461,7 +461,7 @@ jobs:
 
     - name: Create PR
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         RESULT: ${{ steps.import.outputs.result }}
         branchname: ${{ steps.import.outputs.branchname }}
@@ -496,7 +496,7 @@ jobs:
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -524,7 +524,7 @@ jobs:
     - name: Parse command
       if: steps.check-permissions.outputs.result == 'true'
       id: parse-command
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -541,7 +541,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
         flag: ${{ fromJSON(steps.parse-command.outputs.result).flag }}
@@ -584,7 +584,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         RESULT: ${{ steps.commit-changes.outputs.result }}
         branchname: ${{ steps.commit-changes.outputs.branchname }}
@@ -616,7 +616,7 @@ jobs:
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -644,7 +644,7 @@ jobs:
     - name: Parse command
       if: steps.check-permissions.outputs.result == 'true'
       id: parse-command
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -661,7 +661,7 @@ jobs:
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
       id: add-fingerprint
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         fingerprint: ${{ fromJSON(steps.parse-command.outputs.result).fingerprint }}
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
@@ -706,7 +706,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         RESULT: ${{ steps.commit-changes.outputs.result }}
         branchname: ${{ steps.commit-changes.outputs.branchname }}
