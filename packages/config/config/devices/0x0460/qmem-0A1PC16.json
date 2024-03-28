@@ -1,0 +1,50 @@
+{
+	"manufacturer": "Shelly Europe Ltd.",
+	"manufacturerId": "0x0460",
+	"label": "QMEM-0A1PC16",
+	"description": "Wave PM Mini",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0081"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "36",
+			"$import": "templates/wave_template.json#power_change_report_treshold",
+			"label": "O1: Power Change Report Threshold"
+		},
+		{
+			"#": "39",
+			"$import": "templates/wave_template.json#min_time_between_reports",
+			"label": "O1: Minimum Time Between Power Reports"
+		},
+		{
+			"#": "120",
+			"$import": "templates/wave_template.json#factory_reset"
+		},
+		{
+			"#": "201",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 1"
+		},
+		{
+			"#": "202",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 2"
+		},
+		{
+			"#": "203",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 3"
+		}
+	],
+	"metadata": {
+		"$import": "templates/wave_template.json#default_metadata"
+	}
+}
