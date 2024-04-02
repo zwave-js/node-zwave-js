@@ -35,9 +35,11 @@
 			"txPower": 9.9,
 			"measured0dBm": -2.3,
 			"enablePTI": 0,
-			"maxTXPower": 14
+			"maxTXPower": 14,
+			"nodeIdType": null
 		},
 		"sucUpdateEntries": [],
+		"applicationName": null,
 		"applicationData": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
 		"sucAwarenessPushNeeded": null
 	},
@@ -155,6 +157,7 @@
 		}
 	},
 	"meta": {
+		"sharedFileSystem": false,
 		"pageSize": 2048,
 		"writeSize": 1,
 		"memoryMapped": true,
