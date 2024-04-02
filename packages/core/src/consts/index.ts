@@ -10,6 +10,12 @@ export const NODE_ID_MAX = MAX_NODES;
 /** The number of bytes in a node bit mask */
 export const NUM_NODEMASK_BYTES = MAX_NODES / 8;
 
+/** The number of node ids in a long range "segment" (GetLongRangeNodes response) */
+export const NUM_LR_NODES_PER_SEGMENT = 128;
+
+/** The number of bytes in a long range node bit mask segment */
+export const NUM_LR_NODEMASK_SEGMENT_BYTES = NUM_LR_NODES_PER_SEGMENT / 8;
+
 export enum NodeIDType {
 	Short = 0x01,
 	Long = 0x02,

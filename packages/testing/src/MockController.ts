@@ -56,6 +56,7 @@ export class MockController {
 			homeId: options.homeId ?? 0x7e571000,
 			securityManager: undefined,
 			securityManager2: undefined,
+			securityManagerLR: undefined,
 			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
 			getNextSupervisionSessionId: (nodeId) => {

@@ -128,8 +128,9 @@ export enum CommandClasses {
 	"Z/IP ND" = 0x58,
 	"Z/IP Portal" = 0x61,
 	"Z-Wave Plus Info" = 0x5e,
-	// Internal CC which is not used directly by applications
+	// Internal CCs which are not used directly by applications
 	"Z-Wave Protocol" = 0x01,
+	"Z-Wave Long Range" = 0x04,
 }
 
 export function getCCName(cc: number): string {

@@ -44,6 +44,7 @@ export function createTestingHost(
 		isControllerNode: (nodeId) => nodeId === ret.ownNodeId,
 		securityManager: undefined,
 		securityManager2: undefined,
+		securityManagerLR: undefined,
 		getDeviceConfig: undefined,
 		controllerLog: new Proxy({} as any, {
 			get() {

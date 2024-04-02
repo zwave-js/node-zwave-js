@@ -2,6 +2,7 @@ import type { JsonlDB } from "@alcalzone/jsonl-db";
 import {
 	type CommandClasses,
 	NodeType,
+	Protocols,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -177,6 +178,15 @@ function tryParseProvisioningList(
 					&& entry.requestedSecurityClasses.every((s) =>
 						isSerializedSecurityClass(s)
 					)))
+			// protocol and supportedProtocols are stored as strings, not the enum values
+			&& (entry.protocol == undefined
+				|| isSerializedProtocol(entry.protocol))
+			&& (entry.supportedProtocols == undefined || (
+				isArray(entry.supportedProtocols)
+				&& entry.supportedProtocols.every((s) =>
+					isSerializedProtocol(s)
+				)
+			))
 			&& (entry.status == undefined
 				|| isSerializedProvisioningEntryStatus(entry.status))
 		) {
@@ -202,6 +212,17 @@ function tryParseProvisioningList(
 				parsed.status = ProvisioningEntryStatus[
 					entry.status as any
 				] as any as ProvisioningEntryStatus;
+			}
+			if (entry.protocol != undefined) {
+				parsed.protocol =
+					Protocols[entry.protocol as any] as any as Protocols;
+			}
+			if (entry.supportedProtocols) {
+				parsed.supportedProtocols = (
+					entry.supportedProtocols as any[]
+				)
+					.map((s) => Protocols[s] as any as Protocols)
+					.filter((s): s is Protocols => s !== undefined);
 			}
 			ret.push(parsed);
 		} else {
@@ -262,6 +283,16 @@ function isSerializedProvisioningEntryStatus(
 		typeof s === "string"
 		&& s in ProvisioningEntryStatus
 		&& typeof ProvisioningEntryStatus[s as any] === "number"
+	);
+}
+
+function isSerializedProtocol(
+	s: unknown,
+): s is keyof typeof Protocols {
+	return (
+		typeof s === "string"
+		&& s in Protocols
+		&& typeof Protocols[s as any] === "number"
 	);
 }
 
@@ -451,6 +482,18 @@ export function serializeNetworkCacheValue(
 						ProvisioningEntryStatus,
 						entry.status,
 					);
+				}
+				if (entry.protocol != undefined) {
+					serialized.protocol = getEnumMemberName(
+						Protocols,
+						entry.protocol,
+					);
+				}
+				if (entry.supportedProtocols != undefined) {
+					serialized.supportedProtocols = entry.supportedProtocols
+						.map(
+							(p) => getEnumMemberName(Protocols, p),
+						);
 				}
 				ret.push(serialized);
 			}

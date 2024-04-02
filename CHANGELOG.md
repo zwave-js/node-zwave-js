@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://zwave-js.github.io/node-zwave-js/#/getting-started/long-range) to get started.
+
+### Features
+* Support Z-Wave Long Range (#6401, #6620)
+
+### Bugfixes
+
+### Config file changes
+
+### Changes under the hood
+
 ## 12.4.4 (2024-02-10)
 ### Bugfixes
 * NVM backups can now be restored onto 800 series controllers (#6670)

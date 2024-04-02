@@ -87,3 +87,14 @@ export function isEmptyRoute(route: Route): boolean {
 		&& route.routeSpeed === ZWaveDataRate["9k6"]
 	);
 }
+
+export enum LongRangeChannel {
+	Unknown = 0x00, // Reserved
+	A = 0x01,
+	B = 0x02,
+	// 0x03..0xFF are reserved and must not be used
+}
+
+export function isLongRangeNodeId(nodeId: number): boolean {
+	return nodeId > 255;
+}
