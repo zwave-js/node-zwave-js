@@ -4,13 +4,11 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.5.0 (2024-04-02)
 This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://zwave-js.github.io/node-zwave-js/#/getting-started/long-range) to get started.
 
 ### Features
 * Support Z-Wave Long Range (#6401, #6620)
-
-### Bugfixes
 
 ### Config file changes
 * Remove Association Groups 2 & 3 from AEON Labs DSB09 (#6691)
@@ -25,8 +23,6 @@ This release adds support for Z-Wave Long Range thanks to the amazing work of @j
 * Add units, improve descriptions for Everspring ST814 (#6712)
 * Label and parameter definitions for Sensative Drip 700 (#6514)
 * Override supported sensor scales for HELTUN HE-ZW-THERM-FL2 (#6711)
-
-### Changes under the hood
 
 ## 12.4.4 (2024-02-10)
 ### Bugfixes
