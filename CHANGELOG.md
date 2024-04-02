@@ -13,6 +13,18 @@ This release adds support for Z-Wave Long Range thanks to the amazing work of @j
 ### Bugfixes
 
 ### Config file changes
+* Remove Association Groups 2 & 3 from AEON Labs DSB09 (#6691)
+* Correct group 3 label for GE/Enbrighten 26931/ZW4006 (#6703)
+* Add new Fingerprint for Ring Contact sensor (#6676)
+* Preserve root endpoint in Vision ZL7432 (#6675)
+* Add new Product ID to Fibaro Smoke Detector (#6603)
+* Add Product ID for Benext Energy Switch FW1.6 (#6602)
+* Add fingerprint for Ring Glass Break Sensor EU (#6590)
+* Change MH9-CO2 Temperature Reporting Threshold step size to 0.1 (#6581)
+* Add new product ID to Fibaro FGS-213 (#6576)
+* Add units, improve descriptions for Everspring ST814 (#6712)
+* Label and parameter definitions for Sensative Drip 700 (#6514)
+* Override supported sensor scales for HELTUN HE-ZW-THERM-FL2 (#6711)
 
 ### Changes under the hood
 
