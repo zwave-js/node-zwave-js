@@ -38,7 +38,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -67,7 +67,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -127,7 +127,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -188,7 +188,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -215,7 +215,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -260,7 +260,7 @@ jobs:
 
   #   steps:
   #   - name: Checkout code
-  #     uses: actions/checkout@v3
+  #     uses: actions/checkout@v4
 
   #   - name: Restore Turbo Cache from previous jobs
   #     uses: ./.github/actions/build-cache-download
@@ -307,7 +307,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -345,7 +345,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -385,7 +385,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
