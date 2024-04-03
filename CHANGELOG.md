@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fix/improve route diagnostics for Z-Wave LR devices (#6718)
+
 ## 12.5.0 (2024-04-02)
 This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://zwave-js.github.io/node-zwave-js/#/getting-started/long-range) to get started.
 
