@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.5.1 (2024-04-03)
 ### Bugfixes
 * Fix/improve route diagnostics for Z-Wave LR devices (#6718)
 
