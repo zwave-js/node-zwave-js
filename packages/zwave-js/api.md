@@ -108,6 +108,7 @@ import { ProtocolDataRate } from '@zwave-js/core/safe';
 import type { ProtocolDataRate as ProtocolDataRate_2 } from '@zwave-js/core';
 import { protocolDataRateToString } from '@zwave-js/core';
 import { Protocols } from '@zwave-js/core';
+import type { Protocols as Protocols_2 } from '@zwave-js/core/safe';
 import { ProtocolType } from '@zwave-js/core';
 import { ProtocolVersion } from '@zwave-js/core/safe';
 import { ProtocolVersion as ProtocolVersion_2 } from '@zwave-js/core';
@@ -241,6 +242,10 @@ export interface ControllerStatistics {
             current: number;
         };
         channel2?: {
+            average: number;
+            current: number;
+        };
+        channel3?: {
             average: number;
             current: number;
         };
@@ -406,6 +411,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     schedulePoll(nodeId: number, valueId: ValueID_2, options: NodeSchedulePollOptions): boolean;
     get securityManager(): SecurityManager | undefined;
     get securityManager2(): SecurityManager2 | undefined;
+    get securityManagerLR(): SecurityManager2 | undefined;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "SupervisionResult"
@@ -852,10 +858,12 @@ export type PartialZWaveOptions = Expand<DeepPartial<Omit<ZWaveOptions, "inclusi
 export interface PlannedProvisioningEntry {
     [prop: string]: any;
     dsk: string;
+    protocol?: Protocols_2;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "securityClasses"
     requestedSecurityClasses?: readonly SecurityClass[];
     securityClasses: SecurityClass[];
     status?: ProvisioningEntryStatus;
+    supportedProtocols?: readonly Protocols_2[];
 }
 
 export { Powerlevel }
@@ -1012,9 +1020,9 @@ export { SensorType }
 // @public (undocumented)
 export enum SerialAPISetupCommand {
     // (undocumented)
-    GetLRMaximumPayloadSize = 17,
+    GetLongRangeMaximumPayloadSize = 17,
     // (undocumented)
-    GetLRMaximumTxPower = 5,
+    GetLongRangeMaximumTxPower = 5,
     // (undocumented)
     GetMaximumPayloadSize = 16,
     // (undocumented)
@@ -1026,7 +1034,7 @@ export enum SerialAPISetupCommand {
     // (undocumented)
     GetSupportedCommands = 1,
     // (undocumented)
-    SetLRMaximumTxPower = 3,
+    SetLongRangeMaximumTxPower = 3,
     // (undocumented)
     SetNodeIDType = 128,
     // (undocumented)
@@ -1197,6 +1205,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         rssiChannel0: RSSI_2;
         rssiChannel1: RSSI_2;
         rssiChannel2?: RSSI_2;
+        rssiChannel3?: RSSI_2;
     }>;
     getBroadcastNode(): VirtualNode;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignCustomReturnRoutes"
@@ -1302,6 +1311,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // (undocumented)
     get supportedSerialAPISetupCommands(): readonly SerialAPISetupCommand[] | undefined;
     supportsFeature(feature: ZWaveFeature): MaybeNotKnown<boolean>;
+    get supportsLongRange(): MaybeNotKnown<boolean>;
     // (undocumented)
     get supportsTimers(): MaybeNotKnown<boolean>;
     toggleRF(enabled: boolean): Promise<boolean>;
@@ -1440,6 +1450,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get productId(): MaybeNotKnown<number>;
     // (undocumented)
     get productType(): MaybeNotKnown<number>;
+    get protocol(): Protocols;
     get protocolVersion(): MaybeNotKnown<ProtocolVersion_2>;
     protected queryProtocolInfo(): Promise<void>;
     get ready(): boolean;
@@ -1727,10 +1738,14 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         };
     };
     securityKeys?: {
-        S2_Unauthenticated?: Buffer;
-        S2_Authenticated?: Buffer;
         S2_AccessControl?: Buffer;
+        S2_Authenticated?: Buffer;
+        S2_Unauthenticated?: Buffer;
         S0_Legacy?: Buffer;
+    };
+    securityKeysLongRange?: {
+        S2_AccessControl?: Buffer;
+        S2_Authenticated?: Buffer;
     };
     // (undocumented)
     storage: {

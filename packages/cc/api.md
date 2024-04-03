@@ -101,7 +101,6 @@ import { Security2CCAPI } from '../cc/Security2CC';
 import { SecurityCCAPI } from '../cc/SecurityCC';
 import { SecurityClass } from '@zwave-js/core';
 import { SecurityManager } from '@zwave-js/core';
-import { SecurityManager2 } from '@zwave-js/core';
 import { SendCommandOptions } from '@zwave-js/core';
 import { SinglecastCC } from '@zwave-js/core';
 import { SinglecastCC as SinglecastCC_2 } from '@zwave-js/core/safe';
@@ -15457,10 +15456,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     // (undocumented)
     hasMOSExtension(): boolean;
     // (undocumented)
-    host: ZWaveHost_2 & {
-        securityManager2: SecurityManager2;
-    };
-    // (undocumented)
     prepareRetransmission(): void;
     // (undocumented)
     readonly securityClass?: SecurityClass;
@@ -15543,10 +15538,6 @@ export class Security2CCNetworkKeyVerify extends Security2CC {
 // @public (undocumented)
 export class Security2CCNonceGet extends Security2CC {
     constructor(host: ZWaveHost_2, options: CCCommandOptions);
-    // (undocumented)
-    host: ZWaveHost_2 & {
-        securityManager2: SecurityManager2;
-    };
     get sequenceNumber(): number;
     // (undocumented)
     serialize(): Buffer;
@@ -15559,10 +15550,6 @@ export class Security2CCNonceGet extends Security2CC {
 // @public (undocumented)
 export class Security2CCNonceReport extends Security2CC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & Security2CCNonceReportOptions));
-    // (undocumented)
-    host: ZWaveHost_2 & {
-        securityManager2: SecurityManager2;
-    };
     // (undocumented)
     readonly MOS: boolean;
     // (undocumented)

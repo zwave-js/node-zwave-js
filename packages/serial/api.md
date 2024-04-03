@@ -193,6 +193,10 @@ export enum FunctionType {
     // (undocumented)
     GetControllerVersion = 21,
     // (undocumented)
+    GetLongRangeChannel = 219,
+    // (undocumented)
+    GetLongRangeNodes = 218,
+    // (undocumented)
     GetNodeProtocolInfo = 65,
     // (undocumented)
     GetNVMId = 41,
@@ -240,6 +244,10 @@ export enum FunctionType {
     SerialAPIStarted = 10,
     // (undocumented)
     SetApplicationNodeInformation = 3,
+    // (undocumented)
+    SetLongRangeChannel = 220,
+    // (undocumented)
+    SetLongRangeShadowNodeIDs = 221,
     // (undocumented)
     SetPriorityRoute = 147,
     // (undocumented)
@@ -456,7 +464,7 @@ export class Message {
     expectsNodeUpdate(): boolean;
     expectsResponse(): boolean;
     static extractPayload(data: Buffer): Buffer;
-    static from(host: ZWaveHost, options: MessageDeserializationOptions): Message;
+    static from(host: ZWaveHost, options: MessageDeserializationOptions, contextStore?: Map<FunctionType, Record<string, unknown>>): Message;
     // (undocumented)
     functionType: FunctionType;
     getCallbackTimeout(): number | undefined;
@@ -521,6 +529,7 @@ export interface MessageCreationOptions extends MessageBaseOptions {
 //
 // @public (undocumented)
 export interface MessageDeserializationOptions {
+    context?: unknown;
     // (undocumented)
     data: Buffer;
     // (undocumented)
