@@ -5840,14 +5840,37 @@ protocol version:      ${this.protocolVersion}`;
 					if (txReport.routingAttempts > 1) {
 						routeChanges++;
 					}
-					rssi = txReport.ackRSSI;
-					channel = txReport.ackChannelNo;
+
+					if (
+						txReport.ackRSSI != undefined
+						&& !isRssiError(txReport.ackRSSI)
+					) {
+						// If possible, determine the SNR margin from the report
+						if (txReport.measuredNoiseFloor != undefined) {
+							const currentSNRMargin = txReport.ackRSSI
+								- txReport.measuredNoiseFloor;
+							// And remember it if it's the lowest we've seen so far
+							if (
+								snrMargin == undefined
+								|| currentSNRMargin < snrMargin
+							) {
+								snrMargin = currentSNRMargin;
+							}
+						}
+						// Also remember the worst RSSI and the channel it was received on
+						if (rssi == undefined || txReport.ackRSSI < rssi) {
+							rssi = txReport.ackRSSI;
+							channel = txReport.ackChannelNo;
+						}
+					}
 				}
 			}
 
-			// If possible, compute the SNR margin from the test results
+			// If possible, compute the SNR margin from the test results,
+			// unless it could already be determined from the transmit reports
 			if (
-				rssi != undefined
+				snrMargin == undefined
+				&& rssi != undefined
 				&& rssi < RssiError.NoSignalDetected
 				&& channel != undefined
 			) {

@@ -6872,6 +6872,7 @@ ${associatedNodes.join(", ")}`,
 		rssiChannel0: RSSI;
 		rssiChannel1: RSSI;
 		rssiChannel2?: RSSI;
+		rssiChannel3?: RSSI;
 	}> {
 		const ret = await this.driver.sendMessage<GetBackgroundRSSIResponse>(
 			new GetBackgroundRSSIRequest(this.driver),
@@ -6880,6 +6881,7 @@ ${associatedNodes.join(", ")}`,
 			"rssiChannel0",
 			"rssiChannel1",
 			"rssiChannel2",
+			"rssiChannel3",
 		]);
 
 		this.updateStatistics((current) => {
@@ -6914,6 +6916,18 @@ ${associatedNodes.join(", ")}`,
 					),
 				};
 			}
+
+			if (rssi.rssiChannel3 != undefined) {
+				updated.backgroundRSSI!.channel3 = {
+					current: rssi.rssiChannel3,
+					average: averageRSSI(
+						current.backgroundRSSI?.channel3?.average,
+						rssi.rssiChannel3,
+						0.9,
+					),
+				};
+			}
+
 			updated.backgroundRSSI!.timestamp = Date.now();
 
 			return updated;
