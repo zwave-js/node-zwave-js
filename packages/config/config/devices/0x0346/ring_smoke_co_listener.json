@@ -17,8 +17,8 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Unsolicited Battery Report",
-			"description": "255 to 4200 seconds in 255 second increments that the sensor should wait between sending unsolicited battery reports.",
+			"label": "Battery Report Interval",
+			"description": "Allowable range: 255-4200 in increments of 255.",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 255,
@@ -27,36 +27,35 @@
 		},
 		{
 			"#": "2",
-			"label": "“hear” CO Detectors",
-			"description": "Listening mode (Smoke/Smoke+CO)",
+			"label": "Listening Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smoke detector siren",
+					"label": "Smoke detector siren only",
 					"value": 1
 				},
 				{
-					"label": "Smoke+CO detector siren",
+					"label": "Smoke & CO detector sirens",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Installation Test",
-			"description": "Activates test mode. Test mode automatically disengages after 15 minutes of inactivity",
+			"label": "Test Mode",
+			"description": "Disabled automatically after 15 minutes of inactivity",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Cancel installation test mode",
+					"label": "Cancel / Idle",
 					"value": 0
 				},
 				{
-					"label": "Start installation test mode",
+					"label": "Start",
 					"value": 1
 				}
 			]
