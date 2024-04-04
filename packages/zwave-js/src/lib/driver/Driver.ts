@@ -5377,7 +5377,7 @@ ${handlers.length} left`,
 			}
 
 			if (maybeSendToSleep && node && node.canSleep && !node.keepAwake) {
-				setImmediate(() => this.debounceSendNodeToSleep(node!));
+				setImmediate(() => this.debounceSendNodeToSleep(node));
 			}
 
 			// Set the transaction progress to completed before resolving the Promise

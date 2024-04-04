@@ -2498,7 +2498,7 @@ supported CCs: ${
 							`Notifying node ${inclCtrlrId} of finished inclusion`,
 						);
 						// Create API without checking for support
-						const api = inclCtrlr!.createAPI(
+						const api = inclCtrlr.createAPI(
 							CommandClasses["Inclusion Controller"],
 							false,
 						);

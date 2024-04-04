@@ -327,7 +327,7 @@ export function codefind(query: CodeFindQuery): Result[] {
 				const matches = text.matchAll(query.search);
 				for (const match of matches) {
 					const matchPosition = node.getStart(sourceFile)
-						+ match.index!;
+						+ match.index;
 					const location = ts.getLineAndCharacterOfPosition(
 						sourceFile,
 						matchPosition,

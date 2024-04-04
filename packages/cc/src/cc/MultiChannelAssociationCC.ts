@@ -373,7 +373,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached(applHost, endpoint);
-		const valueDB = applHost.getValueDB(endpoint.nodeId)!;
+		const valueDB = applHost.getValueDB(endpoint.nodeId);
 		for (let i = 1; i <= groupCount; i++) {
 			const groupDestinations: AssociationAddress[] = [];
 			// Add all node destinations
