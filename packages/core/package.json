@@ -69,7 +69,7 @@
     "winston-transport": "^4.5.0"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.37.3",
+    "@microsoft/api-extractor": "^7.43.0",
     "@types/node": "^18.17.14",
     "@types/sinon": "^10.0.16",
     "@types/triple-beam": "^1.3.2",
