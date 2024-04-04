@@ -1,33 +1,17 @@
 {
 	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
-	"label": "QNSW-001X16",
-	"description": "Wave 1",
+	"label": "QPSW-0A2X16",
+	"description": "Wave Pro 2",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0083",
-			"zwaveAllianceId": [4922, 5005, 5020]
+			"productId": "0x008c"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
-	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 9,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "SW1: On/Off",
-			"maxNodes": 9
-		},
-		"3": {
-			"label": "SW1: Start/Stop Level Change",
-			"maxNodes": 9
-		}
 	},
 	"paramInformation": [
 		{
@@ -36,9 +20,27 @@
 			"label": "SW1 Switch Type"
 		},
 		{
+			"#": "2",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW2 Switch Type"
+		},
+		{
+			"#": "6",
+			"$import": "templates/wave_template.json#swap_inputs"
+		},
+		{
+			"#": "16",
+			"$import": "templates/wave_template.json#swap_outputs"
+		},
+		{
 			"#": "17",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
 			"label": "O1: State After Power Failure"
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O2: State After Power Failure"
 		},
 		{
 			"#": "19",
@@ -56,9 +58,29 @@
 			"label": "O1: Auto-On/Off Timer Unit"
 		},
 		{
+			"#": "21",
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O2: Auto-Off Timer"
+		},
+		{
+			"#": "22",
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O2: Auto-On Timer"
+		},
+		{
+			"#": "26",
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O2: Auto-On/Off Timer Unit"
+		},
+		{
 			"#": "23",
 			"$import": "templates/wave_template.json#out_relay_type",
 			"label": "O1: Relay Type"
+		},
+		{
+			"#": "24",
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O2: Relay Type"
 		},
 		{
 			"#": "91",

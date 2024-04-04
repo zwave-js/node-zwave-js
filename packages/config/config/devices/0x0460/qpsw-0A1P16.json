@@ -1,39 +1,28 @@
 {
 	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
-	"label": "QNSW-001X16",
-	"description": "Wave 1",
+	"label": "QPSW-0A1P16",
+	"description": "Wave Pro 1PM",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0083",
-			"zwaveAllianceId": [4922, 5005, 5020]
+			"productId": "0x008b"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 9,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "SW1: On/Off",
-			"maxNodes": 9
-		},
-		"3": {
-			"label": "SW1: Start/Stop Level Change",
-			"maxNodes": 9
-		}
-	},
 	"paramInformation": [
 		{
 			"#": "1",
 			"$import": "templates/wave_template.json#switch_type",
 			"label": "SW1 Switch Type"
+		},
+		{
+			"#": "2",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW2 Switch Type"
 		},
 		{
 			"#": "17",
@@ -59,6 +48,16 @@
 			"#": "23",
 			"$import": "templates/wave_template.json#out_relay_type",
 			"label": "O1: Relay Type"
+		},
+		{
+			"#": "36",
+			"$import": "templates/wave_template.json#power_change_report_treshold",
+			"label": "O1: Power Change Report Threshold"
+		},
+		{
+			"#": "39",
+			"$import": "templates/wave_template.json#min_time_between_reports",
+			"label": "O1: Minimum Time Between Power Reports"
 		},
 		{
 			"#": "91",

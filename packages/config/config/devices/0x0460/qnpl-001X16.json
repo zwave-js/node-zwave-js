@@ -1,40 +1,20 @@
 {
 	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
-	"label": "QNSW-001X16",
-	"description": "Wave 1",
+	"label": "QNPL-001X16",
+	"description": "Wave Plug US",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0083",
-			"zwaveAllianceId": [4922, 5005, 5020]
+			"productId": "0x0088",
+			"zwaveAllianceId": 4995
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 9,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "SW1: On/Off",
-			"maxNodes": 9
-		},
-		"3": {
-			"label": "SW1: Start/Stop Level Change",
-			"maxNodes": 9
-		}
-	},
 	"paramInformation": [
-		{
-			"#": "1",
-			"$import": "templates/wave_template.json#switch_type",
-			"label": "SW1 Switch Type"
-		},
 		{
 			"#": "17",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
@@ -61,6 +41,16 @@
 			"label": "O1: Relay Type"
 		},
 		{
+			"#": "36",
+			"$import": "templates/wave_template.json#power_change_report_treshold",
+			"label": "O1: Power Change Report Threshold"
+		},
+		{
+			"#": "39",
+			"$import": "templates/wave_template.json#min_time_between_reports",
+			"label": "O1: Minimum Time Between Power Reports"
+		},
+		{
 			"#": "91",
 			"$import": "templates/wave_template.json#alarm_configuration",
 			"label": "Alarm Configuration: Water"
@@ -79,6 +69,11 @@
 			"#": "94",
 			"$import": "templates/wave_template.json#alarm_configuration",
 			"label": "Alarm Configuration: Heat"
+		},
+		{
+			"#": "105",
+			"$import": "templates/wave_template.json#led_intensity",
+			"label": "Signal LED Intensity"
 		},
 		{
 			"#": "120",
