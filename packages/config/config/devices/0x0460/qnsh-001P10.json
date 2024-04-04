@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "71",
-			"label": "Operating Modes",
+			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -101,40 +101,46 @@
 		},
 		{
 			"#": "72",
-			"label": "Venetian Mode Time",
-			"description": "0: disabled, 1-32767: enabled",
+			"label": "Venetian Mode: Turning Time",
+			"description": "Time required for the slats to make a full turn (180°)",
 			"valueSize": 2,
 			"unit": "0.01 seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 150
+			"defaultValue": 150,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "73",
-			"label": "Slats Return Previus Position",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Venetian Mode: Restore Slats Position After Moving",
+			"defaultValue": 1
+		},
+		{
+			"#": "76",
+			"label": "Motor Operation Detection",
+			"description": "Power consumption threshold at the end positions",
 			"valueSize": 1,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 1,
-			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Auto",
 					"value": 1
 				}
 			]
-		},
-		{
-			"#": "76",
-			"label": "Motor Operation Detection",
-			"description": "0: disabled, 1: enabled, 2-255 W",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
 		},
 		{
 			"#": "78",
@@ -163,7 +169,8 @@
 		},
 		{
 			"#": "80",
-			"label": "Motor Delay After Stop",
+			"label": "Delay Motor Stop",
+			"description": "How long to wait before stopping the motor after reaching the end position",
 			"valueSize": 1,
 			"unit": "0.1 seconds",
 			"minValue": 0,
@@ -173,24 +180,36 @@
 		},
 		{
 			"#": "85",
-			"label": "Power Consumption Delay Time",
-			"description": "0: time set automatically, 3-50: 0,3 - 5 seconds",
+			"label": "Power Consumption Measurement Delay",
+			"description": "Allowable range: 0, 3-50",
 			"valueSize": 1,
-			"unit": "100 ms",
+			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 30
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "Auto",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "91",
 			"label": "Motor Moving Time",
-			"description": "1 - 32000: seconds, 65000: unlimited time",
+			"description": "Allowable range: 1-32000, 65000",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65000,
 			"defaultValue": 120,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Unlimited",
+					"value": 65000
+				}
+			]
 		}
 	],
 	"metadata": {
