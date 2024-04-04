@@ -1182,6 +1182,17 @@ export class NotificationCCReport extends NotificationCC {
 					.map(([param, val]) => `\n  ${param}: ${num2hex(val)}`)
 					.join("");
 			}
+		} else if (
+			valueConfig?.parameter
+				instanceof NotificationParameterWithEnum
+			&& valueConfig.parameter.default != undefined
+		) {
+			const label = valueConfig.parameter.values.get(
+				valueConfig.parameter.default,
+			);
+			if (label) {
+				message["state parameters"] = label;
+			}
 		}
 		return {
 			...super.toLogEntry(applHost),
@@ -1190,11 +1201,10 @@ export class NotificationCCReport extends NotificationCC {
 	}
 
 	private parseEventParameters(applHost: ZWaveApplicationHost): void {
-		// This only makes sense for V2+ notifications with a non-empty event parameters buffer
+		// This only makes sense for V2+ notifications
 		if (
 			this.notificationType == undefined
 			|| this.notificationEvent == undefined
-			|| !Buffer.isBuffer(this.eventParameters)
 		) {
 			return;
 		}
@@ -1213,6 +1223,10 @@ export class NotificationCCReport extends NotificationCC {
 		if (
 			valueConfig.parameter instanceof NotificationParameterWithDuration
 		) {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters contain a Duration
 			this.eventParameters = Duration.parseReport(
 				this.eventParameters[0],
@@ -1221,6 +1235,10 @@ export class NotificationCCReport extends NotificationCC {
 			valueConfig.parameter
 				instanceof NotificationParameterWithCommandClass
 		) {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters **should** contain a CC, however there might be some exceptions
 			if (
 				this.eventParameters.length === 1
@@ -1298,6 +1316,10 @@ export class NotificationCCReport extends NotificationCC {
 		} else if (
 			valueConfig.parameter instanceof NotificationParameterWithValue
 		) {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters contain a named value
 			this.eventParameters = {
 				[valueConfig.parameter.propertyName]: this.eventParameters
@@ -1310,9 +1332,20 @@ export class NotificationCCReport extends NotificationCC {
 			valueConfig.parameter instanceof NotificationParameterWithEnum
 		) {
 			// The parameters may contain an enum value
-			this.eventParameters = this.eventParameters.length === 1
+			this.eventParameters = Buffer.isBuffer(this.eventParameters)
+					&& this.eventParameters.length === 1
 				? this.eventParameters[0]
 				: undefined;
+
+			// Some devices send notifications without an event parameter when they should.
+			// In this case, fall back to the default value where possible.
+
+			if (
+				this.eventParameters == undefined
+				&& valueConfig.parameter.default != undefined
+			) {
+				this.eventParameters = valueConfig.parameter.default;
+			}
 		}
 	}
 
