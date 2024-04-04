@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.5.2 (2024-04-04)
+### Bugfixes
+* Add workaround for devices that omit notification event parameters instead of sending "no data" (#6719)
+
+### Config file changes
+* Added 11 Shelly Qubino Wave devices (#6633)
+* Add Heatit Leakage Water Stopper (#6605)
+* Add Ring Smoke/CO Listener (#6591)
+* Add ZVIDAR Z-TRV-V01 thermostatic valve (#6542)
+* Add Safe Grow NSG-AB-02 Z-Wave Plus Smart Outlet Plug (#6535)
+* Add a new productId and add parameters to 14297/ZW1002 outlet (#6517)
+
 ## 12.5.1 (2024-04-03)
 ### Bugfixes
 * Fix/improve route diagnostics for Z-Wave LR devices (#6718)
