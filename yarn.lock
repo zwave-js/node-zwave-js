@@ -526,10 +526,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/json@npm:^0.19.1":
-  version: 0.19.1
-  resolution: "@dprint/json@npm:0.19.1"
-  checksum: 7aad329c91625852d131b9632a315cc182db0321ec506a425f47f75eb43bf7f6580a268517c932e5f41dcca3b2499f16913d5a0aca1ff597bac996dc84378925
+"@dprint/json@npm:^0.19.2":
+  version: 0.19.2
+  resolution: "@dprint/json@npm:0.19.2"
+  checksum: 25f763f276d2fd5d923262d1776377a61615ef887904eacfb3889baaec08255e5cd555493e9bc5fefbd4b15aff28febae4d0134710aad7e30ca0a818bb9749e4
   languageName: node
   linkType: hard
 
@@ -561,17 +561,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/markdown@npm:^0.16.3":
-  version: 0.16.3
-  resolution: "@dprint/markdown@npm:0.16.3"
-  checksum: 393424a7e6a2f352d698fe848cd9194262f024d0fc259ad2e558bd5b23ffca34a59f69059a4ec4fd00c978375c179f9e89cca6ee388b3f8570483da92ec378bf
+"@dprint/markdown@npm:^0.16.4":
+  version: 0.16.4
+  resolution: "@dprint/markdown@npm:0.16.4"
+  checksum: ba2cf2ca41c4d5fd90d6fa657d303cfb72013f436d988939f45d067178b94634f43a7cb7d2bfa3b990aa00695f5475b8eb9791e33767266a42e881d9d2f1621b
   languageName: node
   linkType: hard
 
-"@dprint/typescript@npm:^0.88.10":
-  version: 0.88.10
-  resolution: "@dprint/typescript@npm:0.88.10"
-  checksum: ff4b4cd42b1f08ce98874d7292263f2f576b61dcd609f9f7ad3bac7dcaa76e679c37c9f63619660ec03d46844f6111e5b5e236dd463ab709b40118c9b9c31ad4
+"@dprint/typescript@npm:^0.90.0":
+  version: 0.90.0
+  resolution: "@dprint/typescript@npm:0.90.0"
+  checksum: f42aabb44c7845dc2fbeefe74dd5bfa347426825498692eaf2f9d448c63b9e41a60d7e84e2cd44a2abce3a90041eb63770c9483e395bdee72482d279ce81c70c
   languageName: node
   linkType: hard
 
@@ -2068,9 +2068,9 @@ __metadata:
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
     "@dprint/formatter": ^0.2.1
-    "@dprint/json": ^0.19.1
-    "@dprint/markdown": ^0.16.3
-    "@dprint/typescript": ^0.88.10
+    "@dprint/json": ^0.19.2
+    "@dprint/markdown": ^0.16.4
+    "@dprint/typescript": ^0.90.0
     "@types/fs-extra": ^11.0.1
     "@types/globrex": ^0.1.2
     "@types/node": ^18.17.14
@@ -2135,9 +2135,9 @@ __metadata:
     "@commitlint/cli": ^17.7.1
     "@commitlint/config-conventional": ^17.7.0
     "@dprint/formatter": ^0.2.1
-    "@dprint/json": ^0.19.1
-    "@dprint/markdown": ^0.16.3
-    "@dprint/typescript": ^0.88.10
+    "@dprint/json": ^0.19.2
+    "@dprint/markdown": ^0.16.4
+    "@dprint/typescript": ^0.90.0
     "@microsoft/api-extractor": ^7.37.3
     "@monorepo-utils/workspaces-to-typescript-project-references": ^2.10.2
     "@tsconfig/node18": ^18.2.1
