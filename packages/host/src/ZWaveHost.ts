@@ -29,8 +29,10 @@ export interface ZWaveHost {
 
 	/** Management of Security S0 keys and nonces */
 	securityManager: SecurityManager | undefined;
-	/** Management of Security S2 keys and nonces */
+	/** Management of Security S2 keys and nonces (Z-Wave Classic) */
 	securityManager2: SecurityManager2 | undefined;
+	/** Management of Security S2 keys and nonces (Z-Wave Long Range) */
+	securityManagerLR: SecurityManager2 | undefined;
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.

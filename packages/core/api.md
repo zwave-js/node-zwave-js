@@ -338,6 +338,8 @@ export enum CommandClasses {
     // (undocumented)
     "Window Covering" = 106,
     // (undocumented)
+    "Z-Wave Long Range" = 4,
+    // (undocumented)
     "Z-Wave Plus Info" = 94,
     // (undocumented)
     "Z-Wave Protocol" = 1,
@@ -867,6 +869,11 @@ export function encodeFloatWithScale(value: number, scale: number, override?: {
     precision?: number;
 }): Buffer;
 
+// Warning: (ae-missing-release-tag) "encodeLongRangeNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function encodeLongRangeNodeBitMask(nodeIDs: readonly number[], startValue: number): Buffer;
+
 // Warning: (ae-missing-release-tag) "encodeMaybeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "UNKNOWN_STATE" has more than one declaration; you need to add a TSDoc member reference selector
 //
@@ -886,17 +893,17 @@ export function encodeNodeID(nodeId: number, type?: NodeIDType): Buffer;
 // Warning: (ae-missing-release-tag) "encodeNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeInformationFrame(info: NodeInformationFrame): Buffer;
+export function encodeNodeInformationFrame(info: NodeInformationFrame, isLongRange?: boolean): Buffer;
 
 // Warning: (ae-missing-release-tag) "encodeNodeProtocolInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeProtocolInfo(info: NodeProtocolInfo): Buffer;
+export function encodeNodeProtocolInfo(info: NodeProtocolInfo, isLongRange?: boolean): Buffer;
 
 // Warning: (ae-missing-release-tag) "encodeNodeProtocolInfoAndDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function encodeNodeProtocolInfoAndDeviceClass(info: NodeProtocolInfoAndDeviceClass): Buffer;
+export function encodeNodeProtocolInfoAndDeviceClass(info: NodeProtocolInfoAndDeviceClass, isLongRange?: boolean): Buffer;
 
 // Warning: (ae-missing-release-tag) "encodeNodeUpdatePayload" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1205,6 +1212,11 @@ export function isEncapsulationCC(cc: CommandClasses): boolean;
 // @public (undocumented)
 export function isExtendedCCId(ccId: CommandClasses): boolean;
 
+// Warning: (ae-missing-release-tag) "isLongRangeNodeId" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isLongRangeNodeId(nodeId: number): boolean;
+
 // Warning: (ae-missing-release-tag) "isManagementCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1446,6 +1458,18 @@ export type LogValueArgs<T> = T & {
     nodeId: number;
     internal?: boolean;
 };
+
+// Warning: (ae-missing-release-tag) "LongRangeChannel" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum LongRangeChannel {
+    // (undocumented)
+    A = 1,
+    // (undocumented)
+    B = 2,
+    // (undocumented)
+    Unknown = 0
+}
 
 // Warning: (ae-missing-release-tag) "managementCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1723,6 +1747,16 @@ export const NOT_KNOWN: undefined;
 // @public (undocumented)
 export type NOT_KNOWN = typeof NOT_KNOWN;
 
+// Warning: (ae-missing-release-tag) "NUM_LR_NODEMASK_SEGMENT_BYTES" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const NUM_LR_NODEMASK_SEGMENT_BYTES: number;
+
+// Warning: (ae-missing-release-tag) "NUM_LR_NODES_PER_SEGMENT" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const NUM_LR_NODES_PER_SEGMENT = 128;
+
 // Warning: (ae-missing-release-tag) "NUM_NODEMASK_BYTES" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1741,7 +1775,7 @@ export function parseApplicationNodeInformation(nif: Buffer): ApplicationNodeInf
 // Warning: (ae-missing-release-tag) "parseBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function parseBitMask(mask: Buffer, startValue?: number): number[];
+export function parseBitMask(mask: Buffer, startValue?: number, numBits?: number): number[];
 
 // Warning: (ae-missing-release-tag) "parseBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1784,6 +1818,11 @@ export function parseFloatWithScale(payload: Buffer, allowEmpty: true): {
     bytesRead: number;
 };
 
+// Warning: (ae-missing-release-tag) "parseLongRangeNodeBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function parseLongRangeNodeBitMask(mask: Buffer, startValue: number): number[];
+
 // Warning: (ae-missing-release-tag) "parseMaybeBoolean" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "UNKNOWN_STATE" has more than one declaration; you need to add a TSDoc member reference selector
 //
@@ -1812,17 +1851,17 @@ export function parseNodeID(buffer: Buffer, type?: NodeIDType, offset?: number):
 // Warning: (ae-missing-release-tag) "parseNodeInformationFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeInformationFrame(buffer: Buffer): NodeInformationFrame;
+export function parseNodeInformationFrame(buffer: Buffer, isLongRange?: boolean): NodeInformationFrame;
 
 // Warning: (ae-missing-release-tag) "parseNodeProtocolInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeProtocolInfo(buffer: Buffer, offset: number): NodeProtocolInfo;
+export function parseNodeProtocolInfo(buffer: Buffer, offset: number, isLongRange?: boolean): NodeProtocolInfo;
 
 // Warning: (ae-missing-release-tag) "parseNodeProtocolInfoAndDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
+export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer, isLongRange?: boolean): {
     info: NodeProtocolInfoAndDeviceClass;
     bytesRead: number;
 };

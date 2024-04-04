@@ -118,6 +118,7 @@ export interface ZWaveHost {
     ownNodeId: number;
     securityManager: SecurityManager | undefined;
     securityManager2: SecurityManager2 | undefined;
+    securityManagerLR: SecurityManager2 | undefined;
     // (undocumented)
     setSecurityClass(nodeId: number, securityClass: SecurityClass, granted: boolean): void;
 }

@@ -1,0 +1,155 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "Z-TRV-V01",
+	"description": "Thermostatic Radiator Valve",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0400"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Open Window Detection",
+			"description": "When the room temperature drops by 6 °C in 4 minutes while heating, TRV will automatically close the valve and display 'OP'. When the room temperature increases by 2 °C again, normal operation resumes."
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Anti-Freezing Function",
+			"description": "When the room temperature drops below 5 °C while, the thermostat automatically turns on until the temperature rises to 8 °C"
+		},
+		{
+			"#": "3",
+			"label": "Temperature Calibration",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": -6,
+			"maxValue": 6,
+			"defaultValue": 0
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Away Mode"
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Anti-Scale Function",
+			"description": "Operate the valve for 30 seconds every two weeks to keep it operational. The display will show 'AS' and return to normal operation afterwards."
+		},
+		{
+			"#": "6",
+			"label": "Valve Opening Level Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 1
+		},
+		{
+			"#": "7",
+			"label": "Temperature Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 267840,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Temperature Change Report Threshold",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5
+		},
+		{
+			"#": "9",
+			"label": "Battery Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 267840,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Battery Change Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Child Lock"
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "External Temperature Sensor",
+			"description": "Use an external temperature sensor's value (parameter 13) instead of the internal sensor."
+		},
+		{
+			"#": "13",
+			"label": "External Temperature Value",
+			"description": "Use this parameter to send an external temperature value to the TRV.",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": -500,
+			"maxValue": 500,
+			"defaultValue": 0
+		},
+		{
+			"#": "14",
+			"label": "External Temperature Value Timeout",
+			"description": "How long to wait for an update from the external temperature sensor before reverting to the internal sensor.",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 300,
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "No timeout",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Power on your TRV. \n2. Set your Z-Wave controller into add/inclusion mode.\n3. In 'OF' state, short press rotary plate three times unit this screen shows '--'.\n4. The screen will show 'PA' after few seconds, whick meant the inclusion is successful. And the signal icon will light on. Otherwise, the inclusion is failed, which you will need to repeat the process.",
+		"exclusion": "1. Power on your TRV. \n2. Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer. \n3. In 'OF' state, short press rotary plate three times unit this screen shows '--'.\n4. The screen will turn back to 'OF' after few seconds. which meant the exclusion is successful. The signal light turn off.",
+		"reset": "Use this procedure only in the event that the primary controller is lost or otherwise inoperable. \n1. In 'OF' state, hold rotary plate for at least 5 seconds and release when screen will blink 'OF'. When successful, the screen will show 'OF' in solid for 2 seconds then turn off."
+	}
+}

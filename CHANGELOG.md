@@ -4,6 +4,38 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.5.1 (2024-04-03)
+### Bugfixes
+* Fix/improve route diagnostics for Z-Wave LR devices (#6718)
+
+## 12.5.0 (2024-04-02)
+This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://zwave-js.github.io/node-zwave-js/#/getting-started/long-range) to get started.
+
+### Features
+* Support Z-Wave Long Range (#6401, #6620)
+
+### Config file changes
+* Remove Association Groups 2 & 3 from AEON Labs DSB09 (#6691)
+* Correct group 3 label for GE/Enbrighten 26931/ZW4006 (#6703)
+* Add new Fingerprint for Ring Contact sensor (#6676)
+* Preserve root endpoint in Vision ZL7432 (#6675)
+* Add new Product ID to Fibaro Smoke Detector (#6603)
+* Add Product ID for Benext Energy Switch FW1.6 (#6602)
+* Add fingerprint for Ring Glass Break Sensor EU (#6590)
+* Change MH9-CO2 Temperature Reporting Threshold step size to 0.1 (#6581)
+* Add new product ID to Fibaro FGS-213 (#6576)
+* Add units, improve descriptions for Everspring ST814 (#6712)
+* Label and parameter definitions for Sensative Drip 700 (#6514)
+* Override supported sensor scales for HELTUN HE-ZW-THERM-FL2 (#6711)
+
+## 12.4.4 (2024-02-10)
+### Bugfixes
+* NVM backups can now be restored onto 800 series controllers (#6670)
+
+### Config file changes
+* Use Color Switch V2 for Inovelli LZW42 (#6654)
+* Correct Zooz ZEN1x timer config params (#6648)
+
 ## 12.4.3 (2024-01-25)
 ### Bugfixes
 * Reduce idle CPU load (#6640)

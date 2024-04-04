@@ -38,6 +38,8 @@ export interface MessageDeserializationOptions {
 	parseCCs?: boolean;
 	/** If known already, this contains the SDK version of the stick which can be used to interpret payloads differently */
 	sdkVersion?: string;
+	/** Optional context used during deserialization */
+	context?: unknown;
 }
 
 /**
@@ -251,8 +253,19 @@ export class Message {
 	public static from(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
+		contextStore?: Map<FunctionType, Record<string, unknown>>,
 	): Message {
 		const Constructor = Message.getConstructor(options.data);
+
+		// Take the context out of the context store if it exists
+		if (contextStore) {
+			const functionType = getFunctionTypeStatic(Constructor)!;
+			if (contextStore.has(functionType)) {
+				options.context = contextStore.get(functionType)!;
+				contextStore.delete(functionType);
+			}
+		}
+
 		const ret = new Constructor(host, options);
 		return ret;
 	}

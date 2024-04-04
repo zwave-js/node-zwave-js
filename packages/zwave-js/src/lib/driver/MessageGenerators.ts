@@ -568,8 +568,8 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			);
 		}
 
-		const secMan = driver.securityManager2!;
 		const nodeId = msg.command.nodeId;
+		const secMan = driver.getSecurityManager2(nodeId)!;
 		const spanState = secMan.getSPANState(nodeId);
 		let additionalTimeoutMs: number | undefined;
 
@@ -742,7 +742,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 			);
 		}
 
-		const secMan = driver.securityManager2!;
+		const secMan = driver.getSecurityManager2(msg.command.nodeId)!;
 		const group = secMan.getMulticastGroup(groupId);
 		if (!group) {
 			throw new ZWaveError(

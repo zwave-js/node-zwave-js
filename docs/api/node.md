@@ -1152,6 +1152,14 @@ While the volume for sound switch commands can be provided on a per-command basi
 
 This can be done using the `defaultVolume` property. It accepts a volume between 0 and 100 (in `%`) and will be used for all sound switch commands that do not specify a volume.
 
+### `protocol`
+
+```ts
+readonly protocol: Protocols
+```
+
+Which protocol is used to communicate with this node, Z-Wave (Classic) or Z-Wave Long Range.
+
 ## ZWaveNode events
 
 The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc.
