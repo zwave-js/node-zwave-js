@@ -9,59 +9,57 @@
 				"value": 0
 			},
 			{
-				"label": "Toggle switch (follow switch)",
+				"label": "Toggle switch (Follow switch)",
 				"value": 1
 			},
 			{
-				"label": "Toggle switch (change on toggle)",
+				"label": "Toggle switch (Change on toggle)",
 				"value": 2
 			}
 		]
 	},
-	"sw1_sw2_swap": {
-		"label": "SW1 & SW2: Swap",
-		"description": "swaped state SW1 control O2, SW2 control O1)",
+	"swap_inputs": {
+		"label": "Swap Inputs",
 		"valueSize": 1,
 		"defaultValue": 0,
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "default",
+				"label": "Normal (SW1 - O1, SW2 - O2)",
 				"value": 0
 			},
 			{
-				"label": "swapped",
+				"label": "Swapped (SW1 - O2, SW2 - O1)",
 				"value": 1
 			}
 		]
 	},
-	"o1_o2_swap": {
-		"label": "O1 & O2: Swap",
-		"description": "swaped state O1 - close, O2 - open",
+	"swap_outputs": {
+		"label": "Swap Outputs",
 		"valueSize": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "default",
+				"label": "Normal",
 				"value": 0
 			},
 			{
-				"label": "swapped",
+				"label": "Swapped (O1 - close, O2 - open)",
 				"value": 1
 			}
 		]
 	},
 	"auto_off_timer": {
-		"description": "The timer resets to zero each time the Device receives an ON command",
+		"description": "The timer resets to zero each time the device receives an ON command",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 32535,
 		"defaultValue": 0
 	},
 	"auto_on_timer": {
-		"description": "The timer resets to zero each time the Device receives an OFF command",
+		"description": "The timer resets to zero each time the device receives an OFF command",
 		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 32535,
@@ -73,7 +71,7 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Seconds",
+				"label": "seconds",
 				"value": 0
 			},
 			{
@@ -112,7 +110,6 @@
 		"defaultValue": 30
 	},
 	"alarm_configuration": {
-		"description": "This parameter determines which alarm frames the Device should respond to and how.",
 		"valueSize": 4,
 		"defaultValue": 0,
 		"allowManualEntry": false,
@@ -157,7 +154,6 @@
 		]
 	},
 	"serial_number": {
-		"description": "This parameter contains a part of devices serial number.",
 		"valueSize": 4,
 		"minValue": 0,
 		"maxValue": 2147483647,
