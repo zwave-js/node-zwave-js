@@ -313,3 +313,110 @@ integrationTest("The 'simple' Door state value works correctly", {
 		t.is(node.getValue(valueSimple.id), 0x17);
 	},
 });
+
+integrationTest.only(
+	"Notification types with 'replace'-type enums fall back to the default value if the event parameter is not contained in the CC",
+	{
+		debug: true,
+
+		nodeCapabilities: {
+			commandClasses: [
+				{
+					ccId: CommandClasses.Notification,
+					version: 8,
+					supportsV1Alarm: false,
+					notificationTypesAndEvents: {
+						// Water Alarm - Water pressure alarm status
+						[0x05]: [0x07],
+					},
+				},
+			],
+		},
+
+		testBody: async (t, driver, node, mockController, mockNode) => {
+			await node.commandClasses.Notification.getSupportedEvents(0x06);
+
+			const waterPressureAlarmValueId =
+				NotificationCCValues.notificationVariable(
+					"Water Alarm",
+					"Water pressure alarm status",
+				).id;
+			const states = (
+				node.getValueMetadata(
+					waterPressureAlarmValueId,
+				) as ValueMetadataNumeric
+			).states;
+			t.deepEqual(states, {
+				[0x00]: "idle",
+				[0x01]: "No data",
+				[0x02]: "Below low threshold",
+				[0x03]: "Above high threshold",
+				[0x04]: "Max",
+			});
+
+			// Send notifications to the node
+			let cc = new NotificationCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				notificationType: 0x05,
+				notificationEvent: 0x07,
+				eventParameters: Buffer.from([0x02]), // Below low threshold
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			// wait a bit for the value to be updated
+			await wait(100);
+
+			let value = node.getValue(waterPressureAlarmValueId);
+			t.is(value, 0x02);
+
+			// Now send one without an event parameter
+			cc = new NotificationCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
+				notificationType: 0x05,
+				notificationEvent: 0x07,
+			});
+			await mockNode.sendToController(
+				createMockZWaveRequestFrame(cc, {
+					ackRequested: false,
+				}),
+			);
+			await wait(100);
+
+			value = node.getValue(waterPressureAlarmValueId);
+			t.is(value, 0x01);
+
+			// cc = new NotificationCCReport(mockNode.host, {
+			// 	nodeId: mockController.host.ownNodeId,
+			// 	notificationType: 0x06,
+			// 	notificationEvent: 0x16, // open
+			// });
+			// await mockNode.sendToController(
+			// 	createMockZWaveRequestFrame(cc, {
+			// 		ackRequested: false,
+			// 	}),
+			// );
+			// await wait(100);
+
+			// value = node.getValue(waterPressureAlarmValueId);
+			// t.is(value, 0x16);
+
+			// cc = new NotificationCCReport(mockNode.host, {
+			// 	nodeId: mockController.host.ownNodeId,
+			// 	notificationType: 0x06,
+			// 	notificationEvent: 0x17, // closed
+			// });
+			// await mockNode.sendToController(
+			// 	createMockZWaveRequestFrame(cc, {
+			// 		ackRequested: false,
+			// 	}),
+			// );
+			// await wait(100);
+
+			// value = node.getValue(waterPressureAlarmValueId);
+			// t.is(value, 0x17);
+		},
+	},
+);
