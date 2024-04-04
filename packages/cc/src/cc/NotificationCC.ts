@@ -1191,7 +1191,7 @@ export class NotificationCCReport extends NotificationCC {
 				valueConfig.parameter.default,
 			);
 			if (label) {
-				message["state parameters"] = label;
+				message["state parameters"] = `${label} (omitted)`;
 			}
 		}
 		return {
