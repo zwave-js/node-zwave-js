@@ -64,13 +64,13 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.37.3",
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.17.14",
+    "@types/node": "^18.19.29",
     "@types/semver": "^7.5.1",
     "@types/yargs": "^17.0.24",
     "ava": "^5.3.1",
     "del-cli": "^5.1.0",
-    "esbuild": "0.19.2",
-    "esbuild-register": "^3.4.2",
-    "typescript": "5.2.2"
+    "esbuild": "0.20.2",
+    "esbuild-register": "^3.5.0",
+    "typescript": "5.4.4"
   }
 }

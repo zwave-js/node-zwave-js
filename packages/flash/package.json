@@ -45,9 +45,9 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.17.14",
+    "@types/node": "^18.19.29",
     "@types/yargs": "^17.0.24",
     "del-cli": "^5.1.0",
-    "typescript": "5.2.2"
+    "typescript": "5.4.4"
   }
 }
