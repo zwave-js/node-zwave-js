@@ -64,7 +64,7 @@
     "winston": "^3.10.0"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.37.3",
+    "@microsoft/api-extractor": "^7.43.0",
     "@serialport/binding-mock": "^10.2.2",
     "@serialport/bindings-interface": "*",
     "@types/node": "^18.19.29",
