@@ -314,10 +314,10 @@ integrationTest("The 'simple' Door state value works correctly", {
 	},
 });
 
-integrationTest.only(
+integrationTest(
 	"Notification types with 'replace'-type enums fall back to the default value if the event parameter is not contained in the CC",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			commandClasses: [

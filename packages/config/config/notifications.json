@@ -303,7 +303,7 @@
 								"0x04": "Max"
 							},
 							// Translate missing event parameter to "no data"
-							"default": 1
+							"default": "0x01"
 						}
 					}
 				}
@@ -322,7 +322,7 @@
 								"0x04": "Max"
 							},
 							// Translate missing event parameter to "no data"
-							"default": 1
+							"default": "0x01"
 						}
 					}
 				}
@@ -340,7 +340,7 @@
 								"0x03": "Above high threshold"
 							},
 							// Translate missing event parameter to "no data"
-							"default": 1
+							"default": "0x01"
 						}
 					}
 				}
@@ -358,7 +358,7 @@
 								"0x03": "Above high threshold"
 							},
 							// Translate missing event parameter to "no data"
-							"default": 1
+							"default": "0x01"
 						}
 					}
 				}
@@ -1259,7 +1259,7 @@
 								"0x04": "Max"
 							},
 							// Translate missing event parameter to "no data"
-							"default": 1
+							"default": "0x01"
 						}
 					}
 				}
@@ -1278,7 +1278,7 @@
 								"0x04": "Max"
 							},
 							// Translate missing event parameter to "no data"
-							"default": 1
+							"default": "0x01"
 						}
 					}
 				}
