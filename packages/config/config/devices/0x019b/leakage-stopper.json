@@ -2,7 +2,7 @@
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "BVS-ZWU",
-	"description": "HeatIT Leakage Stopper",
+	"description": "Leakage Stopper",
 	"devices": [
 		{
 			"productType": "0x0101",
