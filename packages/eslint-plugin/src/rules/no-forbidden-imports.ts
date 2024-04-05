@@ -213,7 +213,7 @@ export const noForbiddenImports: Rule = ESLintUtils.RuleCreator.withoutDocs({
 		}
 
 		// Remember which source files we have already visited
-		const visitedSourceFiles = new Set<string>(context.getFilename());
+		const visitedSourceFiles = new Set<string>(context.filename);
 		let todo: { file: ts.SourceFile; importStack: string[] }[] = [];
 		const resolverContext: ResolverContext = {
 			program: services.program,

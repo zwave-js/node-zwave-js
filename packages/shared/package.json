@@ -55,15 +55,15 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.37.3",
+    "@microsoft/api-extractor": "^7.43.0",
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.17.14",
+    "@types/node": "^18.19.29",
     "@types/sinon": "^10.0.16",
     "ava": "^5.3.1",
     "del-cli": "^5.1.0",
-    "esbuild": "0.19.2",
-    "esbuild-register": "^3.4.2",
+    "esbuild": "0.20.2",
+    "esbuild-register": "^3.5.0",
     "sinon": "^15.2.0",
-    "typescript": "5.2.2"
+    "typescript": "5.4.4"
   }
 }

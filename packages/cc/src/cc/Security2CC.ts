@@ -123,7 +123,7 @@ function getSecurityManager(
 	destination: MulticastDestination | number,
 ): SecurityManager2 | undefined {
 	const longRange = isLongRangeNodeId(
-		isArray(destination) ? destination[0]! : destination,
+		isArray(destination) ? destination[0] : destination,
 	);
 	return longRange
 		? host.securityManagerLR
