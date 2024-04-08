@@ -5846,7 +5846,10 @@ protocol version:      ${this.protocolVersion}`;
 						&& !isRssiError(txReport.ackRSSI)
 					) {
 						// If possible, determine the SNR margin from the report
-						if (txReport.measuredNoiseFloor != undefined) {
+						if (
+							txReport.measuredNoiseFloor != undefined
+							&& !isRssiError(txReport.measuredNoiseFloor)
+						) {
 							const currentSNRMargin = txReport.ackRSSI
 								- txReport.measuredNoiseFloor;
 							// And remember it if it's the lowest we've seen so far
