@@ -295,7 +295,10 @@ jobs:
   gh-cc-table:
     name: Update CC implementation status
     # Only run for master branch and don't run in forks
-    if: github.repository == 'zwave-js/node-zwave-js' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: |
+      github.repository == 'zwave-js/node-zwave-js' &&
+      github.ref == 'refs/heads/master' &&
+      github.event_name == 'push'
 
     needs: [build]
 
@@ -322,18 +325,23 @@ jobs:
       run: yarn build $TURBO_FLAGS
 
     - name: Update CC table # (maybe)
-      uses: ./.github/actions/gh-cc-table
+      uses: actions/github-script@v7
       with:
-        githubToken: ${{ secrets.BOT_TOKEN }}
-      env:
-        CI: true
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateCCImplementationOverview.js`);
+          return main({github, context});
 
   # ===================
 
   generate-overview:
     name: Update toLogEntry overview
     # Only run for master branch and don't run in forks
-    if: github.repository == 'zwave-js/node-zwave-js' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: |
+      github.repository == 'zwave-js/node-zwave-js' &&
+      github.ref == 'refs/heads/master' &&
+      github.event_name == 'push'
 
     needs: [build]
 
@@ -360,11 +368,13 @@ jobs:
       run: yarn build $TURBO_FLAGS
 
     - name: Update overview
-      uses: ./.github/actions/toLogEntry
+      uses: actions/github-script@v7
       with:
-        githubToken: ${{ secrets.BOT_TOKEN }}
-      env:
-        CI: true
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateToLogEntryOverview.js`);
+          return main({github, context});
 
   # ===================
 
