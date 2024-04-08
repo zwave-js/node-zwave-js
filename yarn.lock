@@ -255,6 +255,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@colors/colors@npm:1.6.0, @colors/colors@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@colors/colors@npm:1.6.0"
+  checksum: aa209963e0c3218e80a4a20553ba8c0fbb6fa13140540b4e5f97923790be06801fc90172c1114fc8b7e888b3d012b67298cde6b9e81521361becfaee400c662f
+  languageName: node
+  linkType: hard
+
 "@commitlint/cli@npm:^19.2.1":
   version: 19.2.1
   resolution: "@commitlint/cli@npm:19.2.1"
@@ -1546,6 +1553,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/triple-beam@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@types/triple-beam@npm:1.3.5"
+  checksum: 519b6a1b30d4571965c9706ad5400a200b94e4050feca3e7856e3ea7ac00ec9903e32e9a10e2762d0f7e472d5d03e5f4b29c16c0bd8c1f77c8876c683b2231f1
+  languageName: node
+  linkType: hard
+
 "@types/xml2js@npm:^0.4.12":
   version: 0.4.12
   resolution: "@types/xml2js@npm:0.4.12"
@@ -1843,7 +1857,7 @@ __metadata:
     sinon: ^15.2.0
     ts-pegjs: ^0.3.1
     typescript: 5.4.4
-    winston: ^3.10.0
+    winston: ^3.13.0
     xml2js: ^0.6.2
     yargs: ^17.7.2
   languageName: unknown
@@ -1857,7 +1871,7 @@ __metadata:
     "@microsoft/api-extractor": ^7.43.0
     "@types/node": ^18.19.29
     "@types/sinon": ^10.0.16
-    "@types/triple-beam": ^1.3.2
+    "@types/triple-beam": ^1.3.5
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.8
     ansi-colors: ^4.1.3
@@ -1866,15 +1880,15 @@ __metadata:
     del-cli: ^5.1.0
     esbuild: 0.20.2
     esbuild-register: ^3.5.0
-    logform: ^2.5.1
+    logform: ^2.6.0
     nrf-intel-hex: ^1.3.0
     reflect-metadata: ^0.1.13
     sinon: ^15.2.0
     triple-beam: "*"
     typescript: 5.4.4
-    winston: ^3.10.0
-    winston-daily-rotate-file: ^4.7.1
-    winston-transport: ^4.5.0
+    winston: ^3.13.0
+    winston-daily-rotate-file: ^5.0.0
+    winston-transport: ^4.7.0
   languageName: unknown
   linkType: soft
 
@@ -2085,7 +2099,7 @@ __metadata:
     serialport: ^12.0.0
     sinon: ^15.2.0
     typescript: 5.4.4
-    winston: ^3.10.0
+    winston: ^3.13.0
   languageName: unknown
   linkType: soft
 
@@ -2114,7 +2128,7 @@ __metadata:
   dependencies:
     "@microsoft/api-extractor": ^7.43.0
     "@types/node": ^18.19.29
-    "@types/triple-beam": ^1.3.2
+    "@types/triple-beam": ^1.3.5
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/serial": "workspace:*"
@@ -2126,7 +2140,7 @@ __metadata:
     esbuild-register: ^3.5.0
     triple-beam: "*"
     typescript: 5.4.4
-    winston-transport: ^4.5.0
+    winston-transport: ^4.7.0
   languageName: unknown
   linkType: soft
 
@@ -6030,17 +6044,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"logform@npm:^2.5.1":
-  version: 2.5.1
-  resolution: "logform@npm:2.5.1"
+"logform@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "logform@npm:2.6.0"
   dependencies:
-    "@colors/colors": 1.5.0
+    "@colors/colors": 1.6.0
     "@types/triple-beam": ^1.3.2
     fecha: ^4.2.0
     ms: ^2.1.1
     safe-stable-stringify: ^2.3.1
     triple-beam: ^1.3.0
-  checksum: 08fdf03be5bb69af33bac214eb4f6a0c83ad3821a30de498925fccb61e993e5a4a87470aab356ca2110c11e4643685bed5597ca5f46dd1cd11437c44a0e0e3c2
+  checksum: b9ea74bb75e55379ad0eb3e4d65ae6e8d02bc45b431c218162878bf663997ab9258a73104c2b30e09dd2db288bb83c8bf8748e46689d75f5e7e34cf69378d6df
   languageName: node
   linkType: hard
 
@@ -6730,10 +6744,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-hash@npm:^2.0.1":
-  version: 2.2.0
-  resolution: "object-hash@npm:2.2.0"
-  checksum: 55ba841e3adce9c4f1b9b46b41983eda40f854e0d01af2802d3ae18a7085a17168d6b81731d43fdf1d6bcbb3c9f9c56d22c8fea992203ad90a38d7d919bc28f1
+"object-hash@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "object-hash@npm:3.0.0"
+  checksum: 80b4904bb3857c52cc1bfd0b52c0352532ca12ed3b8a6ff06a90cd209dfda1b95cee059a7625eb9da29537027f68ac4619363491eedb2f5d3dddbba97494fd6c
   languageName: node
   linkType: hard
 
@@ -8414,6 +8428,13 @@ resolve@^1.10.0:
   languageName: node
   linkType: hard
 
+"triple-beam@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "triple-beam@npm:1.4.1"
+  checksum: 2e881a3e8e076b6f2b85b9ec9dd4a900d3f5016e6d21183ed98e78f9abcc0149e7d54d79a3f432b23afde46b0885bdcdcbff789f39bc75de796316961ec07f61
+  languageName: node
+  linkType: hard
+
 "ts-api-utils@npm:^1.0.1":
   version: 1.0.2
   resolution: "ts-api-utils@npm:1.0.2"
@@ -8843,36 +8864,36 @@ resolve@^1.10.0:
   languageName: node
   linkType: hard
 
-"winston-daily-rotate-file@npm:^4.7.1":
-  version: 4.7.1
-  resolution: "winston-daily-rotate-file@npm:4.7.1"
+"winston-daily-rotate-file@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "winston-daily-rotate-file@npm:5.0.0"
   dependencies:
     file-stream-rotator: ^0.6.1
-    object-hash: ^2.0.1
-    triple-beam: ^1.3.0
-    winston-transport: ^4.4.0
+    object-hash: ^3.0.0
+    triple-beam: ^1.4.1
+    winston-transport: ^4.7.0
   peerDependencies:
     winston: ^3
-  checksum: 227daea41f722caa017fc7d6f1f80d0e6c428491e57693e6bebc8312b85bcf3aace53cb3a925bda72fab59a6898fa127411d29348ec4b295e2263a7544cda611
+  checksum: 45d0a1c1d1a178a22a6f92f4248139e0889720947d5afa657314826d6ea48e7dceae37521e2de2ed3a121993c4ae4ddcb0b510613c489a68d2eed689a304bef5
   languageName: node
   linkType: hard
 
-"winston-transport@npm:^4.4.0, winston-transport@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "winston-transport@npm:4.5.0"
+"winston-transport@npm:^4.7.0":
+  version: 4.7.0
+  resolution: "winston-transport@npm:4.7.0"
   dependencies:
     logform: ^2.3.2
     readable-stream: ^3.6.0
     triple-beam: ^1.3.0
-  checksum: a56e5678a80b88a73e77ed998fc6e19d0db19c989a356b137ec236782f2bf58ae4511b11c29163f99391fa4dc12102c7bc5738dcb6543f28877fa2819adc3ee9
+  checksum: ce074b5c76a99bee5236cf2b4d30fadfaf1e551d566f654f1eba303dc5b5f77169c21545ff5c5e4fdad9f8e815fc6d91b989f1db34161ecca6e860e62fd3a862
   languageName: node
   linkType: hard
 
-"winston@npm:^3.10.0":
-  version: 3.10.0
-  resolution: "winston@npm:3.10.0"
+"winston@npm:^3.13.0":
+  version: 3.13.0
+  resolution: "winston@npm:3.13.0"
   dependencies:
-    "@colors/colors": 1.5.0
+    "@colors/colors": ^1.6.0
     "@dabh/diagnostics": ^2.0.2
     async: ^3.2.3
     is-stream: ^2.0.0
@@ -8882,8 +8903,8 @@ resolve@^1.10.0:
     safe-stable-stringify: ^2.3.1
     stack-trace: 0.0.x
     triple-beam: ^1.3.0
-    winston-transport: ^4.5.0
-  checksum: 47df0361220d12b46d1b3c98a1c380a3718321739d527a182ce7984fc20715e5b0b55db0bcd3fd076d1b1d3261903b890b053851cfd4bc028bda7951fa8ca2e0
+    winston-transport: ^4.7.0
+  checksum: 66f9fbbadb58e1632701e9c89391f217310c9455462148e163e060dcd25aed21351b0413bdbbf90e5c5fe9bc945fc5de6f53875ac7c7ef3061133a354fc678c0
   languageName: node
   linkType: hard
 
@@ -9159,7 +9180,7 @@ resolve@^1.10.0:
     sinon: ^15.2.0
     source-map-support: ^0.5.21
     typescript: 5.4.4
-    winston: ^3.10.0
+    winston: ^3.13.0
     xstate: 4.38.2
   bin:
     mock-server: bin/mock-server.js

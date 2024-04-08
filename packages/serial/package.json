@@ -61,7 +61,7 @@
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.8",
     "serialport": "^12.0.0",
-    "winston": "^3.10.0"
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.43.0",

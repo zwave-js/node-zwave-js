@@ -103,7 +103,7 @@
     "semver": "^7.5.4",
     "serialport": "^12.0.0",
     "source-map-support": "^0.5.21",
-    "winston": "^3.10.0",
+    "winston": "^3.13.0",
     "xstate": "4.38.2"
   },
   "devDependencies": {
