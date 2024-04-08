@@ -1,11 +1,9 @@
+// Creates or updates a PR with a documentation update
+
 // @ts-check
+/// <reference path="../bot-scripts/types.d.ts" />
 
 const exec = require("@actions/exec");
-const github = require("@actions/github");
-const core = require("@actions/core");
-
-const githubToken = core.getInput("githubToken");
-const octokit = github.getOctokit(githubToken).rest;
 
 const options = {
 	owner: "zwave-js",
@@ -17,7 +15,12 @@ const assignees = [];
 
 const checkPaths = ["docs/", "packages/*/api.md"];
 
-(async function main() {
+/**
+ * @param {{github: Github, context: Context}} param
+ */
+async function main(param) {
+	const { github, context } = param;
+
 	// check if our local working copy has any changes in the docs directory
 	const isChanged = !!(await exec.exec(
 		"git",
@@ -28,7 +31,7 @@ const checkPaths = ["docs/", "packages/*/api.md"];
 	));
 
 	// Check if a PR already exists
-	const PRs = await octokit.pulls.list({
+	const PRs = await github.rest.pulls.list({
 		...options,
 		state: "open",
 		head: `zwave-js:${branchName}`,
@@ -118,7 +121,7 @@ const checkPaths = ["docs/", "packages/*/api.md"];
 
 	if (!prNumber) {
 		// no PR exists, create one
-		const pr = await octokit.pulls.create({
+		const pr = await github.rest.pulls.create({
 			...options,
 			head: branchName,
 			base: "master",
@@ -131,20 +134,18 @@ const checkPaths = ["docs/", "packages/*/api.md"];
 	}
 	// Request review and add assignee
 	if (reviewers.length) {
-		await octokit.pulls.requestReviewers({
+		await github.rest.pulls.requestReviewers({
 			...options,
 			pull_number: prNumber,
 			reviewers,
 		});
 	}
 	if (assignees.length) {
-		await octokit.issues.addAssignees({
+		await github.rest.issues.addAssignees({
 			...options,
 			issue_number: prNumber,
 			assignees,
 		});
 	}
-})().catch((e) => {
-	console.error(e);
-	process.exit(1);
-});
+}
+module.exports = main;
