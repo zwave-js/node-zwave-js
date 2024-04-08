@@ -295,10 +295,11 @@ jobs:
   gh-cc-table:
     name: Update CC implementation status
     # Only run for master branch and don't run in forks
-    if: |
-      github.repository == 'zwave-js/node-zwave-js' &&
-      github.ref == 'refs/heads/master' &&
-      github.event_name == 'push'
+    if: github.repository == 'zwave-js/node-zwave-js'
+    # if: |
+    #   github.repository == 'zwave-js/node-zwave-js' &&
+    #   github.ref == 'refs/heads/master' &&
+    #   github.event_name == 'push'
 
     needs: [build]
 
@@ -338,10 +339,11 @@ jobs:
   generate-overview:
     name: Update toLogEntry overview
     # Only run for master branch and don't run in forks
-    if: |
-      github.repository == 'zwave-js/node-zwave-js' &&
-      github.ref == 'refs/heads/master' &&
-      github.event_name == 'push'
+    if: github.repository == 'zwave-js/node-zwave-js'
+    # if: |
+    #   github.repository == 'zwave-js/node-zwave-js' &&
+    #   github.ref == 'refs/heads/master' &&
+    #   github.event_name == 'push'
 
     needs: [build]
 
