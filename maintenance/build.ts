@@ -53,6 +53,20 @@ async function main() {
 		return;
 	}
 
+	console.log("Building transformers...");
+	await execa(
+		"yarn",
+		[
+			"workspace",
+			"@zwave-js/transformers",
+			"run",
+			"build",
+			"--verbose",
+			...buildArgs,
+		],
+		execOptions,
+	);
+
 	// Execute codegen tasks, so the rest can be built
 	console.log();
 	console.log("Running codegen tasks...");
