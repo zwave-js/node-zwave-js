@@ -8960,10 +8960,10 @@ resolve@^1.10.0:
   languageName: node
   linkType: hard
 
-"xstate@npm:4.38.2":
-  version: 4.38.2
-  resolution: "xstate@npm:4.38.2"
-  checksum: 04cc8a5ab40f85e2dc46c72c0737dec028ef5733e4d4074962d701632895b3208e1031be79e6e26b32667fcb161ed85da5a73c6f759430c9642144e696291e5f
+"xstate@npm:4.38.3":
+  version: 4.38.3
+  resolution: "xstate@npm:4.38.3"
+  checksum: b52e5bf349834ede65b1eadf9b160b818341739b1306e882c35dd6c4ddb92f18342f534d5080c5218f935254230721faca3d34b66cbb3b6f19d8496516f23eca
   languageName: node
   linkType: hard
 
@@ -9170,7 +9170,7 @@ resolve@^1.10.0:
     source-map-support: ^0.5.21
     typescript: 5.4.4
     winston: ^3.13.0
-    xstate: 4.38.2
+    xstate: 4.38.3
   bin:
     mock-server: bin/mock-server.js
   languageName: unknown
