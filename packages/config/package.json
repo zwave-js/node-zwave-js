@@ -63,7 +63,7 @@
     "json-logic-js": "^2.0.2",
     "json5": "^2.2.3",
     "semver": "^7.5.4",
-    "winston": "^3.10.0"
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.43.0",
