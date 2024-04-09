@@ -91,7 +91,6 @@
 		"yarn.lock",
 		// Build fresh when TS related stuff changes
 		"tsconfig.json",
-		"tsconfig.base.json",
 		"tsconfig.build.json"
 	]
 }
