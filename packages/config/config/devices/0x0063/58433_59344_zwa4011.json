@@ -72,7 +72,7 @@
 		}
 	],
 	"compat": {
-		// Needed for double-tap support
+		// Enables Basic Set via Group 3 as an alternative way to detect double taps (instead of Central Scene)
 		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
