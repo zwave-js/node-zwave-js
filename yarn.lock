@@ -887,30 +887,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@monorepo-utils/package-utils@npm:^2.10.2":
-  version: 2.10.2
-  resolution: "@monorepo-utils/package-utils@npm:2.10.2"
+"@monorepo-utils/package-utils@npm:^2.10.4":
+  version: 2.10.4
+  resolution: "@monorepo-utils/package-utils@npm:2.10.4"
   dependencies:
     globby: ^11.0.1
     load-json-file: ^6.2.0
     upath: ^2.0.1
     yaml: ^2.1.3
-  checksum: fa8ff74b63a5760bb5088c1897f2e82c77d8c5e60858141d354b434fcefdf19a8d590721ddec328821fecfe8797018bdb79ad20be02a19d168859d19f03823ad
+  checksum: aa55887ff790693e2db7158aa28fbf178c7041607e65f857f516306e6ff6a77d596151ee6d61519fce8369db8cffffd07ee6fb66b99f12619f3845985dc7543f
   languageName: node
   linkType: hard
 
-"@monorepo-utils/workspaces-to-typescript-project-references@npm:^2.10.2":
-  version: 2.10.2
-  resolution: "@monorepo-utils/workspaces-to-typescript-project-references@npm:2.10.2"
+"@monorepo-utils/workspaces-to-typescript-project-references@npm:^2.10.4":
+  version: 2.10.4
+  resolution: "@monorepo-utils/workspaces-to-typescript-project-references@npm:2.10.4"
   dependencies:
-    "@monorepo-utils/package-utils": ^2.10.2
+    "@monorepo-utils/package-utils": ^2.10.4
     comment-json: ^3.0.3
     meow: ^7.1.1
     semver-match: 0.1.1
     upath: ^2.0.1
   bin:
     workspaces-to-typescript-project-references: bin/cmd.js
-  checksum: 076575a837a6a928e029eeac284278e2953638a60632264d60e2efcdb216fba1d8de4fc2a74ab598ad71663a87cc595cbe3b8732da7d4845b44f1fb321a4da74
+  checksum: 34d539247bdcaff9f0182ec8654a5f63d81bd8b06e0947fb6ab3f8c72127684e45906510576fa1a15dd31d8b7d7ad99f29918e5a4ff9b21a74f45227f8b6ccef
   languageName: node
   linkType: hard
 
@@ -1275,21 +1275,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/fake-timers@npm:^10.0.2":
-  version: 10.0.2
-  resolution: "@sinonjs/fake-timers@npm:10.0.2"
-  dependencies:
-    "@sinonjs/commons": ^2.0.0
-  checksum: c62aa98e7cefda8dedc101ce227abc888dc46b8ff9706c5f0a8dfd9c3ada97d0a5611384738d9ba0b26b59f99c2ba24efece8e779bb08329e9e87358fa309824
-  languageName: node
-  linkType: hard
-
-"@sinonjs/fake-timers@npm:^10.3.0":
-  version: 10.3.0
-  resolution: "@sinonjs/fake-timers@npm:10.3.0"
+"@sinonjs/fake-timers@npm:^11.2.2":
+  version: 11.2.2
+  resolution: "@sinonjs/fake-timers@npm:11.2.2"
   dependencies:
     "@sinonjs/commons": ^3.0.0
-  checksum: 614d30cb4d5201550c940945d44c9e0b6d64a888ff2cd5b357f95ad6721070d6b8839cd10e15b76bf5e14af0bcc1d8f9ec00d49a46318f1f669a4bec1d7f3148
+  checksum: 68c29b0e1856fdc280df03ddbf57c726420b78e9f943a241b471edc018fb14ff36fdc1daafd6026cba08c3c7f50c976fb7ae11b88ff44cd7f609692ca7d25158
   languageName: node
   linkType: hard
 
@@ -1304,7 +1295,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/text-encoding@npm:^0.7.1":
+"@sinonjs/text-encoding@npm:^0.7.2":
   version: 0.7.2
   resolution: "@sinonjs/text-encoding@npm:0.7.2"
   checksum: fe690002a32ba06906cf87e2e8fe84d1590294586f2a7fd180a65355b53660c155c3273d8011a5f2b77209b819aa7306678ae6e4aea0df014bd7ffd4bbbcf1ab
@@ -1528,12 +1519,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sinon@npm:^10.0.20":
-  version: 10.0.20
-  resolution: "@types/sinon@npm:10.0.20"
+"@types/sinon@npm:^17.0.3":
+  version: 17.0.3
+  resolution: "@types/sinon@npm:17.0.3"
   dependencies:
     "@types/sinonjs__fake-timers": "*"
-  checksum: 7322771345c202b90057f8112e0d34b7339e5ae1827fb1bfe385fc9e38ed6a2f18b4c66e88d27d98c775f7f74fb1167c0c14f61ca64155786534541e6c6eb05f
+  checksum: c8e9956d9c90fe1ec1cc43085ae48897f93f9ea86e909ab47f255ea71f5229651faa070393950fb6923aef426c84e92b375503f9f8886ef44668b82a8ee49e9a
   languageName: node
   linkType: hard
 
@@ -1824,8 +1815,8 @@ __metadata:
     ansi-colors: ^4.1.3
     ava: ^5.3.1
     del-cli: ^5.1.0
-    fs-extra: ^11.1.1
-    reflect-metadata: ^0.1.13
+    fs-extra: ^11.2.0
+    reflect-metadata: ^0.2.2
     typescript: 5.4.4
   languageName: unknown
   linkType: soft
@@ -1841,7 +1832,7 @@ __metadata:
     "@types/node": ^18.19.31
     "@types/pegjs": ^0.10.6
     "@types/semver": ^7.5.8
-    "@types/sinon": ^10.0.20
+    "@types/sinon": ^17.0.3
     "@types/xml2js": ^0.4.14
     "@types/yargs": ^17.0.32
     "@zwave-js/core": "workspace:*"
@@ -1854,14 +1845,14 @@ __metadata:
     del-cli: ^5.1.0
     esbuild: 0.20.2
     esbuild-register: ^3.5.0
-    fs-extra: ^11.1.1
+    fs-extra: ^11.2.0
     got: ^13.0.0
     js-levenshtein: ^1.1.6
     json-logic-js: ^2.0.2
     json5: ^2.2.3
     pegjs: ^0.10.0
-    semver: ^7.5.4
-    sinon: ^15.2.0
+    semver: ^7.6.0
+    sinon: ^17.0.1
     ts-pegjs: ^0.3.1
     typescript: 5.4.4
     winston: ^3.13.0
@@ -1877,7 +1868,7 @@ __metadata:
     "@alcalzone/jsonl-db": ^3.1.1
     "@microsoft/api-extractor": ^7.43.0
     "@types/node": ^18.19.31
-    "@types/sinon": ^10.0.20
+    "@types/sinon": ^17.0.3
     "@types/triple-beam": ^1.3.5
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.8
@@ -1888,9 +1879,9 @@ __metadata:
     esbuild: 0.20.2
     esbuild-register: ^3.5.0
     logform: ^2.6.0
-    nrf-intel-hex: ^1.3.0
-    reflect-metadata: ^0.1.13
-    sinon: ^15.2.0
+    nrf-intel-hex: ^1.4.0
+    reflect-metadata: ^0.2.2
+    sinon: ^17.0.1
     triple-beam: "*"
     typescript: 5.4.4
     winston: ^3.13.0
@@ -1919,7 +1910,7 @@ __metadata:
     "@types/yargs": ^17.0.32
     "@zwave-js/core": "workspace:*"
     del-cli: ^5.1.0
-    fs-extra: ^11.1.1
+    fs-extra: ^11.2.0
     typescript: 5.4.4
     yargs: ^17.7.2
     zwave-js: "workspace:*"
@@ -1979,11 +1970,11 @@ __metadata:
     esbuild: 0.20.2
     esbuild-register: ^3.5.0
     execa: ^5.1.1
-    fs-extra: ^11.1.1
+    fs-extra: ^11.2.0
     globrex: ^0.1.2
     json5: ^2.2.3
     piscina: ^4.1.0
-    reflect-metadata: ^0.1.13
+    reflect-metadata: ^0.2.2
     ts-morph: ^22.0.0
     typescript: 5.4.4
     yargs: ^17.7.2
@@ -2006,9 +1997,9 @@ __metadata:
     del-cli: ^5.1.0
     esbuild: 0.20.2
     esbuild-register: ^3.5.0
-    fs-extra: ^11.1.1
-    reflect-metadata: ^0.1.13
-    semver: ^7.5.4
+    fs-extra: ^11.2.0
+    reflect-metadata: ^0.2.2
+    semver: ^7.6.0
     typescript: 5.4.4
     yargs: ^17.7.2
   bin:
@@ -2033,7 +2024,7 @@ __metadata:
     "@dprint/markdown": ^0.16.4
     "@dprint/typescript": ^0.90.0
     "@microsoft/api-extractor": ^7.43.0
-    "@monorepo-utils/workspaces-to-typescript-project-references": ^2.10.2
+    "@monorepo-utils/workspaces-to-typescript-project-references": ^2.10.4
     "@tsconfig/node18": ^18.2.4
     "@types/fs-extra": ^11.0.4
     "@types/node": ^18.19.31
@@ -2068,14 +2059,14 @@ __metadata:
     eslint-plugin-unicorn: ^52.0.0
     eslint-plugin-unused-imports: ^3.1.0
     execa: ^5.1.1
-    fs-extra: ^11.1.1
+    fs-extra: ^11.2.0
     husky: ^9.0.11
     json5: ^2.2.3
     jsonc-eslint-parser: ^2.4.0
     lint-staged: ^14.0.1
     p-queue: ^7.4.1
-    reflect-metadata: ^0.1.13
-    semver: ^7.5.4
+    reflect-metadata: ^0.2.2
+    semver: ^7.6.0
     source-map-support: ^0.5.21
     ts-patch: 3.1.2
     turbo: 1.7.4
@@ -2093,7 +2084,7 @@ __metadata:
     "@serialport/bindings-interface": "*"
     "@serialport/stream": ^12.0.0
     "@types/node": ^18.19.31
-    "@types/sinon": ^10.0.20
+    "@types/sinon": ^17.0.3
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -2104,7 +2095,7 @@ __metadata:
     esbuild: 0.20.2
     esbuild-register: ^3.5.0
     serialport: ^12.0.0
-    sinon: ^15.2.0
+    sinon: ^17.0.1
     typescript: 5.4.4
     winston: ^3.13.0
   languageName: unknown
@@ -2117,14 +2108,14 @@ __metadata:
     "@microsoft/api-extractor": ^7.43.0
     "@types/fs-extra": ^11.0.4
     "@types/node": ^18.19.31
-    "@types/sinon": ^10.0.20
+    "@types/sinon": ^17.0.3
     alcalzone-shared: ^4.0.8
     ava: ^5.3.1
     del-cli: ^5.1.0
     esbuild: 0.20.2
     esbuild-register: ^3.5.0
-    fs-extra: ^11.1.1
-    sinon: ^15.2.0
+    fs-extra: ^11.2.0
+    sinon: ^17.0.1
     typescript: 5.4.4
   languageName: unknown
   linkType: soft
@@ -2160,7 +2151,7 @@ __metadata:
     cpy-cli: ^5.0.0
     del-cli: ^5.1.0
     execa: ^5.1.1
-    fs-extra: ^11.1.1
+    fs-extra: ^11.2.0
     tsutils: ^3.21.0
     typescript: 5.4.4
   languageName: unknown
@@ -4609,14 +4600,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^11.1.1":
-  version: 11.1.1
-  resolution: "fs-extra@npm:11.1.1"
+"fs-extra@npm:^11.2.0":
+  version: 11.2.0
+  resolution: "fs-extra@npm:11.2.0"
   dependencies:
     graceful-fs: ^4.2.0
     jsonfile: ^6.0.1
     universalify: ^2.0.0
-  checksum: fb883c68245b2d777fbc1f2082c9efb084eaa2bbf9fddaa366130d196c03608eebef7fb490541276429ee1ca99f317e2d73e96f5ca0999eefedf5a624ae1edfd
+  checksum: b12e42fa40ba47104202f57b8480dd098aa931c2724565e5e70779ab87605665594e76ee5fb00545f772ab9ace167fe06d2ab009c416dc8c842c5ae6df7aa7e8
   languageName: node
   linkType: hard
 
@@ -5562,13 +5553,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isarray@npm:0.0.1":
-  version: 0.0.1
-  resolution: "isarray@npm:0.0.1"
-  checksum: 49191f1425681df4a18c2f0f93db3adb85573bcdd6a4482539d98eac9e705d8961317b01175627e860516a2fc45f8f9302db26e5a380a97a520e272e2a40a8d4
-  languageName: node
-  linkType: hard
-
 "isarray@npm:~1.0.0":
   version: 1.0.0
   resolution: "isarray@npm:1.0.0"
@@ -5763,10 +5747,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"just-extend@npm:^4.0.2":
-  version: 4.2.1
-  resolution: "just-extend@npm:4.2.1"
-  checksum: ff9fdede240fad313efeeeb68a660b942e5586d99c0058064c78884894a2690dc09bba44c994ad4e077e45d913fef01a9240c14a72c657b53687ac58de53b39c
+"just-extend@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "just-extend@npm:6.2.0"
+  checksum: 022024d6f687c807963b97a24728a378799f7e4af7357d1c1f90dedb402943d5c12be99a5136654bed8362c37a358b1793feaad3366896f239a44e17c5032d86
   languageName: node
   linkType: hard
 
@@ -6564,16 +6548,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nise@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "nise@npm:5.1.4"
+"nise@npm:^5.1.5":
+  version: 5.1.9
+  resolution: "nise@npm:5.1.9"
   dependencies:
-    "@sinonjs/commons": ^2.0.0
-    "@sinonjs/fake-timers": ^10.0.2
-    "@sinonjs/text-encoding": ^0.7.1
-    just-extend: ^4.0.2
-    path-to-regexp: ^1.7.0
-  checksum: bc57c10eaec28a6a7ddfb2e1e9b21d5e1fe22710e514f8858ae477cf9c7e9c891475674d5241519193403db43d16c3675f4207bc094a7a27b7e4f56584a78c1b
+    "@sinonjs/commons": ^3.0.0
+    "@sinonjs/fake-timers": ^11.2.2
+    "@sinonjs/text-encoding": ^0.7.2
+    just-extend: ^6.2.0
+    path-to-regexp: ^6.2.1
+  checksum: ab9fd6eabc98170f18aef6c9567983145c1dc62c7aef46eda0fea754083316c1f0f9b2c32e9b4bfdd25122276d670293596ed672b54dd1ffa8eb58b56a30ea95
   languageName: node
   linkType: hard
 
@@ -6730,10 +6714,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nrf-intel-hex@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "nrf-intel-hex@npm:1.3.0"
-  checksum: 4085335530c1d0f40027672aa19b0d2a5db47ab928d214fecfab9501eb8d611b67a0a765b398fb49f67fb2ada5a2ff27356692872270f09b575d3cc6b87186bf
+"nrf-intel-hex@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "nrf-intel-hex@npm:1.4.0"
+  checksum: 651c8dba917d7af98c98b01dd389e30385974d71784537819536f5261c20642f47f7df61200222d76870c6c4557efc370e71ea6262ddbdc99a3d263c49f80676
   languageName: node
   linkType: hard
 
@@ -7090,12 +7074,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-to-regexp@npm:^1.7.0":
-  version: 1.8.0
-  resolution: "path-to-regexp@npm:1.8.0"
-  dependencies:
-    isarray: 0.0.1
-  checksum: 709f6f083c0552514ef4780cb2e7e4cf49b0cc89a97439f2b7cc69a608982b7690fb5d1720a7473a59806508fc2dae0be751ba49f495ecf89fd8fbc62abccbcd
+"path-to-regexp@npm:^6.2.1":
+  version: 6.2.2
+  resolution: "path-to-regexp@npm:6.2.2"
+  checksum: b7b0005c36f5099f9ed1fb20a820d2e4ed1297ffe683ea1d678f5e976eb9544f01debb281369dabdc26da82e6453901bf71acf2c7ed14b9243536c2a45286c33
   languageName: node
   linkType: hard
 
@@ -7384,10 +7366,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:^0.1.13":
-  version: 0.1.13
-  resolution: "reflect-metadata@npm:0.1.13"
-  checksum: 798d379a7b6f6455501145419505c97dd11cbc23857a386add2b9ef15963ccf15a48d9d15507afe01d4cd74116df8a213247200bac00320bd7c11ddeaa5e8fb4
+"reflect-metadata@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "reflect-metadata@npm:0.2.2"
+  checksum: a66c7b583e4efdd8f3c3124fbff33da2d0c86d8280617516308b32b2159af7a3698c961db3246387f56f6316b1d33a608f39bb2b49d813316dfc58f6d3bf3210
   languageName: node
   linkType: hard
 
@@ -7903,17 +7885,17 @@ resolve@^1.10.0:
   languageName: node
   linkType: hard
 
-"sinon@npm:^15.2.0":
-  version: 15.2.0
-  resolution: "sinon@npm:15.2.0"
+"sinon@npm:^17.0.1":
+  version: 17.0.1
+  resolution: "sinon@npm:17.0.1"
   dependencies:
     "@sinonjs/commons": ^3.0.0
-    "@sinonjs/fake-timers": ^10.3.0
+    "@sinonjs/fake-timers": ^11.2.2
     "@sinonjs/samsam": ^8.0.0
     diff: ^5.1.0
-    nise: ^5.1.4
+    nise: ^5.1.5
     supports-color: ^7.2.0
-  checksum: 1641b9af8a73ba57c73c9b6fd955a2d062a5d78cce719887869eca45faf33b0fd20cabfeffdfd856bb35bfbd3d49debb2d954ff6ae5e9825a3da5ff4f604ab6c
+  checksum: a807c2997d6eabdcaa4409df9fd9816a3e839f96d7e5d76610a33f5e1b60cf37616c6288f0f580262da17ea4ee626c6d1600325bf423e30c5a7f0d9a203e26c0
   languageName: node
   linkType: hard
 
@@ -9154,7 +9136,7 @@ resolve@^1.10.0:
     "@types/proper-lockfile": ^4.1.4
     "@types/proxyquire": ^1.3.31
     "@types/semver": ^7.5.8
-    "@types/sinon": ^10.0.20
+    "@types/sinon": ^17.0.3
     "@types/source-map-support": ^0.5.10
     "@xstate/test": ^0.5.1
     "@zwave-js/cc": "workspace:*"
@@ -9174,17 +9156,17 @@ resolve@^1.10.0:
     esbuild: 0.20.2
     esbuild-register: ^3.5.0
     execa: ^5.1.1
-    fs-extra: ^11.1.1
+    fs-extra: ^11.2.0
     got: ^13.0.0
     mdns-server: ^1.0.11
     mockdate: ^3.0.5
     p-queue: ^7.4.1
     proper-lockfile: ^4.1.2
     proxyquire: ^2.1.3
-    reflect-metadata: ^0.1.13
-    semver: ^7.5.4
+    reflect-metadata: ^0.2.2
+    semver: ^7.6.0
     serialport: ^12.0.0
-    sinon: ^15.2.0
+    sinon: ^17.0.1
     source-map-support: ^0.5.21
     typescript: 5.4.4
     winston: ^3.13.0

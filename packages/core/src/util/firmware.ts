@@ -1,6 +1,5 @@
 import { getErrorMessage } from "@zwave-js/shared";
 import * as crypto from "node:crypto";
-// @ts-expect-error There are no type definitions for nrf-intel-hex
 import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { Firmware, FirmwareFileFormat } from "./_Types";
