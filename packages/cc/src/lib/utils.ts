@@ -362,6 +362,14 @@ export async function addAssociations(
 		);
 	}
 
+	// Disallow associating a node with itself
+	if (destinations.some((d) => d.nodeId === endpoint.nodeId)) {
+		throw new ZWaveError(
+			`Associating a node with itself is not allowed!`,
+			ZWaveErrorCodes.AssociationCC_NotAllowed,
+		);
+	}
+
 	const assocGroupCount =
 		assocInstance?.getGroupCountCached(applHost, endpoint) ?? 0;
 	const mcGroupCount = mcInstance?.getGroupCountCached(applHost, endpoint)
