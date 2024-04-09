@@ -1,28 +1,45 @@
 {
-	"extends": "@tsconfig/node18/tsconfig.json",
-	"compilerOptions": {
-		"composite": true,
-		"incremental": true,
-		"declaration": true,
-		"declarationMap": true,
-
-		"noEmitOnError": true,
-		"removeComments": false,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": false,
-		"sourceMap": true,
-		"inlineSourceMap": false,
-		"stripInternal": true,
-
-		"pretty": true,
-		"types": ["node"],
-		"noErrorTruncation": true
-	},
-	"include": [
-		"packages/**/src/**/*.ts",
-		"packages/**/maintenance/**/*.ts",
-		"maintenance/**/*.ts",
-		"test/**/*.ts"
-	],
-	"exclude": ["**/build/**", "node_modules/**", "packages/**/node_modules"]
+	"files": [],
+	"include": [],
+	"references": [
+		{
+			"path": "./packages/cc"
+		},
+		{
+			"path": "./packages/config"
+		},
+		{
+			"path": "./packages/core"
+		},
+		{
+			"path": "./packages/eslint-plugin"
+		},
+		{
+			"path": "./packages/flash"
+		},
+		{
+			"path": "./packages/host"
+		},
+		{
+			"path": "./packages/maintenance"
+		},
+		{
+			"path": "./packages/nvmedit"
+		},
+		{
+			"path": "./packages/serial"
+		},
+		{
+			"path": "./packages/shared"
+		},
+		{
+			"path": "./packages/testing"
+		},
+		{
+			"path": "./packages/transformers"
+		},
+		{
+			"path": "./packages/zwave-js"
+		}
+	]
 }
