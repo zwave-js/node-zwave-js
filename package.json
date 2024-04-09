@@ -85,7 +85,7 @@
     "reflect-metadata": "^0.1.13",
     "semver": "^7.5.4",
     "source-map-support": "^0.5.21",
-    "ts-patch": "3.0.2",
+    "ts-patch": "3.1.2",
     "turbo": "1.7.4",
     "typescript": "5.4.4",
     "zwave-js": "workspace:*"
