@@ -72,8 +72,8 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.43.0",
-    "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.19.29",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^18.19.31",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/testing": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
