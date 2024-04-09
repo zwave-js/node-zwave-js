@@ -130,6 +130,9 @@ export function isAssociationAllowed(
 	// The following checks don't apply to Lifeline associations
 	if (destination.nodeId === applHost.ownNodeId) return true;
 
+	// Disallow self-associations
+	if (destination.nodeId === endpoint.nodeId) return false;
+
 	// For Association version 1 and version 2 / MCA version 1-3:
 	// A controlling node MUST NOT associate Node A to a Node B destination
 	// if Node A and Node B’s highest Security Class are not identical.
@@ -362,7 +365,8 @@ export async function addAssociations(
 		);
 	}
 
-	// Disallow associating a node with itself
+	// Disallow associating a node with itself. This is technically checked as part of
+	// isAssociationAllowed, but here we provide a better error message.
 	if (destinations.some((d) => d.nodeId === endpoint.nodeId)) {
 		throw new ZWaveError(
 			`Associating a node with itself is not allowed!`,
