@@ -4446,6 +4446,8 @@ supported CCs: ${
 				)
 					// ...except the controller itself, which was handled by step 2
 					.filter((id) => id !== this._ownNodeId!)
+					// ...and the node itself
+					.filter((id) => id !== nodeId)
 					.sort();
 			} catch {
 				/* ignore */
