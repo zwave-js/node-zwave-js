@@ -26,8 +26,7 @@
 		},
 		"3": {
 			"label": "Double Press",
-			"maxNodes": 5,
-			"isLifeline": true
+			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
