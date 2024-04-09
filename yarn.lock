@@ -1379,20 +1379,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:^11.0.1":
-  version: 11.0.1
-  resolution: "@types/fs-extra@npm:11.0.1"
+"@types/fs-extra@npm:^11.0.4":
+  version: 11.0.4
+  resolution: "@types/fs-extra@npm:11.0.4"
   dependencies:
     "@types/jsonfile": "*"
     "@types/node": "*"
-  checksum: 3e930346e5d84f419deb8ced1c582beef8cb20d0bd8a0eb145a37d75bab0572a1895f0e48a0d681d386b3a58b9a992b2d2acecc464bcaec2548f53ea00718651
+  checksum: 242cb84157631f057f76495c8220707541882c00a00195b603d937fb55e471afecebcb089bab50233ed3a59c69fd68bf65c1f69dd7fafe2347e139cc15b9b0e5
   languageName: node
   linkType: hard
 
-"@types/globrex@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "@types/globrex@npm:0.1.2"
-  checksum: dbb0f7d5740c070cfdbf2e1dcdca00d48ad1ab690b598917ac70a89017d7150b49d4a7b6aa0ab1bc99341e7bfc521f4d377f1037953f4e29aca6bb826ae9b479
+"@types/globrex@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "@types/globrex@npm:0.1.4"
+  checksum: 0df2c8597a350895485446a9006810b03af5805356e81d0b9e1cbfed1f9758bd60c52c3a0f13f19e6abffd2ce6cf55900f91ca175fde4d246519b9ecb7a73a1e
   languageName: node
   linkType: hard
 
@@ -1403,17 +1403,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-levenshtein@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@types/js-levenshtein@npm:1.1.1"
-  checksum: 1d1ff1ee2ad551909e47f3ce19fcf85b64dc5146d3b531c8d26fc775492d36e380b32cf5ef68ff301e812c3b00282f37aac579ebb44498b94baff0ace7509769
+"@types/js-levenshtein@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "@types/js-levenshtein@npm:1.1.3"
+  checksum: eb338696da976925ea8448a42d775d7615a14323dceeb08909f187d0b3d3b4c1f67a1c36ef586b1c2318b70ab141bba8fc58311ba1c816711704605aec09db8b
   languageName: node
   linkType: hard
 
-"@types/json-logic-js@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@types/json-logic-js@npm:2.0.2"
-  checksum: 59c1523c747ac687f5b3dc00c4d738af41cb05da2ad46d326ff7222bcbd5514838804b18dad0c4d950db3d4e79d94741e1de9bc9a8a6cf91d10ddd5ac00b1ff8
+"@types/json-logic-js@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@types/json-logic-js@npm:2.0.7"
+  checksum: 22d2ed1534eb89e91959e7a9793cb65f849b2587aa8b43da7f483a79775a0e6251f85a73774dd5941971eb23c597eeeb19af581c7c1a1d65f9876f48c508e531
   languageName: node
   linkType: hard
 
@@ -1461,12 +1461,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.19.29":
-  version: 18.19.29
-  resolution: "@types/node@npm:18.19.29"
+"@types/node@npm:^18.19.31":
+  version: 18.19.31
+  resolution: "@types/node@npm:18.19.31"
   dependencies:
     undici-types: ~5.26.4
-  checksum: a04066eaca328fbf1bac6fc86e5565af1c0db3481f1f863da8b7ed1455688afa68772827382943c63b336b456bab9935a85572ac4eb7bff14886e6f5b0bdf7d6
+  checksum: 949bddfd7071bd47300d1f33d380ee34695ccd5f046f1a03e4d2be0d953ace896905144d44a6f483f241b5ef34b86f0e40a0e312201117782eecf89e81a4ff13
   languageName: node
   linkType: hard
 
@@ -1484,26 +1484,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pegjs@npm:^0.10.3":
-  version: 0.10.3
-  resolution: "@types/pegjs@npm:0.10.3"
-  checksum: b0301595d7d7da4de9f8edcc8a97ee55c959e74645dd49626bbaf344dd383e1491b43082d34c1f55048566fef21bf219a4b4743f770afbe80a390a3a33926b8a
+"@types/pegjs@npm:^0.10.6":
+  version: 0.10.6
+  resolution: "@types/pegjs@npm:0.10.6"
+  checksum: be219504714e219b37daee7ef3214b6876d98405cc56b2d084763134032fd46394c5d0e387216ee3e52bd519fe7341e25bdec855f2a911c49a593b21fd8ea4a6
   languageName: node
   linkType: hard
 
-"@types/proper-lockfile@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "@types/proper-lockfile@npm:4.1.2"
+"@types/proper-lockfile@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "@types/proper-lockfile@npm:4.1.4"
   dependencies:
     "@types/retry": "*"
-  checksum: 9d8a100f96e6df3ce1213eea2696b86de4b75dce3ab5bbc1767226732976bf38d2d2ce1060d6942e76561e8617576547e83bb172e95375192a0b8df1fbca2331
+  checksum: b0d1b8e84a563b2c5f869f7ff7542b1d83dec03d1c9d980847cbb189865f44b4a854673cdde59767e41bcb8c31932e613ac43822d358a6f8eede6b79ccfceb1d
   languageName: node
   linkType: hard
 
-"@types/proxyquire@npm:^1.3.28":
-  version: 1.3.28
-  resolution: "@types/proxyquire@npm:1.3.28"
-  checksum: 9f0267b4516c2686a2e99a6d4dbd2ed660133180aad775a4000f3e103d8b2fe6b1bfe5b36003edf7adfb02542aed6c2fa6049fc217daea73ebced2942a762f27
+"@types/proxyquire@npm:^1.3.31":
+  version: 1.3.31
+  resolution: "@types/proxyquire@npm:1.3.31"
+  checksum: 945024495fc991f6152686795ac6f2f2d0f571834e67fa41c1e84877eeb1a321a24ab8ff67fc5152d9227f5b39f6254213dced15deaf80ed7443059c2257e072
   languageName: node
   linkType: hard
 
@@ -1514,19 +1514,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.5.0, @types/semver@npm:^7.5.1":
+"@types/semver@npm:^7.5.0":
   version: 7.5.1
   resolution: "@types/semver@npm:7.5.1"
   checksum: 2fffe938c7ac168711f245a16e1856a3578d77161ca17e29a05c3e02c7be3e9c5beefa29a3350f6c1bd982fb70aa28cc52e4845eb7d36246bcdc0377170d584d
   languageName: node
   linkType: hard
 
-"@types/sinon@npm:^10.0.16":
-  version: 10.0.16
-  resolution: "@types/sinon@npm:10.0.16"
+"@types/semver@npm:^7.5.8":
+  version: 7.5.8
+  resolution: "@types/semver@npm:7.5.8"
+  checksum: ea6f5276f5b84c55921785a3a27a3cd37afee0111dfe2bcb3e03c31819c197c782598f17f0b150a69d453c9584cd14c4c4d7b9a55d2c5e6cacd4d66fdb3b3663
+  languageName: node
+  linkType: hard
+
+"@types/sinon@npm:^10.0.20":
+  version: 10.0.20
+  resolution: "@types/sinon@npm:10.0.20"
   dependencies:
     "@types/sinonjs__fake-timers": "*"
-  checksum: 1216aac584500d6bf845ca76f57e82f8459cf9de4ed80a55e50aa4438360fc418789a42181e211c5d279e97f86a3a994e3c81e43971d540737caca0193242bbf
+  checksum: 7322771345c202b90057f8112e0d34b7339e5ae1827fb1bfe385fc9e38ed6a2f18b4c66e88d27d98c775f7f74fb1167c0c14f61ca64155786534541e6c6eb05f
   languageName: node
   linkType: hard
 
@@ -1537,12 +1544,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/source-map-support@npm:^0.5.7":
-  version: 0.5.7
-  resolution: "@types/source-map-support@npm:0.5.7"
+"@types/source-map-support@npm:^0.5.10":
+  version: 0.5.10
+  resolution: "@types/source-map-support@npm:0.5.10"
   dependencies:
     source-map: ^0.6.0
-  checksum: 6da844f0b8333a1789dd27ad7bb33b9bcb41159939a94451738a8f7a1e1fd69169aa6e2dda51ba8f61753c57ead159331330c996b1d672abc2e33d6991b38bf1
+  checksum: ef287caea52a41b600a128d36cf961f048913e30fe143f7d882d19014635d0ca89e27013a48b0e6353ca277689d633c2ef65a25b2f8cd6d82916a2f908f18c38
   languageName: node
   linkType: hard
 
@@ -1560,12 +1567,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/xml2js@npm:^0.4.12":
-  version: 0.4.12
-  resolution: "@types/xml2js@npm:0.4.12"
+"@types/xml2js@npm:^0.4.14":
+  version: 0.4.14
+  resolution: "@types/xml2js@npm:0.4.14"
   dependencies:
     "@types/node": "*"
-  checksum: 6197f6d51d70ba7e6d3169ef6d58adacfeddeb2d8cfe4d2bb24eda86223c7dd77c82896c3aa3c636b3b1442cebc6d05959d1e65fa206dac2caeb99aa2c943716
+  checksum: df9f106b9953dcdec7ba3304ebc56d6c2f61d49bf556d600bed439f94a1733f73ca0bf2d0f64330b402191622862d9d6058bab9d7e3dcb5b0fe51ebdc4372aac
   languageName: node
   linkType: hard
 
@@ -1576,12 +1583,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^17.0.24":
-  version: 17.0.24
-  resolution: "@types/yargs@npm:17.0.24"
+"@types/yargs@npm:^17.0.32":
+  version: 17.0.32
+  resolution: "@types/yargs@npm:17.0.32"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 5f3ac4dc4f6e211c1627340160fbe2fd247ceba002190da6cf9155af1798450501d628c9165a183f30a224fc68fa5e700490d740ff4c73e2cdef95bc4e8ba7bf
+  checksum: 4505bdebe8716ff383640c6e928f855b5d337cb3c68c81f7249fc6b983d0aa48de3eee26062b84f37e0d75a5797bc745e0c6e76f42f81771252a758c638f36ba
   languageName: node
   linkType: hard
 
@@ -1804,8 +1811,8 @@ __metadata:
   resolution: "@zwave-js/cc@workspace:packages/cc"
   dependencies:
     "@microsoft/api-extractor": ^7.43.0
-    "@types/fs-extra": ^11.0.1
-    "@types/node": ^18.19.29
+    "@types/fs-extra": ^11.0.4
+    "@types/node": ^18.19.31
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
@@ -1828,15 +1835,15 @@ __metadata:
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
     "@microsoft/api-extractor": ^7.43.0
-    "@types/fs-extra": ^11.0.1
-    "@types/js-levenshtein": ^1.1.1
-    "@types/json-logic-js": ^2.0.2
-    "@types/node": ^18.19.29
-    "@types/pegjs": ^0.10.3
-    "@types/semver": ^7.5.1
-    "@types/sinon": ^10.0.16
-    "@types/xml2js": ^0.4.12
-    "@types/yargs": ^17.0.24
+    "@types/fs-extra": ^11.0.4
+    "@types/js-levenshtein": ^1.1.3
+    "@types/json-logic-js": ^2.0.7
+    "@types/node": ^18.19.31
+    "@types/pegjs": ^0.10.6
+    "@types/semver": ^7.5.8
+    "@types/sinon": ^10.0.20
+    "@types/xml2js": ^0.4.14
+    "@types/yargs": ^17.0.32
     "@zwave-js/core": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -1869,8 +1876,8 @@ __metadata:
   dependencies:
     "@alcalzone/jsonl-db": ^3.1.1
     "@microsoft/api-extractor": ^7.43.0
-    "@types/node": ^18.19.29
-    "@types/sinon": ^10.0.16
+    "@types/node": ^18.19.31
+    "@types/sinon": ^10.0.20
     "@types/triple-beam": ^1.3.5
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.8
@@ -1907,9 +1914,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/flash@workspace:packages/flash"
   dependencies:
-    "@types/fs-extra": ^11.0.1
-    "@types/node": ^18.19.29
-    "@types/yargs": ^17.0.24
+    "@types/fs-extra": ^11.0.4
+    "@types/node": ^18.19.31
+    "@types/yargs": ^17.0.32
     "@zwave-js/core": "workspace:*"
     del-cli: ^5.1.0
     fs-extra: ^11.1.1
@@ -1940,7 +1947,7 @@ __metadata:
   resolution: "@zwave-js/host@workspace:packages/host"
   dependencies:
     "@microsoft/api-extractor": ^7.43.0
-    "@types/node": ^18.19.29
+    "@types/node": ^18.19.31
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -1958,10 +1965,10 @@ __metadata:
     "@dprint/json": ^0.19.2
     "@dprint/markdown": ^0.16.4
     "@dprint/typescript": ^0.90.0
-    "@types/fs-extra": ^11.0.1
-    "@types/globrex": ^0.1.2
-    "@types/node": ^18.19.29
-    "@types/yargs": ^17.0.24
+    "@types/fs-extra": ^11.0.4
+    "@types/globrex": ^0.1.4
+    "@types/node": ^18.19.31
+    "@types/yargs": ^17.0.32
     "@zwave-js/core": "workspace:*"
     "@zwave-js/fmt": ^1.0.0
     "@zwave-js/shared": "workspace:*"
@@ -1988,10 +1995,10 @@ __metadata:
   resolution: "@zwave-js/nvmedit@workspace:packages/nvmedit"
   dependencies:
     "@microsoft/api-extractor": ^7.43.0
-    "@types/fs-extra": ^11.0.1
-    "@types/node": ^18.19.29
-    "@types/semver": ^7.5.1
-    "@types/yargs": ^17.0.24
+    "@types/fs-extra": ^11.0.4
+    "@types/node": ^18.19.31
+    "@types/semver": ^7.5.8
+    "@types/yargs": ^17.0.32
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.8
@@ -2028,10 +2035,10 @@ __metadata:
     "@microsoft/api-extractor": ^7.43.0
     "@monorepo-utils/workspaces-to-typescript-project-references": ^2.10.2
     "@tsconfig/node18": ^18.2.4
-    "@types/fs-extra": ^11.0.1
-    "@types/node": ^18.19.29
-    "@types/semver": ^7.5.1
-    "@types/source-map-support": ^0.5.7
+    "@types/fs-extra": ^11.0.4
+    "@types/node": ^18.19.31
+    "@types/semver": ^7.5.8
+    "@types/source-map-support": ^0.5.10
     "@typescript-eslint/eslint-plugin": ^7.5.0
     "@typescript-eslint/parser": ^7.5.0
     "@zwave-js/cc": "workspace:*"
@@ -2085,8 +2092,8 @@ __metadata:
     "@serialport/binding-mock": ^10.2.2
     "@serialport/bindings-interface": "*"
     "@serialport/stream": ^12.0.0
-    "@types/node": ^18.19.29
-    "@types/sinon": ^10.0.16
+    "@types/node": ^18.19.31
+    "@types/sinon": ^10.0.20
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -2108,9 +2115,9 @@ __metadata:
   resolution: "@zwave-js/shared@workspace:packages/shared"
   dependencies:
     "@microsoft/api-extractor": ^7.43.0
-    "@types/fs-extra": ^11.0.1
-    "@types/node": ^18.19.29
-    "@types/sinon": ^10.0.16
+    "@types/fs-extra": ^11.0.4
+    "@types/node": ^18.19.31
+    "@types/sinon": ^10.0.20
     alcalzone-shared: ^4.0.8
     ava: ^5.3.1
     del-cli: ^5.1.0
@@ -2127,7 +2134,7 @@ __metadata:
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
     "@microsoft/api-extractor": ^7.43.0
-    "@types/node": ^18.19.29
+    "@types/node": ^18.19.31
     "@types/triple-beam": ^1.3.5
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
@@ -2148,7 +2155,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/transformers@workspace:packages/transformers"
   dependencies:
-    "@types/fs-extra": ^11.0.1
+    "@types/fs-extra": ^11.0.4
     ava: ^5.3.1
     cpy-cli: ^5.0.0
     del-cli: ^5.1.0
@@ -9142,13 +9149,13 @@ resolve@^1.10.0:
     "@alcalzone/jsonl-db": ^3.1.1
     "@alcalzone/pak": ^0.10.1
     "@microsoft/api-extractor": ^7.43.0
-    "@types/fs-extra": ^11.0.1
-    "@types/node": ^18.19.29
-    "@types/proper-lockfile": ^4.1.2
-    "@types/proxyquire": ^1.3.28
-    "@types/semver": ^7.5.1
-    "@types/sinon": ^10.0.16
-    "@types/source-map-support": ^0.5.7
+    "@types/fs-extra": ^11.0.4
+    "@types/node": ^18.19.31
+    "@types/proper-lockfile": ^4.1.4
+    "@types/proxyquire": ^1.3.31
+    "@types/semver": ^7.5.8
+    "@types/sinon": ^10.0.20
+    "@types/source-map-support": ^0.5.10
     "@xstate/test": ^0.5.1
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
