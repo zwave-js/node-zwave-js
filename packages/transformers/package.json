@@ -4,8 +4,8 @@
   "description": "zwave-js: compile-time transformers",
   "private": true,
   "keywords": [],
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
