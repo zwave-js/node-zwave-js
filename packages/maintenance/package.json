@@ -57,7 +57,7 @@
     "fs-extra": "^11.2.0",
     "globrex": "^0.1.2",
     "json5": "^2.2.3",
-    "piscina": "^4.1.0",
+    "piscina": "^4.4.0",
     "reflect-metadata": "^0.2.2",
     "ts-morph": "^22.0.0",
     "typescript": "5.4.4",
