@@ -26,15 +26,15 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/config_template.json#preset_level"
+			"$import": "templates/leviton_template.json#preset_level"
 		},
 		{
 			"#": "6",
-			"$import": "templates/config_template.json#led_timeout"
+			"$import": "templates/leviton_template.json#led_timeout"
 		},
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#locator_led"
+			"$import": "templates/leviton_template.json#locator_led"
 		}
 	],
 	"metadata": {
