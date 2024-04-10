@@ -14,6 +14,7 @@
 * Add UltraPro Z-Wave Plus In-Wall Toggle Switch, 700S (#6664)
 * Rename generic 700 series controller to include 800 series (#6744)
 * Add fingerprint and config parameters for UltraPro 700 Switch (#6726)
+* Add Zooz Zen37 800LR Wall Remote (#6577)
 
 ### Changes under the hood
 * Several dependency updates
