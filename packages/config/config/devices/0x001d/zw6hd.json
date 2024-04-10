@@ -1,0 +1,61 @@
+{
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "ZW6HD",
+	"description": "Decora Smart 800 Series Dimmer",
+	"devices": [
+		{
+			"productType": "0x0041",
+			"productId": "0x0002",
+			"zwaveAllianceId": 4901
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/leviton_template.json#fade_on_time_800_series"
+		},
+		{
+			"#": "2",
+			"$import": "templates/leviton_template.json#fade_off_time_800_series"
+		},
+		{
+			"#": "3",
+			"$import": "templates/leviton_template.json#minimum_dim_level_800_series"
+		},
+		{
+			"#": "4",
+			"$import": "templates/leviton_template.json#maximum_dim_level_800_series"
+		},
+		{
+			"#": "5",
+			"$import": "templates/leviton_template.json#preset_level_800_series"
+		},
+		{
+			"#": "6",
+			"$import": "templates/leviton_template.json#led_timeout_800_series"
+		},
+		{
+			"#": "7",
+			"$import": "templates/leviton_template.json#status_led_800_series"
+		},
+		{
+			"#": "8",
+			"$import": "templates/leviton_template.json#load_type_800_series"
+		},
+		{
+			"#": "9",
+			"$import": "templates/leviton_template.json#control_timing"
+		}
+	],
+	"metadata": {
+		"inclusion": "For older controllers, Classic Inclusion is supported.\nDepending on the age of the controller it may need to be 3 to 35 feet from the device when including.\n1. Enter setup mode (see page 10).\n2. Follow the Z-Wave controller instructions to enter\ninclusion mode.\n3. Tap the top rocker 1 time, the Status LED will quickly\nflash GREEN.\n4. The Z-Wave controller will confirm successful inclusion to the Z-Wave network",
+		"exclusion": "The Exclusion command found in the Z-Wave controller is used as a best practice for removing devices from a\nZ-Wave network.\n1. Enter setup mode (see page 10).\n2. Follow the Z-Wave controller instructions to enter\nexclusion mode.\n3. Tap the top rocker 1 time, the Status LED will quickly\nflash GREEN.\n4. The Z-Wave controller will confirm successful exclusion from the Z-Wave network",
+		"reset": "When removing a Z-Wave device from the network, it is best practice to use the exclusion process. In situations where a device needs to be returned to factory default settings, follow the steps below. Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Hold the top rocker for 14 seconds: After the first 7 seconds, the Status LED will turn AMBER. Continue holding until the Status LED flashes RED/AMBER then release.\n2. The device will reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=cert_portal/certs/633/DI-000-ZW6HD-02A-X4.pdf"
+	}
+}

@@ -16,11 +16,11 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$import": "templates/config_template.json#fade_on_time"
+			"$import": "templates/leviton_template.json#fade_on_time"
 		},
 		{
 			"#": "2",
-			"$import": "templates/config_template.json#fade_off_time"
+			"$import": "templates/leviton_template.json#fade_off_time"
 		},
 		{
 			"#": "3",
@@ -33,19 +33,19 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/config_template.json#preset_level"
+			"$import": "templates/leviton_template.json#preset_level"
 		},
 		{
 			"#": "6",
-			"$import": "templates/config_template.json#led_timeout"
+			"$import": "templates/leviton_template.json#led_timeout"
 		},
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#locator_led"
+			"$import": "templates/leviton_template.json#locator_led"
 		},
 		{
 			"#": "8",
-			"$import": "templates/config_template.json#load_type"
+			"$import": "templates/leviton_template.json#load_type"
 		}
 	]
 }
