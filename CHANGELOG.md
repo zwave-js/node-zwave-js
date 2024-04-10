@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.5.3 (2024-04-10)
 ### Bugfixes
 * Disallow associating a node with itself and skip self-associations when rebuilding routes (#6749)
 * Fix computation of SNR margin when noise floor measurement is N/A (#6732)
