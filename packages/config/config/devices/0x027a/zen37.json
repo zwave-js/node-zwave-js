@@ -21,42 +21,34 @@
 		},
 		"2": {
 			"label": "On/Off Control (Button 1 & 2)",
-			"description": "Basic for on (button 1: top large button) and off (button 2: bottom large button)",
 			"maxNodes": 10
 		},
 		"3": {
 			"label": "On/Off Control (Button 3 & 4)",
-			"description": "Basic for on (button 3: small left button) and off (button 4: small right button)",
 			"maxNodes": 10
 		},
 		"4": {
 			"label": "Dimmer Control (Button 1 & 2)",
-			"description": "Multilevel start level change (held) and stop level change (released) for buttons 1 and 2 (used for remote dimming)",
 			"maxNodes": 10
 		},
 		"5": {
 			"label": "Dimmer Control (Button 3 & 4)",
-			"description": "Multilevel start level change (held) and stop level change (released) for buttons 3 and 4 (used for remote dimming)",
 			"maxNodes": 10
 		},
 		"6": {
 			"label": "Toggle Control (Button 1)",
-			"description": "Basic to toggle device on and off in sequence when button 1 is pressed",
 			"maxNodes": 10
 		},
 		"7": {
 			"label": "Toggle Control (Button 2)",
-			"description": "Basic to toggle device on and off in sequence when button 2 is pressed",
 			"maxNodes": 10
 		},
 		"8": {
 			"label": "Toggle Control (Button 3)",
-			"description": "Basic to toggle device on and off in sequence when button 3 is pressed",
 			"maxNodes": 10
 		},
 		"9": {
 			"label": "Toggle Control (Button 4)",
-			"description": "Basic to toggle device on and off in sequence when button 4 is pressed",
 			"maxNodes": 10
 		}
 	},
@@ -65,7 +57,6 @@
 		{
 			"#": "1",
 			"label": "Low Battery Alert Threshold",
-			"description": "Receive a low battery alert from your device. The value corresponds to the % battery level for the device.",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 5,
@@ -101,11 +92,9 @@
 		},
 		{
 			"#": "6",
-			"$import": "~/templates/master_template.json#base_0-10_nounit",
 			"label": "LED Indicator Brightness",
-			"description": "Brightness level of the LED indicator or turn the LED off completely.",
+			"valueSize": 1,
 			"defaultValue": 5,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -158,7 +147,7 @@
 			"#": "7",
 			"$import": "~/templates/master_template.json#base_1-99_nounit",
 			"label": "Remote Z-Wave Dimming Duration",
-			"description": "Set the time it takes to get from 0% to 100% brightness on dimmers and smart bulbs directly associated with your Wall Remote in Groups 4 and 5 when pressing and holding the buttons (physical dimming) on your Wall Remote. The number entered as value corresponds to the number of seconds.",
+			"description": "Time to dim devices in groups 4 and 5 from 0 to 100% brightness by pressing and holding the buttons.",
 			"unit": "seconds",
 			"defaultValue": 5
 		}
