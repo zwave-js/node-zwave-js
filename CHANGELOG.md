@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Disallow associating a node with itself and skip self-associations when rebuilding routes (#6749)
+* Fix computation of SNR margin when noise floor measurement is N/A (#6732)
+
+### Config file changes
+* Add new Leviton 800 series devices (#6757)
+* Add UltraPro Z-Wave Plus In-Wall Toggle Switch, 700S (#6664)
+* Rename generic 700 series controller to include 800 series (#6744)
+* Add fingerprint and config parameters for UltraPro 700 Switch (#6726)
+
+### Changes under the hood
+* Several dependency updates
+
 ## 12.5.2 (2024-04-04)
 ### Bugfixes
 * Add workaround for devices that omit notification event parameters instead of sending "no data" (#6719)
