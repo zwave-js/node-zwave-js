@@ -4712,6 +4712,10 @@ ${handlers.length} left`,
 
 	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
 	private persistCCValues(cc: CommandClass) {
+		// Do not persist values for a CC that was force-removed via config
+		const endpoint = this.tryGetEndpoint(cc);
+		if (endpoint?.wasCCRemovedViaConfig(cc.ccId)) return;
+
 		cc.persistValues(this);
 		if (isEncapsulatingCommandClass(cc)) {
 			this.persistCCValues(cc.encapsulated);
