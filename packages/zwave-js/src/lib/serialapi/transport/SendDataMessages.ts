@@ -191,14 +191,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		};
 	}
 
-	/** Computes the maximum payload size that can be transmitted with this message */
-	public getMaxPayloadLength(): number {
-		// From INS13954-7, chapter 4.3.3.1.5
-		if (this.transmitOptions & TransmitOptions.Explore) return 46;
-		if (this.transmitOptions & TransmitOptions.AutoRoute) return 48;
-		return 54;
-	}
-
 	public expectsNodeUpdate(): boolean {
 		return (
 			// Only true singlecast commands may expect a response
@@ -505,16 +497,6 @@ export class SendDataMulticastRequest<
 				"callback id": this.callbackId,
 			},
 		};
-	}
-
-	/** Computes the maximum payload size that can be transmitted with this message */
-	public getMaxPayloadLength(): number {
-		// From INS13954-13, chapter 4.3.3.6
-		if (this.transmitOptions & TransmitOptions.ACK) {
-			if (this.transmitOptions & TransmitOptions.Explore) return 17;
-			if (this.transmitOptions & TransmitOptions.AutoRoute) return 19;
-		}
-		return 25;
 	}
 }
 

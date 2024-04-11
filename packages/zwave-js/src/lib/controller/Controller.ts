@@ -690,6 +690,18 @@ export class ZWaveController
 		return this._supportsLongRange;
 	}
 
+	private _maxPayloadSize: MaybeNotKnown<number>;
+	/** The maximum payload size that can be transmitted with a Z-Wave explorer frame */
+	public get maxPayloadSize(): MaybeNotKnown<number> {
+		return this._maxPayloadSize;
+	}
+
+	private _maxPayloadSizeLR: MaybeNotKnown<number>;
+	/** The maximum payload size that can be transmitted with a Z-Wave Long Range frame */
+	public get maxPayloadSizeLR(): MaybeNotKnown<number> {
+		return this._maxPayloadSizeLR;
+	}
+
 	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
@@ -1100,18 +1112,16 @@ export class ZWaveController
 		}
 
 		// Figure out the maximum payload size for outgoing commands
-		let maxPayloadSize: number | undefined;
 		if (
 			this.isSerialAPISetupCommandSupported(
 				SerialAPISetupCommand.GetMaximumPayloadSize,
 			)
 		) {
 			this.driver.controllerLog.print(`querying max. payload size...`);
-			maxPayloadSize = await this.getMaxPayloadSize();
+			this._maxPayloadSize = await this.getMaxPayloadSize();
 			this.driver.controllerLog.print(
-				`maximum payload size: ${maxPayloadSize} bytes`,
+				`maximum payload size: ${this._maxPayloadSize} bytes`,
 			);
-			// TODO: cache this information
 		}
 
 		this.driver.controllerLog.print(
@@ -1147,15 +1157,12 @@ export class ZWaveController
 		// Fetch the list of Long Range nodes
 		const lrNodeIds = await this.getLongRangeNodes();
 
-		let maxPayloadSizeLR: number | undefined;
 		if (
 			this.isSerialAPISetupCommandSupported(
 				SerialAPISetupCommand.GetLongRangeMaximumPayloadSize,
 			)
 		) {
-			maxPayloadSizeLR = await this.getMaxPayloadSizeLongRange();
-
-			// TODO: cache this information
+			this._maxPayloadSizeLR = await this.getMaxPayloadSizeLongRange();
 		}
 
 		let lrChannel: LongRangeChannel | undefined;
@@ -1171,7 +1178,7 @@ export class ZWaveController
 
 		this.driver.controllerLog.print(
 			`received Z-Wave Long Range capabilities:
-  max. payload size: ${maxPayloadSizeLR} bytes
+  max. payload size: ${this._maxPayloadSizeLR} bytes
   channel:           ${
 				lrChannel
 					? getEnumMemberName(LongRangeChannel, lrChannel)
