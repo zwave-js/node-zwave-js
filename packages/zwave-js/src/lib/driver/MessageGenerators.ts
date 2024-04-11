@@ -50,7 +50,6 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import {
-	exceedsMaxPayloadLength,
 	isSendData,
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
@@ -134,7 +133,7 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 		additionalCommandTimeoutMs = 0,
 	) {
 		// Make sure we can send this message
-		if (isSendData(msg) && exceedsMaxPayloadLength(msg)) {
+		if (isSendData(msg) && driver.exceedsMaxPayloadLength(msg)) {
 			// We use explorer frames by default, but this reduces the maximum payload length by 2 bytes compared to AUTO_ROUTE
 			// Try disabling explorer frames for this message and see if it fits now.
 			const fail = () => {
@@ -145,7 +144,7 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 			};
 			if (msg.transmitOptions & TransmitOptions.Explore) {
 				msg.transmitOptions &= ~TransmitOptions.Explore;
-				if (exceedsMaxPayloadLength(msg)) {
+				if (driver.exceedsMaxPayloadLength(msg)) {
 					// Still too large
 					throw fail();
 				}
@@ -226,7 +225,7 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 			node?.supportsCC(CommandClasses["Transport Service"])
 			&& node.getCCVersion(CommandClasses["Transport Service"]) >= 2;
 
-		if (!mayUseTransportService || !exceedsMaxPayloadLength(msg)) {
+		if (!mayUseTransportService || !driver.exceedsMaxPayloadLength(msg)) {
 			// Transport Service isn't needed for this message
 			return yield* simpleMessageGenerator(
 				driver,

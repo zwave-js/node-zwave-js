@@ -60,6 +60,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	type MulticastDestination,
+	NUM_NODEMASK_BYTES,
 	NodeIDType,
 	RFRegion,
 	SPANState,
@@ -6234,7 +6235,54 @@ ${handlers.length} left`,
 		msg.command = this.encapsulateCommands(
 			msg.command,
 		) as SinglecastCC<CommandClass>;
-		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+		return msg.command.getMaxPayloadLength(this.getMaxPayloadLength(msg));
+	}
+
+	/** Computes the maximum payload size that can be transmitted with the given message */
+	public getMaxPayloadLength(msg: SendDataMessage): number {
+		const nodeId = msg.getNodeId();
+
+		// For ZWLR, the result is simply the maximum payload size
+		if (
+			nodeId != undefined
+			&& isLongRangeNodeId(nodeId)
+			&& this._controller?.maxPayloadSizeLR
+		) {
+			return this._controller.maxPayloadSizeLR;
+		}
+
+		// For ZW Classic, it depends on the frame type and transmit options
+		const maxExplorerPayloadSinglecast = this._controller?.maxPayloadSize
+			?? 46;
+		if (isSendDataSinglecast(msg)) {
+			// From INS13954-7, chapter 4.3.3.1.5
+			if (msg.transmitOptions & TransmitOptions.Explore) {
+				return maxExplorerPayloadSinglecast;
+			}
+			if (msg.transmitOptions & TransmitOptions.AutoRoute) {
+				return maxExplorerPayloadSinglecast + 2;
+			}
+			return maxExplorerPayloadSinglecast + 8;
+		} else {
+			// Multicast needs space for the nodes bitmask
+			const maxExplorerPayloadMulticast = maxExplorerPayloadSinglecast
+				- NUM_NODEMASK_BYTES;
+
+			// From INS13954-13, chapter 4.3.3.6
+			if (msg.transmitOptions & TransmitOptions.ACK) {
+				if (msg.transmitOptions & TransmitOptions.Explore) {
+					return maxExplorerPayloadMulticast;
+				}
+				if (msg.transmitOptions & TransmitOptions.AutoRoute) {
+					return maxExplorerPayloadMulticast + 2;
+				}
+			}
+			return maxExplorerPayloadMulticast + 8;
+		}
+	}
+
+	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
+		return msg.serializeCC().length > this.getMaxPayloadLength(msg);
 	}
 
 	/** Determines time in milliseconds to wait for a report from a node */
