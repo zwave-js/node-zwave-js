@@ -31,8 +31,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Relay Switch Period",
-			"description": "Number of milliseconds to turn on relay switch for.",
+			"label": "Relay Turn On Duration",
 			"valueSize": 2,
 			"unit": "ms",
 			"minValue": 100,
