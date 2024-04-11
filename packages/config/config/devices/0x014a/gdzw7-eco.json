@@ -14,14 +14,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		// "The Garage Door Controller supports one Association group: the “Lifeline” group which can have one node in the group."
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 1,
-			"isLifeline": true
-		}
-	},
 	"paramInformation": [
 		{
 			"#": "1",
@@ -36,35 +28,31 @@
 			"unit": "ms",
 			"minValue": 100,
 			"maxValue": 5000,
-			"defaultValue": 1000 // firmware had default: 2000
+			"defaultValue": 2000
 		},
 		{
 			"#": "3",
 			"$import": "~/0x014a/templates/ecolink-template.json#ecolink_5-60_seconds",
 			"label": "Door Open Timeout",
-			"description": "Seconds allowed for garage door to open until timeout.",
-			"defaultValue": 20 // firmware had default: 30
+			"defaultValue": 30
 		},
 		{
 			"#": "4",
 			"$import": "~/0x014a/templates/ecolink-template.json#ecolink_5-60_seconds",
 			"label": "Door Close Timeout",
-			"description": "Seconds allowed for garage door to close until timeout.",
-			"defaultValue": 15 // firmware had default: 30
+			"defaultValue": 30
 		},
 		{
 			"#": "5",
 			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Accelerometer Sensitivity",
 			"description": "1 is least sensitive, 100 is most sensitive.",
-			"defaultValue": 96 // firmware had default:  26
+			"defaultValue": 26
 		},
 		{
 			"#": "6",
 			"$import": "~/templates/master_template.json#base_0-10_nounit",
 			"label": "Application-Level Retries",
-			"description": "Number of attempts on top of the stack-level retries to try to reach the controller/hub with Z-Wave messages.",
-			"unit": "attempts",
 			"defaultValue": 3
 		}
 	],
