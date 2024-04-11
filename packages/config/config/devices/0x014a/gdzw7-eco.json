@@ -26,8 +26,7 @@
 		{
 			"#": "1",
 			"$import": "~/0x014a/templates/ecolink-template.json#ecolink_5-60_seconds",
-			"label": "Unattended Wait Period",
-			"description": "Unattended close operation wait period in seconds.",
+			"label": "Unattended Close Wait Period",
 			"defaultValue": 5
 		},
 		{
