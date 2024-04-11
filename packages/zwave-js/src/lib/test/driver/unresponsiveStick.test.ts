@@ -128,10 +128,10 @@ integrationTest(
 	},
 );
 
-integrationTest.only(
+integrationTest(
 	"The unresponsive controller recovery does not kick in when it was enabled via config",
 	{
-		debug: true,
+		// debug: true,
 
 		additionalDriverOptions: {
 			attempts: {

@@ -86,6 +86,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	highResTimestamp,
+	isEncapsulationCC,
 	isLongRangeNodeId,
 	isMissingControllerACK,
 	isMissingControllerCallback,
@@ -4710,9 +4711,43 @@ ${handlers.length} left`,
 		}
 	}
 
+	private shouldPersistCCValues(cc: CommandClass): boolean {
+		// Always persist encapsulation CCs, otherwise interviews don't work.
+		if (isEncapsulationCC(cc.ccId)) return true;
+
+		// Do not persist values for a node or endpoint that does not exist
+		const endpoint = this.tryGetEndpoint(cc);
+		const node = endpoint?.getNodeUnsafe();
+		if (!node) return false;
+
+		// Do not persist values for a CC that was force-removed via config
+		if (endpoint?.wasCCRemovedViaConfig(cc.ccId)) return false;
+
+		// Do not persist values for a CC that's being mapped to another endpoint.
+		// FIXME: This duplicates logic in Node.ts -> handleCommand
+		const compatConfig = node?.deviceConfig?.compat;
+		if (
+			cc.endpointIndex === 0
+			&& cc.constructor.name.endsWith("Report")
+			&& node.getEndpointCount() >= 1
+			// Only map reports from the root device to an endpoint if we know which one
+			&& compatConfig?.mapRootReportsToEndpoint != undefined
+		) {
+			const targetEndpoint = node.getEndpoint(
+				compatConfig.mapRootReportsToEndpoint,
+			);
+			if (targetEndpoint?.supportsCC(cc.ccId)) return false;
+		}
+
+		return true;
+	}
+
 	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
 	private persistCCValues(cc: CommandClass) {
-		cc.persistValues(this);
+		if (this.shouldPersistCCValues(cc)) {
+			cc.persistValues(this);
+		}
+
 		if (isEncapsulatingCommandClass(cc)) {
 			this.persistCCValues(cc.encapsulated);
 		} else if (isMultiEncapsulatingCommandClass(cc)) {
