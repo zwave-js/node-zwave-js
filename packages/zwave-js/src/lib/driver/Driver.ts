@@ -96,6 +96,7 @@ import {
 	serializeCacheValue,
 	stripUndefined,
 	timespan,
+	isEncapsulationCC,
 } from "@zwave-js/core";
 import type {
 	NodeSchedulePollOptions,
@@ -4711,6 +4712,9 @@ ${handlers.length} left`,
 	}
 
 	private shouldPersistCCValues(cc: CommandClass): boolean {
+		// Always persist encapsulation CCs, otherwise interviews don't work.
+		if (isEncapsulationCC(cc.ccId)) return true;
+
 		// Do not persist values for a node or endpoint that does not exist
 		const endpoint = this.tryGetEndpoint(cc);
 		const node = endpoint?.getNodeUnsafe();
