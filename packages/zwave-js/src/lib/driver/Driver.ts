@@ -4740,9 +4740,10 @@ ${handlers.length} left`,
 
 	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
 	private persistCCValues(cc: CommandClass) {
-		if (!this.shouldPersistCCValues(cc)) return;
+		if (this.shouldPersistCCValues(cc)) {
+			cc.persistValues(this);
+		}
 
-		cc.persistValues(this);
 		if (isEncapsulatingCommandClass(cc)) {
 			this.persistCCValues(cc.encapsulated);
 		} else if (isMultiEncapsulatingCommandClass(cc)) {
