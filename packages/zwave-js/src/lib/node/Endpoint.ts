@@ -279,6 +279,19 @@ export class Endpoint implements IZWaveEndpoint {
 		}
 	}
 
+	/** Determines if support for a CC was force-removed via config file */
+	public wasCCRemovedViaConfig(cc: CommandClasses): boolean {
+		if (this.supportsCC(cc)) return false;
+
+		const compatConfig = this.getNodeUnsafe()?.deviceConfig?.compat;
+		if (!compatConfig) return false;
+
+		const removedEndpoints = compatConfig.removeCCs?.get(cc);
+		if (!removedEndpoints) return false;
+
+		return removedEndpoints == "*" || removedEndpoints.includes(this.index);
+	}
+
 	/**
 	 * Retrieves the version of the given CommandClass this endpoint implements.
 	 * Returns 0 if the CC is not supported.

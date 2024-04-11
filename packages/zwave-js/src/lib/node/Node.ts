@@ -3042,6 +3042,21 @@ protocol version:      ${this.protocolVersion}`;
 			this.markAsAwake();
 		}
 
+		// If the received CC was force-removed via config file, ignore it completely
+		const endpoint = this.getEndpoint(command.endpointIndex);
+		if (endpoint?.wasCCRemovedViaConfig(command.ccId)) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				{
+					endpoint: endpoint.index,
+					direction: "inbound",
+					message:
+						`Ignoring ${command.constructor.name} because CC support was removed via config file`,
+				},
+			);
+			return;
+		}
+
 		if (command instanceof BasicCC) {
 			return this.handleBasicCommand(command);
 		} else if (command instanceof MultilevelSwitchCC) {
