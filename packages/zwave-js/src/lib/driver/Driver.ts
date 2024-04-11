@@ -86,6 +86,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	highResTimestamp,
+	isEncapsulationCC,
 	isLongRangeNodeId,
 	isMissingControllerACK,
 	isMissingControllerCallback,
@@ -96,7 +97,6 @@ import {
 	serializeCacheValue,
 	stripUndefined,
 	timespan,
-	isEncapsulationCC,
 } from "@zwave-js/core";
 import type {
 	NodeSchedulePollOptions,
