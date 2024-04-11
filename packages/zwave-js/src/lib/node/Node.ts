@@ -3662,11 +3662,7 @@ protocol version:      ${this.protocolVersion}`;
 				// Since the node sent us a Basic report, we are sure that it is at least supported
 				// If this is the only supported actuator CC, add it to the support list,
 				// so the information lands in the network cache
-				if (!actuatorCCs.some((cc) => sourceEndpoint.supportsCC(cc))) {
-					sourceEndpoint.addCC(CommandClasses.Basic, {
-						isControlled: true,
-					});
-				}
+				sourceEndpoint.maybeAddBasicCCAsFallback();
 			}
 		} else if (command instanceof BasicCCSet) {
 			// Treat BasicCCSet as value events if desired
@@ -3708,7 +3704,7 @@ protocol version:      ${this.protocolVersion}`;
 						),
 						command.targetValue,
 					);
-					// Since the node sent us a Basic command, we are sure that it is at least controlled
+					// Since the node sent us a Basic Set, we are sure that it is at least controlled
 					// Add it to the support list, so the information lands in the network cache
 					if (!sourceEndpoint.controlsCC(CommandClasses.Basic)) {
 						sourceEndpoint.addCC(CommandClasses.Basic, {
