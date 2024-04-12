@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.5.4 (2024-04-12)
 ### Bugfixes
 * Firmware updates on Z-Wave Long Range now utilize the larger frame size better (#6759)
 * Fixed an issue where multicast `setValue` had a `SupervisionCCReport` as the result instead of a `SetValueResult` (#6765)
