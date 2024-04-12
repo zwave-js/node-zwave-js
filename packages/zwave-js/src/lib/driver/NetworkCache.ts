@@ -289,7 +289,8 @@ function isSerializedProtocol(
 	s: unknown,
 ): boolean {
 	// The list of supported protocols has been around since before we started
-	// saving them as their stringified variant, so we // now have to deal with the following variants:
+	// saving them as their stringified variant, so we
+	// now have to deal with the following variants:
 	// 1. plain numbers representing a valid Protocol: 0
 	// 2. strings representing a valid Protocols: "ZWave"
 	if (typeof s === "number" && s in Protocols) return true;
@@ -304,7 +305,8 @@ function tryParseSerializedProtocol(
 	value: unknown,
 ): Protocols | undefined {
 	// The list of supported protocols has been around since before we started
-	// saving them as their stringified variant, so we // now have to deal with the following variants:
+	// saving them as their stringified variant, so we
+	// now have to deal with the following variants:
 	// 1. plain numbers representing a valid Protocol: 0
 	// 2. strings representing a valid Protocols: "ZWave"
 
