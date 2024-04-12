@@ -178,7 +178,7 @@ function tryParseProvisioningList(
 					&& entry.requestedSecurityClasses.every((s) =>
 						isSerializedSecurityClass(s)
 					)))
-			// protocol and supportedProtocols are stored as strings, not the enum values
+			// protocol and supportedProtocols are (supposed to be) stored as strings, not the enum values
 			&& (entry.protocol == undefined
 				|| isSerializedProtocol(entry.protocol))
 			&& (entry.supportedProtocols == undefined || (
@@ -214,14 +214,13 @@ function tryParseProvisioningList(
 				] as any as ProvisioningEntryStatus;
 			}
 			if (entry.protocol != undefined) {
-				parsed.protocol =
-					Protocols[entry.protocol as any] as any as Protocols;
+				parsed.protocol = tryParseSerializedProtocol(entry.protocol);
 			}
 			if (entry.supportedProtocols) {
 				parsed.supportedProtocols = (
 					entry.supportedProtocols as any[]
 				)
-					.map((s) => Protocols[s] as any as Protocols)
+					.map((s) => tryParseSerializedProtocol(s))
 					.filter((s): s is Protocols => s !== undefined);
 			}
 			ret.push(parsed);
@@ -288,13 +287,38 @@ function isSerializedProvisioningEntryStatus(
 
 function isSerializedProtocol(
 	s: unknown,
-): s is keyof typeof Protocols {
+): boolean {
+	// The list of supported protocols has been around since before we started
+	// saving them as their stringified variant, so we // now have to deal with the following variants:
+	// 1. plain numbers representing a valid Protocol: 0
+	// 2. strings representing a valid Protocols: "ZWave"
+	if (typeof s === "number" && s in Protocols) return true;
 	return (
 		typeof s === "string"
 		&& s in Protocols
 		&& typeof Protocols[s as any] === "number"
 	);
 }
+
+function tryParseSerializedProtocol(
+	value: unknown,
+): Protocols | undefined {
+	// The list of supported protocols has been around since before we started
+	// saving them as their stringified variant, so we // now have to deal with the following variants:
+	// 1. plain numbers representing a valid Protocol: 0
+	// 2. strings representing a valid Protocols: "ZWave"
+
+	if (typeof value === "number" && value in Protocols) return value;
+	if (typeof value === "string") {
+		if (
+			(value as any) in Protocols
+			&& typeof Protocols[value as any] === "number"
+		) {
+			return (Protocols as any)[value as any];
+		}
+	}
+}
+
 
 function tryParseDate(value: unknown): Date | undefined {
 	// Dates are stored as timestamps
