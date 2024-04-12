@@ -5654,8 +5654,22 @@ ${handlers.length} left`,
 		}
 
 		// Fall back to non-supervised commands
+		const result = await this.sendCommandInternal(command, options);
+
+		// When sending S2 multicast commands to supporting nodes, the singlecast followups
+		// may use supervision. In this case, the multicast message generator returns a
+		// synthetic SupervisionCCReport.
+		// sendCommand is supposed to return a SupervisionResult though.
+		if (
+			options?.s2MulticastGroupId != undefined
+			&& result instanceof SupervisionCCReport
+		) {
+			// @ts-expect-error TS doesn't know we've narrowed the return type to match
+			return result.toSupervisionResult();
+		}
+
 		// @ts-expect-error TS doesn't know we've narrowed the return type to match
-		return this.sendCommandInternal(command, options);
+		return result;
 	}
 
 	/** @internal */
