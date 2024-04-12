@@ -321,7 +321,6 @@ function tryParseSerializedProtocol(
 	}
 }
 
-
 function tryParseDate(value: unknown): Date | undefined {
 	// Dates are stored as timestamps
 	if (typeof value === "number") {
