@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Firmware updates on Z-Wave Long Range now utilize the larger frame size better (#6759)
+* Fixed an issue where multicast `setValue` had a `SupervisionCCReport` as the result instead of a `SetValueResult` (#6765)
+* Parsing of provisioning entries with numeric `supportedProtocols` (#6764)
+* Fix error when `ConfigurationCCBulkGet` response is missing (#6763)
+* Values from force-removed or endpoint-mapped CCs are no longer persisted (#6760)
+
+### Config file changes
+* Fix versioning logic for parameter 26 of Zooz ZEN72 (#6761)
+
 ## 12.5.3 (2024-04-10)
 ### Bugfixes
 * Disallow associating a node with itself and skip self-associations when rebuilding routes (#6749)
