@@ -216,9 +216,7 @@ export function encodeNVM(
 
 				// We need to start a new page, if the remaining space is not enough for
 				// the object header plus additional data
-				if (remainingSpace <= NVM3_OBJ_HEADER_SIZE_LARGE) {
-					nextPage();
-				}
+				if (remainingSpace <= NVM3_OBJ_HEADER_SIZE_LARGE) nextPage();
 
 				fragments = fragmentLargeObject(
 					obj as any,
