@@ -5,6 +5,7 @@ import {
 	FLASH_MAX_PAGE_SIZE_700,
 	FLASH_MAX_PAGE_SIZE_800,
 	NVM3_COUNTER_SIZE,
+	NVM3_OBJ_HEADER_SIZE_LARGE,
 	NVM3_OBJ_HEADER_SIZE_SMALL,
 	NVM3_PAGE_HEADER_SIZE,
 	NVM3_WORD_SIZE,
@@ -212,6 +213,13 @@ export function encodeNVM(
 				|| obj.type === ObjectType.DataLarge
 			) {
 				// Large objects may be fragmented
+
+				// We need to start a new page, if the remaining space is not enough for
+				// the object header plus additional data
+				if (remainingSpace <= NVM3_OBJ_HEADER_SIZE_LARGE) {
+					nextPage();
+				}
+
 				fragments = fragmentLargeObject(
 					obj as any,
 					remainingSpace,
