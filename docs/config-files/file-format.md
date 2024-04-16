@@ -360,10 +360,6 @@ If a device reports support for a CCs but does not correctly support it, this ca
 
 Several command classes are refreshed regularly (every couple of hours) if they do not report all of their values automatically. It has been found that some devices respond with invalid reports when queried. By setting `disableAutoRefresh` to `true`, this feature can be disabled.
 
-### `disableBasicMapping`
-
-By default, received `Basic CC::Report` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
-
 ### `disableCallbackFunctionTypeCheck`
 
 By default, responses or callbacks for Serial API commands must have the same function type (command identifier) in order to be recognized. However, in some situations, certain controllers send a callback with an invalid function type. In this case, the faulty commands may be listed in the `disableCallbackFunctionTypeCheck` array to disable the check for a matching function type.
@@ -392,14 +388,22 @@ The specifications mandate that each `Scene Controller Configuration CC` Group I
 
 Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
 
+### `mapBasicReport`
+
+`Basic CC::Report` commands are like their name implies, Basic. They contain no information about **what** they are reporting. By default, Z-Wave JS uses the device type to map these commands to a more appropriate CC. The `mapBasicReport` can influence this behavior. It has the following options:
+
+- `false`: treat the report verbatim without mapping
+- `"auto"` **(default)**: Depending on the device type (Binary Switch, Multilevel Switch, or Binary Sensor), the command is mapped to the corresponding report for that device type. If no matching mapping is found, the command is treated verbatim without mapping.
+- `"Binary Sensor"`: Regardless or the device type, the command is treated like a `Binary Sensor CC::Report`.
+
 ### `mapBasicSet`
 
 `Basic CC::Set` commands are meant to control other devices, yet some devices use them to "report" their status or expose secondary functionality. The `mapBasicSet` flag defines how Z-Wave JS should handle these commands:
 
-- `report` **(default)**: The command is treated like a `Basic CC::Report`, but the **target value** is used as the **current value**.
-- `event`: Emit a `value event` for the `"event"` property instead. This property is exclusively used in this case in order to avoid conflicts with regular value IDs.
-- `auto`: Depending on the device type (Binary Switch, Multilevel Switch, or Binary Sensor), the command is mapped to the corresponding report for that device type.
-- `Binary Sensor`: Regardless or the device type, the command is treated like a `Binary Sensor CC::Report`.
+- `"report"` **(default)**: The command is treated like a `Basic CC::Report`, but the **target value** is used as the **current value**.
+- `"auto"`: Depending on the device type (Binary Switch, Multilevel Switch, or Binary Sensor), the command is mapped to the corresponding report for that device type. If no matching mapping is found, the command is treated like a `Basic CC::Report`, but the **target value** is used as the **current value**.
+- `"event"`: Emit a `value event` for the `"event"` property instead. This property is exclusively used in this case in order to avoid conflicts with regular value IDs.
+- `"Binary Sensor"`: Regardless or the device type, the command is treated like a `Binary Sensor CC::Report`.
 
 ### `mapRootReportsToEndpoint`
 

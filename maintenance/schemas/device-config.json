@@ -565,9 +565,6 @@
 				"disableAutoRefresh": {
 					"const": true
 				},
-				"disableBasicMapping": {
-					"const": true
-				},
 				"disableCallbackFunctionTypeCheck": {
 					"type": "array",
 					"items": {
@@ -593,6 +590,17 @@
 				"manualValueRefreshDelayMs": {
 					"type": "number",
 					"minimum": 0
+				},
+				"mapBasicReport": {
+					"oneOf": [
+						{
+							"const": false
+						},
+						{
+							"type": "string",
+							"enum": ["auto", "Binary Sensor"]
+						}
+					]
 				},
 				"mapBasicSet": {
 					"type": "string",

@@ -89,7 +89,7 @@
 		}
 	],
 	"compat": {
-		"disableBasicMapping": true,
+		"mapBasicReport": false,
 		"mapBasicSet": "event"
 	},
 	"metadata": {

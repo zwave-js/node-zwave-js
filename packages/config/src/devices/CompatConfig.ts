@@ -76,18 +76,6 @@ compat option disableAutoRefresh must be true or omitted`,
 			this.disableAutoRefresh = definition.disableAutoRefresh;
 		}
 
-		if (definition.disableBasicMapping != undefined) {
-			if (definition.disableBasicMapping !== true) {
-				throwInvalidConfig(
-					"devices",
-					`config/devices/${filename}:
-compat option disableBasicMapping must be true or omitted`,
-				);
-			}
-
-			this.disableBasicMapping = definition.disableBasicMapping;
-		}
-
 		if (definition.disableCallbackFunctionTypeCheck != undefined) {
 			if (
 				!isArray(definition.disableCallbackFunctionTypeCheck)
@@ -166,6 +154,18 @@ compat option forceSceneControllerGroupCount must be between 0 and 255!`,
 
 			this.forceSceneControllerGroupCount =
 				definition.forceSceneControllerGroupCount;
+		}
+
+		if (definition.mapBasicReport != undefined) {
+			if (!isBasicReportMapping(definition.mapBasicReport)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapBasicReport contains an invalid value`,
+				);
+			}
+
+			this.mapBasicReport = definition.mapBasicReport;
 		}
 
 		if (definition.mapBasicSet != undefined) {
@@ -599,7 +599,6 @@ compat option overrideQueries must be an object!`,
 		"*" | readonly number[]
 	>;
 	public readonly disableAutoRefresh?: boolean;
-	public readonly disableBasicMapping?: boolean;
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly disableStrictMeasurementValidation?: boolean;
 	public readonly disableCallbackFunctionTypeCheck?: number[];
@@ -607,6 +606,7 @@ compat option overrideQueries must be an object!`,
 	public readonly forceSceneControllerGroupCount?: number;
 	public readonly manualValueRefreshDelayMs?: number;
 	public readonly mapRootReportsToEndpoint?: number;
+	public readonly mapBasicReport?: BasicReportMapping;
 	public readonly mapBasicSet?: BasicSetMapping;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
@@ -643,13 +643,13 @@ compat option overrideQueries must be an object!`,
 			"addCCs",
 			"removeCCs",
 			"disableAutoRefresh",
-			"disableBasicMapping",
 			"disableCallbackFunctionTypeCheck",
 			"disableStrictEntryControlDataValidation",
 			"disableStrictMeasurementValidation",
 			"forceNotificationIdleReset",
 			"forceSceneControllerGroupCount",
 			"manualValueRefreshDelayMs",
+			"mapBasicReport",
 			"mapBasicSet",
 			"mapRootReportsToEndpoint",
 			"overrideFloatEncoding",
@@ -1039,6 +1039,24 @@ export interface CompatOverrideQuery {
 	 * The given metadata will be merged with statically defined value metadata.
 	 */
 	extendMetadata?: Record<string, any>;
+}
+
+const basicReportMappings = [
+	false,
+	"auto",
+	"Binary Sensor",
+] as const;
+
+/**
+ * Defines how to handle a received Basic CC Report:
+ * - "auto": map it to a different CC based on the device type, with fallback to `false`
+ * - false: treat the report verbatim without mapping
+ * - "Binary Sensor": treat it as a Binary Sensor CC Report, regardless of device type
+ */
+export type BasicReportMapping = typeof basicReportMappings[number];
+
+function isBasicReportMapping(v: unknown): v is BasicReportMapping {
+	return basicReportMappings.includes(v as any);
 }
 
 const basicSetMappings = [

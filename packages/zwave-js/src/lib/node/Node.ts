@@ -2948,8 +2948,9 @@ protocol version:      ${this.protocolVersion}`;
 			endpoint.addCC(CommandClasses.Basic, { isControlled: true });
 		}
 
-		// Don't offer or interview the Basic CC if any actuator CC is supported
-		if (!compat?.disableBasicMapping) {
+		// Don't offer or interview the Basic CC if any actuator CC is supported, unless the config file tells us
+		// not to map Basic CC reports
+		if (compat?.mapBasicReport !== false) {
 			endpoint.hideBasicCCInFavorOfActuatorCCs();
 		}
 
@@ -3625,59 +3626,99 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Depending on the generic device class, we may need to map the basic command to other CCs
 		let mappedTargetCC: CommandClass | undefined;
-		// Do not map the basic CC if the device config forbids it
-		if (!this._deviceConfig?.compat?.disableBasicMapping) {
-			switch (sourceEndpoint.deviceClass?.generic.key) {
-				case 0x20: // Binary Sensor
-					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-						CommandClasses["Binary Sensor"],
-					);
-					break;
-				case 0x10: // Binary Switch
-					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-						CommandClasses["Binary Switch"],
-					);
-					break;
-				case 0x11: // Multilevel Switch
-					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-						CommandClasses["Multilevel Switch"],
-					);
-					break;
-				case 0x12: // Remote Switch
-					switch (sourceEndpoint.deviceClass.specific.key) {
-						case 0x01: // Binary Remote Switch
-							mappedTargetCC = sourceEndpoint
-								.createCCInstanceUnsafe(
-									CommandClasses["Binary Switch"],
-								);
-							break;
-						case 0x02: // Multilevel Remote Switch
-							mappedTargetCC = sourceEndpoint
-								.createCCInstanceUnsafe(
-									CommandClasses["Multilevel Switch"],
-								);
-							break;
-					}
-			}
+		switch (sourceEndpoint.deviceClass?.generic.key) {
+			case 0x20: // Binary Sensor
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Binary Sensor"],
+				);
+				break;
+			case 0x10: // Binary Switch
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Binary Switch"],
+				);
+				break;
+			case 0x11: // Multilevel Switch
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Multilevel Switch"],
+				);
+				break;
+			case 0x12: // Remote Switch
+				switch (sourceEndpoint.deviceClass.specific.key) {
+					case 0x01: // Binary Remote Switch
+						mappedTargetCC = sourceEndpoint
+							.createCCInstanceUnsafe(
+								CommandClasses["Binary Switch"],
+							);
+						break;
+					case 0x02: // Multilevel Remote Switch
+						mappedTargetCC = sourceEndpoint
+							.createCCInstanceUnsafe(
+								CommandClasses["Multilevel Switch"],
+							);
+						break;
+				}
 		}
 
 		if (command instanceof BasicCCReport) {
-			// Try to set the mapped value on the target CC
-			const didSetMappedValue = typeof command.currentValue === "number"
-				&& mappedTargetCC?.setMappedBasicValue(
-					this.driver,
-					command.currentValue,
+			// By default, map Basic CC Reports to a more appropriate CC, unless stated otherwise in a config file
+			const basicReportMapping = this.deviceConfig?.compat?.mapBasicReport
+				?? "auto";
+
+			if (basicReportMapping === "Binary Sensor") {
+				// Treat the command as a BinarySensorCC Report, regardless of the device class
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Binary Sensor"],
 				);
+				if (typeof command.currentValue === "number") {
+					if (mappedTargetCC) {
+						this.driver.controllerLog.logNode(this.id, {
+							endpoint: command.endpointIndex,
+							message:
+								"treating BasicCC::Report as a BinarySensorCC::Report",
+						});
+						mappedTargetCC.setMappedBasicValue(
+							this.driver,
+							command.currentValue,
+						);
+					} else {
+						this.driver.controllerLog.logNode(this.id, {
+							endpoint: command.endpointIndex,
+							message:
+								"cannot treat BasicCC::Report as a BinarySensorCC::Report, because the Binary Sensor CC is not supported",
+							level: "warn",
+						});
+					}
+				} else {
+					this.driver.controllerLog.logNode(this.id, {
+						endpoint: command.endpointIndex,
+						message:
+							"cannot map BasicCC::Report to a different CC, because the current value is unknown",
+						level: "warn",
+					});
+				}
+			} else if (
+				basicReportMapping === "auto" || basicReportMapping === false
+			) {
+				// Try to set the mapped value on the target CC
+				const didSetMappedValue =
+					typeof command.currentValue === "number"
+					// ... unless forbidden
+					&& basicReportMapping === "auto"
+					&& mappedTargetCC?.setMappedBasicValue(
+						this.driver,
+						command.currentValue,
+					);
 
-			// Otherwise fall back to setting it ourselves
-			if (!didSetMappedValue) {
-				// Store the value in the value DB now
-				command.persistValues(this.driver);
+				// Otherwise fall back to setting it ourselves
+				if (!didSetMappedValue) {
+					// Store the value in the value DB now
+					command.persistValues(this.driver);
 
-				// Since the node sent us a Basic report, we are sure that it is at least supported
-				// If this is the only supported actuator CC, add it to the support list,
-				// so the information lands in the network cache
-				sourceEndpoint.maybeAddBasicCCAsFallback();
+					// Since the node sent us a Basic report, we are sure that it is at least supported
+					// If this is the only supported actuator CC, add it to the support list,
+					// so the information lands in the network cache
+					sourceEndpoint.maybeAddBasicCCAsFallback();
+				}
 			}
 		} else if (command instanceof BasicCCSet) {
 			// By default, map Basic CC Set to Basic CC Report, unless stated otherwise in a config file
@@ -5553,7 +5594,9 @@ protocol version:      ${this.protocolVersion}`;
 		// Remove the Basic CC if it should be hidden
 		// TODO: Do this as part of loadDeviceConfig
 		const compat = this._deviceConfig?.compat;
-		if (!compat?.disableBasicMapping && compat?.mapBasicSet !== "event") {
+		if (
+			compat?.mapBasicReport !== false && compat?.mapBasicSet !== "event"
+		) {
 			for (const endpoint of this.getAllEndpoints()) {
 				endpoint.hideBasicCCInFavorOfActuatorCCs();
 			}
