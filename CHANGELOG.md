@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Rework compat flags for `Basic CC` mapping (#6773)
+
+### Bugfixes
+* The `protocolDataRate` field in `RouteStatistics` is optional (#6746)
+* Fixed an infinite loop during NVM migration which could happen in rare cases (#6769)
+
+### Config file changes
+* Always map `Basic CC` to `Binary Sensor CC` for Aeotec ZW100 Multisensor 6 (#6773)
+
+### Changes under the hood
+* Reword recommendations on encrypting traffic (#6770)
+
 ## 12.5.4 (2024-04-12)
 ### Bugfixes
 * Firmware updates on Z-Wave Long Range now utilize the larger frame size better (#6759)
