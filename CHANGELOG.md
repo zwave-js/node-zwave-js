@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.5.5 (2024-04-16)
 ### Features
 * Rework compat flags for `Basic CC` mapping (#6773)
 
