@@ -858,13 +858,12 @@ export class DeviceConfig {
 			// Copy some simple flags over
 			for (
 				const prop of [
-					"enableBasicSetMapping",
 					"forceSceneControllerGroupCount",
 					"mapRootReportsToEndpoint",
+					"mapBasicSet",
 					"preserveRootApplicationCCValueIDs",
 					"preserveEndpoints",
 					"removeEndpoints",
-					"treatBasicSetAsEvent",
 					"treatMultilevelSwitchSetAsEvent",
 				] as const
 			) {

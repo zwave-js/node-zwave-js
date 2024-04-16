@@ -477,7 +477,7 @@ jobs:
   # Adds a compat flag to an existing file when an authorized person posts
   # @zwave-js-bot add compat flag to <deviceId>
   # ```
-  # enableBasicSetMapping: true
+  # mapBasicSet: "auto"
   # ```
   add-compat-flag:
     if: |

@@ -328,8 +328,8 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 		}
 
 		if (
-			!!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
-				?.treatBasicSetAsEvent
+			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat?.mapBasicSet
+				=== "event"
 		) {
 			// Add the compat event value if it should be exposed
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));

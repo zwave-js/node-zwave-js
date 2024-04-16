@@ -311,7 +311,7 @@
 		}
 	],
 	"compat": {
-		"enableBasicSetMapping": true,
+		"mapBasicSet": "auto",
 		"commandClasses": {
 			"remove": {
 				// Alarm Sensor CC is reported as supported, but we either get no response

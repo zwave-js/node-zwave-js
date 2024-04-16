@@ -55,7 +55,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "Adding your device to a Z-Wave network:\n1. Follow the instructions for your Z-Wave certified controller to\ninclude the device to the Z-Wave network.\n2. Once the controller is ready to include your smart switch,\nsingle press and release the manual/program button on the\nsmart switch to include it in the network.\nNow you have complete control to turn your lamp ON/OFF\naccording to groups, scenes, schedules and interactive\nautomations programmed by your controller.\nIf your Z-Wave certified controller features Remote Access,\nyou can now control your lighting from your mobile devices",

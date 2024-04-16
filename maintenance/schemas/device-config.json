@@ -582,9 +582,6 @@
 				"disableStrictMeasurementValidation": {
 					"const": true
 				},
-				"enableBasicSetMapping": {
-					"const": true
-				},
 				"forceNotificationIdleReset": {
 					"const": true
 				},
@@ -596,6 +593,10 @@
 				"manualValueRefreshDelayMs": {
 					"type": "number",
 					"minimum": 0
+				},
+				"mapBasicSet": {
+					"type": "string",
+					"enum": ["event", "report", "auto", "Binary Sensor"]
 				},
 				"mapRootReportsToEndpoint": {
 					"type": "number",
@@ -694,9 +695,6 @@
 					"const": true
 				},
 				"skipConfigurationInfoQuery": {
-					"const": true
-				},
-				"treatBasicSetAsEvent": {
 					"const": true
 				},
 				"treatMultilevelSwitchSetAsEvent": {

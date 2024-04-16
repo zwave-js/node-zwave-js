@@ -380,12 +380,6 @@ Without the additional integrity checks that encapsulation CCs like `CRC-16`, `S
 
 Some devices incorrectly encode this support information though, making the checks discard otherwise correct data. To disable the checks, set `disableStrictMeasurementValidation` to `true`.
 
-### `enableBasicSetMapping`
-
-`Basic CC::Set` commands are not meant to be mapped to other CCs. Some devices still use them to report status. By setting `enableBasicSetMapping` to `true`, `Basic CC::Set` commands are mapped just like `Basic CC::Report`s.
-
-> [!NOTE] The option `disableBasicMapping` has precedence. If that is `true`, no `Basic` commands will be mapped.
-
 ### `forceNotificationIdleReset`
 
 Version 8 of the `Notification CC` added the requirement that devices must issue an idle notification after a notification variable is no longer active. Several legacy devices and some misbehaving V8 devices do not return their variables to idle automatically. By setting `forceNotificationIdleReset` to `true`, `zwave-js` auto-idles supporting notification variables after 5 minutes.
@@ -397,6 +391,15 @@ The specifications mandate that each `Scene Controller Configuration CC` Group I
 ### `manualValueRefreshDelayMs`
 
 Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
+
+### `mapBasicSet`
+
+`Basic CC::Set` commands are meant to control other devices, yet some devices use them to "report" their status or expose secondary functionality. The `mapBasicSet` flag defines how Z-Wave JS should handle these commands:
+
+- `report` **(default)**: The command is treated like a `Basic CC::Report`, but the **target value** is used as the **current value**.
+- `event`: Emit a `value event` for the `"event"` property instead. This property is exclusively used in this case in order to avoid conflicts with regular value IDs.
+- `auto`: Depending on the device type (Binary Switch, Multilevel Switch, or Binary Sensor), the command is mapped to the corresponding report for that device type.
+- `Binary Sensor`: Regardless or the device type, the command is treated like a `Binary Sensor CC::Report`.
 
 ### `mapRootReportsToEndpoint`
 
@@ -491,13 +494,6 @@ Some devices spam the network with lots of `ConfigurationCC::NameReport`s in res
 ### `skipConfigurationInfoQuery`
 
 Some devices spam the network with lots of (sometimes invalid) `ConfigurationCC::InfoReport`s in response to the `InfoGet` command. Set this flag to `true` to skip this query for affected devices.
-
-### `treatBasicSetAsEvent`
-
-By default, `Basic CC::Set` commands are interpreted as status updates. This flag causes the driver to emit a `value event` for the `"event"` property instead. Note that this property is exclusively used in this case in order to avoid conflicts with regular value IDs.
-
-> [!NOTE]
-> If this option is `true`, it has precedence over `disableBasicMapping`.
 
 ### `treatMultilevelSwitchSetAsEvent`
 

@@ -185,7 +185,7 @@ test("parses a device config with conditional compat flags", (t) => {
 		compat: [
 			{
 				$if: "firmwareVersion < 1.0",
-				enableBasicSetMapping: true,
+				mapBasicSet: "auto",
 			},
 		],
 	};
@@ -203,7 +203,7 @@ test("parses a device config with conditional compat flags", (t) => {
 		firmwareVersion: "0.5",
 	});
 	t.deepEqual(evaluated1.compat, {
-		enableBasicSetMapping: true,
+		mapBasicSet: "auto",
 	});
 
 	const evaluated2 = condConfig.evaluate({

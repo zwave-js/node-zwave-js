@@ -40,7 +40,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true,
+		"mapBasicSet": "event",
 		"commandClasses": {
 			"remove": {
 				"Supervision": {

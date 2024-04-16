@@ -2944,7 +2944,7 @@ protocol version:      ${this.protocolVersion}`;
 		const compat = this._deviceConfig?.compat;
 
 		// If the config file instructs us to expose Basic Set as an event, mark the CC as controlled
-		if (compat?.treatBasicSetAsEvent && endpoint.index === 0) {
+		if (compat?.mapBasicSet === "event" && endpoint.index === 0) {
 			endpoint.addCC(CommandClasses.Basic, { isControlled: true });
 		}
 
@@ -3680,31 +3680,60 @@ protocol version:      ${this.protocolVersion}`;
 				sourceEndpoint.maybeAddBasicCCAsFallback();
 			}
 		} else if (command instanceof BasicCCSet) {
-			// Treat BasicCCSet as value events if desired
-			if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
+			// By default, map Basic CC Set to Basic CC Report, unless stated otherwise in a config file
+			const basicSetMapping = this.deviceConfig?.compat?.mapBasicSet
+				?? "report";
+
+			if (basicSetMapping === "event") {
+				// Treat BasicCCSet as value events if desired
 				this.driver.controllerLog.logNode(this.id, {
 					endpoint: command.endpointIndex,
 					message: "treating BasicCC::Set as a value event",
 				});
 				this._valueDB.setValue(
-					BasicCCValues.compatEvent.endpoint(command.endpointIndex),
+					BasicCCValues.compatEvent.endpoint(
+						command.endpointIndex,
+					),
 					command.targetValue,
 					{
 						stateful: false,
 					},
 				);
-				return;
-			} else {
-				// Some devices send their current state using `BasicCCSet`s to their associations
+			} else if (basicSetMapping === "Binary Sensor") {
+				// Treat the Set command as a BinarySensorCC Report, regardless of the device class
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Binary Sensor"],
+				);
+				if (mappedTargetCC) {
+					this.driver.controllerLog.logNode(this.id, {
+						endpoint: command.endpointIndex,
+						message:
+							"treating BasicCC::Set as a BinarySensorCC::Report",
+					});
+					mappedTargetCC.setMappedBasicValue(
+						this.driver,
+						command.targetValue,
+					);
+				} else {
+					this.driver.controllerLog.logNode(this.id, {
+						endpoint: command.endpointIndex,
+						message:
+							"cannot treat BasicCC::Set as a BinarySensorCC::Report, because the Binary Sensor CC is not supported",
+						level: "warn",
+					});
+				}
+			} else if (
+				basicSetMapping === "auto" || basicSetMapping === "report"
+			) {
+				// Some devices send their current state using BasicCCSet to their associations
 				// instead of using reports. We still interpret them like reports
 				this.driver.controllerLog.logNode(this.id, {
 					endpoint: command.endpointIndex,
 					message: "treating BasicCC::Set as a report",
 				});
 
-				// If enabled in a config file, try to set the mapped value on the target CC first
-				const didSetMappedValue =
-					!!this._deviceConfig?.compat?.enableBasicSetMapping
+				// In "auto" mode, try to set the mapped value on the target CC first
+				const didSetMappedValue = basicSetMapping === "auto"
 					&& !!mappedTargetCC?.setMappedBasicValue(
 						this.driver,
 						command.targetValue,
@@ -5524,7 +5553,7 @@ protocol version:      ${this.protocolVersion}`;
 		// Remove the Basic CC if it should be hidden
 		// TODO: Do this as part of loadDeviceConfig
 		const compat = this._deviceConfig?.compat;
-		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+		if (!compat?.disableBasicMapping && compat?.mapBasicSet !== "event") {
 			for (const endpoint of this.getAllEndpoints()) {
 				endpoint.hideBasicCCInFavorOfActuatorCCs();
 			}
