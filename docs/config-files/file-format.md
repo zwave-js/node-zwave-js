@@ -394,7 +394,7 @@ Some legacy devices emit an NIF when a local event occurs (e.g. a button press) 
 
 - `false`: treat the report verbatim without mapping
 - `"auto"` **(default)**: Depending on the device type (Binary Switch, Multilevel Switch, or Binary Sensor), the command is mapped to the corresponding report for that device type. If no matching mapping is found, the command is treated verbatim without mapping.
-- `"Binary Sensor"`: Regardless or the device type, the command is treated like a `Binary Sensor CC::Report`.
+- `"Binary Sensor"`: Regardless of the device type, the command is treated like a `Binary Sensor CC::Report`.
 
 ### `mapBasicSet`
 
@@ -402,8 +402,8 @@ Some legacy devices emit an NIF when a local event occurs (e.g. a button press) 
 
 - `"report"` **(default)**: The command is treated like a `Basic CC::Report`, but the **target value** is used as the **current value**.
 - `"auto"`: Depending on the device type (Binary Switch, Multilevel Switch, or Binary Sensor), the command is mapped to the corresponding report for that device type. If no matching mapping is found, the command is treated like a `Basic CC::Report`, but the **target value** is used as the **current value**.
-- `"event"`: Emit a `value event` for the `"event"` property instead. This property is exclusively used in this case in order to avoid conflicts with regular value IDs.
-- `"Binary Sensor"`: Regardless or the device type, the command is treated like a `Binary Sensor CC::Report`.
+- `"event"`: Emit a `value event` for the Basic `"event"` property.
+- `"Binary Sensor"`: Regardless of the device type, the command is treated like a `Binary Sensor CC::Report`.
 
 ### `mapRootReportsToEndpoint`
 
