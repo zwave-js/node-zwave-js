@@ -37,7 +37,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified hub to add a device to the Z-Wave network.\n2. Once the hub is ready to add your device, press and hold either button for three seconds.\n3. The LED will flash two times when the remote sends add notification (NIF).\n4. The LED will keep lighting up for one minute if inclusion is successful.5. Following the instructions for your Z-Wave certified hub, assign actions for each button press. An action can be many combinations of scenes, groups\nor events, and is greatly dependent on the hub capabilities.",

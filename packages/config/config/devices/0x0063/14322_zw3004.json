@@ -61,7 +61,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "Adding your device to a Z-wave network:\n1. Follow the instructions for your Z-wave certified controller to include a device to\nthe Z-wave network.\n2. Once the controller is ready to include your device, press up and release on the\ntoggle to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh\nthe Z-wave network to optimize performance.\nPlease reference the controller’s manual for instructions.\nNow you have complete control to turn your fixture ON/OFF or dim\naccording to groups, scenes, schedules and interactive automations\nprogrammed by your controller.\nIf your Z-wave certified controller features Remote Access, you can now control\nyour fixture from your mobile devices",

@@ -31,7 +31,7 @@
 		}
 	},
 	"compat": {
-		"disableBasicMapping": true
+		"mapBasicReport": false
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\ninclude the smart switch to the Z-Wave network.\n2. Once the controller is ready to include your outdoor smart\nswitch, single press and release the manual/program\nbutton on the smart switch to include it in the network.\n3. Once your controller has confirmed that the smart switch\nhas been included, refresh the Z-Wave network to\noptimize performance",

@@ -33,7 +33,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "Put your controller in INCLUDE mode, and double tap the button on the face of the device.",

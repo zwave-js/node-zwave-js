@@ -55,7 +55,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a\ndevice to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the\nprogram button. Repeat as necessary to add the smart outlet to\nthe network.\nYou have complete control",
