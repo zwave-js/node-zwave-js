@@ -1,6 +1,7 @@
 import test from "ava";
 import { SecurityClass, ZWaveErrorCodes, assertZWaveError } from "..";
-import { QRCodeVersion, parseQRCodeString } from "./QR";
+import { parseQRCodeString } from "./QR";
+import { QRCodeVersion } from "./QR_safe";
 
 function createDummyQR(firstDigits: string): string {
 	return firstDigits + "0".repeat(52 - firstDigits.length);
