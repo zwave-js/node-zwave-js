@@ -284,5 +284,10 @@
 				"value": 1
 			}
 		]
-	}
+	},
+	"range_sensitivity": {
+		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"label": "Range Sensitivity",
+		"description": "Higher values increase sensitivity"
+	},
 }
