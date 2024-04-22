@@ -145,5 +145,15 @@
 			"$import": "#paramInformation/152",
 			"label": "Second Channel: Double Click Value"
 		}
-	]
+	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device does not accept configuration changes using supervision
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }
