@@ -46,14 +46,14 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable / Disable Bluetooth",
+			"label": "Bluetooth",
 			"description": "After changing this setting, the unit will need to be power cycled before it will take effect."
 		},
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable / Disable Motion LED",
-			"description": "Enable /Disable the LED flash when motion is sensed (red) and times out (green).",
+			"label": "Motion LED",
+			"description": "Enable / Disable the LED flash when motion is sensed (red) and times out (green).",
 			"defaultValue": 1
 		},
 		{
