@@ -4,6 +4,15 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* NVM restore works around an issue in some 800 series controllers where the NVM migration built into the Z-Wave firmware would not work due to the SDK version being encoded incorrectly (#6777)
+
+### Config file changes
+* Add HomeSeer PS100 presence sensor, fix broken links (#6783)
+* Fix value size for Fibaro FGWCEU-201, params 150/151 (#6779)
+* Disable Supervision for Heatit Z-Temp2, firmware 1.2.1 (#6785)
+
 ## 12.5.5 (2024-04-16)
 ### Features
 * Rework compat flags for `Basic CC` mapping (#6773)
