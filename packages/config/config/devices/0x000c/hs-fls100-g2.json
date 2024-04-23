@@ -101,6 +101,6 @@
 		"inclusion": "1. Put the Z-Wave controller into inclusion mode.\n2. Press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode. \n2. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode",
 		"reset": "The product reset is to operate only when the primary controller is missing or inoperable. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode.Within 1 second of step 1, press the Link button again and hold until LED is off (about 5 seconds)",
-		"manual": "https://docs.homeseer.com/products/sensors/hs-fls100+/hs-fls100+-user-guide"
+		"manual": "https://docs.homeseer.com/products/hs-fls100-user-guide"
 	}
 }
