@@ -799,6 +799,16 @@ export class ZWaveController
 		// And that the entry contains valid data
 		assertProvisioningEntry(entry);
 
+		// Discard any invalid security classes that may have been granted. This can happen
+		// when switching the protocol to ZWLR for a device that requests S2 Unauthenticated
+		// for Z-Wave Classic.
+		if (entry.protocol === Protocols.ZWaveLongRange) {
+			entry.securityClasses = entry.securityClasses.filter((sc) =>
+				sc === SecurityClass.S2_AccessControl
+				|| sc === SecurityClass.S2_Authenticated
+			);
+		}
+
 		const provisioningList = [...this.provisioningList];
 
 		const index = provisioningList.findIndex((e) => e.dsk === entry.dsk);
@@ -2272,6 +2282,27 @@ export class ZWaveController
 			) {
 				this.driver.controllerLog.print(
 					"The provisioning entry for this node is inactive, ignoring request...",
+				);
+				return;
+			}
+
+			// Ignore provisioning entries where some of the granted keys are not configured
+			const securityManager = isLongRange
+				? this.driver.securityManagerLR
+				: this.driver.securityManager2;
+			const missingKeys = provisioningEntry.securityClasses.filter(
+				(sc) => !securityManager?.hasKeysForSecurityClass(sc),
+			);
+			if (missingKeys.length > 0) {
+				this.driver.controllerLog.print(
+					`Ignoring inclusion request because the following security classes were granted but have no key configured:${
+						missingKeys.map((sc) =>
+							`\n· ${getEnumMemberName(SecurityClass, sc)}${
+								isLongRange ? " (Long Range)" : ""
+							}`
+						).join("")
+					}`,
+					"error",
 				);
 				return;
 			}
