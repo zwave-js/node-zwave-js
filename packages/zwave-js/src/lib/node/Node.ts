@@ -1898,18 +1898,17 @@ export class ZWaveNode extends Endpoint
 		this.supportsSecurity = resp.supportsSecurity;
 		this.supportsBeaming = resp.supportsBeaming;
 
-		const deviceClass = new DeviceClass(
+		this.deviceClass = new DeviceClass(
 			this.driver.configManager,
 			resp.basicDeviceClass,
 			resp.genericDeviceClass,
 			resp.specificDeviceClass,
 		);
-		this.applyDeviceClass(deviceClass);
 
 		const logMessage = `received response for protocol info:
-basic device class:    ${this.deviceClass!.basic.label}
-generic device class:  ${this.deviceClass!.generic.label}
-specific device class: ${this.deviceClass!.specific.label}
+basic device class:    ${this.deviceClass.basic.label}
+generic device class:  ${this.deviceClass.generic.label}
+specific device class: ${this.deviceClass.specific.label}
 node type:             ${getEnumMemberName(NodeType, this.nodeType)}
 is always listening:   ${this.isListening}
 is frequent listening: ${this.isFrequentListening}

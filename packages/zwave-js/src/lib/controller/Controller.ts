@@ -2576,13 +2576,13 @@ supported CCs: ${
 				newNode.updateNodeInfo(requestedNodeInfo);
 
 				// TODO: Check if this stuff works for a normal replace too
-				const deviceClass = new DeviceClass(
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				newNode["deviceClass"] = new DeviceClass(
 					this.driver.configManager,
 					requestedNodeInfo.basicDeviceClass,
 					requestedNodeInfo.genericDeviceClass,
 					requestedNodeInfo.specificDeviceClass,
 				);
-				newNode["applyDeviceClass"](deviceClass);
 			}
 
 			// Perform S0/S2 bootstrapping

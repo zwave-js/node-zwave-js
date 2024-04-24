@@ -59,7 +59,7 @@ export class Endpoint implements IZWaveEndpoint {
 			},
 		);
 
-		this.applyDeviceClass(deviceClass);
+		this._deviceClass = deviceClass;
 
 		// Add optional CCs
 		if (supportedCCs != undefined) {
@@ -130,25 +130,6 @@ export class Endpoint implements IZWaveEndpoint {
 	}
 
 	/**
-	 * Sets the device class of this endpoint and configures the mandatory CCs.
-	 * **Note:** This does nothing if the device class was already configured
-	 */
-	protected applyDeviceClass(deviceClass?: DeviceClass): void {
-		if (this.deviceClass) return;
-
-		this.deviceClass = deviceClass;
-		// Add mandatory CCs
-		if (deviceClass) {
-			for (const cc of deviceClass.mandatorySupportedCCs) {
-				this.addMandatoryCC(cc, { isSupported: true });
-			}
-			for (const cc of deviceClass.mandatoryControlledCCs) {
-				this.addMandatoryCC(cc, { isControlled: true });
-			}
-		}
-	}
-
-	/**
 	 * Adds a CC to the list of command classes implemented by the endpoint or updates the information.
 	 * You shouldn't need to call this yourself.
 	 * @param info The information about the command class. This is merged with existing information.
@@ -171,39 +152,6 @@ export class Endpoint implements IZWaveEndpoint {
 		if (!isDeepStrictEqual(original, updated)) {
 			this._implementedCommandClasses.set(cc, updated);
 		}
-	}
-
-	/**
-	 * Adds a mandatory CC to the list of command classes implemented by the endpoint or updates the information.
-	 * Performs some sanity checks before adding so the behavior is in compliance with the specifications
-	 */
-	protected addMandatoryCC(
-		cc: CommandClasses,
-		info: Partial<CommandClassInfo>,
-	): void {
-		if (
-			this.getNodeUnsafe()?.isListening
-			&& (cc === CommandClasses.Battery
-				|| cc === CommandClasses["Wake Up"])
-		) {
-			// Avoid adding Battery and Wake Up CC to always listening nodes or their endpoints
-			return;
-		} else if (
-			this.index > 0
-			&& [
-				CommandClasses["CRC-16 Encapsulation"],
-				CommandClasses["Device Reset Locally"],
-				CommandClasses["Manufacturer Specific"],
-				CommandClasses.Powerlevel,
-				CommandClasses.Version,
-				CommandClasses["Transport Service"],
-			].includes(cc)
-		) {
-			// Avoid adding CCs as mandatory to endpoints that should only be implemented by the root device
-			return;
-		}
-
-		this.addCC(cc, info);
 	}
 
 	/** Removes a CC from the list of command classes implemented by the endpoint */
