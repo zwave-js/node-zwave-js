@@ -160,21 +160,7 @@ function areEndpointsUnnecessary(
 		return false;
 	}
 
-	// If any endpoint has a mandatory supported CC that's not exposed by the root device, the endpoints are necessary
-	for (const { generic, specific } of deviceClasses.values()) {
-		const deviceClass = applHost.configManager.lookupSpecificDeviceClass(
-			generic,
-			specific,
-		);
-		// Unsure what this device class is. Probably not a good idea to assume it's unnecessary
-		if (!deviceClass) return false;
-		if (deviceClass.supportedCCs.some((cc) => !node.supportsCC(cc))) {
-			// We found one that's not supported by the root device
-			return false;
-		}
-	}
-
-	// Last heuristic: Endpoints are necessary if more than 1 of them has a switch-type device class
+	// Endpoints are necessary if more than 1 of them has a switch-type device class
 	const switchTypeDeviceClasses = [
 		0x10, // Binary Switch
 		0x11, // Multilevel Switch
