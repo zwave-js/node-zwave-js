@@ -1,7 +1,7 @@
 import {
 	type CommandClasses,
 	MessagePriority,
-	parseNodeUpdatePayload,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
@@ -146,13 +146,15 @@ export class RemoveNodeFromNetworkRequestStatusReport
 				break;
 
 			case RemoveNodeStatus.RemovingController:
-			case RemoveNodeStatus.RemovingSlave:
-				// the payload contains a node information frame
-				this.statusContext = parseNodeUpdatePayload(
+			case RemoveNodeStatus.RemovingSlave: {
+				// the payload contains the node ID
+				const { nodeId } = parseNodeID(
 					this.payload.subarray(2),
 					this.host.nodeIdType,
 				);
+				this.statusContext = { nodeId };
 				break;
+			}
 		}
 	}
 
