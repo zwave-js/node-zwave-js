@@ -82,7 +82,7 @@
     "del-cli": "^5.1.0",
     "esbuild": "0.20.2",
     "esbuild-register": "^3.5.0",
-    "got": "^13.0.0",
+    "got": "^14.2.1",
     "js-levenshtein": "^1.1.6",
     "pegjs": "^0.10.0",
     "sinon": "^17.0.1",
