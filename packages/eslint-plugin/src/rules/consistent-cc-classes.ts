@@ -60,14 +60,14 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 				// These must...
 
 				// ...be in a file that ends with "CC.ts"
-				if (!context.getFilename().endsWith("CC.ts")) {
+				if (!context.filename.endsWith("CC.ts")) {
 					context.report({
 						node,
 						loc: node.id.loc,
 						messageId: "wrong-filename",
 					});
 				} else if (
-					context.getFilename().split(path.sep).includes(
+					context.filename.split(path.sep).includes(
 						"manufacturerProprietary",
 					)
 				) {
@@ -216,14 +216,14 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 				// These must...
 
 				// ...be in a file that ends with "CC.ts"
-				if (!context.getFilename().endsWith("CC.ts")) {
+				if (!context.filename.endsWith("CC.ts")) {
 					context.report({
 						node,
 						loc: node.id.loc,
 						messageId: "api-wrong-filename",
 					});
 				} else if (
-					context.getFilename().split(path.sep).includes(
+					context.filename.split(path.sep).includes(
 						"manufacturerProprietary",
 					)
 				) {

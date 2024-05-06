@@ -49,6 +49,6 @@
 	],
 	"compat": {
 		// Enable double-tap support
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	}
 }

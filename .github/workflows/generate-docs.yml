@@ -26,9 +26,6 @@ jobs:
       matrix:
         node-version: [18] # This should be LTS
 
-    outputs:
-      CHANGES: ${{ steps.changes.outputs.CHANGES }}
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -58,8 +55,10 @@ jobs:
       if: |
         github.event_name == 'push' && 
         github.ref == 'refs/heads/master'
-      uses: ./.github/actions/generateTypedDocs
+      uses: actions/github-script@v7
       with:
-        githubToken: ${{ secrets.BOT_TOKEN }}
-      env:
-        CI: true
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/generateTypedDocs.js`);
+          return main({github, context});

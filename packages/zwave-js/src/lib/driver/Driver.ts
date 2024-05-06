@@ -60,6 +60,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	type MulticastDestination,
+	NUM_NODEMASK_BYTES,
 	NodeIDType,
 	RFRegion,
 	SPANState,
@@ -85,6 +86,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	highResTimestamp,
+	isEncapsulationCC,
 	isLongRangeNodeId,
 	isMissingControllerACK,
 	isMissingControllerCallback,
@@ -4709,9 +4711,43 @@ ${handlers.length} left`,
 		}
 	}
 
+	private shouldPersistCCValues(cc: CommandClass): boolean {
+		// Always persist encapsulation CCs, otherwise interviews don't work.
+		if (isEncapsulationCC(cc.ccId)) return true;
+
+		// Do not persist values for a node or endpoint that does not exist
+		const endpoint = this.tryGetEndpoint(cc);
+		const node = endpoint?.getNodeUnsafe();
+		if (!node) return false;
+
+		// Do not persist values for a CC that was force-removed via config
+		if (endpoint?.wasCCRemovedViaConfig(cc.ccId)) return false;
+
+		// Do not persist values for a CC that's being mapped to another endpoint.
+		// FIXME: This duplicates logic in Node.ts -> handleCommand
+		const compatConfig = node?.deviceConfig?.compat;
+		if (
+			cc.endpointIndex === 0
+			&& cc.constructor.name.endsWith("Report")
+			&& node.getEndpointCount() >= 1
+			// Only map reports from the root device to an endpoint if we know which one
+			&& compatConfig?.mapRootReportsToEndpoint != undefined
+		) {
+			const targetEndpoint = node.getEndpoint(
+				compatConfig.mapRootReportsToEndpoint,
+			);
+			if (targetEndpoint?.supportsCC(cc.ccId)) return false;
+		}
+
+		return true;
+	}
+
 	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
 	private persistCCValues(cc: CommandClass) {
-		cc.persistValues(this);
+		if (this.shouldPersistCCValues(cc)) {
+			cc.persistValues(this);
+		}
+
 		if (isEncapsulatingCommandClass(cc)) {
 			this.persistCCValues(cc.encapsulated);
 		} else if (isMultiEncapsulatingCommandClass(cc)) {
@@ -5377,7 +5413,7 @@ ${handlers.length} left`,
 			}
 
 			if (maybeSendToSleep && node && node.canSleep && !node.keepAwake) {
-				setImmediate(() => this.debounceSendNodeToSleep(node!));
+				setImmediate(() => this.debounceSendNodeToSleep(node));
 			}
 
 			// Set the transaction progress to completed before resolving the Promise
@@ -5618,8 +5654,22 @@ ${handlers.length} left`,
 		}
 
 		// Fall back to non-supervised commands
+		const result = await this.sendCommandInternal(command, options);
+
+		// When sending S2 multicast commands to supporting nodes, the singlecast followups
+		// may use supervision. In this case, the multicast message generator returns a
+		// synthetic SupervisionCCReport.
+		// sendCommand is supposed to return a SupervisionResult though.
+		if (
+			options?.s2MulticastGroupId != undefined
+			&& result instanceof SupervisionCCReport
+		) {
+			// @ts-expect-error TS doesn't know we've narrowed the return type to match
+			return result.toSupervisionResult();
+		}
+
 		// @ts-expect-error TS doesn't know we've narrowed the return type to match
-		return this.sendCommandInternal(command, options);
+		return result;
 	}
 
 	/** @internal */
@@ -6234,7 +6284,54 @@ ${handlers.length} left`,
 		msg.command = this.encapsulateCommands(
 			msg.command,
 		) as SinglecastCC<CommandClass>;
-		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+		return msg.command.getMaxPayloadLength(this.getMaxPayloadLength(msg));
+	}
+
+	/** Computes the maximum payload size that can be transmitted with the given message */
+	public getMaxPayloadLength(msg: SendDataMessage): number {
+		const nodeId = msg.getNodeId();
+
+		// For ZWLR, the result is simply the maximum payload size
+		if (
+			nodeId != undefined
+			&& isLongRangeNodeId(nodeId)
+			&& this._controller?.maxPayloadSizeLR
+		) {
+			return this._controller.maxPayloadSizeLR;
+		}
+
+		// For ZW Classic, it depends on the frame type and transmit options
+		const maxExplorerPayloadSinglecast = this._controller?.maxPayloadSize
+			?? 46;
+		if (isSendDataSinglecast(msg)) {
+			// From INS13954-7, chapter 4.3.3.1.5
+			if (msg.transmitOptions & TransmitOptions.Explore) {
+				return maxExplorerPayloadSinglecast;
+			}
+			if (msg.transmitOptions & TransmitOptions.AutoRoute) {
+				return maxExplorerPayloadSinglecast + 2;
+			}
+			return maxExplorerPayloadSinglecast + 8;
+		} else {
+			// Multicast needs space for the nodes bitmask
+			const maxExplorerPayloadMulticast = maxExplorerPayloadSinglecast
+				- NUM_NODEMASK_BYTES;
+
+			// From INS13954-13, chapter 4.3.3.6
+			if (msg.transmitOptions & TransmitOptions.ACK) {
+				if (msg.transmitOptions & TransmitOptions.Explore) {
+					return maxExplorerPayloadMulticast;
+				}
+				if (msg.transmitOptions & TransmitOptions.AutoRoute) {
+					return maxExplorerPayloadMulticast + 2;
+				}
+			}
+			return maxExplorerPayloadMulticast + 8;
+		}
+	}
+
+	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
+		return msg.serializeCC().length > this.getMaxPayloadLength(msg);
 	}
 
 	/** Determines time in milliseconds to wait for a report from a node */

@@ -74,6 +74,7 @@ import {
 } from "./files/ApplicationNameFile";
 import {
 	type NVM3Objects,
+	type NVM3Pages,
 	type NVMMeta,
 	encodeNVM,
 	getNVMMeta,
@@ -1083,6 +1084,12 @@ export function nvmToJSON(
 	debugLogs: boolean = false,
 ): Required<NVMJSON> {
 	const nvm = parseNVM(buffer, debugLogs);
+	return parsedNVMToJSON(nvm);
+}
+
+function parsedNVMToJSON(
+	nvm: NVM3Pages & NVM3Objects,
+): Required<NVMJSON> {
 	const objects = new Map([
 		...nvm.applicationObjects,
 		...nvm.protocolObjects,
@@ -1361,15 +1368,21 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 	let source: ParsedNVM;
 	let target: ParsedNVM;
+	let sourceObjects: Map<number, NVM3Object> | undefined;
 	let sourceProtocolFileFormat: number | undefined;
 	let targetProtocolFileFormat: number | undefined;
 
 	try {
+		const nvm = parseNVM(sourceNVM);
 		source = {
 			type: 700,
-			json: nvmToJSON(sourceNVM),
+			json: parsedNVMToJSON(nvm),
 		};
 		sourceProtocolFileFormat = source.json.format;
+		sourceObjects = new Map([
+			...nvm.applicationObjects,
+			...nvm.protocolObjects,
+		]);
 	} catch (e) {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
 			// This is not a 700 series NVM, maybe it is a 500 series one?
@@ -1461,6 +1474,8 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			// avoid preserving broken 255.x versions which appear on some controllers
 			&& semver.lt(sourceApplicationVersion, "255.0.0")
 			&& semver.lt(targetApplicationVersion, "255.0.0")
+			// and avoid restoring a backup with a shifted 800 series application version file
+			&& (!sourceObjects || !hasShiftedAppVersion800File(sourceObjects))
 		) {
 			return sourceNVM;
 		}
@@ -1536,4 +1551,61 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 		// 700 series distinguishes the NVM format by the application version
 		return jsonToNVM(json, target.json.controller.applicationVersion);
 	}
+}
+
+/**
+ * Detects whether the app version file on a 800 series controller is shifted by 1 byte
+ */
+function hasShiftedAppVersion800File(
+	objects: Map<number, NVM3Object>,
+): boolean {
+	const getObject = (
+		id: number | ((id: number) => boolean),
+	): NVM3Object | undefined => {
+		if (typeof id === "number") {
+			return objects.get(id);
+		} else {
+			for (const [key, obj] of objects) {
+				if (id(key)) return obj;
+			}
+		}
+	};
+
+	const getFile = <T extends NVMFile>(
+		id: number | ((id: number) => boolean),
+		fileVersion: string,
+	): T | undefined => {
+		const obj = getObject(id);
+		if (!obj) return undefined;
+		return NVMFile.from(obj, fileVersion) as T;
+	};
+
+	const protocolVersionFile = getFile<ProtocolVersionFile>(
+		ProtocolVersionFileID,
+		"7.0.0", // We don't know the version here yet
+	);
+	// File not found, cannot fix anything
+	if (!protocolVersionFile) return false;
+
+	const protocolVersion =
+		`${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`;
+
+	const applVersionFile800 = getFile<ApplicationVersionFile800>(
+		ApplicationVersionFile800ID,
+		protocolVersion,
+	);
+
+	// File not found, cannot fix anything
+	if (!applVersionFile800) return false;
+
+	// We consider the version shifted if:
+	// - the app version format is the major protocol version
+	// - the app version major is the minor protocol version +/- 3
+
+	if (applVersionFile800.format !== protocolVersionFile.major) return false;
+	if (Math.abs(applVersionFile800.major - protocolVersionFile.minor) > 3) {
+		return false;
+	}
+
+	return true;
 }

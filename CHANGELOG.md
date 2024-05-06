@@ -4,6 +4,67 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.5.6 (2024-04-23)
+### Bugfixes
+* NVM restore works around an issue in some 800 series controllers where the NVM migration built into the Z-Wave firmware would not work due to the SDK version being encoded incorrectly (#6777)
+
+### Config file changes
+* Add HomeSeer PS100 presence sensor, fix broken links (#6783)
+* Fix value size for Fibaro FGWCEU-201, params 150/151 (#6779)
+* Disable Supervision for Heatit Z-Temp2, firmware 1.2.1 (#6785)
+
+## 12.5.5 (2024-04-16)
+### Features
+* Rework compat flags for `Basic CC` mapping (#6773)
+
+### Bugfixes
+* The `protocolDataRate` field in `RouteStatistics` is optional (#6746)
+* Fixed an infinite loop during NVM migration which could happen in rare cases (#6769)
+
+### Config file changes
+* Always map `Basic CC` to `Binary Sensor CC` for Aeotec ZW100 Multisensor 6 (#6773)
+
+### Changes under the hood
+* Reword recommendations on encrypting traffic (#6770)
+
+## 12.5.4 (2024-04-12)
+### Bugfixes
+* Firmware updates on Z-Wave Long Range now utilize the larger frame size better (#6759)
+* Fixed an issue where multicast `setValue` had a `SupervisionCCReport` as the result instead of a `SetValueResult` (#6765)
+* Parsing of provisioning entries with numeric `supportedProtocols` (#6764)
+* Fix error when `ConfigurationCCBulkGet` response is missing (#6763)
+* Values from force-removed or endpoint-mapped CCs are no longer persisted (#6760)
+
+### Config file changes
+* Fix versioning logic for parameter 26 of Zooz ZEN72 (#6761)
+
+## 12.5.3 (2024-04-10)
+### Bugfixes
+* Disallow associating a node with itself and skip self-associations when rebuilding routes (#6749)
+* Fix computation of SNR margin when noise floor measurement is N/A (#6732)
+
+### Config file changes
+* Add new Leviton 800 series devices (#6757)
+* Add UltraPro Z-Wave Plus In-Wall Toggle Switch, 700S (#6664)
+* Rename generic 700 series controller to include 800 series (#6744)
+* Add fingerprint and config parameters for UltraPro 700 Switch (#6726)
+* Add Zooz Zen37 800LR Wall Remote (#6577)
+
+### Changes under the hood
+* Several dependency updates
+
+## 12.5.2 (2024-04-04)
+### Bugfixes
+* Add workaround for devices that omit notification event parameters instead of sending "no data" (#6719)
+
+### Config file changes
+* Added 11 Shelly Qubino Wave devices (#6633)
+* Add Heatit Leakage Water Stopper (#6605)
+* Add Ring Smoke/CO Listener (#6591)
+* Add ZVIDAR Z-TRV-V01 thermostatic valve (#6542)
+* Add Safe Grow NSG-AB-02 Z-Wave Plus Smart Outlet Plug (#6535)
+* Add a new productId and add parameters to 14297/ZW1002 outlet (#6517)
+
 ## 12.5.1 (2024-04-03)
 ### Bugfixes
 * Fix/improve route diagnostics for Z-Wave LR devices (#6718)

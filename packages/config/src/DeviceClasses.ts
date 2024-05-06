@@ -1,7 +1,5 @@
-import { CommandClasses } from "@zwave-js/core/safe";
 import { type JSONObject, num2hex } from "@zwave-js/shared/safe";
-import { distinct } from "alcalzone-shared/arrays";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
 export type BasicDeviceClassMap = ReadonlyMap<number, string>;
@@ -86,72 +84,6 @@ export class GenericDeviceClass {
 			}
 		}
 
-		if (definition.supportedCCs != undefined) {
-			if (
-				!isArray(definition.supportedCCs)
-				|| !definition.supportedCCs.every(
-					(cc: any) => typeof cc === "string",
-				)
-			) {
-				throwInvalidConfig(
-					"device classes",
-					`supportedCCs in device class ${this.label} (${
-						num2hex(
-							this.key,
-						)
-					}) is not a string array!`,
-				);
-			}
-			const supportedCCs: CommandClasses[] = [];
-			for (const ccName of definition.supportedCCs) {
-				if (!(ccName in CommandClasses)) {
-					throwInvalidConfig(
-						"device classes",
-						`Found unknown CC "${ccName}" in supportedCCs of device class ${this.label} (${
-							num2hex(this.key)
-						})!`,
-					);
-				}
-				supportedCCs.push((CommandClasses as any)[ccName]);
-			}
-			this.supportedCCs = supportedCCs;
-		} else {
-			this.supportedCCs = [];
-		}
-
-		if (definition.controlledCCs != undefined) {
-			if (
-				!isArray(definition.controlledCCs)
-				|| !definition.controlledCCs.every(
-					(cc: any) => typeof cc === "string",
-				)
-			) {
-				throwInvalidConfig(
-					"device classes",
-					`controlledCCs in device class ${this.label} (${
-						num2hex(
-							this.key,
-						)
-					}) is not a string array!`,
-				);
-			}
-			const controlledCCs: CommandClasses[] = [];
-			for (const ccName of definition.controlledCCs) {
-				if (!(ccName in CommandClasses)) {
-					throwInvalidConfig(
-						"device classes",
-						`Found unknown CC "${ccName}" in controlledCCs of device class ${this.label} (${
-							num2hex(this.key)
-						})!`,
-					);
-				}
-				controlledCCs.push((CommandClasses as any)[ccName]);
-			}
-			this.controlledCCs = controlledCCs;
-		} else {
-			this.controlledCCs = [];
-		}
-
 		if (definition.maySupportBasicCC != undefined) {
 			if (definition.maySupportBasicCC !== false) {
 				throwInvalidConfig(
@@ -203,8 +135,6 @@ export class GenericDeviceClass {
 	/** @internal */
 	public readonly zwavePlusDeviceType?: string;
 	public readonly requiresSecurity?: boolean;
-	public readonly supportedCCs: readonly CommandClasses[];
-	public readonly controlledCCs: readonly CommandClasses[];
 	public readonly maySupportBasicCC: boolean;
 	public readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
 }
@@ -259,76 +189,6 @@ export class SpecificDeviceClass {
 			this.requiresSecurity = generic.requiresSecurity;
 		}
 
-		if (definition.supportedCCs != undefined) {
-			if (
-				!isArray(definition.supportedCCs)
-				|| !definition.supportedCCs.every(
-					(cc: any) => typeof cc === "string",
-				)
-			) {
-				throwInvalidConfig(
-					"device classes",
-					`supportedCCs in device class ${generic.label} -> ${this.label} (${
-						num2hex(this.key)
-					}) is not a string array!`,
-				);
-			}
-			const supportedCCs: CommandClasses[] = [];
-			for (const ccName of definition.supportedCCs) {
-				if (!(ccName in CommandClasses)) {
-					throwInvalidConfig(
-						"device classes",
-						`Found unknown CC "${ccName}" in supportedCCs of device class ${generic.label} -> ${this.label} (${
-							num2hex(this.key)
-						})!`,
-					);
-				}
-				supportedCCs.push((CommandClasses as any)[ccName]);
-			}
-			this.supportedCCs = supportedCCs;
-		} else {
-			this.supportedCCs = [];
-		}
-		this.supportedCCs = distinct([
-			...generic.supportedCCs,
-			...this.supportedCCs,
-		]);
-
-		if (definition.controlledCCs != undefined) {
-			if (
-				!isArray(definition.controlledCCs)
-				|| !definition.controlledCCs.every(
-					(cc: any) => typeof cc === "string",
-				)
-			) {
-				throwInvalidConfig(
-					"device classes",
-					`controlledCCs in device class ${generic.label} -> ${this.label} (${
-						num2hex(this.key)
-					}) is not a string array!`,
-				);
-			}
-			const controlledCCs: CommandClasses[] = [];
-			for (const ccName of definition.controlledCCs) {
-				if (!(ccName in CommandClasses)) {
-					throwInvalidConfig(
-						"device classes",
-						`Found unknown CC "${ccName}" in controlledCCs of device class ${generic.label} -> ${this.label} (${
-							num2hex(this.key)
-						})!`,
-					);
-				}
-				controlledCCs.push((CommandClasses as any)[ccName]);
-			}
-			this.controlledCCs = controlledCCs;
-		} else {
-			this.controlledCCs = [];
-		}
-		this.controlledCCs = distinct([
-			...generic.controlledCCs,
-			...this.controlledCCs,
-		]);
-
 		if (definition.maySupportBasicCC != undefined) {
 			if (definition.maySupportBasicCC !== false) {
 				throwInvalidConfig(
@@ -349,7 +209,5 @@ export class SpecificDeviceClass {
 	public readonly label: string;
 	public readonly zwavePlusDeviceType?: string;
 	public readonly requiresSecurity?: boolean;
-	public readonly supportedCCs: readonly CommandClasses[];
-	public readonly controlledCCs: readonly CommandClasses[];
 	public readonly maySupportBasicCC: boolean;
 }

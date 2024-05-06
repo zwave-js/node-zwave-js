@@ -37,15 +37,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true,
-		"commandClasses": {
-			"remove": {
-				"Supervision": {
-					// The device does not support supervision although it is mandatory for the device type
-					"endpoints": "*"
-				}
-			}
-		}
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "Linking your device\n1. Follow the instructions for your Z-wave certified controller to include a device to\nthe Z-wave network.\n2. Once the controller is ready to include your device, press and release the top or\nbottom of the wireless smart switch(rocker) to include it in the network.\nNote: Your controller may need to be within 10 feet of the device to be included.\n3. Once your controller has confirmed that the device has been included, refresh the\nZ-wave network to optimize performance.\nPlease reference the controller’s manual for instructions",

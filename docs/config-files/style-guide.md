@@ -17,7 +17,7 @@ Our device files are parsed as JSON5 and may contain comments. Comments may (and
 	// ...
 	"compat": {
 		// The device is a Binary Sensor, but uses Basic Sets to report its status
-		"enableBasicSetMapping": true
+		"mapBasicSet": "auto"
 	}
 }
 ```

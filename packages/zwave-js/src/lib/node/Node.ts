@@ -1898,18 +1898,17 @@ export class ZWaveNode extends Endpoint
 		this.supportsSecurity = resp.supportsSecurity;
 		this.supportsBeaming = resp.supportsBeaming;
 
-		const deviceClass = new DeviceClass(
+		this.deviceClass = new DeviceClass(
 			this.driver.configManager,
 			resp.basicDeviceClass,
 			resp.genericDeviceClass,
 			resp.specificDeviceClass,
 		);
-		this.applyDeviceClass(deviceClass);
 
 		const logMessage = `received response for protocol info:
-basic device class:    ${this.deviceClass!.basic.label}
-generic device class:  ${this.deviceClass!.generic.label}
-specific device class: ${this.deviceClass!.specific.label}
+basic device class:    ${this.deviceClass.basic.label}
+generic device class:  ${this.deviceClass.generic.label}
+specific device class: ${this.deviceClass.specific.label}
 node type:             ${getEnumMemberName(NodeType, this.nodeType)}
 is always listening:   ${this.isListening}
 is frequent listening: ${this.isFrequentListening}
@@ -2944,12 +2943,13 @@ protocol version:      ${this.protocolVersion}`;
 		const compat = this._deviceConfig?.compat;
 
 		// If the config file instructs us to expose Basic Set as an event, mark the CC as controlled
-		if (compat?.treatBasicSetAsEvent && endpoint.index === 0) {
+		if (compat?.mapBasicSet === "event" && endpoint.index === 0) {
 			endpoint.addCC(CommandClasses.Basic, { isControlled: true });
 		}
 
-		// Don't offer or interview the Basic CC if any actuator CC is supported
-		if (!compat?.disableBasicMapping) {
+		// Don't offer or interview the Basic CC if any actuator CC is supported, unless the config file tells us
+		// not to map Basic CC reports
+		if (compat?.mapBasicReport !== false) {
 			endpoint.hideBasicCCInFavorOfActuatorCCs();
 		}
 
@@ -3040,6 +3040,21 @@ protocol version:      ${this.protocolVersion}`;
 			&& !(command instanceof Security2CCNonceGet)
 		) {
 			this.markAsAwake();
+		}
+
+		// If the received CC was force-removed via config file, ignore it completely
+		const endpoint = this.getEndpoint(command.endpointIndex);
+		if (endpoint?.wasCCRemovedViaConfig(command.ccId)) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				{
+					endpoint: endpoint.index,
+					direction: "inbound",
+					message:
+						`Ignoring ${command.constructor.name} because CC support was removed via config file`,
+				},
+			);
+			return;
 		}
 
 		if (command instanceof BasicCC) {
@@ -3610,90 +3625,155 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Depending on the generic device class, we may need to map the basic command to other CCs
 		let mappedTargetCC: CommandClass | undefined;
-		// Do not map the basic CC if the device config forbids it
-		if (!this._deviceConfig?.compat?.disableBasicMapping) {
-			switch (sourceEndpoint.deviceClass?.generic.key) {
-				case 0x20: // Binary Sensor
-					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-						CommandClasses["Binary Sensor"],
-					);
-					break;
-				case 0x10: // Binary Switch
-					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-						CommandClasses["Binary Switch"],
-					);
-					break;
-				case 0x11: // Multilevel Switch
-					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-						CommandClasses["Multilevel Switch"],
-					);
-					break;
-				case 0x12: // Remote Switch
-					switch (sourceEndpoint.deviceClass.specific.key) {
-						case 0x01: // Binary Remote Switch
-							mappedTargetCC = sourceEndpoint
-								.createCCInstanceUnsafe(
-									CommandClasses["Binary Switch"],
-								);
-							break;
-						case 0x02: // Multilevel Remote Switch
-							mappedTargetCC = sourceEndpoint
-								.createCCInstanceUnsafe(
-									CommandClasses["Multilevel Switch"],
-								);
-							break;
-					}
-			}
+		switch (sourceEndpoint.deviceClass?.generic.key) {
+			case 0x20: // Binary Sensor
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Binary Sensor"],
+				);
+				break;
+			case 0x10: // Binary Switch
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Binary Switch"],
+				);
+				break;
+			case 0x11: // Multilevel Switch
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Multilevel Switch"],
+				);
+				break;
+			case 0x12: // Remote Switch
+				switch (sourceEndpoint.deviceClass.specific.key) {
+					case 0x01: // Binary Remote Switch
+						mappedTargetCC = sourceEndpoint
+							.createCCInstanceUnsafe(
+								CommandClasses["Binary Switch"],
+							);
+						break;
+					case 0x02: // Multilevel Remote Switch
+						mappedTargetCC = sourceEndpoint
+							.createCCInstanceUnsafe(
+								CommandClasses["Multilevel Switch"],
+							);
+						break;
+				}
 		}
 
 		if (command instanceof BasicCCReport) {
-			// Try to set the mapped value on the target CC
-			const didSetMappedValue = typeof command.currentValue === "number"
-				&& mappedTargetCC?.setMappedBasicValue(
-					this.driver,
-					command.currentValue,
+			// By default, map Basic CC Reports to a more appropriate CC, unless stated otherwise in a config file
+			const basicReportMapping = this.deviceConfig?.compat?.mapBasicReport
+				?? "auto";
+
+			if (basicReportMapping === "Binary Sensor") {
+				// Treat the command as a BinarySensorCC Report, regardless of the device class
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Binary Sensor"],
 				);
-
-			// Otherwise fall back to setting it ourselves
-			if (!didSetMappedValue) {
-				// Store the value in the value DB now
-				command.persistValues(this.driver);
-
-				// Since the node sent us a Basic report, we are sure that it is at least supported
-				// If this is the only supported actuator CC, add it to the support list,
-				// so the information lands in the network cache
-				if (!actuatorCCs.some((cc) => sourceEndpoint.supportsCC(cc))) {
-					sourceEndpoint.addCC(CommandClasses.Basic, {
-						isControlled: true,
+				if (typeof command.currentValue === "number") {
+					if (mappedTargetCC) {
+						this.driver.controllerLog.logNode(this.id, {
+							endpoint: command.endpointIndex,
+							message:
+								"treating BasicCC::Report as a BinarySensorCC::Report",
+						});
+						mappedTargetCC.setMappedBasicValue(
+							this.driver,
+							command.currentValue,
+						);
+					} else {
+						this.driver.controllerLog.logNode(this.id, {
+							endpoint: command.endpointIndex,
+							message:
+								"cannot treat BasicCC::Report as a BinarySensorCC::Report, because the Binary Sensor CC is not supported",
+							level: "warn",
+						});
+					}
+				} else {
+					this.driver.controllerLog.logNode(this.id, {
+						endpoint: command.endpointIndex,
+						message:
+							"cannot map BasicCC::Report to a different CC, because the current value is unknown",
+						level: "warn",
 					});
+				}
+			} else if (
+				basicReportMapping === "auto" || basicReportMapping === false
+			) {
+				// Try to set the mapped value on the target CC
+				const didSetMappedValue =
+					typeof command.currentValue === "number"
+					// ... unless forbidden
+					&& basicReportMapping === "auto"
+					&& mappedTargetCC?.setMappedBasicValue(
+						this.driver,
+						command.currentValue,
+					);
+
+				// Otherwise fall back to setting it ourselves
+				if (!didSetMappedValue) {
+					// Store the value in the value DB now
+					command.persistValues(this.driver);
+
+					// Since the node sent us a Basic report, we are sure that it is at least supported
+					// If this is the only supported actuator CC, add it to the support list,
+					// so the information lands in the network cache
+					sourceEndpoint.maybeAddBasicCCAsFallback();
 				}
 			}
 		} else if (command instanceof BasicCCSet) {
-			// Treat BasicCCSet as value events if desired
-			if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
+			// By default, map Basic CC Set to Basic CC Report, unless stated otherwise in a config file
+			const basicSetMapping = this.deviceConfig?.compat?.mapBasicSet
+				?? "report";
+
+			if (basicSetMapping === "event") {
+				// Treat BasicCCSet as value events if desired
 				this.driver.controllerLog.logNode(this.id, {
 					endpoint: command.endpointIndex,
 					message: "treating BasicCC::Set as a value event",
 				});
 				this._valueDB.setValue(
-					BasicCCValues.compatEvent.endpoint(command.endpointIndex),
+					BasicCCValues.compatEvent.endpoint(
+						command.endpointIndex,
+					),
 					command.targetValue,
 					{
 						stateful: false,
 					},
 				);
-				return;
-			} else {
-				// Some devices send their current state using `BasicCCSet`s to their associations
+			} else if (basicSetMapping === "Binary Sensor") {
+				// Treat the Set command as a BinarySensorCC Report, regardless of the device class
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+					CommandClasses["Binary Sensor"],
+				);
+				if (mappedTargetCC) {
+					this.driver.controllerLog.logNode(this.id, {
+						endpoint: command.endpointIndex,
+						message:
+							"treating BasicCC::Set as a BinarySensorCC::Report",
+					});
+					mappedTargetCC.setMappedBasicValue(
+						this.driver,
+						command.targetValue,
+					);
+				} else {
+					this.driver.controllerLog.logNode(this.id, {
+						endpoint: command.endpointIndex,
+						message:
+							"cannot treat BasicCC::Set as a BinarySensorCC::Report, because the Binary Sensor CC is not supported",
+						level: "warn",
+					});
+				}
+			} else if (
+				basicSetMapping === "auto" || basicSetMapping === "report"
+			) {
+				// Some devices send their current state using BasicCCSet to their associations
 				// instead of using reports. We still interpret them like reports
 				this.driver.controllerLog.logNode(this.id, {
 					endpoint: command.endpointIndex,
 					message: "treating BasicCC::Set as a report",
 				});
 
-				// If enabled in a config file, try to set the mapped value on the target CC first
-				const didSetMappedValue =
-					!!this._deviceConfig?.compat?.enableBasicSetMapping
+				// In "auto" mode, try to set the mapped value on the target CC first
+				const didSetMappedValue = basicSetMapping === "auto"
 					&& !!mappedTargetCC?.setMappedBasicValue(
 						this.driver,
 						command.targetValue,
@@ -3708,7 +3788,7 @@ protocol version:      ${this.protocolVersion}`;
 						),
 						command.targetValue,
 					);
-					// Since the node sent us a Basic command, we are sure that it is at least controlled
+					// Since the node sent us a Basic Set, we are sure that it is at least controlled
 					// Add it to the support list, so the information lands in the network cache
 					if (!sourceEndpoint.controlsCC(CommandClasses.Basic)) {
 						sourceEndpoint.addCC(CommandClasses.Basic, {
@@ -5513,7 +5593,9 @@ protocol version:      ${this.protocolVersion}`;
 		// Remove the Basic CC if it should be hidden
 		// TODO: Do this as part of loadDeviceConfig
 		const compat = this._deviceConfig?.compat;
-		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+		if (
+			compat?.mapBasicReport !== false && compat?.mapBasicSet !== "event"
+		) {
 			for (const endpoint of this.getAllEndpoints()) {
 				endpoint.hideBasicCCInFavorOfActuatorCCs();
 			}
@@ -5846,7 +5928,10 @@ protocol version:      ${this.protocolVersion}`;
 						&& !isRssiError(txReport.ackRSSI)
 					) {
 						// If possible, determine the SNR margin from the report
-						if (txReport.measuredNoiseFloor != undefined) {
+						if (
+							txReport.measuredNoiseFloor != undefined
+							&& !isRssiError(txReport.measuredNoiseFloor)
+						) {
 							const currentSNRMargin = txReport.ackRSSI
 								- txReport.measuredNoiseFloor;
 							// And remember it if it's the lowest we've seen so far

@@ -37,7 +37,6 @@
 		}
 	},
 	// Fantem is an OEM for Aeotec
-	// Fantem is an OEM for Aeotec
 	"paramInformation": [
 		{
 			"#": "2",
@@ -533,7 +532,7 @@
 	],
 	"compat": {
 		// In the default configuration this device sends Basic CC Sets instead of Binary Sensor Reports
-		"enableBasicSetMapping": true
+		"mapBasicSet": "Binary Sensor"
 	},
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Z-Wave button that you can find in the back of the product",

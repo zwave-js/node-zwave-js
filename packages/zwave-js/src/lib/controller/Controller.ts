@@ -690,6 +690,18 @@ export class ZWaveController
 		return this._supportsLongRange;
 	}
 
+	private _maxPayloadSize: MaybeNotKnown<number>;
+	/** The maximum payload size that can be transmitted with a Z-Wave explorer frame */
+	public get maxPayloadSize(): MaybeNotKnown<number> {
+		return this._maxPayloadSize;
+	}
+
+	private _maxPayloadSizeLR: MaybeNotKnown<number>;
+	/** The maximum payload size that can be transmitted with a Z-Wave Long Range frame */
+	public get maxPayloadSizeLR(): MaybeNotKnown<number> {
+		return this._maxPayloadSizeLR;
+	}
+
 	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
@@ -786,6 +798,16 @@ export class ZWaveController
 
 		// And that the entry contains valid data
 		assertProvisioningEntry(entry);
+
+		// Discard any invalid security classes that may have been granted. This can happen
+		// when switching the protocol to ZWLR for a device that requests S2 Unauthenticated
+		// for Z-Wave Classic.
+		if (entry.protocol === Protocols.ZWaveLongRange) {
+			entry.securityClasses = entry.securityClasses.filter((sc) =>
+				sc === SecurityClass.S2_AccessControl
+				|| sc === SecurityClass.S2_Authenticated
+			);
+		}
 
 		const provisioningList = [...this.provisioningList];
 
@@ -1100,18 +1122,16 @@ export class ZWaveController
 		}
 
 		// Figure out the maximum payload size for outgoing commands
-		let maxPayloadSize: number | undefined;
 		if (
 			this.isSerialAPISetupCommandSupported(
 				SerialAPISetupCommand.GetMaximumPayloadSize,
 			)
 		) {
 			this.driver.controllerLog.print(`querying max. payload size...`);
-			maxPayloadSize = await this.getMaxPayloadSize();
+			this._maxPayloadSize = await this.getMaxPayloadSize();
 			this.driver.controllerLog.print(
-				`maximum payload size: ${maxPayloadSize} bytes`,
+				`maximum payload size: ${this._maxPayloadSize} bytes`,
 			);
-			// TODO: cache this information
 		}
 
 		this.driver.controllerLog.print(
@@ -1147,15 +1167,12 @@ export class ZWaveController
 		// Fetch the list of Long Range nodes
 		const lrNodeIds = await this.getLongRangeNodes();
 
-		let maxPayloadSizeLR: number | undefined;
 		if (
 			this.isSerialAPISetupCommandSupported(
 				SerialAPISetupCommand.GetLongRangeMaximumPayloadSize,
 			)
 		) {
-			maxPayloadSizeLR = await this.getMaxPayloadSizeLongRange();
-
-			// TODO: cache this information
+			this._maxPayloadSizeLR = await this.getMaxPayloadSizeLongRange();
 		}
 
 		let lrChannel: LongRangeChannel | undefined;
@@ -1171,7 +1188,7 @@ export class ZWaveController
 
 		this.driver.controllerLog.print(
 			`received Z-Wave Long Range capabilities:
-  max. payload size: ${maxPayloadSizeLR} bytes
+  max. payload size: ${this._maxPayloadSizeLR} bytes
   channel:           ${
 				lrChannel
 					? getEnumMemberName(LongRangeChannel, lrChannel)
@@ -2269,6 +2286,27 @@ export class ZWaveController
 				return;
 			}
 
+			// Ignore provisioning entries where some of the granted keys are not configured
+			const securityManager = isLongRange
+				? this.driver.securityManagerLR
+				: this.driver.securityManager2;
+			const missingKeys = provisioningEntry.securityClasses.filter(
+				(sc) => !securityManager?.hasKeysForSecurityClass(sc),
+			);
+			if (missingKeys.length > 0) {
+				this.driver.controllerLog.print(
+					`Ignoring inclusion request because the following security classes were granted but have no key configured:${
+						missingKeys.map((sc) =>
+							`\n· ${getEnumMemberName(SecurityClass, sc)}${
+								isLongRange ? " (Long Range)" : ""
+							}`
+						).join("")
+					}`,
+					"error",
+				);
+				return;
+			}
+
 			this.driver.controllerLog.print(
 				"NWI Home ID found in provisioning list, including node...",
 			);
@@ -2498,7 +2536,7 @@ supported CCs: ${
 							`Notifying node ${inclCtrlrId} of finished inclusion`,
 						);
 						// Create API without checking for support
-						const api = inclCtrlr!.createAPI(
+						const api = inclCtrlr.createAPI(
 							CommandClasses["Inclusion Controller"],
 							false,
 						);
@@ -2569,13 +2607,13 @@ supported CCs: ${
 				newNode.updateNodeInfo(requestedNodeInfo);
 
 				// TODO: Check if this stuff works for a normal replace too
-				const deviceClass = new DeviceClass(
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				newNode["deviceClass"] = new DeviceClass(
 					this.driver.configManager,
 					requestedNodeInfo.basicDeviceClass,
 					requestedNodeInfo.genericDeviceClass,
 					requestedNodeInfo.specificDeviceClass,
 				);
-				newNode["applyDeviceClass"](deviceClass);
 			}
 
 			// Perform S0/S2 bootstrapping
@@ -4446,6 +4484,8 @@ supported CCs: ${
 				)
 					// ...except the controller itself, which was handled by step 2
 					.filter((id) => id !== this._ownNodeId!)
+					// ...and the node itself
+					.filter((id) => id !== nodeId)
 					.sort();
 			} catch {
 				/* ignore */

@@ -2,7 +2,7 @@
 // 1.1 -> 10.0 -> 10.10 -> 10.20 -> 10.30 -> (10.40 ≅ 2.10) -> 2.20
 
 // Conditionals:
-// 10.0  and later: firmwareVersion >= 10.0 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
+// 10.0 and later: firmwareVersion >= 2.10
 // 10.10 and later: firmwareVersion >= 10.10 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
 // 10.20 and later: firmwareVersion >= 10.20 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
 // 10.30 and later: firmwareVersion >= 10.30 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
@@ -224,12 +224,12 @@
 		},
 		{
 			"#": "21",
-			"$if": "firmwareVersion >= 10.0 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$if": "firmwareVersion >= 2.10",
 			"$import": "templates/zooz_template.json#3way_switch_type"
 		},
 		{
 			"#": "22",
-			"$if": "firmwareVersion >= 10.0 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$if": "firmwareVersion >= 2.10",
 			"$import": "templates/zooz_template.json#local_programming"
 		},
 		{

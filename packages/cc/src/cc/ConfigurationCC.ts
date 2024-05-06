@@ -587,7 +587,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
-		let values: ReadonlyMap<number, ConfigValue>;
+		let values: ReadonlyMap<number, ConfigValue> | undefined;
 
 		// If the parameters are consecutive, we may use BulkGet
 		const distinctParameters = distinct(options.map((o) => o.parameter));
@@ -636,7 +636,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Combine the returned values with the requested ones
 		const cc = createConfigurationCCInstance(this.applHost, this.endpoint);
 		return options.map((o) => {
-			let value = values.get(o.parameter);
+			let value = values?.get(o.parameter);
 			if (typeof value === "number" && o.bitMask) {
 				const paramInfo = cc.getParamInformation(
 					this.applHost,

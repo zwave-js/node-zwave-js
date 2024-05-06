@@ -301,7 +301,9 @@
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold",
 								"0x04": "Max"
-							}
+							},
+							// Translate missing event parameter to "no data"
+							"default": "0x01"
 						}
 					}
 				}
@@ -318,7 +320,9 @@
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold",
 								"0x04": "Max"
-							}
+							},
+							// Translate missing event parameter to "no data"
+							"default": "0x01"
 						}
 					}
 				}
@@ -334,7 +338,9 @@
 								"0x01": "No data",
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold"
-							}
+							},
+							// Translate missing event parameter to "no data"
+							"default": "0x01"
 						}
 					}
 				}
@@ -350,7 +356,9 @@
 								"0x01": "No data",
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold"
-							}
+							},
+							// Translate missing event parameter to "no data"
+							"default": "0x01"
 						}
 					}
 				}
@@ -1249,7 +1257,9 @@
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold",
 								"0x04": "Max"
-							}
+							},
+							// Translate missing event parameter to "no data"
+							"default": "0x01"
 						}
 					}
 				}
@@ -1266,7 +1276,9 @@
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold",
 								"0x04": "Max"
-							}
+							},
+							// Translate missing event parameter to "no data"
+							"default": "0x01"
 						}
 					}
 				}

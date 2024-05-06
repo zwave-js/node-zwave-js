@@ -236,7 +236,7 @@ export class MockController {
 			return await ack;
 		} finally {
 			const index = this.expectedHostACKs.indexOf(ack);
-			if (index !== -1) this.expectedHostACKs.splice(index, 1);
+			if (index !== -1) void this.expectedHostACKs.splice(index, 1);
 		}
 	}
 
@@ -259,7 +259,7 @@ export class MockController {
 			return await expectation;
 		} finally {
 			const index = this.expectedHostMessages.indexOf(expectation);
-			if (index !== -1) this.expectedHostMessages.splice(index, 1);
+			if (index !== -1) void this.expectedHostMessages.splice(index, 1);
 		}
 	}
 
@@ -291,7 +291,7 @@ export class MockController {
 			const array = this.expectedNodeFrames.get(node.id);
 			if (array) {
 				const index = array.indexOf(expectation);
-				if (index !== -1) array.splice(index, 1);
+				if (index !== -1) void array.splice(index, 1);
 			}
 		}
 	}

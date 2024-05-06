@@ -20,6 +20,7 @@
 			"severity": "info"
 		}
 	],
+	"dprint.experimentalLsp": true,
 	"editor.defaultFormatter": "dprint.dprint",
 	"[jsonc]": {
 		"editor.formatOnSave": true,

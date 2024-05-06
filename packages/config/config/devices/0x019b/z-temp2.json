@@ -166,5 +166,16 @@
 			"label": "Invert Output",
 			"valueSize": 2
 		}
-	]
+	],
+	"compat": {
+		"$if": "firmwareVersion === 1.2.1",
+		// Firmware version 1.2.1 has broken Supervision support
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }

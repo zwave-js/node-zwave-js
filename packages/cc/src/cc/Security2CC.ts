@@ -124,7 +124,7 @@ function getSecurityManager(
 ): SecurityManager2 | undefined {
 	const longRange = isLongRangeNodeId(host.ownNodeId)
 		|| isLongRangeNodeId(
-			isArray(destination) ? destination[0]! : destination,
+			isArray(destination) ? destination[0] : destination,
 		);
 	return longRange
 		? host.securityManagerLR

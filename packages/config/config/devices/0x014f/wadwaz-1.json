@@ -21,7 +21,7 @@
 		}
 	},
 	"compat": {
-		"enableBasicSetMapping": true
+		"mapBasicSet": "auto"
 	},
 	"metadata": {
 		"inclusion": "With your Controller in Inclusion mode, depress the internal program switch for 1 second then release.",

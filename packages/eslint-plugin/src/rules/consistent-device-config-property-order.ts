@@ -75,7 +75,7 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 					});
 
 					const indentation = context.sourceCode
-						.getLines()[withRanges[0].property.loc.start.line]!
+						.getLines()[withRanges[0].property.loc.start.line]
 						.slice(
 							0,
 							withRanges[0].property.loc.start.column,

@@ -331,7 +331,34 @@ export class NotificationParameterWithEnum {
 		}
 
 		this.values = values;
+
+		if (definition.default != undefined) {
+			let defaultVal: number;
+			if (typeof definition.default === "number") {
+				defaultVal = definition.default;
+			} else if (
+				typeof definition.default === "string"
+				&& hexKeyRegexNDigits.test(definition.default)
+			) {
+				defaultVal = parseInt(definition.default, 16);
+			} else {
+				throwInvalidConfig(
+					"notifications",
+					`The default value for an event parameter enum must be a number or a string in hexadecimal format`,
+				);
+			}
+
+			if (!values.has(defaultVal)) {
+				throwInvalidConfig(
+					"notifications",
+					`The default value for an event parameter enum must be one of the defined values`,
+				);
+			}
+
+			this.default = defaultVal;
+		}
 	}
 
 	public readonly values: ReadonlyMap<number, string>;
+	public readonly default?: number;
 }
