@@ -6,7 +6,7 @@ import {
 	type RSSI,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZnifferProtocolDataRate,
+	type ZnifferProtocolDataRate,
 	ZnifferRegion,
 	parseNodeBitMask,
 	rssiToString,
@@ -813,8 +813,7 @@ export class ZWaveBeamStart {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const tags = [
-			"BEAM",
-			`» ${formatNodeId(this.destinationNodeId)}`,
+			`BEAM » ${formatNodeId(this.destinationNodeId)}`,
 		];
 
 		const message: MessageRecord = {
@@ -871,8 +870,7 @@ export class LongRangeBeamStart {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const tags = [
-			"BEAM",
-			`» ${formatNodeId(this.destinationNodeId)}`,
+			`BEAM » ${formatNodeId(this.destinationNodeId)}`,
 		];
 
 		const message: MessageRecord = {
@@ -1069,9 +1067,8 @@ export type BeamFrame =
 	// Common fields for all Beam frames
 	& {
 		channel: number;
-		region: ZnifferRegion;
 		// Although it is being parsed, Stop frames contain no
-		// valid data for the data rate and RSSI
+		// valid data for everything but the channel no.
 	}
 	// Different types of beam frames:
 	& (
@@ -1083,6 +1080,7 @@ export type BeamFrame =
 			protocolDataRate: ZnifferProtocolDataRate;
 			rssiRaw: number;
 			rssi?: RSSI;
+			region: ZnifferRegion;
 
 			homeIdHash?: number;
 			destinationNodeId: number;
@@ -1094,6 +1092,7 @@ export type BeamFrame =
 			protocolDataRate: ZnifferProtocolDataRate;
 			rssiRaw: number;
 			rssi?: RSSI;
+			region: ZnifferRegion;
 
 			txPower: number;
 			homeIdHash: number;
@@ -1310,20 +1309,19 @@ export function beamToFrame(
 			txPower: beam.txPower,
 		};
 	} else {
-		// Beam Stop
-		const isLR = beam.frameInfo.protocolDataRate
-			>= ZnifferProtocolDataRate.LongRange_100k;
+		// Beam Stop - contains only the channel, the other fields are garbage
+		const isLR = beam.frameInfo.channel === 4;
 		if (isLR) {
 			return {
 				protocol: Protocols.ZWaveLongRange,
 				type: LongRangeFrameType.BeamStop,
-				...retBase,
+				channel: beam.frameInfo.channel,
 			};
 		} else {
 			return {
 				protocol: Protocols.ZWave,
 				type: ZWaveFrameType.BeamStop,
-				...retBase,
+				channel: beam.frameInfo.channel,
 			};
 		}
 	}

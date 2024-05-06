@@ -1,6 +1,7 @@
 import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../Logger";
 import { ZnifferMessageHeaders } from "../MessageHeaders";
+import { ZnifferFrameType } from "../message/Constants";
 
 /** Given a buffer that starts with SOF, this method returns the number of bytes the first message occupies in the buffer */
 function getMessageLength(data: Buffer): number | undefined {
@@ -11,6 +12,14 @@ function getMessageLength(data: Buffer): number | undefined {
 		const length = data[2];
 		return length + 3;
 	} else if (data[0] === ZnifferMessageHeaders.SODF) {
+		if (data.length < 2) return;
+		if (data[1] === ZnifferFrameType.BeamStart) {
+			// Beam Start frame: SOF, 0x04, 9 other bytes = total 11
+			return 11;
+		} else if (data[1] === ZnifferFrameType.BeamStop) {
+			// Beam Stop frame: SOF, 0x05, 5 other bytes = total 7
+			return 7;
+		}
 		// Data frame: SOF, 8 other bytes, remaining length
 		if (data.length < 10) return;
 		const length = data[9];

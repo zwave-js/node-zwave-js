@@ -20,10 +20,10 @@ import { type ZnifferDataMessage } from "@zwave-js/serial";
 import { buffer2hex, num2hex } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import {
-	BeamStop,
-	LongRangeBeamStart,
+	type BeamStop,
+	type LongRangeBeamStart,
 	type LongRangeMPDU,
-	ZWaveBeamStart,
+	type ZWaveBeamStart,
 	type ZWaveMPDU,
 } from "../zniffer/MPDU";
 import { type Zniffer } from "../zniffer/Zniffer";
@@ -177,7 +177,7 @@ export class ZnifferLogger extends ZWaveLoggerBase<ZnifferLogContext> {
 
 		const logEntry = beam.toLogEntry();
 
-		let msg: string[] = [tagify(logEntry.tags)];
+		const msg: string[] = [tagify(logEntry.tags)];
 		if (logEntry.message) {
 			msg.push(
 				...messageRecordToLines(logEntry.message).map(

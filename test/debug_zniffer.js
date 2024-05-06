@@ -7,7 +7,7 @@ const { parseBeamFrame } = require(
 );
 
 const data = Buffer.from(
-	"2104000021003355030114",
+	"210500003400e6",
 	"hex",
 );
 const raw = ZnifferMessage.from({ data });

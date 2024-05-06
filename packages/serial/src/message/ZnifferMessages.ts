@@ -73,9 +73,12 @@ export class ZnifferMessage {
 				const length = payload[2];
 				this.payload = payload.subarray(3, 3 + length);
 			} else if (this.type === ZnifferMessageType.Data) {
-				// TODO: Having the header etc. be part of the payload is a bit awkward
-				const length = payload[9];
-				this.payload = payload.subarray(1, 10 + length);
+				// The ZnifferParser takes care of segmenting frames, so here we
+				// only cut off the type byte from the payload
+				this.payload = payload.subarray(1);
+				// // TODO: Having the header etc. be part of the payload is a bit awkward
+				// const length = payload[9];
+				// this.payload = payload.subarray(1, 10 + length);
 			} else {
 				throw new ZWaveError(
 					`Invalid Zniffer message type ${this.type as any}`,
@@ -260,7 +263,7 @@ export class ZnifferDataMessage extends ZnifferMessage
 				// This always seems to contain the same 2 bytes
 				// There is no checksum
 				this.checksumOK = true;
-				this.payload = this.payload.subarray(6);
+				this.payload = Buffer.alloc(0);
 			} else {
 				validatePayload.fail(
 					`Unsupported frame type ${
