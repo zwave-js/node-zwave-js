@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getImplementedVersion } from "@zwave-js/cc";
+import { DeviceConfig } from "@zwave-js/config";
 import {
 	type CommandClasses,
 	type MaybeNotKnown,
@@ -71,5 +72,33 @@ export class ZnifferCCParsingContext implements ZWaveHost {
 
 	getNextSupervisionSessionId(nodeId: number): number {
 		throw new Error("Method not implemented.");
+	}
+
+	getDeviceConfig(nodeId: number): DeviceConfig | undefined {
+		// Disable strict validation while parsing certain CCs
+		// Most of this stuff isn't actually needed, only the compat flags...
+		return new DeviceConfig(
+			"unknown.json",
+			false,
+			"UNKNOWN_MANUFACTURER",
+			0x0000,
+			"UNKNOWN_PRODUCT",
+			"UNKNOWN_DESCRIPTION",
+			[],
+			{
+				min: "0.0",
+				max: "255.255",
+			},
+			true,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			// ...down here:
+			{
+				disableStrictEntryControlDataValidation: true,
+				disableStrictMeasurementValidation: true,
+			},
+		);
 	}
 }
