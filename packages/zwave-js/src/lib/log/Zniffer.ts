@@ -17,9 +17,15 @@ import {
 	znifferProtocolDataRateToString,
 } from "@zwave-js/core";
 import { type ZnifferDataMessage } from "@zwave-js/serial";
-import { buffer2hex } from "@zwave-js/shared";
+import { buffer2hex, num2hex } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
-import { type LongRangeMPDU, type ZWaveMPDU } from "../zniffer/MPDU";
+import {
+	BeamStop,
+	LongRangeBeamStart,
+	type LongRangeMPDU,
+	ZWaveBeamStart,
+	type ZWaveMPDU,
+} from "../zniffer/MPDU";
 import { type Zniffer } from "../zniffer/Zniffer";
 
 export const ZNIFFER_LABEL = "ZNIFFR";
@@ -157,6 +163,39 @@ export class ZnifferLogger extends ZWaveLoggerBase<ZnifferLogContext> {
 			this.logger.log({
 				level: ZNIFFER_LOGLEVEL,
 				secondaryTags: tagify([homeId]),
+				message: msg,
+				direction: getDirectionPrefix("inbound"),
+				context: { source: "zniffer", direction: "inbound" },
+			});
+		} catch {}
+	}
+
+	public beam(
+		beam: ZWaveBeamStart | LongRangeBeamStart | BeamStop,
+	): void {
+		if (!this.isLogVisible()) return;
+
+		const logEntry = beam.toLogEntry();
+
+		let msg: string[] = [tagify(logEntry.tags)];
+		if (logEntry.message) {
+			msg.push(
+				...messageRecordToLines(logEntry.message).map(
+					(line) => ("  ") + line,
+				),
+			);
+		}
+
+		try {
+			// If possible, include information about the CCs
+			let secondaryTags: string | undefined;
+			if ("homeIdHash" in beam && beam.homeIdHash) {
+				secondaryTags = tagify([`hash: ${num2hex(beam.homeIdHash)}`]);
+			}
+
+			this.logger.log({
+				level: ZNIFFER_LOGLEVEL,
+				secondaryTags,
 				message: msg,
 				direction: getDirectionPrefix("inbound"),
 				context: { source: "zniffer", direction: "inbound" },

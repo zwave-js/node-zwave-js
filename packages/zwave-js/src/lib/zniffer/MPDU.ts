@@ -6,7 +6,7 @@ import {
 	type RSSI,
 	ZWaveError,
 	ZWaveErrorCodes,
-	type ZnifferProtocolDataRate,
+	ZnifferProtocolDataRate,
 	ZnifferRegion,
 	parseNodeBitMask,
 	rssiToString,
@@ -16,6 +16,7 @@ import {
 import {
 	type ZnifferDataMessage,
 	type ZnifferFrameInfo,
+	ZnifferFrameType,
 } from "@zwave-js/serial";
 import {
 	type AllOrNone,
@@ -26,13 +27,15 @@ import {
 import { padStart } from "alcalzone-shared/strings";
 import { parseRSSI } from "../serialapi/transport/SendDataShared";
 
-// FIXME: What are those?
-// 0x21010000210933210316d14ca7c901050116ff2000fa40000000000122010058
-// 0x2101000021092f210313d14ca7c901550213022000fa400000000000d1
-// 0x2101000063093121031fd14ca7c90011011f01029ffa9f03e700d7e3440b929fb3e3d7ed5c0fd0d7a9
-// 0x2101000021092d210316d14ca7c901050116ff2000fa40000000000122010058
-// 0x2101000002093121030cd14ca7c90141010c020084cb
-// 0x2101000002093121030cd14ca7c90141010c020084cb
+// FIXME: Parsing breaks on this chunk:
+// 21003021030bdcb605840141020b03005e2101000021003421030adcb6058403
+// 03020a011d2101000002002a21030ec5b9bc284641010e019f01be32d42101000002002a21030e
+// c5b9bc284641010e019f01be32d42101000021002921030dc5b9bc284651010d019f01be2d2101
+// 000002002a210311c5b9bc2846910111010010439f01beb6a32101000002002a
+// 210311c5b9bc2846810111010010439f01be2235
+
+// FIXME: Beam Stop frame is followed by 0x00, which gets discarded - why?
+// 210500003000e6210100 00
 
 function getChannelConfiguration(region: ZnifferRegion): "1/2" | "3" | "4" {
 	switch (region) {
@@ -737,6 +740,181 @@ export class SearchResultExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 	}
 }
 
+export function parseBeamFrame(
+	frame: ZnifferDataMessage,
+): ZWaveBeamStart | LongRangeBeamStart | BeamStop {
+	if (frame.frameType === ZnifferFrameType.BeamStop) {
+		return new BeamStop({
+			data: frame.payload,
+			frameInfo: frame,
+		});
+	}
+
+	const channelConfig = getChannelConfiguration(frame.region);
+	switch (channelConfig) {
+		case "1/2":
+		case "3": {
+			return new ZWaveBeamStart({
+				data: frame.payload,
+				frameInfo: frame,
+			});
+		}
+		case "4": {
+			return new LongRangeBeamStart({
+				data: frame.payload,
+				frameInfo: frame,
+			});
+		}
+		default:
+			validatePayload.fail(
+				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+				`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
+					buffer2hex(frame.payload)
+				}`,
+			);
+	}
+}
+
+export class ZWaveBeamStart {
+	public constructor(options: MPDUOptions) {
+		const data = options.data;
+		this.frameInfo = options.frameInfo;
+
+		const channelConfig = getChannelConfiguration(this.frameInfo.region);
+		switch (channelConfig) {
+			case "1/2":
+			case "3":
+				// OK
+				break;
+			case "4": {
+				validatePayload.fail(
+					`Channel configuration 4 (ZWLR) must be parsed as a LongRangeMPDU!`,
+				);
+			}
+			default: {
+				validatePayload.fail(
+					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+					`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
+						buffer2hex(data)
+					}`,
+				);
+			}
+		}
+
+		this.destinationNodeId = data[1];
+		if (data[2] === 0x01) {
+			this.homeIdHash = data[3];
+		}
+	}
+
+	public readonly frameInfo: ZnifferFrameInfo;
+	public readonly homeIdHash?: number;
+	public readonly destinationNodeId: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const tags = [
+			"BEAM",
+			`» ${formatNodeId(this.destinationNodeId)}`,
+		];
+
+		const message: MessageRecord = {
+			channel: this.frameInfo.channel,
+			"protocol/data rate": znifferProtocolDataRateToString(
+				this.frameInfo.protocolDataRate,
+			),
+			RSSI: this.frameInfo.rssi != undefined
+				? rssiToString(this.frameInfo.rssi)
+				: this.frameInfo.rssiRaw.toString(),
+		};
+		return {
+			tags,
+			message,
+		};
+	}
+}
+
+export class LongRangeBeamStart {
+	public constructor(options: MPDUOptions) {
+		const data = options.data;
+		this.frameInfo = options.frameInfo;
+
+		const channelConfig = getChannelConfiguration(this.frameInfo.region);
+		switch (channelConfig) {
+			case "1/2":
+			case "3":
+				// OK
+				break;
+			case "4": {
+				validatePayload.fail(
+					`Channel configuration 4 (ZWLR) must be parsed as a LongRangeMPDU!`,
+				);
+			}
+			default: {
+				validatePayload.fail(
+					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+					`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
+						buffer2hex(data)
+					}`,
+				);
+			}
+		}
+
+		this.txPower = data[1] >>> 4;
+		this.destinationNodeId = data.readUint16BE(1) & 0x0fff;
+		this.homeIdHash = data[3];
+	}
+
+	public readonly frameInfo: ZnifferFrameInfo;
+	public readonly homeIdHash: number;
+	public readonly destinationNodeId: number;
+	public readonly txPower: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const tags = [
+			"BEAM",
+			`» ${formatNodeId(this.destinationNodeId)}`,
+		];
+
+		const message: MessageRecord = {
+			channel: this.frameInfo.channel,
+			"protocol/data rate": znifferProtocolDataRateToString(
+				this.frameInfo.protocolDataRate,
+			),
+			// FIXME: convert to dBm
+			"TX power": `${this.txPower}`,
+			RSSI: this.frameInfo.rssi != undefined
+				? rssiToString(this.frameInfo.rssi)
+				: this.frameInfo.rssiRaw.toString(),
+		};
+		return {
+			tags,
+			message,
+		};
+	}
+}
+
+export class BeamStop {
+	public constructor(options: MPDUOptions) {
+		this.frameInfo = options.frameInfo;
+	}
+
+	public readonly frameInfo: ZnifferFrameInfo;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const tags = [
+			"BEAM STOP",
+		];
+
+		const message: MessageRecord = {
+			channel: this.frameInfo.channel,
+		};
+		return {
+			tags,
+			message,
+		};
+	}
+}
+
 export enum ZWaveFrameType {
 	Singlecast,
 	Multicast,
@@ -744,6 +922,8 @@ export enum ZWaveFrameType {
 	ExplorerNormal,
 	ExplorerSearchResult,
 	ExplorerInclusionRequest,
+	BeamStart,
+	BeamStop,
 }
 
 /** An application-oriented representation of a Z-Wave frame that was captured by the Zniffer */
@@ -846,6 +1026,8 @@ export type ZWaveFrame =
 export enum LongRangeFrameType {
 	Singlecast,
 	Ack,
+	BeamStart,
+	BeamStop,
 }
 
 export type LongRangeFrame =
@@ -883,7 +1065,56 @@ export type LongRangeFrame =
 		}
 	);
 
-export type Frame = ZWaveFrame | LongRangeFrame;
+export type BeamFrame =
+	// Common fields for all Beam frames
+	& {
+		channel: number;
+		region: ZnifferRegion;
+		// Although it is being parsed, Stop frames contain no
+		// valid data for the data rate and RSSI
+	}
+	// Different types of beam frames:
+	& (
+		| {
+			// Z-Wave Classic
+			protocol: Protocols.ZWave;
+			type: ZWaveFrameType.BeamStart;
+
+			protocolDataRate: ZnifferProtocolDataRate;
+			rssiRaw: number;
+			rssi?: RSSI;
+
+			homeIdHash?: number;
+			destinationNodeId: number;
+		}
+		| {
+			protocol: Protocols.ZWaveLongRange;
+			type: LongRangeFrameType.BeamStart;
+
+			protocolDataRate: ZnifferProtocolDataRate;
+			rssiRaw: number;
+			rssi?: RSSI;
+
+			txPower: number;
+			homeIdHash: number;
+			destinationNodeId: number;
+		}
+		// Currently, these two are identical, but we distinguish them
+		// to make the Frame type more consistent
+		| {
+			protocol: Protocols.ZWave;
+			type: ZWaveFrameType.BeamStop;
+		}
+		| {
+			protocol: Protocols.ZWaveLongRange;
+			type: LongRangeFrameType.BeamStop;
+		}
+	);
+
+export type Frame =
+	| ZWaveFrame
+	| LongRangeFrame
+	| BeamFrame;
 
 export type CorruptedFrame = {
 	channel: number;
@@ -1047,6 +1278,55 @@ export function mpduToLongRangeFrame(
 		`mpduToLongRangeFrame not supported for ${mpdu.constructor.name}`,
 		ZWaveErrorCodes.Argument_Invalid,
 	);
+}
+
+export function beamToFrame(
+	beam: ZWaveBeamStart | LongRangeBeamStart | BeamStop,
+): Frame {
+	const retBase = {
+		channel: beam.frameInfo.channel,
+		region: beam.frameInfo.region,
+		rssiRaw: beam.frameInfo.rssiRaw,
+		rssi: beam.frameInfo.rssi,
+
+		protocolDataRate: beam.frameInfo.protocolDataRate,
+	};
+
+	if (beam instanceof ZWaveBeamStart) {
+		return {
+			protocol: Protocols.ZWave,
+			type: ZWaveFrameType.BeamStart,
+			...retBase,
+			destinationNodeId: beam.destinationNodeId,
+			homeIdHash: beam.homeIdHash,
+		};
+	} else if (beam instanceof LongRangeBeamStart) {
+		return {
+			protocol: Protocols.ZWaveLongRange,
+			type: LongRangeFrameType.BeamStart,
+			...retBase,
+			destinationNodeId: beam.destinationNodeId,
+			homeIdHash: beam.homeIdHash,
+			txPower: beam.txPower,
+		};
+	} else {
+		// Beam Stop
+		const isLR = beam.frameInfo.protocolDataRate
+			>= ZnifferProtocolDataRate.LongRange_100k;
+		if (isLR) {
+			return {
+				protocol: Protocols.ZWaveLongRange,
+				type: LongRangeFrameType.BeamStop,
+				...retBase,
+			};
+		} else {
+			return {
+				protocol: Protocols.ZWave,
+				type: ZWaveFrameType.BeamStop,
+				...retBase,
+			};
+		}
+	}
 }
 
 export function znifferDataMessageToCorruptedFrame(

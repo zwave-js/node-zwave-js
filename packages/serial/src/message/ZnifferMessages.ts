@@ -8,8 +8,9 @@ import {
 	getZWaveChipType,
 	validatePayload,
 } from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
 import {
-	type ZnifferFrameType,
+	ZnifferFrameType,
 	ZnifferFunctionType,
 	ZnifferMessageType,
 } from "./Constants";
@@ -216,31 +217,57 @@ export class ZnifferDataMessage extends ZnifferMessage
 			this.region = this.payload[4];
 			this.rssiRaw = this.payload[5];
 
-			validatePayload.withReason(
-				`ZnifferDataMessage[6] = ${this.payload[6]}`,
-			)(this.payload[6] === 0x21);
-			validatePayload.withReason(
-				`ZnifferDataMessage[7] = ${this.payload[7]}`,
-			)(this.payload[7] === 0x03);
-			// Length is already validated, so we just skip the length byte
+			if (this.frameType === ZnifferFrameType.Data) {
+				validatePayload.withReason(
+					`ZnifferDataMessage[6] = ${this.payload[6]}`,
+				)(this.payload[6] === 0x21);
+				validatePayload.withReason(
+					`ZnifferDataMessage[7] = ${this.payload[7]}`,
+				)(this.payload[7] === 0x03);
+				// Length is already validated, so we just skip the length byte
 
-			const mpduOffset = 9;
-			const checksum = this.payload.readUIntBE(
-				this.payload.length - checksumLength,
-				checksumLength,
-			);
-
-			// Compute checksum over the entire MPDU
-			const expectedChecksum = checksumLength === 1
-				? computeChecksumXOR(
-					this.payload.subarray(mpduOffset, -checksumLength),
-				)
-				: CRC16_CCITT(
-					this.payload.subarray(mpduOffset, -checksumLength),
+				const mpduOffset = 9;
+				const checksum = this.payload.readUIntBE(
+					this.payload.length - checksumLength,
+					checksumLength,
 				);
 
-			this.checksumOK = checksum === expectedChecksum;
-			this.payload = this.payload.subarray(mpduOffset, -checksumLength);
+				// Compute checksum over the entire MPDU
+				const expectedChecksum = checksumLength === 1
+					? computeChecksumXOR(
+						this.payload.subarray(mpduOffset, -checksumLength),
+					)
+					: CRC16_CCITT(
+						this.payload.subarray(mpduOffset, -checksumLength),
+					);
+
+				this.checksumOK = checksum === expectedChecksum;
+				this.payload = this.payload.subarray(
+					mpduOffset,
+					-checksumLength,
+				);
+			} else if (
+				this.frameType === ZnifferFrameType.BeamStart
+			) {
+				validatePayload.withReason(
+					`ZnifferDataMessage[6] = ${this.payload[6]}`,
+				)(this.payload[6] === 0x55);
+
+				// There is no checksum
+				this.checksumOK = true;
+				this.payload = this.payload.subarray(6);
+			} else if (this.frameType === ZnifferFrameType.BeamStop) {
+				// This always seems to contain the same 2 bytes
+				// There is no checksum
+				this.checksumOK = true;
+				this.payload = this.payload.subarray(6);
+			} else {
+				validatePayload.fail(
+					`Unsupported frame type ${
+						getEnumMemberName(ZnifferFrameType, this.frameType)
+					}`,
+				);
+			}
 		} else {
 			throw new ZWaveError(
 				`Sending ${this.constructor.name} is not supported!`,

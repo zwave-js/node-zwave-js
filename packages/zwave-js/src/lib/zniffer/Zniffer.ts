@@ -25,6 +25,7 @@ import {
 import {
 	type ZWaveSerialPortImplementation,
 	type ZnifferDataMessage,
+	ZnifferFrameType,
 	ZnifferGetFrequenciesRequest,
 	ZnifferGetFrequenciesResponse,
 	ZnifferGetFrequencyInfoRequest,
@@ -61,7 +62,9 @@ import {
 	type CorruptedFrame,
 	type Frame,
 	MPDUHeaderType,
+	beamToFrame,
 	mpduToFrame,
+	parseBeamFrame,
 	parseMPDU,
 	znifferDataMessageToCorruptedFrame,
 } from "./MPDU";
@@ -380,6 +383,21 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 					msg.rssiRaw,
 					this._chipType,
 				);
+			}
+
+			// Short-circuit if we're dealing with beam frames
+			if (
+				msg.frameType === ZnifferFrameType.BeamStart
+				|| msg.frameType === ZnifferFrameType.BeamStop
+			) {
+				const beam = parseBeamFrame(msg);
+				beam.frameInfo.rssi = convertedRSSI;
+
+				// Emit the captured frame in a format that's easier to work with for applications.
+				this.znifferLog.beam(beam);
+				const frame = beamToFrame(beam);
+				this.emit("frame", frame);
+				return;
 			}
 
 			// Only handle messages with a valid checksum, expose the others as CRC errors
