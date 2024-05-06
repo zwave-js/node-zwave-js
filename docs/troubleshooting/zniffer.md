@@ -9,8 +9,7 @@ A Zniffer is a Z-Wave controller with special firmware that can capture Z-Wave t
 - A (spare) Zniffer-compatible Z-Wave controller - it cannot run the controller and Zniffer firmware at the same time:
   - [ZGM230-DK2603A](https://www.silabs.com/development-tools/wireless/z-wave/z-wave-800-dev-kit?tab=overview) 800 series development kit. We recommend using this device as it has a good antenna and can easily converted between a Zniffer and a regular controller.
   - [SLUSB001A / UZB7](https://www.silabs.com/development-tools/wireless/z-wave/efr32zg14-usb-7-z-wave-700-stick-bridge-module?tab=overview) may also work (unverified).
-  - Or (if you really have to) the `ACC-UZB3-x-STA` 500 series controller - where `x` is the frequency identifier, e.g. `E` for Europe, `U` for USA, `H` for Japan (and potentially AUS/NZ). The black versions will work in any region, the white ones only in the one specified on the outside.
-    \
+  - Or (if you really have to) the `ACC-UZB3-x-STA` 500 series controller - where `x` is the frequency identifier, e.g. `E` for Europe, `U` for USA, `H` for Japan (and potentially AUS/NZ). The black versions will work in any region, the white ones only in the one specified on the outside.\
     Programming this is also more complicated, error-prone and requires a Windows PC. Also you'll have to get your hands on the required firmware and drivers somehow.
 
 > [!WARNING] Converting a controller to a Zniffer will erase the network information on the controller. Do not convert a controller that is part of a production network.
