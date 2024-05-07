@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.6.0 (2024-05-07)
 This release enhances the diagnostics in Z-Wave JS by adding support for controlling a Zniffer, which allows inspecting traffic from any Z-Wave network. See [here](https://zwave-js.github.io/node-zwave-js/#/api/zniffer) for details on using this API, and [here](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/zniffer) for information on how to create a Zniffer device.
 
 ### Features
