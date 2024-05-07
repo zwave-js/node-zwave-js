@@ -4,6 +4,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release enhances the diagnostics in Z-Wave JS by adding support for controlling a Zniffer, which allows inspecting traffic from any Z-Wave network. See [here](https://zwave-js.github.io/node-zwave-js/#/api/zniffer) for details on using this API, and [here](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/zniffer) for information on how to create a Zniffer device.
+
+### Features
+* Add Zniffer support (#6651)
+
+### Bugfixes
+* Ignore SmartStart requests and log errors when some keys for the granted security classes were not configured (#6787)
+* Fixed an issue where excluded ZWLR nodes were not removed from the list of nodes until restart (#6795)
+* The mandatory CCs for a device class are no longer automatically considered supported. Instead only the NIF is used to determine them (#6788)
+* The `mandatorySupportedCCs` and `mandatoryControlledCCs` properties of the `DeviceClass` class are now deprecated and return an empty array (#6796)
+
+### Config file changes
+* Use specific float encoding for Namron 4512757 (#6793)
+* Add fingerprint for Aeotec MultiSensor 7 (#6807)
+
+### Changes under the hood
+* Fix links on Long Range documentation page (#6790)
+
 ## 12.5.6 (2024-04-23)
 ### Bugfixes
 * NVM restore works around an issue in some 800 series controllers where the NVM migration built into the Z-Wave firmware would not work due to the SDK version being encoded incorrectly (#6777)
