@@ -8,6 +8,7 @@ import {
 import {
 	CommandClasses,
 	type LogConfig,
+	MPDUHeaderType,
 	type RSSI,
 	SPANState,
 	SecurityClass,
@@ -61,7 +62,6 @@ import { ZnifferCCParsingContext } from "./CCParsingContext";
 import {
 	type CorruptedFrame,
 	type Frame,
-	MPDUHeaderType,
 	beamToFrame,
 	mpduToFrame,
 	parseBeamFrame,

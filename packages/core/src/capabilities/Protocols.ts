@@ -128,6 +128,7 @@ export enum MPDUHeaderType {
 	Singlecast = 0x1,
 	Multicast = 0x2,
 	Acknowledgement = 0x3,
+	Explorer = 0x5,
 	Routed = 0x8,
 }
 

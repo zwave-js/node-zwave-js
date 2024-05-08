@@ -1,5 +1,7 @@
 import { type CommandClass } from "@zwave-js/cc";
 import {
+	type BeamingInfo,
+	MPDUHeaderType,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
 	Protocols,
@@ -26,6 +28,11 @@ import {
 } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import { parseRSSI } from "../serialapi/transport/SendDataShared";
+import {
+	ExplorerFrameCommand,
+	LongRangeFrameType,
+	ZWaveFrameType,
+} from "./_Types";
 
 // FIXME: Parsing breaks on this chunk:
 // 21003021030bdcb605840141020b03005e2101000021003421030adcb6058403
@@ -93,27 +100,6 @@ function formatRoute(
 export interface MPDUOptions {
 	data: Buffer;
 	frameInfo: ZnifferFrameInfo;
-}
-
-export enum MPDUHeaderType {
-	Singlecast = 0x1,
-	Multicast = 0x2,
-	Acknowledgement = 0x3,
-	Explorer = 0x5,
-	Routed = 0x8,
-}
-
-export enum BeamingInfo {
-	None = 0b00,
-	ShortContinuous = 0b01,
-	LongContinuous = 0b10,
-	Fragmented = 0b100,
-}
-
-export enum ExplorerFrameCommand {
-	Normal = 0x00,
-	InclusionRequest = 0x01,
-	SearchResult = 0x02,
 }
 
 export interface MPDU {
@@ -934,18 +920,6 @@ export class BeamStop {
 	}
 }
 
-export enum ZWaveFrameType {
-	Singlecast,
-	Multicast,
-	AckDirect,
-	ExplorerNormal,
-	ExplorerSearchResult,
-	ExplorerInclusionRequest,
-	BeamStart,
-	BeamStop,
-}
-
-/** An application-oriented representation of a Z-Wave frame that was captured by the Zniffer */
 export type ZWaveFrame =
 	// Common fields for all Z-Wave frames
 	& {
@@ -1041,13 +1015,6 @@ export type ZWaveFrame =
 			}
 		)
 	);
-
-export enum LongRangeFrameType {
-	Singlecast,
-	Ack,
-	BeamStart,
-	BeamStop,
-}
 
 export type LongRangeFrame =
 	// Common fields for all Long Range frames
