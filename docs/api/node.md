@@ -884,8 +884,6 @@ interface DeviceClass {
 	readonly basic: BasicDeviceClass;
 	readonly generic: GenericDeviceClass;
 	readonly specific: SpecificDeviceClass;
-	readonly mandatorySupportedCCs: readonly CommandClasses[];
-	readonly mandatoryControlledCCs: readonly CommandClasses[];
 }
 ```
 
@@ -905,8 +903,6 @@ interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
 	readonly requiresSecurity?: boolean;
-	readonly supportedCCs: readonly CommandClasses[];
-	readonly controlledCCs: readonly CommandClasses[];
 	readonly maySupportBasicCC: boolean;
 	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
 }
@@ -920,8 +916,6 @@ interface SpecificDeviceClass {
 	readonly label: string;
 	readonly zwavePlusDeviceType?: string;
 	readonly requiresSecurity?: boolean;
-	readonly supportedCCs: readonly CommandClasses[];
-	readonly controlledCCs: readonly CommandClasses[];
 	readonly maySupportBasicCC: boolean;
 }
 ```
@@ -946,7 +940,7 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node typ
 
 ```ts
 enum ZWavePlusNodeType {
-	Node = 0,
+	Node = 0, // ZWave+ Node
 	IPGateway = 2,
 }
 ```
@@ -1559,7 +1553,7 @@ interface NodeStatistics {
 ```ts
 interface RouteStatistics {
 	/** The protocol and used data rate for this route */
-	protocolDataRate: ProtocolDataRate;
+	protocolDataRate?: ProtocolDataRate;
 	/** Which nodes are repeaters for this route */
 	repeaters: number[];
 
