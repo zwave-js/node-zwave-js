@@ -11,6 +11,7 @@ import {
 	actuatorCCs,
 	getCCName,
 	isActuatorCC,
+	isLongRangeNodeId,
 	isSensorCC,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
@@ -125,6 +126,16 @@ export function isAssociationAllowed(
 			} does not support associations!`,
 			ZWaveErrorCodes.CC_NotSupported,
 		);
+	}
+
+	// Associations to and from ZWLR devices are not allowed
+	if (isLongRangeNodeId(destination.nodeId)) {
+		return false;
+	} else if (isLongRangeNodeId(endpoint.nodeId)) {
+		// Except the lifeline back to the host
+		if (group !== 1 || destination.nodeId !== applHost.ownNodeId) {
+			return false;
+		}
 	}
 
 	// The following checks don't apply to Lifeline associations
