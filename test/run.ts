@@ -12,12 +12,14 @@ process.on("unhandledRejection", (_r) => {
 
 // const port = "tcp://Z-Net-R2v2.local:2001";
 // 500/700 series
-const port = require("node:os").platform() === "win32"
-	? "COM5"
-	: "/dev/ttyACM0";
+// const port = require("node:os").platform() === "win32"
+// 	? "COM5"
+// 	: "/dev/ttyACM0";
 // const port = require("os").platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 // 800 series
-// const port = require("node:os").platform() === "win32" ? "COM5" : "/dev/serial/by-id/usb-1a86_USB_Single_Serial_5479014030-if00";
+const port = require("node:os").platform() === "win32"
+	? "COM5"
+	: "/dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00";
 
 const driver = new Driver(port, {
 	// logConfig: {
@@ -42,6 +44,19 @@ const driver = new Driver(port, {
 			"31132050077310B6F7032F91C79C2EB8",
 			"hex",
 		),
+	},
+	securityKeysLongRange: {
+		S2_Authenticated: Buffer.from(
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			"hex",
+		),
+		S2_AccessControl: Buffer.from(
+			"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+			"hex",
+		),
+	},
+	rf: {
+		maxLongRangePowerlevel: 14,
 	},
 	storage: {
 		cacheDir: path.join(__dirname, "cache"),

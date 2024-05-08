@@ -810,7 +810,7 @@ export class SerialAPISetup_GetLongRangeMaximumTxPowerResponse
 		this.limit = this.payload.readInt16BE(0) / 10;
 	}
 
-	/** The maximum LR TX power dBm */
+	/** The maximum LR TX power in dBm */
 	public readonly limit: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -863,11 +863,12 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest
 		}
 	}
 
+	/** The maximum LR TX power in dBm */
 	public limit: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
-		// The values are in 0.1 dBm
+		// The values are in 0.1 dBm, signed
 		this.payload.writeInt16BE(Math.round(this.limit * 10), 0);
 
 		return super.serialize();
