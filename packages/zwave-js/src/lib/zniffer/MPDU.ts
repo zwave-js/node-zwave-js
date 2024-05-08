@@ -34,16 +34,6 @@ import {
 	ZWaveFrameType,
 } from "./_Types";
 
-// FIXME: Parsing breaks on this chunk:
-// 21003021030bdcb605840141020b03005e2101000021003421030adcb6058403
-// 03020a011d2101000002002a21030ec5b9bc284641010e019f01be32d42101000002002a21030e
-// c5b9bc284641010e019f01be32d42101000021002921030dc5b9bc284651010d019f01be2d2101
-// 000002002a210311c5b9bc2846910111010010439f01beb6a32101000002002a
-// 210311c5b9bc2846810111010010439f01be2235
-
-// FIXME: Beam Stop frame is followed by 0x00, which gets discarded - why?
-// 210500003000e6210100 00
-
 function getChannelConfiguration(region: ZnifferRegion): "1/2" | "3" | "4" {
 	switch (region) {
 		case ZnifferRegion.Japan:
