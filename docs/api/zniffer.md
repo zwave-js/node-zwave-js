@@ -153,15 +153,18 @@ type CorruptedFrame = {
 };
 ```
 
-A valid frame can either be a Z-Wave frame or a Z-Wave Long Range frame...
+A valid frame can either be a Z-Wave frame or a Z-Wave Long Range frame, either normal or beaming...
 
 <!-- #import Frame from "zwave-js" -->
 
 ```ts
-type Frame = ZWaveFrame | LongRangeFrame;
+type Frame =
+	| ZWaveFrame
+	| LongRangeFrame
+	| BeamFrame;
 ```
 
-...both of which have several subtypes:
+...all of which have several subtypes:
 
 <!-- #import ZWaveFrame from "zwave-js" -->
 
@@ -302,6 +305,57 @@ type LongRangeFrame =
 	);
 ```
 
+<!-- #import BeamFrame from "zwave-js" -->
+
+```ts
+type BeamFrame =
+	// Common fields for all Beam frames
+	& {
+		channel: number;
+	}
+	// Different types of beam frames:
+	& (
+		| {
+			// Z-Wave Classic
+			protocol: Protocols.ZWave;
+			type: ZWaveFrameType.BeamStart;
+
+			protocolDataRate: ZnifferProtocolDataRate;
+			rssiRaw: number;
+			rssi?: RSSI;
+			region: ZnifferRegion;
+
+			homeIdHash?: number;
+			destinationNodeId: number;
+		}
+		| {
+			// Z-Wave Long Range
+			protocol: Protocols.ZWaveLongRange;
+			type: LongRangeFrameType.BeamStart;
+
+			protocolDataRate: ZnifferProtocolDataRate;
+			rssiRaw: number;
+			rssi?: RSSI;
+			region: ZnifferRegion;
+
+			txPower: number;
+			homeIdHash: number;
+			destinationNodeId: number;
+		}
+		// The Zniffer sends the same command for the beam ending for both
+		// Z-Wave Classic and Long Range. To make testing the frame type more
+		// consistent with the other frames, two different values are used
+		| {
+			protocol: Protocols.ZWave;
+			type: ZWaveFrameType.BeamStop;
+		}
+		| {
+			protocol: Protocols.ZWaveLongRange;
+			type: LongRangeFrameType.BeamStop;
+		}
+	);
+```
+
 ## Type definitions
 
 <!-- #import Protocols from "@zwave-js/core" -->
@@ -323,6 +377,8 @@ enum ZWaveFrameType {
 	ExplorerNormal,
 	ExplorerSearchResult,
 	ExplorerInclusionRequest,
+	BeamStart,
+	BeamStop,
 }
 ```
 
@@ -332,6 +388,8 @@ enum ZWaveFrameType {
 enum LongRangeFrameType {
 	Singlecast,
 	Ack,
+	BeamStart,
+	BeamStop,
 }
 ```
 

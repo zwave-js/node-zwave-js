@@ -51,6 +51,27 @@ function getChannelConfiguration(region: ZnifferRegion): "1/2" | "3" | "4" {
 	}
 }
 
+function longRangeBeamPowerToDBm(power: number): number {
+	return [
+		-6,
+		-2,
+		2,
+		6,
+		10,
+		13,
+		16,
+		19,
+		21,
+		23,
+		25,
+		26,
+		27,
+		28,
+		29,
+		30,
+	][power];
+}
+
 function formatNodeId(nodeId: number): string {
 	return padStart(nodeId.toString(), 3, "0");
 }
@@ -858,7 +879,8 @@ export class LongRangeBeamStart {
 			}
 		}
 
-		this.txPower = data[1] >>> 4;
+		const txPower = data[1] >>> 4;
+		this.txPower = longRangeBeamPowerToDBm(txPower);
 		this.destinationNodeId = data.readUint16BE(1) & 0x0fff;
 		this.homeIdHash = data[3];
 	}
@@ -878,8 +900,7 @@ export class LongRangeBeamStart {
 			"protocol/data rate": znifferProtocolDataRateToString(
 				this.frameInfo.protocolDataRate,
 			),
-			// FIXME: convert to dBm
-			"TX power": `${this.txPower}`,
+			"TX power": `${this.txPower} dBm`,
 			RSSI: this.frameInfo.rssi != undefined
 				? rssiToString(this.frameInfo.rssi)
 				: this.frameInfo.rssiRaw.toString(),
@@ -1067,8 +1088,6 @@ export type BeamFrame =
 	// Common fields for all Beam frames
 	& {
 		channel: number;
-		// Although it is being parsed, Stop frames contain no
-		// valid data for everything but the channel no.
 	}
 	// Different types of beam frames:
 	& (
@@ -1086,6 +1105,7 @@ export type BeamFrame =
 			destinationNodeId: number;
 		}
 		| {
+			// Z-Wave Long Range
 			protocol: Protocols.ZWaveLongRange;
 			type: LongRangeFrameType.BeamStart;
 
@@ -1098,8 +1118,9 @@ export type BeamFrame =
 			homeIdHash: number;
 			destinationNodeId: number;
 		}
-		// Currently, these two are identical, but we distinguish them
-		// to make the Frame type more consistent
+		// The Zniffer sends the same command for the beam ending for both
+		// Z-Wave Classic and Long Range. To make testing the frame type more
+		// consistent with the other frames, two different values are used
 		| {
 			protocol: Protocols.ZWave;
 			type: ZWaveFrameType.BeamStop;

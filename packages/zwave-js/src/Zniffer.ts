@@ -1,5 +1,6 @@
 export type { MPDU } from "./lib/zniffer/MPDU";
 export type {
+	BeamFrame,
 	CorruptedFrame,
 	Frame,
 	LongRangeFrame,

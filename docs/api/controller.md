@@ -374,7 +374,7 @@ interface LifelineRoutes {
 ```ts
 interface RouteStatistics {
 	/** The protocol and used data rate for this route */
-	protocolDataRate: ProtocolDataRate;
+	protocolDataRate?: ProtocolDataRate;
 	/** Which nodes are repeaters for this route */
 	repeaters: number[];
 

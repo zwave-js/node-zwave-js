@@ -76,9 +76,6 @@ export class ZnifferMessage {
 				// The ZnifferParser takes care of segmenting frames, so here we
 				// only cut off the type byte from the payload
 				this.payload = payload.subarray(1);
-				// // TODO: Having the header etc. be part of the payload is a bit awkward
-				// const length = payload[9];
-				// this.payload = payload.subarray(1, 10 + length);
 			} else {
 				throw new ZWaveError(
 					`Invalid Zniffer message type ${this.type as any}`,
@@ -166,23 +163,6 @@ export class ZnifferMessage {
 		const ret = new Constructor(options);
 		return ret;
 	}
-
-	// /** Generates a representation of this Message for the log */
-	// public toLogEntry(): MessageOrCCLogEntry {
-	// 	const tags = [
-	// 		this.type === MessageType.Request ? "REQ" : "RES",
-	// 		FunctionType[this.functionType],
-	// 	];
-	// 	const nodeId = this.getNodeId();
-	// 	if (nodeId) tags.unshift(getNodeTag(nodeId));
-
-	// 	return {
-	// 		tags,
-	// 		message: this.payload.length > 0
-	// 			? { payload: `0x${this.payload.toString("hex")}` }
-	// 			: undefined,
-	// 	};
-	// }
 }
 
 function computeChecksumXOR(buffer: Buffer): number {
