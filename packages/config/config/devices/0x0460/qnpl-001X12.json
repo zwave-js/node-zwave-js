@@ -76,6 +76,10 @@
 			"label": "Signal LED Intensity"
 		},
 		{
+			"#": "117",
+			"$import": "templates/wave_template.json#remote_reboot"
+		},
+		{
 			"#": "120",
 			"$import": "templates/wave_template.json#factory_reset"
 		},
