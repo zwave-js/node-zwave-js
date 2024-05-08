@@ -275,6 +275,9 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 			/** A hardware-specific calibration value. */
 			measured0dBm: number;
 		};
+
+		/** The desired max. powerlevel setting for Z-Wave Long Range in dBm. */
+		maxLongRangePowerlevel?: number;
 	};
 
 	apiKeys?: {

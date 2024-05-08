@@ -170,6 +170,8 @@ import {
 	SerialAPISetup_CommandUnsupportedResponse,
 	SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest,
 	type SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse,
+	SerialAPISetup_GetLongRangeMaximumTxPowerRequest,
+	type SerialAPISetup_GetLongRangeMaximumTxPowerResponse,
 	SerialAPISetup_GetMaximumPayloadSizeRequest,
 	type SerialAPISetup_GetMaximumPayloadSizeResponse,
 	SerialAPISetup_GetPowerlevel16BitRequest,
@@ -180,6 +182,8 @@ import {
 	type SerialAPISetup_GetRFRegionResponse,
 	SerialAPISetup_GetSupportedCommandsRequest,
 	type SerialAPISetup_GetSupportedCommandsResponse,
+	SerialAPISetup_SetLongRangeMaximumTxPowerRequest,
+	type SerialAPISetup_SetLongRangeMaximumTxPowerResponse,
 	SerialAPISetup_SetNodeIDTypeRequest,
 	type SerialAPISetup_SetNodeIDTypeResponse,
 	SerialAPISetup_SetPowerlevel16BitRequest,
@@ -1319,6 +1323,54 @@ export class ZWaveController
 			} else {
 				this.driver.controllerLog.print(
 					`Querying the powerlevel failed!`,
+					"warn",
+				);
+			}
+		}
+
+		// Check and possibly update the Long Range powerlevel settings
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetLongRangeMaximumTxPower,
+			)
+			&& this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetLongRangeMaximumTxPower,
+			)
+			&& this.driver.options.rf?.maxLongRangePowerlevel != undefined
+		) {
+			const desired = this.driver.options.rf.maxLongRangePowerlevel;
+			this.driver.controllerLog.print(
+				`Querying configured max. Long Range powerlevel...`,
+			);
+			const current = await this.getMaxLongRangePowerlevel().catch(() =>
+				undefined
+			);
+			if (current != undefined) {
+				if (
+					current !== desired
+				) {
+					this.driver.controllerLog.print(
+						`Current max. Long Range powerlevel ${current} dBm differs from desired powerlevel ${desired} dBm, configuring it...`,
+					);
+
+					const resp = await this.setMaxLongRangePowerlevel(desired)
+						.catch((e) => (e as Error).message);
+					if (resp === true) {
+						this.driver.controllerLog.print(
+							`max. Long Range powerlevel updated`,
+						);
+					} else {
+						this.driver.controllerLog.print(
+							`Changing the max. Long Range powerlevel failed!${
+								resp ? ` Reason: ${resp}` : ""
+							}`,
+							"warn",
+						);
+					}
+				}
+			} else {
+				this.driver.controllerLog.print(
+					`Querying the max. Long Range powerlevel failed!`,
 					"warn",
 				);
 			}
@@ -6020,6 +6072,48 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 		return pick(result, ["powerlevel", "measured0dBm"]);
+	}
+
+	/** Configure the maximum TX powerlevel for Z-Wave Long Range */
+	public async setMaxLongRangePowerlevel(
+		limit: number,
+	): Promise<boolean> {
+		const request = new SerialAPISetup_SetLongRangeMaximumTxPowerRequest(
+			this.driver,
+			{ limit },
+		);
+
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_SetLongRangeMaximumTxPowerResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(request);
+
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support setting the max. Long Range powerlevel!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.success;
+	}
+
+	/** Request the maximum TX powerlevel setting for Z-Wave Long Range */
+	public async getMaxLongRangePowerlevel(): Promise<number> {
+		const request = new SerialAPISetup_GetLongRangeMaximumTxPowerRequest(
+			this.driver,
+		);
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetLongRangeMaximumTxPowerResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(request);
+
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the max. Long Range powerlevel!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.limit;
 	}
 
 	/**
