@@ -151,7 +151,6 @@
 			}
 		]
 	},
-
 	"factory_reset": {
 		"label": "Factory Reset",
 		"description": "Reset to factory default settings and remove from the Z-Wave network.",
