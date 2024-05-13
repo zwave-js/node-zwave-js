@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add methods to get/set max. LR powerlevel, add driver option to automatically configure it (#6824)
+
+### Bugfixes
+* Fixed a bug causing the device class of a node to be unintentionally be deleted (#6840)
+* Forbid associations from and to LR devices, except for the lifeline (#6819)
+* Zniffer: convert LR beam TX power to dBm, add documentation for beam frames (#6820)
+
+### Config file changes
+* Override CC versions for Wayne Dalton WDTC-20 (#6822)
+
+### Changes under the hood
+* Refactor Zniffer exports, add them to `/safe` entrypoint (#6830)
+
 ## 12.6.0 (2024-05-07)
 This release enhances the diagnostics in Z-Wave JS by adding support for controlling a Zniffer, which allows inspecting traffic from any Z-Wave network. See [here](https://zwave-js.github.io/node-zwave-js/#/api/zniffer) for details on using this API, and [here](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/zniffer) for information on how to create a Zniffer device.
 
