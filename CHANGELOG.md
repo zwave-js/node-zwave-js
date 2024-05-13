@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.7.0 (2024-05-13)
 ### Features
 * Add methods to get/set max. LR powerlevel, add driver option to automatically configure it (#6824)
 
