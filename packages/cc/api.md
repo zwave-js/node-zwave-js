@@ -7926,9 +7926,9 @@ export enum HumidityControlSetpointType {
     // (undocumented)
     "De-humidifier" = 2,
     // (undocumented)
-    "N/A" = 0,
+    "N/A" = 0,// CC v1
     // (undocumented)
-    "Auto" = 3,
+    "Auto" = 3,// CC v1
     // (undocumented)
     "Humidifier" = 1
 }
@@ -10195,21 +10195,21 @@ export function isTransportServiceEncapsulation(command: CommandClass): command 
 // @public (undocumented)
 export enum KEXFailType {
     // (undocumented)
-    BootstrappingCanceled = 6,
+    BootstrappingCanceled = 6,// KEX_KEY
     // (undocumented)
-    Decrypt = 5,
+    Decrypt = 5,// KEX_SCHEME
     // (undocumented)
-    DifferentKey = 10,
+    DifferentKey = 10,// KEX_CURVES
     // (undocumented)
     KeyNotGranted = 8,
     // (undocumented)
-    NoKeyMatch = 1,
+    NoKeyMatch = 1,// CANCEL
     // (undocumented)
-    NoSupportedCurve = 3,
+    NoSupportedCurve = 3,// AUTH
     // (undocumented)
-    NoSupportedScheme = 2,
+    NoSupportedScheme = 2,// GET
     // (undocumented)
-    NoVerify = 9,
+    NoVerify = 9,// VERIFY
     // (undocumented)
     WrongSecurityLevel = 7
 }
@@ -15453,6 +15453,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     extensions: Security2Extension[];
     // (undocumented)
     getMulticastGroupId(): number | undefined;
+    getSenderEI(): Buffer | undefined;
     // (undocumented)
     hasMOSExtension(): boolean;
     // (undocumented)
@@ -17676,25 +17677,25 @@ export enum ThermostatSetpointType {
     // (undocumented)
     "Auto Changeover" = 10,
     // (undocumented)
-    "Away Cooling" = 14,
+    "Away Cooling" = 14,// CC v1
     // (undocumented)
-    "Away Heating" = 13,
+    "Away Heating" = 13,// CC v1
     // (undocumented)
-    "Dry Air" = 8,
+    "Dry Air" = 8,// CC v1
     // (undocumented)
-    "Energy Save Cooling" = 12,
+    "Energy Save Cooling" = 12,// CC v1
     // (undocumented)
-    "Energy Save Heating" = 11,
+    "Energy Save Heating" = 11,// CC v1
     // (undocumented)
-    "Full Power" = 15,
+    "Full Power" = 15,// CC v1
     // (undocumented)
-    "Moist Air" = 9,
+    "Moist Air" = 9,// CC v2
     // (undocumented)
-    "N/A" = 0,
+    "N/A" = 0,// CC v2
     // (undocumented)
-    "Cooling" = 2,
+    "Cooling" = 2,// CC v2
     // (undocumented)
-    "Furnace" = 7,
+    "Furnace" = 7,// CC v3
     // (undocumented)
     "Heating" = 1
 }
@@ -20525,7 +20526,7 @@ export enum ZWavePlusCommand {
 // @public (undocumented)
 export enum ZWavePlusNodeType {
     // (undocumented)
-    IPGateway = 2,
+    IPGateway = 2,// ZWave+ Node
     // (undocumented)
     Node = 0
 }
