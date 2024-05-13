@@ -430,7 +430,7 @@ export enum PageStatus {
 // @public (undocumented)
 export enum PageWriteSize {
     // (undocumented)
-    WRITE_SIZE_16 = 1,
+    WRITE_SIZE_16 = 1,// Only single writes are allowed
     // (undocumented)
     WRITE_SIZE_32 = 0
 }
