@@ -794,11 +794,17 @@ Returns a reference to the (virtual) broadcast node. This can be used to send a 
 #### Configure RF region
 
 ```ts
+readonly rfRegion: MaybeNotKnown<RFRegion>
+```
+
+Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet). This value is cached and can be changed through the following API.
+
+```ts
 setRFRegion(region: RFRegion): Promise<boolean>
 getRFRegion(): Promise<RFRegion>
 ```
 
-Configure or read the RF region at the Z-Wave API Module. The possible regions are:
+Configure or read the RF region from the Z-Wave API Module. The possible regions are:
 
 ```ts
 export enum RFRegion {
@@ -827,7 +833,7 @@ setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
 getPowerlevel(): Promise<{powerlevel: number, measured0dBm: number}>;
 ```
 
-Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm and serves as a calibration. Both are in dBm and must satisfy the following constraints:
+Configure or read the TX powerlevel setting for Z-Wave Classic. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm and serves as a calibration. Both are in dBm and must satisfy the following constraints:
 
 - `powerlevel` between `-10` and either `+12.7`, `+14` or `+20` dBm (depending on the controller)
 - `measured0dBm` between `-10` and `+10` or between `-12.8` and `+12.7` dBm (depending on the controller)
@@ -837,6 +843,60 @@ Unfortunately there doesn't seem to be a way to determine which constrains apply
 > [!ATTENTION] Not all controllers support configuring the TX powerlevel. These methods will throw if they are not supported.
 
 > [!WARNING] Increasing the powerlevel (i.e. "shouting louder") does not improve reception of the controller and may even be **against the law**. Use at your own risk!
+
+#### Configure maximum Long Range TX powerlevel
+
+```ts
+readonly maxLongRangePowerlevel: MaybeNotKnown<number>;
+```
+
+The maximum powerlevel to use for Z-Wave Long Range, or `undefined` if it could not be determined (yet). This value is cached and can be changed through the following API.
+
+```ts
+setMaxLongRangePowerlevel(limit: number): Promise<boolean>;
+getMaxLongRangePowerlevel(): Promise<number>;
+```
+
+Z-Wave Long Range dynamically adjusts its transmit power. This API is used to configure or read the maximum TX power to use for this. The value is in dBm and must be between `-10.0` and `+14.0` or `+20.0`, depending on the controller hardware.
+
+#### Configure Long Range RF channel
+
+```ts
+readonly longRangeChannel: MaybeNotKnown<LongRangeChannel>;
+readonly supportsLongRangeAutoChannelSelection: MaybeNotKnown<boolean>
+```
+
+The channel to use for Z-Wave Long Range, whether automatic channel selection is supported by the controller, or `undefined` if this information could not be determined (yet). These values are cached. The channel can changed through the following API.
+
+```ts
+setLongRangeChannel(
+	channel:
+		| LongRangeChannel.A
+		| LongRangeChannel.B
+		| LongRangeChannel.Auto,
+): Promise<boolean>;
+getLongRangeChannel(): Promise<{
+	channel: LongRangeChannel;
+	supportsAutoChannelSelection: boolean
+}>;
+```
+
+Request the channel setting and capabilities for Z-Wave Long Range. The following channels exist:
+
+<!-- #import LongRangeChannel from "@zwave-js/core" -->
+
+```ts
+enum LongRangeChannel {
+	/** Indicates that Long Range is not supported by the currently set RF region */
+	Unsupported = 0x00,
+	A = 0x01,
+	B = 0x02,
+	/** Z-Wave Long Range Channel automatically selected by the Z-Wave algorithm */
+	Auto = 0xff,
+}
+```
+
+> [!NOTE] `supportsAutoChannelSelection` indicates whether the controller supports automatic channel selection. `LongRangeChannel.Auto` is only allowed if supported.
 
 #### Turn Z-Wave Radio on/off
 
