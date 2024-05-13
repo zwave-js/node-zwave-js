@@ -266,12 +266,14 @@ export function parseNodeProtocolInfo(
 
 	let nodeType: NodeType;
 	switch (capability & 0b1010) {
-		case 0b1000:
-			nodeType = NodeType["End Node"];
-			break;
 		case 0b0010:
-		default:
 			nodeType = NodeType.Controller;
+			break;
+		case 0b1000:
+			// Routing end node
+		default:
+			// Non-routing end node
+			nodeType = NodeType["End Node"];
 			break;
 	}
 
