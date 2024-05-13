@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { RFRegion } from "@zwave-js/core";
 import { wait as _wait } from "alcalzone-shared/async";
 import path from "node:path";
 import "reflect-metadata";
@@ -57,7 +56,7 @@ const driver = new Driver(port, {
 		),
 	},
 	rf: {
-		region: RFRegion.USA,
+		preferLRRegion: false,
 	},
 	storage: {
 		cacheDir: path.join(__dirname, "cache"),

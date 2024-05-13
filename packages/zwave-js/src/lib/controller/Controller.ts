@@ -1263,8 +1263,8 @@ export class ZWaveController
 		if (this.driver.options.rf?.region != undefined) {
 			desiredRFRegion = this.driver.options.rf.region;
 		}
-		// Unless auto-upgrade to LR regions is disabled, try to find a suitable replacement region
-		if (this.driver.options.rf?.upgradeToLRRegion !== false) {
+		// Unless preferring LR regions is disabled, try to find a suitable replacement region
+		if (this.driver.options.rf?.preferLRRegion !== false) {
 			desiredRFRegion ??= this.rfRegion;
 			if (desiredRFRegion != undefined) {
 				desiredRFRegion = this.tryGetLRCapableRegion(desiredRFRegion);
@@ -6080,7 +6080,7 @@ ${associatedNodes.join(", ")}`,
 	/** Configure the RF region at the Z-Wave API Module */
 	public async setRFRegion(region: RFRegion): Promise<boolean> {
 		// Unless auto-upgrade to LR regions is disabled, try to find a suitable LR replacement region
-		if (this.driver.options.rf?.upgradeToLRRegion !== false) {
+		if (this.driver.options.rf?.preferLRRegion !== false) {
 			region = this.tryGetLRCapableRegion(region);
 		}
 		return this.setRFRegionInternal(region, true);
