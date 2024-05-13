@@ -270,12 +270,12 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		region?: RFRegion;
 
 		/**
-		 * Whether LR-capable regions should automatically be chosen over their corresponding non-LR regions, e.g. `USA` -> `USA (Long Range)`.
+		 * Whether LR-capable regions should automatically be preferred over their corresponding non-LR regions, e.g. `USA` -> `USA (Long Range)`.
 		 * This also overrides the `rf.region` setting if the desired region is not LR-capable.
 		 *
 		 * Default: true.
 		 */
-		upgradeToLRRegion?: boolean;
+		preferLRRegion?: boolean;
 
 		txPower?: {
 			/** The desired TX power in dBm. */

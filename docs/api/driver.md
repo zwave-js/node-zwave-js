@@ -944,7 +944,7 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		 *
 		 * Default: true.
 		 */
-		upgradeToLRRegion?: boolean;
+		preferLRRegion?: boolean;
 
 		txPower?: {
 			/** The desired TX power in dBm. */
