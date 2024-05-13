@@ -6079,6 +6079,10 @@ ${associatedNodes.join(", ")}`,
 
 	/** Configure the RF region at the Z-Wave API Module */
 	public async setRFRegion(region: RFRegion): Promise<boolean> {
+		// Unless auto-upgrade to LR regions is disabled, try to find a suitable LR replacement region
+		if (this.driver.options.rf?.upgradeToLRRegion !== false) {
+			region = this.tryGetLRCapableRegion(region);
+		}
 		return this.setRFRegionInternal(region, true);
 	}
 
