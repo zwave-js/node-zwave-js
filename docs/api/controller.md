@@ -824,6 +824,8 @@ export enum RFRegion {
 }
 ```
 
+> [!NOTE] Long Range capable regions are automatically preferred over their non-LR counterparts. This behavior can be disabled by setting the driver option `rf.upgradeToLRRegion` to `false`.
+
 > [!ATTENTION] Not all controllers support configuring the RF region. These methods will throw if they are not supported
 
 #### Configure TX powerlevel

@@ -1210,6 +1210,24 @@ export class ZWaveController
 		};
 	}
 
+	/** Tries to determine the LR capable replacement of the given region. If none is found, the given region is returned. */
+	private tryGetLRCapableRegion(region: RFRegion): RFRegion {
+		// There is no official API to query whether a given region is supported,
+		// but there are ways to figure out if LR regions are.
+
+		// US_LR is supported if the controller supports changing the node ID type to 16 bit
+		if (
+			region === RFRegion.USA
+			&& this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetNodeIDType,
+			)
+		) {
+			return RFRegion["USA (Long Range)"];
+		}
+
+		return region;
+	}
+
 	/**
 	 * @internal
 	 * Queries the region and powerlevel settings and configures them if necessary
@@ -1240,14 +1258,26 @@ export class ZWaveController
 			}
 		}
 
+		let desiredRFRegion: RFRegion | undefined;
+		// If the user has set a region in the options, use that
+		if (this.driver.options.rf?.region != undefined) {
+			desiredRFRegion = this.driver.options.rf.region;
+		}
+		// Unless auto-upgrade to LR regions is disabled, try to find a suitable replacement region
+		if (this.driver.options.rf?.upgradeToLRRegion !== false) {
+			desiredRFRegion ??= this.rfRegion;
+			if (desiredRFRegion != undefined) {
+				desiredRFRegion = this.tryGetLRCapableRegion(desiredRFRegion);
+			}
+		}
+
 		if (
 			this.isSerialAPISetupCommandSupported(
 				SerialAPISetupCommand.SetRFRegion,
 			)
-			&& this.driver.options.rf?.region != undefined
-			&& this.rfRegion != this.driver.options.rf.region
+			&& desiredRFRegion != undefined
+			&& this.rfRegion != desiredRFRegion
 		) {
-			const desiredRegion = this.driver.options.rf.region;
 			this.driver.controllerLog.print(
 				`Current RF region (${
 					getEnumMemberName(
@@ -1257,12 +1287,12 @@ export class ZWaveController
 				}) differs from desired region (${
 					getEnumMemberName(
 						RFRegion,
-						desiredRegion,
+						desiredRFRegion,
 					)
 				}), configuring it...`,
 			);
 			const resp = await this.setRFRegionInternal(
-				desiredRegion,
+				desiredRFRegion,
 				// Do not soft reset here, we'll do it later
 				false,
 			).catch((e) => (e as Error).message);
@@ -1271,7 +1301,7 @@ export class ZWaveController
 					`Changed RF region to ${
 						getEnumMemberName(
 							RFRegion,
-							desiredRegion,
+							desiredRFRegion,
 						)
 					}`,
 				);
@@ -6049,6 +6079,10 @@ ${associatedNodes.join(", ")}`,
 
 	/** Configure the RF region at the Z-Wave API Module */
 	public async setRFRegion(region: RFRegion): Promise<boolean> {
+		// Unless auto-upgrade to LR regions is disabled, try to find a suitable LR replacement region
+		if (this.driver.options.rf?.upgradeToLRRegion !== false) {
+			region = this.tryGetLRCapableRegion(region);
+		}
 		return this.setRFRegionInternal(region, true);
 	}
 
