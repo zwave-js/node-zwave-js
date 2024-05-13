@@ -114,10 +114,13 @@ export function isEmptyRoute(route: Route): boolean {
 }
 
 export enum LongRangeChannel {
-	Unknown = 0x00, // Reserved
+	/** Indicates that Long Range is not supported by the currently set RF region */
+	Unsupported = 0x00,
 	A = 0x01,
 	B = 0x02,
-	// 0x03..0xFF are reserved and must not be used
+	// 0x03..0xFE are reserved and must not be used
+	/** Z-Wave Long Range Channel automatically selected by the Z-Wave algorithm */
+	Auto = 0xff,
 }
 
 export function isLongRangeNodeId(nodeId: number): boolean {

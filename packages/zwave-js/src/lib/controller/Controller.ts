@@ -164,7 +164,9 @@ import { HardResetRequest } from "../serialapi/capability/HardResetRequest";
 import {
 	GetLongRangeChannelRequest,
 	type GetLongRangeChannelResponse,
-} from "../serialapi/capability/LongRangeSetupMessages";
+	SetLongRangeChannelRequest,
+	type SetLongRangeChannelResponse,
+} from "../serialapi/capability/LongRangeChannelMessages";
 import {
 	SerialAPISetupCommand,
 	SerialAPISetup_CommandUnsupportedResponse,
@@ -694,6 +696,24 @@ export class ZWaveController
 		return this._supportsLongRange;
 	}
 
+	private _maxLongRangePowerlevel: MaybeNotKnown<number>;
+	/** The maximum powerlevel to use for Z-Wave Long Range, or `undefined` if it could not be determined (yet). This value is cached and can be changed through {@link setMaxLongRangePowerlevel}. */
+	public get maxLongRangePowerlevel(): MaybeNotKnown<number> {
+		return this._maxLongRangePowerlevel;
+	}
+
+	private _longRangeChannel: MaybeNotKnown<LongRangeChannel>;
+	/** The channel to use for Z-Wave Long Range, or `undefined` if it could not be determined (yet). This value is cached and can be changed through {@link setLongRangeChannel}. */
+	public get longRangeChannel(): MaybeNotKnown<LongRangeChannel> {
+		return this._longRangeChannel;
+	}
+
+	private _supportsLongRangeAutoChannelSelection: MaybeNotKnown<boolean>;
+	/** Whether automatic LR channel selection is supported, or `undefined` if it could not be determined (yet). */
+	public get supportsLongRangeAutoChannelSelection(): MaybeNotKnown<boolean> {
+		return this._supportsLongRangeAutoChannelSelection;
+	}
+
 	private _maxPayloadSize: MaybeNotKnown<number>;
 	/** The maximum payload size that can be transmitted with a Z-Wave explorer frame */
 	public get maxPayloadSize(): MaybeNotKnown<number> {
@@ -1179,25 +1199,9 @@ export class ZWaveController
 			this._maxPayloadSizeLR = await this.getMaxPayloadSizeLongRange();
 		}
 
-		let lrChannel: LongRangeChannel | undefined;
-		if (
-			this.isFunctionSupported(FunctionType.GetLongRangeChannel)
-		) {
-			// TODO: restore/set the channel
-			const lrChannelResp = await this.driver.sendMessage<
-				GetLongRangeChannelResponse
-			>(new GetLongRangeChannelRequest(this.driver));
-			lrChannel = lrChannelResp.longRangeChannel;
-		}
-
 		this.driver.controllerLog.print(
 			`received Z-Wave Long Range capabilities:
   max. payload size: ${this._maxPayloadSizeLR} bytes
-  channel:           ${
-				lrChannel
-					? getEnumMemberName(LongRangeChannel, lrChannel)
-					: "(unknown)"
-			}
   nodes:             ${lrNodeIds.join(", ")}`,
 		);
 
@@ -1333,46 +1337,129 @@ export class ZWaveController
 			this.isSerialAPISetupCommandSupported(
 				SerialAPISetupCommand.GetLongRangeMaximumTxPower,
 			)
-			&& this.isSerialAPISetupCommandSupported(
-				SerialAPISetupCommand.SetLongRangeMaximumTxPower,
-			)
-			&& this.driver.options.rf?.maxLongRangePowerlevel != undefined
 		) {
-			const desired = this.driver.options.rf.maxLongRangePowerlevel;
 			this.driver.controllerLog.print(
 				`Querying configured max. Long Range powerlevel...`,
 			);
-			const current = await this.getMaxLongRangePowerlevel().catch(() =>
+			const resp = await this.getMaxLongRangePowerlevel().catch(() =>
 				undefined
 			);
-			if (current != undefined) {
-				if (
-					current !== desired
-				) {
-					this.driver.controllerLog.print(
-						`Current max. Long Range powerlevel ${current} dBm differs from desired powerlevel ${desired} dBm, configuring it...`,
-					);
-
-					const resp = await this.setMaxLongRangePowerlevel(desired)
-						.catch((e) => (e as Error).message);
-					if (resp === true) {
-						this.driver.controllerLog.print(
-							`max. Long Range powerlevel updated`,
-						);
-					} else {
-						this.driver.controllerLog.print(
-							`Changing the max. Long Range powerlevel failed!${
-								resp ? ` Reason: ${resp}` : ""
-							}`,
-							"warn",
-						);
-					}
-				}
+			if (resp != undefined) {
+				this.driver.controllerLog.print(
+					`The max. LR powerlevel is ${resp.toFixed(1)} dBm`,
+				);
 			} else {
 				this.driver.controllerLog.print(
 					`Querying the max. Long Range powerlevel failed!`,
 					"warn",
 				);
+			}
+		}
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.SetLongRangeMaximumTxPower,
+			)
+			&& this.driver.options.rf?.maxLongRangePowerlevel != undefined
+			&& this.maxLongRangePowerlevel
+				!== this.driver.options.rf.maxLongRangePowerlevel
+		) {
+			const desired = this.driver.options.rf.maxLongRangePowerlevel;
+			this.driver.controllerLog.print(
+				`Current max. Long Range powerlevel ${
+					this.maxLongRangePowerlevel?.toFixed(1)
+				} dBm differs from desired powerlevel ${desired} dBm, configuring it...`,
+			);
+
+			const resp = await this.setMaxLongRangePowerlevel(desired)
+				.catch((e) => (e as Error).message);
+			if (resp === true) {
+				this.driver.controllerLog.print(
+					`max. Long Range powerlevel updated`,
+				);
+			} else {
+				this.driver.controllerLog.print(
+					`Changing the max. Long Range powerlevel failed!${
+						resp ? ` Reason: ${resp}` : ""
+					}`,
+					"warn",
+				);
+			}
+		}
+
+		// Check and possibly update the Long Range channel settings
+		if (
+			this.isFunctionSupported(FunctionType.GetLongRangeChannel)
+		) {
+			this.driver.controllerLog.print(
+				`Querying configured Long Range channel information...`,
+			);
+			const resp = await this.getLongRangeChannel().catch(() =>
+				undefined
+			);
+			if (resp != undefined) {
+				this.driver.controllerLog.print(
+					`received Z-Wave Long Range channel information:
+  channel:                         ${
+						resp.channel != undefined
+							? getEnumMemberName(LongRangeChannel, resp.channel)
+							: "(unknown)"
+					}
+  supports auto channel selection: ${resp.supportsAutoChannelSelection}
+`,
+				);
+			} else {
+				this.driver.controllerLog.print(
+					`Querying the Long Range channel information failed!`,
+					"warn",
+				);
+			}
+		}
+		if (
+			this.isFunctionSupported(FunctionType.SetLongRangeChannel)
+			&& this.driver.options.rf?.longRangeChannel != undefined
+			&& this.longRangeChannel
+				!== this.driver.options.rf.longRangeChannel
+		) {
+			const desired = this.driver.options.rf.longRangeChannel;
+			if (
+				desired === LongRangeChannel.Auto
+				&& !this._supportsLongRangeAutoChannelSelection
+			) {
+				this.driver.controllerLog.print(
+					`Cannot set desired LR channel to Auto because the controller does not support it!`,
+					"warn",
+				);
+			} else {
+				this.driver.controllerLog.print(
+					`Current LR channel ${
+						this.longRangeChannel != undefined
+							? getEnumMemberName(
+								LongRangeChannel,
+								this.longRangeChannel,
+							)
+							: "(unknown)"
+					} differs from desired channel ${
+						getEnumMemberName(
+							LongRangeChannel,
+							desired,
+						)
+					}, configuring it...`,
+				);
+
+				const resp = await this.setLongRangeChannel(desired)
+					.catch((e) => (e as Error).message);
+				if (resp === true) {
+					this.driver.controllerLog.print(
+						`LR channel updated`,
+					);
+				} else {
+					this.driver.controllerLog.print(
+						`Changing the LR channel failed!${
+							resp ? ` Reason: ${resp}` : ""
+						}`,
+						"warn",
+					);
+				}
 			}
 		}
 	}
@@ -6094,6 +6181,10 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
 		}
+
+		if (result.success) {
+			this._maxLongRangePowerlevel = limit;
+		}
 		return result.success;
 	}
 
@@ -6113,7 +6204,68 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
 		}
+
+		this._maxLongRangePowerlevel = result.limit;
 		return result.limit;
+	}
+
+	/**
+	 * Configure channel to use for Z-Wave Long Range.
+	 */
+	public async setLongRangeChannel(
+		channel:
+			| LongRangeChannel.A
+			| LongRangeChannel.B
+			| LongRangeChannel.Auto,
+	): Promise<boolean> {
+		if (
+			!this._supportsLongRangeAutoChannelSelection
+			&& channel === LongRangeChannel.Auto
+		) {
+			throw new ZWaveError(
+				`Your hardware does not support automatic Long Range channel selection!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+
+		const result = await this.driver.sendMessage<
+			SetLongRangeChannelResponse
+		>(
+			new SetLongRangeChannelRequest(
+				this.driver,
+				{ channel },
+			),
+		);
+
+		if (result.success) {
+			this._longRangeChannel = channel;
+		}
+		return result.success;
+	}
+
+	/** Request the channel setting and capabilities for Z-Wave Long Range */
+	public async getLongRangeChannel(): Promise<
+		{ channel: LongRangeChannel; supportsAutoChannelSelection: boolean }
+	> {
+		const result = await this.driver.sendMessage<
+			GetLongRangeChannelResponse
+		>(
+			new GetLongRangeChannelRequest(this.driver),
+		);
+
+		const channel = result.autoChannelSelectionActive
+				&& result.supportsAutoChannelSelection
+			? LongRangeChannel.Auto
+			: result.channel;
+
+		this._longRangeChannel = channel;
+		this._supportsLongRangeAutoChannelSelection =
+			result.supportsAutoChannelSelection;
+
+		return {
+			channel,
+			supportsAutoChannelSelection: result.supportsAutoChannelSelection,
+		};
 	}
 
 	/**
