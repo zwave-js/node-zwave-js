@@ -1,4 +1,4 @@
-import type { LogConfig, RFRegion } from "@zwave-js/core";
+import type { LogConfig, LongRangeChannel, RFRegion } from "@zwave-js/core";
 import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
@@ -278,6 +278,15 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 
 		/** The desired max. powerlevel setting for Z-Wave Long Range in dBm. */
 		maxLongRangePowerlevel?: number;
+
+		/**
+		 * The desired channel to use for Z-Wave Long Range.
+		 * Auto may be unsupported by the controller and will be ignored in that case.
+		 */
+		longRangeChannel?:
+			| LongRangeChannel.A
+			| LongRangeChannel.B
+			| LongRangeChannel.Auto;
 	};
 
 	apiKeys?: {
