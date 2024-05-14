@@ -37,9 +37,8 @@ export class GetLongRangeChannelResponse extends Message {
 
 		if (this.payload.length >= 2) {
 			this.supportsAutoChannelSelection =
-				!!(this.payload[1] & 0b000_01_000);
-			this.autoChannelSelectionActive =
-				!!(this.payload[1] & 0b000_10_000);
+				!!(this.payload[1] & 0b0001_0000);
+			this.autoChannelSelectionActive = !!(this.payload[1] & 0b0010_0000);
 		} else {
 			this.supportsAutoChannelSelection = false;
 			this.autoChannelSelectionActive = false;
