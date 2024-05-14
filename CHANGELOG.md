@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.8.1 (2024-05-14)
 ### Bugfixes
 This release adds a bit of polishing for Zniffer and some bugfixes (#6849):
 * Z-Wave Classic inclusion frames from LR devices are now parsed instead of logging an error
