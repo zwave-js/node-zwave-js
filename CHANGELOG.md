@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.8.0 (2024-05-14)
 ### Features
 * Automatically prefer LR-capable RF regions over their non-LR counterparts (#6843, #6845)
 * Add `destroy` method to Zniffer to free serial port (#6848)
