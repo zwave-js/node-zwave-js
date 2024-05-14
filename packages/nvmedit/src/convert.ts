@@ -595,8 +595,10 @@ export function nvmObjectsToJSON(
 		format: protocolFileFormat,
 		controller,
 		nodes: mapToObject(nodes),
-		lrNodes: lrNodes.size > 0 ? mapToObject(lrNodes) : undefined,
 	};
+	if (lrNodes.size > 0) {
+		ret.lrNodes = mapToObject(lrNodes);
+	}
 
 	return ret;
 }
