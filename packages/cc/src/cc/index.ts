@@ -873,6 +873,7 @@ export {
 	WindowCoveringCCSupportedReport,
 	WindowCoveringCCValues,
 } from "./WindowCoveringCC";
+export { ZWaveLongRangeCC } from "./ZWaveLongRangeCC";
 export type { ZWavePlusCCReportOptions } from "./ZWavePlusCC";
 export {
 	ZWavePlusCC,
