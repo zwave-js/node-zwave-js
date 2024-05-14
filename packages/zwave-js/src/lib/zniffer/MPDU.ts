@@ -1123,6 +1123,7 @@ export function mpduToZWaveFrame(
 		channel: mpdu.frameInfo.channel,
 		region: mpdu.frameInfo.region,
 		rssiRaw: mpdu.frameInfo.rssiRaw,
+		rssi: mpdu.frameInfo.rssi,
 
 		protocolDataRate: mpdu.frameInfo.protocolDataRate,
 		speedModified: mpdu.speedModified,
