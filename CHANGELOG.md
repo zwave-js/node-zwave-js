@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+This release adds a bit of polishing for Zniffer and some bugfixes (#6849):
+* Z-Wave Classic inclusion frames from LR devices are now parsed instead of logging an error
+* Z-Wave LR protocol frames are now recognized (but not parsed in detail) instead of logging an error
+* The `payload` property for routed frames contains the parsed CC now
+* Expose the `active` property used to determine whether the Zniffer is currently capturing traffic
+
 ## 12.8.0 (2024-05-14)
 ### Features
 * Automatically prefer LR-capable RF regions over their non-LR counterparts (#6843, #6845)
