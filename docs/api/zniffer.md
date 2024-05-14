@@ -88,6 +88,12 @@ await zniffer.saveCaptureToFile("/path/to/file.zlf");
 
 This will overwrite the file if it already exists. Starting a new capture will discard all previously captured frames.
 
+When done, make sure to destroy the Zniffer instance to release the serial port and clean up resources:
+
+```ts
+await zniffer.destroy();
+```
+
 ## Frequency selection
 
 The configured frequency of the Zniffer has to match the frequency of the Z-Wave network it is capturing. Zniffers based on 700/800 series firmware support frequencies that match the `ZnifferRegion` enum:
