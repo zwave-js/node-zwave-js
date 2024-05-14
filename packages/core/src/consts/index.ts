@@ -1,6 +1,9 @@
 /** Max number of nodes in a ZWave network */
 export const MAX_NODES = 232;
 
+/** Max number of nodes in a Z-Wave LR network */
+export const MAX_NODES_LR = 4000; // FIXME: This seems too even, figure out the exact number
+
 /** The broadcast target node id */
 export const NODE_ID_BROADCAST = 0xff;
 

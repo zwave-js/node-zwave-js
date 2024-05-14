@@ -1734,8 +1734,6 @@ export class ZWaveController
 
 	/**
 	 * Gets the list of long range nodes from the controller.
-	 * Warning: This only works when followed up by a hard-reset, so don't call this directly
-	 * @internal
 	 */
 	public async getLongRangeNodes(): Promise<readonly number[]> {
 		const nodeIds: number[] = [];
