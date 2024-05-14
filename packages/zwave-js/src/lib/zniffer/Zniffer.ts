@@ -85,8 +85,8 @@ const logo: string = `
 export interface ZnifferEventCallbacks {
 	ready: () => void;
 	error: (err: Error) => void;
-	frame: (frame: Frame) => void;
-	"corrupted frame": (err: CorruptedFrame) => void;
+	frame: (frame: Frame, rawData: Buffer) => void;
+	"corrupted frame": (err: CorruptedFrame, rawData: Buffer) => void;
 }
 
 export type ZnifferEvents = Extract<keyof ZnifferEventCallbacks, string>;
@@ -160,7 +160,15 @@ function tryConvertRSSI(
 
 interface CapturedData {
 	timestamp: Date;
-	data: Buffer;
+	rawData: Buffer;
+	frameData: Buffer;
+	parsedFrame?: Frame | CorruptedFrame;
+}
+
+export interface CapturedFrame {
+	timestamp: Date;
+	frameData: Buffer;
+	parsedFrame: Frame | CorruptedFrame;
 }
 
 export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
@@ -233,8 +241,17 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		return this._active;
 	}
 
+	private _capturedFrames: CapturedData[] = [];
+
 	/** A list of raw captured frames that can be saved to a .zlf file later */
-	private capturedDataFrames: CapturedData[] = [];
+	public get capturedFrames(): Readonly<CapturedFrame>[] {
+		return this._capturedFrames.filter((f) => f.parsedFrame !== undefined)
+			.map((f) => ({
+				timestamp: f.timestamp,
+				frameData: f.frameData,
+				parsedFrame: f.parsedFrame!,
+			}));
+	}
 
 	public async init(): Promise<void> {
 		if (this.wasDestroyed) {
@@ -375,8 +392,14 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		if (msg.type === ZnifferMessageType.Command) {
 			this.handleResponse(msg);
 		} else {
-			this.capturedDataFrames.push({ timestamp: new Date(), data });
-			this.handleDataMessage(msg as ZnifferDataMessage);
+			const dataMsg = msg as ZnifferDataMessage;
+			const capture: CapturedData = {
+				timestamp: new Date(),
+				rawData: data,
+				frameData: dataMsg.payload,
+			};
+			this._capturedFrames.push(capture);
+			this.handleDataMessage(dataMsg, capture);
 		}
 	}
 
@@ -397,7 +420,10 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	/**
 	 * Is called when a Request-type message was received
 	 */
-	private handleDataMessage(msg: ZnifferDataMessage): void {
+	private handleDataMessage(
+		msg: ZnifferDataMessage,
+		capture: CapturedData,
+	): void {
 		try {
 			let convertedRSSI: RSSI | undefined;
 			if (this._options.convertRSSI && this._chipType) {
@@ -418,17 +444,17 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 				// Emit the captured frame in a format that's easier to work with for applications.
 				this.znifferLog.beam(beam);
 				const frame = beamToFrame(beam);
-				this.emit("frame", frame);
+				capture.parsedFrame = frame;
+				this.emit("frame", frame, capture.frameData);
 				return;
 			}
 
 			// Only handle messages with a valid checksum, expose the others as CRC errors
 			if (!msg.checksumOK) {
 				this.znifferLog.crcError(msg);
-				this.emit(
-					"corrupted frame",
-					znifferDataMessageToCorruptedFrame(msg),
-				);
+				const frame = znifferDataMessageToCorruptedFrame(msg);
+				capture.parsedFrame = frame;
+				this.emit("corrupted frame", frame, capture.frameData);
 				return;
 			}
 
@@ -484,7 +510,8 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 			// Emit the captured frame in a format that's easier to work with for applications.
 			const frame = mpduToFrame(mpdu, cc);
-			this.emit("frame", frame);
+			capture.parsedFrame = frame;
+			this.emit("frame", frame, capture.frameData);
 
 			// Update the security managers when nonces are exchanged, so we can
 			// decrypt the communication
@@ -677,7 +704,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		}
 
 		if (this._active) return;
-		this.capturedDataFrames = [];
+		this._capturedFrames = [];
 		this._active = true;
 
 		const req = new ZnifferStartRequest();
@@ -819,6 +846,11 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		return ret;
 	}
 
+	/** Clears the list of captured frames */
+	public clearCapturedFrames(): void {
+		this._capturedFrames = [];
+	}
+
 	/** Saves the captured frames in a `.zlf` file that can be read by the official Zniffer application. */
 	public async saveCaptureToFile(filePath: string): Promise<void> {
 		// Mimics the current Zniffer software, without using features like sessions and comments
@@ -827,7 +859,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		header.writeUInt16BE(0x2312, 0x07fe); // checksum
 
 		await fs.writeFile(filePath, header);
-		for (const frame of this.capturedDataFrames) {
+		for (const frame of this._capturedFrames) {
 			await fs.appendFile(filePath, captureToZLFEntry(frame));
 		}
 	}
@@ -866,7 +898,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 function captureToZLFEntry(
 	capture: CapturedData,
 ): Buffer {
-	const buffer = Buffer.alloc(14 + capture.data.length, 0);
+	const buffer = Buffer.alloc(14 + capture.rawData.length, 0);
 	// Convert the date to a .NET datetime
 	let ticks = BigInt(capture.timestamp.getTime()) * 10000n
 		+ 621355968000000000n;
@@ -876,9 +908,9 @@ function captureToZLFEntry(
 	const direction = 0b0000_0000; // inbound, outbound would be 0b1000_0000
 
 	buffer[8] = direction | 0x01; // dir + session ID
-	buffer[9] = capture.data.length;
+	buffer[9] = capture.rawData.length;
 	// bytes 10-12 are empty
-	capture.data.copy(buffer, 13);
+	capture.rawData.copy(buffer, 13);
 	buffer[buffer.length - 1] = 0xfe; // end of frame
 	return buffer;
 }
