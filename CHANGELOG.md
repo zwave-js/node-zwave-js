@@ -4,6 +4,15 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Automatically prefer LR-capable RF regions over their non-LR counterparts (#6843, #6845)
+* Add `destroy` method to Zniffer to free serial port (#6848)
+* Expose more Long Range RF settings as methods, controller properties and driver options (#6841)
+
+### Config file changes
+* Disable Supervision for Everspring EH403 (#6847)
+
 ## 12.7.0 (2024-05-13)
 ### Features
 * Add methods to get/set max. LR powerlevel, add driver option to automatically configure it (#6824)
