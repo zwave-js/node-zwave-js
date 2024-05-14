@@ -228,6 +228,10 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private awaitedMessages: AwaitedMessageEntry[] = [];
 
 	private _active: boolean;
+	/** Whether the Zniffer instance is currently capturing */
+	public get active(): boolean {
+		return this._active;
+	}
 
 	/** A list of raw captured frames that can be saved to a .zlf file later */
 	private capturedDataFrames: CapturedData[] = [];
@@ -308,7 +312,9 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 				}
   supported frequencies: ${
 					freqs.supportedFrequencies.map((f) =>
-						`\n  · ${getEnumMemberName(ZnifferRegion, f)}`
+						`\n  · ${f.toString().padStart(2, " ")}: ${
+							getEnumMemberName(ZnifferRegion, f)
+						}`
 					).join("")
 				}`,
 				"info",

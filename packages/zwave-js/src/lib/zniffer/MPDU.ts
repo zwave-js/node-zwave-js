@@ -105,17 +105,16 @@ export interface MPDU {
 export function parseMPDU(
 	frame: ZnifferDataMessage,
 ): ZWaveMPDU | LongRangeMPDU {
-	const channelConfig = getChannelConfiguration(frame.region);
-	switch (channelConfig) {
-		case "1/2":
-		case "3":
+	switch (frame.channel) {
+		case 0:
+		case 1:
+		case 2:
 			return ZWaveMPDU.from(frame);
-		case "4":
+		case 3:
 			return LongRangeMPDU.from(frame);
 		default:
 			validatePayload.fail(
-				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-				`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
+				`Unsupported channel ${frame.channel}. MPDU payload: ${
 					buffer2hex(frame.payload)
 				}`,
 			);
@@ -127,10 +126,9 @@ export class LongRangeMPDU implements MPDU {
 		const data = options.data;
 		this.frameInfo = options.frameInfo;
 
-		const channelConfig = getChannelConfiguration(this.frameInfo.region);
-		if (channelConfig !== "4") {
+		if (options.frameInfo.channel !== 3) {
 			validatePayload.fail(
-				`Unsupported channel configuration ${channelConfig} for LongRangeMPDU`,
+				`Unsupported channel ${options.frameInfo.channel} for LongRangeMPDU`,
 			);
 		}
 
@@ -284,12 +282,11 @@ export class ZWaveMPDU implements MPDU {
 		const data = options.data;
 		this.frameInfo = options.frameInfo;
 
-		const channelConfig = getChannelConfiguration(this.frameInfo.region);
-
 		let destinationOffset = 8;
 		const frameControl = data.subarray(5, 7);
-		switch (channelConfig) {
-			case "1/2": {
+		switch (options.frameInfo.channel) {
+			case 0:
+			case 1: {
 				this.routed = !!(frameControl[0] & 0b1000_0000);
 				this.ackRequested = !!(frameControl[0] & 0b0100_0000);
 				this.lowPower = !!(frameControl[0] & 0b0010_0000);
@@ -299,7 +296,7 @@ export class ZWaveMPDU implements MPDU {
 				this.sequenceNumber = frameControl[1] & 0b0000_1111;
 				break;
 			}
-			case "3": {
+			case 2: {
 				this.routed = false;
 				this.ackRequested = !!(frameControl[0] & 0b1000_0000);
 				this.lowPower = !!(frameControl[0] & 0b0100_0000);
@@ -310,15 +307,14 @@ export class ZWaveMPDU implements MPDU {
 				destinationOffset++;
 				break;
 			}
-			case "4": {
+			case 3: {
 				validatePayload.fail(
-					`Channel configuration 4 (ZWLR) must be parsed as a LongRangeMPDU!`,
+					`Channel 3 (ZWLR) must be parsed as a LongRangeMPDU!`,
 				);
 			}
 			default: {
 				validatePayload.fail(
-					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-					`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
+					`Unsupported channel ${options.frameInfo.channel}. MPDU payload: ${
 						buffer2hex(data)
 					}`,
 				);
@@ -1164,7 +1160,7 @@ export function mpduToZWaveFrame(
 			...retBase,
 			destinationNodeId: mpdu.destinationNodeId,
 			ackRequested: mpdu.ackRequested,
-			payload: mpdu.payload,
+			payload: payloadCC ?? mpdu.payload,
 			direction: mpdu.direction,
 			hop: mpdu.hop,
 			repeaters: [...mpdu.repeaters],
