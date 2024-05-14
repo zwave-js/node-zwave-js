@@ -51,10 +51,14 @@ import {
 import {
 	TypedEventEmitter,
 	getEnumMemberName,
+	noop,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import {
+	type DeferredPromise,
+	createDeferredPromise,
+} from "alcalzone-shared/deferred-promise";
 import fs from "node:fs/promises";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
@@ -191,6 +195,11 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
 
+	private _destroyPromise: DeferredPromise<void> | undefined;
+	private get wasDestroyed(): boolean {
+		return !!this._destroyPromise;
+	}
+
 	private _chipType: string | UnknownZWaveChipType | undefined;
 
 	private _currentFrequency: number | undefined;
@@ -224,6 +233,13 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private capturedDataFrames: CapturedData[] = [];
 
 	public async init(): Promise<void> {
+		if (this.wasDestroyed) {
+			throw new ZWaveError(
+				"The Zniffer was destroyed. Create a new instance and initialize that one.",
+				ZWaveErrorCodes.Driver_Destroyed,
+			);
+		}
+
 		// Open the serial port
 		if (typeof this.port === "string") {
 			if (this.port.startsWith("tcp://")) {
@@ -647,6 +663,13 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 	/** Starts the capture and discards all previously captured frames */
 	public async start(): Promise<void> {
+		if (this.wasDestroyed) {
+			throw new ZWaveError(
+				"The Zniffer is not ready or has been destroyed",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+
 		if (this._active) return;
 		this.capturedDataFrames = [];
 		this._active = true;
@@ -662,6 +685,8 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	public async stop(): Promise<void> {
 		if (!this._active) return;
 		this._active = false;
+
+		if (!this.serial) return;
 
 		const req = new ZnifferStopRequest();
 		await this.serial?.writeAsync(req.serialize());
@@ -799,6 +824,36 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		for (const frame of this.capturedDataFrames) {
 			await fs.appendFile(filePath, captureToZLFEntry(frame));
 		}
+	}
+
+	/**
+	 * Terminates the Zniffer instance and closes the underlying serial connection.
+	 * Must be called under any circumstances.
+	 */
+	public async destroy(): Promise<void> {
+		// Ensure this is only called once and all subsequent calls block
+		if (this._destroyPromise) return this._destroyPromise;
+		this._destroyPromise = createDeferredPromise();
+
+		this.znifferLog.print("Destroying Zniffer instance...");
+
+		if (this._active) {
+			await this.stop().catch(noop);
+		}
+
+		if (this.serial != undefined) {
+			// Avoid spewing errors if the port was in the middle of receiving something
+			this.serial.removeAllListeners();
+			if (this.serial.isOpen) await this.serial.close();
+			this.serial = undefined;
+		}
+
+		this.znifferLog.print("Zniffer instance destroyed");
+
+		// destroy loggers as the very last thing
+		this._logContainer.destroy();
+
+		this._destroyPromise.resolve();
 	}
 }
 
