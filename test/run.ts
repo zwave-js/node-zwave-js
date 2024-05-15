@@ -56,7 +56,7 @@ const driver = new Driver(port, {
 		),
 	},
 	rf: {
-		maxLongRangePowerlevel: 14,
+		preferLRRegion: false,
 	},
 	storage: {
 		cacheDir: path.join(__dirname, "cache"),

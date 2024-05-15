@@ -51,10 +51,14 @@ import {
 import {
 	TypedEventEmitter,
 	getEnumMemberName,
+	noop,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import {
+	type DeferredPromise,
+	createDeferredPromise,
+} from "alcalzone-shared/deferred-promise";
 import fs from "node:fs/promises";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
@@ -81,8 +85,8 @@ const logo: string = `
 export interface ZnifferEventCallbacks {
 	ready: () => void;
 	error: (err: Error) => void;
-	frame: (frame: Frame) => void;
-	"corrupted frame": (err: CorruptedFrame) => void;
+	frame: (frame: Frame, rawData: Buffer) => void;
+	"corrupted frame": (err: CorruptedFrame, rawData: Buffer) => void;
 }
 
 export type ZnifferEvents = Extract<keyof ZnifferEventCallbacks, string>;
@@ -156,7 +160,15 @@ function tryConvertRSSI(
 
 interface CapturedData {
 	timestamp: Date;
-	data: Buffer;
+	rawData: Buffer;
+	frameData: Buffer;
+	parsedFrame?: Frame | CorruptedFrame;
+}
+
+export interface CapturedFrame {
+	timestamp: Date;
+	frameData: Buffer;
+	parsedFrame: Frame | CorruptedFrame;
 }
 
 export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
@@ -191,6 +203,11 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
 
+	private _destroyPromise: DeferredPromise<void> | undefined;
+	private get wasDestroyed(): boolean {
+		return !!this._destroyPromise;
+	}
+
 	private _chipType: string | UnknownZWaveChipType | undefined;
 
 	private _currentFrequency: number | undefined;
@@ -219,11 +236,31 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private awaitedMessages: AwaitedMessageEntry[] = [];
 
 	private _active: boolean;
+	/** Whether the Zniffer instance is currently capturing */
+	public get active(): boolean {
+		return this._active;
+	}
+
+	private _capturedFrames: CapturedData[] = [];
 
 	/** A list of raw captured frames that can be saved to a .zlf file later */
-	private capturedDataFrames: CapturedData[] = [];
+	public get capturedFrames(): Readonly<CapturedFrame>[] {
+		return this._capturedFrames.filter((f) => f.parsedFrame !== undefined)
+			.map((f) => ({
+				timestamp: f.timestamp,
+				frameData: f.frameData,
+				parsedFrame: f.parsedFrame!,
+			}));
+	}
 
 	public async init(): Promise<void> {
+		if (this.wasDestroyed) {
+			throw new ZWaveError(
+				"The Zniffer was destroyed. Create a new instance and initialize that one.",
+				ZWaveErrorCodes.Driver_Destroyed,
+			);
+		}
+
 		// Open the serial port
 		if (typeof this.port === "string") {
 			if (this.port.startsWith("tcp://")) {
@@ -292,7 +329,9 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 				}
   supported frequencies: ${
 					freqs.supportedFrequencies.map((f) =>
-						`\n  · ${getEnumMemberName(ZnifferRegion, f)}`
+						`\n  · ${f.toString().padStart(2, " ")}: ${
+							getEnumMemberName(ZnifferRegion, f)
+						}`
 					).join("")
 				}`,
 				"info",
@@ -353,8 +392,14 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		if (msg.type === ZnifferMessageType.Command) {
 			this.handleResponse(msg);
 		} else {
-			this.capturedDataFrames.push({ timestamp: new Date(), data });
-			this.handleDataMessage(msg as ZnifferDataMessage);
+			const dataMsg = msg as ZnifferDataMessage;
+			const capture: CapturedData = {
+				timestamp: new Date(),
+				rawData: data,
+				frameData: dataMsg.payload,
+			};
+			this._capturedFrames.push(capture);
+			this.handleDataMessage(dataMsg, capture);
 		}
 	}
 
@@ -375,7 +420,10 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	/**
 	 * Is called when a Request-type message was received
 	 */
-	private handleDataMessage(msg: ZnifferDataMessage): void {
+	private handleDataMessage(
+		msg: ZnifferDataMessage,
+		capture: CapturedData,
+	): void {
 		try {
 			let convertedRSSI: RSSI | undefined;
 			if (this._options.convertRSSI && this._chipType) {
@@ -396,17 +444,17 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 				// Emit the captured frame in a format that's easier to work with for applications.
 				this.znifferLog.beam(beam);
 				const frame = beamToFrame(beam);
-				this.emit("frame", frame);
+				capture.parsedFrame = frame;
+				this.emit("frame", frame, capture.frameData);
 				return;
 			}
 
 			// Only handle messages with a valid checksum, expose the others as CRC errors
 			if (!msg.checksumOK) {
 				this.znifferLog.crcError(msg);
-				this.emit(
-					"corrupted frame",
-					znifferDataMessageToCorruptedFrame(msg),
-				);
+				const frame = znifferDataMessageToCorruptedFrame(msg);
+				capture.parsedFrame = frame;
+				this.emit("corrupted frame", frame, capture.frameData);
 				return;
 			}
 
@@ -462,7 +510,8 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 			// Emit the captured frame in a format that's easier to work with for applications.
 			const frame = mpduToFrame(mpdu, cc);
-			this.emit("frame", frame);
+			capture.parsedFrame = frame;
+			this.emit("frame", frame, capture.frameData);
 
 			// Update the security managers when nonces are exchanged, so we can
 			// decrypt the communication
@@ -647,8 +696,15 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 	/** Starts the capture and discards all previously captured frames */
 	public async start(): Promise<void> {
+		if (this.wasDestroyed) {
+			throw new ZWaveError(
+				"The Zniffer is not ready or has been destroyed",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+
 		if (this._active) return;
-		this.capturedDataFrames = [];
+		this._capturedFrames = [];
 		this._active = true;
 
 		const req = new ZnifferStartRequest();
@@ -662,6 +718,8 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	public async stop(): Promise<void> {
 		if (!this._active) return;
 		this._active = false;
+
+		if (!this.serial) return;
 
 		const req = new ZnifferStopRequest();
 		await this.serial?.writeAsync(req.serialize());
@@ -788,6 +846,11 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		return ret;
 	}
 
+	/** Clears the list of captured frames */
+	public clearCapturedFrames(): void {
+		this._capturedFrames = [];
+	}
+
 	/** Get the captured frames in the official Zniffer application format. */
 	public getCaptureAsZLFBuffer(): Buffer {
 		// Mimics the current Zniffer software, without using features like sessions and comments
@@ -796,7 +859,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		header.writeUInt16BE(0x2312, 0x07fe); // checksum
 		return Buffer.concat([
 			header,
-			...this.capturedDataFrames.map(captureToZLFEntry),
+			...this._capturedFrames.map(captureToZLFEntry),
 		]);
 	}
 
@@ -804,12 +867,42 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	public async saveCaptureToFile(filePath: string): Promise<void> {
 		await fs.writeFile(filePath, this.getCaptureAsZLFBuffer());
 	}
+
+	/**
+	 * Terminates the Zniffer instance and closes the underlying serial connection.
+	 * Must be called under any circumstances.
+	 */
+	public async destroy(): Promise<void> {
+		// Ensure this is only called once and all subsequent calls block
+		if (this._destroyPromise) return this._destroyPromise;
+		this._destroyPromise = createDeferredPromise();
+
+		this.znifferLog.print("Destroying Zniffer instance...");
+
+		if (this._active) {
+			await this.stop().catch(noop);
+		}
+
+		if (this.serial != undefined) {
+			// Avoid spewing errors if the port was in the middle of receiving something
+			this.serial.removeAllListeners();
+			if (this.serial.isOpen) await this.serial.close();
+			this.serial = undefined;
+		}
+
+		this.znifferLog.print("Zniffer instance destroyed");
+
+		// destroy loggers as the very last thing
+		this._logContainer.destroy();
+
+		this._destroyPromise.resolve();
+	}
 }
 
 function captureToZLFEntry(
 	capture: CapturedData,
 ): Buffer {
-	const buffer = Buffer.alloc(14 + capture.data.length, 0);
+	const buffer = Buffer.alloc(14 + capture.rawData.length, 0);
 	// Convert the date to a .NET datetime
 	let ticks = BigInt(capture.timestamp.getTime()) * 10000n
 		+ 621355968000000000n;
@@ -819,9 +912,9 @@ function captureToZLFEntry(
 	const direction = 0b0000_0000; // inbound, outbound would be 0b1000_0000
 
 	buffer[8] = direction | 0x01; // dir + session ID
-	buffer[9] = capture.data.length;
+	buffer[9] = capture.rawData.length;
 	// bytes 10-12 are empty
-	capture.data.copy(buffer, 13);
+	capture.rawData.copy(buffer, 13);
 	buffer[buffer.length - 1] = 0xfe; // end of frame
 	return buffer;
 }

@@ -62,14 +62,14 @@ await zniffer.init();
 await zniffer.start();
 ```
 
-The captured data will be emitted using events:
+The captured data will be emitted using events and includes both the parsed frame and its raw data:
 
 ```ts
 zniffer
-	.on("frame", (frame: Frame) => {
+	.on("frame", (frame: Frame, rawData: Buffer) => {
 		// handle the frame
 	})
-	.on("corrupted frame", (corrupted: CorruptedFrame) => {
+	.on("corrupted frame", (corrupted: CorruptedFrame, rawData: Buffer) => {
 		// handle the corrupted frame
 	});
 ```
@@ -80,13 +80,29 @@ To stop capturing traffic, call the `stop` method:
 await zniffer.stop();
 ```
 
+The full list of captured frames can be retrieved using the `capturedFrames` property:
+
+```ts
+const frames = zniffer.capturedFrames;
+```
+
 Captured frames can be saved to a `.zlf` file using the `saveCaptureToFile` method:
 
 ```ts
 await zniffer.saveCaptureToFile("/path/to/file.zlf");
 ```
 
-This will overwrite the file if it already exists. Starting a new capture will discard all previously captured frames.
+This will overwrite the file if it already exists. Starting a new capture will discard all previously captured frames. To clear the list of captured frames without saving them, use the `clearCapturedFrames` method:
+
+```ts
+zniffer.clearCapturedFrames();
+```
+
+When done, make sure to destroy the Zniffer instance to release the serial port and clean up resources:
+
+```ts
+await zniffer.destroy();
+```
 
 Captured frames can also be returned as a `Buffer` in the `.zlf` format using the `getCaptureAsZLFBuffer` method:
 

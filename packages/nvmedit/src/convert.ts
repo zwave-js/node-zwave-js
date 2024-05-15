@@ -30,12 +30,16 @@ import {
 	ControllerInfoFile,
 	ControllerInfoFileID,
 	type ControllerInfoFileOptions,
+	type LRNodeInfo,
+	LRNodeInfoFileV5,
 	NVMFile,
 	type NodeInfo,
 	NodeInfoFileV0,
 	NodeInfoFileV1,
 	ProtocolAppRouteLockNodeMaskFile,
 	ProtocolAppRouteLockNodeMaskFileID,
+	ProtocolLRNodeListFile,
+	ProtocolLRNodeListFileID,
 	ProtocolNodeListFile,
 	ProtocolNodeListFileID,
 	ProtocolPendingDiscoveryNodeMaskFile,
@@ -62,6 +66,7 @@ import {
 	type SUCUpdateEntry,
 	SUC_UPDATES_PER_FILE_V5,
 	getEmptyRoute,
+	nodeIdToLRNodeInfoFileIDV5,
 	nodeIdToNodeInfoFileIDV0,
 	nodeIdToNodeInfoFileIDV1,
 	nodeIdToRouteCacheFileIDV0,
@@ -94,6 +99,7 @@ export interface NVMJSON {
 	meta?: NVMMeta;
 	controller: NVMJSONController;
 	nodes: Record<number, NVMJSONNode>;
+	lrNodes?: Record<number, NVMJSONLRNode>;
 }
 
 export interface NVMJSONController {
@@ -166,6 +172,13 @@ export interface NVMJSONVirtualNode {
 	isVirtual: true;
 }
 
+export interface NVMJSONLRNode
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass">
+{
+	genericDeviceClass: number;
+	specificDeviceClass?: number | null;
+}
+
 export type NVMJSONNode = NVMJSONNodeWithInfo | NVMJSONVirtualNode;
 
 type ParsedNVM =
@@ -210,6 +223,22 @@ function createEmptyPhysicalNode(): NVMJSONNodeWithInfo {
 	};
 }
 
+function createEmptyLRNode(): NVMJSONLRNode {
+	return {
+		isListening: false,
+		isFrequentListening: false,
+		isRouting: false,
+		supportedDataRates: [],
+		protocolVersion: 3,
+		optionalFunctionality: false,
+		nodeType: NodeType["End Node"],
+		supportsSecurity: true,
+		supportsBeaming: false,
+		genericDeviceClass: 0,
+		specificDeviceClass: null,
+	};
+}
+
 /** Converts a compressed set of NVM objects to a JSON representation */
 export function nvmObjectsToJSON(
 	objects: ReadonlyMap<number, NVM3Object>,
@@ -218,6 +247,12 @@ export function nvmObjectsToJSON(
 	const getNode = (id: number): NVMJSONNode => {
 		if (!nodes.has(id)) nodes.set(id, createEmptyPhysicalNode());
 		return nodes.get(id)!;
+	};
+
+	const lrNodes = new Map<number, NVMJSONLRNode>();
+	const getLRNode = (id: number): NVMJSONLRNode => {
+		if (!lrNodes.has(id)) lrNodes.set(id, createEmptyLRNode());
+		return lrNodes.get(id)!;
 	};
 
 	const getObject = (
@@ -391,6 +426,29 @@ export function nvmObjectsToJSON(
 		delete node.nodeId;
 	}
 
+	// If they exist, read info about LR nodes
+	const lrNodeIds = getFile<ProtocolLRNodeListFile>(
+		ProtocolLRNodeListFileID,
+		protocolVersion,
+	)?.nodeIds;
+	if (lrNodeIds) {
+		for (const id of lrNodeIds) {
+			const node = getLRNode(id);
+
+			// Find node info
+			const fileId = nodeIdToLRNodeInfoFileIDV5(id);
+			const file = getFileOrThrow<LRNodeInfoFileV5>(
+				fileId,
+				protocolVersion,
+			);
+			const { nodeId, ...nodeInfo } = file.nodeInfos.find((i) =>
+				i.nodeId === id
+			)!;
+
+			Object.assign(node, nodeInfo);
+		}
+	}
+
 	// Now read info about the controller
 	const controllerInfoFile = getFileOrThrow<ControllerInfoFile>(
 		ControllerInfoFileID,
@@ -538,6 +596,9 @@ export function nvmObjectsToJSON(
 		controller,
 		nodes: mapToObject(nodes),
 	};
+	if (lrNodes.size > 0) {
+		ret.lrNodes = mapToObject(lrNodes);
+	}
 
 	return ret;
 }
@@ -562,6 +623,28 @@ function nvmJSONNodeToNodeInfo(
 			"specificDeviceClass",
 			"neighbors",
 			"sucUpdateIndex",
+		]),
+	};
+}
+
+function nvmJSONLRNodeToLRNodeInfo(
+	nodeId: number,
+	node: NVMJSONLRNode,
+): LRNodeInfo {
+	return {
+		nodeId,
+		...pick(node, [
+			"isListening",
+			"isFrequentListening",
+			"isRouting",
+			"supportedDataRates",
+			"protocolVersion",
+			"optionalFunctionality",
+			"nodeType",
+			"supportsSecurity",
+			"supportsBeaming",
+			"genericDeviceClass",
+			"specificDeviceClass",
 		]),
 	};
 }
@@ -989,8 +1072,10 @@ export function jsonToNVMObjects_v7_11_0(
 	addProtocolObjects(protocolVersionFile.serialize());
 
 	const nodeInfoFiles = new Map<number, NodeInfoFileV1>();
+	const lrNodeInfoFiles = new Map<number, LRNodeInfoFileV5>();
 	const routeCacheFiles = new Map<number, RouteCacheFileV1>();
 	const nodeInfoExists = new Set<number>();
+	const lrNodeInfoExists = new Set<number>();
 	const routeCacheExists = new Set<number>();
 
 	for (const [id, node] of Object.entries(target.nodes)) {
@@ -1036,6 +1121,31 @@ export function jsonToNVMObjects_v7_11_0(
 		}
 	}
 
+	if (target.lrNodes) {
+		for (const [id, node] of Object.entries(target.lrNodes)) {
+			const nodeId = parseInt(id);
+
+			lrNodeInfoExists.add(nodeId);
+
+			// Create/update node info file
+			const nodeInfoFileIndex = nodeIdToLRNodeInfoFileIDV5(nodeId);
+			if (!lrNodeInfoFiles.has(nodeInfoFileIndex)) {
+				lrNodeInfoFiles.set(
+					nodeInfoFileIndex,
+					new LRNodeInfoFileV5({
+						nodeInfos: [],
+						fileVersion: target.controller.protocolVersion,
+					}),
+				);
+			}
+			const nodeInfoFile = lrNodeInfoFiles.get(nodeInfoFileIndex)!;
+
+			nodeInfoFile.nodeInfos.push(
+				nvmJSONLRNodeToLRNodeInfo(nodeId, node),
+			);
+		}
+	}
+
 	// For v3+ targets, the ControllerInfoFile must contain the LongRange properties
 	// or the controller will ignore the file and not have a home ID
 	if (targetProtocolFormat >= 3) {
@@ -1069,6 +1179,18 @@ export function jsonToNVMObjects_v7_11_0(
 	if (routeCacheFiles.size > 0) {
 		addProtocolObjects(
 			...[...routeCacheFiles.values()].map((f) => f.serialize()),
+		);
+	}
+
+	if (lrNodeInfoFiles.size > 0) {
+		addProtocolObjects(
+			new ProtocolLRNodeListFile({
+				nodeIds: [...lrNodeInfoExists],
+				fileVersion: target.controller.protocolVersion,
+			}).serialize(),
+		);
+		addProtocolObjects(
+			...[...lrNodeInfoFiles.values()].map((f) => f.serialize()),
 		);
 	}
 
@@ -1526,6 +1648,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 	} else if (source.type === 500 && target.type === 700) {
 		// We need to upgrade the source to 700 series
 		const json: Required<NVMJSON> = {
+			lrNodes: {},
 			...json500To700(source.json, true),
 			meta: target.json.meta,
 		};

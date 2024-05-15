@@ -1,4 +1,4 @@
-import type { LogConfig, RFRegion } from "@zwave-js/core";
+import type { LogConfig, LongRangeChannel, RFRegion } from "@zwave-js/core";
 import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
@@ -269,6 +269,14 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		/** The RF region the radio should be tuned to. */
 		region?: RFRegion;
 
+		/**
+		 * Whether LR-capable regions should automatically be preferred over their corresponding non-LR regions, e.g. `USA` -> `USA (Long Range)`.
+		 * This also overrides the `rf.region` setting if the desired region is not LR-capable.
+		 *
+		 * Default: true.
+		 */
+		preferLRRegion?: boolean;
+
 		txPower?: {
 			/** The desired TX power in dBm. */
 			powerlevel: number;
@@ -278,6 +286,15 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 
 		/** The desired max. powerlevel setting for Z-Wave Long Range in dBm. */
 		maxLongRangePowerlevel?: number;
+
+		/**
+		 * The desired channel to use for Z-Wave Long Range.
+		 * Auto may be unsupported by the controller and will be ignored in that case.
+		 */
+		longRangeChannel?:
+			| LongRangeChannel.A
+			| LongRangeChannel.B
+			| LongRangeChannel.Auto;
 	};
 
 	apiKeys?: {

@@ -4,6 +4,38 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.8.1 (2024-05-14)
+### Bugfixes
+This release adds a bit of polishing for Zniffer and some bugfixes (#6849):
+* Z-Wave Classic inclusion frames from LR devices are now parsed instead of logging an error
+* Z-Wave LR protocol frames are now recognized (but not parsed in detail) instead of logging an error
+* The `payload` property for routed frames contains the parsed CC now
+* Expose the `active` property used to determine whether the Zniffer is currently capturing traffic
+
+## 12.8.0 (2024-05-14)
+### Features
+* Automatically prefer LR-capable RF regions over their non-LR counterparts (#6843, #6845)
+* Add `destroy` method to Zniffer to free serial port (#6848)
+* Expose more Long Range RF settings as methods, controller properties and driver options (#6841)
+
+### Config file changes
+* Disable Supervision for Everspring EH403 (#6847)
+
+## 12.7.0 (2024-05-13)
+### Features
+* Add methods to get/set max. LR powerlevel, add driver option to automatically configure it (#6824)
+
+### Bugfixes
+* Fixed a bug causing the device class of a node to be unintentionally be deleted (#6840)
+* Forbid associations from and to LR devices, except for the lifeline (#6819)
+* Zniffer: convert LR beam TX power to dBm, add documentation for beam frames (#6820)
+
+### Config file changes
+* Override CC versions for Wayne Dalton WDTC-20 (#6822)
+
+### Changes under the hood
+* Refactor Zniffer exports, add them to `/safe` entrypoint (#6830)
+
 ## 12.6.0 (2024-05-07)
 This release enhances the diagnostics in Z-Wave JS by adding support for controlling a Zniffer, which allows inspecting traffic from any Z-Wave network. See [here](https://zwave-js.github.io/node-zwave-js/#/api/zniffer) for details on using this API, and [here](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/zniffer) for information on how to create a Zniffer device.
 

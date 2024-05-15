@@ -59,7 +59,8 @@ export class Endpoint implements IZWaveEndpoint {
 			},
 		);
 
-		this.deviceClass = deviceClass;
+		// Optionally initialize the device class
+		if (deviceClass) this.deviceClass = deviceClass;
 
 		// Add optional CCs
 		if (supportedCCs != undefined) {

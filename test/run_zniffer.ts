@@ -60,7 +60,7 @@ const zniffer = new Zniffer(port, {
 
 		await wait(600000);
 
-		await zniffer.stop();
+		await zniffer.destroy();
 		process.exit(0);
 	});
 void zniffer.init();

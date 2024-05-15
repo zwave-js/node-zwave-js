@@ -78,6 +78,20 @@ export function authHomeIdFromDSK(dsk: Buffer): Buffer;
 // @public
 export function averageRSSI(acc: number | undefined, rssi: RSSI, weight: number): number;
 
+// Warning: (ae-missing-release-tag) "BeamingInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum BeamingInfo {
+    // (undocumented)
+    Fragmented = 4,
+    // (undocumented)
+    LongContinuous = 2,
+    // (undocumented)
+    None = 0,
+    // (undocumented)
+    ShortContinuous = 1
+}
+
 // Warning: (ae-missing-release-tag) "BroadcastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -484,7 +498,7 @@ export enum ConfigValueFormat {
     // (undocumented)
     Enumerated = 2,
     // (undocumented)
-    SignedInteger = 0,
+    SignedInteger = 0,// UnsignedInt, Radio Buttons
     // (undocumented)
     UnsignedInteger = 1
 }
@@ -504,15 +518,15 @@ export const CONTROLLER_LABEL = "CNTRLR";
 // @public (undocumented)
 export enum ControllerCapabilityFlags {
     // (undocumented)
-    NoNodesIncluded = 32,
+    NoNodesIncluded = 32,// Controller is a secondary
     // (undocumented)
-    OnOtherNetwork = 2,
+    OnOtherNetwork = 2,// Controller is using a home ID from another network
     // (undocumented)
-    Secondary = 1,
+    Secondary = 1,// There's a SUC id server (SIS) on the network
     // (undocumented)
-    SISPresent = 4,
+    SISPresent = 4,// Before the SIS was added, the controller was the primary
     // (undocumented)
-    SUC = 16,
+    SUC = 16,// Controller is a static update controller (SUC)
     // (undocumented)
     WasRealPrimary = 8
 }
@@ -1006,6 +1020,14 @@ export function getBitMaskWidth(mask: number): number;
 // @public (undocumented)
 export function getCCName(cc: number): string;
 
+// Warning: (ae-missing-release-tag) "getChipTypeAndVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getChipTypeAndVersion(zWaveChipType: string): MaybeNotKnown<{
+    type: number;
+    version: number;
+}>;
+
 // Warning: (ae-missing-release-tag) "getDefaultDSTInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1072,6 +1094,11 @@ export function getNodeTag(nodeId: number): string;
 //
 // @public
 export function getNumericEnumValues<T extends Record<string, any>>(enumeration: T): readonly number[];
+
+// Warning: (ae-missing-release-tag) "getZWaveChipType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getZWaveChipType(type: number, version: number): string | UnknownZWaveChipType;
 
 // Warning: (ae-missing-release-tag) "GraphNode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1465,10 +1492,10 @@ export type LogValueArgs<T> = T & {
 export enum LongRangeChannel {
     // (undocumented)
     A = 1,
+    Auto = 255,
     // (undocumented)
     B = 2,
-    // (undocumented)
-    Unknown = 0
+    Unsupported = 0
 }
 
 // Warning: (ae-missing-release-tag) "managementCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1599,6 +1626,22 @@ export type MPANTableEntry = {
     type: MPANState.MPAN;
     currentMPAN: Buffer;
 };
+
+// Warning: (ae-missing-release-tag) "MPDUHeaderType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum MPDUHeaderType {
+    // (undocumented)
+    Acknowledgement = 3,
+    // (undocumented)
+    Explorer = 5,
+    // (undocumented)
+    Multicast = 2,
+    // (undocumented)
+    Routed = 8,
+    // (undocumented)
+    Singlecast = 1
+}
 
 // Warning: (ae-missing-release-tag) "MulticastCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2724,6 +2767,16 @@ export const UNKNOWN_STATE: null;
 // @public (undocumented)
 export type UNKNOWN_STATE = typeof UNKNOWN_STATE;
 
+// Warning: (ae-missing-release-tag) "UnknownZWaveChipType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UnknownZWaveChipType {
+    // (undocumented)
+    type: number;
+    // (undocumented)
+    version: number;
+}
+
 // Warning: (ae-missing-release-tag) "unsilence" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -3231,6 +3284,61 @@ export interface ValueUpdatedArgs extends ValueID {
     source?: "driver" | "node";
 }
 
+// Warning: (ae-missing-release-tag) "ZnifferProtocolDataRate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZnifferProtocolDataRate {
+    // (undocumented)
+    LongRange_100k = 3,
+    // (undocumented)
+    ZWave_100k = 2,
+    // (undocumented)
+    ZWave_40k = 1,
+    // (undocumented)
+    ZWave_9k6 = 0
+}
+
+// Warning: (ae-missing-release-tag) "znifferProtocolDataRateToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function znifferProtocolDataRateToString(rate: ZnifferProtocolDataRate): string;
+
+// Warning: (ae-missing-release-tag) "ZnifferRegion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZnifferRegion {
+    // (undocumented)
+    "Australia/New Zealand" = 2,
+    // (undocumented)
+    "Default (EU)" = 255,
+    // (undocumented)
+    "Hong Kong" = 3,
+    // (undocumented)
+    "USA (Long Range)" = 9,
+    // (undocumented)
+    "USA (Long Range, backup)" = 10,
+    // (undocumented)
+    "USA (Long Range, end device)" = 48,
+    // (undocumented)
+    "China" = 8,
+    // (undocumented)
+    "Europe" = 0,
+    // (undocumented)
+    "India" = 5,
+    // (undocumented)
+    "Israel" = 6,
+    // (undocumented)
+    "Japan" = 32,
+    // (undocumented)
+    "Korea" = 33,
+    // (undocumented)
+    "Russia" = 7,
+    // (undocumented)
+    "Unknown" = 254,
+    // (undocumented)
+    "USA" = 1
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveApiVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3488,6 +3596,8 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
+// src/security/Manager2.ts:116:79 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/security/Manager2.ts:116:98 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
 // src/security/QR.ts:99:3 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)

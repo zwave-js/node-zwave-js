@@ -938,12 +938,32 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		/** The RF region the radio should be tuned to. */
 		region?: RFRegion;
 
+		/**
+		 * Whether LR-capable regions should automatically be chosen over their corresponding non-LR regions, e.g. `USA` -> `USA (Long Range)`.
+		 * This also overrides the `rf.region` setting if the desired region is not LR-capable.
+		 *
+		 * Default: true.
+		 */
+		preferLRRegion?: boolean;
+
 		txPower?: {
 			/** The desired TX power in dBm. */
 			powerlevel: number;
 			/** A hardware-specific calibration value. */
 			measured0dBm: number;
 		};
+
+		/** The desired max. powerlevel setting for Z-Wave Long Range in dBm. */
+		maxLongRangePowerlevel?: number;
+
+		/**
+		 * The desired channel to use for Z-Wave Long Range.
+		 * Auto may be unsupported by the controller and will be ignored in that case.
+		 */
+		longRangeChannel?:
+			| LongRangeChannel.A
+			| LongRangeChannel.B
+			| LongRangeChannel.Auto;
 	};
 
 	apiKeys?: {
