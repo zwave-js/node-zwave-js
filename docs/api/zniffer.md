@@ -88,10 +88,10 @@ await zniffer.saveCaptureToFile("/path/to/file.zlf");
 
 This will overwrite the file if it already exists. Starting a new capture will discard all previously captured frames.
 
-Captured frames can also be returned as a `Buffer` in the `.zlf` format using the `getCapture` method:
+Captured frames can also be returned as a `Buffer` in the `.zlf` format using the `getCaptureAsZLFBuffer` method:
 
 ```ts
-await zniffer.getCapture();
+await zniffer.getCaptureAsZLFBuffer();
 ```
 
 ## Frequency selection
