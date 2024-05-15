@@ -851,17 +851,21 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		this._capturedFrames = [];
 	}
 
-	/** Saves the captured frames in a `.zlf` file that can be read by the official Zniffer application. */
-	public async saveCaptureToFile(filePath: string): Promise<void> {
+	/** Get the captured frames in the official Zniffer application format. */
+	public getCaptureAsZLFBuffer(): Buffer {
 		// Mimics the current Zniffer software, without using features like sessions and comments
 		const header = Buffer.alloc(2048, 0);
 		header[0] = 0x68; // zniffer version
 		header.writeUInt16BE(0x2312, 0x07fe); // checksum
+		return Buffer.concat([
+			header,
+			...this._capturedFrames.map(captureToZLFEntry),
+		]);
+	}
 
-		await fs.writeFile(filePath, header);
-		for (const frame of this._capturedFrames) {
-			await fs.appendFile(filePath, captureToZLFEntry(frame));
-		}
+	/** Saves the captured frames in a `.zlf` file that can be read by the official Zniffer application. */
+	public async saveCaptureToFile(filePath: string): Promise<void> {
+		await fs.writeFile(filePath, this.getCaptureAsZLFBuffer());
 	}
 
 	/**
