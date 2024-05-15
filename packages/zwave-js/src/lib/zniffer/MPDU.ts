@@ -990,6 +990,7 @@ export type ZWaveFrame =
 			} | {
 				type: ZWaveFrameType.ExplorerInclusionRequest;
 				networkHomeId: number;
+				payload: Buffer | CommandClass;
 			})
 			// Common fields for all explorer frames
 			& {
@@ -1197,6 +1198,7 @@ export function mpduToZWaveFrame(
 		} else if (mpdu instanceof InclusionRequestExplorerZWaveMPDU) {
 			return {
 				type: ZWaveFrameType.ExplorerInclusionRequest,
+				payload: payloadCC ?? mpdu.payload,
 				...explorerBase,
 				networkHomeId: mpdu.networkHomeId,
 			};
