@@ -954,6 +954,110 @@
 			}
 		]
 	},
+	// zen16 and zen17 relay devices now (Zen16 FW >=2.0, Zen17 FW >= 1.04) share common definition for switch type (and value inversion) and input trigger duration
+	"multi_universal_relay_switch_type": {
+		"valueSize": 1,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Momentary",
+				"value": 0
+			},
+			{
+				"label": "Toggle (Follow switch)",
+				"value": 1
+			},
+			{
+				"label": "Toggle (Change state on toggle)",
+				"value": 2
+			},
+			{
+				"label": "Garage door (Momentary mode for Z-Wave control)",
+				"value": 3
+			},
+			{
+				"label": "Leak alarm (Water sensor)",
+				"value": 4
+			},
+			{
+				"label": "Heat alarm",
+				"value": 5
+			},
+			{
+				"label": "Motion alert",
+				"value": 6
+			},
+			{
+				"label": "Open/Close alert (Door sensor)",
+				"value": 7
+			},
+			{
+				"label": "CO alarm",
+				"value": 8
+			},
+			{
+				"label": "CO2 alarm",
+				"value": 9
+			},
+			{
+				"label": "On/Off report (Dry contact switch/sensor)",
+				"value": 10
+			},
+			{
+				"label": "Garage door mode (Relay), door sensor (Input)",
+				"value": 11
+			}
+		]
+	},
+	"multi_universal_relay_reverse_reported_value": {
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Values not reversed",
+				"value": 0
+			},
+			{
+				"label": "Leak alarm (Water sensor)",
+				"value": 4
+			},
+			{
+				"label": "Heat alarm",
+				"value": 5
+			},
+			{
+				"label": "Motion alert",
+				"value": 6
+			},
+			{
+				"label": "Open/Close alert (Door sensor)",
+				"value": 7
+			},
+			{
+				"label": "CO alarm",
+				"value": 8
+			},
+			{
+				"label": "CO2 alarm",
+				"value": 9
+			},
+			{
+				"label": "On/Off report (Dry contact switch/sensor)",
+				"value": 10
+			}
+		]
+	},
+	"multi_universal_relay_input_trigger_duration": {
+		"valueSize": 1,
+		"unit": "0.1 seconds",
+		"minValue": 1,
+		"maxValue": 100,
+		"defaultValue": 5
+	},
 	"zen16_manual_control": {
 		"valueSize": 1,
 		"defaultValue": 1,
