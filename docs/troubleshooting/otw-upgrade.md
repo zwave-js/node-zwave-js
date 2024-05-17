@@ -24,4 +24,4 @@ https://github.com/kpine/zwave-js-server-docker/wiki/700-series-Controller-Firmw
 ### Windows
 
 - Aeotec - https://aeotec.freshdesk.com/support/solutions/articles/6000252296-update-z-stick-7-with-windows
-- Zooz - https://www.support.getzooz.com/kb/article/931-how-to-perform-an-ota-firmware-update-on-your-zst10-700-z-wave-stick/
+- Zooz - [700 series](https://www.support.getzooz.com/kb/article/931-how-to-perform-an-ota-firmware-update-on-your-zst10-700-z-wave-stick/), [800 series](https://www.support.getzooz.com/kb/section/406/)
