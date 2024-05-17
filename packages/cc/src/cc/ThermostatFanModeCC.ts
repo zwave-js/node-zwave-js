@@ -357,7 +357,7 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			(this.version >= 2 && this.off ? 0b1000_0000 : 0)
+			(this.off ? 0b1000_0000 : 0)
 			| (this.mode & 0b1111),
 		]);
 		return super.serialize();

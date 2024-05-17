@@ -678,27 +678,23 @@ export class VersionCCReport extends VersionCC {
 				.split(".")
 				.map((n) => parseInt(n))
 				.slice(0, 2),
+			// The value 0x00 SHOULD NOT be used for the Hardware Version
+			this.hardwareVersion ?? 0x01,
+			this.firmwareVersions.length - 1,
 		]);
-		if (this.version >= 2) {
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([
-					// The value 0x00 SHOULD NOT be used for the Hardware Version
-					this.hardwareVersion ?? 0x01,
-				]),
-			]);
-			if (this.firmwareVersions.length > 1) {
-				const firmwaresBuffer = Buffer.allocUnsafe(
-					(this.firmwareVersions.length - 1) * 2,
-				);
-				for (let i = 1; i < this.firmwareVersions.length; i++) {
-					const [major, minor] = this.firmwareVersions[i]
-						.split(".")
-						.map((n) => parseInt(n));
-					firmwaresBuffer[2 * (i - 1)] = major;
-					firmwaresBuffer[2 * (i - 1) + 1] = minor;
-				}
+
+		if (this.firmwareVersions.length > 1) {
+			const firmwaresBuffer = Buffer.allocUnsafe(
+				(this.firmwareVersions.length - 1) * 2,
+			);
+			for (let i = 1; i < this.firmwareVersions.length; i++) {
+				const [major, minor] = this.firmwareVersions[i]
+					.split(".")
+					.map((n) => parseInt(n));
+				firmwaresBuffer[2 * (i - 1)] = major;
+				firmwaresBuffer[2 * (i - 1) + 1] = minor;
 			}
+			this.payload = Buffer.concat([this.payload, firmwaresBuffer]);
 		}
 
 		return super.serialize();
