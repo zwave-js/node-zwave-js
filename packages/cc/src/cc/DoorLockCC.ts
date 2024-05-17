@@ -1242,39 +1242,29 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 			lockTimeoutSeconds = this.lockTimeoutConfiguration! % 60;
 		}
 
+		const flags = (this.twistAssist ? 0b1 : 0)
+			| (this.blockToBlock ? 0b10 : 0);
+
 		this.payload = Buffer.from([
 			this.operationType,
 			handles,
 			lockTimeoutMinutes,
 			lockTimeoutSeconds,
+			// placeholder for auto relock time
+			0,
+			0,
+			// placeholder for hold and release time
+			0,
+			0,
+			flags,
 		]);
-		if (
-			this.version >= 4
-			&& (this.twistAssist != undefined
-				|| this.blockToBlock != undefined
-				|| this.autoRelockTime != undefined
-				|| this.holdAndReleaseTime != undefined)
-		) {
-			const flags = (this.twistAssist ? 0b1 : 0)
-				| (this.blockToBlock ? 0b10 : 0);
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([
-					// placeholder for auto relock time
-					0,
-					0,
-					// placeholder for hold and release time
-					0,
-					0,
-					flags,
-				]),
-			]);
-			this.payload.writeUInt16BE((this.autoRelockTime ?? 0) & 0xffff, 4);
-			this.payload.writeUInt16BE(
-				(this.holdAndReleaseTime ?? 0) & 0xffff,
-				6,
-			);
-		}
+
+		this.payload.writeUInt16BE((this.autoRelockTime ?? 0) & 0xffff, 4);
+		this.payload.writeUInt16BE(
+			(this.holdAndReleaseTime ?? 0) & 0xffff,
+			6,
+		);
+
 		return super.serialize();
 	}
 

@@ -932,7 +932,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	public serialize(): Buffer {
 		const populatedColorCount = Object.keys(this.colorTable).length;
 		this.payload = Buffer.allocUnsafe(
-			1 + populatedColorCount * 2 + (this.version >= 2 ? 1 : 0),
+			1 + populatedColorCount * 2 + 1,
 		);
 		this.payload[0] = populatedColorCount & 0b11111;
 		let i = 1;
@@ -942,11 +942,9 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload[i + 1] = clamp(value, 0, 0xff);
 			i += 2;
 		}
-		if (this.version >= 2) {
-			this.payload[i] = (
-				this.duration ?? Duration.default()
-			).serializeSet();
-		}
+		this.payload[i] = (
+			this.duration ?? Duration.default()
+		).serializeSet();
 		return super.serialize();
 	}
 
@@ -1023,12 +1021,12 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public serialize(): Buffer {
 		const controlByte = (LevelChangeDirection[this.direction] << 6)
 			| (this.ignoreStartLevel ? 0b0010_0000 : 0);
-		const payload = [controlByte, this.colorComponent, this.startLevel];
-
-		if (this.version >= 3) {
-			payload.push((this.duration ?? Duration.default()).serializeSet());
-		}
-		this.payload = Buffer.from(payload);
+		this.payload = Buffer.from([
+			controlByte,
+			this.colorComponent,
+			this.startLevel,
+			(this.duration ?? Duration.default()).serializeSet(),
+		]);
 		return super.serialize();
 	}
 
