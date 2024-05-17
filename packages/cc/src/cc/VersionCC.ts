@@ -555,6 +555,14 @@ export class VersionCC extends CommandClass {
 			message: "querying CC versions...",
 			direction: "outbound",
 		});
+		// Basic CC is not included in the NIF, so it won't be returned by endpoint.getCCs() at this point
+		{
+			const cc = CommandClasses.Basic;
+			// Skip the query of endpoint CCs that are also supported by the root device
+			if (this.endpointIndex === 0 || node.getCCVersion(cc) === 0) {
+				await queryCCVersion(cc);
+			}
+		}
 		for (const [cc] of endpoint.getCCs()) {
 			// We already queried the Version CC version at the start of this interview
 			if (cc === CommandClasses.Version) continue;
