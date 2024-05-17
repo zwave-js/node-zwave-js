@@ -303,11 +303,24 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CommandClassReport,
 		);
 
+		let ccVersion: number;
+		switch (requestedCC) {
+			case CommandClasses["Z-Wave Protocol"]:
+			case CommandClasses["Z-Wave Long Range"]:
+				// These two are only for internal use
+				ccVersion = 0;
+				break;
+
+			default:
+				ccVersion = getImplementedVersion(requestedCC);
+				break;
+		}
+
 		const cc = new VersionCCCommandClassReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedCC,
-			ccVersion: getImplementedVersion(requestedCC),
+			ccVersion,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
