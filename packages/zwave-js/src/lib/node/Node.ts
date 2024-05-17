@@ -81,7 +81,10 @@ import {
 } from "@zwave-js/cc/FirmwareUpdateMetaDataCC";
 import { HailCC } from "@zwave-js/cc/HailCC";
 import { LockCCValues } from "@zwave-js/cc/LockCC";
-import { ManufacturerSpecificCCValues } from "@zwave-js/cc/ManufacturerSpecificCC";
+import {
+	ManufacturerSpecificCCGet,
+	ManufacturerSpecificCCValues,
+} from "@zwave-js/cc/ManufacturerSpecificCC";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
 	MultilevelSwitchCC,
@@ -3105,6 +3108,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleVersionGet(command);
 		} else if (command instanceof VersionCCCommandClassGet) {
 			return this.handleVersionCommandClassGet(command);
+		} else if (command instanceof ManufacturerSpecificCCGet) {
+			return this.handleManufacturerSpecificGet(command);
 		} else if (command instanceof AssociationGroupInfoCCNameGet) {
 			return this.handleAGINameGet(command);
 		} else if (command instanceof AssociationGroupInfoCCInfoGet) {
@@ -3951,6 +3956,27 @@ protocol version:      ${this.protocolVersion}`;
 			});
 
 		await api.reportCCVersion(command.requestedCC);
+	}
+
+	private async handleManufacturerSpecificGet(
+		command: ManufacturerSpecificCCGet,
+	): Promise<void> {
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = this
+			.createAPI(CommandClasses["Manufacturer Specific"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		await api.sendReport({
+			manufacturerId: 0x0466, // Nabu Casa - FIXME: make dynamic!
+			productType: 0x0000,
+			productId: 0x0000,
+		});
 	}
 
 	private async handleAGINameGet(
