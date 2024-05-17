@@ -177,7 +177,9 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLibraryTypes,
 	actuatorCCs,
+	allCCs,
 	applicationCCs,
+	encapsulationCCs,
 	getCCName,
 	getDSTInfo,
 	isLongRangeNodeId,
@@ -4246,8 +4248,57 @@ protocol version:      ${this.protocolVersion}`;
 			&& highestSecurityClass === actualSecurityClass
 		) {
 			// The command was received using the highest security class. Return the list of supported CCs
-			await endpoint.commandClasses["Security 2"].reportSupportedCommands(
-				determineNIF().supportedCCs.filter(
+
+			const implementedCCs = allCCs.filter((cc) =>
+				getImplementedVersion(cc) > 0
+			);
+
+			// Encapsulation CCs are always supported
+			const implementedEncapsulationCCs = encapsulationCCs.filter(
+				(cc) =>
+					implementedCCs.includes(cc)
+					// A node MUST advertise support for Multi Channel Command Class only if it implements End Points.
+					// A node able to communicate using the Multi Channel encapsulation but implementing no End Point
+					// MUST NOT advertise support for the Multi Channel Command Class.
+					// --> We do not implement end points
+					&& cc !== CommandClasses["Multi Channel"],
+			);
+
+			const supportedCCs = new Set([
+				// Z-Wave Plus Info must be listed first
+				CommandClasses["Z-Wave Plus Info"],
+
+				// DT:00.11.0004.1
+				// All Root Devices or nodes MUST support:
+				// - Association, version 2
+				// - Association Group Information
+				// - Device Reset Locally
+				// - Firmware Update Meta Data, version 5
+				// - Indicator, version 3
+				// - Manufacturer Specific
+				// - Multi Channel Association, version 3
+				// - Powerlevel
+				// - Security 2
+				// - Supervision
+				// - Transport Service, version 2
+				// - Version, version 2
+				// - Z-Wave Plus Info, version 2
+				CommandClasses.Association,
+				CommandClasses["Association Group Information"],
+				CommandClasses["Device Reset Locally"],
+				CommandClasses["Firmware Update Meta Data"],
+				CommandClasses.Indicator,
+				CommandClasses["Manufacturer Specific"],
+				CommandClasses["Multi Channel Association"],
+				CommandClasses.Powerlevel,
+				CommandClasses.Version,
+
+				// Generic Controller device type has no additional support requirements,
+				// but we also support the following command classes:
+				CommandClasses["Inclusion Controller"],
+
+				// plus encapsulation CCs, which are part of the above requirement
+				...implementedEncapsulationCCs.filter(
 					(cc) =>
 						// CC:009F.01.0E.11.00F
 						// The Security 0 and Security 2 Command Class MUST NOT be advertised in this command
@@ -4256,6 +4307,10 @@ protocol version:      ${this.protocolVersion}`;
 						&& cc !== CommandClasses["Security 2"]
 						&& cc !== CommandClasses["Transport Service"],
 				),
+			]);
+
+			await endpoint.commandClasses["Security 2"].reportSupportedCommands(
+				[...supportedCCs],
 			);
 		} else if (securityClassIsS2(actualSecurityClass)) {
 			// The command was received using a lower security class. Return an empty list
