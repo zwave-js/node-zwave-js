@@ -3174,6 +3174,16 @@ supported CCs: ${
 			}
 
 			// Validate the response
+			// Echo flag must be false
+			if (kexParams.echo) {
+				this.driver.controllerLog.logNode(node.id, {
+					message:
+						`Security S2 bootstrapping failed: Received unexpected echo command.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoVerify);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			}
 			// At the time of implementation, only KEXScheme1 and Curve25519 are defined.
 			// The certification testing ensures that no other bits are set, so we need to check that too.
 			// Not sure why this choice is made, since it essentially breaks any forwards compatibility
