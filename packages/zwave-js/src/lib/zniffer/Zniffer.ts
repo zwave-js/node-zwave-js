@@ -127,6 +127,9 @@ export interface ZnifferOptions {
 	 * Supported regions and their names have to be queried using the `getFrequencies` and `getFrequencyInfo(frequency)` commands.
 	 */
 	defaultFrequency?: number;
+
+	/** Limit the number of frames that are kept in memory. */
+	maxCapturedFrames?: number;
 }
 
 function is700PlusSeries(
@@ -399,6 +402,12 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 				frameData: dataMsg.payload,
 			};
 			this._capturedFrames.push(capture);
+			if (
+				this._options.maxCapturedFrames != undefined
+				&& this._capturedFrames.length > this._options.maxCapturedFrames
+			) {
+				this._capturedFrames.shift();
+			}
 			this.handleDataMessage(dataMsg, capture);
 		}
 	}

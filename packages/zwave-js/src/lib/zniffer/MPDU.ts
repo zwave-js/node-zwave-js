@@ -1044,7 +1044,7 @@ export type LongRangeFrame =
 		}
 		| {
 			// Broadcast frame. This is technically a singlecast frame,
-			// but the destination node ID is always 4095 and it is not routed
+			// but the destination node ID is always 4095
 			type: LongRangeFrameType.Broadcast;
 			destinationNodeId: typeof NODE_ID_BROADCAST_LR;
 			ackRequested: boolean;
