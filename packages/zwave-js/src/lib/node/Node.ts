@@ -1,4 +1,5 @@
 import {
+	type AssociationAddress,
 	AssociationGroupInfoProfile,
 	type CCAPI,
 	type CCValueOptions,
@@ -19,6 +20,10 @@ import {
 	IndicatorCCGet,
 	IndicatorCCSet,
 	IndicatorCCSupportedGet,
+	MultiChannelAssociationCCGet,
+	MultiChannelAssociationCCRemove,
+	MultiChannelAssociationCCSet,
+	MultiChannelAssociationCCSupportedGroupingsGet,
 	MultiCommandCCCommandEncapsulation,
 	MultilevelSwitchCommand,
 	type PollValueImplementation,
@@ -911,14 +916,14 @@ export class ZWaveNode extends Endpoint
 	}
 
 	/** @internal Which associations are currently configured */
-	public get associations(): readonly number[] {
+	public get associations(): readonly AssociationAddress[] {
 		return (
-			this.driver.cacheGet(cacheKeys.node(this.id).associations(1)) ?? []
+			this.driver.cacheGet(cacheKeys.controller.associations(1)) ?? []
 		);
 	}
 
-	private set associations(value: readonly number[]) {
-		this.driver.cacheSet(cacheKeys.node(this.id).associations(1), value);
+	private set associations(value: readonly AssociationAddress[]) {
+		this.driver.cacheSet(cacheKeys.controller.associations(1), value);
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
@@ -3130,6 +3135,18 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleAssociationSet(command);
 		} else if (command instanceof AssociationCCRemove) {
 			return this.handleAssociationRemove(command);
+		} else if (
+			command instanceof MultiChannelAssociationCCSupportedGroupingsGet
+		) {
+			return this.handleMultiChannelAssociationSupportedGroupingsGet(
+				command,
+			);
+		} else if (command instanceof MultiChannelAssociationCCGet) {
+			return this.handleMultiChannelAssociationGet(command);
+		} else if (command instanceof MultiChannelAssociationCCSet) {
+			return this.handleMultiChannelAssociationSet(command);
+		} else if (command instanceof MultiChannelAssociationCCRemove) {
+			return this.handleMultiChannelAssociationRemove(command);
 		} else if (command instanceof IndicatorCCSupportedGet) {
 			return this.handleIndicatorSupportedGet(command);
 		} else if (command instanceof IndicatorCCSet) {
@@ -4101,10 +4118,9 @@ protocol version:      ${this.protocolVersion}`;
 	private async handleAssociationGet(
 		command: AssociationCCGet,
 	): Promise<void> {
-		if (command.groupId !== 1) {
-			// We only "support" the lifeline group
-			return;
-		}
+		// We only "support" the lifeline group
+		const groupId = 1;
+
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		const controllerNode = this.driver.controller.nodes.get(
@@ -4122,10 +4138,14 @@ protocol version:      ${this.protocolVersion}`;
 					& ~EncapsulationFlags.Supervision,
 			});
 
+		const nodeIds =
+			controllerNode?.associations.filter((a) => a.endpoint == undefined)
+				.map((a) => a.nodeId) ?? [];
+
 		await api.sendReport({
-			groupId: command.groupId,
+			groupId,
 			maxNodes: MAX_ASSOCIATIONS,
-			nodeIds: [...(controllerNode?.associations ?? [])],
+			nodeIds,
 			reportsToFollow: 0,
 		});
 	}
@@ -4141,10 +4161,9 @@ protocol version:      ${this.protocolVersion}`;
 		);
 		if (!controllerNode) return;
 
-		controllerNode.associations = [
-			...controllerNode.associations,
-			...command.nodeIds,
-		].slice(0, MAX_ASSOCIATIONS);
+		const associations = [...controllerNode.associations];
+		associations.push(...command.nodeIds.map((nodeId) => ({ nodeId })));
+		controllerNode.associations = associations.slice(0, MAX_ASSOCIATIONS);
 	}
 
 	private handleAssociationRemove(command: AssociationCCRemove): void {
@@ -4159,13 +4178,149 @@ protocol version:      ${this.protocolVersion}`;
 		);
 		if (!controllerNode) return;
 
-		if (!command.nodeIds) {
+		if (!command.nodeIds?.length) {
 			// clear
 			controllerNode.associations = [];
 		} else {
 			controllerNode.associations = controllerNode.associations.filter(
-				(nodeId) => !command.nodeIds!.includes(nodeId),
+				({ nodeId, endpoint }) =>
+					endpoint === undefined
+					&& !command.nodeIds!.includes(nodeId),
 			);
+		}
+	}
+
+	private async handleMultiChannelAssociationSupportedGroupingsGet(
+		command: MultiChannelAssociationCCSupportedGroupingsGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Multi Channel Association"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We only "support" the lifeline group
+		await api.reportGroupCount(1);
+	}
+
+	private async handleMultiChannelAssociationGet(
+		command: MultiChannelAssociationCCGet,
+	): Promise<void> {
+		// We only "support" the lifeline group
+		const groupId = 1;
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		const controllerNode = this.driver.controller.nodes.get(
+			this.driver.controller.ownNodeId!,
+		)!;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Multi Channel Association"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		const nodeIds =
+			controllerNode?.associations.filter((a) => a.endpoint == undefined)
+				.map((a) => a.nodeId) ?? [];
+		const endpoints =
+			controllerNode?.associations.filter((a) => a.endpoint != undefined)
+				.map(({ nodeId, endpoint }) => ({
+					nodeId,
+					endpoint: endpoint!,
+				}))
+				?? [];
+
+		await api.sendReport({
+			groupId,
+			maxNodes: MAX_ASSOCIATIONS,
+			nodeIds,
+			endpoints,
+			reportsToFollow: 0,
+		});
+	}
+
+	private handleMultiChannelAssociationSet(
+		command: MultiChannelAssociationCCSet,
+	): void {
+		if (command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+
+		const controllerNode = this.driver.controller.nodes.get(
+			this.driver.controller.ownNodeId!,
+		);
+		if (!controllerNode) return;
+
+		const associations = [...controllerNode.associations];
+		associations.push(...command.nodeIds.map((nodeId) => ({ nodeId })));
+		for (const destination of command.endpoints) {
+			if (typeof destination.endpoint === "number") {
+				associations.push({
+					nodeId: destination.nodeId,
+					endpoint: destination.endpoint,
+				});
+			} else {
+				for (const endpoint of destination.endpoint) {
+					associations.push({
+						nodeId: destination.nodeId,
+						endpoint,
+					});
+				}
+			}
+		}
+		controllerNode.associations = associations.slice(0, MAX_ASSOCIATIONS);
+	}
+
+	private handleMultiChannelAssociationRemove(
+		command: MultiChannelAssociationCCRemove,
+	): void {
+		// Allow accessing the lifeline group or all groups (which is the same)
+		if (!!command.groupId && command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+
+		const controllerNode = this.driver.controller.nodes.get(
+			this.driver.controller.ownNodeId!,
+		);
+		if (!controllerNode) return;
+
+		if (!command.nodeIds?.length && !command.endpoints?.length) {
+			// Clear all associations
+			controllerNode.associations = [];
+		} else {
+			let associations = [...controllerNode.associations];
+			if (command.nodeIds?.length) {
+				associations = associations.filter(
+					({ nodeId, endpoint }) =>
+						endpoint === undefined
+						&& !command.nodeIds!.includes(nodeId),
+				);
+			}
+			if (command.endpoints?.length) {
+				associations = associations.filter(
+					({ nodeId, endpoint }) =>
+						!command.endpoints!.some((dest) =>
+							dest.nodeId === nodeId && dest.endpoint === endpoint
+						),
+				);
+			}
+			controllerNode.associations = associations;
 		}
 	}
 

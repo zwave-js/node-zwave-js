@@ -1,4 +1,5 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
+import { type AssociationAddress } from "@zwave-js/cc";
 import {
 	type CommandClasses,
 	NodeType,
@@ -28,6 +29,7 @@ import type { Driver } from "./Driver";
 export const cacheKeys = {
 	controller: {
 		provisioningList: "controller.provisioningList",
+		associations: (groupId: number) => `controller.associations.${groupId}`,
 	},
 	// TODO: somehow these functions should be combined with the pattern matching below
 	node: (nodeId: number) => {
@@ -66,8 +68,6 @@ export const cacheKeys = {
 				};
 			},
 			hasSUCReturnRoute: `${nodeBaseKey}hasSUCReturnRoute`,
-			associations: (groupId: number) =>
-				`${nodeBaseKey}associations.${groupId}`,
 			priorityReturnRoute: (destinationNodeId: number) =>
 				`${nodeBaseKey}priorityReturnRoute.${destinationNodeId}`,
 			prioritySUCReturnRoute: `${nodeBaseKey}priorityReturnRoute.SUC`,
@@ -329,6 +329,18 @@ function tryParseDate(value: unknown): Date | undefined {
 	}
 }
 
+function tryParseAssociationAddress(
+	value: unknown,
+): AssociationAddress | undefined {
+	if (isObject(value)) {
+		const { nodeId, endpoint } = value;
+		if (typeof nodeId !== "number") return;
+		if (endpoint !== undefined && typeof endpoint !== "number") return;
+
+		return { nodeId, endpoint };
+	}
+}
+
 export function deserializeNetworkCacheValue(
 	driver: Driver,
 	key: string,
@@ -432,6 +444,12 @@ export function deserializeNetworkCacheValue(
 	}
 
 	// Other properties
+	if (key.startsWith("controller.associations.")) {
+		value = tryParseAssociationAddress(value);
+		if (value) return value;
+		throw fail();
+	}
+
 	switch (key) {
 		case cacheKeys.controller.provisioningList: {
 			value = tryParseProvisioningList(value);

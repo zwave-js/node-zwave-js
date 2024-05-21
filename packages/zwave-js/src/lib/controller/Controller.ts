@@ -1783,7 +1783,10 @@ export class ZWaveController
 				this.driver.controllerLog.print(
 					"Notifying associated nodes about reset...",
 				);
-				for (const nodeId of associations) {
+				const nodeIdDestinations = distinct(
+					associations.map(({ nodeId }) => nodeId),
+				);
+				for (const nodeId of nodeIdDestinations) {
 					const node = this.nodes.get(nodeId);
 					if (!node) continue;
 
