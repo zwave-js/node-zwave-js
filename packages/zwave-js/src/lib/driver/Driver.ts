@@ -4468,21 +4468,24 @@ ${handlers.length} left`,
 
 				const encapsulationFlags = msg.command.encapsulationFlags;
 
-				let reply: (success: boolean) => Promise<void>;
+				let reply: (
+					status:
+						| SupervisionStatus.Success
+						| SupervisionStatus.Fail
+						| SupervisionStatus.NoSupport,
+				) => Promise<void>;
 				if (supervisionSessionId != undefined) {
 					// The command was supervised, and we must respond with a Supervision Report
 					const endpoint = node.getEndpoint(msg.command.endpointIndex)
 						?? node;
-					reply = (success) =>
+					reply = (status) =>
 						endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.withOptions({ s2MulticastOutOfSync })
 							.sendReport({
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
-								status: success
-									? SupervisionStatus.Success
-									: SupervisionStatus.Fail,
+								status,
 								requestWakeUpOnDemand: this
 									.shouldRequestWakeupOnDemand(node),
 								encapsulationFlags,
@@ -4516,7 +4519,7 @@ ${handlers.length} left`,
 						entry.handler(msg.command);
 
 						// and possibly reply to a supervised command
-						await reply(true);
+						await reply(SupervisionStatus.Success);
 						return;
 					}
 				}
@@ -4524,13 +4527,28 @@ ${handlers.length} left`,
 				// No one is waiting, dispatch the command to the node itself
 				try {
 					await node.handleCommand(msg.command);
-					await reply(true);
+					await reply(SupervisionStatus.Success);
 				} catch (e) {
-					await reply(false);
+					let handled = false;
+					if (isZWaveError(e)) {
+						if (e.code === ZWaveErrorCodes.CC_OperationFailed) {
+							// The sending node tried to do something that didn't work
+							await reply(SupervisionStatus.Fail);
+							handled = true;
+						} else if (e.code === ZWaveErrorCodes.CC_NotSupported) {
+							// The sending node sent a command we could not handle
+							await reply(SupervisionStatus.NoSupport);
+							handled = true;
+						}
+					}
 
-					// We only caught the error to be able to respond to supervised requests.
-					// Re-Throw so it can be handled accordingly
-					throw e;
+					if (!handled) {
+						// Something unexpected happened.
+						// Report failure, then re-throw the error, so it can be handled accordingly
+						await reply(SupervisionStatus.Fail);
+
+						throw e;
+					}
 				}
 			}
 

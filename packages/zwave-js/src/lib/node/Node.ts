@@ -52,6 +52,7 @@ import {
 	AssociationCCGet,
 	AssociationCCRemove,
 	AssociationCCSet,
+	AssociationCCSpecificGroupGet,
 	AssociationCCSupportedGroupingsGet,
 	AssociationCCValues,
 } from "@zwave-js/cc/AssociationCC";
@@ -3135,6 +3136,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleAssociationSet(command);
 		} else if (command instanceof AssociationCCRemove) {
 			return this.handleAssociationRemove(command);
+		} else if (command instanceof AssociationCCSpecificGroupGet) {
+			return this.handleAssociationSpecificGroupGet(command);
 		} else if (
 			command instanceof MultiChannelAssociationCCSupportedGroupingsGet
 		) {
@@ -3194,6 +3197,14 @@ protocol version:      ${this.protocolVersion}`;
 			message: `TODO: no handler for application command`,
 			direction: "inbound",
 		});
+
+		if (command.encapsulationFlags & EncapsulationFlags.Supervision) {
+			// Report no support for supervised commands we cannot handle
+			throw new ZWaveError(
+				"No handler for application command",
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
 	}
 
 	private hasLoggedNoNetworkKey = false;
@@ -4152,8 +4163,11 @@ protocol version:      ${this.protocolVersion}`;
 
 	private handleAssociationSet(command: AssociationCCSet): void {
 		if (command.groupId !== 1) {
-			// We only "support" the lifeline group
-			return;
+			// We only "support" the lifeline group.
+			throw new ZWaveError(
+				`Association group ${command.groupId} is not supported.`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
 		}
 
 		const controllerNode = this.driver.controller.nodes.get(
@@ -4161,9 +4175,25 @@ protocol version:      ${this.protocolVersion}`;
 		);
 		if (!controllerNode) return;
 
+		// Ignore associations that already exist
+		const newAssociations = command.nodeIds.filter((newNodeId) =>
+			!controllerNode.associations.some(
+				({ nodeId, endpoint }) =>
+					endpoint === undefined && nodeId === newNodeId,
+			)
+		).map((nodeId) => ({ nodeId }));
+
 		const associations = [...controllerNode.associations];
-		associations.push(...command.nodeIds.map((nodeId) => ({ nodeId })));
-		controllerNode.associations = associations.slice(0, MAX_ASSOCIATIONS);
+		associations.push(...newAssociations);
+
+		// Report error if the association group is already full
+		if (associations.length > MAX_ASSOCIATIONS) {
+			throw new ZWaveError(
+				`Association group ${command.groupId} is full`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
+		}
+		controllerNode.associations = associations;
 	}
 
 	private handleAssociationRemove(command: AssociationCCRemove): void {
@@ -4188,6 +4218,27 @@ protocol version:      ${this.protocolVersion}`;
 					&& !command.nodeIds!.includes(nodeId),
 			);
 		}
+	}
+
+	private async handleAssociationSpecificGroupGet(
+		command: AssociationCCSpecificGroupGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Association, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We don't support this feature.
+		// It is RECOMMENDED that the value 0 is returned by non-supporting devices.
+		await api.reportSpecificGroup(0);
 	}
 
 	private async handleMultiChannelAssociationSupportedGroupingsGet(
@@ -4257,8 +4308,11 @@ protocol version:      ${this.protocolVersion}`;
 		command: MultiChannelAssociationCCSet,
 	): void {
 		if (command.groupId !== 1) {
-			// We only "support" the lifeline group
-			return;
+			// We only "support" the lifeline group.
+			throw new ZWaveError(
+				`Multi Channel Association group ${command.groupId} is not supported.`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
 		}
 
 		const controllerNode = this.driver.controller.nodes.get(
@@ -4266,23 +4320,38 @@ protocol version:      ${this.protocolVersion}`;
 		);
 		if (!controllerNode) return;
 
-		const associations = [...controllerNode.associations];
-		associations.push(...command.nodeIds.map((nodeId) => ({ nodeId })));
-		for (const destination of command.endpoints) {
-			if (typeof destination.endpoint === "number") {
-				associations.push({
-					nodeId: destination.nodeId,
-					endpoint: destination.endpoint,
-				});
-			} else {
-				for (const endpoint of destination.endpoint) {
-					associations.push({
-						nodeId: destination.nodeId,
-						endpoint,
-					});
+		// Ignore associations that already exists
+		const newNodeIdAssociations = command.nodeIds.filter((newNodeId) =>
+			!controllerNode.associations.some(
+				({ nodeId, endpoint }) =>
+					endpoint === undefined && nodeId === newNodeId,
+			)
+		).map((nodeId) => ({ nodeId }));
+		const newEndpointAssociations = command.endpoints.flatMap(
+			({ nodeId, endpoint }) => {
+				if (typeof endpoint === "number") {
+					return { nodeId, endpoint };
+				} else {
+					return endpoint.map((e) => ({ nodeId, endpoint: e }));
 				}
-			}
+			},
+		).filter(({ nodeId: newNodeId, endpoint: newEndpoint }) =>
+			!controllerNode.associations.some(({ nodeId, endpoint }) =>
+				nodeId === newNodeId && endpoint === newEndpoint
+			)
+		);
+
+		const associations = [...controllerNode.associations];
+		associations.push(...newNodeIdAssociations, ...newEndpointAssociations);
+
+		// Report error if the association group is already full
+		if (associations.length > MAX_ASSOCIATIONS) {
+			throw new ZWaveError(
+				`Multi Channel Association group ${command.groupId} is full`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
 		}
+
 		controllerNode.associations = associations.slice(0, MAX_ASSOCIATIONS);
 	}
 

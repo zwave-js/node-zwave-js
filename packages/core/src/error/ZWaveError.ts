@@ -87,6 +87,8 @@ export enum ZWaveErrorCodes {
 	CC_NotSupported,
 	CC_NotImplemented,
 	CC_NoAPI,
+	/** Used to communicate that a given operation triggered by another node was not successful */
+	CC_OperationFailed,
 
 	Deserialization_NotImplemented = 320,
 	Arithmetic,
