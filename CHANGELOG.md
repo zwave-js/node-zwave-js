@@ -4,6 +4,32 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release contains several bugfixes and improvements for Zniffer, as well as fixing some deviations from the Z-Wave specification.
+
+### Features
+* Zniffer: Expose raw capture data in emitted frames (#6852)
+* Zniffer: Expose previously captured frames using `capturedFrames` property and `clearCapturedFrames()` method (#6852)
+* Zniffer: Add method to return saved capture file as Buffer (#6836)
+* Zniffer: Add a special frame type to distinguish Broadcast frames from singlecast frames without having to inspect the node ID (#6863)
+* Zniffer: Add an optional parameter for `znifferProtocolDataRateToString` to omit the protocol name (#6863)
+* Zniffer: Add an option to limit the number of captured frames kept in memory (#6863)
+
+### Bugfixes
+* Always query Basic CC version as part of the interview
+* Do not report `Z-Wave Protocol CC` and `Z-Wave Long Range CC` as supported
+* Encode CCs using the version implemented by Z-Wave JS, not the target's version
+* Abort S2 bootstrapping when first `KEXReport` incorrectly has echo flag set
+* Correct NIF contents, distinguish between securely and insecurely supported commands
+* Respond to `ManufacturerSpecificCCGet`
+* Correct parsing of auto-channel capabilities in `GetLongRangeChannelResponse` (#6850)
+* Include LR node information in NVM conversion (#6846)
+* Zniffer: Expose `rssi` field in all `Frame` types (#6851)
+* Zniffer: Expose payload in ExplorerInclusionRequest frame
+
+### Changes under the hood
+* Docs: add link to Zooz 800 series firmware upgrade (#6856, #6862)
+
 ## 12.8.1 (2024-05-14)
 ### Bugfixes
 This release adds a bit of polishing for Zniffer and some bugfixes (#6849):
