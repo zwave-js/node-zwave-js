@@ -76,6 +76,7 @@ import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
+	FirmwareUpdateMetaDataCCMetaDataGet,
 	FirmwareUpdateMetaDataCCReport,
 	FirmwareUpdateMetaDataCCStatusReport,
 	FirmwareUpdateMetaDataCCValues,
@@ -3095,6 +3096,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
 			return this.handleUnexpectedFirmwareUpdateGet(command);
+		} else if (command instanceof FirmwareUpdateMetaDataCCMetaDataGet) {
+			return this.handleFirmwareUpdateMetaDataGet(command);
 		} else if (command instanceof EntryControlCCNotification) {
 			return this.handleEntryControlNotification(command);
 		} else if (command instanceof PowerlevelCCTestNodeReport) {
@@ -5654,6 +5657,30 @@ protocol version:      ${this.protocolVersion}`;
 		} catch {
 			// ignore
 		}
+	}
+
+	private async handleFirmwareUpdateMetaDataGet(
+		command: FirmwareUpdateMetaDataCCMetaDataGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Firmware Update Meta Data"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We do not support the firmware to be upgraded.
+		await api.reportMetaData({
+			manufacturerId: 0x0466, // Nabu Casa - FIXME: Make this configurable
+			firmwareUpgradable: false,
+			hardwareVersion: 1, // FIXME: Make configurable, must be the same as in Version CC
+		});
 	}
 
 	private recentEntryControlNotificationSequenceNumbers: number[] = [];
