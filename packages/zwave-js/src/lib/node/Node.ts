@@ -16,6 +16,7 @@ import {
 	FirmwareUpdateStatus,
 	InclusionControllerCCInitiate,
 	InclusionControllerStep,
+	IndicatorCCGet,
 	IndicatorCCSet,
 	IndicatorCCSupportedGet,
 	MultiCommandCCCommandEncapsulation,
@@ -3130,6 +3131,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleIndicatorSupportedGet(command);
 		} else if (command instanceof IndicatorCCSet) {
 			return this.handleIndicatorSet(command);
+		} else if (command instanceof IndicatorCCGet) {
+			return this.handleIndicatorGet(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -4209,6 +4212,46 @@ protocol version:      ${this.protocolVersion}`;
 		this.driver.controller.emit("identify", this);
 	}
 
+	private async handleIndicatorGet(command: IndicatorCCGet): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Indicator, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We only support "identify"
+		if (command.indicatorId === 0x50) {
+			await api.sendReport({
+				values: [
+					{ indicatorId: 0x50, propertyId: 0x03, value: 0 },
+					{ indicatorId: 0x50, propertyId: 0x04, value: 0 },
+					{ indicatorId: 0x50, propertyId: 0x05, value: 0 },
+				],
+			});
+		} else if (typeof command.indicatorId === "number") {
+			// V2+ report
+			await api.sendReport({
+				values: [
+					{
+						indicatorId: command.indicatorId,
+						propertyId: 0,
+						value: 0,
+					},
+				],
+			});
+		} else {
+			// V1+ report
+			await api.sendReport({ value: 0 });
+		}
+	}
+
 	private async handleSecurityCommandsSupportedGet(
 		command: SecurityCCCommandsSupportedGet,
 	): Promise<void> {
@@ -4265,9 +4308,6 @@ protocol version:      ${this.protocolVersion}`;
 			);
 
 			const supportedCCs = new Set([
-				// Z-Wave Plus Info must be listed first
-				CommandClasses["Z-Wave Plus Info"],
-
 				// DT:00.11.0004.1
 				// All Root Devices or nodes MUST support:
 				// - Association, version 2
@@ -4292,6 +4332,7 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses["Multi Channel Association"],
 				CommandClasses.Powerlevel,
 				CommandClasses.Version,
+				CommandClasses["Z-Wave Plus Info"],
 
 				// Generic Controller device type has no additional support requirements,
 				// but we also support the following command classes:
@@ -4309,8 +4350,15 @@ protocol version:      ${this.protocolVersion}`;
 				),
 			]);
 
+			// Commands that are always in the NIF should not appear in the
+			// S2 commands supported report
+			const commandsInNIF = new Set(determineNIF().supportedCCs);
+			const supportedCommandsNotInNIF = [...supportedCCs].filter((cc) =>
+				!commandsInNIF.has(cc)
+			);
+
 			await endpoint.commandClasses["Security 2"].reportSupportedCommands(
-				[...supportedCCs],
+				supportedCommandsNotInNIF,
 			);
 		} else if (securityClassIsS2(actualSecurityClass)) {
 			// The command was received using a lower security class. Return an empty list

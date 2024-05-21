@@ -383,6 +383,24 @@ export class IndicatorCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
+	public async sendReport(
+		options: IndicatorCCReportSpecificOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			IndicatorCommand,
+			IndicatorCommand.Report,
+		);
+
+		const cc = new IndicatorCCReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	@validateArgs()
 	public async getSupported(indicatorId: number): Promise<
 		| {
 			indicatorId?: number;
