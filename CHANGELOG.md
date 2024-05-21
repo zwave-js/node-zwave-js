@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.9.0 (2024-05-21)
 This release contains several bugfixes and improvements for Zniffer, as well as fixing some deviations from the Z-Wave specification.
 
 ### Features
