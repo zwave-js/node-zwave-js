@@ -4,6 +4,8 @@ import {
 	MPDUHeaderType,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
+	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	Protocols,
 	type RSSI,
 	ZWaveError,
@@ -906,6 +908,7 @@ export class BeamStop {
 	}
 }
 
+/** An application-oriented representation of a Z-Wave frame that was captured by the Zniffer */
 export type ZWaveFrame =
 	// Common fields for all Z-Wave frames
 	& {
@@ -965,6 +968,14 @@ export type ZWaveFrame =
 				)
 			>
 		)
+		// Broadcast frame. This is technically a singlecast frame,
+		// but the destination node ID is always 255 and it is not routed
+		| {
+			type: ZWaveFrameType.Broadcast;
+			destinationNodeId: typeof NODE_ID_BROADCAST;
+			ackRequested: boolean;
+			payload: Buffer | CommandClass;
+		}
 		| {
 			// Multicast frame, not routed
 			type: ZWaveFrameType.Multicast;
@@ -1025,12 +1036,21 @@ export type LongRangeFrame =
 	}
 	// Different kinds of Long Range frames:
 	& (
-		{
+		| {
 			// Singlecast frame
 			type: LongRangeFrameType.Singlecast;
 			ackRequested: boolean;
 			payload: Buffer | CommandClass;
-		} | {
+		}
+		| {
+			// Broadcast frame. This is technically a singlecast frame,
+			// but the destination node ID is always 4095
+			type: LongRangeFrameType.Broadcast;
+			destinationNodeId: typeof NODE_ID_BROADCAST_LR;
+			ackRequested: boolean;
+			payload: Buffer | CommandClass;
+		}
+		| {
 			// Acknowledgement frame
 			type: LongRangeFrameType.Ack;
 			incomingRSSI: RSSI;
@@ -1136,13 +1156,24 @@ export function mpduToZWaveFrame(
 	};
 
 	if (mpdu instanceof SinglecastZWaveMPDU) {
-		return {
-			type: ZWaveFrameType.Singlecast,
+		const ret = {
 			...retBase,
-			destinationNodeId: mpdu.destinationNodeId,
 			ackRequested: mpdu.ackRequested,
 			payload: payloadCC ?? mpdu.payload,
 		};
+		if (mpdu.destinationNodeId === NODE_ID_BROADCAST) {
+			return {
+				type: ZWaveFrameType.Broadcast,
+				destinationNodeId: mpdu.destinationNodeId,
+				...ret,
+			};
+		} else {
+			return {
+				type: ZWaveFrameType.Singlecast,
+				destinationNodeId: mpdu.destinationNodeId,
+				...ret,
+			};
+		}
 	} else if (mpdu instanceof AckZWaveMPDU) {
 		return {
 			type: ZWaveFrameType.AckDirect,
@@ -1235,12 +1266,23 @@ export function mpduToLongRangeFrame(
 	};
 
 	if (mpdu instanceof SinglecastLongRangeMPDU) {
-		return {
+		const ret = {
 			...retBase,
-			type: LongRangeFrameType.Singlecast,
 			ackRequested: mpdu.ackRequested,
 			payload: payloadCC ?? mpdu.payload,
 		};
+		if (mpdu.destinationNodeId === NODE_ID_BROADCAST_LR) {
+			return {
+				type: LongRangeFrameType.Broadcast,
+				...ret,
+				destinationNodeId: mpdu.destinationNodeId, // Make TS happy
+			};
+		} else {
+			return {
+				type: LongRangeFrameType.Singlecast,
+				...ret,
+			};
+		}
 	} else if (mpdu instanceof AckLongRangeMPDU) {
 		return {
 			type: LongRangeFrameType.Ack,

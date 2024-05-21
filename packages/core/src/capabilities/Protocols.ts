@@ -62,18 +62,35 @@ export enum ZnifferProtocolDataRate {
 	LongRange_100k = 0x03,
 }
 
+/**
+ * Converts a ZnifferProtocolDataRate into a human-readable string.
+ * @param includeProtocol - Whether to include the protocol name in the output
+ */
 export function znifferProtocolDataRateToString(
 	rate: ZnifferProtocolDataRate,
+	includeProtocol: boolean = true,
 ): string {
-	switch (rate) {
-		case ZnifferProtocolDataRate.ZWave_9k6:
-			return "Z-Wave, 9.6 kbit/s";
-		case ZnifferProtocolDataRate.ZWave_40k:
-			return "Z-Wave, 40 kbit/s";
-		case ZnifferProtocolDataRate.ZWave_100k:
-			return "Z-Wave, 100 kbit/s";
-		case ZnifferProtocolDataRate.LongRange_100k:
-			return "Z-Wave Long Range, 100 kbit/s";
+	if (includeProtocol) {
+		switch (rate) {
+			case ZnifferProtocolDataRate.ZWave_9k6:
+				return "Z-Wave, 9.6 kbit/s";
+			case ZnifferProtocolDataRate.ZWave_40k:
+				return "Z-Wave, 40 kbit/s";
+			case ZnifferProtocolDataRate.ZWave_100k:
+				return "Z-Wave, 100 kbit/s";
+			case ZnifferProtocolDataRate.LongRange_100k:
+				return "Z-Wave Long Range, 100 kbit/s";
+		}
+	} else {
+		switch (rate) {
+			case ZnifferProtocolDataRate.ZWave_9k6:
+				return "9.6 kbit/s";
+			case ZnifferProtocolDataRate.ZWave_40k:
+				return "40 kbit/s";
+			case ZnifferProtocolDataRate.ZWave_100k:
+			case ZnifferProtocolDataRate.LongRange_100k:
+				return "100 kbit/s";
+		}
 	}
 	return `Unknown (${num2hex(rate)})`;
 }

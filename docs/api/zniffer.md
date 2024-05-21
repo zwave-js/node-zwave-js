@@ -46,6 +46,9 @@ interface ZnifferOptions {
 	 * Supported regions and their names have to be queried using the `getFrequencies` and `getFrequencyInfo(frequency)` commands.
 	 */
 	defaultFrequency?: number;
+
+	/** Limit the number of frames that are kept in memory. */
+	maxCapturedFrames?: number;
 }
 ```
 
@@ -250,6 +253,14 @@ type ZWaveFrame =
 				)
 			>
 		)
+		// Broadcast frame. This is technically a singlecast frame,
+		// but the destination node ID is always 255 and it is not routed
+		| {
+			type: ZWaveFrameType.Broadcast;
+			destinationNodeId: typeof NODE_ID_BROADCAST;
+			ackRequested: boolean;
+			payload: Buffer | CommandClass;
+		}
 		| {
 			// Multicast frame, not routed
 			type: ZWaveFrameType.Multicast;
@@ -275,6 +286,7 @@ type ZWaveFrame =
 			} | {
 				type: ZWaveFrameType.ExplorerInclusionRequest;
 				networkHomeId: number;
+				payload: Buffer | CommandClass;
 			})
 			// Common fields for all explorer frames
 			& {
@@ -313,12 +325,21 @@ type LongRangeFrame =
 	}
 	// Different kinds of Long Range frames:
 	& (
-		{
+		| {
 			// Singlecast frame
 			type: LongRangeFrameType.Singlecast;
 			ackRequested: boolean;
 			payload: Buffer | CommandClass;
-		} | {
+		}
+		| {
+			// Broadcast frame. This is technically a singlecast frame,
+			// but the destination node ID is always 4095
+			type: LongRangeFrameType.Broadcast;
+			destinationNodeId: typeof NODE_ID_BROADCAST_LR;
+			ackRequested: boolean;
+			payload: Buffer | CommandClass;
+		}
+		| {
 			// Acknowledgement frame
 			type: LongRangeFrameType.Ack;
 			incomingRSSI: RSSI;
@@ -401,6 +422,7 @@ enum ZWaveFrameType {
 	ExplorerInclusionRequest,
 	BeamStart,
 	BeamStop,
+	Broadcast,
 }
 ```
 
@@ -412,6 +434,7 @@ enum LongRangeFrameType {
 	Ack,
 	BeamStart,
 	BeamStop,
+	Broadcast,
 }
 ```
 
