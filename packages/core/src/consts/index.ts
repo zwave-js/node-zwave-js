@@ -7,6 +7,9 @@ export const MAX_NODES_LR = 4000; // FIXME: This seems too even, figure out the 
 /** The broadcast target node id */
 export const NODE_ID_BROADCAST = 0xff;
 
+/** The broadcast target node id for Z-Wave LR */
+export const NODE_ID_BROADCAST_LR = 0xfff;
+
 /** The highest allowed node id */
 export const NODE_ID_MAX = MAX_NODES;
 

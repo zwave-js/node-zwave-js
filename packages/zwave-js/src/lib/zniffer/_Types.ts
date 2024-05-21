@@ -13,13 +13,13 @@ export enum ZWaveFrameType {
 	ExplorerInclusionRequest,
 	BeamStart,
 	BeamStop,
+	Broadcast,
 }
-
-/** An application-oriented representation of a Z-Wave frame that was captured by the Zniffer */
 
 export enum LongRangeFrameType {
 	Singlecast,
 	Ack,
 	BeamStart,
 	BeamStop,
+	Broadcast,
 }
