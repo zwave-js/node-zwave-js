@@ -13,6 +13,7 @@ import {
 	KEXSchemes,
 	ManufacturerSpecificCCValues,
 	MultiChannelAssociationCC,
+	Powerlevel,
 	Security2CCKEXFail,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
@@ -771,6 +772,25 @@ export class ZWaveController
 	/** @internal */
 	public set associations(value: readonly AssociationAddress[]) {
 		this.driver.cacheSet(cacheKeys.controller.associations(1), value);
+	}
+
+	/** @internal Remembers which powerlevel was set by another node */
+	public get powerlevel(): { powerlevel: Powerlevel; until: Date } {
+		return {
+			powerlevel: this.driver.cacheGet(cacheKeys.controller.powerlevel)
+				?? Powerlevel["Normal Power"],
+			until: this.driver.cacheGet(cacheKeys.controller.powerlevelTimeout)
+				?? new Date(),
+		};
+	}
+
+	/** @internal */
+	public set powerlevel(value: { powerlevel: Powerlevel; until: Date }) {
+		this.driver.cacheSet(cacheKeys.controller.powerlevel, value.powerlevel);
+		this.driver.cacheSet(
+			cacheKeys.controller.powerlevelTimeout,
+			value.until,
+		);
 	}
 
 	private _isRebuildingRoutes: boolean = false;

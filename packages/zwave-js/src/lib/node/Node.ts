@@ -108,7 +108,11 @@ import {
 	getNotificationStateValueWithEnum,
 	getNotificationValueMetadata,
 } from "@zwave-js/cc/NotificationCC";
-import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
+import {
+	PowerlevelCCGet,
+	PowerlevelCCSet,
+	PowerlevelCCTestNodeReport,
+} from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
 import {
 	Security2CCCommandsSupportedGet,
@@ -3144,6 +3148,10 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleIndicatorSet(command);
 		} else if (command instanceof IndicatorCCGet) {
 			return this.handleIndicatorGet(command);
+		} else if (command instanceof PowerlevelCCSet) {
+			return this.handlePowerlevelSet(command);
+		} else if (command instanceof PowerlevelCCGet) {
+			return this.handlePowerlevelGet(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -4446,6 +4454,52 @@ protocol version:      ${this.protocolVersion}`;
 		} else {
 			// V1+ report
 			await api.sendReport({ value: 0 });
+		}
+	}
+
+	private handlePowerlevelSet(command: PowerlevelCCSet): void {
+		// CC:0073.01.01.11.001: A supporting node MAY decide not to change its actual Tx configuration.
+		// In any case, the value received in this Command MUST be returned in a Powerlevel Report Command
+		// in response to a Powerlevel Get Command as if the power setting was accepted for the indicated duration.
+		this.driver.controller.powerlevel = {
+			powerlevel: command.powerlevel,
+			until: command.timeout
+				? new Date(Date.now() + command.timeout * 1000)
+				: new Date(),
+		};
+	}
+
+	private async handlePowerlevelGet(command: PowerlevelCCGet): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Powerlevel, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		const { powerlevel, until } = this.driver.controller.powerlevel;
+
+		if (powerlevel === Powerlevel["Normal Power"]) {
+			await api.reportPowerlevel({ powerlevel });
+		} else {
+			const timeoutSeconds = Math.max(
+				0,
+				Math.min(
+					Math.round((until.getTime() - Date.now()) / 1000),
+					255,
+				),
+			);
+
+			await api.reportPowerlevel({
+				powerlevel,
+				timeout: timeoutSeconds,
+			});
 		}
 	}
 
