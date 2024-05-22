@@ -774,23 +774,21 @@ export class ZWaveController
 		this.driver.cacheSet(cacheKeys.controller.associations(1), value);
 	}
 
-	/** @internal Remembers which powerlevel was set by another node */
+	private _powerlevel: { powerlevel: Powerlevel; until: Date } | undefined;
+	/**
+	 * @internal
+	 * Remembers which powerlevel was set by another node.
+	 */
 	public get powerlevel(): { powerlevel: Powerlevel; until: Date } {
-		return {
-			powerlevel: this.driver.cacheGet(cacheKeys.controller.powerlevel)
-				?? Powerlevel["Normal Power"],
-			until: this.driver.cacheGet(cacheKeys.controller.powerlevelTimeout)
-				?? new Date(),
+		return this._powerlevel ?? {
+			powerlevel: Powerlevel["Normal Power"],
+			until: new Date(),
 		};
 	}
 
 	/** @internal */
 	public set powerlevel(value: { powerlevel: Powerlevel; until: Date }) {
-		this.driver.cacheSet(cacheKeys.controller.powerlevel, value.powerlevel);
-		this.driver.cacheSet(
-			cacheKeys.controller.powerlevelTimeout,
-			value.until,
-		);
+		this._powerlevel = value;
 	}
 
 	private _isRebuildingRoutes: boolean = false;

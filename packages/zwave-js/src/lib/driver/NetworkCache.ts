@@ -30,8 +30,6 @@ export const cacheKeys = {
 	controller: {
 		provisioningList: "controller.provisioningList",
 		associations: (groupId: number) => `controller.associations.${groupId}`,
-		powerlevel: "controller.powerlevel",
-		powerlevelTimeout: "controller.powerlevelTimeout",
 	},
 	// TODO: somehow these functions should be combined with the pattern matching below
 	node: (nodeId: number) => {
@@ -458,14 +456,6 @@ export function deserializeNetworkCacheValue(
 			if (value) return value;
 			throw fail();
 		}
-		case cacheKeys.controller.powerlevel:
-			value = ensureType(value, "number");
-			if (value) return value;
-			throw fail();
-		case cacheKeys.controller.powerlevelTimeout:
-			value = tryParseDate(value);
-			if (value) return value;
-			throw fail();
 	}
 
 	return value;
@@ -552,10 +542,6 @@ export function serializeNetworkCacheValue(
 			}
 			return ret;
 		}
-
-		case cacheKeys.controller.powerlevelTimeout:
-			// Date stored as timestamp
-			return (value as Date).getTime();
 	}
 
 	return value;
