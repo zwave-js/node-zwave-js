@@ -1822,9 +1822,7 @@ export class ZWaveController
 					const node = this.nodes.get(nodeId);
 					if (!node) continue;
 
-					void node.sendResetLocallyNotification().catch(() => {
-						// ignore
-					});
+					await node.sendResetLocallyNotification().catch(noop);
 				}
 			}
 
