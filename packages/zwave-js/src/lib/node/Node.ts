@@ -3807,6 +3807,22 @@ protocol version:      ${this.protocolVersion}`;
 					});
 				}
 			} else if (
+				!this.deviceConfig?.compat?.mapBasicSet
+				&& !!(command.encapsulationFlags
+					& EncapsulationFlags.Supervision)
+			) {
+				// A controller MUST not support Basic CC per the specifications. While we can interpret its contents,
+				// we MUST respond to supervised Basic CC Set with "no support".
+				// All known devices that use BasicCCSet for reporting send it unsupervised, so this should be safe to do.
+				if (
+					command.encapsulationFlags & EncapsulationFlags.Supervision
+				) {
+					throw new ZWaveError(
+						"Basic CC is not supported",
+						ZWaveErrorCodes.CC_NotSupported,
+					);
+				}
+			} else if (
 				basicSetMapping === "auto" || basicSetMapping === "report"
 			) {
 				// Some devices send their current state using BasicCCSet to their associations
