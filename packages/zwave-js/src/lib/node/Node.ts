@@ -5,6 +5,7 @@ import {
 	CentralSceneKeys,
 	ClockCommand,
 	CommandClass,
+	DeviceResetLocallyCCNotification,
 	DeviceResetLocallyCommand,
 	DoorLockMode,
 	EntryControlDataTypes,
@@ -237,6 +238,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { isDeepStrictEqual } from "node:util";
+import { RemoveNodeReason } from "../controller/Inclusion";
 import { determineNIF } from "../controller/NodeInformationFrame";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
@@ -3155,6 +3157,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handlePowerlevelSet(command);
 		} else if (command instanceof PowerlevelCCGet) {
 			return this.handlePowerlevelGet(command);
+		} else if (command instanceof DeviceResetLocallyCCNotification) {
+			return this.handleDeviceResetLocallyNotification(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -4649,6 +4653,37 @@ protocol version:      ${this.protocolVersion}`;
 		} else {
 			// Do not respond
 		}
+	}
+
+	private handleDeviceResetLocallyNotification(
+		_cmd: DeviceResetLocallyCCNotification,
+	): void {
+		// Handling this command can take a few seconds and require communication with the node.
+		// If it was received with Supervision, we need to acknowledge it immediately. Therefore
+		// defer the handling half a second.
+
+		setTimeout(async () => {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `The node was reset locally, removing it`,
+				direction: "inbound",
+			});
+
+			try {
+				await this.driver.controller.removeFailedNodeInternal(
+					this.id,
+					RemoveNodeReason.Reset,
+				);
+			} catch (e) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `removing the node failed: ${
+						getErrorMessage(
+							e,
+						)
+					}`,
+					level: "error",
+				});
+			}
+		}, 500);
 	}
 
 	/**

@@ -3,7 +3,6 @@ import {
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	type CommandClass,
-	DeviceResetLocallyCCNotification,
 	type FirmwareUpdateResult,
 	type ICommandClassContainer,
 	InvalidCC,
@@ -4416,30 +4415,6 @@ ${handlers.length} left`,
 			const nodeSessions = this.nodeSessions.get(nodeId);
 			// Check if we need to handle the command ourselves
 			if (
-				msg.command.ccId === CommandClasses["Device Reset Locally"]
-				&& msg.command instanceof DeviceResetLocallyCCNotification
-			) {
-				this.controllerLog.logNode(msg.command.nodeId, {
-					message: `The node was reset locally, removing it`,
-					direction: "inbound",
-				});
-
-				try {
-					await this.controller.removeFailedNodeInternal(
-						msg.command.nodeId,
-						RemoveNodeReason.Reset,
-					);
-				} catch (e) {
-					this.controllerLog.logNode(msg.command.nodeId, {
-						message: `removing the node failed: ${
-							getErrorMessage(
-								e,
-							)
-						}`,
-						level: "error",
-					});
-				}
-			} else if (
 				msg.command.ccId === CommandClasses.Supervision
 				&& msg.command instanceof SupervisionCCReport
 				&& nodeSessions?.supervision.has(msg.command.sessionId)
