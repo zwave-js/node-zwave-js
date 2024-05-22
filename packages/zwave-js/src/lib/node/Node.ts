@@ -16,6 +16,7 @@ import {
 	FirmwareUpdateStatus,
 	InclusionControllerCCInitiate,
 	InclusionControllerStep,
+	IndicatorCCDescriptionGet,
 	IndicatorCCGet,
 	IndicatorCCSet,
 	IndicatorCCSupportedGet,
@@ -3148,6 +3149,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleIndicatorSet(command);
 		} else if (command instanceof IndicatorCCGet) {
 			return this.handleIndicatorGet(command);
+		} else if (command instanceof IndicatorCCDescriptionGet) {
+			return this.handleIndicatorDescriptionGet(command);
 		} else if (command instanceof PowerlevelCCSet) {
 			return this.handlePowerlevelSet(command);
 		} else if (command instanceof PowerlevelCCGet) {
@@ -4409,6 +4412,10 @@ protocol version:      ${this.protocolVersion}`;
 		if (v2.indicatorId !== 0x50 || v2.propertyId !== 0x04) return;
 		if (v3.indicatorId !== 0x50 || v3.propertyId !== 0x05) return;
 
+		// This isn't really sane, but since we only support a single indicator, it's fine
+		const store = this.driver.controller.indicatorValues;
+		store.set(0x50, [v1, v2, v3]);
+
 		this.driver.controllerLog.logNode(this.id, {
 			message: "Received identify command",
 			direction: "inbound",
@@ -4433,13 +4440,12 @@ protocol version:      ${this.protocolVersion}`;
 
 		// We only support "identify"
 		if (command.indicatorId === 0x50) {
-			await api.sendReport({
-				values: [
-					{ indicatorId: 0x50, propertyId: 0x03, value: 0 },
-					{ indicatorId: 0x50, propertyId: 0x04, value: 0 },
-					{ indicatorId: 0x50, propertyId: 0x05, value: 0 },
-				],
-			});
+			const values = this.driver.controller.indicatorValues.get(0x50) ?? [
+				{ indicatorId: 0x50, propertyId: 0x03, value: 0 },
+				{ indicatorId: 0x50, propertyId: 0x04, value: 0 },
+				{ indicatorId: 0x50, propertyId: 0x05, value: 0 },
+			];
+			await api.sendReport({ values });
 		} else if (typeof command.indicatorId === "number") {
 			// V2+ report
 			await api.sendReport({
@@ -4455,6 +4461,28 @@ protocol version:      ${this.protocolVersion}`;
 			// V1+ report
 			await api.sendReport({ value: 0 });
 		}
+	}
+
+	private async handleIndicatorDescriptionGet(
+		command: IndicatorCCDescriptionGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Indicator, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We only support "identify" (0x50) and requests for indicators outside the 0x80...0x9f range
+		// MUST return an Indicator Description Report with the Description Length set to 0.
+		// So we can just always do that.
+		await api.reportDescription(command.indicatorId, "");
 	}
 
 	private handlePowerlevelSet(command: PowerlevelCCSet): void {

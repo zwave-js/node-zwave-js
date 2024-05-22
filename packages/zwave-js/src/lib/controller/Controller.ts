@@ -30,6 +30,7 @@ import {
 	inclusionTimeouts,
 	utils as ccUtils,
 } from "@zwave-js/cc";
+import { type IndicatorObject } from "@zwave-js/cc/IndicatorCC";
 import {
 	CommandClasses,
 	ControllerStatus,
@@ -790,6 +791,12 @@ export class ZWaveController
 	public set powerlevel(value: { powerlevel: Powerlevel; until: Date }) {
 		this._powerlevel = value;
 	}
+
+	/**
+	 * @internal
+	 * Remembers the indicator values set by another node
+	 */
+	public readonly indicatorValues = new Map<number, IndicatorObject[]>();
 
 	private _isRebuildingRoutes: boolean = false;
 	/** Returns whether the routes are currently being rebuilt for one or more nodes. */
