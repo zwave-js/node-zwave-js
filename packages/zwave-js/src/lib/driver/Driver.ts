@@ -10,13 +10,14 @@ import {
 	KEXFailType,
 	MultiChannelCC,
 	Security2CC,
-	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
 	Security2Command,
 	SecurityCC,
+	SecurityCCCommandEncapsulation,
 	SecurityCCCommandEncapsulationNonceGet,
+	SecurityCCCommandsSupportedReport,
 	SecurityCommand,
 	SupervisionCC,
 	type SupervisionCCGet,
@@ -4204,28 +4205,9 @@ ${handlers.length} left`,
 			? CommandClasses.Security
 			: undefined;
 
-		const discardAnyways = (cmd: CommandClass): boolean => {
-			// S2-encapsulated CCs must always be discarded if they are received using a lower security class, except:
-			// - CommandsSupportedGet and CommandsSupportedReport
-			// - multicast commands
-			if (!(cmd instanceof Security2CCMessageEncapsulation)) return false;
-			if (cmd.getMulticastGroupId() != undefined) return false;
-			// This shouldn't happen, but better be sure
-			if (cmd.securityClass == undefined) return true;
-			// Received at the highest security class -> ok
-			if (cmd.securityClass === secClass) return false;
-
-			if (
-				cmd.encapsulated instanceof Security2CCCommandsSupportedGet
-				|| cmd.encapsulated
-					instanceof Security2CCCommandsSupportedReport
-			) {
-				return false;
-			}
-			return true;
-		};
-
-		const acceptAnyways = (cmd: CommandClass): boolean => {
+		const isCCConsideredSecure = (
+			cmd: CommandClass,
+		): MaybeNotKnown<boolean> => {
 			// Some CCs are always accepted, regardless of security class
 			if (cmd instanceof SecurityCC) {
 				switch (cmd.ccCommand) {
@@ -4235,29 +4217,50 @@ ${handlers.length} left`,
 					case SecurityCommand.SchemeGet:
 					case SecurityCommand.SchemeReport:
 						return true;
+				}
 
-					// Needs to be accepted to be able interview/respond to S0 queries
-					case SecurityCommand.CommandsSupportedGet:
-					case SecurityCommand.CommandsSupportedReport:
-						return cmd.isEncapsulatedWith(
-							CommandClasses.Security,
-							SecurityCommand.CommandEncapsulation,
-						);
+				if (cmd instanceof SecurityCCCommandEncapsulation) {
+					// CommandsSupportedReport is always accepted to be able to learn security classes and interview nodes
+					if (
+						cmd.encapsulated
+							instanceof SecurityCCCommandsSupportedReport
+					) {
+						return true;
+					}
+
+					// Other S0 commands are only accepted if S0 is the highest security class
+					return secClass === SecurityClass.S0_Legacy;
+				}
+			} else if (cmd instanceof Security2CC) {
+				if (cmd instanceof Security2CCMessageEncapsulation) {
+					// CommandsSupportedReport is always accepted to be able to learn security classes and interview nodes
+					if (
+						cmd.encapsulated
+							instanceof Security2CCCommandsSupportedReport
+						|| cmd.encapsulated
+							instanceof SecurityCCCommandsSupportedReport
+					) {
+						return true;
+					}
+
+					// Multicast commands are always accepted
+					if (cmd.getMulticastGroupId() != undefined) return true;
+
+					// This shouldn't happen, but better be sure
+					if (cmd.securityClass == undefined) return false;
+
+					// All other commands are only accepted if the highest security class is used
+					return cmd.securityClass === secClass;
 				}
 			}
-			return false;
+
+			return cmd.ccId === expectedSecurityCC;
 		};
 
-		let isSecure = false;
 		let requiresSecurity = securityClassIsS2(secClass);
-		while (true) {
-			if (
-				(cc.ccId === expectedSecurityCC && !discardAnyways(cc))
-				|| acceptAnyways(cc)
-			) {
-				isSecure = true;
-			}
+		const isSecure = isCCConsideredSecure(cc);
 
+		while (true) {
 			if (isEncapsulatingCommandClass(cc)) {
 				cc = cc.encapsulated;
 			} else if (isMultiEncapsulatingCommandClass(cc)) {
