@@ -761,6 +761,18 @@ export class ZWaveController
 		return this._nodes.get(this._ownNodeId!)!.valueDB;
 	}
 
+	/** @internal Which associations are currently configured */
+	public get associations(): readonly AssociationAddress[] {
+		return (
+			this.driver.cacheGet(cacheKeys.controller.associations(1)) ?? []
+		);
+	}
+
+	/** @internal */
+	public set associations(value: readonly AssociationAddress[]) {
+		this.driver.cacheSet(cacheKeys.controller.associations(1), value);
+	}
+
 	private _isRebuildingRoutes: boolean = false;
 	/** Returns whether the routes are currently being rebuilt for one or more nodes. */
 	public get isRebuildingRoutes(): boolean {
@@ -1778,7 +1790,7 @@ export class ZWaveController
 	public async hardReset(): Promise<void> {
 		// begin the reset process
 		try {
-			const associations = this.nodes.get(this._ownNodeId!)?.associations;
+			const associations = this.associations;
 			if (associations?.length) {
 				this.driver.controllerLog.print(
 					"Notifying associated nodes about reset...",

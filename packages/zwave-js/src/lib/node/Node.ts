@@ -1,5 +1,4 @@
 import {
-	type AssociationAddress,
 	AssociationGroupInfoProfile,
 	type CCAPI,
 	type CCValueOptions,
@@ -914,17 +913,6 @@ export class ZWaveNode extends Endpoint
 	}
 	public set hasSUCReturnRoute(value: boolean) {
 		this.driver.cacheSet(cacheKeys.node(this.id).hasSUCReturnRoute, value);
-	}
-
-	/** @internal Which associations are currently configured */
-	public get associations(): readonly AssociationAddress[] {
-		return (
-			this.driver.cacheGet(cacheKeys.controller.associations(1)) ?? []
-		);
-	}
-
-	private set associations(value: readonly AssociationAddress[]) {
-		this.driver.cacheSet(cacheKeys.controller.associations(1), value);
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
@@ -4134,10 +4122,6 @@ protocol version:      ${this.protocolVersion}`;
 
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		)!;
-
 		// We are being queried, so the device may actually not support the CC, just control it.
 		// Using the commandClasses property would throw in that case
 		const api = endpoint
@@ -4150,7 +4134,9 @@ protocol version:      ${this.protocolVersion}`;
 			});
 
 		const nodeIds =
-			controllerNode?.associations.filter((a) => a.endpoint == undefined)
+			this.driver.controller.associations.filter((a) =>
+				a.endpoint == undefined
+			)
 				.map((a) => a.nodeId) ?? [];
 
 		await api.sendReport({
@@ -4170,20 +4156,15 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		);
-		if (!controllerNode) return;
-
 		// Ignore associations that already exist
 		const newAssociations = command.nodeIds.filter((newNodeId) =>
-			!controllerNode.associations.some(
+			!this.driver.controller.associations.some(
 				({ nodeId, endpoint }) =>
 					endpoint === undefined && nodeId === newNodeId,
 			)
 		).map((nodeId) => ({ nodeId }));
 
-		const associations = [...controllerNode.associations];
+		const associations = [...this.driver.controller.associations];
 		associations.push(...newAssociations);
 
 		// Report error if the association group is already full
@@ -4193,7 +4174,7 @@ protocol version:      ${this.protocolVersion}`;
 				ZWaveErrorCodes.CC_OperationFailed,
 			);
 		}
-		controllerNode.associations = associations;
+		this.driver.controller.associations = associations;
 	}
 
 	private handleAssociationRemove(command: AssociationCCRemove): void {
@@ -4203,20 +4184,16 @@ protocol version:      ${this.protocolVersion}`;
 			return;
 		}
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		);
-		if (!controllerNode) return;
-
 		if (!command.nodeIds?.length) {
 			// clear
-			controllerNode.associations = [];
+			this.driver.controller.associations = [];
 		} else {
-			controllerNode.associations = controllerNode.associations.filter(
-				({ nodeId, endpoint }) =>
-					endpoint === undefined
-					&& !command.nodeIds!.includes(nodeId),
-			);
+			this.driver.controller.associations = this.driver.controller
+				.associations.filter(
+					({ nodeId, endpoint }) =>
+						endpoint === undefined
+						&& !command.nodeIds!.includes(nodeId),
+				);
 		}
 	}
 
@@ -4269,10 +4246,6 @@ protocol version:      ${this.protocolVersion}`;
 
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		)!;
-
 		// We are being queried, so the device may actually not support the CC, just control it.
 		// Using the commandClasses property would throw in that case
 		const api = endpoint
@@ -4285,10 +4258,14 @@ protocol version:      ${this.protocolVersion}`;
 			});
 
 		const nodeIds =
-			controllerNode?.associations.filter((a) => a.endpoint == undefined)
+			this.driver.controller.associations.filter((a) =>
+				a.endpoint == undefined
+			)
 				.map((a) => a.nodeId) ?? [];
 		const endpoints =
-			controllerNode?.associations.filter((a) => a.endpoint != undefined)
+			this.driver.controller.associations.filter((a) =>
+				a.endpoint != undefined
+			)
 				.map(({ nodeId, endpoint }) => ({
 					nodeId,
 					endpoint: endpoint!,
@@ -4315,14 +4292,9 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		);
-		if (!controllerNode) return;
-
 		// Ignore associations that already exists
 		const newNodeIdAssociations = command.nodeIds.filter((newNodeId) =>
-			!controllerNode.associations.some(
+			!this.driver.controller.associations.some(
 				({ nodeId, endpoint }) =>
 					endpoint === undefined && nodeId === newNodeId,
 			)
@@ -4336,12 +4308,12 @@ protocol version:      ${this.protocolVersion}`;
 				}
 			},
 		).filter(({ nodeId: newNodeId, endpoint: newEndpoint }) =>
-			!controllerNode.associations.some(({ nodeId, endpoint }) =>
+			!this.driver.controller.associations.some(({ nodeId, endpoint }) =>
 				nodeId === newNodeId && endpoint === newEndpoint
 			)
 		);
 
-		const associations = [...controllerNode.associations];
+		const associations = [...this.driver.controller.associations];
 		associations.push(...newNodeIdAssociations, ...newEndpointAssociations);
 
 		// Report error if the association group is already full
@@ -4352,7 +4324,10 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
-		controllerNode.associations = associations.slice(0, MAX_ASSOCIATIONS);
+		this.driver.controller.associations = associations.slice(
+			0,
+			MAX_ASSOCIATIONS,
+		);
 	}
 
 	private handleMultiChannelAssociationRemove(
@@ -4364,16 +4339,11 @@ protocol version:      ${this.protocolVersion}`;
 			return;
 		}
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		);
-		if (!controllerNode) return;
-
 		if (!command.nodeIds?.length && !command.endpoints?.length) {
 			// Clear all associations
-			controllerNode.associations = [];
+			this.driver.controller.associations = [];
 		} else {
-			let associations = [...controllerNode.associations];
+			let associations = [...this.driver.controller.associations];
 			if (command.nodeIds?.length) {
 				associations = associations.filter(
 					({ nodeId, endpoint }) =>
@@ -4389,7 +4359,7 @@ protocol version:      ${this.protocolVersion}`;
 						),
 				);
 			}
-			controllerNode.associations = associations;
+			this.driver.controller.associations = associations;
 		}
 	}
 
