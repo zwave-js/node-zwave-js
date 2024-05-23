@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"$import": "~/templates/master_template.json#led_indicator_two_options",
+			"$import": "templates/homeseer_template.json#led_indicator_inverted",
 			"label": "Bottom LED Operation"
 		},
 		{
@@ -150,6 +150,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "3 wire mode (Neutral, line & load)",
