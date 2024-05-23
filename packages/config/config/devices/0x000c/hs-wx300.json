@@ -147,8 +147,6 @@
 			"#": "32",
 			"label": "Wire Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
