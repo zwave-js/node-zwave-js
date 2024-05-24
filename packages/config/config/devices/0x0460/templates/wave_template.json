@@ -135,7 +135,22 @@
 		"maxValue": 100,
 		"defaultValue": 100
 	},
-
+	"remote_reboot": {
+		"label": "Device Reboot",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Idle",
+				"value": 0
+			},
+			{
+				"label": "Reboot device",
+				"value": 1
+			}
+		]
+	},
 	"factory_reset": {
 		"label": "Factory Reset",
 		"description": "Reset to factory default settings and remove from the Z-Wave network.",
