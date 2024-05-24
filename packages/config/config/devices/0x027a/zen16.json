@@ -435,26 +435,25 @@
 		{
 			"#": "31",
 			"$if": "firmwareVersion >= 2.10",
-			"label": "Fixed Input Actions",
-			"description": "Use separate inputs to drive relay(s) on and off",
+			"label": "Input Behavior",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "SW1 turns R1 on/off, SW2 turns R2 on/off",
 					"value": 0
 				},
 				{
-					"label": "SW1 turns on R1, SW2 turns off R1",
+					"label": "SW1 turns R1 on, SW2 turns R1 off",
 					"value": 1
 				},
 				{
-					"label": "SW1 turns on R2, SW2 turns off R2",
+					"label": "SW1 turns R2 on, SW2 turns R2 off",
 					"value": 2
 				},
 				{
-					"label": "SW1 turns on R1 and R2, SW2 turns off R1 and R2",
+					"label": "SW1 turns R1 and R2 on, SW2 turns R1 and R2 off",
 					"value": 3
 				}
 			]
