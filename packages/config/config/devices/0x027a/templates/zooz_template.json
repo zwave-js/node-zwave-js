@@ -951,6 +951,78 @@
 			{
 				"label": "Garage door (momentary mode for Z-Wave control)",
 				"value": 3
+			},
+			{
+				"label": "Leak alarm (water sensor)",
+				"value": 4
+			},
+			{
+				"label": "Heat alarm",
+				"value": 5
+			},
+			{
+				"label": "Motion alert",
+				"value": 6
+			},
+			{
+				"label": "Open/close alert (door sensor)",
+				"value": 7
+			},
+			{
+				"label": "CO alarm",
+				"value": 8
+			},
+			{
+				"label": "CO2 alarm",
+				"value": 9
+			},
+			{
+				"label": "On/off report (dry contact switch/sensor)",
+				"value": 10
+			},
+			{
+				"label": "Relay - garage door mode; input - door sensor",
+				"value": 11
+			}
+		]
+	},
+	"zen16_switch_invert_v2": {
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Values not reversed",
+				"value": 0
+			},
+			{
+				"label": "Leak alarm (water sensor)",
+				"value": 4
+			},
+			{
+				"label": "Heat alarm",
+				"value": 5
+			},
+			{
+				"label": "Motion alert",
+				"value": 6
+			},
+			{
+				"label": "Open/close alert (door sensor)",
+				"value": 7
+			},
+			{
+				"label": "CO alarm",
+				"value": 8
+			},
+			{
+				"label": "CO2 alarm",
+				"value": 9
+			},
+			{
+				"label": "On/off report (dry contact switch/sensor)",
+				"value": 10
 			}
 		]
 	},
