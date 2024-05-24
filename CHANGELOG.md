@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Add parameter 117 to Shelly Wave Plug US and UK (#6831)
+* Add params 12, 20, 254 for Aeotec DSB09 (#6818)
+* Use HomeSeer template for LED Indicator (parameter 3) for all HomeSeer switches (#6868)
+* Add Fibaro FGR-224 Roller Shutter 4 (#6812)
+
 ## 12.9.0 (2024-05-21)
 This release contains several bugfixes and improvements for Zniffer, as well as fixing some deviations from the Z-Wave specification.
 
