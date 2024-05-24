@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.9.1 (2024-05-24)
 ### Config file changes
 * Add parameter 117 to Shelly Wave Plug US and UK (#6831)
 * Add params 12, 20, 254 for Aeotec DSB09 (#6818)
