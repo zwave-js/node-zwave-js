@@ -35,12 +35,7 @@ import {
 	encodeCCList,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import {
-	buffer2hex,
-	getEnumMemberName,
-	num2hex,
-	pick,
-} from "@zwave-js/shared/safe";
+import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
 import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI } from "../lib/API";
@@ -59,6 +54,7 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
+	InvalidExtension,
 	MGRPExtension,
 	MOSExtension,
 	MPANExtension,
@@ -168,7 +164,9 @@ function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 	}
 }
 
-const DECRYPT_ATTEMPTS = 5;
+const MAX_DECRYPT_ATTEMPTS_SINGLECAST = 5;
+const MAX_DECRYPT_ATTEMPTS_MULTICAST = 5;
+const MAX_DECRYPT_ATTEMPTS_SC_FOLLOWUP = 1;
 
 // @publicAPI
 export interface DecryptionResult {
@@ -937,34 +935,57 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			let offset = 2;
 			this.extensions = [];
-			const parseExtensions = (buffer: Buffer) => {
-				while (true) {
-					// we need to read at least the length byte
-					validatePayload(buffer.length >= offset + 1);
-					const extensionLength = Security2Extension
-						.getExtensionLength(
-							buffer.subarray(offset),
-						);
-					// Parse the extension
-					const ext = Security2Extension.from(
-						buffer.subarray(offset, offset + extensionLength),
+			const parseExtensions = (buffer: Buffer, wasEncrypted: boolean) => {
+				while (offset < buffer.length) {
+					validatePayload(buffer.length >= offset + 2);
+					// The length field could be too large, which would cause part of the actual ciphertext
+					// to be ignored. Try to avoid this for known extensions by checking the actual and expected length.
+					const { actual: actualLength, expected: expectedLength } =
+						Security2Extension
+							.getExtensionLength(
+								buffer.subarray(offset),
+							);
+
+					// Parse the extension using the expected length if possible
+					const extensionLength = expectedLength ?? actualLength;
+					const extensionData = buffer.subarray(
+						offset,
+						offset + extensionLength,
 					);
-					if (!isValidExtension(ext)) {
-						validatePayload.fail(
-							`Unknown S2 extension ${
-								num2hex(
-									ext.type,
-								)
-							} with critical flag`,
-						);
-					}
-					this.extensions.push(ext);
 					offset += extensionLength;
-					// Check if that was the last extension
-					if (!ext.moreToFollow) break;
+
+					try {
+						const ext = Security2Extension.from(extensionData);
+						if (
+							expectedLength != undefined
+							&& actualLength !== expectedLength
+						) {
+							// The extension length field does not match, ignore the extension
+						} else if (ext instanceof InvalidExtension) {
+							// The extension could not be parsed, ignore it
+						} else {
+							if (isValidExtension(ext, wasEncrypted)) {
+								this.extensions.push(ext);
+							}
+						}
+
+						// Check if that was the last extension
+						if (!ext.moreToFollow) break;
+					} catch (e) {
+						if (
+							isZWaveError(e)
+							&& e.code
+								=== ZWaveErrorCodes.PacketFormat_InvalidPayload
+						) {
+							// Extension validation failed, ignore
+						} else {
+							debugger;
+							throw e;
+						}
+					}
 				}
 			};
-			if (hasExtensions) parseExtensions(this.payload);
+			if (hasExtensions) parseExtensions(this.payload, false);
 
 			const ctx = ((): MulticastContext => {
 				const multicastGroupId = this.getMulticastGroupId();
@@ -1086,7 +1107,17 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
 			// the Receiver SHOULD try decrypting the message with one or more of the following SPAN values,
 			// stopping when decryption is successful or the maximum number of iterations is reached.
-			for (let i = 0; i < DECRYPT_ATTEMPTS; i++) {
+
+			// If the Receiver is unable to decrypt the S2 MC frame with the current MPAN, the Receiver MAY try
+			// decrypting the frame with one or more of the subsequent MPAN values, stopping when decryption is
+			// successful or the maximum number of iterations is reached.
+			const decryptAttempts = ctx.isMulticast
+				? MAX_DECRYPT_ATTEMPTS_MULTICAST
+				: ctx.groupId != undefined
+				? MAX_DECRYPT_ATTEMPTS_SC_FOLLOWUP
+				: MAX_DECRYPT_ATTEMPTS_SINGLECAST;
+
+			for (let i = 0; i < decryptAttempts; i++) {
 				({
 					plaintext,
 					authOK,
@@ -1129,7 +1160,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			this.securityClass = decryptionSecurityClass;
 
 			offset = 0;
-			if (hasEncryptedExtensions) parseExtensions(plaintext);
+			if (hasEncryptedExtensions) parseExtensions(plaintext, true);
 
 			// If the MPAN extension was received, store the MPAN
 			if (!ctx.isMulticast) {
