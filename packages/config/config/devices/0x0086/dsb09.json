@@ -41,8 +41,7 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/aeotec_template.json#selective_reporting",
-			"label": "Selective Reporting"
+			"$import": "templates/aeotec_template.json#selective_reporting"
 		},
 		{
 			"#": "4",
@@ -75,6 +74,29 @@
 		{
 			"#": "11",
 			"$import": "templates/aeotec_template.json#percent_threshold_clamp3"
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Report While Battery Powered"
+		},
+		{
+			"#": "20",
+			"label": "Current Power Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Battery",
+					"value": 0
+				},
+				{
+					"label": "USB power",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "100",
@@ -224,19 +246,26 @@
 			"#": "111",
 			"$import": "templates/aeotec_template.json#report_interval",
 			"label": "Report Interval (Group 1)",
+			"description": "Rounded up to the nearest 4 minutes when battery powered",
 			"maxValue": 167400
 		},
 		{
 			"#": "112",
 			"$import": "templates/aeotec_template.json#report_interval",
 			"label": "Report Interval (Group 2)",
+			"description": "Rounded up to the nearest 4 minutes when battery powered",
 			"maxValue": 167400
 		},
 		{
 			"#": "113",
 			"$import": "templates/aeotec_template.json#report_interval",
 			"label": "Report Interval (Group 3)",
+			"description": "Rounded up to the nearest 4 minutes when battery powered",
 			"maxValue": 167400
+		},
+		{
+			"#": "254",
+			"$import": "templates/aeotec_template.json#device_tag"
 		},
 		{
 			"#": "255",
