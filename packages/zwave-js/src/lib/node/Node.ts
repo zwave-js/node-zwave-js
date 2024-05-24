@@ -133,6 +133,7 @@ import {
 	ThermostatModeCCValues,
 } from "@zwave-js/cc/ThermostatModeCC";
 import {
+	VersionCCCapabilitiesGet,
 	VersionCCCommandClassGet,
 	VersionCCGet,
 	VersionCCValues,
@@ -3115,6 +3116,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleVersionGet(command);
 		} else if (command instanceof VersionCCCommandClassGet) {
 			return this.handleVersionCommandClassGet(command);
+		} else if (command instanceof VersionCCCapabilitiesGet) {
+			return this.handleVersionCapabilitiesGet(command);
 		} else if (command instanceof ManufacturerSpecificCCGet) {
 			return this.handleManufacturerSpecificGet(command);
 		} else if (command instanceof AssociationGroupInfoCCNameGet) {
@@ -3968,7 +3971,7 @@ protocol version:      ${this.protocolVersion}`;
 				zwavePlusVersion: 2,
 				roleType: ZWavePlusRoleType.CentralStaticController,
 				nodeType: ZWavePlusNodeType.Node,
-				installerIcon: 0x0500, // Generic Gateway
+				installerIcon: 0x0500, // Generic Gateway // FIXME: Make configurable
 				userIcon: 0x0500, // Generic Gateway
 			});
 	}
@@ -4011,6 +4014,25 @@ protocol version:      ${this.protocolVersion}`;
 			});
 
 		await api.reportCCVersion(command.requestedCC);
+	}
+
+	private async handleVersionCapabilitiesGet(
+		command: VersionCCCapabilitiesGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Version, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		await api.reportCapabilities();
 	}
 
 	private async handleManufacturerSpecificGet(
