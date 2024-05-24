@@ -87,8 +87,10 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ManufacturerSpecificCommand.Get:
+			case ManufacturerSpecificCommand.Report:
 				return true; // This is mandatory
 			case ManufacturerSpecificCommand.DeviceSpecificGet:
+			case ManufacturerSpecificCommand.DeviceSpecificReport:
 				return this.version >= 2;
 		}
 		return super.supportsCommand(cmd);
@@ -141,6 +143,23 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			this.commandOptions,
 		);
 		return response?.deviceId;
+	}
+
+	@validateArgs()
+	public async sendReport(
+		options: ManufacturerSpecificCCReportOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			ManufacturerSpecificCommand,
+			ManufacturerSpecificCommand.Report,
+		);
+
+		const cc = new ManufacturerSpecificCCReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -202,7 +221,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 }
 
 // @publicAPI
-export interface ManufacturerSpecificCCReportOptions extends CCCommandOptions {
+export interface ManufacturerSpecificCCReportOptions {
 	manufacturerId: number;
 	productType: number;
 	productId: number;
@@ -213,7 +232,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
 		host: ZWaveHost,
 		options:
-			| ManufacturerSpecificCCReportOptions
+			| (ManufacturerSpecificCCReportOptions & CCCommandOptions)
 			| CommandClassDeserializationOptions,
 	) {
 		super(host, options);

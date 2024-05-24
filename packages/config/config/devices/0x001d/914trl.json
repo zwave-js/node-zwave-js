@@ -23,19 +23,19 @@
 	"paramInformation": [
 		{
 			"#": "40",
-			"$import": "templates/config_template.json#factory_default"
+			"$import": "templates/leviton_template.json#factory_default"
 		},
 		{
 			"#": "31[0x100000]",
-			"$import": "templates/config_template.json#auto_buzz"
+			"$import": "templates/leviton_template.json#auto_buzz"
 		},
 		{
 			"#": "31[0x01000000]",
-			"$import": "templates/config_template.json#auto_lock"
+			"$import": "templates/leviton_template.json#auto_lock"
 		},
 		{
 			"#": "31[0x10000000]",
-			"$import": "templates/config_template.json#led_status"
+			"$import": "templates/leviton_template.json#led_status"
 		}
 	]
 }

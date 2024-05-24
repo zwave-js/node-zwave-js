@@ -11,7 +11,6 @@
 	"generic": {
 		"0x01": {
 			"label": "Remote Controller",
-			"controlledCCs": ["Basic"],
 			"maySupportBasicCC": false,
 			"specific": {
 				"0x01": {
@@ -19,23 +18,10 @@
 					"zwavePlusDeviceType": "Remote Control - Multipurpose"
 				},
 				"0x02": {
-					"label": "Portable Scene Controller",
-					"supportedCCs": ["Association", "Scene Controller Configuration", "Manufacturer Specific"],
-					"controlledCCs": ["Scene Activation"]
+					"label": "Portable Scene Controller"
 				},
 				"0x03": {
-					"label": "Portable Installer Tool",
-					"supportedCCs": ["Controller Replication", "Multi Command", "Manufacturer Specific", "Version"],
-					"controlledCCs": [
-						"Association",
-						"Configuration",
-						"Controller Replication",
-						"Multi Channel",
-						"Multi Channel Association",
-						"Manufacturer Specific",
-						"Version",
-						"Wake Up"
-					]
+					"label": "Portable Installer Tool"
 				},
 				"0x04": {
 					"label": "AV Remote Control",
@@ -50,180 +36,61 @@
 		"0x02": {
 			"label": "Static Controller",
 			"zwavePlusDeviceType": "Gateway",
-			"controlledCCs": ["Basic"],
 			"specific": {
 				"0x01": {
 					"label": "PC Controller",
 					"zwavePlusDeviceType": "Central Controller"
 				},
 				"0x02": {
-					"label": "Scene Controller",
-					"supportedCCs": ["Association", "Basic", "Manufacturer Specific", "Scene Controller Configuration"],
-					"controlledCCs": ["Scene Activation"]
+					"label": "Scene Controller"
 				},
 				"0x03": {
-					"label": "Static Installer Tool",
-					"supportedCCs": ["Controller Replication", "Multi Command", "Manufacturer Specific", "Version"],
-					"controlledCCs": [
-						"Association",
-						"Configuration",
-						"Controller Replication",
-						"Multi Channel",
-						"Multi Channel Association",
-						"Manufacturer Specific",
-						"Version",
-						"Wake Up"
-					]
+					"label": "Static Installer Tool"
 				},
 				"0x04": {
 					"label": "Set Top Box",
-					"zwavePlusDeviceType": "Set Top Box",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Inclusion Controller",
-						"Powerlevel",
-						"Manufacturer Specific",
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						"Simple AV Control",
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					],
-					"controlledCCs": [
-						"Anti-Theft Unlock", // V1
-						"Association", // V2+
-						"Basic",
-						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
-						"Multi Channel", // V4+
-						"Multi Channel Association", // V3+
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						"Wake Up" // V2+
-					]
+					"zwavePlusDeviceType": "Set Top Box"
 				},
 				"0x05": {
 					"label": "Sub System Controller",
-					"zwavePlusDeviceType": "Sub System Controller",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Inclusion Controller",
-						"Manufacturer Specific",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					],
-					"controlledCCs": [
-						"Basic",
-						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
-						"Multi Channel", // V4+
-						"Wake Up" // V2+
-					]
+					"zwavePlusDeviceType": "Sub System Controller"
 				},
 				"0x06": {
 					"label": "TV",
-					"zwavePlusDeviceType": "TV",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Inclusion Controller",
-						"Manufacturer Specific",
-						"Powerlevel",
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						"Simple AV Control",
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					],
-					"controlledCCs": [
-						"Anti-Theft Unlock",
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
-						"Multi Channel", // V4+
-						"Multi Channel Association", // V3+
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						"Wake Up" // V2+
-					]
+					"zwavePlusDeviceType": "TV"
 				},
 				"0x07": {
 					"label": "Gateway",
 					"zwavePlusDeviceType": "Gateway",
-					"maySupportBasicCC": false,
-					"supportedCCs": [
-						"Manufacturer Specific",
-						// "Security", (some devices only support S2)
-						"Version"
-					],
-					"controlledCCs": [
-						// "Security", (some devices only support S2)
-						"Multi Channel"
-					]
+					"maySupportBasicCC": false
 				}
 			}
 		},
 		"0x03": {
 			"label": "AV Control Point",
 			"zwavePlusDeviceType": "AV Control Point",
-			"supportedCCs": ["Basic"],
 			"specific": {
 				"0x01": {
 					"label": "Sound Switch",
-					"zwavePlusDeviceType": "Sound Switch",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						"Battery",
-						"Sound Switch",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Sound Switch"
 				},
 				"0x04": {
-					"label": "Satellite Receiver",
-					"supportedCCs": ["Simple AV Control", "Manufacturer Specific", "Version"]
+					"label": "Satellite Receiver"
 				},
 				"0x11": {
-					"label": "Satellite Receiver V2",
-					"supportedCCs": ["Simple AV Control", "Manufacturer Specific", "Version"]
+					"label": "Satellite Receiver V2"
 				},
 				"0x12": {
-					"label": "Doorbell",
-					"supportedCCs": ["Binary Sensor", "Association", "Manufacturer Specific", "Version"]
+					"label": "Doorbell"
 				}
 			}
 		},
 		"0x04": {
 			"label": "Display",
-			"supportedCCs": ["Basic"],
 			"specific": {
 				"0x01": {
 					"label": "Simple Display",
-					"zwavePlusDeviceType": "Display - Simple",
-					"supportedCCs": ["Screen Attributes", "Screen Meta Data", "Manufacturer Specific", "Version"]
+					"zwavePlusDeviceType": "Display - Simple"
 				}
 			}
 		},
@@ -266,52 +133,21 @@
 					"label": "Heating Thermostat"
 				},
 				"0x02": {
-					"label": "General Thermostat",
-					"supportedCCs": ["Manufacturer Specific", "Thermostat Mode", "Thermostat Setpoint"]
+					"label": "General Thermostat"
 				},
 				"0x03": {
-					"label": "Setback Schedule Thermostat",
-					"supportedCCs": [
-						"Climate Control Schedule",
-						"Manufacturer Specific",
-						"Multi Command",
-						"Version"
-						// TODO: If battery-powered: Basic, Wake Up
-					],
-					"controlledCCs": ["Climate Control Schedule", "Multi Command", "Clock"]
+					"label": "Setback Schedule Thermostat"
 				},
 				"0x04": {
-					"label": "Setpoint Thermostat",
-					"supportedCCs": [
-						"Manufacturer Specific",
-						"Multi Command",
-						"Thermostat Setpoint",
-						"Version"
-						// TODO: If battery-powered: Basic, Wake Up V2
-					]
+					"label": "Setpoint Thermostat"
 				},
 				"0x05": {
 					"label": "Setback Thermostat",
-					"zwavePlusDeviceType": "Thermostat - Setback",
-					"supportedCCs": [
-						"Manufacturer Specific",
-						"Thermostat Mode",
-						"Thermostat Setpoint",
-						"Thermostat Setback",
-						"Version"
-						// TODO: If battery-powered: Basic, Wake Up V2, Multi Command
-					]
+					"zwavePlusDeviceType": "Thermostat - Setback"
 				},
 				"0x06": {
 					"label": "General Thermostat V2",
-					"zwavePlusDeviceType": "Thermostat - HVAC",
-					"supportedCCs": [
-						"Basic",
-						"Manufacturer Specific",
-						"Thermostat Mode",
-						"Thermostat Setpoint",
-						"Version"
-					]
+					"zwavePlusDeviceType": "Thermostat - HVAC"
 				}
 			}
 		},
@@ -319,14 +155,12 @@
 			"label": "Window Covering",
 			"specific": {
 				"0x01": {
-					"label": "Simple Window Covering Control",
-					"supportedCCs": ["Basic Window Covering"]
+					"label": "Simple Window Covering Control"
 				}
 			}
 		},
 		"0x0f": {
 			"label": "Repeater Slave",
-			"supportedCCs": ["Basic"],
 			"specific": {
 				"0x01": {
 					"label": "Repeater Slave",
@@ -336,262 +170,102 @@
 				"0x03": {
 					"label": "IR Repeater",
 					"zwavePlusDeviceType": "IR Repeater",
-					"maySupportBasicCC": false,
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"IR Repeater",
-						"Manufacturer Specific",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"maySupportBasicCC": false
 				}
 			}
 		},
 		"0x10": {
 			"label": "Binary Switch",
-			"supportedCCs": ["Basic", "Binary Switch"],
 			"specific": {
 				"0x01": {
 					"label": "Binary Power Switch",
-					"zwavePlusDeviceType": "On/Off Power Switch",
-					"supportedCCs": ["All Switch"]
+					"zwavePlusDeviceType": "On/Off Power Switch"
 				},
 				"0x02": {
 					"label": "Tunable Color Switch",
-					"zwavePlusDeviceType": "Color Switch",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						"Binary Switch",
-						"Color Switch",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Color Switch"
 				},
 				"0x03": {
-					"label": "Binary Scene Switch",
-					"supportedCCs": [
-						"All Switch",
-						"Manufacturer Specific",
-						"Scene Activation",
-						"Scene Actuator Configuration"
-					]
+					"label": "Binary Scene Switch"
 				},
 				"0x04": {
 					"label": "Power Strip Switch",
-					"zwavePlusDeviceType": "Power Strip",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						"Binary Switch",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Multi Channel", // V4+
-						"Multi Channel Association", // V3+
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Power Strip"
 				},
 				"0x05": {
 					"label": "Siren",
-					"zwavePlusDeviceType": "Siren",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						"Battery",
-						"Binary Switch",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Siren"
 				},
 				"0x06": {
 					"label": "Valve",
-					"zwavePlusDeviceType": "Valve (open/close)",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						"Battery",
-						"Binary Switch",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Valve (open/close)"
 				},
 				"0x07": {
 					"label": "Irrigation Control",
-					"zwavePlusDeviceType": "Irrigation Control",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						"Binary Switch",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Irrigation Control"
 				}
 			}
 		},
 		"0x11": {
 			"label": "Multilevel Switch",
-			"supportedCCs": ["Basic", "Multilevel Switch"],
 			"specific": {
 				"0x01": {
 					"label": "Multilevel Power Switch",
-					"zwavePlusDeviceType": "Light Dimmer Switch",
-					"supportedCCs": ["All Switch"]
+					"zwavePlusDeviceType": "Light Dimmer Switch"
 				},
 				"0x02": {
 					"label": "Tunable Color Switch",
-					"zwavePlusDeviceType": "Color Switch",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						"Color Switch",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Multilevel Switch",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Color Switch"
 				},
 				"0x03": {
-					"label": "Multiposition Motor",
-					"supportedCCs": ["Manufacturer Specific", "Version"]
+					"label": "Multiposition Motor"
 				},
 				"0x04": {
-					"label": "Multilevel Scene Switch",
-					"supportedCCs": [
-						"All Switch",
-						"Scene Activation",
-						"Scene Actuator Configuration",
-						"Manufacturer Specific"
-					]
+					"label": "Multilevel Scene Switch"
 				},
 				"0x05": {
 					"label": "Motor Control Class A",
-					"zwavePlusDeviceType": "Window Covering - No Position/Endpoint",
-					"supportedCCs": [
-						"Binary Switch",
-						"Multilevel Switch", // V3
-						"Manufacturer Specific",
-						"Version"
-					]
+					"zwavePlusDeviceType": "Window Covering - No Position/Endpoint"
 				},
 				"0x06": {
 					"label": "Motor Control Class B",
-					"zwavePlusDeviceType": "Window Covering - Endpoint Aware",
-					"supportedCCs": [
-						"Binary Switch",
-						"Multilevel Switch", // V3
-						"Manufacturer Specific",
-						"Version"
-					]
+					"zwavePlusDeviceType": "Window Covering - Endpoint Aware"
 				},
 				"0x07": {
 					"label": "Motor Control Class C",
-					"zwavePlusDeviceType": "Window Covering - Position/Endpoint Aware",
-					"supportedCCs": [
-						"Binary Switch",
-						"Multilevel Switch", // V3
-						"Manufacturer Specific",
-						"Version"
-					]
+					"zwavePlusDeviceType": "Window Covering - Position/Endpoint Aware"
 				},
 				"0x08": {
 					"label": "Fan Switch",
-					"zwavePlusDeviceType": "Fan Switch",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Basic",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Multilevel Switch",
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Fan Switch"
 				}
 			}
 		},
 		"0x12": {
 			"label": "Remote Switch",
-			"controlledCCs": ["Basic"],
 			"specific": {
 				"0x01": {
-					"label": "Binary Remote Switch",
-					"controlledCCs": ["Binary Switch"]
+					"label": "Binary Remote Switch"
 				},
 				"0x02": {
-					"label": "Multilevel Remote Switch",
-					"controlledCCs": ["Multilevel Switch"]
+					"label": "Multilevel Remote Switch"
 				},
 				"0x03": {
-					"label": "Binary Toggle Remote Switch",
-					"controlledCCs": ["Binary Toggle Switch"]
+					"label": "Binary Toggle Remote Switch"
 				},
 				"0x04": {
-					"label": "Multilevel Toggle Remote Switch",
-					"controlledCCs": ["Multilevel Toggle Switch"]
+					"label": "Multilevel Toggle Remote Switch"
 				}
 			}
 		},
 		"0x13": {
 			"label": "Toggle Switch",
-			"supportedCCs": ["Basic"],
 			"specific": {
 				"0x01": {
-					"label": "Binary Toggle Switch",
-					"supportedCCs": ["Binary Switch", "Binary Toggle Switch"]
+					"label": "Binary Toggle Switch"
 				},
 				"0x02": {
-					"label": "Multilevel Toggle Switch",
-					"supportedCCs": ["Multilevel Switch", "Multilevel Toggle Switch"]
+					"label": "Multilevel Toggle Switch"
 				}
 			}
 		},
@@ -608,11 +282,9 @@
 		},
 		"0x16": {
 			"label": "Ventilation",
-			"supportedCCs": ["Basic"],
 			"specific": {
 				"0x01": {
-					"label": "Residential Heat Recovery Ventilation",
-					"supportedCCs": ["HRV Control", "HRV Status", "Manufacturer Specific", "Version"]
+					"label": "Residential Heat Recovery Ventilation"
 				}
 			}
 		},
@@ -636,7 +308,6 @@
 		},
 		"0x20": {
 			"label": "Binary Sensor",
-			"supportedCCs": ["Basic", "Binary Sensor"],
 			"specific": {
 				"0x01": {
 					"label": "Routing Binary Sensor"
@@ -645,7 +316,6 @@
 		},
 		"0x21": {
 			"label": "Multilevel Sensor",
-			"supportedCCs": ["Basic", "Multilevel Sensor"],
 			"specific": {
 				"0x01": {
 					"label": "Routing Multilevel Sensor",
@@ -655,8 +325,7 @@
 			}
 		},
 		"0x30": {
-			"label": "Pulse Meter",
-			"supportedCCs": ["Basic", "Pulse Meter"]
+			"label": "Pulse Meter"
 		},
 		"0x31": {
 			"label": "Meter",
@@ -664,37 +333,14 @@
 			"specific": {
 				"0x01": {
 					"label": "Simple Meter",
-					"zwavePlusDeviceType": "Sub Energy Meter",
-					"supportedCCs": ["Meter", "Manufacturer Specific", "Version"]
+					"zwavePlusDeviceType": "Sub Energy Meter"
 				},
 				"0x02": {
-					"label": "Advanced Energy Control",
-					"supportedCCs": [
-						"Meter Table Monitor",
-						"Meter Table Configuration",
-						"Manufacturer Specific",
-						"Version"
-					]
+					"label": "Advanced Energy Control"
 				},
 				"0x03": {
 					"label": "Simple Whole Home Meter",
-					"zwavePlusDeviceType": "Whole Home Meter - Simple",
-					"supportedCCs": [
-						"Association", // V2+
-						"Association Group Information",
-						"Battery",
-						// "CRC-16 Encapsulation", (trust the NIF! Assuming support would break communication)
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Meter", // V2+
-						"Powerlevel",
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Wake Up", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"zwavePlusDeviceType": "Whole Home Meter - Simple"
 				}
 			}
 		},
@@ -702,228 +348,94 @@
 			"label": "Entry Control",
 			"specific": {
 				"0x01": {
-					"label": "Door Lock",
-					"supportedCCs": ["Basic", "Lock"]
+					"label": "Door Lock"
 				},
 				"0x02": {
-					"label": "Advanced Door Lock",
-					"supportedCCs": ["Basic", "Door Lock", "Manufacturer Specific", "Version"]
+					"label": "Advanced Door Lock"
 				},
 				"0x03": {
 					"label": "Secure Keypad Door Lock",
 					"zwavePlusDeviceType": "Door Lock - Keypad",
-					"requiresSecurity": true,
-					"supportedCCs": [
-						"Basic",
-						"Door Lock",
-						"User Code",
-						"Manufacturer Specific",
-						// "Security", (some devices only support S2)
-						"Version"
-					]
+					"requiresSecurity": true
 				},
 				"0x05": {
 					"label": "Secure Door",
 					"zwavePlusDeviceType": "Motorized Barrier - GDO",
-					"requiresSecurity": true,
-					"supportedCCs": [
-						"Application Status",
-						"Association", // V2+
-						"Association Group Information",
-						"Barrier Operator",
-						"Battery",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Notification", // V4+
-						"Powerlevel",
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"requiresSecurity": true
 				},
 				"0x06": {
 					"label": "Secure Gate",
 					"zwavePlusDeviceType": "Motorized Barrier - Gate",
-					"requiresSecurity": true,
-					"supportedCCs": [
-						"Application Status",
-						"Association", // V2+
-						"Association Group Information",
-						"Barrier Operator",
-						"Battery",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Notification", // V4+
-						"Powerlevel",
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"requiresSecurity": true
 				},
 				"0x07": {
 					"label": "Secure Barrier Add-on",
 					"zwavePlusDeviceType": "Motorized Barrier - Add-on",
-					"requiresSecurity": true,
-					"supportedCCs": [
-						"Application Status",
-						"Association", // V2+
-						"Association Group Information",
-						"Barrier Operator",
-						"Battery",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Notification", // V4+
-						"Powerlevel",
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"requiresSecurity": true
 				},
 				"0x08": {
 					"label": "Secure Barrier Open only",
 					"zwavePlusDeviceType": "Motorized Barrier - Open only",
-					"requiresSecurity": true,
-					"supportedCCs": [
-						"Application Status",
-						"Association", // V2+
-						"Association Group Information",
-						"Barrier Operator",
-						"Battery",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Notification", // V4+
-						"Powerlevel",
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"requiresSecurity": true
 				},
 				"0x09": {
 					"label": "Secure Barrier Close only",
 					"zwavePlusDeviceType": "Motorized Barrier - Close only",
-					"requiresSecurity": true,
-					"supportedCCs": [
-						"Application Status",
-						"Association", // V2+
-						"Association Group Information",
-						"Barrier Operator",
-						"Battery",
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Manufacturer Specific",
-						"Notification", // V4+
-						"Powerlevel",
-						// "Security", (some devices only support S2)
-						// "Security 2", (older devices don't always support S2)
-						// "Supervision", (trust the NIF! Assuming support would break communication)
-						// "Transport Service", // V2+ (trust the NIF! Assuming support would break communication)
-						"Version", // V2+
-						"Z-Wave Plus Info" // V2+
-					]
+					"requiresSecurity": true
 				},
 				"0x0a": {
 					"label": "Lockbox",
 					"zwavePlusDeviceType": "Lockbox",
-					"requiresSecurity": true,
-					"supportedCCs": [
-						// MUST NOT support Basic
-						"Notification",
-						"Association",
-						"Door Lock",
-						"Manufacturer Specific",
-						// "Security", (some devices only support S2)
-						"Version"
-					]
+					"requiresSecurity": true
 				},
 				"0x0b": {
 					"label": "Secure Keypad",
 					"zwavePlusDeviceType": "Entry Control Keypad",
 					"requiresSecurity": true,
-					"maySupportBasicCC": false,
-					"supportedCCs": [
-						// "Device Reset Locally", (we can't know if the device can be reset)
-						"Entry Control",
-						"Manufacturer Specific",
-						// "Security", (some devices only support S2)
-						"Version"
-					]
+					"maySupportBasicCC": false
 				}
 			}
 		},
 		"0x50": {
 			"label": "Semi-Interoperable",
-			"supportedCCs": ["Basic", "Manufacturer Specific", "Version", "Proprietary"],
 			"specific": {
 				"0x01": {
-					"label": "Energy Production",
-					"supportedCCs": ["Energy Production"]
+					"label": "Energy Production"
 				}
 			}
 		},
 		"0xa1": {
 			"label": "Alarm Sensor",
-			"supportedCCs": ["Basic"],
 			"specific": {
 				"0x01": {
-					"label": "Basic Routing Alarm Sensor",
-					"supportedCCs": ["Alarm Sensor", "Association", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Basic Routing Alarm Sensor"
 				},
 				"0x02": {
-					"label": "Routing Alarm Sensor",
-					"supportedCCs": ["Alarm Sensor", "Association", "Battery", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Routing Alarm Sensor"
 				},
 				"0x03": {
-					"label": "Basic Zensor Net Alarm Sensor",
-					"supportedCCs": ["Alarm Sensor", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Basic Zensor Net Alarm Sensor"
 				},
 				"0x04": {
-					"label": "Zensor Net Alarm Sensor",
-					"supportedCCs": ["Alarm Sensor", "Battery", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Zensor Net Alarm Sensor"
 				},
 				"0x05": {
-					"label": "Advanced Zensor Net Alarm Sensor",
-					"supportedCCs": ["Alarm Sensor", "Association", "Battery", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Advanced Zensor Net Alarm Sensor"
 				},
 				"0x06": {
-					"label": "Basic Routing Smoke Sensor",
-					"supportedCCs": ["Alarm Sensor", "Association", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Basic Routing Smoke Sensor"
 				},
 				"0x07": {
-					"label": "Routing Smoke Sensor",
-					"supportedCCs": ["Alarm Sensor", "Association", "Battery", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Routing Smoke Sensor"
 				},
 				"0x08": {
-					"label": "Basic Zensor Net Smoke Sensor",
-					"supportedCCs": ["Alarm Sensor", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Basic Zensor Net Smoke Sensor"
 				},
 				"0x09": {
-					"label": "Zensor Net Smoke Sensor",
-					"supportedCCs": ["Alarm Sensor", "Battery", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Zensor Net Smoke Sensor"
 				},
 				"0x0a": {
-					"label": "Advanced Zensor Net Smoke Sensor",
-					"supportedCCs": ["Alarm Sensor", "Association", "Battery", "Manufacturer Specific", "Version"],
-					"controlledCCs": ["Alarm Sensor"]
+					"label": "Advanced Zensor Net Smoke Sensor"
 				}
 			}
 		},

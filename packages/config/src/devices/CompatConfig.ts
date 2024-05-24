@@ -76,18 +76,6 @@ compat option disableAutoRefresh must be true or omitted`,
 			this.disableAutoRefresh = definition.disableAutoRefresh;
 		}
 
-		if (definition.disableBasicMapping != undefined) {
-			if (definition.disableBasicMapping !== true) {
-				throwInvalidConfig(
-					"devices",
-					`config/devices/${filename}:
-compat option disableBasicMapping must be true or omitted`,
-				);
-			}
-
-			this.disableBasicMapping = definition.disableBasicMapping;
-		}
-
 		if (definition.disableCallbackFunctionTypeCheck != undefined) {
 			if (
 				!isArray(definition.disableCallbackFunctionTypeCheck)
@@ -131,18 +119,6 @@ compat option disableStrictMeasurementValidation must be true or omitted`,
 				definition.disableStrictMeasurementValidation;
 		}
 
-		if (definition.enableBasicSetMapping != undefined) {
-			if (definition.enableBasicSetMapping !== true) {
-				throwInvalidConfig(
-					"devices",
-					`config/devices/${filename}:
-compat option enableBasicSetMapping must be true or omitted`,
-				);
-			}
-
-			this.enableBasicSetMapping = definition.enableBasicSetMapping;
-		}
-
 		if (definition.forceNotificationIdleReset != undefined) {
 			if (definition.forceNotificationIdleReset !== true) {
 				throwInvalidConfig(
@@ -178,6 +154,30 @@ compat option forceSceneControllerGroupCount must be between 0 and 255!`,
 
 			this.forceSceneControllerGroupCount =
 				definition.forceSceneControllerGroupCount;
+		}
+
+		if (definition.mapBasicReport != undefined) {
+			if (!isBasicReportMapping(definition.mapBasicReport)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapBasicReport contains an invalid value`,
+				);
+			}
+
+			this.mapBasicReport = definition.mapBasicReport;
+		}
+
+		if (definition.mapBasicSet != undefined) {
+			if (!isBasicSetMapping(definition.mapBasicSet)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapBasicSet contains an invalid value`,
+				);
+			}
+
+			this.mapBasicSet = definition.mapBasicSet;
 		}
 
 		if (definition.preserveRootApplicationCCValueIDs != undefined) {
@@ -259,18 +259,6 @@ error in compat option skipConfigurationInfoQuery`,
 
 			this.skipConfigurationInfoQuery =
 				definition.skipConfigurationInfoQuery;
-		}
-
-		if (definition.treatBasicSetAsEvent != undefined) {
-			if (definition.treatBasicSetAsEvent !== true) {
-				throwInvalidConfig(
-					"devices",
-					`config/devices/${filename}:
-error in compat option treatBasicSetAsEvent`,
-				);
-			}
-
-			this.treatBasicSetAsEvent = definition.treatBasicSetAsEvent;
 		}
 
 		if (definition.treatMultilevelSwitchSetAsEvent != undefined) {
@@ -611,15 +599,15 @@ compat option overrideQueries must be an object!`,
 		"*" | readonly number[]
 	>;
 	public readonly disableAutoRefresh?: boolean;
-	public readonly disableBasicMapping?: boolean;
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly disableStrictMeasurementValidation?: boolean;
 	public readonly disableCallbackFunctionTypeCheck?: number[];
-	public readonly enableBasicSetMapping?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
 	public readonly forceSceneControllerGroupCount?: number;
 	public readonly manualValueRefreshDelayMs?: number;
 	public readonly mapRootReportsToEndpoint?: number;
+	public readonly mapBasicReport?: BasicReportMapping;
+	public readonly mapBasicSet?: BasicSetMapping;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
 		precision?: number;
@@ -631,7 +619,6 @@ compat option overrideQueries must be an object!`,
 	public readonly reportTimeout?: number;
 	public readonly skipConfigurationNameQuery?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
-	public readonly treatBasicSetAsEvent?: boolean;
 	public readonly treatMultilevelSwitchSetAsEvent?: boolean;
 	public readonly treatSetAsReport?: ReadonlySet<string>;
 	public readonly treatDestinationEndpointAsSource?: boolean;
@@ -656,14 +643,14 @@ compat option overrideQueries must be an object!`,
 			"addCCs",
 			"removeCCs",
 			"disableAutoRefresh",
-			"disableBasicMapping",
 			"disableCallbackFunctionTypeCheck",
 			"disableStrictEntryControlDataValidation",
 			"disableStrictMeasurementValidation",
-			"enableBasicSetMapping",
 			"forceNotificationIdleReset",
 			"forceSceneControllerGroupCount",
 			"manualValueRefreshDelayMs",
+			"mapBasicReport",
+			"mapBasicSet",
 			"mapRootReportsToEndpoint",
 			"overrideFloatEncoding",
 			"overrideQueries",
@@ -673,7 +660,6 @@ compat option overrideQueries must be an object!`,
 			"removeEndpoints",
 			"skipConfigurationNameQuery",
 			"skipConfigurationInfoQuery",
-			"treatBasicSetAsEvent",
 			"treatMultilevelSwitchSetAsEvent",
 			"treatSetAsReport",
 			"treatDestinationEndpointAsSource",
@@ -1053,4 +1039,42 @@ export interface CompatOverrideQuery {
 	 * The given metadata will be merged with statically defined value metadata.
 	 */
 	extendMetadata?: Record<string, any>;
+}
+
+const basicReportMappings = [
+	false,
+	"auto",
+	"Binary Sensor",
+] as const;
+
+/**
+ * Defines how to handle a received Basic CC Report:
+ * - "auto": map it to a different CC based on the device type, with fallback to `false`
+ * - false: treat the report verbatim without mapping
+ * - "Binary Sensor": treat it as a Binary Sensor CC Report, regardless of device type
+ */
+export type BasicReportMapping = typeof basicReportMappings[number];
+
+function isBasicReportMapping(v: unknown): v is BasicReportMapping {
+	return basicReportMappings.includes(v as any);
+}
+
+const basicSetMappings = [
+	"event",
+	"report",
+	"auto",
+	"Binary Sensor",
+] as const;
+
+/**
+ * Defines how to handle a received Basic CC Set:
+ * - "event": emit an event for the special `event` CC value
+ * - "report": treat it as as a Basic CC Report (default)
+ * - "auto": map it to a different CC based on the device type, with fallback to Basic CC report
+ * - "Binary Sensor": treat it as a Binary Sensor CC Report, regardless of device type
+ */
+export type BasicSetMapping = typeof basicSetMappings[number];
+
+function isBasicSetMapping(v: unknown): v is BasicSetMapping {
+	return basicSetMappings.includes(v as any);
 }

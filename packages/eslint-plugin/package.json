@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/eslint-plugin",
-  "version": "12.4.3",
+  "version": "12.9.0",
   "description": "zwave-js: custom ESLint rules",
   "private": true,
   "keywords": [],
@@ -34,9 +34,9 @@
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
-    "@types/eslint": "^8.44.3",
-    "@typescript-eslint/utils": "^6.7.0",
+    "@types/eslint": "^8.56.7",
+    "@typescript-eslint/utils": "^7.5.0",
     "@zwave-js/core": "workspace:*",
-    "typescript": "5.2.2"
+    "typescript": "5.4.4"
   }
 }

@@ -309,7 +309,7 @@ export class AssociationCC extends CommandClass {
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached(applHost, endpoint);
-		const valueDB = applHost.getValueDB(endpoint.nodeId)!;
+		const valueDB = applHost.getValueDB(endpoint.nodeId);
 		for (let i = 1; i <= groupCount; i++) {
 			// Add all root destinations
 			const nodes = valueDB.getValue<number[]>(

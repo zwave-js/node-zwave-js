@@ -216,8 +216,8 @@ const importRegex =
 export function findImportRanges(docFile: string): ImportRange[] {
 	const matches = [...docFile.matchAll(importRegex)];
 	return matches.map((match) => ({
-		index: match.index!,
-		end: match.index! + match[0].length,
+		index: match.index,
+		end: match.index + match[0].length,
 		module: match.groups!.module,
 		symbol: match.groups!.symbol,
 		import: match.groups!.import,

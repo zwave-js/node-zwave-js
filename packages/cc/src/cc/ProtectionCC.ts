@@ -509,7 +509,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			);
 		} else {
 			this.local = options.local;
-			this.rf = options.rf ?? RFProtectionState.Unprotected;
+			this.rf = options.rf;
 		}
 	}
 
@@ -517,11 +517,10 @@ export class ProtectionCCSet extends ProtectionCC {
 	public rf?: RFProtectionState;
 
 	public serialize(): Buffer {
-		const payload = [this.local & 0b1111];
-		if (this.version >= 2 && this.rf != undefined) {
-			payload.push(this.rf & 0b1111);
-		}
-		this.payload = Buffer.from(payload);
+		this.payload = Buffer.from([
+			this.local & 0b1111,
+			(this.rf ?? RFProtectionState.Unprotected) & 0b1111,
+		]);
 		return super.serialize();
 	}
 

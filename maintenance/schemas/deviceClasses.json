@@ -1,5 +1,5 @@
 {
-	"$schema": "http://json-schema.org/schema#",
+	"$schema": "https://json-schema.org/draft-07/schema",
 	"type": "object",
 	"properties": {
 		"basic": {
@@ -22,12 +22,6 @@
 						"requiresSecurity": {
 							"const": true
 						},
-						"supportedCCs": {
-							"$ref": "#/definitions/CCs"
-						},
-						"controlledCCs": {
-							"$ref": "#/definitions/CCs"
-						},
 						"maySupportBasicCC": {
 							"const": false
 						},
@@ -42,12 +36,6 @@
 										},
 										"requiresSecurity": {
 											"const": true
-										},
-										"supportedCCs": {
-											"$ref": "#/definitions/CCs"
-										},
-										"controlledCCs": {
-											"$ref": "#/definitions/CCs"
 										},
 										"maySupportBasicCC": {
 											"const": false
@@ -67,136 +55,5 @@
 		}
 	},
 	"required": ["basic", "generic"],
-	"additionalProperties": false,
-	"definitions": {
-		"CCs": {
-			"type": "array",
-			"items": {
-				"enum": [
-					"Alarm Sensor",
-					"Alarm Silence",
-					"All Switch",
-					"Anti-Theft",
-					"Anti-Theft Unlock",
-					"Application Capability",
-					"Application Status",
-					"Association",
-					"Association Command Configuration",
-					"Association Group Information",
-					"Authentication",
-					"Authentication Media Write",
-					"Barrier Operator",
-					"Basic",
-					"Basic Tariff Information",
-					"Basic Window Covering",
-					"Battery",
-					"Binary Sensor",
-					"Binary Switch",
-					"Binary Toggle Switch",
-					"Climate Control Schedule",
-					"Central Scene",
-					"Clock",
-					"Color Switch",
-					"Configuration",
-					"Controller Replication",
-					"CRC-16 Encapsulation",
-					"Demand Control Plan Configuration",
-					"Demand Control Plan Monitor",
-					"Device Reset Locally",
-					"Door Lock",
-					"Door Lock Logging",
-					"Energy Production",
-					"Entry Control",
-					"Firmware Update Meta Data",
-					"Generic Schedule",
-					"Geographic Location",
-					"Grouping Name",
-					"Hail",
-					"HRV Status",
-					"HRV Control",
-					"Humidity Control Mode",
-					"Humidity Control Operating State",
-					"Humidity Control Setpoint",
-					"Inclusion Controller",
-					"Indicator",
-					"IP Association",
-					"IP Configuration",
-					"IR Repeater",
-					"Irrigation",
-					"Language",
-					"Lock",
-					"Mailbox",
-					"Manufacturer Proprietary",
-					"Manufacturer Specific",
-					"Support/Control Mark",
-					"Meter",
-					"Meter Table Configuration",
-					"Meter Table Monitor",
-					"Meter Table Push Configuration",
-					"Move To Position Window Covering",
-					"Multi Channel",
-					"Multi Channel Association",
-					"Multi Command",
-					"Multilevel Sensor",
-					"Multilevel Switch",
-					"Multilevel Toggle Switch",
-					"Network Management Basic Node",
-					"Network Management Inclusion",
-					"Network Management Installation and Maintenance",
-					"Network Management Primary",
-					"Network Management Proxy",
-					"No Operation",
-					"Node Naming and Location",
-					"Node Provisioning",
-					"Notification",
-					"Powerlevel",
-					"Prepayment",
-					"Prepayment Encapsulation",
-					"Proprietary",
-					"Protection",
-					"Pulse Meter",
-					"Rate Table Configuration",
-					"Rate Table Monitor",
-					"Remote Association Activation",
-					"Remote Association Configuration",
-					"Scene Activation",
-					"Scene Actuator Configuration",
-					"Scene Controller Configuration",
-					"Schedule",
-					"Schedule Entry Lock",
-					"Screen Attributes",
-					"Screen Meta Data",
-					"Security",
-					"Security 2",
-					"Sensor Configuration",
-					"Simple AV Control",
-					"Sound Switch",
-					"Supervision",
-					"Tariff Table Configuration",
-					"Tariff Table Monitor",
-					"Thermostat Fan Mode",
-					"Thermostat Fan State",
-					"Thermostat Mode",
-					"Thermostat Operating State",
-					"Thermostat Setback",
-					"Thermostat Setpoint",
-					"Time",
-					"Time Parameters",
-					"Transport Service",
-					"User Code",
-					"Version",
-					"Wake Up",
-					"Window Covering",
-					"Z/IP",
-					"Z/IP 6LoWPAN",
-					"Z/IP Gateway",
-					"Z/IP Naming and Location",
-					"Z/IP ND",
-					"Z/IP Portal",
-					"Z-Wave Plus Info"
-				]
-			},
-			"additionalItems": false
-		}
-	}
+	"additionalProperties": false
 }

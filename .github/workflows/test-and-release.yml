@@ -38,7 +38,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -67,7 +67,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -127,7 +127,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -171,7 +171,7 @@ jobs:
         failure() &&
         github.event_name == 'pull_request' &&
         steps.lint.outputs.changed == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: lint-fix
         path: fix.patch
@@ -188,7 +188,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -215,7 +215,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -260,7 +260,7 @@ jobs:
 
   #   steps:
   #   - name: Checkout code
-  #     uses: actions/checkout@v3
+  #     uses: actions/checkout@v4
 
   #   - name: Restore Turbo Cache from previous jobs
   #     uses: ./.github/actions/build-cache-download
@@ -295,7 +295,10 @@ jobs:
   gh-cc-table:
     name: Update CC implementation status
     # Only run for master branch and don't run in forks
-    if: github.repository == 'zwave-js/node-zwave-js' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: |
+      github.repository == 'zwave-js/node-zwave-js' &&
+      github.ref == 'refs/heads/master' &&
+      github.event_name == 'push'
 
     needs: [build]
 
@@ -307,7 +310,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -322,18 +325,23 @@ jobs:
       run: yarn build $TURBO_FLAGS
 
     - name: Update CC table # (maybe)
-      uses: ./.github/actions/gh-cc-table
+      uses: actions/github-script@v7
       with:
-        githubToken: ${{ secrets.BOT_TOKEN }}
-      env:
-        CI: true
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateCCImplementationOverview.js`);
+          return main({github, context});
 
   # ===================
 
   generate-overview:
     name: Update toLogEntry overview
     # Only run for master branch and don't run in forks
-    if: github.repository == 'zwave-js/node-zwave-js' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: |
+      github.repository == 'zwave-js/node-zwave-js' &&
+      github.ref == 'refs/heads/master' &&
+      github.event_name == 'push'
 
     needs: [build]
 
@@ -345,7 +353,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -360,11 +368,13 @@ jobs:
       run: yarn build $TURBO_FLAGS
 
     - name: Update overview
-      uses: ./.github/actions/toLogEntry
+      uses: actions/github-script@v7
       with:
-        githubToken: ${{ secrets.BOT_TOKEN }}
-      env:
-        CI: true
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateToLogEntryOverview.js`);
+          return main({github, context});
 
   # ===================
 
@@ -385,7 +395,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -425,7 +435,7 @@ jobs:
 
 
     - name: Create Github Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:

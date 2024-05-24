@@ -78,6 +78,6 @@
 	],
 	"compat": {
 		// The device uses Basic Set to control other devices
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	}
 }

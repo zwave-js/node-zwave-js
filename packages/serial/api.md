@@ -15,12 +15,15 @@ import type { JSONObject } from '@zwave-js/shared/safe';
 import type { LogContext } from '@zwave-js/core/safe';
 import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessagePriority } from '@zwave-js/core';
-import * as net from 'node:net';
+import type * as net from 'node:net';
 import { PassThrough } from 'node:stream';
+import { RSSI } from '@zwave-js/core';
 import { SerialPort } from 'serialport';
 import { Transform } from 'node:stream';
 import { TransformCallback } from 'node:stream';
 import type { TypedClassDecorator } from '@zwave-js/shared/safe';
+import { UnknownZWaveChipType } from '@zwave-js/core';
+import { ZnifferProtocolDataRate } from '@zwave-js/core';
 import type { ZWaveApplicationHost } from '@zwave-js/host';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLogContainer } from '@zwave-js/core';
@@ -92,6 +95,11 @@ export class BootloaderScreenParser extends Transform {
 // @public (undocumented)
 export type DeserializingMessageConstructor<T extends Message> = new (host: ZWaveHost, options: MessageDeserializationOptions) => T;
 
+// Warning: (ae-missing-release-tag) "DeserializingZnifferMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type DeserializingZnifferMessageConstructor<T extends ZnifferMessage> = new (options: ZnifferMessageDeserializationOptions) => T;
+
 // Warning: (ae-missing-release-tag) "expectedCallback" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -109,9 +117,9 @@ export enum FunctionType {
     // (undocumented)
     AddNodeToNetwork = 74,
     // (undocumented)
-    ApplicationCommand = 4,
+    ApplicationCommand = 4,// Set up the controller NIF prior to starting or joining a Z-Wave network
     // (undocumented)
-    ApplicationUpdateRequest = 73,
+    ApplicationUpdateRequest = 73,// A message from another node
     // (undocumented)
     AssignPriorityReturnRoute = 79,
     // (undocumented)
@@ -121,191 +129,199 @@ export enum FunctionType {
     // (undocumented)
     AssignSUCReturnRoute = 81,
     // (undocumented)
-    BridgeApplicationCommand = 168,
+    BridgeApplicationCommand = 168,// Used to request the Z-Wave Protocol version data (700 series)
     // (undocumented)
-    DeleteReturnRoute = 71,
+    DeleteReturnRoute = 71,// Sent by the controller after the serial API has been started (again)
     // (undocumented)
-    DeleteSUCReturnRoute = 85,
+    DeleteSUCReturnRoute = 85,// Configure the Serial API
     // (undocumented)
-    EnterBootloader = 39,
+    EnterBootloader = 39,// Power the RF section of the stick down/up
     // (undocumented)
-    ExtExtWriteLongByte = 45,
+    ExtExtWriteLongByte = 45,// Set the CPU into sleep mode
     // (undocumented)
-    ExtNVMReadLongBuffer = 42,
+    ExtNVMReadLongBuffer = 42,// Send Node Information Frame of the stick
     // (undocumented)
-    ExtNVMReadLongByte = 44,
+    ExtNVMReadLongByte = 44,// Send data
     // (undocumented)
-    ExtNVMWriteLongBuffer = 43,
+    ExtNVMWriteLongBuffer = 43,// Send data using multicast
     // (undocumented)
     FirmwareUpdateNVM = 120,
     // (undocumented)
-    FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,
+    FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,// Abort sending data
     // (undocumented)
-    FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 209,
+    FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 209,// Set RF Power level
     // (undocumented)
-    FUNC_ID_SERIAL_API_SLAVE_NODE_INFO = 160,
+    FUNC_ID_SERIAL_API_SLAVE_NODE_INFO = 160,// ??
     // (undocumented)
-    FUNC_ID_ZW_CONTROLLER_CHANGE = 77,
+    FUNC_ID_ZW_CONTROLLER_CHANGE = 77,// Returns random data of variable length
     // (undocumented)
-    FUNC_ID_ZW_CREATE_NEW_PRIMARY = 76,
+    FUNC_ID_ZW_CREATE_NEW_PRIMARY = 76,// Get Home ID and Controller Node ID
     // (undocumented)
-    FUNC_ID_ZW_ENABLE_SUC = 82,
+    FUNC_ID_ZW_ENABLE_SUC = 82,// get a byte of memory
     // (undocumented)
-    FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 94,
+    FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 94,// write a byte of memory
     // (undocumented)
     FUNC_ID_ZW_GET_RANDOM = 28,
     // (undocumented)
     FUNC_ID_ZW_GET_VIRTUAL_NODES = 165,
     // (undocumented)
-    FUNC_ID_ZW_IS_VIRTUAL_NODE = 166,
+    FUNC_ID_ZW_IS_VIRTUAL_NODE = 166,// Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
     // (undocumented)
-    FUNC_ID_ZW_NEW_CONTROLLER = 67,
+    FUNC_ID_ZW_NEW_CONTROLLER = 67,// ZW_NVRGetValue(offset, length) => NVRdata[], see INS13954-13
     // (undocumented)
-    FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 23,
+    FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 23,// Returns information about the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 68,
+    FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 68,// Reads a buffer from the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REPLICATION_SEND_DATA = 69,
+    FUNC_ID_ZW_REPLICATION_SEND_DATA = 69,// Writes a buffer to the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REQUEST_NETWORK_UPDATE = 83,
+    FUNC_ID_ZW_REQUEST_NETWORK_UPDATE = 83,// Reads a byte from the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 90,
+    FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 90,// Writes a byte to the external NVM
     // (undocumented)
-    FUNC_ID_ZW_SEND_NODE_INFORMATION = 18,
+    FUNC_ID_ZW_SEND_NODE_INFORMATION = 18,// 700-series command to read and write from/to the external NVM
     // (undocumented)
-    FUNC_ID_ZW_SEND_SLAVE_DATA = 163,
+    FUNC_ID_ZW_SEND_SLAVE_DATA = 163,// ??
     // (undocumented)
-    FUNC_ID_ZW_SEND_SLAVE_NODE_INFO = 162,
+    FUNC_ID_ZW_SEND_SLAVE_NODE_INFO = 162,// ??
     // (undocumented)
-    FUNC_ID_ZW_SET_LEARN_MODE = 80,
+    FUNC_ID_ZW_SET_LEARN_MODE = 80,// ??
     // (undocumented)
-    FUNC_ID_ZW_SET_LEARN_NODE_STATE = 64,
+    FUNC_ID_ZW_SET_LEARN_NODE_STATE = 64,// ??
     // (undocumented)
-    FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 208,
+    FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 208,// ??
     // (undocumented)
-    FUNC_ID_ZW_SET_SLAVE_LEARN_MODE = 164,
+    FUNC_ID_ZW_SET_SLAVE_LEARN_MODE = 164,// ??
     // (undocumented)
-    GetBackgroundRSSI = 59,
+    GetBackgroundRSSI = 59,// ??
     // (undocumented)
     GetControllerCapabilities = 5,
     // (undocumented)
     GetControllerId = 32,
     // (undocumented)
-    GetControllerVersion = 21,
+    GetControllerVersion = 21,// request the most recent background RSSI levels detected
     // (undocumented)
-    GetNodeProtocolInfo = 65,
+    GetLongRangeChannel = 219,
     // (undocumented)
-    GetNVMId = 41,
+    GetLongRangeNodes = 218,// Not implemented
     // (undocumented)
-    GetPriorityRoute = 146,
+    GetNodeProtocolInfo = 65,// Get protocol info (baud rate, listening, etc.) for a given node
     // (undocumented)
-    GetProtocolVersion = 9,
+    GetNVMId = 41,// Reset controller and node info to default (original) values
     // (undocumented)
-    GetRoutingInfo = 128,
+    GetPriorityRoute = 146,// Not implemented
     // (undocumented)
-    GetSerialApiCapabilities = 7,
+    GetProtocolVersion = 9,// Replication send data complete
     // (undocumented)
-    GetSerialApiInitData = 2,
+    GetRoutingInfo = 128,// Replication send data
     // (undocumented)
-    GetSUCNodeId = 86,
+    GetSerialApiCapabilities = 7,// Assign a return route from the source node to the destination node
     // (undocumented)
-    HardReset = 66,
+    GetSerialApiInitData = 2,// Delete all return routes from the specified node
     // (undocumented)
-    IsFailedNode = 98,
+    GetSUCNodeId = 86,// Ask the specified node to update its neighbors (then read them from the controller)
     // (undocumented)
-    NVMOperations = 46,
+    HardReset = 66,// Get a list of supported (and controller) command classes
     // (undocumented)
-    RemoveFailedNode = 97,
+    IsFailedNode = 98,// Control the addnode (or addcontroller) process...start, stop, etc.
     // (undocumented)
-    RemoveNodeFromNetwork = 75,
+    NVMOperations = 46,// Control the removenode (or removecontroller) process...start, stop, etc.
     // (undocumented)
-    ReplaceFailedNode = 99,
+    RemoveFailedNode = 97,// Control the createnewprimary process...start, stop, etc.
     // (undocumented)
-    RequestNodeInfo = 96,
+    RemoveNodeFromNetwork = 75,// Control the transferprimary process...start, stop, etc.
     // (undocumented)
-    RequestNodeNeighborUpdate = 72,
+    ReplaceFailedNode = 99,// Assign a priority route between two nodes
     // (undocumented)
-    SendData = 19,
+    RequestNodeInfo = 96,// Put a controller into learn mode for replication/ receipt of configuration info
     // (undocumented)
-    SendDataAbort = 22,
+    RequestNodeNeighborUpdate = 72,// Assign a return route to the SUC
     // (undocumented)
-    SendDataBridge = 169,
+    SendData = 19,// Make a controller a Static Update Controller
     // (undocumented)
-    SendDataMulticast = 20,
+    SendDataAbort = 22,// Network update for a SUC(?)
     // (undocumented)
-    SendDataMulticastBridge = 171,
+    SendDataBridge = 169,// Configure a static/bridge controller to be a SUC/SIS node (or not)
+    // (undocumented)
+    SendDataMulticast = 20,// Remove return routes to the SUC
+    // (undocumented)
+    SendDataMulticastBridge = 171,// Try to retrieve a Static Update Controller node id (zero if no SUC present)
     // (undocumented)
     SerialAPISetup = 11,
     // (undocumented)
-    SerialAPIStarted = 10,
+    SerialAPIStarted = 10,// Assign a priority route from a node to the SUC
     // (undocumented)
     SetApplicationNodeInformation = 3,
     // (undocumented)
-    SetPriorityRoute = 147,
+    SetLongRangeChannel = 220,// Allow options for request node neighbor update
     // (undocumented)
-    SetRFReceiveMode = 16,
+    SetLongRangeShadowNodeIDs = 221,// supports NWI
     // (undocumented)
-    SetSerialApiTimeouts = 6,
+    SetPriorityRoute = 147,// Get info (supported command classes) for the specified node
     // (undocumented)
-    SetSUCNodeId = 84,
+    SetRFReceiveMode = 16,// Mark a specified node id as failed
     // (undocumented)
-    Shutdown = 217,
+    SetSerialApiTimeouts = 6,// Check to see if a specified node has failed
     // (undocumented)
-    SoftReset = 8,
+    SetSUCNodeId = 84,// Replace a failed node with a new one that takes the same node ID
     // (undocumented)
-    UNKNOWN_FUNC_ClearNetworkStats = 57,
+    Shutdown = 217,// ??
     // (undocumented)
-    UNKNOWN_FUNC_CLOCK_COMPARE = 50,
+    SoftReset = 8,// ??
     // (undocumented)
-    UNKNOWN_FUNC_CLOCK_GET = 49,
+    UNKNOWN_FUNC_ClearNetworkStats = 57,// ??
     // (undocumented)
-    UNKNOWN_FUNC_CLOCK_SET = 48,
+    UNKNOWN_FUNC_CLOCK_COMPARE = 50,// ??
     // (undocumented)
-    UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,
+    UNKNOWN_FUNC_CLOCK_GET = 49,// ??
     // (undocumented)
-    UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 191,
+    UNKNOWN_FUNC_CLOCK_SET = 48,// ??
     // (undocumented)
-    UNKNOWN_FUNC_GetNetworkStats = 58,
+    UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,// Access the NVM section for 500 series OTW firmware updates
     // (undocumented)
-    UNKNOWN_FUNC_GetTXCounter = 129,
+    UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 191,// Get a specified node's neighbor information from the controller
     // (undocumented)
-    UNKNOWN_FUNC_LOCK_ROUTE_RESPONSE = 144,
+    UNKNOWN_FUNC_GetNetworkStats = 58,// ??
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_GET_BUFFER = 35,
+    UNKNOWN_FUNC_GetTXCounter = 129,// ??
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_GET_BYTE = 33,
+    UNKNOWN_FUNC_LOCK_ROUTE_RESPONSE = 144,// ??
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 36,
+    UNKNOWN_FUNC_MEMORY_GET_BUFFER = 35,// ??
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_PUT_BYTE = 34,
+    UNKNOWN_FUNC_MEMORY_GET_BYTE = 33,// ??
     // (undocumented)
-    UNKNOWN_FUNC_REDISCOVERY_NEEDED = 89,
+    UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 36,// ??
     // (undocumented)
-    UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 63,
+    UNKNOWN_FUNC_MEMORY_PUT_BYTE = 34,// Get the route that is used as the first routing attempty when transmitting to a node
     // (undocumented)
-    UNKNOWN_FUNC_ResetTXCounter = 130,
+    UNKNOWN_FUNC_REDISCOVERY_NEEDED = 89,// Set the route that shall be used as the first routing attempty when transmitting to a node
     // (undocumented)
-    UNKNOWN_FUNC_RF_POWERLEVEL_GET = 186,
+    UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 63,// ??
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_CALL = 54,
+    UNKNOWN_FUNC_ResetTXCounter = 130,// ??
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_CREATE = 51,
+    UNKNOWN_FUNC_RF_POWERLEVEL_GET = 186,// Set application virtual slave node information
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_DELETE = 53,
+    UNKNOWN_FUNC_RTC_TIMER_CALL = 54,// Slave command handler
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_READ = 52,
+    UNKNOWN_FUNC_RTC_TIMER_CREATE = 51,// Send a slave node information message
     // (undocumented)
-    UNKNOWN_FUNC_SEND_DATA_META = 24,
+    UNKNOWN_FUNC_RTC_TIMER_DELETE = 53,// Send data from slave
     // (undocumented)
-    UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 145,
+    UNKNOWN_FUNC_RTC_TIMER_READ = 52,// Enter slave learn mode
     // (undocumented)
-    UNKNOWN_FUNC_SEND_SUC_ID = 87,
+    UNKNOWN_FUNC_SEND_DATA_META = 24,// Return all virtual nodes
     // (undocumented)
-    UNKNOWN_FUNC_SEND_TEST_FRAME = 190,
+    UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 145,// Virtual node test
     // (undocumented)
-    UNKNOWN_FUNC_SERIAL_API_TEST = 149,
+    UNKNOWN_FUNC_SEND_SUC_ID = 87,// A message from another node using the Bridge API
     // (undocumented)
-    UNKNOWN_FUNC_SET_SLEEP_MODE = 17,
+    UNKNOWN_FUNC_SEND_TEST_FRAME = 190,// Send data (Bridge API)
+    // (undocumented)
+    UNKNOWN_FUNC_SERIAL_API_TEST = 149,// Send data using multicast (Bridge API)
+    // (undocumented)
+    UNKNOWN_FUNC_SET_SLEEP_MODE = 17,// ??
     // (undocumented)
     UNKNOWN_FUNC_StoreHomeId = 132,
     // (undocumented)
@@ -313,9 +329,9 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_TIMER_CALL = 115,
     // (undocumented)
-    UNKNOWN_FUNC_TIMER_CANCEL = 114,
+    UNKNOWN_FUNC_TIMER_CANCEL = 114,// ??
     // (undocumented)
-    UNKNOWN_FUNC_TIMER_RESTART = 113,
+    UNKNOWN_FUNC_TIMER_RESTART = 113,// Get RF Power level
     // (undocumented)
     UNKNOWN_FUNC_TIMER_START = 112,
     // (undocumented)
@@ -323,19 +339,19 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0x66 = 102,
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0x67 = 103,
+    UNKNOWN_FUNC_UNKNOWN_0x67 = 103,// Set controller into promiscuous mode to listen to all messages
     // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0x98 = 152,
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xB4 = 180,
+    UNKNOWN_FUNC_UNKNOWN_0xB4 = 180,// ??
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xB9 = 185,
+    UNKNOWN_FUNC_UNKNOWN_0xB9 = 185,// ??
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xD2 = 210,
+    UNKNOWN_FUNC_UNKNOWN_0xD2 = 210,// ??
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xD3 = 211,
+    UNKNOWN_FUNC_UNKNOWN_0xD3 = 211,// Instruct the Z-Wave API to shut down in order to safely remove the power
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xD4 = 212,
+    UNKNOWN_FUNC_UNKNOWN_0xD4 = 212,// Used after GetSerialApiInitData to get the nodes with IDs > 0xFF
     // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0xEF = 239,
     // (undocumented)
@@ -343,7 +359,7 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_WATCH_DOG_ENABLE = 182,
     // (undocumented)
-    UNKNOWN_FUNC_WATCH_DOG_KICK = 184,
+    UNKNOWN_FUNC_WATCH_DOG_KICK = 184,// ??
     // (undocumented)
     UNKNOWN_FUNC_ZMEBootloaderFlash = 244,
     // (undocumented)
@@ -456,7 +472,7 @@ export class Message {
     expectsNodeUpdate(): boolean;
     expectsResponse(): boolean;
     static extractPayload(data: Buffer): Buffer;
-    static from(host: ZWaveHost, options: MessageDeserializationOptions): Message;
+    static from(host: ZWaveHost, options: MessageDeserializationOptions, contextStore?: Map<FunctionType, Record<string, unknown>>): Message;
     // (undocumented)
     functionType: FunctionType;
     getCallbackTimeout(): number | undefined;
@@ -521,6 +537,7 @@ export interface MessageCreationOptions extends MessageBaseOptions {
 //
 // @public (undocumented)
 export interface MessageDeserializationOptions {
+    context?: unknown;
     // (undocumented)
     data: Buffer;
     // (undocumented)
@@ -665,6 +682,370 @@ export enum XModemMessageHeaders {
     NAK = 21,
     // (undocumented)
     SOF = 1
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferDataMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferDataMessage extends ZnifferMessage implements ZnifferFrameInfo {
+    constructor(options: ZnifferMessageOptions);
+    // (undocumented)
+    readonly channel: number;
+    // (undocumented)
+    readonly checksumOK: boolean;
+    // (undocumented)
+    readonly frameType: ZnifferFrameType;
+    // (undocumented)
+    readonly protocolDataRate: ZnifferProtocolDataRate;
+    // (undocumented)
+    readonly region: number;
+    // (undocumented)
+    readonly rssiRaw: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferFrameInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferFrameInfo {
+    // (undocumented)
+    readonly channel: number;
+    // (undocumented)
+    readonly frameType: ZnifferFrameType;
+    // (undocumented)
+    readonly protocolDataRate: ZnifferProtocolDataRate;
+    // (undocumented)
+    readonly region: number;
+    // (undocumented)
+    rssi?: RSSI;
+    // (undocumented)
+    readonly rssiRaw: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferFrameType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZnifferFrameType {
+    // (undocumented)
+    BeamFrame = 2,
+    // (undocumented)
+    BeamStart = 4,
+    // (undocumented)
+    BeamStop = 5,
+    // (undocumented)
+    Command = 0,
+    // (undocumented)
+    Data = 1
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferFunctionType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZnifferFunctionType {
+    // (undocumented)
+    GetFrequencies = 3,
+    // (undocumented)
+    GetFrequencyInfo = 19,
+    // (undocumented)
+    GetVersion = 1,
+    // (undocumented)
+    SetBaudRate = 14,
+    // (undocumented)
+    SetFrequency = 2,
+    // (undocumented)
+    Start = 4,
+    // (undocumented)
+    Stop = 5
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetFrequenciesRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferGetFrequenciesRequest extends ZnifferMessage {
+    constructor();
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetFrequenciesResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferGetFrequenciesResponse extends ZnifferMessage {
+    constructor(options: ZnifferMessageOptions);
+    // (undocumented)
+    readonly currentFrequency: number;
+    // (undocumented)
+    readonly supportedFrequencies: readonly number[];
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetFrequencyInfoRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferGetFrequencyInfoRequest extends ZnifferMessage {
+    constructor(options: ZnifferGetFrequencyInfoRequestOptions);
+    // (undocumented)
+    frequency: number;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetFrequencyInfoRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferGetFrequencyInfoRequestOptions {
+    // (undocumented)
+    frequency: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetFrequencyInfoResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferGetFrequencyInfoResponse extends ZnifferMessage {
+    constructor(options: ZnifferMessageOptions);
+    // (undocumented)
+    readonly frequency: number;
+    // (undocumented)
+    readonly frequencyName: string;
+    // (undocumented)
+    readonly numChannels: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetVersionRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferGetVersionRequest extends ZnifferMessage {
+    constructor();
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferGetVersionResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferGetVersionResponse extends ZnifferMessage {
+    constructor(options: ZnifferMessageOptions);
+    // (undocumented)
+    readonly chipType: string | UnknownZWaveChipType;
+    // (undocumented)
+    readonly majorVersion: number;
+    // (undocumented)
+    readonly minorVersion: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferMessage" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class ZnifferMessage {
+    constructor(options: ZnifferMessageOptions);
+    static from(options: ZnifferMessageDeserializationOptions): ZnifferMessage;
+    // (undocumented)
+    functionType?: ZnifferFunctionType;
+    static getConstructor(data: Buffer): ZnifferMessageConstructor<ZnifferMessage>;
+    // (undocumented)
+    payload: Buffer;
+    serialize(): Buffer;
+    // (undocumented)
+    type: ZnifferMessageType;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferMessageBaseOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferMessageBaseOptions {
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferMessageConstructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ZnifferMessageConstructor<T extends ZnifferMessage> = new (options: ZnifferMessageOptions) => T;
+
+// Warning: (ae-missing-release-tag) "ZnifferMessageCreationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferMessageCreationOptions extends ZnifferMessageBaseOptions {
+    // (undocumented)
+    functionType?: ZnifferFunctionType;
+    // (undocumented)
+    messageType: ZnifferMessageType;
+    // (undocumented)
+    payload?: Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferMessageDeserializationOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferMessageDeserializationOptions {
+    // (undocumented)
+    data: Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferMessageHeaders" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZnifferMessageHeaders {
+    // (undocumented)
+    SOCF = 35,// commmand frame
+    // (undocumented)
+    SODF = 33
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferMessageOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ZnifferMessageOptions = ZnifferMessageCreationOptions | ZnifferMessageDeserializationOptions;
+
+// Warning: (ae-missing-release-tag) "ZnifferMessageType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum ZnifferMessageType {
+    // (undocumented)
+    Command = 35,
+    // (undocumented)
+    Data = 33
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSerialPort" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class ZnifferSerialPort extends ZnifferSerialPortBase {
+    constructor(port: string, loggers: ZWaveLogContainer, Binding?: typeof SerialPort);
+    // (undocumented)
+    get isOpen(): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSerialPortBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+// Warning: (ae-missing-release-tag) "ZnifferSerialPortBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferSerialPortBase {
+    // (undocumented)
+    addListener<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
+    // (undocumented)
+    emit<TEvent extends ZnifferSerialPortEvents>(event: TEvent, ...args: Parameters<ZnifferSerialPortEventCallbacks[TEvent]>): boolean;
+    // (undocumented)
+    off<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
+    // (undocumented)
+    on<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
+    // (undocumented)
+    once<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
+    // (undocumented)
+    removeAllListeners(event?: ZnifferSerialPortEvents): this;
+    // (undocumented)
+    removeListener<TEvent extends ZnifferSerialPortEvents>(event: TEvent, callback: ZnifferSerialPortEventCallbacks[TEvent]): this;
+}
+
+// @public (undocumented)
+export class ZnifferSerialPortBase extends PassThrough {
+    // (undocumented)
+    [Symbol.asyncIterator]: () => AsyncIterableIterator<Buffer>;
+    constructor(implementation: ZWaveSerialPortImplementation, loggers: ZWaveLogContainer);
+    // (undocumented)
+    close(): Promise<void>;
+    // (undocumented)
+    get isOpen(): boolean;
+    // (undocumented)
+    protected logger: SerialLogger;
+    // (undocumented)
+    open(): Promise<void>;
+    // (undocumented)
+    protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
+    // (undocumented)
+    writeAsync(data: Buffer): Promise<void>;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSerialPortEventCallbacks" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferSerialPortEventCallbacks {
+    // (undocumented)
+    data: (data: Buffer) => void;
+    // (undocumented)
+    discardedData: (data: Buffer) => void;
+    // (undocumented)
+    error: (e: Error) => void;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSerialPortEvents" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ZnifferSerialPortEvents = Extract<keyof ZnifferSerialPortEventCallbacks, string>;
+
+// Warning: (ae-missing-release-tag) "ZnifferSetBaudRateRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferSetBaudRateRequest extends ZnifferMessage {
+    constructor(options: ZnifferSetBaudRateRequestOptions);
+    // (undocumented)
+    baudrate: 0;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSetBaudRateRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferSetBaudRateRequestOptions {
+    // (undocumented)
+    baudrate: 0;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSetBaudRateResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferSetBaudRateResponse extends ZnifferMessage {
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSetFrequencyRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferSetFrequencyRequest extends ZnifferMessage {
+    constructor(options: ZnifferSetFrequencyRequestOptions);
+    // (undocumented)
+    frequency: number;
+    // (undocumented)
+    serialize(): Buffer;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSetFrequencyRequestOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZnifferSetFrequencyRequestOptions {
+    // (undocumented)
+    frequency: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSetFrequencyResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferSetFrequencyResponse extends ZnifferMessage {
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferSocket" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export class ZnifferSocket extends ZnifferSerialPortBase {
+    constructor(socketOptions: ZWaveSocketOptions, loggers: ZWaveLogContainer);
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferStartRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferStartRequest extends ZnifferMessage {
+    constructor();
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferStartResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferStartResponse extends ZnifferMessage {
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferStopRequest" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferStopRequest extends ZnifferMessage {
+    constructor();
+}
+
+// Warning: (ae-missing-release-tag) "ZnifferStopResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZnifferStopResponse extends ZnifferMessage {
 }
 
 // Warning: (ae-missing-release-tag) "ZWaveSerialChunk" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)

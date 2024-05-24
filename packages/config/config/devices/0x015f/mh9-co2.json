@@ -80,7 +80,7 @@
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
-			"unit": "0.5 °C",
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,

@@ -744,13 +744,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public volume?: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.toneId]);
-		if (this.version >= 2 && this.volume != undefined) {
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([this.volume]),
-			]);
-		}
+		this.payload = Buffer.from([this.toneId, this.volume ?? 0]);
 		return super.serialize();
 	}
 

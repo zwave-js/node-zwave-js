@@ -37,7 +37,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n2. Once the controller is ready to add your sensor, ensure battery is installed with the correct polarity in the sensor and the battery tab has\nbeen removed.\n3. Press and release the programming button (see Figure 2). This starts the manual add process. The red LED (see Figure 2) will begin to\nflash quickly as it begins the add process.\n4. The red LED will activate for 3 seconds to confirm the sensor has been added in the network.\n5. The controller’s app will indicate if it has discovered the sensor. If prompted by the controller to enter the S2 security code, refer to the QR\ncode/security number on the back of the box, or the QR code label on the product (see Figure 3). Enter the 5-digit code.\nNote: Your controller may need to be within 10ft. of the sensor to be added.\nUsing the controller, you can activate interactive automations when the sensor detects when a door or window is opened or closed.\nFunctions may vary depending on gateway or controller",

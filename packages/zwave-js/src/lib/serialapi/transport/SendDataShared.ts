@@ -324,7 +324,3 @@ export function hasTXReport(
 		&& !!msg.txReport
 	);
 }
-
-export function exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
-	return msg.serializeCC().length > msg.getMaxPayloadLength();
-}

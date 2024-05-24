@@ -270,6 +270,9 @@ export class ZWaveLogContainer extends winston.Container {
 			console.log(`Logging to file:
 	${newFilename}`);
 		});
+		ret.on("error", (err: Error) => {
+			console.error(`Error in file stream rotator: ${err.message}`);
+		});
 		return ret;
 	}
 

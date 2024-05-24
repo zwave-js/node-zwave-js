@@ -303,11 +303,24 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CommandClassReport,
 		);
 
+		let ccVersion: number;
+		switch (requestedCC) {
+			case CommandClasses["Z-Wave Protocol"]:
+			case CommandClasses["Z-Wave Long Range"]:
+				// These two are only for internal use
+				ccVersion = 0;
+				break;
+
+			default:
+				ccVersion = getImplementedVersion(requestedCC);
+				break;
+		}
+
 		const cc = new VersionCCCommandClassReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedCC,
-			ccVersion: getImplementedVersion(requestedCC),
+			ccVersion,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
@@ -542,6 +555,14 @@ export class VersionCC extends CommandClass {
 			message: "querying CC versions...",
 			direction: "outbound",
 		});
+		// Basic CC is not included in the NIF, so it won't be returned by endpoint.getCCs() at this point
+		{
+			const cc = CommandClasses.Basic;
+			// Skip the query of endpoint CCs that are also supported by the root device
+			if (this.endpointIndex === 0 || node.getCCVersion(cc) === 0) {
+				await queryCCVersion(cc);
+			}
+		}
 		for (const [cc] of endpoint.getCCs()) {
 			// We already queried the Version CC version at the start of this interview
 			if (cc === CommandClasses.Version) continue;
@@ -678,27 +699,23 @@ export class VersionCCReport extends VersionCC {
 				.split(".")
 				.map((n) => parseInt(n))
 				.slice(0, 2),
+			// The value 0x00 SHOULD NOT be used for the Hardware Version
+			this.hardwareVersion ?? 0x01,
+			this.firmwareVersions.length - 1,
 		]);
-		if (this.version >= 2) {
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([
-					// The value 0x00 SHOULD NOT be used for the Hardware Version
-					this.hardwareVersion ?? 0x01,
-				]),
-			]);
-			if (this.firmwareVersions.length > 1) {
-				const firmwaresBuffer = Buffer.allocUnsafe(
-					(this.firmwareVersions.length - 1) * 2,
-				);
-				for (let i = 1; i < this.firmwareVersions.length; i++) {
-					const [major, minor] = this.firmwareVersions[i]
-						.split(".")
-						.map((n) => parseInt(n));
-					firmwaresBuffer[2 * (i - 1)] = major;
-					firmwaresBuffer[2 * (i - 1) + 1] = minor;
-				}
+
+		if (this.firmwareVersions.length > 1) {
+			const firmwaresBuffer = Buffer.allocUnsafe(
+				(this.firmwareVersions.length - 1) * 2,
+			);
+			for (let i = 1; i < this.firmwareVersions.length; i++) {
+				const [major, minor] = this.firmwareVersions[i]
+					.split(".")
+					.map((n) => parseInt(n));
+				firmwaresBuffer[2 * (i - 1)] = major;
+				firmwaresBuffer[2 * (i - 1) + 1] = minor;
 			}
+			this.payload = Buffer.concat([this.payload, firmwaresBuffer]);
 		}
 
 		return super.serialize();

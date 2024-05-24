@@ -130,7 +130,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press\nand release the manual/program button on the smart\ndimmer. Repeat as necessary to add the dimmer to\nthe network.\nYou have complete control",

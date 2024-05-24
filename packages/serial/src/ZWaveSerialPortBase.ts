@@ -1,15 +1,10 @@
 import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "node:events";
-import {
-	type Duplex,
-	PassThrough,
-	type Readable,
-	type Writable,
-} from "node:stream";
+import { PassThrough, type Readable, type Writable } from "node:stream";
 import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
+import { type ZWaveSerialPortImplementation } from "./ZWaveSerialPortImplementation";
 import {
 	type BootloaderChunk,
 	BootloaderParser,
@@ -68,27 +63,6 @@ export interface ZWaveSerialPortBase {
 		event: TEvent,
 		...args: Parameters<ZWaveSerialPortEventCallbacks[TEvent]>
 	): boolean;
-}
-
-export function isZWaveSerialPortImplementation(
-	obj: unknown,
-): obj is ZWaveSerialPortImplementation {
-	return (
-		isObject(obj)
-		&& typeof obj.create === "function"
-		&& typeof obj.open === "function"
-		&& typeof obj.close === "function"
-	);
-}
-
-export interface ZWaveSerialPortImplementation {
-	create(): Duplex & EventEmitter;
-	open(
-		port: ReturnType<ZWaveSerialPortImplementation["create"]>,
-	): Promise<void>;
-	close(
-		port: ReturnType<ZWaveSerialPortImplementation["create"]>,
-	): Promise<void>;
 }
 
 const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;

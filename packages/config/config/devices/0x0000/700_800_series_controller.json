@@ -2,7 +2,7 @@
 {
 	"manufacturer": "Silicon Labs",
 	"manufacturerId": "0x0000",
-	"label": "700 Series",
+	"label": "700/800 Series",
 	"description": "USB Controller",
 	"devices": [
 		{

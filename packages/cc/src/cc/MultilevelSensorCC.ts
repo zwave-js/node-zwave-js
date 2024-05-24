@@ -791,8 +791,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 
 	public serialize(): Buffer {
 		if (
-			this.version >= 5
-			&& this.sensorType != undefined
+			this.sensorType != undefined
 			&& this.scale != undefined
 		) {
 			this.payload = Buffer.from([
@@ -806,8 +805,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (
-			this.version >= 5
-			&& this.sensorType != undefined
+			this.sensorType != undefined
 			&& this.scale != undefined
 		) {
 			message = {

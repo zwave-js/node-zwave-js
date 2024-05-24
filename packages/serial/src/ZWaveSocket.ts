@@ -5,10 +5,7 @@ import {
 } from "@zwave-js/core";
 import * as net from "node:net";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
-
-export type ZWaveSocketOptions =
-	| Omit<net.TcpSocketConnectOpts, "onread">
-	| Omit<net.IpcSocketConnectOpts, "onread">;
+import { type ZWaveSocketOptions } from "./ZWaveSocketOptions";
 
 /** A version of the Z-Wave serial binding that works using a socket (TCP or IPC) */
 export class ZWaveSocket extends ZWaveSerialPortBase {

@@ -239,7 +239,9 @@ export class MockNode {
 			return (await expectation) as T;
 		} finally {
 			const index = this.expectedControllerFrames.indexOf(expectation);
-			if (index !== -1) this.expectedControllerFrames.splice(index, 1);
+			if (index !== -1) {
+				void this.expectedControllerFrames.splice(index, 1);
+			}
 		}
 	}
 

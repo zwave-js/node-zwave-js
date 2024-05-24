@@ -4,6 +4,168 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.9.0 (2024-05-21)
+This release contains several bugfixes and improvements for Zniffer, as well as fixing some deviations from the Z-Wave specification.
+
+### Features
+* Zniffer: Expose raw capture data in emitted frames (#6852)
+* Zniffer: Expose previously captured frames using `capturedFrames` property and `clearCapturedFrames()` method (#6852)
+* Zniffer: Add method to return saved capture file as Buffer (#6836)
+* Zniffer: Add a special frame type to distinguish Broadcast frames from singlecast frames without having to inspect the node ID (#6863)
+* Zniffer: Add an optional parameter for `znifferProtocolDataRateToString` to omit the protocol name (#6863)
+* Zniffer: Add an option to limit the number of captured frames kept in memory (#6863)
+
+### Bugfixes
+* Always query Basic CC version as part of the interview
+* Do not report `Z-Wave Protocol CC` and `Z-Wave Long Range CC` as supported
+* Encode CCs using the version implemented by Z-Wave JS, not the target's version
+* Abort S2 bootstrapping when first `KEXReport` incorrectly has echo flag set
+* Correct NIF contents, distinguish between securely and insecurely supported commands
+* Respond to `ManufacturerSpecificCCGet`
+* Correct parsing of auto-channel capabilities in `GetLongRangeChannelResponse` (#6850)
+* Include LR node information in NVM conversion (#6846)
+* Zniffer: Expose `rssi` field in all `Frame` types (#6851)
+* Zniffer: Expose payload in ExplorerInclusionRequest frame
+
+### Changes under the hood
+* Docs: add link to Zooz 800 series firmware upgrade (#6856, #6862)
+
+## 12.8.1 (2024-05-14)
+### Bugfixes
+This release adds a bit of polishing for Zniffer and some bugfixes (#6849):
+* Z-Wave Classic inclusion frames from LR devices are now parsed instead of logging an error
+* Z-Wave LR protocol frames are now recognized (but not parsed in detail) instead of logging an error
+* The `payload` property for routed frames contains the parsed CC now
+* Expose the `active` property used to determine whether the Zniffer is currently capturing traffic
+
+## 12.8.0 (2024-05-14)
+### Features
+* Automatically prefer LR-capable RF regions over their non-LR counterparts (#6843, #6845)
+* Add `destroy` method to Zniffer to free serial port (#6848)
+* Expose more Long Range RF settings as methods, controller properties and driver options (#6841)
+
+### Config file changes
+* Disable Supervision for Everspring EH403 (#6847)
+
+## 12.7.0 (2024-05-13)
+### Features
+* Add methods to get/set max. LR powerlevel, add driver option to automatically configure it (#6824)
+
+### Bugfixes
+* Fixed a bug causing the device class of a node to be unintentionally be deleted (#6840)
+* Forbid associations from and to LR devices, except for the lifeline (#6819)
+* Zniffer: convert LR beam TX power to dBm, add documentation for beam frames (#6820)
+
+### Config file changes
+* Override CC versions for Wayne Dalton WDTC-20 (#6822)
+
+### Changes under the hood
+* Refactor Zniffer exports, add them to `/safe` entrypoint (#6830)
+
+## 12.6.0 (2024-05-07)
+This release enhances the diagnostics in Z-Wave JS by adding support for controlling a Zniffer, which allows inspecting traffic from any Z-Wave network. See [here](https://zwave-js.github.io/node-zwave-js/#/api/zniffer) for details on using this API, and [here](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/zniffer) for information on how to create a Zniffer device.
+
+### Features
+* Add Zniffer support (#6651)
+
+### Bugfixes
+* Ignore SmartStart requests and log errors when some keys for the granted security classes were not configured (#6787)
+* Fixed an issue where excluded ZWLR nodes were not removed from the list of nodes until restart (#6795)
+* The mandatory CCs for a device class are no longer automatically considered supported. Instead only the NIF is used to determine them (#6788)
+* The `mandatorySupportedCCs` and `mandatoryControlledCCs` properties of the `DeviceClass` class are now deprecated and return an empty array (#6796)
+
+### Config file changes
+* Use specific float encoding for Namron 4512757 (#6793)
+* Add fingerprint for Aeotec MultiSensor 7 (#6807)
+
+### Changes under the hood
+* Fix links on Long Range documentation page (#6790)
+
+## 12.5.6 (2024-04-23)
+### Bugfixes
+* NVM restore works around an issue in some 800 series controllers where the NVM migration built into the Z-Wave firmware would not work due to the SDK version being encoded incorrectly (#6777)
+
+### Config file changes
+* Add HomeSeer PS100 presence sensor, fix broken links (#6783)
+* Fix value size for Fibaro FGWCEU-201, params 150/151 (#6779)
+* Disable Supervision for Heatit Z-Temp2, firmware 1.2.1 (#6785)
+
+## 12.5.5 (2024-04-16)
+### Features
+* Rework compat flags for `Basic CC` mapping (#6773)
+
+### Bugfixes
+* The `protocolDataRate` field in `RouteStatistics` is optional (#6746)
+* Fixed an infinite loop during NVM migration which could happen in rare cases (#6769)
+
+### Config file changes
+* Always map `Basic CC` to `Binary Sensor CC` for Aeotec ZW100 Multisensor 6 (#6773)
+
+### Changes under the hood
+* Reword recommendations on encrypting traffic (#6770)
+
+## 12.5.4 (2024-04-12)
+### Bugfixes
+* Firmware updates on Z-Wave Long Range now utilize the larger frame size better (#6759)
+* Fixed an issue where multicast `setValue` had a `SupervisionCCReport` as the result instead of a `SetValueResult` (#6765)
+* Parsing of provisioning entries with numeric `supportedProtocols` (#6764)
+* Fix error when `ConfigurationCCBulkGet` response is missing (#6763)
+* Values from force-removed or endpoint-mapped CCs are no longer persisted (#6760)
+
+### Config file changes
+* Fix versioning logic for parameter 26 of Zooz ZEN72 (#6761)
+
+## 12.5.3 (2024-04-10)
+### Bugfixes
+* Disallow associating a node with itself and skip self-associations when rebuilding routes (#6749)
+* Fix computation of SNR margin when noise floor measurement is N/A (#6732)
+
+### Config file changes
+* Add new Leviton 800 series devices (#6757)
+* Add UltraPro Z-Wave Plus In-Wall Toggle Switch, 700S (#6664)
+* Rename generic 700 series controller to include 800 series (#6744)
+* Add fingerprint and config parameters for UltraPro 700 Switch (#6726)
+* Add Zooz Zen37 800LR Wall Remote (#6577)
+
+### Changes under the hood
+* Several dependency updates
+
+## 12.5.2 (2024-04-04)
+### Bugfixes
+* Add workaround for devices that omit notification event parameters instead of sending "no data" (#6719)
+
+### Config file changes
+* Added 11 Shelly Qubino Wave devices (#6633)
+* Add Heatit Leakage Water Stopper (#6605)
+* Add Ring Smoke/CO Listener (#6591)
+* Add ZVIDAR Z-TRV-V01 thermostatic valve (#6542)
+* Add Safe Grow NSG-AB-02 Z-Wave Plus Smart Outlet Plug (#6535)
+* Add a new productId and add parameters to 14297/ZW1002 outlet (#6517)
+
+## 12.5.1 (2024-04-03)
+### Bugfixes
+* Fix/improve route diagnostics for Z-Wave LR devices (#6718)
+
+## 12.5.0 (2024-04-02)
+This release adds support for Z-Wave Long Range thanks to the amazing work of @jtbraun. Application developers planning to add support should read [this](https://zwave-js.github.io/node-zwave-js/#/getting-started/long-range) to get started.
+
+### Features
+* Support Z-Wave Long Range (#6401, #6620)
+
+### Config file changes
+* Remove Association Groups 2 & 3 from AEON Labs DSB09 (#6691)
+* Correct group 3 label for GE/Enbrighten 26931/ZW4006 (#6703)
+* Add new Fingerprint for Ring Contact sensor (#6676)
+* Preserve root endpoint in Vision ZL7432 (#6675)
+* Add new Product ID to Fibaro Smoke Detector (#6603)
+* Add Product ID for Benext Energy Switch FW1.6 (#6602)
+* Add fingerprint for Ring Glass Break Sensor EU (#6590)
+* Change MH9-CO2 Temperature Reporting Threshold step size to 0.1 (#6581)
+* Add new product ID to Fibaro FGS-213 (#6576)
+* Add units, improve descriptions for Everspring ST814 (#6712)
+* Label and parameter definitions for Sensative Drip 700 (#6514)
+* Override supported sensor scales for HELTUN HE-ZW-THERM-FL2 (#6711)
+
 ## 12.4.4 (2024-02-10)
 ### Bugfixes
 * NVM backups can now be restored onto 800 series controllers (#6670)

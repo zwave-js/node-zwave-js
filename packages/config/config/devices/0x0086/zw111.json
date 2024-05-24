@@ -488,7 +488,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true,
+		"mapBasicSet": "event",
 		"treatMultilevelSwitchSetAsEvent": true
 	},
 	"metadata": {

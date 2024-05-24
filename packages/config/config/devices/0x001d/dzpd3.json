@@ -27,11 +27,11 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$import": "templates/config_template.json#fade_on_time"
+			"$import": "templates/leviton_template.json#fade_on_time"
 		},
 		{
 			"#": "2",
-			"$import": "templates/config_template.json#fade_off_time"
+			"$import": "templates/leviton_template.json#fade_off_time"
 		},
 		{
 			"#": "3",
@@ -44,11 +44,11 @@
 		},
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#locator_led"
+			"$import": "templates/leviton_template.json#locator_led"
 		},
 		{
 			"#": "8",
-			"$import": "templates/config_template.json#load_type"
+			"$import": "templates/leviton_template.json#load_type"
 		}
 	],
 	"metadata": {

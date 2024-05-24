@@ -8,6 +8,7 @@
 
 import { CommandClasses } from '@zwave-js/core/safe';
 import { FLiRS } from '@zwave-js/core/safe';
+import { NodeIDType } from '@zwave-js/core/safe';
 import { NodeProtocolInfo } from '@zwave-js/core/safe';
 import { RFRegion } from '@zwave-js/core/safe';
 import { RouteProtocolDataRate } from '@zwave-js/core/safe';
@@ -209,6 +210,8 @@ export interface NVMJSONController {
     // (undocumented)
     applicationData?: string | null;
     // (undocumented)
+    applicationName?: string | null;
+    // (undocumented)
     applicationVersion: string;
     // (undocumented)
     commandClasses: {
@@ -275,6 +278,8 @@ export interface NVMJSONControllerRFConfig {
     // (undocumented)
     measured0dBm: number;
     // (undocumented)
+    nodeIdType: NodeIDType | null;
+    // (undocumented)
     rfRegion: RFRegion;
     // (undocumented)
     txPower: number;
@@ -331,6 +336,8 @@ export interface NVMMeta {
     memoryMapped: boolean;
     // (undocumented)
     pageSize: number;
+    // (undocumented)
+    sharedFileSystem: boolean;
     // (undocumented)
     writeSize: PageWriteSize;
 }
@@ -423,7 +430,7 @@ export enum PageStatus {
 // @public (undocumented)
 export enum PageWriteSize {
     // (undocumented)
-    WRITE_SIZE_16 = 1,
+    WRITE_SIZE_16 = 1,// Only single writes are allowed
     // (undocumented)
     WRITE_SIZE_32 = 0
 }

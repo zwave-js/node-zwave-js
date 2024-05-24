@@ -59,6 +59,8 @@ import {
 	type MaybeNotKnown,
 	MessagePriority,
 	type MessageRecord,
+	type MulticastDestination,
+	NUM_NODEMASK_BYTES,
 	NodeIDType,
 	RFRegion,
 	SPANState,
@@ -84,6 +86,8 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	highResTimestamp,
+	isEncapsulationCC,
+	isLongRangeNodeId,
 	isMissingControllerACK,
 	isMissingControllerCallback,
 	isMissingControllerResponse,
@@ -695,6 +699,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.nodeSessions.get(nodeId)!;
 	}
 
+	private _requestContext: Map<FunctionType, Record<string, unknown>> =
+		new Map();
+	/**
+	 * @internal
+	 * Stores data from Serial API command requests to be used by their responses
+	 */
+	public get requestContext(): Map<FunctionType, Record<string, unknown>> {
+		return this._requestContext;
+	}
+
 	public readonly cacheDir: string;
 
 	private _valueDB: JsonlDB | undefined;
@@ -795,6 +809,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 */
 	public get securityManager2(): SecurityManager2 | undefined {
 		return this._securityManager2;
+	}
+
+	private _securityManagerLR: SecurityManager2 | undefined;
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public get securityManagerLR(): SecurityManager2 | undefined {
+		return this._securityManagerLR;
+	}
+
+	/** @internal */
+	public getSecurityManager2(
+		destination: number | MulticastDestination,
+	): SecurityManager2 | undefined {
+		const nodeId = isArray(destination) ? destination[0] : destination;
+		const isLongRange = isLongRangeNodeId(nodeId);
+		return isLongRange ? this.securityManagerLR : this.securityManager2;
 	}
 
 	/**
@@ -1421,17 +1454,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		if (!this._options.testingHooks?.skipControllerIdentification) {
-			// Determine controller IDs to open the Value DBs
-			// We need to do this first because some older controllers, especially the UZB1 and
-			// some 500-series sticks in virtualized environments don't respond after a soft reset
+			// Determine what the controller can do
+			const { nodeIds } = await this.controller.queryCapabilities();
 
-			// No need to initialize databases if skipInterview is true, because it is only used in some
-			// Driver unit tests that don't need access to them
+			// Configure the radio
+			await this.controller.queryAndConfigureRF();
 
-			// Identify the controller and determine if it supports soft reset
-			await this.controller.identify();
-			await this.initNetworkCache(this.controller.homeId!);
-
+			// Soft-reset the stick if possible.
+			// On 700+ series, we'll also learn about whether the stick supports
+			// Z-Wave Long Range in the current region.
 			const maySoftReset = this.maySoftReset();
 			if (this._options.features.softReset && !maySoftReset) {
 				this.driverLog.print(
@@ -1445,40 +1476,44 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				await this.softResetInternal(false);
 			}
 
-			// There are situations where a controller claims it has the ID 0,
-			// which isn't valid. In this case try again after having soft-reset the stick
-			// TODO: Check if this is still necessary now that we support 16-bit node IDs
-			if (this.controller.ownNodeId === 0 && maySoftReset) {
-				this.driverLog.print(
-					`Controller identification returned invalid node ID 0 - trying again...`,
-					"warn",
-				);
-				// We might end up with a different home ID, so close the cache before re-identifying the controller
-				await this._networkCache?.close();
-				await this.controller.identify();
-				await this.initNetworkCache(this.controller.homeId!);
+			let lrNodeIds: readonly number[] | undefined;
+			if (this.controller.supportsLongRange) {
+				// If the controller supports ZWLR, we need to query the node IDs again
+				// to get the full list of nodes
+				lrNodeIds = (await this.controller.queryLongRangeCapabilities())
+					.lrNodeIds;
 			}
 
-			if (this.controller.ownNodeId === 0) {
-				this.driverLog.print(
-					`Controller identification returned invalid node ID 0`,
-					"error",
-				);
-				await this.destroy();
-				return;
-			}
+			// If the controller supports ZWLR in the current region, switch to
+			// 16-bit node IDs. Otherwise, make sure that it is actually using 8-bit node IDs.
+			await this.controller.trySetNodeIDType(
+				this.controller.supportsLongRange
+					? NodeIDType.Long
+					: NodeIDType.Short,
+			);
+
+			// Now that we know the node ID type, we can identify the controller
+			await this.controller.identify();
+
+			// Perform additional configuration
+			await this.controller.configure();
 
 			// now that we know the home ID, we can open the databases
+			await this.initNetworkCache(this.controller.homeId!);
 			await this.initValueDBs(this.controller.homeId!);
 			await this.performCacheMigration();
 
-			// Interview the controller.
-			await this._controller.interview(async () => {
-				// Try to restore the network information from the cache
-				if (process.env.NO_CACHE !== "true") {
-					await this.restoreNetworkStructureFromCache();
-				}
-			});
+			// Initialize all nodes and restore the data from cache
+			await this._controller.initNodes(
+				nodeIds,
+				lrNodeIds ?? [],
+				async () => {
+					// Try to restore the network information from the cache
+					if (process.env.NO_CACHE !== "true") {
+						await this.restoreNetworkStructureFromCache();
+					}
+				},
+			);
 
 			// Auto-enable smart start inclusion
 			this._controller.autoProvisionSmartStart();
@@ -1535,6 +1570,33 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		} else {
 			this.driverLog.print(
 				"No network key for S2 configured, communication with secure (S2) devices won't work!",
+				"warn",
+			);
+		}
+
+		if (
+			this._options.securityKeysLongRange?.S2_AccessControl
+			|| this._options.securityKeysLongRange?.S2_Authenticated
+		) {
+			this.driverLog.print(
+				"At least one network key for Z-Wave Long Range configured, enabling security manager...",
+			);
+			this._securityManagerLR = new SecurityManager2();
+			if (this._options.securityKeysLongRange?.S2_AccessControl) {
+				this._securityManagerLR.setKey(
+					SecurityClass.S2_AccessControl,
+					this._options.securityKeysLongRange.S2_AccessControl,
+				);
+			}
+			if (this._options.securityKeysLongRange?.S2_Authenticated) {
+				this._securityManagerLR.setKey(
+					SecurityClass.S2_Authenticated,
+					this._options.securityKeysLongRange.S2_Authenticated,
+				);
+			}
+		} else {
+			this.driverLog.print(
+				"No network key for Z-Wave Long Range configured, communication won't work!",
 				"warn",
 			);
 		}
@@ -1603,18 +1665,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					} else if (node.isListening || node.isFrequentListening) {
 						// Ping non-sleeping nodes to determine their status
 						await node.ping();
-					}
-
-					// Previous versions of zwave-js didn't configure the SUC return route. Make sure each node has one
-					// and remember that we did. If the node is not responsive - tough luck, try again next time
-					if (
-						!node.hasSUCReturnRoute
-						&& node.status !== NodeStatus.Dead
-					) {
-						node.hasSUCReturnRoute = await this.controller
-							.assignSUCReturnRoutes(
-								node.id,
-							);
 					}
 				})();
 			}
@@ -2127,6 +2177,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// Remove the node from all security manager instances
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
+		this.securityManagerLR?.deleteNonce(node.id);
 
 		this.rejectAllTransactionsForNode(
 			node.id,
@@ -2196,6 +2247,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// Reset nonces etc. to prevent false-positive duplicates after the update
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
+		this.securityManagerLR?.deleteNonce(node.id);
 
 		// waitTime should always be defined, but just to be sure
 		const waitTime = result.waitTime ?? 5;
@@ -2433,7 +2485,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (securityClassIsS2(securityClass)) {
 			// Use secure communication if the CC is supported. This avoids silly things like S2-encapsulated pings
 			return (
-				!!this.securityManager2
+				!!this.getSecurityManager2(nodeId)
 				&& (isBasicCC || (endpoint ?? node).supportsCC(ccId))
 			);
 		}
@@ -2659,8 +2711,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		).catch(() => false as const);
 
 		if (waitResult) {
-			// Serial API did start, maybe do something with the information?
+			// Serial API did start
 			this.controllerLog.print("reconnected and restarted");
+			this.controller["_supportsLongRange"] =
+				waitResult.supportsLongRange;
 			return true;
 		}
 
@@ -2686,6 +2740,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (waitResult) {
 			// Serial API did start, maybe do something with the information?
 			this.controllerLog.print("Serial API started");
+			this.controller["_supportsLongRange"] =
+				waitResult.supportsLongRange;
 			return true;
 		}
 
@@ -2987,7 +3043,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			msg = Message.from(this, {
 				data,
 				sdkVersion: this._controller?.sdkVersion,
-			});
+			}, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
 				const node = this.getNodeUnsafe(msg);
@@ -3312,15 +3368,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		// With the MGRP extension present
 		const node = this.getNodeUnsafe(msg);
+		if (!node) return false;
 		const groupId = encapS2.getMulticastGroupId();
+		if (groupId == undefined) return false;
+		const securityManager = this.getSecurityManager2(node.id);
 		if (
-			node
-			&& groupId != undefined
 			// but where we don't have an MPAN stored
-			&& this.securityManager2?.getPeerMPAN(
-					msg.command.nodeId as number,
-					groupId,
-				).type !== MPANState.MPAN
+			securityManager?.getPeerMPAN(
+				msg.command.nodeId as number,
+				groupId,
+			).type !== MPANState.MPAN
 		) {
 			return true;
 		}
@@ -3371,11 +3428,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 			if (this.controller.bootstrappingS2NodeId === nodeId) {
 				// The node is currently being bootstrapped.
-				if (this.securityManager2?.tempKeys.has(nodeId)) {
+				const securityManager = this.getSecurityManager2(nodeId);
+				if (securityManager?.tempKeys.has(nodeId)) {
 					// The DSK has been verified, so we should be able to decode this command.
 					// If this is the first attempt, we need to request a nonce first
 					if (
-						this.securityManager2.getSPANState(nodeId).type
+						securityManager.getSPANState(nodeId).type
 							=== SPANState.None
 					) {
 						this.controllerLog.logNode(nodeId, {
@@ -4589,8 +4647,9 @@ ${handlers.length} left`,
 			if (node?.supportsCC(CommandClasses["Security 2"])) {
 				// ... the node supports S2 and has a valid security class
 				const nodeSecClass = node.getHighestSecurityClass();
+				const securityManager = this.getSecurityManager2(node.id);
 				maybeS2 = securityClassIsS2(nodeSecClass)
-					|| !!this.securityManager2?.tempKeys.has(node.id);
+					|| !!securityManager?.tempKeys.has(node.id);
 			} else if (options.s2MulticastGroupId != undefined) {
 				// ... or we're dealing with S2 multicast
 				maybeS2 = true;
@@ -4652,9 +4711,43 @@ ${handlers.length} left`,
 		}
 	}
 
+	private shouldPersistCCValues(cc: CommandClass): boolean {
+		// Always persist encapsulation CCs, otherwise interviews don't work.
+		if (isEncapsulationCC(cc.ccId)) return true;
+
+		// Do not persist values for a node or endpoint that does not exist
+		const endpoint = this.tryGetEndpoint(cc);
+		const node = endpoint?.getNodeUnsafe();
+		if (!node) return false;
+
+		// Do not persist values for a CC that was force-removed via config
+		if (endpoint?.wasCCRemovedViaConfig(cc.ccId)) return false;
+
+		// Do not persist values for a CC that's being mapped to another endpoint.
+		// FIXME: This duplicates logic in Node.ts -> handleCommand
+		const compatConfig = node?.deviceConfig?.compat;
+		if (
+			cc.endpointIndex === 0
+			&& cc.constructor.name.endsWith("Report")
+			&& node.getEndpointCount() >= 1
+			// Only map reports from the root device to an endpoint if we know which one
+			&& compatConfig?.mapRootReportsToEndpoint != undefined
+		) {
+			const targetEndpoint = node.getEndpoint(
+				compatConfig.mapRootReportsToEndpoint,
+			);
+			if (targetEndpoint?.supportsCC(cc.ccId)) return false;
+		}
+
+		return true;
+	}
+
 	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
 	private persistCCValues(cc: CommandClass) {
-		cc.persistValues(this);
+		if (this.shouldPersistCCValues(cc)) {
+			cc.persistValues(this);
+		}
+
 		if (isEncapsulatingCommandClass(cc)) {
 			this.persistCCValues(cc.encapsulated);
 		} else if (isMultiEncapsulatingCommandClass(cc)) {
@@ -5320,7 +5413,7 @@ ${handlers.length} left`,
 			}
 
 			if (maybeSendToSleep && node && node.canSleep && !node.keepAwake) {
-				setImmediate(() => this.debounceSendNodeToSleep(node!));
+				setImmediate(() => this.debounceSendNodeToSleep(node));
 			}
 
 			// Set the transaction progress to completed before resolving the Promise
@@ -5561,8 +5654,22 @@ ${handlers.length} left`,
 		}
 
 		// Fall back to non-supervised commands
+		const result = await this.sendCommandInternal(command, options);
+
+		// When sending S2 multicast commands to supporting nodes, the singlecast followups
+		// may use supervision. In this case, the multicast message generator returns a
+		// synthetic SupervisionCCReport.
+		// sendCommand is supposed to return a SupervisionResult though.
+		if (
+			options?.s2MulticastGroupId != undefined
+			&& result instanceof SupervisionCCReport
+		) {
+			// @ts-expect-error TS doesn't know we've narrowed the return type to match
+			return result.toSupervisionResult();
+		}
+
 		// @ts-expect-error TS doesn't know we've narrowed the return type to match
-		return this.sendCommandInternal(command, options);
+		return result;
 	}
 
 	/** @internal */
@@ -6177,7 +6284,54 @@ ${handlers.length} left`,
 		msg.command = this.encapsulateCommands(
 			msg.command,
 		) as SinglecastCC<CommandClass>;
-		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+		return msg.command.getMaxPayloadLength(this.getMaxPayloadLength(msg));
+	}
+
+	/** Computes the maximum payload size that can be transmitted with the given message */
+	public getMaxPayloadLength(msg: SendDataMessage): number {
+		const nodeId = msg.getNodeId();
+
+		// For ZWLR, the result is simply the maximum payload size
+		if (
+			nodeId != undefined
+			&& isLongRangeNodeId(nodeId)
+			&& this._controller?.maxPayloadSizeLR
+		) {
+			return this._controller.maxPayloadSizeLR;
+		}
+
+		// For ZW Classic, it depends on the frame type and transmit options
+		const maxExplorerPayloadSinglecast = this._controller?.maxPayloadSize
+			?? 46;
+		if (isSendDataSinglecast(msg)) {
+			// From INS13954-7, chapter 4.3.3.1.5
+			if (msg.transmitOptions & TransmitOptions.Explore) {
+				return maxExplorerPayloadSinglecast;
+			}
+			if (msg.transmitOptions & TransmitOptions.AutoRoute) {
+				return maxExplorerPayloadSinglecast + 2;
+			}
+			return maxExplorerPayloadSinglecast + 8;
+		} else {
+			// Multicast needs space for the nodes bitmask
+			const maxExplorerPayloadMulticast = maxExplorerPayloadSinglecast
+				- NUM_NODEMASK_BYTES;
+
+			// From INS13954-13, chapter 4.3.3.6
+			if (msg.transmitOptions & TransmitOptions.ACK) {
+				if (msg.transmitOptions & TransmitOptions.Explore) {
+					return maxExplorerPayloadMulticast;
+				}
+				if (msg.transmitOptions & TransmitOptions.AutoRoute) {
+					return maxExplorerPayloadMulticast + 2;
+				}
+			}
+			return maxExplorerPayloadMulticast + 8;
+		}
+	}
+
+	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
+		return msg.serializeCC().length > this.getMaxPayloadLength(msg);
 	}
 
 	/** Determines time in milliseconds to wait for a report from a node */

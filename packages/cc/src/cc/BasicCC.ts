@@ -328,8 +328,8 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 		}
 
 		if (
-			!!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
-				?.treatBasicSetAsEvent
+			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat?.mapBasicSet
+				=== "event"
 		) {
 			// Add the compat event value if it should be exposed
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
@@ -432,20 +432,11 @@ export class BasicCCReport extends BasicCC {
 	public readonly duration: Duration | undefined;
 
 	public serialize(): Buffer {
-		const payload: number[] = [
-			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
-		];
-		if (
-			this.version >= 2
-			&& this.targetValue !== undefined
-			&& this.duration
-		) {
-			payload.push(
-				this.targetValue ?? 0xfe,
-				this.duration.serializeReport(),
-			);
-		}
-		this.payload = Buffer.from(payload);
+		this.payload = Buffer.from([
+			this.currentValue ?? 0xfe,
+			this.targetValue ?? 0xfe,
+			(this.duration ?? Duration.unknown()).serializeReport(),
+		]);
 		return super.serialize();
 	}
 
