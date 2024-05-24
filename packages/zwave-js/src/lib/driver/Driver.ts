@@ -4675,7 +4675,13 @@ ${handlers.length} left`,
 		) {
 			const unwrapped = msg.command.encapsulated;
 			if (isArray(unwrapped)) {
-				// Multi Command CC cannot be further unwrapped
+				// Multi Command CC cannot be further unwrapped. Preserve the encapsulation flags though.
+				for (const cmd of unwrapped) {
+					cmd.toggleEncapsulationFlag(
+						msg.command.encapsulationFlags,
+						true,
+					);
+				}
 				return;
 			}
 
