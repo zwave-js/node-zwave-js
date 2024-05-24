@@ -78,13 +78,15 @@
 		{
 			"#": "12",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Battery Power Reporting",
-			"description": "Enable reporting when battery powered"
+			"label": "Report While Battery Powered"
 		},
 		{
 			"#": "20",
-			"$import": "templates/aeotec_template.json#current_power_mode",
+			"label": "Current Power Mode",
 			"valueSize": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Battery",
@@ -244,21 +246,21 @@
 			"#": "111",
 			"$import": "templates/aeotec_template.json#report_interval",
 			"label": "Report Interval (Group 1)",
-			"description": "(Rounded up to the nearest 4 minutes when battery powered)",
+			"description": "Rounded up to the nearest 4 minutes when battery powered",
 			"maxValue": 167400
 		},
 		{
 			"#": "112",
 			"$import": "templates/aeotec_template.json#report_interval",
 			"label": "Report Interval (Group 2)",
-			"description": "(Rounded up to the nearest 4 minutes when battery powered)",
+			"description": "Rounded up to the nearest 4 minutes when battery powered",
 			"maxValue": 167400
 		},
 		{
 			"#": "113",
 			"$import": "templates/aeotec_template.json#report_interval",
 			"label": "Report Interval (Group 3)",
-			"description": "(Rounded up to the nearest 4 minutes when battery powered)",
+			"description": "Rounded up to the nearest 4 minutes when battery powered",
 			"maxValue": 167400
 		},
 		{
