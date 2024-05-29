@@ -13,6 +13,7 @@ import {
 	KEXSchemes,
 	ManufacturerSpecificCCValues,
 	MultiChannelAssociationCC,
+	Powerlevel,
 	Security2CCKEXFail,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
@@ -29,6 +30,7 @@ import {
 	inclusionTimeouts,
 	utils as ccUtils,
 } from "@zwave-js/cc";
+import { type IndicatorObject } from "@zwave-js/cc/IndicatorCC";
 import {
 	CommandClasses,
 	ControllerStatus,
@@ -760,6 +762,41 @@ export class ZWaveController
 	public get valueDB(): ValueDB {
 		return this._nodes.get(this._ownNodeId!)!.valueDB;
 	}
+
+	/** @internal Which associations are currently configured */
+	public get associations(): readonly AssociationAddress[] {
+		return (
+			this.driver.cacheGet(cacheKeys.controller.associations(1)) ?? []
+		);
+	}
+
+	/** @internal */
+	public set associations(value: readonly AssociationAddress[]) {
+		this.driver.cacheSet(cacheKeys.controller.associations(1), value);
+	}
+
+	private _powerlevel: { powerlevel: Powerlevel; until: Date } | undefined;
+	/**
+	 * @internal
+	 * Remembers which powerlevel was set by another node.
+	 */
+	public get powerlevel(): { powerlevel: Powerlevel; until: Date } {
+		return this._powerlevel ?? {
+			powerlevel: Powerlevel["Normal Power"],
+			until: new Date(),
+		};
+	}
+
+	/** @internal */
+	public set powerlevel(value: { powerlevel: Powerlevel; until: Date }) {
+		this._powerlevel = value;
+	}
+
+	/**
+	 * @internal
+	 * Remembers the indicator values set by another node
+	 */
+	public readonly indicatorValues = new Map<number, IndicatorObject[]>();
 
 	private _isRebuildingRoutes: boolean = false;
 	/** Returns whether the routes are currently being rebuilt for one or more nodes. */
@@ -1778,18 +1815,19 @@ export class ZWaveController
 	public async hardReset(): Promise<void> {
 		// begin the reset process
 		try {
-			const associations = this.nodes.get(this._ownNodeId!)?.associations;
+			const associations = this.associations;
 			if (associations?.length) {
 				this.driver.controllerLog.print(
 					"Notifying associated nodes about reset...",
 				);
-				for (const nodeId of associations) {
+				const nodeIdDestinations = distinct(
+					associations.map(({ nodeId }) => nodeId),
+				);
+				for (const nodeId of nodeIdDestinations) {
 					const node = this.nodes.get(nodeId);
 					if (!node) continue;
 
-					void node.sendResetLocallyNotification().catch(() => {
-						// ignore
-					});
+					await node.sendResetLocallyNotification().catch(noop);
 				}
 			}
 

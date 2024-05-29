@@ -218,7 +218,10 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			case VersionCommand.CommandClassGet:
 			case VersionCommand.CommandClassReport:
 				return true; // This is mandatory
+
 			case VersionCommand.CapabilitiesGet:
+			case VersionCommand.CapabilitiesReport:
+			case VersionCommand.ZWaveSoftwareReport:
 				// The API might have been created before the versions were determined,
 				// so `this.version` may contains a wrong value
 				return (
@@ -310,6 +313,13 @@ export class VersionCCAPI extends PhysicalCCAPI {
 				// These two are only for internal use
 				ccVersion = 0;
 				break;
+			case CommandClasses.Hail:
+			case CommandClasses["Manufacturer Proprietary"]:
+				// These CCs are obsolete, we cannot enter them in the certification portal
+				// but not doing so fails a certification test. Just respond that they
+				// are not supported or controlled
+				ccVersion = 0;
+				break;
 
 			default:
 				ccVersion = getImplementedVersion(requestedCC);
@@ -345,6 +355,21 @@ export class VersionCCAPI extends PhysicalCCAPI {
 		if (response) {
 			return pick(response, ["supportsZWaveSoftwareGet"]);
 		}
+	}
+
+	public async reportCapabilities(): Promise<void> {
+		this.assertSupportsCommand(
+			VersionCommand,
+			VersionCommand.CapabilitiesReport,
+		);
+
+		const cc = new VersionCCCapabilitiesReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			// At this time, we do not support responding to Z-Wave Software Get
+			supportsZWaveSoftwareGet: false,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -837,21 +862,39 @@ export class VersionCCCommandClassGet extends VersionCC {
 	}
 }
 
+// @publicAPI
+export interface VersionCCCapabilitiesReportOptions {
+	supportsZWaveSoftwareGet: boolean;
+}
+
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (VersionCCCapabilitiesReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		const capabilities = this.payload[0];
-		this.supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			const capabilities = this.payload[0];
+			this.supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+		} else {
+			this.supportsZWaveSoftwareGet = options.supportsZWaveSoftwareGet;
+		}
 	}
 
 	@ccValue(VersionCCValues.supportsZWaveSoftwareGet)
-	public readonly supportsZWaveSoftwareGet: boolean;
+	public supportsZWaveSoftwareGet: boolean;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			(this.supportsZWaveSoftwareGet ? 0b100 : 0) | 0b11,
+		]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

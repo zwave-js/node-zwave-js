@@ -38,8 +38,11 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: PowerlevelCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case PowerlevelCommand.Get:
+			case PowerlevelCommand.Report:
 			case PowerlevelCommand.TestNodeGet:
+			case PowerlevelCommand.TestNodeReport:
 				return this.isSinglecast();
+
 			case PowerlevelCommand.Set:
 			case PowerlevelCommand.TestNodeSet:
 				return true;
@@ -90,6 +93,20 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 		if (response) {
 			return pick(response, ["powerlevel", "timeout"]);
 		}
+	}
+
+	@validateArgs()
+	public async reportPowerlevel(
+		options: PowerlevelCCReportOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Get);
+
+		const cc = new PowerlevelCCReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -195,11 +212,11 @@ export class PowerlevelCCSet extends PowerlevelCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.powerlevel = this.payload[0];
+			if (this.powerlevel !== Powerlevel["Normal Power"]) {
+				this.timeout = this.payload[1];
+			}
 		} else {
 			this.powerlevel = options.powerlevel;
 			if (options.powerlevel !== Powerlevel["Normal Power"]) {
@@ -236,22 +253,43 @@ export class PowerlevelCCSet extends PowerlevelCC {
 	}
 }
 
+// @publicAPI
+export type PowerlevelCCReportOptions = {
+	powerlevel: typeof Powerlevel["Normal Power"];
+	timeout?: undefined;
+} | {
+	powerlevel: Exclude<Powerlevel, typeof Powerlevel["Normal Power"]>;
+	timeout: number;
+};
+
 @CCCommand(PowerlevelCommand.Report)
 export class PowerlevelCCReport extends PowerlevelCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (PowerlevelCCReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		this.powerlevel = this.payload[0];
-		if (this.powerlevel !== Powerlevel["Normal Power"]) {
-			this.timeout = this.payload[1];
+		if (gotDeserializationOptions(options)) {
+			this.powerlevel = this.payload[0];
+			if (this.powerlevel !== Powerlevel["Normal Power"]) {
+				this.timeout = this.payload[1];
+			}
+		} else {
+			this.powerlevel = options.powerlevel;
+			this.timeout = options.timeout;
 		}
 	}
 
 	public readonly powerlevel: Powerlevel;
 	public readonly timeout?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.powerlevel, this.timeout ?? 0x00]);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {

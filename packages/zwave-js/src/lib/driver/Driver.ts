@@ -3,7 +3,6 @@ import {
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	type CommandClass,
-	DeviceResetLocallyCCNotification,
 	type FirmwareUpdateResult,
 	type ICommandClassContainer,
 	InvalidCC,
@@ -16,7 +15,10 @@ import {
 	Security2CCNonceReport,
 	Security2Command,
 	SecurityCC,
+	SecurityCCCommandEncapsulation,
 	SecurityCCCommandEncapsulationNonceGet,
+	SecurityCCCommandsSupportedGet,
+	SecurityCCCommandsSupportedReport,
 	SecurityCommand,
 	SupervisionCC,
 	type SupervisionCCGet,
@@ -4204,28 +4206,9 @@ ${handlers.length} left`,
 			? CommandClasses.Security
 			: undefined;
 
-		const discardAnyways = (cmd: CommandClass): boolean => {
-			// S2-encapsulated CCs must always be discarded if they are received using a lower security class, except:
-			// - CommandsSupportedGet and CommandsSupportedReport
-			// - multicast commands
-			if (!(cmd instanceof Security2CCMessageEncapsulation)) return false;
-			if (cmd.getMulticastGroupId() != undefined) return false;
-			// This shouldn't happen, but better be sure
-			if (cmd.securityClass == undefined) return true;
-			// Received at the highest security class -> ok
-			if (cmd.securityClass === secClass) return false;
-
-			if (
-				cmd.encapsulated instanceof Security2CCCommandsSupportedGet
-				|| cmd.encapsulated
-					instanceof Security2CCCommandsSupportedReport
-			) {
-				return false;
-			}
-			return true;
-		};
-
-		const acceptAnyways = (cmd: CommandClass): boolean => {
+		const isCCConsideredSecure = (
+			cmd: CommandClass,
+		): MaybeNotKnown<boolean> => {
 			// Some CCs are always accepted, regardless of security class
 			if (cmd instanceof SecurityCC) {
 				switch (cmd.ccCommand) {
@@ -4235,29 +4218,59 @@ ${handlers.length} left`,
 					case SecurityCommand.SchemeGet:
 					case SecurityCommand.SchemeReport:
 						return true;
+				}
 
-					// Needs to be accepted to be able interview/respond to S0 queries
-					case SecurityCommand.CommandsSupportedGet:
-					case SecurityCommand.CommandsSupportedReport:
-						return cmd.isEncapsulatedWith(
-							CommandClasses.Security,
-							SecurityCommand.CommandEncapsulation,
-						);
+				if (cmd instanceof SecurityCCCommandEncapsulation) {
+					// CommandsSupportedReport is always accepted to be able to learn security classes and interview nodes
+					// CommandsSupportedGet is always accepted, so others can learn our security classes
+					if (
+						cmd.encapsulated
+							instanceof SecurityCCCommandsSupportedReport
+						|| cmd.encapsulated
+							instanceof SecurityCCCommandsSupportedGet
+					) {
+						return true;
+					}
+
+					// Other S0 commands are only accepted if S0 is the highest security class
+					return secClass === SecurityClass.S0_Legacy;
+				}
+			} else if (cmd instanceof Security2CC) {
+				if (cmd instanceof Security2CCMessageEncapsulation) {
+					// CommandsSupportedReport is always accepted to be able to learn security classes and interview nodes
+					if (
+						cmd.encapsulated
+							instanceof Security2CCCommandsSupportedReport
+					) {
+						return true;
+					}
+
+					// CommandsSupportedGet is always accepted, so others can learn our security classes
+					if (
+						cmd.encapsulated
+							instanceof Security2CCCommandsSupportedGet
+					) {
+						return true;
+					}
+
+					// Multicast commands are always accepted
+					if (cmd.getMulticastGroupId() != undefined) return true;
+
+					// This shouldn't happen, but better be sure
+					if (cmd.securityClass == undefined) return false;
+
+					// All other commands are only accepted if the highest security class is used
+					return cmd.securityClass === secClass;
 				}
 			}
-			return false;
+
+			return cmd.ccId === expectedSecurityCC;
 		};
 
-		let isSecure = false;
 		let requiresSecurity = securityClassIsS2(secClass);
-		while (true) {
-			if (
-				(cc.ccId === expectedSecurityCC && !discardAnyways(cc))
-				|| acceptAnyways(cc)
-			) {
-				isSecure = true;
-			}
+		const isSecure = isCCConsideredSecure(cc);
 
+		while (true) {
 			if (isEncapsulatingCommandClass(cc)) {
 				cc = cc.encapsulated;
 			} else if (isMultiEncapsulatingCommandClass(cc)) {
@@ -4413,30 +4426,6 @@ ${handlers.length} left`,
 			const nodeSessions = this.nodeSessions.get(nodeId);
 			// Check if we need to handle the command ourselves
 			if (
-				msg.command.ccId === CommandClasses["Device Reset Locally"]
-				&& msg.command instanceof DeviceResetLocallyCCNotification
-			) {
-				this.controllerLog.logNode(msg.command.nodeId, {
-					message: `The node was reset locally, removing it`,
-					direction: "inbound",
-				});
-
-				try {
-					await this.controller.removeFailedNodeInternal(
-						msg.command.nodeId,
-						RemoveNodeReason.Reset,
-					);
-				} catch (e) {
-					this.controllerLog.logNode(msg.command.nodeId, {
-						message: `removing the node failed: ${
-							getErrorMessage(
-								e,
-							)
-						}`,
-						level: "error",
-					});
-				}
-			} else if (
 				msg.command.ccId === CommandClasses.Supervision
 				&& msg.command instanceof SupervisionCCReport
 				&& nodeSessions?.supervision.has(msg.command.sessionId)
@@ -4468,21 +4457,24 @@ ${handlers.length} left`,
 
 				const encapsulationFlags = msg.command.encapsulationFlags;
 
-				let reply: (success: boolean) => Promise<void>;
+				let reply: (
+					status:
+						| SupervisionStatus.Success
+						| SupervisionStatus.Fail
+						| SupervisionStatus.NoSupport,
+				) => Promise<void>;
 				if (supervisionSessionId != undefined) {
 					// The command was supervised, and we must respond with a Supervision Report
 					const endpoint = node.getEndpoint(msg.command.endpointIndex)
 						?? node;
-					reply = (success) =>
+					reply = (status) =>
 						endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.withOptions({ s2MulticastOutOfSync })
 							.sendReport({
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
-								status: success
-									? SupervisionStatus.Success
-									: SupervisionStatus.Fail,
+								status,
 								requestWakeUpOnDemand: this
 									.shouldRequestWakeupOnDemand(node),
 								encapsulationFlags,
@@ -4516,7 +4508,7 @@ ${handlers.length} left`,
 						entry.handler(msg.command);
 
 						// and possibly reply to a supervised command
-						await reply(true);
+						await reply(SupervisionStatus.Success);
 						return;
 					}
 				}
@@ -4524,13 +4516,28 @@ ${handlers.length} left`,
 				// No one is waiting, dispatch the command to the node itself
 				try {
 					await node.handleCommand(msg.command);
-					await reply(true);
+					await reply(SupervisionStatus.Success);
 				} catch (e) {
-					await reply(false);
+					let handled = false;
+					if (isZWaveError(e)) {
+						if (e.code === ZWaveErrorCodes.CC_OperationFailed) {
+							// The sending node tried to do something that didn't work
+							await reply(SupervisionStatus.Fail);
+							handled = true;
+						} else if (e.code === ZWaveErrorCodes.CC_NotSupported) {
+							// The sending node sent a command we could not handle
+							await reply(SupervisionStatus.NoSupport);
+							handled = true;
+						}
+					}
 
-					// We only caught the error to be able to respond to supervised requests.
-					// Re-Throw so it can be handled accordingly
-					throw e;
+					if (!handled) {
+						// Something unexpected happened.
+						// Report failure, then re-throw the error, so it can be handled accordingly
+						await reply(SupervisionStatus.Fail);
+
+						throw e;
+					}
 				}
 			}
 
@@ -4679,7 +4686,13 @@ ${handlers.length} left`,
 		) {
 			const unwrapped = msg.command.encapsulated;
 			if (isArray(unwrapped)) {
-				// Multi Command CC cannot be further unwrapped
+				// Multi Command CC cannot be further unwrapped. Preserve the encapsulation flags though.
+				for (const cmd of unwrapped) {
+					cmd.toggleEncapsulationFlag(
+						msg.command.encapsulationFlags,
+						true,
+					);
+				}
 				return;
 			}
 

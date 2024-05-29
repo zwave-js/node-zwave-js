@@ -271,6 +271,7 @@ export class IndicatorCCAPI extends CCAPI {
 			case IndicatorCommand.SupportedReport:
 				return this.version >= 2 && this.isSinglecast();
 			case IndicatorCommand.DescriptionGet:
+			case IndicatorCommand.DescriptionReport:
 				return this.version >= 4 && this.isSinglecast();
 		}
 		return super.supportsCommand(cmd);
@@ -383,6 +384,24 @@ export class IndicatorCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
+	public async sendReport(
+		options: IndicatorCCReportSpecificOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			IndicatorCommand,
+			IndicatorCommand.Report,
+		);
+
+		const cc = new IndicatorCCReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	@validateArgs()
 	public async getSupported(indicatorId: number): Promise<
 		| {
 			indicatorId?: number;
@@ -436,6 +455,26 @@ export class IndicatorCCAPI extends CCAPI {
 			indicatorId,
 			supportedProperties,
 			nextIndicatorId,
+		});
+
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	@validateArgs()
+	public async reportDescription(
+		indicatorId: number,
+		description: string,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			IndicatorCommand,
+			IndicatorCommand.DescriptionReport,
+		);
+
+		const cc = new IndicatorCCDescriptionReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			indicatorId,
+			description,
 		});
 
 		await this.applHost.sendCommand(cc, this.commandOptions);
@@ -1354,21 +1393,34 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 	}
 }
 
+// @publicAPI
+export interface IndicatorCCDescriptionReportOptions {
+	indicatorId: number;
+	description: string;
+}
+
 @CCCommand(IndicatorCommand.DescriptionReport)
 export class IndicatorCCDescriptionReport extends IndicatorCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (IndicatorCCDescriptionReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 2);
-		this.indicatorId = this.payload[0];
-		const descrptionLength = this.payload[1];
-		validatePayload(this.payload.length >= 2 + descrptionLength);
-		this.description = this.payload
-			.subarray(2, 2 + descrptionLength)
-			.toString("utf8");
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.indicatorId = this.payload[0];
+			const descrptionLength = this.payload[1];
+			validatePayload(this.payload.length >= 2 + descrptionLength);
+			this.description = this.payload
+				.subarray(2, 2 + descrptionLength)
+				.toString("utf8");
+		} else {
+			this.indicatorId = options.indicatorId;
+			this.description = options.description;
+		}
 	}
 
 	public indicatorId: number;
@@ -1386,6 +1438,15 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		}
 
 		return true;
+	}
+
+	public serialize(): Buffer {
+		const description = Buffer.from(this.description, "utf8");
+		this.payload = Buffer.concat([
+			Buffer.from([this.indicatorId, description.length]),
+			description,
+		]);
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

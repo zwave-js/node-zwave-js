@@ -45,10 +45,13 @@ export class DeviceResetLocallyCCAPI extends CCAPI {
 		});
 
 		try {
+			// This command is sent immediately before a hard reset of the controller.
+			// If we don't wait for a callback (ack), the controller locks up when hard-resetting.
 			await this.applHost.sendCommand(cc, {
 				...this.commandOptions,
-				// Seems we need these options or some nodes won't accept the nonce
-				transmitOptions: TransmitOptions.DEFAULT_NOACK,
+				// Do not fall back to explorer frames
+				transmitOptions: TransmitOptions.ACK
+					| TransmitOptions.AutoRoute,
 				// Only try sending once
 				maxSendAttempts: 1,
 				// We don't want failures causing us to treat the node as asleep or dead

@@ -5,6 +5,7 @@ import {
 	CentralSceneKeys,
 	ClockCommand,
 	CommandClass,
+	DeviceResetLocallyCCNotification,
 	DeviceResetLocallyCommand,
 	DoorLockMode,
 	EntryControlDataTypes,
@@ -16,8 +17,14 @@ import {
 	FirmwareUpdateStatus,
 	InclusionControllerCCInitiate,
 	InclusionControllerStep,
+	IndicatorCCDescriptionGet,
+	IndicatorCCGet,
 	IndicatorCCSet,
 	IndicatorCCSupportedGet,
+	MultiChannelAssociationCCGet,
+	MultiChannelAssociationCCRemove,
+	MultiChannelAssociationCCSet,
+	MultiChannelAssociationCCSupportedGroupingsGet,
 	MultiCommandCCCommandEncapsulation,
 	MultilevelSwitchCommand,
 	type PollValueImplementation,
@@ -46,6 +53,7 @@ import {
 	AssociationCCGet,
 	AssociationCCRemove,
 	AssociationCCSet,
+	AssociationCCSpecificGroupGet,
 	AssociationCCSupportedGroupingsGet,
 	AssociationCCValues,
 } from "@zwave-js/cc/AssociationCC";
@@ -75,6 +83,7 @@ import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
+	FirmwareUpdateMetaDataCCMetaDataGet,
 	FirmwareUpdateMetaDataCCReport,
 	FirmwareUpdateMetaDataCCStatusReport,
 	FirmwareUpdateMetaDataCCValues,
@@ -101,7 +110,11 @@ import {
 	getNotificationStateValueWithEnum,
 	getNotificationValueMetadata,
 } from "@zwave-js/cc/NotificationCC";
-import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
+import {
+	PowerlevelCCGet,
+	PowerlevelCCSet,
+	PowerlevelCCTestNodeReport,
+} from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
 import {
 	Security2CCCommandsSupportedGet,
@@ -120,6 +133,7 @@ import {
 	ThermostatModeCCValues,
 } from "@zwave-js/cc/ThermostatModeCC";
 import {
+	VersionCCCapabilitiesGet,
 	VersionCCCommandClassGet,
 	VersionCCGet,
 	VersionCCValues,
@@ -225,6 +239,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { isDeepStrictEqual } from "node:util";
+import { RemoveNodeReason } from "../controller/Inclusion";
 import { determineNIF } from "../controller/NodeInformationFrame";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
@@ -906,17 +921,6 @@ export class ZWaveNode extends Endpoint
 	}
 	public set hasSUCReturnRoute(value: boolean) {
 		this.driver.cacheSet(cacheKeys.node(this.id).hasSUCReturnRoute, value);
-	}
-
-	/** @internal Which associations are currently configured */
-	public get associations(): readonly number[] {
-		return (
-			this.driver.cacheGet(cacheKeys.node(this.id).associations(1)) ?? []
-		);
-	}
-
-	private set associations(value: readonly number[]) {
-		this.driver.cacheSet(cacheKeys.node(this.id).associations(1), value);
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
@@ -3094,6 +3098,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
 			return this.handleUnexpectedFirmwareUpdateGet(command);
+		} else if (command instanceof FirmwareUpdateMetaDataCCMetaDataGet) {
+			return this.handleFirmwareUpdateMetaDataGet(command);
 		} else if (command instanceof EntryControlCCNotification) {
 			return this.handleEntryControlNotification(command);
 		} else if (command instanceof PowerlevelCCTestNodeReport) {
@@ -3110,6 +3116,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleVersionGet(command);
 		} else if (command instanceof VersionCCCommandClassGet) {
 			return this.handleVersionCommandClassGet(command);
+		} else if (command instanceof VersionCCCapabilitiesGet) {
+			return this.handleVersionCapabilitiesGet(command);
 		} else if (command instanceof ManufacturerSpecificCCGet) {
 			return this.handleManufacturerSpecificGet(command);
 		} else if (command instanceof AssociationGroupInfoCCNameGet) {
@@ -3126,10 +3134,34 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleAssociationSet(command);
 		} else if (command instanceof AssociationCCRemove) {
 			return this.handleAssociationRemove(command);
+		} else if (command instanceof AssociationCCSpecificGroupGet) {
+			return this.handleAssociationSpecificGroupGet(command);
+		} else if (
+			command instanceof MultiChannelAssociationCCSupportedGroupingsGet
+		) {
+			return this.handleMultiChannelAssociationSupportedGroupingsGet(
+				command,
+			);
+		} else if (command instanceof MultiChannelAssociationCCGet) {
+			return this.handleMultiChannelAssociationGet(command);
+		} else if (command instanceof MultiChannelAssociationCCSet) {
+			return this.handleMultiChannelAssociationSet(command);
+		} else if (command instanceof MultiChannelAssociationCCRemove) {
+			return this.handleMultiChannelAssociationRemove(command);
 		} else if (command instanceof IndicatorCCSupportedGet) {
 			return this.handleIndicatorSupportedGet(command);
 		} else if (command instanceof IndicatorCCSet) {
 			return this.handleIndicatorSet(command);
+		} else if (command instanceof IndicatorCCGet) {
+			return this.handleIndicatorGet(command);
+		} else if (command instanceof IndicatorCCDescriptionGet) {
+			return this.handleIndicatorDescriptionGet(command);
+		} else if (command instanceof PowerlevelCCSet) {
+			return this.handlePowerlevelSet(command);
+		} else if (command instanceof PowerlevelCCGet) {
+			return this.handlePowerlevelGet(command);
+		} else if (command instanceof DeviceResetLocallyCCNotification) {
+			return this.handleDeviceResetLocallyNotification(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
 			// Inclusion controller commands are handled by the controller class
 			if (
@@ -3171,6 +3203,14 @@ protocol version:      ${this.protocolVersion}`;
 			message: `TODO: no handler for application command`,
 			direction: "inbound",
 		});
+
+		if (command.encapsulationFlags & EncapsulationFlags.Supervision) {
+			// Report no support for supervised commands we cannot handle
+			throw new ZWaveError(
+				"No handler for application command",
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
 	}
 
 	private hasLoggedNoNetworkKey = false;
@@ -3770,6 +3810,22 @@ protocol version:      ${this.protocolVersion}`;
 					});
 				}
 			} else if (
+				!this.deviceConfig?.compat?.mapBasicSet
+				&& !!(command.encapsulationFlags
+					& EncapsulationFlags.Supervision)
+			) {
+				// A controller MUST not support Basic CC per the specifications. While we can interpret its contents,
+				// we MUST respond to supervised Basic CC Set with "no support".
+				// All known devices that use BasicCCSet for reporting send it unsupervised, so this should be safe to do.
+				if (
+					command.encapsulationFlags & EncapsulationFlags.Supervision
+				) {
+					throw new ZWaveError(
+						"Basic CC is not supported",
+						ZWaveErrorCodes.CC_NotSupported,
+					);
+				}
+			} else if (
 				basicSetMapping === "auto" || basicSetMapping === "report"
 			) {
 				// Some devices send their current state using BasicCCSet to their associations
@@ -3915,7 +3971,7 @@ protocol version:      ${this.protocolVersion}`;
 				zwavePlusVersion: 2,
 				roleType: ZWavePlusRoleType.CentralStaticController,
 				nodeType: ZWavePlusNodeType.Node,
-				installerIcon: 0x0500, // Generic Gateway
+				installerIcon: 0x0500, // Generic Gateway // FIXME: Make configurable
 				userIcon: 0x0500, // Generic Gateway
 			});
 	}
@@ -3958,6 +4014,25 @@ protocol version:      ${this.protocolVersion}`;
 			});
 
 		await api.reportCCVersion(command.requestedCC);
+	}
+
+	private async handleVersionCapabilitiesGet(
+		command: VersionCCCapabilitiesGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Version, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		await api.reportCapabilities();
 	}
 
 	private async handleManufacturerSpecificGet(
@@ -4095,15 +4170,10 @@ protocol version:      ${this.protocolVersion}`;
 	private async handleAssociationGet(
 		command: AssociationCCGet,
 	): Promise<void> {
-		if (command.groupId !== 1) {
-			// We only "support" the lifeline group
-			return;
-		}
-		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+		// We only "support" the lifeline group
+		const groupId = 1;
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		)!;
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
 		// We are being queried, so the device may actually not support the CC, just control it.
 		// Using the commandClasses property would throw in that case
@@ -4116,29 +4186,48 @@ protocol version:      ${this.protocolVersion}`;
 					& ~EncapsulationFlags.Supervision,
 			});
 
+		const nodeIds =
+			this.driver.controller.associations.filter((a) =>
+				a.endpoint == undefined
+			)
+				.map((a) => a.nodeId) ?? [];
+
 		await api.sendReport({
-			groupId: command.groupId,
+			groupId,
 			maxNodes: MAX_ASSOCIATIONS,
-			nodeIds: [...(controllerNode?.associations ?? [])],
+			nodeIds,
 			reportsToFollow: 0,
 		});
 	}
 
 	private handleAssociationSet(command: AssociationCCSet): void {
 		if (command.groupId !== 1) {
-			// We only "support" the lifeline group
-			return;
+			// We only "support" the lifeline group.
+			throw new ZWaveError(
+				`Association group ${command.groupId} is not supported.`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
 		}
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		);
-		if (!controllerNode) return;
+		// Ignore associations that already exist
+		const newAssociations = command.nodeIds.filter((newNodeId) =>
+			!this.driver.controller.associations.some(
+				({ nodeId, endpoint }) =>
+					endpoint === undefined && nodeId === newNodeId,
+			)
+		).map((nodeId) => ({ nodeId }));
 
-		controllerNode.associations = [
-			...controllerNode.associations,
-			...command.nodeIds,
-		].slice(0, MAX_ASSOCIATIONS);
+		const associations = [...this.driver.controller.associations];
+		associations.push(...newAssociations);
+
+		// Report error if the association group is already full
+		if (associations.length > MAX_ASSOCIATIONS) {
+			throw new ZWaveError(
+				`Association group ${command.groupId} is full`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
+		}
+		this.driver.controller.associations = associations;
 	}
 
 	private handleAssociationRemove(command: AssociationCCRemove): void {
@@ -4148,18 +4237,182 @@ protocol version:      ${this.protocolVersion}`;
 			return;
 		}
 
-		const controllerNode = this.driver.controller.nodes.get(
-			this.driver.controller.ownNodeId!,
-		);
-		if (!controllerNode) return;
-
-		if (!command.nodeIds) {
+		if (!command.nodeIds?.length) {
 			// clear
-			controllerNode.associations = [];
+			this.driver.controller.associations = [];
 		} else {
-			controllerNode.associations = controllerNode.associations.filter(
-				(nodeId) => !command.nodeIds!.includes(nodeId),
+			this.driver.controller.associations = this.driver.controller
+				.associations.filter(
+					({ nodeId, endpoint }) =>
+						endpoint === undefined
+						&& !command.nodeIds!.includes(nodeId),
+				);
+		}
+	}
+
+	private async handleAssociationSpecificGroupGet(
+		command: AssociationCCSpecificGroupGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Association, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We don't support this feature.
+		// It is RECOMMENDED that the value 0 is returned by non-supporting devices.
+		await api.reportSpecificGroup(0);
+	}
+
+	private async handleMultiChannelAssociationSupportedGroupingsGet(
+		command: MultiChannelAssociationCCSupportedGroupingsGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Multi Channel Association"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We only "support" the lifeline group
+		await api.reportGroupCount(1);
+	}
+
+	private async handleMultiChannelAssociationGet(
+		command: MultiChannelAssociationCCGet,
+	): Promise<void> {
+		// We only "support" the lifeline group
+		const groupId = 1;
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Multi Channel Association"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		const nodeIds =
+			this.driver.controller.associations.filter((a) =>
+				a.endpoint == undefined
+			)
+				.map((a) => a.nodeId) ?? [];
+		const endpoints =
+			this.driver.controller.associations.filter((a) =>
+				a.endpoint != undefined
+			)
+				.map(({ nodeId, endpoint }) => ({
+					nodeId,
+					endpoint: endpoint!,
+				}))
+				?? [];
+
+		await api.sendReport({
+			groupId,
+			maxNodes: MAX_ASSOCIATIONS,
+			nodeIds,
+			endpoints,
+			reportsToFollow: 0,
+		});
+	}
+
+	private handleMultiChannelAssociationSet(
+		command: MultiChannelAssociationCCSet,
+	): void {
+		if (command.groupId !== 1) {
+			// We only "support" the lifeline group.
+			throw new ZWaveError(
+				`Multi Channel Association group ${command.groupId} is not supported.`,
+				ZWaveErrorCodes.CC_OperationFailed,
 			);
+		}
+
+		// Ignore associations that already exists
+		const newNodeIdAssociations = command.nodeIds.filter((newNodeId) =>
+			!this.driver.controller.associations.some(
+				({ nodeId, endpoint }) =>
+					endpoint === undefined && nodeId === newNodeId,
+			)
+		).map((nodeId) => ({ nodeId }));
+		const newEndpointAssociations = command.endpoints.flatMap(
+			({ nodeId, endpoint }) => {
+				if (typeof endpoint === "number") {
+					return { nodeId, endpoint };
+				} else {
+					return endpoint.map((e) => ({ nodeId, endpoint: e }));
+				}
+			},
+		).filter(({ nodeId: newNodeId, endpoint: newEndpoint }) =>
+			!this.driver.controller.associations.some(({ nodeId, endpoint }) =>
+				nodeId === newNodeId && endpoint === newEndpoint
+			)
+		);
+
+		const associations = [...this.driver.controller.associations];
+		associations.push(...newNodeIdAssociations, ...newEndpointAssociations);
+
+		// Report error if the association group is already full
+		if (associations.length > MAX_ASSOCIATIONS) {
+			throw new ZWaveError(
+				`Multi Channel Association group ${command.groupId} is full`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
+		}
+
+		this.driver.controller.associations = associations.slice(
+			0,
+			MAX_ASSOCIATIONS,
+		);
+	}
+
+	private handleMultiChannelAssociationRemove(
+		command: MultiChannelAssociationCCRemove,
+	): void {
+		// Allow accessing the lifeline group or all groups (which is the same)
+		if (!!command.groupId && command.groupId !== 1) {
+			// We only "support" the lifeline group
+			return;
+		}
+
+		if (!command.nodeIds?.length && !command.endpoints?.length) {
+			// Clear all associations
+			this.driver.controller.associations = [];
+		} else {
+			let associations = [...this.driver.controller.associations];
+			if (command.nodeIds?.length) {
+				associations = associations.filter(
+					({ nodeId, endpoint }) =>
+						endpoint === undefined
+						&& !command.nodeIds!.includes(nodeId),
+				);
+			}
+			if (command.endpoints?.length) {
+				associations = associations.filter(
+					({ nodeId, endpoint }) =>
+						!command.endpoints!.some((dest) =>
+							dest.nodeId === nodeId && dest.endpoint === endpoint
+						),
+				);
+			}
+			this.driver.controller.associations = associations;
 		}
 	}
 
@@ -4201,12 +4454,123 @@ protocol version:      ${this.protocolVersion}`;
 		if (v2.indicatorId !== 0x50 || v2.propertyId !== 0x04) return;
 		if (v3.indicatorId !== 0x50 || v3.propertyId !== 0x05) return;
 
+		// This isn't really sane, but since we only support a single indicator, it's fine
+		const store = this.driver.controller.indicatorValues;
+		store.set(0x50, [v1, v2, v3]);
+
 		this.driver.controllerLog.logNode(this.id, {
 			message: "Received identify command",
 			direction: "inbound",
 		});
 
 		this.driver.controller.emit("identify", this);
+	}
+
+	private async handleIndicatorGet(command: IndicatorCCGet): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Indicator, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We only support "identify"
+		if (command.indicatorId === 0x50) {
+			const values = this.driver.controller.indicatorValues.get(0x50) ?? [
+				{ indicatorId: 0x50, propertyId: 0x03, value: 0 },
+				{ indicatorId: 0x50, propertyId: 0x04, value: 0 },
+				{ indicatorId: 0x50, propertyId: 0x05, value: 0 },
+			];
+			await api.sendReport({ values });
+		} else if (typeof command.indicatorId === "number") {
+			// V2+ report
+			await api.sendReport({
+				values: [
+					{
+						indicatorId: command.indicatorId,
+						propertyId: 0,
+						value: 0,
+					},
+				],
+			});
+		} else {
+			// V1+ report
+			await api.sendReport({ value: 0 });
+		}
+	}
+
+	private async handleIndicatorDescriptionGet(
+		command: IndicatorCCDescriptionGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Indicator, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We only support "identify" (0x50) and requests for indicators outside the 0x80...0x9f range
+		// MUST return an Indicator Description Report with the Description Length set to 0.
+		// So we can just always do that.
+		await api.reportDescription(command.indicatorId, "");
+	}
+
+	private handlePowerlevelSet(command: PowerlevelCCSet): void {
+		// CC:0073.01.01.11.001: A supporting node MAY decide not to change its actual Tx configuration.
+		// In any case, the value received in this Command MUST be returned in a Powerlevel Report Command
+		// in response to a Powerlevel Get Command as if the power setting was accepted for the indicated duration.
+		this.driver.controller.powerlevel = {
+			powerlevel: command.powerlevel,
+			until: command.timeout
+				? new Date(Date.now() + command.timeout * 1000)
+				: new Date(),
+		};
+	}
+
+	private async handlePowerlevelGet(command: PowerlevelCCGet): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Powerlevel, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		const { powerlevel, until } = this.driver.controller.powerlevel;
+
+		if (powerlevel === Powerlevel["Normal Power"]) {
+			await api.reportPowerlevel({ powerlevel });
+		} else {
+			const timeoutSeconds = Math.max(
+				0,
+				Math.min(
+					Math.round((until.getTime() - Date.now()) / 1000),
+					255,
+				),
+			);
+
+			await api.reportPowerlevel({
+				powerlevel,
+				timeout: timeoutSeconds,
+			});
+		}
 	}
 
 	private async handleSecurityCommandsSupportedGet(
@@ -4265,9 +4629,6 @@ protocol version:      ${this.protocolVersion}`;
 			);
 
 			const supportedCCs = new Set([
-				// Z-Wave Plus Info must be listed first
-				CommandClasses["Z-Wave Plus Info"],
-
 				// DT:00.11.0004.1
 				// All Root Devices or nodes MUST support:
 				// - Association, version 2
@@ -4292,6 +4653,7 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses["Multi Channel Association"],
 				CommandClasses.Powerlevel,
 				CommandClasses.Version,
+				CommandClasses["Z-Wave Plus Info"],
 
 				// Generic Controller device type has no additional support requirements,
 				// but we also support the following command classes:
@@ -4309,8 +4671,15 @@ protocol version:      ${this.protocolVersion}`;
 				),
 			]);
 
+			// Commands that are always in the NIF should not appear in the
+			// S2 commands supported report
+			const commandsInNIF = new Set(determineNIF().supportedCCs);
+			const supportedCommandsNotInNIF = [...supportedCCs].filter((cc) =>
+				!commandsInNIF.has(cc)
+			);
+
 			await endpoint.commandClasses["Security 2"].reportSupportedCommands(
-				[...supportedCCs],
+				supportedCommandsNotInNIF,
 			);
 		} else if (securityClassIsS2(actualSecurityClass)) {
 			// The command was received using a lower security class. Return an empty list
@@ -4322,6 +4691,37 @@ protocol version:      ${this.protocolVersion}`;
 		} else {
 			// Do not respond
 		}
+	}
+
+	private handleDeviceResetLocallyNotification(
+		_cmd: DeviceResetLocallyCCNotification,
+	): void {
+		// Handling this command can take a few seconds and require communication with the node.
+		// If it was received with Supervision, we need to acknowledge it immediately. Therefore
+		// defer the handling half a second.
+
+		setTimeout(async () => {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `The node was reset locally, removing it`,
+				direction: "inbound",
+			});
+
+			try {
+				await this.driver.controller.removeFailedNodeInternal(
+					this.id,
+					RemoveNodeReason.Reset,
+				);
+			} catch (e) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `removing the node failed: ${
+						getErrorMessage(
+							e,
+						)
+					}`,
+					level: "error",
+				});
+			}
+		}, 500);
 	}
 
 	/**
@@ -5606,6 +6006,30 @@ protocol version:      ${this.protocolVersion}`;
 		} catch {
 			// ignore
 		}
+	}
+
+	private async handleFirmwareUpdateMetaDataGet(
+		command: FirmwareUpdateMetaDataCCMetaDataGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses["Firmware Update Meta Data"], false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		// We do not support the firmware to be upgraded.
+		await api.reportMetaData({
+			manufacturerId: 0x0466, // Nabu Casa - FIXME: Make this configurable
+			firmwareUpgradable: false,
+			hardwareVersion: 1, // FIXME: Make configurable, must be the same as in Version CC
+		});
 	}
 
 	private recentEntryControlNotificationSequenceNumbers: number[] = [];
