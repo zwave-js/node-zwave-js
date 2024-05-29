@@ -3971,8 +3971,9 @@ protocol version:      ${this.protocolVersion}`;
 				zwavePlusVersion: 2,
 				roleType: ZWavePlusRoleType.CentralStaticController,
 				nodeType: ZWavePlusNodeType.Node,
-				installerIcon: 0x0500, // Generic Gateway // FIXME: Make configurable
-				userIcon: 0x0500, // Generic Gateway
+				installerIcon: this.driver.options.vendor?.installerIcon
+					?? 0x0500, // Generic Gateway
+				userIcon: this.driver.options.vendor?.userIcon ?? 0x0500, // Generic Gateway
 			});
 	}
 
@@ -3994,6 +3995,7 @@ protocol version:      ${this.protocolVersion}`;
 			libraryType: ZWaveLibraryTypes["Static Controller"],
 			protocolVersion: this.driver.controller.protocolVersion!,
 			firmwareVersions: [this.driver.controller.firmwareVersion!],
+			hardwareVersion: this.driver.options.vendor?.hardwareVersion,
 		});
 	}
 
@@ -4050,9 +4052,10 @@ protocol version:      ${this.protocolVersion}`;
 			});
 
 		await api.sendReport({
-			manufacturerId: 0x0466, // Nabu Casa - FIXME: make dynamic!
-			productType: 0x0000,
-			productId: 0x0000,
+			manufacturerId: this.driver.options.vendor?.manufacturerId
+				?? 0xffff, // Reserved manufacturer ID, definitely invalid!
+			productType: this.driver.options.vendor?.productType ?? 0xffff,
+			productId: this.driver.options.vendor?.productId ?? 0xffff,
 		});
 	}
 
@@ -6026,9 +6029,10 @@ protocol version:      ${this.protocolVersion}`;
 
 		// We do not support the firmware to be upgraded.
 		await api.reportMetaData({
-			manufacturerId: 0x0466, // Nabu Casa - FIXME: Make this configurable
+			manufacturerId: this.driver.options.vendor?.manufacturerId
+				?? 0xffff,
 			firmwareUpgradable: false,
-			hardwareVersion: 1, // FIXME: Make configurable, must be the same as in Version CC
+			hardwareVersion: this.driver.options.vendor?.hardwareVersion ?? 0,
 		});
 	}
 
