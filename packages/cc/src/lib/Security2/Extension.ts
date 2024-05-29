@@ -94,23 +94,46 @@ export function getExtensionType<T extends Security2Extension>(
 	return ret;
 }
 
+export enum ValidateS2ExtensionResult {
+	OK,
+	DiscardExtension,
+	DiscardCommand,
+}
+
 /** Tests if the extension may be accepted */
-export function isValidExtension(
+export function validateS2Extension(
 	ext: Security2Extension,
 	wasEncrypted: boolean,
-): boolean {
-	if (ext.critical && !(ext.type in S2ExtensionType)) {
-		return false;
+): ValidateS2ExtensionResult {
+	if (ext instanceof InvalidExtension) {
+		// The extension could not be parsed, ignore it
+		return ValidateS2ExtensionResult.DiscardExtension;
 	}
+
+	if (ext.critical && !(ext.type in S2ExtensionType)) {
+		// A receiving node MUST discard the entire command if the Critical flag
+		// is set to ‘1’ and the Type field advertises a value that the
+		// receiving node does not support.
+		return ValidateS2ExtensionResult.DiscardCommand;
+	}
+
+	// Check if the extension is correctly encrypted or not encrypted
 	switch (ext.type) {
 		case S2ExtensionType.MPAN:
-			return wasEncrypted === true;
+			if (!wasEncrypted) {
+				return ValidateS2ExtensionResult.DiscardExtension;
+			}
+			break;
 		case S2ExtensionType.SPAN:
 		case S2ExtensionType.MGRP:
 		case S2ExtensionType.MOS:
-			return wasEncrypted === false;
+			if (wasEncrypted) {
+				return ValidateS2ExtensionResult.DiscardExtension;
+			}
+			break;
 	}
-	return true;
+
+	return ValidateS2ExtensionResult.OK;
 }
 
 interface Security2ExtensionCreationOptions {

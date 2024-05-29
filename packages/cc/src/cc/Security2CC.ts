@@ -54,13 +54,13 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
-	InvalidExtension,
 	MGRPExtension,
 	MOSExtension,
 	MPANExtension,
 	SPANExtension,
 	Security2Extension,
-	isValidExtension,
+	ValidateS2ExtensionResult,
+	validateS2Extension,
 } from "../lib/Security2/Extension";
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "../lib/Security2/shared";
 import { Security2Command } from "../lib/_Types";
@@ -935,9 +935,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			let offset = 2;
 			this.extensions = [];
+			let mustDiscardCommand = false;
+
 			const parseExtensions = (buffer: Buffer, wasEncrypted: boolean) => {
-				while (offset < buffer.length) {
-					validatePayload(buffer.length >= offset + 2);
+				while (true) {
+					if (buffer.length < offset + 2) {
+						// An S2 extension was expected, but the buffer is too short
+						mustDiscardCommand = true;
+						return;
+					}
+
 					// The length field could be too large, which would cause part of the actual ciphertext
 					// to be ignored. Try to avoid this for known extensions by checking the actual and expected length.
 					const { actual: actualLength, expected: expectedLength } =
@@ -948,41 +955,50 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 					// Parse the extension using the expected length if possible
 					const extensionLength = expectedLength ?? actualLength;
+					if (extensionLength < 2) {
+						// An S2 extension was expected, but the length is too short
+						mustDiscardCommand = true;
+						return;
+					} else if (
+						extensionLength
+							> buffer.length
+								- offset
+								- SECURITY_S2_AUTH_TAG_LENGTH
+					) {
+						// The supposed length is longer than the space the extensions may occupy
+						mustDiscardCommand = true;
+						return;
+					}
+
 					const extensionData = buffer.subarray(
 						offset,
 						offset + extensionLength,
 					);
 					offset += extensionLength;
 
-					try {
-						const ext = Security2Extension.from(extensionData);
-						if (
-							expectedLength != undefined
-							&& actualLength !== expectedLength
-						) {
-							// The extension length field does not match, ignore the extension
-						} else if (ext instanceof InvalidExtension) {
-							// The extension could not be parsed, ignore it
-						} else {
-							if (isValidExtension(ext, wasEncrypted)) {
+					const ext = Security2Extension.from(extensionData);
+
+					switch (validateS2Extension(ext, wasEncrypted)) {
+						case ValidateS2ExtensionResult.OK:
+							if (
+								expectedLength != undefined
+								&& actualLength !== expectedLength
+							) {
+								// The extension length field does not match, ignore the extension
+							} else {
 								this.extensions.push(ext);
 							}
-						}
-
-						// Check if that was the last extension
-						if (!ext.moreToFollow) break;
-					} catch (e) {
-						if (
-							isZWaveError(e)
-							&& e.code
-								=== ZWaveErrorCodes.PacketFormat_InvalidPayload
-						) {
-							// Extension validation failed, ignore
-						} else {
-							debugger;
-							throw e;
-						}
+							break;
+						case ValidateS2ExtensionResult.DiscardExtension:
+							// Do nothing
+							break;
+						case ValidateS2ExtensionResult.DiscardCommand:
+							mustDiscardCommand = true;
+							break;
 					}
+
+					// Check if that was the last extension
+					if (!ext.moreToFollow) break;
 				}
 			};
 			if (hasExtensions) parseExtensions(this.payload, false);
@@ -1006,6 +1022,22 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					return { isMulticast: false, groupId: multicastGroupId };
 				}
 			})();
+
+			// If a command is to be discarded before decryption,
+			// we still need to increment the SPAN or MPAN state
+			if (mustDiscardCommand) {
+				if (ctx.isMulticast) {
+					this.securityManager.nextPeerMPAN(
+						sendingNodeId,
+						ctx.groupId,
+					);
+				} else {
+					this.securityManager.nextNonce(sendingNodeId);
+				}
+				throw validatePayload.fail(
+					"Invalid S2 extension",
+				);
+			}
 
 			let prevSequenceNumber: number | undefined;
 			let mpanState:
@@ -1161,6 +1193,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			offset = 0;
 			if (hasEncryptedExtensions) parseExtensions(plaintext, true);
+
+			// Before we can continue, check if the command must be discarded
+			if (mustDiscardCommand) {
+				throw validatePayload.fail("Invalid extension");
+			}
 
 			// If the MPAN extension was received, store the MPAN
 			if (!ctx.isMulticast) {
@@ -1594,10 +1631,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			) {
 				const nonce = spanState.currentSPAN.nonce;
 				spanState.currentSPAN = undefined;
-				return {
-					...decryptWithNonce(nonce),
-					securityClass: spanState.securityClass,
-				};
+
+				// If we could decrypt this way, we're done...
+				const result = decryptWithNonce(nonce);
+				if (result.authOK) {
+					return {
+						...result,
+						securityClass: spanState.securityClass,
+					};
+				}
+				// ...otherwise, we need to try the normal way
 			} else {
 				// forgetting the current SPAN shouldn't be necessary but better be safe than sorry
 				spanState.currentSPAN = undefined;
