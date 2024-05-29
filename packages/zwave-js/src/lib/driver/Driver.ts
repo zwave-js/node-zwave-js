@@ -9,6 +9,7 @@ import {
 	KEXFailType,
 	MultiChannelCC,
 	Security2CC,
+	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceReport,
@@ -16,6 +17,7 @@ import {
 	SecurityCC,
 	SecurityCCCommandEncapsulation,
 	SecurityCCCommandEncapsulationNonceGet,
+	SecurityCCCommandsSupportedGet,
 	SecurityCCCommandsSupportedReport,
 	SecurityCommand,
 	SupervisionCC,
@@ -4220,9 +4222,12 @@ ${handlers.length} left`,
 
 				if (cmd instanceof SecurityCCCommandEncapsulation) {
 					// CommandsSupportedReport is always accepted to be able to learn security classes and interview nodes
+					// CommandsSupportedGet is always accepted, so others can learn our security classes
 					if (
 						cmd.encapsulated
 							instanceof SecurityCCCommandsSupportedReport
+						|| cmd.encapsulated
+							instanceof SecurityCCCommandsSupportedGet
 					) {
 						return true;
 					}
@@ -4236,8 +4241,14 @@ ${handlers.length} left`,
 					if (
 						cmd.encapsulated
 							instanceof Security2CCCommandsSupportedReport
-						|| cmd.encapsulated
-							instanceof SecurityCCCommandsSupportedReport
+					) {
+						return true;
+					}
+
+					// CommandsSupportedGet is always accepted, so others can learn our security classes
+					if (
+						cmd.encapsulated
+							instanceof Security2CCCommandsSupportedGet
 					) {
 						return true;
 					}
