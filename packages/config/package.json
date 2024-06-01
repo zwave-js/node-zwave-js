@@ -62,7 +62,7 @@
     "fs-extra": "^11.2.0",
     "json-logic-js": "^2.0.2",
     "json5": "^2.2.3",
-    "semver": "^7.6.0",
+    "semver": "^7.6.2",
     "winston": "^3.13.0"
   },
   "devDependencies": {
