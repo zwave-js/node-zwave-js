@@ -348,11 +348,11 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	public manufacturerData?: Buffer;
 
 	public serialize(): Buffer {
-		const manufacturerData = this.version >= 3
-				&& this.mode === ThermostatMode["Manufacturer specific"]
+		const manufacturerData =
+			this.mode === ThermostatMode["Manufacturer specific"]
 				&& this.manufacturerData
-			? this.manufacturerData
-			: Buffer.from([]);
+				? this.manufacturerData
+				: Buffer.from([]);
 		const manufacturerDataLength = manufacturerData.length;
 		this.payload = Buffer.concat([
 			Buffer.from([

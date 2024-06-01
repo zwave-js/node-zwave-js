@@ -1,4 +1,4 @@
-import type { LogConfig, RFRegion } from "@zwave-js/core";
+import type { LogConfig, LongRangeChannel, RFRegion } from "@zwave-js/core";
 import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
@@ -146,13 +146,21 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	};
 
 	/**
-	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
+	 * Specify the security keys to use for encryption (Z-Wave Classic). Each one must be a Buffer of exactly 16 bytes.
 	 */
 	securityKeys?: {
-		S2_Unauthenticated?: Buffer;
-		S2_Authenticated?: Buffer;
 		S2_AccessControl?: Buffer;
+		S2_Authenticated?: Buffer;
+		S2_Unauthenticated?: Buffer;
 		S0_Legacy?: Buffer;
+	};
+
+	/**
+	 * Specify the security keys to use for encryption (Z-Wave Long Range). Each one must be a Buffer of exactly 16 bytes.
+	 */
+	securityKeysLongRange?: {
+		S2_AccessControl?: Buffer;
+		S2_Authenticated?: Buffer;
 	};
 
 	/**
@@ -261,12 +269,32 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		/** The RF region the radio should be tuned to. */
 		region?: RFRegion;
 
+		/**
+		 * Whether LR-capable regions should automatically be preferred over their corresponding non-LR regions, e.g. `USA` -> `USA (Long Range)`.
+		 * This also overrides the `rf.region` setting if the desired region is not LR-capable.
+		 *
+		 * Default: true.
+		 */
+		preferLRRegion?: boolean;
+
 		txPower?: {
 			/** The desired TX power in dBm. */
 			powerlevel: number;
 			/** A hardware-specific calibration value. */
 			measured0dBm: number;
 		};
+
+		/** The desired max. powerlevel setting for Z-Wave Long Range in dBm. */
+		maxLongRangePowerlevel?: number;
+
+		/**
+		 * The desired channel to use for Z-Wave Long Range.
+		 * Auto may be unsupported by the controller and will be ignored in that case.
+		 */
+		longRangeChannel?:
+			| LongRangeChannel.A
+			| LongRangeChannel.B
+			| LongRangeChannel.Auto;
 	};
 
 	apiKeys?: {

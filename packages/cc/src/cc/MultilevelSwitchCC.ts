@@ -640,11 +640,10 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public duration: Duration | undefined;
 
 	public serialize(): Buffer {
-		const payload = [this.targetValue];
-		if (this.version >= 2) {
-			payload.push((this.duration ?? Duration.default()).serializeSet());
-		}
-		this.payload = Buffer.from(payload);
+		this.payload = Buffer.from([
+			this.targetValue,
+			(this.duration ?? Duration.default()).serializeSet(),
+		]);
 		return super.serialize();
 	}
 
@@ -708,17 +707,10 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			typeof this.currentValue === "number" ? this.currentValue : 254,
+			this.currentValue ?? 0xfe,
+			this.targetValue ?? 0xfe,
+			(this.duration ?? Duration.default()).serializeReport(),
 		]);
-		if (this.version >= 4) {
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([
-					this.targetValue ?? 254,
-					(this.duration ?? Duration.default()).serializeReport(),
-				]),
-			]);
-		}
 		return super.serialize();
 	}
 
@@ -799,11 +791,11 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public serialize(): Buffer {
 		const controlByte = (LevelChangeDirection[this.direction] << 6)
 			| (this.ignoreStartLevel ? 0b0010_0000 : 0);
-		const payload = [controlByte, this.startLevel];
-		if (this.version >= 2) {
-			payload.push((this.duration ?? Duration.default()).serializeSet());
-		}
-		this.payload = Buffer.from(payload);
+		this.payload = Buffer.from([
+			controlByte,
+			this.startLevel,
+			(this.duration ?? Duration.default()).serializeSet(),
+		]);
 		return super.serialize();
 	}
 

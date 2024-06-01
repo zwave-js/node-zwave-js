@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"$import": "~/templates/master_template.json#led_indicator_two_options",
+			"$import": "templates/homeseer_template.json#led_indicator_inverted",
 			"label": "Bottom LED Operation"
 		},
 		{
@@ -147,9 +147,8 @@
 			"#": "32",
 			"label": "Wire Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "3 wire mode (Neutral, line & load)",
@@ -221,6 +220,6 @@
 		"inclusion": "1. Put your Z-Wave controller into inclusion (or exclusion) mode. Consult your controller’s manual if you’re unsure how to do this. \n2. In rapid succession, tap the bottom paddle 2 times, then press & hold the bottom paddle for 3 seconds (tap-tap-press & hold). This will initiate the inclusion (or exclusion) process. \nNote: The switch will default to dimmer mode after Z-Wave exclusion.",
 		"exclusion": "1. Put your Z-Wave controller into inclusion (or exclusion) mode. Consult your controller’s manual if you’re unsure how to do this. \n2. In rapid succession, tap the bottom paddle 2 times, then press & hold the bottom paddle for 3 seconds (tap-tap-press & hold). This will initiate the inclusion (or exclusion) process. \nNote: The switch will default to dimmer mode after Z-Wave exclusion.",
 		"reset": "To be used only in the event that the network primary controller is lost or otherwise inoperable.\n\n1. In rapid succession, tap the top paddle 3 times, then tap the bottom paddle 3 times. If all LEDs flash white 5 times, factory reset was successful. If not, repeat this procedure.\nNote: As this must be done very quickly, we recommend using 2 fingers for this operation; one on each paddle!\nNote: The switch will default to 3-wire mode and dimmer mode after factory reset",
-		"manual": "https://docs.homeseer.com/products/lighting/hs-wx300/hs-wx300-user-guide"
+		"manual": "https://docs.homeseer.com/products/hs-wx300-r2-user-guide"
 	}
 }

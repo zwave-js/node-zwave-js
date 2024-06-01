@@ -40,14 +40,6 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true,
-		"commandClasses": {
-			"remove": {
-				"Supervision": {
-					// The device does not support supervision although it is mandatory for the device type
-					"endpoints": "*"
-				}
-			}
-		}
+		"mapBasicSet": "event"
 	}
 }

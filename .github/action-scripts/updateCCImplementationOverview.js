@@ -1,13 +1,19 @@
+// Updates the CC implementation status table in issue 6
+
+// @ts-check
+/// <reference path="../bot-scripts/types.d.ts" />
+
 const c = require("ansi-colors");
 const exec = require("@actions/exec");
-const github = require("@actions/github");
-const core = require("@actions/core");
 
-const githubToken = core.getInput("githubToken");
-const octokit = github.getOctokit(githubToken).rest;
-const context = github.context;
+const ISSUE_NUMBER = 6;
 
-(async function main() {
+/**
+ * @param {{github: Github, context: Context}} param
+ */
+async function main(param) {
+	const { github, context } = param;
+
 	let ccTable = "";
 
 	const options = {};
@@ -31,21 +37,22 @@ const context = github.context;
 
 	const {
 		data: { body: oldBody },
-	} = await octokit.issues.get({
+	} = await github.rest.issues.get({
 		...context.repo,
-		issue_number: 6,
+		issue_number: ISSUE_NUMBER,
 	});
 
 	const newBody = ccTable;
 
 	if (oldBody !== newBody) {
-		await octokit.issues.update({
+		await github.rest.issues.update({
 			...context.repo,
-			issue_number: 6,
+			issue_number: ISSUE_NUMBER,
 			body: newBody,
 		});
 		console.error(c.green("The implementation table was updated!"));
 	} else {
 		console.error(c.yellow("No changes to the implementation table!"));
 	}
-})();
+}
+module.exports = main;

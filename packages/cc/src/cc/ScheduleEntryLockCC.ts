@@ -1057,13 +1057,8 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 		this.payload = Buffer.from([
 			this.numWeekDaySlots,
 			this.numYearDaySlots,
+			this.numDailyRepeatingSlots ?? 0,
 		]);
-		if (this.version >= 3 && this.numDailyRepeatingSlots != undefined) {
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([this.numDailyRepeatingSlots]),
-			]);
-		}
 		return super.serialize();
 	}
 

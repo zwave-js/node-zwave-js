@@ -4,7 +4,7 @@ import type {
 	GenericDeviceClass,
 	SpecificDeviceClass,
 } from "@zwave-js/config";
-import { CommandClasses } from "@zwave-js/core/safe";
+import { type CommandClasses } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 
 export class DeviceClass {
@@ -20,24 +20,20 @@ export class DeviceClass {
 			generic,
 			specific,
 		);
-
-		// The specific class' CCs include the generic class' CCs
-		this._mandatorySupportedCCs = this.specific.supportedCCs;
-		this._mandatoryControlledCCs = this.specific.controlledCCs;
 	}
 
 	public readonly basic: BasicDeviceClass;
 	public readonly generic: GenericDeviceClass;
 	public readonly specific: SpecificDeviceClass;
 
-	private _mandatorySupportedCCs: readonly CommandClasses[];
+	/** @deprecated This property is no longer in use and contains no information. */
 	public get mandatorySupportedCCs(): readonly CommandClasses[] {
-		return this._mandatorySupportedCCs;
+		return [];
 	}
 
-	private _mandatoryControlledCCs: readonly CommandClasses[];
+	/** @deprecated This property is no longer in use and contains no information. */
 	public get mandatoryControlledCCs(): readonly CommandClasses[] {
-		return this._mandatoryControlledCCs;
+		return [];
 	}
 
 	public toJSON(): JSONObject {
@@ -45,12 +41,6 @@ export class DeviceClass {
 			basic: this.basic.label,
 			generic: this.generic.label,
 			specific: this.specific.label,
-			mandatorySupportedCCs: this._mandatorySupportedCCs.map(
-				(cc) => CommandClasses[cc],
-			),
-			mandatoryControlCCs: this._mandatoryControlledCCs.map(
-				(cc) => CommandClasses[cc],
-			),
 		};
 	}
 }

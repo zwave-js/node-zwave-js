@@ -40,16 +40,6 @@
 			"label": "Local Dimming Step Duration"
 		}
 	],
-	"compat": {
-		"commandClasses": {
-			"remove": {
-				"Supervision": {
-					// The device does not support supervision although it is mandatory for the device type
-					"endpoints": "*"
-				}
-			}
-		}
-	},
 	"metadata": {
 		"inclusion": "1. Turn the connected lights ON/OFF by tapping the switch. Tapping and releasing the upper part of the rocker turns the appliance ON. Tapping and releasing the lower part of the rocker turns the appliance OFF.\n2. Add(Include) the module to/from your Z-Wave network with your primary controller. Please refer to the instructions manual of your gateway or remote controller for details and procedures on how these actions can be done. \n3. Normally, the sequence is as follows: when the inclusion process is prompted by your primary controller, single click and release the rocker switch to ON or OFF position. The controller should show that the action was successful. If the controller shows it was a fail, repeat the procedure",
 		"exclusion": "1. Turn the connected appliance ON/OFF by tapping the switch. Tapping and releasing the upper part of the rocker turns the appliance ON. Tapping and releasing the lower part of the rocker turns the appliance OFF.\n2. Delete(Exclude) the module to/from your Z-Wave network with your primary controller. Please refer to the instructions manual of your gateway or remote controller for details and procedures on how these actions can be done. \n3. Normally, the sequence is as follows: when the exclusion process is prompted by your primary controller, single click and release the rocker switch. The controller should show that the action was successful. If the controller shows it was a fail, repeat the procedure",

@@ -1,7 +1,9 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
+import { type AssociationAddress } from "@zwave-js/cc";
 import {
 	type CommandClasses,
 	NodeType,
+	Protocols,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -27,6 +29,7 @@ import type { Driver } from "./Driver";
 export const cacheKeys = {
 	controller: {
 		provisioningList: "controller.provisioningList",
+		associations: (groupId: number) => `controller.associations.${groupId}`,
 	},
 	// TODO: somehow these functions should be combined with the pattern matching below
 	node: (nodeId: number) => {
@@ -65,8 +68,6 @@ export const cacheKeys = {
 				};
 			},
 			hasSUCReturnRoute: `${nodeBaseKey}hasSUCReturnRoute`,
-			associations: (groupId: number) =>
-				`${nodeBaseKey}associations.${groupId}`,
 			priorityReturnRoute: (destinationNodeId: number) =>
 				`${nodeBaseKey}priorityReturnRoute.${destinationNodeId}`,
 			prioritySUCReturnRoute: `${nodeBaseKey}priorityReturnRoute.SUC`,
@@ -177,6 +178,15 @@ function tryParseProvisioningList(
 					&& entry.requestedSecurityClasses.every((s) =>
 						isSerializedSecurityClass(s)
 					)))
+			// protocol and supportedProtocols are (supposed to be) stored as strings, not the enum values
+			&& (entry.protocol == undefined
+				|| isSerializedProtocol(entry.protocol))
+			&& (entry.supportedProtocols == undefined || (
+				isArray(entry.supportedProtocols)
+				&& entry.supportedProtocols.every((s) =>
+					isSerializedProtocol(s)
+				)
+			))
 			&& (entry.status == undefined
 				|| isSerializedProvisioningEntryStatus(entry.status))
 		) {
@@ -202,6 +212,16 @@ function tryParseProvisioningList(
 				parsed.status = ProvisioningEntryStatus[
 					entry.status as any
 				] as any as ProvisioningEntryStatus;
+			}
+			if (entry.protocol != undefined) {
+				parsed.protocol = tryParseSerializedProtocol(entry.protocol);
+			}
+			if (entry.supportedProtocols) {
+				parsed.supportedProtocols = (
+					entry.supportedProtocols as any[]
+				)
+					.map((s) => tryParseSerializedProtocol(s))
+					.filter((s): s is Protocols => s !== undefined);
 			}
 			ret.push(parsed);
 		} else {
@@ -265,11 +285,59 @@ function isSerializedProvisioningEntryStatus(
 	);
 }
 
+function isSerializedProtocol(
+	s: unknown,
+): boolean {
+	// The list of supported protocols has been around since before we started
+	// saving them as their stringified variant, so we
+	// now have to deal with the following variants:
+	// 1. plain numbers representing a valid Protocol: 0
+	// 2. strings representing a valid Protocols: "ZWave"
+	if (typeof s === "number" && s in Protocols) return true;
+	return (
+		typeof s === "string"
+		&& s in Protocols
+		&& typeof Protocols[s as any] === "number"
+	);
+}
+
+function tryParseSerializedProtocol(
+	value: unknown,
+): Protocols | undefined {
+	// The list of supported protocols has been around since before we started
+	// saving them as their stringified variant, so we
+	// now have to deal with the following variants:
+	// 1. plain numbers representing a valid Protocol: 0
+	// 2. strings representing a valid Protocols: "ZWave"
+
+	if (typeof value === "number" && value in Protocols) return value;
+	if (typeof value === "string") {
+		if (
+			(value as any) in Protocols
+			&& typeof Protocols[value as any] === "number"
+		) {
+			return (Protocols as any)[value as any];
+		}
+	}
+}
+
 function tryParseDate(value: unknown): Date | undefined {
 	// Dates are stored as timestamps
 	if (typeof value === "number") {
 		const ret = new Date(value);
 		if (!isNaN(ret.getTime())) return ret;
+	}
+}
+
+function tryParseAssociationAddress(
+	value: unknown,
+): AssociationAddress | undefined {
+	if (isObject(value)) {
+		const { nodeId, endpoint } = value;
+		if (typeof nodeId !== "number") return;
+		if (endpoint !== undefined && typeof endpoint !== "number") return;
+
+		return { nodeId, endpoint };
 	}
 }
 
@@ -376,6 +444,12 @@ export function deserializeNetworkCacheValue(
 	}
 
 	// Other properties
+	if (key.startsWith("controller.associations.")) {
+		value = tryParseAssociationAddress(value);
+		if (value) return value;
+		throw fail();
+	}
+
 	switch (key) {
 		case cacheKeys.controller.provisioningList: {
 			value = tryParseProvisioningList(value);
@@ -451,6 +525,18 @@ export function serializeNetworkCacheValue(
 						ProvisioningEntryStatus,
 						entry.status,
 					);
+				}
+				if (entry.protocol != undefined) {
+					serialized.protocol = getEnumMemberName(
+						Protocols,
+						entry.protocol,
+					);
+				}
+				if (entry.supportedProtocols != undefined) {
+					serialized.supportedProtocols = entry.supportedProtocols
+						.map(
+							(p) => getEnumMemberName(Protocols, p),
+						);
 				}
 				ret.push(serialized);
 			}

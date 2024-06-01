@@ -1,5 +1,10 @@
 export {
+	ProtocolDataRate,
+	ProtocolType,
+	ProtocolVersion,
+	Protocols,
 	QRCodeVersion,
+	RouteProtocolDataRate,
 	extractFirmware,
 	guessFirmwareFileFormat,
 	parseQRCodeString,
@@ -8,12 +13,7 @@ export {
 export type {
 	Firmware,
 	FirmwareFileFormat,
-	ProtocolDataRate,
-	ProtocolType,
-	ProtocolVersion,
-	Protocols,
 	QRProvisioningInformation,
-	RouteProtocolDataRate,
 	protocolDataRateToString,
 } from "@zwave-js/core";
 export {

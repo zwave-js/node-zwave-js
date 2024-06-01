@@ -1,0 +1,101 @@
+{
+	"manufacturer": "Safe Grow",
+	"manufacturerId": "0x013c",
+	"label": "NSG-AB-02",
+	"description": "Smart Outlet Plug",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x002f"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Allow Turning Off",
+			"description": "When disabled, the device will not turn off in response to Z-Wave commands or physical interaction.",
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "LED Indicator Mode",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch is on",
+					"value": 1
+				},
+				{
+					"label": "LED on when switch is off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Auto Off Timer",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Response to Z-Wave Off Command",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Toggle",
+					"value": 2
+				},
+				{
+					"label": "Turn on",
+					"value": 3
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Put your Z-Wave controller into inclusion mode by following the instructions provided by the controller manufacturer. \n2. Pressing On/Off button three times within 2 seconds will enter inclusion mode.",
+		"exclusion": "1. Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer. \n 2. Pressing On/Off button three times within 2 seconds will enter exclusion mode. \n3. Node ID has been excluded",
+		"reset": "Use this procedure only in the event that the primary controller is lost or otherwise inoperable. \n1. Pressing On/Off button three times within 2 seconds will enter inclusion mode. \n2. Within 1 second, press On/Off button again for 5 seconds. \n3. IDs are excluded"
+	}
+}

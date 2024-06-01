@@ -44,6 +44,6 @@
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2054/Binder2.pdf"
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	}
 }

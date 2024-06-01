@@ -38,19 +38,8 @@ export enum AssociationCommand {
 	Remove = 0x04,
 	SupportedGroupingsGet = 0x05,
 	SupportedGroupingsReport = 0x06,
-	// TODO: These two commands are V2. I have no clue how this is supposed to function:
-	// SpecificGroupGet = 0x0b,
-	// SpecificGroupReport = 0x0c,
-
-	// Here's what the docs have to say:
-	// This functionality allows a supporting multi-button device to detect a key press and subsequently advertise
-	// the identity of the key. The following sequence of events takes place:
-	// * The user activates a special identification sequence and pushes the button to be identified
-	// * The device issues a Node Information frame (NIF)
-	// * The NIF allows the portable controller to determine the NodeID of the multi-button device
-	// * The portable controller issues an Association Specific Group Get Command to the multi-button device
-	// * The multi-button device returns an Association Specific Group Report Command that advertises the
-	//   association group that represents the most recently detected button
+	SpecificGroupGet = 0x0b,
+	SpecificGroupReport = 0x0c,
 }
 
 export enum AssociationGroupInfoCommand {

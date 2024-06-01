@@ -215,6 +215,7 @@ export type NodeInformationFrame =
 export function parseNodeProtocolInfo(
 	buffer: Buffer,
 	offset: number,
+	isLongRange: boolean = false,
 ): NodeProtocolInfo {
 	validatePayload(buffer.length >= offset + 3);
 
@@ -222,19 +223,28 @@ export function parseNodeProtocolInfo(
 	const isRouting = !!(buffer[offset] & 0b01_000_000);
 
 	const supportedDataRates: DataRate[] = [];
-	const maxSpeed = buffer[offset] & 0b00_011_000;
-	const speedExtension = buffer[offset + 2] & 0b111;
-	if (maxSpeed & 0b00_010_000) {
-		supportedDataRates.push(40000);
-	}
-	if (maxSpeed & 0b00_001_000) {
-		supportedDataRates.push(9600);
-	}
-	if (speedExtension & 0b001) {
-		supportedDataRates.push(100000);
-	}
-	if (supportedDataRates.length === 0) {
-		supportedDataRates.push(9600);
+	const speed = buffer[offset] & 0b00_011_000;
+	const speedExt = buffer[offset + 2] & 0b111;
+	if (isLongRange) {
+		// In the LR NIF, the speed bitmask is reserved and contains no information
+		// The speedExt bitmask is used instead, but for some reason the bitmask
+		// is different from a classic NIF...
+		if (speedExt & 0b010) {
+			supportedDataRates.push(100000);
+		}
+	} else {
+		if (speed & 0b00_010_000) {
+			supportedDataRates.push(40000);
+		}
+		if (speed & 0b00_001_000) {
+			supportedDataRates.push(9600);
+		}
+		if (speedExt & 0b001) {
+			supportedDataRates.push(100000);
+		}
+		if (supportedDataRates.length === 0) {
+			supportedDataRates.push(9600);
+		}
 	}
 
 	const protocolVersion = buffer[offset] & 0b111;
@@ -256,12 +266,14 @@ export function parseNodeProtocolInfo(
 
 	let nodeType: NodeType;
 	switch (capability & 0b1010) {
-		case 0b1000:
-			nodeType = NodeType["End Node"];
-			break;
 		case 0b0010:
-		default:
 			nodeType = NodeType.Controller;
+			break;
+		case 0b1000:
+			// Routing end node
+		default:
+			// Non-routing end node
+			nodeType = NodeType["End Node"];
 			break;
 	}
 
@@ -282,14 +294,23 @@ export function parseNodeProtocolInfo(
 	};
 }
 
-export function encodeNodeProtocolInfo(info: NodeProtocolInfo): Buffer {
+export function encodeNodeProtocolInfo(
+	info: NodeProtocolInfo,
+	isLongRange: boolean = false,
+): Buffer {
+	// Technically a lot of these fields are reserved/unused in Z-Wave Long Range,
+	// but the only thing where it really matters is the speed bitmask.
 	const ret = Buffer.alloc(3, 0);
 	// Byte 0 and 2
 	if (info.isListening) ret[0] |= 0b10_000_000;
 	if (info.isRouting) ret[0] |= 0b01_000_000;
-	if (info.supportedDataRates.includes(40000)) ret[0] |= 0b00_010_000;
-	if (info.supportedDataRates.includes(9600)) ret[0] |= 0b00_001_000;
-	if (info.supportedDataRates.includes(100000)) ret[2] |= 0b001;
+	if (isLongRange) {
+		if (info.supportedDataRates.includes(100000)) ret[2] |= 0b010;
+	} else {
+		if (info.supportedDataRates.includes(40000)) ret[0] |= 0b00_010_000;
+		if (info.supportedDataRates.includes(9600)) ret[0] |= 0b00_001_000;
+		if (info.supportedDataRates.includes(100000)) ret[2] |= 0b001;
+	}
 	ret[0] |= info.protocolVersion & 0b111;
 
 	// Byte 1
@@ -307,12 +328,20 @@ export function encodeNodeProtocolInfo(info: NodeProtocolInfo): Buffer {
 	return ret;
 }
 
-export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
+export function parseNodeProtocolInfoAndDeviceClass(
+	buffer: Buffer,
+	isLongRange: boolean = false,
+): {
 	info: NodeProtocolInfoAndDeviceClass;
 	bytesRead: number;
 } {
 	validatePayload(buffer.length >= 5);
-	const protocolInfo = parseNodeProtocolInfo(buffer, 0);
+	// The specs are a bit confusing here. We parse the response to GetNodeProtocolInfo,
+	// which always includes the basic device class, unlike the NIF that was received by
+	// the end device. However, the meaning of the flags in the first 3 bytes may change
+	// depending on the protocol in use.
+	const protocolInfo = parseNodeProtocolInfo(buffer, 0, isLongRange);
+
 	let offset = 3;
 	const basic = buffer[offset++];
 	const generic = buffer[offset++];
@@ -334,9 +363,13 @@ export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
 
 export function encodeNodeProtocolInfoAndDeviceClass(
 	info: NodeProtocolInfoAndDeviceClass,
+	isLongRange: boolean = false,
 ): Buffer {
 	return Buffer.concat([
-		encodeNodeProtocolInfo({ ...info, hasSpecificDeviceClass: true }),
+		encodeNodeProtocolInfo(
+			{ ...info, hasSpecificDeviceClass: true },
+			isLongRange,
+		),
 		Buffer.from([
 			info.basicDeviceClass,
 			info.genericDeviceClass,
@@ -347,11 +380,26 @@ export function encodeNodeProtocolInfoAndDeviceClass(
 
 export function parseNodeInformationFrame(
 	buffer: Buffer,
+	isLongRange: boolean = false,
 ): NodeInformationFrame {
-	const { info, bytesRead: offset } = parseNodeProtocolInfoAndDeviceClass(
+	const result = parseNodeProtocolInfoAndDeviceClass(
 		buffer,
+		isLongRange,
 	);
-	const supportedCCs = parseCCList(buffer.subarray(offset)).supportedCCs;
+	const info = result.info;
+	let offset = result.bytesRead;
+
+	let ccList: Buffer;
+	if (isLongRange) {
+		const ccListLength = buffer[offset];
+		offset += 1;
+		validatePayload(buffer.length >= offset + ccListLength);
+		ccList = buffer.subarray(offset, offset + ccListLength);
+	} else {
+		ccList = buffer.subarray(offset);
+	}
+
+	const supportedCCs = parseCCList(ccList).supportedCCs;
 
 	return {
 		...info,
@@ -359,11 +407,21 @@ export function parseNodeInformationFrame(
 	};
 }
 
-export function encodeNodeInformationFrame(info: NodeInformationFrame): Buffer {
-	return Buffer.concat([
-		encodeNodeProtocolInfoAndDeviceClass(info),
-		encodeCCList(info.supportedCCs, []),
-	]);
+export function encodeNodeInformationFrame(
+	info: NodeInformationFrame,
+	isLongRange: boolean = false,
+): Buffer {
+	const protocolInfo = encodeNodeProtocolInfoAndDeviceClass(
+		info,
+		isLongRange,
+	);
+
+	let ccList = encodeCCList(info.supportedCCs, []);
+	if (isLongRange) {
+		ccList = Buffer.concat([Buffer.from([ccList.length]), ccList]);
+	}
+
+	return Buffer.concat([protocolInfo, ccList]);
 }
 
 export function parseNodeID(

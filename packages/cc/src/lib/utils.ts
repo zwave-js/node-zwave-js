@@ -11,6 +11,7 @@ import {
 	actuatorCCs,
 	getCCName,
 	isActuatorCC,
+	isLongRangeNodeId,
 	isSensorCC,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
@@ -127,8 +128,21 @@ export function isAssociationAllowed(
 		);
 	}
 
+	// Associations to and from ZWLR devices are not allowed
+	if (isLongRangeNodeId(destination.nodeId)) {
+		return false;
+	} else if (isLongRangeNodeId(endpoint.nodeId)) {
+		// Except the lifeline back to the host
+		if (group !== 1 || destination.nodeId !== applHost.ownNodeId) {
+			return false;
+		}
+	}
+
 	// The following checks don't apply to Lifeline associations
 	if (destination.nodeId === applHost.ownNodeId) return true;
+
+	// Disallow self-associations
+	if (destination.nodeId === endpoint.nodeId) return false;
 
 	// For Association version 1 and version 2 / MCA version 1-3:
 	// A controlling node MUST NOT associate Node A to a Node B destination
@@ -359,6 +373,15 @@ export async function addAssociations(
 		throw new ZWaveError(
 			`Node ${nodeAndEndpointString} does not support multi channel associations!`,
 			ZWaveErrorCodes.CC_NotSupported,
+		);
+	}
+
+	// Disallow associating a node with itself. This is technically checked as part of
+	// isAssociationAllowed, but here we provide a better error message.
+	if (destinations.some((d) => d.nodeId === endpoint.nodeId)) {
+		throw new ZWaveError(
+			`Associating a node with itself is not allowed!`,
+			ZWaveErrorCodes.AssociationCC_NotAllowed,
 		);
 	}
 

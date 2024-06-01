@@ -50,5 +50,15 @@
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode",
 		"reset": "1. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode\n2. Within 1 second of step 1, press the tamper switch again and hold until LED is off (about 5 seconds).\n3. Node ID is excluded. The device reverts to factory default state and will be in auto-inclusion mode for 4 minutes.\n4. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2890/EH403%20Manual_20180522修改-A501112670R.pdf"
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device does not support Supervision correctly
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
 	}
 }

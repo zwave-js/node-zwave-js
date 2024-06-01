@@ -382,9 +382,7 @@ export class BinarySensorCCGet extends BinarySensorCC {
 	public sensorType: BinarySensorType | undefined;
 
 	public serialize(): Buffer {
-		if (this.version >= 2 && this.sensorType != undefined) {
-			this.payload = Buffer.from([this.sensorType]);
-		}
+		this.payload = Buffer.from([this.sensorType ?? BinarySensorType.Any]);
 		return super.serialize();
 	}
 

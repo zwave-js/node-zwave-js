@@ -69,6 +69,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case FirmwareUpdateMetaDataCommand.MetaDataGet:
+			case FirmwareUpdateMetaDataCommand.MetaDataReport:
 			case FirmwareUpdateMetaDataCommand.RequestGet:
 			case FirmwareUpdateMetaDataCommand.Report:
 			case FirmwareUpdateMetaDataCommand.StatusReport:
@@ -124,6 +125,23 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 				"supportsActivation",
 			]);
 		}
+	}
+
+	@validateArgs()
+	public async reportMetaData(
+		options: FirmwareUpdateMetaDataCCMetaDataReportOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			FirmwareUpdateMetaDataCommand,
+			FirmwareUpdateMetaDataCommand.Report,
+		);
+
+		const cc = new FirmwareUpdateMetaDataCCMetaDataReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -279,6 +297,19 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface FirmwareUpdateMetaDataCCMetaDataReportOptions {
+	manufacturerId: number;
+	firmwareId?: number;
+	checksum?: number;
+	firmwareUpgradable: boolean;
+	maxFragmentSize?: number;
+	additionalFirmwareIDs?: readonly number[];
+	hardwareVersion?: number;
+	continuesToFunction?: MaybeNotKnown<boolean>;
+	supportsActivation?: MaybeNotKnown<boolean>;
+}
+
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataReport)
 export class FirmwareUpdateMetaDataCCMetaDataReport
 	extends FirmwareUpdateMetaDataCC
@@ -286,46 +317,66 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (
+				& FirmwareUpdateMetaDataCCMetaDataReportOptions
+				& CCCommandOptions
+			),
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 6);
-		this.manufacturerId = this.payload.readUInt16BE(0);
-		this.firmwareId = this.payload.readUInt16BE(2);
-		this.checksum = this.payload.readUInt16BE(4);
-		// V1/V2 only have a single firmware which must be upgradable
-		this.firmwareUpgradable = this.payload[6] === 0xff
-			|| this.payload[6] == undefined;
 
-		if (this.version >= 3 && this.payload.length >= 10) {
-			this.maxFragmentSize = this.payload.readUInt16BE(8);
-			// Read variable length list of additional firmwares
-			const numAdditionalFirmwares = this.payload[7];
-			const additionalFirmwareIDs = [];
-			validatePayload(
-				this.payload.length >= 10 + 2 * numAdditionalFirmwares,
-			);
-			for (let i = 0; i < numAdditionalFirmwares; i++) {
-				additionalFirmwareIDs.push(
-					this.payload.readUInt16BE(10 + 2 * i),
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 6);
+			this.manufacturerId = this.payload.readUInt16BE(0);
+			this.firmwareId = this.payload.readUInt16BE(2);
+			this.checksum = this.payload.readUInt16BE(4);
+			// V1/V2 only have a single firmware which must be upgradable
+			this.firmwareUpgradable = this.payload[6] === 0xff
+				|| this.payload[6] == undefined;
+
+			if (this.version >= 3 && this.payload.length >= 10) {
+				this.maxFragmentSize = this.payload.readUInt16BE(8);
+				// Read variable length list of additional firmwares
+				const numAdditionalFirmwares = this.payload[7];
+				const additionalFirmwareIDs = [];
+				validatePayload(
+					this.payload.length >= 10 + 2 * numAdditionalFirmwares,
 				);
-			}
-			this.additionalFirmwareIDs = additionalFirmwareIDs;
-			// Read hardware version (if it exists)
-			let offset = 10 + 2 * numAdditionalFirmwares;
-			if (this.version >= 5 && this.payload.length >= offset + 1) {
-				this.hardwareVersion = this.payload[offset];
-				offset++;
-				if (this.version >= 6 && this.payload.length >= offset + 1) {
-					const capabilities = this.payload[offset];
+				for (let i = 0; i < numAdditionalFirmwares; i++) {
+					additionalFirmwareIDs.push(
+						this.payload.readUInt16BE(10 + 2 * i),
+					);
+				}
+				this.additionalFirmwareIDs = additionalFirmwareIDs;
+				// Read hardware version (if it exists)
+				let offset = 10 + 2 * numAdditionalFirmwares;
+				if (this.version >= 5 && this.payload.length >= offset + 1) {
+					this.hardwareVersion = this.payload[offset];
 					offset++;
+					if (
+						this.version >= 6 && this.payload.length >= offset + 1
+					) {
+						const capabilities = this.payload[offset];
+						offset++;
 
-					this.continuesToFunction = !!(capabilities & 0b1);
-					if (this.version >= 7) {
-						this.supportsActivation = !!(capabilities & 0b10);
+						this.continuesToFunction = !!(capabilities & 0b1);
+						if (this.version >= 7) {
+							this.supportsActivation = !!(capabilities & 0b10);
+						}
 					}
 				}
 			}
+		} else {
+			this.manufacturerId = options.manufacturerId;
+			this.firmwareId = options.firmwareId ?? 0;
+			this.checksum = options.checksum ?? 0;
+			this.firmwareUpgradable = options.firmwareUpgradable;
+			this.maxFragmentSize = options.maxFragmentSize;
+			this.additionalFirmwareIDs = options.additionalFirmwareIDs ?? [];
+			this.hardwareVersion = options.hardwareVersion;
+			this.continuesToFunction = options.continuesToFunction;
+			this.supportsActivation = options.supportsActivation;
 		}
 	}
 
@@ -343,6 +394,29 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 
 	@ccValue(FirmwareUpdateMetaDataCCValues.supportsActivation)
 	public readonly supportsActivation: MaybeNotKnown<boolean>;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.alloc(
+			12 + 2 * this.additionalFirmwareIDs.length,
+		);
+		this.payload.writeUInt16BE(this.manufacturerId, 0);
+		this.payload.writeUInt16BE(this.firmwareId, 2);
+		this.payload.writeUInt16BE(this.checksum, 4);
+		this.payload[6] = this.firmwareUpgradable ? 0xff : 0;
+		this.payload[7] = this.additionalFirmwareIDs.length;
+		this.payload.writeUInt16BE(this.maxFragmentSize ?? 0xff, 8);
+		let offset = 10;
+		for (const id of this.additionalFirmwareIDs) {
+			this.payload.writeUInt16BE(id, offset);
+			offset += 2;
+		}
+		this.payload[offset++] = this.hardwareVersion ?? 0xff;
+		this.payload[offset++] = (this.continuesToFunction ? 0b1 : 0) | (
+			this.supportsActivation ? 0b10 : 0
+		);
+
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {

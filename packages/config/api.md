@@ -36,6 +36,18 @@ export interface BasicDeviceClass {
 // @public (undocumented)
 export type BasicDeviceClassMap = ReadonlyMap<number, string>;
 
+// Warning: (ae-forgotten-export) The symbol "basicReportMappings" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "BasicReportMapping" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type BasicReportMapping = typeof basicReportMappings[number];
+
+// Warning: (ae-forgotten-export) The symbol "basicSetMappings" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "BasicSetMapping" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type BasicSetMapping = typeof basicSetMappings[number];
+
 // Warning: (ae-missing-release-tag) "CompatAddCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -142,15 +154,11 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     // (undocumented)
     readonly disableAutoRefresh?: boolean;
     // (undocumented)
-    readonly disableBasicMapping?: boolean;
-    // (undocumented)
     readonly disableCallbackFunctionTypeCheck?: number[];
     // (undocumented)
     readonly disableStrictEntryControlDataValidation?: boolean;
     // (undocumented)
     readonly disableStrictMeasurementValidation?: boolean;
-    // (undocumented)
-    readonly enableBasicSetMapping?: boolean;
     // (undocumented)
     evaluateCondition(deviceId?: DeviceID): CompatConfig | undefined;
     // (undocumented)
@@ -159,6 +167,10 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     readonly forceSceneControllerGroupCount?: number;
     // (undocumented)
     readonly manualValueRefreshDelayMs?: number;
+    // (undocumented)
+    readonly mapBasicReport?: BasicReportMapping;
+    // (undocumented)
+    readonly mapBasicSet?: BasicSetMapping;
     // (undocumented)
     readonly mapRootReportsToEndpoint?: number;
     // (undocumented)
@@ -188,8 +200,6 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     readonly skipConfigurationInfoQuery?: boolean;
     // (undocumented)
     readonly skipConfigurationNameQuery?: boolean;
-    // (undocumented)
-    readonly treatBasicSetAsEvent?: boolean;
     // (undocumented)
     readonly treatDestinationEndpointAsSource?: boolean;
     // (undocumented)
@@ -663,8 +673,6 @@ export interface FulltextDeviceConfigIndexEntry {
 export class GenericDeviceClass {
     constructor(key: number, definition: JSONObject);
     // (undocumented)
-    readonly controlledCCs: readonly CommandClasses[];
-    // (undocumented)
     readonly key: number;
     // (undocumented)
     readonly label: string;
@@ -674,8 +682,6 @@ export class GenericDeviceClass {
     readonly requiresSecurity?: boolean;
     // (undocumented)
     readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
-    // (undocumented)
-    readonly supportedCCs: readonly CommandClasses[];
 }
 
 // Warning: (ae-missing-release-tag) "GenericDeviceClassMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -847,6 +853,8 @@ export class NotificationParameterWithDuration {
 export class NotificationParameterWithEnum {
     constructor(definition: JSONObject);
     // (undocumented)
+    readonly default?: number;
+    // (undocumented)
     readonly values: ReadonlyMap<number, string>;
 }
 
@@ -971,8 +979,6 @@ export type SensorTypeMap = ReadonlyMap<number, SensorType>;
 export class SpecificDeviceClass {
     constructor(key: number, definition: JSONObject, generic: GenericDeviceClass);
     // (undocumented)
-    readonly controlledCCs: readonly CommandClasses[];
-    // (undocumented)
     readonly key: number;
     // (undocumented)
     readonly label: string;
@@ -980,8 +986,6 @@ export class SpecificDeviceClass {
     readonly maySupportBasicCC: boolean;
     // (undocumented)
     readonly requiresSecurity?: boolean;
-    // (undocumented)
-    readonly supportedCCs: readonly CommandClasses[];
     // (undocumented)
     readonly zwavePlusDeviceType?: string;
 }

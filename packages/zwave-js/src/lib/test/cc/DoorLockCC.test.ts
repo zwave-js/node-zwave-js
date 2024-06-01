@@ -253,45 +253,6 @@ test("the ConfigurationReport command (v4) should be deserialized correctly", (t
 	t.false(cc.blockToBlock);
 });
 
-test("the ConfigurationSet command (v1-3) should serialize correctly (timed)", (t) => {
-	const cc = new DoorLockCCConfigurationSet(host, {
-		nodeId: 2,
-		operationType: DoorLockOperationType.Timed,
-		outsideHandlesCanOpenDoorConfiguration: [false, true, true, true],
-		insideHandlesCanOpenDoorConfiguration: [true, false, true, false],
-		lockTimeoutConfiguration: 60 * 15 + 18,
-	});
-	const expected = buildCCBuffer(
-		Buffer.from([
-			DoorLockCommand.ConfigurationSet, // CC Command
-			DoorLockOperationType.Timed,
-			0b1110_0101,
-			15,
-			18,
-		]),
-	);
-	t.deepEqual(cc.serialize(), expected);
-});
-
-test("the ConfigurationSet command (v1-3) should serialize correctly (constant)", (t) => {
-	const cc = new DoorLockCCConfigurationSet(host, {
-		nodeId: 2,
-		operationType: DoorLockOperationType.Constant,
-		outsideHandlesCanOpenDoorConfiguration: [false, true, true, true],
-		insideHandlesCanOpenDoorConfiguration: [true, false, true, false],
-	});
-	const expected = buildCCBuffer(
-		Buffer.from([
-			DoorLockCommand.ConfigurationSet, // CC Command
-			DoorLockOperationType.Constant,
-			0b1110_0101,
-			0xfe,
-			0xfe,
-		]),
-	);
-	t.deepEqual(cc.serialize(), expected);
-});
-
 test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
 	const cc = new DoorLockCCConfigurationSet(host, {
 		nodeId: 2,

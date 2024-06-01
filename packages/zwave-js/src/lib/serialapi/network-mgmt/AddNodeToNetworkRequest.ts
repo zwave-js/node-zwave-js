@@ -4,6 +4,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	NodeType,
+	Protocols,
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
@@ -48,6 +49,7 @@ export enum AddNodeStatus {
 enum AddNodeFlags {
 	HighPower = 0x80,
 	NetworkWide = 0x40,
+	ProtocolLongRange = 0x20,
 }
 
 interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
@@ -61,6 +63,7 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 	authHomeId: Buffer;
 	highPower?: boolean;
 	networkWide?: boolean;
+	protocol?: Protocols;
 }
 
 export function computeNeighborDiscoveryTimeout(
@@ -210,20 +213,26 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 		this.authHomeId = options.authHomeId;
 		this.highPower = !!options.highPower;
 		this.networkWide = !!options.networkWide;
+		this.protocol = options.protocol ?? Protocols.ZWave;
 	}
 
 	/** The home IDs of node to add */
 	public nwiHomeId: Buffer;
 	public authHomeId: Buffer;
 	/** Whether to use high power */
-	public highPower: boolean = false;
+	public highPower: boolean;
 	/** Whether to include network wide */
-	public networkWide: boolean = false;
+	public networkWide: boolean;
+	/** Whether to include as long-range or not */
+	public protocol: Protocols;
 
 	public serialize(): Buffer {
 		let control: number = AddNodeType.SmartStartDSK;
 		if (this.highPower) control |= AddNodeFlags.HighPower;
 		if (this.networkWide) control |= AddNodeFlags.NetworkWide;
+		if (this.protocol === Protocols.ZWaveLongRange) {
+			control |= AddNodeFlags.ProtocolLongRange;
+		}
 
 		this.payload = Buffer.concat([
 			Buffer.from([control, this.callbackId]),
@@ -240,6 +249,9 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 			"NWI Home ID": buffer2hex(this.nwiHomeId),
 			"high power": this.highPower,
 			"network wide": this.networkWide,
+			protocol: this.protocol === Protocols.ZWaveLongRange
+				? "Z-Wave Long Range"
+				: "Z-Wave Classic",
 		};
 		if (this.hasCallbackId()) {
 			message["callback id"] = this.callbackId;

@@ -1,0 +1,105 @@
+{
+	"manufacturer": "Shelly Europe Ltd.",
+	"manufacturerId": "0x0460",
+	"label": "QNPL-001X16",
+	"description": "Wave Plug US",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0088",
+			"zwaveAllianceId": 4995
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "17",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O1: State After Power Failure"
+		},
+		{
+			"#": "19",
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O1: Auto-Off Timer"
+		},
+		{
+			"#": "20",
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O1: Auto-On Timer"
+		},
+		{
+			"#": "25",
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O1: Auto-On/Off Timer Unit"
+		},
+		{
+			"#": "23",
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O1: Relay Type"
+		},
+		{
+			"#": "36",
+			"$import": "templates/wave_template.json#power_change_report_treshold",
+			"label": "O1: Power Change Report Threshold"
+		},
+		{
+			"#": "39",
+			"$import": "templates/wave_template.json#min_time_between_reports",
+			"label": "O1: Minimum Time Between Power Reports"
+		},
+		{
+			"#": "91",
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Water"
+		},
+		{
+			"#": "92",
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Smoke"
+		},
+		{
+			"#": "93",
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: CO"
+		},
+		{
+			"#": "94",
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Heat"
+		},
+		{
+			"#": "105",
+			"$import": "templates/wave_template.json#led_intensity",
+			"label": "Signal LED Intensity"
+		},
+		{
+			"#": "117",
+			"$import": "templates/wave_template.json#remote_reboot"
+		},
+		{
+			"#": "120",
+			"$import": "templates/wave_template.json#factory_reset"
+		},
+		{
+			"#": "201",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 1"
+		},
+		{
+			"#": "202",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 2"
+		},
+		{
+			"#": "203",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 3"
+		}
+	],
+	"metadata": {
+		"$import": "templates/wave_template.json#default_metadata"
+	}
+}

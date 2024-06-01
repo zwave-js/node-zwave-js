@@ -565,9 +565,6 @@
 				"disableAutoRefresh": {
 					"const": true
 				},
-				"disableBasicMapping": {
-					"const": true
-				},
 				"disableCallbackFunctionTypeCheck": {
 					"type": "array",
 					"items": {
@@ -582,9 +579,6 @@
 				"disableStrictMeasurementValidation": {
 					"const": true
 				},
-				"enableBasicSetMapping": {
-					"const": true
-				},
 				"forceNotificationIdleReset": {
 					"const": true
 				},
@@ -596,6 +590,21 @@
 				"manualValueRefreshDelayMs": {
 					"type": "number",
 					"minimum": 0
+				},
+				"mapBasicReport": {
+					"oneOf": [
+						{
+							"const": false
+						},
+						{
+							"type": "string",
+							"enum": ["auto", "Binary Sensor"]
+						}
+					]
+				},
+				"mapBasicSet": {
+					"type": "string",
+					"enum": ["event", "report", "auto", "Binary Sensor"]
 				},
 				"mapRootReportsToEndpoint": {
 					"type": "number",
@@ -694,9 +703,6 @@
 					"const": true
 				},
 				"skipConfigurationInfoQuery": {
-					"const": true
-				},
-				"treatBasicSetAsEvent": {
 					"const": true
 				},
 				"treatMultilevelSwitchSetAsEvent": {

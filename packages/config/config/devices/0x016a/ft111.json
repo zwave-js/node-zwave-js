@@ -475,7 +475,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",

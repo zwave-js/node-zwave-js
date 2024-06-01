@@ -587,7 +587,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
-		let values: ReadonlyMap<number, ConfigValue>;
+		let values: ReadonlyMap<number, ConfigValue> | undefined;
 
 		// If the parameters are consecutive, we may use BulkGet
 		const distinctParameters = distinct(options.map((o) => o.parameter));
@@ -636,7 +636,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Combine the returned values with the requested ones
 		const cc = createConfigurationCCInstance(this.applHost, this.endpoint);
 		return options.map((o) => {
-			let value = values.get(o.parameter);
+			let value = values?.get(o.parameter);
 			if (typeof value === "number" && o.bitMask) {
 				const paramInfo = cc.getParamInformation(
 					this.applHost,
@@ -2807,7 +2807,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		this.payload = Buffer.allocUnsafe(
 			3 // preamble
 				+ 3 * this.valueSize // min, max, default value
-				+ 2, // next parameter
+				+ 2 // next parameter
+				+ 1, // options2
 		);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		const options1 = (this.altersCapabilities ? 0b1000_0000 : 0)
@@ -2844,15 +2845,11 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			offset += this.valueSize;
 		}
 		this.payload.writeUInt16BE(this.nextParameter, offset);
+		offset += 2;
 
-		if (this.version >= 4) {
-			const options2 = (this.isAdvanced ? 0b1 : 0)
-				| (this.noBulkSupport ? 0b10 : 0);
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([options2]),
-			]);
-		}
+		const options2 = (this.isAdvanced ? 0b1 : 0)
+			| (this.noBulkSupport ? 0b10 : 0);
+		this.payload[offset] = options2;
 
 		return super.serialize();
 	}

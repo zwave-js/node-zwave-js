@@ -89,8 +89,8 @@
 		}
 	],
 	"compat": {
-		"disableBasicMapping": true,
-		"treatBasicSetAsEvent": true
+		"mapBasicReport": false,
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press and release the top or bottom of the wireless smart switch(rocker) to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance",

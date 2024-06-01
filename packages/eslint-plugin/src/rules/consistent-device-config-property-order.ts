@@ -75,13 +75,13 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 					});
 
 					const indentation = context.sourceCode
-						.getLines()[withRanges[0].property.loc.start.line]!
+						.getLines()[withRanges[0].property.loc.start.line]
 						.slice(
 							0,
 							withRanges[0].property.loc.start.column,
 						);
-
-					const desiredOrder = propsWithComments.toSorted((a, b) =>
+					// TODO: Change to .toSorted() once on node 20.
+					const desiredOrder = [...propsWithComments].sort((a, b) =>
 						a.index - b.index
 					).map((prop) => {
 						const start = Math.min(

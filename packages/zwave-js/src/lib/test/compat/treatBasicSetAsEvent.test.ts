@@ -37,9 +37,9 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			// Make sure the custom config is loaded
-			const treatBasicSetAsEvent = node.deviceConfig?.compat
-				?.treatBasicSetAsEvent;
-			t.is(treatBasicSetAsEvent, true);
+			const mapBasicSet = node.deviceConfig?.compat
+				?.mapBasicSet;
+			t.is(mapBasicSet, "event");
 
 			const valueIDs = node.getDefinedValueIDs();
 			t.false(
@@ -97,9 +97,9 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			// Make sure the custom config is loaded
-			const treatBasicSetAsEvent = node.deviceConfig?.compat
-				?.treatBasicSetAsEvent;
-			t.is(treatBasicSetAsEvent, true);
+			const mapBasicSet = node.deviceConfig?.compat
+				?.mapBasicSet;
+			t.is(mapBasicSet, "event");
 
 			const valueIDs = node.getDefinedValueIDs();
 			t.false(
