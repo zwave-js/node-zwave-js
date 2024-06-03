@@ -164,7 +164,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_RF_POWERLEVEL_GET = 0xba, // Get RF Power level
 
 	UNKNOWN_FUNC_GET_LIBRARY_TYPE = 0xbd,
-	UNKNOWN_FUNC_SEND_TEST_FRAME = 0xbe,
+	SendTestFrame = 0xbe, // Sends a NOP Power frame to the given node
 	UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 0xbf,
 
 	FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 0xd0, // Set controller into promiscuous mode to listen to all messages

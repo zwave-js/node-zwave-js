@@ -113,7 +113,9 @@ import {
 import {
 	PowerlevelCCGet,
 	PowerlevelCCSet,
+	PowerlevelCCTestNodeGet,
 	PowerlevelCCTestNodeReport,
+	PowerlevelCCTestNodeSet,
 } from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
 import {
@@ -223,6 +225,7 @@ import {
 	formatId,
 	getEnumMemberName,
 	getErrorMessage,
+	noop,
 	pick,
 	stringify,
 	throttle,
@@ -3102,8 +3105,6 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleFirmwareUpdateMetaDataGet(command);
 		} else if (command instanceof EntryControlCCNotification) {
 			return this.handleEntryControlNotification(command);
-		} else if (command instanceof PowerlevelCCTestNodeReport) {
-			return this.handlePowerlevelTestNodeReport(command);
 		} else if (command instanceof TimeCCTimeGet) {
 			return this.handleTimeGet(command);
 		} else if (command instanceof TimeCCDateGet) {
@@ -3160,6 +3161,12 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handlePowerlevelSet(command);
 		} else if (command instanceof PowerlevelCCGet) {
 			return this.handlePowerlevelGet(command);
+		} else if (command instanceof PowerlevelCCTestNodeSet) {
+			return this.handlePowerlevelTestNodeSet(command);
+		} else if (command instanceof PowerlevelCCTestNodeGet) {
+			return this.handlePowerlevelTestNodeGet(command);
+		} else if (command instanceof PowerlevelCCTestNodeReport) {
+			return this.handlePowerlevelTestNodeReport(command);
 		} else if (command instanceof DeviceResetLocallyCCNotification) {
 			return this.handleDeviceResetLocallyNotification(command);
 		} else if (command instanceof InclusionControllerCCInitiate) {
@@ -4528,6 +4535,14 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	private handlePowerlevelSet(command: PowerlevelCCSet): void {
+		// Check if the powerlevel is valid
+		if (!(command.powerlevel in Powerlevel)) {
+			throw new ZWaveError(
+				`Invalid powerlevel ${command.powerlevel}.`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
+		}
+
 		// CC:0073.01.01.11.001: A supporting node MAY decide not to change its actual Tx configuration.
 		// In any case, the value received in this Command MUST be returned in a Powerlevel Report Command
 		// in response to a Powerlevel Get Command as if the power setting was accepted for the indicated duration.
@@ -4555,8 +4570,15 @@ protocol version:      ${this.protocolVersion}`;
 
 		const { powerlevel, until } = this.driver.controller.powerlevel;
 
-		if (powerlevel === Powerlevel["Normal Power"]) {
-			await api.reportPowerlevel({ powerlevel });
+		if (
+			// Setting elapsed
+			until.getTime() < Date.now()
+			// or it is already set to normal power
+			|| powerlevel === Powerlevel["Normal Power"]
+		) {
+			await api.reportPowerlevel({
+				powerlevel: Powerlevel["Normal Power"],
+			});
 		} else {
 			const timeoutSeconds = Math.max(
 				0,
@@ -4571,6 +4593,108 @@ protocol version:      ${this.protocolVersion}`;
 				timeout: timeoutSeconds,
 			});
 		}
+	}
+
+	private async handlePowerlevelTestNodeSet(
+		command: PowerlevelCCTestNodeSet,
+	): Promise<void> {
+		// Check if the powerlevel is valid
+		if (!(command.powerlevel in Powerlevel)) {
+			throw new ZWaveError(
+				`Invalid powerlevel ${command.powerlevel}.`,
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
+		} else if (command.testFrameCount < 1) {
+			throw new ZWaveError(
+				"testFrameCount must be at least 1",
+				ZWaveErrorCodes.CC_OperationFailed,
+			);
+		}
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Powerlevel, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		try {
+			const acknowledgedFrames = await this.driver.sendNOPPowerFrames(
+				command.testNodeId,
+				command.powerlevel,
+				command.testFrameCount,
+			);
+			// Test results are in, send report
+			void api.sendNodeTestReport({
+				status: acknowledgedFrames > 0
+					? PowerlevelTestStatus.Success
+					: PowerlevelTestStatus.Failed,
+				testNodeId: command.testNodeId,
+				acknowledgedFrames,
+			}).catch(noop);
+		} catch {
+			// Test failed for some reason (e.g. invalid node)
+			void api.sendNodeTestReport({
+				status: PowerlevelTestStatus.Failed,
+				testNodeId: command.testNodeId,
+				acknowledgedFrames: 0,
+			}).catch(noop);
+		}
+	}
+
+	private async handlePowerlevelTestNodeGet(
+		command: PowerlevelCCTestNodeGet,
+	): Promise<void> {
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		const api = endpoint
+			.createAPI(CommandClasses.Powerlevel, false)
+			.withOptions({
+				// Answer with the same encapsulation as asked, but omit
+				// Supervision as it shouldn't be used for Get-Report flows
+				encapsulationFlags: command.encapsulationFlags
+					& ~EncapsulationFlags.Supervision,
+			});
+
+		const status = this.driver.getNOPPowerTestStatus();
+
+		if (status) {
+			await api.sendNodeTestReport({
+				status: status.inProgress
+					? PowerlevelTestStatus["In Progress"]
+					: status.acknowledgedFrames > 0
+					? PowerlevelTestStatus.Success
+					: PowerlevelTestStatus.Failed,
+				...status,
+			});
+		} else {
+			// No test was done
+			await api.sendNodeTestReport({
+				status: PowerlevelTestStatus.Success,
+				testNodeId: 0,
+				acknowledgedFrames: 0,
+			});
+		}
+	}
+
+	private handlePowerlevelTestNodeReport(
+		command: PowerlevelCCTestNodeReport,
+	): void {
+		// Notify listeners
+		this.emit(
+			"notification",
+			this,
+			CommandClasses.Powerlevel,
+			pick(command, ["testNodeId", "status", "acknowledgedFrames"]),
+		);
 	}
 
 	private async handleSecurityCommandsSupportedGet(
@@ -6071,18 +6195,6 @@ protocol version:      ${this.protocolVersion}`;
 				command.dataType,
 			),
 		});
-	}
-
-	private handlePowerlevelTestNodeReport(
-		command: PowerlevelCCTestNodeReport,
-	): void {
-		// Notify listeners
-		this.emit(
-			"notification",
-			this,
-			CommandClasses.Powerlevel,
-			pick(command, ["testNodeId", "status", "acknowledgedFrames"]),
-		);
 	}
 
 	/**

@@ -99,7 +99,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	public async reportPowerlevel(
 		options: PowerlevelCCReportOptions,
 	): Promise<void> {
-		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Get);
+		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Report);
 
 		const cc = new PowerlevelCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
@@ -180,6 +180,23 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 				"acknowledgedFrames",
 			]);
 		}
+	}
+
+	@validateArgs()
+	public async sendNodeTestReport(
+		options: PowerlevelCCTestNodeReportOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			PowerlevelCommand,
+			PowerlevelCommand.TestNodeReport,
+		);
+
+		const cc = new PowerlevelCCTestNodeReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -327,11 +344,10 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 4);
+			this.testNodeId = this.payload[0];
+			this.powerlevel = this.payload[1];
+			this.testFrameCount = this.payload.readUInt16BE(2);
 		} else {
 			this.testNodeId = options.testNodeId;
 			this.powerlevel = options.powerlevel;
@@ -361,23 +377,50 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	}
 }
 
+// @publicAPI
+export interface PowerlevelCCTestNodeReportOptions {
+	testNodeId: number;
+	status: PowerlevelTestStatus;
+	acknowledgedFrames: number;
+}
+
 @CCCommand(PowerlevelCommand.TestNodeReport)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (PowerlevelCCTestNodeReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 4);
-		this.testNodeId = this.payload[0];
-		this.status = this.payload[1];
-		this.acknowledgedFrames = this.payload.readUInt16BE(2);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 4);
+			this.testNodeId = this.payload[0];
+			this.status = this.payload[1];
+			this.acknowledgedFrames = this.payload.readUInt16BE(2);
+		} else {
+			this.testNodeId = options.testNodeId;
+			this.status = options.status;
+			this.acknowledgedFrames = options.acknowledgedFrames;
+		}
 	}
 
-	public readonly testNodeId: number;
-	public readonly status: PowerlevelTestStatus;
-	public readonly acknowledgedFrames: number;
+	public testNodeId: number;
+	public status: PowerlevelTestStatus;
+	public acknowledgedFrames: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.testNodeId,
+			this.status,
+			// Placeholder for acknowledged frames
+			0,
+			0,
+		]);
+		this.payload.writeUInt16BE(this.acknowledgedFrames, 2);
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
