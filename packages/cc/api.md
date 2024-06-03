@@ -559,6 +559,33 @@ export interface AssociationCCSetOptions extends CCCommandOptions {
     nodeIds: number[];
 }
 
+// Warning: (ae-missing-release-tag) "AssociationCCSpecificGroupGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssociationCCSpecificGroupGet extends AssociationCC {
+}
+
+// Warning: (ae-missing-release-tag) "AssociationCCSpecificGroupReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class AssociationCCSpecificGroupReport extends AssociationCC {
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (AssociationCCSpecificGroupReportOptions & CCCommandOptions));
+    // (undocumented)
+    group: number;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "AssociationCCSpecificGroupReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface AssociationCCSpecificGroupReportOptions {
+    // (undocumented)
+    group: number;
+}
+
 // Warning: (ae-missing-release-tag) "AssociationCCSupportedGroupingsGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -710,6 +737,10 @@ export enum AssociationCommand {
     Report = 3,
     // (undocumented)
     Set = 1,
+    // (undocumented)
+    SpecificGroupGet = 11,
+    // (undocumented)
+    SpecificGroupReport = 12,
     // (undocumented)
     SupportedGroupingsGet = 5,
     // (undocumented)
@@ -6790,7 +6821,7 @@ export class FirmwareUpdateMetaDataCCMetaDataGet extends FirmwareUpdateMetaDataC
 //
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDataCC implements FirmwareUpdateMetaData {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (FirmwareUpdateMetaDataCCMetaDataReportOptions & CCCommandOptions));
     // (undocumented)
     readonly additionalFirmwareIDs: readonly number[];
     // (undocumented)
@@ -6808,9 +6839,35 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
     // (undocumented)
     readonly maxFragmentSize?: number;
     // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
     readonly supportsActivation: MaybeNotKnown<boolean>;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCMetaDataReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateMetaDataCCMetaDataReportOptions {
+    // (undocumented)
+    additionalFirmwareIDs?: readonly number[];
+    // (undocumented)
+    checksum?: number;
+    // (undocumented)
+    continuesToFunction?: MaybeNotKnown<boolean>;
+    // (undocumented)
+    firmwareId?: number;
+    // (undocumented)
+    firmwareUpgradable: boolean;
+    // (undocumented)
+    hardwareVersion?: number;
+    // (undocumented)
+    manufacturerId: number;
+    // (undocumented)
+    maxFragmentSize?: number;
+    // (undocumented)
+    supportsActivation?: MaybeNotKnown<boolean>;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCPrepareGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8110,7 +8167,7 @@ export interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class IndicatorCCDescriptionReport extends IndicatorCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (IndicatorCCDescriptionReportOptions & CCCommandOptions));
     // (undocumented)
     description: string;
     // (undocumented)
@@ -8118,7 +8175,19 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "IndicatorCCDescriptionReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IndicatorCCDescriptionReportOptions {
+    // (undocumented)
+    description: string;
+    // (undocumented)
+    indicatorId: number;
 }
 
 // Warning: (ae-missing-release-tag) "IndicatorCCGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -10579,7 +10648,7 @@ export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
 //
 // @public (undocumented)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
-    constructor(host: ZWaveHost_2, options: ManufacturerSpecificCCReportOptions | CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: (ManufacturerSpecificCCReportOptions & CCCommandOptions) | CommandClassDeserializationOptions);
     // (undocumented)
     readonly manufacturerId: number;
     // (undocumented)
@@ -10595,7 +10664,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 // Warning: (ae-missing-release-tag) "ManufacturerSpecificCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ManufacturerSpecificCCReportOptions extends CCCommandOptions {
+export interface ManufacturerSpecificCCReportOptions {
     // (undocumented)
     manufacturerId: number;
     // (undocumented)
@@ -11122,6 +11191,8 @@ export class MGRPExtension extends Security2Extension {
     // Warning: (ae-forgotten-export) The symbol "MGRPExtensionOptions" needs to be exported by the entry point index.d.ts
     constructor(options: Security2ExtensionDeserializationOptions | MGRPExtensionOptions);
     // (undocumented)
+    static readonly expectedLength = 3;
+    // (undocumented)
     groupId: number;
     // (undocumented)
     serialize(moreToFollow: boolean): Buffer;
@@ -11134,6 +11205,8 @@ export class MGRPExtension extends Security2Extension {
 // @public (undocumented)
 export class MOSExtension extends Security2Extension {
     constructor(options?: Security2ExtensionDeserializationOptions);
+    // (undocumented)
+    static readonly expectedLength = 2;
 }
 
 // Warning: (ae-missing-release-tag) "MPANExtension" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11142,6 +11215,8 @@ export class MOSExtension extends Security2Extension {
 export class MPANExtension extends Security2Extension {
     // Warning: (ae-forgotten-export) The symbol "MPANExtensionOptions" needs to be exported by the entry point index.d.ts
     constructor(options: Security2ExtensionDeserializationOptions | MPANExtensionOptions);
+    // (undocumented)
+    static readonly expectedLength = 19;
     // (undocumented)
     groupId: number;
     // (undocumented)
@@ -11233,9 +11308,9 @@ export interface MultiChannelAssociationCCRemoveOptions {
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (MultiChannelAssociationCCReportOptions & CCCommandOptions));
     // (undocumented)
-    get endpoints(): readonly EndpointAddress[];
+    endpoints: EndpointAddress[];
     // (undocumented)
     expectMoreMessages(): boolean;
     // (undocumented)
@@ -11243,15 +11318,33 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
     // (undocumented)
     readonly groupId: number;
     // (undocumented)
-    readonly maxNodes: number;
+    maxNodes: number;
     // (undocumented)
     mergePartialCCs(applHost: ZWaveApplicationHost_2, partials: MultiChannelAssociationCCReport[]): void;
     // (undocumented)
-    get nodeIds(): readonly number[];
+    nodeIds: number[];
     // (undocumented)
-    readonly reportsToFollow: number;
+    reportsToFollow: number;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultiChannelAssociationCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelAssociationCCReportOptions {
+    // (undocumented)
+    endpoints: EndpointAddress[];
+    // (undocumented)
+    groupId: number;
+    // (undocumented)
+    maxNodes: number;
+    // (undocumented)
+    nodeIds: number[];
+    // (undocumented)
+    reportsToFollow: number;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -11295,11 +11388,21 @@ export class MultiChannelAssociationCCSupportedGroupingsGet extends MultiChannel
 //
 // @public (undocumented)
 export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChannelAssociationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | MultiChannelAssociationCCSupportedGroupingsReportOptions);
     // (undocumented)
     readonly groupCount: number;
     // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultiChannelAssociationCCSupportedGroupingsReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultiChannelAssociationCCSupportedGroupingsReportOptions extends CCCommandOptions {
+    // (undocumented)
+    groupCount: number;
 }
 
 // Warning: (ae-missing-release-tag) "MultiChannelAssociationCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -13536,14 +13639,27 @@ export class PowerlevelCCGet extends PowerlevelCC {
 //
 // @public (undocumented)
 export class PowerlevelCCReport extends PowerlevelCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (PowerlevelCCReportOptions & CCCommandOptions));
     // (undocumented)
     readonly powerlevel: Powerlevel;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly timeout?: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
 }
+
+// Warning: (ae-missing-release-tag) "PowerlevelCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type PowerlevelCCReportOptions = {
+    powerlevel: typeof Powerlevel["Normal Power"];
+    timeout?: undefined;
+} | {
+    powerlevel: Exclude<Powerlevel, typeof Powerlevel["Normal Power"]>;
+    timeout: number;
+};
 
 // Warning: (ae-missing-release-tag) "PowerlevelCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -13581,15 +13697,29 @@ export class PowerlevelCCTestNodeGet extends PowerlevelCC {
 //
 // @public (undocumented)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (PowerlevelCCTestNodeReportOptions & CCCommandOptions));
     // (undocumented)
-    readonly acknowledgedFrames: number;
+    acknowledgedFrames: number;
     // (undocumented)
-    readonly status: PowerlevelTestStatus;
+    serialize(): Buffer;
     // (undocumented)
-    readonly testNodeId: number;
+    status: PowerlevelTestStatus;
+    // (undocumented)
+    testNodeId: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "PowerlevelCCTestNodeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface PowerlevelCCTestNodeReportOptions {
+    // (undocumented)
+    acknowledgedFrames: number;
+    // (undocumented)
+    status: PowerlevelTestStatus;
+    // (undocumented)
+    testNodeId: number;
 }
 
 // Warning: (ae-missing-release-tag) "PowerlevelCCTestNodeSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15672,7 +15802,10 @@ export class Security2Extension {
     critical: boolean;
     static from(data: Buffer): Security2Extension;
     static getConstructor(data: Buffer): Security2ExtensionConstructor<Security2Extension>;
-    static getExtensionLength(data: Buffer): number;
+    static getExtensionLength(data: Buffer): {
+        expected?: number;
+        actual: number;
+    };
     // (undocumented)
     isEncrypted(): boolean;
     // (undocumented)
@@ -16354,6 +16487,8 @@ export enum SoundSwitchCommand {
 export class SPANExtension extends Security2Extension {
     // Warning: (ae-forgotten-export) The symbol "SPANExtensionOptions" needs to be exported by the entry point index.d.ts
     constructor(options: Security2ExtensionDeserializationOptions | SPANExtensionOptions);
+    // (undocumented)
+    static readonly expectedLength = 18;
     // (undocumented)
     senderEI: Buffer;
     // (undocumented)
@@ -19104,11 +19239,21 @@ export class VersionCCCapabilitiesGet extends VersionCC {
 //
 // @public (undocumented)
 export class VersionCCCapabilitiesReport extends VersionCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (VersionCCCapabilitiesReportOptions & CCCommandOptions));
     // (undocumented)
-    readonly supportsZWaveSoftwareGet: boolean;
+    serialize(): Buffer;
+    // (undocumented)
+    supportsZWaveSoftwareGet: boolean;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "VersionCCCapabilitiesReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface VersionCCCapabilitiesReportOptions {
+    // (undocumented)
+    supportsZWaveSoftwareGet: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "VersionCCCommandClassGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -20326,6 +20471,12 @@ export type WrapWithTXReport<T> = [T] extends [Promise<infer U>] ? Promise<WrapW
 //
 // @public (undocumented)
 export function ZWaveDataRate2DataRate(zdr: ZWaveDataRate_2): DataRate_2;
+
+// Warning: (ae-missing-release-tag) "ZWaveLongRangeCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class ZWaveLongRangeCC extends CommandClass {
+}
 
 // Warning: (ae-missing-release-tag) "ZWavePlusCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

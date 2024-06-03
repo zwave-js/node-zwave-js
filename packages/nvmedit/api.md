@@ -197,6 +197,10 @@ export interface NVMJSON {
     controller: NVMJSONController;
     // (undocumented)
     format: number;
+    // Warning: (ae-forgotten-export) The symbol "NVMJSONLRNode" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    lrNodes?: Record<number, NVMJSONLRNode>;
     // (undocumented)
     meta?: NVMMeta;
     // (undocumented)

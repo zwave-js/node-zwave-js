@@ -517,6 +517,7 @@ export {
 export type {
 	PowerlevelCCReportOptions,
 	PowerlevelCCSetOptions,
+	PowerlevelCCTestNodeReportOptions,
 	PowerlevelCCTestNodeSetOptions,
 } from "./PowerlevelCC";
 export {

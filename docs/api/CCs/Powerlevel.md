@@ -27,6 +27,14 @@ async getPowerlevel(): Promise<
 >;
 ```
 
+### `reportPowerlevel`
+
+```ts
+async reportPowerlevel(
+	options: PowerlevelCCReportOptions,
+): Promise<void>;
+```
+
 ### `startNodeTest`
 
 ```ts
@@ -48,4 +56,12 @@ async getNodeTestStatus(): Promise<
 		>
 	>
 >;
+```
+
+### `sendNodeTestReport`
+
+```ts
+async sendNodeTestReport(
+	options: PowerlevelCCTestNodeReportOptions,
+): Promise<void>;
 ```
