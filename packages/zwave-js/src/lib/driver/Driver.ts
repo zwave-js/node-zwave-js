@@ -8,6 +8,7 @@ import {
 	InvalidCC,
 	KEXFailType,
 	MultiChannelCC,
+	type Powerlevel,
 	Security2CC,
 	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,
@@ -112,6 +113,7 @@ import {
 	Message,
 	MessageHeaders,
 	MessageType,
+	type SuccessIndicator,
 	XModemMessageHeaders,
 	ZWaveSerialMode,
 	ZWaveSerialPort,
@@ -190,6 +192,11 @@ import {
 	isSendDataTransmitReport,
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
+
+import {
+	SendTestFrameRequest,
+	SendTestFrameTransmitReport,
+} from "../serialapi/transport/SendTestFrameMessages";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import {
 	type AppInfo,
@@ -2971,6 +2978,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				...this.awaitedMessages.map((m) => m.timeout),
 				...this.awaitedMessageHeaders.map((h) => h.timeout),
 				...this.awaitedBootloaderChunks.map((b) => b.timeout),
+				this._powerlevelTestNodeContext?.timeout,
 			]
 		) {
 			if (timeout) clearTimeout(timeout);
@@ -6686,6 +6694,100 @@ ${handlers.length} left`,
 				clearTimeout(this.pollBackgroundRSSITimer);
 				this.pollBackgroundRSSITimer = undefined;
 			}
+		}
+	}
+
+	private _powerlevelTestNodeContext: {
+		testNodeId: number;
+		timeout: NodeJS.Timeout | undefined;
+		acknowledgedFrames: number;
+	} | undefined;
+
+	/**
+	 * @internal
+	 * Begins a powerlevel test for the given node using NOP power frames
+	 */
+	public async sendNOPPowerFrames(
+		testNodeId: number,
+		powerlevel: Powerlevel,
+		frameCount: number,
+	): Promise<number> {
+		if (this._powerlevelTestNodeContext) {
+			// Cancel the previous test
+			clearTimeout(this._powerlevelTestNodeContext.timeout);
+			this._powerlevelTestNodeContext = undefined;
+		}
+
+		if (frameCount < 1) return 0;
+
+		const ret = createDeferredPromise<number>();
+
+		const context = {
+			testNodeId,
+			acknowledgedFrames: 0,
+			// This is set below after defining sendFrame
+			timeout: undefined as NodeJS.Timeout | undefined,
+		};
+		this._powerlevelTestNodeContext = context;
+
+		// We're expected to send these pretty quickly (260 frames in 25s for the CTT test)
+		const interval = 50;
+
+		const sendFrame = async () => {
+			const result = await this.sendTestFrame(testNodeId, powerlevel);
+			if (result === TransmitStatus.OK) {
+				context.acknowledgedFrames++;
+			}
+			frameCount--;
+
+			if (frameCount > 0) {
+				context.timeout = setTimeout(sendFrame, interval);
+			} else {
+				context.timeout = undefined;
+				ret.resolve(context.acknowledgedFrames);
+			}
+		};
+
+		context.timeout = setTimeout(sendFrame, interval);
+
+		return ret;
+	}
+
+	/** Sends a NOP Power frame to the given node and returns the transmit status if the frame was sent */
+	public async sendTestFrame(
+		nodeId: number,
+		powerlevel: Powerlevel,
+	): Promise<TransmitStatus | undefined> {
+		const result = await this.sendMessage<
+			Message & SuccessIndicator
+		>(
+			new SendTestFrameRequest(this, {
+				testNodeId: nodeId,
+				powerlevel,
+			}),
+		);
+
+		if (result instanceof SendTestFrameTransmitReport) {
+			return result.transmitStatus;
+		}
+	}
+
+	/**
+	 * @internal
+	 * Returns the status of a potentially ongoing NOP power test
+	 */
+	public getNOPPowerTestStatus(): {
+		testNodeId: number;
+		inProgress: boolean;
+		acknowledgedFrames: number;
+	} | undefined {
+		if (this._powerlevelTestNodeContext) {
+			return {
+				inProgress: !!this._powerlevelTestNodeContext.timeout,
+				testNodeId: this._powerlevelTestNodeContext.testNodeId,
+				acknowledgedFrames:
+					this._powerlevelTestNodeContext.acknowledgedFrames,
+			};
 		}
 	}
 }
