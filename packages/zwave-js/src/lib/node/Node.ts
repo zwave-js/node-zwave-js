@@ -3066,23 +3066,6 @@ protocol version:      ${this.protocolVersion}`;
 			return;
 		}
 
-		// If a get-type command is received via multicast / broadcast, ignore it
-		if (
-			!command.isSinglecast()
-			&& command.constructor.name.endsWith("Get")
-		) {
-			this.driver.controllerLog.logNode(
-				this.id,
-				{
-					endpoint: endpoint?.index,
-					direction: "inbound",
-					message:
-						`Ignoring ${command.constructor.name} because it was received via multicast or broadcast`,
-				},
-			);
-			return;
-		}
-
 		if (command instanceof BasicCC) {
 			return this.handleBasicCommand(command);
 		} else if (command instanceof MultilevelSwitchCC) {
