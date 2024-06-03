@@ -963,7 +963,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						extensionLength
 							> buffer.length
 								- offset
-								- SECURITY_S2_AUTH_TAG_LENGTH
+								- (wasEncrypted
+									? 0
+									: SECURITY_S2_AUTH_TAG_LENGTH)
 					) {
 						// The supposed length is longer than the space the extensions may occupy
 						mustDiscardCommand = true;

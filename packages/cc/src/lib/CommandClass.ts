@@ -566,16 +566,32 @@ export class CommandClass implements ICommandClass {
 
 	public isSinglecast(): this is SinglecastCC<this> {
 		return (
-			typeof this.nodeId === "number" && this.nodeId !== NODE_ID_BROADCAST
+			// received
+			this.frameType === "singlecast"
+			// transmitted
+			|| (this.frameType == undefined
+				&& typeof this.nodeId === "number"
+				&& this.nodeId !== NODE_ID_BROADCAST)
 		);
 	}
 
 	public isMulticast(): this is MulticastCC<this> {
-		return isArray(this.nodeId);
+		return (
+			// received
+			this.frameType === "multicast"
+			// transmitted
+			|| (this.frameType == undefined && isArray(this.nodeId))
+		);
 	}
 
 	public isBroadcast(): this is BroadcastCC<this> {
-		return this.nodeId === NODE_ID_BROADCAST;
+		return (
+			// received
+			this.frameType === "broadcast"
+			// transmitted
+			|| (this.frameType == undefined
+				&& this.nodeId === NODE_ID_BROADCAST)
+		);
 	}
 
 	/**

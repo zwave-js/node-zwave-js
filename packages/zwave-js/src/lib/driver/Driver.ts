@@ -4180,18 +4180,6 @@ ${handlers.length} left`,
 			return this.isSecurityLevelTooLow(cc.encapsulated);
 		}
 
-		if (
-			cc.constructor.name.endsWith("Get")
-			&& (cc.frameType === "multicast" || cc.frameType === "broadcast")
-		) {
-			this.controllerLog.logNode(
-				cc.nodeId as number,
-				`received GET-type command via ${cc.frameType} - discarding...`,
-				"warn",
-			);
-			return true;
-		}
-
 		const secClass = node.getHighestSecurityClass();
 		if (
 			secClass === SecurityClass.None
@@ -4312,6 +4300,18 @@ ${handlers.length} left`,
 			this.controllerLog.logNode(
 				cc.nodeId as number,
 				`is unknown - discarding received command...`,
+				"warn",
+			);
+			return true;
+		}
+
+		if (
+			cc.constructor.name.endsWith("Get")
+			&& (cc.frameType === "multicast" || cc.frameType === "broadcast")
+		) {
+			this.controllerLog.logNode(
+				cc.nodeId as number,
+				`received GET-type command via ${cc.frameType} - discarding...`,
 				"warn",
 			);
 			return true;
