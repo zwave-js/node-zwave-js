@@ -3216,7 +3216,7 @@ supported CCs: ${
 			if (kexParams.echo) {
 				this.driver.controllerLog.logNode(node.id, {
 					message:
-						`Security S2 bootstrapping failed: Received unexpected echo command.`,
+						`Security S2 bootstrapping failed: KEX Report unexpectedly has the echo flag set.`,
 					level: "warn",
 				});
 				await abort(KEXFailType.NoVerify);
@@ -3511,8 +3511,9 @@ supported CCs: ${
 						|| cc instanceof Security2CCKEXFail,
 					inclusionTimeouts.TA3,
 				).catch(() => "timeout" as const);
-				if (keyRequest === "timeout") return abortTimeout();
-				if (keyRequest instanceof Security2CCKEXFail) {
+				if (keyRequest === "timeout") {
+					return abortTimeout();
+				} else if (keyRequest instanceof Security2CCKEXFail) {
 					this.driver.controllerLog.logNode(node.id, {
 						message:
 							`The joining node canceled the Security S2 bootstrapping.`,
@@ -3521,6 +3522,20 @@ supported CCs: ${
 					});
 					await abort();
 					return SecurityBootstrapFailure.NodeCanceled;
+				} else if (
+					!keyRequest.isEncapsulatedWith(
+						CommandClasses["Security 2"],
+						Security2Command.MessageEncapsulation,
+					)
+				) {
+					this.driver.controllerLog.logNode(node.id, {
+						message:
+							`Security S2 bootstrapping failed: Command received without encryption`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
 				}
 
 				const securityClass = keyRequest.requestedKey;
