@@ -3251,7 +3251,18 @@ supported CCs: ${
 				});
 				await abort(KEXFailType.NoSupportedCurve);
 				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (kexParams.requestCSA) {
+				// We do not support CSA at the moment, so it is never granted.
+				// Alternatively, filter out S2 Authenticated and S2 Access Control
+				this.driver.controllerLog.logNode(node.id, {
+					message:
+						`Security S2 bootstrapping failed: CSA requested but not granted.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.ParameterMismatch;
 			}
+
 			const supportedKeys = kexParams.requestedKeys.filter((k) =>
 				securityClassOrder.includes(k as any)
 			);
