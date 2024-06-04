@@ -247,23 +247,25 @@ export enum FunctionType {
     // (undocumented)
     SendDataMulticastBridge = 171,// Try to retrieve a Static Update Controller node id (zero if no SUC present)
     // (undocumented)
-    SerialAPISetup = 11,
+    SendTestFrame = 190,
     // (undocumented)
-    SerialAPIStarted = 10,// Assign a priority route from a node to the SUC
+    SerialAPISetup = 11,// Assign a priority route from a node to the SUC
     // (undocumented)
-    SetApplicationNodeInformation = 3,
+    SerialAPIStarted = 10,
     // (undocumented)
-    SetLongRangeChannel = 220,// Allow options for request node neighbor update
+    SetApplicationNodeInformation = 3,// Allow options for request node neighbor update
     // (undocumented)
-    SetLongRangeShadowNodeIDs = 221,// supports NWI
+    SetLongRangeChannel = 220,// supports NWI
     // (undocumented)
-    SetPriorityRoute = 147,// Get info (supported command classes) for the specified node
+    SetLongRangeShadowNodeIDs = 221,// Get info (supported command classes) for the specified node
     // (undocumented)
-    SetRFReceiveMode = 16,// Mark a specified node id as failed
+    SetPriorityRoute = 147,// Mark a specified node id as failed
     // (undocumented)
-    SetSerialApiTimeouts = 6,// Check to see if a specified node has failed
+    SetRFReceiveMode = 16,// Check to see if a specified node has failed
     // (undocumented)
-    SetSUCNodeId = 84,// Replace a failed node with a new one that takes the same node ID
+    SetSerialApiTimeouts = 6,// Replace a failed node with a new one that takes the same node ID
+    // (undocumented)
+    SetSUCNodeId = 84,// ??
     // (undocumented)
     Shutdown = 217,// ??
     // (undocumented)
@@ -275,11 +277,11 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_CLOCK_GET = 49,// ??
     // (undocumented)
-    UNKNOWN_FUNC_CLOCK_SET = 48,// ??
+    UNKNOWN_FUNC_CLOCK_SET = 48,// Access the NVM section for 500 series OTW firmware updates
     // (undocumented)
-    UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,// Access the NVM section for 500 series OTW firmware updates
+    UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,// Get a specified node's neighbor information from the controller
     // (undocumented)
-    UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 191,// Get a specified node's neighbor information from the controller
+    UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 191,// ??
     // (undocumented)
     UNKNOWN_FUNC_GetNetworkStats = 58,// ??
     // (undocumented)
@@ -291,33 +293,31 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_MEMORY_GET_BYTE = 33,// ??
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 36,// ??
+    UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 36,// Get the route that is used as the first routing attempty when transmitting to a node
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_PUT_BYTE = 34,// Get the route that is used as the first routing attempty when transmitting to a node
+    UNKNOWN_FUNC_MEMORY_PUT_BYTE = 34,// Set the route that shall be used as the first routing attempty when transmitting to a node
     // (undocumented)
-    UNKNOWN_FUNC_REDISCOVERY_NEEDED = 89,// Set the route that shall be used as the first routing attempty when transmitting to a node
+    UNKNOWN_FUNC_REDISCOVERY_NEEDED = 89,// ??
     // (undocumented)
     UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 63,// ??
     // (undocumented)
-    UNKNOWN_FUNC_ResetTXCounter = 130,// ??
+    UNKNOWN_FUNC_ResetTXCounter = 130,// Set application virtual slave node information
     // (undocumented)
-    UNKNOWN_FUNC_RF_POWERLEVEL_GET = 186,// Set application virtual slave node information
+    UNKNOWN_FUNC_RF_POWERLEVEL_GET = 186,// Slave command handler
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_CALL = 54,// Slave command handler
+    UNKNOWN_FUNC_RTC_TIMER_CALL = 54,// Send a slave node information message
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_CREATE = 51,// Send a slave node information message
+    UNKNOWN_FUNC_RTC_TIMER_CREATE = 51,// Send data from slave
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_DELETE = 53,// Send data from slave
+    UNKNOWN_FUNC_RTC_TIMER_DELETE = 53,// Enter slave learn mode
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_READ = 52,// Enter slave learn mode
+    UNKNOWN_FUNC_RTC_TIMER_READ = 52,// Return all virtual nodes
     // (undocumented)
-    UNKNOWN_FUNC_SEND_DATA_META = 24,// Return all virtual nodes
+    UNKNOWN_FUNC_SEND_DATA_META = 24,// Virtual node test
     // (undocumented)
-    UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 145,// Virtual node test
+    UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 145,// A message from another node using the Bridge API
     // (undocumented)
-    UNKNOWN_FUNC_SEND_SUC_ID = 87,// A message from another node using the Bridge API
-    // (undocumented)
-    UNKNOWN_FUNC_SEND_TEST_FRAME = 190,// Send data (Bridge API)
+    UNKNOWN_FUNC_SEND_SUC_ID = 87,// Send data (Bridge API)
     // (undocumented)
     UNKNOWN_FUNC_SERIAL_API_TEST = 149,// Send data using multicast (Bridge API)
     // (undocumented)
@@ -335,7 +335,7 @@ export enum FunctionType {
     // (undocumented)
     UNKNOWN_FUNC_TIMER_START = 112,
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0x28 = 40,
+    UNKNOWN_FUNC_UNKNOWN_0x28 = 40,// Sends a NOP Power frame to the given node
     // (undocumented)
     UNKNOWN_FUNC_UNKNOWN_0x66 = 102,
     // (undocumented)

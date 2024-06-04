@@ -1508,6 +1508,11 @@ export const managementCCs: readonly CommandClasses[];
 // @public
 export const MAX_NODES = 232;
 
+// Warning: (ae-missing-release-tag) "MAX_NODES_LR" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const MAX_NODES_LR = 4000;
+
 // Warning: (ae-missing-release-tag) "MAX_REPEATERS" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1671,6 +1676,11 @@ export interface MulticastGroup {
 //
 // @public
 export const NODE_ID_BROADCAST = 255;
+
+// Warning: (ae-missing-release-tag) "NODE_ID_BROADCAST_LR" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export const NODE_ID_BROADCAST_LR = 4095;
 
 // Warning: (ae-missing-release-tag) "NODE_ID_MAX" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3300,8 +3310,8 @@ export enum ZnifferProtocolDataRate {
 
 // Warning: (ae-missing-release-tag) "znifferProtocolDataRateToString" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
-// @public (undocumented)
-export function znifferProtocolDataRateToString(rate: ZnifferProtocolDataRate): string;
+// @public
+export function znifferProtocolDataRateToString(rate: ZnifferProtocolDataRate, includeProtocol?: boolean): string;
 
 // Warning: (ae-missing-release-tag) "ZnifferRegion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3401,6 +3411,7 @@ export enum ZWaveErrorCodes {
     CC_NotImplemented = 303,
     // (undocumented)
     CC_NotSupported = 302,
+    CC_OperationFailed = 305,
     Config_CircularImport = 342,
     // (undocumented)
     Config_Invalid = 340,

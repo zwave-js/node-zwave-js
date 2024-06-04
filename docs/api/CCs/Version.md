@@ -36,6 +36,12 @@ async reportCCVersion(requestedCC: CommandClasses): Promise<void>;
 async getCapabilities(): Promise<Pick<VersionCCCapabilitiesReport, "supportsZWaveSoftwareGet"> | undefined>;
 ```
 
+### `reportCapabilities`
+
+```ts
+async reportCapabilities(): Promise<void>;
+```
+
 ### `getZWaveSoftware`
 
 ```ts
