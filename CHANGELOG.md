@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Support `SendTestFrame` command and perform powerlevel tests on behalf of other nodes (#6889)
+
+### Bugfixes
+* Respond to more queries from other devices (#6866)
+* Handle supervised queries from other devices correctly (#6866)
+* Harden S2 extension parsing and validation (#6866)
+* Fixed some more edge cases found by S2 certification tests (#6887)
+* Abort S2 bootstrapping when CSA is requested (not supported in Z-Wave JS) (#6890)
+
+### Config file changes
+* Parameter update for Zooz Zen16 v2.0 and v2.10 (#6855)
+* Override Central Scene CC version for Springs Window Fashions BRZ (#6870)
+
 ## 12.9.1 (2024-05-24)
 ### Config file changes
 * Add parameter 117 to Shelly Wave Plug US and UK (#6831)
