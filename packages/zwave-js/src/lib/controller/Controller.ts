@@ -1195,6 +1195,13 @@ export class ZWaveController
 			);
 		}
 
+		// On older controllers with soft-reset disabled, supportsLongRange is not automatically reported by the controller
+		// so we should set it manually
+		if (!this.isLongRangeCapable()) {
+			this._supportsLongRange = false;
+			this._supportsLongRangeAutoChannelSelection = false;
+		}
+
 		this.driver.controllerLog.print(
 			`supported Z-Wave features: ${
 				Object.keys(ZWaveFeature)
@@ -1247,18 +1254,21 @@ export class ZWaveController
 		};
 	}
 
+	private isLongRangeCapable(): MaybeNotKnown<boolean> {
+		// Z-Wave Long Range is supported if the controller supports changing the node ID type to 16 bit
+		// FIXME: Consider using the ZWaveFeature enum for this instead
+		return this.isSerialAPISetupCommandSupported(
+			SerialAPISetupCommand.SetNodeIDType,
+		);
+	}
+
 	/** Tries to determine the LR capable replacement of the given region. If none is found, the given region is returned. */
 	private tryGetLRCapableRegion(region: RFRegion): RFRegion {
 		// There is no official API to query whether a given region is supported,
 		// but there are ways to figure out if LR regions are.
 
-		// US_LR is supported if the controller supports changing the node ID type to 16 bit
-		if (
-			region === RFRegion.USA
-			&& this.isSerialAPISetupCommandSupported(
-				SerialAPISetupCommand.SetNodeIDType,
-			)
-		) {
+		// US_LR is the first supported LR region, so if the controller supports LR, US_LR is supported
+		if (region === RFRegion.USA && this.isLongRangeCapable()) {
 			return RFRegion["USA (Long Range)"];
 		}
 
@@ -1480,6 +1490,8 @@ export class ZWaveController
 					"warn",
 				);
 			}
+		} else {
+			this._supportsLongRangeAutoChannelSelection = false;
 		}
 		if (
 			this.isFunctionSupported(FunctionType.SetLongRangeChannel)
