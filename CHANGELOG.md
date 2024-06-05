@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.10.0 (2024-06-05)
 ### Features
 * Support `SendTestFrame` command and perform powerlevel tests on behalf of other nodes (#6889)
 
