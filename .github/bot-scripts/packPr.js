@@ -1,13 +1,9 @@
+// Creates or updates a PR with a documentation update
+
 // @ts-check
+/// <reference path="../bot-scripts/types.d.ts" />
 
 const exec = require("@actions/exec");
-const github = require("@actions/github");
-const core = require("@actions/core");
-
-const githubToken = core.getInput("githubToken");
-const npmToken = core.getInput("npmToken");
-const task = core.getInput("task");
-const octokit = github.getOctokit(githubToken).rest;
 const semver = require("semver");
 
 const options = {
@@ -15,13 +11,16 @@ const options = {
 	repo: "node-zwave-js",
 };
 
-if (task === "publish-pr") {
-	publishPr().catch(() => process.exit(1));
-}
+/**
+ * @param {{github: Github, context: Context}} param
+ */
+async function main(param) {
+	const { github, context } = param;
 
-async function publishPr() {
-	const pr = parseInt(core.getInput("pr"));
-	const { data: pull } = await octokit.pulls.get({
+	const npmToken = /** @type {string} */ (process.env.NPM_TOKEN);
+	const pr = context.issue.number;
+
+	const { data: pull } = await github.rest.pulls.get({
 		...options,
 		pull_number: pr,
 	});
@@ -68,7 +67,7 @@ async function publishPr() {
 	}
 
 	if (success) {
-		octokit.issues.createComment({
+		github.rest.issues.createComment({
 			...options,
 			issue_number: pr,
 			body: `🎉 The packages have been published.
@@ -78,7 +77,7 @@ yarn add zwave-js@${newVersion}
 \`\`\``,
 		});
 	} else {
-		octokit.issues.createComment({
+		github.rest.issues.createComment({
 			...options,
 			issue_number: pr,
 			body:
@@ -86,3 +85,5 @@ yarn add zwave-js@${newVersion}
 		});
 	}
 }
+
+module.exports = main;
