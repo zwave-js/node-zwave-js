@@ -1,12 +1,12 @@
 {
-	"manufacturer": “Ultrapro,
+	"manufacturer": "Ultrapro",
 	"manufacturerId": "0x0063",
 	"label": "59373 / 59372 / 59350 / ZWA3016",
 	"description": "In-Wall Smart Dimmer, QFSW, 700S",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3433”,
+			"productId": "0x3433",
 			"zwaveAllianceId": 4462
 		}
 	],
@@ -82,7 +82,6 @@
 		}
 	],
 	"compat": {
-		// Needed for double-tap support
 		"mapBasicSet": "event"
 	},
 	"metadata": {
