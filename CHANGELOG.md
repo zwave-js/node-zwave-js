@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.10.1 (2024-06-06)
 This release implements the workaround mentioned by Silicon Labs in their SDK 7.21.3 release notes. Jammed 700/800 series controllers (fail to transmit continuously) are now restarted when this situation is detected, which hopefully resolves the issue temporarily.
 
 Unfortunately I have no way to reproduce the situation other than simulated tests, so please let us know if this actually helps or not.
