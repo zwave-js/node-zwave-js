@@ -21,4 +21,5 @@ module.exports = {
 	importConfigCreatePR: (...args) =>
 		require("./importConfigCreatePR")(...args),
 	shouldAutomerge: (...args) => require("./shouldAutomerge")(...args),
+	packPr: (...args) => require("./packPr")(...args),
 };
