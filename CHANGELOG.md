@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release implements the workaround mentioned by Silicon Labs in their SDK 7.21.3 release notes. Jammed 700/800 series controllers (fail to transmit continuously) are now restarted when this situation is detected, which hopefully resolves the issue temporarily.
+
+Unfortunately I have no way to reproduce the situation other than simulated tests, so please let us know if this actually helps or not.
+
+### Bugfixes
+* Set `supportsLongRange` to `false` on controllers known not to support LR ever (#6894)
+* Attempt to recover jammed controller by soft-resetting (#6900)
+
+### Config file changes
+* Add fingerprint `0x0004:0xffff` to "Yale YRD210" (#6899)
+
+### Changes under the hood
+* Migrate pack PR action to github-script (#6897)
+
 ## 12.10.0 (2024-06-05)
 ### Features
 * Support `SendTestFrame` command and perform powerlevel tests on behalf of other nodes (#6889)
