@@ -788,6 +788,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@homebridge/ciao@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@homebridge/ciao@npm:1.2.0"
+  dependencies:
+    debug: ^4.3.4
+    fast-deep-equal: ^3.1.3
+    source-map-support: ^0.5.21
+    tslib: ^2.6.2
+  bin:
+    ciao-bcs: lib/bonjour-conformance-testing.js
+  checksum: c2a30ee0d092464f5f6b88e9feeafe801d5d590652f39d46b28f9d22ded65f845747b9a824748295dd02cf467bfb1c44904c4eb3ed13251b5fb7b16b937debf7
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.14":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -8632,6 +8646,13 @@ resolve@^1.10.0:
   languageName: node
   linkType: hard
 
+"tslib@npm:^2.6.2":
+  version: 2.6.3
+  resolution: "tslib@npm:2.6.3"
+  checksum: 74fce0e100f1ebd95b8995fbbd0e6c91bdd8f4c35c00d4da62e285a3363aaa534de40a80db30ecfd388ed7c313c42d930ee0eaf108e8114214b180eec3dbe6f5
+  languageName: node
+  linkType: hard
+
 "tsutils@npm:^3.21.0":
   version: 3.21.0
   resolution: "tsutils@npm:3.21.0"
@@ -9294,6 +9315,7 @@ resolve@^1.10.0:
   dependencies:
     "@alcalzone/jsonl-db": ^3.1.1
     "@alcalzone/pak": ^0.10.1
+    "@homebridge/ciao": ^1.2.0
     "@microsoft/api-extractor": ^7.43.0
     "@types/fs-extra": ^11.0.4
     "@types/node": ^18.19.31

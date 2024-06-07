@@ -15,6 +15,7 @@ export function discoverRemoteSerialPorts(
 		reuseAddr: true,
 		loopback: false,
 		noInit: true,
+		ttl: 10,
 	});
 	let timer: NodeJS.Timeout | undefined;
 
@@ -31,8 +32,12 @@ export function discoverRemoteSerialPorts(
 					return {
 						txt: resp.answers.find(
 							(n) => n.type === "TXT" && n.name === data,
+						) ?? resp.additionals.find(
+							(n) => n.type === "TXT" && n.name === data,
 						),
 						srv: resp.answers.find(
+							(n) => n.type === "SRV" && n.name === data,
+						) ?? resp.additionals.find(
 							(n) => n.type === "SRV" && n.name === data,
 						),
 					};
