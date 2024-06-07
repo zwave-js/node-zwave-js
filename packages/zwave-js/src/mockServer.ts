@@ -1,16 +1,23 @@
-import { CommandClasses } from "@zwave-js/core";
+import { NotificationCCValues } from "@zwave-js/cc";
+import {
+	CommandClasses,
+	type ConfigurationMetadata,
+	type ValueID,
+} from "@zwave-js/core";
 import type { ZWaveSerialPort } from "@zwave-js/serial";
 import {
 	type MockPortBinding,
 	createAndOpenMockedZWaveSerialPort,
 } from "@zwave-js/serial/mock";
 import {
+	type ConfigurationCCCapabilities,
 	MockController,
 	type MockControllerBehavior,
 	type MockControllerOptions,
 	MockNode,
 	type MockNodeBehavior,
 	type MockNodeOptions,
+	type NotificationCCCapabilities,
 	type PartialCCCapabilities,
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
@@ -316,7 +323,90 @@ function createCCCapabilitiesFromDump(
 		version: dump.version,
 	};
 
-	// TODO: Parse CC specific info from values
+	// Parse CC specific info from values
+	if (ccId === CommandClasses.Configuration) {
+		Object.assign(ret, createConfigurationCCCapabilitiesFromDump(dump));
+	} else if (ccId === CommandClasses.Notification) {
+		Object.assign(ret, createNotificationCCCapabilitiesFromDump(dump));
+	}
 
 	return ret;
+}
+
+function createConfigurationCCCapabilitiesFromDump(
+	dump: CommandClassDump,
+): ConfigurationCCCapabilities {
+	const ret: ConfigurationCCCapabilities = {
+		bulkSupport: false,
+		parameters: [],
+	};
+
+	for (const val of dump.values) {
+		if (typeof val.property !== "number") continue;
+		// Mocks don't support partial parameters
+		if (val.propertyKey != undefined) continue;
+		// Metadata contains the param information
+		if (!val.metadata) continue;
+		const meta = val.metadata as ConfigurationMetadata;
+
+		ret.parameters.push({
+			"#": val.property,
+			valueSize: meta.valueSize ?? 1,
+			name: meta.label,
+			info: meta.description,
+			format: meta.format,
+			minValue: meta.min,
+			maxValue: meta.max,
+			defaultValue: meta.default,
+			readonly: !meta.writeable,
+		});
+	}
+
+	return ret;
+}
+
+function createNotificationCCCapabilitiesFromDump(
+	dump: CommandClassDump,
+): NotificationCCCapabilities {
+	const supportsV1Alarm = findDumpedValue(
+		dump,
+		CommandClasses.Notification,
+		NotificationCCValues.supportsV1Alarm.id,
+		false,
+	);
+	const ret: NotificationCCCapabilities = {
+		supportsV1Alarm,
+		notificationTypesAndEvents: {},
+	};
+
+	const supportedNotificationTypes: number[] = findDumpedValue(
+		dump,
+		CommandClasses.Notification,
+		NotificationCCValues.supportedNotificationTypes.id,
+		[],
+	);
+
+	for (const type of supportedNotificationTypes) {
+		const supportedEvents: number[] = findDumpedValue(
+			dump,
+			CommandClasses.Notification,
+			NotificationCCValues.supportedNotificationEvents(type).id,
+			[],
+		);
+		ret.notificationTypesAndEvents[type] = supportedEvents;
+	}
+
+	return ret;
+}
+
+function findDumpedValue<T>(
+	dump: CommandClassDump,
+	commandClass: CommandClasses,
+	valueId: ValueID,
+	defaultValue: T,
+): T {
+	return (dump.values.find((id) =>
+		id.property === valueId.property
+		&& id.propertyKey === valueId.propertyKey
+	)?.value) as (T | undefined) ?? defaultValue;
 }
