@@ -6,7 +6,12 @@ import type { ValueMetadata } from "./Metadata";
 import type { ValueID } from "./_Types";
 
 // export type SerializableValue = number | string | boolean | Map<string | number, any> | JSONObject;
-type SerializedValue = number | string | boolean | JSONObject | undefined;
+export type SerializedValue =
+	| number
+	| string
+	| boolean
+	| JSONObject
+	| undefined;
 
 export interface CacheValue
 	extends Pick<ValueID, "endpoint" | "property" | "propertyKey">

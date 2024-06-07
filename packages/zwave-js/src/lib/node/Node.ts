@@ -150,10 +150,11 @@ import {
 	SetValueStatus,
 	supervisionResultToSetValueResult,
 } from "@zwave-js/cc/safe";
-import type {
-	DeviceConfig,
-	Notification,
-	NotificationValueDefinition,
+import {
+	type DeviceConfig,
+	type Notification,
+	type NotificationValueDefinition,
+	embeddedDevicesDir,
 } from "@zwave-js/config";
 import {
 	CRC16_CCITT,
@@ -171,7 +172,7 @@ import {
 	NOT_KNOWN,
 	NodeType,
 	type NodeUpdatePayload,
-	type ProtocolVersion,
+	ProtocolVersion,
 	Protocols,
 	type RSSI,
 	RssiError,
@@ -195,6 +196,7 @@ import {
 	actuatorCCs,
 	allCCs,
 	applicationCCs,
+	dskToString,
 	encapsulationCCs,
 	getCCName,
 	getDSTInfo,
@@ -206,9 +208,11 @@ import {
 	isZWaveError,
 	nonApplicationCCs,
 	normalizeValueID,
+	securityClassIsLongRange,
 	securityClassIsS2,
 	securityClassOrder,
 	sensorCCs,
+	serializeCacheValue,
 	supervisedCommandFailed,
 	supervisedCommandSucceeded,
 	timespan,
@@ -241,6 +245,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
+import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
 import { RemoveNodeReason } from "../controller/Inclusion";
 import { determineNIF } from "../controller/NodeInformationFrame";
@@ -263,6 +268,7 @@ import {
 	RequestNodeInfoResponse,
 } from "../serialapi/network-mgmt/RequestNodeInfoMessages";
 import { DeviceClass } from "./DeviceClass";
+import { type NodeDump, type ValueDump } from "./Dump";
 import { Endpoint } from "./Endpoint";
 import {
 	formatLifelineHealthCheckSummary,
@@ -845,6 +851,10 @@ export class ZWaveNode extends Endpoint
 		}
 		// For all others, just return the simple x.y firmware version
 		return ret;
+	}
+
+	public get hardwareVersion(): MaybeNotKnown<number> {
+		return this.getValue(VersionCCValues.hardwareVersion.id);
 	}
 
 	public get sdkVersion(): MaybeNotKnown<string> {
@@ -7357,5 +7367,152 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			return !actualHash.equals(this.deviceConfigHash);
 		}
 		return true;
+	}
+
+	/** Returns a dump of this node's information for debugging purposes */
+	public createDump(): NodeDump {
+		const { index, ...endpointDump } = this.createEndpointDump();
+		const ret: NodeDump = {
+			id: this.id,
+			manufacturer: this.deviceConfig?.manufacturer,
+			label: this.label,
+			description: this.deviceConfig?.description,
+			fingerprint: {
+				manufacturerId: this.manufacturerId != undefined
+					? formatId(this.manufacturerId)
+					: "unknown",
+				productType: this.productType != undefined
+					? formatId(this.productType)
+					: "unknown",
+				productId: this.productId != undefined
+					? formatId(this.productId)
+					: "unknown",
+				firmwareVersion: this.firmwareVersion ?? "unknown",
+			},
+			interviewStage: getEnumMemberName(
+				InterviewStage,
+				this.interviewStage,
+			),
+			ready: this.ready,
+
+			dsk: this.dsk ? dskToString(this.dsk) : undefined,
+			securityClasses: {},
+
+			isListening: this.isListening ?? "unknown",
+			isFrequentListening: this.isFrequentListening ?? "unknown",
+			isRouting: this.isRouting ?? "unknown",
+			supportsBeaming: this.supportsBeaming ?? "unknown",
+			supportsSecurity: this.supportsSecurity ?? "unknown",
+			protocol: getEnumMemberName(Protocols, this.protocol),
+			supportedProtocols: this.driver.controller.getProvisioningEntry(
+				this.id,
+			)?.supportedProtocols?.map((p) => getEnumMemberName(Protocols, p)),
+			protocolVersion: this.protocolVersion != undefined
+				? getEnumMemberName(ProtocolVersion, this.protocolVersion)
+				: "unknown",
+			sdkVersion: this.sdkVersion ?? "unknown",
+			supportedDataRates: this.supportedDataRates
+				? [...this.supportedDataRates]
+				: "unknown",
+
+			...endpointDump,
+		};
+
+		if (this.hardwareVersion != undefined) {
+			ret.fingerprint.hardwareVersion = this.hardwareVersion;
+		}
+
+		for (const secClass of securityClassOrder) {
+			if (
+				this.protocol === Protocols.ZWaveLongRange
+				&& !securityClassIsLongRange(secClass)
+			) {
+				continue;
+			}
+			ret.securityClasses[getEnumMemberName(SecurityClass, secClass)] =
+				this.hasSecurityClass(secClass) ?? "unknown";
+		}
+
+		const allValueIds = nodeUtils.getDefinedValueIDsInternal(
+			this.driver,
+			this,
+			true,
+		);
+
+		const collectValues = (
+			endpointIndex: number,
+			getCollection: (ccId: CommandClasses) => ValueDump[] | undefined,
+		) => {
+			for (const valueId of allValueIds) {
+				if ((valueId.endpoint ?? 0) !== endpointIndex) continue;
+
+				const value = this._valueDB.getValue(valueId);
+				const metadata = this._valueDB.getMetadata(valueId);
+				const timestamp = this._valueDB.getTimestamp(valueId);
+				const timestampAsDate = timestamp
+					? new Date(timestamp).toISOString()
+					: undefined;
+
+				const ccInstance = CommandClass.createInstanceUnchecked(
+					this.driver,
+					this,
+					valueId.commandClass,
+				);
+				const isInternalValue = ccInstance?.isInternalValue(valueId);
+
+				const valueDump: ValueDump = {
+					...pick(valueId, [
+						"property",
+						"propertyKey",
+					]),
+					metadata,
+					value: serializeCacheValue(value),
+					timestamp: timestampAsDate,
+				};
+				if (isInternalValue) valueDump.internal = true;
+
+				for (const [prop, value] of Object.entries(valueDump)) {
+					// @ts-expect-error
+					if (value === undefined) delete valueDump[prop];
+				}
+
+				getCollection(valueId.commandClass)?.push(valueDump);
+			}
+		};
+		collectValues(0, (ccId) => ret.commandClasses[getCCName(ccId)]?.values);
+
+		for (const endpoint of this.getAllEndpoints()) {
+			ret.endpoints ??= {};
+			const endpointDump = endpoint.createEndpointDump();
+			collectValues(
+				index,
+				(ccId) => endpointDump.commandClasses[getCCName(ccId)]?.values,
+			);
+			ret.endpoints[endpoint.index] = endpointDump;
+		}
+
+		if (this.deviceConfig) {
+			const relativePath = path.relative(
+				embeddedDevicesDir,
+				this.deviceConfig.filename,
+			);
+			if (relativePath.startsWith("..")) {
+				// The path is outside our embedded config dir, take the full path
+				ret.configFileName = this.deviceConfig.filename;
+			} else {
+				ret.configFileName = relativePath;
+			}
+
+			if (this.deviceConfig.compat) {
+				// TODO: Check if everything comes through this way.
+				ret.compatFlags = this.deviceConfig.compat;
+			}
+		}
+		for (const [prop, value] of Object.entries(ret)) {
+			// @ts-expect-error
+			if (value === undefined) delete ret[prop];
+		}
+
+		return ret;
 	}
 }
