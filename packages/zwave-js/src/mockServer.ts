@@ -1,3 +1,9 @@
+import {
+	type CiaoService,
+	Protocol,
+	type Responder as MdnsResponder,
+	getResponder as getMdnsResponder,
+} from "@homebridge/ciao";
 import { NotificationCCValues } from "@zwave-js/cc";
 import {
 	CommandClasses,
@@ -9,6 +15,7 @@ import {
 	type MockPortBinding,
 	createAndOpenMockedZWaveSerialPort,
 } from "@zwave-js/serial/mock";
+import { getErrorMessage } from "@zwave-js/shared";
 import {
 	type ConfigurationCCCapabilities,
 	MockController,
@@ -70,6 +77,8 @@ export class MockServer {
 	private serialport: ZWaveSerialPort | undefined;
 	private binding: MockPortBinding | undefined;
 	private server: Server | undefined;
+	private responder: MdnsResponder | undefined;
+	private service: CiaoService | undefined;
 	private mockController: MockController | undefined;
 	private mockNodes: MockNode[] | undefined;
 
@@ -123,6 +132,19 @@ export class MockServer {
 			});
 		});
 
+		const port = this.options.port ?? 5555;
+		this.responder = getMdnsResponder();
+		this.service = this.responder.createService({
+			name: "zwave-mock-server",
+			type: "zwave",
+			protocol: Protocol.TCP,
+			port,
+			txt: {
+				manufacturer: "Z-Wave JS",
+				model: "Mock Server",
+			},
+		});
+
 		// Do not allow more than one client to connect
 		this.server.maxConnections = 1;
 
@@ -135,20 +157,38 @@ export class MockServer {
 		this.server.listen(
 			{
 				host: this.options.interface,
-				port: this.options.port ?? 5555,
+				port,
 			},
-			() => {
+			async () => {
 				const address: AddressInfo = this.server!.address() as any;
 				console.log(
 					`Server listening on tcp://${address.address}:${address.port}`,
 				);
+
 				promise.resolve();
+
+				// Advertise the service via mDNS
+				try {
+					await this.service!.advertise();
+					console.log(
+						`Enabled mDNS service discovery.`,
+					);
+				} catch (e) {
+					console.error(
+						`Failed to enable mDNS service discovery: ${
+							getErrorMessage(e)
+						}`,
+					);
+				}
 			},
 		);
 	}
 
 	public async stop(): Promise<void> {
 		console.log("Shutting down mock server...");
+		await this.service?.end();
+		await this.service?.destroy();
+		await this.responder?.shutdown();
 		this.mockController?.destroy();
 		this.server?.close();
 		await this.serialport?.close();
