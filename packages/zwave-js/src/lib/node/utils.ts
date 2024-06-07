@@ -299,6 +299,18 @@ export function getDefinedValueIDs(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 ): TranslatedValueID[] {
+	return getDefinedValueIDsInternal(applHost, node, false);
+}
+
+/**
+ * @internal
+ * Returns a list of all value names that are defined on all endpoints of this node
+ */
+export function getDefinedValueIDsInternal(
+	applHost: ZWaveApplicationHost,
+	node: IZWaveNode,
+	includeInternal: boolean = false,
+): TranslatedValueID[] {
 	let ret: ValueID[] = [];
 	const allowControlled: CommandClasses[] = [
 		CommandClasses.Basic,
@@ -316,7 +328,12 @@ export function getDefinedValueIDs(
 					cc,
 				);
 				if (ccInstance) {
-					ret.push(...ccInstance.getDefinedValueIDs(applHost));
+					ret.push(
+						...ccInstance.getDefinedValueIDs(
+							applHost,
+							includeInternal,
+						),
+					);
 				}
 			}
 		}

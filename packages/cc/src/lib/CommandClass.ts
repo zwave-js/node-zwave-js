@@ -804,7 +804,10 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */
-	public getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[] {
+	public getDefinedValueIDs(
+		applHost: ZWaveApplicationHost,
+		includeInternal: boolean = false,
+	): ValueID[] {
 		// In order to compare value ids, we need them to be strings
 		const ret = new Map<string, ValueID>();
 
@@ -844,7 +847,7 @@ export class CommandClass implements ICommandClass {
 			}
 
 			// Skip internal values
-			if (value.options.internal) continue;
+			if (value.options.internal && !includeInternal) continue;
 
 			// And determine if this value should be automatically "created"
 			if (!this.shouldAutoCreateValue(applHost, value)) continue;
@@ -864,7 +867,7 @@ export class CommandClass implements ICommandClass {
 			// ... which don't have a CC value definition
 			// ... or one that does not mark the value ID as internal
 			const ccValue = ccValues.find((value) => value.is(valueId));
-			if (!ccValue || !ccValue.options.internal) {
+			if (!ccValue || !ccValue.options.internal || includeInternal) {
 				addValueId(valueId.property, valueId.propertyKey);
 			}
 		}

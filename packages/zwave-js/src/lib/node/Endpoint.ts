@@ -26,6 +26,7 @@ import { isDeepStrictEqual } from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";
+import type { EndpointDump } from "./Dump";
 import type { ZWaveNode } from "./Node";
 
 /**
@@ -486,5 +487,46 @@ export class Endpoint implements IZWaveEndpoint {
 		return this.getNodeUnsafe()?.getValue(
 			ZWavePlusCCValues.userIcon.endpoint(this.index),
 		);
+	}
+
+	/**
+	 * @internal
+	 * Returns a dump of this endpoint's information for debugging purposes
+	 */
+	public createEndpointDump(): EndpointDump {
+		const ret: EndpointDump = {
+			index: this.index,
+			deviceClass: "unknown",
+			commandClasses: {},
+			maySupportBasicCC: this.maySupportBasicCC(),
+		};
+
+		if (this.deviceClass) {
+			ret.deviceClass = {
+				basic: {
+					key: this.deviceClass.basic.key,
+					label: this.deviceClass.basic.label,
+				},
+				generic: {
+					key: this.deviceClass.generic.key,
+					label: this.deviceClass.generic.label,
+				},
+				specific: {
+					key: this.deviceClass.specific.key,
+					label: this.deviceClass.specific.label,
+				},
+			};
+		}
+
+		for (const [ccId, info] of this._implementedCommandClasses) {
+			ret.commandClasses[getCCName(ccId)] = { ...info, values: [] };
+		}
+
+		for (const [prop, value] of Object.entries(ret)) {
+			// @ts-expect-error
+			if (value === undefined) delete ret[prop];
+		}
+
+		return ret;
 	}
 }
