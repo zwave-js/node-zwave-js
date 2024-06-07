@@ -7482,6 +7482,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		collectValues(0, (ccId) => ret.commandClasses[getCCName(ccId)]?.values);
 
 		for (const endpoint of this.getAllEndpoints()) {
+			if (endpoint.index === 0) continue;
 			ret.endpoints ??= {};
 			const endpointDump = endpoint.createEndpointDump();
 			collectValues(

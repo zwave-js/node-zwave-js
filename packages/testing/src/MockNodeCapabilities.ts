@@ -61,7 +61,10 @@ export function getDefaultMockNodeCapabilities(): MockNodeCapabilities {
 }
 
 export function getDefaultMockEndpointCapabilities(
-	nodeCaps: MockNodeCapabilities,
+	nodeCaps: {
+		genericDeviceClass: number;
+		specificDeviceClass: number;
+	},
 ): MockEndpointCapabilities {
 	return {
 		genericDeviceClass: nodeCaps.genericDeviceClass,
