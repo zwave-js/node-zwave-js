@@ -7935,16 +7935,23 @@ ${associatedNodes.join(", ")}`,
 				// We're done, send EOT and wait for the menu screen
 				await this.driver.bootloader.finishUpload();
 				try {
-					await this.driver.waitForBootloaderChunk(
-						(c) =>
-							c.type === BootloaderChunkType.Message
-							&& c.message.includes("upload complete"),
-						1000,
-					);
-					await this.driver.waitForBootloaderChunk(
-						(c) => c.type === BootloaderChunkType.Menu,
-						1000,
-					);
+					// The bootloader sends the confirmation and the menu screen very quickly.
+					// Waiting for them separately can cause us to miss the menu screen and
+					// incorrectly assume the update timed out.
+
+					await Promise.all([
+						this.driver.waitForBootloaderChunk(
+							(c) =>
+								c.type === BootloaderChunkType.Message
+								&& c.message.includes("upload complete"),
+							1000,
+						),
+
+						this.driver.waitForBootloaderChunk(
+							(c) => c.type === BootloaderChunkType.Menu,
+							1000,
+						),
+					]);
 				} catch (e) {
 					this.driver.controllerLog.print(
 						"OTW update failed: The bootloader did not acknowledge the end of transfer.",
