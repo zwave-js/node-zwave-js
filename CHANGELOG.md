@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.11.0 (2024-06-10)
 ### Features
 * Add `ZWaveNode.createDump()` method to save debug information in a format Z-Wave JS understands (#6906)
 * Support node dumps created by `ZWaveNode.createDump()` as input for `mock-server' (#6907)
