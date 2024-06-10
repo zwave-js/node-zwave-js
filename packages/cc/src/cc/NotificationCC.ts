@@ -739,6 +739,7 @@ export class NotificationCC extends CommandClass {
 			?.compat?.alarmMapping;
 		if (mappings) {
 			// Find all mappings to a valid notification variable
+			const supportedNotifications = new Map<number, Set<number>>();
 			for (const { to } of mappings) {
 				const notificationConfig = applHost.configManager
 					.lookupNotification(
@@ -748,6 +749,18 @@ export class NotificationCC extends CommandClass {
 				const valueConfig = notificationConfig.lookupValue(
 					to.notificationEvent,
 				);
+
+				// Remember supported notification types and events to create the internal values later
+				if (!supportedNotifications.has(to.notificationType)) {
+					supportedNotifications.set(
+						to.notificationType,
+						new Set(),
+					);
+				}
+				const supportedNotificationTypesSet = supportedNotifications
+					.get(to.notificationType)!;
+				supportedNotificationTypesSet.add(to.notificationEvent);
+
 				if (valueConfig?.type !== "state") continue;
 
 				const notificationValue = NotificationCCValues
@@ -779,6 +792,20 @@ export class NotificationCC extends CommandClass {
 						);
 					}
 				}
+			}
+
+			// Remember supported notification types and events in the cache
+			this.setValue(
+				applHost,
+				NotificationCCValues.supportedNotificationTypes,
+				[...supportedNotifications.keys()],
+			);
+			for (const [type, events] of supportedNotifications) {
+				this.setValue(
+					applHost,
+					NotificationCCValues.supportedNotificationEvents(type),
+					[...events],
+				);
 			}
 		}
 
