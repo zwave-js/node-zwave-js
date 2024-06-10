@@ -1043,6 +1043,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			"inclusionUserCallbacks",
 			"interview",
 			"preferences",
+			"vendor",
 		]);
 
 		// Create a new deep-merged copy of the options so we can check them for validity

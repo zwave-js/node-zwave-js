@@ -320,6 +320,23 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	userAgent?: Record<string, string>;
 
+	/**
+	 * Specify application-specific information to use in queries from other devices
+	 */
+	vendor?: {
+		manufacturerId: number;
+		productType: number;
+		productId: number;
+
+		/** The version of the hardware the application is running on. Can be omitted if unknown. */
+		hardwareVersion?: number;
+
+		/** The icon type to use for installers. Default: 0x0500 - Generic Gateway */
+		installerIcon?: number;
+		/** The icon type to use for users. Default: 0x0500 - Generic Gateway */
+		userIcon?: number;
+	};
+
 	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {
 		serialPortBinding?: typeof SerialPort;
@@ -361,7 +378,7 @@ export type PartialZWaveOptions = Expand<
 	& Partial<
 		Pick<
 			ZWaveOptions,
-			"inclusionUserCallbacks" | "testingHooks"
+			"inclusionUserCallbacks" | "testingHooks" | "vendor"
 		>
 	>
 	& {
@@ -379,6 +396,7 @@ export type EditableZWaveOptions = Expand<
 		| "interview"
 		| "logConfig"
 		| "preferences"
+		| "vendor"
 	>
 	& {
 		userAgent?: Record<string, string | null | undefined>;

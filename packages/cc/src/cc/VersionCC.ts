@@ -724,8 +724,7 @@ export class VersionCCReport extends VersionCC {
 				.split(".")
 				.map((n) => parseInt(n))
 				.slice(0, 2),
-			// The value 0x00 SHOULD NOT be used for the Hardware Version
-			this.hardwareVersion ?? 0x01,
+			this.hardwareVersion ?? 0x00,
 			this.firmwareVersions.length - 1,
 		]);
 
