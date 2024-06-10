@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add `ZWaveNode.createDump()` method to save debug information in a format Z-Wave JS understands (#6906)
+* Support node dumps created by `ZWaveNode.createDump()` as input for `mock-server' (#6907)
+* `mock-server`: enable mDNS discovery (#6909)
+* Add driver option to configure vendor-specific constants Z-Wave JS uses to reply to requests from other nodes, including manufacturer ID, product type/ID and hardware version (#6876)
+
+### Bugfixes
+* Fixed a race condition that would cause a timeout error to be shown after an actually successful OTW update (#6912)
+* Create `supportedNotificationTypes` and `supportedNotificationEvents` values with `alarmMapping` compat flag (#6914)
+
+### Config file changes
+* Correct config parameters for Minoston MP21ZD Dimmer Plug (#6686)
+
 ## 12.10.1 (2024-06-06)
 This release implements the workaround mentioned by Silicon Labs in their SDK 7.21.3 release notes. Jammed 700/800 series controllers (fail to transmit continuously) are now restarted when this situation is detected, which hopefully resolves the issue temporarily.
 
