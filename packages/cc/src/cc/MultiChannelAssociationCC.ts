@@ -326,11 +326,11 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 					endpoint: this.endpoint.index,
 					groupId: group,
 					nodeIds: destinations
-						.filter((d) => !d.endpoint)
+						.filter((d) => d.endpoint != undefined)
 						.map((d) => d.nodeId),
 					endpoints: destinations.filter(
 						(d): d is AssociationAddress & { endpoint: number } =>
-							!!d.endpoint,
+							d.endpoint != undefined,
 					),
 				});
 				// TODO: evaluate intermediate supervision results

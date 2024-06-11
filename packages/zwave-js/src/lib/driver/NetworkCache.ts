@@ -195,13 +195,13 @@ function tryParseProvisioningList(
 			} as unknown as SmartStartProvisioningEntry;
 			parsed.securityClasses = entry.securityClasses
 				.map((s) => tryParseSerializedSecurityClass(s))
-				.filter((s): s is SecurityClass => s !== undefined);
+				.filter((s) => s !== undefined);
 			if (entry.requestedSecurityClasses) {
 				parsed.requestedSecurityClasses = (
 					entry.requestedSecurityClasses as any[]
 				)
 					.map((s) => tryParseSerializedSecurityClass(s))
-					.filter((s): s is SecurityClass => s !== undefined);
+					.filter((s) => s !== undefined);
 			}
 			if (entry.status != undefined) {
 				parsed.status = ProvisioningEntryStatus[
@@ -216,7 +216,7 @@ function tryParseProvisioningList(
 					entry.supportedProtocols as any[]
 				)
 					.map((s) => tryParseSerializedProtocol(s))
-					.filter((s): s is Protocols => s !== undefined);
+					.filter((s) => s !== undefined);
 			}
 			ret.push(parsed);
 		} else {

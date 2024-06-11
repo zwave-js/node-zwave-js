@@ -20,7 +20,6 @@ import {
 import { staticExtends } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
-import type { Endpoint } from "./Endpoint";
 import { createMultiCCAPIWrapper } from "./MultiCCAPIWrapper";
 import { VirtualNode } from "./VirtualNode";
 
@@ -184,7 +183,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 		const allCCs = distinct(
 			this._node.physicalNodes
 				.map((n) => n.getEndpoint(this.index))
-				.filter((e): e is Endpoint => !!e)
+				.filter((e) => !!e)
 				.flatMap((e) => [...e.implementedCommandClasses.keys()]),
 		);
 		for (const cc of allCCs) {
