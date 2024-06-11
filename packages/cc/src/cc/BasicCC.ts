@@ -437,6 +437,16 @@ export class BasicCCReport extends BasicCC {
 			this.targetValue ?? 0xfe,
 			(this.duration ?? Duration.unknown()).serializeReport(),
 		]);
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, only send the current value
+			this.payload = this.payload.subarray(0, 1);
+		}
+
 		return super.serialize();
 	}
 

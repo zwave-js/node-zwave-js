@@ -521,6 +521,16 @@ export class ProtectionCCSet extends ProtectionCC {
 			this.local & 0b1111,
 			(this.rf ?? RFProtectionState.Unprotected) & 0b1111,
 		]);
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, only include the local state
+			this.payload = this.payload.subarray(0, 1);
+		}
+
 		return super.serialize();
 	}
 

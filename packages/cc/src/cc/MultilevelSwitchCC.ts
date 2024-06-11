@@ -644,6 +644,16 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			this.targetValue,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, only include the target value
+			this.payload = this.payload.subarray(0, 1);
+		}
+
 		return super.serialize();
 	}
 
@@ -796,6 +806,16 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			this.startLevel,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, omit the duration byte
+			this.payload = this.payload.subarray(0, -1);
+		}
+
 		return super.serialize();
 	}
 
