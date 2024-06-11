@@ -945,6 +945,16 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		this.payload[i] = (
 			this.duration ?? Duration.default()
 		).serializeSet();
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, omit the duration byte
+			this.payload = this.payload.subarray(0, -1);
+		}
+
 		return super.serialize();
 	}
 
@@ -1027,6 +1037,16 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			this.startLevel,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
+
+		if (
+			this.version < 3 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1 or 2, omit the duration byte
+			this.payload = this.payload.subarray(0, -1);
+		}
+
 		return super.serialize();
 	}
 
