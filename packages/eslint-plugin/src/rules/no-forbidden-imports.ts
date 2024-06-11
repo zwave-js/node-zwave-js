@@ -193,7 +193,7 @@ export const noForbiddenImports: Rule = ESLintUtils.RuleCreator.withoutDocs({
 			.filter((c) => c.type === "Block")
 			.map((c) => c.value.trim());
 		const forbidden = comments.map((c) => c.match(forbiddenImportsRegex))
-			.filter((match): match is RegExpMatchArray => !!match)
+			.filter((match) => !!match)
 			.map((match) => match.groups?.forbidden?.trim())
 			.filter((forbidden): forbidden is string => !!forbidden)
 			.flatMap((forbidden) => forbidden.split(" "));

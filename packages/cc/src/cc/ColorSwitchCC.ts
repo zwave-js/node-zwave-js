@@ -472,7 +472,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 								value,
 								supportedColors
 									.map((c) => colorComponentToTableKey(c))
-									.filter((c) => !!c) as ColorKey[],
+									.filter((c) => !!c),
 							);
 						}
 					}
