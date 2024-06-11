@@ -51,7 +51,7 @@
     "cli-highlight": "^2.1.11",
     "del-cli": "^5.1.0",
     "dprint": "^0.46.3",
-    "esbuild": "0.20.2",
+    "esbuild": "0.21.5",
     "esbuild-register": "^3.5.0",
     "execa": "^5.1.1",
     "fs-extra": "^11.2.0",
@@ -60,7 +60,7 @@
     "piscina": "^4.4.0",
     "reflect-metadata": "^0.2.2",
     "ts-morph": "^22.0.0",
-    "typescript": "5.4.4",
+    "typescript": "5.5.1-rc",
     "yargs": "^17.7.2"
   }
 }

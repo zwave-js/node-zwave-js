@@ -3,8 +3,8 @@ const path = require("path");
 const fs = require("fs");
 
 const tsDirectory = path.dirname(require.resolve("typescript"));
-const tsServerPath = path.join(tsDirectory, "tsserver.js");
-let fileContent = fs.readFileSync(tsServerPath, "utf8");
+const tsLibPath = path.join(tsDirectory, "typescript.js");
+let fileContent = fs.readFileSync(tsLibPath, "utf8");
 
 const replacements = [
 	[
@@ -17,15 +17,15 @@ const replacements = [
 for (const [search, replace] of replacements) {
 	if (!fileContent.includes(search) && !fileContent.includes(replace)) {
 		fs.writeFileSync(
-			"patch-tsserver.log",
-			`Failed to patch tsserver.js - search string not found:
+			"patch-typescript.log",
+			`Failed to patch typescript.js - search string not found:
 ${search}`,
 		);
-		console.error(`Failed to patch tsserver.js - search string not found:
+		console.error(`Failed to patch typescript.js - search string not found:
 ${search}`);
 		process.exit(0);
 	}
 	fileContent = fileContent.replace(search, replace);
 }
 
-fs.writeFileSync(tsServerPath, fileContent);
+fs.writeFileSync(tsLibPath, fileContent);
