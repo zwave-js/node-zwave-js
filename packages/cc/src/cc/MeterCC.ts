@@ -1,8 +1,8 @@
-import { type ConfigManager } from "@zwave-js/config";
 import {
+	type FloatParameters,
 	type IZWaveEndpoint,
 	type MaybeUnknown,
-	type MeterScale,
+	encodeBitMask,
 	encodeFloatWithScale,
 	getFloatParameters,
 	getMeter,
@@ -21,15 +21,17 @@ import {
 	type SupervisionResult,
 	UNKNOWN_STATE,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
-	getMinIntegerSize,
 	parseBitMask,
 	parseFloatWithScale,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
+import {
+	type AllOrNone,
+	getEnumMemberName,
+	num2hex,
+	pick,
+} from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -89,18 +91,28 @@ export const MeterCCValues = Object.freeze({
 		...V.dynamicPropertyAndKeyWithName(
 			"resetSingle",
 			"reset",
-			(meterType: number) => meterType,
+			toPropertyKey,
 			({ property, propertyKey }) =>
 				property === "reset" && typeof propertyKey === "number",
-			(meterType: number) => ({
+			(meterType: number, rateType: RateType, scale: number) => ({
 				...ValueMetadata.WriteOnlyBoolean,
 				// This is only a placeholder label. A config manager is needed to
 				// determine the actual label.
-				label: `Reset (${num2hex(meterType)})`,
+				label: `Reset (${
+					rateType === RateType.Consumed
+						? "Consumption, "
+						: rateType === RateType.Produced
+						? "Production, "
+						: ""
+				}${num2hex(scale)})`,
 				states: {
 					true: "Reset",
 				},
-				ccSpecific: { meterType },
+				ccSpecific: {
+					meterType,
+					rateType,
+					scale,
+				},
 			} as const),
 		),
 
@@ -144,22 +156,23 @@ function splitPropertyKey(key: number): {
 }
 
 function getValueLabel(
-	configManager: ConfigManager,
 	meterType: number,
-	scale: MeterScale,
+	scale: number,
 	rateType: RateType,
 	suffix?: string,
 ): string {
 	let ret = getMeterName(meterType);
+	const scaleLabel =
+		(getMeterScale(meterType, scale) ?? getUnknownMeterScale(scale)).label;
 	switch (rateType) {
 		case RateType.Consumed:
-			ret += ` Consumption [${scale.label}]`;
+			ret += ` Consumption [${scaleLabel}]`;
 			break;
 		case RateType.Produced:
-			ret += ` Production [${scale.label}]`;
+			ret += ` Production [${scaleLabel}]`;
 			break;
 		default:
-			ret += ` [${scale.label}]`;
+			ret += ` [${scaleLabel}]`;
 	}
 	if (suffix) {
 		ret += ` (${suffix})`;
@@ -167,13 +180,124 @@ function getValueLabel(
 	return ret;
 }
 
+function parseMeterValueAndInfo(data: Buffer, offset: number): {
+	type: number;
+	rateType: RateType;
+	scale1: number;
+	value: number;
+	bytesRead: number;
+} {
+	validatePayload(data.length >= offset + 1);
+
+	const type = data[offset] & 0b0_00_11111;
+	const rateType = (data[offset] & 0b0_11_00000) >>> 5;
+	const scale1Bit2 = (data[offset] & 0b1_00_00000) >>> 7;
+
+	const {
+		scale: scale1Bits10,
+		value,
+		bytesRead,
+	} = parseFloatWithScale(data.subarray(offset + 1));
+
+	return {
+		type,
+		rateType,
+		// The scale is composed of two fields
+		scale1: (scale1Bit2 << 2) | scale1Bits10,
+		value,
+		// We've read one byte more than the float contains
+		bytesRead: bytesRead + 1,
+	};
+}
+
+function encodeMeterValueAndInfo(
+	type: number,
+	rateType: RateType,
+	scale: number,
+	value: number,
+): { data: Buffer; floatParams: FloatParameters; scale2: number | undefined } {
+	// We need at least 2 bytes
+
+	const scale1 = scale >= 7 ? 7 : scale & 0b111;
+	const scale1Bits10 = scale1 & 0b11;
+	const scale1Bit2 = scale1 >>> 2;
+	const scale2 = scale >= 7 ? scale - 7 : undefined;
+
+	const typeByte = (type & 0b0_00_11111)
+		| ((rateType & 0b11) << 5)
+		| (scale1Bit2 << 7);
+
+	const floatParams = getFloatParameters(value);
+	const valueBytes = encodeFloatWithScale(
+		value,
+		scale1Bits10,
+		floatParams,
+	);
+
+	return {
+		data: Buffer.concat([Buffer.from([typeByte]), valueBytes]),
+		floatParams: pick(floatParams, ["precision", "size"]),
+		scale2,
+	};
+}
+
+function parseScale(
+	scale1: number,
+	data: Buffer,
+	scale2Offset: number,
+): number {
+	if (scale1 === 7) {
+		validatePayload(data.length >= scale2Offset + 1);
+		const scale2 = data[scale2Offset];
+		return scale1 + scale2;
+	} else {
+		return scale1;
+	}
+}
+
+export function isAccumulatedValue(
+	meterType: number,
+	scale: number,
+): boolean {
+	// FIXME: We should probably move the meter definitions into code
+	switch (meterType) {
+		case 0x01: // Electric
+			return (
+				scale === 0x00 // kWh
+				|| scale === 0x01 // kVAh
+				|| scale === 0x03 // Pulse count
+				|| scale === 0x08 // kVarh
+			);
+		case 0x02: // Gas
+			return (
+				scale === 0x00 // m³
+				|| scale === 0x01 // ft³
+				|| scale === 0x03 // Pulse count
+			);
+		case 0x03: // Water
+			return (
+				scale === 0x00 // m³
+				|| scale === 0x01 // ft³
+				|| scale === 0x02 // US gallons
+				|| scale === 0x03 // Pulse count
+			);
+		case 0x04: // Heating
+			return scale === 0x00; // kWh
+		case 0x05: // Cooling
+			return scale === 0x00; // kWh
+	}
+	return false;
+}
+
 @API(CommandClasses.Meter)
 export class MeterCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: MeterCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case MeterCommand.Get:
+			case MeterCommand.Report:
 				return true; // This is mandatory
 			case MeterCommand.SupportedGet:
+			case MeterCommand.SupportedReport:
 				return this.version >= 2;
 			case MeterCommand.Reset: {
 				const ret = this.tryGetValueDB()?.getValue<boolean>({
@@ -246,11 +370,29 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
+	public async sendReport(
+		options: MeterCCReportOptions,
+	): Promise<SupervisionResult | undefined> {
+		this.assertSupportsCommand(MeterCommand, MeterCommand.Report);
+
+		const cc = new MeterCCReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		return this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getAll() {
+	public async getAll(accumulatedOnly: boolean = false) {
 		const valueDB = this.tryGetValueDB();
 
 		if (this.version >= 2) {
+			const meterType = valueDB?.getValue<number>(
+				MeterCCValues.type.endpoint(this.endpoint.index),
+			);
 			const supportedScales = valueDB?.getValue<number[]>(
 				MeterCCValues.supportedScales.endpoint(this.endpoint.index),
 			) ?? [];
@@ -267,6 +409,15 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			const ret = [];
 			for (const rateType of rateTypes) {
 				for (const scale of supportedScales) {
+					// Skip non-accumulated values if requested
+					if (
+						accumulatedOnly
+						&& meterType != undefined
+						&& !isAccumulatedValue(meterType, scale)
+					) {
+						continue;
+					}
+
 					const response = await this.get({
 						scale,
 						rateType,
@@ -306,6 +457,20 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
+	public async sendSupportedReport(
+		options: MeterCCSupportedReportOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(MeterCommand, MeterCommand.SupportedReport);
+
+		const cc = new MeterCCSupportedReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	@validateArgs()
 	public async reset(
 		options?: MeterCCResetOptions,
 	): Promise<SupervisionResult | undefined> {
@@ -341,16 +506,24 @@ export class MeterCCAPI extends PhysicalCCAPI {
 				);
 			}
 
-			const resetOptions: MeterCCResetOptions = propertyKey != undefined
-				? {
-					type: propertyKey,
+			if (typeof propertyKey === "number") {
+				const { meterType, scale, rateType } = splitPropertyKey(
+					propertyKey,
+				);
+				await this.reset({
+					type: meterType,
+					scale,
+					rateType,
 					targetValue: 0,
-				}
-				: {};
-			await this.reset(resetOptions);
-
-			// Refresh values
-			await this.getAll();
+				});
+				await this.get({
+					rateType,
+					scale,
+				});
+			} else {
+				await this.reset();
+				await this.getAll(true);
+			}
 
 			return undefined;
 		};
@@ -595,7 +768,7 @@ supports reset:       ${suppResp.supportsReset}`;
 }
 
 // @publicAPI
-export interface MeterCCReportOptions extends CCCommandOptions {
+export interface MeterCCReportOptions {
 	type: number;
 	scale: number;
 	value: number;
@@ -608,29 +781,22 @@ export interface MeterCCReportOptions extends CCCommandOptions {
 export class MeterCCReport extends MeterCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions | MeterCCReportOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (MeterCCReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.type = this.payload[0] & 0b0_00_11111;
-
-			this.rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
-			const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
-
-			const {
-				scale: scale1Bits10,
-				value,
-				bytesRead,
-			} = parseFloatWithScale(this.payload.subarray(1));
-			let offset = 2 + (bytesRead - 1);
-			// The scale is composed of two fields (see SDS13781)
-			const scale1 = (scale1Bit2 << 2) | scale1Bits10;
-			let scale2 = 0;
+			const { type, rateType, scale1, value, bytesRead } =
+				parseMeterValueAndInfo(this.payload, 0);
+			this.type = type;
+			this.rateType = rateType;
 			this.value = value;
+			let offset = bytesRead;
+			const floatSize = bytesRead - 2;
 
-			if (this.version >= 2 && this.payload.length >= offset + 2) {
+			if (this.payload.length >= offset + 2) {
 				this.deltaTime = this.payload.readUInt16BE(offset);
 				offset += 2;
 				if (this.deltaTime === 0xffff) {
@@ -638,9 +804,9 @@ export class MeterCCReport extends MeterCC {
 				}
 
 				if (
-					// 0 means that no previous value is included
+					// Previous value is included only if delta time is not 0
 					this.deltaTime !== 0
-					&& this.payload.length >= offset + (bytesRead - 1)
+					&& this.payload.length >= offset + floatSize
 				) {
 					const { value: prevValue } = parseFloatWithScale(
 						// This float is split in the payload
@@ -649,21 +815,14 @@ export class MeterCCReport extends MeterCC {
 							this.payload.subarray(offset),
 						]),
 					);
-					offset += bytesRead - 1;
+					offset += floatSize;
 					this.previousValue = prevValue;
-				}
-				if (
-					this.version >= 4
-					&& scale1 === 7
-					&& this.payload.length >= offset + 1
-				) {
-					scale2 = this.payload[offset];
 				}
 			} else {
 				// 0 means that no previous value is included
 				this.deltaTime = 0;
 			}
-			this.scale = scale1 === 7 ? scale1 + scale2 : scale1;
+			this.scale = parseScale(scale1, this.payload, offset);
 		} else {
 			this.type = options.type;
 			this.scale = options.scale;
@@ -740,12 +899,7 @@ export class MeterCCReport extends MeterCC {
 		);
 		this.setMetadata(applHost, valueValue, {
 			...valueValue.meta,
-			label: getValueLabel(
-				applHost.configManager,
-				this.type,
-				scale,
-				this.rateType,
-			),
+			label: getValueLabel(this.type, this.scale, this.rateType),
 			unit: scale.label,
 			ccSpecific: {
 				meterType: this.type,
@@ -766,40 +920,43 @@ export class MeterCCReport extends MeterCC {
 	public deltaTime: MaybeUnknown<number>;
 
 	public serialize(): Buffer {
-		const scale1 = this.scale >= 7 ? 7 : this.scale & 0b111;
-		const scale1Bits10 = scale1 & 0b11;
-		const scale1Bit2 = scale1 >>> 2;
-		const scale2 = this.scale >= 7 ? this.scale - 7 : 0;
-
-		const typeByte = (this.type & 0b0_00_11111)
-			| ((this.rateType & 0b11) << 5)
-			| (scale1Bit2 << 7);
-
-		const floatParams = getFloatParameters(this.value);
-		const valueBytes = encodeFloatWithScale(
-			this.value,
-			scale1Bits10,
-			floatParams,
-		);
-		const prevValueBytes = this.previousValue != undefined
-			? encodeFloatWithScale(
-				this.previousValue,
-				scale1Bits10,
-				floatParams,
-			)
-			: Buffer.from([]);
+		const { data: typeAndValue, floatParams, scale2 } =
+			encodeMeterValueAndInfo(
+				this.type,
+				this.rateType,
+				this.scale,
+				this.value,
+			);
 
 		const deltaTime = this.deltaTime ?? 0xffff;
 		const deltaTimeBytes = Buffer.allocUnsafe(2);
 		deltaTimeBytes.writeUInt16BE(deltaTime, 0);
 
 		this.payload = Buffer.concat([
-			Buffer.from([typeByte]),
-			valueBytes,
+			typeAndValue,
 			deltaTimeBytes,
-			prevValueBytes,
-			Buffer.from([scale2]),
 		]);
+
+		if (this.deltaTime !== 0 && this.previousValue != undefined) {
+			// Encode the float, but only keep the value bytes
+			const prevValueBytes = encodeFloatWithScale(
+				this.previousValue,
+				0, // we discard the scale anyways
+				floatParams,
+			).subarray(1);
+
+			this.payload = Buffer.concat([
+				this.payload,
+				prevValueBytes,
+			]);
+		}
+
+		if (scale2 != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([scale2]),
+			]);
+		}
 
 		return super.serialize();
 	}
@@ -853,11 +1010,14 @@ export class MeterCCGet extends MeterCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			if (this.payload.length >= 1) {
+				this.rateType = (this.payload[0] & 0b11_000_000) >>> 6;
+				this.scale = (this.payload[0] & 0b00_111_000) >>> 3;
+				if (this.scale === 7) {
+					validatePayload(this.payload.length >= 2);
+					this.scale += this.payload[1];
+				}
+			}
 		} else {
 			this.rateType = options.rateType;
 			this.scale = options.scale;
@@ -921,43 +1081,61 @@ export class MeterCCGet extends MeterCC {
 	}
 }
 
+// @publicAPI
+export interface MeterCCSupportedReportOptions {
+	type: number;
+	supportsReset: boolean;
+	supportedScales: readonly number[];
+	supportedRateTypes: readonly RateType[];
+}
+
 @CCCommand(MeterCommand.SupportedReport)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (MeterCCSupportedReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.type = this.payload[0] & 0b0_00_11111;
-		this.supportsReset = !!(this.payload[0] & 0b1_00_00000);
-		const hasMoreScales = !!(this.payload[1] & 0b1_0000000);
-		if (hasMoreScales) {
-			// The bitmask is spread out
-			validatePayload(this.payload.length >= 3);
-			const extraBytes = this.payload[2];
-			validatePayload(this.payload.length >= 3 + extraBytes);
-			// The bitmask is the original payload byte plus all following bytes
-			// Since the first byte only has 7 bits, we need to reduce all following bits by 1
-			this.supportedScales = parseBitMask(
-				Buffer.concat([
-					Buffer.from([this.payload[1] & 0b0_1111111]),
-					this.payload.subarray(3, 3 + extraBytes),
-				]),
-				0,
-			).map((scale) => (scale >= 8 ? scale - 1 : scale));
-		} else {
-			// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
-			this.supportedScales = parseBitMask(
-				Buffer.from([this.payload[1]]),
-				0,
+
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.type = this.payload[0] & 0b0_00_11111;
+			this.supportsReset = !!(this.payload[0] & 0b1_00_00000);
+			const hasMoreScales = !!(this.payload[1] & 0b1_0000000);
+			if (hasMoreScales) {
+				// The bitmask is spread out
+				validatePayload(this.payload.length >= 3);
+				const extraBytes = this.payload[2];
+				validatePayload(this.payload.length >= 3 + extraBytes);
+				// The bitmask is the original payload byte plus all following bytes
+				// Since the first byte only has 7 bits, we need to reduce all following bits by 1
+				this.supportedScales = parseBitMask(
+					Buffer.concat([
+						Buffer.from([this.payload[1] & 0b0_1111111]),
+						this.payload.subarray(3, 3 + extraBytes),
+					]),
+					0,
+				).map((scale) => (scale >= 8 ? scale - 1 : scale));
+			} else {
+				// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
+				this.supportedScales = parseBitMask(
+					Buffer.from([this.payload[1]]),
+					0,
+				);
+			}
+			// This is only present in V4+
+			this.supportedRateTypes = parseBitMask(
+				Buffer.from([(this.payload[0] & 0b0_11_00000) >>> 5]),
+				1,
 			);
+		} else {
+			this.type = options.type;
+			this.supportsReset = options.supportsReset;
+			this.supportedScales = options.supportedScales;
+			this.supportedRateTypes = options.supportedRateTypes;
 		}
-		// This is only present in V4+
-		this.supportedRateTypes = parseBitMask(
-			Buffer.from([(this.payload[0] & 0b0_11_00000) >>> 5]),
-			1,
-		);
 	}
 
 	@ccValue(MeterCCValues.type)
@@ -980,13 +1158,65 @@ export class MeterCCSupportedReport extends MeterCC {
 		if (this.version < 6) {
 			this.ensureMetadata(applHost, MeterCCValues.resetAll);
 		} else {
-			const resetSingleValue = MeterCCValues.resetSingle(this.type);
-			this.ensureMetadata(applHost, resetSingleValue, {
-				...resetSingleValue.meta,
-				label: `Reset (${getMeterName(this.type)})`,
-			});
+			for (const scale of this.supportedScales) {
+				// Only accumulated values can be reset
+				if (!isAccumulatedValue(this.type, scale)) continue;
+
+				for (const rateType of this.supportedRateTypes) {
+					const resetSingleValue = MeterCCValues.resetSingle(
+						this.type,
+						rateType,
+						scale,
+					);
+					this.ensureMetadata(applHost, resetSingleValue, {
+						...resetSingleValue.meta,
+						label: `Reset ${
+							getValueLabel(
+								this.type,
+								scale,
+								rateType,
+							)
+						}`,
+					});
+				}
+			}
 		}
 		return true;
+	}
+
+	public serialize(): Buffer {
+		const typeByte = (this.type & 0b0_00_11111)
+			| (this.supportedRateTypes.includes(RateType.Consumed)
+				? 0b0_01_00000
+				: 0)
+			| (this.supportedRateTypes.includes(RateType.Produced)
+				? 0b0_10_00000
+				: 0)
+			| (this.supportsReset ? 0b1_00_00000 : 0);
+		const supportedScales = encodeBitMask(
+			this.supportedScales,
+			undefined,
+			// The first byte only has 7 bits for the bitmask,
+			// so we add a fake bit for the value -1 and later shift
+			// the first byte one to the right
+			-1,
+		);
+		const scalesByte1 = (supportedScales[0] >>> 1)
+			| (supportedScales.length > 1 ? 0b1000_0000 : 0);
+
+		this.payload = Buffer.from([
+			typeByte,
+			scalesByte1,
+		]);
+		if (supportedScales.length > 1) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([supportedScales.length - 1]),
+				Buffer.from(supportedScales.subarray(1)),
+			]);
+		}
+
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1017,15 +1247,12 @@ export class MeterCCSupportedReport extends MeterCC {
 export class MeterCCSupportedGet extends MeterCC {}
 
 // @publicAPI
-export type MeterCCResetOptions =
-	| {
-		type?: undefined;
-		targetValue?: undefined;
-	}
-	| {
-		type: number;
-		targetValue: number;
-	};
+export type MeterCCResetOptions = AllOrNone<{
+	type: number;
+	scale: number;
+	rateType: RateType;
+	targetValue: number;
+}>;
 
 @CCCommand(MeterCommand.Reset)
 @useSupervision()
@@ -1038,39 +1265,53 @@ export class MeterCCReset extends MeterCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			if (this.payload.length > 0) {
+				const {
+					type,
+					rateType,
+					scale1,
+					value,
+					bytesRead: scale2Offset,
+				} = parseMeterValueAndInfo(this.payload, 0);
+				this.type = type;
+				this.rateType = rateType;
+				this.targetValue = value;
+				this.scale = parseScale(scale1, this.payload, scale2Offset);
+			}
 		} else {
 			this.type = options.type;
+			this.scale = options.scale;
+			this.rateType = options.rateType;
 			this.targetValue = options.targetValue;
-			// Test if this is a valid target value
-			if (
-				this.targetValue != undefined
-				&& !getMinIntegerSize(this.targetValue, true)
-			) {
-				throw new ZWaveError(
-					`${this.targetValue} is not a valid target value!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 		}
 	}
 
 	public type: number | undefined;
+	public scale: number | undefined;
+	public rateType: RateType | undefined;
 	public targetValue: number | undefined;
 
 	public serialize(): Buffer {
-		if (this.version >= 6 && this.targetValue != undefined && this.type) {
-			const size = (this.targetValue
-				&& getMinIntegerSize(this.targetValue, true))
-				|| 0;
-			if (size > 0) {
-				this.payload = Buffer.allocUnsafe(1 + size);
-				this.payload[0] = (size << 5) | (this.type & 0b11111);
-				this.payload.writeIntBE(this.targetValue, 1, size);
+		if (
+			this.type != undefined
+			&& this.scale != undefined
+			&& this.rateType != undefined
+			&& this.targetValue != undefined
+		) {
+			const { data: typeAndValue, scale2 } = encodeMeterValueAndInfo(
+				this.type,
+				this.rateType,
+				this.scale,
+				this.targetValue,
+			);
+
+			this.payload = typeAndValue;
+
+			if (scale2 != undefined) {
+				this.payload = Buffer.concat([
+					this.payload,
+					Buffer.from([scale2]),
+				]);
 			}
 		}
 		return super.serialize();
@@ -1080,6 +1321,13 @@ export class MeterCCReset extends MeterCC {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
 			message.type = getMeterName(this.type);
+		}
+		if (this.rateType != undefined) {
+			message["rate type"] = getEnumMemberName(RateType, this.rateType);
+		}
+		if (this.type != undefined && this.scale != undefined) {
+			message.scale = (getMeterScale(this.type, this.scale)
+				?? getUnknownMeterScale(this.scale)).label;
 		}
 		if (this.targetValue != undefined) {
 			message["target value"] = this.targetValue;
