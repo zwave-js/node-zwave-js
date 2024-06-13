@@ -9,11 +9,6 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "node:path";
-import {
-	type IndicatorMap,
-	type IndicatorPropertiesMap,
-	IndicatorProperty,
-} from "./Indicators";
 import { ConfigLogger } from "./Logger";
 import {
 	type ManufacturersMap,
@@ -62,28 +57,6 @@ export class ConfigManager {
 	}
 
 	private logger: ConfigLogger;
-
-	private _indicators: IndicatorMap | undefined;
-	public get indicators(): IndicatorMap {
-		if (!this._indicators) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._indicators;
-	}
-
-	private _indicatorProperties: IndicatorPropertiesMap | undefined;
-	public get indicatorProperties(): IndicatorPropertiesMap {
-		if (!this._indicatorProperties) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._indicatorProperties;
-	}
 
 	private _manufacturers: ManufacturersMap | undefined;
 	public get manufacturers(): ManufacturersMap {
@@ -135,7 +108,6 @@ export class ConfigManager {
 		await this.loadManufacturers();
 		await this.loadDeviceIndex();
 		await this.loadNotifications();
-		await this.loadIndicators();
 	}
 
 	public async loadManufacturers(): Promise<void> {
@@ -203,61 +175,6 @@ export class ConfigManager {
 		}
 
 		this._manufacturers.set(manufacturerId, manufacturerName);
-	}
-
-	public async loadIndicators(): Promise<void> {
-		try {
-			const config = await loadIndicatorsInternal(
-				this._useExternalConfig,
-			);
-			this._indicators = config.indicators;
-			this._indicatorProperties = config.properties;
-		} catch (e) {
-			// If the config file is missing or invalid, don't try to find it again
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
-				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
-						`Could not load indicators config: ${e.message}`,
-						"error",
-					);
-				}
-				if (!this._indicators) this._indicators = new Map();
-				if (!this._indicatorProperties) {
-					this._indicatorProperties = new Map();
-				}
-			} else {
-				// This is an unexpected error
-				throw e;
-			}
-		}
-	}
-
-	/**
-	 * Looks up the label for a given indicator id
-	 */
-	public lookupIndicator(indicatorId: number): string | undefined {
-		if (!this._indicators) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-
-		return this._indicators.get(indicatorId);
-	}
-
-	/**
-	 * Looks up the property definition for a given indicator property id
-	 */
-	public lookupProperty(propertyId: number): IndicatorProperty | undefined {
-		if (!this._indicatorProperties) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-
-		return this._indicatorProperties.get(propertyId);
 	}
 
 	public async loadDeviceIndex(): Promise<void> {
@@ -476,91 +393,6 @@ export class ConfigManager {
 			this.lookupNotificationUnsafe(notificationType)?.name
 				?? `Unknown (${num2hex(notificationType)})`
 		);
-	}
-}
-
-/** @internal */
-export async function loadIndicatorsInternal(
-	externalConfig?: boolean,
-): Promise<{
-	indicators: IndicatorMap;
-	properties: IndicatorPropertiesMap;
-}> {
-	const indicatorsConfigPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"indicators.json",
-	);
-
-	if (!(await pathExists(indicatorsConfigPath))) {
-		throw new ZWaveError(
-			"The config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(indicatorsConfigPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig("indicators", "the database is not an object");
-		}
-		if (!("indicators" in definition)) {
-			throwInvalidConfig(
-				"indicators",
-				`the required key "indicators" is missing`,
-			);
-		}
-		if (!("properties" in definition)) {
-			throwInvalidConfig(
-				"indicators",
-				`the required key "properties" is missing`,
-			);
-		}
-
-		const indicators = new Map<number, string>();
-		for (const [id, label] of Object.entries(definition.indicators)) {
-			if (!hexKeyRegexNDigits.test(id)) {
-				throwInvalidConfig(
-					"indicators",
-					`found invalid key "${id}" in "indicators". Indicators must have lowercase hexadecimal IDs.`,
-				);
-			}
-			if (typeof label !== "string") {
-				throwInvalidConfig(
-					"indicators",
-					`indicator "${id}" must be a string`,
-				);
-			}
-			const idNum = parseInt(id.slice(2), 16);
-			indicators.set(idNum, label);
-		}
-
-		const properties = new Map<number, IndicatorProperty>();
-		for (
-			const [id, propDefinition] of Object.entries(
-				definition.properties,
-			)
-		) {
-			if (!hexKeyRegexNDigits.test(id)) {
-				throwInvalidConfig(
-					"indicators",
-					`found invalid key "${id}" in "properties". Indicator properties must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const idNum = parseInt(id.slice(2), 16);
-			properties.set(
-				idNum,
-				new IndicatorProperty(idNum, propDefinition as any),
-			);
-		}
-
-		return { indicators, properties };
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("indicators");
-		}
 	}
 }
 

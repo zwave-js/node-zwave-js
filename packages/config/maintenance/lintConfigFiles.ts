@@ -39,20 +39,6 @@ async function lintManufacturers(): Promise<void> {
 	// TODO: Validate that the file is semantically correct
 }
 
-async function lintIndicators(): Promise<void> {
-	await configManager.loadIndicators();
-	const properties = configManager.indicatorProperties;
-
-	if (!(properties.get(1)?.label === "Multilevel")) {
-		throw new Error(
-			`The indicator property Multilevel (0x01) is required!`,
-		);
-	}
-	if (!(properties.get(2)?.label === "Binary")) {
-		throw new Error(`The indicator property Binary (0x02) is required!`);
-	}
-}
-
 function getAllConditions(
 	config: ConditionalDeviceConfig,
 ): Map<string, Set<string>> {
@@ -1273,7 +1259,6 @@ export async function lintConfigFiles(): Promise<void> {
 		await lintManufacturers();
 		await lintDevices();
 		await lintNotifications();
-		await lintIndicators();
 
 		console.log();
 		console.log(green("The config files are valid!"));

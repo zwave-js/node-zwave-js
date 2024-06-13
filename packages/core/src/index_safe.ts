@@ -15,6 +15,7 @@ export * from "./consts";
 export * from "./error/ZWaveError";
 export * from "./log/shared_safe";
 export * from "./registries/DeviceClasses";
+export * from "./registries/Indicators";
 export * from "./registries/Meters";
 export * from "./registries/Scales";
 export * from "./registries/Sensors";

@@ -27,34 +27,6 @@ Looks up the name of the manufacturer with the given ID in the configuration DB 
 
 > [!NOTE] `loadManufacturers` must be used first.
 
-### `loadIndicators`
-
-```ts
-loadIndicators(): Promise<void>;
-```
-
-Loads the indicators config which is used to lookup indicators and indicator properties.
-
-### `lookupIndicator`
-
-```ts
-lookupIndicator(indicatorId: number): string | undefined;
-```
-
-Looks up the label of the indicator with the given ID in the configuration DB and returns it if it was found.
-
-> [!NOTE] `loadIndicators` must be used first.
-
-### `lookupProperty`
-
-```ts
-lookupProperty(propertyId: number): IndicatorProperty | undefined;
-```
-
-Looks up the property definition for a given indicator property id
-
-> [!NOTE] `loadIndicators` must be used first.
-
 ### `loadDeviceIndex`
 
 ```ts
