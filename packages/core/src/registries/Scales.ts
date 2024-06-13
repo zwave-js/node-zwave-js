@@ -1,3 +1,4 @@
+import { num2hex } from "@zwave-js/shared/safe";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 
 export interface ScaleDefinition {
@@ -144,6 +145,6 @@ export function getNamedScale<
 export function getUnknownScale(key: number): Scale {
 	return {
 		key,
-		label: "Unknown",
+		label: `Unknown (${num2hex(key)})`,
 	};
 }

@@ -55,44 +55,6 @@ Looks up the property definition for a given indicator property id
 
 > [!NOTE] `loadIndicators` must be used first.
 
-### `loadMeters`
-
-```ts
-loadMeters(): Promise<void>;
-```
-
-Loads the meters config which is used to lookup meter types and scales.
-
-### `lookupMeter`
-
-```ts
-lookupMeter(meterType: number): Meter | undefined;
-```
-
-Looks up the meter definition for a given meter type.
-
-> [!NOTE] `loadMeters` must be used first.
-
-### `getMeterName`
-
-```ts
-getMeterName(meterType: number): string;
-```
-
-Returns the meter label for a given meter type.
-
-> [!NOTE] `loadMeters` must be used first.
-
-### `lookupMeterScale`
-
-```ts
-lookupMeterScale(type: number, scale: number): MeterScale;
-```
-
-Looks up a scale definition for a given meter type
-
-> [!NOTE] `loadMeters` must be used first.
-
 ### `loadDeviceClasses`
 
 ```ts

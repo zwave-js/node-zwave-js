@@ -29,12 +29,6 @@ import {
 	loadManufacturersInternal,
 	saveManufacturersInternal,
 } from "./Manufacturers";
-import {
-	Meter,
-	type MeterMap,
-	type MeterScale,
-	getDefaultMeterScale,
-} from "./Meters";
 import { Notification, type NotificationMap } from "./Notifications";
 import {
 	ConditionalDeviceConfig,
@@ -111,17 +105,6 @@ export class ConfigManager {
 		return this._manufacturers;
 	}
 
-	private _meters: MeterMap | undefined;
-	public get meters(): MeterMap {
-		if (!this._meters) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._meters;
-	}
-
 	private _basicDeviceClasses: BasicDeviceClassMap | undefined;
 	public get basicDeviceClasses(): BasicDeviceClassMap {
 		if (!this._basicDeviceClasses) {
@@ -184,7 +167,6 @@ export class ConfigManager {
 		await this.loadManufacturers();
 		await this.loadDeviceIndex();
 		await this.loadNotifications();
-		await this.loadMeters();
 		await this.loadIndicators();
 	}
 
@@ -308,51 +290,6 @@ export class ConfigManager {
 		}
 
 		return this._indicatorProperties.get(propertyId);
-	}
-
-	public async loadMeters(): Promise<void> {
-		try {
-			this._meters = await loadMetersInternal(this._useExternalConfig);
-		} catch (e) {
-			// If the config file is missing or invalid, don't try to find it again
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
-				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
-						`Could not meters config: ${e.message}`,
-						"error",
-					);
-				}
-				if (!this._meters) this._meters = new Map();
-			} else {
-				// This is an unexpected error
-				throw e;
-			}
-		}
-	}
-
-	/**
-	 * Looks up the notification configuration for a given notification type
-	 */
-	public lookupMeter(meterType: number): Meter | undefined {
-		if (!this._meters) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-
-		return this._meters.get(meterType);
-	}
-
-	public getMeterName(meterType: number): string {
-		const meter = this.lookupMeter(meterType);
-		return meter?.name ?? `UNKNOWN (${num2hex(meterType)})`;
-	}
-
-	/** Looks up a scale definition for a given meter type */
-	public lookupMeterScale(type: number, scale: number): MeterScale {
-		const meter = this.lookupMeter(type);
-		return meter?.scales.get(scale) ?? getDefaultMeterScale(scale);
 	}
 
 	public async loadDeviceClasses(): Promise<void> {
@@ -813,50 +750,6 @@ export async function loadIndicatorsInternal(
 			throw e;
 		} else {
 			throwInvalidConfig("indicators");
-		}
-	}
-}
-
-/** @internal */
-export async function loadMetersInternal(
-	externalConfig?: boolean,
-): Promise<MeterMap> {
-	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"meters.json",
-	);
-
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig("meters", "the database is not an object");
-		}
-
-		const meters = new Map();
-		for (const [id, meterDefinition] of Object.entries(definition)) {
-			if (!hexKeyRegexNDigits.test(id)) {
-				throwInvalidConfig(
-					"meters",
-					`found invalid key "${id}" at the root. Meters must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const idNum = parseInt(id.slice(2), 16);
-			meters.set(idNum, new Meter(idNum, meterDefinition as JSONObject));
-		}
-		return meters;
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("meters");
 		}
 	}
 }
