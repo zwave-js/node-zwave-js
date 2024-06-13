@@ -10,15 +10,6 @@ import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "node:path";
 import {
-	type BasicDeviceClass,
-	type BasicDeviceClassMap,
-	GenericDeviceClass,
-	type GenericDeviceClassMap,
-	type SpecificDeviceClass,
-	getDefaultGenericDeviceClass,
-	getDefaultSpecificDeviceClass,
-} from "./DeviceClasses";
-import {
 	type IndicatorMap,
 	type IndicatorPropertiesMap,
 	IndicatorProperty,
@@ -105,28 +96,6 @@ export class ConfigManager {
 		return this._manufacturers;
 	}
 
-	private _basicDeviceClasses: BasicDeviceClassMap | undefined;
-	public get basicDeviceClasses(): BasicDeviceClassMap {
-		if (!this._basicDeviceClasses) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._basicDeviceClasses;
-	}
-
-	private _genericDeviceClasses: GenericDeviceClassMap | undefined;
-	public get genericDeviceClasses(): GenericDeviceClassMap {
-		if (!this._genericDeviceClasses) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._genericDeviceClasses;
-	}
-
 	private deviceConfigPriorityDir: string | undefined;
 	private index: DeviceConfigIndex | undefined;
 	private fulltextIndex: FulltextDeviceConfigIndex | undefined;
@@ -163,7 +132,6 @@ export class ConfigManager {
 		}
 		this.logger.print(`version ${this._configVersion}`, "info");
 
-		await this.loadDeviceClasses();
 		await this.loadManufacturers();
 		await this.loadDeviceIndex();
 		await this.loadNotifications();
@@ -290,75 +258,6 @@ export class ConfigManager {
 		}
 
 		return this._indicatorProperties.get(propertyId);
-	}
-
-	public async loadDeviceClasses(): Promise<void> {
-		try {
-			const config = await loadDeviceClassesInternal(
-				this._useExternalConfig,
-			);
-			this._basicDeviceClasses = config.basicDeviceClasses;
-			this._genericDeviceClasses = config.genericDeviceClasses;
-		} catch (e) {
-			// If the config file is missing or invalid, don't try to find it again
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
-				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
-						`Could not load scales config: ${e.message}`,
-						"error",
-					);
-				}
-				if (!this._basicDeviceClasses) {
-					this._basicDeviceClasses = new Map();
-				}
-				if (!this._genericDeviceClasses) {
-					this._genericDeviceClasses = new Map();
-				}
-			} else {
-				// This is an unexpected error
-				throw e;
-			}
-		}
-	}
-
-	public lookupBasicDeviceClass(basic: number): BasicDeviceClass {
-		if (!this._basicDeviceClasses) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-
-		return {
-			key: basic,
-			label: this._basicDeviceClasses.get(basic)
-				?? `UNKNOWN (${num2hex(basic)})`,
-		};
-	}
-
-	public lookupGenericDeviceClass(generic: number): GenericDeviceClass {
-		if (!this._genericDeviceClasses) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-
-		return (
-			this._genericDeviceClasses.get(generic)
-				?? getDefaultGenericDeviceClass(generic)
-		);
-	}
-
-	public lookupSpecificDeviceClass(
-		generic: number,
-		specific: number,
-	): SpecificDeviceClass {
-		const genericClass = this.lookupGenericDeviceClass(generic);
-		return (
-			genericClass.specific.get(specific)
-				?? getDefaultSpecificDeviceClass(genericClass, specific)
-		);
 	}
 
 	public async loadDeviceIndex(): Promise<void> {
@@ -577,95 +476,6 @@ export class ConfigManager {
 			this.lookupNotificationUnsafe(notificationType)?.name
 				?? `Unknown (${num2hex(notificationType)})`
 		);
-	}
-}
-
-/** @internal */
-export async function loadDeviceClassesInternal(
-	externalConfig?: boolean,
-): Promise<{
-	basicDeviceClasses: BasicDeviceClassMap;
-	genericDeviceClasses: GenericDeviceClassMap;
-}> {
-	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"deviceClasses.json",
-	);
-
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The device classes config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig(
-				"device classes",
-				`the dictionary is not an object`,
-			);
-		}
-
-		if (!isObject(definition.basic)) {
-			throwInvalidConfig(
-				"device classes",
-				`The "basic" property is not an object`,
-			);
-		}
-		if (!isObject(definition.generic)) {
-			throwInvalidConfig(
-				"device classes",
-				`The "generic" property is not an object`,
-			);
-		}
-
-		const basicDeviceClasses = new Map<number, string>();
-		for (const [key, basicClass] of Object.entries(definition.basic)) {
-			if (!hexKeyRegexNDigits.test(key)) {
-				throwInvalidConfig(
-					"device classes",
-					`found invalid key "${key}" in the basic device class definition. Device classes must have lowercase hexadecimal IDs.`,
-				);
-			}
-			if (typeof basicClass !== "string") {
-				throwInvalidConfig(
-					"device classes",
-					`basic device class "${key}" must be a string`,
-				);
-			}
-			const keyNum = parseInt(key.slice(2), 16);
-			basicDeviceClasses.set(keyNum, basicClass);
-		}
-
-		const genericDeviceClasses = new Map<number, GenericDeviceClass>();
-		for (
-			const [key, genericDefinition] of Object.entries(
-				definition.generic,
-			)
-		) {
-			if (!hexKeyRegexNDigits.test(key)) {
-				throwInvalidConfig(
-					"device classes",
-					`found invalid key "${key}" in the generic device class definition. Device classes must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const keyNum = parseInt(key.slice(2), 16);
-			genericDeviceClasses.set(
-				keyNum,
-				new GenericDeviceClass(keyNum, genericDefinition as any),
-			);
-		}
-
-		return { basicDeviceClasses, genericDeviceClasses };
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("device classes");
-		}
 	}
 }
 

@@ -55,32 +55,6 @@ Looks up the property definition for a given indicator property id
 
 > [!NOTE] `loadIndicators` must be used first.
 
-### `loadDeviceClasses`
-
-```ts
-loadDeviceClasses(): Promise<void>;
-```
-
-Loads the device classes config which is used to lookup basic, generic and specific device classes.
-
-### `lookupBasicDeviceClass`
-
-```ts
-lookupBasicDeviceClass(basic: number): BasicDeviceClass;
-```
-
-### `lookupGenericDeviceClass`
-
-```ts
-lookupGenericDeviceClass(generic: number): GenericDeviceClass;
-```
-
-### `lookupSpecificDeviceClass`
-
-```ts
-lookupSpecificDeviceClass(generic: number, specific: number): SpecificDeviceClass;
-```
-
 ### `loadDeviceIndex`
 
 ```ts

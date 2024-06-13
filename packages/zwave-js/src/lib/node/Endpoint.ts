@@ -12,6 +12,7 @@ import {
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import type { IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
 import {
+	BasicDeviceClass,
 	CacheBackedMap,
 	type CommandClassInfo,
 	CommandClasses,
@@ -21,7 +22,7 @@ import {
 	actuatorCCs,
 	getCCName,
 } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
@@ -504,8 +505,11 @@ export class Endpoint implements IZWaveEndpoint {
 		if (this.deviceClass) {
 			ret.deviceClass = {
 				basic: {
-					key: this.deviceClass.basic.key,
-					label: this.deviceClass.basic.label,
+					key: this.deviceClass.basic,
+					label: getEnumMemberName(
+						BasicDeviceClass,
+						this.deviceClass.basic,
+					),
 				},
 				generic: {
 					key: this.deviceClass.generic.key,

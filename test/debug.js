@@ -15,7 +15,6 @@ const { ConfigManager } = require("@zwave-js/config");
 
 (async () => {
 	const configManager = new ConfigManager();
-	await configManager.loadDeviceClasses();
 	await configManager.loadManufacturers();
 	await configManager.loadDeviceIndex();
 	await configManager.loadNotifications();

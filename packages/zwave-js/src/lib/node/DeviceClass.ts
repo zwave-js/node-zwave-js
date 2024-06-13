@@ -1,22 +1,22 @@
-import type {
+import {
 	BasicDeviceClass,
-	ConfigManager,
-	GenericDeviceClass,
-	SpecificDeviceClass,
-} from "@zwave-js/config";
-import { type CommandClasses } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
+	type CommandClasses,
+	type GenericDeviceClass,
+	type SpecificDeviceClass,
+	getGenericDeviceClass,
+	getSpecificDeviceClass,
+} from "@zwave-js/core";
+import { type JSONObject, getEnumMemberName } from "@zwave-js/shared";
 
 export class DeviceClass {
 	public constructor(
-		configManager: ConfigManager,
-		basic: number,
+		basic: BasicDeviceClass,
 		generic: number,
 		specific: number,
 	) {
-		this.basic = configManager.lookupBasicDeviceClass(basic);
-		this.generic = configManager.lookupGenericDeviceClass(generic);
-		this.specific = configManager.lookupSpecificDeviceClass(
+		this.basic = basic;
+		this.generic = getGenericDeviceClass(generic);
+		this.specific = getSpecificDeviceClass(
 			generic,
 			specific,
 		);
@@ -38,7 +38,7 @@ export class DeviceClass {
 
 	public toJSON(): JSONObject {
 		return {
-			basic: this.basic.label,
+			basic: getEnumMemberName(BasicDeviceClass, this.basic),
 			generic: this.generic.label,
 			specific: this.specific.label,
 		};

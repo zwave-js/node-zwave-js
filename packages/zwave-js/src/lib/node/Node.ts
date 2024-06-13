@@ -157,6 +157,7 @@ import {
 	embeddedDevicesDir,
 } from "@zwave-js/config";
 import {
+	BasicDeviceClass,
 	CRC16_CCITT,
 	CacheBackedMap,
 	CommandClasses,
@@ -1498,8 +1499,7 @@ export class ZWaveNode extends Endpoint
 		);
 		if (deviceClass && this.deviceClass) {
 			return new DeviceClass(
-				this.driver.configManager,
-				this.deviceClass.basic.key,
+				this.deviceClass.basic,
 				deviceClass.generic,
 				deviceClass.specific,
 			);
@@ -1921,14 +1921,15 @@ export class ZWaveNode extends Endpoint
 		this.supportsBeaming = resp.supportsBeaming;
 
 		this.deviceClass = new DeviceClass(
-			this.driver.configManager,
 			resp.basicDeviceClass,
 			resp.genericDeviceClass,
 			resp.specificDeviceClass,
 		);
 
 		const logMessage = `received response for protocol info:
-basic device class:    ${this.deviceClass.basic.label}
+basic device class:    ${
+			getEnumMemberName(BasicDeviceClass, this.deviceClass.basic)
+		}
 generic device class:  ${this.deviceClass.generic.label}
 specific device class: ${this.deviceClass.specific.label}
 node type:             ${getEnumMemberName(NodeType, this.nodeType)}
