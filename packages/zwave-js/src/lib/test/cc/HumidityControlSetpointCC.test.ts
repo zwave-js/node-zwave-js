@@ -27,12 +27,6 @@ function buildCCBuffer(payload: Buffer): Buffer {
 const host = createTestingHost();
 const nodeId = 2;
 
-test.before(async (t) => {
-	// Loading configuration may take a while on CI
-	t.timeout(30000);
-	await host.configManager.loadNamedScales();
-});
-
 test("the Get command should serialize correctly", (t) => {
 	const cc = new HumidityControlSetpointCCGet(host, {
 		nodeId: nodeId,

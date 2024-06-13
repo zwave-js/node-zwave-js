@@ -37,13 +37,6 @@ import {
 } from "./Meters";
 import { Notification, type NotificationMap } from "./Notifications";
 import {
-	type NamedScalesGroupMap,
-	Scale,
-	type ScaleGroup,
-	getDefaultScale,
-} from "./Scales";
-import { SensorType, type SensorTypeMap } from "./SensorTypes";
-import {
 	ConditionalDeviceConfig,
 	type DeviceConfig,
 	type DeviceConfigIndex,
@@ -116,28 +109,6 @@ export class ConfigManager {
 			);
 		}
 		return this._manufacturers;
-	}
-
-	private _namedScales: NamedScalesGroupMap | undefined;
-	public get namedScales(): NamedScalesGroupMap {
-		if (!this._namedScales) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._namedScales;
-	}
-
-	private _sensorTypes: SensorTypeMap | undefined;
-	public get sensorTypes(): SensorTypeMap {
-		if (!this._sensorTypes) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._sensorTypes;
 	}
 
 	private _meters: MeterMap | undefined;
@@ -213,8 +184,6 @@ export class ConfigManager {
 		await this.loadManufacturers();
 		await this.loadDeviceIndex();
 		await this.loadNotifications();
-		await this.loadNamedScales();
-		await this.loadSensorTypes();
 		await this.loadMeters();
 		await this.loadIndicators();
 	}
@@ -339,97 +308,6 @@ export class ConfigManager {
 		}
 
 		return this._indicatorProperties.get(propertyId);
-	}
-
-	public async loadNamedScales(): Promise<void> {
-		try {
-			this._namedScales = await loadNamedScalesInternal(
-				this._useExternalConfig,
-			);
-		} catch (e) {
-			// If the config file is missing or invalid, don't try to find it again
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
-				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
-						`Could not load scales config: ${e.message}`,
-						"error",
-					);
-				}
-				if (!this._namedScales) this._namedScales = new Map();
-			} else {
-				// This is an unexpected error
-				throw e;
-			}
-		}
-	}
-
-	/**
-	 * Looks up all scales defined under a given name
-	 */
-	public lookupNamedScaleGroup(name: string): ScaleGroup | undefined {
-		if (!this._namedScales) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-
-		return this._namedScales.get(name);
-	}
-
-	/** Looks up a scale definition for a given scale type */
-	public lookupNamedScale(name: string, scale: number): Scale {
-		const group = this.lookupNamedScaleGroup(name);
-		return group?.get(scale) ?? getDefaultScale(scale);
-	}
-
-	public async loadSensorTypes(): Promise<void> {
-		try {
-			this._sensorTypes = await loadSensorTypesInternal(
-				this,
-				this._useExternalConfig,
-			);
-		} catch (e) {
-			// If the config file is missing or invalid, don't try to find it again
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
-				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
-						`Could not load sensor types config: ${e.message}`,
-						"error",
-					);
-				}
-				if (!this._sensorTypes) this._sensorTypes = new Map();
-			} else {
-				// This is an unexpected error
-				throw e;
-			}
-		}
-	}
-
-	/**
-	 * Looks up the configuration for a given sensor type
-	 */
-	public lookupSensorType(sensorType: number): SensorType | undefined {
-		if (!this._sensorTypes) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-
-		return this._sensorTypes.get(sensorType);
-	}
-
-	/** Looks up a scale definition for a given sensor type */
-	public lookupSensorScale(sensorType: number, scale: number): Scale {
-		const sensor = this.lookupSensorType(sensorType);
-		return sensor?.scales.get(scale) ?? getDefaultScale(scale);
-	}
-
-	public getSensorTypeName(sensorType: number): string {
-		const sensor = this.lookupSensorType(sensorType);
-		if (sensor) return sensor.label;
-		return `UNKNOWN (${num2hex(sensorType)})`;
 	}
 
 	public async loadMeters(): Promise<void> {
@@ -1029,122 +907,6 @@ export async function loadNotificationsInternal(
 			throw e;
 		} else {
 			throwInvalidConfig("notifications");
-		}
-	}
-}
-
-/** @internal */
-export async function loadNamedScalesInternal(
-	externalConfig?: boolean,
-): Promise<NamedScalesGroupMap> {
-	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"scales.json",
-	);
-
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The named scales config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig(
-				"named scales",
-				`the dictionary is not an object`,
-			);
-		}
-
-		const namedScales = new Map<string, ScaleGroup>();
-		for (const [name, scales] of Object.entries(definition)) {
-			if (!/[\w\d]+/.test(name)) {
-				throwInvalidConfig(
-					"named scales",
-					`Name ${name} contains other characters than letters and numbers`,
-				);
-			}
-			const named: Map<number, Scale> & { name?: string } = new Map<
-				number,
-				Scale
-			>();
-			named.name = name;
-			for (
-				const [key, scaleDefinition] of Object.entries(
-					scales as JSONObject,
-				)
-			) {
-				if (!hexKeyRegexNDigits.test(key)) {
-					throwInvalidConfig(
-						"named scales",
-						`found invalid key "${key}" in the definition for "${name}". Scales must have lowercase hexadecimal IDs.`,
-					);
-				}
-				const keyNum = parseInt(key.slice(2), 16);
-				named.set(keyNum, new Scale(keyNum, scaleDefinition));
-			}
-			namedScales.set(name, named);
-		}
-		return namedScales;
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("named scales");
-		}
-	}
-}
-
-/** @internal */
-export async function loadSensorTypesInternal(
-	manager: ConfigManager,
-	externalConfig?: boolean,
-): Promise<SensorTypeMap> {
-	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"sensorTypes.json",
-	);
-
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The sensor types config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig(
-				"sensor types",
-				`the dictionary is not an object`,
-			);
-		}
-
-		const sensorTypes = new Map();
-		for (const [key, sensorDefinition] of Object.entries(definition)) {
-			if (!hexKeyRegexNDigits.test(key)) {
-				throwInvalidConfig(
-					"sensor types",
-					`found invalid key "${key}" at the root. Sensor types must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const keyNum = parseInt(key.slice(2), 16);
-			sensorTypes.set(
-				keyNum,
-				new SensorType(manager, keyNum, sensorDefinition as JSONObject),
-			);
-		}
-		return sensorTypes;
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("sensor types");
 		}
 	}
 }

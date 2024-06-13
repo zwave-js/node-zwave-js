@@ -55,72 +55,6 @@ Looks up the property definition for a given indicator property id
 
 > [!NOTE] `loadIndicators` must be used first.
 
-### `loadNamedScales`
-
-```ts
-loadNamedScales(): Promise<void>;
-```
-
-Loads the named scales config which is used to lookup named scales and scale groups.
-
-### `lookupNamedScaleGroup`
-
-```ts
-lookupNamedScaleGroup(name: string): ScaleGroup | undefined;
-```
-
-Looks up all scales defined under a given name.
-
-> [!NOTE] `loadNamedScales` must be used first.
-
-### `lookupNamedScale`
-
-```ts
-lookupNamedScale(name: string, scale: number): Scale;
-```
-
-Looks up a single scale from a named scale group.
-
-> [!NOTE] `loadNamedScales` must be used first.
-
-### `loadSensorTypes`
-
-```ts
-loadSensorTypes(): Promise<void>;
-```
-
-Loads the sensor config which is used to lookup sensor types and scales.
-
-### `lookupSensorType`
-
-```ts
-lookupSensorType(sensorType: number): SensorType | undefined;
-```
-
-Looks up the configuration for a given sensor type
-
-> [!NOTE] `loadSensorTypes` must be used first.
-
-### `getSensorTypeName`
-
-```ts
-getSensorTypeName(sensorType: number): string;
-```
-
-Returns the label for a given sensor type.
-
-> [!NOTE] `loadSensorTypes` must be used first.
-
-### `lookupSensorScale`
-
-```ts
-lookupSensorScale(sensorType: number, scale: number): Scale;
-```
-
-Looks up a scale definition for a given sensor type
-
-> [!NOTE] `loadSensorTypes` and `loadNamedScales` must be used first.
-
 ### `loadMeters`
 
 ```ts
@@ -519,40 +453,6 @@ interface MeterScale {
 }
 ```
 
-### `namedScales`
-
-```ts
-readonly namedScales: NamedScalesGroupMap;
-```
-
-A map of the defined named sensor scales, which can be used to configure the user-preferred scales.
-
-<!-- #import NamedScalesGroupMap from "@zwave-js/config" -->
-
-```ts
-type NamedScalesGroupMap = ReadonlyMap<string, ScaleGroup>;
-```
-
-<!-- #import ScaleGroup from "@zwave-js/config" with comments -->
-
-```ts
-type ScaleGroup = ReadonlyMap<number, Scale> & {
-	/** The name of the scale group if it is named */
-	readonly name?: string;
-};
-```
-
-<!-- #import Scale from "@zwave-js/config" -->
-
-```ts
-interface Scale {
-	readonly key: number;
-	readonly unit: string;
-	readonly label: string;
-	readonly description: string;
-}
-```
-
 ### `notifications`
 
 ```ts
@@ -587,45 +487,5 @@ interface NotificationEvent {
 	readonly description?: string;
 	readonly parameter?: NotificationParameter;
 	readonly idleVariables?: number[];
-}
-```
-
-### `sensorTypes`
-
-```ts
-readonly sensorTypes: SensorTypeMap;
-```
-
-A map (numeric sensor type -> sensor type definition) of the known sensor types and their scales.
-
-<!-- #import SensorTypeMap from "@zwave-js/config" -->
-
-```ts
-type SensorTypeMap = ReadonlyMap<number, SensorType>;
-```
-
-<!-- #import SensorType from "@zwave-js/config" -->
-
-```ts
-interface SensorType {
-	readonly key: number;
-	readonly label: string;
-	readonly scales: ScaleGroup;
-}
-```
-
-```ts
-type ScaleGroup = ReadonlyMap<number, Scale> & {
-	/** The name of the scale group if it is named */
-	readonly name?: string;
-};
-```
-
-```ts
-interface Scale {
-	readonly key: number;
-	readonly unit: string | undefined;
-	readonly label: string;
-	readonly description: string | undefined;
 }
 ```

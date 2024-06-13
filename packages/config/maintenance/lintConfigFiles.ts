@@ -12,7 +12,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { green, red, white } from "ansi-colors";
 import levenshtein from "js-levenshtein";
 import type { RulesLogic } from "json-logic-js";
-import * as path from "path";
+import * as path from "node:path";
 import type { ConditionalParamInfoMap, ParamInfoMap } from "../src";
 import { ConfigManager } from "../src/ConfigManager";
 import { parseLogic } from "../src/Logic";
@@ -1266,23 +1266,6 @@ function lintConditionalParamInformation(
 	}
 }
 
-async function lintNamedScales(): Promise<void> {
-	await configManager.loadNamedScales();
-	const definitions = configManager.namedScales;
-
-	if (!definitions.has("temperature")) {
-		throw new Error(`Named scale "temperature" is missing!`);
-	}
-}
-
-async function lintSensorTypes(): Promise<void> {
-	// The named scales must be loaded here so the parsing can work
-	await configManager.loadNamedScales();
-
-	await configManager.loadSensorTypes();
-	// TODO: Validate that all contents are semantically correct
-}
-
 export async function lintConfigFiles(): Promise<void> {
 	// Set NODE_ENV to test in order to trigger stricter checks
 	process.env.NODE_ENV = "test";
@@ -1290,8 +1273,6 @@ export async function lintConfigFiles(): Promise<void> {
 		await lintManufacturers();
 		await lintDevices();
 		await lintNotifications();
-		await lintNamedScales();
-		await lintSensorTypes();
 		await lintIndicators();
 
 		console.log();

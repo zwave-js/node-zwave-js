@@ -14,6 +14,8 @@ export * from "./capabilities/ZWaveChipTypes";
 export * from "./consts";
 export * from "./error/ZWaveError";
 export * from "./log/shared_safe";
+export * from "./registries/Scales";
+export * from "./registries/Sensors";
 export * from "./security/DSK";
 export * from "./security/SecurityClass";
 export * from "./security/shared_safe";

@@ -5,8 +5,6 @@ export * from "./Logger_safe";
 export * from "./Manufacturers";
 export * from "./Meters";
 export * from "./Notifications";
-export * from "./Scales";
-export * from "./SensorTypes";
 export * from "./devices/AssociationConfig";
 export * from "./devices/CompatConfig";
 export * from "./devices/DeviceConfig";

@@ -19,8 +19,6 @@ const { ConfigManager } = require("@zwave-js/config");
 	await configManager.loadManufacturers();
 	await configManager.loadDeviceIndex();
 	await configManager.loadNotifications();
-	await configManager.loadNamedScales();
-	await configManager.loadSensorTypes();
 	await configManager.loadMeters();
 	await configManager.loadIndicators();
 
