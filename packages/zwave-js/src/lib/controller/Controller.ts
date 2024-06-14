@@ -389,7 +389,7 @@ interface ControllerEventCallbacks
 {
 	"inclusion failed": () => void;
 	"exclusion failed": () => void;
-	"inclusion started": (secure: boolean, strategy: InclusionStrategy) => void;
+	"inclusion started": (strategy: InclusionStrategy) => void;
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
@@ -2037,12 +2037,7 @@ export class ZWaveController
 				`The controller is now ready to add nodes`,
 			);
 
-			this.emit(
-				"inclusion started",
-				// TODO: Remove first parameter in next major version
-				options.strategy !== InclusionStrategy.Insecure,
-				options.strategy,
-			);
+			this.emit("inclusion started", options.strategy);
 		} catch (e) {
 			this.setInclusionState(InclusionState.Idle);
 			if (
@@ -2111,12 +2106,7 @@ export class ZWaveController
 				}),
 			);
 
-			this.emit(
-				"inclusion started",
-				// TODO: Remove first parameter in next major version
-				true,
-				InclusionStrategy.SmartStart,
-			);
+			this.emit("inclusion started", InclusionStrategy.SmartStart);
 		} catch (e) {
 			this.setInclusionState(InclusionState.Idle);
 			// Error handling for this happens at the call site
@@ -4172,13 +4162,7 @@ export class ZWaveController
 				this.driver.controllerLog.print(
 					`The failed node is ready to be replaced, inclusion started...`,
 				);
-				this.emit(
-					"inclusion started",
-					// TODO: Remove first parameter in next major version
-					this._inclusionOptions.strategy
-						!== InclusionStrategy.Insecure,
-					this._inclusionOptions.strategy,
-				);
+				this.emit("inclusion started", this._inclusionOptions.strategy);
 				this.setInclusionState(InclusionState.Including);
 				this._replaceFailedPromise?.resolve(true);
 
