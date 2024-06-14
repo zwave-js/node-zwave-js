@@ -16,7 +16,7 @@ export interface Sensor extends SensorDefinition {
 	readonly key: number;
 }
 
-function defineNamedScales<T extends Parameters<typeof getNamedScaleGroup>[0]>(
+function useNamedScales<T extends Parameters<typeof getNamedScaleGroup>[0]>(
 	name: T,
 ): { scaleGroupName: T; scales: ReturnType<typeof getNamedScaleGroup<T>> } {
 	return { scaleGroupName: name, scales: getNamedScaleGroup(name) };
@@ -26,7 +26,7 @@ const sensors = Object.freeze(
 	{
 		[0x01]: {
 			label: "Air temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x02]: {
 			label: "General purpose",
@@ -68,7 +68,7 @@ const sensors = Object.freeze(
 		},
 		[0x05]: {
 			label: "Humidity",
-			...defineNamedScales("humidity"),
+			...useNamedScales("humidity"),
 		},
 		[0x06]: {
 			label: "Velocity",
@@ -85,15 +85,15 @@ const sensors = Object.freeze(
 		},
 		[0x07]: {
 			label: "Direction",
-			...defineNamedScales("direction"),
+			...useNamedScales("direction"),
 		},
 		[0x08]: {
 			label: "Atmospheric pressure",
-			...defineNamedScales("airPressure"),
+			...useNamedScales("airPressure"),
 		},
 		[0x09]: {
 			label: "Barometric pressure",
-			...defineNamedScales("airPressure"),
+			...useNamedScales("airPressure"),
 		},
 		[0x0a]: {
 			label: "Solar radiation",
@@ -106,7 +106,7 @@ const sensors = Object.freeze(
 		},
 		[0x0b]: {
 			label: "Dew point",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x0c]: {
 			label: "Rain rate",
@@ -263,11 +263,11 @@ const sensors = Object.freeze(
 		},
 		[0x17]: {
 			label: "Water temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x18]: {
 			label: "Soil temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x19]: {
 			label: "Seismic Intensity",
@@ -389,7 +389,7 @@ const sensors = Object.freeze(
 		},
 		[0x22]: {
 			label: "Target temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x23]: {
 			label: "Particulate Matter 2.5",
@@ -463,11 +463,11 @@ const sensors = Object.freeze(
 		},
 		[0x29]: {
 			label: "Soil humidity",
-			...defineNamedScales("percentage"),
+			...useNamedScales("percentage"),
 		},
 		[0x2a]: {
 			label: "Soil reactivity",
-			...defineNamedScales("acidity"),
+			...useNamedScales("acidity"),
 		},
 		[0x2b]: {
 			label: "Soil salinity",
@@ -502,19 +502,19 @@ const sensors = Object.freeze(
 		},
 		[0x2e]: {
 			label: "Muscle mass",
-			...defineNamedScales("mass"),
+			...useNamedScales("mass"),
 		},
 		[0x2f]: {
 			label: "Fat mass",
-			...defineNamedScales("mass"),
+			...useNamedScales("mass"),
 		},
 		[0x30]: {
 			label: "Bone mass",
-			...defineNamedScales("mass"),
+			...useNamedScales("mass"),
 		},
 		[0x31]: {
 			label: "Total body water (TBW)",
-			...defineNamedScales("mass"),
+			...useNamedScales("mass"),
 		},
 		[0x32]: {
 			label: "Basis metabolic rate (BMR)",
@@ -535,19 +535,19 @@ const sensors = Object.freeze(
 		},
 		[0x34]: {
 			label: "Acceleration X-axis",
-			...defineNamedScales("acceleration"),
+			...useNamedScales("acceleration"),
 		},
 		[0x35]: {
 			label: "Acceleration Y-axis",
-			...defineNamedScales("acceleration"),
+			...useNamedScales("acceleration"),
 		},
 		[0x36]: {
 			label: "Acceleration Z-axis",
-			...defineNamedScales("acceleration"),
+			...useNamedScales("acceleration"),
 		},
 		[0x37]: {
 			label: "Smoke density",
-			...defineNamedScales("percentage"),
+			...useNamedScales("percentage"),
 		},
 		[0x38]: {
 			label: "Water flow",
@@ -604,23 +604,23 @@ const sensors = Object.freeze(
 		},
 		[0x3d]: {
 			label: "Relative Modulation level",
-			...defineNamedScales("percentage"),
+			...useNamedScales("percentage"),
 		},
 		[0x3e]: {
 			label: "Boiler water temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x3f]: {
 			label: "Domestic Hot Water (DHW) temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x40]: {
 			label: "Outside temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x41]: {
 			label: "Exhaust temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x42]: {
 			label: "Water Chlorine level",
@@ -633,7 +633,7 @@ const sensors = Object.freeze(
 		},
 		[0x43]: {
 			label: "Water acidity",
-			...defineNamedScales("acidity"),
+			...useNamedScales("acidity"),
 		},
 		[0x44]: {
 			label: "Water Oxidation reduction potential",
@@ -646,11 +646,11 @@ const sensors = Object.freeze(
 		},
 		[0x45]: {
 			label: "Heart Rate LF/HF ratio",
-			...defineNamedScales("unitless"),
+			...useNamedScales("unitless"),
 		},
 		[0x46]: {
 			label: "Motion Direction",
-			...defineNamedScales("direction"),
+			...useNamedScales("direction"),
 		},
 		[0x47]: {
 			label: "Applied force on the sensor",
@@ -663,71 +663,71 @@ const sensors = Object.freeze(
 		},
 		[0x48]: {
 			label: "Return Air temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x49]: {
 			label: "Supply Air temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x4a]: {
 			label: "Condenser Coil temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x4b]: {
 			label: "Evaporator Coil temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x4c]: {
 			label: "Liquid Line temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x4d]: {
 			label: "Discharge Line temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x4e]: {
 			label: "Suction Pressure",
-			...defineNamedScales("pressure"),
+			...useNamedScales("pressure"),
 		},
 		[0x4f]: {
 			label: "Discharge Pressure",
-			...defineNamedScales("pressure"),
+			...useNamedScales("pressure"),
 		},
 		[0x50]: {
 			label: "Defrost temperature",
-			...defineNamedScales("temperature"),
+			...useNamedScales("temperature"),
 		},
 		[0x51]: {
 			label: "Ozone",
-			...defineNamedScales("density"),
+			...useNamedScales("density"),
 		},
 		[0x52]: {
 			label: "Sulfur dioxide",
-			...defineNamedScales("density"),
+			...useNamedScales("density"),
 		},
 		[0x53]: {
 			label: "Nitrogen dioxide",
-			...defineNamedScales("density"),
+			...useNamedScales("density"),
 		},
 		[0x54]: {
 			label: "Ammonia",
-			...defineNamedScales("density"),
+			...useNamedScales("density"),
 		},
 		[0x55]: {
 			label: "Lead",
-			...defineNamedScales("density"),
+			...useNamedScales("density"),
 		},
 		[0x56]: {
 			label: "Particulate Matter 1",
-			...defineNamedScales("density"),
+			...useNamedScales("density"),
 		},
 		[0x57]: {
 			label: "Person counter (entering)",
-			...defineNamedScales("unitless"),
+			...useNamedScales("unitless"),
 		},
 		[0x58]: {
 			label: "Person counter (exiting)",
-			...defineNamedScales("unitless"),
+			...useNamedScales("unitless"),
 		},
 	} as const satisfies Record<number, SensorDefinition>,
 );
@@ -751,6 +751,12 @@ export function getSensor<Key extends number>(
 export function getSensorName(sensorType: number): string {
 	return getSensor(sensorType)?.label
 		?? `UNKNOWN (${num2hex(sensorType)})`;
+}
+
+/** Returns all sensor definitions including their scales */
+export function getAllSensors(): readonly Sensor[] {
+	return Object.entries(sensors)
+		.map(([key, value]) => ({ key: parseInt(key, 10), ...value }));
 }
 
 /** Returns a scale definition for a scale with known name and key */
@@ -779,4 +785,15 @@ export function getSensorScale<
 		key: type,
 		...scaleDef,
 	} satisfies Scale as any;
+}
+
+/** Returns all scales of a given sensor */
+export function getAllSensorScales(
+	sensorType: number,
+): readonly Scale[] | undefined {
+	const sensor = getSensor(sensorType);
+	if (!sensor) return;
+
+	return Object.entries(sensor.scales)
+		.map(([key, scale]) => ({ key: parseInt(key, 10), ...scale }));
 }
