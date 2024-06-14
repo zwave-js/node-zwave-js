@@ -13,7 +13,11 @@ import {
 	parseFloatWithScale,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { type AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -543,7 +547,7 @@ export class BatteryCCReport extends BatteryCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			level: this.level,
 			"is low": this.isLow,
@@ -579,7 +583,7 @@ export class BatteryCCReport extends BatteryCC {
 			message.disconnected = this.disconnected;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -632,9 +636,9 @@ export class BatteryCCHealthReport extends BatteryCC {
 
 	private readonly temperatureScale: number | undefined;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				temperature: this.temperature != undefined
 					? this.temperature
