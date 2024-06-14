@@ -39,7 +39,9 @@ import {
 	PhysicalCCAPI,
 	type PollValueImplementation,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
 	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
@@ -510,24 +512,108 @@ export class MeterCCAPI extends PhysicalCCAPI {
 				const { meterType, scale, rateType } = splitPropertyKey(
 					propertyKey,
 				);
-				await this.reset({
+				return this.reset({
 					type: meterType,
 					scale,
 					rateType,
 					targetValue: 0,
 				});
-				await this.get({
-					rateType,
-					scale,
-				});
 			} else {
-				await this.reset();
-				await this.getAll(true);
+				return this.reset();
 			}
 
 			return undefined;
 		};
 	}
+
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
+		{ property, propertyKey },
+		_value,
+		_options,
+	) => {
+		if (property !== "reset") return;
+
+		if (typeof propertyKey === "number") {
+			// Reset single
+			const { meterType, rateType, scale } = splitPropertyKey(
+				propertyKey,
+			);
+			const readingValueId = MeterCCValues.value(
+				meterType,
+				rateType,
+				scale,
+			).endpoint(this.endpoint.index);
+
+			return {
+				optimisticallyUpdateRelatedValues: (
+					supervisedAndSuccessful,
+				) => {
+					if (!supervisedAndSuccessful) return;
+
+					// After resetting a single reading with supervision, store zero
+					// in the corresponding value
+					const valueDB = this.tryGetValueDB();
+					if (!valueDB) return;
+
+					if (isAccumulatedValue(meterType, scale)) {
+						valueDB.setValue({
+							commandClass: this.ccId,
+							endpoint: this.endpoint.index,
+							property,
+							propertyKey,
+						}, 0);
+					}
+				},
+
+				verifyChanges: () => {
+					this.schedulePoll(
+						readingValueId,
+						0,
+						{ transition: "fast" },
+					);
+				},
+			};
+		} else {
+			// Reset all
+			const valueDB = this.tryGetValueDB();
+			if (!valueDB) return;
+
+			const accumulatedValues = valueDB.findValues((vid) =>
+				vid.commandClass === this.ccId
+				&& vid.endpoint === this.endpoint.index
+				&& MeterCCValues.value.is(vid)
+			).filter(({ propertyKey }) => {
+				if (typeof propertyKey !== "number") return false;
+				const { meterType, scale } = splitPropertyKey(propertyKey);
+				return isAccumulatedValue(meterType, scale);
+			});
+
+			return {
+				optimisticallyUpdateRelatedValues: (
+					supervisedAndSuccessful,
+				) => {
+					if (!supervisedAndSuccessful) return;
+
+					// After setting the reset all value with supervision,
+					// reset all accumulated values, since we know they are now zero.
+					for (const value of accumulatedValues) {
+						valueDB.setValue(value, 0);
+					}
+				},
+
+				verifyChanges: () => {
+					// Poll all accumulated values, unless they were updated by the device
+					for (const valueID of accumulatedValues) {
+						this.schedulePoll(
+							valueID,
+							0,
+							{ transition: "fast" },
+						);
+					}
+				},
+			};
+		}
+	};
 }
 
 @commandClass(CommandClasses.Meter)
