@@ -2,7 +2,7 @@
 
 <h2 align="center">Z-Wave device driver written entirely in JavaScript/TypeScript</h2>
 
-![Test and Release](https://github.com/AlCalzone/node-zwave-js/workflows/Test%20and%20Release/badge.svg)
+![Test and Release](https://github.com/zwave-js/node-zwave-js/workflows/Test%20and%20Release/badge.svg)
 [![Discord](https://img.shields.io/discord/1111193770935996459?color=D82167&label=Chat%20on%20Discord&logo=Discord&logoColor=ffffff)](https://discord.gg/HFqcyFNfWd)
 
 [![node](https://img.shields.io/node/v/zwave-js.svg) ![npm](https://img.shields.io/npm/v/zwave-js.svg)](https://www.npmjs.com/package/zwave-js)
