@@ -14,7 +14,11 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host";
 import {
 	type AllOrNone,
 	formatDate,
@@ -961,9 +965,9 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user ID": this.userId,
 				action: this.enabled ? "enable" : "disable",
@@ -1004,9 +1008,9 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				action: this.enabled ? "enable all" : "disable all",
 			},
@@ -1062,7 +1066,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"no. of weekday schedule slots": this.numWeekDaySlots,
 			"no. of day-of-year schedule slots": this.numYearDaySlots,
@@ -1072,7 +1076,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 				this.numDailyRepeatingSlots;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1164,7 +1168,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -1192,7 +1196,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 			};
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1291,7 +1295,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.weekday == undefined) {
 			message = {
@@ -1318,7 +1322,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 			};
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1357,9 +1361,9 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user ID": this.userId,
 				"slot #": this.slotId,
@@ -1470,7 +1474,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -1500,7 +1504,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 			};
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1634,7 +1638,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.startYear !== undefined) {
 			message = {
@@ -1664,7 +1668,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 			};
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1703,9 +1707,9 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user ID": this.userId,
 				"slot #": this.slotId,
@@ -1753,9 +1757,9 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -1802,9 +1806,9 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -1912,7 +1916,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -1939,7 +1943,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 			};
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -2047,7 +2051,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (!this.weekdays) {
 			message = {
@@ -2074,7 +2078,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 			};
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -2115,9 +2119,9 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user ID": this.userId,
 				"slot #": this.slotId,
