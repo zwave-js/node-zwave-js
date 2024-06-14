@@ -99,9 +99,9 @@ export const HumidityControlSetpointCCValues = Object.freeze({
 	}),
 });
 
-const temperatureScale = getNamedScaleGroup("temperature");
+const humidityScale = getNamedScaleGroup("humidity");
 function getScale(scale: number): Scale {
-	return (temperatureScale as any)[scale] ?? getUnknownScale(scale);
+	return (humidityScale as any)[scale] ?? getUnknownScale(scale);
 }
 function getSetpointUnit(scale: number): string {
 	return getScale(scale).unit ?? "";
