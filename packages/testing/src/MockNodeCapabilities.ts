@@ -1,4 +1,5 @@
 import {
+	BasicDeviceClass,
 	type CommandClassInfo,
 	type CommandClasses,
 	type NodeProtocolInfoAndDeviceClass,
@@ -52,7 +53,7 @@ export function getDefaultMockNodeCapabilities(): MockNodeCapabilities {
 		nodeType: NodeType["End Node"],
 		supportsSecurity: false,
 		supportsBeaming: true,
-		basicDeviceClass: 0x04, // Routing End Node
+		basicDeviceClass: BasicDeviceClass["Routing End Node"],
 		genericDeviceClass: 0x06, // Appliance
 		specificDeviceClass: 0x01, // General Appliance
 

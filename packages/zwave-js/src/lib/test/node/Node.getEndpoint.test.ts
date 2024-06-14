@@ -34,8 +34,6 @@ test.before(async (t) => {
 			t.context.controller = controller;
 		},
 	});
-	await driver.configManager.loadDeviceClasses();
-
 	t.context.driver = driver;
 });
 

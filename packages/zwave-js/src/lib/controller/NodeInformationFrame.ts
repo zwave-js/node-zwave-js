@@ -1,13 +1,13 @@
-import { CommandClasses } from "@zwave-js/core/safe";
+import { BasicDeviceClass, CommandClasses } from "@zwave-js/core/safe";
 
 export function determineNIF(): {
-	basicDeviceClass: number;
+	basicDeviceClass: BasicDeviceClass;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 } {
-	const basicDeviceClass = 0x02; // Static Controller
+	const basicDeviceClass = BasicDeviceClass["Static Controller"];
 	const genericDeviceClass = 0x01; // Generic Controller
 	const specificDeviceClass = 0x00; // Not used
 

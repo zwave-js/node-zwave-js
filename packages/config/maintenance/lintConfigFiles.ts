@@ -12,7 +12,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { green, red, white } from "ansi-colors";
 import levenshtein from "js-levenshtein";
 import type { RulesLogic } from "json-logic-js";
-import * as path from "path";
+import * as path from "node:path";
 import type { ConditionalParamInfoMap, ParamInfoMap } from "../src";
 import { ConfigManager } from "../src/ConfigManager";
 import { parseLogic } from "../src/Logic";
@@ -29,28 +29,9 @@ import {
 
 const configManager = new ConfigManager();
 
-async function lintNotifications(): Promise<void> {
-	await configManager.loadNotifications();
-	// TODO: Validate that all contents are semantically correct
-}
-
 async function lintManufacturers(): Promise<void> {
 	await configManager.loadManufacturers();
 	// TODO: Validate that the file is semantically correct
-}
-
-async function lintIndicators(): Promise<void> {
-	await configManager.loadIndicators();
-	const properties = configManager.indicatorProperties;
-
-	if (!(properties.get(1)?.label === "Multilevel")) {
-		throw new Error(
-			`The indicator property Multilevel (0x01) is required!`,
-		);
-	}
-	if (!(properties.get(2)?.label === "Binary")) {
-		throw new Error(`The indicator property Binary (0x02) is required!`);
-	}
 }
 
 function getAllConditions(
@@ -1266,33 +1247,12 @@ function lintConditionalParamInformation(
 	}
 }
 
-async function lintNamedScales(): Promise<void> {
-	await configManager.loadNamedScales();
-	const definitions = configManager.namedScales;
-
-	if (!definitions.has("temperature")) {
-		throw new Error(`Named scale "temperature" is missing!`);
-	}
-}
-
-async function lintSensorTypes(): Promise<void> {
-	// The named scales must be loaded here so the parsing can work
-	await configManager.loadNamedScales();
-
-	await configManager.loadSensorTypes();
-	// TODO: Validate that all contents are semantically correct
-}
-
 export async function lintConfigFiles(): Promise<void> {
 	// Set NODE_ENV to test in order to trigger stricter checks
 	process.env.NODE_ENV = "test";
 	try {
 		await lintManufacturers();
 		await lintDevices();
-		await lintNotifications();
-		await lintNamedScales();
-		await lintSensorTypes();
-		await lintIndicators();
 
 		console.log();
 		console.log(green("The config files are valid!"));

@@ -887,37 +887,33 @@ interface DeviceClass {
 }
 ```
 
-<!-- #import BasicDeviceClass from "@zwave-js/config" -->
+<!-- #import BasicDeviceClass from "@zwave-js/core" -->
 
 ```ts
-interface BasicDeviceClass {
-	key: number;
-	label: string;
+enum BasicDeviceClass {
+	Controller = 0x01,
+	"Static Controller" = 0x02,
+	"End Node" = 0x03,
+	"Routing End Node" = 0x04,
 }
 ```
 
-<!-- #import GenericDeviceClass from "@zwave-js/config" -->
+<!-- #import GenericDeviceClass from "@zwave-js/core" -->
 
 ```ts
 interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly requiresSecurity?: boolean;
+	readonly zwavePlusDeviceType?: string;
+	readonly requiresSecurity: boolean;
 	readonly maySupportBasicCC: boolean;
-	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
 }
 ```
 
-<!-- #import SpecificDeviceClass from "@zwave-js/config" -->
+<!-- #import SpecificDeviceClass from "@zwave-js/core" -->
 
 ```ts
-interface SpecificDeviceClass {
-	readonly key: number;
-	readonly label: string;
-	readonly zwavePlusDeviceType?: string;
-	readonly requiresSecurity?: boolean;
-	readonly maySupportBasicCC: boolean;
-}
+type SpecificDeviceClass = GenericDeviceClass;
 ```
 
 ### `zwavePlusVersion`

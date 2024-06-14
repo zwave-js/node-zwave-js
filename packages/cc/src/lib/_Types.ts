@@ -1,9 +1,9 @@
-import type { Scale } from "@zwave-js/config/safe";
 import {
 	type CommandClasses,
 	type DataRate,
 	type FLiRS,
 	type MaybeNotKnown,
+	type Scale,
 	type ValueMetadata,
 	ZWaveDataRate,
 } from "@zwave-js/core/safe";

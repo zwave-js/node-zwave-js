@@ -1,12 +1,14 @@
 import {
 	type Notification,
-	NotificationParameterWithCommandClass,
-	NotificationParameterWithDuration,
-	NotificationParameterWithEnum,
-	NotificationParameterWithValue,
-	type NotificationValueDefinition,
-} from "@zwave-js/config";
-import { timespan } from "@zwave-js/core";
+	type NotificationState,
+	type NotificationValue,
+	getNotification,
+	getNotificationEventName,
+	getNotificationName,
+	getNotificationValue,
+	getNotificationValueName,
+	timespan,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -208,20 +210,6 @@ function shouldAutoCreateSimpleDoorSensorValue(
 	);
 }
 
-function lookupNotificationNames(
-	applHost: ZWaveApplicationHost,
-	notificationTypes: readonly number[],
-): string[] {
-	return notificationTypes
-		.map((n) => {
-			const ret = applHost.configManager.lookupNotification(n);
-			return [n, ret] as const;
-		})
-		.map(([type, ntfcn]) =>
-			ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`
-		);
-}
-
 @API(CommandClasses.Notification)
 export class NotificationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: NotificationCommand): MaybeNotKnown<boolean> {
@@ -388,15 +376,15 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 }
 
 export function getNotificationEnumBehavior(
-	notificationConfig: Notification,
-	valueConfig: NotificationValueDefinition & { type: "state" },
+	notification: Notification,
+	valueConfig: NotificationState,
 ): "none" | "extend" | "replace" {
-	const variable = notificationConfig.variables.find((v) =>
+	const variable = notification.variables.find((v) =>
 		v.states.has(valueConfig.value)
 	);
 	if (!variable) return "none";
 	const numStatesWithEnums = [...variable.states.values()].filter(
-		(val) => val.parameter instanceof NotificationParameterWithEnum,
+		(val) => val.parameter?.type === "enum",
 	).length;
 	if (numStatesWithEnums === 0) return "none";
 	// An enum value replaces the original value if there is only a single possible state
@@ -421,29 +409,32 @@ export function getNotificationStateValueWithEnum(
  */
 export function getNotificationValueMetadata(
 	previous: ValueMetadataNumeric | undefined,
-	notificationConfig: Notification,
-	valueConfig: NotificationValueDefinition & { type: "state" },
+	notification: Notification,
+	valueConfig: NotificationState,
 ): ValueMetadataNumeric {
 	const metadata: ValueMetadataNumeric = previous ?? {
 		...ValueMetadata.ReadOnlyUInt8,
 		label: valueConfig.variableName,
 		states: {},
 		ccSpecific: {
-			notificationType: notificationConfig.id,
+			notificationType: notification.type,
 		},
 	};
 	if (valueConfig.idle) {
 		metadata.states![0] = "idle";
 	}
 	const enumBehavior = getNotificationEnumBehavior(
-		notificationConfig,
+		notification,
 		valueConfig,
 	);
 	if (enumBehavior !== "replace") {
 		metadata.states![valueConfig.value] = valueConfig.label;
 	}
-	if (valueConfig.parameter instanceof NotificationParameterWithEnum) {
-		for (const [value, label] of valueConfig.parameter.values) {
+	if (valueConfig.parameter?.type === "enum") {
+		for (
+			const [key, label] of Object.entries(valueConfig.parameter.values)
+		) {
+			const value = parseInt(key);
 			const stateKey = enumBehavior === "replace"
 				? value
 				: getNotificationStateValueWithEnum(valueConfig.value, value);
@@ -600,9 +591,8 @@ export class NotificationCC extends CommandClass {
 			supportsV1Alarm = suppResponse.supportsV1Alarm;
 			const supportedNotificationTypes =
 				suppResponse.supportedNotificationTypes;
-			const supportedNotificationNames = lookupNotificationNames(
-				applHost,
-				supportedNotificationTypes,
+			const supportedNotificationNames = supportedNotificationTypes.map(
+				getNotificationName,
 			);
 			const supportedNotificationEvents = new Map<
 				number,
@@ -673,8 +663,7 @@ export class NotificationCC extends CommandClass {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
-					const notificationConfig = applHost.configManager
-						.lookupNotification(type);
+					const notification = getNotification(type);
 
 					// Enable reports for each notification type
 					applHost.controllerLog.logNode(node.id, {
@@ -685,15 +674,13 @@ export class NotificationCC extends CommandClass {
 					await api.set(type, true);
 
 					// Set the value to idle if possible and there is no value yet
-					if (notificationConfig) {
+					if (notification) {
 						const events = supportedNotificationEvents.get(type);
 						if (events) {
 							// Find all variables that are supported by this node and have an idle state
 							for (
-								const variable of notificationConfig.variables
-									.filter(
-										(v) => !!v.idle,
-									)
+								const variable of notification.variables
+									.filter((v) => !!v.idle)
 							) {
 								if (
 									[...variable.states.keys()].some((key) =>
@@ -702,7 +689,7 @@ export class NotificationCC extends CommandClass {
 								) {
 									const value = NotificationCCValues
 										.notificationVariable(
-											notificationConfig.name,
+											notification.name,
 											variable.name,
 										);
 
@@ -741,12 +728,10 @@ export class NotificationCC extends CommandClass {
 			// Find all mappings to a valid notification variable
 			const supportedNotifications = new Map<number, Set<number>>();
 			for (const { to } of mappings) {
-				const notificationConfig = applHost.configManager
-					.lookupNotification(
-						to.notificationType,
-					);
-				if (!notificationConfig) continue;
-				const valueConfig = notificationConfig.lookupValue(
+				const notification = getNotification(to.notificationType);
+				if (!notification) continue;
+				const valueConfig = getNotificationValue(
+					notification,
 					to.notificationEvent,
 				);
 
@@ -765,14 +750,14 @@ export class NotificationCC extends CommandClass {
 
 				const notificationValue = NotificationCCValues
 					.notificationVariable(
-						notificationConfig.name,
+						notification.name,
 						valueConfig.variableName,
 					);
 
 				// Create or update the metadata
 				const metadata = getNotificationValueMetadata(
 					this.getMetadata(applHost, notificationValue),
-					notificationConfig,
+					notification,
 					valueConfig,
 				);
 				this.setMetadata(applHost, notificationValue, metadata);
@@ -831,9 +816,8 @@ export class NotificationCC extends CommandClass {
 				applHost,
 				NotificationCCValues.supportedNotificationTypes,
 			) ?? [];
-			const supportedNotificationNames = lookupNotificationNames(
-				applHost,
-				supportedNotificationTypes,
+			const supportedNotificationNames = supportedNotificationTypes.map(
+				getNotificationName,
 			);
 
 			for (let i = 0; i < supportedNotificationTypes.length; i++) {
@@ -928,9 +912,7 @@ export class NotificationCCSet extends NotificationCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 				status: this.notificationStatus,
 			},
 		};
@@ -1137,22 +1119,21 @@ export class NotificationCCReport extends NotificationCC {
 			};
 		}
 
-		let valueConfig: NotificationValueDefinition | undefined;
+		let valueConfig: NotificationValue | undefined;
 		if (this.notificationType) {
-			try {
-				valueConfig = applHost.configManager
-					.lookupNotification(this.notificationType)
-					?.lookupValue(this.notificationEvent!);
-			} catch {
-				/* ignore */
+			const notification = getNotification(this.notificationType);
+			if (notification) {
+				valueConfig = getNotificationValue(
+					notification,
+					this.notificationEvent!,
+				);
 			}
 			if (valueConfig) {
 				message = {
 					...message,
-					"notification type": applHost.configManager
-						.getNotificationName(
-							this.notificationType,
-						),
+					"notification type": getNotificationName(
+						this.notificationType,
+					),
 					"notification status": this.notificationStatus!,
 					[`notification ${valueConfig.type}`]: valueConfig.label
 						?? `Unknown (${num2hex(this.notificationEvent)})`,
@@ -1184,12 +1165,10 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to look up the enum label
 				let found = false;
 				if (
-					valueConfig?.parameter
-						instanceof NotificationParameterWithEnum
+					valueConfig?.parameter?.type === "enum"
 				) {
-					const label = valueConfig.parameter.values.get(
-						this.eventParameters,
-					);
+					const label =
+						valueConfig.parameter.values[this.eventParameters];
 					if (label) {
 						message["state parameters"] = label;
 						found = true;
@@ -1210,13 +1189,12 @@ export class NotificationCCReport extends NotificationCC {
 					.join("");
 			}
 		} else if (
-			valueConfig?.parameter
-				instanceof NotificationParameterWithEnum
+			valueConfig?.parameter?.type === "enum"
 			&& valueConfig.parameter.default != undefined
 		) {
-			const label = valueConfig.parameter.values.get(
-				valueConfig.parameter.default,
-			);
+			const label = valueConfig.parameter.values[
+				valueConfig.parameter.default
+			];
 			if (label) {
 				message["state parameters"] = `${label} (omitted)`;
 			}
@@ -1237,19 +1215,16 @@ export class NotificationCCReport extends NotificationCC {
 		}
 
 		// Look up the received notification and value in the config
-		const notificationConfig = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
-		if (!notificationConfig) return;
-		const valueConfig = notificationConfig.lookupValue(
+		const notification = getNotification(this.notificationType);
+		if (!notification) return;
+		const valueConfig = getNotificationValue(
+			notification,
 			this.notificationEvent,
 		);
 		if (!valueConfig) return;
 
 		// Parse the event parameters if possible
-		if (
-			valueConfig.parameter instanceof NotificationParameterWithDuration
-		) {
+		if (valueConfig.parameter?.type === "duration") {
 			// This only makes sense if the event parameters are a buffer
 			if (!Buffer.isBuffer(this.eventParameters)) {
 				return;
@@ -1258,10 +1233,7 @@ export class NotificationCCReport extends NotificationCC {
 			this.eventParameters = Duration.parseReport(
 				this.eventParameters[0],
 			);
-		} else if (
-			valueConfig.parameter
-				instanceof NotificationParameterWithCommandClass
-		) {
+		} else if (valueConfig.parameter?.type === "commandclass") {
 			// This only makes sense if the event parameters are a buffer
 			if (!Buffer.isBuffer(this.eventParameters)) {
 				return;
@@ -1269,7 +1241,7 @@ export class NotificationCCReport extends NotificationCC {
 			// The parameters **should** contain a CC, however there might be some exceptions
 			if (
 				this.eventParameters.length === 1
-				&& notificationConfig.id === 0x06
+				&& notification.type === 0x06
 				&& (this.notificationEvent === 0x05
 					|| this.notificationEvent === 0x06)
 			) {
@@ -1340,9 +1312,7 @@ export class NotificationCCReport extends NotificationCC {
 					}
 				}
 			}
-		} else if (
-			valueConfig.parameter instanceof NotificationParameterWithValue
-		) {
+		} else if (valueConfig.parameter?.type === "value") {
 			// This only makes sense if the event parameters are a buffer
 			if (!Buffer.isBuffer(this.eventParameters)) {
 				return;
@@ -1355,9 +1325,7 @@ export class NotificationCCReport extends NotificationCC {
 						this.eventParameters.length,
 					),
 			};
-		} else if (
-			valueConfig.parameter instanceof NotificationParameterWithEnum
-		) {
+		} else if (valueConfig.parameter?.type === "enum") {
 			// The parameters may contain an enum value
 			this.eventParameters = Buffer.isBuffer(this.eventParameters)
 					&& this.eventParameters.length === 1
@@ -1500,15 +1468,14 @@ export class NotificationCCGet extends NotificationCC {
 			message["V1 alarm type"] = this.alarmType;
 		}
 		if (this.notificationType != undefined) {
-			message["notification type"] = applHost.configManager
-				.getNotificationName(
-					this.notificationType,
-				);
+			message["notification type"] = getNotificationName(
+				this.notificationType,
+			);
 			if (this.notificationEvent != undefined) {
-				message["notification event"] = applHost.configManager
-					.lookupNotification(this.notificationType)
-					?.events.get(this.notificationEvent)?.label
-					?? `Unknown (${num2hex(this.notificationEvent)})`;
+				message["notification event"] = getNotificationEventName(
+					this.notificationType,
+					this.notificationEvent,
+				);
 			}
 		}
 		return {
@@ -1586,12 +1553,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 				"supports V1 alarm": this.supportsV1Alarm,
 				"supported notification types": this.supportedNotificationTypes
 					.map(
-						(t) =>
-							`\n· ${
-								applHost.configManager.getNotificationName(
-									t,
-								)
-							}`,
+						(t) => `\n· ${getNotificationName(t)}`,
 					)
 					.join(""),
 			},
@@ -1657,11 +1619,9 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		);
 
 		// For each event, predefine the value metadata
-		const notificationConfig = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
+		const notification = getNotification(this.notificationType);
 
-		if (!notificationConfig) {
+		if (!notification) {
 			// This is an unknown notification
 			this.setMetadata(
 				applHost,
@@ -1674,11 +1634,11 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			let isFirst = true;
 			for (const value of this.supportedEvents) {
 				// Find out which property we need to update
-				const valueConfig = notificationConfig.lookupValue(value);
+				const valueConfig = getNotificationValue(notification, value);
 				if (valueConfig?.type === "state") {
 					const notificationValue = NotificationCCValues
 						.notificationVariable(
-							notificationConfig.name,
+							notification.name,
 							valueConfig.variableName,
 						);
 
@@ -1687,7 +1647,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 						isFirst
 							? undefined
 							: this.getMetadata(applHost, notificationValue),
-						notificationConfig,
+						notification,
 						valueConfig,
 					);
 
@@ -1720,21 +1680,18 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const notification = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 				"supported events": this.supportedEvents
 					.map(
 						(e) =>
 							`\n· ${
-								notification?.lookupValue(e)?.label
-									?? `Unknown (${num2hex(e)})`
+								getNotificationValueName(
+									this.notificationType,
+									e,
+								)
 							}`,
 					)
 					.join(""),
@@ -1779,9 +1736,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 			},
 		};
 	}

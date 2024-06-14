@@ -21,7 +21,6 @@ import {
 } from "../controller/Inclusion";
 import { DeviceClass } from "../node/DeviceClass";
 import { InterviewStage } from "../node/_Types";
-import type { Driver } from "./Driver";
 
 /**
  * Defines the keys that are used to store certain properties in the network cache.
@@ -116,10 +115,7 @@ function tryParseInterviewStage(value: unknown): InterviewStage | undefined {
 	}
 }
 
-function tryParseDeviceClass(
-	driver: Driver,
-	value: unknown,
-): DeviceClass | undefined {
+function tryParseDeviceClass(value: unknown): DeviceClass | undefined {
 	if (isObject(value)) {
 		const { basic, generic, specific } = value;
 		if (
@@ -128,7 +124,6 @@ function tryParseDeviceClass(
 			&& typeof specific === "number"
 		) {
 			return new DeviceClass(
-				driver.configManager,
 				basic,
 				generic,
 				specific,
@@ -342,7 +337,6 @@ function tryParseAssociationAddress(
 }
 
 export function deserializeNetworkCacheValue(
-	driver: Driver,
 	key: string,
 	value: unknown,
 ): unknown {
@@ -371,7 +365,7 @@ export function deserializeNetworkCacheValue(
 			throw fail();
 		}
 		case "deviceClass": {
-			value = tryParseDeviceClass(driver, value);
+			value = tryParseDeviceClass(value);
 			if (value) return value;
 			throw fail();
 		}
@@ -462,7 +456,6 @@ export function deserializeNetworkCacheValue(
 }
 
 export function serializeNetworkCacheValue(
-	driver: Driver,
 	key: string,
 	value: unknown,
 ): unknown {
@@ -474,7 +467,7 @@ export function serializeNetworkCacheValue(
 		case "deviceClass": {
 			const deviceClass = value as DeviceClass;
 			return {
-				basic: deviceClass.basic.key,
+				basic: deviceClass.basic,
 				generic: deviceClass.generic.key,
 				specific: deviceClass.specific.key,
 			};
@@ -577,7 +570,6 @@ const legacyPaths = {
 } as const;
 
 export async function migrateLegacyNetworkCache(
-	driver: Driver,
 	homeId: number,
 	networkCache: JsonlDB,
 	valueDB: JsonlDB,
@@ -627,7 +619,7 @@ export async function migrateLegacyNetworkCache(
 				nodeCacheKeys.deviceClass,
 				node,
 				legacyPaths.node.deviceClass,
-				(v) => tryParseDeviceClass(driver, v),
+				(v) => tryParseDeviceClass(v),
 			);
 			tryMigrate(
 				nodeCacheKeys.isListening,
