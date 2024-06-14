@@ -227,17 +227,6 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		watchdog?: boolean;
 	};
 
-	/**
-	 * @deprecated Use `features.softReset` instead.
-	 *
-	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
-	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
-	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
-	 *
-	 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
-	 */
-	enableSoftReset?: boolean;
-
 	preferences: {
 		/**
 		 * The preferred scales to use when querying sensors. The key is either:

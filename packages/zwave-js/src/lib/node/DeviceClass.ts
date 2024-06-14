@@ -1,6 +1,5 @@
 import {
 	BasicDeviceClass,
-	type CommandClasses,
 	type GenericDeviceClass,
 	type SpecificDeviceClass,
 	getGenericDeviceClass,
@@ -25,16 +24,6 @@ export class DeviceClass {
 	public readonly basic: BasicDeviceClass;
 	public readonly generic: GenericDeviceClass;
 	public readonly specific: SpecificDeviceClass;
-
-	/** @deprecated This property is no longer in use and contains no information. */
-	public get mandatorySupportedCCs(): readonly CommandClasses[] {
-		return [];
-	}
-
-	/** @deprecated This property is no longer in use and contains no information. */
-	public get mandatoryControlledCCs(): readonly CommandClasses[] {
-		return [];
-	}
 
 	public toJSON(): JSONObject {
 		return {

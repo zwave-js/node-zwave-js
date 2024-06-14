@@ -595,17 +595,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			cloneDeep(defaultOptions),
 		) as ZWaveOptions;
 
-		// Normalize deprecated options
-		// TODO: Remove test in packages/zwave-js/src/lib/test/driver/sendDataMissingCallbackAbort.test.ts
-		// when the deprecated option is removed
-		if (
-			// eslint-disable-next-line deprecation/deprecation
-			this._options.enableSoftReset === false
-			&& this._options.features.softReset
-		) {
-			this._options.features.softReset = false;
-		}
-
 		// And make sure they contain valid values
 		checkOptions(this._options);
 		if (this._options.userAgent) {
