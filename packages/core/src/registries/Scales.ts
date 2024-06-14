@@ -13,6 +13,11 @@ export interface Scale extends ScaleDefinition {
 
 export type ScaleGroup = Record<number, ScaleDefinition>;
 
+export interface NamedScaleGroup {
+	name: string;
+	scales: Record<number, ScaleDefinition>;
+}
+
 const namedScales = Object.freeze(
 	{
 		temperature: {
@@ -116,6 +121,12 @@ export function getNamedScaleGroup<
 	}
 
 	return scaleGroup;
+}
+
+/** Returns all defined named scale groups */
+export function getAllNamedScaleGroups(): readonly NamedScaleGroup[] {
+	return Object.entries(namedScales)
+		.map(([name, scales]) => ({ name, scales }));
 }
 
 /** Returns a scale definition for a scale with known name and key */
