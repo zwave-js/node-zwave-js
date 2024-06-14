@@ -1369,10 +1369,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		);
 		this._networkCache = new JsonlDB(networkCacheFile, {
 			...options,
-			serializer: (key, value) =>
-				serializeNetworkCacheValue(this, key, value),
-			reviver: (key, value) =>
-				deserializeNetworkCacheValue(this, key, value),
+			serializer: serializeNetworkCacheValue,
+			reviver: deserializeNetworkCacheValue,
 		});
 		await this._networkCache.open();
 
@@ -1431,7 +1429,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 			try {
 				await migrateLegacyNetworkCache(
-					this,
 					this.controller.homeId,
 					this._networkCache,
 					this._valueDB,

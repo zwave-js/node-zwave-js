@@ -32,6 +32,7 @@ import {
 } from "@zwave-js/cc";
 import { type IndicatorObject } from "@zwave-js/cc/IndicatorCC";
 import {
+	BasicDeviceClass,
 	CommandClasses,
 	ControllerStatus,
 	EMPTY_ROUTE,
@@ -2636,7 +2637,6 @@ export class ZWaveController
 			this.setInclusionState(InclusionState.Busy);
 
 			const deviceClass = new DeviceClass(
-				this.driver.configManager,
 				nodeInfo.basicDeviceClass,
 				nodeInfo.genericDeviceClass,
 				nodeInfo.specificDeviceClass,
@@ -2661,11 +2661,20 @@ export class ZWaveController
 			});
 
 			this.driver.controllerLog.print(
-				`Node ${newNode.id} was included by another controller:
-basic device class:    ${newNode.deviceClass?.basic.label}
-generic device class:  ${newNode.deviceClass?.generic.label}
-specific device class: ${newNode.deviceClass?.specific.label}
-supported CCs: ${
+				`Node ${newNode.id} was included by another controller:${
+					newNode.deviceClass
+						? `
+  basic device class:    ${
+							getEnumMemberName(
+								BasicDeviceClass,
+								newNode.deviceClass.basic,
+							)
+						}
+  generic device class:  ${newNode.deviceClass.generic.label}
+  specific device class: ${newNode.deviceClass.specific.label}`
+						: ""
+				}
+  supported CCs: ${
 					nodeInfo.supportedCCs
 						.map((cc) =>
 							`\n  · ${CommandClasses[cc]} (${num2hex(cc)})`
@@ -2884,7 +2893,6 @@ supported CCs: ${
 				// TODO: Check if this stuff works for a normal replace too
 				// eslint-disable-next-line @typescript-eslint/dot-notation
 				newNode["deviceClass"] = new DeviceClass(
-					this.driver.configManager,
 					requestedNodeInfo.basicDeviceClass,
 					requestedNodeInfo.genericDeviceClass,
 					requestedNodeInfo.specificDeviceClass,
@@ -3822,7 +3830,6 @@ supported CCs: ${
 					msg.statusContext!.nodeId,
 					this.driver,
 					new DeviceClass(
-						this.driver.configManager,
 						msg.statusContext!.basicDeviceClass!,
 						msg.statusContext!.genericDeviceClass!,
 						msg.statusContext!.specificDeviceClass!,
@@ -3908,10 +3915,19 @@ supported CCs: ${
 				});
 
 				this.driver.controllerLog.print(
-					`finished adding node ${newNode.id}:
-  basic device class:    ${newNode.deviceClass?.basic.label}
-  generic device class:  ${newNode.deviceClass?.generic.label}
-  specific device class: ${newNode.deviceClass?.specific.label}
+					`finished adding node ${newNode.id}:${
+						newNode.deviceClass
+							? `
+  basic device class:    ${
+								getEnumMemberName(
+									BasicDeviceClass,
+									newNode.deviceClass.basic,
+								)
+							}
+  generic device class:  ${newNode.deviceClass.generic.label}
+  specific device class: ${newNode.deviceClass.specific.label}`
+							: ""
+					}
   supported CCs: ${
 						supportedCCs
 							.map((cc) =>
