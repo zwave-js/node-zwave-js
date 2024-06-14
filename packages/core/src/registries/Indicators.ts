@@ -205,3 +205,9 @@ export function getIndicatorProperty<ID extends number>(
 		...property,
 	} satisfies IndicatorProperty as any;
 }
+
+/** Returns all defined indicator properties */
+export function getAllIndicatorProperties(): readonly IndicatorProperty[] {
+	return Object.entries(indicatorProperties)
+		.map(([id, value]) => ({ id: parseInt(id, 10), ...value }));
+}
