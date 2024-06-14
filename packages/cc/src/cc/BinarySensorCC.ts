@@ -360,7 +360,19 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const binarySensorValue = BinarySensorCCValues.state(this.type);
+		// Workaround for devices reporting with sensor type Any -> find first supported sensor type and use that
+		let sensorType = this.type;
+		if (sensorType === BinarySensorType.Any) {
+			const supportedSensorTypes = this.getValue<BinarySensorType[]>(
+				applHost,
+				BinarySensorCCValues.supportedSensorTypes,
+			);
+			if (supportedSensorTypes?.length) {
+				sensorType = supportedSensorTypes[0];
+			}
+		}
+
+		const binarySensorValue = BinarySensorCCValues.state(sensorType);
 		this.setMetadata(applHost, binarySensorValue, binarySensorValue.meta);
 		this.setValue(applHost, binarySensorValue, this.value);
 
@@ -395,6 +407,8 @@ function testResponseForBinarySensorGet(
 		sent.sensorType == undefined
 		|| sent.sensorType === BinarySensorType.Any
 		|| received.type === sent.sensorType
+		// This is technically not correct, but some devices do this anyways
+		|| received.type === BinarySensorType.Any
 	);
 }
 

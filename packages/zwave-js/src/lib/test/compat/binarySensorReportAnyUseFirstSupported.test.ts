@@ -17,13 +17,9 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"When a node sends a Binary Sensor Report with type 0xFF (Any), use the first supported sensor instead",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
-			manufacturerId: 0xdead,
-			productType: 0xbeef,
-			productId: 0xcafe,
-
 			commandClasses: [
 				CommandClasses.Version,
 				ccCaps({
