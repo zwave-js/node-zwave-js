@@ -28,6 +28,7 @@ import {
 
 import { CommandClasses } from "@zwave-js/core";
 import { BasicCCBehaviors } from "./mockCCBehaviors/Basic";
+import { BinarySensorCCBehaviors } from "./mockCCBehaviors/BinarySensor";
 import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
 import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
@@ -291,6 +292,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToS2ZWavePlusCCGet,
 
 		...BasicCCBehaviors,
+		...BinarySensorCCBehaviors,
 		...ConfigurationCCBehaviors,
 		...EnergyProductionCCBehaviors,
 		...ManufacturerSpecificCCBehaviors,
