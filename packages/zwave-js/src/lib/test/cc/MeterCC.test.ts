@@ -30,12 +30,6 @@ function buildCCBuffer(payload: Buffer): Buffer {
 const host = createTestingHost();
 const node2 = createTestNode(host, { id: 2 });
 
-test.before(async (t) => {
-	// Loading configuration may take a while on CI
-	t.timeout(30000);
-	await host.configManager.loadMeters();
-});
-
 test("the Get command (V1) should serialize correctly", (t) => {
 	const cc = new MeterCCGet(host, { nodeId: 1 });
 	const expected = buildCCBuffer(
