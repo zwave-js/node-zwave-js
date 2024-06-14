@@ -31,7 +31,11 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -908,9 +912,9 @@ export class NotificationCCSet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"notification type": getNotificationName(this.notificationType),
 				status: this.notificationStatus,
@@ -1110,7 +1114,7 @@ export class NotificationCCReport extends NotificationCC {
 
 	public sequenceNumber: number | undefined;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (this.alarmType) {
 			message = {
@@ -1200,7 +1204,7 @@ export class NotificationCCReport extends NotificationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1462,7 +1466,7 @@ export class NotificationCCGet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.alarmType != undefined) {
 			message["V1 alarm type"] = this.alarmType;
@@ -1479,7 +1483,7 @@ export class NotificationCCGet extends NotificationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1546,9 +1550,9 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports V1 alarm": this.supportsV1Alarm,
 				"supported notification types": this.supportedNotificationTypes
@@ -1679,9 +1683,9 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"notification type": getNotificationName(this.notificationType),
 				"supported events": this.supportedEvents
@@ -1732,9 +1736,9 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"notification type": getNotificationName(this.notificationType),
 			},

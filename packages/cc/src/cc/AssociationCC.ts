@@ -13,7 +13,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -516,7 +520,7 @@ export class AssociationCCSet extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds.length
@@ -524,7 +528,7 @@ export class AssociationCCSet extends AssociationCC {
 				: "all nodes",
 		};
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -589,7 +593,7 @@ export class AssociationCCRemove extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds && this.nodeIds.length
@@ -597,7 +601,7 @@ export class AssociationCCRemove extends AssociationCC {
 				: "all nodes",
 		};
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -680,9 +684,9 @@ export class AssociationCCReport extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"group id": this.groupId,
 				"max # of nodes": this.maxNodes,
@@ -727,9 +731,9 @@ export class AssociationCCGet extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -768,9 +772,9 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "group count": this.groupCount },
 		};
 	}
@@ -810,9 +814,9 @@ export class AssociationCCSpecificGroupReport extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { group: this.group },
 		};
 	}

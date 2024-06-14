@@ -13,7 +13,11 @@ import {
 	parseMaybeNumber,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -657,7 +661,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -665,7 +669,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -724,7 +728,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};
@@ -733,7 +737,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -819,7 +823,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			startLevel: `${this.startLevel}${
 				this.ignoreStartLevel ? " (ignored)" : ""
@@ -830,7 +834,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -863,9 +867,9 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		return true;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"switch type": getEnumMemberName(SwitchType, this.switchType),
 			},

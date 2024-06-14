@@ -17,7 +17,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -549,10 +553,10 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -631,10 +635,10 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		return this._value;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -690,9 +694,9 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -724,9 +728,9 @@ export class HumidityControlSetpointCCSupportedReport
 	public readonly supportedSetpointTypes:
 		readonly HumidityControlSetpointType[];
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported setpoint types": this.supportedSetpointTypes
 					.map(
@@ -770,12 +774,12 @@ export class HumidityControlSetpointCCScaleSupportedReport
 
 	public readonly supportedScales: readonly number[];
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const supportedScales = this.supportedScales.map((scale) =>
 			getScale(scale)
 		);
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"scale supported": supportedScales
 					.map((t) => `\n· ${t.key} ${t.unit} - ${t.label}`)
@@ -822,9 +826,9 @@ export class HumidityControlSetpointCCScaleSupportedGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -901,11 +905,11 @@ export class HumidityControlSetpointCCCapabilitiesReport
 		return this._maxValueScale;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const minValueScale = getScale(this.minValueScale);
 		const maxValueScale = getScale(this.maxValueScale);
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -955,9 +959,9 @@ export class HumidityControlSetpointCCCapabilitiesGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,

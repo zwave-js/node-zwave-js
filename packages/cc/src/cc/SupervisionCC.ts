@@ -16,7 +16,11 @@ import {
 	isTransmissionError,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
 import {
@@ -331,7 +335,7 @@ export class SupervisionCCReport extends SupervisionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"session id": this.sessionId,
 			"more updates follow": this.moreUpdatesFollow,
@@ -341,7 +345,7 @@ export class SupervisionCCReport extends SupervisionCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -422,9 +426,9 @@ export class SupervisionCCGet extends SupervisionCC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"session id": this.sessionId,
 				"request updates": this.requestStatusUpdates,
