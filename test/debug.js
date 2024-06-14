@@ -15,9 +15,7 @@ const { ConfigManager } = require("@zwave-js/config");
 
 (async () => {
 	const configManager = new ConfigManager();
-	await configManager.loadManufacturers();
-	await configManager.loadDeviceIndex();
-	await configManager.loadNotifications();
+	await configManager.loadAll();
 
 	// The data to decode
 	const data = Buffer.from(

@@ -190,34 +190,6 @@ interface ConditionalConfigOption {
 }
 ```
 
-### `loadNotifications`
-
-```ts
-loadNotifications(): Promise<void>;
-```
-
-Loads the notifications config which is used to lookup notifications.
-
-### `lookupNotification`
-
-```ts
-lookupNotification(notificationType: number): Notification | undefined;
-```
-
-Looks up the notification definition for a given notification type
-
-> [!NOTE] `loadNotifications` must be used first.
-
-### `getNotificationName`
-
-```ts
-getNotificationName(notificationType: number): string;
-```
-
-Returns the defined label for a given notification type
-
-> [!NOTE] `loadNotifications` must be used first.
-
 ## ConfigManager properties
 
 ### `basicDeviceClasses`

@@ -17,6 +17,7 @@ export * from "./log/shared_safe";
 export * from "./registries/DeviceClasses";
 export * from "./registries/Indicators";
 export * from "./registries/Meters";
+export * from "./registries/Notifications";
 export * from "./registries/Scales";
 export * from "./registries/Sensors";
 export * from "./security/DSK";

@@ -1,7 +1,6 @@
 export * from "./ConfigManager";
 export * from "./Logger_safe";
 export * from "./Manufacturers";
-export * from "./Notifications";
 export * from "./devices/AssociationConfig";
 export * from "./devices/CompatConfig";
 export * from "./devices/DeviceConfig";

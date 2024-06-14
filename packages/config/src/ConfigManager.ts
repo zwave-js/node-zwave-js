@@ -4,10 +4,8 @@ import {
 	ZWaveLogContainer,
 	isZWaveError,
 } from "@zwave-js/core";
-import { type JSONObject, getErrorMessage, num2hex } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile } from "fs-extra";
-import JSON5 from "json5";
+import { getErrorMessage } from "@zwave-js/shared";
+import { pathExists } from "fs-extra";
 import path from "node:path";
 import { ConfigLogger } from "./Logger";
 import {
@@ -15,7 +13,6 @@ import {
 	loadManufacturersInternal,
 	saveManufacturersInternal,
 } from "./Manufacturers";
-import { Notification, type NotificationMap } from "./Notifications";
 import {
 	ConditionalDeviceConfig,
 	type DeviceConfig,
@@ -33,7 +30,6 @@ import {
 	getEmbeddedConfigVersion,
 	syncExternalConfigDir,
 } from "./utils";
-import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
 export interface ConfigManagerOptions {
 	logContainer?: ZWaveLogContainer;
@@ -73,17 +69,6 @@ export class ConfigManager {
 	private index: DeviceConfigIndex | undefined;
 	private fulltextIndex: FulltextDeviceConfigIndex | undefined;
 
-	private _notifications: NotificationMap | undefined;
-	public get notifications(): NotificationMap {
-		if (!this._notifications) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-		return this._notifications;
-	}
-
 	private _useExternalConfig: boolean = false;
 	public get useExternalConfig(): boolean {
 		return this._useExternalConfig;
@@ -107,7 +92,6 @@ export class ConfigManager {
 
 		await this.loadManufacturers();
 		await this.loadDeviceIndex();
-		await this.loadNotifications();
 	}
 
 	public async loadManufacturers(): Promise<void> {
@@ -338,110 +322,5 @@ export class ConfigManager {
 			productId,
 			firmwareVersion,
 		});
-	}
-
-	public async loadNotifications(): Promise<void> {
-		try {
-			this._notifications = await loadNotificationsInternal(
-				this._useExternalConfig,
-			);
-		} catch (e) {
-			// If the config file is missing or invalid, don't try to find it again
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
-				if (process.env.NODE_ENV !== "test") {
-					this.logger.print(
-						`Could not load notifications config: ${e.message}`,
-						"error",
-					);
-				}
-				this._notifications = new Map();
-			} else {
-				// This is an unexpected error
-				throw e;
-			}
-		}
-	}
-
-	/**
-	 * Looks up the notification configuration for a given notification type
-	 */
-	public lookupNotification(
-		notificationType: number,
-	): Notification | undefined {
-		if (!this._notifications) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
-
-		return this._notifications.get(notificationType);
-	}
-
-	/**
-	 * Looks up the notification configuration for a given notification type.
-	 * If the config has not been loaded yet, this returns undefined.
-	 */
-	private lookupNotificationUnsafe(
-		notificationType: number,
-	): Notification | undefined {
-		return this._notifications?.get(notificationType);
-	}
-
-	public getNotificationName(notificationType: number): string {
-		return (
-			this.lookupNotificationUnsafe(notificationType)?.name
-				?? `Unknown (${num2hex(notificationType)})`
-		);
-	}
-}
-
-/** @internal */
-export async function loadNotificationsInternal(
-	externalConfig?: boolean,
-): Promise<NotificationMap> {
-	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"notifications.json",
-	);
-
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig(
-				"notifications",
-				"the database is not an object",
-			);
-		}
-
-		const notifications = new Map();
-		for (const [id, ntfcnDefinition] of Object.entries(definition)) {
-			if (!hexKeyRegexNDigits.test(id)) {
-				throwInvalidConfig(
-					"notifications",
-					`found invalid key "${id}" at the root. Notifications must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const idNum = parseInt(id.slice(2), 16);
-			notifications.set(
-				idNum,
-				new Notification(idNum, ntfcnDefinition as JSONObject),
-			);
-		}
-		return notifications;
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("notifications");
-		}
 	}
 }

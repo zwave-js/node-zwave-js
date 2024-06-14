@@ -29,11 +29,6 @@ import {
 
 const configManager = new ConfigManager();
 
-async function lintNotifications(): Promise<void> {
-	await configManager.loadNotifications();
-	// TODO: Validate that all contents are semantically correct
-}
-
 async function lintManufacturers(): Promise<void> {
 	await configManager.loadManufacturers();
 	// TODO: Validate that the file is semantically correct
@@ -1258,7 +1253,6 @@ export async function lintConfigFiles(): Promise<void> {
 	try {
 		await lintManufacturers();
 		await lintDevices();
-		await lintNotifications();
 
 		console.log();
 		console.log(green("The config files are valid!"));
