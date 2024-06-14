@@ -9,7 +9,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
 	getEnumMemberName,
@@ -418,7 +422,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": this.manufacturerId,
 			"firmware id": this.firmwareId,
@@ -444,7 +448,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 		}
 
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -471,9 +475,9 @@ export class FirmwareUpdateMetaDataCCRequestReport
 
 	public readonly status: FirmwareUpdateRequestStatus;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				status: getEnumMemberName(
 					FirmwareUpdateRequestStatus,
@@ -568,7 +572,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -587,7 +591,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -609,9 +613,9 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	public readonly numReports: number;
 	public readonly reportNumber: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"total # of reports": this.numReports,
 				"report number": this.reportNumber,
@@ -683,9 +687,9 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"report #": this.reportNumber,
 				"is last": this.isLast,
@@ -714,7 +718,7 @@ export class FirmwareUpdateMetaDataCCStatusReport
 	/** The wait time in seconds before the node becomes available for communication after the update */
 	public readonly waitTime?: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			status: getEnumMemberName(FirmwareUpdateStatus, this.status),
 		};
@@ -722,7 +726,7 @@ export class FirmwareUpdateMetaDataCCStatusReport
 			message["wait time"] = `${this.waitTime} seconds`;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -755,7 +759,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 	public readonly activationStatus: FirmwareUpdateActivationStatus;
 	public readonly hardwareVersion?: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -770,7 +774,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 			message.hardwareVersion = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -832,7 +836,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -843,7 +847,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -866,9 +870,9 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 	public readonly status: FirmwareDownloadStatus;
 	public readonly checksum: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				status: getEnumMemberName(FirmwareDownloadStatus, this.status),
 				checksum: num2hex(this.checksum),
@@ -931,9 +935,9 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"manufacturer id": num2hex(this.manufacturerId),
 				"firmware id": num2hex(this.firmwareId),
