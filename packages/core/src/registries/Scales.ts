@@ -125,7 +125,7 @@ export function getNamedScale<
 >(
 	group: Name,
 	key: Key,
-): typeof namedScales[Name][Key] {
+): { key: Key } & (typeof namedScales[Name][Key]) {
 	const scaleGroup = getNamedScaleGroup(group);
 
 	const scaleDef = scaleGroup[key];

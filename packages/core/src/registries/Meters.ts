@@ -121,7 +121,8 @@ const meters = Object.freeze(
 /** Returns the meter definition for the given key */
 export function getMeter<MeterType extends number>(
 	type: MeterType,
-): MeterType extends keyof typeof meters ? typeof meters[MeterType]
+): MeterType extends keyof typeof meters
+	? ({ key: MeterType } & (typeof meters[MeterType]))
 	: (Meter | undefined)
 {
 	const meter: MeterDefinition | undefined = (meters as any)[type];
@@ -148,11 +149,13 @@ export function getMeterScale<
 	scale: ScaleKey,
 ): MeterType extends keyof typeof meters
 	? ScaleKey extends keyof typeof meters[MeterType]["scales"]
-		? typeof meters[MeterType]["scales"][ScaleKey]
+		? ({ key: ScaleKey } & (typeof meters[MeterType]["scales"][ScaleKey]))
 	: (MeterScale | undefined)
 	: (MeterScale | undefined)
 {
 	const meter = getMeter(type);
+	// @ts-expect-error Undefined is valid if the meter is not found
+	if (!meter) return;
 
 	const scaleDef: MeterScaleDefinition | undefined =
 		(meter?.scales as any)[scale];

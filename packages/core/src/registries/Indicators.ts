@@ -191,7 +191,8 @@ const indicatorProperties = Object.freeze(
 /** Returns the indicator property definition for the given id */
 export function getIndicatorProperty<ID extends number>(
 	id: ID,
-): ID extends keyof typeof indicatorProperties ? typeof indicatorProperties[ID]
+): ID extends keyof typeof indicatorProperties
+	? ({ id: ID } & (typeof indicatorProperties[ID]))
 	: (IndicatorProperty | undefined)
 {
 	const property: IndicatorPropertyDefinition | undefined =

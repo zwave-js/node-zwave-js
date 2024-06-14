@@ -762,11 +762,13 @@ export function getSensorScale<
 	scale: ScaleKey,
 ): SensorType extends keyof typeof sensors
 	? ScaleKey extends keyof typeof sensors[SensorType]["scales"]
-		? typeof sensors[SensorType]["scales"][ScaleKey]
+		? ({ key: ScaleKey } & (typeof sensors[SensorType]["scales"][ScaleKey]))
 	: (Scale | undefined)
 	: (Scale | undefined)
 {
 	const sensor = getSensor(type);
+	// @ts-expect-error Undefined is valid if the sensor is not found
+	if (!sensor) return;
 
 	const scaleDef: ScaleDefinition | undefined =
 		(sensor?.scales as any)[scale];

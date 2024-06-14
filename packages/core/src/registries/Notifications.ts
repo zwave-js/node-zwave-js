@@ -1812,7 +1812,7 @@ const notifications = Object.freeze(
 				},
 			],
 		},
-	} as const satisfies Record<number, NotificationDefinition>,
+	} satisfies Record<number, NotificationDefinition>,
 );
 
 /** Returns the notification definition for the given notification type */
@@ -1836,7 +1836,7 @@ export function getNotification(type: number): Notification | undefined {
 			notificationVariableFromDefinition,
 		) ?? [],
 		events,
-	} satisfies Notification as any;
+	};
 }
 
 export function getNotificationName(type: number): string {
