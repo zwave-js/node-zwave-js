@@ -1844,6 +1844,13 @@ export function getNotificationName(type: number): string {
 	return notification?.name ?? `Unknown (${num2hex(type)})`;
 }
 
+/** Returns all defined notifications */
+export function getAllNotifications(): readonly Notification[] {
+	return Object.keys(notifications).map((type) =>
+		getNotification(parseInt(type, 10))!
+	);
+}
+
 /** Returns a notification's event or state with the given value */
 export function getNotificationValue(
 	notification: Notification,

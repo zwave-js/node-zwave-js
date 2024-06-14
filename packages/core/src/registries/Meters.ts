@@ -135,6 +135,12 @@ export function getMeter<MeterType extends number>(
 	} satisfies Meter as any;
 }
 
+/** Returns all meter definitions including their scales */
+export function getAllMeters(): readonly Meter[] {
+	return Object.entries(meters)
+		.map(([key, value]) => ({ key: parseInt(key, 10), ...value }));
+}
+
 export function getMeterName(meterType: number): string {
 	return getMeter(meterType)?.name
 		?? `UNKNOWN (${num2hex(meterType)})`;
@@ -174,4 +180,15 @@ export function getUnknownMeterScale(key: number): MeterScale {
 		key,
 		label: `Unknown (${num2hex(key)})`,
 	};
+}
+
+/** Returns all scales of a given meter */
+export function getAllMeterScales(
+	meterType: number,
+): readonly MeterScale[] | undefined {
+	const meter = getMeter(meterType);
+	if (!meter) return;
+
+	return Object.entries(meter.scales)
+		.map(([key, value]) => ({ key: parseInt(key, 10), ...value }));
 }
