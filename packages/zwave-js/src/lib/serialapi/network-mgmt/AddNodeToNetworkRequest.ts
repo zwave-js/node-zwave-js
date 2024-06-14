@@ -326,7 +326,7 @@ export class AddNodeToNetworkRequestStatusReport
 	}
 }
 
-interface AddNodeStatusContext {
+export interface AddNodeStatusContext {
 	nodeId: number;
 	basicDeviceClass?: BasicDeviceClass;
 	genericDeviceClass?: number;

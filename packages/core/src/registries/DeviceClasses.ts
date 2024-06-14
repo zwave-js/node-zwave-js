@@ -7,7 +7,7 @@ export enum BasicDeviceClass {
 	"Routing End Node" = 0x04,
 }
 
-export interface GenericDeviceClassDefinition {
+interface GenericDeviceClassDefinition {
 	readonly label: string;
 	readonly zwavePlusDeviceType?: string;
 	readonly requiresSecurity?: boolean;
@@ -15,7 +15,7 @@ export interface GenericDeviceClassDefinition {
 	readonly specific: Record<number, SpecificDeviceClassDefinition>;
 }
 
-export interface SpecificDeviceClassDefinition {
+interface SpecificDeviceClassDefinition {
 	readonly label: string;
 	readonly zwavePlusDeviceType?: string;
 	readonly requiresSecurity?: boolean;
@@ -490,7 +490,7 @@ export function getGenericDeviceClass(generic: number): GenericDeviceClass {
 	};
 }
 
-export function getUnknownGenericDeviceClass(key: number): GenericDeviceClass {
+function getUnknownGenericDeviceClass(key: number): GenericDeviceClass {
 	return {
 		key,
 		label: `UNKNOWN (${num2hex(key)})`,
@@ -528,7 +528,7 @@ export function getSpecificDeviceClass(
 	};
 }
 
-export function getUnknownSpecificDeviceClass(
+function getUnknownSpecificDeviceClass(
 	genericClass: GenericDeviceClassDefinition,
 	specific: number,
 ): SpecificDeviceClass {
