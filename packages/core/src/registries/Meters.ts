@@ -154,7 +154,8 @@ export function getMeterScale<
 {
 	const meter = getMeter(type);
 
-	const scaleDef: MeterScaleDefinition | undefined = (meter as any)?.[scale];
+	const scaleDef: MeterScaleDefinition | undefined =
+		(meter?.scales as any)[scale];
 	// @ts-expect-error Undefined is valid if the scale is not found
 	if (!scaleDef) return;
 

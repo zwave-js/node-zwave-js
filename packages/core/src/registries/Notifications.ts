@@ -1851,7 +1851,7 @@ export function getNotificationValue(
 ): NotificationValue | undefined {
 	return (
 		notification.events.get(value)
-			?? notification.variables?.find((v) => value in v.states)
+			?? notification.variables?.find((v) => v.states.has(value))
 				?.states.get(value)
 	);
 }
