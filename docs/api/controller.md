@@ -1361,10 +1361,10 @@ The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.o
 
 ### `"inclusion started"`
 
-The process to include a node into the network was started successfully. The event handler takes a parameter which tells you whether the inclusion should be secure or not:
+The process to include a node into the network was started successfully. The event handler has a parameter which indicates which inclusion strategy is used to include the node, and which can also be used to determine whether the inclusion is supposed to be secure.
 
 ```ts
-(secure: boolean) => void
+(strategy: InclusionStrategy) => void
 ```
 
 > [!NOTE]
