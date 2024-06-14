@@ -33,6 +33,28 @@ export interface NotificationCCCapabilities {
 	notificationTypesAndEvents: Record<number, number[]>;
 }
 
+export interface MeterCCCapabilities {
+	meterType: number;
+	supportedScales: number[];
+	supportedRateTypes: number[];
+	supportsReset: boolean;
+	getValue?: (
+		scale: number,
+		rateType: number,
+	) => number | {
+		value: number;
+		deltaTime: number;
+		prevValue?: number;
+	} | undefined;
+	onReset?: (
+		options?: {
+			scale: number;
+			rateType: number;
+			targetValue: number;
+		},
+	) => void;
+}
+
 export interface MultilevelSensorCCCapabilities {
 	sensors: Record<number, {
 		supportedScales: number[];
@@ -129,6 +151,7 @@ export type CCSpecificCapabilities = {
 	[67 /* Thermostat Setpoint */]: ThermostatSetpointCCCapabilities;
 	[99 /* User Code */]: UserCodeCCCapabilities;
 	[78 /* Schedule Entry Lock */]: ScheduleEntryLockCCCapabilities;
+	[CommandClasses.Meter]: MeterCCCapabilities;
 };
 
 export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> =

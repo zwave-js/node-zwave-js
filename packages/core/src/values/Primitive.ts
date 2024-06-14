@@ -182,11 +182,16 @@ export function getIntegerLimits(
 	return (IntegerLimits as any)[`${signed ? "" : "U"}Int${size * 8}`];
 }
 
-export function getFloatParameters(value: number): {
+export interface FloatParameters {
 	precision: number;
 	size: number;
+}
+
+export interface FloatParametersWithValue extends FloatParameters {
 	roundedValue: number;
-} {
+}
+
+export function getFloatParameters(value: number): FloatParametersWithValue {
 	const precision = Math.min(getPrecision(value), 7);
 	value = Math.round(value * Math.pow(10, precision));
 	const size: number | undefined = getMinIntegerSize(value, true);
