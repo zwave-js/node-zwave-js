@@ -1,9 +1,9 @@
-import type { ConfigManager, Scale } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
+	type Scale,
 	type SupervisionResult,
 	ValueMetadata,
 	type ValueMetadataNumeric,
@@ -11,6 +11,8 @@ import {
 	ZWaveErrorCodes,
 	encodeBitMask,
 	encodeFloatWithScale,
+	getNamedScaleGroup,
+	getUnknownScale,
 	parseBitMask,
 	parseFloatWithScale,
 	supervisedCommandSucceeded,
@@ -67,12 +69,12 @@ const thermostatSetpointTypeMap = [
 	0x0f,
 ];
 
-const thermostatSetpointScaleName = "temperature";
-function getScale(configManager: ConfigManager, scale: number): Scale {
-	return configManager.lookupNamedScale(thermostatSetpointScaleName, scale);
+const temperatureScale = getNamedScaleGroup("temperature");
+function getScale(scale: number): Scale {
+	return (temperatureScale as any)[scale] ?? getUnknownScale(scale);
 }
-function getSetpointUnit(configManager: ConfigManager, scale: number): string {
-	return getScale(configManager, scale).unit ?? "";
+function getSetpointUnit(scale: number): string {
+	return getScale(scale).unit ?? "";
 }
 
 export const ThermostatSetpointCCValues = Object.freeze({
@@ -231,7 +233,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		if (!response) return;
 		if (response.type !== ThermostatSetpointType["N/A"]) {
 			// This is a supported setpoint
-			const scale = getScale(this.applHost.configManager, response.scale);
+			const scale = getScale(response.scale);
 			return {
 				value: response.value,
 				scale,
@@ -531,11 +533,9 @@ export class ThermostatSetpointCC extends CommandClass {
 				const setpointCaps = await api.getCapabilities(type);
 				if (setpointCaps) {
 					const minValueUnit = getSetpointUnit(
-						applHost.configManager,
 						setpointCaps.minValueScale,
 					);
 					const maxValueUnit = getSetpointUnit(
-						applHost.configManager,
 						setpointCaps.maxValueScale,
 					);
 					const logMessage =
@@ -652,7 +652,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const scale = getScale(applHost.configManager, this.scale);
+		const scale = getScale(this.scale);
 		return {
 			...super.toLogEntry(applHost),
 			message: {
@@ -709,7 +709,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const scale = getScale(applHost.configManager, this.scale);
+		const scale = getScale(this.scale);
 
 		const setpointValue = ThermostatSetpointCCValues.setpoint(this.type);
 		const existingMetadata = this.getMetadata<ValueMetadataNumeric>(
@@ -748,7 +748,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const scale = getScale(applHost.configManager, this.scale);
+		const scale = getScale(this.scale);
 		return {
 			...super.toLogEntry(applHost),
 			message: {
@@ -869,8 +869,8 @@ export class ThermostatSetpointCCCapabilitiesReport
 			...setpointValue.meta,
 			min: this.minValue,
 			max: this.maxValue,
-			unit: getSetpointUnit(applHost.configManager, this.minValueScale)
-				|| getSetpointUnit(applHost.configManager, this.maxValueScale),
+			unit: getSetpointUnit(this.minValueScale)
+				|| getSetpointUnit(this.maxValueScale),
 		});
 
 		return true;
@@ -890,14 +890,8 @@ export class ThermostatSetpointCCCapabilitiesReport
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const minValueScale = getScale(
-			applHost.configManager,
-			this.minValueScale,
-		);
-		const maxValueScale = getScale(
-			applHost.configManager,
-			this.maxValueScale,
-		);
+		const minValueScale = getScale(this.minValueScale);
+		const maxValueScale = getScale(this.maxValueScale);
 		return {
 			...super.toLogEntry(applHost),
 			message: {

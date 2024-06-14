@@ -1,17 +1,20 @@
-import type { GenericDeviceClass, SpecificDeviceClass } from "@zwave-js/config";
 import {
 	type ApplicationNodeInformation,
 	CommandClasses,
+	type GenericDeviceClass,
 	type IZWaveNode,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type SpecificDeviceClass,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeApplicationNodeInformation,
 	encodeBitMask,
 	getCCName,
+	getGenericDeviceClass,
+	getSpecificDeviceClass,
 	parseApplicationNodeInformation,
 	parseBitMask,
 	validatePayload,
@@ -248,15 +251,13 @@ export class MultiChannelCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
-			const generic = this.applHost.configManager
-				.lookupGenericDeviceClass(
-					response.genericDeviceClass,
-				);
-			const specific = this.applHost.configManager
-				.lookupSpecificDeviceClass(
-					response.genericDeviceClass,
-					response.specificDeviceClass,
-				);
+			const generic = getGenericDeviceClass(
+				response.genericDeviceClass,
+			);
+			const specific = getSpecificDeviceClass(
+				response.genericDeviceClass,
+				response.specificDeviceClass,
+			);
 			return {
 				isDynamic: response.isDynamic,
 				wasRemoved: response.wasRemoved,
@@ -968,19 +969,17 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const generic = applHost.configManager.lookupGenericDeviceClass(
-			this.genericDeviceClass,
-		);
-		const specific = applHost.configManager.lookupSpecificDeviceClass(
-			this.genericDeviceClass,
-			this.specificDeviceClass,
-		);
 		return {
 			...super.toLogEntry(applHost),
 			message: {
 				"endpoint index": this.endpointIndex,
-				"generic device class": generic.label,
-				"specific device class": specific.label,
+				"generic device class": getGenericDeviceClass(
+					this.genericDeviceClass,
+				).label,
+				"specific device class": getSpecificDeviceClass(
+					this.genericDeviceClass,
+					this.specificDeviceClass,
+				).label,
 				"is dynamic end point": this.isDynamic,
 				"supported CCs": this.supportedCCs
 					.map((cc) => `\n· ${getCCName(cc)}`)
@@ -1120,15 +1119,13 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"generic device class":
-					applHost.configManager.lookupGenericDeviceClass(
-						this.genericClass,
-					).label,
-				"specific device class":
-					applHost.configManager.lookupSpecificDeviceClass(
-						this.genericClass,
-						this.specificClass,
-					).label,
+				"generic device class": getGenericDeviceClass(
+					this.genericClass,
+				).label,
+				"specific device class": getSpecificDeviceClass(
+					this.genericClass,
+					this.specificClass,
+				).label,
 				"found endpoints": this.foundEndpoints.join(", "),
 				"# of reports to follow": this.reportsToFollow,
 			},
@@ -1175,14 +1172,11 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 			...super.toLogEntry(applHost),
 			message: {
 				"generic device class":
-					applHost.configManager.lookupGenericDeviceClass(
-						this.genericClass,
-					).label,
-				"specific device class":
-					applHost.configManager.lookupSpecificDeviceClass(
-						this.genericClass,
-						this.specificClass,
-					).label,
+					getGenericDeviceClass(this.genericClass).label,
+				"specific device class": getSpecificDeviceClass(
+					this.genericClass,
+					this.specificClass,
+				).label,
 			},
 		};
 	}

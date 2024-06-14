@@ -150,13 +150,9 @@ import {
 	SetValueStatus,
 	supervisionResultToSetValueResult,
 } from "@zwave-js/cc/safe";
+import { type DeviceConfig, embeddedDevicesDir } from "@zwave-js/config";
 import {
-	type DeviceConfig,
-	type Notification,
-	type NotificationValueDefinition,
-	embeddedDevicesDir,
-} from "@zwave-js/config";
-import {
+	BasicDeviceClass,
 	CRC16_CCITT,
 	CacheBackedMap,
 	CommandClasses,
@@ -172,6 +168,8 @@ import {
 	NOT_KNOWN,
 	NodeType,
 	type NodeUpdatePayload,
+	type Notification,
+	type NotificationState,
 	ProtocolVersion,
 	Protocols,
 	type RSSI,
@@ -201,6 +199,8 @@ import {
 	encapsulationCCs,
 	getCCName,
 	getDSTInfo,
+	getNotification,
+	getNotificationValue,
 	isLongRangeNodeId,
 	isRssiError,
 	isSupervisionResult,
@@ -1499,8 +1499,7 @@ export class ZWaveNode extends Endpoint
 		);
 		if (deviceClass && this.deviceClass) {
 			return new DeviceClass(
-				this.driver.configManager,
-				this.deviceClass.basic.key,
+				this.deviceClass.basic,
 				deviceClass.generic,
 				deviceClass.specific,
 			);
@@ -1922,14 +1921,15 @@ export class ZWaveNode extends Endpoint
 		this.supportsBeaming = resp.supportsBeaming;
 
 		this.deviceClass = new DeviceClass(
-			this.driver.configManager,
 			resp.basicDeviceClass,
 			resp.genericDeviceClass,
 			resp.specificDeviceClass,
 		);
 
 		const logMessage = `received response for protocol info:
-basic device class:    ${this.deviceClass.basic.label}
+basic device class:    ${
+			getEnumMemberName(BasicDeviceClass, this.deviceClass.basic)
+		}
 generic device class:  ${this.deviceClass.generic.label}
 specific device class: ${this.deviceClass.specific.label}
 node type:             ${getEnumMemberName(NodeType, this.nodeType)}
@@ -4893,8 +4893,8 @@ protocol version:      ${this.protocolVersion}`;
 	// Instead of defining useless values for each possible notification event, we build the metadata on demand
 	private extendNotificationValueMetadata(
 		valueId: ValueID,
-		notificationConfig: Notification,
-		valueConfig: NotificationValueDefinition & { type: "state" },
+		notification: Notification,
+		valueConfig: NotificationState,
 	) {
 		const ccVersion = this.driver.getSupportedCCVersion(
 			CommandClasses.Notification,
@@ -4906,7 +4906,7 @@ protocol version:      ${this.protocolVersion}`;
 				this.valueDB.getMetadata(valueId) as
 					| ValueMetadataNumeric
 					| undefined,
-				notificationConfig,
+				notification,
 				valueConfig,
 			);
 			this.valueDB.setMetadata(valueId, metadata);
@@ -4951,13 +4951,11 @@ protocol version:      ${this.protocolVersion}`;
 			return;
 		}
 
-		const notificationConfig = this.driver.configManager.lookupNotification(
-			notificationType,
-		);
-		if (!notificationConfig) return;
+		const notification = getNotification(notificationType);
+		if (!notification) return;
 
 		return this.manuallyIdleNotificationValueInternal(
-			notificationConfig,
+			notification,
 			prevValue!,
 			endpointIndex,
 		);
@@ -4965,17 +4963,17 @@ protocol version:      ${this.protocolVersion}`;
 
 	/** Manually resets a single notification value to idle */
 	private manuallyIdleNotificationValueInternal(
-		notificationConfig: Notification,
+		notification: Notification,
 		prevValue: number,
 		endpointIndex: number,
 	): void {
-		const valueConfig = notificationConfig.lookupValue(prevValue);
+		const valueConfig = getNotificationValue(notification, prevValue);
 		// Only known variables may be reset to idle
 		if (!valueConfig || valueConfig.type !== "state") return;
 		// Some properties may not be reset to idle
 		if (!valueConfig.idle) return;
 
-		const notificationName = notificationConfig.name;
+		const notificationName = notification.name;
 		const variableName = valueConfig.variableName;
 		const valueId = NotificationCCValues.notificationVariable(
 			notificationName,
@@ -4989,7 +4987,7 @@ protocol version:      ${this.protocolVersion}`;
 		this.clearNotificationIdleReset(valueId);
 		this.extendNotificationValueMetadata(
 			valueId,
-			notificationConfig,
+			notification,
 			valueConfig,
 		);
 		this.valueDB.setValue(valueId, 0 /* idle */);
@@ -5014,13 +5012,11 @@ protocol version:      ${this.protocolVersion}`;
 		}
 
 		// Look up the received notification in the config
-		const notificationConfig = this.driver.configManager.lookupNotification(
-			command.notificationType,
-		);
+		const notification = getNotification(command.notificationType);
 
-		if (notificationConfig) {
+		if (notification) {
 			// This is a known notification (status or event)
-			const notificationName = notificationConfig.name;
+			const notificationName = notification.name;
 
 			this.driver.controllerLog.logNode(this.id, {
 				message:
@@ -5031,7 +5027,7 @@ protocol version:      ${this.protocolVersion}`;
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
 				this.manuallyIdleNotificationValueInternal(
-					notificationConfig,
+					notification,
 					prevValue,
 					command.endpointIndex,
 				);
@@ -5065,7 +5061,7 @@ protocol version:      ${this.protocolVersion}`;
 			}
 
 			// Find out which property we need to update
-			const valueConfig = notificationConfig.lookupValue(value);
+			const valueConfig = getNotificationValue(notification, value);
 
 			if (valueConfig) {
 				this.driver.controllerLog.logNode(this.id, {
@@ -5107,7 +5103,7 @@ protocol version:      ${this.protocolVersion}`;
 					{
 						type: command.notificationType,
 						event: value,
-						label: notificationConfig.name,
+						label: notification.name,
 						eventLabel: valueConfig.label,
 						parameters: command.eventParameters,
 					},
@@ -5132,7 +5128,7 @@ protocol version:      ${this.protocolVersion}`;
 
 				this.extendNotificationValueMetadata(
 					valueId,
-					notificationConfig,
+					notification,
 					valueConfig,
 				);
 			} else {
@@ -5156,7 +5152,7 @@ protocol version:      ${this.protocolVersion}`;
 				// from states without enum values
 				const enumBehavior = valueConfig
 					? getNotificationEnumBehavior(
-						notificationConfig,
+						notification,
 						valueConfig,
 					)
 					: "extend";
