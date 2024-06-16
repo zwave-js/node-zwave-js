@@ -4,6 +4,11 @@ import {
 	type ConfigValueFormat,
 } from "@zwave-js/core";
 
+export interface BinarySensorCCCapabilities {
+	supportedSensorTypes: number[];
+	getValue?: (sensorType: number | undefined) => boolean | undefined;
+}
+
 export interface ConfigurationCCCapabilities {
 	// We don't have bulk support implemented in the mocks
 	bulkSupport?: false;
@@ -115,6 +120,7 @@ export interface ScheduleEntryLockCCCapabilities {
 export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
+	[48 /* Binary Sensor */]: BinarySensorCCCapabilities;
 	[49 /* Multilevel Sensor */]: MultilevelSensorCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
 	[106 /* Window Covering */]: WindowCoveringCCCapabilities;

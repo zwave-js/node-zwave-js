@@ -85,6 +85,7 @@ export {
 export type {
 	BinarySensorCCGetOptions,
 	BinarySensorCCReportOptions,
+	BinarySensorCCSupportedReportOptions,
 } from "./BinarySensorCC";
 export {
 	BinarySensorCC,
