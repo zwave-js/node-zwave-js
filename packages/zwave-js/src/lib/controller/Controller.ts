@@ -1,6 +1,7 @@
 import {
 	type AssociationAddress,
 	AssociationCC,
+	type AssociationCheckResult,
 	type AssociationGroup,
 	ECDHProfiles,
 	FLiRS2WakeUpTime,
@@ -5818,15 +5819,15 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Checks if a given association is allowed.
 	 */
-	public isAssociationAllowed(
+	public checkAssociation(
 		source: AssociationAddress,
 		group: number,
 		destination: AssociationAddress,
-	): boolean {
+	): AssociationCheckResult {
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
-		return ccUtils.isAssociationAllowed(
+		return ccUtils.checkAssociation(
 			this.driver,
 			endpoint,
 			group,
