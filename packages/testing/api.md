@@ -19,6 +19,16 @@ import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
 
+// Warning: (ae-missing-release-tag) "BinarySensorCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BinarySensorCCCapabilities {
+    // (undocumented)
+    getValue?: (sensorType: number | undefined) => boolean | undefined;
+    // (undocumented)
+    supportedSensorTypes: number[];
+}
+
 // Warning: (ae-missing-release-tag) "ccCaps" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -35,6 +45,7 @@ export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> = T ex
 export type CCSpecificCapabilities = {
     [CommandClasses.Configuration]: ConfigurationCCCapabilities;
     [CommandClasses.Notification]: NotificationCCCapabilities;
+    [48]: BinarySensorCCCapabilities;
     [49]: MultilevelSensorCCCapabilities;
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
@@ -101,6 +112,21 @@ export interface EnergyProductionCCCapabilities {
         };
     };
 }
+
+// Warning: (ae-forgotten-export) The symbol "MockEndpointCapabilities" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "getDefaultMockEndpointCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getDefaultMockEndpointCapabilities(nodeCaps: {
+    genericDeviceClass: number;
+    specificDeviceClass: number;
+}): MockEndpointCapabilities;
+
+// Warning: (ae-forgotten-export) The symbol "MockNodeCapabilities" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "getDefaultMockNodeCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getDefaultMockNodeCapabilities(): MockNodeCapabilities;
 
 // Warning: (ae-missing-release-tag) "getDefaultSupportedFunctionTypes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -209,8 +235,6 @@ export interface MockControllerOptions {
 export class MockEndpoint {
     constructor(options: MockEndpointOptions);
     addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void;
-    // Warning: (ae-forgotten-export) The symbol "MockEndpointCapabilities" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     readonly capabilities: MockEndpointCapabilities;
     // (undocumented)
@@ -252,8 +276,6 @@ export class MockNode {
         errorMessage?: string;
     }): void;
     autoAckControllerFrames: boolean;
-    // Warning: (ae-forgotten-export) The symbol "MockNodeCapabilities" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     readonly capabilities: MockNodeCapabilities;
     clearReceivedControllerFrames(): void;

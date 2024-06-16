@@ -151,8 +151,6 @@ export interface CacheMetadata extends Pick<ValueID, "endpoint" | "property" | "
 //
 // @public (undocumented)
 export interface CacheValue extends Pick<ValueID, "endpoint" | "property" | "propertyKey"> {
-    // Warning: (ae-forgotten-export) The symbol "SerializedValue" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     value: SerializedValue;
 }
@@ -2274,6 +2272,11 @@ export enum SecurityClass {
     Temporary = -2
 }
 
+// Warning: (ae-missing-release-tag) "securityClassIsLongRange" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function securityClassIsLongRange(secClass: SecurityClass | undefined): secClass is S2SecurityClass;
+
 // Warning: (ae-missing-release-tag) "securityClassIsS2" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -2456,6 +2459,11 @@ export type SerializableTXReport = Partial<Omit<TXReport, "numRepeaters">> & Pic
 //
 // @public
 export function serializeCacheValue(value: unknown): SerializedValue;
+
+// Warning: (ae-missing-release-tag) "SerializedValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SerializedValue = number | string | boolean | JSONObject | undefined;
 
 // Warning: (ae-missing-release-tag) "SetNonceOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

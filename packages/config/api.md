@@ -160,6 +160,8 @@ export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
     // (undocumented)
     readonly disableStrictMeasurementValidation?: boolean;
     // (undocumented)
+    readonly encodeCCsUsingTargetVersion?: boolean;
+    // (undocumented)
     evaluateCondition(deviceId?: DeviceID): CompatConfig | undefined;
     // (undocumented)
     readonly forceNotificationIdleReset?: boolean;
