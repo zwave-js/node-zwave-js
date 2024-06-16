@@ -392,10 +392,17 @@ export async function addAssociations(
 
 	// Disallow associating a node with itself. This is technically checked as part of
 	// checkAssociations, but here we provide a better error message.
-	if (destinations.some((d) => d.nodeId === endpoint.nodeId)) {
+	const selfAssociations = destinations.filter((d) =>
+		d.nodeId === endpoint.nodeId
+	);
+	if (selfAssociations.length > 0) {
 		throw new ZWaveError(
 			`Associating a node with itself is not allowed!`,
 			ZWaveErrorCodes.AssociationCC_NotAllowed,
+			selfAssociations.map((a) => ({
+				...a,
+				checkResult: AssociationCheckResult.Forbidden_SelfAssociation,
+			})),
 		);
 	}
 
