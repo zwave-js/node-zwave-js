@@ -5852,6 +5852,8 @@ ${associatedNodes.join(", ")}`,
 			destinations,
 		);
 
+		if (isLongRangeNodeId(source.nodeId)) return;
+
 		// Nodes need a return route to be able to send commands to other nodes
 		const destinationNodeIDs = distinct(
 			destinations.map((d) => d.nodeId),
