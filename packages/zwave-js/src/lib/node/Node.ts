@@ -7470,7 +7470,9 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 						"propertyKey",
 					]),
 					metadata,
-					value: serializeCacheValue(value),
+					value: metadata?.secret
+						? "(redacted)"
+						: serializeCacheValue(value),
 					timestamp: timestampAsDate,
 				};
 				if (isInternalValue) valueDump.internal = true;
