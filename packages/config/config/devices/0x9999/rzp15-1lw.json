@@ -1,0 +1,18 @@
+// TODO: This file contains a placeholder for a productType, productID, or manufacturerId (0x9999) that must be corrected.
+{
+	"manufacturerId": "0x9999",
+	"label": "RZP15-1LW",
+	"description": "- Scene Capable Plug-In Appliance Module",
+	"devices": [
+		{
+			"productType": "0x9999",
+			"productId": "0x9999",
+			"zwaveAllianceId": 517
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {}
+}
