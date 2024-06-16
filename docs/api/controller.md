@@ -696,7 +696,7 @@ getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<
 	ReadonlyMap<number, readonly AssociationAddress[]>
 >;
 
-isAssociationAllowed(source: AssociationAddress, group: number, destination: AssociationAddress): boolean;
+checkAssociation(source: AssociationAddress, group: number, destination: AssociationAddress): AssociationCheckResult;
 
 addAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
 
@@ -708,7 +708,7 @@ removeNodeFromAllAssociations(nodeId: number): Promise<void>;
 - `getAllAssociationGroups` returns all association groups of a given **node and all its endpoints**. The returned `Map` uses the endpoint index as keys and its values are `Map`s of group IDs to their definition
 - `getAssociations` returns all defined associations of a given node **or** endpoint. If no endpoint is given, the associations for the root endpoint (`0`) are returned.
 - `getAllAssociations` returns all defined associations of a given **node and all its endpoints**. The returned `Map` uses the source node+endpoint as keys and its values are `Map`s of association group IDs to target node+endpoint.
-- `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
+- `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `checkAssociation` before doing so.
 - To remove a previously added association, use `removeAssociations`
 - A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`
 
@@ -751,6 +751,30 @@ interface AssociationAddress {
 If the target endpoint is not given, the association is a "node association". If an endpoint is given, the association is an "endpoint association".
 
 A target endpoint of `0` (i.e. the root endpoint), the association targets the node itself and acts like a node association for the target node. However, you should note that some devices don't like having a root endpoint association as the lifeline and must be configured with a node association.
+
+#### `AssociationCheckResult` enum
+
+This tells you whether an association is allowed, and if not, why:
+
+<!-- #import AssociationCheckResult from "zwave-js" -->
+
+```ts
+enum AssociationCheckResult {
+	OK = 1,
+	/** The association is forbidden, because the destination is a ZWLR node. ZWLR does not support direct communication between end devices. */
+	Forbidden_DestinationIsLongRange = 2,
+	/** The association is forbidden, because the source is a ZWLR node. ZWLR does not support direct communication between end devices. */
+	Forbidden_SourceIsLongRange = 3,
+	/** The association is forbidden, because a node cannot be associated with itself. */
+	Forbidden_SelfAssociation = 4,
+	/** The association is forbidden, because the source node's CC versions require the source and destination node to have the same (highest) security class. */
+	Forbidden_SecurityClassMismatch = 5,
+	/** The association is forbidden, because the source node's CC versions require the source node to have the key for the destination node's highest security class. */
+	Forbidden_DestinationSecurityClassNotGranted = 6,
+	/** The association is forbidden, because none of the CCs the source node sends are supported by the destination. */
+	Forbidden_NoSupportedCCs = 7,
+}
+```
 
 ### Controlling multiple nodes at once (multicast / broadcast)
 
