@@ -4744,34 +4744,39 @@ supported CCs: ${
 				/* ignore */
 			}
 
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `assigning return routes to the following nodes:
+			if (associatedNodes.length > 0) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `assigning return routes to the following nodes:
 ${associatedNodes.join(", ")}`,
-				direction: "outbound",
-			});
-			for (const destinationNodeId of associatedNodes) {
-				for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-					this.driver.controllerLog.logNode(nodeId, {
-						message:
-							`assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
-						direction: "outbound",
-					});
-
-					if (
-						await this.assignReturnRoutes(nodeId, destinationNodeId)
-					) {
-						// this step was successful, continue with the next
-						break;
-					}
-
-					if (attempt === maxAttempts) {
+					direction: "outbound",
+				});
+				for (const destinationNodeId of associatedNodes) {
+					for (let attempt = 1; attempt <= maxAttempts; attempt++) {
 						this.driver.controllerLog.logNode(nodeId, {
 							message:
-								`rebuilding routes failed: failed to assign return route after ${maxAttempts} attempts`,
-							level: "warn",
-							direction: "none",
+								`assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
+							direction: "outbound",
 						});
-						return false;
+
+						if (
+							await this.assignReturnRoutes(
+								nodeId,
+								destinationNodeId,
+							)
+						) {
+							// this step was successful, continue with the next
+							break;
+						}
+
+						if (attempt === maxAttempts) {
+							this.driver.controllerLog.logNode(nodeId, {
+								message:
+									`rebuilding routes failed: failed to assign return route after ${maxAttempts} attempts`,
+								level: "warn",
+								direction: "none",
+							});
+							return false;
+						}
 					}
 				}
 			}
