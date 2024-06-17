@@ -62,6 +62,9 @@ export enum ZWaveErrorCodes {
 	/** Tried to send a message that is too large */
 	Controller_MessageTooLarge,
 
+	/** Tried to perform an action for a Long Range node that does not make sense for ZWLR */
+	Controller_NotSupportedForLongRange,
+
 	/** Could not fetch some information to determine firmware upgrades from a node */
 	FWUpdateService_MissingInformation = 260,
 	/** Any error related to HTTP requests during firmware update communication */

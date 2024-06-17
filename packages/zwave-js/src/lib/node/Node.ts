@@ -6460,9 +6460,10 @@ protocol version:      ${this.protocolVersion}`;
 			if (latency > 100) return 5;
 			if (minPowerlevel < Powerlevel["-6 dBm"] || snrMargin < 17) {
 				// Lower powerlevel reductions (= higher power) have lower numeric values
+				if (numNeighbors == undefined) return 7; // ZWLR has no neighbors
 				return numNeighbors > 2 ? 7 : 6;
 			}
-			if (numNeighbors <= 2) return 8;
+			if (numNeighbors != undefined && numNeighbors <= 2) return 8; // ZWLR has no neighbors
 			if (latency > 50) return 9;
 			return 10;
 		};
@@ -6509,10 +6510,14 @@ protocol version:      ${this.protocolVersion}`;
 		for (let round = 1; round <= rounds; round++) {
 			if (this._healthCheckAborted) return aborted();
 
-			// Determine the number of repeating neighbors
-			const numNeighbors = (
-				await this.driver.controller.getNodeNeighbors(this.id, true)
-			).length;
+			// Determine the number of repeating neighbors for Z-Wave Classic
+			let numNeighbors: number | undefined;
+			if (this.protocol === Protocols.ZWave) {
+				numNeighbors = (await this.driver.controller.getNodeNeighbors(
+					this.id,
+					true,
+				)).length;
+			}
 
 			// Ping the node 10x, measuring the RSSI
 			let txReport: TXReport | undefined;
@@ -6764,6 +6769,19 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 		) => void,
 	): Promise<RouteHealthCheckSummary> {
 		const otherNode = this.driver.controller.nodes.getOrThrow(targetNodeId);
+
+		if (this.protocol === Protocols.ZWaveLongRange) {
+			throw new ZWaveError(
+				`Cannot perform route health check for Long Range node ${this.id}.`,
+				ZWaveErrorCodes.Controller_NotSupportedForLongRange,
+			);
+		} else if (otherNode.protocol === Protocols.ZWaveLongRange) {
+			throw new ZWaveError(
+				`Cannot perform route health check for Long Range node ${otherNode.id}.`,
+				ZWaveErrorCodes.Controller_NotSupportedForLongRange,
+			);
+		}
+
 		if (otherNode.canSleep) {
 			throw new ZWaveError(
 				"Nodes which can sleep are not a valid target for a route health check!",
