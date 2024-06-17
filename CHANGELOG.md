@@ -4,6 +4,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Add compat flag to always encode Set-type commands using target node's CC version (#6918)
+* Export `NodeDump` type (#6915)
+* Redact secret values in `NodeDump` (#6934)
+* Added a workaround for devices that incorrectly send their `Binary Sensor Reports` using the sensor type `Any (0xff)`. Those reports are now interpreted as if they were using the first supported sensor type (#6933)
+* After adding an association to a LR node, Z-Wave JS no longer attempts assigning routes (#6936)
+* Removed some unnecessary log outputs during `rebuildNodeRoutes` when the node has no other associations than the controller (#6940)
+* Pings in route health checks no longer use explorer frames (#6942)
+* When attempting communication with a node that's considered dead, the command is now sent immediately instead of pinging first (#6944)
+* Fixed an issue where the priority and tag of a transaction would not be preserved when moving it to the wakeup queue (#6944)
+
+### Config file changes
+* Remove endpoint workaround for Zooz ZEN30 800LR (#6931)
+* Encode CCs using target's CC version for `TKB Home TZ67` (#6918)
+
+### Changes under the hood
+* GitHub links in the released `package.json` now point to the Z-Wave JS org (#6930)
+
 ## 12.11.0 (2024-06-10)
 ### Features
 * Add `ZWaveNode.createDump()` method to save debug information in a format Z-Wave JS understands (#6906)
