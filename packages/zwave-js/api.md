@@ -22,6 +22,7 @@ import { CommandClass } from '@zwave-js/cc';
 import { CommandClasses } from '@zwave-js/core';
 import { CommandClasses as CommandClasses_2 } from '@zwave-js/core/safe';
 import { CommandClassInfo } from '@zwave-js/core';
+import type { CommandClassInfo as CommandClassInfo_2 } from '@zwave-js/core/safe';
 import { Comparable } from 'alcalzone-shared/comparable';
 import { CompareResult } from 'alcalzone-shared/comparable';
 import { ConfigManager } from '@zwave-js/config';
@@ -72,7 +73,7 @@ import { IVirtualEndpoint } from '@zwave-js/core/safe';
 import { IVirtualNode } from '@zwave-js/core';
 import type { IZWaveEndpoint } from '@zwave-js/core';
 import { IZWaveNode } from '@zwave-js/core';
-import type { JSONObject } from '@zwave-js/shared';
+import { JSONObject } from '@zwave-js/shared';
 import { KEXFailType } from '@zwave-js/cc';
 import { LogConfig } from '@zwave-js/core';
 import { LogContext } from '@zwave-js/core';
@@ -144,6 +145,7 @@ import { SendCommandOptions } from '@zwave-js/core';
 import { SendCommandReturnType } from '@zwave-js/core';
 import { SendMessageOptions } from '@zwave-js/core';
 import { SensorType } from '@zwave-js/config';
+import type { SerializedValue } from '@zwave-js/core/safe';
 import type { SerialPort } from 'serialport';
 import { SetbackState } from '@zwave-js/cc';
 import { SetValueAPIOptions } from '@zwave-js/cc';
@@ -568,7 +570,7 @@ export { DurationUnit }
 // Warning: (ae-missing-release-tag) "EditableZWaveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type EditableZWaveOptions = Expand<Pick<PartialZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences"> & {
+export type EditableZWaveOptions = Expand<Pick<PartialZWaveOptions, "disableOptimisticValueUpdate" | "emitValueUpdateAfterSetValue" | "inclusionUserCallbacks" | "interview" | "logConfig" | "preferences" | "vendor"> & {
     userAgent?: Record<string, string | null | undefined>;
 }>;
 
@@ -989,6 +991,74 @@ export { NODE_ID_BROADCAST }
 
 export { NODE_ID_MAX }
 
+// Warning: (ae-missing-release-tag) "NodeDump" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NodeDump {
+    // Warning: (ae-forgotten-export) The symbol "CommandClassDump" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    commandClasses: Record<string, CommandClassDump>;
+    // (undocumented)
+    compatFlags?: JSONObject;
+    // (undocumented)
+    configFileName?: string;
+    // (undocumented)
+    description?: string;
+    // Warning: (ae-forgotten-export) The symbol "DeviceClassesDump" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    deviceClass: DeviceClassesDump | "unknown";
+    // (undocumented)
+    dsk?: string;
+    // Warning: (ae-forgotten-export) The symbol "EndpointDump" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    endpoints?: Record<number, EndpointDump>;
+    // (undocumented)
+    fingerprint: {
+        manufacturerId: string;
+        productType: string;
+        productId: string;
+        firmwareVersion: string;
+        hardwareVersion?: number;
+    };
+    // (undocumented)
+    id: number;
+    // (undocumented)
+    interviewStage: string;
+    // (undocumented)
+    isFrequentListening: FLiRS | "unknown";
+    // (undocumented)
+    isListening: boolean | "unknown";
+    // (undocumented)
+    isRouting: boolean | "unknown";
+    // (undocumented)
+    label?: string;
+    // (undocumented)
+    manufacturer?: string;
+    // (undocumented)
+    maySupportBasicCC: boolean;
+    // (undocumented)
+    protocol: string;
+    // (undocumented)
+    protocolVersion: string;
+    // (undocumented)
+    ready: boolean;
+    // (undocumented)
+    sdkVersion: string;
+    // (undocumented)
+    securityClasses: Record<string, boolean | "unknown">;
+    // (undocumented)
+    supportedDataRates: DataRate[] | "unknown";
+    // (undocumented)
+    supportedProtocols?: string[];
+    // (undocumented)
+    supportsBeaming: boolean | "unknown";
+    // (undocumented)
+    supportsSecurity: boolean | "unknown";
+}
+
 // Warning: (ae-missing-release-tag) "NodeInterviewFailedEventArgs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1032,7 +1102,7 @@ export { parseQRCodeString }
 // Warning: (ae-missing-release-tag) "PartialZWaveOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type PartialZWaveOptions = Expand<DeepPartial<Omit<ZWaveOptions, "inclusionUserCallbacks" | "logConfig" | "testingHooks">> & Partial<Pick<ZWaveOptions, "inclusionUserCallbacks" | "testingHooks">> & {
+export type PartialZWaveOptions = Expand<DeepPartial<Omit<ZWaveOptions, "inclusionUserCallbacks" | "logConfig" | "testingHooks">> & Partial<Pick<ZWaveOptions, "inclusionUserCallbacks" | "testingHooks" | "vendor">> & {
     inclusionUserCallbacks?: ZWaveOptions["inclusionUserCallbacks"];
     logConfig?: Partial<LogConfig>;
 }>;
@@ -1735,6 +1805,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get canSleep(): MaybeNotKnown<boolean>;
     checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: LifelineHealthCheckResult) => void): Promise<LifelineHealthCheckSummary>;
     checkRouteHealth(targetNodeId: number, rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: RouteHealthCheckResult) => void): Promise<RouteHealthCheckSummary>;
+    createDump(): NodeDump;
     get defaultTransitionDuration(): string | undefined;
     set defaultTransitionDuration(value: string | Duration_2 | undefined);
     get defaultVolume(): number | undefined;
@@ -1766,6 +1837,8 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     getValue<T = unknown>(valueId: ValueID_2): MaybeNotKnown<T>;
     getValueMetadata(valueId: ValueID_2): ValueMetadata_2;
     getValueTimestamp(valueId: ValueID_2): MaybeNotKnown<number>;
+    // (undocumented)
+    get hardwareVersion(): MaybeNotKnown<number>;
     hasDeviceConfigChanged(): MaybeNotKnown<boolean>;
     // (undocumented)
     hasSecurityClass(securityClass: SecurityClass_2): MaybeNotKnown<boolean>;
@@ -2144,6 +2217,14 @@ export interface ZWaveOptions extends ZWaveHostOptions {
         serialAPIStarted: number;
     };
     userAgent?: Record<string, string>;
+    vendor?: {
+        manufacturerId: number;
+        productType: number;
+        productId: number;
+        hardwareVersion?: number;
+        installerIcon?: number;
+        userIcon?: number;
+    };
 }
 
 
@@ -2152,17 +2233,17 @@ export * from "@zwave-js/cc";
 // Warnings were encountered during analysis:
 //
 // src/lib/controller/Controller.ts:849:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
-// src/lib/driver/Driver.ts:699:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/lib/driver/Driver.ts:4080:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5151:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
-// src/lib/driver/Driver.ts:5554:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5555:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5597:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5598:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5734:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:706:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/lib/driver/Driver.ts:4172:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5242:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
+// src/lib/driver/Driver.ts:5645:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5646:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5688:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5689:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5825:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/driver/ZWaveOptions.ts:273:120 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/lib/node/Node.ts:1016:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
-// src/lib/node/Node.ts:2904:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/node/Node.ts:1026:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
+// src/lib/node/Node.ts:2914:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/zniffer/Zniffer.ts:620:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/zniffer/Zniffer.ts:621:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 

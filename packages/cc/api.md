@@ -2515,11 +2515,21 @@ export class BinarySensorCCSupportedGet extends BinarySensorCC {
 //
 // @public (undocumented)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (BinarySensorCCSupportedReportOptions & CCCommandOptions));
     // (undocumented)
-    readonly supportedSensorTypes: readonly BinarySensorType[];
+    serialize(): Buffer;
+    // (undocumented)
+    supportedSensorTypes: BinarySensorType[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "BinarySensorCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BinarySensorCCSupportedReportOptions {
+    // (undocumented)
+    supportedSensorTypes: BinarySensorType[];
 }
 
 // Warning: (ae-missing-release-tag) "BinarySensorCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -3074,6 +3084,11 @@ export interface CCValueOptions {
     stateful?: boolean;
     supportsEndpoints?: boolean;
 }
+
+// Warning: (ae-missing-release-tag) "CCValuePredicate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type CCValuePredicate = (valueId: ValueID) => boolean;
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ccValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -4156,7 +4171,7 @@ export class CommandClass implements ICommandClass {
     protected getCCValue(valueId: ValueID): StaticCCValue | DynamicCCValue | undefined;
     static getCommandClass(data: Buffer): CommandClasses_2;
     static getConstructor(ccData: Buffer): CCConstructor<CommandClass>;
-    getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[];
+    getDefinedValueIDs(applHost: ZWaveApplicationHost, includeInternal?: boolean): ValueID[];
     getEncapsulatedCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     getEncapsulatingCC(ccId: CommandClasses_2, ccCommand?: number): CommandClass | undefined;
     // (undocumented)
@@ -13575,6 +13590,11 @@ export type OwnMethodsOf<API extends CCAPI> = Omit<OnlyMethods<API>, keyof OnlyM
 //
 // @public (undocumented)
 export function parseWakeUpTime(value: number): WakeUpTime;
+
+// Warning: (ae-missing-release-tag) "PartialCCValuePredicate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type PartialCCValuePredicate = (properties: ValueIDProperties) => boolean;
 
 // Warning: (ae-missing-release-tag) "PhysicalCCAPI" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
