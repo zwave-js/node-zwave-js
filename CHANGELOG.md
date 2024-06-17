@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.11.1 (2024-06-17)
 ### Bugfixes
 * Add compat flag to always encode Set-type commands using target node's CC version (#6918)
 * Export `NodeDump` type (#6915)
