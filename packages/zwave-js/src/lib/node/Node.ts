@@ -184,6 +184,7 @@ import {
 	SupervisionStatus,
 	type TXReport,
 	type TranslatedValueID,
+	TransmitOptions,
 	ValueDB,
 	type ValueID,
 	ValueMetadata,
@@ -6526,6 +6527,12 @@ protocol version:      ${this.protocolVersion}`;
 			let failedPingsNode = 0;
 			let latency = 0;
 			const pingAPI = this.commandClasses["No Operation"].withOptions({
+				// Don't change the node status when the ACK is missing. We're likely testing the limits here.
+				changeNodeStatusOnMissingACK: false,
+				// Avoid using explorer frames, because they can create a ton of delay
+				transmitOptions: TransmitOptions.ACK
+					| TransmitOptions.AutoRoute,
+				// And remember the transmit report, so we can evaluate it
 				onTXReport: (report) => {
 					txReport = report;
 				},
