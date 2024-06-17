@@ -5382,20 +5382,6 @@ ${handlers.length} left`,
 
 		let node: ZWaveNode | undefined;
 
-		// Don't send messages to dead nodes
-		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			node = this.getNodeUnsafe(msg);
-			if (!messageIsPing(msg) && node?.status === NodeStatus.Dead) {
-				// Instead of throwing immediately, try to ping the node first - if it responds, continue
-				if (!(await node.ping())) {
-					throw new ZWaveError(
-						`The message cannot be sent because node ${node.id} is dead`,
-						ZWaveErrorCodes.Controller_MessageDropped,
-					);
-				}
-			}
-		}
-
 		if (options.priority == undefined) {
 			options.priority = getDefaultPriority(msg);
 		}
