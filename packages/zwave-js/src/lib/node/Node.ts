@@ -6762,6 +6762,19 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 		) => void,
 	): Promise<RouteHealthCheckSummary> {
 		const otherNode = this.driver.controller.nodes.getOrThrow(targetNodeId);
+
+		if (this.protocol === Protocols.ZWaveLongRange) {
+			throw new ZWaveError(
+				`Cannot perform route health check for Long Range node ${this.id}.`,
+				ZWaveErrorCodes.Controller_NotSupportedForLongRange,
+			);
+		} else if (otherNode.protocol === Protocols.ZWaveLongRange) {
+			throw new ZWaveError(
+				`Cannot perform route health check for Long Range node ${otherNode.id}.`,
+				ZWaveErrorCodes.Controller_NotSupportedForLongRange,
+			);
+		}
+
 		if (otherNode.canSleep) {
 			throw new ZWaveError(
 				"Nodes which can sleep are not a valid target for a route health check!",
