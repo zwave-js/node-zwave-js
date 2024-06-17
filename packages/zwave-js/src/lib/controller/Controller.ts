@@ -6610,12 +6610,21 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * Returns the known list of neighbors for a node
+	 * Returns the known list of neighbors for a node.
+	 *
+	 * Throws when the node is a Long Range node.
 	 */
 	public async getNodeNeighbors(
 		nodeId: number,
 		onlyRepeaters: boolean = false,
 	): Promise<readonly number[]> {
+		if (isLongRangeNodeId(nodeId)) {
+			throw new ZWaveError(
+				`Cannot request node neighbors for Long Range node ${nodeId}`,
+				ZWaveErrorCodes.Controller_NotSupportedForLongRange,
+			);
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: "requesting node neighbors...",
 			direction: "outbound",
