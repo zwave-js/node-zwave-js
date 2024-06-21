@@ -8,7 +8,6 @@
 			"@zwave-js/transformers": ["./src"]
 		}
 	},
-	"references": [],
 	"include": ["src/**/*.ts", "test/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

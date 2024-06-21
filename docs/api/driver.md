@@ -907,6 +907,7 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		 */
 		watchdog?: boolean;
 	};
+
 	preferences: {
 		/**
 		 * The preferred scales to use when querying sensors. The key is either:

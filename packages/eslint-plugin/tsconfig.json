@@ -4,11 +4,6 @@
 	"compilerOptions": {
 		"types": ["node", "@typescript-eslint/utils"]
 	},
-	"references": [
-		{
-			"path": "../core"
-		}
-	],
 	"include": [
 		"src/**/*.ts"
 	],

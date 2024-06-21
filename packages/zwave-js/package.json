@@ -3,46 +3,55 @@
   "version": "13.0.0-beta.0",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "type": "commonjs",
   "exports": {
     ".": {
+      "@@dev": "./src/index.ts",
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
     "./safe": {
+      "@@dev": "./src/index_safe.ts",
       "types": "./build/index_safe.d.ts",
       "default": "./build/index_safe.js"
     },
     "./Controller": {
+      "@@dev": "./src/Controller.ts",
       "types": "./build/Controller.d.ts",
       "default": "./build/Controller.js"
     },
     "./Driver": {
+      "@@dev": "./src/Driver.ts",
       "types": "./build/Driver.d.ts",
       "default": "./build/Driver.js"
     },
     "./Error": {
+      "@@dev": "./src/Error.ts",
       "types": "./build/Error.d.ts",
       "default": "./build/Error.js"
     },
     "./Node": {
+      "@@dev": "./src/Node.ts",
       "types": "./build/Node.d.ts",
       "default": "./build/Node.js"
     },
     "./Testing": {
+      "@@dev": "./src/Testing.ts",
       "types": "./build/Testing.d.ts",
       "default": "./build/Testing.js"
     },
     "./Utils": {
+      "@@dev": "./src/Utils.ts",
       "types": "./build/Utils.d.ts",
       "default": "./build/Utils.js"
     },
     "./Values": {
+      "@@dev": "./src/Values.ts",
       "types": "./build/Values.d.ts",
       "default": "./build/Values.js"
     },
     "./Zniffer": {
+      "@@dev": "./src/Zniffer.ts",
       "types": "./build/Zniffer.d.ts",
       "default": "./build/Zniffer.js"
     },

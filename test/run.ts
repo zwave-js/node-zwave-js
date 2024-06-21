@@ -29,7 +29,6 @@ const driver = new Driver(port, {
 	// testingHooks: {
 	// 	skipNodeInterview: true,
 	// },
-	enableSoftReset: false,
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(

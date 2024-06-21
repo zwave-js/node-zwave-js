@@ -1,15 +1,6 @@
 // tsconfig for IntelliSense - active in all files in the current package
 {
 	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {},
-	"references": [
-		{
-			"path": "../core"
-		},
-		{
-			"path": "../zwave-js"
-		}
-	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

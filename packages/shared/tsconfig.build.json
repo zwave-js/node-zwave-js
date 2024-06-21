@@ -3,7 +3,9 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"rootDir": "src",
-		"outDir": "build"
+		"outDir": "build",
+		// Do not use the @@dev export for compiling
+		"customConditions": []
 	},
 	"references": [],
 	"include": ["src/**/*.ts"],
