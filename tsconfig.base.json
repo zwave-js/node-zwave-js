@@ -1,3 +1,4 @@
+// Shared tsconfig to be inherited by all other tsconfigs in this repo
 {
 	"extends": "@tsconfig/node18/tsconfig.json",
 	"compilerOptions": {
@@ -22,9 +23,4 @@
 		// From: https://colinhacks.com/essays/live-types-typescript-monorepo
 		"customConditions": ["@@dev"]
 	}
-	// "include": [
-	// 	"maintenance/**/*.ts",
-	// 	"test/**/*.ts"
-	// ],
-	// "exclude": ["**/build/**", "node_modules/**", "./packages/**/node_modules"]
 }
