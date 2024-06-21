@@ -86,7 +86,7 @@
   },
   "dependencies": {
     "@alcalzone/jsonl-db": "^3.1.1",
-    "@alcalzone/pak": "^0.10.1",
+    "@alcalzone/pak": "^0.11.0",
     "@homebridge/ciao": "^1.2.0",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",

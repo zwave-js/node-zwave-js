@@ -32,14 +32,14 @@
     "@actions/exec": "^1.1.1",
     "@actions/github": "^6.0.0",
     "@alcalzone/jsonl-db": "^3.1.1",
-    "@alcalzone/monopack": "^1.2.2",
+    "@alcalzone/monopack": "^1.3.0",
     "@alcalzone/release-script": "~3.7.0",
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
-    "@dprint/formatter": "^0.2.1",
-    "@dprint/json": "^0.19.2",
-    "@dprint/markdown": "^0.16.4",
-    "@dprint/typescript": "^0.90.0",
+    "@dprint/formatter": "^0.3.0",
+    "@dprint/json": "^0.19.3",
+    "@dprint/markdown": "^0.17.1",
+    "@dprint/typescript": "^0.91.1",
     "@microsoft/api-extractor": "^7.43.0",
     "@monorepo-utils/workspaces-to-typescript-project-references": "^2.10.4",
     "@tsconfig/node18": "^18.2.4",
@@ -54,7 +54,7 @@
     "@zwave-js/core": "workspace:*",
     "@zwave-js/eslint-plugin": "workspace:*",
     "@zwave-js/flash": "workspace:*",
-    "@zwave-js/fmt": "^1.0.0",
+    "@zwave-js/fmt": "^1.0.1",
     "@zwave-js/host": "workspace:*",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/nvmedit": "workspace:*",
@@ -68,7 +68,7 @@
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^5.1.0",
-    "dprint": "^0.45.0",
+    "dprint": "^0.46.3",
     "esbuild": "0.20.2",
     "esbuild-register": "^3.5.0",
     "eslint": "^8.57.0",
@@ -131,7 +131,7 @@
     "test:firmware": "yarn ts test/firmware-extraction.ts",
     "nvmedit": "yarn ts packages/nvmedit/src/cli.ts",
     "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
-    "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
+    "for-changed": "yarn changed foreach --all --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
     "codefind": "yarn ts packages/maintenance/src/codefind.ts",
     "configfind": "yarn ts packages/config/maintenance/find.ts",
     "extract-api": "FORCE_COLOR=1 yarn turbo run extract-api",
@@ -146,5 +146,5 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "yarn@4.3.0"
 }
