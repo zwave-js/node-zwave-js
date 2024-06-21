@@ -95,7 +95,7 @@
     "colors": "1.4.0"
   },
   "scripts": {
-    "ts": "node -r source-map-support/register -r ./maintenance/esbuild-register.js",
+    "ts": "node -r source-map-support/register -r ./maintenance/esbuild-register.js --conditions=@@dev",
     "w": "yarn ts maintenance/watch.ts",
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
     "clean": "yarn turbo run clean",

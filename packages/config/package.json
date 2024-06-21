@@ -49,7 +49,7 @@
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
     "lint:zwave": "yarn ts maintenance/lintConfigFiles.ts && eslint --cache --cache-location .eslintcache/config --ext .json \"config/devices/**/*.json\"",
-    "ts": "node -r esbuild-register",
+    "ts": "node -r esbuild-register --conditions=@@dev",
     "lint:ts": "eslint --cache --cache-location .eslintcache/ts --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",

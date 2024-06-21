@@ -58,7 +58,7 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "ts": "node -r esbuild-register",
+    "ts": "node -r esbuild-register --conditions=@@dev",
     "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",
