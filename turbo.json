@@ -38,6 +38,10 @@
 			"outputs": ["packages/*/build/**", "packages/*/*.tsbuildinfo"]
 		},
 
+		"@zwave-js/eslint-plugin#build": {
+			// Dummy task to enable building the eslint plugin
+		},
+
 		// Specific linting tasks: ESLint
 		"lint:ts": {
 			"dependsOn": ["//#build:turbo"],
@@ -67,9 +71,9 @@
 
 		"lint:zwave": {
 			// Dummy task to enable running all lint:zwave tasks
-			"dependsOn": ["//#build:turbo"]
 		},
 		"@zwave-js/config#lint:zwave": {
+			"dependsOn": ["@zwave-js/eslint-plugin#build"],
 			"inputs": ["**/*.ts", "config/**/*.json"]
 		},
 
@@ -81,7 +85,7 @@
 		},
 
 		"test:ts": {
-			"dependsOn": ["//#build:turbo"],
+			// "dependsOn": ["//#build:turbo"],
 			"inputs": ["src/**/*.ts", "ava.config.cjs", "../../ava.config.cjs"]
 			// TODO: consider snapshot files
 		}
