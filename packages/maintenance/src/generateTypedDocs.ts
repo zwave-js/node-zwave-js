@@ -31,7 +31,7 @@ import { formatWithDprint } from "./dprint";
 import {
 	getCommandClassFromClassDeclaration,
 	projectRoot,
-	tsConfigFilePath,
+	tsConfigFilePathForDocs as tsConfigFilePath,
 } from "./tsAPITools";
 
 export function findSourceNode(

@@ -2,17 +2,6 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {},
-	"references": [
-		{
-			"path": "../config"
-		},
-		{
-			"path": "../core"
-		},
-		{
-			"path": "../shared"
-		}
-	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

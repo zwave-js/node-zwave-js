@@ -7,6 +7,7 @@
     "access": "public"
   },
   "main": "build/cli.js",
+  "type": "commonjs",
   "files": [
     "bin/",
     "build/**/*.{js,d.ts,map}"

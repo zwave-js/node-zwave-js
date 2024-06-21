@@ -5,14 +5,15 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "type": "commonjs",
   "exports": {
     ".": {
+      "@@dev": "./src/index.ts",
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
     "./safe": {
+      "@@dev": "./src/index_safe.ts",
       "types": "./build/index_safe.d.ts",
       "default": "./build/index_safe.js"
     },

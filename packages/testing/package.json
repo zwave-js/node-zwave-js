@@ -6,8 +6,15 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "@@dev": "./src/index.ts",
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],

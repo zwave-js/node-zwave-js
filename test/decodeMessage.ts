@@ -1,17 +1,17 @@
 // @ts-check
 
-require("reflect-metadata");
-require("zwave-js");
-const { Message } = require("@zwave-js/serial");
-const {
+import "reflect-metadata";
+import "zwave-js";
+import { isCommandClassContainer } from "@zwave-js/cc";
+import { ConfigManager } from "@zwave-js/config";
+import {
+	SPANState,
+	SecurityClass,
+	SecurityManager2,
 	generateAuthKey,
 	generateEncryptionKey,
-	SecurityManager2,
-	SecurityClass,
-	SPANState,
-} = require("@zwave-js/core");
-const { isCommandClassContainer } = require("@zwave-js/cc");
-const { ConfigManager } = require("@zwave-js/config");
+} from "@zwave-js/core";
+import { Message } from "@zwave-js/serial";
 
 (async () => {
 	const configManager = new ConfigManager();
@@ -53,8 +53,7 @@ const { ConfigManager } = require("@zwave-js/config");
 	});
 
 	console.log(Message.getMessageLength(data));
-	/** @type {any} */
-	const host = {
+	const host: any = {
 		getSafeCCVersion: () => 1,
 		getSupportedCCVersion: () => 1,
 		configManager,
