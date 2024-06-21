@@ -1,43 +1,18 @@
+// This is a "solution" tsconfig with references to all "entrypoints" in the monorepo
+// to power IntelliSense without having to open a specific package first
 {
 	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true
+	},
 	"files": [],
 	"include": [],
 	"references": [
-		{
-			"path": "./packages/cc"
-		},
-		{
-			"path": "./packages/config"
-		},
-		{
-			"path": "./packages/core"
-		},
 		{
 			"path": "./packages/eslint-plugin"
 		},
 		{
 			"path": "./packages/flash"
-		},
-		{
-			"path": "./packages/host"
-		},
-		{
-			"path": "./packages/maintenance"
-		},
-		{
-			"path": "./packages/nvmedit"
-		},
-		{
-			"path": "./packages/serial"
-		},
-		{
-			"path": "./packages/shared"
-		},
-		{
-			"path": "./packages/testing"
-		},
-		{
-			"path": "./packages/transformers"
 		},
 		{
 			"path": "./packages/zwave-js"

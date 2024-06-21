@@ -1,3 +1,4 @@
+// Custom tsconfig for eslint
 {
 	"extends": "./tsconfig.base.json",
 	"include": ["**/*.ts"],
