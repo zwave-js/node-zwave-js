@@ -1,0 +1,26 @@
+// Shared tsconfig to be inherited by all other tsconfigs in this repo
+{
+	"extends": "@tsconfig/node18/tsconfig.json",
+	"compilerOptions": {
+		"composite": true,
+		"incremental": true,
+		"declaration": true,
+		"declarationMap": true,
+
+		"noEmitOnError": true,
+		"removeComments": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": false,
+		"sourceMap": true,
+		"inlineSourceMap": false,
+		"stripInternal": true,
+
+		"pretty": true,
+		"types": ["node"],
+		"noErrorTruncation": true,
+
+		// Look up source files instead of type definitions while developing
+		// From: https://colinhacks.com/essays/live-types-typescript-monorepo
+		"customConditions": ["@@dev"]
+	}
+}

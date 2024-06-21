@@ -7,19 +7,35 @@
 ### `get`
 
 ```ts
-async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: MeterScale; } | undefined>;
+async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: import("/home/dominic/Repositories/node-zwave-js/packages/core/build/index").MeterScale; } | undefined>;
+```
+
+### `sendReport`
+
+```ts
+async sendReport(
+	options: MeterCCReportOptions,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getAll`
 
 ```ts
-async getAll(): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: MeterScale; }[]>;
+async getAll(accumulatedOnly: boolean = false): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: import("/home/dominic/Repositories/node-zwave-js/packages/core/build/index").MeterScale; }[]>;
 ```
 
 ### `getSupported`
 
 ```ts
 async getSupported(): Promise<Pick<MeterCCSupportedReport, "type" | "supportsReset" | "supportedScales" | "supportedRateTypes"> | undefined>;
+```
+
+### `sendSupportedReport`
+
+```ts
+async sendSupportedReport(
+	options: MeterCCSupportedReportOptions,
+): Promise<void>;
 ```
 
 ### `reset`
@@ -50,7 +66,7 @@ async reset(
 - **secret:** false
 - **value type:** `"boolean"`
 
-### `resetSingle(meterType: number)`
+### `resetSingle(meterType: number, rateType: RateType, scale: number)`
 
 ```ts
 {
@@ -61,7 +77,7 @@ async reset(
 }
 ```
 
-- **label:** `Reset (${string})`
+- **label:** `Reset (${string})` | `Reset (Consumption, ${string})` | `Reset (Production, ${string})`
 - **min. CC version:** 1
 - **readable:** false
 - **writeable:** true

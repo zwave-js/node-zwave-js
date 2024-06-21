@@ -29,7 +29,7 @@
     "node": ">= 18"
   },
   "scripts": {
-    "ts": "node -r esbuild-register",
+    "ts": "node -r esbuild-register --conditions=@@dev",
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",

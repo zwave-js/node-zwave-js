@@ -95,7 +95,7 @@
     "colors": "1.4.0"
   },
   "scripts": {
-    "ts": "node -r source-map-support/register -r ./maintenance/esbuild-register.js",
+    "ts": "node -r source-map-support/register -r ./maintenance/esbuild-register.js --conditions=@@dev",
     "w": "yarn ts maintenance/watch.ts",
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
     "clean": "yarn turbo run clean",
@@ -137,8 +137,8 @@
     "extract-api": "FORCE_COLOR=1 yarn turbo run extract-api",
     "accept-api": "yarn extract-api -- --local",
     "monopack": "yarn exec monopack",
-    "check-references": "workspaces-to-typescript-project-references --check && workspaces-to-typescript-project-references --check --tsconfigPath tsconfig.build.json",
-    "sync-references": "workspaces-to-typescript-project-references && workspaces-to-typescript-project-references --tsconfigPath tsconfig.build.json && yarn fmt > /dev/null"
+    "check-references": "workspaces-to-typescript-project-references --check --tsconfigPath tsconfig.build.json",
+    "sync-references": "workspaces-to-typescript-project-references --tsconfigPath tsconfig.build.json && yarn fmt > /dev/null"
   },
   "readme": "README.md",
   "config": {

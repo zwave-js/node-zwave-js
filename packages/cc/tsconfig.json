@@ -1,6 +1,6 @@
 // tsconfig for IntelliSense - active in all files in the current package
 {
-	"extends": "../../tsconfig.json",
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"plugins": [
 			{
@@ -8,29 +8,6 @@
 			}
 		]
 	},
-	"references": [
-		{
-			"path": "../core"
-		},
-		{
-			"path": "../host"
-		},
-		{
-			"path": "../serial"
-		},
-		{
-			"path": "../shared"
-		},
-		{
-			"path": "../maintenance"
-		},
-		{
-			"path": "../testing"
-		},
-		{
-			"path": "../transformers"
-		}
-	],
 	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

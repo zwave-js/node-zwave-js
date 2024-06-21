@@ -9,7 +9,10 @@ export const repoRoot = path.normalize(
 );
 
 /** Used for ts-morph */
-export const tsConfigFilePath = path.join(repoRoot, "tsconfig.json");
+export const tsConfigFilePathForDocs = path.join(
+	repoRoot,
+	"tsconfig.docs.json",
+);
 
 export function loadTSConfig(
 	packageName: string = "",

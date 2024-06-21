@@ -899,6 +899,7 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		 */
 		unresponsiveControllerRecovery?: boolean;
 	};
+
 	preferences: {
 		/**
 		 * The preferred scales to use when querying sensors. The key is either:
