@@ -4,6 +4,11 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 12.11.2 (2024-06-22)
+### Bugfixes
+* Fixed a regression from 12.11.1 causing commands to sleeping nodes to block the send queue (#6953)
+* Fixed how routes for inbound frames are parsed in Zniffer (#6945)
+
 ## 12.11.1 (2024-06-17)
 ### Bugfixes
 * Add compat flag to always encode Set-type commands using target node's CC version (#6918)
