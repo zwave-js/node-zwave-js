@@ -5381,6 +5381,9 @@ ${handlers.length} left`,
 		this.ensureReady();
 
 		let node: ZWaveNode | undefined;
+		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
+			node = this.getNodeUnsafe(msg);
+		}
 
 		if (options.priority == undefined) {
 			options.priority = getDefaultPriority(msg);
