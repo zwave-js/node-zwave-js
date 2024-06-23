@@ -217,6 +217,10 @@ import {
 	type SetSerialApiTimeoutsResponse,
 } from "../serialapi/misc/SetSerialApiTimeoutsMessages";
 import {
+	StartWatchdogRequest,
+	StopWatchdogRequest,
+} from "../serialapi/misc/WatchdogMessages";
+import {
 	AddNodeDSKToNetworkRequest,
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
@@ -1886,6 +1890,63 @@ export class ZWaveController
 			);
 			throw e;
 		}
+	}
+
+	/**
+	 * Starts the hardware watchdog on supporting 700+ series controllers.
+	 * Returns whether the operation was successful.
+	 */
+	public async startWatchdog(): Promise<boolean> {
+		if (
+			this.sdkVersionGte("7.0")
+			&& this.isFunctionSupported(FunctionType.StartWatchdog)
+		) {
+			try {
+				this.driver.controllerLog.print(
+					"Starting hardware watchdog...",
+				);
+				await this.driver.sendMessage(
+					new StartWatchdogRequest(this.driver),
+				);
+
+				return true;
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Starting the hardware watchdog failed: ${
+						getErrorMessage(e)
+					}`,
+					"error",
+				);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Stops the hardware watchdog on supporting controllers.
+	 * Returns whether the operation was successful.
+	 */
+	public async stopWatchdog(): Promise<boolean> {
+		if (this.isFunctionSupported(FunctionType.StopWatchdog)) {
+			try {
+				this.driver.controllerLog.print(
+					"Stopping hardware watchdog...",
+				);
+				await this.driver.sendMessage(
+					new StopWatchdogRequest(this.driver),
+				);
+
+				return true;
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Stopping the hardware watchdog failed: ${
+						getErrorMessage(e)
+					}`,
+					"error",
+				);
+			}
+		}
+		return false;
 	}
 
 	private _inclusionState: InclusionState = InclusionState.Idle;
@@ -4354,6 +4415,11 @@ supported CCs: ${
 						`Serial API restarted unexpectedly.`,
 						"warn",
 					);
+
+					// Restart the watchdog unless disabled
+					if (this.driver.options.features.watchdog) {
+						await this.startWatchdog();
+					}
 
 					// We previously used 16 bit node IDs, but the controller was reset.
 					// Remember this and try to go back to 16 bit.
@@ -6945,6 +7011,9 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
+		// Disable watchdog to prevent resets during NVM access
+		await this.stopWatchdog();
+
 		let ret: Buffer;
 		try {
 			if (this.sdkVersionGte("7.0")) {
@@ -6952,6 +7021,7 @@ ${associatedNodes.join(", ")}`,
 				// All 7.xx versions so far seem to have a bug where the NVM is not properly closed after reading
 				// resulting in extremely strange controller behavior after a backup. To work around this, restart the stick if possible
 				await this.driver.trySoftReset();
+				// Soft-resetting will enable the watchdog again
 			} else {
 				ret = await this.backupNVMRaw500(onProgress);
 			}
@@ -7070,6 +7140,9 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Controller_ResponseNOK,
 			);
 		}
+
+		// Disable watchdog to prevent resets during NVM access
+		await this.stopWatchdog();
 
 		// Restoring a potentially incompatible NVM happens in three steps:
 		// 1. the current NVM is read
