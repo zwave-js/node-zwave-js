@@ -15,6 +15,11 @@ import {
 } from "@zwave-js/core";
 import path from "node:path";
 import Sinon from "sinon";
+import { determineNIF } from "../../controller/NodeInformationFrame";
+import {
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+} from "../../serialapi/application/SerialAPIStartedRequest";
 import { SoftResetRequest } from "../../serialapi/misc/SoftResetRequest";
 import {
 	RequestNodeInfoRequest,
@@ -822,6 +827,112 @@ integrationTestMulti(
 			await followupCommand;
 
 			t.pass();
+		},
+	},
+);
+
+integrationTest(
+	"Retry transmissions if the controller is reset by the watchdog while waiting for the callback",
+	{
+		// debug: true,
+
+		// provisioningDirectory: path.join(
+		// 	__dirname,
+		// 	"__fixtures/supervision_binary_switch",
+		// ),
+
+		additionalDriverOptions: {
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+		},
+
+		customSetup: async (driver, mockController, mockNode) => {
+			// This is almost a 1:1 copy of the default behavior, except that the callback never gets sent
+			const handleBrokenSendData: MockControllerBehavior = {
+				async onHostMessage(host, controller, msg) {
+					// If the controller is operating normally, defer to the default behavior
+					if (!shouldTimeOut) return false;
+
+					if (msg instanceof SendDataRequest) {
+						// Check if this command is legal right now
+						const state = controller.state.get(
+							MockControllerStateKeys.CommunicationState,
+						) as MockControllerCommunicationState | undefined;
+						if (
+							state != undefined
+							&& state !== MockControllerCommunicationState.Idle
+						) {
+							throw new Error(
+								"Received SendDataRequest while not idle",
+							);
+						}
+
+						// Put the controller into sending state
+						controller.state.set(
+							MockControllerStateKeys.CommunicationState,
+							MockControllerCommunicationState.Sending,
+						);
+
+						// Notify the host that the message was sent
+						const res = new SendDataResponse(host, {
+							wasSent: true,
+						});
+						await controller.sendToHost(res.serialize());
+
+						return true;
+					} else if (msg instanceof SendDataAbort) {
+						// Put the controller into idle state
+						controller.state.set(
+							MockControllerStateKeys.CommunicationState,
+							MockControllerCommunicationState.Idle,
+						);
+
+						return true;
+					}
+				},
+			};
+			mockController.defineBehavior(handleBrokenSendData);
+		},
+		testBody: async (t, driver, node, mockController, mockNode) => {
+			// Circumvent the options validation so the test doesn't take forever
+			driver.options.timeouts.sendDataAbort = 1500;
+			driver.options.timeouts.sendDataCallback = 2000;
+
+			shouldTimeOut = true;
+
+			const pingPromise = node.ping();
+
+			await wait(1000);
+
+			// After 1 second, the watchdog restarts the controller
+			shouldTimeOut = false;
+
+			mockController.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Idle,
+			);
+
+			const ret = new SerialAPIStartedRequest(mockController.host, {
+				wakeUpReason: SerialAPIWakeUpReason.WatchdogReset,
+				watchdogEnabled: true,
+				isListening: true,
+				...determineNIF(),
+				supportsLongRange: true,
+			});
+			setImmediate(async () => {
+				await mockController.sendToHost(ret.serialize());
+			});
+
+			// And the ping should eventually succeed
+			t.true(await pingPromise);
+
+			// But the transmission should not have been aborted
+			t.throws(() =>
+				mockController.assertReceivedHostMessage(
+					(msg) => msg.functionType === FunctionType.SendDataAbort,
+				)
+			);
 		},
 	},
 );

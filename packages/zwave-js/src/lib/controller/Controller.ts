@@ -130,10 +130,7 @@ import {
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
-import {
-	type SerialAPIStartedRequest,
-	SerialAPIWakeUpReason,
-} from "../serialapi/application/SerialAPIStartedRequest";
+
 import {
 	ShutdownRequest,
 	type ShutdownResponse,
@@ -453,10 +450,6 @@ export class ZWaveController
 			FunctionType.ReplaceFailedNode,
 			this.handleReplaceNodeStatusReport.bind(this),
 		);
-		driver.registerRequestHandler(
-			FunctionType.SerialAPIStarted,
-			this.handleSerialAPIStartedUnexpectedly.bind(this),
-		);
 	}
 
 	private _type: MaybeNotKnown<ZWaveLibraryTypes>;
@@ -742,6 +735,10 @@ export class ZWaveController
 	/** Whether the controller is configured to use 8 or 16 bit node IDs */
 	public get nodeIdType(): NodeIDType {
 		return this._nodeIdType;
+	}
+	/** @internal */
+	public set nodeIdType(value: NodeIDType) {
+		this._nodeIdType = value;
 	}
 
 	/** Returns the node with the given DSK */
@@ -4390,48 +4387,6 @@ supported CCs: ${
 		}
 		// not sure what to do with this message
 		return false;
-	}
-
-	/**
-	 * Is called when the Serial API restart unexpectedly.
-	 */
-	private async handleSerialAPIStartedUnexpectedly(
-		msg: SerialAPIStartedRequest,
-	): Promise<boolean> {
-		// Normally, the soft reset command includes waiting for this message.
-		// If we end up here, it is unexpected.
-
-		switch (msg.wakeUpReason) {
-			// All wakeup reasons that indicate a reset of the Serial API
-			// need to be handled here, so we interpret node IDs correctly.
-			case SerialAPIWakeUpReason.Reset:
-			case SerialAPIWakeUpReason.WatchdogReset:
-			case SerialAPIWakeUpReason.SoftwareReset:
-			case SerialAPIWakeUpReason.EmergencyWatchdogReset:
-			case SerialAPIWakeUpReason.BrownoutCircuit: {
-				// The Serial API restarted unexpectedly
-				if (this._nodeIdType === NodeIDType.Long) {
-					this.driver.controllerLog.print(
-						`Serial API restarted unexpectedly.`,
-						"warn",
-					);
-
-					// Restart the watchdog unless disabled
-					if (this.driver.options.features.watchdog) {
-						await this.startWatchdog();
-					}
-
-					// We previously used 16 bit node IDs, but the controller was reset.
-					// Remember this and try to go back to 16 bit.
-					this._nodeIdType = NodeIDType.Short;
-					await this.trySetNodeIDType(NodeIDType.Long);
-				}
-
-				return true; // Don't invoke any more handlers
-			}
-		}
-
-		return false; // Not handled
 	}
 
 	private _rebuildRoutesProgress = new Map<number, RebuildRoutesStatus>();
