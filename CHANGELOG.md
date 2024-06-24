@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.12.0 (2024-06-24)
 We were informed by Silicon Labs that 700/800 series controllers have a hardware watchdog that can reset the controller when it becomes unresponsive. This feature is now enabled by default in Z-Wave JS and should prevent the controller from hanging indefinitely.
 
 In case this causes new issues, the feature can be disabled by setting the environment variable `ZWAVEJS_DISABLE_WATCHDOG` to any non-empty value, or by setting the driver option `features.watchdog` to `false`.
