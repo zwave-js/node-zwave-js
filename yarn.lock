@@ -1892,7 +1892,7 @@ __metadata:
     del-cli: "npm:^5.1.0"
     fs-extra: "npm:^11.2.0"
     reflect-metadata: "npm:^0.2.2"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
 
@@ -1929,7 +1929,7 @@ __metadata:
     semver: "npm:^7.6.2"
     sinon: "npm:^17.0.1"
     ts-pegjs: "npm:^0.3.1"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     winston: "npm:^3.13.0"
     xml2js: "npm:^0.6.2"
     yargs: "npm:^17.7.2"
@@ -1958,7 +1958,7 @@ __metadata:
     reflect-metadata: "npm:^0.2.2"
     sinon: "npm:^17.0.1"
     triple-beam: "npm:*"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     winston: "npm:^3.13.0"
     winston-daily-rotate-file: "npm:^5.0.0"
     winston-transport: "npm:^4.7.0"
@@ -1973,7 +1973,7 @@ __metadata:
     "@typescript-eslint/utils": "npm:^7.13.0"
     "@zwave-js/core": "workspace:*"
     eslint: "npm:^8.57.0"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
 
@@ -1987,7 +1987,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     del-cli: "npm:^5.1.0"
     fs-extra: "npm:^11.2.0"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     yargs: "npm:^17.7.2"
     zwave-js: "workspace:*"
   bin:
@@ -2020,7 +2020,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: "npm:^4.0.8"
     del-cli: "npm:^5.1.0"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
 
@@ -2052,7 +2052,7 @@ __metadata:
     piscina: "npm:^4.4.0"
     reflect-metadata: "npm:^0.2.2"
     ts-morph: "npm:^22.0.0"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     yargs: "npm:^17.7.2"
   languageName: unknown
   linkType: soft
@@ -2076,7 +2076,7 @@ __metadata:
     fs-extra: "npm:^11.2.0"
     reflect-metadata: "npm:^0.2.2"
     semver: "npm:^7.6.2"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     yargs: "npm:^17.7.2"
   bin:
     nvmedit: bin/nvmedit.js
@@ -2146,7 +2146,7 @@ __metadata:
     source-map-support: "npm:^0.5.21"
     ts-patch: "npm:3.2.0"
     turbo: "npm:1.7.4"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -2172,7 +2172,7 @@ __metadata:
     esbuild-register: "npm:^3.5.0"
     serialport: "npm:^12.0.0"
     sinon: "npm:^17.0.1"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     winston: "npm:^3.13.0"
   languageName: unknown
   linkType: soft
@@ -2192,7 +2192,7 @@ __metadata:
     esbuild-register: "npm:^3.5.0"
     fs-extra: "npm:^11.2.0"
     sinon: "npm:^17.0.1"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
 
@@ -2213,7 +2213,7 @@ __metadata:
     esbuild: "npm:0.21.5"
     esbuild-register: "npm:^3.5.0"
     triple-beam: "npm:*"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     winston-transport: "npm:^4.7.0"
   languageName: unknown
   linkType: soft
@@ -2229,7 +2229,7 @@ __metadata:
     execa: "npm:^5.1.1"
     fs-extra: "npm:^11.2.0"
     tsutils: "npm:^3.21.0"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
   languageName: unknown
   linkType: soft
 
@@ -8907,13 +8907,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.5.1-rc":
-  version: 5.5.1-rc
-  resolution: "typescript@npm:5.5.1-rc"
+"typescript@npm:5.5.2":
+  version: 5.5.2
+  resolution: "typescript@npm:5.5.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/c4412a2f9a351c0cd566464da8794c25f86dc1da087bf04776eb3a1ae16e1f9f52ec3f3b9e972bfd6bd7845af94f46de062b848e4e1001b7d58b4e02ccd61136
+  checksum: 10/9118b20f248e76b0dbff8737fef65dfa89d02668d4e633d2c5ceac99033a0ca5e8a1c1a53bc94da68e8f67677a88f318663dde859c9e9a09c1e116415daec2ba
   languageName: node
   linkType: hard
 
@@ -8927,13 +8927,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.5.1-rc#optional!builtin<compat/typescript>":
-  version: 5.5.1-rc
-  resolution: "typescript@patch:typescript@npm%3A5.5.1-rc#optional!builtin<compat/typescript>::version=5.5.1-rc&hash=b45daf"
+"typescript@patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>":
+  version: 5.5.2
+  resolution: "typescript@patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=b45daf"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/2f3cdded7c8c273e483f041a6dbd1bebb202403b2623d1e71242f530e6c927f37a1135a7069b3e7e038416b5b9db8bdd8ca8ab0c4493b11da8f32cd3d7c9829a
+  checksum: 10/28b3de2ddaf63a7620e7ddbe5d377af71ce93ecc558c41bf0e3d88661d8e6e7aa6c7739164fef98055f69819e41faca49252938ef3633a3dff2734cca6a9042e
   languageName: node
   linkType: hard
 
@@ -9427,7 +9427,7 @@ __metadata:
     serialport: "npm:^12.0.0"
     sinon: "npm:^17.0.1"
     source-map-support: "npm:^0.5.21"
-    typescript: "npm:5.5.1-rc"
+    typescript: "npm:5.5.2"
     winston: "npm:^3.13.0"
     xstate: "npm:4.38.3"
   bin:
