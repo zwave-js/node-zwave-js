@@ -59,7 +59,7 @@
     "json5": "^2.2.3",
     "piscina": "^4.4.0",
     "reflect-metadata": "^0.2.2",
-    "ts-morph": "^22.0.0",
+    "ts-morph": "^23.0.0",
     "typescript": "5.5.2",
     "yargs": "^17.7.2"
   }
