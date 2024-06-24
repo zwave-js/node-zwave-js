@@ -135,51 +135,55 @@ export enum FunctionType {
     // (undocumented)
     DeleteSUCReturnRoute = 85,// Configure the Serial API
     // (undocumented)
-    EnterBootloader = 39,// Power the RF section of the stick down/up
+    DisableWatchdog500 = 183,// Power the RF section of the stick down/up
     // (undocumented)
-    ExtExtWriteLongByte = 45,// Set the CPU into sleep mode
+    EnableWatchdog500 = 182,// Set the CPU into sleep mode
     // (undocumented)
-    ExtNVMReadLongBuffer = 42,// Send Node Information Frame of the stick
+    EnterBootloader = 39,// Send Node Information Frame of the stick
     // (undocumented)
-    ExtNVMReadLongByte = 44,// Send data
+    ExtExtWriteLongByte = 45,// Send data
     // (undocumented)
-    ExtNVMWriteLongBuffer = 43,// Send data using multicast
+    ExtNVMReadLongBuffer = 42,// Send data using multicast
     // (undocumented)
-    FirmwareUpdateNVM = 120,
+    ExtNVMReadLongByte = 44,
     // (undocumented)
-    FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,// Abort sending data
+    ExtNVMWriteLongBuffer = 43,// Abort sending data
     // (undocumented)
-    FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 209,// Set RF Power level
+    FirmwareUpdateNVM = 120,// Set RF Power level
     // (undocumented)
-    FUNC_ID_SERIAL_API_SLAVE_NODE_INFO = 160,// ??
+    FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,// ??
     // (undocumented)
-    FUNC_ID_ZW_CONTROLLER_CHANGE = 77,// Returns random data of variable length
+    FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 209,// Returns random data of variable length
     // (undocumented)
-    FUNC_ID_ZW_CREATE_NEW_PRIMARY = 76,// Get Home ID and Controller Node ID
+    FUNC_ID_SERIAL_API_SLAVE_NODE_INFO = 160,// Get Home ID and Controller Node ID
     // (undocumented)
-    FUNC_ID_ZW_ENABLE_SUC = 82,// get a byte of memory
+    FUNC_ID_ZW_CONTROLLER_CHANGE = 77,// get a byte of memory
     // (undocumented)
-    FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 94,// write a byte of memory
+    FUNC_ID_ZW_CREATE_NEW_PRIMARY = 76,// write a byte of memory
     // (undocumented)
-    FUNC_ID_ZW_GET_RANDOM = 28,
+    FUNC_ID_ZW_ENABLE_SUC = 82,
     // (undocumented)
-    FUNC_ID_ZW_GET_VIRTUAL_NODES = 165,
+    FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 94,
     // (undocumented)
-    FUNC_ID_ZW_IS_VIRTUAL_NODE = 166,// Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
+    FUNC_ID_ZW_GET_RANDOM = 28,// Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
     // (undocumented)
-    FUNC_ID_ZW_NEW_CONTROLLER = 67,// ZW_NVRGetValue(offset, length) => NVRdata[], see INS13954-13
+    FUNC_ID_ZW_GET_VIRTUAL_NODES = 165,// ZW_NVRGetValue(offset, length) => NVRdata[], see INS13954-13
     // (undocumented)
-    FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 23,// Returns information about the external NVM
+    FUNC_ID_ZW_IS_VIRTUAL_NODE = 166,// Returns information about the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 68,// Reads a buffer from the external NVM
+    FUNC_ID_ZW_NEW_CONTROLLER = 67,// Reads a buffer from the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REPLICATION_SEND_DATA = 69,// Writes a buffer to the external NVM
+    FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 23,// Writes a buffer to the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REQUEST_NETWORK_UPDATE = 83,// Reads a byte from the external NVM
+    FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 68,// Reads a byte from the external NVM
     // (undocumented)
-    FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 90,// Writes a byte to the external NVM
+    FUNC_ID_ZW_REPLICATION_SEND_DATA = 69,// Writes a byte to the external NVM
     // (undocumented)
-    FUNC_ID_ZW_SEND_NODE_INFORMATION = 18,// 700-series command to read and write from/to the external NVM
+    FUNC_ID_ZW_REQUEST_NETWORK_UPDATE = 83,// 700-series command to read and write from/to the external NVM
+    // (undocumented)
+    FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 90,// ??
+    // (undocumented)
+    FUNC_ID_ZW_SEND_NODE_INFORMATION = 18,// ??
     // (undocumented)
     FUNC_ID_ZW_SEND_SLAVE_DATA = 163,// ??
     // (undocumented)
@@ -191,79 +195,81 @@ export enum FunctionType {
     // (undocumented)
     FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 208,// ??
     // (undocumented)
-    FUNC_ID_ZW_SET_SLAVE_LEARN_MODE = 164,// ??
+    FUNC_ID_ZW_SET_SLAVE_LEARN_MODE = 164,
     // (undocumented)
-    GetBackgroundRSSI = 59,// ??
+    GetBackgroundRSSI = 59,
     // (undocumented)
-    GetControllerCapabilities = 5,
+    GetControllerCapabilities = 5,// request the most recent background RSSI levels detected
     // (undocumented)
     GetControllerId = 32,
     // (undocumented)
-    GetControllerVersion = 21,// request the most recent background RSSI levels detected
+    GetControllerVersion = 21,// Not implemented
     // (undocumented)
-    GetLongRangeChannel = 219,
+    GetLongRangeChannel = 219,// Get protocol info (baud rate, listening, etc.) for a given node
     // (undocumented)
-    GetLongRangeNodes = 218,// Not implemented
+    GetLongRangeNodes = 218,// Reset controller and node info to default (original) values
     // (undocumented)
-    GetNodeProtocolInfo = 65,// Get protocol info (baud rate, listening, etc.) for a given node
+    GetNodeProtocolInfo = 65,// Not implemented
     // (undocumented)
-    GetNVMId = 41,// Reset controller and node info to default (original) values
+    GetNVMId = 41,// Replication send data complete
     // (undocumented)
-    GetPriorityRoute = 146,// Not implemented
+    GetPriorityRoute = 146,// Replication send data
     // (undocumented)
-    GetProtocolVersion = 9,// Replication send data complete
+    GetProtocolVersion = 9,// Assign a return route from the source node to the destination node
     // (undocumented)
-    GetRoutingInfo = 128,// Replication send data
+    GetRoutingInfo = 128,// Delete all return routes from the specified node
     // (undocumented)
-    GetSerialApiCapabilities = 7,// Assign a return route from the source node to the destination node
+    GetSerialApiCapabilities = 7,// Ask the specified node to update its neighbors (then read them from the controller)
     // (undocumented)
-    GetSerialApiInitData = 2,// Delete all return routes from the specified node
+    GetSerialApiInitData = 2,// Get a list of supported (and controller) command classes
     // (undocumented)
-    GetSUCNodeId = 86,// Ask the specified node to update its neighbors (then read them from the controller)
+    GetSUCNodeId = 86,// Control the addnode (or addcontroller) process...start, stop, etc.
     // (undocumented)
-    HardReset = 66,// Get a list of supported (and controller) command classes
+    HardReset = 66,// Control the removenode (or removecontroller) process...start, stop, etc.
     // (undocumented)
-    IsFailedNode = 98,// Control the addnode (or addcontroller) process...start, stop, etc.
+    IsFailedNode = 98,// Control the createnewprimary process...start, stop, etc.
     // (undocumented)
-    NVMOperations = 46,// Control the removenode (or removecontroller) process...start, stop, etc.
+    KickWatchdog500 = 184,// Control the transferprimary process...start, stop, etc.
     // (undocumented)
-    RemoveFailedNode = 97,// Control the createnewprimary process...start, stop, etc.
+    NVMOperations = 46,// Assign a priority route between two nodes
     // (undocumented)
-    RemoveNodeFromNetwork = 75,// Control the transferprimary process...start, stop, etc.
+    RemoveFailedNode = 97,// Put a controller into learn mode for replication/ receipt of configuration info
     // (undocumented)
-    ReplaceFailedNode = 99,// Assign a priority route between two nodes
+    RemoveNodeFromNetwork = 75,// Assign a return route to the SUC
     // (undocumented)
-    RequestNodeInfo = 96,// Put a controller into learn mode for replication/ receipt of configuration info
+    ReplaceFailedNode = 99,// Make a controller a Static Update Controller
     // (undocumented)
-    RequestNodeNeighborUpdate = 72,// Assign a return route to the SUC
+    RequestNodeInfo = 96,// Network update for a SUC(?)
     // (undocumented)
-    SendData = 19,// Make a controller a Static Update Controller
+    RequestNodeNeighborUpdate = 72,// Configure a static/bridge controller to be a SUC/SIS node (or not)
     // (undocumented)
-    SendDataAbort = 22,// Network update for a SUC(?)
+    SendData = 19,// Remove return routes to the SUC
     // (undocumented)
-    SendDataBridge = 169,// Configure a static/bridge controller to be a SUC/SIS node (or not)
+    SendDataAbort = 22,// Try to retrieve a Static Update Controller node id (zero if no SUC present)
     // (undocumented)
-    SendDataMulticast = 20,// Remove return routes to the SUC
+    SendDataBridge = 169,
     // (undocumented)
-    SendDataMulticastBridge = 171,// Try to retrieve a Static Update Controller node id (zero if no SUC present)
+    SendDataMulticast = 20,// Assign a priority route from a node to the SUC
     // (undocumented)
-    SendTestFrame = 190,
+    SendDataMulticastBridge = 171,
     // (undocumented)
-    SerialAPISetup = 11,// Assign a priority route from a node to the SUC
+    SendTestFrame = 190,// Allow options for request node neighbor update
     // (undocumented)
-    SerialAPIStarted = 10,
+    SerialAPISetup = 11,// supports NWI
     // (undocumented)
-    SetApplicationNodeInformation = 3,// Allow options for request node neighbor update
+    SerialAPIStarted = 10,// Get info (supported command classes) for the specified node
     // (undocumented)
-    SetLongRangeChannel = 220,// supports NWI
+    SetApplicationNodeInformation = 3,// Mark a specified node id as failed
     // (undocumented)
-    SetLongRangeShadowNodeIDs = 221,// Get info (supported command classes) for the specified node
+    SetLongRangeChannel = 220,// Check to see if a specified node has failed
     // (undocumented)
-    SetPriorityRoute = 147,// Mark a specified node id as failed
+    SetLongRangeShadowNodeIDs = 221,// Replace a failed node with a new one that takes the same node ID
     // (undocumented)
-    SetRFReceiveMode = 16,// Check to see if a specified node has failed
+    SetPriorityRoute = 147,// ??
     // (undocumented)
-    SetSerialApiTimeouts = 6,// Replace a failed node with a new one that takes the same node ID
+    SetRFReceiveMode = 16,// ??
+    // (undocumented)
+    SetSerialApiTimeouts = 6,// ??
     // (undocumented)
     SetSUCNodeId = 84,// ??
     // (undocumented)
@@ -271,95 +277,89 @@ export enum FunctionType {
     // (undocumented)
     SoftReset = 8,// ??
     // (undocumented)
+    StartWatchdog = 210,// Access the NVM section for 500 series OTW firmware updates
+    // (undocumented)
+    StopWatchdog = 211,// Get a specified node's neighbor information from the controller
+    // (undocumented)
     UNKNOWN_FUNC_ClearNetworkStats = 57,// ??
     // (undocumented)
     UNKNOWN_FUNC_CLOCK_COMPARE = 50,// ??
     // (undocumented)
     UNKNOWN_FUNC_CLOCK_GET = 49,// ??
     // (undocumented)
-    UNKNOWN_FUNC_CLOCK_SET = 48,// Access the NVM section for 500 series OTW firmware updates
+    UNKNOWN_FUNC_CLOCK_SET = 48,// ??
     // (undocumented)
-    UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,// Get a specified node's neighbor information from the controller
+    UNKNOWN_FUNC_GET_LIBRARY_TYPE = 189,// ??
     // (undocumented)
     UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 191,// ??
     // (undocumented)
-    UNKNOWN_FUNC_GetNetworkStats = 58,// ??
+    UNKNOWN_FUNC_GetNetworkStats = 58,// Get the route that is used as the first routing attempty when transmitting to a node
     // (undocumented)
-    UNKNOWN_FUNC_GetTXCounter = 129,// ??
+    UNKNOWN_FUNC_GetTXCounter = 129,// Set the route that shall be used as the first routing attempty when transmitting to a node
     // (undocumented)
     UNKNOWN_FUNC_LOCK_ROUTE_RESPONSE = 144,// ??
     // (undocumented)
     UNKNOWN_FUNC_MEMORY_GET_BUFFER = 35,// ??
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_GET_BYTE = 33,// ??
+    UNKNOWN_FUNC_MEMORY_GET_BYTE = 33,// Set application virtual slave node information
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 36,// Get the route that is used as the first routing attempty when transmitting to a node
+    UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 36,// Slave command handler
     // (undocumented)
-    UNKNOWN_FUNC_MEMORY_PUT_BYTE = 34,// Set the route that shall be used as the first routing attempty when transmitting to a node
+    UNKNOWN_FUNC_MEMORY_PUT_BYTE = 34,// Send a slave node information message
     // (undocumented)
-    UNKNOWN_FUNC_REDISCOVERY_NEEDED = 89,// ??
+    UNKNOWN_FUNC_REDISCOVERY_NEEDED = 89,// Send data from slave
     // (undocumented)
-    UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 63,// ??
+    UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 63,// Enter slave learn mode
     // (undocumented)
-    UNKNOWN_FUNC_ResetTXCounter = 130,// Set application virtual slave node information
+    UNKNOWN_FUNC_ResetTXCounter = 130,// Return all virtual nodes
     // (undocumented)
-    UNKNOWN_FUNC_RF_POWERLEVEL_GET = 186,// Slave command handler
+    UNKNOWN_FUNC_RF_POWERLEVEL_GET = 186,// Virtual node test
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_CALL = 54,// Send a slave node information message
+    UNKNOWN_FUNC_RTC_TIMER_CALL = 54,// A message from another node using the Bridge API
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_CREATE = 51,// Send data from slave
+    UNKNOWN_FUNC_RTC_TIMER_CREATE = 51,// Send data (Bridge API)
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_DELETE = 53,// Enter slave learn mode
+    UNKNOWN_FUNC_RTC_TIMER_DELETE = 53,// Send data using multicast (Bridge API)
     // (undocumented)
-    UNKNOWN_FUNC_RTC_TIMER_READ = 52,// Return all virtual nodes
+    UNKNOWN_FUNC_RTC_TIMER_READ = 52,// ??
     // (undocumented)
-    UNKNOWN_FUNC_SEND_DATA_META = 24,// Virtual node test
+    UNKNOWN_FUNC_SEND_DATA_META = 24,// Enable Watchdog (500 series and older)
     // (undocumented)
-    UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 145,// A message from another node using the Bridge API
+    UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 145,// Disable Watchdog (500 series and older)
     // (undocumented)
-    UNKNOWN_FUNC_SEND_SUC_ID = 87,// Send data (Bridge API)
+    UNKNOWN_FUNC_SEND_SUC_ID = 87,// Kick Watchdog (500 series and older)
     // (undocumented)
-    UNKNOWN_FUNC_SERIAL_API_TEST = 149,// Send data using multicast (Bridge API)
+    UNKNOWN_FUNC_SERIAL_API_TEST = 149,// ??
     // (undocumented)
-    UNKNOWN_FUNC_SET_SLEEP_MODE = 17,// ??
+    UNKNOWN_FUNC_SET_SLEEP_MODE = 17,// Get RF Power level
     // (undocumented)
     UNKNOWN_FUNC_StoreHomeId = 132,
     // (undocumented)
-    UNKNOWN_FUNC_StoreNodeInfo = 131,
+    UNKNOWN_FUNC_StoreNodeInfo = 131,// Sends a NOP Power frame to the given node
     // (undocumented)
     UNKNOWN_FUNC_TIMER_CALL = 115,
     // (undocumented)
-    UNKNOWN_FUNC_TIMER_CANCEL = 114,// ??
+    UNKNOWN_FUNC_TIMER_CANCEL = 114,// Set controller into promiscuous mode to listen to all messages
     // (undocumented)
-    UNKNOWN_FUNC_TIMER_RESTART = 113,// Get RF Power level
+    UNKNOWN_FUNC_TIMER_RESTART = 113,
     // (undocumented)
-    UNKNOWN_FUNC_TIMER_START = 112,
+    UNKNOWN_FUNC_TIMER_START = 112,// Start Hardware Watchdog (700 series and newer)
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0x28 = 40,// Sends a NOP Power frame to the given node
+    UNKNOWN_FUNC_UNKNOWN_0x28 = 40,// Stop Hardware Watchdog (700 series and newer)
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0x66 = 102,
+    UNKNOWN_FUNC_UNKNOWN_0x66 = 102,// ??
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0x67 = 103,// Set controller into promiscuous mode to listen to all messages
+    UNKNOWN_FUNC_UNKNOWN_0x67 = 103,// Instruct the Z-Wave API to shut down in order to safely remove the power
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0x98 = 152,
+    UNKNOWN_FUNC_UNKNOWN_0x98 = 152,// Used after GetSerialApiInitData to get the nodes with IDs > 0xFF
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xB4 = 180,// ??
+    UNKNOWN_FUNC_UNKNOWN_0xB4 = 180,
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xB9 = 185,// ??
+    UNKNOWN_FUNC_UNKNOWN_0xB9 = 185,
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xD2 = 210,// ??
+    UNKNOWN_FUNC_UNKNOWN_0xD4 = 212,
     // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xD3 = 211,// Instruct the Z-Wave API to shut down in order to safely remove the power
-    // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xD4 = 212,// Used after GetSerialApiInitData to get the nodes with IDs > 0xFF
-    // (undocumented)
-    UNKNOWN_FUNC_UNKNOWN_0xEF = 239,
-    // (undocumented)
-    UNKNOWN_FUNC_WATCH_DOG_DISABLE = 183,
-    // (undocumented)
-    UNKNOWN_FUNC_WATCH_DOG_ENABLE = 182,
-    // (undocumented)
-    UNKNOWN_FUNC_WATCH_DOG_KICK = 184,// ??
+    UNKNOWN_FUNC_UNKNOWN_0xEF = 239,// ??
     // (undocumented)
     UNKNOWN_FUNC_ZMEBootloaderFlash = 244,
     // (undocumented)
@@ -468,6 +468,7 @@ export class Message {
     expectedCallback: FunctionType | typeof Message | ResponsePredicate | undefined;
     // (undocumented)
     expectedResponse: FunctionType | typeof Message | ResponsePredicate | undefined;
+    expectsAck(): boolean;
     expectsCallback(): boolean;
     expectsNodeUpdate(): boolean;
     expectsResponse(): boolean;

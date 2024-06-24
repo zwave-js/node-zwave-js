@@ -3302,6 +3302,13 @@ export interface ValueUpdatedArgs extends ValueID {
     source?: "driver" | "node";
 }
 
+// Warning: (ae-missing-release-tag) "wasControllerReset" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function wasControllerReset(e: unknown): e is ZWaveError & {
+    code: ZWaveErrorCodes.Controller_Reset;
+};
+
 // Warning: (ae-missing-release-tag) "ZnifferProtocolDataRate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -3414,7 +3421,7 @@ export enum ZWaveErrorCodes {
     // (undocumented)
     CC_NoAPI = 304,
     // (undocumented)
-    CC_NoNodeID = 301,
+    CC_NoNodeID = 301,// FIXME: This is not used
     // (undocumented)
     CC_NotImplemented = 303,
     // (undocumented)
@@ -3433,24 +3440,25 @@ export enum ZWaveErrorCodes {
     ConfigurationCC_NoResetToDefaultOnLegacyDevices = 1002,
     // (undocumented)
     Controller_CallbackNOK = 204,
-    Controller_CommandError = 215,
-    Controller_EndpointNotFound = 211,
+    Controller_CommandError = 216,
+    Controller_EndpointNotFound = 212,
     // (undocumented)
-    Controller_ExclusionFailed = 207,
+    Controller_ExclusionFailed = 208,
     // (undocumented)
-    Controller_InclusionFailed = 206,
-    Controller_InterviewRestarted = 209,
+    Controller_InclusionFailed = 207,
+    Controller_InterviewRestarted = 210,
     // (undocumented)
     Controller_Jammed = 205,
     // (undocumented)
     Controller_MessageDropped = 202,
-    Controller_MessageExpired = 214,
-    Controller_MessageTooLarge = 216,
-    Controller_NodeInsecureCommunication = 213,
-    Controller_NodeNotFound = 210,
-    Controller_NodeRemoved = 212,
+    Controller_MessageExpired = 215,
+    Controller_MessageTooLarge = 217,
+    Controller_NodeInsecureCommunication = 214,
+    Controller_NodeNotFound = 211,
+    Controller_NodeRemoved = 213,
     Controller_NodeTimeout = 201,
-    Controller_NotSupported = 208,
+    Controller_NotSupported = 209,
+    Controller_Reset = 206,
     // (undocumented)
     Controller_ResponseNOK = 203,
     Controller_Timeout = 200,

@@ -13357,6 +13357,43 @@ export const NotificationCCValues: Readonly<{
             readonly supportsEndpoints: false;
         };
     };
+    doorTiltState: {
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: "Access Control";
+            propertyKey: "Door tilt state";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "Access Control";
+            readonly propertyKey: "Door tilt state";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
+        readonly meta: {
+            readonly label: "Door tilt state";
+            readonly states: {
+                readonly 0: "Window/door is not tilted";
+                readonly 1: "Window/door is tilted";
+            };
+            readonly ccSpecific: {
+                readonly notificationType: 6;
+            };
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly internal: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: false;
+        };
+    };
     doorStateSimple: {
         readonly id: {
             commandClass: CommandClasses.Notification;
