@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+We were informed by Silicon Labs that 700/800 series controllers have a hardware watchdog that can reset the controller when it becomes unresponsive. This feature is now enabled by default in Z-Wave JS and should prevent the controller from hanging indefinitely.
+
+In case this causes new issues, the feature can be disabled by setting the environment variable `ZWAVEJS_DISABLE_WATCHDOG` to any non-empty value, or by setting the driver option `features.watchdog` to `false`.
+
+Please let us know if this actually helps or not.
+
+### Features
+* Enable hardware watchdog on 700/800 series controllers (#6954)
+* Add method to query supported RF regions (#6957)
+* Add notification variable for Door/Window tilt state (#6958)
+
+### Bugfixes
+* Fixed an issue where value metadata for unknown notification events with known notification types would only be created if the CC version was exactly 2 (#6959)
+
 ## 12.11.2 (2024-06-22)
 ### Bugfixes
 * Fixed a regression from 12.11.1 causing commands to sleeping nodes to block the send queue (#6953)
