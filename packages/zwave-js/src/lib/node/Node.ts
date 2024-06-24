@@ -5144,7 +5144,7 @@ protocol version:      ${this.protocolVersion}`;
 					);
 				valueId = unknownValue.endpoint(command.endpointIndex);
 
-				if (command.version === 2) {
+				if (command.version >= 2) {
 					if (!this.valueDB.hasMetadata(valueId)) {
 						this.valueDB.setMetadata(valueId, unknownValue.meta);
 					}
