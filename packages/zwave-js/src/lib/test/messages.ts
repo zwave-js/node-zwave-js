@@ -11,6 +11,7 @@ const defaultImplementations = {
 	getCallbackTimeout: () => undefined,
 	markAsSent: () => void 0,
 	markAsCompleted: () => void 0,
+	expectsAck: () => true,
 };
 
 export const dummyResponseOK = {
