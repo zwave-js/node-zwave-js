@@ -6235,6 +6235,41 @@ ${associatedNodes.join(", ")}`,
 		return result.region;
 	}
 
+	/**
+	 * Returns the RF regions supported by this controller, or `undefined` if the information is not known yet.
+	 *
+	 * @param filterSubsets Whether to exclude regions that are subsets of other regions,
+	 * for example `USA` which is a subset of `USA (Long Range)`
+	 */
+	public getSupportedRFRegions(
+		filterSubsets: boolean = true,
+	): MaybeNotKnown<readonly RFRegion[]> {
+		// FIXME: Once supported in firmware, query the controller for supported regions instead of hardcoding
+		const ret = new Set([
+			// Always supported
+			RFRegion.Europe,
+			RFRegion.USA,
+			RFRegion["Australia/New Zealand"],
+			RFRegion["Hong Kong"],
+			RFRegion.India,
+			RFRegion.Israel,
+			RFRegion.Russia,
+			RFRegion.China,
+			RFRegion.Japan,
+			RFRegion.Korea,
+			RFRegion["Default (EU)"],
+		]);
+
+		if (this.isLongRangeCapable()) {
+			ret.add(RFRegion["USA (Long Range)"]);
+			if (filterSubsets) {
+				ret.delete(RFRegion.USA);
+			}
+		}
+
+		return [...ret].sort((a, b) => a - b);
+	}
+
 	/** Configure the Powerlevel setting of the Z-Wave API */
 	public async setPowerlevel(
 		powerlevel: number,

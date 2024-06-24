@@ -828,6 +828,14 @@ export enum RFRegion {
 
 > [!ATTENTION] Not all controllers support configuring the RF region. These methods will throw if they are not supported
 
+To determine which regions are supported by the current controller, use the following method:
+
+```ts
+getSupportedRFRegions(filterSubsets: boolean): MaybeNotKnown<readonly RFRegion[]>
+```
+
+The `filterSubsets` parameter (`true` by default) can be used to filter out regions that are subsets of other supported regions. For example, if the controller supports both `USA` and `USA (Long Range)`, only `USA (Long Range)` will be returned, since it includes the `USA` region.
+
 #### Configure TX powerlevel
 
 ```ts
