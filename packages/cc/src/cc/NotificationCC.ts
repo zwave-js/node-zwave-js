@@ -119,6 +119,29 @@ export const NotificationCCValues = Object.freeze({
 				autoCreate: shouldAutoCreateSimpleDoorSensorValue,
 			} as const,
 		),
+
+		// Binary tilt value extracted from the Door state variable.
+		...V.staticPropertyAndKeyWithName(
+			"doorTiltState",
+			"Access Control",
+			"Door tilt state",
+			{
+				// Must be a number for compatibility reasons
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Door tilt state",
+				states: {
+					[0x00]: "Window/door is not tilted",
+					[0x01]: "Window/door is tilted",
+				},
+				ccSpecific: {
+					notificationType: 0x06,
+				},
+			} as const,
+			{
+				// This is created when the tilt state is first received.
+				autoCreate: false,
+			} as const,
+		),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses.Notification, {

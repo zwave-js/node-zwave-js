@@ -5252,15 +5252,33 @@ protocol version:      ${this.protocolVersion}`;
 			// actually support them, which makes working with the Door state variable
 			// very cumbersome. Also, this is currently the only notification where the enum values
 			// extend the state value.
+
 			// To work around this, we hard-code a notification value for the door status
 			// which only includes the "legacy" states for open/closed.
-
 			this.valueDB.setValue(
 				NotificationCCValues.doorStateSimple.endpoint(
 					command.endpointIndex,
 				),
 				command.notificationEvent === 0x17 ? 0x17 : 0x16,
 			);
+
+			// In addition to that, we also hard-code a notification value for only the tilt status.
+			// This will only be created after receiving a notification for the tilted state.
+			// Only after it exists, it will be updated. Otherwise, we'd get phantom
+			// values, since some devices send the enum value, even when they don't support tilt.
+			const tiltValue = NotificationCCValues.doorTiltState;
+			const tiltValueId = tiltValue.endpoint(command.endpointIndex);
+			let tiltValueWasCreated = this.valueDB.hasMetadata(tiltValueId);
+			if (command.eventParameters === 0x01 && !tiltValueWasCreated) {
+				this.valueDB.setMetadata(tiltValueId, tiltValue.meta);
+				tiltValueWasCreated = true;
+			}
+			if (tiltValueWasCreated) {
+				this.valueDB.setValue(
+					tiltValueId,
+					command.eventParameters === 0x01 ? 0x01 : 0x00,
+				);
+			}
 		}
 	}
 
