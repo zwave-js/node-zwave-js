@@ -58,7 +58,7 @@
 		".yarn/releases",
 		".tmp/",
 		"cache/",
-		"packages/*/api.md",
+		"packages/*/*.api.md",
 		"CHANGELOG*.md",
 		".yarnrc.yml",
 	],

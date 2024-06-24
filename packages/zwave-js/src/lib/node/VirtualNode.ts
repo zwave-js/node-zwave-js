@@ -301,7 +301,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		const exposedEndpoints = distinct(
 			[...ret.values()]
 				.map((v) => v.endpoint)
-				.filter((e): e is number => e !== undefined),
+				.filter((e) => e !== undefined),
 		);
 		for (const endpoint of exposedEndpoints) {
 			// TODO: This should be defined in the Basic CC file

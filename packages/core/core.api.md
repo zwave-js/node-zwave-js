@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import type { ExecutionContext } from 'ava';
 import type { Format } from 'logform';
 import type { JsonlDB } from '@alcalzone/jsonl-db';
@@ -3389,11 +3387,11 @@ export function zwaveDataRateToString(rate: ZWaveDataRate): string;
 // @public
 export class ZWaveError extends Error {
     constructor(message: string, code: ZWaveErrorCodes,
-    context?: unknown,
+    context?: unknown | undefined,
     transactionSource?: string | undefined);
     // (undocumented)
     readonly code: ZWaveErrorCodes;
-    readonly context?: unknown;
+    readonly context?: unknown | undefined;
     // (undocumented)
     readonly message: string;
     readonly transactionSource?: string | undefined;

@@ -47,12 +47,9 @@ integrationTest(
 			const cc = CRC16CC.encapsulate(mockNode.host, zwpRequest);
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
-			const { payload: response } = await mockNode.expectControllerFrame<
-				MockZWaveRequestFrame
-			>(
+			const { payload: response } = await mockNode.expectControllerFrame(
 				1000,
-				(msg): msg is MockZWaveRequestFrame =>
-					msg.type === MockZWaveFrameType.Request,
+				(msg) => msg.type === MockZWaveFrameType.Request,
 			);
 
 			t.true(response instanceof CRC16CCCommandEncapsulation);

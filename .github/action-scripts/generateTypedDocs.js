@@ -13,7 +13,7 @@ const branchName = "docs/update-typed-docs";
 const reviewers = ["AlCalzone"];
 const assignees = [];
 
-const checkPaths = ["docs/", "packages/*/api.md"];
+const checkPaths = ["docs/", "packages/*/*.api.md"];
 
 /**
  * @param {{github: Github, context: Context}} param

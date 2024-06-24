@@ -86,7 +86,7 @@ function select(
 	selector: string,
 ): Record<string, unknown> {
 	let ret: Record<string, unknown> = obj;
-	const selectorParts = selector.split("/").filter((s): s is string => !!s);
+	const selectorParts = selector.split("/").filter((s) => !!s);
 	for (const part of selectorParts) {
 		// Special case for paramInformation selectors to select params by #
 		if (isArray(ret)) {

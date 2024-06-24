@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import type { CommandClasses } from '@zwave-js/core';
 import type { ConfigManager } from '@zwave-js/config';
 import type { ControllerLogger } from '@zwave-js/core';
