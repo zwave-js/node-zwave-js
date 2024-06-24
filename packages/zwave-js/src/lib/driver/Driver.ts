@@ -100,6 +100,7 @@ import {
 	serializeCacheValue,
 	stripUndefined,
 	timespan,
+	wasControllerReset,
 } from "@zwave-js/core";
 import type {
 	NodeSchedulePollOptions,
@@ -171,7 +172,10 @@ import {
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
-import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
+import {
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+} from "../serialapi/application/SerialAPIStartedRequest";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
 import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
@@ -290,6 +294,8 @@ const defaultOptions: ZWaveOptions = {
 		// By default enable the unresponsive controller recovery unless the env variable is set
 		unresponsiveControllerRecovery: !process.env
 			.ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY,
+		// By default enable the watchdog, unless the env variable is set
+		watchdog: !process.env.ZWAVEJS_DISABLE_WATCHDOG,
 	},
 	interview: {
 		queryAllUserCodes: false,
@@ -2663,6 +2669,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		// This is a bit hacky, but what the heck...
 		if (!this._enteringBootloader) {
+			// Start the watchdog again, unless disabled
+			if (this.options.features.watchdog) {
+				await this._controller?.startWatchdog();
+			}
+
 			// If desired, re-configure the controller to use 16 bit node IDs
 			void this._controller?.trySetNodeIDType(NodeIDType.Long);
 
@@ -4196,6 +4207,69 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	/**
+	 * Is called when the Serial API restart unexpectedly.
+	 */
+	private async handleSerialAPIStartedUnexpectedly(
+		msg: SerialAPIStartedRequest,
+	): Promise<boolean> {
+		// Normally, the soft reset command includes waiting for this message.
+		// If we end up here, it is unexpected.
+
+		switch (msg.wakeUpReason) {
+			// All wakeup reasons that indicate a reset of the Serial API
+			// need to be handled here, so we interpret node IDs correctly.
+			case SerialAPIWakeUpReason.Reset:
+			case SerialAPIWakeUpReason.WatchdogReset:
+			case SerialAPIWakeUpReason.SoftwareReset:
+			case SerialAPIWakeUpReason.EmergencyWatchdogReset:
+			case SerialAPIWakeUpReason.BrownoutCircuit: {
+				// The Serial API restarted unexpectedly
+				this.controllerLog.print(
+					`Serial API restarted unexpectedly.`,
+					"warn",
+				);
+
+				// In this situation, we may be executing a Serial API command, which will never complete.
+				// Bail out of it, without rejecting the actual transaction
+				if (
+					this.serialAPIInterpreter?.status
+						=== InterpreterStatus.Running
+				) {
+					this.serialAPIInterpreter.stop();
+				}
+				if (this._currentSerialAPICommandPromise) {
+					this.controllerLog.print(
+						`Currently active command will be retried...`,
+						"warn",
+					);
+					this._currentSerialAPICommandPromise.reject(
+						new ZWaveError(
+							"The Serial API restarted unexpectedly",
+							ZWaveErrorCodes.Controller_Reset,
+						),
+					);
+				}
+
+				// Restart the watchdog unless disabled
+				if (this.options.features.watchdog) {
+					await this._controller?.startWatchdog();
+				}
+
+				if (this._controller?.nodeIdType === NodeIDType.Long) {
+					// We previously used 16 bit node IDs, but the controller was reset.
+					// Remember this and try to go back to 16 bit.
+					this._controller.nodeIdType = NodeIDType.Short;
+					await this._controller.trySetNodeIDType(NodeIDType.Long);
+				}
+
+				return true; // Don't invoke any more handlers
+			}
+		}
+
+		return false; // Not handled
+	}
+
+	/**
 	 * Registers a handler for messages that are not handled by the driver as part of a message exchange.
 	 * The handler function needs to return a boolean indicating if the message has been handled.
 	 * Registered handlers are called in sequence until a handler returns `true`.
@@ -4646,6 +4720,10 @@ ${handlers.length} left`,
 			// Make sure we're ready to handle this command
 			this.ensureReady(true);
 			return this.controller.handleApplicationUpdateRequest(msg);
+		} else if (msg instanceof SerialAPIStartedRequest) {
+			if (await this.handleSerialAPIStartedUnexpectedly(msg)) {
+				return;
+			}
 		} else {
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
@@ -5137,6 +5215,9 @@ ${handlers.length} left`,
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
 							throw e;
+						} else if (wasControllerReset(e)) {
+							// The controller was reset unexpectedly. Reject the transaction, so we can attempt to recover
+							throw e;
 						} else if (
 							e.code === ZWaveErrorCodes.Controller_MessageDropped
 						) {
@@ -5169,6 +5250,13 @@ ${handlers.length} left`,
 		transaction.setProgress({ state: TransactionState.Completed });
 	}
 
+	/**
+	 * Provides access to the result Promise for the currently executed serial API command
+	 */
+	private _currentSerialAPICommandPromise:
+		| DeferredPromise<Message | undefined>
+		| undefined;
+
 	/** Handles sequencing of queued Serial API commands */
 	private async drainSerialAPIQueue(): Promise<void> {
 		for await (const item of this.serialAPIQueue) {
@@ -5181,6 +5269,8 @@ ${handlers.length} left`,
 				result.resolve(ret);
 			} catch (e) {
 				result.reject(e);
+			} finally {
+				this._currentSerialAPICommandPromise = undefined;
 			}
 		}
 	}
@@ -5355,6 +5445,7 @@ ${handlers.length} left`,
 
 		this.serialAPIInterpreter.start();
 
+		this._currentSerialAPICommandPromise = result;
 		return result;
 	}
 
@@ -6000,6 +6091,15 @@ ${handlers.length} left`,
 			if (
 				this.handleMissingSendDataResponseOrCallback(transaction, error)
 			) return;
+		} else if (wasControllerReset(error)) {
+			// The controller was reset in the middle of a transaction.
+			// Re-queue the transaction, so it can get handled again
+			// Its message generator may have finished, so reset that too.
+			transaction.reset();
+			this.getQueueForTransaction(transaction).add(
+				transaction.clone(),
+			);
+			return;
 		}
 
 		this.rejectTransaction(transaction, error);

@@ -14,7 +14,7 @@ export enum ZWaveErrorCodes {
 
 	/** The driver failed to start */
 	Driver_Failed = 100,
-	Driver_Reset,
+	Driver_Reset, // FIXME: This is not used
 	Driver_Destroyed,
 	Driver_NotReady,
 	Driver_InvalidDataReceived,
@@ -35,6 +35,9 @@ export enum ZWaveErrorCodes {
 	Controller_ResponseNOK,
 	Controller_CallbackNOK,
 	Controller_Jammed,
+	/** The controller was reset in the middle of a Serial API command */
+	Controller_Reset,
+
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
@@ -292,6 +295,15 @@ export function isMissingControllerACK(
 	return isZWaveError(e)
 		&& e.code === ZWaveErrorCodes.Controller_Timeout
 		&& e.context === "ACK";
+}
+
+export function wasControllerReset(
+	e: unknown,
+): e is ZWaveError & {
+	code: ZWaveErrorCodes.Controller_Reset;
+} {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Reset;
 }
 
 export function isMissingControllerResponse(

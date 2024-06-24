@@ -130,10 +130,7 @@ import {
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
-import {
-	type SerialAPIStartedRequest,
-	SerialAPIWakeUpReason,
-} from "../serialapi/application/SerialAPIStartedRequest";
+
 import {
 	ShutdownRequest,
 	type ShutdownResponse,
@@ -216,6 +213,10 @@ import {
 	SetSerialApiTimeoutsRequest,
 	type SetSerialApiTimeoutsResponse,
 } from "../serialapi/misc/SetSerialApiTimeoutsMessages";
+import {
+	StartWatchdogRequest,
+	StopWatchdogRequest,
+} from "../serialapi/misc/WatchdogMessages";
 import {
 	AddNodeDSKToNetworkRequest,
 	AddNodeStatus,
@@ -448,10 +449,6 @@ export class ZWaveController
 		driver.registerRequestHandler(
 			FunctionType.ReplaceFailedNode,
 			this.handleReplaceNodeStatusReport.bind(this),
-		);
-		driver.registerRequestHandler(
-			FunctionType.SerialAPIStarted,
-			this.handleSerialAPIStartedUnexpectedly.bind(this),
 		);
 	}
 
@@ -738,6 +735,10 @@ export class ZWaveController
 	/** Whether the controller is configured to use 8 or 16 bit node IDs */
 	public get nodeIdType(): NodeIDType {
 		return this._nodeIdType;
+	}
+	/** @internal */
+	public set nodeIdType(value: NodeIDType) {
+		this._nodeIdType = value;
 	}
 
 	/** Returns the node with the given DSK */
@@ -1886,6 +1887,63 @@ export class ZWaveController
 			);
 			throw e;
 		}
+	}
+
+	/**
+	 * Starts the hardware watchdog on supporting 700+ series controllers.
+	 * Returns whether the operation was successful.
+	 */
+	public async startWatchdog(): Promise<boolean> {
+		if (
+			this.sdkVersionGte("7.0")
+			&& this.isFunctionSupported(FunctionType.StartWatchdog)
+		) {
+			try {
+				this.driver.controllerLog.print(
+					"Starting hardware watchdog...",
+				);
+				await this.driver.sendMessage(
+					new StartWatchdogRequest(this.driver),
+				);
+
+				return true;
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Starting the hardware watchdog failed: ${
+						getErrorMessage(e)
+					}`,
+					"error",
+				);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Stops the hardware watchdog on supporting controllers.
+	 * Returns whether the operation was successful.
+	 */
+	public async stopWatchdog(): Promise<boolean> {
+		if (this.isFunctionSupported(FunctionType.StopWatchdog)) {
+			try {
+				this.driver.controllerLog.print(
+					"Stopping hardware watchdog...",
+				);
+				await this.driver.sendMessage(
+					new StopWatchdogRequest(this.driver),
+				);
+
+				return true;
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Stopping the hardware watchdog failed: ${
+						getErrorMessage(e)
+					}`,
+					"error",
+				);
+			}
+		}
+		return false;
 	}
 
 	private _inclusionState: InclusionState = InclusionState.Idle;
@@ -4329,43 +4387,6 @@ supported CCs: ${
 		}
 		// not sure what to do with this message
 		return false;
-	}
-
-	/**
-	 * Is called when the Serial API restart unexpectedly.
-	 */
-	private async handleSerialAPIStartedUnexpectedly(
-		msg: SerialAPIStartedRequest,
-	): Promise<boolean> {
-		// Normally, the soft reset command includes waiting for this message.
-		// If we end up here, it is unexpected.
-
-		switch (msg.wakeUpReason) {
-			// All wakeup reasons that indicate a reset of the Serial API
-			// need to be handled here, so we interpret node IDs correctly.
-			case SerialAPIWakeUpReason.Reset:
-			case SerialAPIWakeUpReason.WatchdogReset:
-			case SerialAPIWakeUpReason.SoftwareReset:
-			case SerialAPIWakeUpReason.EmergencyWatchdogReset:
-			case SerialAPIWakeUpReason.BrownoutCircuit: {
-				// The Serial API restarted unexpectedly
-				if (this._nodeIdType === NodeIDType.Long) {
-					this.driver.controllerLog.print(
-						`Serial API restarted unexpectedly.`,
-						"warn",
-					);
-
-					// We previously used 16 bit node IDs, but the controller was reset.
-					// Remember this and try to go back to 16 bit.
-					this._nodeIdType = NodeIDType.Short;
-					await this.trySetNodeIDType(NodeIDType.Long);
-				}
-
-				return true; // Don't invoke any more handlers
-			}
-		}
-
-		return false; // Not handled
 	}
 
 	private _rebuildRoutesProgress = new Map<number, RebuildRoutesStatus>();
@@ -6945,6 +6966,9 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
+		// Disable watchdog to prevent resets during NVM access
+		await this.stopWatchdog();
+
 		let ret: Buffer;
 		try {
 			if (this.sdkVersionGte("7.0")) {
@@ -6952,6 +6976,7 @@ ${associatedNodes.join(", ")}`,
 				// All 7.xx versions so far seem to have a bug where the NVM is not properly closed after reading
 				// resulting in extremely strange controller behavior after a backup. To work around this, restart the stick if possible
 				await this.driver.trySoftReset();
+				// Soft-resetting will enable the watchdog again
 			} else {
 				ret = await this.backupNVMRaw500(onProgress);
 			}
@@ -7070,6 +7095,9 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Controller_ResponseNOK,
 			);
 		}
+
+		// Disable watchdog to prevent resets during NVM access
+		await this.stopWatchdog();
 
 		// Restoring a potentially incompatible NVM happens in three steps:
 		// 1. the current NVM is read
