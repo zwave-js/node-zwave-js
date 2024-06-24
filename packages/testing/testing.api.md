@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import { CommandClasses } from '@zwave-js/core';
 import { CommandClassInfo } from '@zwave-js/core';
 import { ConfigValue } from '@zwave-js/core';

@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import { CommandClasses } from '@zwave-js/core/safe';
 import { CommandClassInfo } from '@zwave-js/core/safe';
 import { JSONObject } from '@zwave-js/shared/safe';
