@@ -314,6 +314,171 @@ integrationTest("The 'simple' Door state value works correctly", {
 	},
 });
 
+integrationTest("The synthetic 'Door tilt state' value works correctly", {
+	// debug: true,
+
+	nodeCapabilities: {
+		commandClasses: [
+			CommandClasses.Version,
+			{
+				ccId: CommandClasses.Notification,
+				isSupported: true,
+				version: 8,
+				supportsV1Alarm: false,
+				notificationTypesAndEvents: {
+					// Access Control - Window open and Window closed
+					[0x06]: [0x16, 0x17],
+				},
+			},
+		],
+	},
+
+	testBody: async (t, driver, node, mockController, mockNode) => {
+		await node.commandClasses.Notification.getSupportedEvents(0x06);
+
+		const tiltVID = NotificationCCValues.doorTiltState.id;
+
+		const hasTiltVID = () =>
+			node.getDefinedValueIDs().some(
+				(vid) => NotificationCCValues.doorTiltState.is(vid),
+			);
+		// Before receiving any notifications with the tilt enum, the synthetic value should not exist
+		t.false(hasTiltVID());
+
+		// Send a notification to the node where the window is not tilted
+		let cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+			eventParameters: Buffer.from([0x00]), // ... in regular position
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		// The value should still not exist
+		t.false(hasTiltVID());
+
+		// ===
+
+		// Again with tilt
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+			eventParameters: Buffer.from([0x01]), // ... in tilt position
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		// The value should now exist
+		t.true(hasTiltVID());
+		t.is(node.getValue(tiltVID), 0x01);
+
+		// ===
+
+		// Again without tilt
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+			eventParameters: Buffer.from([0x00]), // ... in regular position
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(tiltVID), 0x00);
+
+		// ===
+
+		// Again with tilt to be able to detect changes
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+			eventParameters: Buffer.from([0x01]), // ... in tilt position
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(tiltVID), 0x01);
+
+		// ===
+
+		// And now without the enum
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x17, // Window/door is closed
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(tiltVID), 0x00);
+
+		// ===
+
+		// Again with tilt to be able to detect changes
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+			eventParameters: Buffer.from([0x01]), // ... in tilt position
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(tiltVID), 0x01);
+
+		// ===
+
+		// And again without the enum
+		cc = new NotificationCCReport(mockNode.host, {
+			nodeId: mockController.host.ownNodeId,
+			notificationType: 0x06,
+			notificationEvent: 0x16, // Window/door is open
+		});
+		await mockNode.sendToController(
+			createMockZWaveRequestFrame(cc, {
+				ackRequested: false,
+			}),
+		);
+		// wait a bit for the value to be updated
+		await wait(100);
+
+		t.is(node.getValue(tiltVID), 0x00);
+	},
+});
+
 integrationTest(
 	"Notification types with 'replace'-type enums fall back to the default value if the event parameter is not contained in the CC",
 	{
