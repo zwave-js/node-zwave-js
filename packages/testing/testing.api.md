@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import { CommandClasses } from '@zwave-js/core';
 import { CommandClassInfo } from '@zwave-js/core';
 import { ConfigValue } from '@zwave-js/core';
@@ -54,6 +52,7 @@ export type CCSpecificCapabilities = {
     [67]: ThermostatSetpointCCCapabilities;
     [99]: UserCodeCCCapabilities;
     [78]: ScheduleEntryLockCCCapabilities;
+    [CommandClasses.Meter]: MeterCCCapabilities;
 };
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -147,6 +146,32 @@ export interface LazyMockZWaveRequestFrame {
     repeaters: number[];
     // (undocumented)
     type: MockZWaveFrameType.Request;
+}
+
+// Warning: (ae-missing-release-tag) "MeterCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MeterCCCapabilities {
+    // (undocumented)
+    getValue?: (scale: number, rateType: number) => number | {
+        value: number;
+        deltaTime: number;
+        prevValue?: number;
+    } | undefined;
+    // (undocumented)
+    meterType: number;
+    // (undocumented)
+    onReset?: (options?: {
+        scale: number;
+        rateType: number;
+        targetValue: number;
+    }) => void;
+    // (undocumented)
+    supportedRateTypes: number[];
+    // (undocumented)
+    supportedScales: number[];
+    // (undocumented)
+    supportsReset: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "MOCK_FRAME_ACK_TIMEOUT" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -474,6 +499,10 @@ export interface WindowCoveringCCCapabilities {
     // (undocumented)
     supportedParameters: number[];
 }
+
+// Warnings were encountered during analysis:
+//
+// /home/dominic/Repositories/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
 
 // (No @packageDocumentation comment for this package)
 

@@ -4,13 +4,12 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import { AllOrNone } from '@zwave-js/shared';
 import { APIMethodsOf } from '@zwave-js/cc';
 import { AssociationAddress } from '@zwave-js/cc';
+import { AssociationCheckResult } from '@zwave-js/cc';
 import { AssociationGroup } from '@zwave-js/cc';
-import type { BasicDeviceClass } from '@zwave-js/config';
+import { BasicDeviceClass } from '@zwave-js/core/safe';
 import { BeamingInfo } from '@zwave-js/core/safe';
 import { BeamingInfo as BeamingInfo_2 } from '@zwave-js/core';
 import { BootloaderChunk } from '@zwave-js/serial';
@@ -19,8 +18,8 @@ import { CCAPIs } from '@zwave-js/cc';
 import { CCConstructor } from '@zwave-js/cc';
 import { CCNameOrId } from '@zwave-js/cc';
 import { CommandClass } from '@zwave-js/cc';
-import { CommandClasses } from '@zwave-js/core';
-import { CommandClasses as CommandClasses_2 } from '@zwave-js/core/safe';
+import { CommandClasses } from '@zwave-js/core/safe';
+import { CommandClasses as CommandClasses_2 } from '@zwave-js/core';
 import { CommandClassInfo } from '@zwave-js/core';
 import type { CommandClassInfo as CommandClassInfo_2 } from '@zwave-js/core/safe';
 import { Comparable } from 'alcalzone-shared/comparable';
@@ -61,7 +60,7 @@ import { FLiRS } from '@zwave-js/core/safe';
 import { FLiRS as FLiRS_2 } from '@zwave-js/core';
 import { formatId } from '@zwave-js/shared/safe';
 import { FunctionType } from '@zwave-js/serial';
-import type { GenericDeviceClass } from '@zwave-js/config';
+import { GenericDeviceClass } from '@zwave-js/core/safe';
 import { getEnumMemberName } from '@zwave-js/shared/safe';
 import { GraphNode } from '@zwave-js/core';
 import { guessFirmwareFileFormat } from '@zwave-js/core';
@@ -73,7 +72,8 @@ import { IVirtualEndpoint } from '@zwave-js/core/safe';
 import { IVirtualNode } from '@zwave-js/core';
 import type { IZWaveEndpoint } from '@zwave-js/core';
 import { IZWaveNode } from '@zwave-js/core';
-import { JSONObject } from '@zwave-js/shared';
+import { JSONObject } from '@zwave-js/shared/safe';
+import { JSONObject as JSONObject_2 } from '@zwave-js/shared';
 import { KEXFailType } from '@zwave-js/cc';
 import { LogConfig } from '@zwave-js/core';
 import { LogContext } from '@zwave-js/core';
@@ -135,7 +135,7 @@ import { RSSI } from '@zwave-js/core/safe';
 import { RSSI as RSSI_2 } from '@zwave-js/core';
 import { RssiError } from '@zwave-js/core/safe';
 import { rssiToString } from '@zwave-js/core';
-import { Scale } from '@zwave-js/config';
+import { Scale } from '@zwave-js/core/safe';
 import type { SecurityClass } from '@zwave-js/core/safe';
 import { SecurityClass as SecurityClass_2 } from '@zwave-js/core';
 import { SecurityClassOwner } from '@zwave-js/core';
@@ -144,14 +144,14 @@ import { SecurityManager2 } from '@zwave-js/core';
 import { SendCommandOptions } from '@zwave-js/core';
 import { SendCommandReturnType } from '@zwave-js/core';
 import { SendMessageOptions } from '@zwave-js/core';
-import { SensorType } from '@zwave-js/config';
+import { Sensor } from '@zwave-js/core/safe';
 import type { SerializedValue } from '@zwave-js/core/safe';
 import type { SerialPort } from 'serialport';
 import { SetbackState } from '@zwave-js/cc';
 import { SetValueAPIOptions } from '@zwave-js/cc';
 import { SetValueResult } from '@zwave-js/cc/safe';
 import { SinglecastCC } from '@zwave-js/core';
-import type { SpecificDeviceClass } from '@zwave-js/config';
+import { SpecificDeviceClass } from '@zwave-js/core/safe';
 import { Switchpoint } from '@zwave-js/cc';
 import { TransactionProgress } from '@zwave-js/core';
 import { TransactionProgressListener } from '@zwave-js/core';
@@ -363,15 +363,11 @@ export type DateAndTime = AllOrNone<{
 //
 // @public (undocumented)
 export class DeviceClass {
-    constructor(configManager: ConfigManager, basic: number, generic: number, specific: number);
+    constructor(basic: BasicDeviceClass, generic: number, specific: number);
     // (undocumented)
     readonly basic: BasicDeviceClass;
     // (undocumented)
     readonly generic: GenericDeviceClass;
-    // @deprecated (undocumented)
-    get mandatoryControlledCCs(): readonly CommandClasses[];
-    // @deprecated (undocumented)
-    get mandatorySupportedCCs(): readonly CommandClasses[];
     // (undocumented)
     readonly specific: SpecificDeviceClass;
     // (undocumented)
@@ -429,7 +425,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    getSafeCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
+    getSafeCCVersion(cc: CommandClasses_2, nodeId: number, endpointIndex?: number): number;
     // Warning: (ae-forgotten-export) The symbol "SendDataMulticastRequest" needs to be exported by the entry point index.d.ts
     // Warning: (ae-forgotten-export) The symbol "SendDataMulticastBridgeRequest" needs to be exported by the entry point index.d.ts
     getSendDataMulticastConstructor(): typeof SendDataMulticastRequest | typeof SendDataMulticastBridgeRequest;
@@ -437,7 +433,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    getSupportedCCVersion(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
+    getSupportedCCVersion(cc: CommandClasses_2, nodeId: number, endpointIndex?: number): number;
     getUserAgentStringWithComponents(components?: Record<string, string | null | undefined>): string;
     getValueDB(nodeId: number): ValueDB;
     hardReset(): Promise<void>;
@@ -450,7 +446,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    isCCSecure(ccId: CommandClasses, nodeId: number, endpointIndex?: number): boolean;
+    isCCSecure(ccId: CommandClasses_2, nodeId: number, endpointIndex?: number): boolean;
     isControllerNode(nodeId: number): boolean;
     // (undocumented)
     isInBootloader(): boolean;
@@ -581,41 +577,41 @@ export class Endpoint implements IZWaveEndpoint {
     constructor(
     nodeId: number,
     driver: Driver,
-    index: number, deviceClass?: DeviceClass, supportedCCs?: CommandClasses[]);
+    index: number, deviceClass?: DeviceClass, supportedCCs?: CommandClasses_2[]);
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void;
-    buildCCInterviewGraph(skipCCs: CommandClasses[]): GraphNode<CommandClasses>[];
+    addCC(cc: CommandClasses_2, info: Partial<CommandClassInfo>): void;
+    buildCCInterviewGraph(skipCCs: CommandClasses_2[]): GraphNode<CommandClasses_2>[];
     get commandClasses(): CCAPIs;
-    controlsCC(cc: CommandClasses): boolean;
-    createCCInstance<T extends CommandClass>(cc: CommandClasses | CCConstructor<T>): T | undefined;
-    createCCInstanceUnsafe<T extends CommandClass>(cc: CommandClasses | CCConstructor<T>): T | undefined;
+    controlsCC(cc: CommandClasses_2): boolean;
+    createCCInstance<T extends CommandClass>(cc: CommandClasses_2 | CCConstructor<T>): T | undefined;
+    createCCInstanceUnsafe<T extends CommandClass>(cc: CommandClasses_2 | CCConstructor<T>): T | undefined;
     // (undocumented)
     get deviceClass(): MaybeNotKnown<DeviceClass>;
     protected set deviceClass(deviceClass: MaybeNotKnown<DeviceClass>);
     protected readonly driver: Driver;
     get endpointLabel(): string | undefined;
     // (undocumented)
-    getCCs(): Iterable<[ccId: CommandClasses, info: CommandClassInfo]>;
-    getCCVersion(cc: CommandClasses): number;
+    getCCs(): Iterable<[ccId: CommandClasses_2, info: CommandClassInfo]>;
+    getCCVersion(cc: CommandClasses_2): number;
     getNodeUnsafe(): ZWaveNode | undefined;
     getSupportedCCInstances(): readonly CommandClass[];
     hideBasicCCInFavorOfActuatorCCs(): void;
     readonly index: number;
     get installerIcon(): MaybeNotKnown<number>;
-    invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses extends CC ? any : Omit<CCNameOrId, CommandClasses> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
-    isCCSecure(cc: CommandClasses): boolean;
+    invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : Omit<CCNameOrId, CommandClasses_2> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
+    isCCSecure(cc: CommandClasses_2): boolean;
     maybeAddBasicCCAsFallback(): void;
     maySupportBasicCC(): boolean;
     readonly nodeId: number;
     removeBasicCCSupportIfForbidden(): void;
-    removeCC(cc: CommandClasses): void;
+    removeCC(cc: CommandClasses_2): void;
     protected reset(): void;
-    supportsCC(cc: CommandClasses): boolean;
+    supportsCC(cc: CommandClasses_2): boolean;
     supportsCCAPI(cc: CCNameOrId): boolean;
     get userIcon(): MaybeNotKnown<number>;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "IZWaveEndpoint"
     readonly virtual = false;
-    wasCCRemovedViaConfig(cc: CommandClasses): boolean;
+    wasCCRemovedViaConfig(cc: CommandClasses_2): boolean;
 }
 
 export { EntryControlDataTypes }
@@ -717,13 +713,13 @@ export function formatRouteHealthCheckSummary(sourceNodeId: number, targetNodeId
 // @public
 export interface FoundNode {
     // (undocumented)
-    controlledCCs?: CommandClasses_2[];
+    controlledCCs?: CommandClasses[];
     // (undocumented)
     deviceClass?: DeviceClass;
     // (undocumented)
     id: number;
     // (undocumented)
-    supportedCCs?: CommandClasses_2[];
+    supportedCCs?: CommandClasses[];
 }
 
 // Warning: (ae-missing-release-tag) "Frame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -850,7 +846,7 @@ export interface LifelineHealthCheckResult {
     latency: number;
     minPowerlevel?: Powerlevel;
     // Warning: (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-    numNeighbors: number;
+    numNeighbors?: number;
     rating: number;
     routeChanges?: number;
     snrMargin?: number;
@@ -1000,7 +996,7 @@ export interface NodeDump {
     // (undocumented)
     commandClasses: Record<string, CommandClassDump>;
     // (undocumented)
-    compatFlags?: JSONObject;
+    compatFlags?: JSONObject_2;
     // (undocumented)
     configFileName?: string;
     // (undocumented)
@@ -1268,7 +1264,7 @@ export enum SecurityBootstrapFailure {
 
 export { SendMessageOptions }
 
-export { SensorType }
+export { Sensor }
 
 // Warning: (ae-missing-release-tag) "SerialAPISetupCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1341,15 +1337,15 @@ export class VirtualEndpoint implements IVirtualEndpoint {
     index: number);
     get commandClasses(): CCAPIs;
     protected readonly driver: Driver;
-    getCCVersion(cc: CommandClasses_2): number;
+    getCCVersion(cc: CommandClasses): number;
     readonly index: number;
-    invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : Omit<CCNameOrId, CommandClasses_2> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
+    invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses extends CC ? any : Omit<CCNameOrId, CommandClasses> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     // (undocumented)
     get node(): VirtualNode;
     // (undocumented)
     get nodeId(): number | MulticastDestination;
-    supportsCC(cc: CommandClasses_2): boolean;
-    supportsCCAPI(cc: CommandClasses_2): boolean;
+    supportsCC(cc: CommandClasses): boolean;
+    supportsCCAPI(cc: CommandClasses): boolean;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "IZWaveEndpoint"
     readonly virtual = true;
 }
@@ -1435,6 +1431,10 @@ export interface ZWaveController extends ControllerStatisticsHost {
 
 // @public (undocumented)
 export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks> {
+    // Warning: (tsdoc-code-fence-opening-indent) The opening backtick for a code fence must appear at the start of the line
+    // Warning: (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+    // Warning: (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+    // Warning: (tsdoc-code-fence-opening-indent) The opening backtick for a code fence must appear at the start of the line
     addAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignReturnRoutes"
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignReturnRoutes"
@@ -1464,6 +1464,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     beginRebuildingRoutes(options?: RebuildRoutesOptions): boolean;
     // (undocumented)
     cancelSecureBootstrapS2(reason: KEXFailType): void;
+    checkAssociation(source: AssociationAddress, group: number, destination: AssociationAddress): AssociationCheckResult;
     configureSUC(nodeId: number, enableSUC: boolean, enableSIS: boolean): Promise<boolean>;
     deleteReturnRoutes(nodeId: number): Promise<boolean>;
     deleteSUCReturnRoutes(nodeId: number): Promise<boolean>;
@@ -1536,7 +1537,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // (undocumented)
     get inclusionState(): InclusionState;
     isAnyOTAFirmwareUpdateInProgress(): boolean;
-    isAssociationAllowed(source: AssociationAddress, group: number, destination: AssociationAddress): boolean;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     isFailedNode(nodeId: number): Promise<boolean>;
     isFirmwareUpdateInProgress(): boolean;
@@ -1798,7 +1798,7 @@ export interface ZWaveNode extends TypedEventEmitter<ZWaveNodeEventCallbacks & S
 
 // @public
 export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNode {
-    constructor(id: number, driver: Driver, deviceClass?: DeviceClass, supportedCCs?: CommandClasses[], controlledCCs?: CommandClasses[], valueDB?: ValueDB);
+    constructor(id: number, driver: Driver, deviceClass?: DeviceClass, supportedCCs?: CommandClasses_2[], controlledCCs?: CommandClasses_2[], valueDB?: ValueDB);
     abortFirmwareUpdate(): Promise<void>;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkLifelineHealth"
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkRouteHealth"
@@ -1854,7 +1854,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get individualEndpointCount(): MaybeNotKnown<number>;
     interview(): Promise<void>;
     get interviewAttempts(): number;
-    interviewCC(cc: CommandClasses): Promise<void>;
+    interviewCC(cc: CommandClasses_2): Promise<void>;
     protected interviewCCs(): Promise<boolean>;
     protected interviewNodeInfo(): Promise<void>;
     get interviewStage(): InterviewStage;
@@ -1894,7 +1894,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get protocolVersion(): MaybeNotKnown<ProtocolVersion_2>;
     protected queryProtocolInfo(): Promise<void>;
     get ready(): boolean;
-    refreshCCValues(cc: CommandClasses): Promise<void>;
+    refreshCCValues(cc: CommandClasses_2): Promise<void>;
     refreshInfo(options?: RefreshInfoOptions): Promise<void>;
     refreshValues(): Promise<void>;
     // (undocumented)
@@ -2103,7 +2103,7 @@ export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
 // @public
 export type ZWaveNotificationCallbackParams_EntryControlCC = [
 endpoint: Endpoint,
-ccId: (typeof CommandClasses_2)["Entry Control"],
+ccId: (typeof CommandClasses)["Entry Control"],
 args: ZWaveNotificationCallbackArgs_EntryControlCC
 ];
 
@@ -2112,7 +2112,7 @@ args: ZWaveNotificationCallbackArgs_EntryControlCC
 // @public
 export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
 endpoint: Endpoint,
-ccId: (typeof CommandClasses_2)["Multilevel Switch"],
+ccId: (typeof CommandClasses)["Multilevel Switch"],
 args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 ];
 
@@ -2121,7 +2121,7 @@ args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
 // @public
 export type ZWaveNotificationCallbackParams_NotificationCC = [
 endpoint: Endpoint,
-ccId: CommandClasses_2.Notification,
+ccId: CommandClasses.Notification,
 args: ZWaveNotificationCallbackArgs_NotificationCC
 ];
 
@@ -2130,7 +2130,7 @@ args: ZWaveNotificationCallbackArgs_NotificationCC
 // @public
 export type ZWaveNotificationCallbackParams_PowerlevelCC = [
 endpoint: Endpoint,
-ccId: CommandClasses_2.Powerlevel,
+ccId: CommandClasses.Powerlevel,
 args: ZWaveNotificationCallbackArgs_PowerlevelCC
 ];
 
@@ -2152,8 +2152,6 @@ export interface ZWaveOptions extends ZWaveHostOptions {
     };
     disableOptimisticValueUpdate?: boolean;
     emitValueUpdateAfterSetValue?: boolean;
-    // @deprecated (undocumented)
-    enableSoftReset?: boolean;
     // (undocumented)
     features: {
         softReset?: boolean;
@@ -2237,18 +2235,34 @@ export * from "@zwave-js/cc";
 
 // Warnings were encountered during analysis:
 //
-// src/lib/controller/Controller.ts:850:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
-// src/lib/driver/Driver.ts:712:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/lib/driver/Driver.ts:4183:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5332:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
-// src/lib/driver/Driver.ts:5725:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5726:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5768:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5769:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5905:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/ZWaveOptions.ts:281:120 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/lib/node/Node.ts:1027:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
-// src/lib/node/Node.ts:2915:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:477:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+//   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
+//     Type 'undefined' is not assignable to type 'string | number | symbol'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1273:41 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1280:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1398:40 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1338:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
+//   Property 'groupId' is missing in type 'Security2Extension' but required in type 'MGRPExtension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1349:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
+//   Type 'Security2Extension' is missing the following properties from type 'MPANExtension': groupId, innerMPANState
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1363:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1421:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/dominic/Repositories/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
+// src/lib/controller/Controller.ts:852:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
+// src/lib/driver/Driver.ts:701:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/lib/driver/Driver.ts:4191:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5340:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
+// src/lib/driver/Driver.ts:5733:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5734:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5776:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5777:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5913:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/ZWaveOptions.ts:270:120 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/lib/node/Node.ts:1028:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
+// src/lib/node/Node.ts:2941:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/zniffer/Zniffer.ts:620:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/zniffer/Zniffer.ts:621:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 

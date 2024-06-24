@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import type { CommandClasses } from '@zwave-js/core';
 import type { ConfigManager } from '@zwave-js/config';
 import type { ControllerLogger } from '@zwave-js/core';
@@ -78,11 +76,10 @@ export type TestingHost = Overwrite<Omit<ZWaveApplicationHost, "__internalIsMock
 // Warning: (ae-missing-release-tag) "ZWaveApplicationHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export interface ZWaveApplicationHost extends ZWaveHost {
+export interface ZWaveApplicationHost extends ZWaveValueHost, ZWaveHost {
     configManager: ConfigManager;
     // (undocumented)
     controllerLog: ControllerLogger;
-    getValueDB(nodeId: number): ValueDB;
     isControllerNode(nodeId: number): boolean;
     nodes: ReadonlyThrowingMap<number, IZWaveNode>;
     // (undocumented)
@@ -91,7 +88,6 @@ export interface ZWaveApplicationHost extends ZWaveHost {
     schedulePoll(nodeId: number, valueId: ValueID, options: NodeSchedulePollOptions): boolean;
     // (undocumented)
     sendCommand<TResponse extends ICommandClass | undefined = undefined>(command: ICommandClass, options?: SendCommandOptions): Promise<SendCommandReturnType<TResponse>>;
-    tryGetValueDB(nodeId: number): ValueDB | undefined;
     // (undocumented)
     waitForCommand<T extends ICommandClass>(predicate: (cc: ICommandClass) => boolean, timeout: number): Promise<T>;
 }
@@ -146,6 +142,14 @@ export interface ZWaveHostOptions {
         refreshValue: number;
         refreshValueAfterTransition: number;
     };
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveValueHost" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface ZWaveValueHost {
+    getValueDB(nodeId: number): ValueDB;
+    tryGetValueDB(nodeId: number): ValueDB | undefined;
 }
 
 // (No @packageDocumentation comment for this package)
