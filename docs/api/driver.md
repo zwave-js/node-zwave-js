@@ -898,6 +898,14 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
 		 */
 		unresponsiveControllerRecovery?: boolean;
+
+		/**
+		 * Controllers of the 700 series and newer have a hardware watchdog that can be enabled to automatically
+		 * reset the chip in case it becomes unresponsive. This option controls whether the watchdog should be enabled.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_WATCHDOG env variable is set.
+		 */
+		watchdog?: boolean;
 	};
 	preferences: {
 		/**

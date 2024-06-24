@@ -1529,6 +1529,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     getProvisioningEntries(): SmartStartProvisioningEntry[];
     getProvisioningEntry(dskOrNodeId: string | number): Readonly<SmartStartProvisioningEntry> | undefined;
     getRFRegion(): Promise<RFRegion_2>;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    getSupportedRFRegions(filterSubsets?: boolean): MaybeNotKnown<readonly RFRegion_2[]>;
     hasPlannedProvisioningEntries(): boolean;
     get homeId(): MaybeNotKnown<number>;
     // (undocumented)
@@ -1606,10 +1608,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     setPriorityRoute(destinationNodeId: number, repeaters: number[], routeSpeed: ZWaveDataRate): Promise<boolean>;
     setRFRegion(region: RFRegion_2): Promise<boolean>;
+    startWatchdog(): Promise<boolean>;
     get status(): ControllerStatus_2;
     stopExclusion(): Promise<boolean>;
     stopInclusion(): Promise<boolean>;
     stopRebuildingRoutes(): boolean;
+    stopWatchdog(): Promise<boolean>;
     // (undocumented)
     get sucNodeId(): MaybeNotKnown<number>;
     // (undocumented)
@@ -2154,6 +2158,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
     features: {
         softReset?: boolean;
         unresponsiveControllerRecovery?: boolean;
+        watchdog?: boolean;
     };
     inclusionUserCallbacks?: InclusionUserCallbacks;
     // (undocumented)
@@ -2232,18 +2237,18 @@ export * from "@zwave-js/cc";
 
 // Warnings were encountered during analysis:
 //
-// src/lib/controller/Controller.ts:849:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
-// src/lib/driver/Driver.ts:706:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/lib/driver/Driver.ts:4172:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5242:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
-// src/lib/driver/Driver.ts:5645:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5646:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5688:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5689:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/Driver.ts:5825:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/driver/ZWaveOptions.ts:273:120 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/lib/node/Node.ts:1026:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
-// src/lib/node/Node.ts:2914:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/controller/Controller.ts:850:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
+// src/lib/driver/Driver.ts:712:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/lib/driver/Driver.ts:4183:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5332:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
+// src/lib/driver/Driver.ts:5725:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5726:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5768:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5769:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/Driver.ts:5905:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/driver/ZWaveOptions.ts:281:120 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/lib/node/Node.ts:1027:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
+// src/lib/node/Node.ts:2915:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/zniffer/Zniffer.ts:620:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/zniffer/Zniffer.ts:621:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 
