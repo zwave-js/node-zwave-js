@@ -472,6 +472,7 @@ export class VersionCC extends CommandClass {
 				let logMessage: string;
 				if (supportedVersion > 0) {
 					endpoint.addCC(cc, {
+						isSupported: true,
 						version: supportedVersion,
 					});
 					logMessage = `  supports CC ${CommandClasses[cc]} (${
