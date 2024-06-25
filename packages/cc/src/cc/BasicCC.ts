@@ -327,14 +327,17 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			ret.push(...super.getDefinedValueIDs(applHost));
 		}
 
-		if (
-			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat?.mapBasicSet
-				=== "event"
-		) {
+		const compat = applHost.getDeviceConfig?.(endpoint.nodeId)?.compat;
+		if (compat?.mapBasicSet === "event") {
 			// Add the compat event value if it should be exposed
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
-		} else if (endpoint.controlsCC(CommandClasses.Basic)) {
-			// Otherwise, only expose currentValue on devices that only control Basic CC
+		} else if (
+			endpoint.controlsCC(CommandClasses.Basic)
+			|| compat?.mapBasicReport === false
+			|| compat?.mapBasicSet === "report"
+		) {
+			// Otherwise, only expose currentValue on devices that only control Basic CC,
+			// or devices where a compat flag indicates that currentValue is meant to be exposed
 			ret.push(BasicCCValues.currentValue.endpoint(endpoint.index));
 		}
 

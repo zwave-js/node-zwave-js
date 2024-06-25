@@ -52,6 +52,9 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 				nodeId: self.id,
 				...self.capabilities,
 				supportedCCs: [...self.implementedCCs]
+					// Basic CC must not be included in the NIF
+					.filter(([ccId]) => ccId !== CommandClasses.Basic)
+					// Only include supported CCs
 					.filter(([, info]) => info.isSupported)
 					.map(([ccId]) => ccId),
 			});

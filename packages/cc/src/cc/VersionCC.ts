@@ -591,6 +591,8 @@ export class VersionCC extends CommandClass {
 		for (const [cc] of endpoint.getCCs()) {
 			// We already queried the Version CC version at the start of this interview
 			if (cc === CommandClasses.Version) continue;
+			// And we queried Basic CC just before this
+			if (cc === CommandClasses.Basic) continue;
 			// Skip the query of endpoint CCs that are also supported by the root device
 			if (this.endpointIndex > 0 && node.getCCVersion(cc) > 0) continue;
 			await queryCCVersion(cc);
