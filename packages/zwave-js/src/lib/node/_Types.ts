@@ -251,10 +251,18 @@ export interface LifelineHealthCheckResult {
 	 * Will use the time in TX reports if available, otherwise fall back to measuring the round trip time.
 	 */
 	latency: number;
-	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
-	numNeighbors: number;
-	/** How many pings were not ACKed by the node. Lower = better, ideally 0. */
+
+	/**
+	 * How many routing neighbors this node has (Z-Wave Classic only). Higher = better, ideally > 2.
+	 * For Z-Wave LR, this is undefined.
+	 */
+	numNeighbors?: number;
+
+	/**
+	 * How many pings were not ACKed by the node. Lower = better, ideally 0.
+	 */
 	failedPingsNode: number;
+
 	/**
 	 * The minimum powerlevel where all pings from the node were ACKed by the controller. Higher = better, ideally 6dBm or more.
 	 *
@@ -267,6 +275,7 @@ export interface LifelineHealthCheckResult {
 	 * Only available if the node supports Powerlevel CC
 	 */
 	failedPingsController?: number;
+
 	/**
 	 * An estimation of the Signal-to-Noise Ratio Margin in dBm.
 	 *
@@ -304,6 +313,7 @@ export interface LifelineHealthCheckSummary {
 	 * | ❌   0 |           10 |             - |                - |               - |          - |
 	 *
 	 * If the min. powerlevel or SNR margin can not be measured, the condition is assumed to be fulfilled.
+	 * The no. of neighbors is only relevant for Z-Wave Classic. The condition is assumed to be fulfilled for Z-Wave LR.
 	 */
 	rating: number;
 }

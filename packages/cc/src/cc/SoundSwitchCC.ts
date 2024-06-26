@@ -11,7 +11,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
@@ -494,9 +498,9 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "# of tones": this.toneCount },
 		};
 	}
@@ -551,9 +555,9 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"tone id": this.toneId,
 				duration: `${this.duration} seconds`,
@@ -603,9 +607,9 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "tone id": this.toneId },
 		};
 	}
@@ -647,9 +651,9 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"default volume": `${this.defaultVolume} %`,
 				"default tone id": this.defaultToneId,
@@ -696,9 +700,9 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"default volume": `${this.defaultVolume} %`,
 				"default tone id": this.defaultToneId,
@@ -748,7 +752,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -756,7 +760,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -782,7 +786,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	@ccValue(SoundSwitchCCValues.volume)
 	public volume?: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -790,7 +794,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

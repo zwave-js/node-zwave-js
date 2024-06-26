@@ -1,4 +1,5 @@
 import {
+	type BasicDeviceClass,
 	type CommandClasses,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -325,9 +326,9 @@ export class AddNodeToNetworkRequestStatusReport
 	}
 }
 
-interface AddNodeStatusContext {
+export interface AddNodeStatusContext {
 	nodeId: number;
-	basicDeviceClass?: number;
+	basicDeviceClass?: BasicDeviceClass;
 	genericDeviceClass?: number;
 	specificDeviceClass?: number;
 	supportedCCs?: CommandClasses[];

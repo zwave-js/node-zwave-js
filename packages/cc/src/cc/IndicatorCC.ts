@@ -2,6 +2,7 @@ import type { ConfigManager } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type IZWaveEndpoint,
+	Indicator,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -11,10 +12,15 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
+	getIndicatorProperty,
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp, roundTo } from "alcalzone-shared/math";
@@ -197,13 +203,13 @@ export const IndicatorCCValues = Object.freeze({
  */
 function getIndicatorMetadata(
 	configManager: ConfigManager,
-	indicatorId: number,
+	indicatorId: Indicator,
 	propertyId: number,
 	overrideIndicatorLabel?: string,
 ): ValueMetadata {
 	const label = overrideIndicatorLabel
-		|| configManager.lookupIndicator(indicatorId);
-	const prop = configManager.lookupProperty(propertyId);
+		|| getIndicatorName(indicatorId);
+	const prop = getIndicatorProperty(propertyId);
 	const baseMetadata = IndicatorCCValues.valueV2(
 		indicatorId,
 		propertyId,
@@ -244,16 +250,15 @@ function getIndicatorMetadata(
 }
 
 function getIndicatorName(
-	configManager: ConfigManager,
 	indicatorId: number | undefined,
 ): string {
-	let indicatorName = "0 (default)";
 	if (indicatorId) {
-		indicatorName = `${num2hex(indicatorId)} (${
-			configManager.lookupIndicator(indicatorId) ?? `Unknown`
+		return `${num2hex(indicatorId)} (${
+			indicatorId in Indicator ? Indicator[indicatorId] : "Unknown"
 		})`;
+	} else {
+		return "0 (default)";
 	}
-	return indicatorName;
 }
 
 const MAX_INDICATOR_OBJECTS = 31;
@@ -808,7 +813,7 @@ export class IndicatorCC extends CommandClass {
 			&& typeof propertyKey === "number"
 		) {
 			// The indicator property is our property key
-			const prop = applHost.configManager.lookupProperty(propertyKey);
+			const prop = getIndicatorProperty(propertyKey);
 			if (prop) return prop.label;
 		}
 		return super.translatePropertyKey(applHost, property, propertyKey);
@@ -821,8 +826,7 @@ export class IndicatorCC extends CommandClass {
 	): string {
 		if (typeof property === "number" && typeof propertyKey === "number") {
 			// The indicator corresponds to our property
-			const label = applHost.configManager.lookupIndicator(property);
-			if (label) return label;
+			if (property in Indicator) return Indicator[property];
 		}
 		return super.translateProperty(applHost, property, propertyKey);
 	}
@@ -959,7 +963,7 @@ export class IndicatorCCSet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
 			message["indicator 0 value"] = this.indicator0Value;
@@ -977,7 +981,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			}`;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1173,7 +1177,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
 			message["indicator 0 value"] = this.indicator0Value;
@@ -1191,7 +1195,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			}`;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1228,14 +1232,11 @@ export class IndicatorCCGet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				indicator: getIndicatorName(
-					applHost.configManager,
-					this.indicatorId,
-				),
+				indicator: getIndicatorName(this.indicatorId),
 			},
 		};
 	}
@@ -1314,27 +1315,21 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				indicator: getIndicatorName(
-					applHost.configManager,
-					this.indicatorId,
-				),
+				indicator: getIndicatorName(this.indicatorId),
 				"supported properties": `${
 					this.supportedProperties
 						.map(
 							(id) =>
-								applHost.configManager.lookupProperty(id)?.label
+								getIndicatorProperty(id)?.label
 									?? `Unknown (${num2hex(id)})`,
 						)
 						.join(", ")
 				}`,
-				"next indicator": getIndicatorName(
-					applHost.configManager,
-					this.nextIndicatorId,
-				),
+				"next indicator": getIndicatorName(this.nextIndicatorId),
 			},
 		};
 	}
@@ -1380,14 +1375,11 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				indicator: getIndicatorName(
-					applHost.configManager,
-					this.indicatorId,
-				),
+				indicator: getIndicatorName(this.indicatorId),
 			},
 		};
 	}
@@ -1449,9 +1441,9 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"indicator ID": this.indicatorId,
 				description: this.description || "(none)",
@@ -1506,9 +1498,9 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"indicator ID": this.indicatorId,
 			},

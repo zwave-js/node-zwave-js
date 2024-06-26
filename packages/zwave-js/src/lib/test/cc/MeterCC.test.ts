@@ -30,12 +30,6 @@ function buildCCBuffer(payload: Buffer): Buffer {
 const host = createTestingHost();
 const node2 = createTestNode(host, { id: 2 });
 
-test.before(async (t) => {
-	// Loading configuration may take a while on CI
-	t.timeout(30000);
-	await host.configManager.loadMeters();
-});
-
 test("the Get command (V1) should serialize correctly", (t) => {
 	const cc = new MeterCCGet(host, { nodeId: 1 });
 	const expected = buildCCBuffer(
@@ -104,16 +98,16 @@ test("the Reset command (V6) should serialize correctly", (t) => {
 	const cc = new MeterCCReset(host, {
 		nodeId: 1,
 		type: 7,
-		targetValue: 0x010203,
+		scale: 3,
+		rateType: RateType.Unspecified,
+		targetValue: 12.3,
 	});
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Reset, // CC Command
-			0b100_00111, // Size, Type
-			0,
-			1,
-			2,
-			3,
+			0b0_00_00111, // scale (2), rate type, type
+			0b001_11_001, // precision, scale, size
+			123, // 12.3
 		]),
 	);
 	t.deepEqual(cc.serialize(), expected);

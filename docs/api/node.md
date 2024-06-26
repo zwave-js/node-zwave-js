@@ -531,10 +531,18 @@ interface LifelineHealthCheckResult {
 	 * Will use the time in TX reports if available, otherwise fall back to measuring the round trip time.
 	 */
 	latency: number;
-	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
-	numNeighbors: number;
-	/** How many pings were not ACKed by the node. Lower = better, ideally 0. */
+
+	/**
+	 * How many routing neighbors this node has (Z-Wave Classic only). Higher = better, ideally > 2.
+	 * For Z-Wave LR, this is undefined.
+	 */
+	numNeighbors?: number;
+
+	/**
+	 * How many pings were not ACKed by the node. Lower = better, ideally 0.
+	 */
 	failedPingsNode: number;
+
 	/**
 	 * The minimum powerlevel where all pings from the node were ACKed by the controller. Higher = better, ideally 6dBm or more.
 	 *
@@ -547,6 +555,7 @@ interface LifelineHealthCheckResult {
 	 * Only available if the node supports Powerlevel CC
 	 */
 	failedPingsController?: number;
+
 	/**
 	 * An estimation of the Signal-to-Noise Ratio Margin in dBm.
 	 *
@@ -887,37 +896,33 @@ interface DeviceClass {
 }
 ```
 
-<!-- #import BasicDeviceClass from "@zwave-js/config" -->
+<!-- #import BasicDeviceClass from "@zwave-js/core" -->
 
 ```ts
-interface BasicDeviceClass {
-	key: number;
-	label: string;
+enum BasicDeviceClass {
+	Controller = 0x01,
+	"Static Controller" = 0x02,
+	"End Node" = 0x03,
+	"Routing End Node" = 0x04,
 }
 ```
 
-<!-- #import GenericDeviceClass from "@zwave-js/config" -->
+<!-- #import GenericDeviceClass from "@zwave-js/core" -->
 
 ```ts
 interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly requiresSecurity?: boolean;
+	readonly zwavePlusDeviceType?: string;
+	readonly requiresSecurity: boolean;
 	readonly maySupportBasicCC: boolean;
-	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
 }
 ```
 
-<!-- #import SpecificDeviceClass from "@zwave-js/config" -->
+<!-- #import SpecificDeviceClass from "@zwave-js/core" -->
 
 ```ts
-interface SpecificDeviceClass {
-	readonly key: number;
-	readonly label: string;
-	readonly zwavePlusDeviceType?: string;
-	readonly requiresSecurity?: boolean;
-	readonly maySupportBasicCC: boolean;
-}
+type SpecificDeviceClass = GenericDeviceClass;
 ```
 
 ### `zwavePlusVersion`

@@ -10,7 +10,11 @@ import {
 	parseMaybeNumber,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -413,7 +417,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.position != undefined) {
 			message.position = this.position;
@@ -422,7 +426,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 			message.tilt = this.tilt;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -487,7 +491,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		return this._tilt;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.position != undefined) {
 			message.position = this.position;
@@ -496,7 +500,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			message.tilt = this.tilt;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

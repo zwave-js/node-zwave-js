@@ -1,4 +1,5 @@
 import {
+	type BasicDeviceClass,
 	CommandClasses,
 	type DataRate,
 	type FLiRS,
@@ -106,7 +107,7 @@ export class ZWaveProtocolCCNodeInformationFrame extends ZWaveProtocolCC
 		this.supportedCCs = nif.supportedCCs;
 	}
 
-	public basicDeviceClass: number;
+	public basicDeviceClass: BasicDeviceClass;
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 	public isListening: boolean;
@@ -425,7 +426,7 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC
 
 	public sequenceNumber: number;
 	public sourceNodeId: number;
-	public basicDeviceClass: number;
+	public basicDeviceClass: BasicDeviceClass;
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 	public isListening: boolean;
@@ -641,7 +642,7 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC
 	}
 
 	public newNodeId: number;
-	public basicDeviceClass: number;
+	public basicDeviceClass: BasicDeviceClass;
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 	public isListening: boolean;
