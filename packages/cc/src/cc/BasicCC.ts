@@ -327,14 +327,19 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			ret.push(...super.getDefinedValueIDs(applHost));
 		}
 
-		if (
-			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat?.mapBasicSet
-				=== "event"
-		) {
+		const compat = applHost.getDeviceConfig?.(endpoint.nodeId)?.compat;
+		if (compat?.mapBasicSet === "event") {
 			// Add the compat event value if it should be exposed
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
-		} else if (endpoint.controlsCC(CommandClasses.Basic)) {
-			// Otherwise, only expose currentValue on devices that only control Basic CC
+		} else if (
+			!endpoint.supportsCC(CommandClasses.Basic) && (
+				endpoint.controlsCC(CommandClasses.Basic)
+				|| compat?.mapBasicReport === false
+				|| compat?.mapBasicSet === "report"
+			)
+		) {
+			// Otherwise, only expose currentValue on devices that only control Basic CC,
+			// or devices where a compat flag indicates that currentValue is meant to be exposed
 			ret.push(BasicCCValues.currentValue.endpoint(endpoint.index));
 		}
 
@@ -430,6 +435,49 @@ export class BasicCCReport extends BasicCC {
 
 	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		// Basic CC Report persists its values itself, since there are some
+		// specific rules when which value may be persisted.
+		// These rules are essentially encoded in the getDefinedValueIDs overload,
+		// so we simply reuse that here.
+
+		// Figure out which values may be persisted.
+		const definedValueIDs = this.getDefinedValueIDs(applHost);
+		const shouldPersistCurrentValue = definedValueIDs.some((vid) =>
+			BasicCCValues.currentValue.is(vid)
+		);
+		const shouldPersistTargetValue = definedValueIDs.some((vid) =>
+			BasicCCValues.targetValue.is(vid)
+		);
+		const shouldPersistDuration = definedValueIDs.some((vid) =>
+			BasicCCValues.duration.is(vid)
+		);
+
+		if (this.currentValue !== undefined && shouldPersistCurrentValue) {
+			this.setValue(
+				applHost,
+				BasicCCValues.currentValue,
+				this.currentValue,
+			);
+		}
+		if (this.targetValue !== undefined && shouldPersistTargetValue) {
+			this.setValue(
+				applHost,
+				BasicCCValues.targetValue,
+				this.targetValue,
+			);
+		}
+		if (this.duration !== undefined && shouldPersistDuration) {
+			this.setValue(
+				applHost,
+				BasicCCValues.duration,
+				this.duration,
+			);
+		}
+
+		return true;
+	}
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([

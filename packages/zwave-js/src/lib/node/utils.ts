@@ -313,14 +313,18 @@ export function getDefinedValueIDsInternal(
 ): TranslatedValueID[] {
 	let ret: ValueID[] = [];
 	const allowControlled: CommandClasses[] = [
-		CommandClasses.Basic,
 		CommandClasses["Scene Activation"],
 	];
 	for (const endpoint of getAllEndpoints(applHost, node)) {
 		for (const cc of allCCs) {
 			if (
+				// Create values only for supported CCs
 				endpoint.supportsCC(cc)
+				// ...and some controlled CCs
 				|| (endpoint.controlsCC(cc) && allowControlled.includes(cc))
+				// ...and possibly Basic CC, which has some extra checks to know
+				// whether values should be exposed
+				|| cc === CommandClasses.Basic
 			) {
 				const ccInstance = CommandClass.createInstanceUnchecked(
 					applHost,
