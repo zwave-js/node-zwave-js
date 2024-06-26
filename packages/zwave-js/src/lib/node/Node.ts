@@ -1832,7 +1832,10 @@ export class ZWaveNode extends Endpoint
 				&& this.status !== NodeStatus.Alive
 			) {
 				// Ping non-sleeping nodes to determine their status
-				await this.ping();
+				if (!await this.ping()) {
+					// Not alive, abort the interview
+					return false;
+				}
 			}
 
 			if (this.interviewStage === InterviewStage.ProtocolInfo) {
@@ -2258,7 +2261,11 @@ protocol version:      ${this.protocolVersion}`;
 						this._hasEmittedNoS2NetworkKeyError = true;
 					}
 				} else {
-					await interviewEndpoint(this, CommandClasses["Security 2"]);
+					const action = await interviewEndpoint(
+						this,
+						CommandClasses["Security 2"],
+					);
+					if (typeof action === "boolean") return action;
 				}
 			}
 		} else {
@@ -2315,7 +2322,11 @@ protocol version:      ${this.protocolVersion}`;
 						this._hasEmittedNoS0NetworkKeyError = true;
 					}
 				} else {
-					await interviewEndpoint(this, CommandClasses.Security);
+					const action = await interviewEndpoint(
+						this,
+						CommandClasses.Security,
+					);
+					if (typeof action === "boolean") return action;
 				}
 			}
 		} else {
@@ -2334,10 +2345,11 @@ protocol version:      ${this.protocolVersion}`;
 				"silly",
 			);
 
-			await interviewEndpoint(
+			const action = await interviewEndpoint(
 				this,
 				CommandClasses["Manufacturer Specific"],
 			);
+			if (typeof action === "boolean") return action;
 		}
 
 		// Basic CC MUST only be used/interviewed when no other actuator CC is supported. If Basic CC is not in the NIF
@@ -2351,7 +2363,11 @@ protocol version:      ${this.protocolVersion}`;
 				"silly",
 			);
 
-			await interviewEndpoint(this, CommandClasses.Version);
+			const action = await interviewEndpoint(
+				this,
+				CommandClasses.Version,
+			);
+			if (typeof action === "boolean") return action;
 
 			// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
 			await this.loadDeviceConfig();
@@ -2380,7 +2396,11 @@ protocol version:      ${this.protocolVersion}`;
 				"silly",
 			);
 
-			await interviewEndpoint(this, CommandClasses["Wake Up"]);
+			const action = await interviewEndpoint(
+				this,
+				CommandClasses["Wake Up"],
+			);
+			if (typeof action === "boolean") return action;
 		}
 
 		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
@@ -2652,7 +2672,12 @@ protocol version:      ${this.protocolVersion}`;
 					level: "silly",
 				});
 
-				await interviewEndpoint(endpoint, CommandClasses.Version, true);
+				const action = await interviewEndpoint(
+					endpoint,
+					CommandClasses.Version,
+					true,
+				);
+				if (typeof action === "boolean") return action;
 			} else {
 				this.driver.controllerLog.logNode(this.id, {
 					endpoint: endpoint.index,
