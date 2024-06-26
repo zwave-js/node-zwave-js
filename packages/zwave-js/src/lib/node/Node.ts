@@ -2970,11 +2970,8 @@ protocol version:      ${this.protocolVersion}`;
 			endpoint.addCC(CommandClasses.Basic, { isControlled: true });
 		}
 
-		// Don't offer or interview the Basic CC if any actuator CC is supported, unless the config file tells us
-		// not to map Basic CC reports
-		if (compat?.mapBasicReport !== false) {
-			endpoint.hideBasicCCInFavorOfActuatorCCs();
-		}
+		// Mark Basic CC as not supported if any other actuator CC is supported
+		endpoint.hideBasicCCInFavorOfActuatorCCs();
 
 		// Window Covering CC:
 		// CL:006A.01.51.01.2: A controlling node MUST NOT interview and provide controlling functionalities for the
@@ -6242,14 +6239,14 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Remove the Basic CC if it should be hidden
 		// TODO: Do this as part of loadDeviceConfig
-		const compat = this._deviceConfig?.compat;
-		if (
-			compat?.mapBasicReport !== false && compat?.mapBasicSet !== "event"
-		) {
-			for (const endpoint of this.getAllEndpoints()) {
-				endpoint.hideBasicCCInFavorOfActuatorCCs();
-			}
+		// const compat = this._deviceConfig?.compat;
+		// if (
+		// 	compat?.mapBasicReport !== false && compat?.mapBasicSet !== "event"
+		// ) {
+		for (const endpoint of this.getAllEndpoints()) {
+			endpoint.hideBasicCCInFavorOfActuatorCCs();
 		}
+		// }
 
 		// Mark already-interviewed nodes as potentially ready
 		if (this.interviewStage === InterviewStage.Complete) {
