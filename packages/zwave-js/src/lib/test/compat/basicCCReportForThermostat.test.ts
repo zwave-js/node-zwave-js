@@ -6,7 +6,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"A Thermostat with compat flag mapBasicReport=false exposes currentValue",
 	{
-		debug: true,
+		// debug: true,
 
 		nodeCapabilities: {
 			manufacturerId: 0xdead,
