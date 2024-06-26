@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.12.1 (2024-06-26)
 ### Bugfixes
 * Fixed an issue where the watchdog feature could cause Z-Wave JS to stall after attempting controller recovery (#6968)
 * Reset controller again when transmitting to a problematic node makes the controller become unresponsive again after automatic recovery (#6968)
