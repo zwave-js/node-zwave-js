@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where the watchdog feature could cause Z-Wave JS to stall after attempting controller recovery (#6968)
+* Reset controller again when transmitting to a problematic node makes the controller become unresponsive again after automatic recovery (#6968)
+* Node interviews are now aborted in more cases when node is determined to be dead (#6967)
+* Expose Basic CC `currentValue` when certain compat flags are set (#6964)
+
 ## 12.12.0 (2024-06-24)
 We were informed by Silicon Labs that 700/800 series controllers have a hardware watchdog that can reset the controller when it becomes unresponsive. This feature is now enabled by default in Z-Wave JS and should prevent the controller from hanging indefinitely.
 
