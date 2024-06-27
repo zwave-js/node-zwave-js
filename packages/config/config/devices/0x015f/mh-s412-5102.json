@@ -13,6 +13,12 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"metadata": {
+		"inclusion": "Hold any key for >8s OR 3 fast clicks",
+		"exclusion": "Hold any key for >8s OR 3 fast clicks",
+		"reset": "20 fast clicks on any key",
+		"manual": "https:\/\/www.mcohome.com\/index.php?c=Front\/DownDetail&a=downloadFujian&name=MH-S412&path=L2NvbWRhdGEvOTUzMDEvcHJvZHVjdGZ1amlhbi8yMDIxMDIwMzE3Mjc0NjYwMWE2YzkyYjIxMTQucGRm"
+	},
 	"associations": {
 		"1": {
 			"label": "Lifeline",
@@ -75,24 +81,32 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single click to switch on/off",
+					"label": "Single click (On/Off)",
 					"value": 0
 				},
 				{
-					"label": "Click to turn on, auto off after param 6 duration",
+					"label": "Auto off after 'Key on duration' seconds",
 					"value": 1
 				},
 				{
-					"label": "Click to turn off, auto on after param 6 duration",
+					"label": "Auto on after 'Key on duration' seconds",
 					"value": 2
 				},
 				{
-					"label": "Hold >3s for on until released",
+					"label": "Held 3 seconds -> on; Release -> off",
 					"value": 3
 				},
 				{
-					"label": "Single click to toggle, hold >3s for on until released",
+					"label": "Single click (On/Off); Held 3 seconds -> on; Release -> off",
 					"value": 4
+				},
+				{
+					"label": "Momentary switch; Held -> on; Release -> off",
+					"value": 5
+				},
+				{
+					"label": "Held 3 seconds -> on; Held 3 seconds -> off",
+					"value": 6
 				}
 			]
 		},
@@ -115,150 +129,399 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Relay 1 responds to set, relay 1 responds to get, instant updates disabled",
+					"label": "Key1 (Basic CC Set/Get); Reporting disabled",
 					"value": 0
 				},
 				{
-					"label": "Relay 1 responds to set, relay 1 responds to get, instant updates enabled",
+					"label": "Key1 (Basic CC Set/Get); Reporting enabled",
 					"value": 1
 				},
 				{
-					"label": "All relays respond to set, get ignored, instant updates disabled",
+					"label": "All keys (Basic CC Set only); Reporting disabled",
 					"value": 2
 				},
 				{
-					"label": "All relays respond to set, relay 1 responds to get, instant updates disabled",
+					"label": "All keys (Basic CC Set only); Reporting enabled",
 					"value": 3
 				}
 			]
 		},
 		{
-			"#": "10[0x01]",
-			"label": "Button 1 Respond to Scenes",
+			"#": "10",
+			"label": "Key 1 Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Single click (On/Off)",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Auto off after 'Key on duration' seconds",
 					"value": 1
-				}
-			]
-		},
-		{
-			"#": "10[0x02]",
-			"label": "Button 2 Respond to Scenes",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
 				},
 				{
-					"label": "Enabled",
-					"value": 1
+					"label": "Auto on after 'Key on duration' seconds",
+					"value": 2
+				},
+				{
+					"label": "Held 3 seconds -> on; Release -> off",
+					"value": 3
+				},
+				{
+					"label": "Single click (On/Off); Held 3 seconds -> on; Release -> off",
+					"value": 4
+				},
+				{
+					"label": "Momentary switch; Held -> on; Release -> off",
+					"value": 5
+				},
+				{
+					"label": "Held 3 seconds -> on; Held 3 seconds -> off",
+					"value": 6
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Button 1 Scene Activate Mode",
+			"label": "Key 2 Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene activate function disabled",
+					"label": "Single click (On/Off)",
 					"value": 0
 				},
 				{
-					"label": "Button 1 tap activates scene in param 12 regardless of state",
+					"label": "Auto off after 'Key on duration' seconds",
 					"value": 1
 				},
 				{
-					"label": "Button 1 tap activates scene in param 12 when state is off",
+					"label": "Auto on after 'Key on duration' seconds",
 					"value": 2
 				},
 				{
-					"label": "Button 1 tap activates scene in param 12 when state is on",
+					"label": "Held 3 seconds -> on; Release -> off",
 					"value": 3
+				},
+				{
+					"label": "Single click (On/Off); Held 3 seconds -> on; Release -> off",
+					"value": 4
+				},
+				{
+					"label": "Momentary switch; Held -> on; Release -> off",
+					"value": 5
+				},
+				{
+					"label": "Held 3 seconds -> on; Held 3 seconds -> off",
+					"value": 6
 				}
 			]
 		},
 		{
-			"#": "12",
-			"label": "Button 1 Activate Scene ID",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
-		},
-		{
-			"#": "13",
-			"label": "Button 1 Activate Scene Dim Duration",
-			"description": "0-127 seconds, +128 for minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
 			"#": "14",
-			"label": "Button 2 Scene Activate Mode",
+			"label": "Local Control",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene activate function disabled",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Button 2 tap activates scene in param 15 regardless of state",
-					"value": 1
-				},
-				{
-					"label": "Button 2 tap activates scene in param 15 when state is off",
-					"value": 2
-				},
-				{
-					"label": "Button 2 tap activates scene in param 15 when state is on",
-					"value": 3
+					"label": "Disable",
+					"value": 15
 				}
 			]
 		},
 		{
 			"#": "15",
-			"label": "Button 2 Activate Scene ID",
+			"label": "Remote Control",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 15
+				}
+			]
 		},
 		{
 			"#": "16",
-			"label": "Button 2 Activate Scene Dim Duration",
-			"description": "0-127 seconds, +128 for minutes",
+			"label": "Scene Respond",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Key 1 responds",
+					"value": 1
+				},
+				{
+					"label": "Key 2 responds",
+					"value": 2
+				},
+				{
+					"label": "Keys 1 and 2 respond",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Key 1 Scene Settings",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene Activation disabled",
+					"value": 0
+				},
+				{
+					"label": "Key 1 -> scene ID1 (Any key 1 relay state)",
+					"value": 1
+				},
+				{
+					"label": "Key 1 -> scene id 1 (Key 1 relay open)",
+					"value": 2
+				},
+				{
+					"label": "Upon clicking key 1, always activate scene ID1 when key 1's relay output is closed",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Key 1 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Scene Activation disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Key 1 Activate Scene Duration",
+			"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Key 2 Scene Settings",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene Activation disabled",
+					"value": 0
+				},
+				{
+					"label": "Key 2 -> scene ID1 (Any key 2 relay state)",
+					"value": 1
+				},
+				{
+					"label": "Key 2 -> scene id 1 (Key 2 relay open)",
+					"value": 2
+				},
+				{
+					"label": "Upon clicking key 2, always activate scene ID1 when key 2's relay output is closed",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Key 2 Activate Scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Scene Activation disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Key 2 Activate Scene Duration",
+			"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Scene Respond ID 1-50",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Key 1 responds",
+					"value": 1
+				},
+				{
+					"label": "Key 2 responds",
+					"value": 2
+				},
+				{
+					"label": "Keys 1 and 2 respond",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "33",
+			"label": "Scene Respond ID 51-100",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Key 1 responds",
+					"value": 1
+				},
+				{
+					"label": "Key 2 responds",
+					"value": 2
+				},
+				{
+					"label": "Keys 1 and 2 respond",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "34",
+			"label": "Scene Respond ID 101-150",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Key 1 responds",
+					"value": 1
+				},
+				{
+					"label": "Key 2 responds",
+					"value": 2
+				},
+				{
+					"label": "Keys 1 and 2 respond",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "35",
+			"label": "Scene Respond ID 151-200",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Key 1 responds",
+					"value": 1
+				},
+				{
+					"label": "Key 2 responds",
+					"value": 2
+				},
+				{
+					"label": "Keys 1 and 2 respond",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "36",
+			"label": "Scene Respond ID 201-250",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Key 1 responds",
+					"value": 1
+				},
+				{
+					"label": "Key 2 responds",
+					"value": 2
+				},
+				{
+					"label": "Keys 1 and 2 respond",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "255",
 			"label": "Factory Reset",
+			"description": "Alternatively, press any key 20 times",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
