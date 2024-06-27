@@ -68,6 +68,7 @@ import {
 	dskFromString,
 	dskToString,
 	encodeX25519KeyDERSPKI,
+	getChipTypeAndVersion,
 	indexDBsByNode,
 	isEmptyRoute,
 	isLongRangeNodeId,
@@ -6261,9 +6262,18 @@ ${associatedNodes.join(", ")}`,
 		]);
 
 		if (this.isLongRangeCapable()) {
+			// All LR capable controllers support USA Long Range
 			ret.add(RFRegion["USA (Long Range)"]);
-			if (filterSubsets) {
-				ret.delete(RFRegion.USA);
+			if (filterSubsets) ret.delete(RFRegion.USA);
+
+			// EU Long Range was added in SDK 7.22 for 800 series chips
+			if (
+				typeof this._zwaveChipType === "string"
+				&& getChipTypeAndVersion(this._zwaveChipType)?.type === 8
+				&& this.sdkVersionGte("7.22")
+			) {
+				ret.add(RFRegion["Europe (Long Range)"]);
+				if (filterSubsets) ret.delete(RFRegion.Europe);
 			}
 		}
 
