@@ -1,0 +1,9 @@
+{
+	"ecolink_5-60_seconds": {
+		"unit": "seconds",
+		"valueSize": 1,
+		"minValue": 5,
+		"maxValue": 60,
+		"unsigned": true
+	}
+}
