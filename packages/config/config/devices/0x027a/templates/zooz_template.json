@@ -473,6 +473,22 @@
 			}
 		]
 	},
+	"zwave_on_dimmer_ramp_rate_match_manual_255": {
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
+		"label": "Ramp Rate On (Z-Wave)",
+		"unit": "seconds",
+		"defaultValue": 255,
+		"options": [
+			{
+				"label": "Instant on",
+				"value": 0
+			},
+			{
+				"label": "Match ramp rate for manual control",
+				"value": 255
+			}
+		]
+	},
 	"zwave_off_dimmer_ramp_rate_match_manual": {
 		"$import": "~/templates/master_template.json#base_0-100_nounit",
 		"label": "Ramp Rate Off (Z-Wave)",
@@ -486,6 +502,22 @@
 			{
 				"label": "Match ramp rate for manual control",
 				"value": 100
+			}
+		]
+	},
+	"zwave_off_dimmer_ramp_rate_match_manual_255": {
+		"$import": "~/templates/master_template.json#base_0-255_nounit",
+		"label": "Ramp Rate Off (Z-Wave)",
+		"unit": "seconds",
+		"defaultValue": 255,
+		"options": [
+			{
+				"label": "Instant off",
+				"value": 0
+			},
+			{
+				"label": "Match ramp rate for manual control",
+				"value": 255
 			}
 		]
 	},
