@@ -1776,6 +1776,8 @@ export class BasicCCReport extends BasicCC {
     // (undocumented)
     readonly duration: Duration | undefined;
     // (undocumented)
+    persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     readonly targetValue: MaybeUnknown<number> | undefined;
