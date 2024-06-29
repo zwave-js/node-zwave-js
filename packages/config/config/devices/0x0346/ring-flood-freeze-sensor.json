@@ -17,7 +17,7 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"maxNodes": 5,
+			"maxNodes": 1,
 			"isLifeline": true
 		}
 	},
@@ -29,15 +29,17 @@
 			"unit": "seconds",
 			"minValue": 255,
 			"maxValue": 4200,
-			"defaultValue": 4200
+			"defaultValue": 4080
 		},
 		{
 			"#": "2",
 			"label": "One Shot Timer",
+			"description": "Device will wakeup once after the configured delay",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 1,
-			"maxValue": 32767
+			"maxValue": 32767,
+			"defaultValue": 0
 		},
 		{
 			"#": "3",
@@ -54,16 +56,17 @@
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 60
+			"defaultValue": 6
 		},
 		{
 			"#": "5",
 			"label": "Supervision Report Timeout",
+			"description": "How long to wait for a Supervision Report response to a Supervision Get",
 			"valueSize": 2,
 			"unit": "ms",
 			"minValue": 500,
 			"maxValue": 5000,
-			"defaultValue": 5000
+			"defaultValue": 1500
 		}
 	],
 	"metadata": {
