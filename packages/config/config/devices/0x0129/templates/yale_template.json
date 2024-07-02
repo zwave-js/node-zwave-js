@@ -333,14 +333,15 @@
 		"$import": "~/templates/master_template.json#base_0-127_nounit",
 		"label": "Door Propped Time Limit",
 		"unit": "10 seconds",
-		"minValue": 10,
+		"minValue": 0,
 		"defaultValue": 0
 	},
 	"door_propped_timer_255": {
 		"$import": "~/templates/master_template.json#base_0-255_nounit",
 		"label": "Door Propped Time Limit",
 		"unit": "10 seconds",
-		"minValue": 10,
+		"minValue": 0,
+		"maxValue": 254,
 		"defaultValue": 0
 	},
 	"dps_alarm": {
