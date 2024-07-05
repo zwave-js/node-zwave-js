@@ -9,7 +9,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Home Assistant **TBD** or higher
 * `zwave-js-server` **TBD**
 -->
-## 13.0.0-beta.0 (2024-07-05)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v13)
 * Align Meter CC Reset v6 with specifications, add mocks, add API for report commands (#6921)
 * Convert all Z-Wave specific configs except devices and manufacturers into code, move from ConfigManager methods to utility functions (#6925, #6929)
@@ -18,6 +18,10 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Replace `Controller.isAssociationAllowed` with `Controller.checkAssociation` (#6935)
 * Fixed health checks for ZWLR nodes, throw when requesting neighbors (#6939)
 * The repo now uses Yarn 4 and Corepack to manage its dependencies (#6949)
+
+### Changes under the hood
+* Upgrade to TypeScript 5.5 (#6919)
+* The root `tsconfig.json` is now set up in "solution-style", which should improve the goto references functionality. In addition, linting, testing and running locally no longer requires all modules to be compiled first. (#6748)
 
 ## 12.12.2 (2024-07-05)
 ### Bugfixes
