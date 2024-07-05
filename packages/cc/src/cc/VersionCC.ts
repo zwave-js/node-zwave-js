@@ -680,7 +680,7 @@ export class VersionCCReport extends VersionCC {
 		} else {
 			if (!/^\d+\.\d+(\.\d+)?$/.test(options.protocolVersion)) {
 				throw new ZWaveError(
-					`protocolVersion must be a string in the format "major.minor", received "${options.protocolVersion}"`,
+					`protocolVersion must be a string in the format "major.minor" or "major.minor.patch", received "${options.protocolVersion}"`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (
@@ -689,7 +689,7 @@ export class VersionCCReport extends VersionCC {
 				)
 			) {
 				throw new ZWaveError(
-					`firmwareVersions must be an array of strings in the format "major.minor", received "${
+					`firmwareVersions must be an array of strings in the format "major.minor" or "major.minor.patch", received "${
 						JSON.stringify(
 							options.firmwareVersions,
 						)

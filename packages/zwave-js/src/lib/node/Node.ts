@@ -248,9 +248,10 @@ import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
 import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
+import semver from "semver";
 import { RemoveNodeReason } from "../controller/Inclusion";
 import { determineNIF } from "../controller/NodeInformationFrame";
-import type { Driver } from "../driver/Driver";
+import { type Driver, libVersion } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import { type Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
@@ -4031,10 +4032,17 @@ protocol version:      ${this.protocolVersion}`;
 					& ~EncapsulationFlags.Supervision,
 			});
 
+		const firmwareVersion1 = semver.parse(libVersion, { loose: true })!;
+
 		await api.sendReport({
 			libraryType: ZWaveLibraryTypes["Static Controller"],
 			protocolVersion: this.driver.controller.protocolVersion!,
-			firmwareVersions: [this.driver.controller.firmwareVersion!],
+			firmwareVersions: [
+				// Firmware 0 is the Z-Wave chip firmware
+				this.driver.controller.firmwareVersion!,
+				// Firmware 1 is Z-Wave JS itself
+				`${firmwareVersion1.major}.${firmwareVersion1.minor}.${firmwareVersion1.patch}`,
+			],
 			hardwareVersion: this.driver.options.vendor?.hardwareVersion,
 		});
 	}
