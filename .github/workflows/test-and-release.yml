@@ -125,9 +125,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
@@ -179,9 +176,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
@@ -203,9 +197,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -292,9 +283,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
@@ -329,9 +317,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
