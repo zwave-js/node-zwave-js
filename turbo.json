@@ -7,6 +7,7 @@
 
 		"bootstrap": {
 			// Dummy task to enable running all bootstrap tasks
+			"cache": false // TypeScript does the caching
 		},
 
 		"codegen": {
@@ -42,13 +43,9 @@
 			"outputs": ["packages/*/build/**", "packages/*/*.tsbuildinfo"]
 		},
 
-		"@zwave-js/eslint-plugin#build": {
-			// Dummy task to enable building the eslint plugin
-		},
-
 		// Specific linting tasks: ESLint
 		"lint:ts": {
-			"dependsOn": ["//#build:turbo"],
+			"dependsOn": ["bootstrap"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
@@ -60,7 +57,7 @@
 			]
 		},
 		"lint:ts:fix": {
-			"dependsOn": ["//#build:turbo"],
+			"dependsOn": ["bootstrap"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
@@ -74,10 +71,10 @@
 		},
 
 		"lint:zwave": {
+			"dependsOn": ["bootstrap"]
 			// Dummy task to enable running all lint:zwave tasks
 		},
 		"@zwave-js/config#lint:zwave": {
-			"dependsOn": ["@zwave-js/eslint-plugin#build"],
 			"inputs": ["**/*.ts", "config/**/*.json"]
 		},
 
