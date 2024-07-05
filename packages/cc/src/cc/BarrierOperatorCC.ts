@@ -15,7 +15,12 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
+import {
+	getEnumMemberName,
+	isEnumMember,
+	noop,
+	pick,
+} from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -449,6 +454,25 @@ export class BarrierOperatorCC extends CommandClass {
 				}`,
 				direction: "inbound",
 			});
+
+			// Enable all supported subsystems
+			for (const subsystemType of resp) {
+				// Some devices report invalid subsystem types, but the CC API checks
+				// for valid values and throws otherwise.
+				if (!isEnumMember(SubsystemType, subsystemType)) continue;
+
+				applHost.controllerLog.logNode(node.id, {
+					message: `Enabling subsystem ${
+						getEnumMemberName(
+							SubsystemType,
+							subsystemType,
+						)
+					}...`,
+					direction: "outbound",
+				});
+				await api.setEventSignaling(subsystemType, SubsystemState.On)
+					.catch(noop);
+			}
 		}
 
 		await this.refreshValues(applHost);
