@@ -125,3 +125,7 @@ It is recommended to check if `node.protocol === Protocols.ZWaveLongRange` or `i
 - The `noBulkSupport` property of `ConfigurationMetadata` has been removed. There is no replacement, as it was never meant to be user-facing
 - The `enableSoftReset` property of the `ZWaveOptions` has been removed. Use `features.softReset` instead.
 - The `mandatorySupportedCCs` and `mandatorControlledCCs` properties of the `DeviceClass` class have been removed. There is no replacement.
+
+## Migrated to Yarn 4 and Corepack
+
+The repository has been migrated to Yarn v4 and now uses [Corepack](https://github.com/nodejs/corepack) to automatically install the correct package manager version, without having to check it into git. This should work out of the box, unless `yarn` was previously installed globally as a system package on Linux. In that case, you may have to uninstall the Linux package and remove any additions to the `PATH` environment variable.
