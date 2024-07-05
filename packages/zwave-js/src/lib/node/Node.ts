@@ -5041,7 +5041,7 @@ protocol version:      ${this.protocolVersion}`;
 		);
 
 		if (notificationConfig) {
-			// This is a known notification (status or event)
+			// This is a notification (status or event) with a known type
 			const notificationName = notificationConfig.name;
 
 			this.driver.controllerLog.logNode(this.id, {
@@ -5059,6 +5059,27 @@ protocol version:      ${this.protocolVersion}`;
 				);
 			};
 
+			const setUnknownStateIdle = (prevValue?: number) => {
+				// Find the value for the unknown notification variable bucket
+				const unknownNotificationVariableValueId = NotificationCCValues
+					.unknownNotificationVariable(
+						command.notificationType!,
+						notificationName,
+					).endpoint(command.endpointIndex);
+				const currentValue = this.valueDB.getValue(
+					unknownNotificationVariableValueId,
+				);
+				// ... and if it exists
+				if (currentValue == undefined) return;
+				// ... reset it to idle
+				if (prevValue == undefined || currentValue === prevValue) {
+					this.valueDB.setValue(
+						unknownNotificationVariableValueId,
+						0, /* idle */
+					);
+				}
+			};
+
 			const value = command.notificationEvent!;
 			if (value === 0) {
 				// Generic idle notification, this contains a value to be reset
@@ -5068,6 +5089,7 @@ protocol version:      ${this.protocolVersion}`;
 				) {
 					// The target value is the first byte of the event parameters
 					setStateIdle(command.eventParameters[0]);
+					setUnknownStateIdle(command.eventParameters[0]);
 				} else {
 					// Reset all values to idle
 					const nonIdleValues = this.valueDB
@@ -5082,6 +5104,7 @@ protocol version:      ${this.protocolVersion}`;
 					for (const v of nonIdleValues) {
 						setStateIdle(v.value as number);
 					}
+					setUnknownStateIdle();
 				}
 				return;
 			}
