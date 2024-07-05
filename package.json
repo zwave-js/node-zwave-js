@@ -97,7 +97,7 @@
   "scripts": {
     "ts": "node -r source-map-support/register -r ./maintenance/esbuild-register.js --conditions=@@dev",
     "w": "yarn ts maintenance/watch.ts",
-    "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
+    "foreach": "yarn workspaces foreach --all -pvi --exclude @zwave-js/repo",
     "clean": "yarn turbo run clean",
     "build": "yarn turbo run build:turbo --",
     "build:turbo": "yarn ts maintenance/build.ts",
