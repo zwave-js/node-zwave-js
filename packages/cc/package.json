@@ -74,7 +74,7 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.43.0",
+    "@microsoft/api-extractor": "^7.47.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.31",
     "@zwave-js/maintenance": "workspace:*",
@@ -83,6 +83,6 @@
     "ava": "^6.1.2",
     "del-cli": "^5.1.0",
     "fs-extra": "^11.2.0",
-    "typescript": "5.4.4"
+    "typescript": "5.5.3"
   }
 }

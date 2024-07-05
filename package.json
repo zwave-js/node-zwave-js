@@ -40,15 +40,15 @@
     "@dprint/json": "^0.19.3",
     "@dprint/markdown": "^0.17.1",
     "@dprint/typescript": "^0.91.1",
-    "@microsoft/api-extractor": "^7.43.0",
+    "@microsoft/api-extractor": "^7.47.0",
     "@monorepo-utils/workspaces-to-typescript-project-references": "^2.10.4",
     "@tsconfig/node18": "^18.2.4",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.31",
     "@types/semver": "^7.5.8",
     "@types/source-map-support": "^0.5.10",
-    "@typescript-eslint/eslint-plugin": "^7.5.0",
-    "@typescript-eslint/parser": "^7.5.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
@@ -69,12 +69,12 @@
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^5.1.0",
     "dprint": "^0.46.3",
-    "esbuild": "0.20.2",
+    "esbuild": "0.21.5",
     "esbuild-register": "^3.5.0",
     "eslint": "^8.57.0",
     "eslint-plugin-deprecation": "^2.0.0",
     "eslint-plugin-unicorn": "^52.0.0",
-    "eslint-plugin-unused-imports": "^3.1.0",
+    "eslint-plugin-unused-imports": "^3.2.0",
     "execa": "^5.1.1",
     "fs-extra": "^11.2.0",
     "husky": "^9.0.11",
@@ -85,9 +85,9 @@
     "reflect-metadata": "^0.2.2",
     "semver": "^7.6.2",
     "source-map-support": "^0.5.21",
-    "ts-patch": "3.1.2",
+    "ts-patch": "3.2.1",
     "turbo": "1.7.4",
-    "typescript": "5.4.4",
+    "typescript": "5.5.3",
     "zwave-js": "workspace:*"
   },
   "resolutions": {
@@ -122,7 +122,7 @@
     "commit": "git-cz",
     "release": "release-script",
     "release:all": "release-script --publish-all",
-    "postinstall": "ts-patch install -s && yarn node maintenance/patch-tsserver.js && yarn turbo run bootstrap",
+    "postinstall": "ts-patch install -s && yarn node maintenance/patch-typescript.js && yarn turbo run bootstrap",
     "prepare": "husky && ts-patch install -s",
     "config": "yarn ts packages/config/maintenance/importConfig.ts",
     "docs": "docsify serve docs",
@@ -146,5 +146,5 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "packageManager": "yarn@4.3.0"
+  "packageManager": "yarn@4.3.1"
 }

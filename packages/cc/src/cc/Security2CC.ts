@@ -1336,7 +1336,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	private getMGRPExtension(): MGRPExtension | undefined {
 		return this.extensions.find(
-			(e): e is MGRPExtension => e instanceof MGRPExtension,
+			(e) => e instanceof MGRPExtension,
 		);
 	}
 
@@ -1347,7 +1347,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	private getMPANExtension(): MPANExtension | undefined {
 		return this.extensions.find(
-			(e): e is MPANExtension => e instanceof MPANExtension,
+			(e) => e instanceof MPANExtension,
 		);
 	}
 
@@ -1358,7 +1358,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
 	public getSenderEI(): Buffer | undefined {
 		const spanExtension = this.extensions.find(
-			(e): e is SPANExtension => e instanceof SPANExtension,
+			(e) => e instanceof SPANExtension,
 		);
 		return spanExtension?.senderEI;
 	}
@@ -1415,7 +1415,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// Add or update the SPAN extension
 			let spanExtension = this.extensions.find(
-				(e): e is SPANExtension => e instanceof SPANExtension,
+				(e) => e instanceof SPANExtension,
 			);
 			if (spanExtension) {
 				spanExtension.senderEI = senderEI;

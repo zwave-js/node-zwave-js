@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import type { ExecutionContext } from 'ava';
 import type { Format } from 'logform';
 import type { JsonlDB } from '@alcalzone/jsonl-db';
@@ -77,6 +75,20 @@ export function authHomeIdFromDSK(dsk: Buffer): Buffer;
 //
 // @public
 export function averageRSSI(acc: number | undefined, rssi: RSSI, weight: number): number;
+
+// Warning: (ae-missing-release-tag) "BasicDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum BasicDeviceClass {
+    // (undocumented)
+    "End Node" = 3,
+    // (undocumented)
+    "Routing End Node" = 4,
+    // (undocumented)
+    "Static Controller" = 2,
+    // (undocumented)
+    Controller = 1
+}
 
 // Warning: (ae-missing-release-tag) "BeamingInfo" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -467,10 +479,6 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
     max?: ConfigValue;
     // (undocumented)
     min?: ConfigValue;
-    // Warning: (tsdoc-missing-deprecation-message) The @deprecated block must include a deprecation message, e.g. describing the recommended alternative
-    //
-    // @deprecated (undocumented)
-    noBulkSupport?: boolean;
     // (undocumented)
     requiresReInclusion?: boolean;
     // (undocumented)
@@ -988,6 +996,24 @@ export type FirmwareFileFormat = "aeotec" | "otz" | "ota" | "hex" | "hec" | "gec
 // @public (undocumented)
 export type FLiRS = false | "250ms" | "1000ms";
 
+// Warning: (ae-missing-release-tag) "FloatParameters" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FloatParameters {
+    // (undocumented)
+    precision: number;
+    // (undocumented)
+    size: number;
+}
+
+// Warning: (ae-missing-release-tag) "FloatParametersWithValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FloatParametersWithValue extends FloatParameters {
+    // (undocumented)
+    roundedValue: number;
+}
+
 // Warning: (ae-missing-release-tag) "formatDate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1007,6 +1033,57 @@ export function generateAuthKey(networkKey: Buffer): Buffer;
 //
 // @public (undocumented)
 export function generateEncryptionKey(networkKey: Buffer): Buffer;
+
+// Warning: (ae-missing-release-tag) "GenericDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GenericDeviceClass {
+    // (undocumented)
+    readonly key: number;
+    // (undocumented)
+    readonly label: string;
+    // (undocumented)
+    readonly maySupportBasicCC: boolean;
+    // (undocumented)
+    readonly requiresSecurity: boolean;
+    // (undocumented)
+    readonly zwavePlusDeviceType?: string;
+}
+
+// Warning: (ae-missing-release-tag) "getAllIndicatorProperties" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getAllIndicatorProperties(): readonly IndicatorProperty[];
+
+// Warning: (ae-missing-release-tag) "getAllMeters" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getAllMeters(): readonly Meter[];
+
+// Warning: (ae-missing-release-tag) "getAllMeterScales" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getAllMeterScales(meterType: number): readonly MeterScale[] | undefined;
+
+// Warning: (ae-missing-release-tag) "getAllNamedScaleGroups" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getAllNamedScaleGroups(): readonly NamedScaleGroup[];
+
+// Warning: (ae-missing-release-tag) "getAllNotifications" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getAllNotifications(): readonly Notification[];
+
+// Warning: (ae-missing-release-tag) "getAllSensors" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getAllSensors(): readonly Sensor[];
+
+// Warning: (ae-missing-release-tag) "getAllSensorScales" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getAllSensorScales(sensorType: number): readonly Scale[] | undefined;
 
 // Warning: (ae-missing-release-tag) "getBitMaskWidth" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1049,16 +1126,25 @@ export function getErrorSuffix(code: ZWaveErrorCodes): string;
 // Warning: (ae-missing-release-tag) "getFloatParameters" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function getFloatParameters(value: number): {
-    precision: number;
-    size: number;
-    roundedValue: number;
-};
+export function getFloatParameters(value: number): FloatParametersWithValue;
+
+// Warning: (ae-missing-release-tag) "getGenericDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getGenericDeviceClass(generic: number): GenericDeviceClass;
 
 // Warning: (ae-missing-release-tag) "getHighestSecurityClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
 export function getHighestSecurityClass(securityClasses: SecurityClass[]): SecurityClass;
+
+// Warning: (ae-forgotten-export) The symbol "indicatorProperties" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "getIndicatorProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getIndicatorProperty<ID extends number>(id: ID): ID extends keyof typeof indicatorProperties ? ({
+    id: ID;
+} & (typeof indicatorProperties[ID])) : (IndicatorProperty | undefined);
 
 // Warning: (ae-missing-release-tag) "getIntegerLimits" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1073,6 +1159,26 @@ export function getIntegerLimits(size: 1 | 2 | 3 | 4, signed: boolean): {
 // @public
 export function getLegalRangeForBitMask(mask: number, unsigned: boolean): [min: number, max: number];
 
+// Warning: (ae-forgotten-export) The symbol "meters" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "getMeter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getMeter<MeterType extends number>(type: MeterType): MeterType extends keyof typeof meters ? ({
+    key: MeterType;
+} & (typeof meters[MeterType])) : (Meter | undefined);
+
+// Warning: (ae-missing-release-tag) "getMeterName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getMeterName(meterType: number): string;
+
+// Warning: (ae-missing-release-tag) "getMeterScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getMeterScale<MeterType extends number, ScaleKey extends number>(type: MeterType, scale: ScaleKey): MeterType extends keyof typeof meters ? ScaleKey extends keyof typeof meters[MeterType]["scales"] ? ({
+    key: ScaleKey;
+} & (typeof meters[MeterType]["scales"][ScaleKey])) : (MeterScale | undefined) : (MeterScale | undefined);
+
 // Warning: (ae-missing-release-tag) "getMinimumShiftForBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
@@ -1083,15 +1189,86 @@ export function getMinimumShiftForBitMask(mask: number): number;
 // @public (undocumented)
 export function getMinIntegerSize(value: number, signed: boolean): 1 | 2 | 4 | undefined;
 
+// Warning: (ae-forgotten-export) The symbol "namedScales" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "getNamedScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNamedScale<Name extends keyof typeof namedScales, Key extends (keyof typeof namedScales[Name]) & number>(group: Name, key: Key): {
+    key: Key;
+} & (typeof namedScales[Name][Key]);
+
+// Warning: (ae-missing-release-tag) "getNamedScaleGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNamedScaleGroup<Name extends keyof typeof namedScales>(group: Name): typeof namedScales[Name];
+
 // Warning: (ae-missing-release-tag) "getNodeTag" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getNodeTag(nodeId: number): string;
 
+// Warning: (ae-missing-release-tag) "getNotification" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNotification(type: number): Notification | undefined;
+
+// Warning: (ae-missing-release-tag) "getNotificationEventName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNotificationEventName(type: number, event: number): string;
+
+// Warning: (ae-missing-release-tag) "getNotificationName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getNotificationName(type: number): string;
+
+// Warning: (ae-missing-release-tag) "getNotificationValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNotificationValue(notification: Notification, value: number): NotificationValue | undefined;
+
+// Warning: (ae-missing-release-tag) "getNotificationValueName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getNotificationValueName(type: number, event: number): string;
+
 // Warning: (ae-missing-release-tag) "getNumericEnumValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export function getNumericEnumValues<T extends Record<string, any>>(enumeration: T): readonly number[];
+
+// Warning: (ae-forgotten-export) The symbol "sensors" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "getSensor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getSensor<Key extends number>(type: Key): Key extends keyof typeof sensors ? typeof sensors[Key] : (Sensor | undefined);
+
+// Warning: (ae-missing-release-tag) "getSensorName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function getSensorName(sensorType: number): string;
+
+// Warning: (ae-missing-release-tag) "getSensorScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getSensorScale<SensorType extends number, ScaleKey extends number>(type: SensorType, scale: ScaleKey): SensorType extends keyof typeof sensors ? ScaleKey extends keyof typeof sensors[SensorType]["scales"] ? ({
+    key: ScaleKey;
+} & (typeof sensors[SensorType]["scales"][ScaleKey])) : (Scale | undefined) : (Scale | undefined);
+
+// Warning: (ae-missing-release-tag) "getSpecificDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getSpecificDeviceClass(generic: number, specific: number): SpecificDeviceClass;
+
+// Warning: (ae-missing-release-tag) "getUnknownMeterScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getUnknownMeterScale(key: number): MeterScale;
+
+// Warning: (ae-missing-release-tag) "getUnknownScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export function getUnknownScale(key: number): Scale;
 
 // Warning: (ae-missing-release-tag) "getZWaveChipType" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1146,6 +1323,262 @@ export interface ICommandClass {
 //
 // @public
 export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>>;
+
+// Warning: (ae-missing-release-tag) "Indicator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum Indicator {
+    // (undocumented)
+    "Alarming: Burglar" = 13,
+    // (undocumented)
+    "Alarming: Carbon Monoxide" = 15,
+    // (undocumented)
+    "Alarming: Freeze warning" = 20,
+    // (undocumented)
+    "Alarming: Medical" = 19,
+    // (undocumented)
+    "Alarming: Panic" = 22,
+    // (undocumented)
+    "Alarming: Smoke / Fire" = 14,
+    // (undocumented)
+    "Alarming: Water leak" = 21,
+    // (undocumented)
+    "Armed Away" = 11,
+    // (undocumented)
+    "Armed Stay" = 10,
+    // (undocumented)
+    "Button 1 indication" = 67,
+    // (undocumented)
+    "Button 10 indication" = 76,
+    // (undocumented)
+    "Button 11 indication" = 77,
+    // (undocumented)
+    "Button 12 indication" = 78,
+    // (undocumented)
+    "Button 2 indication" = 68,
+    // (undocumented)
+    "Button 3 indication" = 69,
+    // (undocumented)
+    "Button 4 indication" = 70,
+    // (undocumented)
+    "Button 5 indication" = 71,
+    // (undocumented)
+    "Button 6 indication" = 72,
+    // (undocumented)
+    "Button 7 indication" = 73,
+    // (undocumented)
+    "Button 8 indication" = 74,
+    // (undocumented)
+    "Button 9 indication" = 75,
+    // (undocumented)
+    "Button backlight command" = 66,
+    // (undocumented)
+    "Button backlight digits" = 65,
+    // (undocumented)
+    "Button backlight letters" = 64,
+    // (undocumented)
+    "Bypass challenge" = 16,
+    // (undocumented)
+    "Code accepted" = 8,
+    // (undocumented)
+    "Code not accepted" = 9,
+    // (undocumented)
+    "Enter ID" = 6,
+    // (undocumented)
+    "Enter PIN" = 7,
+    // (undocumented)
+    "Entry Delay" = 17,
+    // (undocumented)
+    "Exit Delay" = 18,
+    // (undocumented)
+    "Generic event sound notification 1" = 96,
+    // (undocumented)
+    "Generic event sound notification 10" = 105,
+    // (undocumented)
+    "Generic event sound notification 11" = 106,
+    // (undocumented)
+    "Generic event sound notification 12" = 107,
+    // (undocumented)
+    "Generic event sound notification 13" = 108,
+    // (undocumented)
+    "Generic event sound notification 14" = 109,
+    // (undocumented)
+    "Generic event sound notification 15" = 110,
+    // (undocumented)
+    "Generic event sound notification 16" = 111,
+    // (undocumented)
+    "Generic event sound notification 17" = 112,
+    // (undocumented)
+    "Generic event sound notification 18" = 113,
+    // (undocumented)
+    "Generic event sound notification 19" = 114,
+    // (undocumented)
+    "Generic event sound notification 2" = 97,
+    // (undocumented)
+    "Generic event sound notification 20" = 115,
+    // (undocumented)
+    "Generic event sound notification 21" = 116,
+    // (undocumented)
+    "Generic event sound notification 22" = 117,
+    // (undocumented)
+    "Generic event sound notification 23" = 118,
+    // (undocumented)
+    "Generic event sound notification 24" = 119,
+    // (undocumented)
+    "Generic event sound notification 25" = 120,
+    // (undocumented)
+    "Generic event sound notification 26" = 121,
+    // (undocumented)
+    "Generic event sound notification 27" = 122,
+    // (undocumented)
+    "Generic event sound notification 28" = 123,
+    // (undocumented)
+    "Generic event sound notification 29" = 124,
+    // (undocumented)
+    "Generic event sound notification 3" = 98,
+    // (undocumented)
+    "Generic event sound notification 30" = 125,
+    // (undocumented)
+    "Generic event sound notification 31" = 126,
+    // (undocumented)
+    "Generic event sound notification 32" = 127,
+    // (undocumented)
+    "Generic event sound notification 4" = 99,
+    // (undocumented)
+    "Generic event sound notification 5" = 100,
+    // (undocumented)
+    "Generic event sound notification 6" = 101,
+    // (undocumented)
+    "Generic event sound notification 7" = 102,
+    // (undocumented)
+    "Generic event sound notification 8" = 103,
+    // (undocumented)
+    "Generic event sound notification 9" = 104,
+    // (undocumented)
+    "LCD backlight" = 48,
+    // (undocumented)
+    "Manufacturer defined 1" = 128,
+    // (undocumented)
+    "Manufacturer defined 10" = 137,
+    // (undocumented)
+    "Manufacturer defined 11" = 138,
+    // (undocumented)
+    "Manufacturer defined 12" = 139,
+    // (undocumented)
+    "Manufacturer defined 13" = 140,
+    // (undocumented)
+    "Manufacturer defined 14" = 141,
+    // (undocumented)
+    "Manufacturer defined 15" = 142,
+    // (undocumented)
+    "Manufacturer defined 16" = 143,
+    // (undocumented)
+    "Manufacturer defined 17" = 144,
+    // (undocumented)
+    "Manufacturer defined 18" = 145,
+    // (undocumented)
+    "Manufacturer defined 19" = 146,
+    // (undocumented)
+    "Manufacturer defined 2" = 129,
+    // (undocumented)
+    "Manufacturer defined 20" = 147,
+    // (undocumented)
+    "Manufacturer defined 21" = 148,
+    // (undocumented)
+    "Manufacturer defined 22" = 149,
+    // (undocumented)
+    "Manufacturer defined 23" = 150,
+    // (undocumented)
+    "Manufacturer defined 24" = 151,
+    // (undocumented)
+    "Manufacturer defined 25" = 152,
+    // (undocumented)
+    "Manufacturer defined 26" = 153,
+    // (undocumented)
+    "Manufacturer defined 27" = 154,
+    // (undocumented)
+    "Manufacturer defined 28" = 155,
+    // (undocumented)
+    "Manufacturer defined 29" = 156,
+    // (undocumented)
+    "Manufacturer defined 3" = 130,
+    // (undocumented)
+    "Manufacturer defined 30" = 157,
+    // (undocumented)
+    "Manufacturer defined 31" = 158,
+    // (undocumented)
+    "Manufacturer defined 32" = 159,
+    // (undocumented)
+    "Manufacturer defined 4" = 131,
+    // (undocumented)
+    "Manufacturer defined 5" = 132,
+    // (undocumented)
+    "Manufacturer defined 6" = 133,
+    // (undocumented)
+    "Manufacturer defined 7" = 134,
+    // (undocumented)
+    "Manufacturer defined 8" = 135,
+    // (undocumented)
+    "Manufacturer defined 9" = 136,
+    // (undocumented)
+    "Node Identify" = 80,
+    // (undocumented)
+    "Not armed / disarmed" = 2,
+    // (undocumented)
+    "Zone 1 armed" = 32,
+    // (undocumented)
+    "Zone 2 armed" = 33,
+    // (undocumented)
+    "Zone 3 armed" = 34,
+    // (undocumented)
+    "Zone 4 armed" = 35,
+    // (undocumented)
+    "Zone 5 armed" = 36,
+    // (undocumented)
+    "Zone 6 armed" = 37,
+    // (undocumented)
+    "Zone 7 armed" = 38,
+    // (undocumented)
+    "Zone 8 armed" = 39,
+    // (undocumented)
+    "Alarming" = 12,
+    // (undocumented)
+    "Armed" = 1,
+    // (undocumented)
+    "Busy" = 5,
+    // (undocumented)
+    "Buzzer" = 240,
+    // (undocumented)
+    "Fault" = 4,
+    // (undocumented)
+    "Ready" = 3
+}
+
+// Warning: (ae-missing-release-tag) "IndicatorProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IndicatorProperty extends IndicatorPropertyDefinition {
+    // (undocumented)
+    readonly id: number;
+}
+
+// Warning: (ae-missing-release-tag) "IndicatorPropertyDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface IndicatorPropertyDefinition {
+    // (undocumented)
+    readonly description?: string;
+    // (undocumented)
+    readonly label: string;
+    // (undocumented)
+    readonly max?: number;
+    // (undocumented)
+    readonly min?: number;
+    // (undocumented)
+    readonly readonly?: boolean;
+    // (undocumented)
+    readonly type?: ValueType;
+}
 
 // Warning: (ae-missing-release-tag) "IntegerLimits" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1611,6 +2044,47 @@ export interface MetadataUpdatedArgs extends ValueID {
     metadata: ValueMetadata | undefined;
 }
 
+// Warning: (ae-missing-release-tag) "Meter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Meter extends MeterDefinition {
+    // (undocumented)
+    readonly key: number;
+}
+
+// Warning: (ae-missing-release-tag) "MeterDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MeterDefinition {
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    readonly scales: MeterScaleGroup;
+}
+
+// Warning: (ae-missing-release-tag) "MeterScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MeterScale extends MeterScaleDefinition {
+    // (undocumented)
+    readonly key: number;
+}
+
+// Warning: (ae-missing-release-tag) "MeterScaleDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MeterScaleDefinition {
+    // (undocumented)
+    readonly label: string;
+    // (undocumented)
+    readonly unit?: string;
+}
+
+// Warning: (ae-missing-release-tag) "MeterScaleGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type MeterScaleGroup = Record<number, MeterScaleDefinition>;
+
 // Warning: (ae-missing-release-tag) "MPANState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -1668,6 +2142,16 @@ export interface MulticastGroup {
     securityClass: S2SecurityClass;
     // (undocumented)
     sequenceNumber: number;
+}
+
+// Warning: (ae-missing-release-tag) "NamedScaleGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NamedScaleGroup {
+    // (undocumented)
+    name: string;
+    // (undocumented)
+    scales: Record<number, ScaleDefinition>;
 }
 
 // Warning: (ae-missing-release-tag) "NODE_ID_BROADCAST" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1731,7 +2215,7 @@ export interface NodeProtocolInfo {
 // @public (undocumented)
 export interface NodeProtocolInfoAndDeviceClass extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
     // (undocumented)
-    basicDeviceClass: number;
+    basicDeviceClass: BasicDeviceClass;
     // (undocumented)
     genericDeviceClass: number;
     // (undocumented)
@@ -1769,7 +2253,7 @@ export enum NodeType {
 // @public (undocumented)
 export interface NodeUpdatePayload extends ApplicationNodeInformation {
     // (undocumented)
-    basicDeviceClass: number;
+    basicDeviceClass: BasicDeviceClass;
     // (undocumented)
     nodeId: number;
 }
@@ -1797,6 +2281,116 @@ export const NOT_KNOWN: undefined;
 
 // @public (undocumented)
 export type NOT_KNOWN = typeof NOT_KNOWN;
+
+// Warning: (ae-missing-release-tag) "Notification" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Notification {
+    // (undocumented)
+    readonly events: ReadonlyMap<number, NotificationEvent>;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    readonly type: number;
+    // (undocumented)
+    readonly variables: readonly NotificationVariable[];
+}
+
+// Warning: (ae-missing-release-tag) "NotificationEvent" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NotificationEvent extends NotificationValueBase {
+    // (undocumented)
+    readonly type: "event";
+    // (undocumented)
+    readonly value: number;
+}
+
+// Warning: (ae-missing-release-tag) "NotificationParameter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NotificationParameter = NotificationParameterWithDuration | NotificationParameterWithCommandClass | NotificationParameterWithValue | NotificationParameterWithEnum;
+
+// Warning: (ae-missing-release-tag) "NotificationParameterWithCommandClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface NotificationParameterWithCommandClass {
+    // (undocumented)
+    readonly type: "commandclass";
+}
+
+// Warning: (ae-missing-release-tag) "NotificationParameterWithDuration" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface NotificationParameterWithDuration {
+    // (undocumented)
+    readonly type: "duration";
+}
+
+// Warning: (ae-missing-release-tag) "NotificationParameterWithEnum" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface NotificationParameterWithEnum {
+    // (undocumented)
+    readonly default?: number;
+    // (undocumented)
+    readonly type: "enum";
+    // (undocumented)
+    readonly values: Record<number, string>;
+}
+
+// Warning: (ae-missing-release-tag) "NotificationParameterWithValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface NotificationParameterWithValue {
+    // (undocumented)
+    readonly propertyName: string;
+    // (undocumented)
+    readonly type: "value";
+}
+
+// Warning: (ae-missing-release-tag) "NotificationState" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NotificationState extends NotificationValueBase {
+    readonly idle: boolean;
+    // (undocumented)
+    readonly type: "state";
+    // (undocumented)
+    readonly value: number;
+    // (undocumented)
+    readonly variableName: string;
+}
+
+// Warning: (ae-missing-release-tag) "NotificationValue" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NotificationValue = NotificationState | NotificationEvent;
+
+// Warning: (ae-missing-release-tag) "NotificationValueBase" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface NotificationValueBase {
+    // (undocumented)
+    readonly description?: string;
+    // (undocumented)
+    readonly idleVariables?: readonly number[];
+    // (undocumented)
+    readonly label: string;
+    // (undocumented)
+    readonly parameter?: NotificationParameter;
+}
+
+// Warning: (ae-missing-release-tag) "NotificationVariable" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface NotificationVariable {
+    readonly idle: boolean;
+    // (undocumented)
+    readonly name: string;
+    // (undocumented)
+    readonly states: ReadonlyMap<number, NotificationState>;
+}
 
 // Warning: (ae-missing-release-tag) "NUM_LR_NODEMASK_SEGMENT_BYTES" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2251,6 +2845,31 @@ export function rssiToString(rssi: RSSI): string;
 // @public (undocumented)
 export type S2SecurityClass = SecurityClass.S2_Unauthenticated | SecurityClass.S2_Authenticated | SecurityClass.S2_AccessControl;
 
+// Warning: (ae-missing-release-tag) "Scale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Scale extends ScaleDefinition {
+    // (undocumented)
+    readonly key: number;
+}
+
+// Warning: (ae-missing-release-tag) "ScaleDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ScaleDefinition {
+    // (undocumented)
+    readonly description?: string;
+    // (undocumented)
+    readonly label: string;
+    // (undocumented)
+    readonly unit?: string;
+}
+
+// Warning: (ae-missing-release-tag) "ScaleGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ScaleGroup = Record<number, ScaleDefinition>;
+
 // Warning: (ae-missing-release-tag) "SECURITY_S2_AUTH_TAG_LENGTH" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2445,10 +3064,30 @@ export interface SendMessageOptions {
     tag?: any;
 }
 
+// Warning: (ae-missing-release-tag) "Sensor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Sensor extends SensorDefinition {
+    // (undocumented)
+    readonly key: number;
+}
+
 // Warning: (ae-missing-release-tag) "sensorCCs" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
 export const sensorCCs: readonly CommandClasses[];
+
+// Warning: (ae-missing-release-tag) "SensorDefinition" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface SensorDefinition {
+    // (undocumented)
+    readonly label: string;
+    // (undocumented)
+    readonly scaleGroupName?: string;
+    // (undocumented)
+    readonly scales: ScaleGroup;
+}
 
 // Warning: (ae-missing-release-tag) "SerializableTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2532,6 +3171,11 @@ export type SPANTableEntry = {
         expires: number;
     };
 };
+
+// Warning: (ae-missing-release-tag) "SpecificDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type SpecificDeviceClass = GenericDeviceClass;
 
 // Warning: (ae-internal-missing-underscore) The name "stringToNodeList" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -3396,11 +4040,11 @@ export function zwaveDataRateToString(rate: ZWaveDataRate): string;
 // @public
 export class ZWaveError extends Error {
     constructor(message: string, code: ZWaveErrorCodes,
-    context?: unknown,
+    context?: unknown | undefined,
     transactionSource?: string | undefined);
     // (undocumented)
     readonly code: ZWaveErrorCodes;
-    readonly context?: unknown;
+    readonly context?: unknown | undefined;
     // (undocumented)
     readonly message: string;
     readonly transactionSource?: string | undefined;
@@ -3458,6 +4102,7 @@ export enum ZWaveErrorCodes {
     Controller_NodeRemoved = 213,
     Controller_NodeTimeout = 201,
     Controller_NotSupported = 209,
+    Controller_NotSupportedForLongRange = 218,
     Controller_Reset = 206,
     // (undocumented)
     Controller_ResponseNOK = 203,

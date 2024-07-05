@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import type { DataDirection } from '@zwave-js/core/safe';
 import { DataDirection as DataDirection_2 } from '@zwave-js/core';
 import { Duplex } from 'node:stream';

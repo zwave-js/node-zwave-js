@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 import { CommandClasses } from '@zwave-js/core/safe';
 import { FLiRS } from '@zwave-js/core/safe';
 import { NodeIDType } from '@zwave-js/core/safe';

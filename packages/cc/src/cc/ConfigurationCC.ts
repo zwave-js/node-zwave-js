@@ -1266,7 +1266,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			const parameters = distinct(
 				this.getDefinedValueIDs(applHost)
 					.map((v) => v.property)
-					.filter((p): p is number => typeof p === "number"),
+					.filter((p) => typeof p === "number"),
 			);
 			for (const param of parameters) {
 				if (
@@ -1390,7 +1390,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const parameters = distinct(
 			this.getDefinedValueIDs(applHost)
 				.map((v) => v.property)
-				.filter((p): p is number => typeof p === "number"),
+				.filter((p) => typeof p === "number"),
 		);
 		return composeObject(
 			parameters.map((p) => [

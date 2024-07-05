@@ -312,7 +312,7 @@ export class Endpoint implements IZWaveEndpoint {
 			.filter((cc) => this.supportsCC(cc))
 			// Filter out CCs we don't implement
 			.map((cc) => this.createCCInstance(cc))
-			.filter((instance) => !!instance) as CommandClass[];
+			.filter((instance) => !!instance);
 		// For endpoint interviews, we skip some CCs
 		if (this.index > 0) {
 			supportedCCInstances = supportedCCInstances.filter(

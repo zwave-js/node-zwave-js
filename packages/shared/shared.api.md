@@ -4,8 +4,6 @@
 
 ```ts
 
-/// <reference types="node" />
-
 // Warning: (ae-forgotten-export) The symbol "Constructors" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "AllOf" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

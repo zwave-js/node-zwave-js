@@ -53,7 +53,7 @@ export function discoverRemoteSerialPorts(
 					const info: Record<string, string> = {};
 					if (!!txt && isArray(txt.data)) {
 						const strings = (txt.data as unknown[])
-							.filter((d): d is Buffer => Buffer.isBuffer(d))
+							.filter((d) => Buffer.isBuffer(d))
 							.map((d) => d.toString())
 							.filter((d) => d.includes("="));
 
