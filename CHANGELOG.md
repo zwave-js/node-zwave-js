@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* When responding to `Version CC Get` queries, Z-Wave JS's own version is now included as the `Firmware 1` version (#6982)
+* When receiving a notification with an unknown notification type, the created "unknown" value now correctly has metadata set (#6981)
+* When receiving an idle notification, the values for unknown notification events are now also reset to idle (#6980)
+* Auto-enable all supported Barrier Operator signaling subsystem during the interview (#6979)
+
 ## 12.12.1 (2024-06-26)
 ### Bugfixes
 * Fixed an issue where the watchdog feature could cause Z-Wave JS to stall after attempting controller recovery (#6968)
