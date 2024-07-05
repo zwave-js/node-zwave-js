@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.12.2 (2024-07-05)
 ### Bugfixes
 * When responding to `Version CC Get` queries, Z-Wave JS's own version is now included as the `Firmware 1` version (#6982)
 * When receiving a notification with an unknown notification type, the created "unknown" value now correctly has metadata set (#6981)
