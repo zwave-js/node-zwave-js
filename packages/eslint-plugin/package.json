@@ -29,6 +29,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
+    "bootstrap": "yarn build",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"

@@ -122,7 +122,7 @@
     "commit": "git-cz",
     "release": "release-script",
     "release:all": "release-script --publish-all",
-    "postinstall": "ts-patch install -s && yarn node maintenance/patch-tsserver.js",
+    "postinstall": "ts-patch install -s && yarn node maintenance/patch-tsserver.js && yarn turbo run bootstrap",
     "prepare": "husky && ts-patch install -s",
     "config": "yarn ts packages/config/maintenance/importConfig.ts",
     "docs": "docsify serve docs",

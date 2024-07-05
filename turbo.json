@@ -5,6 +5,10 @@
 			"cache": false
 		},
 
+		"bootstrap": {
+			// Dummy task to enable running all bootstrap tasks
+		},
+
 		"codegen": {
 			// Dummy task to enable running all codegen tasks
 		},
