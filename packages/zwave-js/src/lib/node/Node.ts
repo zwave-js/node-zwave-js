@@ -5213,10 +5213,19 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		} else {
 			// This is an unknown notification
-			const valueId = NotificationCCValues.unknownNotificationType(
+			const unknownValue = NotificationCCValues.unknownNotificationType(
 				command.notificationType,
-			).endpoint(command.endpointIndex);
+			);
+			const valueId = unknownValue.endpoint(command.endpointIndex);
 
+			// Make sure the metdata exists
+			if (command.version >= 2) {
+				if (!this.valueDB.hasMetadata(valueId)) {
+					this.valueDB.setMetadata(valueId, unknownValue.meta);
+				}
+			}
+
+			// And set its value
 			this.valueDB.setValue(valueId, command.notificationEvent);
 			// We don't know what this notification refers to, so we don't force a reset
 		}
