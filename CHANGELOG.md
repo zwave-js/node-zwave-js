@@ -4,6 +4,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+<!-- ### Application compatibility
+Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
+* Home Assistant **TBD** or higher
+* `zwave-js-server` **TBD**
+-->
+
+## __WORK IN PROGRESS__
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v13)
+* Align Meter CC Reset v6 with specifications, add mocks, add API for report commands (#6921)
+* Convert all Z-Wave specific configs except devices and manufacturers into code, move from ConfigManager methods to utility functions (#6925, #6929)
+* Remove `ZWaveApplicationHost` dependency from `CommandClass.toLogEntry()` (#6927)
+* Removed some deprecated things (#6928)
+* Replace `Controller.isAssociationAllowed` with `Controller.checkAssociation` (#6935)
+* Fixed health checks for ZWLR nodes, throw when requesting neighbors (#6939)
+* The repo now uses Yarn 4 and Corepack to manage its dependencies (#6949)
+
 ## 12.12.2 (2024-07-05)
 ### Bugfixes
 * When responding to `Version CC Get` queries, Z-Wave JS's own version is now included as the `Firmware 1` version (#6982)
