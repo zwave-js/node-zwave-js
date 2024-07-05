@@ -39,6 +39,6 @@
     "@typescript-eslint/utils": "^7.13.0",
     "@zwave-js/core": "workspace:*",
     "eslint": "^8.57.0",
-    "typescript": "5.5.2"
+    "typescript": "5.5.3"
   }
 }
