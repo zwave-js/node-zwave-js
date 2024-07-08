@@ -194,11 +194,15 @@ export class Endpoint implements IZWaveEndpoint {
 		}
 	}
 
-	/** Removes the BasicCC from the supported CCs if the device type forbids it */
-	public removeBasicCCSupportIfForbidden(): void {
+	/** Removes the BasicCC from the supported CCs if necessary */
+	public hideBasicCCSupportIfForbidden(): void {
+		if (!this.supportsCC(CommandClasses.Basic)) return;
+
 		if (
-			this.supportsCC(CommandClasses.Basic)
-			&& !this.maySupportBasicCC()
+			// Basic CC must not be offered if any other actuator CC is supported
+			actuatorCCs.some((cc) => this.supportsCC(cc))
+			// ...or the device class forbids it
+			|| !this.maySupportBasicCC()
 		) {
 			// We assume that the device reports support for this CC in error, and that it actually controls it.
 			// TODO: Consider if we should check additional sources, like the issued commands in AGI CC
@@ -206,26 +210,6 @@ export class Endpoint implements IZWaveEndpoint {
 				isSupported: false,
 				isControlled: true,
 			});
-		}
-	}
-
-	/** Removes the BasicCC from the supported CCs if any other actuator CCs are supported */
-	public hideBasicCCInFavorOfActuatorCCs(): void {
-		// This behavior is defined in SDS14223
-		if (
-			this.supportsCC(CommandClasses.Basic)
-			&& actuatorCCs.some((cc) => this.supportsCC(cc))
-		) {
-			// Mark the CC as not supported, but remember if it is controlled
-			this.addCC(CommandClasses.Basic, { isSupported: false });
-
-			// If the record is now only a dummy, remove the CC entirely
-			if (
-				!this.supportsCC(CommandClasses.Basic)
-				&& !this.controlsCC(CommandClasses.Basic)
-			) {
-				this.removeCC(CommandClasses.Basic);
-			}
 		}
 	}
 

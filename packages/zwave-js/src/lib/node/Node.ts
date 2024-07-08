@@ -1856,7 +1856,7 @@ export class ZWaveNode extends Endpoint
 					// Some device types are not allowed to support it, but there are devices that do.
 					// If a device type is forbidden to support Basic CC, remove the "support" portion of it
 					for (const endpoint of this.getAllEndpoints()) {
-						endpoint.removeBasicCCSupportIfForbidden();
+						endpoint.hideBasicCCSupportIfForbidden();
 					}
 
 					this.setInterviewStage(InterviewStage.CommandClasses);
@@ -2997,7 +2997,7 @@ protocol version:      ${this.protocolVersion}`;
 		}
 
 		// Mark Basic CC as not supported if any other actuator CC is supported
-		endpoint.hideBasicCCInFavorOfActuatorCCs();
+		endpoint.hideBasicCCSupportIfForbidden();
 
 		// Window Covering CC:
 		// CL:006A.01.51.01.2: A controlling node MUST NOT interview and provide controlling functionalities for the
@@ -6309,7 +6309,7 @@ protocol version:      ${this.protocolVersion}`;
 		// 	compat?.mapBasicReport !== false && compat?.mapBasicSet !== "event"
 		// ) {
 		for (const endpoint of this.getAllEndpoints()) {
-			endpoint.hideBasicCCInFavorOfActuatorCCs();
+			endpoint.hideBasicCCSupportIfForbidden();
 		}
 		// }
 
