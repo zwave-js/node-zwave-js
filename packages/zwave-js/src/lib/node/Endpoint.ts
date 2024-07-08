@@ -176,41 +176,19 @@ export class Endpoint implements IZWaveEndpoint {
 		return !!this._implementedCommandClasses.get(cc)?.isControlled;
 	}
 
-	/** Checks if this device type is allowed to support Basic CC per the specification */
+	/**
+	 * Checks if this endpoint is allowed to support Basic CC per the specification.
+	 * This depends on the device type and the other supported CCs
+	 */
 	public maySupportBasicCC(): boolean {
+		// Basic CC must not be offered if any other actuator CC is supported
+		if (actuatorCCs.some((cc) => this.supportsCC(cc))) {
+			return false;
+		}
+		// ...or the device class forbids it
 		return this.deviceClass?.specific.maySupportBasicCC
 			?? this.deviceClass?.generic.maySupportBasicCC
 			?? true;
-	}
-
-	/** Adds Basic CC to the supported CCs if no other actuator CCs are supported */
-	public maybeAddBasicCCAsFallback(): void {
-		if (
-			!this.supportsCC(CommandClasses.Basic)
-			&& this.maySupportBasicCC()
-			&& !actuatorCCs.some((cc) => this.supportsCC(cc))
-		) {
-			this.addCC(CommandClasses.Basic, { isSupported: true });
-		}
-	}
-
-	/** Removes the BasicCC from the supported CCs if necessary */
-	public hideBasicCCSupportIfForbidden(): void {
-		if (!this.supportsCC(CommandClasses.Basic)) return;
-
-		if (
-			// Basic CC must not be offered if any other actuator CC is supported
-			actuatorCCs.some((cc) => this.supportsCC(cc))
-			// ...or the device class forbids it
-			|| !this.maySupportBasicCC()
-		) {
-			// We assume that the device reports support for this CC in error, and that it actually controls it.
-			// TODO: Consider if we should check additional sources, like the issued commands in AGI CC
-			this.addCC(CommandClasses.Basic, {
-				isSupported: false,
-				isControlled: true,
-			});
-		}
 	}
 
 	/** Determines if support for a CC was force-removed via config file */

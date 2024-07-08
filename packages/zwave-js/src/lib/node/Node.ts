@@ -1852,13 +1852,6 @@ export class ZWaveNode extends Endpoint
 			if (this.interviewStage === InterviewStage.NodeInfo) {
 				// Only advance the interview if it was completed, otherwise abort
 				if (await this.interviewCCs()) {
-					// After interviewing the CCs, we may need to clean up the Basic CC values.
-					// Some device types are not allowed to support it, but there are devices that do.
-					// If a device type is forbidden to support Basic CC, remove the "support" portion of it
-					for (const endpoint of this.getAllEndpoints()) {
-						endpoint.hideBasicCCSupportIfForbidden();
-					}
-
 					this.setInterviewStage(InterviewStage.CommandClasses);
 				} else {
 					return false;
@@ -2353,10 +2346,6 @@ protocol version:      ${this.protocolVersion}`;
 			if (typeof action === "boolean") return action;
 		}
 
-		// Basic CC MUST only be used/interviewed when no other actuator CC is supported. If Basic CC is not in the NIF
-		// or list of supported CCs, we need to add it here manually, so its version can get queried.
-		this.maybeAddBasicCCAsFallback();
-
 		if (this.supportsCC(CommandClasses.Version)) {
 			this.driver.controllerLog.logNode(
 				this.id,
@@ -2411,21 +2400,25 @@ protocol version:      ${this.protocolVersion}`;
 		// We determine the correct interview order of the remaining CCs by topologically sorting two dependency graph
 		// In order to avoid emitting unnecessary value events for the root endpoint,
 		// we defer the application CC interview until after the other endpoints have been interviewed
-		const priorityCCs = [
+		// The following CCs are interviewed "manually" outside of the automatic interview sequence,
+		// because there are special rules around them.
+		const specialCCs = [
 			CommandClasses.Security,
 			CommandClasses["Security 2"],
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Version,
 			CommandClasses["Wake Up"],
+			// Basic CC is interviewed last
+			CommandClasses.Basic,
 		];
 		const rootInterviewGraphBeforeEndpoints = this.buildCCInterviewGraph([
-			...priorityCCs,
+			...specialCCs,
 			...applicationCCs,
 		]);
 		let rootInterviewOrderBeforeEndpoints: CommandClasses[];
 
 		const rootInterviewGraphAfterEndpoints = this.buildCCInterviewGraph([
-			...priorityCCs,
+			...specialCCs,
 			...nonApplicationCCs,
 		]);
 		let rootInterviewOrderAfterEndpoints: CommandClasses[];
@@ -2655,10 +2648,6 @@ protocol version:      ${this.protocolVersion}`;
 				}
 			}
 
-			// Basic CC MUST only be used/interviewed when no other actuator CC is supported. If Basic CC is not in the NIF
-			// or list of supported CCs, we need to add it here manually, so its version can get queried.
-			this.maybeAddBasicCCAsFallback();
-
 			// This intentionally checks for Version CC support on the root device.
 			// Endpoints SHOULD not support this CC, but we still need to query their
 			// CCs that the root device may or may not support
@@ -2707,6 +2696,7 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses.Security,
 				CommandClasses["Security 2"],
 				CommandClasses.Version,
+				CommandClasses.Basic,
 			]);
 			let endpointInterviewOrder: CommandClasses[];
 			try {
@@ -2760,6 +2750,62 @@ protocol version:      ${this.protocolVersion}`;
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
+		}
+
+		// At the very end, figure out if Basic CC is supposed to be supported
+		// First on the root device
+		if (!this.wasCCRemovedViaConfig(CommandClasses.Basic)) {
+			if (this.maySupportBasicCC()) {
+				// The device probably supports Basic CC and is allowed to.
+				// Interview the Basic CC to figure out if it actually supports it
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Root device interview: ${getCCName(CommandClasses.Basic)}`,
+					"silly",
+				);
+
+				const action = await interviewEndpoint(
+					this,
+					CommandClasses.Basic,
+				);
+				if (typeof action === "boolean") return action;
+			} else {
+				// The device is supposed to only control Basic CC
+				this.driver.controllerLog.logNode(this.id, {
+					message:
+						"Node implements Basic CC but is not supposed to support it. Assuming it only controls Basic CC...",
+				});
+			}
+		}
+
+		// Then on all endpoints
+		for (const endpointIndex of this.getEndpointIndizes()) {
+			const endpoint = this.getEndpoint(endpointIndex);
+			if (!endpoint) continue;
+			if (endpoint.wasCCRemovedViaConfig(CommandClasses.Basic)) continue;
+
+			if (endpoint.maySupportBasicCC()) {
+				// The endpoint probably supports Basic CC and is allowed to.
+				// Interview the Basic CC to figure out if it actually supports it
+				this.driver.controllerLog.logNode(this.id, {
+					endpoint: endpoint.index,
+					message: `Endpoint ${endpoint.index} interview: Basic CC`,
+					level: "silly",
+				});
+
+				const action = await interviewEndpoint(
+					endpoint,
+					CommandClasses.Basic,
+				);
+				if (typeof action === "boolean") return action;
+			} else {
+				// The device is supposed to only control Basic CC
+				this.driver.controllerLog.logNode(this.id, {
+					endpoint: endpoint.index,
+					message:
+						"Endpoint implements Basic CC but is not supposed to support it. Assuming it only controls Basic CC...",
+				});
+			}
 		}
 
 		return true;
@@ -2989,16 +3035,6 @@ protocol version:      ${this.protocolVersion}`;
 	 * and certification requirements
 	 */
 	private modifySupportedCCBeforeInterview(endpoint: Endpoint): void {
-		const compat = this._deviceConfig?.compat;
-
-		// If the config file instructs us to expose Basic Set as an event, mark the CC as controlled
-		if (compat?.mapBasicSet === "event" && endpoint.index === 0) {
-			endpoint.addCC(CommandClasses.Basic, { isControlled: true });
-		}
-
-		// Mark Basic CC as not supported if any other actuator CC is supported
-		endpoint.hideBasicCCSupportIfForbidden();
-
 		// Window Covering CC:
 		// CL:006A.01.51.01.2: A controlling node MUST NOT interview and provide controlling functionalities for the
 		// Multilevel Switch Command Class for a node (or endpoint) supporting the Window Covering CC, as it is a fully
@@ -3800,11 +3836,6 @@ protocol version:      ${this.protocolVersion}`;
 				if (!didSetMappedValue) {
 					// Store the value in the value DB now
 					command.persistValues(this.driver);
-
-					// Since the node sent us a Basic report, we are sure that it is at least supported
-					// If this is the only supported actuator CC, add it to the support list,
-					// so the information lands in the network cache
-					sourceEndpoint.maybeAddBasicCCAsFallback();
 				}
 			}
 		} else if (command instanceof BasicCCSet) {
@@ -6301,17 +6332,6 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Restore the device config
 		await this.loadDeviceConfig();
-
-		// Remove the Basic CC if it should be hidden
-		// TODO: Do this as part of loadDeviceConfig
-		// const compat = this._deviceConfig?.compat;
-		// if (
-		// 	compat?.mapBasicReport !== false && compat?.mapBasicSet !== "event"
-		// ) {
-		for (const endpoint of this.getAllEndpoints()) {
-			endpoint.hideBasicCCSupportIfForbidden();
-		}
-		// }
 
 		// Mark already-interviewed nodes as potentially ready
 		if (this.interviewStage === InterviewStage.Complete) {
