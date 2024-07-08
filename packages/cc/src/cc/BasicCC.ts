@@ -333,7 +333,8 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
 		} else if (
 			!endpoint.supportsCC(CommandClasses.Basic) && (
-				endpoint.controlsCC(CommandClasses.Basic)
+				(endpoint.controlsCC(CommandClasses.Basic)
+					&& compat?.mapBasicSet !== "Binary Sensor")
 				|| compat?.mapBasicReport === false
 				|| compat?.mapBasicSet === "report"
 			)
