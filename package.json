@@ -81,7 +81,7 @@
     "json5": "^2.2.3",
     "jsonc-eslint-parser": "^2.4.0",
     "lint-staged": "^15.2.2",
-    "p-queue": "^7.4.1",
+    "p-queue": "^8.0.1",
     "reflect-metadata": "^0.2.2",
     "semver": "^7.6.2",
     "source-map-support": "^0.5.21",
