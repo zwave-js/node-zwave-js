@@ -1,18 +1,21 @@
-import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
+import { CommandClass, type ICommandClassContainer } from "@zwave-js/cc";
 import {
-	MessageOrCCLogEntry,
+	type FrameType,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
+	type MessageRecord,
 	NODE_ID_BROADCAST,
-	RSSI,
+	type RSSI,
 	RssiError,
-	SinglecastCC,
+	type SinglecastCC,
+	parseNodeBitMask,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
-	MessageDeserializationOptions,
+	type MessageDeserializationOptions,
 	MessageType,
 	messageTypes,
 	priority,
@@ -24,8 +27,7 @@ import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
 @messageTypes(MessageType.Request, FunctionType.BridgeApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
-export class BridgeApplicationCommandRequest
-	extends Message
+export class BridgeApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
@@ -47,9 +49,8 @@ export class BridgeApplicationCommandRequest
 			default:
 				this.frameType = "singlecast";
 		}
-		this.isExploreFrame =
-			this.frameType === "broadcast" &&
-			!!(status & ApplicationCommandStatusFlags.Explore);
+		this.isExploreFrame = this.frameType === "broadcast"
+			&& !!(status & ApplicationCommandStatusFlags.Explore);
 		this.isForeignFrame = !!(
 			status & ApplicationCommandStatusFlags.ForeignFrame
 		);
@@ -57,14 +58,23 @@ export class BridgeApplicationCommandRequest
 			status & ApplicationCommandStatusFlags.ForeignHomeId
 		);
 
-		const sourceNodeId = this.payload[2];
+		let offset = 1;
+		const { nodeId: destinationNodeId, bytesRead: dstNodeIdBytes } =
+			parseNodeID(this.payload, host.nodeIdType, offset);
+		offset += dstNodeIdBytes;
+		const { nodeId: sourceNodeId, bytesRead: srcNodeIdBytes } = parseNodeID(
+			this.payload,
+			host.nodeIdType,
+			offset,
+		);
+		offset += srcNodeIdBytes;
 		// Parse the CC
-		const commandLength = this.payload[3];
-		let offset = 4;
+		const commandLength = this.payload[offset++];
 		this.command = CommandClass.from(this.host, {
-			data: this.payload.slice(offset, offset + commandLength),
+			data: this.payload.subarray(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 			origin: options.origin,
+			frameType: this.frameType,
 		}) as SinglecastCC<CommandClass>;
 		offset += commandLength;
 
@@ -72,11 +82,11 @@ export class BridgeApplicationCommandRequest
 		const multicastNodesLength = this.payload[offset];
 		offset++;
 		if (this.frameType === "multicast") {
-			this.targetNodeId = [
-				...this.payload.slice(offset, offset + multicastNodesLength),
-			];
+			this.targetNodeId = parseNodeBitMask(
+				this.payload.subarray(offset, offset + multicastNodesLength),
+			);
 		} else if (this.frameType === "singlecast") {
-			this.targetNodeId = this.payload[1];
+			this.targetNodeId = destinationNodeId;
 		} else {
 			this.targetNodeId = NODE_ID_BROADCAST;
 		}
@@ -86,7 +96,7 @@ export class BridgeApplicationCommandRequest
 	}
 
 	public readonly routedBusy: boolean;
-	public readonly frameType: "singlecast" | "broadcast" | "multicast";
+	public readonly frameType: FrameType;
 	public readonly targetNodeId: number | number[];
 	public readonly isExploreFrame: boolean;
 	public readonly isForeignFrame: boolean;
@@ -109,10 +119,13 @@ export class BridgeApplicationCommandRequest
 			message.type = this.frameType;
 		}
 		if (this.targetNodeId !== this.host.ownNodeId) {
-			message["target node"] =
-				typeof this.targetNodeId === "number"
-					? this.targetNodeId
-					: this.targetNodeId.join(", ");
+			if (typeof this.targetNodeId === "number") {
+				message["target node"] = this.targetNodeId;
+			} else if (this.targetNodeId.length === 1) {
+				message["target node"] = this.targetNodeId[0];
+			} else {
+				message["target nodes"] = this.targetNodeId.join(", ");
+			}
 		}
 		if (this.rssi !== undefined) {
 			switch (true) {

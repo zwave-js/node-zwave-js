@@ -70,8 +70,6 @@
 			"#": "10",
 			"label": "Local Dimmer Speed Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -80,7 +78,7 @@
 					"value": 0
 				},
 				{
-					"label": "Instant On/Off",
+					"label": "Instant on/off",
 					"value": 1
 				}
 			]

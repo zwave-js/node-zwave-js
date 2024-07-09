@@ -7,19 +7,35 @@
 ### `get`
 
 ```ts
-async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: number; previousValue: number | undefined; deltaTime: Maybe<number>; type: number; scale: MeterScale; } | undefined>;
+async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: import("/home/dominic/Repositories/node-zwave-js/packages/core/build/index").MeterScale; } | undefined>;
+```
+
+### `sendReport`
+
+```ts
+async sendReport(
+	options: MeterCCReportOptions,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getAll`
 
 ```ts
-async getAll(): Promise<{ value: number; rateType: RateType; previousValue: number | undefined; deltaTime: Maybe<number>; type: number; scale: MeterScale; }[]>;
+async getAll(accumulatedOnly: boolean = false): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: import("/home/dominic/Repositories/node-zwave-js/packages/core/build/index").MeterScale; }[]>;
 ```
 
 ### `getSupported`
 
 ```ts
 async getSupported(): Promise<Pick<MeterCCSupportedReport, "type" | "supportsReset" | "supportedScales" | "supportedRateTypes"> | undefined>;
+```
+
+### `sendSupportedReport`
+
+```ts
+async sendSupportedReport(
+	options: MeterCCSupportedReportOptions,
+): Promise<void>;
 ```
 
 ### `reset`
@@ -42,15 +58,15 @@ async reset(
 }
 ```
 
--   **label:** Reset accumulated values
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Reset accumulated values
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
-### `resetSingle(meterType: number)`
+### `resetSingle(meterType: number, rateType: RateType, scale: number)`
 
 ```ts
 {
@@ -61,13 +77,13 @@ async reset(
 }
 ```
 
--   **label:** `Reset (${string})`
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `Reset (${string})` | `Reset (Consumption, ${string})` | `Reset (Production, ${string})`
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `value(meterType: number, rateType: RateType, scale: number)`
 
@@ -80,9 +96,9 @@ async reset(
 }
 ```
 
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`

@@ -1,17 +1,18 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	EncapsulationFlags,
+	type MaybeNotKnown,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -28,7 +29,7 @@ import { MultiCommandCommand } from "../lib/_Types";
 
 @API(CommandClasses["Multi Command"])
 export class MultiCommandCCAPI extends CCAPI {
-	public supportsCommand(_cmd: MultiCommandCommand): Maybe<boolean> {
+	public supportsCommand(_cmd: MultiCommandCommand): MaybeNotKnown<boolean> {
 		// switch (cmd) {
 		// 	case MultiCommandCommand.CommandEncapsulation:
 		return true; // This is mandatory
@@ -61,8 +62,8 @@ export class MultiCommandCC extends CommandClass {
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
-			cc.endpointIndex !== 0 &&
-			!(cc instanceof MultiCommandCCCommandEncapsulation)
+			cc.endpointIndex !== 0
+			&& !(cc instanceof MultiCommandCCCommandEncapsulation)
 		);
 	}
 
@@ -76,12 +77,14 @@ export class MultiCommandCC extends CommandClass {
 		});
 
 		// Copy the "sum" of the encapsulation flags from the encapsulated CCs
-		for (const flag of [
-			EncapsulationFlags.Supervision,
-			EncapsulationFlags.Security,
-			EncapsulationFlags.CRC16,
-		] as const) {
-			ret.setEncapsulationFlag(
+		for (
+			const flag of [
+				EncapsulationFlags.Supervision,
+				EncapsulationFlags.Security,
+				EncapsulationFlags.CRC16,
+			] as const
+		) {
+			ret.toggleEncapsulationFlag(
 				flag,
 				CCs.some((cc) => cc.encapsulationFlags & flag),
 			);
@@ -91,7 +94,10 @@ export class MultiCommandCC extends CommandClass {
 	}
 }
 
-interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
+// @publicAPI
+export interface MultiCommandCCCommandEncapsulationOptions
+	extends CCCommandOptions
+{
 	encapsulated: CommandClass[];
 }
 
@@ -116,13 +122,14 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 				validatePayload(this.payload.length >= offset + 1 + cmdLength);
 				this.encapsulated.push(
 					CommandClass.from(this.host, {
-						data: this.payload.slice(
+						data: this.payload.subarray(
 							offset + 1,
 							offset + 1 + cmdLength,
 						),
 						fromEncapsulation: true,
 						encapCC: this,
 						origin: options.origin,
+						frameType: options.frameType,
 					}),
 				);
 				offset += 1 + cmdLength;
@@ -149,9 +156,9 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			// Hide the default payload line
 			message: undefined,
 		};

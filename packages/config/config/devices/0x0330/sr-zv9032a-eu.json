@@ -1,0 +1,382 @@
+{
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
+	"manufacturerId": "0x0330",
+	"label": "SR-ZV9032A-EU",
+	"description": "Multisensor",
+	"devices": [
+		{
+			"productType": "0x0400",
+			"productId": "0xd10a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Motion Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Battery Change Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 10
+		},
+		{
+			"#": "3",
+			"label": "Motion Sensitivity",
+			"description": "Allowable range: 8 (high) - 255 (low)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Motion Blind Time",
+			"description": "The amount of time the sensor will not report motion after it has reported motion.",
+			"valueSize": 1,
+			"defaultValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.5s",
+					"value": 0
+				},
+				{
+					"label": "1s",
+					"value": 1
+				},
+				{
+					"label": "1.5s",
+					"value": 2
+				},
+				{
+					"label": "2s",
+					"value": 3
+				},
+				{
+					"label": "2.5s",
+					"value": 4
+				},
+				{
+					"label": "3s",
+					"value": 5
+				},
+				{
+					"label": "3.5s",
+					"value": 6
+				},
+				{
+					"label": "4s",
+					"value": 7
+				},
+				{
+					"label": "4.5s",
+					"value": 8
+				},
+				{
+					"label": "5s",
+					"value": 9
+				},
+				{
+					"label": "5.5s",
+					"value": 10
+				},
+				{
+					"label": "6s",
+					"value": 11
+				},
+				{
+					"label": "6.5s",
+					"value": 12
+				},
+				{
+					"label": "7s",
+					"value": 13
+				},
+				{
+					"label": "7.5s",
+					"value": 14
+				},
+				{
+					"label": "8s",
+					"value": 15
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Pulse Count",
+			"description": "Number of moves required for the sensor to report motion. Higher values = less sensitive.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "1",
+					"value": 0
+				},
+				{
+					"label": "2",
+					"value": 1
+				},
+				{
+					"label": "3",
+					"value": 2
+				},
+				{
+					"label": "4",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Motion Window Time",
+			"description": "The amount of time the moves specified in parameter #3 need to take place in for the sensor to report motion. Higher values = more sensitive.",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "4s",
+					"value": 0
+				},
+				{
+					"label": "8s",
+					"value": 1
+				},
+				{
+					"label": "12s",
+					"value": 2
+				},
+				{
+					"label": "16s",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Motion Clear Time",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 3,
+			"maxValue": 28800,
+			"defaultValue": 30
+		},
+		{
+			"#": "8",
+			"label": "Association Group: Basic Set Commands",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Motion and no motion",
+					"value": 0
+				},
+				{
+					"label": "Motion only",
+					"value": 1
+				},
+				{
+					"label": "No motion only",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Association Group: Value of Basic Set (Motion)",
+			"description": "Allowable range: 0-99, 255",
+			"valueSize": 2,
+			"defaultValue": 255,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On / Last non-zero value",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Association Group: Value of Basic Set (No Motion)",
+			"description": "Allowable range: 0-99, 255",
+			"valueSize": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On / Last non-zero value",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Motion Sensor Night/Day Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always active",
+					"value": 0
+				},
+				{
+					"label": "Day only",
+					"value": 1
+				},
+				{
+					"label": "Night only",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Night/Day Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 200
+		},
+		{
+			"#": "13",
+			"label": "Brightness Report Interval",
+			"description": "Allowable range: 5-2678400",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Brightness Change Report Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Association Group: Send Secure Commands",
+			"defaultValue": 1
+		},
+		{
+			"#": "16",
+			"label": "Temperature/Humidity Report Interval",
+			"description": "Allowable range: 5-2678400",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Temperature Change Report Threshold",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Humidity Change Report Threshold",
+			"valueSize": 2,
+			"unit": "rh%",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Temperature Calibration",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "20",
+			"label": "Humidity Calibration",
+			"description": "The value to be added to the actual measured humidity.",
+			"valueSize": 2,
+			"unit": "%rH",
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"inclusion": "Triple press the action button, the sensor will be set to inclusion mode",
+		"exclusion": "Triple press the action button, the sensor will be set to exclusion mode",
+		"reset": "Press and hold down action button for over 10 seconds, then LED indicator will flash 3 times slowly to indicate successful factory reset, the sensor will be removed from the network and reset to factory defaults."
+	}
+}

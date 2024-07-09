@@ -1,0 +1,215 @@
+{
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "SR-ZV2833PAC",
+	"description": "Push-Button Coupler",
+	"devices": [
+		{
+			"productType": "0x0400",
+			"productId": "0xd105"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Launch 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Launch 2",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Launch 3",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Launch 4",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "External Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				},
+				{
+					"label": "3-Way switch",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Multilevel Start Level Change Duration",
+			"description": "Sent when the switch is pressed and held.",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 8
+		},
+		{
+			"#": "4[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Association Group 2: Send Secure Commands",
+			"description": "Requires the device to be included securely.",
+			"defaultValue": 1
+		},
+		{
+			"#": "4[0x02]",
+			"$import": "#paramInformation/4[0x01]",
+			"label": "Association Group 3: Send Secure Commands"
+		},
+		{
+			"#": "4[0x04]",
+			"$import": "#paramInformation/4[0x01]",
+			"label": "Association Group 4: Send Secure Commands"
+		},
+		{
+			"#": "4[0x08]",
+			"$import": "#paramInformation/4[0x01]",
+			"label": "Association Group 5: Send Secure Commands"
+		},
+		{
+			"#": "5[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 1 Scenes: Short Press 1x",
+			"defaultValue": 1
+		},
+		{
+			"#": "5[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 1 Scenes: Short Press 2x",
+			"defaultValue": 1
+		},
+		{
+			"#": "5[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 1 Scenes: Pressed and Held",
+			"defaultValue": 1
+		},
+		{
+			"#": "5[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 1 Scenes: Released",
+			"defaultValue": 1
+		},
+		{
+			"#": "6[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 2 Scenes: Short Press 1x",
+			"defaultValue": 1
+		},
+		{
+			"#": "6[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 2 Scenes: Short Press 2x",
+			"defaultValue": 1
+		},
+		{
+			"#": "6[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 2 Scenes: Pressed and Held",
+			"defaultValue": 1
+		},
+		{
+			"#": "6[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 2 Scenes: Released",
+			"defaultValue": 1
+		},
+		{
+			"#": "7[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 3 Scenes: Short Press 1x",
+			"defaultValue": 1
+		},
+		{
+			"#": "7[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 3 Scenes: Short Press 2x",
+			"defaultValue": 1
+		},
+		{
+			"#": "7[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 3 Scenes: Pressed and Held",
+			"defaultValue": 1
+		},
+		{
+			"#": "7[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 3 Scenes: Released",
+			"defaultValue": 1
+		},
+		{
+			"#": "8[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 4 Scenes: Short Press 1x",
+			"defaultValue": 1
+		},
+		{
+			"#": "8[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 4 Scenes: Short Press 2x",
+			"defaultValue": 1
+		},
+		{
+			"#": "8[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 4 Scenes: Pressed and Held",
+			"defaultValue": 1
+		},
+		{
+			"#": "8[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button 4 Scenes: Released",
+			"defaultValue": 1
+		},
+		{
+			"#": "9",
+			"label": "Switch Behavior",
+			"description": "See device manual for an explanation of the different functions.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function 1",
+					"value": 0
+				},
+				{
+					"label": "Function 2",
+					"value": 1
+				},
+				{
+					"label": "Function 3",
+					"value": 2
+				}
+			]
+		}
+	],
+	"metadata": {
+		"manual": "https://www.sunricher.com/media/resources/manual/SR-ZV2833PAC-Instruction.pdf"
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"manufacturer": "Jin Tao Bao",
+	"manufacturerId": "0x015a",
+	"label": "JTB-ZMNKGD1",
+	"description": "Shades Remote Controller",
+	"devices": [
+		{
+			"productType": "0x2000",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

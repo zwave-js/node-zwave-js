@@ -2,9 +2,11 @@ import type { ICommandClass } from "@zwave-js/core";
 
 /**
  * Is used to simulate communication between a {@link MockController} and a {@link MockNode}.
- *
  */
 export type MockZWaveFrame = MockZWaveRequestFrame | MockZWaveAckFrame;
+
+// Support delayed parsing
+export type LazyMockZWaveFrame = LazyMockZWaveRequestFrame | MockZWaveAckFrame;
 
 export interface MockZWaveRequestFrame {
 	type: MockZWaveFrameType.Request;
@@ -14,6 +16,16 @@ export interface MockZWaveRequestFrame {
 	ackRequested: boolean;
 	/** The Command Class contained in the frame */
 	payload: ICommandClass;
+}
+
+export interface LazyMockZWaveRequestFrame {
+	type: MockZWaveFrameType.Request;
+	/** The repeaters to use to reach the destination */
+	repeaters: number[];
+	/** Whether an ACK is requested from the destination */
+	ackRequested: boolean;
+	/** The Command Class contained in the frame */
+	payload: ICommandClass | (() => ICommandClass);
 }
 
 export interface MockZWaveAckFrame {
@@ -32,9 +44,9 @@ export enum MockZWaveFrameType {
 }
 
 export function createMockZWaveRequestFrame(
-	payload: ICommandClass,
+	payload: ICommandClass | (() => ICommandClass),
 	options: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">> = {},
-): MockZWaveRequestFrame {
+): LazyMockZWaveRequestFrame {
 	const { repeaters = [], ackRequested = true } = options;
 	return {
 		type: MockZWaveFrameType.Request,
@@ -53,6 +65,20 @@ export function createMockZWaveAckFrame(
 		repeaters,
 		ack,
 		failedHop,
+	};
+}
+
+export function unlazyMockZWaveFrame(
+	frame: LazyMockZWaveFrame,
+): MockZWaveFrame {
+	if (frame.type === MockZWaveFrameType.ACK) return frame;
+	let payload = frame.payload;
+	if (typeof payload === "function") {
+		payload = payload();
+	}
+	return {
+		...frame,
+		payload,
 	};
 }
 

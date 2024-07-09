@@ -1,10 +1,11 @@
 // TODO: auto-generate this
 
 export type { SetbackState, Switchpoint } from "@zwave-js/cc";
-export type { Scale, SensorType } from "@zwave-js/config";
+export type { Scale, Sensor } from "@zwave-js/core/safe";
 export { Duration, ValueMetadata } from "@zwave-js/core/safe";
 export type {
 	DurationUnit,
+	TranslatedValueID,
 	ValueID,
 	ValueMetadataAny,
 	ValueMetadataBoolean,
@@ -13,7 +14,6 @@ export type {
 	ValueType,
 } from "@zwave-js/core/safe";
 export type {
-	TranslatedValueID,
 	ZWaveNodeMetadataUpdatedArgs,
 	ZWaveNodeValueAddedArgs,
 	ZWaveNodeValueNotificationArgs,

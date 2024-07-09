@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "32562 / ZW6301",
-	"description": "Hinge Pin Door Sensor, 500S",
+	"description": "Hinge PIN Door Sensor, 500S",
 	"devices": [
 		{
 			"productType": "0x4953",

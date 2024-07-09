@@ -54,7 +54,8 @@ async function main(param) {
 	await github.rest.issues.createComment({
 		...options,
 		issue_number: context.payload.issue.number,
-		body: `🔨 I created a PR at #${prNumber} - check it out! Usually, I'm going to need some help from a human to make sure the configuration matches the [style guide](${urls.styleGuide}).
+		body:
+			`🔨 I created a PR at #${prNumber} - check it out! Usually, I'm going to need some help from a human to make sure the configuration matches the [style guide](${urls.styleGuide}).
 
 If anyone feels compelled to help out, please follow these steps:
 

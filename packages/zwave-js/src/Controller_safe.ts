@@ -1,21 +1,21 @@
 export {
-	isRssiError,
 	ProtocolDataRate,
 	RFRegion,
-	RSSI,
 	RssiError,
-	TXReport,
+	isRssiError,
 } from "@zwave-js/core/safe";
+export type { RSSI, TXReport } from "@zwave-js/core/safe";
 export type { ControllerStatistics } from "./lib/controller/ControllerStatistics";
 export { ZWaveFeature } from "./lib/controller/Features";
 export * from "./lib/controller/Inclusion";
-export {
+export { ControllerFirmwareUpdateStatus } from "./lib/controller/_Types";
+export type {
 	ControllerFirmwareUpdateProgress,
 	ControllerFirmwareUpdateResult,
-	ControllerFirmwareUpdateStatus,
+	FirmwareUpdateDeviceID,
 	GetFirmwareUpdatesOptions,
-	HealNetworkOptions,
-	HealNodeStatus,
+	RebuildRoutesOptions,
+	RebuildRoutesStatus,
 	SDKVersion,
 } from "./lib/controller/_Types";
 export type { ZWaveLibraryTypes } from "./lib/serialapi/_Types";

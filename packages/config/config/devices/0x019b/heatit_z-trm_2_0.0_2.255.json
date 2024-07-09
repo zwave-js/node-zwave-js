@@ -22,7 +22,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off. (default)",
+					"label": "Off",
 					"value": 0
 				},
 				{
@@ -30,7 +30,7 @@
 					"value": 1
 				},
 				{
-					"label": "Cooling mode (not implemented)",
+					"label": "Cooling mode (Not implemented)",
 					"value": 2
 				},
 				{
@@ -47,15 +47,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "F-mode, floor sensor mode",
+					"label": "F-Mode, floor sensor mode",
 					"value": 0
 				},
 				{
-					"label": "A-mode, internal room sensor mode (default)",
+					"label": "A-Mode, internal room sensor mode",
 					"value": 1
 				},
 				{
-					"label": "AF-mode, internal sensor and floor sensor mode",
+					"label": "Af-Mode, internal sensor and floor sensor mode",
 					"value": 2
 				},
 				{
@@ -63,24 +63,24 @@
 					"value": 3
 				},
 				{
-					"label": "P-mode, power regulator mode",
+					"label": "P-Mode, power regulator mode",
 					"value": 4
 				},
 				{
-					"label": "FP-mode, floor sensor and power regulator mode",
+					"label": "Fp-Mode, floor sensor and power regulator mode",
 					"value": 5
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Floor sensor type",
+			"label": "Floor Sensor Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "10K-NTC (default)",
+					"label": "10K-NTC",
 					"value": 0
 				},
 				{
@@ -107,7 +107,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Temperature control hysteresis (DIFF I)",
+			"label": "Temperature Control Hysteresis (DIFF I)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
@@ -115,43 +115,43 @@
 		},
 		{
 			"#": "5",
-			"label": "Floor minimum temperature limit (FLo)",
-			"unit": "oC",
+			"label": "Floor Minimum Temperature Limit (FLo)",
 			"valueSize": 2,
+			"unit": "oC",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 50
 		},
 		{
 			"#": "6",
-			"label": "Floor maximum temperature (FHi)",
-			"unit": "oC",
+			"label": "Floor Maximum Temperature (FHi)",
 			"valueSize": 2,
+			"unit": "oC",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 400
 		},
 		{
 			"#": "7",
-			"label": "Air minimum temperature limit (ALo)",
-			"unit": "oC",
+			"label": "Air Minimum Temperature Limit (ALo)",
 			"valueSize": 2,
+			"unit": "oC",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 50
 		},
 		{
 			"#": "8",
-			"label": "Air maximum temperature limit (AHi)",
-			"unit": "oC",
+			"label": "Air Maximum Temperature Limit (AHi)",
 			"valueSize": 2,
+			"unit": "oC",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 400
 		},
 		{
 			"#": "9",
-			"label": "FP mode P setting (PLo)",
+			"label": "FP Mode P Setting (PLo)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -159,76 +159,76 @@
 		},
 		{
 			"#": "10",
-			"label": "Heating mode setpoint (CO)",
-			"unit": "oC",
+			"label": "Heating Mode Setpoint (CO)",
 			"valueSize": 2,
+			"unit": "oC",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 210
 		},
 		{
 			"#": "11",
-			"label": "Energy saving mode setpoint (ECO)",
-			"unit": "oC",
+			"label": "Energy Saving Mode Setpoint (ECO)",
 			"valueSize": 2,
+			"unit": "oC",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 180
 		},
 		{
 			"#": "12",
-			"label": "P setting",
-			"unit": "oC",
+			"label": "P Setting",
 			"valueSize": 1,
+			"unit": "oC",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 2
 		},
 		{
 			"#": "13",
-			"label": "Cooling setpoint (COOL)",
-			"unit": "oC",
+			"label": "Cooling Setpoint (COOL)",
 			"valueSize": 2,
+			"unit": "oC",
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 210
 		},
 		{
 			"#": "14",
-			"label": "Room sensor calibration",
-			"unit": "oC",
+			"label": "Room Sensor Calibration",
 			"valueSize": 1,
+			"unit": "oC",
 			"minValue": -40,
 			"maxValue": 40,
 			"defaultValue": 0
 		},
 		{
 			"#": "15",
-			"label": "Floor sensor calibration",
-			"unit": "oC",
+			"label": "Floor Sensor Calibration",
 			"valueSize": 1,
+			"unit": "oC",
 			"minValue": -40,
 			"maxValue": 40,
 			"defaultValue": 0
 		},
 		{
 			"#": "16",
-			"label": "External sensor calibration",
-			"unit": "oC",
+			"label": "External Sensor Calibration",
 			"valueSize": 1,
+			"unit": "oC",
 			"minValue": -40,
 			"maxValue": 40,
 			"defaultValue": 0
 		},
 		{
 			"#": "17",
-			"label": "Temperature display",
+			"label": "Temperature Display",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Display setpoint temperature (default)",
+					"label": "Display setpoint temperature",
 					"value": 0
 				},
 				{
@@ -239,72 +239,72 @@
 		},
 		{
 			"#": "18",
-			"label": "Button brightness - dimmed state",
-			"unit": "%",
+			"label": "Button Brightness - Dimmed State",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50
 		},
 		{
 			"#": "19",
-			"label": "Button brightness - active state",
-			"unit": "%",
+			"label": "Button Brightness - Active State",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
 		{
 			"#": "20",
-			"label": "Display brightness - dimmed state",
-			"unit": "%",
+			"label": "Display Brightness - Dimmed State",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50
 		},
 		{
 			"#": "21",
-			"label": "Display brightness - active state",
-			"unit": "%",
+			"label": "Display Brightness - Active State",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
 		{
 			"#": "22",
-			"label": "Temperature report interval",
-			"unit": "seconds",
+			"label": "Temperature Report Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 60
 		},
 		{
 			"#": "23",
-			"label": "Temperature report hysteresis",
-			"unit": "oC",
+			"label": "Temperature Report Hysteresis",
 			"valueSize": 1,
+			"unit": "oC",
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
 		{
 			"#": "24",
-			"label": "Meter report interval",
-			"unit": "seconds",
+			"label": "Meter Report Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 60
 		},
 		{
 			"#": "25",
-			"label": "Meter report delta value",
-			"unit": "kWh/10",
+			"label": "Meter Report Delta Value",
 			"valueSize": 1,
+			"unit": "kWh/10",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,

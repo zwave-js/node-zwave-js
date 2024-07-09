@@ -31,10 +31,9 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Siren alarm sequence interval in seconds",
-			"description": "This parameter defines the total length of the interval in seconds.",
-			"unit": "Seconds",
+			"label": "Siren Alarm Sequence Duration",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 129,
 			"defaultValue": 10,
@@ -42,10 +41,10 @@
 		},
 		{
 			"#": "2",
-			"label": "Siren alarm tone length",
+			"label": "Siren Alarm Tone Length",
 			"description": "Total length of the sound versus silence within this interval.",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 129,
 			"defaultValue": 10,
@@ -69,38 +68,36 @@
 		},
 		{
 			"#": "5",
-			"label": "Status of automated meshing of smoke alarms",
+			"label": "Status of Automated Meshing of Smoke Alarms",
 			"description": "Inform other smoke detectors of same type about smoke alarms",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "inactive",
+					"label": "Inactive",
 					"value": 0
 				},
 				{
-					"label": "active",
+					"label": "Active",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Status of automated meshing of battery alarms",
+			"label": "Status of Automated Meshing of Battery Alarms",
 			"description": "Inform other smoke detectors of same type about battery alarms",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "inactive",
+					"label": "Inactive",
 					"value": 0
 				},
 				{
-					"label": "active",
+					"label": "Active",
 					"value": 1
 				}
 			]

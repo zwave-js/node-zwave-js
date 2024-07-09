@@ -24,12 +24,12 @@
 		},
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#dim_step_zwave",
-			"valueSize": 2
+			"$import": "templates/config_template.json#dim_step_zwave"
 		},
 		{
 			"#": "8",
-			"$import": "templates/config_template.json#dim_rate_zwave"
+			"$import": "templates/config_template.json#dim_rate_zwave",
+			"valueSize": 2
 		},
 		{
 			"#": "9",

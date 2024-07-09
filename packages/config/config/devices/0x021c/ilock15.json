@@ -1,13 +1,12 @@
 {
-	"manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
+	"manufacturer": "Shenzhen iSurpass Technology Co., Ltd.",
 	"manufacturerId": "0x021c",
 	"label": "ILOCK15",
 	"description": "Smart Door Lock",
 	"devices": [
 		{
-			"productType": "0x5010",
-			"productId": "0x1001",
-			"zwaveAllianceId": 3048
+			"productType": "0x634b",
+			"productId": "0x504c"
 		}
 	],
 	"firmwareVersion": {

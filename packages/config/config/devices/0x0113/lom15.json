@@ -14,6 +14,6 @@
 		"max": "255.255"
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	}
 }

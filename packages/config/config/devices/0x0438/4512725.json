@@ -27,15 +27,14 @@
 			"description": "In Switch Mode, the device operates as a regular switch. In Thermostat Mode, the binary set command class will be invalid and the action button is disabled.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch mode",
+					"label": "Switch",
 					"value": 0
 				},
 				{
-					"label": "Thermostat mode",
+					"label": "Thermostat",
 					"value": 1
 				}
 			]
@@ -63,7 +62,6 @@
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 36,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -80,7 +78,6 @@
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -162,7 +159,6 @@
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 600,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -191,7 +187,6 @@
 			"minValue": 0,
 			"maxValue": 16,
 			"defaultValue": 16,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

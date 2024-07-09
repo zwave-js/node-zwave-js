@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN05-1B",
-	"description": "Single relay in-wall switch module",
+	"description": "Single Relay In-Wall Switch Module",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -37,45 +37,17 @@
 		},
 		{
 			"#": "2",
-			"label": "Restore switch state mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch Off",
-					"value": 0
-				},
-				{
-					"label": "Last Switch State",
-					"value": 1
-				},
-				{
-					"label": "Switch On",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "3",
-			"label": "Manual On/Off mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable manual On/Off",
-					"value": 0
-				},
-				{
-					"label": "Enable manual On/Off",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Manual On/Off Mode",
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "LED indication mode",
+			"label": "LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -96,16 +68,16 @@
 		},
 		{
 			"#": "5",
-			"label": "Auto off timer",
-			"unit": "second",
+			"label": "Auto Off Timer",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
 		{
 			"#": "6",
-			"label": "RF Off command mode",
+			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

@@ -23,8 +23,16 @@ async setCustomPowerlevel(
 
 ```ts
 async getPowerlevel(): Promise<
-	Pick<PowerlevelCCReport, "powerlevel" | "timeout"> | undefined
+	MaybeNotKnown<Pick<PowerlevelCCReport, "powerlevel" | "timeout">>
 >;
+```
+
+### `reportPowerlevel`
+
+```ts
+async reportPowerlevel(
+	options: PowerlevelCCReportOptions,
+): Promise<void>;
 ```
 
 ### `startNodeTest`
@@ -41,10 +49,19 @@ async startNodeTest(
 
 ```ts
 async getNodeTestStatus(): Promise<
-	| Pick<
+	MaybeNotKnown<
+		Pick<
 			PowerlevelCCTestNodeReport,
 			"testNodeId" | "status" | "acknowledgedFrames"
-	  >
-	| undefined
+		>
+	>
 >;
+```
+
+### `sendNodeTestReport`
+
+```ts
+async sendNodeTestReport(
+	options: PowerlevelCCTestNodeReportOptions,
+): Promise<void>;
 ```

@@ -15,7 +15,15 @@ async get(): Promise<Pick<ManufacturerSpecificCCReport, "manufacturerId" | "prod
 ```ts
 async deviceSpecificGet(
 	deviceIdType: DeviceIdType,
-): Promise<string | undefined>;
+): Promise<MaybeNotKnown<string>>;
+```
+
+### `sendReport`
+
+```ts
+async sendReport(
+	options: ManufacturerSpecificCCReportOptions,
+): Promise<void>;
 ```
 
 ## Manufacturer Specific CC values
@@ -31,13 +39,13 @@ async deviceSpecificGet(
 }
 ```
 
--   **label:** _(dynamic)_
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** _(dynamic)_
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `manufacturerId`
 
@@ -49,15 +57,15 @@ async deviceSpecificGet(
 }
 ```
 
--   **label:** Manufacturer ID
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 65535
+- **label:** Manufacturer ID
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 65535
 
 ### `productId`
 
@@ -69,15 +77,15 @@ async deviceSpecificGet(
 }
 ```
 
--   **label:** Product ID
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 65535
+- **label:** Product ID
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 65535
 
 ### `productType`
 
@@ -89,12 +97,12 @@ async deviceSpecificGet(
 }
 ```
 
--   **label:** Product type
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 65535
+- **label:** Product type
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 65535

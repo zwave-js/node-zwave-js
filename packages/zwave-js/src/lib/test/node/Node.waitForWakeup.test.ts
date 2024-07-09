@@ -1,7 +1,7 @@
 import {
-	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
@@ -40,8 +40,9 @@ test.before(async (t) => {
 		const node = new ZWaveNode(2, driver);
 		node["isListening"] = !canSleep;
 		node["isFrequentListening"] = false;
-		if (canSleep)
+		if (canSleep) {
 			node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+		}
 		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
 			node.id,
 			node,

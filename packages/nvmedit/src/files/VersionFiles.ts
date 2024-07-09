@@ -1,10 +1,10 @@
 import type { NVM3Object } from "../nvm3/object";
 import {
+	NVMFile,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
 } from "./NVMFile";
 
@@ -62,6 +62,14 @@ export class VersionFile extends NVMFile {
 export class ApplicationVersionFile extends VersionFile {}
 export const ApplicationVersionFileID = getNVMFileIDStatic(
 	ApplicationVersionFile,
+);
+
+// The 800 series has a shared application/protocol file system
+// and uses a different ID for the application version file
+@nvmFileID(0x41000)
+export class ApplicationVersionFile800 extends VersionFile {}
+export const ApplicationVersionFile800ID = getNVMFileIDStatic(
+	ApplicationVersionFile800,
 );
 
 @nvmFileID(0x50000)

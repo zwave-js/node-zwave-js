@@ -47,7 +47,7 @@
 			// However since this is a sensor, Basic CC values are not offered automatically
 			"commandClasses": {
 				"add": {
-					"0x20": {
+					"Basic": {
 						"version": 1,
 						"isSupported": true
 					}

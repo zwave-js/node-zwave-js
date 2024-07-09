@@ -9,28 +9,35 @@ on:
   merge_group:
     types: [checks_requested]
 
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: 'generate-docs-${{ github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   # This job checks if the docs can be generated and produce changes
   # If they do, a PR will be created with the changes
   check-and-update:
-    if: github.repository == 'zwave-js/node-zwave-js' # Don't run in forks
+    # Don't run in forks
+    if: github.repository == 'zwave-js/node-zwave-js'
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
-
-    outputs:
-      CHANGES: ${{ steps.changes.outputs.CHANGES }}
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -44,13 +51,18 @@ jobs:
     - name: Generate documentation
       run: yarn run docs:generate
 
+    - name: Generate API report
+      run: yarn run accept-api
+
     # Trigger this step only when pushing to master
     - name: Create or update PR
       if: |
         github.event_name == 'push' && 
         github.ref == 'refs/heads/master'
-      uses: ./.github/actions/generateTypedDocs
+      uses: actions/github-script@v7
       with:
-        githubToken: ${{ secrets.BOT_TOKEN }}
-      env:
-        CI: true
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/generateTypedDocs.js`);
+          return main({github, context});

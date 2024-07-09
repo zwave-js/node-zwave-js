@@ -21,15 +21,14 @@
 			"description": "This parameter allows you to reverse the detection values of the device",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Reverse event (open 16, close 17)",
+					"label": "Reverse event (Open 16, close 17)",
 					"value": 1
 				}
 			]
@@ -44,37 +43,24 @@
 			"description": "This parameter allows you to change the inclusion configuration settings of this device",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) - notification only",
+					"label": "Notification only",
 					"value": 1
 				},
 				{
-					"label": "Notification and basic report",
+					"label": "Notification and Basic Report",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Led Control (magnet Triggers Only)",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "LED Control (Magnet Triggers Only)",
 			"description": "This parameter gives you the option to turn the LED off on magnetic triggers",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "(default) - enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "23",
@@ -84,7 +70,6 @@
 			"minValue": 60,
 			"maxValue": 1440,
 			"defaultValue": 1440,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "5-60 minutes",
@@ -99,7 +84,7 @@
 					"value": 720
 				},
 				{
-					"label": "(default) daily",
+					"label": "Daily",
 					"value": 1440
 				}
 			]
@@ -110,11 +95,10 @@
 			"description": "This parameter allows you to choose how often the LED will flash once the device/battery cover is tampered with",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) continuous flash",
+					"label": "Continuous flash",
 					"value": 1
 				},
 				{

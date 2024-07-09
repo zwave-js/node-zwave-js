@@ -1,4 +1,8 @@
-import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
+import {
+	ZWaveError,
+	ZWaveErrorCodes,
+	type ZWaveLogContainer,
+} from "@zwave-js/core";
 import { SerialPort } from "serialport";
 import type { DisconnectError } from "./DisconnectError";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
@@ -51,8 +55,9 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 						// Otherwise this would cause an EventEmitter leak.
 						// Hence this somewhat ugly construct
 						removeListeners = (removeOnClose: boolean) => {
-							if (removeOnClose)
+							if (removeOnClose) {
 								serial.removeListener("close", onClose);
+							}
 							serial.removeListener("error", onError);
 							serial.removeListener("open", onOpen);
 						};

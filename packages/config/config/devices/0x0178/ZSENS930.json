@@ -23,7 +23,6 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -34,8 +33,8 @@
 		{
 			"#": "8",
 			"label": "Temperature Delta Report Threshold (Group 1)",
-			"unit": "0.1°",
 			"valueSize": 1,
+			"unit": "0.1°",
 			"minValue": 1,
 			"maxValue": 200,
 			"defaultValue": 10,
@@ -44,12 +43,11 @@
 		{
 			"#": "9",
 			"label": "Periodic Temperature Report Interval (Group 1)",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -64,18 +62,16 @@
 			"unit": "0.1°",
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "11",
 			"label": "Periodic Temperature Report Interval (Group 2)",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -90,8 +86,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "17",
@@ -101,7 +96,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -116,8 +110,7 @@
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "19",
@@ -127,7 +120,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -141,23 +133,22 @@
 			"description": "Determines which combination of Basic Set commands will be sent",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable Parameters 2, 5, 12, 15",
+					"label": "Enable parameters 2, 5, 12, 15",
 					"value": 1
 				},
 				{
-					"label": "Enable Parameters 2, 5, 13, 14",
+					"label": "Enable parameters 2, 5, 13, 14",
 					"value": 2
 				},
 				{
-					"label": "Enable Parameters 3, 4, 12, 15",
+					"label": "Enable parameters 3, 4, 12, 15",
 					"value": 3
 				},
 				{
-					"label": "Enable Parameters 3, 4, 13, 14",
+					"label": "Enable parameters 3, 4, 13, 14",
 					"value": 4
 				}
 			]
@@ -170,7 +161,6 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -246,7 +236,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -262,7 +251,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -278,7 +266,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -294,7 +281,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -336,13 +322,13 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 60,
-			"defaultValue": 30,
-			"unsigned": true
+			"defaultValue": 30
 		}
 	],
 	"metadata": {
 		"inclusion": "Set your primary controller into inclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful inclusion into the network",
 		"exclusion": "Set your primary controller into exclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful exclusion from the network",
-		"reset": "Press and hold Install button for 10 seconds. Factory Reset should only be used if the primary controller is missing or inoperable."
+		"reset": "Press and hold the \"Install\" button for 10 seconds. Factory Reset should only be used if the primary controller is missing or inoperable.",
+		"wakeup": "Press the \"Install\" button three times rapidly to send a \"BATTERY_REPORT\" and \"WAKE_UP_NOTIFICATION\" (if installed on a network). The sensor will stay awake for 30 seconds."
 	}
 }

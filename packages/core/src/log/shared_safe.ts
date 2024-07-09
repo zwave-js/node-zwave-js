@@ -35,7 +35,8 @@ export const LOG_WIDTH = 80;
 export const LOG_PREFIX_WIDTH = 20;
 
 export interface ZWaveLogInfo<TContext extends LogContext = LogContext>
-	extends Omit<TransformableInfo, "message"> {
+	extends Omit<TransformableInfo, "message">
+{
 	direction: string;
 	/** Primary tags are printed before the message and must fit into the first line.
 	 * They don't have to be enclosed in square brackets */
@@ -58,13 +59,12 @@ export interface LogContext<T extends string = string> {
 }
 
 export type NodeLogContext = LogContext & { nodeId: number; type: "node" };
-export type ValueLogContext = LogContext &
-	ValueID & { nodeId: number; type: "value" };
+export type ValueLogContext =
+	& LogContext
+	& ValueID
+	& { nodeId: number; type: "value" };
 
-export type MessageRecord = Record<
-	string,
-	string | number | boolean | null | undefined
->;
+export type MessageRecord = Record<string, string | number | boolean>;
 
 export interface MessageOrCCLogEntry {
 	tags: string[];
@@ -76,12 +76,14 @@ export function getNodeTag(nodeId: number): string {
 	return "Node " + padStart(nodeId.toString(), 3, "0");
 }
 
-export type ZWaveLogger<TContext extends LogContext = LogContext> = Omit<
-	Logger,
-	"log"
-> & {
-	log: <T extends TContext>(info: ZWaveLogInfo<T>) => void;
-};
+export type ZWaveLogger<TContext extends LogContext = LogContext> =
+	& Omit<
+		Logger,
+		"log"
+	>
+	& {
+		log: <T extends TContext>(info: ZWaveLogInfo<T>) => void;
+	};
 
 export interface LogConfig {
 	enabled: boolean;

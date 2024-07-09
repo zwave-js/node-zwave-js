@@ -3,8 +3,18 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"rootDir": "src",
-		"outDir": "build"
+		"outDir": "build",
+		// Do not use the @@dev export for compiling
+		"customConditions": []
 	},
+	"references": [
+		{
+			"path": "../core/tsconfig.build.json"
+		},
+		{
+			"path": "../zwave-js/tsconfig.build.json"
+		}
+	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["src/**/*.test.ts"]
 }

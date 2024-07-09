@@ -17,8 +17,8 @@ on:
     types: [checks_requested]
 
 # Cancel previous PR/branch runs when a new commit is pushed
-concurrency: 
-  group: ${{ github.ref }}
+concurrency:
+  group: 'test-and-release-${{ github.ref }}'
   cancel-in-progress: true
 
 env:
@@ -34,11 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -47,9 +47,7 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
-      run: |
-        yarn clean $TURBO_FLAGS
-        yarn build $TURBO_FLAGS
+      run: yarn build $TURBO_FLAGS
 
     - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload
@@ -63,11 +61,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -118,19 +116,14 @@ jobs:
   # ===================
 
   lint:
-    needs: [build]
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
+      uses: actions/checkout@v4
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -149,8 +142,7 @@ jobs:
       run: |
         # Run all lint commands and abort if one has unfixable errors
         yarn run lint:ts:fix $TURBO_FLAGS
-        yarn run lint:prettier:fix $TURBO_FLAGS
-        yarn run lint:configjson:fix $TURBO_FLAGS
+        yarn fmt $TURBO_FLAGS
 
         git diff --name-only || true
         if ! git diff --quiet ; then
@@ -167,7 +159,7 @@ jobs:
         failure() &&
         github.event_name == 'pull_request' &&
         steps.lint.outputs.changed == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: lint-fix
         path: fix.patch
@@ -175,19 +167,14 @@ jobs:
   # ===================
 
   lint-zwave:
-    needs: [build]
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
+      uses: actions/checkout@v4
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -201,20 +188,15 @@ jobs:
   # ===================
   # Runs unit tests on all supported node versions and OSes
   unit-tests:
-    needs: [build]
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18, 20]
         os: [ubuntu-latest]
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
+      uses: actions/checkout@v4
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -222,78 +204,84 @@ jobs:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Run component tests
-      run: yarn run test:ci $TURBO_FLAGS
-      env:
-        CI: true
-
-  # ===================
-  # This job checks if a PR changes the public API surface
-  api-surface:
-    name: Check public API surface
-    # Only run for PRs
-    if: github.event_name == 'pull_request'
-
-    needs: [build]
-
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x] # This should be LTS
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
-    - name: Prepare testing environment
-      uses: ./.github/actions/prepare-env
-      with:
-        node-version: ${{ matrix.node-version }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Generate API report
-      run: yarn run extract-api $TURBO_FLAGS
-
-    - name: Show changes
-      if: failure()
+    # For pull requests, only run tests for changed files
+    - name: Run component tests (changes)
+      if: github.event_name == 'pull_request'
       run: |
-        cat packages/*/.tmp/api.md
+        git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+        yarn run test:dirty --resolve --base origin/${{ github.event.pull_request.base.ref }}
 
-    - name: Comment on PR
-      if: failure()
-      run: |
-        echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
-        echo "Please run" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "yarn accept-api" >> $GITHUB_STEP_SUMMARY
-        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
+    # For all other events, especially on master and releases, run the full test suite
+    # Run the full test suite on master, release branches and tags
+    - name: Run component tests (full)
+      if: github.event_name != 'pull_request'
+      run: yarn run test:ts $TURBO_FLAGS
+
+  # # ===================
+  # # This job checks if a PR changes the public API surface
+  # api-surface:
+  #   name: Check public API surface
+  #   # Only run for PRs
+  #   if: github.event_name == 'pull_request'
+
+  #   needs: [build]
+
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [18] # This should be LTS
+
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v4
+
+  #   - name: Restore Turbo Cache from previous jobs
+  #     uses: ./.github/actions/build-cache-download
+
+  #   - name: Prepare testing environment
+  #     uses: ./.github/actions/prepare-env
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #       githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  #   - name: Generate API report
+  #     run: yarn run extract-api $TURBO_FLAGS
+
+  #   - name: Show changes
+  #     if: failure()
+  #     run: |
+  #       cat packages/*/.tmp/api.md
+
+  #   - name: Comment on PR
+  #     if: failure()
+  #     run: |
+  #       echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
+  #       echo "Please run" >> $GITHUB_STEP_SUMMARY
+  #       echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+  #       echo "yarn accept-api" >> $GITHUB_STEP_SUMMARY
+  #       echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+  #       echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
+  #       echo "" >> $GITHUB_STEP_SUMMARY
 
   # ===================
 
   gh-cc-table:
     name: Update CC implementation status
-    # Only run for master branch
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-
-    needs: [build]
+    # Only run for master branch and don't run in forks
+    if: |
+      github.repository == 'zwave-js/node-zwave-js' &&
+      github.ref == 'refs/heads/master' &&
+      github.event_name == 'push'
 
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
+      uses: actions/checkout@v4
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -301,37 +289,34 @@ jobs:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS
-
     - name: Update CC table # (maybe)
-      uses: ./.github/actions/gh-cc-table
+      uses: actions/github-script@v7
       with:
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
-      env:
-        CI: true
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateCCImplementationOverview.js`);
+          return main({github, context});
 
   # ===================
 
   generate-overview:
     name: Update toLogEntry overview
-    # Only run for master branch
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-
-    needs: [build]
+    # Only run for master branch and don't run in forks
+    if: |
+      github.repository == 'zwave-js/node-zwave-js' &&
+      github.ref == 'refs/heads/master' &&
+      github.event_name == 'push'
 
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
+      uses: actions/checkout@v4
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -339,55 +324,14 @@ jobs:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS
-
     - name: Update overview
-      uses: ./.github/actions/toLogEntry
+      uses: actions/github-script@v7
       with:
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
-      env:
-        CI: true
-
-  # # Generate coverage reports when the unit tests have succeeded
-  # coverage:
-  #   # Trigger this step only on pushes, because the job often fails for pull requests
-  #   if: |
-  #     contains(github.event.head_commit.message, '[skip ci]') == false &&
-  #     github.event_name == 'push'
-
-  #   needs: [unit-tests]
-
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [16.x] # This should be LTS
-
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v3
-
-  #   - name: Use Node.js ${{ matrix.node-version }}
-  #     uses: actions/setup-node@v3
-  #     with:
-  #       node-version: ${{ matrix.node-version }}
-  #       cache: 'yarn'
-
-  #   - name: Install dependencies
-  #     run: yarn install --immutable
-
-  #   # Compilation is necessary, or the tests won't run
-  #   - name: Compile TypeScript code
-  #     run: yarn run build
-
-  #   - name: Generate coverage
-  #     run: yarn run coverage:ci
-  #     env:
-  #       CI: true
-  #   - name: Upload to Coveralls
-  #     uses: coverallsapp/github-action@master
-  #     with:
-  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const main = require(`${process.env.GITHUB_WORKSPACE}/.github/action-scripts/updateToLogEntryOverview.js`);
+          return main({github, context});
 
   # ===================
 
@@ -399,16 +343,16 @@ jobs:
       github.event_name == 'push' &&
       startsWith(github.ref, 'refs/tags/v')
 
-    needs: [lint, lint-zwave, unit-tests, test-packages]
+    needs: [build, lint, lint-zwave, unit-tests, test-packages]
 
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
@@ -444,30 +388,31 @@ jobs:
       run: |
         yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
         yarn npm whoami
-        yarn workspaces foreach -vti --no-private npm publish --tolerate-republish $TAG
+        yarn workspaces foreach --all -vti --no-private npm publish --tolerate-republish $TAG
+
 
     - name: Create Github Release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release v${{ steps.extract_release.outputs.VERSION }}
+        name: Release v${{ steps.extract_release.outputs.VERSION }}
         draft: false
         # Prerelease versions create prereleases on Github
         prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
         body: ${{ steps.extract_release.outputs.BODY }}
 
-    - name: Notify Sentry.io about the release
-      run: |
-        npm i -g @sentry/cli
-        export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-        export SENTRY_URL=https://sentry.iobroker.net
-        export SENTRY_ORG=iobroker
-        export SENTRY_PROJECT=zwave-js
-        export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
-        sentry-cli releases new $SENTRY_VERSION
-        # Commits disabled until the Github integration can be enabled
-        sentry-cli releases set-commits $SENTRY_VERSION --auto
-        sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
-        sentry-cli releases finalize $SENTRY_VERSION
+    # - name: Notify Sentry.io about the release
+    #   run: |
+    #     npm i -g @sentry/cli
+    #     export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+    #     export SENTRY_URL=https://sentry.iobroker.net
+    #     export SENTRY_ORG=iobroker
+    #     export SENTRY_PROJECT=zwave-js
+    #     export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
+    #     sentry-cli releases new $SENTRY_VERSION
+    #     # Commits disabled until the Github integration can be enabled
+    #     sentry-cli releases set-commits $SENTRY_VERSION --auto
+    #     sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
+    #     sentry-cli releases finalize $SENTRY_VERSION

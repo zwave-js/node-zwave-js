@@ -1,12 +1,15 @@
-import * as Sentry from "@sentry/node";
 import {
-	DataDirection,
-	getDirectionPrefix,
-	ZWaveLogContainer,
+	type DataDirection,
+	type ZWaveLogContainer,
 	ZWaveLoggerBase,
+	getDirectionPrefix,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, num2hex } from "@zwave-js/shared";
-import { SerialLogContext, SERIAL_LABEL, SERIAL_LOGLEVEL } from "./Logger_safe";
+import {
+	SERIAL_LABEL,
+	SERIAL_LOGLEVEL,
+	type SerialLogContext,
+} from "./Logger_safe";
 import { MessageHeaders } from "./MessageHeaders";
 
 export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
@@ -23,8 +26,9 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	 * @param direction The direction this ACK was sent
 	 */
 	public ACK(direction: DataDirection): void {
-		if (this.isVisible())
+		if (this.isVisible()) {
 			this.logMessageHeader(direction, MessageHeaders.ACK);
+		}
 	}
 
 	/**
@@ -32,8 +36,9 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	 * @param direction The direction this NAK was sent
 	 */
 	public NAK(direction: DataDirection): void {
-		if (this.isVisible())
+		if (this.isVisible()) {
 			this.logMessageHeader(direction, MessageHeaders.NAK);
+		}
 	}
 
 	/**
@@ -41,8 +46,9 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	 * @param direction The direction this CAN was sent
 	 */
 	public CAN(direction: DataDirection): void {
-		if (this.isVisible())
+		if (this.isVisible()) {
 			this.logMessageHeader(direction, MessageHeaders.CAN);
+		}
 	}
 
 	/**
@@ -99,15 +105,6 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 					source: "serial",
 					direction,
 				},
-			});
-		}
-		if (process.env.NODE_ENV !== "test") {
-			// Enrich error data in case something goes wrong
-			Sentry.addBreadcrumb({
-				category: "serial",
-				timestamp: Date.now() / 1000,
-				type: "debug",
-				message: `${getDirectionPrefix(direction)}${buffer2hex(data)}`,
 			});
 		}
 	}

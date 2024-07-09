@@ -26,11 +26,12 @@ async set(
 
 ```ts
 async getLastActivated(): Promise<
-	| Pick<
+	MaybeNotKnown<
+		Pick<
 			SceneControllerConfigurationCCReport,
 			"groupId" | "sceneId" | "dimmingDuration"
-	  >
-	| undefined
+		>
+	>
 >;
 ```
 
@@ -40,11 +41,12 @@ async getLastActivated(): Promise<
 async get(
 	groupId: number,
 ): Promise<
-	| Pick<
+	MaybeNotKnown<
+		Pick<
 			SceneControllerConfigurationCCReport,
 			"sceneId" | "dimmingDuration"
-	  >
-	| undefined
+		>
+	>
 >;
 ```
 
@@ -54,38 +56,40 @@ async get(
 
 ```ts
 {
-	commandClass: CommandClasses["Scene Controller Configuration"],
+	commandClass:
+		CommandClasses["Scene Controller Configuration"],
 	endpoint: number,
 	property: "dimmingDuration",
 	propertyKey: number,
 }
 ```
 
--   **label:** `Dimming duration (${number})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** `Dimming duration (${number})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `sceneId(groupId: number)`
 
 ```ts
 {
-	commandClass: CommandClasses["Scene Controller Configuration"],
+	commandClass:
+		CommandClasses["Scene Controller Configuration"],
 	endpoint: number,
 	property: "sceneId",
 	propertyKey: number,
 }
 ```
 
--   **label:** `Associated Scene ID (${number})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Associated Scene ID (${number})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

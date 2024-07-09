@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { wait as _wait } from "alcalzone-shared/async";
-import os from "os";
-import path from "path";
+import path from "node:path";
 import "reflect-metadata";
 import { Driver } from "zwave-js";
 
@@ -10,10 +10,16 @@ process.on("unhandledRejection", (_r) => {
 	debugger;
 });
 
+// const port = "tcp://Z-Net-R2v2.local:2001";
 // 500/700 series
-// const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
+// const port = require("node:os").platform() === "win32"
+// 	? "COM5"
+// 	: "/dev/ttyACM0";
+// const port = require("os").platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 // 800 series
-const port = os.platform() === "win32" ? "COM5" : "/dev/ttyACM0";
+const port = require("node:os").platform() === "win32"
+	? "COM5"
+	: "/dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00";
 
 const driver = new Driver(port, {
 	// logConfig: {
@@ -38,6 +44,19 @@ const driver = new Driver(port, {
 			"hex",
 		),
 	},
+	securityKeysLongRange: {
+		S2_Authenticated: Buffer.from(
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			"hex",
+		),
+		S2_AccessControl: Buffer.from(
+			"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+			"hex",
+		),
+	},
+	rf: {
+		preferLRRegion: false,
+	},
 	storage: {
 		cacheDir: path.join(__dirname, "cache"),
 		lockDir: path.join(__dirname, "cache/locks"),
@@ -47,7 +66,6 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-		await wait(2000);
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader

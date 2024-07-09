@@ -2,7 +2,7 @@
 	"manufacturer": "Home controls",
 	"manufacturerId": "0x0293",
 	"label": "HTP-8S0-XX",
-	"description": "8 way touch light switch",
+	"description": "8 Way Touch Light Switch",
 	"devices": [
 		{
 			"productType": "0x0003",

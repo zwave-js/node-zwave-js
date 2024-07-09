@@ -1,25 +1,30 @@
 import {
-	DataRate,
-	encodeNodeProtocolInfo,
-	FLiRS,
+	type BasicDeviceClass,
+	type DataRate,
+	type FLiRS,
 	MessagePriority,
-	NodeProtocolInfoAndDeviceClass,
-	NodeType,
+	type NodeProtocolInfoAndDeviceClass,
+	type NodeType,
+	type ProtocolVersion,
+	encodeNodeID,
+	encodeNodeProtocolInfo,
+	isLongRangeNodeId,
+	parseNodeID,
 	parseNodeProtocolInfo,
-	ProtocolVersion,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
+import { isObject } from "alcalzone-shared/typeguards";
 
 interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 	requestedNodeId: number;
@@ -37,7 +42,8 @@ export class GetNodeProtocolInfoRequest extends Message {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			this.requestedNodeId = this.payload[0];
+			this.requestedNodeId =
+				parseNodeID(this.payload, this.host.nodeIdType, 0).nodeId;
 		} else {
 			this.requestedNodeId = options.requestedNodeId;
 		}
@@ -48,14 +54,14 @@ export class GetNodeProtocolInfoRequest extends Message {
 	public requestedNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.requestedNodeId]);
+		this.payload = encodeNodeID(this.requestedNodeId, this.host.nodeIdType);
 		return super.serialize();
 	}
 }
 
 interface GetNodeProtocolInfoResponseOptions
-	extends MessageBaseOptions,
-		NodeProtocolInfoAndDeviceClass {}
+	extends MessageBaseOptions, NodeProtocolInfoAndDeviceClass
+{}
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
@@ -68,9 +74,21 @@ export class GetNodeProtocolInfoResponse extends Message {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
+			// The context should contain the node ID the protocol info was requested for.
+			// We use it here to determine whether the node is long range.
+			let isLongRange = false;
+			if (
+				isObject(options.context)
+				&& "nodeId" in options.context
+				&& typeof options.context.nodeId === "number"
+			) {
+				isLongRange = isLongRangeNodeId(options.context.nodeId);
+			}
+
 			const { hasSpecificDeviceClass, ...rest } = parseNodeProtocolInfo(
 				this.payload,
 				0,
+				isLongRange,
 			);
 			this.isListening = rest.isListening;
 			this.isFrequentListening = rest.isFrequentListening;
@@ -121,7 +139,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 	/** Whether this node can issue wakeup beams to FLiRS nodes */
 	public supportsBeaming: boolean;
 
-	public basicDeviceClass: number;
+	public basicDeviceClass: BasicDeviceClass;
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 

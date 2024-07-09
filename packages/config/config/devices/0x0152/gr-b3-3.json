@@ -2,7 +2,7 @@
 	"manufacturer": "UFairy G.R. Tech",
 	"manufacturerId": "0x0152",
 	"label": "GR-B3-3",
-	"description": "3 Gang In-wall Switch",
+	"description": "3 Gang In-Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0500",
@@ -34,7 +34,7 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
-				"0x60": {
+				"Multi Channel": {
 					// This device has 3 channels, but it responds to the CC version request with 0
 					"isSupported": true,
 					"version": 2

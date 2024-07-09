@@ -24,11 +24,11 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch MultiLevel Set Light",
+			"label": "Multilevel Switch Set Light",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Switch MultiLevel Start/Stop Light",
+			"label": "Multilevel Switch Start/Stop Light",
 			"maxNodes": 5
 		},
 		"5": {
@@ -36,11 +36,11 @@
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "Switch MultiLevel Set Fan",
+			"label": "Multilevel Switch Set Fan",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "Switch MultiLevel Start/Stop Fan",
+			"label": "Multilevel Switch Start/Stop Fan",
 			"maxNodes": 5
 		}
 	},
@@ -48,12 +48,11 @@
 		{
 			"#": "1",
 			"label": "Light Dimming Speed (Z-Wave)",
-			"units": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 4,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -64,12 +63,11 @@
 		{
 			"#": "2",
 			"label": "Light Dimming Speed",
-			"units": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -84,12 +82,11 @@
 		{
 			"#": "3",
 			"label": "Light Ramp Rate (Z-Wave)",
-			"units": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -104,12 +101,11 @@
 		{
 			"#": "4",
 			"label": "Light Ramp Rate",
-			"units": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Immediate",
@@ -127,8 +123,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
@@ -136,8 +131,7 @@
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "7",
@@ -145,8 +139,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
@@ -154,28 +147,25 @@
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "10",
 			"label": "Auto Off Light Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "11",
 			"label": "Auto Off Fan Timer",
-			"units": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "12",
@@ -184,7 +174,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Last state",
@@ -199,7 +188,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Last state",
@@ -212,7 +200,6 @@
 			"label": "Default Fan Speed",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -238,7 +225,6 @@
 			"label": "Default Fan Speed (Z-Wave)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -266,7 +252,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -285,7 +270,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -317,7 +301,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Red",
@@ -358,7 +341,6 @@
 			"label": "Light LED Strip Brightness",
 			"valueSize": 1,
 			"defaultValue": 5,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -415,7 +397,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Red",
@@ -456,7 +437,6 @@
 			"label": "Fan LED Strip Brightness",
 			"valueSize": 1,
 			"defaultValue": 5,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -512,7 +492,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -568,7 +547,6 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Off",
@@ -904,12 +882,11 @@
 			"#": "26",
 			"label": "Light LED Strip Timeout",
 			"description": "When light LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -921,12 +898,11 @@
 			"#": "27",
 			"label": "Fan LED Strip Timeout",
 			"description": "When the fan LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted.",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -938,12 +914,11 @@
 			"#": "28",
 			"label": "Active Power Reports",
 			"description": "The power level change that will result in a new power report being sent.",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -955,30 +930,27 @@
 			"#": "29",
 			"label": "Periodic Power & Energy Reports",
 			"description": "Time period between consecutive power & energy reports being sent.",
-			"units": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600,
-			"unsigned": true
+			"defaultValue": 3600
 		},
 		{
 			"#": "30",
 			"label": "Energy Reports",
 			"description": "The energy level change that will result in a new energy report being sent.",
-			"units": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "31",
 			"label": "Local Protection",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -986,11 +958,11 @@
 					"value": 0
 				},
 				{
-					"label": "light",
+					"label": "Light",
 					"value": 1
 				},
 				{
-					"label": "fan",
+					"label": "Fan",
 					"value": 2
 				},
 				{
@@ -1001,12 +973,11 @@
 		},
 		{
 			"#": "51",
-			"label": "Instant On",
 			"$if": "firmwareVersion >= 1.36",
+			"label": "Instant On",
 			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -1023,7 +994,7 @@
 	"compat": {
 		"commandClasses": {
 			"remove": {
-				"0x6c": {
+				"Supervision": {
 					// Supervision commands cause this device to crash after ~2 hours of operation due to a firmware bug
 					"endpoints": "*"
 				}

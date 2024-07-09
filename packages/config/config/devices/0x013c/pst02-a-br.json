@@ -37,13 +37,12 @@
 		},
 		{
 			"#": "3",
-			"label": "Pir Sensitivity",
+			"label": "PIR Sensitivity",
 			"description": "Pir sensitivity settings.0 means disable the PIR motion.1 means the lowest sensitivity,99 means the highest sensitivity.high sensitivity means can detected long distance, but if there is more noise signal in the environment, it will re-trigger too frequency",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 80,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable the PIR motion",
@@ -67,7 +66,6 @@
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 99,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable illumination check",
@@ -81,7 +79,6 @@
 			"description": "Operation mode. using bit to control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff. bit0: reserve. bit1: 1 means test mode,   0 means normal mode. bit2: disable the door/window  function. (1:disable, 0:enable) bit3: setting the temperature scale.  0: fahrenheit, 1:celsius bit4: disable the illumination report  after event triggered. (1:disable, 0:enable) bit5: disable the temperature report  after event triggered. (1:disable, 0:enable) bit6: reserve. bit7: disable the back key release into test mode.  (1:disable, 0:enable)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -89,7 +86,7 @@
 					"value": 127
 				},
 				{
-					"label": "Bit0: reserve",
+					"label": "Bit0: Reserve",
 					"value": 1
 				},
 				{
@@ -97,27 +94,27 @@
 					"value": 2
 				},
 				{
-					"label": "Bit2: disable the door/window function.(1:disable, 0:enable)",
+					"label": "Bit2: Disable the door/window function.(1:Disable, 0:Enable)",
 					"value": 4
 				},
 				{
-					"label": "Bit3: setting the temperature scale. 0: fahrenheit, 1:celsius",
+					"label": "Bit3: Setting the temperature scale. 0: Fahrenheit, 1:Celsius",
 					"value": 8
 				},
 				{
-					"label": "Bit4: disable the illumination report after event triggered. (1:disable, 0:enable)",
+					"label": "Bit4: Disable the illumination report after event triggered. (1:Disable, 0:Enable)",
 					"value": 10
 				},
 				{
-					"label": "Bit5: disable the temperature report after event triggered. (1:disable, 0:enable)",
+					"label": "Bit5: Disable the temperature report after event triggered. (1:Disable, 0:Enable)",
 					"value": 20
 				},
 				{
-					"label": "Bit6: reserve",
+					"label": "Bit6: Reserve",
 					"value": 40
 				},
 				{
-					"label": "Bit7: disable the back key release into test mode. (1:disable, 0:enable)",
+					"label": "Bit7: Disable the back key release into test mode. (1:Disable, 0:Enable)",
 					"value": 80
 				}
 			]
@@ -125,10 +122,9 @@
 		{
 			"#": "6",
 			"label": "Mult- Sensor Function Switch",
-			"description": "Multisensor function switch. using bit to control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: disable magnetic integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit1: disable PIR integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit2: disable magnetic integrate PIR  to turn on the lighting nodes in the  association group 2. (1:disable,  0:enable) (default is disable) bit3: when bit2 is 0 (enable), are the  device and the lighting in the same  room? 0: in the same room(default),1: in the different room. bit4: disable delay 5 seconds to turn off the light, when door/window closed. (1:disable, 0:enable) bit5: disable auto turn off the light, after door/window opened to turn on the light. (1:disable, 0:enable) bit6: reserve. bit7: reserve",
+			"description": "Multisensor function switch. using bit to control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: disable magnetic integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit1: disable PIR integrate  illumination to turn on the lighting  nodes in the association group 2.  (1:disable, 0:enable) bit2: disable magnetic integrate PIR  to turn on the lighting nodes in the  association group 2. (1:disable,  0:enable) (default is disable) bit3: when bit2 is 0 (enable), are the  device and the lighting in the same  room? 0: in the same room,1: in the different room. bit4: disable delay 5 seconds to turn off the light, when door/window closed. (1:disable, 0:enable) bit5: disable auto turn off the light, after door/window opened to turn on the light. (1:disable, 0:enable) bit6: reserve. bit7: reserve",
 			"valueSize": 1,
 			"defaultValue": 4,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -136,35 +132,35 @@
 					"value": 127
 				},
 				{
-					"label": "Bit0: disable magnetic integrate illumination to turn on the lighting nodes in the association group 2. (1:disable, 0:enable)",
+					"label": "Bit0: Disable magnetic integrate illumination to turn on the lighting nodes in the association group 2. (1:Disable, 0:Enable)",
 					"value": 1
 				},
 				{
-					"label": "Bit1: disable PIR integrate illumination to turn on the lighting nodes in the association group 2. (1:disable, 0:enable)",
+					"label": "Bit1: Disable PIR integrate illumination to turn on the lighting nodes in the association group 2. (1:Disable, 0:Enable)",
 					"value": 2
 				},
 				{
-					"label": "Bit2: disable magnetic integrate pir",
+					"label": "Bit2: Disable magnetic integrate PIR",
 					"value": 4
 				},
 				{
-					"label": "Bit3: when bit2 is 0 (enable), are the device and the lighting in the same room? 0: in the same room(default),1: in the different room",
+					"label": "Bit3: When bit2 is 0 (Enable), are the device and the lighting in the same room? 0: In the same room,1: In the different room",
 					"value": 8
 				},
 				{
-					"label": "Bit4: disable delay 5 seconds to turn off the light, when door/window closed.(1:disable, 0:enable)",
+					"label": "Bit4: Disable delay 5 seconds to turn off the light, when door/window closed.(1:Disable, 0:Enable)",
 					"value": 10
 				},
 				{
-					"label": "Bit5: disable auto turn off the light, after door/window opened to turn on the light.(1:disable, 0:enable)",
+					"label": "Bit5: Disable auto turn off the light, after door/window opened to turn on the light.(1:Disable, 0:Enable)",
 					"value": 20
 				},
 				{
-					"label": "Bit6: reserve",
+					"label": "Bit6: Reserve",
 					"value": 40
 				},
 				{
-					"label": "Bit7: reserve",
+					"label": "Bit7: Reserve",
 					"value": 80
 				}
 			]
@@ -172,10 +168,9 @@
 		{
 			"#": "7",
 			"label": "Customer Function",
-			"description": "Customer function switch, using bit control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: reserve. bit1: enable sending motion off report. (0:disable, 1:enable) bit2: enable PIR super sensitivity mode. (0:disable, 1:enable) bit3: disable send out basic off after door closed. (1:disable, 0:enable) bit4: notification type,  0: using notification report.  1: using sensor binary report. bit5: disable multi cc in auto report. (1:disable, 0:enable) bit6: disable to report battery state when the device triggered.(1:disable, 0:enable) bit7: reserve",
+			"description": "Customer function switch, using bit control.caution: the value is unsigned byte, the range is from 0x00 ~ 0xff.  bit0: reserve. bit1: enable sending motion off report. (0:disable, 1:enable) bit2: enable PIR super sensitivity mode. (0:disable, 1:enable) bit3: disable send out basic off after door closed. (1:disable, 0:enable) bit4: notification type,  0: using notification report.  1: using Binary Sensor report. bit5: disable multi cc in auto report. (1:disable, 0:enable) bit6: disable to report battery state when the device triggered.(1:disable, 0:enable) bit7: reserve",
 			"valueSize": 1,
 			"defaultValue": 4,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -183,42 +178,42 @@
 					"value": 127
 				},
 				{
-					"label": "Bit0: reserve",
+					"label": "Bit0: Reserve",
 					"value": 1
 				},
 				{
-					"label": "Bit1: enable sending motion off report. (0:disable, 1:enable)",
+					"label": "Bit1: Enable sending motion off report. (0:Disable, 1:Enable)",
 					"value": 2
 				},
 				{
-					"label": "Bit2: enable PIR super sensitivity mode. (0:disable, 1:enable)",
+					"label": "Bit2: Enable PIR super sensitivity mode. (0:Disable, 1:Enable)",
 					"value": 4
 				},
 				{
-					"label": "Bit3: disable send out basic off after door closed. (1:disable,0:enable)",
+					"label": "Bit3: Disable send out basic off after door closed. (1:Disable,0:Enable)",
 					"value": 8
 				},
 				{
-					"label": "Bit4: notification type, 0: using notification report. 1: using sensor binary report",
+					"label": "Bit4: Notification type, 0: Using Notification Report. 1: Using Binary Sensor Report",
 					"value": 10
 				},
 				{
-					"label": "Bit5: disable multi cc in auto report. (1:disable, 0:enable)",
+					"label": "Bit5: Disable multi cc in auto report. (1:Disable, 0:Enable)",
 					"value": 20
 				},
 				{
-					"label": "Bit6: disable to report battery state when the device triggered.(1:disable, 0:enable)",
+					"label": "Bit6: Disable to report battery state when the device triggered.(1:Disable, 0:Enable)",
 					"value": 40
 				},
 				{
-					"label": "Bit7: reserve",
+					"label": "Bit7: Reserve",
 					"value": 80
 				}
 			]
 		},
 		{
 			"#": "8",
-			"label": "Pir Re- Detect Interval Time",
+			"label": "PIR Re- Detect Interval Time",
 			"description": "Default tick is 3 (24 seconds)",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -296,8 +291,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "22",
@@ -306,8 +300,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

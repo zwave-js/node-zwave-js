@@ -2,7 +2,7 @@
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
 	"label": "123610 68G",
-	"description": "Plug-in Switch",
+	"description": "Plug-In Switch",
 	"devices": [
 		{
 			"productType": "0x0202",

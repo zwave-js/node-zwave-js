@@ -1,15 +1,14 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import {
-	FLASH_MAX_PAGE_SIZE,
 	NVM3_MIN_PAGE_SIZE,
 	NVM3_PAGE_COUNTER_MASK,
 	NVM3_PAGE_COUNTER_SIZE,
 	NVM3_PAGE_HEADER_SIZE,
 	NVM3_PAGE_MAGIC,
-	PageStatus,
-	PageWriteSize,
+	type PageStatus,
+	type PageWriteSize,
 } from "./consts";
-import { NVM3Object, readObjects } from "./object";
+import { type NVM3Object, readObjects } from "./object";
 import { computeBergerCode, validateBergerCode } from "./utils";
 
 export interface NVM3PageHeader {
@@ -42,6 +41,87 @@ export function readPage(
 	buffer: Buffer,
 	offset: number,
 ): { page: NVM3Page; bytesRead: number } {
+	const { version, eraseCount } = tryGetVersionAndEraseCount(buffer, offset);
+
+	// Page status
+	const status = buffer.readUInt32LE(offset + 12);
+
+	const devInfo = buffer.readUInt16LE(offset + 16);
+	const deviceFamily = devInfo & 0x7ff;
+	const writeSize = (devInfo >> 11) & 0b1;
+	const memoryMapped = !!((devInfo >> 12) & 0b1);
+	let pageSize = pageSizeFromBits((devInfo >> 13) & 0b111);
+
+	if (pageSize > 0xffff) {
+		// Some controllers have no valid info in the page size bits, resulting
+		// in an impossibly large page size. To try and figure out the actual page
+		// size without knowing the hardware, we scan the buffer for the next valid
+		// page start.
+		for (let exponent = 0; exponent < 0b111; exponent++) {
+			const testPageSize = pageSizeFromBits(exponent);
+			const nextOffset = offset + testPageSize;
+			if (
+				// exactly end of NVM OR
+				buffer.length === nextOffset
+				// next page
+				|| isValidPageHeaderAtOffset(buffer, nextOffset)
+			) {
+				pageSize = testPageSize;
+				break;
+			}
+		}
+	}
+	if (pageSize > 0xffff) {
+		throw new ZWaveError(
+			"Could not determine page size!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
+	}
+
+	if (buffer.length < offset + pageSize) {
+		throw new ZWaveError(
+			"Incomplete page in buffer!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
+	}
+
+	const formatInfo = buffer.readUInt16LE(offset + 18);
+
+	const encrypted = !(formatInfo & 0b1);
+
+	const header: NVM3PageHeader = {
+		offset,
+		version,
+		eraseCount,
+		status,
+		encrypted,
+		pageSize,
+		writeSize,
+		memoryMapped,
+		deviceFamily,
+	};
+	const bytesRead = pageSize;
+	const data = buffer.subarray(offset + 20, offset + bytesRead);
+
+	const { objects } = readObjects(data);
+
+	return {
+		page: { header, objects },
+		bytesRead,
+	};
+}
+
+function tryGetVersionAndEraseCount(
+	buffer: Buffer,
+	offset: number,
+): { version: number; eraseCount: number } {
+	if (offset > buffer.length - NVM3_PAGE_HEADER_SIZE) {
+		throw new ZWaveError(
+			"Incomplete page in buffer!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
+	}
+
 	const version = buffer.readUInt16LE(offset);
 	const magic = buffer.readUInt16LE(offset + 2);
 	if (magic !== NVM3_PAGE_MAGIC) {
@@ -79,49 +159,19 @@ export function readPage(
 		);
 	}
 
-	// Page status
-	const status = buffer.readUInt32LE(offset + 12);
+	return { version, eraseCount };
+}
 
-	const devInfo = buffer.readUInt16LE(offset + 16);
-	const deviceFamily = devInfo & 0x7ff;
-	const writeSize = (devInfo >> 11) & 0b1;
-	const memoryMapped = !!((devInfo >> 12) & 0b1);
-	const pageSize = pageSizeFromBits((devInfo >> 13) & 0b111);
-
-	// Application NVM pages seem to get written with a page size of 0xffff
-	const actualPageSize = Math.min(pageSize, FLASH_MAX_PAGE_SIZE);
-
-	if (buffer.length < offset + actualPageSize) {
-		throw new ZWaveError(
-			"Incomplete page in buffer!",
-			ZWaveErrorCodes.NVM_InvalidFormat,
-		);
+function isValidPageHeaderAtOffset(
+	buffer: Buffer,
+	offset: number,
+): boolean {
+	try {
+		tryGetVersionAndEraseCount(buffer, offset);
+		return true;
+	} catch {
+		return false;
 	}
-
-	const formatInfo = buffer.readUInt16LE(offset + 18);
-
-	const encrypted = !(formatInfo & 0b1);
-
-	const header: NVM3PageHeader = {
-		offset,
-		version,
-		eraseCount,
-		status,
-		encrypted,
-		pageSize,
-		writeSize,
-		memoryMapped,
-		deviceFamily,
-	};
-	const bytesRead = actualPageSize;
-	const data = buffer.slice(offset + 20, offset + bytesRead);
-
-	const { objects } = readObjects(data);
-
-	return {
-		page: { header, objects },
-		bytesRead,
-	};
 }
 
 export function writePageHeader(
@@ -150,11 +200,10 @@ export function writePageHeader(
 
 	ret.writeUInt32LE(header.status, 12);
 
-	const devInfo =
-		(header.deviceFamily & 0x7ff) |
-		((header.writeSize & 0b1) << 11) |
-		((header.memoryMapped ? 1 : 0) << 12) |
-		(pageSizeToBits(header.pageSize) << 13);
+	const devInfo = (header.deviceFamily & 0x7ff)
+		| ((header.writeSize & 0b1) << 11)
+		| ((header.memoryMapped ? 1 : 0) << 12)
+		| (pageSizeToBits(header.pageSize) << 13);
 	ret.writeUInt16LE(devInfo, 16);
 
 	const formatInfo = header.encrypted ? 0xfffe : 0xffff;

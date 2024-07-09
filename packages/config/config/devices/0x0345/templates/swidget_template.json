@@ -1,0 +1,1230 @@
+{
+	"primary_power_high_entry_value": {
+		// param 1
+		"label": "Primary Power High Entry Threshold",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 2400
+	},
+	"primary_power_low_entry_value": {
+		// param 2
+		"label": "Primary Power Low Entry Value",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"primary_power_high_exit_value": {
+		// param 3
+		"label": "Primary Power High Exit Value",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 2400
+	},
+	"primary_power_low_exit_value": {
+		// param 4
+		"label": "Primary Power Low Exit Value",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"primary_power_high_delay": {
+		// param 5
+		"label": "Primary Power High Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"primary_power_low_delay": {
+		// param 6
+		"label": "Primary Power Low Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"primary_power_periodic_report": {
+		// param 7
+		"label": "Primary Power Periodic Report",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 3600
+	},
+	"primary_power_change_report": {
+		// param 8
+		"label": "Primary Power Change Report",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 10
+	},
+	"primary_power_renotification_delay": {
+		// param 9
+		"label": "Primary Power Renotification Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"primary_power_high_entry_set_value": {
+		// param 10
+		"label": "Primary Power High Entry Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 255
+	},
+	"primary_power_high_exit_set_value": {
+		// param 11
+		"label": "Primary Power High Exit Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"primary_power_low_entry_set_value": {
+		// param 12
+		"label": "Primary Power Low Entry Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 255
+	},
+	"primary_power_low_exit_set_value": {
+		// param 13
+		"label": "Primary Power Low Exit Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"primary_power_high_actions_control_associations_on_entry": {
+		// param 14b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power High Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"primary_power_high_actions_control_associations_on_exit": {
+		// param 14b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power High Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"primary_power_high_actions_control_host_on_entry": {
+		// param 14b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power High Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"primary_power_high_actions_control_host_on_exit": {
+		// param 14b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power High Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"primary_power_high_actions_report_transitions": {
+		// param 14b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power High Actions: Report Transitions",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"primary_power_high_actions_apply_entry_delay": {
+		// param 14b5
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power High Actions: Apply Entry Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"primary_power_high_actions_apply_exit_delay": {
+		// param 14b6
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power High Actions: Apply Exit Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"primary_power_low_actions_control_associations_on_entry": {
+		// param 15b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power Low Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"primary_power_low_actions_control_associations_on_exit": {
+		// param 15b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power Low Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"primary_power_low_actions_control_host_on_entry": {
+		// param 15b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power Low Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"primary_power_low_actions_control_host_on_exit": {
+		// param 15b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power Low Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"primary_power_low_actions_report_transitions": {
+		// param 15b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power Low Actions: Report Transitions",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"primary_power_low_actions_apply_entry_delay": {
+		// param 15b5
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power Low Actions: Apply Entry Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"primary_power_low_actions_apply_exit_delay": {
+		// param 15b6
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Primary Power Low Actions: Apply Exit Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"secondary_power_high_entry_value": {
+		// param 24
+		"label": "Secondary Power High Entry Value",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 2400
+	},
+	"secondary_power_low_entry_value": {
+		// param 25
+		"label": "Secondary Power Low Entry Value",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"secondary_power_high_exit_value": {
+		// param 26
+		"label": "Secondary Power High Exit Value",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 2400
+	},
+	"secondary_power_low_exit_value": {
+		// param 27
+		"label": "Secondary Power Low Exit Value",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"secondary_power_high_delay": {
+		// param 28
+		"label": "Secondary Power High Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"secondary_power_low_delay": {
+		// param 29
+		"label": "Secondary Power Low Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"secondary_power_periodic_report": {
+		// param 30
+		"label": "Secondary Power Periodic Report",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 3600
+	},
+	"secondary_power_change_report": {
+		// param 31
+		"label": "Secondary Power Change Report",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2400,
+		"unsigned": true,
+		"defaultValue": 10
+	},
+	"secondary_power_renotification_delay": {
+		// param 32
+		"label": "Secondary Power Renotification Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"secondary_power_high_entry_set_value": {
+		// param 33
+		"label": "Secondary Power High Entry Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 255
+	},
+	"secondary_power_high_exit_set_value": {
+		// param 34
+		"label": "Secondary Power High Exit Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"secondary_power_low_entry_set_value": {
+		// param 35
+		"label": "Secondary Power Low Entry Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 255
+	},
+	"secondary_power_low_exit_set_value": {
+		// param 36
+		"label": "Secondary Power Low Exit Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"secondary_power_high_actions_control_associations_on_entry": {
+		// param 37b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power High Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"secondary_power_high_actions_control_associations_on_exit": {
+		// param 37b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power High Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"secondary_power_high_actions_control_host_on_entry": {
+		// param 37b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power High Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"secondary_power_high_actions_control_host_on_exit": {
+		// param 37b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power High Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"secondary_power_high_actions_report_transitions": {
+		// param 37b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power High Actions: Report Transitions",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"secondary_power_high_actions_apply_entry_delay": {
+		// param 37b5
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power High Actions: Apply Entry Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"secondary_power_high_actions_apply_exit_delay": {
+		// param 37b6
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power High Actions: Apply Exit Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"secondary_power_low_actions_control_associations_on_entry": {
+		// param 38b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power Low Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"secondary_power_low_actions_control_associations_on_exit": {
+		// param 38b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power Low Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"secondary_power_low_actions_control_host_on_entry": {
+		// param 38b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power Low Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"secondary_power_low_actions_control_host_on_exit": {
+		// param 38b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power Low Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"secondary_power_low_actions_report_transitions": {
+		// param 38b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power Low Actions: Report Transitions",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"secondary_power_low_actions_apply_entry_delay": {
+		// param 38b5
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power Low Actions: Apply Entry Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"secondary_power_low_actions_apply_exit_delay": {
+		// param 38b6
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Secondary Power Low Actions: Apply Exit Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"motion_sensitivity_level": {
+		// param 48
+		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"label": "Motion Sensitivity Level"
+	},
+	"motion_renotification_delay": {
+		// param 49
+		"label": "Motion Renotification Delay",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 300
+	},
+	"motion_reset_delay": {
+		// param 50
+		"label": "Motion Reset Delay",
+		"valueSize": 2,
+		"minValue": 1,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 300
+	},
+	"motion_detected_entry_set_value": {
+		// param 51
+		"label": "Motion Detected Entry Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 255
+	},
+	"motion_detected_exit_set_value": {
+		// param 52
+		"label": "Motion Detected Exit Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"motion_actions_control_associations_on_entry": {
+		// param 53b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Motion Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"motion_actions_control_associations_on_exit": {
+		// param 54b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Motion Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"motion_actions_control_host_on_entry": {
+		// param 54b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Motion Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"motion_actions_control_host_on_exit": {
+		// param 54b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Motion Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"motion_actions_report_transitions": {
+		// param 54b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Motion Actions: Notify Transitions",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"air_quality_level_1_index": {
+		// param 64
+		"label": "Air Quality Level 1 Index",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 500,
+		"unsigned": true,
+		"defaultValue": 100
+	},
+	"air_quality_level_2_index": {
+		// param 65
+		"label": "Air Quality Level 2 Index",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 500,
+		"unsigned": true,
+		"defaultValue": 175
+	},
+	"air_quality_level_3_index": {
+		// param 66
+		"label": "Air Quality Level 3 Index",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 500,
+		"unsigned": true,
+		"defaultValue": 250
+	},
+	"air_quality_alert_level": {
+		// pram 67
+		"label": "Air Quality Alert Level",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 3,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Slightly Polluted",
+				"value": 1
+			},
+			{
+				"label": "Moderately Polluted",
+				"value": 2
+			},
+			{
+				"label": "Extremely Polluted",
+				"value": 3
+			}
+		]
+	},
+	"air_quality_alert_delay": {
+		// param 68
+		"label": "Air Quality Alert Delay",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"air_quality_renotification_delay": {
+		// param 69
+		"label": "Air Quality Renotification Delay",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 300
+	},
+	"air_quality_voc_periodic_report": {
+		// param 70
+		"label": "Air Quality VOC Periodic Report",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 3600
+	},
+	"air_quality_alert_entry_set_value": {
+		// param 72
+		"label": "Air Quality Alert Entry Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 255
+	},
+	"air_quality_alert_exit_set_value": {
+		// param 73
+		"label": "Air Quality Alert Exit Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"air_quality_actions_control_associations_on_entry": {
+		// param 74b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Air Quality Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"air_quality_actions_control_associations_on_exit": {
+		// param 74b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Air Quality Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"air_quality_actions_control_host_on_entry": {
+		// param 74b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Air Quality Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"air_quality_actions_host_on_exit": {
+		// param 74b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Air Quality Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"air_quality_actions_notify_transitions": {
+		// param 74b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Air Quality Actions: Notify Transitions",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_high_entry_level": {
+		// param 80
+		"label": "Temperature High Entry Level",
+		"unit": "0.1 °(C/F)",
+		"unsigned": false,
+		"valueSize": 2,
+		"minValue": -400,
+		"maxValue": 1850,
+		"defaultValue": 230
+	},
+	"temperature_low_entry_level": {
+		// param 81
+		"label": "Temperature Low Entry Level",
+		"unit": "0.1 °(C/F)",
+		"unsigned": false,
+		"valueSize": 2,
+		"minValue": -400,
+		"maxValue": 1850,
+		"defaultValue": 170
+	},
+	"temperature_high_exit_level": {
+		// param 82
+		"label": "Temperature High Exit Level",
+		"unit": "0.1 °(C/F)",
+		"unsigned": false,
+		"valueSize": 2,
+		"minValue": -400,
+		"maxValue": 1850,
+		"defaultValue": 230
+	},
+	"temperature_low_exit_level": {
+		// param 83
+		"label": "Temperature Low Exit Level",
+		"unit": "0.1 °(C/F)",
+		"unsigned": false,
+		"valueSize": 2,
+		"minValue": -400,
+		"maxValue": 1850,
+		"defaultValue": 170
+	},
+	"temperature_high_delay": {
+		// param 84
+		"label": "Temperature High Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"temperature_low_delay": {
+		// pram 85
+		"label": "Temperature Low Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"temperature_periodic_report": {
+		// param 86
+		"label": "Temperature Periodic Report",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 3600
+	},
+	"temperature_change_report": {
+		// param 87
+		"label": "Temperature Change Report",
+		"unit": "0.1 °(C/F)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 10
+	},
+	"temperature_renotification_delay": {
+		// param 88
+		"label": "Temperature Renotification Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"temperature_high_entry_set_value": {
+		// param 89
+		"label": "Temperature High Entry Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 255
+	},
+	"temperature_high_exit_set_value": {
+		// param 90
+		"label": "Temperature High Exit Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"temperature_low_entry_set_value": {
+		// param 91
+		"label": "Temperature Low Entry Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 255
+	},
+	"temperature_low_exit_set_value": {
+		// param 92
+		"label": "Temperature Low Exit Set Value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"temperature_high_actions_control_associations_on_entry": {
+		// param 93b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature High Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_high_actions_control_associations_on_exit": {
+		// param 93b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature High Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_high_actions_control_host_on_entry": {
+		// param 93b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature High Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"temperature_high_actions_control_host_on_exit": {
+		// param 93b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature High Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"temperature_high_actions_report_transitions": {
+		// param 93b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature High Actions: Report Transitions",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"temperature_high_actions_notify_transitions": {
+		// param 93b5
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature High Actions: Notify Transitions",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_high_actions_apply_entry_delay": {
+		// param 93b6
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature High Actions: Apply Entry Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_high_actions_apply_exit_delay": {
+		// param 93b7
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature High Actions: Apply Exit Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_low_actions_control_associations_on_entry": {
+		// param 94b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature Low Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_low_actions_control_associations_on_exit": {
+		// param 94b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature Low Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_low_actions_control_host_on_entry": {
+		// param 94b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature Low Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"temperature_low_actions_control_host_on_exit": {
+		// param 94b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature Low Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"temperature_low_actions_report_transitions": {
+		// param 94b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature Low Actions: Report Transitions",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"temperature_low_actions_notify_transitions": {
+		// param 94b5
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature Low Actions: Notify Transitions",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_low_actions_apply_entry_delay": {
+		// param 94b6
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature Low Actions: Apply Entry Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_low_actions_apply_exit_delay": {
+		// param 94b7
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Temperature Low Actions: Apply Exit Delay",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"temperature_units": {
+		// param 95
+		"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+		"label": "Temperature Units"
+	},
+	"humidity_high_entry_level": {
+		// param 128
+		"label": "Humidity High Entry Level",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"unsigned": true,
+		"defaultValue": 100
+	},
+	"humidity_low_entry_level": {
+		// param 129
+		"label": "Humidity Low Entry Level",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_high_exit_level": {
+		// param 130
+		"label": "Humidity High Exit Level",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"unsigned": true,
+		"defaultValue": 100
+	},
+	"humidity_low_exit_level": {
+		// param 131
+		"label": "Humidity Low Exit Level",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_high_delay": {
+		// param 132
+		"label": "Humidity High Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_low_delay": {
+		// param 133
+		"label": "Humidity Low Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_periodic_report": {
+		// param 134
+		"label": "Humidity Periodic Report",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 3600
+	},
+	"humidity_change_report": {
+		// param 135
+		"label": "Humidity Change Report",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"unsigned": true,
+		"defaultValue": 10
+	},
+	"humidity_renotification_delay": {
+		// param 136
+		"label": "Humidity Renotification Delay",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 65535,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_high_entry_set_value": {
+		// param 137
+		"label": "Humidity High Entry Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_high_exit_set_value": {
+		// param 138
+		"label": "Humidity High Exit Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_low_entry_set_value": {
+		// param 139
+		"label": "Humidity Low Entry Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_low_exit_set_value": {
+		// param 140
+		"label": "Humidity Low Exit Set value",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"defaultValue": 0
+	},
+	"humidity_high_actions_control_associations_on_entry": {
+		// param 142b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity High Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"humidity_high_actions_control_associations_on_exit": {
+		// param 142b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity High Actions: Control Associations on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"humidity_high-actions_control_host_on_entry": {
+		// param 142b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity High Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_high_actions_control_host_on_exit": {
+		// param 142b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity High Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_high_actions_report_transitions": {
+		// param 142b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity High Actions: Report Transitions",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_high-actions_apply_entry_delay": {
+		// param 142b5
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity High Actions: Apply Entry Delay",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_high_actions_apply_exit_delay": {
+		// param 142b6
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity High Actions: Apply Exit Delay",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_low_actions_control_associations_on_entry": {
+		// param 143b0
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity Low Actions: Control Associations on Entry",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"humidity_low_actions_control_associations_on_exit": {
+		// param 143b1
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity Low Actions: Control Assoications on Exit",
+		"valueSize": 2,
+		"defaultValue": 1
+	},
+	"humidity_low_actions_control_host_on_entry": {
+		// param 143b2
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity Low Actions: Control Host on Entry",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_low_actions_control_host_on_exit": {
+		// param 143b3
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity Low Actions: Control Host on Exit",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_low_actions_report_transitions": {
+		// param 143b4
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity Low Actions: Report Transitions",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_low_actions_apply_entry_delay": {
+		// param 143b5
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity Low Actions: Apply Entry Delay",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"humidity_low_actions_apply_exit_delay": {
+		// param 143b6
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Humidity Low Actions: Apply Exit Delay",
+		"valueSize": 2,
+		"defaultValue": 0
+	},
+	"system_status": {
+		// param 152
+		"label": "System Status",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 4294967295,
+		"defaultValue": 0,
+		"unsigned": true,
+		"readOnly": true
+	},
+	"system_led_brightness": {
+		// param 153
+		"label": "System LED Brightness",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"unsigned": true,
+		"defaultValue": 100
+	},
+	"led_invert": {
+		// param 154 b0
+		"label": "LED indicator invert",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "LED follows state of host switch",
+				"value": 0
+			},
+			{
+				"label": "LED is inverse of state of host switch",
+				"value": 1
+			}
+		]
+	},
+	"switch_host_control_flags_3_way_mode": {
+		// param 168b0
+		"label": "3-Way Mode",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Relay state determines on/off state",
+				"value": 0
+			},
+			{
+				"label": "Power level determines on/off state",
+				"value": 1
+			}
+		]
+	},
+	"switch_host_control_flags_on_off_invert": {
+		// param 168b1
+		"label": "Invert Host State",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Not inverted",
+				"value": 0
+			},
+			{
+				"label": "Inverted",
+				"value": 1
+			}
+		]
+	},
+	"dimmer_minimum_brightness": {
+		// param 192
+		"label": "Dimmer Minimum Brightness",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 20,
+		"maxValue": 80,
+		"defaultValue": 42,
+		"unsigned": true
+	},
+	"dimmer_maximum_brightness": {
+		// param 193
+		"label": "Dimmer Maximum Brightness",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 80,
+		"maxValue": 100,
+		"defaultValue": 100,
+		"unsigned": true
+	},
+	"dimmer_default_brightness": {
+		// param 194
+		"label": "Dimmer Default Brightness",
+		"unit": "%",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"defaultValue": 80,
+		"unsigned": true
+	}
+}

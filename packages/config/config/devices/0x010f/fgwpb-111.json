@@ -2,7 +2,7 @@
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWPB-111",
-	"description": "FIBARO Wall Plug",
+	"description": "Fibaro Wall Plug",
 	"devices": [
 		{
 			"productType": "0x1701",
@@ -34,10 +34,10 @@
 		},
 		{
 			"#": "3",
-			"label": "Overload safety switch",
+			"label": "Overload Safety Switch",
 			"description": "turn off the controlled device in case of exceeding the defined power.",
-			"unit": "0.1 Watts",
 			"valueSize": 2,
+			"unit": "0.1 W",
 			"minValue": 0,
 			"maxValue": 18000,
 			"defaultValue": 0
@@ -46,8 +46,8 @@
 			"#": "11",
 			"label": "Power Reporting",
 			"description": "Minimum change in active power consumption to trigger",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 15
@@ -55,8 +55,8 @@
 		{
 			"#": "12",
 			"label": "Energy Reporting Threshold",
-			"unit": "0.01 kWh",
 			"valueSize": 2,
+			"unit": "0.01 kWh",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10
@@ -64,8 +64,8 @@
 		{
 			"#": "13",
 			"label": "Periodic Power Report",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
@@ -73,8 +73,8 @@
 		{
 			"#": "14",
 			"label": "Periodic Energy Report",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
@@ -88,11 +88,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "function inactive",
+					"label": "Function inactive",
 					"value": 0
 				},
 				{
-					"label": "function active",
+					"label": "Function active",
 					"value": 1
 				}
 			]
@@ -101,8 +101,8 @@
 			"#": "21",
 			"label": "UPValue",
 			"description": "UP value -On/Off (Power) association group (3)",
-			"unit": "0.1W",
 			"valueSize": 2,
+			"unit": "0.1W",
 			"minValue": 100,
 			"maxValue": 18000,
 			"defaultValue": 500
@@ -111,8 +111,8 @@
 			"#": "22",
 			"label": "DOWNvalue",
 			"description": "lower power threshold",
-			"unit": "0.1w",
 			"valueSize": 2,
+			"unit": "0.1w",
 			"minValue": 0,
 			"maxValue": 17900,
 			"defaultValue": 300
@@ -126,15 +126,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Going Up",
+					"label": "Going up",
 					"value": 1
 				},
 				{
-					"label": "Going Down",
+					"label": "Going down",
 					"value": 2
 				},
 				{
-					"label": "Both Ways",
+					"label": "Both ways",
 					"value": 3
 				}
 			]
@@ -185,31 +185,31 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "general alarm",
+					"label": "General alarm",
 					"value": 1
 				},
 				{
-					"label": "smoke alarm",
+					"label": "Smoke alarm",
 					"value": 2
 				},
 				{
-					"label": "CO Alarm",
+					"label": "CO alarm",
 					"value": 4
 				},
 				{
-					"label": "CO2 Alarm",
+					"label": "CO2 alarm",
 					"value": 8
 				},
 				{
-					"label": "High Temp Alarm",
+					"label": "High temp alarm",
 					"value": 16
 				},
 				{
-					"label": "flood alarm",
+					"label": "Flood alarm",
 					"value": 32
 				},
 				{
-					"label": "all",
+					"label": "All",
 					"value": 63
 				}
 			]
@@ -224,15 +224,15 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "no reaction",
+					"label": "No reaction",
 					"value": 0
 				},
 				{
-					"label": "turn connected device on",
+					"label": "Turn connected device on",
 					"value": 1
 				},
 				{
-					"label": "turn connected device off",
+					"label": "Turn connected device off",
 					"value": 2
 				}
 			]
@@ -241,8 +241,8 @@
 			"#": "32",
 			"label": "AlarmDuration",
 			"description": "duration of alarm state",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 32400,
 			"defaultValue": 600
@@ -251,8 +251,8 @@
 			"#": "40",
 			"label": "PwrLoadViolet",
 			"description": "maximum active power value causes the LED frame to flash violet",
-			"unit": "0.1w",
 			"valueSize": 2,
+			"unit": "0.1w",
 			"minValue": 1000,
 			"maxValue": 18000,
 			"defaultValue": 18000
@@ -266,43 +266,43 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
-					"label": "color changes smoothly depending on active power",
+					"label": "Color changes smoothly depending on active power",
 					"value": 1
 				},
 				{
-					"label": "color changes in steps depending on active power",
+					"label": "Color changes in steps depending on active power",
 					"value": 2
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -316,7 +316,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
@@ -324,31 +324,31 @@
 					"value": 1
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]
@@ -362,11 +362,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "illumination turned off completely",
+					"label": "Illumination turned off completely",
 					"value": 0
 				},
 				{
-					"label": "no change in color",
+					"label": "No change in color",
 					"value": 1
 				},
 				{
@@ -374,31 +374,31 @@
 					"value": 2
 				},
 				{
-					"label": "white",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "red",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "green",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "blue",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "yellow",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "cyan",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "magenta",
+					"label": "Magenta",
 					"value": 9
 				}
 			]

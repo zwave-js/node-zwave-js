@@ -41,19 +41,18 @@
 			"label": "Sensor Detecting Function",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Group 1 Enabled / Group 2 Enabled",
+					"label": "Group 1 enabled / Group 2 enabled",
 					"value": 1
 				},
 				{
-					"label": "Group 1 Enabled / Group 2 Disabled",
+					"label": "Group 1 enabled / Group 2 disabled",
 					"value": 2
 				},
 				{
-					"label": "Group 1 Disabled / Group 2 Disabled",
+					"label": "Group 1 disabled / Group 2 disabled",
 					"value": 3
 				}
 			]
@@ -68,34 +67,34 @@
 		},
 		{
 			"#": "4",
-			"label": "Re-trigger Interval Setting",
+			"label": "Re-Trigger Interval Setting",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 180,
-			"unsigned": true,
-			"unit": "seconds"
+			"unsigned": true
 		},
 		{
 			"#": "5",
 			"label": "Brightness Threshold",
 			"description": "Motion sensing is active while the brightness is below this value.",
 			"valueSize": 1,
+			"unit": "lux",
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10,
-			"unit": "lux"
+			"defaultValue": 10
 		},
 		{
 			"#": "6",
-			"label": "On time",
+			"label": "On Time",
 			"description": "The amount of time the module/lighting should stay ON for.",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 255,
 			"defaultValue": 15,
-			"unsigned": true,
-			"unit": "seconds"
+			"unsigned": true
 		}
 	]
 }

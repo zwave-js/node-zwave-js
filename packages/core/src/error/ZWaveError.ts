@@ -14,7 +14,7 @@ export enum ZWaveErrorCodes {
 
 	/** The driver failed to start */
 	Driver_Failed = 100,
-	Driver_Reset,
+	Driver_Reset, // FIXME: This is not used
 	Driver_Destroyed,
 	Driver_NotReady,
 	Driver_InvalidDataReceived,
@@ -34,6 +34,10 @@ export enum ZWaveErrorCodes {
 	Controller_MessageDropped,
 	Controller_ResponseNOK,
 	Controller_CallbackNOK,
+	Controller_Jammed,
+	/** The controller was reset in the middle of a Serial API command */
+	Controller_Reset,
+
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
@@ -58,12 +62,20 @@ export enum ZWaveErrorCodes {
 	/** A Serial API command resulted in an error response */
 	Controller_CommandError,
 
+	/** Tried to send a message that is too large */
+	Controller_MessageTooLarge,
+
+	/** Tried to perform an action for a Long Range node that does not make sense for ZWLR */
+	Controller_NotSupportedForLongRange,
+
 	/** Could not fetch some information to determine firmware upgrades from a node */
 	FWUpdateService_MissingInformation = 260,
 	/** Any error related to HTTP requests during firmware update communication */
 	FWUpdateService_RequestError,
 	/** The integrity check of the downloaded firmware update failed */
 	FWUpdateService_IntegrityCheckFailed,
+	/** The firmware update is for a different device */
+	FWUpdateService_DeviceMismatch,
 
 	/** The given NVM version/format is unsupported */
 	NVM_NotSupported = 280,
@@ -81,6 +93,8 @@ export enum ZWaveErrorCodes {
 	CC_NotSupported,
 	CC_NotImplemented,
 	CC_NoAPI,
+	/** Used to communicate that a given operation triggered by another node was not successful */
+	CC_OperationFailed,
 
 	Deserialization_NotImplemented = 320,
 	Arithmetic,
@@ -111,6 +125,9 @@ export enum ZWaveErrorCodes {
 
 	/** The controller is currently busy with something that prevents an OTW update */
 	OTW_Update_Busy = 380,
+
+	/** The node is currently busy with another health check */
+	HealthCheck_Busy = 400,
 
 	// Here follow CC specific errors
 
@@ -148,7 +165,7 @@ export enum ZWaveErrorCodes {
 
 	/** Used to report that no nonce exists */
 	SecurityCC_NoNonce = 1400,
-	/** Used to report that no SPAN is established between the nodes yet. The context should be an object that contains the peer node ID */
+	/** Used to report that no SPAN is established between the nodes yet. */
 	Security2CC_NoSPAN,
 	/** Used to report that the inner state required for this action was not initialized */
 	Security2CC_NotInitialized,
@@ -160,6 +177,10 @@ export enum ZWaveErrorCodes {
 	Security2CC_CannotDecode,
 	/** Gets thrown when parsing an invalid QR code */
 	Security2CC_InvalidQRCode,
+	/** Used to report that no MPAN has been received from the peer yet, or it is out of sync. */
+	Security2CC_NoMPAN,
+	/** Gets thrown when a Security S2 Multicast encapsulated command cannot be decoded by the target node */
+	Security2CC_CannotDecodeMulticast,
 
 	/** The firmware update process is already active on this node */
 	FirmwareUpdateCC_Busy = 1500,
@@ -238,13 +259,13 @@ export function isTransmissionError(e: unknown): e is ZWaveError & {
 		| ZWaveErrorCodes.Security2CC_CannotDecode;
 } {
 	return (
-		isZWaveError(e) &&
-		(e.code === ZWaveErrorCodes.Controller_Timeout ||
-			e.code === ZWaveErrorCodes.Controller_MessageDropped ||
-			e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
-			e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-			e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
-			e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
+		isZWaveError(e)
+		&& (e.code === ZWaveErrorCodes.Controller_Timeout
+			|| e.code === ZWaveErrorCodes.Controller_MessageDropped
+			|| e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			|| e.code === ZWaveErrorCodes.Controller_ResponseNOK
+			|| e.code === ZWaveErrorCodes.Controller_NodeTimeout
+			|| e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
 	);
 }
 
@@ -254,7 +275,11 @@ export function isTransmissionError(e: unknown): e is ZWaveError & {
  *
  * This explicitly does not include transmission errors.
  */
-export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
+export function isRecoverableZWaveError(e: unknown): e is ZWaveError & {
+	code:
+		| ZWaveErrorCodes.Controller_InterviewRestarted
+		| ZWaveErrorCodes.Controller_NodeRemoved;
+} {
 	if (!isZWaveError(e)) return false;
 	switch (e.code) {
 		case ZWaveErrorCodes.Controller_InterviewRestarted:
@@ -262,4 +287,46 @@ export function isRecoverableZWaveError(e: unknown): e is ZWaveError {
 			return true;
 	}
 	return false;
+}
+
+export function isMissingControllerACK(
+	e: unknown,
+): e is ZWaveError & {
+	code: ZWaveErrorCodes.Controller_Timeout;
+	context: "ACK";
+} {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Timeout
+		&& e.context === "ACK";
+}
+
+export function wasControllerReset(
+	e: unknown,
+): e is ZWaveError & {
+	code: ZWaveErrorCodes.Controller_Reset;
+} {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Reset;
+}
+
+export function isMissingControllerResponse(
+	e: unknown,
+): e is ZWaveError & {
+	code: ZWaveErrorCodes.Controller_Timeout;
+	context: "response";
+} {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Timeout
+		&& e.context === "response";
+}
+
+export function isMissingControllerCallback(
+	e: unknown,
+): e is ZWaveError & {
+	code: ZWaveErrorCodes.Controller_Timeout;
+	context: "callback";
+} {
+	return isZWaveError(e)
+		&& e.code === ZWaveErrorCodes.Controller_Timeout
+		&& e.context === "callback";
 }

@@ -46,11 +46,10 @@
 			"label": "Motor Run Direction",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Shutter / Venetian Mode (Output 1 - Up; Output 2 - Down)",
+					"label": "Shutter / Venetian mode (Output 1 - Up; Output 2 - Down)",
 					"value": 0
 				},
 				{
@@ -62,7 +61,7 @@
 					"value": 2
 				},
 				{
-					"label": "Shutter / Venetian Mode (Output 1 - Down; Output 2 - Up)",
+					"label": "Shutter / Venetian mode (Output 1 - Down; Output 2 - Up)",
 					"value": 3
 				}
 			]
@@ -74,25 +73,40 @@
 			"unit": "0.01 seconds",
 			"minValue": 10,
 			"maxValue": 32767,
-			"defaultValue": 150,
-			"unsigned": true
+			"defaultValue": 150
+		},
+		{
+			"#": "52",
+			"$if": "firmwareVersion >= 3.6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Equal Curtain Trip Times (Opening and Closing)",
+			"description": "Enabling this disables parameter #51",
+			"defaultValue": 1
 		},
 		{
 			"#": "35",
-			"label": "Curtain Trip Time",
+			"label": "Curtain Trip Time (Closing)",
 			"valueSize": 2,
 			"unit": "0.01 seconds",
 			"minValue": 500,
 			"maxValue": 32767,
-			"defaultValue": 15000,
-			"unsigned": true
+			"defaultValue": 15000
+		},
+		{
+			"#": "51",
+			"$if": "firmwareVersion >= 3.6",
+			"label": "Curtain Trip Time (Opening)",
+			"valueSize": 2,
+			"unit": "0.01 seconds",
+			"minValue": 500,
+			"maxValue": 32767,
+			"defaultValue": 15000
 		},
 		{
 			"#": "36",
 			"label": "Enter/Exit Calibration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -111,10 +125,9 @@
 		},
 		{
 			"#": "37",
-			"label": "User Confirmation For Calibration",
+			"label": "User Confirmation for Calibration",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -128,7 +141,6 @@
 			"label": "Calibration Status",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -145,11 +157,11 @@
 					"value": 2
 				},
 				{
-					"label": "Calibrating - Waiting for blade turn calibraion (venetian mode)",
+					"label": "Calibrating - Waiting for blade turn calibraion (Venetian mode)",
 					"value": 3
 				},
 				{
-					"label": "Calibrating - Going to reference point c (venetian mode)",
+					"label": "Calibrating - Going to reference point c (Venetian mode)",
 					"value": 4
 				},
 				{
@@ -163,7 +175,6 @@
 			"label": "Curtain Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -181,7 +192,6 @@
 			"label": "Inititiate Repositioning",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -196,7 +206,6 @@
 			"label": "Repositioning Status",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -215,7 +224,6 @@
 			"label": "Calibration Lock",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -242,19 +250,18 @@
 			"label": "External Button Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Map S1/S2 to Z-Wave Button",
+					"label": "Map S1/S2 to Z-Wave button",
 					"value": 0
 				},
 				{
-					"label": "S1 -> Open; S2 -> Close",
+					"label": "S1 -> open; S2 -> close",
 					"value": 1
 				},
 				{
-					"label": "(Push Button) - Blind actions; (Other types) S1 -> Open, S2 -> Close",
+					"label": "Push button: Blind actions; Other types: S1 -> open, S2 -> close",
 					"value": 2
 				}
 			]
@@ -264,7 +271,6 @@
 			"label": "Switch S1 Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -272,11 +278,11 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch",
+					"label": "2-State switch",
 					"value": 1
 				},
 				{
-					"label": "3-way switch",
+					"label": "3-Way switch",
 					"value": 2
 				},
 				{
@@ -294,7 +300,6 @@
 			"label": "Switch S2 Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -302,11 +307,11 @@
 					"value": 0
 				},
 				{
-					"label": "2-state switch",
+					"label": "2-State switch",
 					"value": 1
 				},
 				{
-					"label": "3-way switch",
+					"label": "3-Way switch",
 					"value": 2
 				},
 				{
@@ -326,7 +331,6 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -334,11 +338,10 @@
 			"label": "External Switch: Network/Reset Functions",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable network function (inclusion/exclusion)",
+					"label": "Enable network function (Inclusion/Exclusion)",
 					"value": 1
 				},
 				{

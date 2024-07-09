@@ -1,6 +1,6 @@
 /*
 	Note to future self:
-	
+
 	If ESLint is ever extremely slow again, check if there are .js and/or .map files in the source directories
 	and delete them:
 
@@ -13,9 +13,10 @@
 */
 
 module.exports = {
+	root: true,
 	parser: "@typescript-eslint/parser", // Specifies the ESLint parser
 	parserOptions: {
-		ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
+		ecmaVersion: 2023, // Allows for the parsing of modern ECMAScript features
 		sourceType: "module", // Allows for the use of imports
 		project: "./tsconfig.eslint.json",
 		tsconfigRootDir: __dirname,
@@ -24,10 +25,13 @@ module.exports = {
 		// Use the recommended rules from the @typescript-eslint/eslint-plugin
 		"plugin:@typescript-eslint/recommended",
 		"plugin:@typescript-eslint/recommended-requiring-type-checking",
-		// Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
-		"plugin:prettier/recommended",
 	],
-	plugins: [],
+	plugins: [
+		"deprecation",
+		"unused-imports",
+		"unicorn",
+		"@zwave-js",
+	],
 	reportUnusedDisableDirectives: true,
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -84,6 +88,17 @@ module.exports = {
 				checksVoidReturn: false,
 			},
 		],
+
+		// Make sure type imports are used where necessary
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				fixStyle: "inline-type-imports",
+				disallowTypeAnnotations: false,
+			},
+		],
+		"@typescript-eslint/consistent-type-exports": "error",
+
 		// We can turn this on from time to time but in general these rules
 		// make our lives harder instead of easier
 		"@typescript-eslint/no-unsafe-argument": "off",
@@ -91,6 +106,8 @@ module.exports = {
 		"@typescript-eslint/no-unsafe-member-access": "off",
 		"@typescript-eslint/no-unsafe-return": "off",
 		"@typescript-eslint/no-unsafe-call": "off",
+		"@typescript-eslint/no-unsafe-enum-comparison": "off",
+		"@typescript-eslint/no-unsafe-declaration-merging": "off",
 
 		// Although this rule makes sense, it takes about a second to execute (and we don't need it)
 		"@typescript-eslint/no-implied-eval": "off",
@@ -111,6 +128,25 @@ module.exports = {
 			},
 		],
 		"quote-props": ["error", "as-needed"],
+		"deprecation/deprecation": "error",
+		"unused-imports/no-unused-imports-ts": "error",
+		"unused-imports/no-unused-imports": "error",
+
+		"unicorn/prefer-array-find": ["error", { checkFromLast: true }],
+		"unicorn/prefer-array-flat-map": "error",
+		"unicorn/prefer-array-flat": "error",
+		"unicorn/prefer-array-index-of": "error",
+		"unicorn/prefer-array-some": "error",
+		"unicorn/prefer-at": "error",
+		"unicorn/prefer-includes": "error",
+		"unicorn/prefer-logical-operator-over-ternary": "error",
+		"unicorn/prefer-modern-math-apis": "error",
+		"unicorn/prefer-negative-index": "error",
+		"unicorn/prefer-node-protocol": "error",
+		"unicorn/prefer-regexp-test": "error",
+		"unicorn/prefer-string-slice": "error",
+		"unicorn/prefer-string-starts-ends-with": "error",
+		"unicorn/prefer-string-replace-all": "error",
 	},
 	overrides: [
 		{
@@ -128,14 +164,42 @@ module.exports = {
 				"@typescript-eslint/no-floating-promises": "off",
 				"@typescript-eslint/require-await": "off",
 				"@typescript-eslint/unbound-method": "off",
-				"@typescript-eslint/no-unused-vars": "warn",
+				"@typescript-eslint/no-unused-vars": "off",
 				"@typescript-eslint/dot-notation": "off",
+
+				"@zwave-js/no-debug-in-tests": "error",
 			},
 		},
 		{
 			files: ["*.js"],
 			rules: {
 				"@typescript-eslint/*": "off",
+			},
+		},
+		{
+			files: ["packages/cc/src/**/*CC.ts"],
+			rules: {
+				"@zwave-js/ccapi-validate-args": "error",
+				"@zwave-js/no-internal-cc-types": "error",
+			},
+		},
+		{
+			files: ["packages/cc/src/**"],
+			rules: {
+				"@zwave-js/consistent-cc-classes": "error",
+			},
+		},
+		{
+			files: ["packages/**/*.ts"],
+			rules: {
+				"@zwave-js/no-forbidden-imports": "error",
+			},
+		},
+		{
+			files: ["packages/config/config/devices/**/*.json"],
+			parser: "jsonc-eslint-parser",
+			rules: {
+				"@zwave-js/consistent-device-configs": "error",
 			},
 		},
 	],

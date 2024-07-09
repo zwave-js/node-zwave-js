@@ -2,7 +2,7 @@
 	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "55251 / ZW3107",
-	"description": "Plug-in 2-Outlet Dimmer, Simultaneous, 500S",
+	"description": "Plug-In 2-Outlet Dimmer, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",
@@ -61,7 +61,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your smart dimmer, single press and release the manual/program button on\nthe smart dimmer",

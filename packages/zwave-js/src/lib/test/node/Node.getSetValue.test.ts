@@ -1,9 +1,9 @@
-import { BasicCommand } from "@zwave-js/cc";
+import { BasicCommand, SetValueStatus } from "@zwave-js/cc";
 import { BasicCC, BasicCCValues } from "@zwave-js/cc/BasicCC";
-import { CommandClasses, ValueMetadata, type ValueID } from "@zwave-js/core";
+import { CommandClasses, type ValueID, ValueMetadata } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import ava, { ExecutionContext, type TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
@@ -30,7 +30,6 @@ test.before(async (t) => {
 			t.context.controller = controller;
 		},
 	});
-	await driver.configManager.loadDeviceClasses();
 	t.context.driver = driver;
 });
 
@@ -81,7 +80,7 @@ test.serial("setValue() issues the correct xyzCCSet command", async (t) => {
 		5,
 	);
 
-	t.true(result);
+	t.is(result.status, SetValueStatus.SuccessUnsupervised);
 	sinon.assert.called(sendMessage);
 
 	assertCC(t, sendMessage.getCall(0).args[0], {
@@ -102,17 +101,20 @@ test.serial(
 		const node = new ZWaveNode(1, driver);
 		const result = await node.setValue(
 			{
+				// @ts-expect-error
 				commandClass: 0xbada55, // this is guaranteed to not be implemented
 				property: "test",
 			},
 			1,
 		);
-		t.false(result);
+		t.is(result.status, SetValueStatus.NotImplemented);
+		t.regex(result.message!, /Command Class 12245589 is not implemented/);
 		node.destroy();
 	},
 );
 
 {
+	const valueDefinition = BasicCCValues.currentValue;
 	const valueId = BasicCCValues.currentValue.id;
 
 	function prepareTest(t: ExecutionContext<TestContext>): ZWaveNode {
@@ -138,6 +140,9 @@ test.serial(
 				writeable: false,
 				min: 0,
 				max: 99,
+				// Nothing special about this value, so we should get the default secret/stateful flags:
+				secret: false,
+				stateful: true,
 			});
 		},
 	);
@@ -151,8 +156,30 @@ test.serial(
 
 			const currentValueMeta = node.getValueMetadata(valueId);
 
-			// The label should be preserved from the static metadata
-			t.deepEqual(currentValueMeta, ValueMetadata.WriteOnlyInt32);
+			t.deepEqual(currentValueMeta, {
+				...ValueMetadata.WriteOnlyInt32,
+				secret: valueDefinition.options.secret,
+				stateful: valueDefinition.options.stateful,
+			});
+		},
+	);
+
+	test.serial(
+		"writing to the value DB with setValueMetadata() preserves the secret/stateful flags",
+		(t) => {
+			const node = prepareTest(t);
+			// Create dynamic metadata
+			node.valueDB.setMetadata(valueId, {
+				...ValueMetadata.WriteOnlyInt32,
+				secret: !valueDefinition.options.secret,
+				stateful: !valueDefinition.options.stateful,
+			});
+
+			const currentValueMeta = node.getValueMetadata(valueId);
+			t.like(currentValueMeta, {
+				secret: valueDefinition.options.secret,
+				stateful: valueDefinition.options.stateful,
+			});
 		},
 	);
 }

@@ -1,18 +1,18 @@
 import {
-	CommandClasses,
 	CRC16_CCITT,
+	CommandClasses,
 	EncapsulationFlags,
-	Maybe,
-	MessageOrCCLogEntry,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -26,11 +26,13 @@ import { CRC16Command } from "../lib/_Types";
 // @noSetValueAPI
 // @noInterview This CC only has a single encapsulation command
 
-// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
+/* eslint-disable @zwave-js/ccapi-validate-args */
+
 @API(CommandClasses["CRC-16 Encapsulation"])
 export class CRC16CCAPI extends CCAPI {
-	public supportsCommand(_cmd: CRC16Command): Maybe<boolean> {
+	public supportsCommand(_cmd: CRC16Command): MaybeNotKnown<boolean> {
 		// switch (cmd) {
 		// 	case CRC16Command.CommandEncapsulation:
 		return true; // This is mandatory
@@ -61,8 +63,8 @@ export class CRC16CC extends CommandClass {
 	/** Tests if a command should be supervised and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
-			!!(cc.encapsulationFlags & EncapsulationFlags.CRC16) &&
-			!(cc instanceof CRC16CCCommandEncapsulation)
+			!!(cc.encapsulationFlags & EncapsulationFlags.CRC16)
+			&& !(cc instanceof CRC16CCCommandEncapsulation)
 		);
 	}
 
@@ -78,24 +80,31 @@ export class CRC16CC extends CommandClass {
 
 		// Copy the encapsulation flags from the encapsulated command
 		// but omit CRC-16, since we're doing that right now
-		ret.encapsulationFlags =
-			cc.encapsulationFlags & ~EncapsulationFlags.CRC16;
+		ret.encapsulationFlags = cc.encapsulationFlags
+			& ~EncapsulationFlags.CRC16;
 
 		return ret;
 	}
 }
 
-interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
+// @publicAPI
+export interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 
-// This indirection is necessary to be able to define the same CC as the response
-function getResponseForCommandEncapsulation() {
-	return CRC16CCCommandEncapsulation;
+function getCCResponseForCommandEncapsulation(
+	sent: CRC16CCCommandEncapsulation,
+) {
+	if (sent.encapsulated?.expectsCCResponse()) {
+		return CRC16CCCommandEncapsulation;
+	}
 }
 
 @CCCommand(CRC16Command.CommandEncapsulation)
-@expectedCCResponse(getResponseForCommandEncapsulation)
+@expectedCCResponse(
+	getCCResponseForCommandEncapsulation,
+	() => "checkEncapsulated",
+)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
 		host: ZWaveHost,
@@ -107,7 +116,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 
-			const ccBuffer = this.payload.slice(0, -2);
+			const ccBuffer = this.payload.subarray(0, -2);
 
 			// Verify the CRC
 			let expectedCRC = CRC16_CCITT(this.headerBuffer);
@@ -122,6 +131,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
+				frameType: options.frameType,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
@@ -151,9 +161,9 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			// Hide the default payload line
 			message: undefined,
 		};

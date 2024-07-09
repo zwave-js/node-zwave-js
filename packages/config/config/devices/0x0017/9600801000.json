@@ -2,7 +2,7 @@
 	"manufacturer": "HiTech Automation",
 	"manufacturerId": "0x0017",
 	"label": "9600801000",
-	"description": "EbV floor heating regulator",
+	"description": "EbV Floor Heating Regulator",
 	"devices": [
 		{
 			"productType": "0x0006",

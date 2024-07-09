@@ -8,7 +8,7 @@
 
 ```ts
 async getSupported(): Promise<
-	readonly ColorComponent[] | undefined
+	MaybeNotKnown<readonly ColorComponent[]>
 >;
 ```
 
@@ -54,13 +54,13 @@ async stopLevelChange(
 }
 ```
 
--   **label:** Current color
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Current color
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `currentColorChannel(component: ColorComponent)`
 
@@ -73,16 +73,16 @@ async stopLevelChange(
 }
 ```
 
--   **label:** `Current value (${string})`
--   **description:** `The current value of the ${string} channel.`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Current value (${string})`
+- **description:** `The current value of the ${string} channel.`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `duration`
 
@@ -94,13 +94,13 @@ async stopLevelChange(
 }
 ```
 
--   **label:** Remaining duration
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** Remaining duration
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `hexColor`
 
@@ -112,15 +112,15 @@ async stopLevelChange(
 }
 ```
 
--   **label:** RGB Color
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"color"`
--   **min. length:** 6
--   **max. length:** 7
+- **label:** RGB Color
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"color"`
+- **min. length:** 6
+- **max. length:** 7
 
 ### `targetColor`
 
@@ -132,13 +132,13 @@ async stopLevelChange(
 }
 ```
 
--   **label:** Target color
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Target color
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `targetColorChannel(component: ColorComponent)`
 
@@ -151,13 +151,13 @@ async stopLevelChange(
 }
 ```
 
--   **label:** `Target value (${string})`
--   **description:** `The target value of the ${string} channel.`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Target value (${string})`
+- **description:** `The target value of the ${string} channel.`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

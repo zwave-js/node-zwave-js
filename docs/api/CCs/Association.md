@@ -7,19 +7,33 @@
 ### `getGroupCount`
 
 ```ts
-async getGroupCount(): Promise<number | undefined>;
+async getGroupCount(): Promise<MaybeNotKnown<number>>;
 ```
 
 Returns the number of association groups a node supports.
 Association groups are consecutive, starting at 1.
 
+### `reportGroupCount`
+
+```ts
+async reportGroupCount(groupCount: number): Promise<void>;
+```
+
 ### `getGroup`
 
 ```ts
-async getGroup(groupId: number): Promise<{ maxNodes: number; nodeIds: readonly number[]; } | undefined>;
+async getGroup(groupId: number): Promise<{ maxNodes: number; nodeIds: number[]; } | undefined>;
 ```
 
 Returns information about an association group.
+
+### `sendReport`
+
+```ts
+async sendReport(
+	options: AssociationCCReportSpecificOptions,
+): Promise<void>;
+```
 
 ### `addNodeIds`
 
@@ -51,3 +65,21 @@ async removeNodeIdsFromAllGroups(
 ```
 
 Removes nodes from all association groups.
+
+### `getSpecificGroup`
+
+```ts
+async getSpecificGroup(): Promise<number | undefined>;
+```
+
+Request the association group that represents the most recently detected button press.
+
+### `reportSpecificGroup`
+
+```ts
+async reportSpecificGroup(
+	group: number,
+): Promise<void>;
+```
+
+Report the association group that represents the most recently detected button press.

@@ -70,7 +70,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Switch mode",
@@ -93,7 +92,7 @@
 		{
 			"#": "3",
 			"$import": "~/templates/master_template.json#base_options_nounit",
-			"label": "State when magnet is close to sensor",
+			"label": "State When Magnet Is Close to Sensor",
 			"options": [
 				{
 					"label": "Closed",
@@ -169,7 +168,7 @@
 		{
 			"#": "16",
 			"$import": "~/templates/master_template.json#base_options_nounit",
-			"label": "Tilt sensor polarity when sensor is vertical",
+			"label": "Tilt Sensor Polarity When Sensor Is Vertical",
 			"options": [
 				{
 					"label": "Off",

@@ -23,10 +23,9 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set LED indication mode",
+			"label": "Set LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,7 +48,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Automatic switch off time",
+			"label": "Automatic Switch Off Time",
 			"description": "If not zero, automatically switch off after a user defined time (in seconds)",
 			"valueSize": 2,
 			"minValue": 0,
@@ -59,14 +58,13 @@
 		},
 		{
 			"#": "3",
-			"label": "RF Off command",
+			"label": "RF Off Command",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -74,7 +72,7 @@
 					"value": 1
 				},
 				{
-					"label": "Switch ON",
+					"label": "Switch on",
 					"value": 2
 				},
 				{
@@ -85,21 +83,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state after power cycle",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No - turn OFF",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		}
 	]
 }

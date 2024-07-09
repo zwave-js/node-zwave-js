@@ -52,7 +52,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input I alarm cancellation delay",
+			"label": "Input I Alarm Cancellation Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Input 2 alarm cancellation delay",
+			"label": "Input 2 Alarm Cancellation Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -70,137 +70,135 @@
 		},
 		{
 			"#": "3",
-			"label": "Type of input no. 1",
+			"label": "Type of Input No. 1",
 			"description": "Type of input no. 1, what the input 1 will report if no contact is made",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normal Open)",
+					"label": "NO (Normal open)",
 					"value": 0
 				},
 				{
-					"label": "NC (Normal Close)",
+					"label": "NC (Normal close)",
 					"value": 1
 				},
 				{
-					"label": "MONOSTABLE",
+					"label": "Monostable",
 					"value": 2
 				},
 				{
-					"label": "BISTABLE",
+					"label": "Bistable",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Type of input no. 2",
+			"label": "Type of Input No. 2",
 			"description": "Type of input no. 2, what the input 2 will report if no contact is made",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (Normal Open)",
+					"label": "NO (Normal open)",
 					"value": 0
 				},
 				{
-					"label": "NC (Normal Close)",
+					"label": "NC (Normal close)",
 					"value": 1
 				},
 				{
-					"label": "MONOSTABLE",
+					"label": "Monostable",
 					"value": 2
 				},
 				{
-					"label": "BISTABLE",
+					"label": "Bistable",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Type of control frame for association group 1",
+			"label": "Type of Control Frame for Association Group 1",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALARM GENERIC",
+					"label": "Alarm generic",
 					"value": 0
 				},
 				{
-					"label": "ALARM SMOKE",
+					"label": "Alarm smoke",
 					"value": 1
 				},
 				{
-					"label": "ALARM CO",
+					"label": "Alarm CO",
 					"value": 2
 				},
 				{
-					"label": "ALARM CO2",
+					"label": "Alarm CO2",
 					"value": 3
 				},
 				{
-					"label": "ALARM HEAT",
+					"label": "Alarm heat",
 					"value": 4
 				},
 				{
-					"label": "ALARM WATER",
+					"label": "Alarm water",
 					"value": 5
 				},
 				{
-					"label": "BASIC_SET",
+					"label": "Basic Set",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Type of control frame for association group 2",
+			"label": "Type of Control Frame for Association Group 2",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALARM GENERIC",
+					"label": "Alarm generic",
 					"value": 0
 				},
 				{
-					"label": "ALARM SMOKE",
+					"label": "Alarm smoke",
 					"value": 1
 				},
 				{
-					"label": "ALARM CO",
+					"label": "Alarm CO",
 					"value": 2
 				},
 				{
-					"label": "ALARM CO2",
+					"label": "Alarm CO2",
 					"value": 3
 				},
 				{
-					"label": "ALARM HEAT",
+					"label": "Alarm heat",
 					"value": 4
 				},
 				{
-					"label": "ALARM WATER",
+					"label": "Alarm water",
 					"value": 5
 				},
 				{
-					"label": "BASIC_SET",
+					"label": "Basic Set",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "Forced Level of Dimming group 1",
+			"label": "Forced Level of Dimming Group 1",
 			"description": "Value of the parameter specifying the forced levels.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -210,7 +208,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Forced Level of Dimming group 2",
+			"label": "Forced Level of Dimming Group 2",
 			"description": "Value of the parameter specifying forced levels.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -220,10 +218,9 @@
 		},
 		{
 			"#": "9",
-			"label": "Deactivate transmission of frame canceling alarm",
+			"label": "Deactivate Transmission of Frame Canceling Alarm",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -231,18 +228,18 @@
 					"value": 0
 				},
 				{
-					"label": "Group 1 sent, Group 2 not sent.",
+					"label": "Only group 1 sent",
 					"value": 1
 				},
 				{
-					"label": "Group 1 not sent, Group 2 sent.",
+					"label": "Only group 2 sent",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "10",
-			"label": "Interval between readings of temperature sensors",
+			"label": "Interval Between Readings of Temperature Sensors",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -251,7 +248,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Interval betw. forcing to send report for temp.",
+			"label": "Temperature Report Interval",
 			"description": "The forced report is sent immediately after ...",
 			"valueSize": 1,
 			"minValue": 1,
@@ -261,7 +258,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Insensitiveness to temperature changes.",
+			"label": "Temperature Change Report Threshold",
 			"description": "This is the maximum acceptable difference between",
 			"valueSize": 1,
 			"minValue": 0,
@@ -271,37 +268,35 @@
 		},
 		{
 			"#": "13",
-			"label": "Transmitting alarm/control frame broadcast mode",
+			"label": "Transmitting Alarm/control Frame Broadcast Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IN1 and IN2 Broadcast inactive",
+					"label": "IN1 and IN2 broadcast inactive",
 					"value": 0
 				},
 				{
-					"label": "IN1 mode active, Sensor 2 mode inactive",
+					"label": "IN1 mode active, sensor 2 mode inactive",
 					"value": 1
 				},
 				{
-					"label": "IN1 mode inactive, Sensor 2 mode active",
+					"label": "IN1 mode inactive, sensor 2 mode active",
 					"value": 2
 				},
 				{
-					"label": "INI and IN2 broadcast mode active",
+					"label": "IN1 and IN2 broadcast mode active",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Scene activation",
+			"label": "Scene Activation",
 			"description": "Enable/Disable scene functionality.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -316,12 +311,12 @@
 		}
 	],
 	"compat": {
-		"enableBasicSetMapping": true,
+		"mapBasicSet": "auto",
 		"commandClasses": {
 			"remove": {
 				// Alarm Sensor CC is reported as supported, but we either get no response
 				// or the supported sensor types are incorrectly encoded
-				"0x9c": {
+				"Alarm Sensor": {
 					"endpoints": "*"
 				}
 			}

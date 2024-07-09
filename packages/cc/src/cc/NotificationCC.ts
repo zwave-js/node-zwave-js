@@ -1,40 +1,57 @@
 import {
-	Notification,
-	NotificationParameterWithCommandClass,
-	NotificationParameterWithDuration,
-	NotificationParameterWithEnum,
-	NotificationParameterWithValue,
-	NotificationValueDefinition,
-} from "@zwave-js/config";
+	type Notification,
+	type NotificationState,
+	type NotificationValue,
+	getNotification,
+	getNotificationEventName,
+	getNotificationName,
+	getNotificationValue,
+	getNotificationValueName,
+	timespan,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
-	encodeBitMask,
-	isZWaveError,
-	IZWaveNode,
-	Maybe,
-	MessageOrCCLogEntry,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	SupervisionResult,
-	validatePayload,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
+	type ValueID,
 	ValueMetadata,
-	ValueMetadataNumeric,
+	type ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	getCCName,
+	isZWaveError,
+	parseBitMask,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
-	InvalidCC,
+	CCAPI,
+	POLL_VALUE,
+	PhysicalCCAPI,
+	type PollValueImplementation,
+	throwUnsupportedProperty,
+} from "../lib/API";
+import {
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	InvalidCC,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -47,9 +64,10 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
-import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
 import { NotificationCommand, UserCodeCommand } from "../lib/_Types";
+import * as ccUtils from "../lib/utils";
+import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
 
 export const NotificationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Notification, {
@@ -65,16 +83,71 @@ export const NotificationCCValues = Object.freeze({
 			internal: true,
 			supportsEndpoints: false,
 		}),
+		...V.staticProperty("lastRefresh", undefined, {
+			internal: true,
+		}),
 
 		// V1 Alarm values
-		...V.staticProperty("alarmType", {
-			...ValueMetadata.ReadOnlyUInt8,
-			label: "Alarm Type",
-		} as const),
-		...V.staticProperty("alarmLevel", {
-			...ValueMetadata.ReadOnlyUInt8,
-			label: "Alarm Level",
-		} as const),
+		...V.staticProperty(
+			"alarmType",
+			{
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Alarm Type",
+			} as const,
+		),
+		...V.staticProperty(
+			"alarmLevel",
+			{
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Alarm Level",
+			} as const,
+		),
+
+		// Simplification for the Door state variable, where we cannot know
+		// if any of the enum values are supported
+		...V.staticPropertyAndKeyWithName(
+			"doorStateSimple",
+			"Access Control",
+			"Door state (simple)",
+			{
+				// Must be a number for compatibility reasons
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Door state (simple)",
+				states: {
+					[0x16]: "Window/door is open",
+					[0x17]: "Window/door is closed",
+				},
+				ccSpecific: {
+					notificationType: 0x06,
+				},
+			} as const,
+			{
+				autoCreate: shouldAutoCreateSimpleDoorSensorValue,
+			} as const,
+		),
+
+		// Binary tilt value extracted from the Door state variable.
+		...V.staticPropertyAndKeyWithName(
+			"doorTiltState",
+			"Access Control",
+			"Door tilt state",
+			{
+				// Must be a number for compatibility reasons
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Door tilt state",
+				states: {
+					[0x00]: "Window/door is not tilted",
+					[0x01]: "Window/door is tilted",
+				},
+				ccSpecific: {
+					notificationType: 0x06,
+				},
+			} as const,
+			{
+				// This is created when the tilt state is first received.
+				autoCreate: false,
+			} as const,
+		),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses.Notification, {
@@ -83,8 +156,8 @@ export const NotificationCCValues = Object.freeze({
 			"supportedNotificationEvents",
 			(notificationType: number) => notificationType,
 			({ property, propertyKey }) =>
-				property === "supportedNotificationEvents" &&
-				typeof propertyKey === "number",
+				property === "supportedNotificationEvents"
+				&& typeof propertyKey === "number",
 			undefined,
 			{ internal: true, supportsEndpoints: false },
 		),
@@ -96,15 +169,17 @@ export const NotificationCCValues = Object.freeze({
 			(notificationType: number) =>
 				`UNKNOWN_${num2hex(notificationType)}`,
 			({ property }) =>
-				typeof property === "string" && /^UNKNOWN_0x/.test(property),
-			(notificationType: number) =>
-				({
-					...ValueMetadata.ReadOnlyUInt8,
-					label: `Unknown notification (${num2hex(
+				typeof property === "string"
+				&& property.startsWith("UNKNOWN_0x"),
+			(notificationType: number) => ({
+				...ValueMetadata.ReadOnlyUInt8,
+				label: `Unknown notification (${
+					num2hex(
 						notificationType,
-					)})`,
-					ccSpecific: { notificationType },
-				} as const),
+					)
+				})`,
+				ccSpecific: { notificationType },
+			} as const),
 		),
 
 		// Known type, unknown variable
@@ -115,12 +190,11 @@ export const NotificationCCValues = Object.freeze({
 			"unknown",
 			({ property, propertyKey }) =>
 				typeof property === "string" && propertyKey === "unknown",
-			(notificationType: number, notificationName: string) =>
-				({
-					...ValueMetadata.ReadOnlyUInt8,
-					label: `${notificationName}: Unknown value`,
-					ccSpecific: { notificationType },
-				} as const),
+			(notificationType: number, notificationName: string) => ({
+				...ValueMetadata.ReadOnlyUInt8,
+				label: `${notificationName}: Unknown value`,
+				ccSpecific: { notificationType },
+			} as const),
 		),
 
 		// (Stateful) notification variable
@@ -132,30 +206,40 @@ export const NotificationCCValues = Object.freeze({
 			(notificationName: string, variableName: string) => variableName,
 			({ property, propertyKey }) =>
 				typeof property === "string" && typeof propertyKey === "string",
-
 			// Notification metadata is so dynamic, it does not make sense to define it here
 			undefined,
 		),
 	}),
 });
 
-function lookupNotificationNames(
+function shouldAutoCreateSimpleDoorSensorValue(
 	applHost: ZWaveApplicationHost,
-	notificationTypes: readonly number[],
-): string[] {
-	return notificationTypes
-		.map((n) => {
-			const ret = applHost.configManager.lookupNotification(n);
-			return [n, ret] as const;
-		})
-		.map(([type, ntfcn]) =>
-			ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
-		);
+	endpoint: IZWaveEndpoint,
+): boolean {
+	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	if (!valueDB) return false;
+	const supportedACEvents = valueDB.getValue<readonly number[]>(
+		NotificationCCValues.supportedNotificationEvents(
+			// Access Control
+			0x06,
+		).endpoint(endpoint.index),
+	);
+	if (!supportedACEvents) return false;
+	return (
+		supportedACEvents.includes(
+			// Window/door is open
+			0x16,
+		)
+		&& supportedACEvents.includes(
+			// Window/door is closed
+			0x17,
+		)
+	);
 }
 
 @API(CommandClasses.Notification)
 export class NotificationCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
+	public supportsCommand(cmd: NotificationCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case NotificationCommand.Report:
 			case NotificationCommand.Get:
@@ -169,6 +253,30 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 				return this.version >= 3;
 		}
 		return super.supportsCommand(cmd);
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function(
+			this: NotificationCCAPI,
+			{ property, propertyKey },
+		) {
+			const valueId: ValueID = {
+				commandClass: this.ccId,
+				endpoint: this.endpoint.index,
+				property,
+				propertyKey,
+			};
+			if (NotificationCCValues.notificationVariable.is(valueId)) {
+				const notificationType: number | undefined = this
+					.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific
+					?.notificationType;
+				if (notificationType != undefined) {
+					return this.getInternal({ notificationType });
+				}
+			}
+
+			throwUnsupportedProperty(this.ccId, property);
+		};
 	}
 
 	/**
@@ -256,11 +364,12 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<NotificationCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			NotificationCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"supportsV1Alarm",
@@ -272,7 +381,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getSupportedEvents(
 		notificationType: number,
-	): Promise<readonly number[] | undefined> {
+	): Promise<MaybeNotKnown<readonly number[]>> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.EventSupportedGet,
@@ -283,31 +392,33 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			notificationType,
 		});
-		const response =
-			await this.applHost.sendCommand<NotificationCCEventSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			NotificationCCEventSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.supportedEvents;
 	}
 }
 
-function getNotificationEnumBehavior(
-	notificationConfig: Notification,
-	valueConfig: NotificationValueDefinition & { type: "state" },
+export function getNotificationEnumBehavior(
+	notification: Notification,
+	valueConfig: NotificationState,
 ): "none" | "extend" | "replace" {
-	const variable = notificationConfig.variables.find((v) =>
-		v.states.has(valueConfig.value),
+	const variable = notification.variables.find((v) =>
+		v.states.has(valueConfig.value)
 	);
 	if (!variable) return "none";
 	const numStatesWithEnums = [...variable.states.values()].filter(
-		(val) => val.parameter instanceof NotificationParameterWithEnum,
+		(val) => val.parameter?.type === "enum",
 	).length;
 	if (numStatesWithEnums === 0) return "none";
 	// An enum value replaces the original value if there is only a single possible state
 	// which also has an enum parameter
-	if (numStatesWithEnums === 1 && variable.states.size === 1)
+	if (numStatesWithEnums === 1 && variable.states.size === 1) {
 		return "replace";
+	}
 	return "extend";
 }
 
@@ -325,32 +436,36 @@ export function getNotificationStateValueWithEnum(
  */
 export function getNotificationValueMetadata(
 	previous: ValueMetadataNumeric | undefined,
-	notificationConfig: Notification,
-	valueConfig: NotificationValueDefinition & { type: "state" },
+	notification: Notification,
+	valueConfig: NotificationState,
 ): ValueMetadataNumeric {
 	const metadata: ValueMetadataNumeric = previous ?? {
 		...ValueMetadata.ReadOnlyUInt8,
 		label: valueConfig.variableName,
 		states: {},
 		ccSpecific: {
-			notificationType: notificationConfig.id,
+			notificationType: notification.type,
 		},
 	};
 	if (valueConfig.idle) {
 		metadata.states![0] = "idle";
 	}
 	const enumBehavior = getNotificationEnumBehavior(
-		notificationConfig,
+		notification,
 		valueConfig,
 	);
 	if (enumBehavior !== "replace") {
 		metadata.states![valueConfig.value] = valueConfig.label;
 	}
-	if (valueConfig.parameter instanceof NotificationParameterWithEnum) {
-		for (const [value, label] of valueConfig.parameter.values) {
-			metadata.states![
-				getNotificationStateValueWithEnum(valueConfig.value, value)
-			] = label;
+	if (valueConfig.parameter?.type === "enum") {
+		for (
+			const [key, label] of Object.entries(valueConfig.parameter.values)
+		) {
+			const value = parseInt(key);
+			const stateKey = enumBehavior === "replace"
+				? value
+				: getNotificationStateValueWithEnum(valueConfig.value, value);
+			metadata.states![stateKey] = label;
 		}
 	}
 
@@ -385,28 +500,19 @@ export class NotificationCC extends CommandClass {
 		// it may be concluded that the supporting node implements Pull Mode and discovery may be aborted.
 		if (!node.supportsCC(CommandClasses.Association)) return "pull";
 
-		try {
-			if (
-				node.supportsCC(CommandClasses["Association Group Information"])
-			) {
-				const assocGroups = ccUtils.getAssociationGroups(
-					applHost,
-					node,
-				);
-				for (const group of assocGroups.values()) {
-					// Check if this group sends Notification Reports
-					if (
-						group.issuedCommands
-							?.get(CommandClasses.Notification)
-							?.includes(NotificationCommand.Report)
-					) {
-						return "push";
-					}
-				}
-				return "pull";
+		if (node.supportsCC(CommandClasses["Association Group Information"])) {
+			try {
+				const groupsIssueingNotifications = AssociationGroupInfoCC
+					.findGroupsForIssuedCommand(
+						applHost,
+						node,
+						this.ccId,
+						NotificationCommand.Report,
+					);
+				return groupsIssueingNotifications.length > 0 ? "push" : "pull";
+			} catch {
+				// We might be dealing with an older cache file, fall back to testing
 			}
-		} catch {
-			// We might be dealing with an older cache file, fall back to testing
 		}
 
 		applHost.controllerLog.logNode(node.id, {
@@ -435,15 +541,19 @@ export class NotificationCC extends CommandClass {
 				/* ignore */
 			}
 		}
-		// If everything failed, fall back to "pull"
-		return "pull";
+
+		// If everything failed, e.g. because the node is V1/V2, assume this is a "push" node.
+		// If we assumed "pull", we would have to query the node regularly, which can cause
+		// the node to return old (already handled) notifications.
+		// https://github.com/zwave-js/node-zwave-js/issues/5626
+		return "push";
 	}
 
 	/** Whether the node implements push or pull notifications */
 	public static getNotificationMode(
 		applHost: ZWaveApplicationHost,
 		node: IZWaveNode,
-	): "push" | "pull" | undefined {
+	): MaybeNotKnown<"push" | "pull"> {
 		return applHost
 			.getValueDB(node.id)
 			.getValue(NotificationCCValues.notificationMode.id);
@@ -466,6 +576,27 @@ export class NotificationCC extends CommandClass {
 			direction: "none",
 		});
 
+		// If one Association group issues Notification Reports,
+		// we must associate ourselves with that channel
+		try {
+			await ccUtils.assignLifelineIssueingCommand(
+				applHost,
+				endpoint,
+				this.ccId,
+				NotificationCommand.Report,
+			);
+		} catch {
+			applHost.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
+				message: `Configuring associations to receive ${
+					getCCName(
+						this.ccId,
+					)
+				} reports failed!`,
+				level: "warn",
+			});
+		}
+
 		let supportsV1Alarm = false;
 		if (this.version >= 2) {
 			applHost.controllerLog.logNode(node.id, {
@@ -487,18 +618,19 @@ export class NotificationCC extends CommandClass {
 			supportsV1Alarm = suppResponse.supportsV1Alarm;
 			const supportedNotificationTypes =
 				suppResponse.supportedNotificationTypes;
-			const supportedNotificationNames = lookupNotificationNames(
-				applHost,
-				supportedNotificationTypes,
+			const supportedNotificationNames = supportedNotificationTypes.map(
+				getNotificationName,
 			);
 			const supportedNotificationEvents = new Map<
 				number,
 				readonly number[]
 			>();
 
-			const logMessage = `received supported notification types:${supportedNotificationNames
-				.map((name) => `\n· ${name}`)
-				.join("")}`;
+			const logMessage = `received supported notification types:${
+				supportedNotificationNames
+					.map((name) => `\n· ${name}`)
+					.join("")
+			}`;
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -513,7 +645,8 @@ export class NotificationCC extends CommandClass {
 
 					applHost.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `querying supported notification events for ${name}...`,
+						message:
+							`querying supported notification events for ${name}...`,
 						direction: "outbound",
 					});
 					const supportedEvents = await api.getSupportedEvents(type);
@@ -521,9 +654,12 @@ export class NotificationCC extends CommandClass {
 						supportedNotificationEvents.set(type, supportedEvents);
 						applHost.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
-							message: `received supported notification events for ${name}: ${supportedEvents
-								.map(String)
-								.join(", ")}`,
+							message:
+								`received supported notification events for ${name}: ${
+									supportedEvents
+										.map(String)
+										.join(", ")
+								}`,
 							direction: "inbound",
 						});
 					}
@@ -554,8 +690,7 @@ export class NotificationCC extends CommandClass {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
-					const notificationConfig =
-						applHost.configManager.lookupNotification(type);
+					const notification = getNotification(type);
 
 					// Enable reports for each notification type
 					applHost.controllerLog.logNode(node.id, {
@@ -566,21 +701,22 @@ export class NotificationCC extends CommandClass {
 					await api.set(type, true);
 
 					// Set the value to idle if possible and there is no value yet
-					if (notificationConfig) {
+					if (notification) {
 						const events = supportedNotificationEvents.get(type);
 						if (events) {
 							// Find all variables that are supported by this node and have an idle state
-							for (const variable of notificationConfig.variables.filter(
-								(v) => !!v.idle,
-							)) {
+							for (
+								const variable of notification.variables
+									.filter((v) => !!v.idle)
+							) {
 								if (
 									[...variable.states.keys()].some((key) =>
-										events.includes(key),
+										events.includes(key)
 									)
 								) {
-									const value =
-										NotificationCCValues.notificationVariable(
-											notificationConfig.name,
+									const value = NotificationCCValues
+										.notificationVariable(
+											notification.name,
 											variable.name,
 										);
 
@@ -589,13 +725,13 @@ export class NotificationCC extends CommandClass {
 									// * do this only if the last update was more than 5 minutes ago
 									// * schedule an auto-idle if the last update was less than 5 minutes ago but before the current applHost start
 									if (
-										this.getValue(applHost, value) ==
-										undefined
+										this.getValue(applHost, value)
+											== undefined
 									) {
 										this.setValue(
 											applHost,
 											value,
-											0 /* idle */,
+											0, /* idle */
 										);
 									}
 								}
@@ -617,27 +753,38 @@ export class NotificationCC extends CommandClass {
 			?.compat?.alarmMapping;
 		if (mappings) {
 			// Find all mappings to a valid notification variable
+			const supportedNotifications = new Map<number, Set<number>>();
 			for (const { to } of mappings) {
-				const notificationConfig =
-					applHost.configManager.lookupNotification(
-						to.notificationType,
-					);
-				if (!notificationConfig) continue;
-				const valueConfig = notificationConfig.lookupValue(
+				const notification = getNotification(to.notificationType);
+				if (!notification) continue;
+				const valueConfig = getNotificationValue(
+					notification,
 					to.notificationEvent,
 				);
+
+				// Remember supported notification types and events to create the internal values later
+				if (!supportedNotifications.has(to.notificationType)) {
+					supportedNotifications.set(
+						to.notificationType,
+						new Set(),
+					);
+				}
+				const supportedNotificationTypesSet = supportedNotifications
+					.get(to.notificationType)!;
+				supportedNotificationTypesSet.add(to.notificationEvent);
+
 				if (valueConfig?.type !== "state") continue;
 
-				const notificationValue =
-					NotificationCCValues.notificationVariable(
-						notificationConfig.name,
+				const notificationValue = NotificationCCValues
+					.notificationVariable(
+						notification.name,
 						valueConfig.variableName,
 					);
 
 				// Create or update the metadata
 				const metadata = getNotificationValueMetadata(
 					this.getMetadata(applHost, notificationValue),
-					notificationConfig,
+					notification,
 					valueConfig,
 				);
 				this.setMetadata(applHost, notificationValue, metadata);
@@ -653,10 +800,24 @@ export class NotificationCC extends CommandClass {
 						this.setValue(
 							applHost,
 							notificationValue,
-							0 /* idle */,
+							0, /* idle */
 						);
 					}
 				}
+			}
+
+			// Remember supported notification types and events in the cache
+			this.setValue(
+				applHost,
+				NotificationCCValues.supportedNotificationTypes,
+				[...supportedNotifications.keys()],
+			);
+			for (const [type, events] of supportedNotifications) {
+				this.setValue(
+					applHost,
+					NotificationCCValues.supportedNotificationEvents(type),
+					[...events],
+				);
 			}
 		}
 
@@ -678,14 +839,12 @@ export class NotificationCC extends CommandClass {
 			});
 
 			// Load supported notification types and events from cache
-			const supportedNotificationTypes =
-				this.getValue<readonly number[]>(
-					applHost,
-					NotificationCCValues.supportedNotificationTypes,
-				) ?? [];
-			const supportedNotificationNames = lookupNotificationNames(
+			const supportedNotificationTypes = this.getValue<readonly number[]>(
 				applHost,
-				supportedNotificationTypes,
+				NotificationCCValues.supportedNotificationTypes,
+			) ?? [];
+			const supportedNotificationNames = supportedNotificationTypes.map(
+				getNotificationName,
 			);
 
 			for (let i = 0; i < supportedNotificationTypes.length; i++) {
@@ -708,11 +867,42 @@ export class NotificationCC extends CommandClass {
 				// @ts-expect-error
 				if (response) await node.handleCommand(response);
 			}
+
+			// Remember when we did this
+			this.setValue(
+				applHost,
+				NotificationCCValues.lastRefresh,
+				Date.now(),
+			);
 		}
+	}
+
+	public shouldRefreshValues(
+		this: SinglecastCC<this>,
+		applHost: ZWaveApplicationHost,
+	): boolean {
+		// Pull-mode nodes must be polled regularly
+
+		const isPullMode = NotificationCC.getNotificationMode(
+			applHost,
+			this.getNode(applHost)!,
+		) === "pull";
+		if (!isPullMode) return false;
+
+		const lastUpdated = this.getValue<number>(
+			applHost,
+			NotificationCCValues.lastRefresh,
+		);
+
+		return (
+			lastUpdated == undefined
+			|| Date.now() - lastUpdated > timespan.hours(6)
+		);
 	}
 }
 
-interface NotificationCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NotificationCCSetOptions extends CCCommandOptions {
 	notificationType: number;
 	notificationStatus: boolean;
 }
@@ -726,11 +916,9 @@ export class NotificationCCSet extends NotificationCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.notificationType = this.payload[0];
+			this.notificationStatus = this.payload[1] === 0xff;
 		} else {
 			this.notificationType = options.notificationType;
 			this.notificationStatus = options.notificationStatus;
@@ -747,30 +935,29 @@ export class NotificationCCSet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 				status: this.notificationStatus,
 			},
 		};
 	}
 }
 
+// @publicAPI
 export type NotificationCCReportOptions =
 	| {
-			alarmType: number;
-			alarmLevel: number;
-	  }
+		alarmType: number;
+		alarmLevel: number;
+	}
 	| {
-			notificationType: number;
-			notificationEvent: number;
-			eventParameters?: Buffer;
-			sequenceNumber?: number;
-	  };
+		notificationType: number;
+		notificationEvent: number;
+		eventParameters?: Buffer;
+		sequenceNumber?: number;
+	};
 
 @CCCommand(NotificationCommand.Report)
 @useSupervision()
@@ -789,8 +976,8 @@ export class NotificationCCReport extends NotificationCC {
 			this.alarmLevel = this.payload[1];
 			// V2..V3, reserved in V4+
 			if (
-				(this.version === 2 || this.version === 3) &&
-				this.payload.length >= 3
+				(this.version === 2 || this.version === 3)
+				&& this.payload.length >= 3
 			) {
 				this.zensorNetSourceNodeId = this.payload[2];
 			}
@@ -807,7 +994,7 @@ export class NotificationCCReport extends NotificationCC {
 				if (numEventParams > 0) {
 					validatePayload(this.payload.length >= 7 + numEventParams);
 					this.eventParameters = Buffer.from(
-						this.payload.slice(7, 7 + numEventParams),
+						this.payload.subarray(7, 7 + numEventParams),
 					);
 				}
 				if (containsSeqNum) {
@@ -841,9 +1028,9 @@ export class NotificationCCReport extends NotificationCC {
 
 		// Check if we need to re-interpret the alarm values somehow
 		if (
-			this.alarmType != undefined &&
-			this.alarmLevel != undefined &&
-			this.alarmType !== 0
+			this.alarmType != undefined
+			&& this.alarmLevel != undefined
+			&& this.alarmType !== 0
 		) {
 			if (this.version >= 2) {
 				// Check if the device actually supports Notification CC, but chooses
@@ -852,8 +1039,8 @@ export class NotificationCCReport extends NotificationCC {
 					readonly number[]
 				>(applHost, NotificationCCValues.supportedNotificationTypes);
 				if (
-					isArray(supportedNotificationTypes) &&
-					supportedNotificationTypes.includes(this.alarmType)
+					isArray(supportedNotificationTypes)
+					&& supportedNotificationTypes.includes(this.alarmType)
 				) {
 					const supportedNotificationEvents = this.getValue<
 						readonly number[]
@@ -864,8 +1051,8 @@ export class NotificationCCReport extends NotificationCC {
 						),
 					);
 					if (
-						isArray(supportedNotificationEvents) &&
-						supportedNotificationEvents.includes(this.alarmLevel)
+						isArray(supportedNotificationEvents)
+						&& supportedNotificationEvents.includes(this.alarmLevel)
 					) {
 						// This alarm frame corresponds to a valid notification event
 						applHost.controllerLog.logNode(
@@ -885,9 +1072,9 @@ export class NotificationCCReport extends NotificationCC {
 				)?.compat?.alarmMapping;
 				const match = mapping?.find(
 					(m) =>
-						m.from.alarmType === this.alarmType &&
-						(m.from.alarmLevel == undefined ||
-							m.from.alarmLevel === this.alarmLevel),
+						m.from.alarmType === this.alarmType
+						&& (m.from.alarmLevel == undefined
+							|| m.from.alarmLevel === this.alarmLevel),
 				);
 				if (match) {
 					applHost.controllerLog.logNode(
@@ -898,9 +1085,11 @@ export class NotificationCCReport extends NotificationCC {
 					this.notificationEvent = match.to.notificationEvent;
 					if (match.to.eventParameters) {
 						this.eventParameters = {};
-						for (const [key, val] of Object.entries(
-							match.to.eventParameters,
-						)) {
+						for (
+							const [key, val] of Object.entries(
+								match.to.eventParameters,
+							)
+						) {
 							if (typeof val === "number") {
 								this.eventParameters[key] = val;
 							} else if (val === "alarmLevel") {
@@ -948,48 +1137,46 @@ export class NotificationCCReport extends NotificationCC {
 
 	public sequenceNumber: number | undefined;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (this.alarmType) {
 			message = {
 				"V1 alarm type": this.alarmType,
-				"V1 alarm level": this.alarmLevel,
+				"V1 alarm level": this.alarmLevel!,
 			};
 		}
 
-		let valueConfig: NotificationValueDefinition | undefined;
+		let valueConfig: NotificationValue | undefined;
 		if (this.notificationType) {
-			try {
-				valueConfig = applHost.configManager
-					.lookupNotification(this.notificationType)
-					?.lookupValue(this.notificationEvent!);
-			} catch {
-				/* ignore */
+			const notification = getNotification(this.notificationType);
+			if (notification) {
+				valueConfig = getNotificationValue(
+					notification,
+					this.notificationEvent!,
+				);
 			}
 			if (valueConfig) {
 				message = {
 					...message,
-					"notification type":
-						applHost.configManager.getNotificationName(
-							this.notificationType,
-						),
-					"notification status": this.notificationStatus,
-					[`notification ${valueConfig.type}`]:
-						valueConfig.label ??
-						`Unknown (${num2hex(this.notificationEvent)})`,
+					"notification type": getNotificationName(
+						this.notificationType,
+					),
+					"notification status": this.notificationStatus!,
+					[`notification ${valueConfig.type}`]: valueConfig.label
+						?? `Unknown (${num2hex(this.notificationEvent)})`,
 				};
 			} else if (this.notificationEvent === 0x00) {
 				message = {
 					...message,
 					"notification type": this.notificationType,
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					"notification state": "idle",
 				};
 			} else {
 				message = {
 					...message,
 					"notification type": this.notificationType,
-					"notification status": this.notificationStatus,
+					"notification status": this.notificationStatus!,
 					"notification event": num2hex(this.notificationEvent),
 				};
 			}
@@ -1005,12 +1192,10 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to look up the enum label
 				let found = false;
 				if (
-					valueConfig?.parameter instanceof
-					NotificationParameterWithEnum
+					valueConfig?.parameter?.type === "enum"
 				) {
-					const label = valueConfig.parameter.values.get(
-						this.eventParameters,
-					);
+					const label =
+						valueConfig.parameter.values[this.eventParameters];
 					if (label) {
 						message["state parameters"] = label;
 						found = true;
@@ -1030,51 +1215,62 @@ export class NotificationCCReport extends NotificationCC {
 					.map(([param, val]) => `\n  ${param}: ${num2hex(val)}`)
 					.join("");
 			}
+		} else if (
+			valueConfig?.parameter?.type === "enum"
+			&& valueConfig.parameter.default != undefined
+		) {
+			const label = valueConfig.parameter.values[
+				valueConfig.parameter.default
+			];
+			if (label) {
+				message["state parameters"] = `${label} (omitted)`;
+			}
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 
 	private parseEventParameters(applHost: ZWaveApplicationHost): void {
-		// This only makes sense for V2+ notifications with a non-empty event parameters buffer
+		// This only makes sense for V2+ notifications
 		if (
-			this.notificationType == undefined ||
-			this.notificationEvent == undefined ||
-			!Buffer.isBuffer(this.eventParameters)
+			this.notificationType == undefined
+			|| this.notificationEvent == undefined
 		) {
 			return;
 		}
 
 		// Look up the received notification and value in the config
-		const notificationConfig = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
-		if (!notificationConfig) return;
-		const valueConfig = notificationConfig.lookupValue(
+		const notification = getNotification(this.notificationType);
+		if (!notification) return;
+		const valueConfig = getNotificationValue(
+			notification,
 			this.notificationEvent,
 		);
 		if (!valueConfig) return;
 
 		// Parse the event parameters if possible
-		if (
-			valueConfig.parameter instanceof NotificationParameterWithDuration
-		) {
+		if (valueConfig.parameter?.type === "duration") {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters contain a Duration
 			this.eventParameters = Duration.parseReport(
 				this.eventParameters[0],
 			);
-		} else if (
-			valueConfig.parameter instanceof
-			NotificationParameterWithCommandClass
-		) {
+		} else if (valueConfig.parameter?.type === "commandclass") {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters **should** contain a CC, however there might be some exceptions
 			if (
-				this.eventParameters.length === 1 &&
-				notificationConfig.id === 0x06 &&
-				(this.notificationEvent === 0x05 ||
-					this.notificationEvent === 0x06)
+				this.eventParameters.length === 1
+				&& notification.type === 0x06
+				&& (this.notificationEvent === 0x05
+					|| this.notificationEvent === 0x06)
 			) {
 				// Access control -> Keypad Lock/Unlock operation
 				// Some devices only send the User ID, not a complete CC payload
@@ -1093,15 +1289,15 @@ export class NotificationCCReport extends NotificationCC {
 					validatePayload(!(cc instanceof InvalidCC));
 
 					if (isNotificationEventPayload(cc)) {
-						this.eventParameters =
-							cc.toNotificationEventParameters();
+						this.eventParameters = cc
+							.toNotificationEventParameters();
 					} else {
 						// If a CC has no good toJSON() representation, we're only interested in the payload
 						let json = cc.toJSON();
 						if (
-							"nodeId" in json &&
-							"ccId" in json &&
-							"payload" in json
+							"nodeId" in json
+							&& "ccId" in json
+							&& "payload" in json
 						) {
 							json = pick(json, ["payload"]);
 						}
@@ -1109,10 +1305,10 @@ export class NotificationCCReport extends NotificationCC {
 					}
 				} catch (e) {
 					if (
-						isZWaveError(e) &&
-						e.code ===
-							ZWaveErrorCodes.PacketFormat_InvalidPayload &&
-						Buffer.isBuffer(this.eventParameters)
+						isZWaveError(e)
+						&& e.code
+							=== ZWaveErrorCodes.PacketFormat_InvalidPayload
+						&& Buffer.isBuffer(this.eventParameters)
 					) {
 						const ccId = CommandClass.getCommandClass(
 							this.eventParameters,
@@ -1121,9 +1317,9 @@ export class NotificationCCReport extends NotificationCC {
 							this.eventParameters,
 						);
 						if (
-							ccId === CommandClasses["User Code"] &&
-							ccCommand === UserCodeCommand.Report &&
-							this.eventParameters.length >= 3
+							ccId === CommandClasses["User Code"]
+							&& ccCommand === UserCodeCommand.Report
+							&& this.eventParameters.length >= 3
 						) {
 							// Access control -> Keypad Lock/Unlock operation
 							// Some devices report the user code with truncated UserCode reports
@@ -1143,25 +1339,35 @@ export class NotificationCCReport extends NotificationCC {
 					}
 				}
 			}
-		} else if (
-			valueConfig.parameter instanceof NotificationParameterWithValue
-		) {
+		} else if (valueConfig.parameter?.type === "value") {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters contain a named value
 			this.eventParameters = {
-				[valueConfig.parameter.propertyName]:
-					this.eventParameters.readUIntBE(
+				[valueConfig.parameter.propertyName]: this.eventParameters
+					.readUIntBE(
 						0,
 						this.eventParameters.length,
 					),
 			};
-		} else if (
-			valueConfig.parameter instanceof NotificationParameterWithEnum
-		) {
+		} else if (valueConfig.parameter?.type === "enum") {
 			// The parameters may contain an enum value
-			this.eventParameters =
-				this.eventParameters.length === 1
-					? this.eventParameters[0]
-					: undefined;
+			this.eventParameters = Buffer.isBuffer(this.eventParameters)
+					&& this.eventParameters.length === 1
+				? this.eventParameters[0]
+				: undefined;
+
+			// Some devices send notifications without an event parameter when they should.
+			// In this case, fall back to the default value where possible.
+
+			if (
+				this.eventParameters == undefined
+				&& valueConfig.parameter.default != undefined
+			) {
+				this.eventParameters = valueConfig.parameter.default;
+			}
 		}
 	}
 
@@ -1176,16 +1382,16 @@ export class NotificationCCReport extends NotificationCC {
 			this.payload = Buffer.from([this.alarmType, this.alarmLevel]);
 		} else {
 			if (
-				this.notificationType == undefined ||
-				this.notificationEvent == undefined
+				this.notificationType == undefined
+				|| this.notificationEvent == undefined
 			) {
 				throw new ZWaveError(
 					`Notification CC reports requires the notification type and event to be set!`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (
-				this.eventParameters != undefined &&
-				!Buffer.isBuffer(this.eventParameters)
+				this.eventParameters != undefined
+				&& !Buffer.isBuffer(this.eventParameters)
 			) {
 				throw new ZWaveError(
 					`When sending Notification CC reports, the event parameters can only be buffers!`,
@@ -1193,8 +1399,8 @@ export class NotificationCCReport extends NotificationCC {
 				);
 			}
 			const controlByte =
-				(this.sequenceNumber != undefined ? 0b1000_0000 : 0) |
-				((this.eventParameters?.length ?? 0) & 0b11111);
+				(this.sequenceNumber != undefined ? 0b1000_0000 : 0)
+				| ((this.eventParameters?.length ?? 0) & 0b11111);
 			this.payload = Buffer.from([
 				0,
 				0,
@@ -1223,14 +1429,16 @@ export class NotificationCCReport extends NotificationCC {
 
 type NotificationCCGetSpecificOptions =
 	| {
-			alarmType: number;
-	  }
+		alarmType: number;
+	}
 	| {
-			notificationType: number;
-			notificationEvent?: number;
-	  };
-type NotificationCCGetOptions = CCCommandOptions &
-	NotificationCCGetSpecificOptions;
+		notificationType: number;
+		notificationEvent?: number;
+	};
+// @publicAPI
+export type NotificationCCGetOptions =
+	& CCCommandOptions
+	& NotificationCCGetSpecificOptions;
 
 @CCCommand(NotificationCommand.Get)
 @expectedCCResponse(NotificationCCReport)
@@ -1281,31 +1489,30 @@ export class NotificationCCGet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.alarmType != undefined) {
 			message["V1 alarm type"] = this.alarmType;
 		}
 		if (this.notificationType != undefined) {
-			message["notification type"] =
-				applHost.configManager.getNotificationName(
-					this.notificationType,
-				);
+			message["notification type"] = getNotificationName(
+				this.notificationType,
+			);
 			if (this.notificationEvent != undefined) {
-				message["notification event"] =
-					applHost.configManager
-						.lookupNotification(this.notificationType)
-						?.events.get(this.notificationEvent)?.label ??
-					`Unknown (${num2hex(this.notificationEvent)})`;
+				message["notification event"] = getNotificationEventName(
+					this.notificationType,
+					this.notificationEvent,
+				);
 			}
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
+// @publicAPI
 export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
 	supportsV1Alarm: boolean;
 	supportedNotificationTypes: number[];
@@ -1329,7 +1536,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 				numBitMaskBytes > 0,
 				this.payload.length >= 1 + numBitMaskBytes,
 			);
-			const notificationBitMask = this.payload.slice(
+			const notificationBitMask = this.payload.subarray(
 				1,
 				1 + numBitMaskBytes,
 			);
@@ -1366,17 +1573,14 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports V1 alarm": this.supportsV1Alarm,
 				"supported notification types": this.supportedNotificationTypes
 					.map(
-						(t) =>
-							`\n· ${applHost.configManager.getNotificationName(
-								t,
-							)}`,
+						(t) => `\n· ${getNotificationName(t)}`,
 					)
 					.join(""),
 			},
@@ -1388,8 +1592,10 @@ export class NotificationCCSupportedReport extends NotificationCC {
 @expectedCCResponse(NotificationCCSupportedReport)
 export class NotificationCCSupportedGet extends NotificationCC {}
 
+// @publicAPI
 export interface NotificationCCEventSupportedReportOptions
-	extends CCCommandOptions {
+	extends CCCommandOptions
+{
 	notificationType: number;
 	supportedEvents: number[];
 }
@@ -1415,7 +1621,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			}
 
 			validatePayload(this.payload.length >= 2 + numBitMaskBytes);
-			const eventBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
+			const eventBitMask = this.payload.subarray(2, 2 + numBitMaskBytes);
 			this.supportedEvents = parseBitMask(
 				eventBitMask,
 				// In this mask, bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
@@ -1440,11 +1646,9 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		);
 
 		// For each event, predefine the value metadata
-		const notificationConfig = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
+		const notification = getNotification(this.notificationType);
 
-		if (!notificationConfig) {
+		if (!notification) {
 			// This is an unknown notification
 			this.setMetadata(
 				applHost,
@@ -1457,11 +1661,11 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			let isFirst = true;
 			for (const value of this.supportedEvents) {
 				// Find out which property we need to update
-				const valueConfig = notificationConfig.lookupValue(value);
+				const valueConfig = getNotificationValue(notification, value);
 				if (valueConfig?.type === "state") {
-					const notificationValue =
-						NotificationCCValues.notificationVariable(
-							notificationConfig.name,
+					const notificationValue = NotificationCCValues
+						.notificationVariable(
+							notification.name,
 							valueConfig.variableName,
 						);
 
@@ -1470,7 +1674,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 						isFirst
 							? undefined
 							: this.getMetadata(applHost, notificationValue),
-						notificationConfig,
+						notification,
 						valueConfig,
 					);
 
@@ -1502,22 +1706,19 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const notification = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 				"supported events": this.supportedEvents
 					.map(
 						(e) =>
 							`\n· ${
-								notification?.lookupValue(e)?.label ??
-								`Unknown (${num2hex(e)})`
+								getNotificationValueName(
+									this.notificationType,
+									e,
+								)
 							}`,
 					)
 					.join(""),
@@ -1526,7 +1727,10 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	}
 }
 
-interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NotificationCCEventSupportedGetOptions
+	extends CCCommandOptions
+{
 	notificationType: number;
 }
 
@@ -1555,13 +1759,11 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 			},
 		};
 	}

@@ -18,8 +18,8 @@
 		{
 			"#": "1",
 			"label": "Dimming Speed (Z-Wave)",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 3,
@@ -33,8 +33,8 @@
 		{
 			"#": "2",
 			"label": "Dimming Speed (Manual)",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 101,
 			"defaultValue": 101,
@@ -44,7 +44,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 101
 				}
 			]
@@ -52,8 +52,8 @@
 		{
 			"#": "3",
 			"label": "Ramp Rate (Z-Wave)",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 101,
 			"defaultValue": 101,
@@ -63,7 +63,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 101
 				}
 			]
@@ -71,8 +71,8 @@
 		{
 			"#": "4",
 			"label": "Ramp Rate (Manual)",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 101,
 			"defaultValue": 101,
@@ -82,7 +82,7 @@
 					"value": 0
 				},
 				{
-					"label": "Synced with Parameter 1",
+					"label": "Synced with parameter 1",
 					"value": 101
 				}
 			]
@@ -91,8 +91,8 @@
 			"#": "5",
 			"$if": "firmwareVersion < 1.57",
 			"label": "Minimum Dim Level",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 45,
 			"defaultValue": 1
@@ -101,8 +101,8 @@
 			"#": "5",
 			"$if": "firmwareVersion >= 1.57",
 			"label": "Minimum Dim Level",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 1
@@ -110,8 +110,8 @@
 		{
 			"#": "6",
 			"label": "Maximum Dim Level",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 55,
 			"maxValue": 99,
 			"defaultValue": 99
@@ -123,9 +123,9 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto-off Timer",
-			"unit": "seconds",
+			"label": "Auto-Off Timer",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
@@ -143,7 +143,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Previous State",
+					"label": "Previous state",
 					"value": 0
 				}
 			]
@@ -155,7 +155,7 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Previous State",
+					"label": "Previous state",
 					"value": 0
 				}
 			]
@@ -277,7 +277,6 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Red",
@@ -463,11 +462,11 @@
 					"value": 2
 				},
 				{
-					"label": "Fast Blink",
+					"label": "Fast blink",
 					"value": 3
 				},
 				{
-					"label": "Slow Blink",
+					"label": "Slow blink",
 					"value": 4
 				},
 				{
@@ -479,8 +478,8 @@
 		{
 			"#": "17",
 			"label": "LED Indicator: Timeout",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3
@@ -495,8 +494,8 @@
 		{
 			"#": "19",
 			"label": "Power & Energy Report Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 3600
@@ -505,8 +504,8 @@
 			"#": "20",
 			"$if": "firmwareVersion >= 1.43",
 			"label": "Energy Report Threshold",
-			"unit": "0.01 kWh",
 			"valueSize": 1,
+			"unit": "0.01 kWh",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 10
@@ -527,7 +526,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Neutral",
+					"label": "No neutral",
 					"value": 0
 				},
 				{
@@ -544,15 +543,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single-Pole (One Switch)",
+					"label": "Single-Pole (One switch)",
 					"value": 0
 				},
 				{
-					"label": "Multi-Switch (Dumb Switch)",
+					"label": "Multi-Switch (Dumb switch)",
 					"value": 1
 				},
 				{
-					"label": "Multi-Switch (Auxiliary Switch)",
+					"label": "Multi-Switch (Auxiliary switch)",
 					"value": 2
 				}
 			]
@@ -561,8 +560,8 @@
 			"#": "50",
 			"$if": "firmwareVersion >= 1.49",
 			"label": "Button Delay Period",
-			"unit": "0.1 seconds",
 			"valueSize": 1,
+			"unit": "0.1 seconds",
 			"minValue": 1,
 			"maxValue": 9,
 			"defaultValue": 7
@@ -587,11 +586,11 @@
 					"value": 0
 				},
 				{
-					"label": "On/Off Only",
+					"label": "On/Off only",
 					"value": 1
 				},
 				{
-					"label": "Smart Bulb",
+					"label": "Smart bulb",
 					"value": 2
 				}
 			]

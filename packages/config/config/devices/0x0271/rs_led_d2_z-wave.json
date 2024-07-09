@@ -2,7 +2,7 @@
 	"manufacturer": "STEINEL GmbH",
 	"manufacturerId": "0x0271",
 	"label": "RS LED D2 Z-Wave",
-	"description": "Indoor LED-light with motion sensor",
+	"description": "Indoor LED-Light with Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0001",

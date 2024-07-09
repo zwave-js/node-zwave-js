@@ -1,6 +1,6 @@
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CommandClass, CommandClassOptions } from "./CommandClass";
+import { CommandClass, type CommandClassOptions } from "./CommandClass";
 
 /** Defines the static side of an encapsulating command class */
 export interface EncapsulatingCommandClassStatic {
@@ -49,6 +49,14 @@ export function isEncapsulatingCommandClass(
 	return false;
 }
 
+export function getInnermostCommandClass(cc: CommandClass): CommandClass {
+	if (isEncapsulatingCommandClass(cc)) {
+		return getInnermostCommandClass(cc.encapsulated);
+	} else {
+		return cc;
+	}
+}
+
 /** Defines the static side of an encapsulating command class */
 export interface MultiEncapsulatingCommandClassStatic {
 	new (
@@ -80,8 +88,8 @@ export function isMultiEncapsulatingCommandClass(
 	// The encapsulated property must  array of CCs
 	if (
 		!(
-			isArray((cc as any).encapsulated) &&
-			(cc as any).encapsulated.every(
+			isArray((cc as any).encapsulated)
+			&& (cc as any).encapsulated.every(
 				(item: any) => item instanceof CommandClass,
 			)
 		)

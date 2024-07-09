@@ -57,15 +57,15 @@
 		{
 			"#": "6",
 			"label": "Auto Scene Mode Duration",
-			"unit": "2",
 			"valueSize": 2,
+			"unit": "2",
 			"minValue": 1,
 			"maxValue": 1127,
 			"defaultValue": 3
 		},
 		{
 			"#": "7",
-			"label": "Memory Device Status at Power Cut",
+			"label": "Memory Device Status At Power Cut",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -97,7 +97,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Dimming Time when key pressed",
+			"label": "Dimming Time When Key Pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,

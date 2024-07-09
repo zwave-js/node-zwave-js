@@ -1,4 +1,4 @@
-import { ICommandClass, MAX_SUPERVISION_SESSION_ID } from "@zwave-js/core";
+import { type ICommandClass, MAX_SUPERVISION_SESSION_ID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
@@ -7,19 +7,24 @@ import {
 	SerialAPIParser,
 } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { createWrappingCounter, TimedExpectation } from "@zwave-js/shared/safe";
+import { AsyncQueue } from "@zwave-js/shared";
+import { TimedExpectation, createWrappingCounter } from "@zwave-js/shared/safe";
+import { wait } from "alcalzone-shared/async";
+import { randomInt } from "node:crypto";
 import {
+	type MockControllerCapabilities,
 	getDefaultMockControllerCapabilities,
-	MockControllerCapabilities,
 } from "./MockControllerCapabilities";
 import type { MockNode } from "./MockNode";
 import {
-	createMockZWaveAckFrame,
-	MockZWaveAckFrame,
-	MockZWaveFrame,
-	MockZWaveFrameType,
-	MockZWaveRequestFrame,
+	type LazyMockZWaveFrame,
 	MOCK_FRAME_ACK_TIMEOUT,
+	type MockZWaveAckFrame,
+	type MockZWaveFrame,
+	MockZWaveFrameType,
+	type MockZWaveRequestFrame,
+	createMockZWaveAckFrame,
+	unlazyMockZWaveFrame,
 } from "./MockZWaveFrame";
 
 export interface MockControllerOptions {
@@ -44,23 +49,27 @@ export class MockController {
 		// const valuesStorage = new Map();
 		// const metadataStorage = new Map();
 		// const valueDBCache = new Map<number, ValueDB>();
+		const supervisionSessionIDs = new Map<number, () => number>();
 
 		this.host = {
 			ownNodeId: options.ownNodeId ?? 1,
 			homeId: options.homeId ?? 0x7e571000,
 			securityManager: undefined,
 			securityManager2: undefined,
+			securityManagerLR: undefined,
 			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
-			getNextSupervisionSessionId: createWrappingCounter(
-				MAX_SUPERVISION_SESSION_ID,
-			),
-			getSafeCCVersionForNode: () => 100,
-			getSupportedCCVersionForEndpoint: (
-				cc,
-				nodeId,
-				endpointIndex = 0,
-			) => {
+			getNextSupervisionSessionId: (nodeId) => {
+				if (!supervisionSessionIDs.has(nodeId)) {
+					supervisionSessionIDs.set(
+						nodeId,
+						createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
+					);
+				}
+				return supervisionSessionIDs.get(nodeId)!();
+			},
+			getSafeCCVersion: () => 100,
+			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
 					return 0;
 				}
@@ -73,9 +82,7 @@ export class MockController {
 			// This is handled by the nodes hosts
 			getHighestSecurityClass: () => undefined,
 			hasSecurityClass: () => false,
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			setSecurityClass: () => {},
-
 			// getValueDB: (nodeId) => {
 			// 	if (!valueDBCache.has(nodeId)) {
 			// 		valueDBCache.set(
@@ -95,10 +102,13 @@ export class MockController {
 			...getDefaultMockControllerCapabilities(),
 			...options.capabilities,
 		};
+
+		void this.execute();
 	}
 
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
+
 	private expectedHostACKs: TimedExpectation[] = [];
 	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
 	private expectedNodeFrames: Map<
@@ -107,8 +117,20 @@ export class MockController {
 	> = new Map();
 	private behaviors: MockControllerBehavior[] = [];
 
+	/** Shared medium for sending messages back and forth */
+	private air = new AsyncQueue<
+		LazyMockZWaveFrame & {
+			source?: number;
+			target?: number;
+			onTransmit?: (frame: MockZWaveFrame) => void;
+		}
+	>();
+
 	/** Records the messages received from the host to perform assertions on them */
-	private receivedHostMessages: Message[] = [];
+	private _receivedHostMessages: Message[] = [];
+	public get receivedHostMessages(): readonly Readonly<Message>[] {
+		return this._receivedHostMessages;
+	}
 
 	private _nodes = new Map<number, MockNode>();
 	public get nodes(): ReadonlyMap<number, MockNode> {
@@ -130,8 +152,12 @@ export class MockController {
 	/** Can be used by behaviors to store controller related state */
 	public readonly state = new Map<string, unknown>();
 
+	/** Controls whether the controller automatically ACKs messages from the host before handling them */
+	public autoAckHostMessages: boolean = true;
 	/** Controls whether the controller automatically ACKs node frames before handling them */
 	public autoAckNodeFrames: boolean = true;
+	/** Allows reproducing issues with the 7.19.x firmware where the high nibble of the ACK after soft-reset is corrupted */
+	public corruptACK: boolean = false;
 
 	/** Gets called when parsed/chunked data is received from the serial port */
 	private async serialOnData(
@@ -168,9 +194,11 @@ export class MockController {
 				origin: MessageOrigin.Host,
 				parseCCs: false,
 			});
-			this.receivedHostMessages.push(msg);
-			// all good, respond with ACK
-			this.sendHeaderToHost(MessageHeaders.ACK);
+			this._receivedHostMessages.push(msg);
+			if (this.autoAckHostMessages) {
+				// all good, respond with ACK
+				this.ackHostMessage();
+			}
 		} catch (e: any) {
 			throw new Error(
 				`Mock controller received an invalid message from the host: ${e.stack}`,
@@ -185,8 +213,9 @@ export class MockController {
 			handler.resolve(msg);
 		} else {
 			for (const behavior of this.behaviors) {
-				if (await behavior.onHostMessage?.(this.host, this, msg))
+				if (await behavior.onHostMessage?.(this.host, this, msg)) {
 					return;
+				}
 			}
 		}
 	}
@@ -207,7 +236,7 @@ export class MockController {
 			return await ack;
 		} finally {
 			const index = this.expectedHostACKs.indexOf(ack);
-			if (index !== -1) this.expectedHostACKs.splice(index, 1);
+			if (index !== -1) void this.expectedHostACKs.splice(index, 1);
 		}
 	}
 
@@ -230,7 +259,7 @@ export class MockController {
 			return await expectation;
 		} finally {
 			const index = this.expectedHostMessages.indexOf(expectation);
-			if (index !== -1) this.expectedHostMessages.splice(index, 1);
+			if (index !== -1) void this.expectedHostMessages.splice(index, 1);
 		}
 	}
 
@@ -262,7 +291,7 @@ export class MockController {
 			const array = this.expectedNodeFrames.get(node.id);
 			if (array) {
 				const index = array.indexOf(expectation);
-				if (index !== -1) array.splice(index, 1);
+				if (index !== -1) void array.splice(index, 1);
 			}
 		}
 	}
@@ -281,8 +310,8 @@ export class MockController {
 			node,
 			timeout,
 			(msg): msg is MockZWaveRequestFrame & { payload: T } =>
-				msg.type === MockZWaveFrameType.Request &&
-				predicate(msg.payload),
+				msg.type === MockZWaveFrameType.Request
+				&& predicate(msg.payload),
 		);
 		return ret.payload;
 	}
@@ -316,6 +345,20 @@ export class MockController {
 		await this.expectHostACK(1000);
 	}
 
+	/**
+	 * Sends an ACK frame to the host
+	 */
+	public ackHostMessage(): void {
+		if (this.corruptACK) {
+			const highNibble = randomInt(1, 0xf) << 4;
+			this.serial.emitData(
+				Buffer.from([highNibble | MessageHeaders.ACK]),
+			);
+		} else {
+			this.sendHeaderToHost(MessageHeaders.ACK);
+		}
+	}
+
 	/** Gets called when a {@link MockZWaveFrame} is received from a {@link MockNode} */
 	public async onNodeFrame(
 		node: MockNode,
@@ -323,10 +366,10 @@ export class MockController {
 	): Promise<void> {
 		// Ack the frame if desired
 		if (
-			this.autoAckNodeFrames &&
-			frame.type === MockZWaveFrameType.Request
+			this.autoAckNodeFrames
+			&& frame.type === MockZWaveFrameType.Request
 		) {
-			await this.ackNodeRequestFrame(node, frame);
+			void this.ackNodeRequestFrame(node, frame);
 		}
 
 		// Handle message buffer. Check for pending expectations first.
@@ -338,8 +381,11 @@ export class MockController {
 		} else {
 			// Then apply generic predefined behavior
 			for (const behavior of this.behaviors) {
-				if (await behavior.onNodeFrame?.(this.host, this, node, frame))
+				if (
+					await behavior.onNodeFrame?.(this.host, this, node, frame)
+				) {
 					return;
+				}
 			}
 		}
 	}
@@ -364,16 +410,16 @@ export class MockController {
 	 */
 	public async sendToNode(
 		node: MockNode,
-		frame: MockZWaveFrame,
+		frame: LazyMockZWaveFrame,
 	): Promise<MockZWaveAckFrame | undefined> {
-		let ret: Promise<MockZWaveAckFrame> | undefined;
-		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
-			ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
-		}
-		process.nextTick(() => {
-			void node.onControllerFrame(frame);
+		this.air.add({
+			target: node.id,
+			...frame,
 		});
-		if (ret) return await ret;
+
+		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
+			return await this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
+		}
 	}
 
 	public defineBehavior(...behaviors: MockControllerBehavior[]): void {
@@ -389,7 +435,7 @@ export class MockController {
 		},
 	): void {
 		const { errorMessage } = options ?? {};
-		const index = this.receivedHostMessages.findIndex(predicate);
+		const index = this._receivedHostMessages.findIndex(predicate);
 		if (index === -1) {
 			throw new Error(
 				`Did not receive a host message matching the predicate!${
@@ -401,7 +447,41 @@ export class MockController {
 
 	/** Forgets all recorded messages received from the host */
 	public clearReceivedHostMessages(): void {
-		this.receivedHostMessages = [];
+		this._receivedHostMessages = [];
+	}
+
+	public async execute(): Promise<void> {
+		for await (const { source, target, onTransmit, ...frame } of this.air) {
+			if (!source && target) {
+				// controller -> node
+				const node = this._nodes.get(target);
+				if (!node) continue;
+
+				await wait(node.capabilities.txDelay);
+
+				const unlazy = unlazyMockZWaveFrame(frame);
+				onTransmit?.(unlazy);
+				node.onControllerFrame(unlazy).catch((e) => {
+					console.error(e);
+				});
+			} else if (source && !target) {
+				// node -> controller
+				const node = this._nodes.get(source);
+				if (!node) continue;
+
+				await wait(node.capabilities.txDelay);
+
+				const unlazy = unlazyMockZWaveFrame(frame);
+				onTransmit?.(unlazy);
+				this.onNodeFrame(node, unlazy).catch((e) => {
+					console.error(e);
+				});
+			}
+		}
+	}
+
+	public destroy(): void {
+		this.air.abort();
 	}
 }
 

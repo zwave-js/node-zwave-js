@@ -10,20 +10,20 @@ This is where **Z-Wave JS** comes in. It has the difficult parts, DOs and DON'Ts
 
 For applications built with Node.js, the npm package `zwave-js` can be installed and used directly. To get started, check out [Quick Start](getting-started/quickstart.md) and the [API overview](api/overview.md). Examples for this can be found in the following applications:
 
--   [Z-Wave JS UI](https://github.com/zwave-js/zwave-js-ui) _(formerly ZwaveJS2MQTT)_
--   [ioBroker.zwave2](https://github.com/AlCalzone/ioBroker.zwave2)
--   [node-red-contrib-zwave-js](https://github.com/zwave-js/node-red-contrib-zwave-js)
+- [Z-Wave JS UI](https://github.com/zwave-js/zwave-js-ui) _(formerly ZwaveJS2MQTT)_
+- [ioBroker.zwave2](https://github.com/AlCalzone/ioBroker.zwave2)
+- [node-red-contrib-zwave-js](https://github.com/zwave-js/node-red-contrib-zwave-js)
 
 For all other languages, [`@zwave-js/server`](https://github.com/zwave-js/zwave-js-server) hosts Z-Wave JS in a Node.js process and exposes [an API](https://github.com/zwave-js/zwave-js-server#api) via websockets. Example applications for this approach can be found here:
 
--   [Home Assistant](https://github.com/home-assistant-libs/zwave-js-server-python), client library written in Python
--   [ZWaveJS.NET](https://github.com/zwave-js/ZWaveJS.NET), a wrapper/client for the .NET ecosystem
+- [Home Assistant](https://github.com/home-assistant-libs/zwave-js-server-python), client library written in Python
+- [ZWaveJS.NET](https://github.com/zwave-js/ZWaveJS.NET), a wrapper/client for the .NET ecosystem
 
 ## How to support the development
 
 By openly working together on Z-Wave JS, access to Z-Wave is commoditized and everyone works on the same stable platform. This has worked great for Linux, which is powering the entire world now.
 If you'd like to help support the future of the project and make the Z-Wave world a better place, please consider:
 
--   [Financially supporting Z-Wave JS to get priority support](https://github.com/sponsors/AlCalzone).
--   Contributing [configuration files](config-files/overview) for new devices, so we have our hands free for the actual development.
--   Sending us devices to test. Working with an actual device is much more efficient than trying to debug with logfiles.
+- [Financially supporting Z-Wave JS to get priority support](https://github.com/sponsors/AlCalzone).
+- Contributing [configuration files](config-files/overview) for new devices, so we have our hands free for the actual development.
+- Sending us devices to test. Working with an actual device is much more efficient than trying to debug with logfiles.

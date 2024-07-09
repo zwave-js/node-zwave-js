@@ -17,17 +17,17 @@
 		{
 			"#": "1",
 			"label": "Siren Alarm Duration",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 600,
 			"defaultValue": 180
 		},
 		{
 			"#": "2",
-			"label": "Temperature & Humidity reporting interval",
-			"unit": "minutes",
+			"label": "Temperature & Humidity Reporting Interval",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 1440,
 			"defaultValue": 30
@@ -45,7 +45,7 @@
 		"commandClasses": {
 			"remove": {
 				// Supervised commands always result in a status of "Fail"
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

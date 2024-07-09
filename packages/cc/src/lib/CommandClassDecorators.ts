@@ -1,10 +1,10 @@
 import {
+	type CommandClasses,
+	ZWaveError,
+	ZWaveErrorCodes,
 	createReflectionDecorator,
 	createReflectionDecoratorPair,
 	createValuelessReflectionDecorator,
-	ZWaveError,
-	ZWaveErrorCodes,
-	type CommandClasses,
 } from "@zwave-js/core";
 import type {
 	TypedClassDecorator,
@@ -111,9 +111,8 @@ export function getCommandClass(cc: CommandClass | CCAPI): CommandClasses {
 	// get the class constructor
 	const constr = cc.constructor;
 	// retrieve the current metadata
-	const ret =
-		CCAndCommandDecorator.lookupSuperValueStatic(constr) ??
-		apiDecorator.lookupValueStatic(constr);
+	const ret = CCAndCommandDecorator.lookupSuperValueStatic(constr)
+		?? apiDecorator.lookupValueStatic(constr);
 
 	if (ret == undefined) {
 		throw new ZWaveError(

@@ -1,20 +1,20 @@
 import {
 	CommandClasses,
-	IVirtualEndpoint,
-	IZWaveEndpoint,
-	validatePayload,
+	type IVirtualEndpoint,
+	type IZWaveEndpoint,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -22,15 +22,16 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { ManufacturerSpecificCCValues } from "./ManufacturerSpecificCC";
 import {
 	getManufacturerId,
 	getManufacturerProprietaryAPI,
 	getManufacturerProprietaryCCConstructor,
 } from "./manufacturerProprietary/Decorators";
-import { ManufacturerSpecificCCValues } from "./ManufacturerSpecificCC";
 
 export type ManufacturerProprietaryCCConstructor<
-	T extends typeof ManufacturerProprietaryCC = typeof ManufacturerProprietaryCC,
+	T extends typeof ManufacturerProprietaryCC =
+		typeof ManufacturerProprietaryCC,
 > = T & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
 	new (host: ZWaveHost, options: any): InstanceType<T>;
@@ -50,11 +51,12 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		);
 		// If possible, try to defer to a specific subclass of this API
 		if (manufacturerId != undefined) {
-			const SpecificAPIConstructor =
-				getManufacturerProprietaryAPI(manufacturerId);
+			const SpecificAPIConstructor = getManufacturerProprietaryAPI(
+				manufacturerId,
+			);
 			if (
-				SpecificAPIConstructor != undefined &&
-				new.target !== SpecificAPIConstructor
+				SpecificAPIConstructor != undefined
+				&& new.target !== SpecificAPIConstructor
 			) {
 				return new SpecificAPIConstructor(applHost, endpoint);
 			}
@@ -87,11 +89,12 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		});
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
-		const response =
-			await this.applHost.sendCommand<ManufacturerProprietaryCC>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ManufacturerProprietaryCC
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return {
 				manufacturerId: response.manufacturerId,
@@ -101,6 +104,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	}
 }
 
+// @publicAPI
 export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
 	manufacturerId?: number;
 	unspecifiedExpectsResponse?: boolean;
@@ -140,26 +144,26 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
-			this.manufacturerId =
-				((this.ccCommand as unknown as number) << 8) + this.payload[0];
+			this.manufacturerId = ((this.ccCommand as unknown as number) << 8)
+				+ this.payload[0];
 
 			// Try to parse the proprietary command
 			const PCConstructor = getManufacturerProprietaryCCConstructor(
 				this.manufacturerId,
 			);
 			if (
-				PCConstructor &&
-				new.target !== PCConstructor &&
-				!staticExtends(new.target, PCConstructor)
+				PCConstructor
+				&& new.target !== PCConstructor
+				&& !staticExtends(new.target, PCConstructor)
 			) {
 				return new PCConstructor(host, options);
 			}
 
 			// If the constructor is correct, update the payload for subclass deserialization
-			this.payload = this.payload.slice(1);
+			this.payload = this.payload.subarray(1);
 		} else {
-			this.manufacturerId =
-				options.manufacturerId ?? getManufacturerId(this);
+			this.manufacturerId = options.manufacturerId
+				?? getManufacturerId(this);
 
 			this.unspecifiedExpectsResponse =
 				options.unspecifiedExpectsResponse;
@@ -192,7 +196,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		const manufacturerId = this.getManufacturerIdOrThrow();
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
-		super.ccCommand = (manufacturerId >>> 8) & 0xff;
+		(this.ccCommand as unknown as number) = (manufacturerId >>> 8) & 0xff;
 		// The 2nd byte is in the payload
 		this.payload = Buffer.concat([
 			Buffer.from([
@@ -232,7 +236,8 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			await pcInstance.interview(applHost);
 		} else {
 			applHost.controllerLog.logNode(node.id, {
-				message: `${this.constructor.name}: skipping interview refresh because the matching proprietary CC is not implemented...`,
+				message:
+					`${this.constructor.name}: skipping interview refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",
 			});
 		}
@@ -256,7 +261,8 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			await pcInstance.refreshValues(applHost);
 		} else {
 			applHost.controllerLog.logNode(node.id, {
-				message: `${this.constructor.name}: skipping value refresh because the matching proprietary CC is not implemented...`,
+				message:
+					`${this.constructor.name}: skipping value refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",
 			});
 		}

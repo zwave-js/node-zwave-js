@@ -33,9 +33,11 @@ async function main(param) {
 	console.log(`hasLink: ${hasLink}`);
 	console.log(`hasZjsLog: ${hasZjsLog}`);
 	console.log(
-		`codeBlockContent (matches = ${codeBlockRegex.test(
-			codeBlockContent,
-		)}): ${codeBlockContent}`,
+		`codeBlockContent (matches = ${
+			codeBlockRegex.test(
+				codeBlockContent,
+			)
+		}): ${codeBlockContent}`,
 	);
 
 	let message = "";
@@ -80,8 +82,8 @@ Please consider uploading a logfile that captures your problem.`;
 		});
 		const existing = comments.find(
 			(c) =>
-				c.user.login === "zwave-js-bot" &&
-				c.body.includes(LOGFILE_COMMENT_TAG),
+				c.user.login === "zwave-js-bot"
+				&& c.body.includes(LOGFILE_COMMENT_TAG),
 		);
 		if (existing) {
 			if (message) {

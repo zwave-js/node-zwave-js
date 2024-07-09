@@ -81,7 +81,7 @@ async setValveTable(
 ```ts
 async getValveTable(
 	tableId: number,
-): Promise<ValveTableEntry[] | undefined>;
+): Promise<MaybeNotKnown<ValveTableEntry[]>>;
 ```
 
 ### `runTables`
@@ -104,7 +104,7 @@ Shuts off the entire system for the given duration.
 
 **Parameters:**
 
--   `duration`: Shutoff duration in hours. A value of 255 will shut off the entire system permanently and prevents schedules from running.
+- `duration`: Shutoff duration in hours. A value of 255 will shut off the entire system permanently and prevents schedules from running.
 
 ### `shutoffSystemPermanently`
 
@@ -126,13 +126,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Error: emergency shutdown
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Error: emergency shutdown
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorHighCurrent(valveId: ValveId)`
 
@@ -145,13 +145,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Error - Current above high threshold`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Error - Current above high threshold`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorHighFlow(valveId: ValveId)`
 
@@ -164,13 +164,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Error - Flow above high threshold`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Error - Flow above high threshold`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorHighPressure`
 
@@ -182,13 +182,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Error: high pressure
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Error: high pressure
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorLowCurrent(valveId: ValveId)`
 
@@ -201,13 +201,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Error - Current below low threshold`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Error - Current below low threshold`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorLowFlow(valveId: ValveId)`
 
@@ -220,13 +220,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Error - Flow below high threshold`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Error - Flow below high threshold`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorLowPressure`
 
@@ -238,13 +238,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Error: low pressure
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Error: low pressure
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorMaximumFlow(valveId: ValveId)`
 
@@ -257,13 +257,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Error - Maximum flow detected`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Error - Maximum flow detected`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorNotProgrammed`
 
@@ -275,13 +275,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Error: device not programmed
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Error: device not programmed
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorShortCircuit(valveId: ValveId)`
 
@@ -294,13 +294,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Error - Short circuit detected`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Error - Short circuit detected`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `errorValve`
 
@@ -312,13 +312,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Error: valve reporting error
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Error: valve reporting error
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `firstOpenZoneId`
 
@@ -330,13 +330,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** First open zone valve ID
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** First open zone valve ID
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `flow`
 
@@ -348,13 +348,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Flow
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** Flow
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `flowSensorActive`
 
@@ -366,13 +366,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Flow sensor active
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Flow sensor active
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `highFlowThreshold(valveId: ValveId)`
 
@@ -385,14 +385,14 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: High flow threshold`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
+- **label:** `${string}: High flow threshold`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
 
 ### `highPressureThreshold`
 
@@ -404,13 +404,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** High pressure threshold
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** High pressure threshold
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `lowFlowThreshold(valveId: ValveId)`
 
@@ -423,14 +423,14 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Low flow threshold`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
+- **label:** `${string}: Low flow threshold`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
 
 ### `lowPressureThreshold`
 
@@ -442,13 +442,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Low pressure threshold
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** Low pressure threshold
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `masterValveDelay`
 
@@ -460,16 +460,16 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Master valve delay
--   **description:** The delay between turning on the master valve and turning on any zone valve
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Master valve delay
+- **description:** The delay between turning on the master valve and turning on any zone valve
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `masterValveOpen`
 
@@ -481,13 +481,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Master valve is open
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Master valve is open
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `maximumFlow(valveId: ValveId)`
 
@@ -500,14 +500,14 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Maximum flow`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
+- **label:** `${string}: Maximum flow`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
 
 ### `moistureSensorActive`
 
@@ -519,13 +519,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Moisture sensor attached and active
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Moisture sensor attached and active
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `moistureSensorPolarity`
 
@@ -537,15 +537,15 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Moisture sensor polarity
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 1
+- **label:** Moisture sensor polarity
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 1
 
 ### `nominalCurrent(valveId: ValveId)`
 
@@ -558,13 +558,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Nominal current`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Nominal current`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `nominalCurrentHighThreshold(valveId: ValveId)`
 
@@ -577,15 +577,15 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Nominal current - high threshold`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 2550
+- **label:** `${string}: Nominal current - high threshold`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 2550
 
 ### `nominalCurrentLowThreshold(valveId: ValveId)`
 
@@ -598,15 +598,15 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Nominal current - low threshold`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 2550
+- **label:** `${string}: Nominal current - low threshold`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 2550
 
 ### `pressure`
 
@@ -618,13 +618,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Pressure
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** Pressure
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `pressureSensorActive`
 
@@ -636,13 +636,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Pressure sensor active
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Pressure sensor active
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `rainSensorActive`
 
@@ -654,13 +654,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Rain sensor attached and active
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Rain sensor attached and active
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `rainSensorPolarity`
 
@@ -672,15 +672,15 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Rain sensor polarity
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 1
+- **label:** Rain sensor polarity
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 1
 
 ### `shutoffDuration`
 
@@ -692,15 +692,15 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Remaining shutoff duration
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Remaining shutoff duration
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `shutoffSystem`
 
@@ -712,13 +712,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** Shutoff system
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Shutoff system
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `systemVoltage`
 
@@ -730,15 +730,15 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** System voltage
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** System voltage
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `useMoistureSensor(valveId: ValveId)`
 
@@ -751,13 +751,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Use moisture sensor`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Use moisture sensor`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `useRainSensor(valveId: ValveId)`
 
@@ -770,13 +770,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Use rain sensor`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Use rain sensor`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `valveConnected(valveId: ValveId)`
 
@@ -789,13 +789,13 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Connected`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Connected`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `valveRunDuration(valveId: ValveId)`
 
@@ -808,15 +808,15 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Run duration`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 1
--   **max. value:** 65535
+- **label:** `${string}: Run duration`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 1
+- **max. value:** 65535
 
 ### `valveRunStartStop(valveId: ValveId)`
 
@@ -829,10 +829,10 @@ Shuts off the entire system permanently and prevents schedules from running.
 }
 ```
 
--   **label:** `${string}: Start/Stop`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `${string}: Start/Stop`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`

@@ -17,11 +17,9 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Remember The Last Status",
-			"description": "",
+			"label": "Remember the Last Status",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

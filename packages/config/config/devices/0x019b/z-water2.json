@@ -1,0 +1,118 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "Z-WATER2",
+	"description": "Relay Controller",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x020b",
+			"zwaveAllianceId": 4898
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Input 1 Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": -60,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "2",
+			"label": "Input 2 Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": -60,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "3",
+			"label": "Temperature Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 870,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Temperature Report Hysteresis",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "6",
+			"label": "Output Behavior",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Inverted",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Valve Inactivity Exercise",
+			"description": "How long the relays should be turned on for after 30 days of relay inactivity.",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Antenna",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Internal",
+					"value": 0
+				},
+				{
+					"label": "External",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "The primary controller/gateway has a mode for adding devices. Please refer to your primary controller manual on how to set the primary controller in add mode. The device may only be added from the network if the primary controller is in add mode. When the device is removed from the network, it will NOT revert to factory settings. An always listening node must be powered continuously and reside in a fixed position in the installation to secure the routing table. Adding the device within a 2 meter range from the gateway can minimize faults during the Interview process.\n\nStandard (Manual)\nAdd mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the device has been added to the network. Configuration mode can also be cancelled by performing the same procedure used for starting Configuration mode.\nTo start the configuration process, press the reset button 3 times in rapid succession. The LED will light up solid green for 3 seconds if add is successful. The device is now ready for use with default settings.\nNB! When the device is removed from the gateway, the parameters are not reset. To reset the parameters, see Chapter ”Factory reset”.\n\nIf inclusion fails, please perform a ”remove device” process and try again. If inclusion fails again, please see “Factory reset”",
+		"exclusion": "The primary controller/gateway has a mode for removing devices. Please refer to your primary controller manual on how to set the primary controller in remove mode. The device may only be removed from the network if the primary controller is in remove mode. When the device is removed from the network, it will NOT revert to factory settings. An always listening node must be powered continuously and reside in a fixed position in the installation to secure the routing table. \n\nStandard (Manual)\nRemove mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the device has been removed from the network. Configuration mode can also be cancelled by performing the same procedure used for starting Configuration mode.\nTo start the configuration process, press the reset button 3 times in rapid succession. The LED will light up solid green for 3 seconds if remove is successful. The device is now ready for use with default settings.\nNB! When the device is removed from the gateway, the parameters are not reset. To reset the parameters, see Chapter ”Factory reset”",
+		"reset": "Press and hold the reset button. After 3 seconds the LED will start to blink green. After 20 seconds the LED will start blinking green rapidly. You may now release the button. If reset was successful the LED will light up solid green for 3 seconds",
+		"manual": "https://media.heatit.com/2924"
+	}
+}

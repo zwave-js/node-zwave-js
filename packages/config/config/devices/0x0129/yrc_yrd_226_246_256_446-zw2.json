@@ -1,0 +1,119 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YRD226 / YRC226 / YRC246 / YRD256 / YRC256 / YRD446",
+	"description": "Assure Touchscreen Deadbolt",
+	"devices": [
+		{
+			"productType": "0x8002",
+			"productId": "0x0600",
+			"zwaveAllianceId": [1878, 1972, 1973, 3211, 3299, 3401, 3418]
+		},
+		{
+			"productType": "0x8002",
+			"productId": "0x1600"
+		},
+		{
+			"productType": "0x8002",
+			"productId": "0x4600"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/yale_template.json#volume"
+		},
+		{
+			"#": "2",
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#auto_relock_time_180"
+		},
+		{
+			"#": "4",
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
+		},
+		{
+			"#": "5",
+			"$import": "templates/yale_template.json#language"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Radio Event Reporting"
+		},
+		{
+			"#": "7",
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
+		},
+		{
+			"#": "8",
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
+		},
+		{
+			"#": "11",
+			"$import": "templates/yale_template.json#one_touch"
+		},
+		{
+			"#": "12",
+			"$import": "templates/yale_template.json#privacy_button"
+		},
+		{
+			"#": "13",
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "15",
+			"$import": "templates/yale_template.json#reset_factory"
+		}
+	],
+	"compat": {
+		"alarmMapping": [
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_limit"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_manual_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rf_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_manual_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rf_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_deadbolt_jammed"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_low_battery"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_critical_battery"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_auto_relock"
+			}
+		]
+	},
+	"metadata": {
+		"inclusion": "Enter the 4-8 master Pin code followed by the gear key.\nPress the 7 key followed by the gear key\nPress the 1 key followed by the gear key",
+		"exclusion": "Enter the 4-8 digit master pin code followed by the gear key\nPress the 7 key followed by the gear key\nPress the 3 key followed by the gear key",
+		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1878/WGA6ZWManual.pdf"
+	}
+}

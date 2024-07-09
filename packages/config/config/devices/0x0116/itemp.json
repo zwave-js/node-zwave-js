@@ -2,7 +2,7 @@
 	"manufacturer": "Chromagic Technologies Corporation",
 	"manufacturerId": "0x0116",
 	"label": "ITEMP",
-	"description": "Contact and temperature sensor",
+	"description": "Contact and Temperature Sensor",
 	"devices": [
 		{
 			"productType": "0x1182",
@@ -30,38 +30,36 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Reset to factory default",
+			"label": "Reset to Factory Default",
 			"description": "Delete configuration but keeps inclusion",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (default)",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Execute reset",
+					"label": "Factory reset",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Command sent on external dry contact",
+			"label": "Command Sent on External Dry Contact",
 			"description": "Configure what the external contact sends when triggered",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alarm Resport Type 2 (default)",
+					"label": "Alarm resport type 2",
 					"value": 0
 				},
 				{
-					"label": "Basic On or Basic Off",
+					"label": "Basic on or basic off",
 					"value": 1
 				}
 			]
@@ -71,11 +69,10 @@
 			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Wakeup (default)",
+					"label": "Normal wakeup",
 					"value": 1
 				},
 				{

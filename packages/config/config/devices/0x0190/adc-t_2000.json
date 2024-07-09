@@ -2,6 +2,7 @@
 	"manufacturer": "Building 36 Technologies",
 	"manufacturerId": "0x0190",
 	"label": "ADC-T 2000",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "Alarm.com Smart Thermostat",
 	"devices": [
 		{
@@ -27,7 +28,7 @@
 					"value": 0
 				},
 				{
-					"label": "Heat Pump",
+					"label": "Heat pump",
 					"value": 1
 				}
 			]
@@ -56,7 +57,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Fossil Fuel",
+					"label": "Fossil fuel",
 					"value": 0
 				},
 				{
@@ -69,8 +70,8 @@
 			"#": "5[0xffff00]",
 			"label": "Calibration Temperature",
 			"description": "Allowable range: -10 to 10 in 1 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0,
@@ -116,8 +117,8 @@
 			"#": "6[0xffff00]",
 			"label": "Overshoot",
 			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 30,
 			"defaultValue": 5,
@@ -163,8 +164,8 @@
 			"#": "7[0xffff00]",
 			"label": "Swing",
 			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 30,
 			"defaultValue": 0,
@@ -228,8 +229,8 @@
 			"#": "10[0xffff00]",
 			"label": "Balance Setpoint",
 			"description": "Allowable range: 0 to 95 in 1 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 350,
@@ -302,8 +303,8 @@
 		{
 			"#": "13",
 			"label": "Fan Circulation Duty Cycle",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 25
@@ -311,8 +312,8 @@
 		{
 			"#": "14",
 			"label": "Fan Purge Time",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 3600,
 			"defaultValue": 60
@@ -321,8 +322,8 @@
 			"#": "15[0xffff00]",
 			"label": "Maximum Heat Setpoint",
 			"description": "Allowable range: 35 to 95 in 1 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 950,
@@ -368,8 +369,8 @@
 			"#": "16[0xffff00]",
 			"label": "Minimum Heat Setpoint",
 			"description": "Allowable range: 35 to 95 in 1 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 350,
@@ -415,8 +416,8 @@
 			"#": "17[0xffff00]",
 			"label": "Maximum Cool Setpoint",
 			"description": "Allowable range: 50 to 95 in 1 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 950,
@@ -462,8 +463,8 @@
 			"#": "18[0xffff00]",
 			"label": "Minimum Cool Setpoint",
 			"description": "Allowable range: 50 to 95 in 1 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 950,
 			"defaultValue": 500,
@@ -564,6 +565,7 @@
 			"valueSize": 1,
 			"defaultValue": 15,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Off, Heat",
@@ -594,6 +596,7 @@
 					"value": 31
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "25",
@@ -602,6 +605,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "Disabled",
@@ -620,6 +624,7 @@
 					"value": 3
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "26",
@@ -641,8 +646,8 @@
 		{
 			"#": "27",
 			"label": "Battery Alert Threshold Low",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 30
@@ -650,8 +655,8 @@
 		{
 			"#": "28",
 			"label": "Battery Alert Threshold Very Low",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 15
@@ -666,8 +671,8 @@
 			"#": "31[0xffff00]",
 			"label": "Heat Differential",
 			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 100,
 			"defaultValue": 30,
@@ -713,8 +718,8 @@
 			"#": "32[0xffff00]",
 			"label": "Cool Differential",
 			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 100,
 			"defaultValue": 30,
@@ -760,8 +765,8 @@
 			"#": "33[0xffff00]",
 			"label": "Temperature Reporting Threshold",
 			"description": "Allowable range: 0.5 to 2 in 0.5 °F increments.",
-			"unit": "0.1°F",
 			"valueSize": 4,
+			"unit": "0.1 °F",
 			"minValue": -1,
 			"maxValue": 20,
 			"defaultValue": 10,
@@ -810,6 +815,7 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "O/B as B",
@@ -820,6 +826,7 @@
 					"value": 1
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "35",

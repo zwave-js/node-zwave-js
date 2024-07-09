@@ -55,8 +55,8 @@
 			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto report the battery level.",
-			"unit": "Ticks",
 			"valueSize": 1,
+			"unit": "Ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
@@ -65,8 +65,8 @@
 			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"description": "The interval time for auto report the temperature.",
-			"unit": "Ticks",
 			"valueSize": 1,
+			"unit": "Ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
@@ -75,8 +75,8 @@
 			"#": "14",
 			"label": "Auto Report Humidity Time",
 			"description": "The interval time for auto report the humidity",
-			"unit": "Ticks",
 			"valueSize": 1,
+			"unit": "Ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
@@ -85,8 +85,8 @@
 			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"description": "The interval time for auto report each tick",
-			"unit": "Minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
@@ -95,8 +95,8 @@
 		{
 			"#": "21",
 			"label": "Temperature Differential Report",
-			"unit": "Fahrenheit",
 			"valueSize": 1,
+			"unit": "Fahrenheit",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
@@ -104,15 +104,15 @@
 		{
 			"#": "23",
 			"label": "Humidity Differential Report",
-			"unit": "Percent",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0
 		},
 		{
 			"#": "7[0x10]",
-			"label": "Customer Function: Notification Type",
+			"label": "Notification Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -122,27 +122,16 @@
 					"value": 0
 				},
 				{
-					"label": "Sensor Binary Report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7[0x20]",
-			"label": "Customer Function: Disable Multi CC",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Multi CC",
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

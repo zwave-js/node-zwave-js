@@ -38,11 +38,12 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene Mode",
+					"label": "Scene mode",
 					"value": 1
 				},
 				{
-					"label": "SOS Mode",
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
+					"label": "SOS mode",
 					"value": 2
 				}
 			]
@@ -59,11 +60,11 @@
 					"value": 0
 				},
 				{
-					"label": "Fire Services",
+					"label": "Fire services",
 					"value": 1
 				},
 				{
-					"label": "Medical Services",
+					"label": "Medical services",
 					"value": 2
 				}
 			]

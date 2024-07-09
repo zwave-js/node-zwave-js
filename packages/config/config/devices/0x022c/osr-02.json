@@ -18,12 +18,11 @@
 		{
 			"#": "1",
 			"label": "Battery Report Period",
-			"unit": "15 minutes",
 			"valueSize": 1,
+			"unit": "15 minutes",
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 24,
-			"unsigned": true
+			"defaultValue": 24
 		}
 	],
 	"metadata": {

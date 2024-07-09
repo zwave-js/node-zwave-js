@@ -1,22 +1,25 @@
 import {
-	CommandClasses,
-	MessageOrCCLogEntry,
+	type BasicDeviceClass,
+	type CommandClasses,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
+	type MessageRecord,
 	NodeType,
+	Protocols,
+	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
-	expectedCallback,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
+	expectedCallback,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -47,6 +50,7 @@ export enum AddNodeStatus {
 enum AddNodeFlags {
 	HighPower = 0x80,
 	NetworkWide = 0x40,
+	ProtocolLongRange = 0x20,
 }
 
 interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
@@ -60,6 +64,7 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 	authHomeId: Buffer;
 	highPower?: boolean;
 	networkWide?: boolean;
+	protocol?: Protocols;
 }
 
 export function computeNeighborDiscoveryTimeout(
@@ -73,10 +78,10 @@ export function computeNeighborDiscoveryTimeout(
 
 	// According to the Appl-Programmers-Guide
 	return (
-		76000 +
-		numListeningNodes * 217 +
-		numFlirsNodes * 3517 +
-		(nodeType === NodeType.Controller ? numNodes * 732 : 0)
+		76000
+		+ numListeningNodes * 217
+		+ numFlirsNodes * 3517
+		+ (nodeType === NodeType.Controller ? numNodes * 732 : 0)
 	);
 }
 
@@ -86,8 +91,8 @@ export function computeNeighborDiscoveryTimeout(
 export class AddNodeToNetworkRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== AddNodeToNetworkRequestStatusReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== AddNodeToNetworkRequestStatusReport
 		) {
 			return new AddNodeToNetworkRequestStatusReport(host, options);
 		}
@@ -108,14 +113,14 @@ function testCallbackForAddNodeRequest(
 		case AddNodeType.Slave:
 		case AddNodeType.Existing:
 			return (
-				received.status === AddNodeStatus.Ready ||
-				received.status === AddNodeStatus.Failed
+				received.status === AddNodeStatus.Ready
+				|| received.status === AddNodeStatus.Failed
 			);
 		case AddNodeType.Stop:
 		case AddNodeType.StopControllerReplication:
 			return (
-				received.status === AddNodeStatus.Done ||
-				received.status === AddNodeStatus.Failed
+				received.status === AddNodeStatus.Done
+				|| received.status === AddNodeStatus.Failed
 			);
 		default:
 			return false;
@@ -179,8 +184,8 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 
 export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 	public serialize(): Buffer {
-		const control: number =
-			AddNodeType.SmartStartListen | AddNodeFlags.NetworkWide;
+		const control: number = AddNodeType.SmartStartListen
+			| AddNodeFlags.NetworkWide;
 		// The Serial API does not send a callback, so disable waiting for one
 		this.callbackId = 0;
 
@@ -209,20 +214,26 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 		this.authHomeId = options.authHomeId;
 		this.highPower = !!options.highPower;
 		this.networkWide = !!options.networkWide;
+		this.protocol = options.protocol ?? Protocols.ZWave;
 	}
 
 	/** The home IDs of node to add */
 	public nwiHomeId: Buffer;
 	public authHomeId: Buffer;
 	/** Whether to use high power */
-	public highPower: boolean = false;
+	public highPower: boolean;
 	/** Whether to include network wide */
-	public networkWide: boolean = false;
+	public networkWide: boolean;
+	/** Whether to include as long-range or not */
+	public protocol: Protocols;
 
 	public serialize(): Buffer {
 		let control: number = AddNodeType.SmartStartDSK;
 		if (this.highPower) control |= AddNodeFlags.HighPower;
 		if (this.networkWide) control |= AddNodeFlags.NetworkWide;
+		if (this.protocol === Protocols.ZWaveLongRange) {
+			control |= AddNodeFlags.ProtocolLongRange;
+		}
 
 		this.payload = Buffer.concat([
 			Buffer.from([control, this.callbackId]),
@@ -239,6 +250,9 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 			"NWI Home ID": buffer2hex(this.nwiHomeId),
 			"high power": this.highPower,
 			"network wide": this.networkWide,
+			protocol: this.protocol === Protocols.ZWaveLongRange
+				? "Z-Wave Long Range"
+				: "Z-Wave Classic",
 		};
 		if (this.hasCallbackId()) {
 			message["callback id"] = this.callbackId;
@@ -270,15 +284,22 @@ export class AddNodeToNetworkRequestStatusReport
 				// no context for the status to parse
 				break;
 
-			case AddNodeStatus.Done:
-				this.statusContext = { nodeId: this.payload[2] };
+			case AddNodeStatus.Done: {
+				const { nodeId } = parseNodeID(
+					this.payload,
+					host.nodeIdType,
+					2,
+				);
+				this.statusContext = { nodeId };
 				break;
+			}
 
 			case AddNodeStatus.AddingController:
 			case AddNodeStatus.AddingSlave: {
 				// the payload contains a node information frame
 				this.statusContext = parseNodeUpdatePayload(
-					this.payload.slice(2),
+					this.payload.subarray(2),
+					host.nodeIdType,
 				);
 				break;
 			}
@@ -305,9 +326,9 @@ export class AddNodeToNetworkRequestStatusReport
 	}
 }
 
-interface AddNodeStatusContext {
+export interface AddNodeStatusContext {
 	nodeId: number;
-	basicDeviceClass?: number;
+	basicDeviceClass?: BasicDeviceClass;
 	genericDeviceClass?: number;
 	specificDeviceClass?: number;
 	supportedCCs?: CommandClasses[];

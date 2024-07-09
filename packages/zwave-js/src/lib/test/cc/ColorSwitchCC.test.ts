@@ -11,10 +11,10 @@ import {
 	ColorSwitchCommand,
 } from "@zwave-js/cc";
 import {
-	assertZWaveError,
 	CommandClasses,
 	Duration,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
@@ -125,13 +125,12 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 	t.is(cc.duration!.unit, "seconds");
 });
 
-test("the Set command should serialize correctly (version 1)", (t) => {
+test("the Set command should serialize correctly (without duration)", (t) => {
 	const cc = new ColorSwitchCCSet(host, {
 		nodeId: 1,
 		red: 128,
 		green: 255,
 	});
-	cc.version = 1;
 
 	const expected = buildCCBuffer(
 		Buffer.from([
@@ -142,6 +141,7 @@ test("the Set command should serialize correctly (version 1)", (t) => {
 			0b1000_0000, // value: 128
 			0b0000_0011, // color: green
 			0b1111_1111, // value: 255
+			0xff, // duration: default
 		]),
 	);
 	t.deepEqual(cc.serialize(), expected);
@@ -154,7 +154,6 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 		green: 255,
 		duration: new Duration(1, "seconds"),
 	});
-	cc.version = 2;
 
 	const expected = buildCCBuffer(
 		Buffer.from([
@@ -171,73 +170,11 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 	t.deepEqual(cc.serialize(), expected);
 });
 
-test("the StartLevelChange command should serialize correctly (up) (version 1)", (t) => {
-	const cc = new ColorSwitchCCStartLevelChange(host, {
-		nodeId: 1,
-		ignoreStartLevel: false,
-		startLevel: 5,
-		direction: "up",
-		colorComponent: ColorComponent.Red,
-	});
-	cc.version = 1;
-
-	const expected = buildCCBuffer(
-		Buffer.from([
-			ColorSwitchCommand.StartLevelChange,
-			0b0000_0000, // up/down: 0, ignoreStartLevel: 0
-			0b0000_0010, // color: red
-			0b0000_0101, // startLevel: 5
-		]),
-	);
-	t.deepEqual(cc.serialize(), expected);
-});
-
-test("the StartLevelChange command should serialize correctly (down) (version 1)", (t) => {
+test("the StartLevelChange command should serialize correctly", (t) => {
 	const cc = new ColorSwitchCCStartLevelChange(host, {
 		nodeId: 1,
 		startLevel: 5,
-		ignoreStartLevel: false,
-		direction: "down",
-		colorComponent: ColorComponent.Red,
-	});
-	cc.version = 1;
-
-	const expected = buildCCBuffer(
-		Buffer.from([
-			ColorSwitchCommand.StartLevelChange,
-			0b0100_0000, // up/down: 0, ignoreStartLevel: 0
-			0b0000_0010, // color: red
-			0b0000_0101, // startLevel: 5
-		]),
-	);
-	t.deepEqual(cc.serialize(), expected);
-});
-
-test("the StartLevelChange command should serialize correctly (ignoreStartLevel) (version 1)", (t) => {
-	const cc = new ColorSwitchCCStartLevelChange(host, {
-		nodeId: 1,
-		colorComponent: ColorComponent.Red,
 		ignoreStartLevel: true,
-		direction: "up",
-	});
-	cc.version = 1;
-
-	const expected = buildCCBuffer(
-		Buffer.from([
-			ColorSwitchCommand.StartLevelChange,
-			0b0010_0000, // up/down: 0, ignoreStartLevel: 1
-			0b0000_0010, // color: red
-			0b0000_0000, // startLevel: 0
-		]),
-	);
-	t.deepEqual(cc.serialize(), expected);
-});
-
-test("the StartLevelChange command should serialize correctly (duration) (version 3)", (t) => {
-	const cc = new ColorSwitchCCStartLevelChange(host, {
-		nodeId: 1,
-		startLevel: 5,
-		ignoreStartLevel: false,
 		direction: "up",
 		colorComponent: ColorComponent.Red,
 		duration: new Duration(1, "seconds"),
@@ -247,7 +184,7 @@ test("the StartLevelChange command should serialize correctly (duration) (versio
 	const expected = buildCCBuffer(
 		Buffer.from([
 			ColorSwitchCommand.StartLevelChange,
-			0b0000_0000, // up/down: 0, ignoreStartLevel: 0
+			0b0010_0000, // up/down: 0, ignoreStartLevel: 1
 			0b0000_0010, // color: red
 			0b0000_0101, // startLevel: 5
 			0b0000_0001, // duration: 1

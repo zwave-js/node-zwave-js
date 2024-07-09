@@ -3,7 +3,7 @@ import {
 	BasicCCGet,
 	BasicCCReport,
 	BasicCCSet,
-	BasicCCValues,
+	type BasicCCValues,
 	BasicCommand,
 	getCCValues,
 } from "@zwave-js/cc";
@@ -126,8 +126,8 @@ test("getDefinedValueIDs() should include the target value for all endpoints exc
 		.getDefinedValueIDs(host as any, node2)
 		.filter(
 			({ commandClass, property }) =>
-				commandClass === CommandClasses.Basic &&
-				property === "targetValue",
+				commandClass === CommandClasses.Basic
+				&& property === "targetValue",
 		);
 	const endpointIndizes = valueIDs.map(({ endpoint }) => endpoint);
 	t.deepEqual(endpointIndizes, [1, 2]);

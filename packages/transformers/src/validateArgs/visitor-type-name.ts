@@ -30,7 +30,7 @@ function visitTupleObjectType(
 		return "st_et";
 	}
 	const itemNames = type.typeArguments.map((type) =>
-		visitType(type, visitorContext, mode),
+		visitType(type, visitorContext, mode)
 	);
 	return `st_${itemNames.join("_")}_et`;
 }
@@ -127,7 +127,7 @@ function visitUnionOrIntersectionType(
 	mode: NameMode,
 ) {
 	const names = type.types.map((type) =>
-		visitType(type, visitorContext, mode),
+		visitType(type, visitorContext, mode)
 	);
 	if (tsutils.isIntersectionType(type)) {
 		return `si_${names.join("_")}_ei`;
@@ -183,8 +183,8 @@ export function visitType(
 	} else if ((ts.TypeFlags.BooleanLiteral & type.flags) !== 0) {
 		name = `_${index}`;
 	} else if (
-		tsutils.isTypeReference(type) &&
-		visitorContext.previousTypeReference !== type
+		tsutils.isTypeReference(type)
+		&& visitorContext.previousTypeReference !== type
 	) {
 		name = visitTypeReference(type, visitorContext, mode);
 	} else if ((ts.TypeFlags.TypeParameter & type.flags) !== 0) {
@@ -219,11 +219,10 @@ export function visitType(
 	}
 	if (tsutils.isTypeReference(type) && type.typeArguments !== undefined) {
 		for (const typeArgument of type.typeArguments) {
-			const resolvedType =
-				VisitorUtils.getResolvedTypeParameter(
-					typeArgument,
-					visitorContext,
-				) || typeArgument;
+			const resolvedType = VisitorUtils.getResolvedTypeParameter(
+				typeArgument,
+				visitorContext,
+			) || typeArgument;
 			const resolvedTypeIndex = getTypeIndexById(
 				resolvedType,
 				visitorContext,

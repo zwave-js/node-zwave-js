@@ -2,20 +2,21 @@
 
 The following properties are defined and should always be present in the same order for consistency among the config files:
 
-| Property           | Description                                                                                                                                                                                                |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `manufacturer`     | The name of the manufacturer (or brand under which the device is sold)                                                                                                                                     |
-| `manufacturerId`   | The ID of the manufacturer (as defined in the Z-Wave specs) as a 4-digit hexadecimal string.                                                                                                               |
-| `label`            | A short label for the device                                                                                                                                                                               |
-| `description`      | A longer description of the device, usually the full name                                                                                                                                                  |
-| `devices`          | An array of product type and product ID combinations, [see below](#devices) for details.                                                                                                                   |
-| `firmwareVersion`  | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                                                                                                       |
-| `endpoints`        | Endpoint-specific configuration, [see below](#endpoints) for details. If this is present, `associations` must be specified on endpoint `"0"` instead of on the root level.                                 |
-| `associations`     | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
-| `paramInformation` | An array of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                                  |
-| `proprietary`      | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
-| `compat`           | Compatibility flags used to influence the communication with non-compliant devices. [See below](#compat) for details.                                                                                      |
-| `metadata`         | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
+| Property           | Description                                                                                                                                                                                                                      |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `manufacturer`     | The name of the manufacturer (or brand under which the device is sold)                                                                                                                                                           |
+| `manufacturerId`   | The ID of the manufacturer (as defined in the Z-Wave specs) as a 4-digit hexadecimal string.                                                                                                                                     |
+| `label`            | A short label for the device                                                                                                                                                                                                     |
+| `description`      | A longer description of the device, usually the full name                                                                                                                                                                        |
+| `devices`          | An array of product type and product ID combinations, [see below](#devices) for details.                                                                                                                                         |
+| `firmwareVersion`  | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                                                                                                                             |
+| `preferred`        | Mark this config file as preferred over others with the same IDs, but overlapping firmware versions. Can be used to have a default white-labeled configuration with re-branded versions, without having to split files too much. |
+| `endpoints`        | Endpoint-specific configuration, [see below](#endpoints) for details. If this is present, `associations` must be specified on endpoint `"0"` instead of on the root level.                                                       |
+| `associations`     | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config.                       |
+| `paramInformation` | An array of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                                                        |
+| `proprietary`      | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                                      |
+| `compat`           | Compatibility flags used to influence the communication with non-compliant devices. [See below](#compat) for details.                                                                                                            |
+| `metadata`         | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                                                 |
 
 ## `devices`
 
@@ -74,7 +75,7 @@ Can be used to add instructions for the user to a device:
 
 ## `endpoints`
 
-Optional endpoint-specific configuration. This includes associations and endpoint labels. Example:
+Optional endpoint-specific configuration. This includes associations, paramInformation and endpoint labels. Example:
 
 ```json
 "endpoints": {
@@ -87,7 +88,10 @@ Optional endpoint-specific configuration. This includes associations and endpoin
 		"label": "Relay",
 		"associations": {
 			// Association definitions for endpoint 1, see below for details
-		}
+		},
+		"paramInformation": [
+			// Config parameters that only exist on endpoint 1
+		]
 	},
 	// etc.
 }
@@ -99,10 +103,10 @@ For devices which do not allow auto-discovering associations, the associations m
 
 Before defining `associations` in a config file, please make sure that **at least one** of the following points applies:
 
--   The device **does not** support `Z-Wave Plus CC` and `Association Group Info CC`
--   The auto-discovered labels are **bad** (content or formatting wise), like `GROUP_1` instead of something useful like `Multilevel Sensor Reports`
--   Additional lifelines besides the primary one are **necessary** to get all desired reports
--   `zwave-js` auto-assigns an endpoint association (node 1, endpoint 0) to the lifeline, but the device needs a node association (node 1, no endpoint) to report properly
+- The device **does not** support `Z-Wave Plus CC` and `Association Group Info CC`
+- The auto-discovered labels are **bad** (content or formatting wise), like `GROUP_1` instead of something useful like `Multilevel Sensor Reports`
+- Additional lifelines besides the primary one are **necessary** to get all desired reports
+- `zwave-js` auto-assigns an endpoint association (node 1, endpoint 0) to the lifeline, but the device needs a node association (node 1, no endpoint) to report properly
 
 The property looks as follows:
 
@@ -352,9 +356,15 @@ If a device reports support for a CCs but does not correctly support it, this ca
 }
 ```
 
-### `disableBasicMapping`
+### `disableAutoRefresh`
 
-By default, received `Basic CC::Report` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
+Several command classes are refreshed regularly (every couple of hours) if they do not report all of their values automatically. It has been found that some devices respond with invalid reports when queried. By setting `disableAutoRefresh` to `true`, this feature can be disabled.
+
+### `disableCallbackFunctionTypeCheck`
+
+By default, responses or callbacks for Serial API commands must have the same function type (command identifier) in order to be recognized. However, in some situations, certain controllers send a callback with an invalid function type. In this case, the faulty commands may be listed in the `disableCallbackFunctionTypeCheck` array to disable the check for a matching function type.
+
+> [!NOTE] This compat flag requires command-specific support and is not a generic escape hatch.
 
 ### `disableStrictEntryControlDataValidation`
 
@@ -366,11 +376,9 @@ Without the additional integrity checks that encapsulation CCs like `CRC-16`, `S
 
 Some devices incorrectly encode this support information though, making the checks discard otherwise correct data. To disable the checks, set `disableStrictMeasurementValidation` to `true`.
 
-### `enableBasicSetMapping`
+### `encodeCCsUsingTargetVersion`
 
-`Basic CC::Set` commands are not meant to be mapped to other CCs. Some devices still use them to report status. By setting `enableBasicSetMapping` to `true`, `Basic CC::Set` commands are mapped just like `Basic CC::Report`s.
-
-> [!NOTE] The option `disableBasicMapping` has precedence. If that is `true`, no `Basic` commands will be mapped.
+Because command classes are extended in a backwards-compatible way, the Z-Wave specifications recommend encoding command classes using the version the sender supports, regardless of the receiver's version. However it has been found that some devices do not correctly parse commands from a newer version and do not react to them. When `encodeCCsUsingTargetVersion` is set to `true` for a device, Z-Wave JS will encode commands using the version the receiver supports instead.
 
 ### `forceNotificationIdleReset`
 
@@ -384,9 +392,80 @@ The specifications mandate that each `Scene Controller Configuration CC` Group I
 
 Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
 
+### `mapBasicReport`
+
+`Basic CC::Report` commands are like their name implies, Basic. They contain no information about **what** they are reporting. By default, Z-Wave JS uses the device type to map these commands to a more appropriate CC. The `mapBasicReport` can influence this behavior. It has the following options:
+
+- `false`: treat the report verbatim without mapping
+- `"auto"` **(default)**: Depending on the device type (Binary Switch, Multilevel Switch, or Binary Sensor), the command is mapped to the corresponding report for that device type. If no matching mapping is found, the command is treated verbatim without mapping.
+- `"Binary Sensor"`: Regardless of the device type, the command is treated like a `Binary Sensor CC::Report`.
+
+### `mapBasicSet`
+
+`Basic CC::Set` commands are meant to control other devices, yet some devices use them to "report" their status or expose secondary functionality. The `mapBasicSet` flag defines how Z-Wave JS should handle these commands:
+
+- `"report"` **(default)**: The command is treated like a `Basic CC::Report`, but the **target value** is used as the **current value**.
+- `"auto"`: Depending on the device type (Binary Switch, Multilevel Switch, or Binary Sensor), the command is mapped to the corresponding report for that device type. If no matching mapping is found, the command is treated like a `Basic CC::Report`, but the **target value** is used as the **current value**.
+- `"event"`: Emit a `value event` for the Basic `"event"` property.
+- `"Binary Sensor"`: Regardless of the device type, the command is treated like a `Binary Sensor CC::Report`.
+
 ### `mapRootReportsToEndpoint`
 
 Some multi-channel devices incorrectly report state changes for one of their endpoints via the root device, however there is no way to automatically detect for which endpoint these reports are meant. The flag `mapRootReportsToEndpoint` can be used to specify which endpoint these reports are mapped to. Without this flag, reports to the root device are silently ignored, unless `preserveRootApplicationCCValueIDs` is `true`.
+
+### `overrideQueries`
+
+A frequent reason for device not "working" correctly is that they respond to queries incorrectly, e.g. RGB bulbs not reporting support for the blue color channel, or thermostats reporting the wrong supported modes. Using `overrideQueries`, the responses to these queries can be overridden, so they are not queried from the device anymore. Example:
+
+```js
+"overrideQueries": {
+	// For which CC the queries should be overridden. Also accepts the decimal or hexadecimal CC ID.
+	"Schedule Entry Lock": [
+		{
+			// Which endpoint the query should be overridden for (optional).
+			// Defaults to the root endpoint 0
+			"endpoint": 1,
+			// Which API method should be overridden. Available methods depend on the CC.
+			"method": "getNumSlots",
+			// Multiple overrides can optionally be specified for the same method, distinguished
+			// by the method arguments. If `matchArgs` is not specified, the override
+			// is used for all calls to the method.
+			// The arguments must be exactly the same as in the API call and are
+			// compared using equality (===)
+			"matchArgs": [1, 2, 3]
+			// The result that should be returned by the API method when called.
+			"result": {
+				"numWeekDaySlots": 0,
+				"numYearDaySlots": 0,
+				"numDailyRepeatingSlots": 1
+			},
+			// Which values should be stored in the value DB when the API method is called (optional).
+			// The keys are the names of the predefined values of the given CC,
+			// see the CC documentation for available values.
+			"persistValues": {
+				"numWeekDaySlots": 0,
+				"numYearDaySlots": 0,
+				"numDailyRepeatingSlots": 1,
+				// To pass arguments for dynamic CC values, put them in round brackets (must be parseable by `JSON.parse()`)
+				"userEnabled(1)": true
+			},
+			// Which metadata should be stored in the value DB when the API method is called (optional).
+			// The keys are the names of the predefined values of the given CC,
+			// see the CC documentation for available values.
+			"extendMetadata": {
+				"numWeekDaySlots": {
+					// This metadata will be merged with the statically defined metadata
+					"states": {
+						"0": "none",
+						"1": "one",
+						// ...
+					}
+				},
+			},
+		}
+	]
+}
+```
 
 ### `preserveEndpoints`
 
@@ -401,6 +480,17 @@ Many devices unnecessarily use endpoints when they could (or do) provide all fun
 
 The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achieve this, set `preserveRootApplicationCCValueIDs` to `true`.
 
+### `removeEndpoints`
+
+Some devices expose endpoints which are not needed or don't behave correctly. Using this flag, they can be ignored/hidden from applications. Example:
+
+```js
+"removeEndpoints": "*",    // to remove all endpoints and only preserve the root device
+"removeEndpoints": [3, 5], // to remove endpoints 3 and 5
+```
+
+Note that this setting has precedence over `preserveEndpoints`.
+
 ### `reportTimeout`
 
 By default, the driver determines the time to wait for a response from a node using the RTT of the request (including nonce exchange if needed) and adds `1s` to it. While `1s` is recommended by the specs and a good default, some devices have been found to sometimes respond slower. Instead of increasing the timeout for all devices with the driver option, the `reportTimeout` compat flag can be used to increase the timeout for a specific device.
@@ -413,17 +503,22 @@ Some devices spam the network with lots of `ConfigurationCC::NameReport`s in res
 
 Some devices spam the network with lots of (sometimes invalid) `ConfigurationCC::InfoReport`s in response to the `InfoGet` command. Set this flag to `true` to skip this query for affected devices.
 
-### `treatBasicSetAsEvent`
-
-By default, `Basic CC::Set` commands are interpreted as status updates. This flag causes the driver to emit a `value event` for the `"event"` property instead. Note that this property is exclusively used in this case in order to avoid conflicts with regular value IDs.
-
-> [!NOTE]
-> If this option is `true`, it has precedence over `disableBasicMapping`.
-
 ### `treatMultilevelSwitchSetAsEvent`
 
 By default, `Multilevel Switch CC::Set` commands are ignored, because they are meant to control end devices. This flag causes the driver to emit a `value event` for the `"event"` property instead, so applications can react to these commands, e.g. for remotes.
 
+### `treatSetAsReport`
+
+By default, many `Set` CC commands are ignored, because they are meant to control end devices. For some devices, those commands are the only way to receive updates about some values though.
+This flag causes the driver treat the listed commands as a report instead and issue a `value report`, so applications can react to them.
+
+> [!NOTE] This mapping is CC specific and must be implemented for every CC that needs it. Currently, only `BinarySwitchCCSet` and `ThermostatModeCCSet` are supported.
+
 ### `treatDestinationEndpointAsSource`
 
 Some devices incorrectly use the multi channel **destination** endpoint in reports to indicate the **source** endpoint the report originated from. When this flag is `true`, the destination endpoint is instead interpreted to be the source and the original source endpoint gets ignored.
+
+### `useUTCInTimeParametersCC`
+
+When a device exposes no other way to configure timezone information, Z-Wave JS uses local time for setting the date and time using `Time Parameters CC`. Per the specification, UTC should be used for this, but it has been found that without timezone information, devices tend to falsely interpret UTC as local time in this case.
+By setting `useUTCInTimeParametersCC` to `true`, UTC is used anyways, so devices that get their timezone information from other sources can be configured correctly.

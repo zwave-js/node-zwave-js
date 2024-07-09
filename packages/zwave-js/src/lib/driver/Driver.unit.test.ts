@@ -1,10 +1,12 @@
-import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 // import { Message, MessageType, messageTypes } from "@zwave-js/serial";
 import { MockSerialPort } from "@zwave-js/serial/mock";
+import { mergeDeep } from "@zwave-js/shared";
 import test from "ava";
 import proxyquire from "proxyquire";
 import sinon from "sinon";
-import { createAndStartDriver, PORT_ADDRESS } from "../test/utils";
+import { PORT_ADDRESS, createAndStartDriver } from "../test/utils";
+import { type PartialZWaveOptions, driverPresets } from "./ZWaveOptions";
 
 // @messageTypes(MessageType.Request, 0xff)
 // class TestMessage extends Message {}
@@ -100,7 +102,7 @@ test.serial(
 		// fail opening of the serialport
 		const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 		portInstance.openStub.callsFake(() =>
-			Promise.reject(new Error("NOPE")),
+			Promise.reject(new Error("NOPE"))
 		);
 
 		await t.throwsAsync(startPromise, { message: /NOPE/ });
@@ -195,6 +197,85 @@ test.serial("the constructor should throw on duplicate security keys", (t) => {
 			errorCode: ZWaveErrorCodes.Driver_InvalidOptions,
 		},
 	);
+});
+
+test("merging multiple sets of options should work", (t) => {
+	const preset1: PartialZWaveOptions = {
+		attempts: {
+			sendDataJammed: 1,
+		},
+		timeouts: {
+			sendDataAbort: 22000,
+			sendDataCallback: 33000,
+		},
+	};
+
+	const preset2: PartialZWaveOptions = {
+		attempts: {
+			sendDataJammed: 2,
+			sendData: 3,
+		},
+		timeouts: {
+			sendDataAbort: 25000,
+		},
+	};
+
+	const driver = new Driver("/dev/test", preset1, preset2);
+
+	t.like(driver.options, {
+		attempts: {
+			sendDataJammed: 2,
+			sendData: 3,
+		},
+		timeouts: {
+			sendDataAbort: 25000,
+			sendDataCallback: 33000,
+		},
+		// This comes from the defaults:
+		features: {
+			softReset: true,
+		},
+	});
+});
+
+test("The result of merging multiple sets of options is still checked", (t) => {
+	const preset1: PartialZWaveOptions = {
+		attempts: {
+			sendDataJammed: 1,
+		},
+		timeouts: {
+			sendDataAbort: 22000,
+			sendDataCallback: 33000,
+		},
+	};
+
+	const preset2: PartialZWaveOptions = {
+		attempts: {
+			sendDataJammed: 2,
+			sendData: 3,
+		},
+		timeouts: {
+			sendDataAbort: 1,
+		},
+	};
+
+	assertZWaveError(t, () => new Driver("/dev/test", preset1, preset2), {
+		errorCode: ZWaveErrorCodes.Driver_InvalidOptions,
+		messageMatches: /Abort/,
+	});
+});
+
+test("The exported driver presets work", (t) => {
+	const driver = new Driver(
+		"/dev/test",
+		driverPresets.SAFE_MODE,
+		driverPresets.AWAKE_LONGER,
+	);
+
+	let expected = mergeDeep({}, driverPresets.SAFE_MODE, true);
+	expected = mergeDeep(expected, driverPresets.AWAKE_LONGER, true);
+
+	t.like(driver.options, expected);
 });
 
 // describe.skip("sending messages", () => {

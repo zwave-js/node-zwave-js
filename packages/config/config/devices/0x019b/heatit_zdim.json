@@ -26,8 +26,8 @@
 		},
 		{
 			"#": "2",
-			"label": "Minimum Dim level",
-			"description": "efines the lowest dimming level",
+			"label": "Minimum Dim Level",
+			"description": "Defines the lowest dimming level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -35,7 +35,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Maximum Dim level",
+			"label": "Maximum Dim Level",
 			"description": "Defines the highest dimming level of the dimmer",
 			"valueSize": 1,
 			"minValue": 2,
@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Total steps",
+			"label": "Total Steps",
 			"description": "How many steps it should take to dim from min to max",
 			"valueSize": 1,
 			"minValue": 5,
@@ -54,7 +54,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Double press function",
+			"label": "Double Press Function",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"readOnly": true,
@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Scene controller",
+			"label": "Scene Controller",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -89,10 +89,10 @@
 		},
 		{
 			"#": "7",
-			"label": "Switch ON level",
+			"label": "Switch ON Level",
 			"description": "Defines the dim level when restored from OFF state by push button",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
@@ -118,10 +118,10 @@
 		},
 		{
 			"#": "10",
-			"label": "Power restore level",
+			"label": "Power Restore Level",
 			"description": "Defines initial dimming level after power loss.",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 50

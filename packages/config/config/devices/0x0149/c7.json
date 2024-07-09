@@ -1,0 +1,376 @@
+{
+	"manufacturer": "wiDom",
+	"manufacturerId": "0x0149",
+	"label": "C7",
+	"description": "Energy Driven Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0009"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "21",
+			"label": "Output Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Direct load control or normally open relay",
+					"value": 0
+				},
+				{
+					"label": "Normally closed relay",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "23",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
+			"defaultValue": 0
+		},
+		{
+			"#": "31",
+			"label": "Auto-Off Timer",
+			"valueSize": 4,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 360000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Auto-On Timer",
+			"valueSize": 4,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 360000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "40",
+			"label": "Up Power: Integrated Relay Reaction",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "41",
+			"label": "Down Power: Integrated Relay Reaction",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "42",
+			"label": "Meter Type",
+			"description": "Defines how consumed (positive) and produced (negative) energy is treated",
+			"valueSize": 1,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Measure consumed and produced energy",
+					"value": 0
+				},
+				{
+					"label": "Measure consumed energy only, ignore produced energy",
+					"value": 1
+				},
+				{
+					"label": "Measure produced energy only, ignore consumed energy",
+					"value": 2
+				},
+				{
+					"label": "Energy is only consumed",
+					"value": 3
+				},
+				{
+					"label": "Energy is only produced",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "43",
+			"label": "Current Transformer Type",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard type",
+					"value": 1
+				},
+				{
+					"label": "Type 2 version",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "44",
+			"label": "Up Power: Value Sent to Association Groups",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On (0xff)",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "45",
+			"label": "Up Power: Value Sent to Association Groups",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On (0xff)",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "46",
+			"label": "Over Voltage Threshold",
+			"valueSize": 2,
+			"unit": "0.1 V",
+			"minValue": 900,
+			"maxValue": 2530,
+			"defaultValue": 2530
+		},
+		{
+			"#": "47",
+			"label": "Down Voltage Threshold",
+			"valueSize": 2,
+			"unit": "0.1 V",
+			"minValue": 900,
+			"maxValue": 2530,
+			"defaultValue": 2070
+		},
+		{
+			"#": "50",
+			"label": "Up Power: Threshold",
+			"valueSize": 4,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 100000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "51",
+			"label": "Up Power: Energy Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Consumed",
+					"value": 0
+				},
+				{
+					"label": "Produced",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "52",
+			"label": "Up Power: First Timeout",
+			"description": "After this time above the Up Power threshold, an Up Power event occurs",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 7200,
+			"defaultValue": 30
+		},
+		{
+			"#": "53",
+			"label": "Up Power: Next Timeout",
+			"description": "After this time above the Up Power threshold, further Up Power events occur",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 7200,
+			"defaultValue": 5
+		},
+		{
+			"#": "54",
+			"label": "Down Power: Threshold",
+			"valueSize": 4,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 100000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "55",
+			"label": "Down Power: Energy Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Consumed",
+					"value": 0
+				},
+				{
+					"label": "Produced",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "56",
+			"label": "Down Power: First Timeout",
+			"description": "After this time below the Down Power threshold, an Down Power event occurs",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 7200,
+			"defaultValue": 30
+		},
+		{
+			"#": "57",
+			"label": "Down Power: Next Timeout",
+			"description": "After this time below the Down Power threshold, further Down Power events occur",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 7200,
+			"defaultValue": 5
+		},
+		{
+			"#": "58",
+			"label": "Up/Down Power: Protection Time",
+			"description": "How long to wait before Up/Down Power Events can be triggered again",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 3600,
+			"defaultValue": 60
+		},
+		{
+			"#": "71",
+			"label": "Meter Report Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		{
+			"#": "75",
+			"label": "Power Change Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "76[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Energy Reports",
+			"defaultValue": 1
+		},
+		{
+			"#": "76[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Power Reports",
+			"defaultValue": 1
+		},
+		{
+			"#": "76[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Voltage Reports",
+			"defaultValue": 1
+		},
+		{
+			"#": "76[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Current Reports",
+			"defaultValue": 1
+		},
+		{
+			"#": "76[0x40]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Power Factor Reports",
+			"defaultValue": 1
+		}
+	],
+	"metadata": {
+		"manual": "https://support.widom.it/wp-content/uploads/2022/11/energy-driven-switch-c-serie-700-manual-en.pdf"
+	}
+}

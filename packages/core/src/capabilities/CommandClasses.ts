@@ -128,8 +128,9 @@ export enum CommandClasses {
 	"Z/IP ND" = 0x58,
 	"Z/IP Portal" = 0x61,
 	"Z-Wave Plus Info" = 0x5e,
-	// Internal CC which is not used directly by applications
+	// Internal CCs which are not used directly by applications
 	"Z-Wave Protocol" = 0x01,
+	"Z-Wave Long Range" = 0x04,
 }
 
 export function getCCName(cc: number): string {
@@ -163,6 +164,13 @@ export const actuatorCCs: readonly CommandClasses[] = [
 	CommandClasses["Window Covering"],
 ];
 
+const actuatorCCsAsSet = new Set(actuatorCCs);
+
+/** Returns if the given CC is an Actuator CC */
+export function isActuatorCC(cc: CommandClasses): boolean {
+	return actuatorCCsAsSet.has(cc);
+}
+
 /**
  * Defines which CCs are considered Sensor CCs
  */
@@ -176,6 +184,13 @@ export const sensorCCs: readonly CommandClasses[] = [
 	CommandClasses.Notification, // For pull nodes
 	CommandClasses["Pulse Meter"],
 ];
+
+const sensorCCsAsSet = new Set(sensorCCs);
+
+/** Returns if the given CC is a Sensor CC */
+export function isSensorCC(cc: CommandClasses): boolean {
+	return sensorCCsAsSet.has(cc);
+}
 
 /**
  * Defines which CCs are considered Application CCs
@@ -255,6 +270,13 @@ export const applicationCCs: readonly CommandClasses[] = [
 	CommandClasses["Window Covering"],
 ];
 
+const applicationCCsAsSet = new Set(applicationCCs);
+
+/** Returns if the given CC is an Application CC */
+export function isApplicationCC(cc: CommandClasses): boolean {
+	return applicationCCsAsSet.has(cc);
+}
+
 /**
  * Defines which CCs are considered Encapsulation CCs
  */
@@ -264,8 +286,16 @@ export const encapsulationCCs: readonly CommandClasses[] = [
 	CommandClasses["Multi Command"],
 	CommandClasses.Security,
 	CommandClasses["Security 2"],
+	CommandClasses.Supervision,
 	CommandClasses["Transport Service"],
 ];
+
+const encapsulationCCsAsSet = new Set(encapsulationCCs);
+
+/** Returns if the given CC is an Encapsulation CC */
+export function isEncapsulationCC(cc: CommandClasses): boolean {
+	return encapsulationCCsAsSet.has(cc);
+}
 
 /**
  * Defines which CCs are considered Management CCs
@@ -295,6 +325,13 @@ export const managementCCs: readonly CommandClasses[] = [
 	CommandClasses["Z/IP Naming and Location"],
 	CommandClasses["Z-Wave Plus Info"],
 ];
+
+const managementCCsAsSet = new Set(managementCCs);
+
+/** Returns if the given CC is a Management CC */
+export function isManagementCC(cc: CommandClasses): boolean {
+	return managementCCsAsSet.has(cc);
+}
 
 /**
  * An array of all defined CCs that are not application CCs

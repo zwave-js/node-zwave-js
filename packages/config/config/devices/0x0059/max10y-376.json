@@ -18,7 +18,7 @@
 		{
 			"#": "1",
 			"label": "Enable/Disable Fail Safe Timer",
-			"description": "For any non zero value fail safe timer of 60 minutes starts after valid 'switch binary set' or 'Basic Set' command, timer is reloaded with 60 minutes on every successful communication with the controller. in case of communication failure with the controller for 60 minutes. fail safe timer will switch off the relay and communication failure indicated on rf led",
+			"description": "For any non zero value fail safe timer of 60 minutes starts after valid 'Binary Switch set' or 'Basic Set' command, timer is reloaded with 60 minutes on every successful communication with the controller. in case of communication failure with the controller for 60 minutes. fail safe timer will switch off the relay and communication failure indicated on rf led",
 			"valueSize": 1,
 			"unit": "minutes",
 			"defaultValue": 0,
@@ -44,7 +44,6 @@
 			"description": "Used to select temperature scale '°c' or '°f' for unsolicited multilevel sensor report. note: (1) on every scale change config parameter 3 to 5 will be set to their default values. (2) parameter 2 to 5 available only if temperature sensor is connected while inclusion process",
 			"valueSize": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -75,7 +74,7 @@
 					"value": 32767
 				},
 				{
-					"label": "Not used (ignore)",
+					"label": "Not used (Ignore)",
 					"value": 29
 				},
 				{
@@ -90,7 +89,6 @@
 			"description": "Configuration of delta temperature for delta temperature change based reporting. in case of °f scale: minimum value is 0 and maximum value is 500 (in 0.1 °f resolution)",
 			"valueSize": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -98,7 +96,7 @@
 					"value": 0
 				},
 				{
-					"label": "Delta temperature value in °c (in 0.1 °c resolution)",
+					"label": "Delta temperature value in °c (In 0.1 °c resolution)",
 					"value": 100
 				}
 			]
@@ -112,7 +110,6 @@
 			"minValue": 0,
 			"maxValue": 2120,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Cut off temperature feature is disable",

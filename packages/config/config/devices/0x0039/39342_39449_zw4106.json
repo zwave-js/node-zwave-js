@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39342 / 39449 / ZW4106",
-	"description": "Plug-in 2-Outlet Switch, Simultaneous, 500S",
+	"description": "Plug-In 2-Outlet Switch, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",
@@ -37,26 +37,25 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED on when light is turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always Off",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "Adding your device to a Z-Wave network:\n1. Follow the instructions for your Z-Wave certified controller to\ninclude the device to the Z-Wave network.\n2. Once the controller is ready to include your smart switch,\nsingle press and release the manual/program button on the\nsmart switch to include it in the network.\nNow you have complete control to turn your lamp ON/OFF\naccording to groups, scenes, schedules and interactive\nautomations programmed by your controller.\nIf your Z-Wave certified controller features Remote Access,\nyou can now control your lighting from your mobile devices",

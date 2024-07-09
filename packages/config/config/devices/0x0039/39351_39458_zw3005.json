@@ -37,19 +37,18 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED ON when load is ON",
+					"label": "LED on when load is on",
 					"value": 1
 				},
 				{
-					"label": "LED always OFF",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
@@ -60,15 +59,14 @@
 			"description": "If the switch is accidentally installed upside down with “On” at the bottom and “Off” at the top, the default On/Off rocker settings can be reversed by changing parameter 4’s value to “1”",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Orientation",
+					"label": "Normal orientation",
 					"value": 0
 				},
 				{
-					"label": "Invert Switch",
+					"label": "Invert switch",
 					"value": 1
 				}
 			]
@@ -80,8 +78,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
@@ -91,8 +88,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "9",
@@ -101,8 +97,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "10",
@@ -112,8 +107,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "11",
@@ -123,8 +117,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "12",
@@ -134,12 +127,11 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\ninclude a device to the Z-Wave network.\n2. Once the controller is ready to add your device,\npress and release the top or bottom of the wireless smart\nswitch (rocker) to add it in the network.\nPlease reference the controller’s manual for instructions",

@@ -39,9 +39,14 @@ const tests = [
 
 for (let i = 1; i <= tests.length; i++) {
 	const { logic, context, expected } = tests[i - 1];
-	test(`Logic parser, test ${i}: ${JSON.stringify(
-		context,
-	)} --> ${logic} is ${expected}`, (t) => {
-		t.is(evaluate(logic, context), expected);
-	});
+	test(
+		`Logic parser, test ${i}: ${
+			JSON.stringify(
+				context,
+			)
+		} --> ${logic} is ${expected}`,
+		(t) => {
+			t.is(evaluate(logic, context), expected);
+		},
+	);
 }

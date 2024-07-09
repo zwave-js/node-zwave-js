@@ -2,7 +2,7 @@
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "SR-BX-ZW",
-	"description": "External siren",
+	"description": "External Siren",
 	"devices": [
 		{
 			"productType": "0x6f01",
@@ -22,8 +22,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "2",
@@ -39,7 +38,6 @@
 			"minValue": 0,
 			"maxValue": 25,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

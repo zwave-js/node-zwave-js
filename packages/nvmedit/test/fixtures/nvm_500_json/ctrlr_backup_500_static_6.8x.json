@@ -22,25 +22,8 @@
 				"nodeId": 2,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					85,
-					159,
-					108,
-					134,
-					114,
-					90,
-					115,
-					49,
-					67,
-					64,
-					66,
-					68,
-					69,
-					112,
-					133,
-					142,
-					89,
-					122
+					94, 85, 159, 108, 134, 114, 90, 115, 49, 67, 64, 66, 68, 69,
+					112, 133, 142, 89, 122
 				],
 				"controlledCCs": []
 			},
@@ -48,18 +31,7 @@
 				"nodeId": 3,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					38,
-					51,
-					112,
-					133,
-					89,
-					114,
-					134,
-					122,
-					115,
-					152,
-					90
+					94, 38, 51, 112, 133, 89, 114, 134, 122, 115, 152, 90
 				],
 				"controlledCCs": []
 			},
@@ -73,25 +45,8 @@
 				"nodeId": 4,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					85,
-					159,
-					108,
-					134,
-					114,
-					90,
-					115,
-					49,
-					67,
-					64,
-					66,
-					68,
-					69,
-					112,
-					133,
-					142,
-					89,
-					122
+					94, 85, 159, 108, 134, 114, 90, 115, 49, 67, 64, 66, 68, 69,
+					112, 133, 142, 89, 122
 				],
 				"controlledCCs": []
 			}
@@ -101,26 +56,14 @@
 		"systemState": 0,
 		"watchdogStarted": 0,
 		"rfConfig": {
-			"powerLevelNormal": [
-				255,
-				255,
-				255
-			],
-			"powerLevelLow": [
-				255,
-				255,
-				255
-			],
+			"powerLevelNormal": [255, 255, 255],
+			"powerLevelLow": [255, 255, 255],
 			"powerMode": 255,
 			"powerModeExtintEnable": 255,
 			"powerModeWutTimeout": 4294967295
 		},
 		"preferredRepeaters": [],
-		"commandClasses": [
-			33,
-			32,
-			134
-		],
+		"commandClasses": [33, 32, 134],
 		"applicationData": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
 	},
 	"nodes": {
@@ -128,10 +71,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": false,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": false,
 			"nodeType": 0,
@@ -140,10 +80,7 @@
 			"genericDeviceClass": 2,
 			"specificDeviceClass": 1,
 			"isVirtual": false,
-			"neighbors": [
-				3,
-				4
-			],
+			"neighbors": [3, 4],
 			"sucUpdateIndex": 255,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -156,10 +93,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -168,10 +102,7 @@
 			"genericDeviceClass": 15,
 			"specificDeviceClass": 1,
 			"isVirtual": false,
-			"neighbors": [
-				1,
-				4
-			],
+			"neighbors": [1, 4],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -187,10 +118,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -199,10 +127,7 @@
 			"genericDeviceClass": 8,
 			"specificDeviceClass": 6,
 			"isVirtual": false,
-			"neighbors": [
-				1,
-				3
-			],
+			"neighbors": [1, 3],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,

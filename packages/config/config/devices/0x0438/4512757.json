@@ -1,0 +1,419 @@
+{
+	"manufacturer": "Namron",
+	"manufacturerId": "0x0438",
+	"label": "4512757",
+	"description": "16 A Thermostat - White",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0108"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "ECO Mode",
+			"valueSize": 4
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Window Check",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Frost",
+			"valueSize": 4
+		},
+		{
+			"#": "23",
+			"label": "Temperature Unit",
+			"valueSize": 4,
+			"unit": "°C",
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "°C",
+					"value": 0
+				},
+				{
+					"label": "°F",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "27",
+			"label": "Temperature Calibration",
+			"valueSize": 4,
+			"unit": "°C",
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "31",
+			"label": "Work Days Set",
+			"valueSize": 4,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monday - Friday",
+					"value": 0
+				},
+				{
+					"label": "Monday - Saturday",
+					"value": 1
+				},
+				{
+					"label": "Monday - Sunday",
+					"value": 2
+				},
+				{
+					"label": "None",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "40",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Child Lock",
+			"valueSize": 4
+		},
+		{
+			"#": "43",
+			"label": "Sensor Mode",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
+			"options": [
+				{
+					"label": "A",
+					"value": 0
+				},
+				{
+					"label": "F",
+					"value": 1
+				},
+				{
+					"label": "AF",
+					"value": 2
+				},
+				{
+					"label": "A2",
+					"value": 3
+				},
+				{
+					"label": "A2F",
+					"value": 4
+				},
+				{
+					"label": "P",
+					"value": 6
+				}
+			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
+		},
+		{
+			"#": "58",
+			"label": "Run Mode",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual",
+					"value": 0
+				},
+				{
+					"label": "Program",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "112",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Adaption",
+			"valueSize": 4
+		},
+		{
+			"#": "118",
+			"label": "Regulator",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 30
+		},
+		{
+			"#": "123",
+			"label": "LCD Backlight Standby",
+			"description": "Allowable range: 10-100 (increment by 10)",
+			"valueSize": 4,
+			"defaultValue": 10,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10 %",
+					"value": 10
+				},
+				{
+					"label": "20 %",
+					"value": 20
+				},
+				{
+					"label": "30 %",
+					"value": 30
+				},
+				{
+					"label": "40 %",
+					"value": 40
+				},
+				{
+					"label": "50 %",
+					"value": 50
+				},
+				{
+					"label": "60 %",
+					"value": 60
+				},
+				{
+					"label": "70 %",
+					"value": 70
+				},
+				{
+					"label": "80 %",
+					"value": 80
+				},
+				{
+					"label": "90 %",
+					"value": 90
+				},
+				{
+					"label": "100 %",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "124",
+			"label": "LCD Backlight Work",
+			"description": "Allowable range: 10-100 (increment by 10)",
+			"valueSize": 4,
+			"defaultValue": 100,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10 %",
+					"value": 10
+				},
+				{
+					"label": "20 %",
+					"value": 20
+				},
+				{
+					"label": "30 %",
+					"value": 30
+				},
+				{
+					"label": "40 %",
+					"value": 40
+				},
+				{
+					"label": "50 %",
+					"value": 50
+				},
+				{
+					"label": "60 %",
+					"value": 60
+				},
+				{
+					"label": "70 %",
+					"value": 70
+				},
+				{
+					"label": "80 %",
+					"value": 80
+				},
+				{
+					"label": "90 %",
+					"value": 90
+				},
+				{
+					"label": "100 %",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "127",
+			"label": "Regulator Percentage",
+			"description": "Allowable range: 0-100 (increment by 10)",
+			"valueSize": 4,
+			"defaultValue": 20,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0 %",
+					"value": 0
+				},
+				{
+					"label": "10 %",
+					"value": 10
+				},
+				{
+					"label": "20 %",
+					"value": 20
+				},
+				{
+					"label": "30 %",
+					"value": 30
+				},
+				{
+					"label": "40 %",
+					"value": 40
+				},
+				{
+					"label": "50 %",
+					"value": 50
+				},
+				{
+					"label": "60 %",
+					"value": 60
+				},
+				{
+					"label": "70 %",
+					"value": 70
+				},
+				{
+					"label": "80 %",
+					"value": 80
+				},
+				{
+					"label": "90 %",
+					"value": 90
+				},
+				{
+					"label": "100 %",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "134",
+			"label": "Differential (Celsius)",
+			"description": "Allowable range: 5-100 (increment by 5)",
+			"valueSize": 4,
+			"unit": "°C",
+			"minValue": 5,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "135",
+			"label": "Differential (Fahrenheit)",
+			"description": "Allowable range: 10-180 (increment by 10)",
+			"valueSize": 4,
+			"unit": "°C",
+			"minValue": 10,
+			"maxValue": 180,
+			"defaultValue": 20
+		},
+		{
+			"#": "136",
+			"label": "Frost (Celsius)",
+			"description": "Allowable range: 50-100 (increment by 10)",
+			"valueSize": 4,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 100,
+			"defaultValue": 50
+		},
+		{
+			"#": "137",
+			"label": "Frost (Fahrenheit)",
+			"description": "Allowable range: 410-500 (increment by 20)",
+			"valueSize": 4,
+			"unit": "0.1 °C",
+			"minValue": 410,
+			"maxValue": 500,
+			"defaultValue": 410
+		},
+		{
+			"#": "183",
+			"label": "Dry",
+			"description": "Allowable range: 0-120 (increment by 5)",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 30
+		},
+		{
+			"#": "185",
+			"label": "Floor Limit Temp (Celsius)",
+			"description": "Allowable range: 50-600 (increment by 5)",
+			"valueSize": 4,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 600,
+			"defaultValue": 270
+		},
+		{
+			"#": "186",
+			"label": "Floor Limit Temp (Fahrenheit)",
+			"description": "Allowable range: 410-1400 (increment by 10)",
+			"valueSize": 4,
+			"unit": "0.1 °C",
+			"minValue": 410,
+			"maxValue": 1400,
+			"defaultValue": 810
+		},
+		{
+			"#": "188",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LCD Display Switch",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "189",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Automatically Get Network Time",
+			"valueSize": 4
+		}
+	],
+	"metadata": {
+		"inclusion": "Select menu item “Net”, then find IN and long-press M for 2s.",
+		"exclusion": "Select menu item “Net”, then find OUT and long-press M for 2s.",
+		"reset": "Select menu item “Net”, then find OUT and long-press M for 2s.",
+		"manual": "https://www.elektroimportoren.no/docs/lib/4512757-Manual-18.pdf"
+	},
+	"compat": {
+		// This device only accepts Thermostat Setpoint Set commands with a specific float encoding
+		"overrideFloatEncoding": {
+			"precision": 1,
+			"size": 2
+		}
+	}
+}

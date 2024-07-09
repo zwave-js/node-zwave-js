@@ -28,7 +28,6 @@ test.before(async (t) => {
 			t.context.controller = controller;
 		},
 	});
-	await driver.configManager.loadDeviceClasses();
 	t.context.driver = driver;
 });
 
@@ -97,7 +96,7 @@ test.serial(
 			{
 				commandClass: CommandClasses["Thermostat Setpoint"],
 				property: "setpoint",
-				propertyKey: 1 /* Heating */,
+				propertyKey: 1, /* Heating */
 			},
 			5,
 		);

@@ -2,7 +2,7 @@
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSA03XXX-ZW",
-	"description": "Minimote 4 button remote control",
+	"description": "Minimote 4 Button Remote Control",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -86,7 +86,7 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
-				"0x84": {
+				"Wake Up": {
 					// To fix issue #1536
 					"isSupported": true,
 					"version": 1

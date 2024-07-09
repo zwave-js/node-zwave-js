@@ -1,9 +1,9 @@
 import {
+	NVMFile,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
 } from "./NVMFile";
 

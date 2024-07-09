@@ -24,96 +24,78 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Default switch state",
-			"description": "Behaviour after mains failure",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Plug actuator OFF",
-					"value": 0
-				},
-				{
-					"label": "Plug actuator ON",
-					"value": 1
-				},
-				{
-					"label": "Last status is restored",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "2",
-			"label": "Energy minimum report time",
+			"label": "Energy Minimum Report Time",
 			"description": "Minimum time between two (non-requested) energy values",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 10
 		},
 		{
 			"#": "3",
-			"label": "Energy maximum report time",
+			"label": "Energy Maximum Report Time",
 			"description": "Maximum time between two energy values, independently of changes in the value",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120
 		},
 		{
 			"#": "4",
-			"label": "Power minimum report time",
+			"label": "Power Minimum Report Time",
 			"description": "Minimum time between two (non-requested) power values",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 10
 		},
 		{
 			"#": "5",
-			"label": "Power maximum report time",
+			"label": "Power Maximum Report Time",
 			"description": "Maximum time between two power values, independently of changes in the value",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120
 		},
 		{
 			"#": "6",
-			"label": "Energy delta value",
+			"label": "Energy Delta Value",
 			"description": "Minimum change required for a new energy value to be transmitted.",
-			"unit": "0.1 Wh",
 			"valueSize": 2,
+			"unit": "0.1 Wh",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 10
 		},
 		{
 			"#": "7",
-			"label": "Power delta value",
+			"label": "Power Delta Value",
 			"description": "Minimum change required for a new power value to be transmitted.",
-			"unit": "0.1 Wh",
 			"valueSize": 2,
+			"unit": "0.1 Wh",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 150
 		},
 		{
 			"#": "8",
-			"label": "Safety shutdown configuration",
+			"label": "Safety Shutdown Configuration",
 			"description": "Behaviour in the event of a safety shutdown",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Plug actuator remains OFF",
+					"label": "Plug actuator remains off",
 					"value": 0
 				},
 				{
@@ -124,7 +106,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Reset of overcurrent shutdown",
+			"label": "Reset of Overcurrent Shutdown",
 			"description": "Activation despite 3x safety shutdown",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -143,32 +125,32 @@
 		},
 		{
 			"#": "10",
-			"label": "Night mode",
+			"label": "Night Mode",
 			"description": "Set Night mode of the Status LED",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Night mode OFF",
+					"label": "Night mode off",
 					"value": 0
 				},
 				{
-					"label": "Night mode ON",
+					"label": "Night mode on",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Info LED colour",
+			"label": "Info LED Colour",
 			"description": "Set color of the Info LED",
 			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Info LED OFF",
+					"label": "Info LED off",
 					"value": 0
 				},
 				{

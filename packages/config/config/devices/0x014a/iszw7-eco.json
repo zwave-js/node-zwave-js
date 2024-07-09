@@ -21,8 +21,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "2",
@@ -31,15 +30,13 @@
 			"unit": "seconds",
 			"minValue": 120,
 			"maxValue": 86400,
-			"defaultValue": 3600,
-			"unsigned": true
+			"defaultValue": 3600
 		},
 		{
 			"#": "3",
 			"label": "Supervision Encapsulation for Get Requests",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -59,8 +56,7 @@
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		},
 		{
 			"#": "5",
@@ -78,7 +74,6 @@
 			"label": "Allow Volume Adjustments for Intrusion/Smoke/CO Alarms",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

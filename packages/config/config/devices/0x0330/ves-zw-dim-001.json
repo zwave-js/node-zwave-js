@@ -6,12 +6,13 @@
 	"devices": [
 		{
 			"productType": "0x0200",
-			"productId": "0xd00c"
+			"productId": "0xd00c",
+			"zwaveAllianceId": 3331
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "1.21",
+		"max": "1.30"
 	},
 	"paramInformation": [
 		{
@@ -20,8 +21,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Send Basic Report on State Change",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Basic Report on State Change",
 			"defaultValue": 1
 		},
 		{
@@ -31,8 +32,7 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "5",
@@ -40,8 +40,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "6",
@@ -57,7 +56,6 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Momentary",
@@ -71,30 +69,29 @@
 		},
 		{
 			"#": "9",
-			"label": "Use External Switch for Inclusion/Exclusion",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Use External Switch for Inclusion/Exclusion",
 			"defaultValue": 1
 		},
 		{
 			"#": "11",
 			"label": "Wiring Type",
-			"readOnly": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
+			"readOnly": true,
 			"options": [
 				{
 					"label": "Unknown",
 					"value": 0
 				},
 				{
-					"label": "2-wire (no neutral)",
+					"label": "2-Wire (No neutral)",
 					"value": 1
 				},
 				{
-					"label": "3-wire (with neutral)",
+					"label": "3-Wire (With neutral)",
 					"value": 2
 				}
 			]
@@ -102,12 +99,11 @@
 		{
 			"#": "12",
 			"label": "Load Type",
-			"readOnly": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"unsigned": true,
+			"readOnly": true,
 			"options": [
 				{
 					"label": "Unknown",
@@ -129,39 +125,36 @@
 		},
 		{
 			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Over Current Protection",
 			"description": "Triggered at over 2.1A for 20 seconds continuously.",
-			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
 		{
 			"#": "14",
-			"label": "Power Report Absolute Threshold",
-			"unit": "W",
+			"label": "Power Report: Change Threshold",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 400,
-			"unsigned": true,
 			"defaultValue": 10
 		},
 		{
 			"#": "15",
-			"label": "Power Report Percentage Threshold",
-			"unit": "%",
+			"label": "Power Report: Relative Change Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"unsigned": true,
 			"defaultValue": 20
 		},
 		{
 			"#": "21",
 			"label": "Power Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
-			"unsigned": true,
 			"defaultValue": 600,
 			"options": [
 				{
@@ -173,11 +166,10 @@
 		{
 			"#": "22",
 			"label": "Energy Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
-			"unsigned": true,
 			"defaultValue": 1800,
 			"options": [
 				{
@@ -189,11 +181,10 @@
 		{
 			"#": "23",
 			"label": "Voltage Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
-			"unsigned": true,
 			"defaultValue": 3600,
 			"options": [
 				{
@@ -205,11 +196,10 @@
 		{
 			"#": "24",
 			"label": "Current Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
-			"unsigned": true,
 			"defaultValue": 3600,
 			"options": [
 				{
@@ -222,9 +212,8 @@
 			"#": "31",
 			"label": "Dimming Curve",
 			"valueSize": 1,
-			"allowManualEntry": false,
-			"unsigned": true,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Linear",
@@ -238,9 +227,9 @@
 		},
 		{
 			"#": "32",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"label": "Startup Brightness",
 			"description": "When the light is turned from off to on, if the target brightness is lower than the startup brightness, the brightness will first go to the startup brightness then fall to the target brightness.",
-			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"defaultValue": 0
 		}
 	],

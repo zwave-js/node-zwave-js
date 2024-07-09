@@ -56,19 +56,19 @@
 			"#": "3",
 			"label": "Set Filter Counter",
 			"valueSize": 2,
+			"unit": "hours",
 			"minValue": 500,
 			"maxValue": 4000,
-			"defaultValue": 500,
-			"unit": "hours"
+			"defaultValue": 500
 		},
 		{
 			"#": "4",
 			"label": "Report Filter Counter",
 			"valueSize": 2,
+			"unit": "hours",
 			"minValue": 0,
 			"maxValue": 9999,
 			"defaultValue": 0,
-			"unit": "hours",
 			"readOnly": true
 		},
 		{
@@ -76,7 +76,6 @@
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -107,37 +106,23 @@
 		},
 		{
 			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Easy Mode",
-			"description": "Set Easy Mode 0:DISABLE 1:ENABLED DEFAULT:ENABLED",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Easy Mode Disabled",
-					"value": 0
-				},
-				{
-					"label": "Easy Mode Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "9",
 			"label": "Time Format",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "24 Hour Format",
+					"label": "24 hour",
 					"value": 0
 				},
 				{
-					"label": "12 Hour Format",
+					"label": "12 hour",
 					"value": 1
 				}
 			]
@@ -153,7 +138,7 @@
 		},
 		{
 			"#": "11",
-			"label": "AUTO report by room temperature",
+			"label": "AUTO Report by Room Temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -161,7 +146,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Sensor temperature calibration.",
+			"label": "Sensor Temperature Calibration",
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,
@@ -169,7 +154,7 @@
 		},
 		{
 			"#": "13",
-			"label": "AUTO report by time interval.",
+			"label": "AUTO Report by Time Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 16,

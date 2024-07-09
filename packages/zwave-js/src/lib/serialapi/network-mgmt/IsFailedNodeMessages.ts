@@ -1,12 +1,12 @@
-import { MessagePriority } from "@zwave-js/core";
+import { MessagePriority, encodeNodeID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -29,7 +29,7 @@ export class IsFailedNodeRequest extends Message {
 	public failedNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.failedNodeId]);
+		this.payload = encodeNodeID(this.failedNodeId, this.host.nodeIdType);
 		return super.serialize();
 	}
 }

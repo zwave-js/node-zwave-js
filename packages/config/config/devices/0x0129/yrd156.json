@@ -2,7 +2,7 @@
 	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRD156",
-	"description": "Touchscreen Deadbolt with Integrated ZWave Plus",
+	"description": "Touchscreen Deadbolt with Integrated Z-Wave Plus",
 	"devices": [
 		{
 			"productType": "0x803a",
@@ -37,7 +37,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/yale_template.json#operating_mode"
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
 		},
 		{
 			"#": "11",

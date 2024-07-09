@@ -19,6 +19,10 @@
 		{
 			"productType": "0x0004",
 			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0xffff"
 		}
 	],
 	"firmwareVersion": {
@@ -59,7 +63,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "~/0x0129/templates/yale_template.json#operating_mode"
+			"$import": "~/0x0129/templates/yale_template.json#operating_mode_normal_vacation_privacy"
 		}
 	],
 	"compat": {
@@ -90,6 +94,9 @@
 			},
 			{
 				"$import": "~/0x0129/templates/yale_template.json#alarm_map_low_battery"
+			},
+			{
+				"$import": "~/0x0129/templates/yale_template.json#alarm_map_critical_battery"
 			},
 			{
 				"$import": "~/0x0129/templates/yale_template.json#alarm_map_auto_relock"

@@ -2,7 +2,7 @@
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ69",
-	"description": "Smart meter switch",
+	"description": "Smart Meter Switch",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -68,9 +68,9 @@
 		{
 			"#": "3",
 			"label": "Watt Meter Report Period",
-			"description": "5s x 720 (default) = 3600s = 1 hour",
-			"unit": "5 seconds",
+			"description": "5s x 720 = 3600s = 1 hour",
 			"valueSize": 2,
+			"unit": "5 seconds",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
@@ -78,9 +78,9 @@
 		{
 			"#": "4",
 			"label": "kWH Meter Report Period",
-			"description": "10m * 6 (default) = 60m = 1 hour",
-			"unit": "10 minutes",
+			"description": "10m * 6 = 60m = 1 hour",
 			"valueSize": 2,
+			"unit": "10 minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 6
@@ -89,18 +89,18 @@
 			"#": "5",
 			"label": "Threshold of Watt for Load Caution",
 			"description": "Above this level, switch enters overload mode",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 10,
 			"maxValue": 3000,
 			"defaultValue": 3000
 		},
 		{
 			"#": "6",
-			"label": "Threshold of kWH for Load Caution",
+			"label": "Threshold of kWh for Load Caution",
 			"description": "Over this level, unit with go into overload mode",
-			"unit": "kWH",
 			"valueSize": 2,
+			"unit": "kWh",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000
@@ -110,7 +110,7 @@
 		"commandClasses": {
 			"add": {
 				// This device is a binary switch, but claims not to support the Binary Switch CC
-				"0x25": {
+				"Binary Switch": {
 					"isSupported": true
 				}
 			}

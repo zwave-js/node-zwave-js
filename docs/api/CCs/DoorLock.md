@@ -50,15 +50,15 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Duration in seconds until lock returns to secure state
--   **min. CC version:** 4
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 65535
+- **label:** Duration in seconds until lock returns to secure state
+- **min. CC version:** 4
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 65535
 
 ### `blockToBlock`
 
@@ -70,13 +70,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Block-to-block functionality enabled
--   **min. CC version:** 4
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Block-to-block functionality enabled
+- **min. CC version:** 4
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `boltStatus`
 
@@ -88,13 +88,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Current status of the bolt
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Current status of the bolt
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `currentMode`
 
@@ -106,15 +106,15 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Current lock mode
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Current lock mode
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `doorStatus`
 
@@ -126,13 +126,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Current status of the door
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Current status of the door
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `duration`
 
@@ -144,13 +144,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Remaining duration until target lock mode
--   **min. CC version:** 3
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** Remaining duration until target lock mode
+- **min. CC version:** 3
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `holdAndReleaseTime`
 
@@ -162,15 +162,15 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Duration in seconds the latch stays retracted
--   **min. CC version:** 4
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 65535
+- **label:** Duration in seconds the latch stays retracted
+- **min. CC version:** 4
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 65535
 
 ### `insideHandlesCanOpenDoor`
 
@@ -182,13 +182,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Which inside handles can open the door (actual status)
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Which inside handles can open the door (actual status)
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `insideHandlesCanOpenDoorConfiguration`
 
@@ -200,13 +200,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Which inside handles can open the door (configuration)
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Which inside handles can open the door (configuration)
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `latchStatus`
 
@@ -218,13 +218,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Current status of the latch
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Current status of the latch
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `lockTimeout`
 
@@ -236,15 +236,15 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Seconds until lock mode times out
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 65535
+- **label:** Seconds until lock mode times out
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 65535
 
 ### `lockTimeoutConfiguration`
 
@@ -256,15 +256,15 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Duration of timed mode in seconds
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 65535
+- **label:** Duration of timed mode in seconds
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 65535
 
 ### `operationType`
 
@@ -276,15 +276,15 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Lock operation type
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Lock operation type
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `outsideHandlesCanOpenDoor`
 
@@ -296,13 +296,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Which outside handles can open the door (actual status)
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Which outside handles can open the door (actual status)
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `outsideHandlesCanOpenDoorConfiguration`
 
@@ -314,13 +314,13 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Which outside handles can open the door (configuration)
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Which outside handles can open the door (configuration)
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `targetMode`
 
@@ -332,15 +332,15 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Target lock mode
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Target lock mode
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `twistAssist`
 
@@ -352,10 +352,10 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 }
 ```
 
--   **label:** Twist Assist enabled
--   **min. CC version:** 4
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Twist Assist enabled
+- **min. CC version:** 4
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`

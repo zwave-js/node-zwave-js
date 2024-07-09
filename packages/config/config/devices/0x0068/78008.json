@@ -29,7 +29,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Basic set level for nodes of group2",
+			"label": "Basic Set Level for Nodes of Group2",
 			"description": "255: Binary switch ON, 1-99: Dimmer level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,20 +39,20 @@
 		},
 		{
 			"#": "2",
-			"label": "Basic set OFF delay time for nodes of group2",
+			"label": "Basic Set OFF Delay Time for Nodes of Group2",
 			"description": "0: Disable, 0-127 Second",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
 		{
 			"#": "3",
-			"label": "Delay time to enter standby mode",
+			"label": "Delay Time to Enter Standby Mode",
 			"description": "After force to wake up, delay time to enter standby mode again",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 10,
@@ -60,9 +60,9 @@
 		},
 		{
 			"#": "4",
-			"label": "Delay time to enter standby after wake up",
-			"unit": "Seconds",
+			"label": "Delay Time to Enter Standby After Wake Up",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 5,
@@ -70,9 +70,9 @@
 		},
 		{
 			"#": "5",
-			"label": "Set waiting exclusion time",
-			"unit": "Seconds",
+			"label": "Set Waiting Exclusion Time",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Activate/Deactivate WUT standby mode",
+			"label": "Activate/Deactivate WUT Standby Mode",
 			"description": "0: Always wake up, 1: Enter standby mode",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -98,37 +98,24 @@
 		},
 		{
 			"#": "7",
-			"label": "Activate/Deactivate Tamper alarm mode",
-			"description": "0: Disable, 1: Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Activate/Deactivate Tamper Alarm Mode"
 		},
 		{
 			"#": "8",
-			"label": "Tamper alarm continuously send",
+			"label": "Tamper Alarm Continuously Send",
 			"description": "In tamper alarm mode, delay time for continuously send Sensor_Binary_report",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 30,
 			"defaultValue": 5
 		},
 		{
 			"#": "9",
-			"label": "Interval time for sending battery report",
-			"unit": "Minutes",
+			"label": "Interval Time for Sending Battery Report",
 			"valueSize": 1,
+			"unit": "minutes",
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -148,7 +135,7 @@
 		},
 		{
 			"#": "10",
-			"label": "set the configuration of 2 external sensors",
+			"label": "Set the Configuration of 2 External Sensors",
 			"description": "BIT0: sensor1 (S1), BIT1: sensor2 (S2)",
 			"valueSize": 1,
 			"minValue": 0,

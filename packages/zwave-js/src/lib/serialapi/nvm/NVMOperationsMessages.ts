@@ -1,22 +1,22 @@
 import {
-	MessageOrCCLogEntry,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	validatePayload,
+	type MessageRecord,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -236,7 +236,7 @@ export class NVMOperationsResponse extends Message implements SuccessIndicator {
 		const dataLength = this.payload[1];
 		// The response to the write command contains the offset and written data length, but no data
 		if (dataLength > 0 && this.payload.length >= 4 + dataLength) {
-			this.buffer = this.payload.slice(4, 4 + dataLength);
+			this.buffer = this.payload.subarray(4, 4 + dataLength);
 		} else {
 			this.buffer = Buffer.from([]);
 		}
@@ -244,8 +244,8 @@ export class NVMOperationsResponse extends Message implements SuccessIndicator {
 
 	isOK(): boolean {
 		return (
-			this.status === NVMOperationStatus.OK ||
-			this.status === NVMOperationStatus.EndOfFile
+			this.status === NVMOperationStatus.OK
+			|| this.status === NVMOperationStatus.EndOfFile
 		);
 	}
 

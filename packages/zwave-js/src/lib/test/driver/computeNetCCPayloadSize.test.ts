@@ -3,7 +3,7 @@ import { MultiChannelCCCommandEncapsulation } from "@zwave-js/cc/MultiChannelCC"
 import { SecurityCCCommandEncapsulation } from "@zwave-js/cc/SecurityCC";
 import { EncapsulationFlags, TransmitOptions } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
-import ava, { TestFn } from "ava";
+import ava, { type TestFn } from "ava";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
@@ -71,6 +71,6 @@ test("should compute the correct net payload sizes", (t) => {
 	const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
 		nodeId: 2,
 	});
-	testMsg3.setEncapsulationFlag(EncapsulationFlags.Security, true);
+	testMsg3.toggleEncapsulationFlag(EncapsulationFlags.Security, true);
 	t.is(driver.computeNetCCPayloadSize(testMsg3), 46 - 20 - 2);
 });

@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "DZPA1",
-	"description": "Plug-in Appliance Module",
+	"description": "Plug-In Appliance Module",
 	"devices": [
 		{
 			"productType": "0x1a02",
@@ -27,7 +27,7 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#locator_led"
+			"$import": "templates/leviton_template.json#locator_led"
 		}
 	]
 }

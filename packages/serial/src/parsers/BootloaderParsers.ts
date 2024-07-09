@@ -1,4 +1,4 @@
-import { Transform, TransformCallback } from "stream";
+import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../Logger";
 import { XModemMessageHeaders } from "../MessageHeaders";
 
@@ -11,36 +11,36 @@ export enum BootloaderChunkType {
 
 export type BootloaderChunk =
 	| {
-			type: BootloaderChunkType.Error;
-			error: string;
-			_raw: string;
-	  }
+		type: BootloaderChunkType.Error;
+		error: string;
+		_raw: string;
+	}
 	| {
-			type: BootloaderChunkType.Menu;
-			version: string;
-			options: { num: number; option: string }[];
-			_raw: string;
-	  }
+		type: BootloaderChunkType.Menu;
+		version: string;
+		options: { num: number; option: string }[];
+		_raw: string;
+	}
 	| {
-			type: BootloaderChunkType.Message;
-			message: string;
-			_raw: string;
-	  }
+		type: BootloaderChunkType.Message;
+		message: string;
+		_raw: string;
+	}
 	| {
-			type: BootloaderChunkType.FlowControl;
-			command:
-				| XModemMessageHeaders.ACK
-				| XModemMessageHeaders.NAK
-				| XModemMessageHeaders.CAN
-				| XModemMessageHeaders.C;
-	  };
+		type: BootloaderChunkType.FlowControl;
+		command:
+			| XModemMessageHeaders.ACK
+			| XModemMessageHeaders.NAK
+			| XModemMessageHeaders.CAN
+			| XModemMessageHeaders.C;
+	};
 
 function isFlowControl(byte: number): boolean {
 	return (
-		byte === XModemMessageHeaders.ACK ||
-		byte === XModemMessageHeaders.NAK ||
-		byte === XModemMessageHeaders.CAN ||
-		byte === XModemMessageHeaders.C
+		byte === XModemMessageHeaders.ACK
+		|| byte === XModemMessageHeaders.NAK
+		|| byte === XModemMessageHeaders.CAN
+		|| byte === XModemMessageHeaders.C
 	);
 }
 
@@ -68,7 +68,7 @@ export class BootloaderScreenParser extends Transform {
 
 		// Correct buggy ordering of NUL char in error codes.
 		// The bootloader may send errors as "some error 0x\012" instead of "some error 0x12\0"
-		this.receiveBuffer = this.receiveBuffer.replace(
+		this.receiveBuffer = this.receiveBuffer.replaceAll(
 			/(error 0x)\0([0-9a-f]+)/gi,
 			"$1$2\0",
 		);
@@ -131,7 +131,7 @@ export class BootloaderParser extends Transform {
 				{
 					type: BootloaderChunkType.FlowControl,
 					command: chunk,
-				} /* satisfies BootloaderChunk */,
+				}, /* satisfies BootloaderChunk */
 			);
 		}
 
@@ -152,7 +152,7 @@ export class BootloaderParser extends Transform {
 						type: BootloaderChunkType.Error,
 						error: "Could not determine bootloader version",
 						_raw: screen,
-					} /* satisfies BootloaderChunk */,
+					}, /* satisfies BootloaderChunk */
 				);
 			}
 
@@ -171,7 +171,7 @@ export class BootloaderParser extends Transform {
 					_raw: screen,
 					version,
 					options,
-				} /* satisfies BootloaderChunk */,
+				}, /* satisfies BootloaderChunk */
 			);
 		} else {
 			// Some output
@@ -180,7 +180,7 @@ export class BootloaderParser extends Transform {
 					type: BootloaderChunkType.Message,
 					_raw: screen,
 					message: screen,
-				} /* satisfies BootloaderChunk */,
+				}, /* satisfies BootloaderChunk */
 			);
 		}
 

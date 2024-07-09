@@ -40,7 +40,6 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -55,7 +54,6 @@
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -71,7 +69,6 @@
 			"minValue": 0,
 			"maxValue": 23,
 			"defaultValue": 13,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Outbound edge towards the left (Open/Close)",
@@ -178,7 +175,6 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{
@@ -203,10 +199,7 @@
 			"#": "34",
 			"label": "Sun Activation",
 			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 7,
 			"defaultValue": 5,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -227,7 +220,6 @@
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
@@ -237,7 +229,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{
@@ -253,21 +244,17 @@
 		{
 			"#": "37",
 			"label": "Level Reporting Frequency",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 2,
 			"maxValue": 60,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "38",
 			"label": "Send Multilevel Report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

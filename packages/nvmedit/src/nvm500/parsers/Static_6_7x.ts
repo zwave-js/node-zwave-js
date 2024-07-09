@@ -4,7 +4,7 @@ import type { NVM500Details } from "../NVMParser";
 import {
 	APPL_NODEPARM_MAX,
 	NVMEntryType,
-	NVMLayout,
+	type NVMLayout,
 	NVM_SERIALAPI_HOST_SIZE,
 	POWERLEVEL_CHANNELS,
 	RTC_TIMER_SIZE,

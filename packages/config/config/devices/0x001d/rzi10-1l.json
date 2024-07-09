@@ -1,10 +1,8 @@
-// Leviton RZI10-1L
-// Dimmer switch 1000w incandescent
 {
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "RZI10-1L",
-	"description": "Dimmer switch 1000w incandescent",
+	"description": "Dimmer Switch 1000 W Incandescent",
 	"devices": [
 		{
 			"productType": "0x0501",

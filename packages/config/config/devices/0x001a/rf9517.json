@@ -28,7 +28,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delayed OFF time",
+			"label": "Delayed OFF Time",
 			"description": "The time in seconds the switch will delay when trigger the delayed off feature",
 			"valueSize": 1,
 			"minValue": 0,

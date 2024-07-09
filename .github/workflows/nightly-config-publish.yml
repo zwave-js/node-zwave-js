@@ -11,16 +11,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0 # Fetch the history, or this action won't work
 
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'

@@ -40,11 +40,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Slow Ramp Rate",
+					"label": "Slow ramp rate",
 					"value": 0
 				},
 				{
-					"label": "Fast Ramp Rate",
+					"label": "Fast ramp rate",
 					"value": 1
 				}
 			]

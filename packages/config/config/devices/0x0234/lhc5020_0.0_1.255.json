@@ -2,7 +2,7 @@
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "LHC5020",
-	"description": "DIN-rail module with 10 digital outputs and 4 digital inputs",
+	"description": "DIN-Rail Module with 10 Digital Outputs and 4 Digital Inputs",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Diode control",
+			"label": "Diode Control",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -30,18 +30,18 @@
 					"value": 1
 				},
 				{
-					"label": "Blinking 1 sec. interval",
+					"label": "Blinking 1 sec. Interval",
 					"value": 2
 				},
 				{
-					"label": "Blinking 0.5 sec. interval",
+					"label": "Blinking 0.5 sec. Interval",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Turn on/off voltage on input terminal 1",
+			"label": "Turn On/off Voltage on Input Terminal 1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -58,7 +58,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Turn on/off voltage on input terminal 2",
+			"label": "Turn On/off Voltage on Input Terminal 2",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -75,7 +75,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Turn on/off voltage on input terminal 3",
+			"label": "Turn On/off Voltage on Input Terminal 3",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -92,7 +92,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Turn on/off voltage on input terminal 4",
+			"label": "Turn On/off Voltage on Input Terminal 4",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Prel. filter time on input terminals",
+			"label": "Prel. Filter Time on Input Terminals",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -118,7 +118,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Threshold for triggering input",
+			"label": "Threshold for Triggering Input",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -127,7 +127,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Threshold time for triggering input",
+			"label": "Threshold Time for Triggering Input",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Function for input terminal 1",
+			"label": "Function for Input Terminal 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -144,7 +144,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Function for input terminal 2",
+			"label": "Function for Input Terminal 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -152,7 +152,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Function for input terminal 3",
+			"label": "Function for Input Terminal 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -160,7 +160,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Function for input terminal 4",
+			"label": "Function for Input Terminal 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -168,7 +168,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Central Scene notification",
+			"label": "Central Scene Notification",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

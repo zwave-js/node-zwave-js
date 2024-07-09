@@ -48,7 +48,7 @@ async getSupported(): Promise<Pick<NotificationCCSupportedReport, "supportsV1Ala
 ```ts
 async getSupportedEvents(
 	notificationType: number,
-): Promise<readonly number[] | undefined>;
+): Promise<MaybeNotKnown<readonly number[]>>;
 ```
 
 ## Notification CC values
@@ -63,15 +63,15 @@ async getSupportedEvents(
 }
 ```
 
--   **label:** Alarm Level
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Alarm Level
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `alarmType`
 
@@ -83,15 +83,57 @@ async getSupportedEvents(
 }
 ```
 
--   **label:** Alarm Type
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Alarm Type
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
+
+### `doorStateSimple`
+
+```ts
+{
+	commandClass: CommandClasses.Notification,
+	endpoint: number,
+	property: "Access Control",
+	propertyKey: "Door state (simple)",
+}
+```
+
+- **label:** Door state (simple)
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
+
+### `doorTiltState`
+
+```ts
+{
+	commandClass: CommandClasses.Notification,
+	endpoint: number,
+	property: "Access Control",
+	propertyKey: "Door tilt state",
+}
+```
+
+- **label:** Door tilt state
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `notificationVariable(notificationName: string, variableName: string)`
 
@@ -104,12 +146,12 @@ async getSupportedEvents(
 }
 ```
 
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`
 
 ### `unknownNotificationType(notificationType: number)`
 
@@ -121,15 +163,15 @@ async getSupportedEvents(
 }
 ```
 
--   **label:** `Unknown notification (${string})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Unknown notification (${string})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `unknownNotificationVariable(notificationType: number, notificationName: string)`
 
@@ -142,12 +184,12 @@ async getSupportedEvents(
 }
 ```
 
--   **label:** `${string}: Unknown value`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `${string}: Unknown value`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

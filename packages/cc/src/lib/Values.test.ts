@@ -12,11 +12,10 @@ test("defineDynamicCCValues, dynamic property and meta", (t) => {
 			(valueType: string) => valueType,
 			({ property, propertyKey }: any) =>
 				typeof property === "string" && property === propertyKey,
-			(valueType: string) =>
-				({
-					...ValueMetadata.Any,
-					readable: valueType === "readable",
-				} as const),
+			(valueType: string) => ({
+				...ValueMetadata.Any,
+				readable: valueType === "readable",
+			} as const),
 			{ internal: true },
 		),
 		...V.dynamicPropertyAndKeyWithName(
@@ -24,9 +23,9 @@ test("defineDynamicCCValues, dynamic property and meta", (t) => {
 			(valueType: string) => valueType + "2",
 			(valueType: string) => valueType + "2",
 			({ property, propertyKey }: any) =>
-				typeof property === "string" &&
-				property.endsWith("2") &&
-				property === propertyKey,
+				typeof property === "string"
+				&& property.endsWith("2")
+				&& property === propertyKey,
 			(valueType: string) => ({
 				...ValueMetadata.Any,
 				writeable: valueType !== "not-writeable",

@@ -1,30 +1,34 @@
 import {
 	CommandClasses,
-	formatDate,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
+	type IZWaveEndpoint,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	SupervisionResult,
-	validatePayload,
+	type SupervisionResult,
 	ValueMetadata,
+	formatDate,
+	validatePayload,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -41,17 +45,23 @@ import { TimeParametersCommand } from "../lib/_Types";
 
 export const TimeParametersCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Time Parameters"], {
-		...V.staticProperty("dateAndTime", {
-			...ValueMetadata.Any,
-			label: "Date and Time",
-		} as const),
+		...V.staticProperty(
+			"dateAndTime",
+			{
+				...ValueMetadata.Any,
+				label: "Date and Time",
+			} as const,
+		),
 	}),
 });
 
 /**
  * Determines if the node expects local time instead of UTC.
  */
-function shouldUseLocalTime(endpoint: IZWaveEndpoint): boolean {
+function shouldUseLocalTime(
+	applHost: ZWaveApplicationHost,
+	endpoint: IZWaveEndpoint,
+): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
 	// so they need to interpret the set time as local time instead of UTC.
 	//
@@ -59,11 +69,19 @@ function shouldUseLocalTime(endpoint: IZWaveEndpoint): boolean {
 	// 1. DON'T control TimeCC V1, so they cannot request the local time
 	// 2. DON'T support TimeCC V2, so the controller cannot specify the timezone offset
 	// Incidentally, this is also true when they don't support TimeCC at all
+
+	// Use UTC though when the device config file explicitly requests it
+	const forceUTC = !!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
+		?.useUTCInTimeParametersCC;
+	if (forceUTC) return false;
+
 	const ccVersion = endpoint.getCCVersion(CommandClasses.Time);
-	if (ccVersion >= 1 && endpoint.controlsCC(CommandClasses.Time))
+	if (ccVersion >= 1 && endpoint.controlsCC(CommandClasses.Time)) {
 		return false;
-	if (ccVersion >= 2 && endpoint.supportsCC(CommandClasses.Time))
+	}
+	if (ccVersion >= 2 && endpoint.supportsCC(CommandClasses.Time)) {
 		return false;
+	}
 
 	return true;
 }
@@ -114,7 +132,7 @@ function dateToSegments(date: Date, local: boolean): DateSegments {
 
 @API(CommandClasses["Time Parameters"])
 export class TimeParametersCCAPI extends CCAPI {
-	public supportsCommand(cmd: TimeParametersCommand): Maybe<boolean> {
+	public supportsCommand(cmd: TimeParametersCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case TimeParametersCommand.Get:
 				return this.isSinglecast();
@@ -124,31 +142,30 @@ export class TimeParametersCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		if (property !== "dateAndTime") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (!(value instanceof Date)) {
-			throwWrongValueType(this.ccId, property, "date", typeof value);
-		}
-		return this.set(value);
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "dateAndTime":
-				return this.get();
-			default:
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function(this: TimeParametersCCAPI, { property }, value) {
+			if (property !== "dateAndTime") {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+			if (!(value instanceof Date)) {
+				throwWrongValueType(this.ccId, property, "date", typeof value);
+			}
+			return this.set(value);
+		};
+	}
 
-	public async get(): Promise<Date | undefined> {
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function(this: TimeParametersCCAPI, { property }) {
+			switch (property) {
+				case "dateAndTime":
+					return this.get();
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
+
+	public async get(): Promise<MaybeNotKnown<Date>> {
 		this.assertSupportsCommand(
 			TimeParametersCommand,
 			TimeParametersCommand.Get,
@@ -158,11 +175,12 @@ export class TimeParametersCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<TimeParametersCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			TimeParametersCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.dateAndTime;
 	}
 
@@ -175,13 +193,13 @@ export class TimeParametersCCAPI extends CCAPI {
 			TimeParametersCommand.Set,
 		);
 
-		const useLocalTime = this.endpoint.virtual
-			? shouldUseLocalTime(
-					this.endpoint.node.physicalNodes[0].getEndpoint(
-						this.endpoint.index,
-					)!,
-			  )
-			: shouldUseLocalTime(this.endpoint);
+		const endpointToCheck = this.endpoint.virtual
+			? this.endpoint.node.physicalNodes[0].getEndpoint(
+				this.endpoint.index,
+			)!
+			: this.endpoint;
+
+		const useLocalTime = shouldUseLocalTime(this.applHost, endpointToCheck);
 
 		const cc = new TimeParametersCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
@@ -254,11 +272,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// If necessary, fix the date and time before persisting it
-		const local = shouldUseLocalTime(
-			applHost.nodes
-				.get(this.nodeId as number)!
-				.getEndpoint(this.endpointIndex)!,
-		);
+		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
@@ -274,9 +288,9 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		return this._dateAndTime;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"date and time": formatDate(
 					this.dateAndTime,
@@ -291,7 +305,8 @@ export class TimeParametersCCReport extends TimeParametersCC {
 @expectedCCResponse(TimeParametersCCReport)
 export class TimeParametersCCGet extends TimeParametersCC {}
 
-interface TimeParametersCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface TimeParametersCCSetOptions extends CCCommandOptions {
 	dateAndTime: Date;
 	useLocalTime?: boolean;
 }
@@ -338,11 +353,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		// We do not actually persist anything here, but we need access to the node
 		// in order to interpret the date segments correctly
 
-		const local = shouldUseLocalTime(
-			applHost.nodes
-				.get(this.nodeId as number)!
-				.getEndpoint(this.endpointIndex)!,
-		);
+		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
@@ -374,9 +385,9 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"date and time": formatDate(
 					this.dateAndTime,

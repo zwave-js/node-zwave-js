@@ -1,0 +1,234 @@
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZXT-800",
+	"description": "IR AC & AV Extender",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x8492",
+			"zwaveAllianceId": 4788
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "25",
+			"label": "Learn AC IR Code",
+			"description": "Refer to AC mapping table",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 40,
+			"defaultValue": 0
+		},
+		{
+			"#": "26",
+			"label": "Learn AV IR Code",
+			"description": "Refer to AV mapping table",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 40,
+			"defaultValue": 0
+		},
+		{
+			"#": "27",
+			"label": "Set IR Code From Built-In AC Library",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2389,
+			"defaultValue": 18
+		},
+		{
+			"#": "28",
+			"label": "External IR Emitter Power Level",
+			"valueSize": 1,
+			"defaultValue": 255,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "High",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "30",
+			"label": "Temperature Change Reporting Threshold",
+			"description": "1 °F = 0.5 °C",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0
+		},
+		{
+			"#": "32",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Built-In IR Emitter Control",
+			"defaultValue": 255
+		},
+		{
+			"#": "33",
+			"label": "Air Conditioner Swing Function",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Auto",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "34",
+			"label": "Temperature & Humidity Reporting Interval",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "15 minutes",
+					"value": 1
+				},
+				{
+					"label": "30 minutes",
+					"value": 2
+				},
+				{
+					"label": "1 hour",
+					"value": 3
+				},
+				{
+					"label": "2 hours",
+					"value": 4
+				},
+				{
+					"label": "3 hours",
+					"value": 5
+				},
+				{
+					"label": "4 hours",
+					"value": 6
+				},
+				{
+					"label": "8 hours",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "37",
+			"label": "Temperature Calibration",
+			"description": "1 °F = 0.5 °C",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "38",
+			"label": "Select AV Endpoint",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "Endpoint 2 (AV 1)",
+					"value": 2
+				},
+				{
+					"label": "Endpoint 3 (AV 2)",
+					"value": 3
+				},
+				{
+					"label": "Endpoint 4 (AV 3)",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "53",
+			"label": "Humidity Offset",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": -30,
+			"maxValue": 30,
+			"defaultValue": 0
+		},
+		{
+			"#": "60",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "BLE Advertising",
+			"minValue": 0,
+			"maxValue": 255
+		},
+		{
+			"#": "61",
+			"label": "BLE Advertising Timeout",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10 minutes",
+					"value": 0
+				},
+				{
+					"label": "No timeout",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "160",
+			"label": "Reset to Default Settings",
+			"description": "255 to reset device to defaults",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Reset",
+					"value": 255
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Classic inclusion\nRefer to your primary controller to enter into the Inclusion Mode or Exclusion Mode\nOnce the primary controller is ready to include/exclude the device, press the “PROG” button once",
+		"exclusion": "Refer to your primary controller to enter into the Inclusion Mode or Exclusion Mode\nOnce the primary controller is ready to include/exclude the device, press the “PROG” button once",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable\nPress and keep holding “PROG” button not less than 10 seconds:\nLED will light up at first 5 seconds, LED flashes twice then stay off after reset process completed",
+		"manual": "https://remotec.com.hk/wp-content/uploads/2023/07/ZXT-800_USER_MANUAL_V1.0.pdf"
+	}
+}

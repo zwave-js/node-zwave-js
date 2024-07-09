@@ -22,7 +22,6 @@
 			"minValue": 21930,
 			"maxValue": 21930,
 			"defaultValue": 21930,
-			"unsigned": true,
 			"writeOnly": true
 		}
 	],

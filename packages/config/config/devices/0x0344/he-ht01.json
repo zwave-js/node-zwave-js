@@ -60,15 +60,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle Switch",
+					"label": "Toggle switch",
 					"value": 1
 				},
 				{
-					"label": "Toggle Switch Reverse",
+					"label": "Toggle switch reverse",
 					"value": 2
 				},
 				{
-					"label": "Push Button (Momentary Switch)",
+					"label": "Push button (Momentary switch)",
 					"value": 3
 				}
 			]
@@ -79,6 +79,7 @@
 			"valueSize": 1,
 			"defaultValue": 6,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "COM",
@@ -105,12 +106,13 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "10",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Floor Sensor Resistance",
 			"unit": "kΩ",
-			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"defaultValue": 10
 		},
 		{
@@ -125,7 +127,7 @@
 					"value": 1
 				},
 				{
-					"label": "Air and Floor sensors",
+					"label": "Air and floor sensors",
 					"value": 2
 				},
 				{
@@ -133,7 +135,7 @@
 					"value": 3
 				},
 				{
-					"label": "Floor and Air sensor",
+					"label": "Floor and air sensor",
 					"value": 4
 				},
 				{
@@ -141,11 +143,11 @@
 					"value": 5
 				},
 				{
-					"label": "Time regulator and Air sensor",
+					"label": "Time regulator and air sensor",
 					"value": 6
 				},
 				{
-					"label": "Time regulator and Floor sensor",
+					"label": "Time regulator and floor sensor",
 					"value": 7
 				}
 			]
@@ -153,8 +155,8 @@
 		{
 			"#": "12",
 			"label": "Air Temperature: Minimum",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 360,
 			"defaultValue": 210
@@ -162,8 +164,8 @@
 		{
 			"#": "13",
 			"label": "Air Temperature: Maximum",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 20,
 			"maxValue": 370,
 			"defaultValue": 270
@@ -171,8 +173,8 @@
 		{
 			"#": "14",
 			"label": "Floor Temperature: Minimum",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 360,
 			"defaultValue": 180
@@ -180,8 +182,8 @@
 		{
 			"#": "15",
 			"label": "Floor Temperature: Maximum",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 20,
 			"maxValue": 370,
 			"defaultValue": 320
@@ -199,8 +201,8 @@
 		{
 			"#": "18",
 			"label": "Temperature Hysteresis",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 2,
 			"maxValue": 100,
 			"defaultValue": 5
@@ -238,8 +240,8 @@
 			"#": "23",
 			"label": "Time Regulation On Time",
 			"description": "Floor HEATING time when time regulator is selected as the source sensor in Parameter 11.",
-			"unit": "minutes",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 240,
 			"defaultValue": 30
@@ -248,8 +250,8 @@
 			"#": "24",
 			"label": "Time Regulation Off Time",
 			"description": "Floor IDLE time when time regulator is selected as the source sensor in Parameter 11.",
-			"unit": "minutes",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 240,
 			"defaultValue": 30
@@ -257,18 +259,19 @@
 		{
 			"#": "25",
 			"label": "Dry Time",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 90,
 			"defaultValue": 30
 		},
 		{
 			"#": "26",
-			"label": "Mode To Switch After Dry Mode Operation Completion",
+			"label": "Mode to Switch After Dry Mode Operation Completion",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "COM",
@@ -291,6 +294,7 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "40",
@@ -301,15 +305,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "All Locked",
+					"label": "All locked",
 					"value": 1
 				},
 				{
-					"label": "Set Point Unlocked",
+					"label": "Set point unlocked",
 					"value": 2
 				},
 				{
-					"label": "Set Point and Mode Unlocked",
+					"label": "Set point and mode unlocked",
 					"value": 3
 				}
 			]
@@ -317,8 +321,8 @@
 		{
 			"#": "41",
 			"label": "Morning Start Time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 600
@@ -326,8 +330,8 @@
 		{
 			"#": "42",
 			"label": "Day Start Time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 900
@@ -335,8 +339,8 @@
 		{
 			"#": "43",
 			"label": "Evening Start Time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 1800
@@ -344,8 +348,8 @@
 		{
 			"#": "44",
 			"label": "Night Start Time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 2300
@@ -353,8 +357,8 @@
 		{
 			"#": "45",
 			"label": "Monday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -362,8 +366,8 @@
 		{
 			"#": "46",
 			"label": "Monday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -371,8 +375,8 @@
 		{
 			"#": "47",
 			"label": "Monday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -380,8 +384,8 @@
 		{
 			"#": "48",
 			"label": "Monday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -389,8 +393,8 @@
 		{
 			"#": "49",
 			"label": "Tuesday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -398,8 +402,8 @@
 		{
 			"#": "50",
 			"label": "Tuesday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -407,8 +411,8 @@
 		{
 			"#": "51",
 			"label": "Tuesday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -416,8 +420,8 @@
 		{
 			"#": "52",
 			"label": "Tuesday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -425,8 +429,8 @@
 		{
 			"#": "53",
 			"label": "Wednesday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -434,8 +438,8 @@
 		{
 			"#": "54",
 			"label": "Wednesday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -443,8 +447,8 @@
 		{
 			"#": "55",
 			"label": "Wednesday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -452,8 +456,8 @@
 		{
 			"#": "56",
 			"label": "Wednesday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -461,8 +465,8 @@
 		{
 			"#": "57",
 			"label": "Thursday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -470,8 +474,8 @@
 		{
 			"#": "58",
 			"label": "Thursday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -479,8 +483,8 @@
 		{
 			"#": "59",
 			"label": "Thursday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -488,8 +492,8 @@
 		{
 			"#": "60",
 			"label": "Thursday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -497,8 +501,8 @@
 		{
 			"#": "61",
 			"label": "Friday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -506,8 +510,8 @@
 		{
 			"#": "62",
 			"label": "Friday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -515,8 +519,8 @@
 		{
 			"#": "63",
 			"label": "Friday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -524,8 +528,8 @@
 		{
 			"#": "64",
 			"label": "Friday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -533,8 +537,8 @@
 		{
 			"#": "65",
 			"label": "Saturday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -542,8 +546,8 @@
 		{
 			"#": "66",
 			"label": "Saturday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -551,8 +555,8 @@
 		{
 			"#": "67",
 			"label": "Saturday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -560,8 +564,8 @@
 		{
 			"#": "68",
 			"label": "Saturday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -569,8 +573,8 @@
 		{
 			"#": "69",
 			"label": "Sunday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -578,8 +582,8 @@
 		{
 			"#": "70",
 			"label": "Sunday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -587,8 +591,8 @@
 		{
 			"#": "71",
 			"label": "Sunday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -596,60 +600,60 @@
 		{
 			"#": "72",
 			"label": "Sunday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
 		},
 		{
 			"#": "141",
-			"label": "Energy Consumption Report Interval",
-			"$import": "templates/heltun_template.json#report_interval"
+			"$import": "templates/heltun_template.json#report_interval",
+			"label": "Energy Consumption Report Interval"
 		},
 		{
 			"#": "142",
 			"label": "Energy Consumption Report Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 25
 		},
 		{
 			"#": "143",
-			"label": "Sensors Consecutive Reporting Interval",
-			"$import": "templates/heltun_template.json#report_interval"
+			"$import": "templates/heltun_template.json#report_interval",
+			"label": "Sensors Consecutive Reporting Interval"
 		},
 		{
 			"#": "144",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Air & Floor Temperature Sensors Report Threshold",
 			"unit": "0.1 °C",
-			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"defaultValue": 2
 		},
 		{
 			"#": "145",
 			"label": "Humidity Sensor Report Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 25,
 			"defaultValue": 2
 		},
 		{
 			"#": "146",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"label": "Light Sensor Report Threshold",
 			"unit": "%",
-			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"defaultValue": 50
 		},
 		{
 			"#": "152",
 			"$if": "firmwareVersion >= 2.5",
 			"label": "Temperature Rise Notification",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 40,
 			"maxValue": 99,
 			"defaultValue": 50
@@ -657,16 +661,16 @@
 		{
 			"#": "154",
 			"$if": "firmwareVersion >= 2.5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Over-Current Notification",
 			"description": "The device will switch Off the load when the current reaches 16A.",
-			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
 		{
 			"#": "159",
 			"$if": "firmwareVersion >= 2.5",
-			"label": "Load Error Notification",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Load Error Notification",
 			"defaultValue": 1
 		},
 		{
@@ -676,9 +680,10 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
-					"label": "No Action",
+					"label": "No action",
 					"value": 0
 				},
 				{
@@ -706,6 +711,7 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		}
 	],
 	"compat": {
@@ -713,7 +719,7 @@
 		"$if": "firmwareVersion < 2.6",
 		"commandClasses": {
 			"remove": {
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

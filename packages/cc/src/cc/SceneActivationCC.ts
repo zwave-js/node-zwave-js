@@ -1,5 +1,4 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
@@ -7,23 +6,24 @@ import type {
 import {
 	CommandClasses,
 	Duration,
-	validatePayload,
+	type MaybeNotKnown,
 	ValueMetadata,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	SetValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -50,10 +50,13 @@ export const SceneActivationCCValues = Object.freeze({
 			{ stateful: false },
 		),
 
-		...V.staticProperty("dimmingDuration", {
-			...ValueMetadata.Duration,
-			label: "Dimming duration",
-		} as const),
+		...V.staticProperty(
+			"dimmingDuration",
+			{
+				...ValueMetadata.Duration,
+				label: "Dimming duration",
+			} as const,
+		),
 	}),
 });
 
@@ -61,25 +64,35 @@ export const SceneActivationCCValues = Object.freeze({
 
 @API(CommandClasses["Scene Activation"])
 export class SceneActivationCCAPI extends CCAPI {
-	public supportsCommand(_cmd: SceneActivationCommand): Maybe<boolean> {
+	public supportsCommand(
+		_cmd: SceneActivationCommand,
+	): MaybeNotKnown<boolean> {
 		// There is only one mandatory command
 		return true;
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-		options,
-	) => {
-		if (property !== "sceneId") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-		const duration = Duration.from(options?.transitionDuration);
-		return this.set(value, duration);
-	};
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function(
+			this: SceneActivationCCAPI,
+			{ property },
+			value,
+			options,
+		) {
+			if (property !== "sceneId") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			const duration = Duration.from(options?.transitionDuration);
+			return this.set(value, duration);
+		};
+	}
 
 	/**
 	 * Activates the Scene with the given ID
@@ -112,7 +125,8 @@ export class SceneActivationCC extends CommandClass {
 	declare ccCommand: SceneActivationCommand;
 }
 
-interface SceneActivationCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SceneActivationCCSetOptions extends CCCommandOptions {
 	sceneId: number;
 	dimmingDuration?: Duration | string;
 }
@@ -133,8 +147,6 @@ export class SceneActivationCCSet extends SceneActivationCC {
 			// Per the specs, dimmingDuration is required, but as always the real world is different...
 			if (this.payload.length >= 2) {
 				this.dimmingDuration = Duration.parseSet(this.payload[1]);
-			} else {
-				this.dimmingDuration = undefined;
 			}
 
 			validatePayload(this.sceneId >= 1, this.sceneId <= 255);
@@ -158,13 +170,13 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { "scene id": this.sceneId };
 		if (this.dimmingDuration != undefined) {
 			message["dimming duration"] = this.dimmingDuration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

@@ -1,5 +1,5 @@
 import test from "ava";
-import { ObjectKeyMap, ReadonlyObjectKeyMap } from "./ObjectKeyMap";
+import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "./ObjectKeyMap";
 
 const fixtures = {
 	entries: [

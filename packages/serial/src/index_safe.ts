@@ -1,6 +1,6 @@
 /* @forbiddenImports external */
 
-export { SerialLogContext } from "./Logger_safe";
+export type { SerialLogContext } from "./Logger_safe";
+export * from "./MessageHeaders";
 export * from "./message/Constants";
 export * from "./message/SuccessIndicator";
-export * from "./MessageHeaders";

@@ -20,7 +20,6 @@
 			"description": "Controls the on/off orientation of the rocker switch",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -46,8 +45,8 @@
 			"#": "8",
 			"label": "Remote Dim Step Duration",
 			"description": "Interval between dimming steps when remotely commanded",
-			"unit": "10 ms",
 			"valueSize": 2,
+			"unit": "10 ms",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3
@@ -59,28 +58,17 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "10",
 			"label": "Step Duration",
 			"description": "Interval between dimming steps",
 			"valueSize": 2,
+			"unit": "10 ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unit": "10 ms"
+			"defaultValue": 3
 		}
-	],
-	"compat": {
-		"commandClasses": {
-			"remove": {
-				"0x6c": {
-					// The device does not support supervision although it is mandatory for the device type
-					"endpoints": "*"
-				}
-			}
-		}
-	}
+	]
 }

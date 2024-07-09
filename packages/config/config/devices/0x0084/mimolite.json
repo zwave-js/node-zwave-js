@@ -2,7 +2,7 @@
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "MIMOlite",
-	"description": "Digital or Analog Voltage input and/or Dry Contact Relay",
+	"description": "Digital or Analog Voltage Input And/or Dry Contact Relay",
 	"devices": [
 		{
 			"productType": "0x0451",
@@ -65,11 +65,10 @@
 			"label": "Clear_Pulse_Meter_Counts",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Clear Pulse Meter Counts",
+					"label": "Clear pulse meter counts",
 					"value": 0
 				}
 			]
@@ -80,7 +79,6 @@
 			"description": "Input-to-relay Mapping",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -158,23 +156,22 @@
 			"label": "Trigger_Level_And_Input_Threshold",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ANALOG, trigger OUTSIDE of thresholds.",
+					"label": "Analog, trigger outside of thresholds",
 					"value": 0
 				},
 				{
-					"label": "ANALOG, trigger BETWEEN thresholds.",
+					"label": "Analog, trigger between thresholds",
 					"value": 1
 				},
 				{
-					"label": "DIGITAL, trigger OUTSIDE of thresholds.",
+					"label": "Digital, trigger outside of thresholds",
 					"value": 2
 				},
 				{
-					"label": "DIGITAL, trigger BETWEEN thresholds.",
+					"label": "Digital, trigger between thresholds",
 					"value": 3
 				}
 			]
@@ -184,15 +181,14 @@
 			"label": "Multilevel_AutoReport_Interval",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Automatic Reports",
+					"label": "Disable automatic reports",
 					"value": 0
 				},
 				{
-					"label": "Enable Reports every 30 seconds",
+					"label": "Enable reports every 30 seconds",
 					"value": 3
 				}
 			]

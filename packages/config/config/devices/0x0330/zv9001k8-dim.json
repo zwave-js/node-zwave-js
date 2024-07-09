@@ -2,7 +2,7 @@
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
 	"label": "ZV9001K8-DIM",
-	"description": "4 group single color wall mounted remote",
+	"description": "4 Group Single Color Wall Mounted Remote",
 	"devices": [
 		{
 			"productType": "0x0003",

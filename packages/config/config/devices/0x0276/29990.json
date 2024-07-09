@@ -25,12 +25,12 @@
 		},
 		{
 			"#": "2",
-			"label": "Filter - Period (read-only)",
+			"label": "Filter - Period (Read-Only)",
 			"valueSize": 2,
+			"unit": "30 days",
 			"minValue": 0,
 			"maxValue": 12,
 			"defaultValue": 12,
-			"unit": "30 days",
 			"readOnly": true
 		},
 		{
@@ -38,30 +38,30 @@
 			"label": "Filter - Days",
 			"description": "How many days the filter has been used since the last change",
 			"valueSize": 2,
+			"unit": "days",
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unit": "days",
 			"readOnly": true
 		},
 		{
 			"#": "4",
 			"label": "Boost Mode Remaining Time",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unit": "seconds",
 			"readOnly": true
 		},
 		{
 			"#": "5",
 			"label": "Temperature Setpoint Step",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
-			"unit": "0.1 °C",
 			"readOnly": true
 		}
 	]

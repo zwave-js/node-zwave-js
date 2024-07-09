@@ -1,0 +1,115 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-C321",
+	"description": "Shutter Panel",
+	"devices": [
+		{
+			"productType": "0xc321",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/mcohome_template.json#w_report_interval"
+		},
+		{
+			"#": "2",
+			"$import": "templates/mcohome_template.json#kwh_report_interval"
+		},
+		{
+			"#": "5",
+			"$import": "templates/mcohome_template.json#level_report_mode"
+		},
+		{
+			"#": "8",
+			"$import": "templates/mcohome_template.json#backlight_brightness"
+		},
+		{
+			"#": "7",
+			"$import": "templates/mcohome_template.json#demo_trip"
+		},
+		{
+			"#": "10",
+			"$import": "templates/mcohome_template.json#auto_calibrate"
+		},
+		{
+			"#": "9",
+			"$import": "templates/mcohome_template.json#demo_trip_and_calibrate"
+		},
+		{
+			"#": "11",
+			"$import": "templates/mcohome_template.json#min_shutter_level"
+		},
+		{
+			"#": "12",
+			"$import": "templates/mcohome_template.json#max_shutter_level"
+		},
+		{
+			"#": "13",
+			"label": "External Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Button (Momentary buttons)",
+					"value": 0
+				},
+				{
+					"label": "Toggle (2-State switches)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "External Switch Input",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function disabled",
+					"value": 0
+				},
+				{
+					"label": "External switch wired to S1",
+					"value": 1
+				},
+				{
+					"label": "External switch wired to S2",
+					"value": 2
+				},
+				{
+					"label": "Switches wired to S1 and S2, each control both directions",
+					"value": 3
+				},
+				{
+					"label": "Switches wired to S1 and S2, S1 for open, S2 for close",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "255",
+			"$import": "templates/mcohome_template.json#factory_reset"
+		}
+	],
+	"compat": {
+		"commandClasses": {
+			"add": {
+				"Multilevel Switch": {
+					// This is a roller shutter, but it responds to the CC version request with 0
+					"isSupported": true,
+					"version": 1
+				}
+			}
+		}
+	}
+}

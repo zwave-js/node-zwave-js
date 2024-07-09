@@ -43,16 +43,16 @@ async setConfiguration(
 }
 ```
 
--   **label:** Key cache size
--   **description:** Number of character that must be stored before sending
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 1
--   **max. value:** 32
+- **label:** Key cache size
+- **description:** Number of character that must be stored before sending
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 1
+- **max. value:** 32
 
 ### `keyCacheTimeout`
 
@@ -64,13 +64,13 @@ async setConfiguration(
 }
 ```
 
--   **label:** Key cache timeout
--   **description:** How long the key cache must wait for additional characters
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 1
--   **max. value:** 10
+- **label:** Key cache timeout
+- **description:** How long the key cache must wait for additional characters
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 1
+- **max. value:** 10

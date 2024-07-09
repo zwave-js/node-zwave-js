@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Send Setpoint when WakeUp",
+			"label": "Send Setpoint When WakeUp",
 			"description": "0 - 64 -> SEND : 64 - 127 -> DO NOT SEND",
 			"valueSize": 1,
 			"minValue": 0,

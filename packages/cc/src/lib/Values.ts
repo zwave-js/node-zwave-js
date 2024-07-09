@@ -1,7 +1,7 @@
 import {
-	CommandClasses,
-	IZWaveEndpoint,
-	ValueID,
+	type CommandClasses,
+	type IZWaveEndpoint,
+	type ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
@@ -43,9 +43,9 @@ export interface CCValueOptions {
 	autoCreate?:
 		| boolean
 		| ((
-				applHost: ZWaveApplicationHost,
-				endpoint: IZWaveEndpoint,
-		  ) => boolean);
+			applHost: ZWaveApplicationHost,
+			endpoint: IZWaveEndpoint,
+		) => boolean);
 }
 
 export const defaultCCValueOptions = {
@@ -63,37 +63,38 @@ type DefaultOptions = typeof defaultCCValueOptions;
 export type ExpandRecursively<T> =
 	// Split functions with properties into the function and object parts
 	T extends (...args: infer A) => infer R
-		? [keyof T] extends [never]
-			? (...args: A) => ExpandRecursively<R>
-			: ((...args: A) => ExpandRecursively<R>) & {
-					[P in keyof T]: ExpandRecursively<T[P]>;
-			  }
-		: // Expand object types
-		T extends object
-		? T extends infer O
-			? { [K in keyof O]: ExpandRecursively<O[K]> }
+		? [keyof T] extends [never] ? (...args: A) => ExpandRecursively<R>
+		:
+			& ((...args: A) => ExpandRecursively<R>)
+			& {
+				[P in keyof T]: ExpandRecursively<T[P]>;
+			}
+		// Expand object types
+		: T extends object
+			? T extends infer O ? { [K in keyof O]: ExpandRecursively<O[K]> }
 			: never
-		: // Fallback to the type itself if no match
-		  T;
+		// Fallback to the type itself if no match
+		: T;
 
 export type ExpandRecursivelySkipMeta<T> =
 	// Split functions with properties into the function and object parts
 	T extends (...args: infer A) => infer R
 		? [keyof T] extends [never]
 			? (...args: A) => ExpandRecursivelySkipMeta<R>
-			: ((...args: A) => ExpandRecursivelySkipMeta<R>) & {
-					[P in keyof T]: ExpandRecursivelySkipMeta<T[P]>;
-			  }
-		: // Ignore the ValueMetadata type
-		T extends ValueMetadata
-		? T
-		: // Expand object types
-		T extends object
-		? T extends infer O
-			? { [K in keyof O]: ExpandRecursivelySkipMeta<O[K]> }
+		:
+			& ((...args: A) => ExpandRecursivelySkipMeta<R>)
+			& {
+				[P in keyof T]: ExpandRecursivelySkipMeta<T[P]>;
+			}
+		// Ignore the ValueMetadata type
+		: T extends ValueMetadata ? T
+		// Expand object types
+		: T extends object
+			? T extends infer O
+				? { [K in keyof O]: ExpandRecursivelySkipMeta<O[K]> }
 			: never
-		: // Fallback to the type itself if no match
-		  T;
+		// Fallback to the type itself if no match
+		: T;
 
 type InferValueIDBase<
 	TCommandClass extends CommandClasses,
@@ -108,20 +109,24 @@ type InferValueIDBase<
 type ToStaticCCValues<
 	TCommandClass extends CommandClasses,
 	TValues extends Record<keyof TValues, CCValueBlueprint>,
-> = Readonly<{
-	[K in keyof TValues]: ExpandRecursively<
-		InferStaticCCValue<TCommandClass, TValues[K]>
-	>;
-}>;
+> = Readonly<
+	{
+		[K in keyof TValues]: ExpandRecursively<
+			InferStaticCCValue<TCommandClass, TValues[K]>
+		>;
+	}
+>;
 
 type ToDynamicCCValues<
 	TCommandClass extends CommandClasses,
 	TValues extends Record<keyof TValues, DynamicCCValueBlueprint<any>>,
-> = Readonly<{
-	[K in keyof TValues]: ExpandRecursively<
-		InferDynamicCCValue<TCommandClass, TValues[K]>
-	>;
-}>;
+> = Readonly<
+	{
+		[K in keyof TValues]: ExpandRecursively<
+			InferDynamicCCValue<TCommandClass, TValues[K]>
+		>;
+	}
+>;
 
 type FnOrStatic<TArgs extends any[], TReturn> =
 	| ((...args: TArgs) => TReturn)
@@ -132,10 +137,8 @@ type ReturnTypeOrStatic<T> = T extends (...args: any[]) => infer R ? R : T;
 type InferArgs<T extends FnOrStatic<any, any>[]> = T extends [
 	(...args: infer A) => any,
 	...any,
-]
-	? A
-	: T extends [any, ...infer R]
-	? InferArgs<R>
+] ? A
+	: T extends [any, ...infer R] ? InferArgs<R>
 	: [];
 
 function evalOrStatic<T>(fnOrConst: T, ...args: any[]): ReturnTypeOrStatic<T> {
@@ -176,9 +179,9 @@ function defineStaticCCValue<
 		},
 		is: (testValueId) => {
 			return (
-				valueId.commandClass === testValueId.commandClass &&
-				valueId.property === testValueId.property &&
-				valueId.propertyKey === testValueId.propertyKey
+				valueId.commandClass === testValueId.commandClass
+				&& valueId.property === testValueId.property
+				&& valueId.propertyKey === testValueId.propertyKey
 			);
 		},
 		get meta() {
@@ -271,7 +274,8 @@ export const V = {
 		values: TValues,
 	): TValues extends Record<keyof TValues, CCValueBlueprint>
 		? ExpandRecursively<ToStaticCCValues<TCommandClass, TValues>>
-		: never {
+		: never
+	{
 		return Object.fromEntries(
 			Object.entries<CCValueBlueprint>(values).map(([key, blueprint]) => [
 				key,
@@ -289,7 +293,8 @@ export const V = {
 		values: TValues,
 	): TValues extends Record<keyof TValues, DynamicCCValueBlueprint<any>>
 		? ExpandRecursively<ToDynamicCCValues<TCommandClass, TValues>>
-		: never {
+		: never
+	{
 		return Object.fromEntries(
 			Object.entries<DynamicCCValueBlueprint<any>>(values).map(
 				([key, blueprint]) => [
@@ -479,16 +484,16 @@ type DropOptional<T> = {
 
 type MergeOptions<TOptions extends CCValueOptions> = DropOptional<
 	CCValueOptions extends TOptions
-		? // When the type cannot be inferred exactly (not given), default to DefaultOptions
-		  DefaultOptions
+		// When the type cannot be inferred exactly (not given), default to DefaultOptions
+		? DefaultOptions
 		: Overwrite<DefaultOptions, TOptions>
 >;
 
 type MergeMeta<TMeta extends ValueMetadata> = DropOptional<
 	ValueMetadata extends TMeta
-		? // When the type cannot be inferred exactly (not given), default to ValueMetadata.Any
-		  typeof ValueMetadata["Any"]
-		: Overwrite<typeof ValueMetadata["Any"], TMeta>
+		// When the type cannot be inferred exactly (not given), default to ValueMetadata.Any
+		? (typeof ValueMetadata)["Any"]
+		: Overwrite<(typeof ValueMetadata)["Any"], TMeta>
 >;
 
 /** The common base type of all CC value definitions */
@@ -513,10 +518,12 @@ type AddCCValueProperties<
 	endpoint(
 		endpoint?: number,
 	): Readonly<
-		Pick<ValueIDBase, "commandClass"> & { endpoint: number } & Omit<
-				ValueIDBase,
-				"commandClass"
-			>
+		& Pick<ValueIDBase, "commandClass">
+		& { endpoint: number }
+		& Omit<
+			ValueIDBase,
+			"commandClass"
+		>
 	>;
 
 	/** Whether the given value ID matches this value definition */
@@ -532,21 +539,20 @@ type AddCCValueProperties<
 export type InferDynamicCCValue<
 	TCommandClass extends CommandClasses,
 	TBlueprint extends DynamicCCValueBlueprint<any[]>,
-> = TBlueprint extends DynamicCCValueBlueprint<infer TArgs>
-	? {
-			(...args: TArgs): Omit<
-				InferStaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
-				"options" | "is"
-			>;
+> = TBlueprint extends DynamicCCValueBlueprint<infer TArgs> ? {
+		(...args: TArgs): Omit<
+			InferStaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
+			"options" | "is"
+		>;
 
-			/** Whether the given value ID matches this value definition */
-			is: CCValuePredicate;
+		/** Whether the given value ID matches this value definition */
+		is: CCValuePredicate;
 
-			readonly options: InferStaticCCValue<
-				TCommandClass,
-				ReturnType<TBlueprint> & { options: TBlueprint["options"] }
-			>["options"];
-	  }
+		readonly options: InferStaticCCValue<
+			TCommandClass,
+			ReturnType<TBlueprint> & { options: TBlueprint["options"] }
+		>["options"];
+	}
 	: never;
 
 /** A static or evaluated CC value definition, transparently inferred from its arguments */
@@ -564,7 +570,8 @@ export interface StaticCCValue extends CCValue {
 
 /** The generic variant of {@link InferDynamicCCValue}, without inferring arguments */
 export type DynamicCCValue<TArgs extends any[] = any[]> =
-	ExpandRecursivelySkipMeta<(...args: TArgs) => CCValue> & {
+	& ExpandRecursivelySkipMeta<(...args: TArgs) => CCValue>
+	& {
 		/** Whether the given value ID matches this value definition */
 		is: CCValuePredicate;
 		readonly options: Required<CCValueOptions>;
@@ -578,51 +585,79 @@ export interface CCValues {
 	// AUTO GENERATION BELOW
 	"Alarm Sensor": typeof import("../cc/AlarmSensorCC").AlarmSensorCCValues;
 	Association: typeof import("../cc/AssociationCC").AssociationCCValues;
-	"Association Group Information": typeof import("../cc/AssociationGroupInfoCC").AssociationGroupInfoCCValues;
-	"Barrier Operator": typeof import("../cc/BarrierOperatorCC").BarrierOperatorCCValues;
+	"Association Group Information":
+		typeof import("../cc/AssociationGroupInfoCC").AssociationGroupInfoCCValues;
+	"Barrier Operator":
+		typeof import("../cc/BarrierOperatorCC").BarrierOperatorCCValues;
 	Basic: typeof import("../cc/BasicCC").BasicCCValues;
 	Battery: typeof import("../cc/BatteryCC").BatteryCCValues;
 	"Binary Sensor": typeof import("../cc/BinarySensorCC").BinarySensorCCValues;
 	"Binary Switch": typeof import("../cc/BinarySwitchCC").BinarySwitchCCValues;
 	"Central Scene": typeof import("../cc/CentralSceneCC").CentralSceneCCValues;
-	"Climate Control Schedule": typeof import("../cc/ClimateControlScheduleCC").ClimateControlScheduleCCValues;
+	"Climate Control Schedule":
+		typeof import("../cc/ClimateControlScheduleCC").ClimateControlScheduleCCValues;
 	"Color Switch": typeof import("../cc/ColorSwitchCC").ColorSwitchCCValues;
 	Configuration: typeof import("../cc/ConfigurationCC").ConfigurationCCValues;
 	"Door Lock": typeof import("../cc/DoorLockCC").DoorLockCCValues;
-	"Door Lock Logging": typeof import("../cc/DoorLockLoggingCC").DoorLockLoggingCCValues;
+	"Door Lock Logging":
+		typeof import("../cc/DoorLockLoggingCC").DoorLockLoggingCCValues;
+	"Energy Production":
+		typeof import("../cc/EnergyProductionCC").EnergyProductionCCValues;
 	"Entry Control": typeof import("../cc/EntryControlCC").EntryControlCCValues;
-	"Firmware Update Meta Data": typeof import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCValues;
-	"Humidity Control Mode": typeof import("../cc/HumidityControlModeCC").HumidityControlModeCCValues;
-	"Humidity Control Operating State": typeof import("../cc/HumidityControlOperatingStateCC").HumidityControlOperatingStateCCValues;
-	"Humidity Control Setpoint": typeof import("../cc/HumidityControlSetpointCC").HumidityControlSetpointCCValues;
+	"Firmware Update Meta Data":
+		typeof import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCValues;
+	"Humidity Control Mode":
+		typeof import("../cc/HumidityControlModeCC").HumidityControlModeCCValues;
+	"Humidity Control Operating State":
+		typeof import("../cc/HumidityControlOperatingStateCC").HumidityControlOperatingStateCCValues;
+	"Humidity Control Setpoint":
+		typeof import("../cc/HumidityControlSetpointCC").HumidityControlSetpointCCValues;
 	Indicator: typeof import("../cc/IndicatorCC").IndicatorCCValues;
 	Irrigation: typeof import("../cc/IrrigationCC").IrrigationCCValues;
 	Language: typeof import("../cc/LanguageCC").LanguageCCValues;
 	Lock: typeof import("../cc/LockCC").LockCCValues;
-	"Manufacturer Specific": typeof import("../cc/ManufacturerSpecificCC").ManufacturerSpecificCCValues;
+	"Manufacturer Specific":
+		typeof import("../cc/ManufacturerSpecificCC").ManufacturerSpecificCCValues;
 	Meter: typeof import("../cc/MeterCC").MeterCCValues;
-	"Multi Channel Association": typeof import("../cc/MultiChannelAssociationCC").MultiChannelAssociationCCValues;
+	"Multi Channel Association":
+		typeof import("../cc/MultiChannelAssociationCC").MultiChannelAssociationCCValues;
 	"Multi Channel": typeof import("../cc/MultiChannelCC").MultiChannelCCValues;
-	"Multilevel Sensor": typeof import("../cc/MultilevelSensorCC").MultilevelSensorCCValues;
-	"Multilevel Switch": typeof import("../cc/MultilevelSwitchCC").MultilevelSwitchCCValues;
-	"Node Naming and Location": typeof import("../cc/NodeNamingCC").NodeNamingAndLocationCCValues;
+	"Multilevel Sensor":
+		typeof import("../cc/MultilevelSensorCC").MultilevelSensorCCValues;
+	"Multilevel Switch":
+		typeof import("../cc/MultilevelSwitchCC").MultilevelSwitchCCValues;
+	"Node Naming and Location":
+		typeof import("../cc/NodeNamingCC").NodeNamingAndLocationCCValues;
 	Notification: typeof import("../cc/NotificationCC").NotificationCCValues;
 	Protection: typeof import("../cc/ProtectionCC").ProtectionCCValues;
-	"Scene Activation": typeof import("../cc/SceneActivationCC").SceneActivationCCValues;
-	"Scene Actuator Configuration": typeof import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCValues;
-	"Scene Controller Configuration": typeof import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCValues;
-	"Schedule Entry Lock": typeof import("../cc/ScheduleEntryLockCC").ScheduleEntryLockCCValues;
+	"Scene Activation":
+		typeof import("../cc/SceneActivationCC").SceneActivationCCValues;
+	"Scene Actuator Configuration":
+		typeof import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCValues;
+	"Scene Controller Configuration":
+		typeof import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCValues;
+	"Schedule Entry Lock":
+		typeof import("../cc/ScheduleEntryLockCC").ScheduleEntryLockCCValues;
 	"Sound Switch": typeof import("../cc/SoundSwitchCC").SoundSwitchCCValues;
 	Supervision: typeof import("../cc/SupervisionCC").SupervisionCCValues;
-	"Thermostat Fan Mode": typeof import("../cc/ThermostatFanModeCC").ThermostatFanModeCCValues;
-	"Thermostat Fan State": typeof import("../cc/ThermostatFanStateCC").ThermostatFanStateCCValues;
-	"Thermostat Mode": typeof import("../cc/ThermostatModeCC").ThermostatModeCCValues;
-	"Thermostat Operating State": typeof import("../cc/ThermostatOperatingStateCC").ThermostatOperatingStateCCValues;
-	"Thermostat Setback": typeof import("../cc/ThermostatSetbackCC").ThermostatSetbackCCValues;
-	"Thermostat Setpoint": typeof import("../cc/ThermostatSetpointCC").ThermostatSetpointCCValues;
-	"Time Parameters": typeof import("../cc/TimeParametersCC").TimeParametersCCValues;
+	"Thermostat Fan Mode":
+		typeof import("../cc/ThermostatFanModeCC").ThermostatFanModeCCValues;
+	"Thermostat Fan State":
+		typeof import("../cc/ThermostatFanStateCC").ThermostatFanStateCCValues;
+	"Thermostat Mode":
+		typeof import("../cc/ThermostatModeCC").ThermostatModeCCValues;
+	"Thermostat Operating State":
+		typeof import("../cc/ThermostatOperatingStateCC").ThermostatOperatingStateCCValues;
+	"Thermostat Setback":
+		typeof import("../cc/ThermostatSetbackCC").ThermostatSetbackCCValues;
+	"Thermostat Setpoint":
+		typeof import("../cc/ThermostatSetpointCC").ThermostatSetpointCCValues;
+	"Time Parameters":
+		typeof import("../cc/TimeParametersCC").TimeParametersCCValues;
 	"User Code": typeof import("../cc/UserCodeCC").UserCodeCCValues;
 	Version: typeof import("../cc/VersionCC").VersionCCValues;
 	"Wake Up": typeof import("../cc/WakeUpCC").WakeUpCCValues;
+	"Window Covering":
+		typeof import("../cc/WindowCoveringCC").WindowCoveringCCValues;
 	"Z-Wave Plus Info": typeof import("../cc/ZWavePlusCC").ZWavePlusCCValues;
 }

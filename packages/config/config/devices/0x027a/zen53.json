@@ -1,0 +1,232 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN53 LR",
+	"description": "DC Motor Controller",
+	"devices": [
+		{
+			"productType": "0x0904",
+			"productId": "0x0219"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "State/Position After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Always off",
+					"value": 0
+				},
+				{
+					"label": "Previous position",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"label": "Motor Cycle Duration (Shutter Mode)",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 6000,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Use limit switches",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Motor Cycle Duration (Venetian Mode)",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 1000,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Use limit switches",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Calibration",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle / Stop calibration",
+					"value": 0
+				},
+				{
+					"label": "Shutter mode calibration",
+					"value": 1
+				},
+				{
+					"label": "Venetian mode calibration",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Calibration Correction",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle / Stop repositioning",
+					"value": 0
+				},
+				{
+					"label": "Start repositioning",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Operation Mode",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutter without positioning",
+					"value": 0
+				},
+				{
+					"label": "Shutter with positioning",
+					"value": 1
+				},
+				{
+					"label": "Venetian",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Reverse Motor Direction",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not reversed",
+					"value": 0
+				},
+				{
+					"label": "Reversed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Inclusion From Switch",
+			"defaultValue": 1
+		},
+		{
+			"#": "14",
+			"label": "External Switch Type (S1)",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle switch",
+					"value": 0
+				},
+				{
+					"label": "Momentary switch",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "External Switch Type (S2)",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle switch",
+					"value": 0
+				},
+				{
+					"label": "Momentary switch",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Momentary Switch Configuration",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single 2-button switch",
+					"value": 0
+				},
+				{
+					"label": "Two 1-button switches",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"$import": "templates/zooz_template.json#auto_timer_variable_unit_base_5x_long",
+			"label": "Auto-Open Timer"
+		},
+		{
+			"#": "11",
+			"$import": "templates/zooz_template.json#auto_timer_variable_unit_base_5x_long",
+			"label": "Auto-Close Timer"
+		},
+		{
+			"#": "12",
+			"$import": "templates/zooz_template.json#auto_timer_unit_select_sec_min"
+		},
+		{
+			"#": "13",
+			"$import": "templates/zooz_template.json#local_zwave_control"
+		},
+		{
+			"#": "16",
+			"$import": "templates/zooz_template.json#association_reports_multilevel"
+		}
+	],
+	"metadata": {
+		"$import": "templates/zooz_template.json#zen5x_metadata",
+		"manual": "https://www.getzooz.com/downloads/zooz-700-z-wave-plus-long-range-dc-motor-controller-zen53-manual.pdf"
+	}
+}

@@ -7,7 +7,7 @@
 ### `get`
 
 ```ts
-async get(): Promise<boolean | undefined>;
+async get(): Promise<MaybeNotKnown<boolean>>;
 ```
 
 ### `set`
@@ -20,7 +20,7 @@ Locks or unlocks the lock.
 
 **Parameters:**
 
--   `locked`: Whether the lock should be locked
+- `locked`: Whether the lock should be locked
 
 ## Lock CC values
 
@@ -34,11 +34,11 @@ Locks or unlocks the lock.
 }
 ```
 
--   **label:** Locked
--   **description:** Whether the lock is locked
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Locked
+- **description:** Whether the lock is locked
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`

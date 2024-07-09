@@ -291,51 +291,51 @@
 		},
 		{
 			"#": "101",
-			"label": "Relay Inverse Mode, Inching: Group 1",
-			"$import": "templates/heltun_template.json#relay_inverse_mode_inching"
+			"$import": "templates/heltun_template.json#relay_inverse_mode_inching",
+			"label": "Relay Inverse Mode, Inching: Group 1"
 		},
 		{
 			"#": "102",
-			"label": "Relay Inverse Mode, Inching: Group 2",
-			"$import": "templates/heltun_template.json#relay_inverse_mode_inching"
+			"$import": "templates/heltun_template.json#relay_inverse_mode_inching",
+			"label": "Relay Inverse Mode, Inching: Group 2"
 		},
 		{
 			"#": "141",
-			"label": "Energy Consumption Report Interval",
-			"$import": "templates/heltun_template.json#report_interval"
+			"$import": "templates/heltun_template.json#report_interval",
+			"label": "Energy Consumption Report Interval"
 		},
 		{
 			"#": "142",
-			"label": "Energy Consumption Report",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Energy Consumption Report",
 			"defaultValue": 1
 		},
 		{
 			"#": "143",
-			"label": "All Sensors: Reporting Interval",
-			"$import": "templates/heltun_template.json#report_interval"
+			"$import": "templates/heltun_template.json#report_interval",
+			"label": "All Sensors: Reporting Interval"
 		},
 		{
 			"#": "144",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Air Temperature Sensor Report Threshold",
 			"unit": "0.1 °C",
-			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"defaultValue": 2
 		},
 		{
 			"#": "145",
 			"label": "Humidity Sensor Report Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 25,
 			"defaultValue": 2
 		},
 		{
 			"#": "146",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"label": "Light Sensor Report Threshold",
 			"unit": "%",
-			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"defaultValue": 50
 		}
 	],
@@ -344,7 +344,7 @@
 		"$if": "firmwareVersion < 2.6",
 		"commandClasses": {
 			"remove": {
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

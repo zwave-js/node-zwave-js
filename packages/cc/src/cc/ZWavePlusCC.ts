@@ -1,18 +1,23 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -65,7 +70,7 @@ export const ZWavePlusCCValues = Object.freeze({
 
 @API(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: ZWavePlusCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ZWavePlusCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ZWavePlusCommand.Get:
 			case ZWavePlusCommand.Report:
@@ -159,6 +164,7 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 	}
 }
 
+// @publicAPI
 export interface ZWavePlusCCReportOptions {
 	zwavePlusVersion: number;
 	nodeType: ZWavePlusNodeType;
@@ -223,9 +229,9 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				version: this.zwavePlusVersion,
 				"node type": getEnumMemberName(

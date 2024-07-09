@@ -1,7 +1,11 @@
-export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+import { type DeviceID } from "@zwave-js/config";
+import { type RFRegion } from "@zwave-js/core";
+import { type Expand } from "@zwave-js/shared/safe";
 
-export interface HealNetworkOptions {
-	/** Whether sleeping nodes should be healed too at the end of the healing process. Default: true */
+export type RebuildRoutesStatus = "pending" | "done" | "failed" | "skipped";
+
+export interface RebuildRoutesOptions {
+	/** Whether the routes of sleeping nodes should be rebuilt too at the end of the process. Default: true */
 	includeSleeping?: boolean;
 }
 
@@ -15,7 +19,15 @@ export interface FirmwareUpdateFileInfo {
 	integrity: `sha256:${string}`;
 }
 
-export interface FirmwareUpdateInfo {
+/** The information sent to the firmware update service to identify which updates are available for a device. */
+export type FirmwareUpdateDeviceID = Expand<
+	DeviceID & {
+		firmwareVersion: string;
+		rfRegion?: RFRegion;
+	}
+>;
+
+export interface FirmwareUpdateServiceResponse {
 	version: string;
 	changelog: string;
 	channel: "stable" | "beta";
@@ -23,6 +35,13 @@ export interface FirmwareUpdateInfo {
 	downgrade: boolean;
 	normalizedVersion: string;
 }
+
+export type FirmwareUpdateInfo = Expand<
+	FirmwareUpdateServiceResponse & {
+		/** Which device this update is for */
+		device: FirmwareUpdateDeviceID;
+	}
+>;
 
 export interface GetFirmwareUpdatesOptions {
 	/** Allows overriding the API key for the firmware update service */

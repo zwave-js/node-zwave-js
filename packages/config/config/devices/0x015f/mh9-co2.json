@@ -80,7 +80,7 @@
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
-			"unit": "0.5 °C",
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
@@ -101,7 +101,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 2,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -115,7 +114,6 @@
 			"label": "Reset to Factory Settings",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -124,7 +122,7 @@
 					"value": 0
 				},
 				{
-					"label": "Reset to Factory Settings",
+					"label": "Reset to factory settings",
 					"value": 85
 				}
 			]

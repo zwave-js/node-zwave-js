@@ -1,39 +1,47 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
+	type JSONObject,
 	enumFilesRecursive,
 	formatId,
-	JSONObject,
-	ObjectKeyMap,
-	ReadonlyObjectKeyMap,
+	num2hex,
+	padVersion,
+	pick,
 	stringify,
 } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
-import path from "path";
+import { createHash } from "node:crypto";
+import path from "node:path";
+import semver from "semver";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
 import type { ConfigLogger } from "../Logger";
 import { configDir, externalConfigDir } from "../utils";
 import { hexKeyRegex4Digits, throwInvalidConfig } from "../utils_safe";
 import {
-	ConditionalAssociationConfig,
 	type AssociationConfig,
+	ConditionalAssociationConfig,
 } from "./AssociationConfig";
-import { CompatConfig, ConditionalCompatConfig } from "./CompatConfig";
+import { type CompatConfig, ConditionalCompatConfig } from "./CompatConfig";
 import { evaluateDeep, validateCondition } from "./ConditionalItem";
 import {
-	ConditionalPrimitive,
+	type ConditionalPrimitive,
 	parseConditionalPrimitive,
 } from "./ConditionalPrimitive";
 import {
 	ConditionalDeviceMetadata,
 	type DeviceMetadata,
 } from "./DeviceMetadata";
-import { ConditionalEndpointConfig, EndpointConfig } from "./EndpointConfig";
 import {
-	ConditionalParamInformation,
-	ParamInformation,
+	ConditionalEndpointConfig,
+	type EndpointConfig,
+} from "./EndpointConfig";
+import {
+	type ConditionalParamInfoMap,
+	type ParamInfoMap,
+	type ParamInformation,
+	parseConditionalParamInformationMap,
 } from "./ParamInformation";
 import type { DeviceID, FirmwareVersionRange } from "./shared";
 
@@ -42,6 +50,7 @@ export interface DeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	preferred?: true;
 	rootDir?: string;
 	filename: string;
 }
@@ -54,19 +63,10 @@ export interface FulltextDeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	preferred?: true;
 	rootDir?: string;
 	filename: string;
 }
-
-export type ConditionalParamInfoMap = ReadonlyObjectKeyMap<
-	{ parameter: number; valueBitMask?: number },
-	ConditionalParamInformation[]
->;
-
-export type ParamInfoMap = ReadonlyObjectKeyMap<
-	{ parameter: number; valueBitMask?: number },
-	ParamInformation
->;
 
 export const embeddedDevicesDir = path.join(configDir, "devices");
 const fulltextIndexPath = path.join(embeddedDevicesDir, "fulltext_index.json");
@@ -96,15 +96,18 @@ async function hasChangedDeviceFiles(
 
 		const stat = await fs.stat(fullPath);
 		if (
-			(dir !== devicesRoot || f !== "index.json") &&
-			(stat.isFile() || stat.isDirectory()) &&
-			stat.mtime > lastChange
+			(dir !== devicesRoot || f !== "index.json")
+			&& (stat.isFile() || stat.isDirectory())
+			&& stat.mtime > lastChange
 		) {
 			return true;
 		} else if (stat.isDirectory()) {
 			// we need to go deeper!
-			if (await hasChangedDeviceFiles(devicesRoot, fullPath, lastChange))
+			if (
+				await hasChangedDeviceFiles(devicesRoot, fullPath, lastChange)
+			) {
 				return true;
+			}
 		}
 	}
 	return false;
@@ -126,20 +129,26 @@ async function generateIndex<T extends Record<string, unknown>>(
 	const configFiles = await enumFilesRecursive(
 		devicesDir,
 		(file) =>
-			file.endsWith(".json") &&
-			!file.endsWith("index.json") &&
-			!file.includes("/templates/") &&
-			!file.includes("\\templates\\"),
+			file.endsWith(".json")
+			&& !file.endsWith("index.json")
+			&& !file.includes("/templates/")
+			&& !file.includes("\\templates\\"),
 	);
+
+	// Add the embedded devices dir as a fallback if necessary
+	const fallbackDirs = devicesDir !== embeddedDevicesDir
+		? [embeddedDevicesDir]
+		: undefined;
 
 	for (const file of configFiles) {
 		const relativePath = path
 			.relative(devicesDir, file)
-			.replace(/\\/g, "/");
+			.replaceAll("\\", "/");
 		// Try parsing the file
 		try {
 			const config = await DeviceConfig.from(file, isEmbedded, {
 				rootDir: devicesDir,
+				fallbackDirs,
 				relative: true,
 			});
 			// Add the file to the index
@@ -275,6 +284,7 @@ export async function generatePriorityDeviceIndex(
 					productType: formatId(dev.productType),
 					productId: formatId(dev.productId),
 					firmwareVersion: config.firmwareVersion,
+					...(config.preferred ? { preferred: true as const } : {}),
 					rootDir: deviceConfigPriorityDir,
 				})),
 			logger,
@@ -311,6 +321,7 @@ export async function loadDeviceIndexInternal(
 				productType: formatId(dev.productType),
 				productId: formatId(dev.productId),
 				firmwareVersion: config.firmwareVersion,
+				...(config.preferred ? { preferred: true as const } : {}),
 			})),
 		logger,
 	);
@@ -337,6 +348,7 @@ export async function loadFulltextDeviceIndexInternal(
 				productType: formatId(dev.productType),
 				productId: formatId(dev.productId),
 				firmwareVersion: config.firmwareVersion,
+				...(config.preferred ? { preferred: true as const } : {}),
 				rootDir: embeddedDevicesDir,
 			})),
 		logger,
@@ -350,9 +362,9 @@ function isHexKeyWith4Digits(val: any): val is string {
 const firmwareVersionRegex = /^\d{1,3}\.\d{1,3}(\.\d{1,3})?$/;
 function isFirmwareVersion(val: any): val is string {
 	return (
-		typeof val === "string" &&
-		firmwareVersionRegex.test(val) &&
-		val
+		typeof val === "string"
+		&& firmwareVersionRegex.test(val)
+		&& val
 			.split(".")
 			.map((str) => parseInt(str, 10))
 			.every((num) => num >= 0 && num <= 255)
@@ -366,15 +378,19 @@ export class ConditionalDeviceConfig {
 		isEmbedded: boolean,
 		options: {
 			rootDir: string;
+			fallbackDirs?: string[];
 			relative?: boolean;
 		},
 	): Promise<ConditionalDeviceConfig> {
 		const { relative, rootDir } = options;
 
 		const relativePath = relative
-			? path.relative(rootDir, filename).replace(/\\/g, "/")
+			? path.relative(rootDir, filename).replaceAll("\\", "/")
 			: filename;
-		const json = await readJsonWithTemplate(filename, options.rootDir);
+		const json = await readJsonWithTemplate(filename, [
+			options.rootDir,
+			...(options.fallbackDirs ?? []),
+		]);
 		return new ConditionalDeviceConfig(relativePath, isEmbedded, json);
 	}
 
@@ -405,12 +421,12 @@ manufacturer id must be a lowercase hexadecimal number with 4 digits`,
 		}
 
 		if (
-			!isArray(definition.devices) ||
-			!(definition.devices as any[]).every(
+			!isArray(definition.devices)
+			|| !(definition.devices as any[]).every(
 				(dev: unknown) =>
-					isObject(dev) &&
-					isHexKeyWith4Digits(dev.productType) &&
-					isHexKeyWith4Digits(dev.productId),
+					isObject(dev)
+					&& isHexKeyWith4Digits(dev.productType)
+					&& isHexKeyWith4Digits(dev.productId),
 			)
 		) {
 			throwInvalidConfig(
@@ -427,9 +443,9 @@ devices is malformed (not an object or type/id that is not a lowercase 4-digit h
 		);
 
 		if (
-			!isObject(definition.firmwareVersion) ||
-			!isFirmwareVersion(definition.firmwareVersion.min) ||
-			!isFirmwareVersion(definition.firmwareVersion.max)
+			!isObject(definition.firmwareVersion)
+			|| !isFirmwareVersion(definition.firmwareVersion.min)
+			|| !isFirmwareVersion(definition.firmwareVersion.max)
 		) {
 			throwInvalidConfig(
 				`device`,
@@ -438,8 +454,27 @@ firmwareVersion is malformed or invalid. Must be x.y or x.y.z where x, y, and z 
 			);
 		} else {
 			const { min, max } = definition.firmwareVersion;
+			if (semver.gt(padVersion(min), padVersion(max))) {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+firmwareVersion.min ${min} must not be greater than firmwareVersion.max ${max}`,
+				);
+			}
 			this.firmwareVersion = { min, max };
 		}
+
+		if (
+			definition.preferred != undefined
+			&& definition.preferred !== true
+		) {
+			throwInvalidConfig(
+				`device`,
+				`packages/config/config/devices/${filename}:
+preferred must be true or omitted`,
+			);
+		}
+		this.preferred = !!definition.preferred;
 
 		if (definition.endpoints != undefined) {
 			const endpoints = new Map<number, ConditionalEndpointConfig>();
@@ -462,7 +497,7 @@ found non-numeric endpoint index "${key}" in endpoints`,
 				const epIndex = parseInt(key, 10);
 				endpoints.set(
 					epIndex,
-					new ConditionalEndpointConfig(filename, epIndex, ep as any),
+					new ConditionalEndpointConfig(this, epIndex, ep as any),
 				);
 			}
 			this.endpoints = endpoints;
@@ -480,9 +515,11 @@ found non-numeric endpoint index "${key}" in endpoints`,
 associations is not an object`,
 				);
 			}
-			for (const [key, assocDefinition] of Object.entries(
-				definition.associations,
-			)) {
+			for (
+				const [key, assocDefinition] of Object.entries(
+					definition.associations,
+				)
+			) {
 				if (!/^[1-9][0-9]*$/.test(key)) {
 					throwInvalidConfig(
 						`device`,
@@ -505,135 +542,10 @@ found non-numeric group id "${key}" in associations`,
 		}
 
 		if (definition.paramInformation != undefined) {
-			const paramInformation = new ObjectKeyMap<
-				{ parameter: number; valueBitMask?: number },
-				ConditionalParamInformation[]
-			>();
-
-			if (isArray(definition.paramInformation)) {
-				// Defining paramInformation as an array is the preferred variant now.
-
-				// Check that every param has a param number
-				if (
-					!definition.paramInformation.every(
-						(entry: any) => "#" in entry,
-					)
-				) {
-					throwInvalidConfig(
-						`device`,
-						`packages/config/config/devices/${filename}: 
-required property "#" missing in at least one entry of paramInformation`,
-					);
-				}
-
-				// And a valid $if condition
-				for (const entry of definition.paramInformation) {
-					validateCondition(
-						filename,
-						entry,
-						`At least one entry of paramInformation contains an`,
-					);
-				}
-
-				for (const paramDefinition of definition.paramInformation) {
-					const { ["#"]: paramNo, ...defn } = paramDefinition;
-					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(
-						paramNo,
-					);
-					if (!match) {
-						throwInvalidConfig(
-							`device`,
-							`packages/config/config/devices/${filename}: 
-found invalid param number "${paramNo}" in paramInformation`,
-						);
-					}
-
-					const keyNum = parseInt(match[1], 10);
-					const bitMask =
-						match[2] != undefined
-							? parseInt(match[2], 16)
-							: undefined;
-					const key = { parameter: keyNum, valueBitMask: bitMask };
-
-					if (!paramInformation.has(key))
-						paramInformation.set(key, []);
-					paramInformation
-						.get(key)!
-						.push(
-							new ConditionalParamInformation(
-								this,
-								keyNum,
-								bitMask,
-								defn,
-							),
-						);
-				}
-			} else if (
-				(process.env.NODE_ENV !== "test" || !!process.env.CI) &&
-				isObject(definition.paramInformation)
-			) {
-				// Prior to v8.1.0, paramDefinition was an object
-				// We need to support parsing legacy files because users might have custom configs
-				// However, we don't allow this on CI or during tests/lint
-
-				for (const [key, paramDefinition] of Object.entries(
-					definition.paramInformation,
-				)) {
-					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(key);
-					if (!match) {
-						throwInvalidConfig(
-							`device`,
-							`packages/config/config/devices/${filename}:
-found invalid param number "${key}" in paramInformation`,
-						);
-					}
-
-					if (
-						!isObject(paramDefinition) &&
-						!(
-							isArray(paramDefinition) &&
-							(paramDefinition as any[]).every((p) => isObject(p))
-						)
-					) {
-						throwInvalidConfig(
-							`device`,
-							`packages/config/config/devices/${filename}:
-paramInformation "${key}" is invalid: Every entry must either be an object or an array of objects!`,
-						);
-					}
-
-					// Normalize to an array
-					const defns: any[] = isArray(paramDefinition)
-						? paramDefinition
-						: [paramDefinition];
-
-					const keyNum = parseInt(match[1], 10);
-					const bitMask =
-						match[2] != undefined
-							? parseInt(match[2], 16)
-							: undefined;
-					paramInformation.set(
-						{ parameter: keyNum, valueBitMask: bitMask },
-						defns.map(
-							(def) =>
-								new ConditionalParamInformation(
-									this,
-									keyNum,
-									bitMask,
-									def,
-								),
-						),
-					);
-				}
-			} else {
-				throwInvalidConfig(
-					`device`,
-					`packages/config/config/devices/${filename}:
-paramInformation must be an array!`,
-				);
-			}
-
-			this.paramInformation = paramInformation;
+			this.paramInformation = parseConditionalParamInformationMap(
+				definition,
+				this,
+			);
 		}
 
 		if (definition.proprietary != undefined) {
@@ -649,8 +561,8 @@ proprietary is not an object`,
 
 		if (definition.compat != undefined) {
 			if (
-				isArray(definition.compat) &&
-				definition.compat.every((item: any) => isObject(item))
+				isArray(definition.compat)
+				&& definition.compat.every((item: any) => isObject(item))
 			) {
 				// Make sure all conditions are valid
 				for (const entry of definition.compat) {
@@ -704,6 +616,8 @@ metadata is not an object`,
 		productId: number;
 	}[];
 	public readonly firmwareVersion: FirmwareVersionRange;
+	/** Mark this configuration as preferred over other config files with an overlapping firmware range */
+	public readonly preferred: boolean;
 	public readonly endpoints?: ReadonlyMap<number, ConditionalEndpointConfig>;
 	public readonly associations?: ReadonlyMap<
 		number,
@@ -735,6 +649,7 @@ metadata is not an object`,
 			evaluateDeep(this.description, deviceId),
 			this.devices,
 			this.firmwareVersion,
+			this.preferred,
 			evaluateDeep(this.endpoints, deviceId),
 			evaluateDeep(this.associations, deviceId),
 			evaluateDeep(this.paramInformation, deviceId),
@@ -751,6 +666,7 @@ export class DeviceConfig {
 		isEmbedded: boolean,
 		options: {
 			rootDir: string;
+			fallbackDirs?: string[];
 			relative?: boolean;
 			deviceId?: DeviceID;
 		},
@@ -764,32 +680,68 @@ export class DeviceConfig {
 	}
 
 	public constructor(
-		public readonly filename: string,
-		/** Whether this is an embedded configuration or not */
-		public readonly isEmbedded: boolean,
-
-		public readonly manufacturer: string,
-		public readonly manufacturerId: number,
-		public readonly label: string,
-		public readonly description: string,
-		public readonly devices: readonly {
+		filename: string,
+		isEmbedded: boolean,
+		manufacturer: string,
+		manufacturerId: number,
+		label: string,
+		description: string,
+		devices: readonly {
 			productType: number;
 			productId: number;
 		}[],
-		public readonly firmwareVersion: FirmwareVersionRange,
-		public readonly endpoints?: ReadonlyMap<number, EndpointConfig>,
-		public readonly associations?: ReadonlyMap<number, AssociationConfig>,
-		public readonly paramInformation?: ParamInfoMap,
-		/**
-		 * Contains manufacturer-specific support information for the
-		 * ManufacturerProprietary CC
-		 */
-		public readonly proprietary?: Record<string, unknown>,
-		/** Contains compatibility options */
-		public readonly compat?: CompatConfig,
-		/** Contains instructions and other metadata for the device */
-		public readonly metadata?: DeviceMetadata,
-	) {}
+		firmwareVersion: FirmwareVersionRange,
+		preferred: boolean,
+		endpoints?: ReadonlyMap<number, EndpointConfig>,
+		associations?: ReadonlyMap<number, AssociationConfig>,
+		paramInformation?: ParamInfoMap,
+		proprietary?: Record<string, unknown>,
+		compat?: CompatConfig,
+		metadata?: DeviceMetadata,
+	) {
+		this.filename = filename;
+		this.isEmbedded = isEmbedded;
+		this.manufacturer = manufacturer;
+		this.manufacturerId = manufacturerId;
+		this.label = label;
+		this.description = description;
+		this.devices = devices;
+		this.firmwareVersion = firmwareVersion;
+		this.preferred = preferred;
+		this.endpoints = endpoints;
+		this.associations = associations;
+		this.paramInformation = paramInformation;
+		this.proprietary = proprietary;
+		this.compat = compat;
+		this.metadata = metadata;
+	}
+
+	public readonly filename: string;
+	/** Whether this is an embedded configuration or not */
+	public readonly isEmbedded: boolean;
+	public readonly manufacturer: string;
+	public readonly manufacturerId: number;
+	public readonly label: string;
+	public readonly description: string;
+	public readonly devices: readonly {
+		productType: number;
+		productId: number;
+	}[];
+	public readonly firmwareVersion: FirmwareVersionRange;
+	/** Mark this configuration as preferred over other config files with an overlapping firmware range */
+	public readonly preferred: boolean;
+	public readonly endpoints?: ReadonlyMap<number, EndpointConfig>;
+	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
+	public readonly paramInformation?: ParamInfoMap;
+	/**
+	 * Contains manufacturer-specific support information for the
+	 * ManufacturerProprietary CC
+	 */
+	public readonly proprietary?: Record<string, unknown>;
+	/** Contains compatibility options */
+	public readonly compat?: CompatConfig;
+	/** Contains instructions and other metadata for the device */
+	public readonly metadata?: DeviceMetadata;
 
 	/** Returns the association config for a given endpoint */
 	public getAssociationConfigForEndpoint(
@@ -799,12 +751,159 @@ export class DeviceConfig {
 		if (endpointIndex === 0) {
 			// The root endpoint's associations may be configured separately or as part of "endpoints"
 			return (
-				this.associations?.get(group) ??
-				this.endpoints?.get(0)?.associations?.get(group)
+				this.associations?.get(group)
+					?? this.endpoints?.get(0)?.associations?.get(group)
 			);
 		} else {
 			// The other endpoints can only have a configuration as part of "endpoints"
 			return this.endpoints?.get(endpointIndex)?.associations?.get(group);
 		}
+	}
+
+	/**
+	 * Returns a hash code that can be used to check whether a device config has changed enough to require a re-interview.
+	 */
+	public getHash(): Buffer {
+		// We only need to compare the information that is persisted elsewhere:
+		// - config parameters
+		// - functional association settings
+		// - CC-related compat flags
+
+		let hashable: Record<string, any> = {
+			// endpoints: {
+			// 	associations: {},
+			// 	paramInformation: []
+			// },
+			// proprietary: {},
+			// compat: {},
+		};
+
+		const sortObject = (obj: Record<string, any>) => {
+			const ret: Record<string, any> = {};
+			for (const key of Object.keys(obj).sort()) {
+				ret[key] = obj[key];
+			}
+			return ret;
+		};
+
+		const cloneAssociationConfig = (a: AssociationConfig) => {
+			return sortObject(
+				pick(a, ["maxNodes", "multiChannel", "isLifeline"]),
+			);
+		};
+		const cloneAssociationMap = (
+			target: Record<string, any>,
+			map: ReadonlyMap<number, AssociationConfig> | undefined,
+		) => {
+			if (!map || !map.size) return;
+			target.associations = {};
+			for (const [key, value] of map) {
+				target.associations[key] = cloneAssociationConfig(value);
+			}
+			target.associations = sortObject(target.associations);
+		};
+
+		const cloneParamInformationMap = (
+			target: Record<string, any>,
+			map: ParamInfoMap | undefined,
+		) => {
+			if (!map || !map.size) return;
+			const getParamKey = (param: ParamInformation) =>
+				`${param.parameterNumber}${
+					param.valueBitMask ? `[${num2hex(param.valueBitMask)}]` : ""
+				}`;
+			target.paramInformation = [...map.values()].sort((a, b) =>
+				getParamKey(a).localeCompare(getParamKey(b))
+			);
+		};
+
+		// Clone associations and param information on the root (ep 0) and endpoints
+		{
+			let ep0: Record<string, any> = {};
+			cloneAssociationMap(ep0, this.associations);
+			cloneParamInformationMap(ep0, this.paramInformation);
+			ep0 = sortObject(ep0);
+
+			if (Object.keys(ep0).length > 0) {
+				hashable.endpoints ??= {};
+				hashable.endpoints[0] = ep0;
+			}
+		}
+
+		if (this.endpoints) {
+			for (const [index, endpoint] of this.endpoints) {
+				let ep: Record<string, any> = {};
+
+				cloneAssociationMap(ep, endpoint.associations);
+				cloneParamInformationMap(ep, endpoint.paramInformation);
+
+				ep = sortObject(ep);
+
+				if (Object.keys(ep).length > 0) {
+					hashable.endpoints ??= {};
+					hashable.endpoints[index] = ep;
+				}
+			}
+		}
+
+		// Clone proprietary config
+		if (this.proprietary && Object.keys(this.proprietary).length > 0) {
+			hashable.proprietary = sortObject({ ...this.proprietary });
+		}
+
+		// Clone relevant compat flags
+		if (this.compat) {
+			let c: Record<string, any> = {};
+
+			// Copy some simple flags over
+			for (
+				const prop of [
+					"forceSceneControllerGroupCount",
+					"mapRootReportsToEndpoint",
+					"mapBasicSet",
+					"preserveRootApplicationCCValueIDs",
+					"preserveEndpoints",
+					"removeEndpoints",
+					"treatMultilevelSwitchSetAsEvent",
+				] as const
+			) {
+				if (this.compat[prop] != undefined) {
+					c[prop] = this.compat[prop];
+				}
+			}
+
+			// Copy other, more complex flags
+			if (this.compat.overrideQueries) {
+				c.overrideQueries = Object.fromEntries(
+					this.compat.overrideQueries["overrides"],
+				);
+			}
+			if (this.compat.addCCs) {
+				c.addCCs = Object.fromEntries(
+					[...this.compat.addCCs].map(([ccId, def]) => [
+						ccId,
+						Object.fromEntries(def.endpoints),
+					]),
+				);
+			}
+			if (this.compat.removeCCs) {
+				c.removeCCs = Object.fromEntries(this.compat.removeCCs);
+			}
+			if (this.compat.treatSetAsReport) {
+				c.treatSetAsReport = [...this.compat.treatSetAsReport].sort();
+			}
+
+			c = sortObject(c);
+			if (Object.keys(c).length > 0) {
+				hashable.compat = c;
+			}
+		}
+
+		hashable = sortObject(hashable);
+
+		// And create a hash from it. This does not need to be cryptographically secure, just good enough to detect changes.
+		const buffer = Buffer.from(JSON.stringify(hashable), "utf8");
+		const md5 = createHash("md5");
+		return md5.update(buffer).digest();
 	}
 }

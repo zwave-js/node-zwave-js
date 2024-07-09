@@ -42,26 +42,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON disabled / ALL OFF disabled",
+					"label": "All on disabled / All off disabled",
 					"value": 0
 				},
 				{
-					"label": "ALL ON disabled / ALL OFF active",
+					"label": "All on disabled / All off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active / ALL OFF disabled",
+					"label": "All on active / All off disabled",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active / ALL OFF active",
+					"label": "All on active / All off active",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Override OFF-delay",
+			"label": "Override OFF-Delay",
 			"description": "Forced auto off period",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Relay 1: OFF-delay time (100ms steps)",
+			"label": "Relay 1: OFF-Delay Time (100ms Steps)",
 			"description": "Automatic turning off relay 1 after set time ...",
 			"valueSize": 2,
 			"minValue": 0,
@@ -89,11 +89,10 @@
 		},
 		{
 			"#": "6",
-			"label": "Separation of association sending (key 1)",
+			"label": "Separation of Association Sending (Key 1)",
 			"description": "Sending commands to control devices assigned ...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -101,22 +100,21 @@
 					"value": 0
 				},
 				{
-					"label": "Map OFF status to all devices in group 1 ...",
+					"label": "Map off status to all devices in group 1",
 					"value": 1
 				},
 				{
-					"label": "Map OFF status to all devices in group 1 ...",
+					"label": "Map off status to all devices in group 1",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "13",
-			"label": "Inputs behaviour",
+			"label": "Inputs Behaviour",
 			"description": "Assigns bistable key status to the device status.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -124,45 +122,43 @@
 					"value": 0
 				},
 				{
-					"label": "Follow switch contact (closed=ON, open=OFF)",
+					"label": "Follow switch contact (Closed=ON, open=OFF)",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Inputs Button/Switch configuration",
+			"label": "Inputs Button/Switch Configuration",
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable input (button)",
+					"label": "Mono-Stable input (Button)",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable input (switch)",
+					"label": "Bi-Stable input (Switch)",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "15",
-			"label": "Dimmer/Roller shutter control",
+			"label": "Dimmer/Roller Shutter Control",
 			"description": "Enable/Disable operation of dimmer or roller shutter devices ...",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Dimmer/Roller shutter control",
+					"label": "Disable dimmer/roller shutter control",
 					"value": 0
 				},
 				{
-					"label": "Enable Dimmer/Roller shutter control",
+					"label": "Enable dimmer/roller shutter control",
 					"value": 1
 				}
 			]
@@ -176,23 +172,22 @@
 			"label": "Relay 1: Response to General Alarm",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DEACTIVATION - no response to alarm frames",
+					"label": "Deactivation - No response to alarm frames",
 					"value": 0
 				},
 				{
-					"label": "Alarm relay ON",
+					"label": "Alarm relay on",
 					"value": 1
 				},
 				{
-					"label": "Alarm relay OFF",
+					"label": "Alarm relay off",
 					"value": 2
 				},
 				{
-					"label": "ALARM FLASHING - relay will turn ON and OFF ...",
+					"label": "Alarm flashing - Relay will turn on and off",
 					"value": 3
 				}
 			]
@@ -202,23 +197,22 @@
 			"label": "Relay 1: Response to Water Flood Alarm",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DEACTIVATION - no response to alarm frames",
+					"label": "Deactivation - No response to alarm frames",
 					"value": 0
 				},
 				{
-					"label": "Alarm relay ON",
+					"label": "Alarm relay on",
 					"value": 1
 				},
 				{
-					"label": "Alarm relay OFF",
+					"label": "Alarm relay off",
 					"value": 2
 				},
 				{
-					"label": "ALARM FLASHING - relay will turn ON and OFF ...",
+					"label": "Alarm flashing - Relay will turn on and off",
 					"value": 3
 				}
 			]
@@ -228,23 +222,22 @@
 			"label": "Relay 1: Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
 			"defaultValue": 3,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DEACTIVATION - no response to alarm frames",
+					"label": "Deactivation - No response to alarm frames",
 					"value": 0
 				},
 				{
-					"label": "Alarm relay ON",
+					"label": "Alarm relay on",
 					"value": 1
 				},
 				{
-					"label": "Alarm relay OFF",
+					"label": "Alarm relay off",
 					"value": 2
 				},
 				{
-					"label": "ALARM FLASHING - relay will turn ON and OFF ...",
+					"label": "Alarm flashing - Relay will turn on and off",
 					"value": 3
 				}
 			]
@@ -254,30 +247,29 @@
 			"label": "Relay 1: Response to Temperature Alarm",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DEACTIVATION - no response to alarm frames",
+					"label": "Deactivation - No response to alarm frames",
 					"value": 0
 				},
 				{
-					"label": "Alarm relay ON",
+					"label": "Alarm relay on",
 					"value": 1
 				},
 				{
-					"label": "Alarm relay OFF",
+					"label": "Alarm relay off",
 					"value": 2
 				},
 				{
-					"label": "ALARM FLASHING - relay will turn ON and OFF ...",
+					"label": "Alarm flashing - Relay will turn on and off",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "39",
-			"label": "ALARM FLASHING alarm time",
+			"label": "ALARM FLASHING Alarm Time",
 			"description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
 			"valueSize": 2,
 			"minValue": 0,

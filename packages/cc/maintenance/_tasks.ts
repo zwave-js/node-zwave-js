@@ -3,17 +3,9 @@ import { generateCCAPIInterface } from "./generateCCAPIInterface";
 import { generateCCExports } from "./generateCCExports";
 import { generateCCValuesInterface } from "./generateCCValuesInterface";
 // import { lintCCConstructors } from "./lintCCConstructor";
-import { lintCCInterview } from "./lintCCInterview";
-import { lintCCValidateArgs } from "./lintCCValidateArgs";
 
 const argv = process.argv.slice(2);
 
-const lint = () =>
-	Promise.all([
-		lintCCInterview(),
-		// lintCCConstructors(),
-		lintCCValidateArgs(),
-	]);
 const codegen = () =>
 	Promise.all([
 		generateCCAPIInterface(),
@@ -22,15 +14,11 @@ const codegen = () =>
 	]);
 
 (async () => {
-	if (argv.includes("lint")) {
-		await lint();
-	}
-
 	if (argv.includes("codegen")) {
 		await codegen();
 	}
 })().catch((e) => {
-	console.error(red(e.message));
+	console.error(red(e.stack));
 	console.error(" ");
 	process.exit(1);
 });

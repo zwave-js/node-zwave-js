@@ -1,0 +1,252 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "ZM DIMMER",
+	"description": "Heatit ZM Dimmer",
+	"devices": [
+		{
+			"productType": "0x0021",
+			"productId": "0x2101",
+			"zwaveAllianceId": 4802
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Multilevel Switch",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Brightness After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Previous state",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Default Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Restore previous brightness",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Auto-Off Timer",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Auto-On Timer",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Turn Off Delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "S1 Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Dimming",
+					"value": 0
+				},
+				{
+					"label": "Scene controller",
+					"value": 1
+				},
+				{
+					"label": "Scene controller and dimming",
+					"value": 2
+				},
+				{
+					"label": "Disabled",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "S2 Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Dimming",
+					"value": 0
+				},
+				{
+					"label": "Scene controller",
+					"value": 1
+				},
+				{
+					"label": "Scene controller and dimming",
+					"value": 2
+				},
+				{
+					"label": "Disabled",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Dimming Duration",
+			"valueSize": 1,
+			"unit": "ms",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Dimmer Curve",
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Linear",
+					"value": 0
+				},
+				{
+					"label": "Logarithmic",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#dimmer_type_trail_lead"
+		},
+		{
+			"#": "11",
+			"label": "Maximum Dim Level",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 90
+		},
+		{
+			"#": "12",
+			"label": "Minimum Dim Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 15
+		},
+		{
+			"#": "13",
+			"label": "Meter Report Threshold",
+			"valueSize": 1,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 250,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Meter Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 810,
+			"unsigned": true
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "On/Off Functionality",
+			"description": "Use for non-dimmable loads."
+		}
+	],
+	"metadata": {
+		"inclusion": "The primary controller/gateway has a mode for adding devices. Please refer to your primary controller manual on how to set the primary controller in add mode.\nThe device may only be added from the network if the primary controller is in add mode. When the device is removed from the network, it will NOT revert to factory settings.\nAn always listening node must be powered continuously and reside in a fixed position in the installation to secure the routing table. Adding the device within a 2 meters range from the gateway can minimize faults during the Interview process.\n\nStandard (Manual)\nAdd mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the module has been added to the network. Configuration mode can also be cancelled by performing the same procedure used for starting Configuration mode.\nTo start the configuration process, press the reset button 3 times in rapid succession. The LED will light up in solid green for 3 seconds if add is successful. The device is now ready for use with default settings.\n\nNB! When the device is removed from the gateway, the parameters are not reset. To reset the parameters, see ”Factory reset”.\nIf inclusion fails, please perform a ”remove device” process and try again. If inclusion fails again, please see “Factory reset”",
+		"exclusion": "The primary controller/gateway has a mode for removing devices. Please refer to your primary controller manual on how to set the primary controller in remove mode. The device may only be removed from the network if the primary controller is in remove mode. When the device is removed from the network, it will NOT revert to factory settings.\n\nStandard (Manual)\nRemove mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the module has been removed from the network. Configuration mode can also be cancelled by performing the same procedure used for starting Configuration mode.\nTo start the configuration process, press the reset button 3 times in rapid succession. The LED will light up in solid green for 3 seconds if remove is successful. The device is now ready for use with default settings.\n\nNB! When the device is removed from the gateway, the parameters are not reset. To reset the parameters, see ”Factory reset”",
+		"reset": "Factory Reset. \nPlease read this before installation.\nPress and hold the reset button. After 3 seconds the LED will start to blink green. After 20 seconds the LED will start blinking green rapidly. You may now release the button. If reset was successful the LED will light up in solid green for 3 seconds.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://www.thermo-floor.no/media/multicase/documents/_tfasdokumentasjon/heatit%20controls/heatit%20zm%20dimmer%20%20250w/1444449_manual_heatit_zm_dimmer.pdf"
+	}
+}

@@ -3,10 +3,10 @@ description: 'Downloads the previously stored turborepo cache'
 author: 'AlCalzone'
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Download turbo cache artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: turbo-cache
         path: ${{ runner.temp }}

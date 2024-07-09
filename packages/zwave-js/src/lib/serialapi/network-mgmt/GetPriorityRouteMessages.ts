@@ -1,20 +1,24 @@
 import {
 	MAX_REPEATERS,
-	MessageOrCCLogEntry,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type MessageRecord,
+	RouteKind,
 	ZWaveDataRate,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
+	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -46,7 +50,10 @@ export class GetPriorityRouteRequest extends Message {
 	public destinationNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.destinationNodeId]);
+		this.payload = encodeNodeID(
+			this.destinationNodeId,
+			this.host.nodeIdType,
+		);
 
 		return super.serialize();
 	}
@@ -68,31 +75,53 @@ export class GetPriorityRouteResponse extends Message {
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
-		this.destinationNodeId = this.payload[0];
-		this.repeaters = [...this.payload.slice(1, 1 + MAX_REPEATERS)].filter(
-			(id) => id > 0,
+		let offset = 0;
+		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			this.payload,
+			host.nodeIdType,
+			offset,
 		);
-		this.routeSpeed = this.payload[1 + MAX_REPEATERS];
+		offset += nodeIdBytes;
+		this.destinationNodeId = nodeId;
+		this.routeKind = this.payload[offset++];
+		if (this.routeKind) {
+			this.repeaters = [
+				...this.payload.subarray(offset, offset + MAX_REPEATERS),
+			].filter((id) => id > 0);
+			this.routeSpeed = this.payload[offset + MAX_REPEATERS];
+		}
 	}
 
 	public readonly destinationNodeId: number;
-	public readonly repeaters: number[];
-	public readonly routeSpeed: ZWaveDataRate;
+	public readonly routeKind: RouteKind;
+	public readonly repeaters?: number[];
+	public readonly routeSpeed?: ZWaveDataRate;
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		return {
-			...super.toLogEntry(),
-			message: {
-				"node ID": this.destinationNodeId,
-				repeaters:
-					this.repeaters.length > 0
-						? this.repeaters.join(" -> ")
-						: "none",
+		let message: MessageRecord = {
+			"node ID": this.destinationNodeId,
+		};
+		if (this.routeKind !== RouteKind.None) {
+			message = {
+				...message,
+				"route kind": getEnumMemberName(RouteKind, this.routeKind),
+				repeaters: this.repeaters?.length
+					? this.repeaters.join(" -> ")
+					: "none",
 				"route speed": getEnumMemberName(
 					ZWaveDataRate,
-					this.routeSpeed,
+					this.routeSpeed!,
 				),
-			},
+			};
+		} else {
+			message = {
+				...message,
+				route: "(not set)",
+			};
+		}
+		return {
+			...super.toLogEntry(),
+			message,
 		};
 	}
 }

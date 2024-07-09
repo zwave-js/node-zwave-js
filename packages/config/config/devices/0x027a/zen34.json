@@ -156,8 +156,8 @@
 			"#": "5",
 			"$if": "firmwareVersion >= 1.40",
 			"label": "Dimmer Control Group: Dimming Duration",
+			"valueSize": 1,
 			"unit": "seconds",
-			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 5

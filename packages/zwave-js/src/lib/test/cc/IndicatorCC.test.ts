@@ -23,12 +23,6 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 const host = createTestingHost();
 
-test.before(async (t) => {
-	// Loading configuration may take a while on CI
-	t.timeout(30000);
-	await host.configManager.loadIndicators();
-});
-
 test("the Get command (V1) should serialize correctly", (t) => {
 	const cc = new IndicatorCCGet(host, { nodeId: 1 });
 	const expected = buildCCBuffer(
@@ -111,7 +105,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 		data: ccData,
 	});
 
-	t.is(cc.value, 55);
+	t.is(cc.indicator0Value, 55);
 	t.is(cc.values, undefined);
 });
 
@@ -136,7 +130,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	// Boolean indicators are only interpreted during persistValues
 	cc.persistValues(host);
 
-	t.is(cc.value, undefined);
+	t.is(cc.indicator0Value, undefined);
 	t.deepEqual(cc.values, [
 		{
 			indicatorId: 1,

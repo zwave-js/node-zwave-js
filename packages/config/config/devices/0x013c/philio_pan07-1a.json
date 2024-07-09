@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "Philio PAN07-1A",
-	"description": "TWO SPDT Switch module with meter",
+	"description": "TWO SPDT Switch Module with Meter",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Threshold of current for Load Caution",
+			"label": "Threshold of Current for Load Caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 600,
@@ -97,16 +97,16 @@
 		},
 		{
 			"#": "6",
-			"label": "Threshold of KWH for Load Caution",
-			"unit": "KWh",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
+			"unit": "kWh",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
 		{
 			"#": "7",
-			"label": "Relay control mode",
+			"label": "Relay Control Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -123,7 +123,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Restore Relay state mode",
+			"label": "Restore Relay State Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

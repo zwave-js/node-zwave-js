@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "NE-NAS-DS01Z",
-	"description": "Door sensor",
+	"description": "Door Sensor",
 	"devices": [
 		{
 			"productType": "0x0003",

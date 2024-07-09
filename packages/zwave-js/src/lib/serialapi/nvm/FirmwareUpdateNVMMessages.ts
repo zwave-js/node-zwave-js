@@ -1,11 +1,11 @@
 import {
-	createSimpleReflectionDecorator,
-	MessageOrCCLogEntry,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	validatePayload,
+	type MessageRecord,
 	ZWaveError,
 	ZWaveErrorCodes,
+	createSimpleReflectionDecorator,
+	validatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type {
@@ -13,13 +13,13 @@ import type {
 	MessageBaseOptions,
 } from "@zwave-js/serial";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageDeserializationOptions,
-	MessageOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -123,7 +123,7 @@ export class FirmwareUpdateNVMResponse extends Message {
 			return new CommandConstructor(host, options);
 		}
 
-		this.payload = this.payload.slice(1);
+		this.payload = this.payload.subarray(1);
 	}
 
 	public command: FirmwareUpdateNVMCommand;
@@ -171,12 +171,15 @@ export class FirmwareUpdateNVM_InitResponse extends FirmwareUpdateNVMResponse {
 // =============================================================================
 
 export interface FirmwareUpdateNVM_SetNewImageRequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	newImage: boolean;
 }
 
 @subCommandRequest(FirmwareUpdateNVMCommand.SetNewImage)
-export class FirmwareUpdateNVM_SetNewImageRequest extends FirmwareUpdateNVMRequest {
+export class FirmwareUpdateNVM_SetNewImageRequest
+	extends FirmwareUpdateNVMRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -214,7 +217,9 @@ export class FirmwareUpdateNVM_SetNewImageRequest extends FirmwareUpdateNVMReque
 }
 
 @subCommandResponse(FirmwareUpdateNVMCommand.SetNewImage)
-export class FirmwareUpdateNVM_SetNewImageResponse extends FirmwareUpdateNVMResponse {
+export class FirmwareUpdateNVM_SetNewImageResponse
+	extends FirmwareUpdateNVMResponse
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
@@ -237,10 +242,14 @@ export class FirmwareUpdateNVM_SetNewImageResponse extends FirmwareUpdateNVMResp
 // =============================================================================
 
 @subCommandRequest(FirmwareUpdateNVMCommand.GetNewImage)
-export class FirmwareUpdateNVM_GetNewImageRequest extends FirmwareUpdateNVMRequest {}
+export class FirmwareUpdateNVM_GetNewImageRequest
+	extends FirmwareUpdateNVMRequest
+{}
 
 @subCommandResponse(FirmwareUpdateNVMCommand.GetNewImage)
-export class FirmwareUpdateNVM_GetNewImageResponse extends FirmwareUpdateNVMResponse {
+export class FirmwareUpdateNVM_GetNewImageResponse
+	extends FirmwareUpdateNVMResponse
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
@@ -263,14 +272,17 @@ export class FirmwareUpdateNVM_GetNewImageResponse extends FirmwareUpdateNVMResp
 // =============================================================================
 
 export interface FirmwareUpdateNVM_UpdateCRC16RequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	crcSeed: number;
 	offset: number;
 	blockLength: number;
 }
 
 @subCommandRequest(FirmwareUpdateNVMCommand.UpdateCRC16)
-export class FirmwareUpdateNVM_UpdateCRC16Request extends FirmwareUpdateNVMRequest {
+export class FirmwareUpdateNVM_UpdateCRC16Request
+	extends FirmwareUpdateNVMRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -322,7 +334,9 @@ export class FirmwareUpdateNVM_UpdateCRC16Request extends FirmwareUpdateNVMReque
 }
 
 @subCommandResponse(FirmwareUpdateNVMCommand.UpdateCRC16)
-export class FirmwareUpdateNVM_UpdateCRC16Response extends FirmwareUpdateNVMResponse {
+export class FirmwareUpdateNVM_UpdateCRC16Response
+	extends FirmwareUpdateNVMResponse
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
@@ -346,7 +360,9 @@ export class FirmwareUpdateNVM_UpdateCRC16Response extends FirmwareUpdateNVMResp
 // =============================================================================
 
 @subCommandRequest(FirmwareUpdateNVMCommand.IsValidCRC16)
-export class FirmwareUpdateNVM_IsValidCRC16Request extends FirmwareUpdateNVMRequest {
+export class FirmwareUpdateNVM_IsValidCRC16Request
+	extends FirmwareUpdateNVMRequest
+{
 	public override getResponseTimeout(): number | undefined {
 		// Computing the CRC-16 of a couple hundred KB can take a while on slow sticks
 		return 30000;
@@ -354,7 +370,9 @@ export class FirmwareUpdateNVM_IsValidCRC16Request extends FirmwareUpdateNVMRequ
 }
 
 @subCommandResponse(FirmwareUpdateNVMCommand.IsValidCRC16)
-export class FirmwareUpdateNVM_IsValidCRC16Response extends FirmwareUpdateNVMResponse {
+export class FirmwareUpdateNVM_IsValidCRC16Response
+	extends FirmwareUpdateNVMResponse
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
@@ -378,7 +396,8 @@ export class FirmwareUpdateNVM_IsValidCRC16Response extends FirmwareUpdateNVMRes
 // =============================================================================
 
 export interface FirmwareUpdateNVM_WriteRequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	offset: number;
 	buffer: Buffer;
 }

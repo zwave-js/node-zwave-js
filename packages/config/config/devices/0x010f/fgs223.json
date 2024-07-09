@@ -49,7 +49,6 @@
 			"label": "First Channel - Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -57,19 +56,19 @@
 					"value": 0
 				},
 				{
-					"label": "Delay turn ON",
+					"label": "Delay turn on",
 					"value": 1
 				},
 				{
-					"label": "Delay turn OFF",
+					"label": "Delay turn off",
 					"value": 2
 				},
 				{
-					"label": "Automatically turn ON",
+					"label": "Automatically turn on",
 					"value": 3
 				},
 				{
-					"label": "Automatically turn OFF",
+					"label": "Automatically turn off",
 					"value": 4
 				},
 				{
@@ -83,7 +82,6 @@
 			"label": "First Channel - Reaction to Key S1 for Delay/Auto ON/OFF Modes",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -91,11 +89,11 @@
 					"value": 0
 				},
 				{
-					"label": "Ignore - mode runs until it ends",
+					"label": "Ignore - Mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "Reset - start time from the beginning",
+					"label": "Reset - Start time from the beginning",
 					"value": 2
 				}
 			]
@@ -108,7 +106,6 @@
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 50,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "0.1 seconds",
@@ -123,15 +120,13 @@
 			"unit": "0.1 seconds",
 			"minValue": 1,
 			"maxValue": 32000,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "15",
 			"label": "Second Channel - Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -139,19 +134,19 @@
 					"value": 0
 				},
 				{
-					"label": "Delay turn ON",
+					"label": "Delay turn on",
 					"value": 1
 				},
 				{
-					"label": "Delay turn OFF",
+					"label": "Delay turn off",
 					"value": 2
 				},
 				{
-					"label": "Automatically turn ON",
+					"label": "Automatically turn on",
 					"value": 3
 				},
 				{
-					"label": "Automatically turn OFF",
+					"label": "Automatically turn off",
 					"value": 4
 				},
 				{
@@ -166,7 +161,6 @@
 			"valueSize": 1,
 			"unit": "seconds",
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,11 +168,11 @@
 					"value": 0
 				},
 				{
-					"label": "Ignore - mode runs until it ends",
+					"label": "Ignore - Mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "Reset - start time from the beginning",
+					"label": "Reset - Start time from the beginning",
 					"value": 2
 				}
 			]
@@ -191,7 +185,6 @@
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 50,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "0.1 seconds",
@@ -206,15 +199,13 @@
 			"unit": "0.1 seconds",
 			"minValue": 1,
 			"maxValue": 32000,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "20",
 			"label": "Input Button/Switch Configuration",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -222,11 +213,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch (status syncs with switch position)",
+					"label": "Switch (Status syncs with switch position)",
 					"value": 1
 				},
 				{
-					"label": "Switch (status changes when switch change)",
+					"label": "Switch (Status changes when switch change)",
 					"value": 2
 				}
 			]
@@ -320,8 +311,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"defaultValue": 255
 		},
 		{
 			"#": "32",
@@ -329,8 +319,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "33",
@@ -338,8 +327,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "35[0x01]",
@@ -365,8 +353,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"defaultValue": 255
 		},
 		{
 			"#": "37",
@@ -374,8 +361,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "38",
@@ -383,8 +369,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "40",
@@ -421,7 +406,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -432,15 +416,15 @@
 		{
 			"#": "53",
 			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"label": "First Channel - Energy Reports: Threshold",
 			"maxValue": 32000,
-			"defaultValue": 100,
-			"label": "First Channel - Energy Reports: Threshold"
+			"defaultValue": 100
 		},
 		{
 			"#": "54",
 			"$import": "templates/fibaro_template.json#power_report_threshold_relative",
-			"defaultValue": 20,
-			"label": "Second Channel - Power Reports: Threshold"
+			"label": "Second Channel - Power Reports: Threshold",
+			"defaultValue": 20
 		},
 		{
 			"#": "55",
@@ -450,7 +434,6 @@
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -461,9 +444,9 @@
 		{
 			"#": "57",
 			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"label": "Second Channel - Energy Reports: Threshold",
 			"maxValue": 32000,
-			"defaultValue": 100,
-			"label": "Second Channel - Energy Reports: Threshold"
+			"defaultValue": 100
 		},
 		{
 			"#": "58",

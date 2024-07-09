@@ -1,7 +1,7 @@
 import {
 	BatteryCC,
 	BatteryCCGet,
-	BatteryCCReport,
+	type BatteryCCReport,
 	BatteryChargingStatus,
 	BatteryCommand,
 	BatteryReplacementStatus,

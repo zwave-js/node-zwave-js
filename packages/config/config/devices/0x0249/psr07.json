@@ -21,8 +21,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "2",
@@ -30,25 +29,22 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "10",
 			"label": "Auto Report Battery Time",
-			"unit": "0.5 hours",
 			"valueSize": 1,
+			"unit": "0.5 hours",
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 12,
-			"unsigned": true
+			"defaultValue": 12
 		},
 		{
 			"#": "25",
 			"label": "Dimmer Set Method",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -24,11 +24,10 @@
 			"label": "Light Level Threshold",
 			"description": "Activate floodlight and send Basic Set Command when PIR is triggered while light level is below this threshold.",
 			"valueSize": 2,
+			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
-			"unsigned": true,
-			"unit": "lux",
 			"options": [
 				{
 					"label": "Never turn on floodlight",
@@ -48,9 +47,20 @@
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Basic Report on Trigger"
+			"label": "Send Basic Report On Trigger"
 		}
 	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					// The device reports that it supports Supervision, but it does not support all
+					// commands supervision-encapsulated
+					"endpoints": "*"
+				}
+			}
+		}
+	},
 	"metadata": {
 		"inclusion": "Z-Wave auto inclusion.\nOr manual inclusion : put the Z-Wave controller into inclusion mode, press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode",
 		"exclusion": "Put the Z-Wave Controller into exclusion mode. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode",

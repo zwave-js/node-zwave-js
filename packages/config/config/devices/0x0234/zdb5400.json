@@ -305,9 +305,9 @@
 		{
 			"#": "22[0xff]",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 1 (On): Blinking",
-			"unit": "100 ms",
+			"label": "LED Time for Button 1 (On): Blinking",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		},
 		{
@@ -331,9 +331,9 @@
 		{
 			"#": "23[0xff]",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 1 (Off): Blinking",
-			"unit": "100 ms",
+			"label": "LED Time for Button 1 (Off): Blinking",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		},
 		{
@@ -345,8 +345,8 @@
 			"#": "25",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Button 2 - Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"maxValue": 43200,
 			"defaultValue": 300
 		},
@@ -399,9 +399,9 @@
 		{
 			"#": "30[0xff]",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 2 (On): Blinking",
-			"unit": "100 ms",
+			"label": "LED Time for Button 2 (On): Blinking",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		},
 		{
@@ -425,9 +425,9 @@
 		{
 			"#": "31[0xff]",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 2 (Off) Blinking",
-			"unit": "100 ms",
+			"label": "LED Time for Button 2 (Off) Blinking",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		},
 		{
@@ -439,8 +439,8 @@
 			"#": "33",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Button 3 - Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"maxValue": 43200,
 			"defaultValue": 300
 		},
@@ -493,9 +493,9 @@
 		{
 			"#": "38[0xff]",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 3 (On): Blinking",
-			"unit": "100 ms",
+			"label": "LED Time for Button 3 (On): Blinking",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		},
 		{
@@ -519,9 +519,9 @@
 		{
 			"#": "39[0xff]",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 3 (Off): Blinking",
-			"unit": "100 ms",
+			"label": "LED Time for Button 3 (Off): Blinking",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		},
 		{
@@ -533,8 +533,8 @@
 			"#": "41",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Button 4 - Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"maxValue": 43200,
 			"defaultValue": 300
 		},
@@ -587,9 +587,9 @@
 		{
 			"#": "46[0xff]",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 4 (On): Blinking",
-			"unit": "100 ms",
-			"valueSize": 4
+			"label": "LED Time for Button 4 (On): Blinking",
+			"valueSize": 4,
+			"unit": "100 ms"
 		},
 		{
 			"#": "47[0xff000000]",
@@ -612,9 +612,9 @@
 		{
 			"#": "47[0xff]",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "LED Time For Button 4 (Off): Blinking",
-			"unit": "100 ms",
+			"label": "LED Time for Button 4 (Off): Blinking",
 			"valueSize": 4,
+			"unit": "100 ms",
 			"defaultValue": 0
 		}
 	],

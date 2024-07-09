@@ -1,0 +1,69 @@
+{
+	"manufacturer": "LG U+",
+	"manufacturerId": "0x018c",
+	"label": "SSD-105",
+	"description": "1-Button Smart Switch",
+	"devices": [
+		{
+			"productType": "0x0057",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3315
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Switch 1",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Temperature & Humidity Reporting Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Temperature Change Report Threshold",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 10,
+			"maxValue": 30,
+			"defaultValue": 20
+		},
+		{
+			"#": "3",
+			"label": "Humidity Change Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 20,
+			"defaultValue": 10
+		}
+	],
+	"metadata": {
+		"inclusion": "After mounting the UZB controller to your PC and running the PC Controller program, click the Add button in the PC Controller program. Press the button on the Smart Power Strip for more than five seconds after you plug the Smart Power Strip into a power outlet and it will include to the network controller, while flashing the red button on the LED Smart Power Strip",
+		"exclusion": "After mounting the UZB controller to your PC and run the PC Controller program you can click the Remove button in the PC Controller program. Press the button on the Smart Power Strip for more than five seconds after you plug the Smart Power Strip into a power outlet will Exclusion in the network controller, while the flashing red button LED Smart Power Strip",
+		"reset": "With the device powered, press and hold the third button for 10 seconds.\nThe LED of the button will flash red after 5 seconds, it will turn green, then it will flash red again. Then release the button.\nAfter a few moments, the entire LED is blinking and the green LED stops flashing.\nPlease use the procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3315/Light%20switch%20user%20manual.pdf"
+	}
+}

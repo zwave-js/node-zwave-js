@@ -1,0 +1,162 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN37 800LR",
+	"description": "Wall Remote",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xf003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control (Button 1 & 2)",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "On/Off Control (Button 3 & 4)",
+			"maxNodes": 10
+		},
+		"4": {
+			"label": "Dimmer Control (Button 1 & 2)",
+			"maxNodes": 10
+		},
+		"5": {
+			"label": "Dimmer Control (Button 3 & 4)",
+			"maxNodes": 10
+		},
+		"6": {
+			"label": "Toggle Control (Button 1)",
+			"maxNodes": 10
+		},
+		"7": {
+			"label": "Toggle Control (Button 2)",
+			"maxNodes": 10
+		},
+		"8": {
+			"label": "Toggle Control (Button 3)",
+			"maxNodes": 10
+		},
+		"9": {
+			"label": "Toggle Control (Button 4)",
+			"maxNodes": 10
+		}
+	},
+	// https://www.support.getzooz.com/kb/article/1511-zen37-wall-remote-advanced-settings
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Low Battery Alert Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 10,
+			"defaultValue": 5
+		},
+		{
+			"#": "2",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended_alternate_palette",
+			"label": "LED Indicator Color (Button 1)",
+			"description": "Color of top left LED when button 1 pressed."
+		},
+		{
+			"#": "3",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended_alternate_palette",
+			"label": "LED Indicator Color (Button 2)",
+			"description": "Color of top left LED when button 2 pressed.",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended_alternate_palette",
+			"label": "LED Indicator Color (Button 3)",
+			"description": "Color of top left LED when button 3 pressed.",
+			"defaultValue": 2
+		},
+		{
+			"#": "5",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended_alternate_palette",
+			"label": "LED Indicator Color (Button 4)",
+			"description": "Color of top left LED when button 4 pressed.",
+			"defaultValue": 3
+		},
+		{
+			"#": "6",
+			"label": "LED Indicator Brightness",
+			"valueSize": 1,
+			"defaultValue": 5,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10%",
+					"value": 1
+				},
+				{
+					"label": "20%",
+					"value": 2
+				},
+				{
+					"label": "30%",
+					"value": 3
+				},
+				{
+					"label": "40%",
+					"value": 4
+				},
+				{
+					"label": "50%",
+					"value": 5
+				},
+				{
+					"label": "60%",
+					"value": 6
+				},
+				{
+					"label": "70%",
+					"value": 7
+				},
+				{
+					"label": "80%",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100%",
+					"value": 10
+				}
+			]
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#base_1-99_nounit",
+			"label": "Remote Z-Wave Dimming Duration",
+			"description": "Time to dim devices in groups 4 and 5 from 0 to 100% brightness by pressing and holding the buttons.",
+			"unit": "seconds",
+			"defaultValue": 5
+		}
+	],
+	"metadata": {
+		"inclusion": "Put your Z-Wave hub into inclusion mode and click the upper paddle 6 times quickly. The LED indicator\nwill blink blue during the process and light up green once added successfully. It will light up red if failed",
+		"exclusion": "1. Bring the Remote Switch within direct range of your Z-Wave gateway (hub).\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Click the lower paddle 6 times very quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"wakeup": "1. Bring the Remote Switch within direct range of your Z-Wave gateway (hub).\n2. Click the lower left button 6 times as quickly as possible to wake the device up\n3. Your device's indicator light will remain on to indicate that the device is awake.",
+		"reset": "When your network's primary controller is missing or otherwise inoperable, you may need to reset the device to factory settings manually. In order to complete the process, make sure the device is powered, then click the bottom right small button 6 times quickly. The LED indicator will start blinking red, then immediately click the same button 6 more times. The LED indicator will stay red for 2 seconds.",
+		"manual": "https://cdn.shopify.com/s/files/1/0218/7704/files/zooz-800-series-z-wave-long-range-wall-remote-zen37-800lr-manual.pdf"
+	}
+}

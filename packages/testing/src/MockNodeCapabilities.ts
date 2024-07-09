@@ -1,15 +1,26 @@
 import {
-	CommandClasses,
-	CommandClassInfo,
-	NodeProtocolInfoAndDeviceClass,
+	BasicDeviceClass,
+	type CommandClassInfo,
+	type CommandClasses,
+	type NodeProtocolInfoAndDeviceClass,
 	NodeType,
 } from "@zwave-js/core";
+import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 
-export type PartialCCCapabilities =
-	| ({
-			ccId: CommandClasses;
-	  } & Partial<CommandClassInfo>)
-	| CommandClasses;
+export type PartialCCCapabilities<T extends CommandClasses = CommandClasses> =
+	| T
+	| (
+		& { ccId: T }
+		& Partial<CommandClassInfo>
+		& Partial<CCIdToCapabilities<T>>
+	);
+
+/** Helper function to infer the correct properties for mock CC capabilities */
+export function ccCaps<T extends CommandClasses>(
+	caps: PartialCCCapabilities<T>,
+): PartialCCCapabilities<T> {
+	return caps;
+}
 
 export interface MockNodeCapabilities extends NodeProtocolInfoAndDeviceClass {
 	firmwareVersion: string;
@@ -42,7 +53,7 @@ export function getDefaultMockNodeCapabilities(): MockNodeCapabilities {
 		nodeType: NodeType["End Node"],
 		supportsSecurity: false,
 		supportsBeaming: true,
-		basicDeviceClass: 0x04, // Routing End Node
+		basicDeviceClass: BasicDeviceClass["Routing End Node"],
 		genericDeviceClass: 0x06, // Appliance
 		specificDeviceClass: 0x01, // General Appliance
 
@@ -51,7 +62,10 @@ export function getDefaultMockNodeCapabilities(): MockNodeCapabilities {
 }
 
 export function getDefaultMockEndpointCapabilities(
-	nodeCaps: MockNodeCapabilities,
+	nodeCaps: {
+		genericDeviceClass: number;
+		specificDeviceClass: number;
+	},
 ): MockEndpointCapabilities {
 	return {
 		genericDeviceClass: nodeCaps.genericDeviceClass,

@@ -1,6 +1,6 @@
 import { Mixin } from "@zwave-js/shared";
 import test from "ava";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { StatisticsHost } from "./Statistics";
 
 interface TestStatistics {
@@ -17,7 +17,6 @@ class TestStatisticsHost extends StatisticsHost<TestStatistics> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Test extends TestStatisticsHost {}
 
 @Mixin([TestStatisticsHost])

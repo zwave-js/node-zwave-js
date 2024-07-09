@@ -20,21 +20,21 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "PM2.5 report interval",
+			"label": "PM2.5 Report Interval",
 			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
-			"unit": "0.1μg/m³",
 			"valueSize": 1,
+			"unit": "0.1μg/m³",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Report Disabled",
+					"label": "Report disabled",
 					"value": 0
 				},
 				{
-					"label": "Report every whole 1μg/m³ change (default)",
+					"label": "Report every whole 1μg/m³ change",
 					"value": 10
 				}
 			]
@@ -43,15 +43,15 @@
 			"#": "3",
 			"label": "Temperature Report Interval",
 			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
-			"unit": "0.5°C",
 			"valueSize": 1,
+			"unit": "0.5 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Report Disabled",
+					"label": "Report disabled",
 					"value": 0
 				},
 				{
@@ -64,8 +64,8 @@
 			"#": "4",
 			"label": "Humidity Report Interval",
 			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
-			"unit": "2%",
 			"valueSize": 1,
+			"unit": "2%",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -77,12 +77,11 @@
 			"description": "85 (0x55) to restore factory setting",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"writeOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Operation",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
@@ -91,5 +90,9 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// The device reports in a different scale than it reports support for
+		"disableStrictMeasurementValidation": true
+	}
 }

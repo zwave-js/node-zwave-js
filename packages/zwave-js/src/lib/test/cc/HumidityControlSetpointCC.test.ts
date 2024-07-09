@@ -27,12 +27,6 @@ function buildCCBuffer(payload: Buffer): Buffer {
 const host = createTestingHost();
 const nodeId = 2;
 
-test.before(async (t) => {
-	// Loading configuration may take a while on CI
-	t.timeout(30000);
-	await host.configManager.loadNamedScales();
-});
-
 test("the Get command should serialize correctly", (t) => {
 	const cc = new HumidityControlSetpointCCGet(host, {
 		nodeId: nodeId,
@@ -167,8 +161,8 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
 		Buffer.from([
 			HumidityControlSetpointCommand.SupportedReport, // CC Command
-			(1 << HumidityControlSetpointType.Humidifier) |
-				(1 << HumidityControlSetpointType.Auto),
+			(1 << HumidityControlSetpointType.Humidifier)
+			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
 	const cc = new HumidityControlSetpointCCSupportedReport(host, {
@@ -186,8 +180,8 @@ test("the SupportedReport command should set the correct value", (t) => {
 	const ccData = buildCCBuffer(
 		Buffer.from([
 			HumidityControlSetpointCommand.SupportedReport, // CC Command
-			(1 << HumidityControlSetpointType.Humidifier) |
-				(1 << HumidityControlSetpointType.Auto),
+			(1 << HumidityControlSetpointType.Humidifier)
+			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
 	const report = new HumidityControlSetpointCCSupportedReport(host, {

@@ -19,15 +19,14 @@
 			"label": "Input 1 Switch Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				},
 				{
@@ -50,7 +49,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Automatic turning off output after set time",
+			"label": "Automatic Turning Off Output After Set Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
@@ -58,7 +57,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Automatic turning on output after set time",
+			"label": "Automatic Turning on Output After Set Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
@@ -66,7 +65,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Enable/Disable Double click function",
+			"label": "Enable/Disable Double Click Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -78,7 +77,7 @@
 		},
 		{
 			"#": "52",
-			"label": "Auto or manual selection",
+			"label": "Auto or Manual Selection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -86,7 +85,7 @@
 		},
 		{
 			"#": "53",
-			"label": "PID value inside deadband",
+			"label": "PID Value Inside Deadband",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -94,7 +93,7 @@
 		},
 		{
 			"#": "54",
-			"label": "PID deadband",
+			"label": "PID Deadband",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -102,7 +101,7 @@
 		},
 		{
 			"#": "55",
-			"label": "Integral sampling time",
+			"label": "Integral Sampling Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -110,7 +109,7 @@
 		},
 		{
 			"#": "56",
-			"label": "P parameter",
+			"label": "P Parameter",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -118,7 +117,7 @@
 		},
 		{
 			"#": "57",
-			"label": "I parameter",
+			"label": "I Parameter",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -126,7 +125,7 @@
 		},
 		{
 			"#": "58",
-			"label": "D parameter",
+			"label": "D Parameter",
 			"description": "Available config. parameters (data type is2 Byte DEC)",
 			"valueSize": 2,
 			"minValue": 0,
@@ -135,7 +134,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Minimum dimming value",
+			"label": "Minimum Dimming Value",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -143,7 +142,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Maximum dimming value",
+			"label": "Maximum Dimming Value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -151,7 +150,7 @@
 		},
 		{
 			"#": "65",
-			"label": "Dimming time (soft on/off)",
+			"label": "Dimming Time (Soft On/off)",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
@@ -159,7 +158,7 @@
 		},
 		{
 			"#": "66",
-			"label": "Dimming time when key pressed",
+			"label": "Dimming Time When Key Pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -168,7 +167,7 @@
 		},
 		{
 			"#": "67",
-			"label": "Ignore start level",
+			"label": "Ignore Start Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -176,7 +175,7 @@
 		},
 		{
 			"#": "68",
-			"label": "Dimming duration",
+			"label": "Dimming Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -184,7 +183,7 @@
 		},
 		{
 			"#": "110",
-			"label": "Temperature sensor offset settings",
+			"label": "Temperature Sensor Offset Settings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32536,
@@ -192,7 +191,7 @@
 		},
 		{
 			"#": "120",
-			"label": "Digital temperature sensor reporting",
+			"label": "Digital Temperature Sensor Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -200,7 +199,7 @@
 		},
 		{
 			"#": "140",
-			"label": "Input I1 Sensor reporting",
+			"label": "Input I1 Sensor Reporting",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 140,
@@ -208,7 +207,7 @@
 		},
 		{
 			"#": "141",
-			"label": "Input I1 0-10V reporting threshold",
+			"label": "Input I1 0-10V Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -216,18 +215,18 @@
 		},
 		{
 			"#": "143",
-			"label": "Minimum sensor range value",
-			"unit": "2",
+			"label": "Minimum Sensor Range Value",
 			"valueSize": 2,
+			"unit": "2",
 			"minValue": 0,
 			"maxValue": 20000,
 			"defaultValue": 0
 		},
 		{
 			"#": "144",
-			"label": "Maximum sensor range value",
-			"unit": "2",
+			"label": "Maximum Sensor Range Value",
 			"valueSize": 2,
+			"unit": "2",
 			"minValue": 0,
 			"maxValue": 20000,
 			"defaultValue": 1000

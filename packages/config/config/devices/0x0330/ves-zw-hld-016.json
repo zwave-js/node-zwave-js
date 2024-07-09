@@ -1,0 +1,121 @@
+{
+	"manufacturer": "Vesternet",
+	"manufacturerId": "0x0330",
+	"label": "VES-ZW-HLD-016",
+	"description": "High Load Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0xd019"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.2.5",
+		"max": "2.4.6"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Basic Report on State Change",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Over Current Protection",
+			"description": "Triggered at over 16A.",
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"label": "Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Power Change Report Threshold",
+			"valueSize": 1,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Current Change Report Threshold",
+			"valueSize": 1,
+			"unit": "0.1 A",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Voltage Change Report Threshold",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Energy/Power/Voltage/Current Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 1800,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.\n Step 3. The connected light will stay on solid for 3 seconds to indicate successful inclusion.",
+		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Triple press the action button.",
+		"reset": "Press and hold the action button for over 10 seconds. The connected light will be set to 50% brightness and flash slowly.",
+		"manual": "https://cdn.shopify.com/s/files/1/0066/8149/3559/files/VES-ZW-HLD-016.pdf"
+	}
+}

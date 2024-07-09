@@ -1,13 +1,13 @@
 import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -20,7 +20,8 @@ import type { ZWaveLibraryTypes } from "../_Types";
 export class GetControllerVersionRequest extends Message {}
 
 export interface GetControllerVersionResponseOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	controllerType: ZWaveLibraryTypes;
 	libraryVersion: string;
 }

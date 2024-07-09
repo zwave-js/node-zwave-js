@@ -2,7 +2,7 @@
 	"manufacturer": "Chromagic Technologies Corporation",
 	"manufacturerId": "0x0116",
 	"label": "HAN02",
-	"description": "-1 - Z-Wave In Wall Switch",
+	"description": "-1 - Z-Wave in Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0011",

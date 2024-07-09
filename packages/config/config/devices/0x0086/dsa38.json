@@ -27,15 +27,14 @@
 			"label": "Button 1 Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Factory Default",
+					"label": "Factory default",
 					"value": 0
 				},
 				{
-					"label": "Scene Mode",
+					"label": "Scene mode",
 					"value": 1
 				}
 			]

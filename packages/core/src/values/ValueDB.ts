@@ -1,7 +1,7 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { TypedEventEmitter } from "@zwave-js/shared";
 import type { CommandClasses } from "../capabilities/CommandClasses";
-import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { ZWaveError, ZWaveErrorCodes, isZWaveError } from "../error/ZWaveError";
 import type { ValueMetadata } from "../values/Metadata";
 import type {
 	MetadataUpdatedArgs,
@@ -34,16 +34,16 @@ export function isValueID(param: Record<any, any>): param is ValueID {
 	if (typeof param.commandClass !== "number") return false;
 	// property is mandatory and must be a number or string
 	if (
-		typeof param.property !== "number" &&
-		typeof param.property !== "string"
+		typeof param.property !== "number"
+		&& typeof param.property !== "string"
 	) {
 		return false;
 	}
 	// propertyKey is optional and must be a number or string
 	if (
-		param.propertyKey != undefined &&
-		typeof param.propertyKey !== "number" &&
-		typeof param.propertyKey !== "string"
+		param.propertyKey != undefined
+		&& typeof param.propertyKey !== "number"
+		&& typeof param.propertyKey !== "string"
 	) {
 		return false;
 	}
@@ -125,8 +125,9 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			if (compareDBKeyFast(key, this.nodeId)) ret.add(key);
 		}
 		for (const key of this._metadata.keys()) {
-			if (!ret.has(key) && compareDBKeyFast(key, this.nodeId))
+			if (!ret.has(key) && compareDBKeyFast(key, this.nodeId)) {
 				ret.add(key);
+			}
 		}
 		return ret;
 	}
@@ -138,13 +139,21 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		});
 	}
 
-	private dbKeyToValueId(key: string): { nodeId: number } & ValueID {
+	private dbKeyToValueId(
+		key: string,
+	): ({ nodeId: number } & ValueID) | undefined {
 		try {
 			// Try the dumb but fast way first
 			return dbKeyToValueIdFast(key);
 		} catch {
+			// ignore
+		}
+
+		try {
 			// Fall back to JSON.parse if anything went wrong
 			return JSON.parse(key);
+		} catch {
+			// This is not a valid DB key
 		}
 	}
 
@@ -161,9 +170,9 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			dbKey = this.valueIdToDBKey(valueId);
 		} catch (e) {
 			if (
-				isZWaveError(e) &&
-				e.code === ZWaveErrorCodes.Argument_Invalid &&
-				options.noThrow === true
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.Argument_Invalid
+				&& options.noThrow === true
 			) {
 				// ignore invalid value IDs
 				return;
@@ -180,14 +189,15 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			if (this._db.has(dbKey)) {
 				event = "value updated";
 				(cbArg as ValueUpdatedArgs).prevValue = this._db.get(dbKey);
-				if (options.source)
+				if (options.source) {
 					(cbArg as ValueUpdatedArgs).source = options.source;
+				}
 			} else {
 				event = "value added";
 			}
 
 			this._index.add(dbKey);
-			this._db.set(dbKey, value);
+			this._db.set(dbKey, value, options.updateTimestamp !== false);
 			if (valueId.commandClass >= 0 && options.noEvent !== true) {
 				this.emit(event, cbArg);
 			}
@@ -250,7 +260,13 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		const ret: ReturnType<ValueDB["findValues"]> = [];
 		for (const key of this._index) {
 			if (!this._db.has(key)) continue;
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			const vid = this.dbKeyToValueId(key);
+			if (!vid) {
+				this.dropBrokenEntry(key);
+				continue;
+			}
+
+			const { nodeId, ...valueId } = vid;
 
 			if (predicate(valueId)) {
 				ret.push({ ...valueId, value: this._db.get(key) });
@@ -264,10 +280,17 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
 		for (const key of this._index) {
 			if (
-				compareDBKeyFast(key, this.nodeId, { commandClass: forCC }) &&
-				this._db.has(key)
+				compareDBKeyFast(key, this.nodeId, { commandClass: forCC })
+				&& this._db.has(key)
 			) {
-				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+				const vid = this.dbKeyToValueId(key);
+				if (!vid) {
+					this.dropBrokenEntry(key);
+					continue;
+				}
+
+				const { nodeId, ...valueId } = vid;
+
 				const value = this._db.get(key);
 				ret.push({ ...valueId, value });
 			}
@@ -275,10 +298,22 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		return ret;
 	}
 
+	/**
+	 * Returns when the given value id was last updated
+	 */
+	public getTimestamp(valueId: ValueID): number | undefined {
+		const key = this.valueIdToDBKey(valueId);
+		return this._db.getTimestamp(key);
+	}
+
 	/** Clears all values from the value DB */
 	public clear(options: SetValueOptions = {}): void {
 		for (const key of this._index) {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			const vid = this.dbKeyToValueId(key);
+			if (!vid) continue;
+
+			const { nodeId, ...valueId } = vid;
+
 			if (this._db.has(key)) {
 				const prevValue = this._db.get(key);
 				this._db.delete(key);
@@ -306,6 +341,14 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		this._index.clear();
 	}
 
+	private dropBrokenEntry(key: string): void {
+		// Sometimes the files get corrupted on disk, e.g. when an SD card goes bad
+		// When this happens for a key, we can no longer parse it, so we silently drop it from the DB
+		this._db.delete(key);
+		this._metadata.delete(key);
+		this._index.delete(key);
+	}
+
 	/**
 	 * Stores metadata for a given value id
 	 */
@@ -319,9 +362,9 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			dbKey = this.valueIdToDBKey(valueId);
 		} catch (e) {
 			if (
-				isZWaveError(e) &&
-				e.code === ZWaveErrorCodes.Argument_Invalid &&
-				options.noThrow === true
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.Argument_Invalid
+				&& options.noThrow === true
 			) {
 				// ignore invalid value IDs
 				return;
@@ -371,10 +414,17 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
 		for (const key of this._index) {
 			if (
-				compareDBKeyFast(key, this.nodeId, { commandClass: forCC }) &&
-				this._metadata.has(key)
+				compareDBKeyFast(key, this.nodeId, { commandClass: forCC })
+				&& this._metadata.has(key)
 			) {
-				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+				const vid = this.dbKeyToValueId(key);
+				if (!vid) {
+					this.dropBrokenEntry(key);
+					continue;
+				}
+
+				const { nodeId, ...valueId } = vid;
+
 				const metadata = this._metadata.get(key)!;
 				ret.push({ ...valueId, metadata });
 			}
@@ -389,7 +439,14 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 		const ret: ReturnType<ValueDB["findMetadata"]> = [];
 		for (const key of this._index) {
 			if (!this._metadata.has(key)) continue;
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+
+			const vid = this.dbKeyToValueId(key);
+			if (!vid) {
+				this.dropBrokenEntry(key);
+				continue;
+			}
+
+			const { nodeId, ...valueId } = vid;
 
 			if (predicate(valueId)) {
 				ret.push({ ...valueId, metadata: this._metadata.get(key)! });
@@ -424,22 +481,25 @@ export function dbKeyToValueIdFast(key: string): { nodeId: number } & ValueID {
 	const nodeId = parseInt(key.slice(start, end));
 
 	start = end + 16; // ,"commandClass":
-	if (key.charCodeAt(start - 1) !== 58)
+	if (key.charCodeAt(start - 1) !== 58) {
 		throw new Error("Invalid input format!");
+	}
 	end = start + 1;
 	while (end < len && key.charCodeAt(end) !== 44) end++;
 	const commandClass = parseInt(key.slice(start, end));
 
 	start = end + 12; // ,"endpoint":
-	if (key.charCodeAt(start - 1) !== 58)
+	if (key.charCodeAt(start - 1) !== 58) {
 		throw new Error("Invalid input format!");
+	}
 	end = start + 1;
 	while (end < len && key.charCodeAt(end) !== 44) end++;
 	const endpoint = parseInt(key.slice(start, end));
 
 	start = end + 12; // ,"property":
-	if (key.charCodeAt(start - 1) !== 58)
+	if (key.charCodeAt(start - 1) !== 58) {
 		throw new Error("Invalid input format!");
+	}
 
 	let property;
 	if (key.charCodeAt(start) === 34) {
@@ -451,19 +511,21 @@ export function dbKeyToValueIdFast(key: string): { nodeId: number } & ValueID {
 	} else {
 		end = start + 1;
 		while (
-			end < len &&
-			key.charCodeAt(end) !== 44 &&
-			key.charCodeAt(end) !== 125
-		)
+			end < len
+			&& key.charCodeAt(end) !== 44
+			&& key.charCodeAt(end) !== 125
+		) {
 			end++;
+		}
 		property = parseInt(key.slice(start, end));
 	}
 
 	if (key.charCodeAt(end) !== 125) {
 		let propertyKey;
 		start = end + 15; // ,"propertyKey":
-		if (key.charCodeAt(start - 1) !== 58)
+		if (key.charCodeAt(start - 1) !== 58) {
 			throw new Error("Invalid input format!");
+		}
 		if (key.charCodeAt(start) === 34) {
 			start++; // skip leading "
 			end = start + 1;
@@ -473,11 +535,12 @@ export function dbKeyToValueIdFast(key: string): { nodeId: number } & ValueID {
 		} else {
 			end = start + 1;
 			while (
-				end < len &&
-				key.charCodeAt(end) !== 44 &&
-				key.charCodeAt(end) !== 125
-			)
+				end < len
+				&& key.charCodeAt(end) !== 44
+				&& key.charCodeAt(end) !== 125
+			) {
 				end++;
+			}
 			propertyKey = parseInt(key.slice(start, end));
 		}
 		return {
@@ -507,25 +570,30 @@ function compareDBKeyFast(
 	if (!valueId) return true;
 
 	if ("commandClass" in valueId) {
-		if (-1 === key.indexOf(`,"commandClass":${valueId.commandClass},`))
+		if (-1 === key.indexOf(`,"commandClass":${valueId.commandClass},`)) {
 			return false;
+		}
 	}
 	if ("endpoint" in valueId) {
-		if (-1 === key.indexOf(`,"endpoint":${valueId.endpoint},`))
+		if (-1 === key.indexOf(`,"endpoint":${valueId.endpoint},`)) {
 			return false;
+		}
 	}
 	if (typeof valueId.property === "string") {
-		if (-1 === key.indexOf(`,"property":"${valueId.property}"`))
+		if (-1 === key.indexOf(`,"property":"${valueId.property}"`)) {
 			return false;
+		}
 	} else if (typeof valueId.property === "number") {
 		if (-1 === key.indexOf(`,"property":${valueId.property}`)) return false;
 	}
 	if (typeof valueId.propertyKey === "string") {
-		if (-1 === key.indexOf(`,"propertyKey":"${valueId.propertyKey}"`))
+		if (-1 === key.indexOf(`,"propertyKey":"${valueId.propertyKey}"`)) {
 			return false;
+		}
 	} else if (typeof valueId.propertyKey === "number") {
-		if (-1 === key.indexOf(`,"propertyKey":${valueId.propertyKey}`))
+		if (-1 === key.indexOf(`,"propertyKey":${valueId.propertyKey}`)) {
 			return false;
+		}
 	}
 	return true;
 }

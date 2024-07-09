@@ -1,6 +1,6 @@
-import { CommandClasses, ValueID } from "@zwave-js/core";
+import { CommandClasses, type ValueID } from "@zwave-js/core";
 import { MockController } from "@zwave-js/testing";
-import ava, { TestFn } from "ava";
+import ava, { type TestFn } from "ava";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";

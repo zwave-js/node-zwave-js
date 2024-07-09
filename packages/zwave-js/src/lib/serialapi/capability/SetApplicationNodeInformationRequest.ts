@@ -1,14 +1,15 @@
 import {
-	CommandClasses,
-	getCCName,
-	MessageOrCCLogEntry,
+	type CommandClasses,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	encodeCCList,
+	getCCName,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
-	MessageBaseOptions,
+	type MessageBaseOptions,
 	MessageType,
 	messageTypes,
 	priority,
@@ -16,7 +17,8 @@ import {
 import { num2hex } from "@zwave-js/shared";
 
 export interface SetApplicationNodeInformationRequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	isListening: boolean;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
@@ -46,18 +48,14 @@ export class SetApplicationNodeInformationRequest extends Message {
 	public controlledCCs: CommandClasses[];
 
 	public serialize(): Buffer {
-		const ccList = [
-			...this.supportedCCs,
-			CommandClasses["Support/Control Mark"],
-			...this.controlledCCs,
-		];
+		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const ccListLength = Math.min(ccList.length, 35);
 		this.payload = Buffer.from([
 			this.isListening ? 0x01 : 0, // APPLICATION_NODEINFO_LISTENING
 			this.genericDeviceClass,
 			this.specificDeviceClass,
 			ccListLength,
-			...ccList.slice(0, ccListLength),
+			...ccList.subarray(0, ccListLength),
 		]);
 
 		return super.serialize();

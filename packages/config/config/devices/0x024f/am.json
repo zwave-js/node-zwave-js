@@ -2,7 +2,7 @@
 	"manufacturer": "SE Devices",
 	"manufacturerId": "0x024f",
 	"label": "AM",
-	"description": "Standalone Mosfet Dimmer",
+	"description": "Standalone MOSFET Dimmer",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -20,24 +20,23 @@
 			"label": "Hardware Combination Identifier",
 			"valueSize": 1,
 			"defaultValue": 18,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "2-Pole 8A Relay",
+					"label": "2-Pole 8A relay",
 					"value": 16
 				},
 				{
-					"label": "1-10V Dimmer",
+					"label": "1-10V dimmer",
 					"value": 17
 				},
 				{
-					"label": "230V MOSFET Dimmer",
+					"label": "230V MOSFET dimmer",
 					"value": 18
 				},
 				{
-					"label": "1-Pole 16A Relay",
+					"label": "1-Pole 16A relay",
 					"value": 19
 				}
 			]
@@ -45,28 +44,25 @@
 		{
 			"#": "10",
 			"label": "Dimming Speed",
-			"description": "",
 			"valueSize": 2,
 			"unit": "0.01 seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 300,
-			"unsigned": true
+			"defaultValue": 300
 		},
 		{
 			"#": "11",
 			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Leading Edge",
+					"label": "Leading edge",
 					"value": 0
 				},
 				{
-					"label": "Tailing Edge",
+					"label": "Tailing edge",
 					"value": 1
 				}
 			]
@@ -77,8 +73,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 90,
-			"unsigned": true
+			"defaultValue": 90
 		},
 		{
 			"#": "13",
@@ -86,32 +81,30 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "16",
 			"label": "Back Unit Type",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "2-Pole 8A Relay",
+					"label": "2-Pole 8A relay",
 					"value": 0
 				},
 				{
-					"label": "230V MOSFET Dimmer",
+					"label": "230V MOSFET dimmer",
 					"value": 2
 				},
 				{
-					"label": "1-10V Dimmer",
+					"label": "1-10V dimmer",
 					"value": 4
 				},
 				{
-					"label": "1-Pole 16A Relay",
+					"label": "1-Pole 16A relay",
 					"value": 6
 				}
 			]
@@ -122,8 +115,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		}
 	],
 	"metadata": {

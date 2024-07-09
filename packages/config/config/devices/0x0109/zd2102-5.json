@@ -22,28 +22,14 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "External switch",
-			"description": "Determines if the external switch can be used.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 255
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "External Switch"
 		}
 	],
 	"compat": {
 		"commandClasses": {
 			"add": {
-				"0x20": {
+				"Basic": {
 					// This device should send Notification Reports, but they seem to get lost often
 					// Basic Set comes through
 					"isSupported": true

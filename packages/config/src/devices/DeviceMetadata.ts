@@ -1,13 +1,13 @@
-import { pick, type JSONObject } from "@zwave-js/shared/safe";
+import { type JSONObject, pick } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe";
 import {
-	ConditionalItem,
+	type ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
 } from "./ConditionalItem";
 import {
-	ConditionalPrimitive,
+	type ConditionalPrimitive,
 	parseConditionalPrimitive,
 } from "./ConditionalPrimitive";
 import type { DeviceID } from "./shared";
@@ -16,13 +16,15 @@ export class ConditionalDeviceMetadata
 	implements ConditionalItem<DeviceMetadata>
 {
 	public constructor(filename: string, definition: JSONObject) {
-		for (const prop of [
-			"wakeup",
-			"inclusion",
-			"exclusion",
-			"reset",
-			"manual",
-		] as const) {
+		for (
+			const prop of [
+				"wakeup",
+				"inclusion",
+				"exclusion",
+				"reset",
+				"manual",
+			] as const
+		) {
 			if (prop in definition) {
 				this[prop] = parseConditionalPrimitive(
 					filename,
@@ -37,9 +39,9 @@ export class ConditionalDeviceMetadata
 		if ("comments" in definition) {
 			const value = definition.comments;
 			const isComment = (opt: unknown) =>
-				isObject(opt) &&
-				typeof opt.level === "string" &&
-				typeof opt.text === "string";
+				isObject(opt)
+				&& typeof opt.level === "string"
+				&& typeof opt.text === "string";
 
 			if (isComment(value)) {
 				this.comments = new ConditionalDeviceComment(
@@ -67,13 +69,15 @@ The metadata entry comments is invalid!`,
 	public evaluateCondition(deviceId?: DeviceID): DeviceMetadata | undefined {
 		if (!conditionApplies(this, deviceId)) return;
 		const ret: DeviceMetadata = {};
-		for (const prop of [
-			"wakeup",
-			"inclusion",
-			"exclusion",
-			"reset",
-			"manual",
-		] as const) {
+		for (
+			const prop of [
+				"wakeup",
+				"inclusion",
+				"exclusion",
+				"reset",
+				"manual",
+			] as const
+		) {
 			if (this[prop]) {
 				const evaluated = evaluateDeep(this[prop], deviceId);
 				if (evaluated) ret[prop] = evaluated;

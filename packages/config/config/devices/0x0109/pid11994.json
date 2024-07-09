@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZL7101",
-	"description": "Monoprice ZWave Dimmer Plugin",
+	"description": "Monoprice Z-Wave Dimmer Plugin",
 	"devices": [
 		{
 			"productType": "0x2008",

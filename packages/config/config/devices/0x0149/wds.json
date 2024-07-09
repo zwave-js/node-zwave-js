@@ -39,7 +39,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Status upon receipt of 1 click",
+			"label": "Status Upon Receipt of 1 Click",
 			"description": "Defines the status of the output O1/O2 after 1 Click",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -50,52 +50,52 @@
 					"value": 0
 				},
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Status upon receipt of 2 clicks",
+			"label": "Status Upon Receipt of 2 Clicks",
 			"description": "Defines the status of the output O1/O2 after 2 Clicks",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Type of outputs",
+			"label": "Type of Outputs",
 			"description": "Defines how the outputs are controlled",
 			"valueSize": 1,
 			"minValue": 0,
@@ -104,25 +104,25 @@
 		},
 		{
 			"#": "4",
-			"label": "Number of clicks that control the device",
+			"label": "Number of Clicks That Control the Device",
 			"description": "Defines the Clicks on the Switches that control associated devices",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Controlled by 1 Click",
+					"label": "Controlled by 1 click",
 					"value": 1
 				},
 				{
-					"label": "Controlled by 2 Clicks",
+					"label": "Controlled by 2 clicks",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Level used to control association group 2 and 3",
+			"label": "Level Used to Control Association Group 2 and 3",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,
@@ -130,7 +130,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Level used to control association group 4 and 5.",
+			"label": "Level Used to Control Association Group 4 and 5",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,
@@ -138,40 +138,40 @@
 		},
 		{
 			"#": "10",
-			"label": "Timer to switch OFF the Channel 1",
+			"label": "Timer to Switch OFF the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched OFF",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
 		{
 			"#": "11",
-			"label": "Timer to switch OFF the Channel 2",
+			"label": "Timer to Switch OFF the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched OFF",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
 		{
 			"#": "12",
-			"label": "Timer to switch ON the Channel 1",
+			"label": "Timer to Switch ON the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched ON",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
 		{
 			"#": "13",
-			"label": "Timer to switch ON the Channel 2",
+			"label": "Timer to Switch ON the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched ON",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0,
@@ -179,51 +179,51 @@
 		},
 		{
 			"#": "20",
-			"label": "Status after Multi-Channel Basic Set command",
+			"label": "Status After Multi-Channel Basic Set Command",
 			"description": "Defines how Basic Set commands controlling outputs",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "As Received",
+					"label": "As received",
 					"value": 1
 				},
 				{
-					"label": "Ignore if ON",
+					"label": "Ignore if on",
 					"value": 2
 				},
 				{
-					"label": "Ignore if OFF",
+					"label": "Ignore if off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Outputs status upon receipt of a Basic Set command",
+			"label": "Outputs Status Upon Receipt of A Basic Set Command",
 			"description": "Define which channels are controlled by Basic Set command",
 			"valueSize": 2,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "CHANNEL 1",
+					"label": "Channel 1",
 					"value": 1
 				},
 				{
-					"label": "BOTH CHANNELS",
+					"label": "Both channels",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "60",
-			"label": "Start-up status",
+			"label": "Start-Up Status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
 			"defaultValue": 4,
@@ -246,59 +246,59 @@
 					"value": 3
 				},
 				{
-					"label": "PREVIOUS STATUS",
+					"label": "Previous status",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "61",
-			"label": "Configuration reset",
+			"label": "Configuration Reset",
 			"description": "Defines which parameters should be reset to default values",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "FACTORY RESET",
+					"label": "Factory reset",
 					"value": 0
 				},
 				{
-					"label": "ASSOCIATIONS RESET",
+					"label": "Associations reset",
 					"value": 1
 				},
 				{
-					"label": "CONFIGURATIONS RESET",
+					"label": "Configurations reset",
 					"value": 2
 				},
 				{
-					"label": "RESTART DEVICE",
+					"label": "Restart device",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "62",
-			"label": "Type of external switch",
+			"label": "Type of External Switch",
 			"description": "Defines the type of external switch connected to the device",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "BUTTON",
+					"label": "Button",
 					"value": 1
 				},
 				{
-					"label": "SWITCH",
+					"label": "Switch",
 					"value": 2
 				}
 			]

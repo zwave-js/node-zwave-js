@@ -43,15 +43,15 @@
 		},
 		{
 			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Shade Control Group 2",
-			"description": "Allow the switch to control shade devices",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Allow the switch to control shade devices"
 		},
 		{
 			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Shade Control Group 3",
-			"description": "Allow the switch to control shade devices",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Allow the switch to control shade devices"
 		},
 		{
 			"#": "19",
@@ -59,8 +59,8 @@
 		},
 		{
 			"#": "29",
-			"label": "Load Sense",
 			"$import": "templates/config_template.json#load_sense",
+			"label": "Load Sense",
 			"defaultValue": 0
 		}
 	]

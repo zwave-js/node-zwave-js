@@ -22,7 +22,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NONE",
+					"label": "None",
 					"value": 0
 				},
 				{
@@ -30,6 +30,7 @@
 					"value": 1
 				},
 				{
+					// eslint-disable-next-line @zwave-js/consistent-config-string-case
 					"label": "HP",
 					"value": 2
 				}
@@ -58,6 +59,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "w/Cool",
@@ -68,6 +70,7 @@
 					"value": 1
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "4",
@@ -98,11 +101,11 @@
 					"value": 0
 				},
 				{
-					"label": "1 Stage",
+					"label": "1 stage",
 					"value": 1
 				},
 				{
-					"label": "2 Stage",
+					"label": "2 stage",
 					"value": 2
 				}
 			]
@@ -110,8 +113,8 @@
 		{
 			"#": "9",
 			"label": "Compressor Stage 1 MRT",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 3,
 			"maxValue": 9,
 			"defaultValue": 0
@@ -119,8 +122,8 @@
 		{
 			"#": "10",
 			"label": "Minimum Off Time",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 9,
 			"defaultValue": 5
@@ -128,8 +131,8 @@
 		{
 			"#": "11",
 			"label": "Compressor MOT",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 9,
 			"defaultValue": 5
@@ -137,8 +140,8 @@
 		{
 			"#": "12",
 			"label": "Indoor Heat Stage 1 MRT",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 3,
 			"maxValue": 9,
 			"defaultValue": 3
@@ -146,8 +149,8 @@
 		{
 			"#": "13",
 			"label": "Heating Delta Stage 1 OFF",
-			"unit": "degrees",
 			"valueSize": 1,
+			"unit": "degrees",
 			"minValue": 0,
 			"maxValue": 8,
 			"defaultValue": 0
@@ -155,8 +158,8 @@
 		{
 			"#": "14",
 			"label": "Indoor Heat MOT",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 5,
 			"maxValue": 9,
 			"defaultValue": 5
@@ -164,8 +167,8 @@
 		{
 			"#": "15",
 			"label": "Sensor Calibration",
-			"unit": "degrees",
 			"valueSize": 1,
+			"unit": "degrees",
 			"minValue": -7,
 			"maxValue": 7,
 			"defaultValue": 0
@@ -173,8 +176,8 @@
 		{
 			"#": "29",
 			"label": "ESM Setpoint-Heating",
-			"unit": "degrees",
 			"valueSize": 1,
+			"unit": "degrees",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 65
@@ -182,8 +185,8 @@
 		{
 			"#": "30",
 			"label": "ESM Setpoint-Cooling",
-			"unit": "degrees",
 			"valueSize": 1,
+			"unit": "degrees",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 80
@@ -217,7 +220,7 @@
 					"value": 0
 				},
 				{
-					"label": "Run Schedule",
+					"label": "Run schedule",
 					"value": 1
 				}
 			]
@@ -241,43 +244,19 @@
 		},
 		{
 			"#": "78",
-			"label": "Aux Heat Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "no aux heat",
-					"value": 0
-				},
-				{
-					"label": "aux heat enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Aux Heat"
 		},
 		{
 			"#": "79",
-			"label": "2nd Stage Cool Enable",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "no 2nd stage cool",
-					"value": 0
-				},
-				{
-					"label": "2nd stage cool",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "2nd Stage Cool"
 		},
 		{
 			"#": "141",
 			"label": "Screen Timeout",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0
@@ -285,8 +264,8 @@
 		{
 			"#": "143",
 			"label": "Sensor (Internal) Offset",
-			"unit": "degrees",
 			"valueSize": 1,
+			"unit": "degrees",
 			"minValue": -7,
 			"maxValue": 7,
 			"defaultValue": 0

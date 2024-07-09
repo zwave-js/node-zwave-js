@@ -64,7 +64,7 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/yale_template.json#operating_mode"
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
 		},
 		{
 			"#": "11",
@@ -111,6 +111,9 @@
 			},
 			{
 				"$import": "templates/yale_template.json#alarm_map_low_battery"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_critical_battery"
 			},
 			{
 				"$import": "templates/yale_template.json#alarm_map_auto_relock"

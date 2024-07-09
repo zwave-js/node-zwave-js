@@ -1,0 +1,88 @@
+{
+	"manufacturer": "Hoppe",
+	"manufacturerId": "0x0313",
+	"label": "E0400Z-EF",
+	"description": "eHandle ConnectSense",
+	"devices": [
+		{
+			"productType": "0x0701",
+			"productId": "0x0002",
+			"zwaveAllianceId": 4504
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set (Open/Close)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Basic Set (Tilt/Close)",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Basic Set (Intrusion)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Basic Set Value (Open)",
+			"description": "Allowable range: 0-99, 255",
+			"valueSize": 1,
+			"defaultValue": 255,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Basic Set Value (Close)",
+			"description": "Allowable range: 0-99, 255",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Report Last State On Wakeup",
+			"defaultValue": 255
+		}
+	],
+	"metadata": {
+		"inclusion": "To add or remove the eHandle ConnectSense for windows in the\nsmart home central control unit, proceed as follows:\n6\n6\n8173\nferTor 13\nadtallendorf\n8\nmax.\n360°\n7\n29\nEnglish\n1. Follow the instructions of your smart home central control unit\nand start the process of adding or removing.\n2. Using the Allen key, press the hidden button in the recess on the\nback of the wireless unit three times in quick succession (within\none second), (steps 3-4).\n3. The successful start and the progress of adding (Add) or removing\n(Remove) e can be tracked in your smart home central\ncontrol unit.\n4. Your smart home central control unit may ask you to enter a\nfive-digit PIN number. You will find this on the sticker with QR\ncode. It is the underlined sequence of numbers.\n5. A successful addition (Add) is displayed in your smart home\ncentral control unit.\n6. The handle signals that it is ready for calibration by continuous\nrapid flashing of the green LED.\n7. Follow the further instructions for installation (Chapter 11) and\ncalibration (Chapter 6.2)",
+		"exclusion": "To add or remove the eHandle ConnectSense for windows in the\nsmart home central control unit, proceed as follows:\n6\n6\n8173\nferTor 13\nadtallendorf\n8\nmax.\n360°\n7\n29\nEnglish\n1. Follow the instructions of your smart home central control unit\nand start the process of adding or removing.\n2. Using the Allen key, press the hidden button in the recess on the\nback of the wireless unit three times in quick succession (within\none second), (steps 3-4).\n3. The successful start and the progress of adding (Add) or removing\n(Remove) e can be tracked in your smart home central\ncontrol unit.\n4. Your smart home central control unit may ask you to enter a\nfive-digit PIN number. You will find this on the sticker with QR\ncode. It is the underlined sequence of numbers.\n5. A successful addition (Add) is displayed in your smart home\ncentral control unit.\n6. The handle signals that it is ready for calibration by continuous\nrapid flashing of the green LED.\n7. Follow the further instructions for installation (Chapter 11) and\ncalibration (Chapter 6.2)",
+		"reset": "The eHandle ConnectSense for windows also allows to be reset\nwithout any involvement of the smart home central control unit. This\nprocedure should only be used when the smart home central control\nunit is inoperable. Press the concealed button for 10 seconds using\nthe Allen key. The successful reset to the factory setting is confirmed\nby the LED lighting up once",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4504/2022-04-19-MA441-ConnectSense-DE-EN-FR-Langversion_Korr%202022-04-20.pdf"
+	}
+}

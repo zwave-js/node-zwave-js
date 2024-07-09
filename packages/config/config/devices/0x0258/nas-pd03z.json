@@ -78,5 +78,9 @@
 			"#": "99",
 			"$import": "templates/shenzhen_neo_template.json#light_calibration"
 		}
-	]
+	],
+	"compat": {
+		// The device responds with 0 when sensor values are queried
+		"disableAutoRefresh": true
+	}
 }

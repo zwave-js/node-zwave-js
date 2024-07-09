@@ -1,0 +1,21 @@
+name: 'Z-Wave Bot: Discussion created/edited'
+
+on:
+  discussion:
+    types: [created, edited]
+
+jobs:
+  # Notify author when they post the wrong log
+  ensure-discussion-logfile:
+    runs-on: [ubuntu-latest]
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v4
+
+    - uses: actions/github-script@v7
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.ensureLogfileInDiscussion({github, context});

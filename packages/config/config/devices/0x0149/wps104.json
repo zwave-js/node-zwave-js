@@ -23,26 +23,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "TOGGLE:ON/OFF",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 2
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "20",
-			"label": "Device status upon receipt of a Basic Set command",
+			"label": "Device Status Upon Receipt of A Basic Set Command",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 					"value": 3
 				},
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 4
 				}
 			]
@@ -91,19 +91,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 2
 				},
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 3
 				}
 			]
@@ -117,29 +117,29 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Reset Meter and time",
+					"label": "Reset meter and time",
 					"value": 0
 				},
 				{
-					"label": "Greater than 0 – IGNORE",
+					"label": "Greater than 0 – ignore",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "34",
-			"label": "Energy flow",
+			"label": "Energy Flow",
 			"description": "Determines whether if energy consumed or energy produced.",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "CONSUMED",
+					"label": "Consumed",
 					"value": 1
 				},
 				{
-					"label": "PRODUCED",
+					"label": "Produced",
 					"value": 2
 				}
 			]
@@ -171,19 +171,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 2
 				},
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 3
 				}
 			]
@@ -225,19 +225,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 2
 				},
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 3
 				}
 			]
@@ -270,19 +270,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 2
 				},
 				{
-					"label": "TOGGLE",
+					"label": "Toggle",
 					"value": 3
 				}
 			]
@@ -307,30 +307,29 @@
 		},
 		{
 			"#": "47",
-			"label": "Variation Total Energy",
-			"description": "Defines the increase energy to generate a report",
+			"label": "Energy Report Threshold",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE: No report provided.",
+					"label": "Disable reports",
 					"value": 0
 				},
 				{
-					"label": "No report provided.",
+					"label": "Disable reports",
 					"value": 1
 				},
 				{
-					"label": "Report at 1 hundredth of KWh.",
+					"label": "0.01 kWh",
 					"value": 2
 				},
 				{
-					"label": "Report at 1 tenth of KWh",
+					"label": "0.1 kWh",
 					"value": 3
 				},
 				{
-					"label": "Report at 1 KWh",
+					"label": "1 kWh",
 					"value": 4
 				}
 			]
@@ -346,7 +345,7 @@
 		},
 		{
 			"#": "49",
-			"label": "Fall In Maximum Voltage",
+			"label": "Fall in Maximum Voltage",
 			"description": "Defines, the nominal value for max voltage fall permitted",
 			"valueSize": 1,
 			"minValue": 1,
@@ -355,7 +354,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Electric parameters",
+			"label": "Electric Parameters",
 			"description": "Defines which parameters will be subjected to notification",
 			"valueSize": 2,
 			"minValue": 0,
@@ -364,7 +363,7 @@
 		},
 		{
 			"#": "51",
-			"label": "Voltage RMS value",
+			"label": "Voltage RMS Value",
 			"description": "Reading of this parameter returns the value of voltage RMS",
 			"valueSize": 2,
 			"minValue": 0,
@@ -375,7 +374,7 @@
 		},
 		{
 			"#": "52",
-			"label": "Current RMS value",
+			"label": "Current RMS Value",
 			"description": "Returns the value of current RMS expressed in hundredths of Amperes.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -397,7 +396,7 @@
 		},
 		{
 			"#": "54",
-			"label": "Total energy consumed",
+			"label": "Total Energy Consumed",
 			"description": "Returns the value of total energy consumed expressed in Wh (thousandths of KWh).",
 			"valueSize": 4,
 			"minValue": 0,
@@ -408,7 +407,7 @@
 		},
 		{
 			"#": "55",
-			"label": "Total energy produced",
+			"label": "Total Energy Produced",
 			"description": "Returns the value of total energy consumed expressed in Wh (thousandths of KWh).",
 			"valueSize": 4,
 			"minValue": 0,
@@ -419,74 +418,74 @@
 		},
 		{
 			"#": "60",
-			"label": "Start-up status",
+			"label": "Start-Up Status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ON: Device on",
+					"label": "On: Device on",
 					"value": 1
 				},
 				{
-					"label": "OFF: Device off",
+					"label": "Off: Device off",
 					"value": 2
 				},
 				{
-					"label": "PREVIOUS STATUS: Status prior to restart",
+					"label": "Previous status: Status prior to restart",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "61",
-			"label": "Configuration reset",
+			"label": "Configuration Reset",
 			"description": "Defines which parameters should be reset to default values.",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "FACTORY RESET",
+					"label": "Factory reset",
 					"value": 0
 				},
 				{
-					"label": "ASSOCIATIONS RESET",
+					"label": "Associations reset",
 					"value": 1
 				},
 				{
-					"label": "CONFIGURATIONS RESET",
+					"label": "Configurations reset",
 					"value": 2
 				},
 				{
-					"label": "IGNORE: No action is performed.",
+					"label": "Normal operation",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "62",
-			"label": "Type of external switch",
+			"label": "Type of External Switch",
 			"description": "Defines the type of external switch connected to the device.",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IGNORE",
+					"label": "Ignore",
 					"value": 0
 				},
 				{
-					"label": "BUTTON",
+					"label": "Button",
 					"value": 1
 				},
 				{
-					"label": "SWITCH",
+					"label": "Switch",
 					"value": 2
 				},
 				{
-					"label": "AUTOMATIC RECOGNITION",
+					"label": "Automatic recognition",
 					"value": 4
 				}
 			]
@@ -500,7 +499,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DIRECT CONTROL",
+					"label": "Direct control",
 					"value": 1
 				},
 				{

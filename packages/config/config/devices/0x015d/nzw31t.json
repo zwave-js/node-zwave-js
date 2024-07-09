@@ -1,0 +1,22 @@
+{
+	"manufacturer": "Inovelli",
+	"manufacturerId": "0x015d",
+	"label": "NZW31T",
+	"description": "In-Wall Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x1f02",
+			"productId": "0x1f02"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Primary inclusion method is via, \"Auto-Inclusion\". Start the inclusion process on your HUB/Gateway and then flip the circuit back on to bring power to your device. You will have 30 seconds before the device times out. The backup method is toggling UP on the switch 6 times within 2 seconds.",
+		"exclusion": "Toggle UP on the switch 6 times within 2 seconds",
+		"reset": "Please use your controller to remove the device from the network. To factory reset, toggle UP the switch 10x in a row when powered on. However, please only use this method if your controller is missing or inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2679/NZW31Tmanual171102.pdf"
+	}
+}

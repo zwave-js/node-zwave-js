@@ -1,0 +1,144 @@
+{
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd",
+	"manufacturerId": "0x0258",
+	"label": "NAS-WR02ZU",
+	"description": "Neo Coolcam Repeater",
+	"devices": [
+		{
+			"productType": "0x0010",
+			"productId": "0x0722"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Low Temperature Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "High Temperature Basic Set",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Low Humidity Basic Set",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "High Humidity Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Red LED Blink When Measuring",
+			"defaultValue": 1
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Yellow LED Blink During OTA",
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"label": "Temperature Offset Value",
+			"valueSize": 1,
+			"unit": "0.1 °C/°F",
+			"minValue": -120,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "4",
+			"label": "Humidity Offset Value",
+			"valueSize": 1,
+			"unit": "0.1 %rH",
+			"minValue": -120,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "5",
+			"$import": "templates/shenzhen_neo_template.json#temperature_report_threshold",
+			"unit": "0.1 °C/°F",
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "6",
+			"label": "Humidity D-Value (Report Threshold) Setting",
+			"valueSize": 1,
+			"unit": "0.1 %rH",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20
+		},
+		{
+			"#": "7",
+			"label": "Low Temperature Alarm Value",
+			"valueSize": 2,
+			"unit": "0.1 °C/°F",
+			"minValue": -200,
+			"maxValue": 600,
+			"defaultValue": 180,
+			"unsigned": false
+		},
+		{
+			"#": "8",
+			"label": "High Temperature Alarm Value",
+			"valueSize": 2,
+			"unit": "0.1 °C/°F",
+			"minValue": -200,
+			"maxValue": 600,
+			"defaultValue": 300,
+			"unsigned": false
+		},
+		{
+			"#": "9",
+			"label": "Low Humidity Alarm Value",
+			"valueSize": 2,
+			"unit": "0.1 %rH",
+			"minValue": 200,
+			"maxValue": 850,
+			"defaultValue": 400
+		},
+		{
+			"#": "10",
+			"label": "High Humidity Alarm Value",
+			"valueSize": 2,
+			"unit": "0.1 %rH",
+			"minValue": 200,
+			"maxValue": 850,
+			"defaultValue": 400
+		},
+		{
+			"#": "11",
+			"label": "Sensor Measuring Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 10
+		},
+		{
+			"#": "12",
+			"label": "Heartbeat Time",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 3600
+		}
+	]
+}

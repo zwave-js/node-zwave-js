@@ -1,6 +1,6 @@
 import type {
-	CommandClasses,
 	CommandClassInfo,
+	CommandClasses,
 } from "../capabilities/CommandClasses";
 import type { MulticastDestination } from "../consts";
 import type { IVirtualNode, IZWaveNode } from "./IZWaveNode";

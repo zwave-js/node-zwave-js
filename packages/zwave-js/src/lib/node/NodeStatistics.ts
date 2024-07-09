@@ -48,11 +48,14 @@ export interface NodeStatistics {
 	lwr?: RouteStatistics;
 	/** The next to last working route from the controller to this node. */
 	nlwr?: RouteStatistics;
+
+	/** The last time a command was received from or successfully sent to the node. */
+	lastSeen?: Date;
 }
 
 export interface RouteStatistics {
 	/** The protocol and used data rate for this route */
-	protocolDataRate: ProtocolDataRate;
+	protocolDataRate?: ProtocolDataRate;
 	/** Which nodes are repeaters for this route */
 	repeaters: number[];
 
@@ -77,7 +80,8 @@ export function routeStatisticsEquals(
 	r2: RouteStatistics,
 ): boolean {
 	if (r1.repeaters.length !== r2.repeaters.length) return false;
-	if (!r1.repeaters.every((node) => r2.repeaters.includes(node)))
+	if (!r1.repeaters.every((node) => r2.repeaters.includes(node))) {
 		return false;
+	}
 	return true;
 }

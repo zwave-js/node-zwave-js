@@ -2,11 +2,11 @@ import type { ProtocolType } from "@zwave-js/core";
 import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
 	Message,
-	MessageDeserializationOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -34,7 +34,7 @@ export class GetProtocolVersionResponse extends Message {
 			if (appBuild !== 0) this.applicationFrameworkBuildNumber = appBuild;
 		}
 		if (this.payload.length >= 22) {
-			const commitHash = this.payload.slice(6, 22);
+			const commitHash = this.payload.subarray(6, 22);
 			if (!commitHash.every((b) => b === 0)) {
 				this.gitCommitHash = commitHash.toString("hex");
 			}

@@ -33,22 +33,35 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/homeseer_template.json#enable_pir_triggers"
-		},
-		{
-			"#": "6",
-			"label": "Floodlight Triggers",
+			"label": "Load Control Mode",
 			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
+			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Lux and PIR triggers",
+					"label": "Z-Wave only",
 					"value": 0
 				},
 				{
-					"label": "Lux level only",
+					"label": "Z-Wave and sensors",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Load Control Sensor Mode",
+			"description": "Select which sensors control the load when parameter 5 is set to 1",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Lux and motion",
+					"value": 0
+				},
+				{
+					"label": "Lux only",
 					"value": 1
 				}
 			]
@@ -57,7 +70,7 @@
 			"#": "7",
 			"label": "Temperature Calibration",
 			"valueSize": 1,
-			"unit": "0.1°C",
+			"unit": "0.1 °C",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0
@@ -66,8 +79,7 @@
 			"#": "8",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
+			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -89,6 +101,6 @@
 		"inclusion": "1. Put the Z-Wave controller into inclusion mode.\n2. Press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode. \n2. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode",
 		"reset": "The product reset is to operate only when the primary controller is missing or inoperable. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode.Within 1 second of step 1, press the Link button again and hold until LED is off (about 5 seconds)",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3984/HS-FLS100-G2-Manual_certification%2020200915.pdf"
+		"manual": "https://docs.homeseer.com/products/hs-fls100-user-guide"
 	}
 }

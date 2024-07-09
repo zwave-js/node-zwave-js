@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 import { Protocols } from "../capabilities/Protocols";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask } from "../values/Primitive";
@@ -6,7 +6,7 @@ import { dskToString } from "./DSK";
 import { SecurityClass } from "./SecurityClass";
 
 function readNumber(qr: string, offset: number, length: number): number {
-	return parseInt(qr.substr(offset, length), 10);
+	return parseInt(qr.slice(offset, offset + length), 10);
 }
 
 function fail(reason: string): never {
@@ -85,23 +85,25 @@ export interface ProvisioningInformation_SupportedProtocols {
 	supportedProtocols: Protocols[];
 }
 
-export type QRProvisioningInformation = {
-	version: QRCodeVersion;
-	/**
-	 * The security classes that were **requested** by the device.
-	 */
-	readonly requestedSecurityClasses: SecurityClass[];
-	/**
-	 * The security classes that will be **granted** to this device.
-	 * Until this has been changed by a user, this will be identical to {@link requestedSecurityClasses}.
-	 */
-	securityClasses: SecurityClass[];
-	dsk: string;
-} & ProvisioningInformation_ProductType &
-	ProvisioningInformation_ProductId &
-	Partial<ProvisioningInformation_MaxInclusionRequestInterval> &
-	Partial<ProvisioningInformation_UUID16> &
-	Partial<ProvisioningInformation_SupportedProtocols>;
+export type QRProvisioningInformation =
+	& {
+		version: QRCodeVersion;
+		/**
+		 * The security classes that were **requested** by the device.
+		 */
+		readonly requestedSecurityClasses: SecurityClass[];
+		/**
+		 * The security classes that will be **granted** to this device.
+		 * Until this has been changed by a user, this will be identical to {@link requestedSecurityClasses}.
+		 */
+		securityClasses: SecurityClass[];
+		dsk: string;
+	}
+	& ProvisioningInformation_ProductType
+	& ProvisioningInformation_ProductId
+	& Partial<ProvisioningInformation_MaxInclusionRequestInterval>
+	& Partial<ProvisioningInformation_UUID16>
+	& Partial<ProvisioningInformation_SupportedProtocols>;
 
 function parseTLVData(type: ProvisioningInformationType, data: string) {
 	switch (type) {
@@ -191,7 +193,7 @@ function parseTLV(qr: string): {
 	offset += 4;
 	if (qr.length - offset < length) fail("incomplete TLV block");
 
-	const data = qr.substr(offset, length);
+	const data = qr.slice(offset, offset + length);
 	offset += length;
 
 	// Try to parse the raw data and fail if a critical block is not understood

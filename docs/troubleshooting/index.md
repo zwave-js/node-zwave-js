@@ -4,7 +4,7 @@ Z-Wave is a complex protocol and many things can go wrong in the communication. 
 
 ## Rule #1: Use the driver log, Luke!
 
-Many, many, many issues can **only** be sorted out by looking at driver logs. Try to familiarize yourself with them - it will help.  
+Many, many, many issues can **only** be sorted out by looking at driver logs. Try to familiarize yourself with them - it will help.\
 Unless you are inquiring about a missing device configuration, you **should** have a driver log at hand. Also, make sure you have the correct log!
 
 <details>
@@ -82,6 +82,8 @@ Now that we got this out of the way, here's a collection of **common** issues an
 🐛 [Connectivity issues](troubleshooting/connectivity-issues.md) (unreliable communication, slow network, no responses from devices, etc.)
 
 🐛 [Problems with 700 series sticks](troubleshooting/otw-upgrade.md)
+
+🐛 [Nonsensical values appear randomly](troubleshooting/nonsensical-values.md), like water flow sensors on an electrical outlet, or CO<sub>2</sub> readings on a motion sensor.
 
 🐛 [Missing updates from a device](troubleshooting/no-updates.md), e.g. when toggling it physically
 

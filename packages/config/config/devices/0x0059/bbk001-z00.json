@@ -22,24 +22,22 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delta Temperature For Association Group 2",
+			"label": "Delta Temperature for Association Group 2",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "2",
-			"label": "Temperature Report Interval For Association Group 2",
+			"label": "Temperature Report Interval for Association Group 2",
 			"description": "In minutes, controllers may only allow configuring signed values. in order to set values in the range 128…255, the value sent in the application shall be equal to desired value minus 256. for example, to set delta temperature to 130, it may be needed to set a value 130−256=−126",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 30,
-			"defaultValue": 30,
-			"unsigned": true
+			"defaultValue": 30
 		},
 		{
 			"#": "3",
@@ -49,8 +47,7 @@
 			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "4",
@@ -60,23 +57,21 @@
 			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 35,
-			"defaultValue": 35,
-			"unsigned": true
+			"defaultValue": 35
 		},
 		{
 			"#": "5",
-			"label": "Delta Temperature For Lifeline Group",
+			"label": "Delta Temperature for Lifeline Group",
 			"description": "In 0.1 degree centigrade",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "6",
-			"label": "Temperature Report Interval For Lifeline Group",
+			"label": "Temperature Report Interval for Lifeline Group",
 			"description": "In degree centigrade. controllers may only allow configuring signed values. in order to set values in the range 128…255, the value sent in the application shall be equal to desired value minus 256. for example, to set delta temperature to 130, it may be needed to set a value 130−256=−126",
 			"valueSize": 1,
 			"unit": "°C",

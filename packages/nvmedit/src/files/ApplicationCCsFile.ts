@@ -1,11 +1,11 @@
 import { CommandClasses } from "@zwave-js/core/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
+	NVMFile,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
 } from "./NVMFile";
 
@@ -27,18 +27,18 @@ export class ApplicationCCsFile extends NVMFile {
 			let offset = 0;
 			let numCCs = this.payload[offset];
 			this.includedInsecurely = [
-				...this.payload.slice(offset + 1, offset + 1 + numCCs),
+				...this.payload.subarray(offset + 1, offset + 1 + numCCs),
 			];
 			offset += MAX_CCs;
 
 			numCCs = this.payload[offset];
 			this.includedSecurelyInsecureCCs = [
-				...this.payload.slice(offset + 1, offset + 1 + numCCs),
+				...this.payload.subarray(offset + 1, offset + 1 + numCCs),
 			];
 			offset += MAX_CCs;
 			numCCs = this.payload[offset];
 			this.includedSecurelySecureCCs = [
-				...this.payload.slice(offset + 1, offset + 1 + numCCs),
+				...this.payload.subarray(offset + 1, offset + 1 + numCCs),
 			];
 		} else {
 			this.includedInsecurely = options.includedInsecurely;
@@ -55,11 +55,13 @@ export class ApplicationCCsFile extends NVMFile {
 	public serialize(): NVM3Object {
 		this.payload = Buffer.alloc((1 + MAX_CCs) * 3);
 		let offset = 0;
-		for (const array of [
-			this.includedInsecurely,
-			this.includedSecurelyInsecureCCs,
-			this.includedSecurelySecureCCs,
-		]) {
+		for (
+			const array of [
+				this.includedInsecurely,
+				this.includedSecurelyInsecureCCs,
+				this.includedSecurelySecureCCs,
+			]
+		) {
 			this.payload[offset] = array.length;
 			this.payload.set(array, offset + 1);
 			offset += 1 + MAX_CCs;

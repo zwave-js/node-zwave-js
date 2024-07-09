@@ -1,7 +1,24 @@
+// The firmware versions on this device are a mess
+// 1.1 -> 10.0 -> 10.10 -> 10.20 -> 10.30 -> (10.40 ≅ 2.10) -> 2.20
+
+// Conditionals:
+// 10.0 and later: firmwareVersion >= 2.10
+// 10.10 and later: firmwareVersion >= 10.10 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
+// 10.20 and later: firmwareVersion >= 10.20 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
+// 10.30 and later: firmwareVersion >= 10.30 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
+// 10.40 and later: firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
+// 800 series: firmwareVersion >= 2.10 && firmwareVersion < 10.0
+
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN32",
+	"label": [
+		{
+			"$if": "firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"value": "ZEN32 800LR"
+		},
+		"ZEN32"
+	],
 	"description": "Scene Controller",
 	"devices": [
 		{
@@ -93,8 +110,22 @@
 		},
 		{
 			"#": "6",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Relay)",
+			"defaultValue": 0
+		},
+		{
+			"#": "6",
 			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Relay)",
+			"defaultValue": 0
+		},
+		{
+			"#": "7",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Button 1)",
 			"defaultValue": 0
 		},
 		{
@@ -105,14 +136,35 @@
 		},
 		{
 			"#": "8",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Button 2)",
+			"defaultValue": 0
+		},
+		{
+			"#": "8",
 			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Button 2)",
 			"defaultValue": 0
 		},
 		{
 			"#": "9",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Button 3)",
+			"defaultValue": 0
+		},
+		{
+			"#": "9",
 			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Button 3)",
+			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#led_indicator_color_extended",
+			"label": "LED Indicator Color (Button 4)",
 			"defaultValue": 0
 		},
 		{
@@ -148,12 +200,12 @@
 		},
 		{
 			"#": "16",
-			"$import": "templates/zooz_template.json#auto_off_timer",
+			"$import": "templates/zooz_template.json#auto_off_timer_0x_1x_3x_7x",
 			"label": "Auto-Off Timer (Relay)"
 		},
 		{
 			"#": "17",
-			"$import": "templates/zooz_template.json#auto_on_timer",
+			"$import": "templates/zooz_template.json#auto_on_timer_0x_1x_3x_7x",
 			"label": "Auto-On Timer (Relay)"
 		},
 		{
@@ -168,31 +220,69 @@
 		{
 			"#": "20",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Report and Toggle LED on Button Press if Relay Disabled"
+			"label": "Send Report and Toggle LED on Button Press If Relay Disabled"
 		},
 		{
 			"#": "21",
-			"$if": "firmwareVersion >= 1.2",
+			"$if": "firmwareVersion >= 2.10",
 			"$import": "templates/zooz_template.json#3way_switch_type"
 		},
 		{
 			"#": "22",
-			"$if": "firmwareVersion >= 10.0",
+			"$if": "firmwareVersion >= 2.10",
 			"$import": "templates/zooz_template.json#local_programming"
 		},
 		{
 			"#": "23",
-			"$if": "firmwareVersion >= 10.20",
+			"$if": "firmwareVersion >= 10.20 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "LED Settings Indicator",
 			"defaultValue": 0
 		},
 		{
 			"#": "24",
+			"$if": "firmwareVersion >= 10.30 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"$if": "firmwareVersion >= 10.30",
 			"label": "Scene Control (Relay)",
 			"defaultValue": 0
+		},
+		{
+			"#": "26",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#enable_scene_control_3way",
+			"label": "Scene Control (Relay)"
+		},
+		{
+			"#": "25[0x01]",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Local Control",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"defaultValue": 1
+		},
+		{
+			"#": "25[0x02]",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: 3-Way",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"defaultValue": 1
+		},
+		{
+			"#": "25[0x04]",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Z-Wave",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"defaultValue": 1
+		},
+		{
+			"#": "25[0x08]",
+			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Timer",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"defaultValue": 1
 		}
 	],
 	"compat": {

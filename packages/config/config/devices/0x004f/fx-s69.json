@@ -17,23 +17,14 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Change The State of Indicator Light",
-			"description": "1 means night light mode,0 means turn off the night light mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Night Light Mode"
 		},
 		{
 			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Memory Function",
-			"description": "0 means no memory function,1 means memory function",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "3",
@@ -41,8 +32,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 720,
-			"defaultValue": 720,
-			"unsigned": true
+			"defaultValue": 720
 		},
 		{
 			"#": "4",
@@ -50,26 +40,23 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 6,
-			"defaultValue": 6,
-			"unsigned": true
+			"defaultValue": 6
 		},
 		{
 			"#": "5",
-			"label": "Threshold of Watt For Load Caution",
+			"label": "Threshold of Watt for Load Caution",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3000,
-			"defaultValue": 3000,
-			"unsigned": true
+			"defaultValue": 3000
 		},
 		{
 			"#": "6",
-			"label": "Threshold of kWh For Load Caution",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10000,
-			"defaultValue": 10000,
-			"unsigned": true
+			"defaultValue": 10000
 		}
 	],
 	"metadata": {

@@ -31,7 +31,7 @@
 	"paramInformation": [
 		{
 			"#": "10",
-			"label": "Typical click timeout",
+			"label": "Typical Click Timeout",
 			"description": "Typical time used to differentiate click",
 			"valueSize": 1,
 			"minValue": 1,
@@ -40,10 +40,9 @@
 		},
 		{
 			"#": "11",
-			"label": "Invert buttons",
+			"label": "Invert Buttons",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -58,7 +57,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Action on button single press or hold",
+			"label": "Action on Button Single Press or Hold",
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -71,11 +70,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim using Basic Set",
+					"label": "Switch on, off and dim using Basic Set",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
@@ -86,11 +85,10 @@
 		},
 		{
 			"#": "14",
-			"label": "Action on button double press or hold",
+			"label": "Action on Button Double Press or Hold",
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -98,11 +96,11 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On, Off and dim using Basic Set",
+					"label": "Switch on, off and dim using Basic Set",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch all",
 					"value": 2
 				},
 				{
@@ -113,18 +111,18 @@
 		},
 		{
 			"#": "15",
-			"label": "Send the following Switch All commands",
+			"label": "Send the Following Switch All Commands",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch OFF Only",
+					"label": "Switch off only",
 					"value": 1
 				},
 				{
-					"label": "Switch ON Only",
+					"label": "Switch on only",
 					"value": 2
 				},
 				{
@@ -135,10 +133,9 @@
 		},
 		{
 			"#": "20",
-			"label": "Send unsolicited Battery Report on Wake Up",
+			"label": "Send Unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

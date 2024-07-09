@@ -1,11 +1,25 @@
 import test from "ava";
-import crypto, { randomBytes } from "crypto";
+import crypto, { randomBytes } from "node:crypto";
 import sinon from "sinon";
 import { SecurityManager } from "./Manager";
 
-// prettier-ignore
 const networkKey = Buffer.from([
-	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+	7,
+	8,
+	9,
+	10,
+	11,
+	12,
+	13,
+	14,
+	15,
+	16,
 ]);
 const ownNodeId = 1;
 const options = { networkKey, ownNodeId, nonceTimeout: 500 };

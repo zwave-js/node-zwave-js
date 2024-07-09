@@ -7,7 +7,7 @@
 ### `getName`
 
 ```ts
-async getName(): Promise<string | undefined>;
+async getName(): Promise<MaybeNotKnown<string>>;
 ```
 
 ### `setName`
@@ -19,7 +19,7 @@ async setName(name: string): Promise<SupervisionResult | undefined>;
 ### `getLocation`
 
 ```ts
-async getLocation(): Promise<string | undefined>;
+async getLocation(): Promise<MaybeNotKnown<string>>;
 ```
 
 ### `setLocation`
@@ -42,13 +42,13 @@ async setLocation(
 }
 ```
 
--   **label:** Node location
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Node location
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`
 
 ### `name`
 
@@ -60,10 +60,10 @@ async setLocation(
 }
 ```
 
--   **label:** Node name
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"string"`
+- **label:** Node name
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"string"`

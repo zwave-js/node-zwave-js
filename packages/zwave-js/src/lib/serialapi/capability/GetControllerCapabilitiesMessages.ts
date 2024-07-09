@@ -1,13 +1,13 @@
 import { ControllerCapabilityFlags, MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -18,7 +18,8 @@ import {
 export class GetControllerCapabilitiesRequest extends Message {}
 
 export interface GetControllerCapabilitiesResponseOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	isSecondary: boolean;
 	isUsingHomeIdFromOtherNetwork: boolean;
 	isSISPresent: boolean;
@@ -71,17 +72,17 @@ export class GetControllerCapabilitiesResponse extends Message {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			(this.isSecondary ? ControllerCapabilityFlags.Secondary : 0) |
-				(this.isUsingHomeIdFromOtherNetwork
-					? ControllerCapabilityFlags.OnOtherNetwork
-					: 0) |
-				(this.isSISPresent ? ControllerCapabilityFlags.SISPresent : 0) |
-				(this.wasRealPrimary
-					? ControllerCapabilityFlags.WasRealPrimary
-					: 0) |
-				(this.isStaticUpdateController
-					? ControllerCapabilityFlags.SUC
-					: 0),
+			(this.isSecondary ? ControllerCapabilityFlags.Secondary : 0)
+			| (this.isUsingHomeIdFromOtherNetwork
+				? ControllerCapabilityFlags.OnOtherNetwork
+				: 0)
+			| (this.isSISPresent ? ControllerCapabilityFlags.SISPresent : 0)
+			| (this.wasRealPrimary
+				? ControllerCapabilityFlags.WasRealPrimary
+				: 0)
+			| (this.isStaticUpdateController
+				? ControllerCapabilityFlags.SUC
+				: 0),
 		]);
 		return super.serialize();
 	}

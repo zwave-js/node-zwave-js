@@ -2,7 +2,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHDA",
-	"description": "Flush dimmer",
+	"description": "Flush Dimmer",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -35,81 +35,78 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input 1 switch type",
+			"label": "Input 1 Switch Type",
 			"description": "Switch type (input I1)",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "mono-stable switch (push button)",
+					"label": "Mono-Stable switch (Push button)",
 					"value": 0
 				},
 				{
-					"label": "bi-stable (toggle) switch",
+					"label": "Bi-Stable (Toggle) switch",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Input 2 contact type",
+			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Input 3 contact type",
+			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normally open) input type",
+					"label": "NO (Normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normally close) input type",
+					"label": "NC (Normally close) input type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active ALL OFF is not active",
+					"label": "All on is not active all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active ALL OFF active",
+					"label": "All on is not active all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active ALL OFF is not active",
+					"label": "All on active all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
@@ -120,7 +117,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in Watts on power change",
+			"label": "Power Reporting in Watts on Power Change",
 			"description": "Set value means percentage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +126,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by time interval",
+			"label": "Power Reporting in Watts by Time Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -138,7 +135,7 @@
 		},
 		{
 			"#": "60",
-			"label": "Minimum dimming value",
+			"label": "Minimum Dimming Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -146,7 +143,7 @@
 		},
 		{
 			"#": "61",
-			"label": "Maximum dimming value",
+			"label": "Maximum Dimming Value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -154,7 +151,7 @@
 		},
 		{
 			"#": "65",
-			"label": "Dimming time (soft on/off)",
+			"label": "Dimming Time (Soft On/off)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -163,7 +160,7 @@
 		},
 		{
 			"#": "66",
-			"label": "Dimming time when key pressed",
+			"label": "Dimming Time When Key Pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -174,8 +171,8 @@
 	"compat": {
 		"commandClasses": {
 			"add": {
-				// The device lists Binary Switch CC as supported, but then responds with a version of 0
-				"0x85": {
+				// The device lists Association CC as supported, but then responds with a version of 0
+				"Association": {
 					"isSupported": true
 				}
 			}

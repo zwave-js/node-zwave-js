@@ -370,7 +370,7 @@
 		"unsigned": true
 	},
 	"input_precision": {
-		//number of decimal points
+		// number of decimal points
 		"label": "Input: Precision",
 		"valueSize": 1,
 		"minValue": 0,
@@ -524,6 +524,29 @@
 			{
 				"label": "Colors set by parameters 6 and 7",
 				"value": 2
+			}
+		]
+	},
+	"default_brightness": {
+		"label": "Default Brightness",
+		"description": "Next turn on only: 1-99. Every turn on: 129-228 (target brightness + 128)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 228,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "No effect",
+				"value": 0
+			},
+			{
+				"label": "Max brightness (once)",
+				"value": 99
+			},
+			{
+				"label": "Max brightness (always)",
+				"value": 228
 			}
 		]
 	}

@@ -66,18 +66,21 @@ export interface ValueMetadataAny {
 	ccSpecific?: Record<string, any>;
 	/** Options that can be provided when changing this value on a device via its value ID. */
 	valueChangeOptions?: readonly (keyof ValueChangeOptions)[];
+	/** Whether this value represents a state (`true`) or a notification/event (`false`) */
+	stateful?: boolean;
+	/** Omit this value from value logs */
+	secret?: boolean;
 }
 
 /**
  * Helper function to define metadata templates while checking that they satisfy a constraint.
  */
 // TODO: Revisit this when https://github.com/microsoft/TypeScript/issues/47920 is solved
-const define =
-	<TBase extends ValueMetadataAny>() =>
-	// The chained function pattern is necessary for partial application of generic types
-	<T extends TBase>(definition: T): T => {
-		return definition;
-	};
+const define = <TBase extends ValueMetadataAny>() =>
+// The chained function pattern is necessary for partial application of generic types
+<T extends TBase>(definition: T): T => {
+	return definition;
+};
 
 const defineAny = define<ValueMetadataAny>();
 
@@ -93,6 +96,13 @@ export interface ValueMetadataNumeric extends ValueMetadataAny {
 	default?: number;
 	/** Speaking names for numeric values */
 	states?: Record<number, string>;
+	/**
+	 * Whether a user should be able to manually enter all legal values in the range `min...max` (`true`),
+	 * or if only the ones defined in `states` should be selectable in a dropdown (`false`).
+	 *
+	 * If missing, applications should assume this to be `true` if no `states` are defined and `false` if `states` are defined.
+	 */
+	allowManualEntry?: boolean;
 	/** An optional unit for numeric values */
 	unit?: string;
 }
@@ -103,6 +113,11 @@ export interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	/** The default value */
 	default?: number;
+	/** Possible values and their meaning */
+	states?: {
+		true?: string;
+		false?: string;
+	};
 }
 
 const defineBoolean = define<ValueMetadataBoolean>();
@@ -146,11 +161,8 @@ export enum ConfigValueFormat {
 	BitField = 0x03, // Check Boxes
 }
 
-/**
- * @publicAPI
- * A configuration value is either a single number or a bit map
- */
-export type ConfigValue = number | Set<number>;
+/** @publicAPI */
+export type ConfigValue = number;
 
 export interface ConfigurationMetadata extends ValueMetadataAny {
 	// readable and writeable are inherited from ValueMetadataAny
@@ -160,14 +172,10 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	unit?: string;
 	valueSize?: number;
 	format?: ConfigValueFormat;
-	name?: string;
-	info?: string;
-	noBulkSupport?: boolean;
+	label?: string;
+	description?: string;
 	isAdvanced?: boolean;
 	requiresReInclusion?: boolean;
-	// The following information cannot be detected by scanning.
-	// We have to rely on configuration to support them
-	// options?: readonly ConfigOption[];
 	states?: Record<number, string>;
 	allowManualEntry?: boolean;
 	isFromConfig?: boolean;
@@ -185,11 +193,13 @@ export type ValueMetadata =
 // TODO: lists of allowed values, etc...
 
 // Mixins for value metadata
-const _default = defineAny({
-	type: "any",
-	readable: true,
-	writeable: true,
-} as const);
+const _default = defineAny(
+	{
+		type: "any",
+		readable: true,
+		writeable: true,
+	} as const,
+);
 
 const _readonly = {
 	writeable: false,
@@ -200,295 +210,389 @@ const _writeonly = {
 } as const;
 
 /** The default value for metadata: readable and writeable */
-const Any = defineAny({
-	..._default,
-} as const);
+const Any = defineAny(
+	{
+		..._default,
+	} as const,
+);
 
 /** The default value for readonly metadata */
-const ReadOnly = defineAny({
-	..._default,
-	..._readonly,
-} as const);
+const ReadOnly = defineAny(
+	{
+		..._default,
+		..._readonly,
+	} as const,
+);
 
 /** The default value for writeonly metadata */
-const WriteOnly = defineAny({
-	..._default,
-	..._writeonly,
-} as const);
+const WriteOnly = defineAny(
+	{
+		..._default,
+		..._writeonly,
+	} as const,
+);
 
 /** A boolean value */
-const Boolean = defineBoolean({
-	..._default,
-	type: "boolean",
-} as const);
+const Boolean = defineBoolean(
+	{
+		..._default,
+		type: "boolean",
+	} as const,
+);
 
 /** A boolean value (readonly) */
-const ReadOnlyBoolean = defineBoolean({
-	...Boolean,
-	..._readonly,
-} as const);
+const ReadOnlyBoolean = defineBoolean(
+	{
+		...Boolean,
+		..._readonly,
+	} as const,
+);
 
 /** A boolean value (writeonly) */
-const WriteOnlyBoolean = defineBoolean({
-	...Boolean,
-	..._writeonly,
-} as const);
+const WriteOnlyBoolean = defineBoolean(
+	{
+		...Boolean,
+		..._writeonly,
+	} as const,
+);
 
 /** Any number */
-const Number = defineNumeric({
-	..._default,
-	type: "number",
-} as const);
+const Number = defineNumeric(
+	{
+		..._default,
+		type: "number",
+	} as const,
+);
 
 /** Unsigned number (readonly) */
-const ReadOnlyNumber = defineNumeric({
-	...Number,
-	..._readonly,
-} as const);
+const ReadOnlyNumber = defineNumeric(
+	{
+		...Number,
+		..._readonly,
+	} as const,
+);
 
 /** Unsigned number (writeonly) */
-const WriteOnlyNumber = defineNumeric({
-	...Number,
-	..._writeonly,
-} as const);
+const WriteOnlyNumber = defineNumeric(
+	{
+		...Number,
+		..._writeonly,
+	} as const,
+);
 
 /** Unsigned 8-bit integer */
-const UInt8 = defineNumeric({
-	..._default,
-	type: "number",
-	...IntegerLimits.UInt8,
-} as const);
+const UInt8 = defineNumeric(
+	{
+		..._default,
+		type: "number",
+		...IntegerLimits.UInt8,
+	} as const,
+);
 
 /** Unsigned 8-bit integer (readonly) */
-const ReadOnlyUInt8 = defineNumeric({
-	...UInt8,
-	..._readonly,
-} as const);
+const ReadOnlyUInt8 = defineNumeric(
+	{
+		...UInt8,
+		..._readonly,
+	} as const,
+);
 
 /** Unsigned 8-bit integer (writeonly) */
-const WriteOnlyUInt8 = defineNumeric({
-	...UInt8,
-	..._writeonly,
-} as const);
+const WriteOnlyUInt8 = defineNumeric(
+	{
+		...UInt8,
+		..._writeonly,
+	} as const,
+);
 
 /** Unsigned 16-bit integer */
-const UInt16 = defineNumeric({
-	..._default,
-	type: "number",
-	...IntegerLimits.UInt16,
-} as const);
+const UInt16 = defineNumeric(
+	{
+		..._default,
+		type: "number",
+		...IntegerLimits.UInt16,
+	} as const,
+);
 
 /** Unsigned 16-bit integer (readonly) */
-const ReadOnlyUInt16 = defineNumeric({
-	...UInt16,
-	..._readonly,
-} as const);
+const ReadOnlyUInt16 = defineNumeric(
+	{
+		...UInt16,
+		..._readonly,
+	} as const,
+);
 
 /** Unsigned 16-bit integer (writeonly) */
-const WriteOnlyUInt16 = defineNumeric({
-	...UInt16,
-	..._writeonly,
-} as const);
+const WriteOnlyUInt16 = defineNumeric(
+	{
+		...UInt16,
+		..._writeonly,
+	} as const,
+);
 
 /** Unsigned 24-bit integer */
-const UInt24 = defineNumeric({
-	..._default,
-	type: "number",
-	...IntegerLimits.UInt24,
-} as const);
+const UInt24 = defineNumeric(
+	{
+		..._default,
+		type: "number",
+		...IntegerLimits.UInt24,
+	} as const,
+);
 
 /** Unsigned 24-bit integer (readonly) */
-const ReadOnlyUInt24 = defineNumeric({
-	...UInt24,
-	..._readonly,
-} as const);
+const ReadOnlyUInt24 = defineNumeric(
+	{
+		...UInt24,
+		..._readonly,
+	} as const,
+);
 
 /** Unsigned 24-bit integer (writeonly) */
-const WriteOnlyUInt24 = defineNumeric({
-	...UInt24,
-	..._writeonly,
-} as const);
+const WriteOnlyUInt24 = defineNumeric(
+	{
+		...UInt24,
+		..._writeonly,
+	} as const,
+);
 
 /** Unsigned 32-bit integer */
-const UInt32 = defineNumeric({
-	..._default,
-	type: "number",
-	...IntegerLimits.UInt32,
-} as const);
+const UInt32 = defineNumeric(
+	{
+		..._default,
+		type: "number",
+		...IntegerLimits.UInt32,
+	} as const,
+);
 
 /** Unsigned 32-bit integer (readonly) */
-const ReadOnlyUInt32 = defineNumeric({
-	...UInt32,
-	..._readonly,
-} as const);
+const ReadOnlyUInt32 = defineNumeric(
+	{
+		...UInt32,
+		..._readonly,
+	} as const,
+);
 
 /** Unsigned 32-bit integer (writeonly) */
-const WriteOnlyUInt32 = defineNumeric({
-	...UInt32,
-	..._writeonly,
-} as const);
+const WriteOnlyUInt32 = defineNumeric(
+	{
+		...UInt32,
+		..._writeonly,
+	} as const,
+);
 
 /** Signed 8-bit integer */
-const Int8 = defineNumeric({
-	..._default,
-	type: "number",
-	...IntegerLimits.Int8,
-} as const);
+const Int8 = defineNumeric(
+	{
+		..._default,
+		type: "number",
+		...IntegerLimits.Int8,
+	} as const,
+);
 
 /** Signed 8-bit integer (readonly) */
-const ReadOnlyInt8 = defineNumeric({
-	...Int8,
-	..._readonly,
-} as const);
+const ReadOnlyInt8 = defineNumeric(
+	{
+		...Int8,
+		..._readonly,
+	} as const,
+);
 
 /** Signed 8-bit integer (writeonly) */
-const WriteOnlyInt8 = defineNumeric({
-	...Int8,
-	..._writeonly,
-} as const);
+const WriteOnlyInt8 = defineNumeric(
+	{
+		...Int8,
+		..._writeonly,
+	} as const,
+);
 
 /** Signed 16-bit integer */
-const Int16 = defineNumeric({
-	..._default,
-	type: "number",
-	...IntegerLimits.Int16,
-} as const);
+const Int16 = defineNumeric(
+	{
+		..._default,
+		type: "number",
+		...IntegerLimits.Int16,
+	} as const,
+);
 
 /** Signed 16-bit integer (readonly) */
-const ReadOnlyInt16 = defineNumeric({
-	...Int16,
-	..._readonly,
-} as const);
+const ReadOnlyInt16 = defineNumeric(
+	{
+		...Int16,
+		..._readonly,
+	} as const,
+);
 
 /** Signed 16-bit integer (writeonly) */
-const WriteOnlyInt16 = defineNumeric({
-	...Int16,
-	..._writeonly,
-} as const);
+const WriteOnlyInt16 = defineNumeric(
+	{
+		...Int16,
+		..._writeonly,
+	} as const,
+);
 
 /** Signed 24-bit integer */
-const Int24 = defineNumeric({
-	..._default,
-	type: "number",
-	...IntegerLimits.Int24,
-} as const);
+const Int24 = defineNumeric(
+	{
+		..._default,
+		type: "number",
+		...IntegerLimits.Int24,
+	} as const,
+);
 
 /** Signed 24-bit integer (readonly) */
-const ReadOnlyInt24 = defineNumeric({
-	...Int24,
-	..._readonly,
-} as const);
+const ReadOnlyInt24 = defineNumeric(
+	{
+		...Int24,
+		..._readonly,
+	} as const,
+);
 
 /** Signed 24-bit integer (writeonly) */
-const WriteOnlyInt24 = defineNumeric({
-	...Int24,
-	..._writeonly,
-} as const);
+const WriteOnlyInt24 = defineNumeric(
+	{
+		...Int24,
+		..._writeonly,
+	} as const,
+);
 
 /** Signed 32-bit integer */
-const Int32 = defineNumeric({
-	..._default,
-	type: "number",
-	...IntegerLimits.Int32,
-} as const);
+const Int32 = defineNumeric(
+	{
+		..._default,
+		type: "number",
+		...IntegerLimits.Int32,
+	} as const,
+);
 
 /** Signed 32-bit integer (readonly) */
-const ReadOnlyInt32 = defineNumeric({
-	...Int32,
-	..._readonly,
-} as const);
+const ReadOnlyInt32 = defineNumeric(
+	{
+		...Int32,
+		..._readonly,
+	} as const,
+);
 
 /** Signed 32-bit integer (writeonly) */
-const WriteOnlyInt32 = defineNumeric({
-	...Int32,
-	..._writeonly,
-} as const);
+const WriteOnlyInt32 = defineNumeric(
+	{
+		...Int32,
+		..._writeonly,
+	} as const,
+);
 
 /** Any string */
-const String = defineString({
-	..._default,
-	type: "string",
-} as const);
+const String = defineString(
+	{
+		..._default,
+		type: "string",
+	} as const,
+);
 
 /** Any string (readonly) */
-const ReadOnlyString = defineString({
-	...String,
-	..._readonly,
-} as const);
+const ReadOnlyString = defineString(
+	{
+		...String,
+		..._readonly,
+	} as const,
+);
 
 /** Any string (writeonly) */
-const WriteOnlyString = defineString({
-	...String,
-	..._writeonly,
-} as const);
+const WriteOnlyString = defineString(
+	{
+		...String,
+		..._writeonly,
+	} as const,
+);
 
 /** A (hex) string that represents a color */
-const Color = defineString({
-	...String,
-	type: "color",
-} as const);
+const Color = defineString(
+	{
+		...String,
+		type: "color",
+	} as const,
+);
 
 /** A (hex) string that represents a color (readonly) */
-const ReadOnlyColor = defineString({
-	...Color,
-	..._readonly,
-} as const);
+const ReadOnlyColor = defineString(
+	{
+		...Color,
+		..._readonly,
+	} as const,
+);
 
 /** A (hex) string that represents a color (writeonly) */
-const WriteOnlyColor = defineString({
-	...Color,
-	..._writeonly,
-} as const);
+const WriteOnlyColor = defineString(
+	{
+		...Color,
+		..._writeonly,
+	} as const,
+);
 
 // Some predefined CC-specific metadata
 
 /** The level of a Switch */
-const Level = defineNumeric({
-	...UInt8,
-	max: 99,
-} as const);
+const Level = defineNumeric(
+	{
+		...UInt8,
+		max: 99,
+	} as const,
+);
 
 /** The level of a Switch (readonly) */
-const ReadOnlyLevel = defineNumeric({
-	...Level,
-	..._readonly,
-} as const);
+const ReadOnlyLevel = defineNumeric(
+	{
+		...Level,
+		..._readonly,
+	} as const,
+);
 
 /** The level of a Switch (writeonly) */
-const WriteOnlyLevel = defineNumeric({
-	...Level,
-	..._writeonly,
-} as const);
+const WriteOnlyLevel = defineNumeric(
+	{
+		...Level,
+		..._writeonly,
+	} as const,
+);
 
 /** A duration value */
-const _Duration = defineDuration({
-	..._default,
-	type: "duration",
-} as const);
+const _Duration = defineDuration(
+	{
+		..._default,
+		type: "duration",
+	} as const,
+);
 
 /** A duration value (readonly) */
-const ReadOnlyDuration = defineDuration({
-	..._Duration,
-	..._readonly,
-} as const);
+const ReadOnlyDuration = defineDuration(
+	{
+		..._Duration,
+		..._readonly,
+	} as const,
+);
 
 /** A duration value (writeonly) */
-const WriteOnlyDuration = defineDuration({
-	..._Duration,
-	..._writeonly,
-} as const);
+const WriteOnlyDuration = defineDuration(
+	{
+		..._Duration,
+		..._writeonly,
+	} as const,
+);
 
 /** A buffer */
-const _Buffer = defineBuffer({
-	..._default,
-	type: "buffer",
-} as const);
+const _Buffer = defineBuffer(
+	{
+		..._default,
+		type: "buffer",
+	} as const,
+);
 
 /** A buffer (readonly) */
-const ReadOnlyBuffer = defineBuffer({
-	..._Buffer,
-	..._readonly,
-} as const);
+const ReadOnlyBuffer = defineBuffer(
+	{
+		..._Buffer,
+		..._readonly,
+	} as const,
+);
 
 /** A buffer (writeonly) */
 const WriteOnlyBuffer = defineBuffer({

@@ -2,7 +2,7 @@
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "ARF",
-	"description": "Roller blind module",
+	"description": "Roller Blind Module",
 	"devices": [
 		{
 			"productType": "0x0004",

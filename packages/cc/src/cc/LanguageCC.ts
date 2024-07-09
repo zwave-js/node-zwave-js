@@ -1,26 +1,30 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -37,15 +41,21 @@ import { LanguageCommand } from "../lib/_Types";
 
 export const LanguageCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Language, {
-		...V.staticProperty("language", {
-			...ValueMetadata.ReadOnlyString,
-			label: "Language code",
-		} as const),
+		...V.staticProperty(
+			"language",
+			{
+				...ValueMetadata.ReadOnlyString,
+				label: "Language code",
+			} as const,
+		),
 
-		...V.staticProperty("country", {
-			...ValueMetadata.ReadOnlyString,
-			label: "Country code",
-		} as const),
+		...V.staticProperty(
+			"country",
+			{
+				...ValueMetadata.ReadOnlyString,
+				label: "Country code",
+			} as const,
+		),
 	}),
 });
 
@@ -53,7 +63,7 @@ export const LanguageCCValues = Object.freeze({
 
 @API(CommandClasses.Language)
 export class LanguageCCAPI extends CCAPI {
-	public supportsCommand(cmd: LanguageCommand): Maybe<boolean> {
+	public supportsCommand(cmd: LanguageCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case LanguageCommand.Get:
 				return this.isSinglecast();
@@ -147,7 +157,8 @@ export class LanguageCC extends CommandClass {
 	}
 }
 
-interface LanguageCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface LanguageCCSetOptions extends CCCommandOptions {
 	language: string;
 	country?: string;
 }
@@ -187,14 +198,14 @@ export class LanguageCCSet extends LanguageCC {
 		this._language = value;
 	}
 
-	private _country: string | undefined;
-	public get country(): string | undefined {
+	private _country: MaybeNotKnown<string>;
+	public get country(): MaybeNotKnown<string> {
 		return this._country;
 	}
-	public set country(value: string | undefined) {
+	public set country(value: MaybeNotKnown<string>) {
 		if (
-			typeof value === "string" &&
-			(value.length !== 2 || value.toUpperCase() !== value)
+			typeof value === "string"
+			&& (value.length !== 2 || value.toUpperCase() !== value)
 		) {
 			throw new ZWaveError(
 				"country must be a 2 digit (uppercase) code according to ISO 3166-1",
@@ -211,13 +222,13 @@ export class LanguageCCSet extends LanguageCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this._country != undefined) {
 			message.country = this._country;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -243,15 +254,15 @@ export class LanguageCCReport extends LanguageCC {
 	public readonly language: string;
 
 	@ccValue(LanguageCCValues.country)
-	public readonly country: string | undefined;
+	public readonly country: MaybeNotKnown<string>;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this.country != undefined) {
 			message.country = this.country;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

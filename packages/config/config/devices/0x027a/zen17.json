@@ -39,7 +39,6 @@
 			"label": "Status After Power Failure",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -59,7 +58,7 @@
 					"value": 3
 				},
 				{
-					"label": "Relay 2 - Previous state, Relay 1 - On",
+					"label": "Relay 2 - Previous state, relay 1 - On",
 					"value": 4
 				}
 			]
@@ -71,7 +70,6 @@
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -79,15 +77,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mode)",
+					"label": "Garage door (Momentary mode)",
 					"value": 3
 				},
 				{
@@ -103,7 +101,7 @@
 					"value": 6
 				},
 				{
-					"label": "Door sensor (open/close)",
+					"label": "Door sensor (Open/Close)",
 					"value": 7
 				},
 				{
@@ -115,7 +113,7 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				}
 			]
@@ -127,7 +125,6 @@
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -135,15 +132,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mode)",
+					"label": "Garage door (Momentary mode)",
 					"value": 3
 				},
 				{
@@ -159,7 +156,7 @@
 					"value": 6
 				},
 				{
-					"label": "Door sensor (open/close)",
+					"label": "Door sensor (Open/Close)",
 					"value": 7
 				},
 				{
@@ -171,11 +168,11 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				},
 				{
-					"label": "Garage door mode (momentary mode) for relay and door sensor (open/close) for input",
+					"label": "Garage door mode (Momentary mode) for relay and door sensor (Open/Close) for input",
 					"value": 11
 				}
 			]
@@ -187,7 +184,6 @@
 			"description": "Select the same value as you chose for parameter 2 to reverse the values for open and closed circuit",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -195,7 +191,7 @@
 					"value": 0
 				},
 				{
-					"label": "Leak alarm (water sensor)",
+					"label": "Leak alarm (Water sensor)",
 					"value": 4
 				},
 				{
@@ -207,7 +203,7 @@
 					"value": 6
 				},
 				{
-					"label": "Open/close alert (door sensor)",
+					"label": "Open/Close alert (Door sensor)",
 					"value": 7
 				},
 				{
@@ -219,7 +215,7 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				}
 			]
@@ -231,7 +227,6 @@
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -239,15 +234,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mode)",
+					"label": "Garage door (Momentary mode)",
 					"value": 3
 				},
 				{
@@ -263,7 +258,7 @@
 					"value": 6
 				},
 				{
-					"label": "Door sensor (open/close)",
+					"label": "Door sensor (Open/Close)",
 					"value": 7
 				},
 				{
@@ -275,7 +270,7 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				}
 			]
@@ -287,7 +282,6 @@
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -295,15 +289,15 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle switch (Follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change on toggle)",
+					"label": "Toggle switch (Change on toggle)",
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mode)",
+					"label": "Garage door (Momentary mode)",
 					"value": 3
 				},
 				{
@@ -319,7 +313,7 @@
 					"value": 6
 				},
 				{
-					"label": "Door sensor (open/close)",
+					"label": "Door sensor (Open/Close)",
 					"value": 7
 				},
 				{
@@ -331,11 +325,11 @@
 					"value": 9
 				},
 				{
-					"label": "On/off report (dry contact switch/sensor)",
+					"label": "On/Off report (Dry contact switch/sensor)",
 					"value": 10
 				},
 				{
-					"label": "Garage door mode (momentary mode) for relay and door sensor (open/close) for input",
+					"label": "Garage door mode (Momentary mode) for relay and door sensor (Open/Close) for input",
 					"value": 11
 				}
 			]
@@ -352,7 +346,6 @@
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -375,43 +368,59 @@
 		},
 		{
 			"#": "6",
-			"label": "Auto Turn-Off Timer (Relay 1)",
-			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 15.",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
+			"label": "Relay 1: Auto Turn-Off Timer"
+		},
+		{
+			"#": "15",
+			"label": "Relay 1: Auto Turn-Off Timer Unit",
+			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Minutes",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Hours",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "7",
-			"label": "Auto Turn-On Timer (Relay 1)",
-			"description": "The time after relay 1 will automatically turn on, using the unit defined in parameter 16",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
+			"label": "Relay 1: Auto Turn-On Timer"
+		},
+		{
+			"#": "16",
+			"$import": "#paramInformation/15",
+			"label": "Relay 1: Auto Turn-On Timer Unit"
 		},
 		{
 			"#": "8",
-			"label": "Auto Turn-Off Timer (Relay 2)",
-			"description": "The time after relay 2 will automatically turn off, using the unit defined in parameter 17",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
+			"label": "Relay 2: Auto Turn-Off Timer"
+		},
+		{
+			"#": "17",
+			"$import": "#paramInformation/15",
+			"label": "Relay 2: Auto Turn-Off Timer Unit"
 		},
 		{
 			"#": "9",
-			"label": "Auto Turn-On Timer (Relay 2)",
-			"description": "The time after relay 2 will automatically turn on, using the unit defined in parameter 18",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x_nounit",
+			"label": "Relay 2: Auto Turn-On Timer"
+		},
+		{
+			"#": "18",
+			"$import": "#paramInformation/15",
+			"label": "Relay 2: Auto Turn-On Timer Unit"
 		},
 		{
 			"#": "10",
@@ -419,7 +428,6 @@
 			"description": "If disabled and Parameter 2 is >= 4, a Z-Wave report will be sent but R1 will not be triggered",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -438,7 +446,6 @@
 			"description": "If disabled and Parameter 3 is >= 4, a Z-Wave report will be sent but R2 will not be triggered",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -452,101 +459,11 @@
 			]
 		},
 		{
-			"#": "15",
-			"label": "Auto Turn-Off Timer Unit (Relay 1)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Minutes",
-					"value": 0
-				},
-				{
-					"label": "Seconds",
-					"value": 1
-				},
-				{
-					"label": "Hours",
-					"value": 2
-				}
-			]
-		},
-		{
-			"#": "16",
-			"label": "Auto Turn-On Timer Unit (Relay 1)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Minutes",
-					"value": 0
-				},
-				{
-					"label": "Seconds",
-					"value": 1
-				},
-				{
-					"label": "Hours",
-					"value": 2
-				}
-			]
-		},
-		{
-			"#": "17",
-			"label": "Auto Turn-Off Timer Unit (Relay 2)",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 2.  Default: minutes",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Minutes",
-					"value": 0
-				},
-				{
-					"label": "Seconds",
-					"value": 1
-				},
-				{
-					"label": "Hours",
-					"value": 2
-				}
-			]
-		},
-		{
-			"#": "18",
-			"label": "Auto Turn-On Timer Unit (Relay 2)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Minutes",
-					"value": 0
-				},
-				{
-					"label": "Seconds",
-					"value": 1
-				},
-				{
-					"label": "Hours",
-					"value": 2
-				}
-			]
-		},
-		{
 			"#": "24",
 			"label": "DC Motor Mode",
 			"description": "Sync R1 and R2 together to prevent both being activated at the same time",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -556,6 +473,50 @@
 				{
 					"label": "Enabled",
 					"value": 1
+				}
+			]
+		},
+		{
+			"#": "25",
+			"$if": "firmwareVersion >= 1.30",
+			"label": "Input 1 Trigger Duration",
+			"description": "How long contact needs to be made at the input for the status change to be recorded.",
+			"valueSize": 1,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5
+		},
+		{
+			"#": "26",
+			"$if": "firmwareVersion >= 1.30",
+			"$import": "#paramInformation/25",
+			"label": "Input 2 Trigger Duration"
+		},
+		{
+			"#": "27",
+			"$if": "firmwareVersion >= 1.30",
+			"label": "Custom Input Actions",
+			"description": "How the relay should react to state changes of IN1 and IN2. This setting is designed for rare and niche scenarios and should not be used unless your unique situation requires it.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "IN1: Turn R1 on, IN2: Turn R1 off",
+					"value": 1
+				},
+				{
+					"label": "IN1: Turn R2 on, IN2: Turn R2 off",
+					"value": 2
+				},
+				{
+					"label": "IN1: Turn R1 and R2 on, IN2: Turn R1 and R2 off",
+					"value": 3
 				}
 			]
 		}

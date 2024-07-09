@@ -1,0 +1,172 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "Z-HAN2",
+	"description": "Heatit Z-HAN2",
+	"devices": [
+		{
+			"productType": "0x0062",
+			"productId": "0x6201"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Meter Report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Meter Report Hysteresis (W)",
+			"valueSize": 4,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 100000,
+			"defaultValue": 200,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Meter Report Hysteresis (V)",
+			"valueSize": 2,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 420,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Meter Report Hysteresis (A)",
+			"valueSize": 2,
+			"unit": "A",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 20,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Report Interval for (W)",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 65535,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Meter Report Interval (V and A)",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Temperature Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Temperature Report Hysteresis",
+			"description": "Accepts values in steps of 0.5 °C",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Sensor Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": -60,
+			"maxValue": 60,
+			"defaultValue": 0
+		},
+		{
+			"#": "9",
+			"label": "Serial Number (Part 1)",
+			"description": "First half of the meter point serial number.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 1718972025,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "10",
+			"label": "Serial Number (Part 2)",
+			"description": "Last half of the meter point serial number.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 1835363685,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "11",
+			"label": "Scaling Factor",
+			"description": "Allows for multiplication of the meter value in case of use with large electrical systems",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "No scaling",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "The primary controller/gateway has a mode for adding devices. Please refer to your primary controller manual on how to set the primary controller in add mode. The device may only be added in the network if the primary controller is in add mode. \nWe recommend adding the device within a 2m range from the gateway.\n\nMethod 1: Standard (Manual)\nAdd mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the module has been added to/removed from the network.\nTo start the configuration process, press the reset button 3 times in rapid succession. The LED will light up in green for 3 seconds if adding is successful. The device is now ready for use with default settings",
+		"exclusion": "The primary controller/gateway has a mode for removing devices. Please refer to your primary controller manual on how to set the primary controller in remove mode. The device may only be removed from the network if the primary controller is in remove mode. When the device is removed from the network, it will NOT revert to factory settings.\nWe recommend removing the device within a 2m range from the gateway.\n\nStandard (Manual)\nRemove mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the module has been removed from the network.\nTo start the configuration process, press the reset button 3 times in rapid succession. The LED will light up in green for 3 seconds if removing is successful. The device is now ready for use with default settings",
+		"reset": "Press and hold the reset button. After 3 seconds the LED will start to blink in green. After 20 seconds the LED will shine solid green for 3 seconds. You may now release the button.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "4",
-			"label": "Memory function",
+			"label": "Memory Function",
 			"description": "Recover after a power failure",
 			"valueSize": 1,
 			"defaultValue": 1,

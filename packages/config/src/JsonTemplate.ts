@@ -3,7 +3,7 @@ import { getErrorMessage } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
 import JSON5 from "json5";
-import * as path from "path";
+import * as path from "node:path";
 
 const IMPORT_KEY = "$import";
 const importSpecifierRegex =
@@ -22,7 +22,7 @@ export function clearTemplateCache(): void {
 /** Parses a JSON file with $import keys and replaces them with the selected objects */
 export async function readJsonWithTemplate(
 	filename: string,
-	rootDir?: string,
+	rootDirs?: string | string[],
 ): Promise<Record<string, unknown>> {
 	if (!(await fs.pathExists(filename))) {
 		throw new ZWaveError(
@@ -31,6 +31,8 @@ export async function readJsonWithTemplate(
 		);
 	}
 
+	if (typeof rootDirs === "string") rootDirs = [rootDirs];
+
 	// Try to use the cached versions of the template files to speed up the loading
 	const fileCache = new Map(templateCache);
 	const ret = await readJsonWithTemplateInternal(
@@ -38,7 +40,7 @@ export async function readJsonWithTemplate(
 		undefined,
 		[],
 		fileCache,
-		rootDir,
+		rootDirs,
 	);
 
 	// Only remember the cached templates, not the individual files to save RAM
@@ -84,7 +86,7 @@ function select(
 	selector: string,
 ): Record<string, unknown> {
 	let ret: Record<string, unknown> = obj;
-	const selectorParts = selector.split("/").filter((s): s is string => !!s);
+	const selectorParts = selector.split("/").filter((s) => !!s);
 	for (const part of selectorParts) {
 		// Special case for paramInformation selectors to select params by #
 		if (isArray(ret)) {
@@ -128,19 +130,25 @@ async function readJsonWithTemplateInternal(
 	selector: string | undefined,
 	visited: string[],
 	fileCache: FileCache,
-	rootDir?: string,
+	rootDirs?: string[],
 ): Promise<Record<string, unknown>> {
 	filename = path.normalize(filename);
 
-	// If we're limited by a root directory, make sure the file is inside that directory
-	if (rootDir) {
-		const relativeToRoot = path.relative(rootDir, filename);
-		if (relativeToRoot.startsWith("..")) {
+	// If we're limited by one or more root directories, make sure the file is inside one of those
+	if (rootDirs) {
+		const outsideAllRootDirs = rootDirs.every((rootDir) => {
+			const relativeToRoot = path.relative(rootDir, filename);
+			return relativeToRoot.startsWith("..");
+		});
+
+		if (outsideAllRootDirs) {
 			throw new ZWaveError(
-				`Tried to import config file "${filename}" outside of root directory "${rootDir}"!${getImportStack(
-					visited,
-					selector,
-				)}`,
+				`Tried to import config file "${filename}" from outside all root directories: ${
+					rootDirs
+						.map((d) => `\n· ${d}`)
+						.join("")
+				}
+${getImportStack(visited, selector)}`,
 				ZWaveErrorCodes.Config_Invalid,
 			);
 		}
@@ -148,10 +156,12 @@ async function readJsonWithTemplateInternal(
 
 	const specifier = getImportSpecifier(filename, selector);
 	if (visited.includes(specifier)) {
-		const msg = `Circular $import in config files: ${[
-			...visited,
-			specifier,
-		].join(" -> ")}\n`;
+		const msg = `Circular $import in config files: ${
+			[
+				...visited,
+				specifier,
+			].join(" -> ")
+		}\n`;
 		// process.stderr.write(msg + "\n");
 		throw new ZWaveError(msg, ZWaveErrorCodes.Config_CircularImport);
 	}
@@ -166,9 +176,11 @@ async function readJsonWithTemplateInternal(
 			fileCache.set(filename, json);
 		} catch (e) {
 			throw new ZWaveError(
-				`Could not parse config file ${filename}: ${getErrorMessage(
-					e,
-				)}${getImportStack(visited, selector)}`,
+				`Could not parse config file ${filename}: ${
+					getErrorMessage(
+						e,
+					)
+				}${getImportStack(visited, selector)}`,
 				ZWaveErrorCodes.Config_Invalid,
 			);
 		}
@@ -179,7 +191,7 @@ async function readJsonWithTemplateInternal(
 		filename,
 		[...visited, specifier],
 		fileCache,
-		rootDir,
+		rootDirs,
 	);
 }
 
@@ -189,7 +201,7 @@ async function resolveJsonImports(
 	filename: string,
 	visited: string[],
 	fileCache: FileCache,
-	rootDir?: string,
+	rootDirs?: string[],
 ): Promise<Record<string, unknown>> {
 	const ret: Record<string, unknown> = {};
 	// Loop through all properties and copy them to the resulting object
@@ -197,24 +209,56 @@ async function resolveJsonImports(
 		if (prop === IMPORT_KEY) {
 			// This is an import statement. Make sure we're working with a string
 			assertImportSpecifier(val, visited.join(" -> "));
-			const { filename: importFilename, selector } =
-				importSpecifierRegex.exec(val)!.groups!;
+			const { filename: importFilename, selector } = importSpecifierRegex
+				.exec(val)!.groups!;
 
 			// Resolve the correct import path
-			let newFilename: string;
+			let newFilename: string | undefined;
 			if (importFilename) {
 				if (importFilename.startsWith("~/")) {
-					if (rootDir) {
-						newFilename = path.join(
-							rootDir,
-							importFilename.slice(2),
-						);
+					// This is a special import specifier that is relative to the root directory
+					// Try to find at least one root directory that contains the referenced file
+					if (rootDirs) {
+						for (const rootDir of rootDirs) {
+							newFilename = path.join(
+								rootDir,
+								importFilename.slice(2),
+							);
+							if (await fs.pathExists(newFilename)) {
+								break;
+							} else {
+								// Try the next
+								newFilename = undefined!;
+							}
+						}
+
+						if (!newFilename) {
+							throw new ZWaveError(
+								`Could not find the referenced file ${
+									importFilename.slice(
+										2,
+									)
+								} in any of the root directories: ${
+									rootDirs
+										.map((d) => `\n· ${d}`)
+										.join("")
+								}\n${
+									getImportStack(
+										visited,
+										selector,
+									)
+								}`,
+								ZWaveErrorCodes.Config_Invalid,
+							);
+						}
 					} else {
 						throw new ZWaveError(
-							`An $import specifier cannot start with ~/ when no root directory is defined!${getImportStack(
-								visited,
-								selector,
-							)}`,
+							`An $import specifier cannot start with ~/ when no root directory is defined!${
+								getImportStack(
+									visited,
+									selector,
+								)
+							}`,
 							ZWaveErrorCodes.Config_Invalid,
 						);
 					}
@@ -234,7 +278,7 @@ async function resolveJsonImports(
 				selector,
 				visited,
 				fileCache,
-				rootDir,
+				rootDirs,
 			);
 			Object.assign(ret, imported);
 		} else if (isObject(val)) {
@@ -244,7 +288,7 @@ async function resolveJsonImports(
 				filename,
 				visited,
 				fileCache,
-				rootDir,
+				rootDirs,
 			);
 		} else if (isArray(val)) {
 			// We're looking at an array, check if there are objects we need to recurse into
@@ -257,7 +301,7 @@ async function resolveJsonImports(
 							filename,
 							visited,
 							fileCache,
-							rootDir,
+							rootDirs,
 						),
 					);
 				} else {

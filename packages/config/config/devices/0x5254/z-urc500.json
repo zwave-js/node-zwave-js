@@ -2,7 +2,7 @@
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
 	"label": "Z-URC500",
-	"description": "Z-Wave enabled universal remote control",
+	"description": "Z-Wave Enabled Universal Remote Control",
 	"devices": [
 		{
 			"productType": "0x0000",

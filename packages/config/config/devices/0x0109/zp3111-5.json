@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Temperature offset",
+			"label": "Temperature Offset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -44,8 +44,8 @@
 			"#": "3",
 			"label": "Humidity",
 			"description": "Configure Relative Humidity",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 10
@@ -53,8 +53,8 @@
 		{
 			"#": "4",
 			"label": "Light Sensor",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 10
@@ -63,8 +63,8 @@
 			"#": "5",
 			"label": "Trigger Interval",
 			"description": "Set the trigger interval for motion sensor re-activation.",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
@@ -79,38 +79,38 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "highest",
+					"label": "Highest",
 					"value": 1
 				},
 				{
-					"label": "higher",
+					"label": "Higher",
 					"value": 2
 				},
 				{
-					"label": "high",
+					"label": "High",
 					"value": 3
 				},
 				{
-					"label": "normal",
+					"label": "Normal",
 					"value": 4
 				},
 				{
-					"label": "low",
+					"label": "Low",
 					"value": 5
 				},
 				{
-					"label": "lower",
+					"label": "Lower",
 					"value": 6
 				},
 				{
-					"label": "lowest",
+					"label": "Lowest",
 					"value": 7
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "LED indicator mode",
+			"label": "LED Indicator Mode",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -120,11 +120,11 @@
 					"value": 1
 				},
 				{
-					"label": "Pulsing Temperature, Flashing Motion",
+					"label": "Pulsing temperature, flashing motion",
 					"value": 2
 				},
 				{
-					"label": "Flashing Temperature and Motion",
+					"label": "Flashing temperature and motion",
 					"value": 3
 				}
 			]

@@ -2,7 +2,7 @@
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-Temp2",
-	"description": "Battery operated thermostat",
+	"description": "Battery Operated Thermostat",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -17,23 +17,21 @@
 		{
 			"#": "1",
 			"label": "Temperature / Humidity Report Interval",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 30,
 			"maxValue": 32767,
-			"defaultValue": 900,
-			"unsigned": true
+			"defaultValue": 900
 		},
 		{
 			"#": "2",
 			"label": "Temperature Change Report Threshold",
 			"description": "Allowable range: 5-50",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -45,12 +43,11 @@
 			"#": "3",
 			"label": "Humidity Change Report Threshold",
 			"description": "Allowable range: 5-50",
-			"unit": "%",
 			"valueSize": 2,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -61,8 +58,8 @@
 		{
 			"#": "4",
 			"label": "Temperature Sensor Calibration",
-			"unit": "°C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0,
@@ -71,8 +68,8 @@
 		{
 			"#": "5",
 			"label": "Humidity Sensor Calibration",
-			"unit": "0.1 %",
 			"valueSize": 2,
+			"unit": "0.1 %",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0,
@@ -80,13 +77,12 @@
 		},
 		{
 			"#": "6",
-			"label": "Proximity Sensor Re-trigger Interval",
-			"unit": "seconds",
+			"label": "Proximity Sensor Re-Trigger Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 2,
 			"maxValue": 270,
-			"defaultValue": 10,
-			"unsigned": true
+			"defaultValue": 10
 		},
 		{
 			"#": "7",
@@ -102,59 +98,54 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		},
 		{
 			"#": "9",
 			"label": "LED Display Timeout",
 			"description": "How long the LED display will be active after after being activated",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 300,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "10",
 			"label": "Temperature Control Hysteresis",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 3,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "11",
 			"label": "Minimum Temperature Limit",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		},
 		{
 			"#": "12",
 			"label": "Maximum Temperature Limit",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 50,
 			"maxValue": 400,
-			"defaultValue": 400,
-			"unsigned": true,
-			"unit": "0.1 °C"
+			"defaultValue": 400
 		},
 		{
 			"#": "13",
 			"label": "External Relay and Operating State Update Interval",
 			"description": "How often the devices sends Binary Switch State and Thermostat Mode in addition to change reports",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 240,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Only when changed",
@@ -165,14 +156,26 @@
 		{
 			"#": "14",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send Report When Presence is Detected",
+			"label": "Send Report When Presence Is Detected",
 			"valueSize": 2
 		},
 		{
 			"#": "15",
+			"$if": "firmwareVersion >= 1.2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Invert Output",
 			"valueSize": 2
 		}
-	]
+	],
+	"compat": {
+		"$if": "firmwareVersion === 1.2.1",
+		// Firmware version 1.2.1 has broken Supervision support
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }

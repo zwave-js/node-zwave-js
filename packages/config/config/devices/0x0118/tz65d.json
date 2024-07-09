@@ -35,7 +35,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Ignore start level",
+			"label": "Ignore Start Level",
 			"description": "Ignore start level when transmitting a dim command to the dimmer",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -70,14 +70,14 @@
 		},
 		{
 			"#": "3",
-			"label": "Blue LED light Behavior",
+			"label": "Blue LED Light Behavior",
 			"description": "Defines the behavior of the blue LED.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Led on when switch on",
+					"label": "LED on when switch on",
 					"value": 0
 				},
 				{
@@ -95,11 +95,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ON on top",
+					"label": "On on top",
 					"value": 0
 				},
 				{
-					"label": "OFF on top",
+					"label": "Off on top",
 					"value": 1
 				}
 			]
@@ -116,7 +116,7 @@
 					"value": 0
 				},
 				{
-					"label": "Shade Control",
+					"label": "Shade control",
 					"value": 1
 				}
 			]
@@ -133,14 +133,14 @@
 					"value": 0
 				},
 				{
-					"label": "Shade Control",
+					"label": "Shade control",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "19",
-			"label": "Blue LED light behavior on transmission",
+			"label": "Blue LED Light Behavior on Transmission",
 			"description": "Defines the behavior of the blue LED when transmission of data",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -162,31 +162,19 @@
 		},
 		{
 			"#": "20",
-			"label": "Poll Group 2 Interval ",
+			"label": "Poll Group 2 Interval",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true,
-			"unit": "minutes"
+			"unsigned": true
 		},
 		{
 			"#": "22",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Poll Group 2",
-			"description": "Should Group 2 be pulled?",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	]
 }

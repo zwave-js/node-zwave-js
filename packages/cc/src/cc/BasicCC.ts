@@ -1,35 +1,41 @@
 import {
 	CommandClasses,
 	Duration,
-	Maybe,
-	MessageOrCCLogEntry,
+	type MaybeNotKnown,
+	type MaybeUnknown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseMaybeNumber,
-	parseNumber,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	unknownNumber,
-	validatePayload,
+	type MessageRecord,
+	type SupervisionResult,
+	type ValueID,
 	ValueMetadata,
+	maybeUnknownToString,
+	parseMaybeNumber,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { AllOrNone, pick } from "@zwave-js/shared/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
+import { type AllOrNone, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	type PollValueImplementation,
 	SET_VALUE,
+	SET_VALUE_HOOKS,
+	type SetValueImplementation,
+	type SetValueImplementationHooksFactory,
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -64,9 +70,11 @@ export const BasicCCValues = Object.freeze({
 		...V.staticProperty("restorePrevious", {
 			...ValueMetadata.WriteOnlyBoolean,
 			label: "Restore previous value" as const,
+			states: {
+				true: "Restore",
+			},
 		}),
 
-		// TODO: This should really not be a static CC value, but depend on compat flags:
 		...V.staticPropertyWithName(
 			"compatEvent",
 			"event",
@@ -76,9 +84,7 @@ export const BasicCCValues = Object.freeze({
 			} as const,
 			{
 				stateful: false,
-				autoCreate: (applHost, endpoint) =>
-					!!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
-						?.treatBasicSetAsEvent,
+				autoCreate: false,
 			},
 		),
 	}),
@@ -86,7 +92,7 @@ export const BasicCCValues = Object.freeze({
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	public supportsCommand(cmd: BasicCommand): Maybe<boolean> {
+	public supportsCommand(cmd: BasicCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case BasicCommand.Get:
 				return this.isSinglecast();
@@ -96,9 +102,34 @@ export class BasicCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function(this: BasicCCAPI, { property }, value) {
+			// Enable restoring the previous non-zero value
+			if (property === "restorePrevious") {
+				property = "targetValue";
+				value = 255;
+			}
+
+			if (property !== "targetValue") {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+
+			return this.set(value);
+		};
+	}
+
+	protected [SET_VALUE_HOOKS]: SetValueImplementationHooksFactory = (
 		{ property },
 		value,
+		_options,
 	) => {
 		// Enable restoring the previous non-zero value
 		if (property === "restorePrevious") {
@@ -106,86 +137,77 @@ export class BasicCCAPI extends CCAPI {
 			value = 255;
 		}
 
-		if (property !== "targetValue") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-
-		const result = await this.set(value);
-
-		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-		// so UIs have immediate feedback
-		const shouldUpdateOptimistically =
-			// For unsupervised commands, make the choice to update optimistically dependent on the driver options
-			(!this.applHost.options.disableOptimisticValueUpdate &&
-				result == undefined) ||
-			// TODO: Consider delaying the optimistic update if the result is WORKING
-			supervisedCommandSucceeded(result);
-
-		if (this.isSinglecast()) {
-			// Only update currentValue for valid target values
-			if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
-				this.tryGetValueDB()?.setValue(
-					BasicCCValues.currentValue.endpoint(this.endpoint.index),
-					value,
-				);
-			}
-
-			// Verify the current value after a delay, unless the command was supervised and successful
-			if (!supervisedCommandSucceeded(result)) {
-				// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
-				// that unsolicited updates cancel the scheduled poll
-				if (property === "targetValue") property = "currentValue";
-				this.schedulePoll({ property }, value);
-			}
-		} else if (this.isMulticast()) {
-			// Only update currentValue for valid target values
-			if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
-				// Figure out which nodes were affected by this command
-				const affectedNodes = this.endpoint.node.physicalNodes.filter(
-					(node) =>
-						node
-							.getEndpoint(this.endpoint.index)
-							?.supportsCC(this.ccId),
-				);
-				// and optimistically update the currentValue
-				for (const node of affectedNodes) {
-					this.applHost
-						.tryGetValueDB(node.id)
-						?.setValue(
-							BasicCCValues.currentValue.endpoint(
-								this.endpoint.index,
-							),
-							value,
+		if (property === "targetValue") {
+			const currentValueValueId = BasicCCValues.currentValue.endpoint(
+				this.endpoint.index,
+			);
+			return {
+				optimisticallyUpdateRelatedValues: (
+					_supervisedAndSuccessful,
+				) => {
+					// Only update currentValue for valid target values
+					if (
+						typeof value === "number"
+						&& value >= 0
+						&& value <= 99
+					) {
+						if (this.isSinglecast()) {
+							this.tryGetValueDB()?.setValue(
+								currentValueValueId,
+								value,
+							);
+						} else if (this.isMulticast()) {
+							// Figure out which nodes were affected by this command
+							const affectedNodes = this.endpoint.node
+								.physicalNodes.filter(
+									(node) =>
+										node
+											.getEndpoint(this.endpoint.index)
+											?.supportsCC(this.ccId),
+								);
+							// and optimistically update the currentValue
+							for (const node of affectedNodes) {
+								this.applHost
+									.tryGetValueDB(node.id)
+									?.setValue(currentValueValueId, value);
+							}
+						}
+					}
+				},
+				forceVerifyChanges: () => {
+					// If we don't know the actual value, we need to verify the change, regardless of the supervision result
+					return value === 255;
+				},
+				verifyChanges: () => {
+					if (
+						this.isSinglecast()
+						// We generally don't want to poll for multicasts because of how much traffic it can cause
+						// However, when setting the value 255 (ON), we don't know the actual state
+						|| (this.isMulticast() && value === 255)
+					) {
+						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+						(this as this).schedulePoll(
+							currentValueValueId,
+							value === 255 ? undefined : value,
 						);
-				}
-			} else if (value === 255) {
-				// We generally don't want to poll for multicasts because of how much traffic it can cause
-				// However, when setting the value 255 (ON), we don't know the actual state
+					}
+				},
+			};
+		}
+	};
 
-				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-				if (property === "targetValue") property = "currentValue";
-				this.schedulePoll({ property }, undefined);
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function(this: BasicCCAPI, { property }) {
+			switch (property) {
+				case "currentValue":
+				case "targetValue":
+				case "duration":
+					return (await this.get())?.[property];
+				default:
+					throwUnsupportedProperty(this.ccId, property);
 			}
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "currentValue":
-			case "targetValue":
-			case "duration":
-				return (await this.get())?.[property];
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
@@ -239,24 +261,27 @@ export class BasicCC extends CommandClass {
 			direction: "none",
 		});
 
+		// Assume that the endpoint supports Basic CC, so the values get persisted correctly.
+		endpoint.addCC(CommandClasses.Basic, { isSupported: true });
+
 		// try to query the current state
 		await this.refreshValues(applHost);
 
-		// Remove Basic CC support when there was no response,
-		// but only if the compat event shouldn't be used.
+		// Remove Basic CC support again when there was no response
 		if (
-			!applHost.getDeviceConfig?.(node.id)?.compat
-				?.treatBasicSetAsEvent &&
 			this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
-					"No response to Basic Get command, assuming the node does not support Basic CC...",
+					"No response to Basic Get command, assuming Basic CC is unsupported...",
 			});
 			// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
 			// endpoint) if no Basic Report is returned.
-			endpoint.removeCC(CommandClasses.Basic);
+			endpoint.addCC(CommandClasses.Basic, { isSupported: false });
+			if (!endpoint.controlsCC(CommandClasses.Basic)) {
+				endpoint.removeCC(CommandClasses.Basic);
+			}
 		}
 
 		// Remember that the interview is complete
@@ -297,9 +322,41 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			});
 		}
 	}
+
+	public override getDefinedValueIDs(
+		applHost: ZWaveApplicationHost,
+	): ValueID[] {
+		const ret: ValueID[] = [];
+
+		// Defer to the base implementation if Basic CC is supported
+		const endpoint = this.getEndpoint(applHost)!;
+		if (endpoint.supportsCC(this.ccId)) {
+			ret.push(...super.getDefinedValueIDs(applHost));
+		}
+
+		const compat = applHost.getDeviceConfig?.(endpoint.nodeId)?.compat;
+		if (compat?.mapBasicSet === "event") {
+			// Add the compat event value if it should be exposed
+			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
+		} else if (
+			!endpoint.supportsCC(CommandClasses.Basic) && (
+				(endpoint.controlsCC(CommandClasses.Basic)
+					&& compat?.mapBasicSet !== "Binary Sensor")
+				|| compat?.mapBasicReport === false
+				|| compat?.mapBasicSet === "report"
+			)
+		) {
+			// Otherwise, only expose currentValue on devices that only control Basic CC,
+			// or devices where a compat flag indicates that currentValue is meant to be exposed
+			ret.push(BasicCCValues.currentValue.endpoint(endpoint.index));
+		}
+
+		return ret;
+	}
 }
 
-interface BasicCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface BasicCCSetOptions extends CCCommandOptions {
 	targetValue: number;
 }
 
@@ -326,17 +383,21 @@ export class BasicCCSet extends BasicCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "target value": this.targetValue },
 		};
 	}
 }
 
-type BasicCCReportOptions = CCCommandOptions & {
-	currentValue: number;
-} & AllOrNone<{
+// @publicAPI
+export type BasicCCReportOptions =
+	& CCCommandOptions
+	& {
+		currentValue: number;
+	}
+	& AllOrNone<{
 		targetValue: number;
 		duration: Duration;
 	}>;
@@ -352,14 +413,16 @@ export class BasicCCReport extends BasicCC {
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this._currentValue = parseMaybeNumber(this.payload[0]);
+			this._currentValue =
+				// 0xff is a legacy value for 100% (99)
+				this.payload[0] === 0xff
+					? 99
+					: parseMaybeNumber(this.payload[0]);
 
-			if (this.version >= 2 && this.payload.length >= 3) {
-				this.targetValue = parseNumber(this.payload[1]);
+			if (this.payload.length >= 3) {
+				this.targetValue = parseMaybeNumber(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
 			}
-			// Do not persist values here. We want to control when this is happening,
-			// in case the report is mapped to another CC
 		} else {
 			this._currentValue = options.currentValue;
 			if ("targetValue" in options) {
@@ -369,52 +432,92 @@ export class BasicCCReport extends BasicCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (
-			this.currentValue === unknownNumber &&
-			!applHost.options.preserveUnknownValues
-		) {
-			this._currentValue = undefined;
-		}
-
-		return super.persistValues(applHost);
-	}
-
-	private _currentValue: Maybe<number> | undefined;
+	private _currentValue: MaybeUnknown<number> | undefined;
 	@ccValue(BasicCCValues.currentValue)
-	public get currentValue(): Maybe<number> | undefined {
+	public get currentValue(): MaybeUnknown<number> | undefined {
 		return this._currentValue;
 	}
 
 	@ccValue(BasicCCValues.targetValue)
-	public readonly targetValue: number | undefined;
+	public readonly targetValue: MaybeUnknown<number> | undefined;
 
 	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
 
-	public serialize(): Buffer {
-		const payload: number[] = [
-			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
-		];
-		if (this.version >= 2 && this.targetValue && this.duration) {
-			payload.push(this.targetValue, this.duration.serializeReport());
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		// Basic CC Report persists its values itself, since there are some
+		// specific rules when which value may be persisted.
+		// These rules are essentially encoded in the getDefinedValueIDs overload,
+		// so we simply reuse that here.
+
+		// Figure out which values may be persisted.
+		const definedValueIDs = this.getDefinedValueIDs(applHost);
+		const shouldPersistCurrentValue = definedValueIDs.some((vid) =>
+			BasicCCValues.currentValue.is(vid)
+		);
+		const shouldPersistTargetValue = definedValueIDs.some((vid) =>
+			BasicCCValues.targetValue.is(vid)
+		);
+		const shouldPersistDuration = definedValueIDs.some((vid) =>
+			BasicCCValues.duration.is(vid)
+		);
+
+		if (this.currentValue !== undefined && shouldPersistCurrentValue) {
+			this.setValue(
+				applHost,
+				BasicCCValues.currentValue,
+				this.currentValue,
+			);
 		}
-		this.payload = Buffer.from(payload);
+		if (this.targetValue !== undefined && shouldPersistTargetValue) {
+			this.setValue(
+				applHost,
+				BasicCCValues.targetValue,
+				this.targetValue,
+			);
+		}
+		if (this.duration !== undefined && shouldPersistDuration) {
+			this.setValue(
+				applHost,
+				BasicCCValues.duration,
+				this.duration,
+			);
+		}
+
+		return true;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.currentValue ?? 0xfe,
+			this.targetValue ?? 0xfe,
+			(this.duration ?? Duration.unknown()).serializeReport(),
+		]);
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, only send the current value
+			this.payload = this.payload.subarray(0, 1);
+		}
+
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": this.currentValue,
+			"current value": maybeUnknownToString(this.currentValue),
 		};
-		if (this.targetValue != undefined) {
-			message["target value"] = this.targetValue;
+		if (this.targetValue !== undefined) {
+			message["target value"] = maybeUnknownToString(this.targetValue);
 		}
 		if (this.duration != undefined) {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

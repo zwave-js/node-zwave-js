@@ -1,28 +1,28 @@
 import {
-	encodeBitMask,
 	MAX_NODES,
 	MessagePriority,
-	NodeType,
 	NUM_NODEMASK_BYTES,
+	NodeType,
+	encodeBitMask,
+	parseNodeBitMask,
+} from "@zwave-js/core";
+import {
+	type UnknownZWaveChipType,
+	getChipTypeAndVersion,
+	getZWaveChipType,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { parseNodeBitMask } from "../../controller/NodeBitMask";
-import {
-	getChipTypeAndVersion,
-	getZWaveChipType,
-	UnknownZWaveChipType,
-} from "../../controller/ZWaveChipTypes";
 import type { ZWaveApiVersion } from "../_Types";
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiInitData)
@@ -31,7 +31,8 @@ import type { ZWaveApiVersion } from "../_Types";
 export class GetSerialApiInitDataRequest extends Message {}
 
 export interface GetSerialApiInitDataResponseOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	zwaveApiVersion: ZWaveApiVersion;
 	isPrimary: boolean;
 	nodeType: NodeType;
@@ -67,31 +68,15 @@ export class GetSerialApiInitDataResponse extends Message {
 			}
 
 			const capabilities = this.payload[1];
-			// TODO: Up to SDK 7.19.1 (inclusive), maybe later, the encoding for these flags is still the old one,
-			// despite the official Host API specs having changed it. When this is fixed, update the version comparison
-			// and uncomment the `if` branch
-
-			// if (
-			// 	this.zwaveApiVersion.kind === "official" &&
-			// 	sdkVersionGte(options.sdkVersion, "7.19.2")
-			// ) {
-			// 	// The new "official" Host API specs sneakily switched the meaning of some flags
-			// 	this.nodeType =
-			// 		capabilities & 0b0001
-			// 			? NodeType.Controller
-			// 			: NodeType["End Node"];
-			// 	this.supportsTimers = !!(capabilities & 0b0010);
-			// 	this.isPrimary = !!(capabilities & 0b0100);
-			// 	this.isSIS = !!(capabilities & 0b1000);
-			// } else {
-			this.nodeType =
-				capabilities & 0b0001
-					? NodeType["End Node"]
-					: NodeType.Controller;
+			// The new "official" Host API specs incorrectly switched the meaning of some flags
+			// Apparently this was never intended, and the firmware correctly uses the "old" encoding.
+			// https://community.silabs.com/s/question/0D58Y00009qjEghSAE/bug-in-firmware-7191-get-init-data-response-does-not-match-host-api-specification?language=en_US
+			this.nodeType = capabilities & 0b0001
+				? NodeType["End Node"]
+				: NodeType.Controller;
 			this.supportsTimers = !!(capabilities & 0b0010);
 			this.isPrimary = !(capabilities & 0b0100);
 			this.isSIS = !!(capabilities & 0b1000);
-			// }
 
 			let offset = 2;
 			this.nodeIds = [];
@@ -99,10 +84,10 @@ export class GetSerialApiInitDataResponse extends Message {
 				const nodeListLength = this.payload[offset];
 				// Controller Nodes MUST set this field to 29
 				if (
-					nodeListLength === NUM_NODEMASK_BYTES &&
-					this.payload.length >= offset + 1 + nodeListLength
+					nodeListLength === NUM_NODEMASK_BYTES
+					&& this.payload.length >= offset + 1 + nodeListLength
 				) {
-					const nodeBitMask = this.payload.slice(
+					const nodeBitMask = this.payload.subarray(
 						offset + 1,
 						offset + 1 + nodeListLength,
 					);

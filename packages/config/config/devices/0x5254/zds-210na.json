@@ -31,44 +31,33 @@
 		},
 		{
 			"#": "13",
-			"label": "Double click option",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double Click Option",
+			"defaultValue": 1
 		},
 		{
 			"#": "17",
-			"label": "Dimmer time from 0% to max.",
-			"unit": "seconds",
+			"label": "Dimmer Time From 0% to Max",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 3
 		},
 		{
 			"#": "18",
-			"label": "Maximum Dimmer level control",
-			"unit": "percent",
+			"label": "Maximum Dimmer Level Control",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
 		{
 			"#": "19",
-			"label": "Minimum Dimmer level control",
-			"unit": "percent",
+			"label": "Minimum Dimmer Level Control",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 13

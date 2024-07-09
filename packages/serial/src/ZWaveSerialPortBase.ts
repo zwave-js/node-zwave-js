@@ -1,15 +1,15 @@
 import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
-import { EventEmitter } from "events";
-import { Duplex, PassThrough, Readable, Writable } from "stream";
+import { EventEmitter } from "node:events";
+import { PassThrough, type Readable, type Writable } from "node:stream";
 import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
+import { type ZWaveSerialPortImplementation } from "./ZWaveSerialPortImplementation";
 import {
-	BootloaderChunk,
-	bootloaderMenuPreamble,
+	type BootloaderChunk,
 	BootloaderParser,
 	BootloaderScreenParser,
+	bootloaderMenuPreamble,
 } from "./parsers/BootloaderParsers";
 import { SerialAPIParser } from "./parsers/SerialAPIParser";
 
@@ -65,26 +65,7 @@ export interface ZWaveSerialPortBase {
 	): boolean;
 }
 
-export function isZWaveSerialPortImplementation(
-	obj: unknown,
-): obj is ZWaveSerialPortImplementation {
-	return (
-		isObject(obj) &&
-		typeof obj.create === "function" &&
-		typeof obj.open === "function" &&
-		typeof obj.close === "function"
-	);
-}
-
-export interface ZWaveSerialPortImplementation {
-	create(): Duplex & EventEmitter;
-	open(
-		port: ReturnType<ZWaveSerialPortImplementation["create"]>,
-	): Promise<void>;
-	close(
-		port: ReturnType<ZWaveSerialPortImplementation["create"]>,
-	): Promise<void>;
-}
+const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;
 
 // This is basically a duplex transform stream wrapper around any stream (network, serial, ...)
 // 0 ┌─────────────────┐ ┌─────────────────┐ ┌──
@@ -108,8 +89,15 @@ export class ZWaveSerialPortBase extends PassThrough {
 	// Allow switching between modes
 	public mode: ZWaveSerialMode | undefined;
 
+	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
+	public ignoreAckHighNibbleOnce(): void {
+		this.parser.ignoreAckHighNibble = true;
+	}
+
 	// Allow strongly-typed async iteration
-	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<ZWaveSerialChunk>;
+	declare public [Symbol.asyncIterator]: () => AsyncIterableIterator<
+		ZWaveSerialChunk
+	>;
 
 	constructor(
 		private implementation: ZWaveSerialPortImplementation,
@@ -118,14 +106,16 @@ export class ZWaveSerialPortBase extends PassThrough {
 		super({ readableObjectMode: true });
 
 		// Route the data event handlers to the parser and handle everything else ourselves
-		for (const method of [
-			"on",
-			"once",
-			"off",
-			"addListener",
-			"removeListener",
-			"removeAllListeners",
-		] as const) {
+		for (
+			const method of [
+				"on",
+				"once",
+				"off",
+				"addListener",
+				"removeListener",
+				"removeAllListeners",
+			] as const
+		) {
 			const original = this[method].bind(this);
 			this[method] = (event: any, ...args: any[]) => {
 				if (event === "data") {
@@ -150,8 +140,9 @@ export class ZWaveSerialPortBase extends PassThrough {
 
 		// Prepare parsers to hook up to the serial port
 		// -> Serial API mode
-		this.parser = new SerialAPIParser(this.logger, (discarded) =>
-			this.emit("discardedData", discarded),
+		this.parser = new SerialAPIParser(
+			this.logger,
+			(discarded) => this.emit("discardedData", discarded),
 		);
 
 		// -> Bootloader mode
@@ -173,10 +164,22 @@ export class ZWaveSerialPortBase extends PassThrough {
 					: ZWaveSerialMode.SerialAPI;
 			}
 
-			if (this.mode === ZWaveSerialMode.Bootloader) {
-				this.bootloaderScreenParser.write(data);
+			// On Windows, writing to the parsers immediately seems to lag the event loop
+			// long enough that the state machine sometimes has not transitioned to the next state yet.
+			// By using setImmediate, we "break" the work into manageable chunks.
+			// We have some tests that don't like this though, so we don't do it in tests
+			const write = () => {
+				if (this.mode === ZWaveSerialMode.Bootloader) {
+					this.bootloaderScreenParser.write(data);
+				} else {
+					this.parser.write(data);
+				}
+			};
+
+			if (IS_TEST) {
+				write();
 			} else {
-				this.parser.write(data);
+				setImmediate(write);
 			}
 		});
 

@@ -23,8 +23,8 @@ Sets the switch to a new value.
 
 **Parameters:**
 
--   `targetValue`: The new target value for the switch
--   `duration`: The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
+- `targetValue`: The new target value for the switch
+- `duration`: The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 
 ### `startLevelChange`
 
@@ -43,7 +43,7 @@ async stopLevelChange(): Promise<SupervisionResult | undefined>;
 ### `getSupported`
 
 ```ts
-async getSupported(): Promise<SwitchType | undefined>;
+async getSupported(): Promise<MaybeNotKnown<SwitchType>>;
 ```
 
 ## Multilevel Switch CC values
@@ -58,15 +58,15 @@ async getSupported(): Promise<SwitchType | undefined>;
 }
 ```
 
--   **label:** Event value
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** false
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Event value
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** false
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `currentValue`
 
@@ -78,15 +78,15 @@ async getSupported(): Promise<SwitchType | undefined>;
 }
 ```
 
--   **label:** Current value
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 99
+- **label:** Current value
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 99
 
 ### `duration`
 
@@ -98,13 +98,13 @@ async getSupported(): Promise<SwitchType | undefined>;
 }
 ```
 
--   **label:** Remaining duration
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** Remaining duration
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `levelChangeDown(switchType: SwitchType)`
 
@@ -116,13 +116,13 @@ async getSupported(): Promise<SwitchType | undefined>;
 }
 ```
 
--   **label:** `Perform a level change (${string})`
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `Perform a level change (${string})`
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `levelChangeUp(switchType: SwitchType)`
 
@@ -134,13 +134,13 @@ async getSupported(): Promise<SwitchType | undefined>;
 }
 ```
 
--   **label:** `Perform a level change (${string})`
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** `Perform a level change (${string})`
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `restorePrevious`
 
@@ -152,13 +152,13 @@ async getSupported(): Promise<SwitchType | undefined>;
 }
 ```
 
--   **label:** Restore previous value
--   **min. CC version:** 1
--   **readable:** false
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Restore previous value
+- **min. CC version:** 1
+- **readable:** false
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `targetValue`
 
@@ -170,12 +170,12 @@ async getSupported(): Promise<SwitchType | undefined>;
 }
 ```
 
--   **label:** Target value
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 99
+- **label:** Target value
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 99

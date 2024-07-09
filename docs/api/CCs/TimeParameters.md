@@ -7,7 +7,7 @@
 ### `get`
 
 ```ts
-async get(): Promise<Date | undefined>;
+async get(): Promise<MaybeNotKnown<Date>>;
 ```
 
 ### `set`
@@ -30,10 +30,10 @@ async set(
 }
 ```
 
--   **label:** Date and Time
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"any"`
+- **label:** Date and Time
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"any"`

@@ -1,46 +1,50 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	supervisedCommandSucceeded,
-	SupervisionResult,
-	unknownBoolean,
-	validatePayload,
+	type MessageRecord,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	supervisedCommandSucceeded,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
-	isPrintableASCIIWithNewlines,
+	isPrintableASCIIWithWhitespace,
 	num2hex,
 	pick,
 } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PhysicalCCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	PhysicalCCAPI,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -116,11 +120,10 @@ export const UserCodeCCValues = Object.freeze({
 			(userId: number) => userId,
 			({ property, propertyKey }) =>
 				property === "userIdStatus" && typeof propertyKey === "number",
-			(userId: number) =>
-				({
-					...ValueMetadata.Number,
-					label: `User ID status (${userId})`,
-				} as const),
+			(userId: number) => ({
+				...ValueMetadata.Number,
+				label: `User ID status (${userId})`,
+			} as const),
 		),
 
 		...V.dynamicPropertyAndKeyWithName(
@@ -145,7 +148,7 @@ function parseExtendedUserCode(payload: Buffer): {
 	const status: UserIDStatus = payload[2];
 	const codeLength = payload[3] & 0b1111;
 	validatePayload(payload.length >= 4 + codeLength);
-	const code = payload.slice(4, 4 + codeLength).toString("ascii");
+	const code = payload.subarray(4, 4 + codeLength).toString("ascii");
 	return {
 		code: {
 			userId,
@@ -171,20 +174,20 @@ function setUserCodeMetadata(
 	const codeValue = UserCodeCCValues.userCode(userId);
 
 	const supportedUserIDStatuses: UserIDStatus[] =
-		this.getValue(applHost, UserCodeCCValues.supportedUserIDStatuses) ??
-		(this.version === 1
-			? [
+		this.getValue(applHost, UserCodeCCValues.supportedUserIDStatuses)
+			?? (this.version === 1
+				? [
 					UserIDStatus.Available,
 					UserIDStatus.Enabled,
 					UserIDStatus.Disabled,
-			  ]
-			: [
+				]
+				: [
 					UserIDStatus.Available,
 					UserIDStatus.Enabled,
 					UserIDStatus.Disabled,
 					UserIDStatus.Messaging,
 					UserIDStatus.PassageMode,
-			  ]);
+				]);
 
 	this.ensureMetadata(applHost, statusValue, {
 		...statusValue.meta,
@@ -242,7 +245,7 @@ export function userCodeToLogString(userCode: string | Buffer): string {
 
 @API(CommandClasses["User Code"])
 export class UserCodeCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: UserCodeCommand): Maybe<boolean> {
+	public supportsCommand(cmd: UserCodeCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case UserCodeCommand.Get:
 			case UserCodeCommand.Set:
@@ -259,134 +262,53 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			case UserCodeCommand.MasterCodeSet:
 			case UserCodeCommand.MasterCodeGet: {
 				if (this.version < 2) return false;
-				return (
-					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						UserCodeCCValues.supportsMasterCode.endpoint(
-							this.endpoint.index,
-						),
-					) ?? unknownBoolean
+				return this.tryGetValueDB()?.getValue<boolean>(
+					UserCodeCCValues.supportsMasterCode.endpoint(
+						this.endpoint.index,
+					),
 				);
 			}
 
 			case UserCodeCommand.UserCodeChecksumGet: {
 				if (this.version < 2) return false;
-				return (
-					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						UserCodeCCValues.supportsUserCodeChecksum.endpoint(
-							this.endpoint.index,
-						),
-					) ?? unknownBoolean
+				return this.tryGetValueDB()?.getValue<boolean>(
+					UserCodeCCValues.supportsUserCodeChecksum.endpoint(
+						this.endpoint.index,
+					),
 				);
 			}
 		}
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	) => {
-		let result: SupervisionResult | undefined;
-		if (property === "keypadMode") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			result = await this.setKeypadMode(value);
-		} else if (property === "masterCode") {
-			if (typeof value !== "string") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"string",
-					typeof value,
-				);
-			}
-			result = await this.setMasterCode(value);
-		} else if (property === "userIdStatus") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-			}
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-
-			if (value === UserIDStatus.Available) {
-				// Clear Code
-				result = await this.clear(propertyKey);
-			} else {
-				// We need to set the user code along with the status
-				const userCode = this.getValueDB().getValue<string>(
-					UserCodeCCValues.userCode(propertyKey).endpoint(
-						this.endpoint.index,
-					),
-				);
-				result = await this.set(propertyKey, value, userCode!);
-			}
-		} else if (property === "userCode") {
-			if (propertyKey == undefined) {
-				throwMissingPropertyKey(this.ccId, property);
-			} else if (typeof propertyKey !== "number") {
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-			}
-			if (typeof value !== "string" && !Buffer.isBuffer(value)) {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"string or Buffer",
-					typeof value,
-				);
-			}
-
-			// We need to set the user id status along with the code
-			let userIdStatus = this.getValueDB().getValue<UserIDStatus>(
-				UserCodeCCValues.userIdStatus(propertyKey).endpoint(
-					this.endpoint.index,
-				),
-			);
-			if (
-				userIdStatus === UserIDStatus.Available ||
-				userIdStatus == undefined
-			) {
-				userIdStatus = UserIDStatus.Enabled;
-			}
-			result = await this.set(propertyKey, userIdStatus as any, value);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-
-		// Verify the change after a short delay, unless the command was supervised and successful
-		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
-			this.schedulePoll({ property, propertyKey }, value, {
-				transition: "fast",
-			});
-		}
-
-		return result;
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "keypadMode":
-				return this.getKeypadMode();
-			case "masterCode":
-				return this.getMasterCode();
-			case "userIdStatus":
-			case "userCode": {
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function(
+			this: UserCodeCCAPI,
+			{ property, propertyKey },
+			value,
+		) {
+			let result: SupervisionResult | undefined;
+			if (property === "keypadMode") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				result = await this.setKeypadMode(value);
+			} else if (property === "masterCode") {
+				if (typeof value !== "string") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"string",
+						typeof value,
+					);
+				}
+				result = await this.setMasterCode(value);
+			} else if (property === "userIdStatus") {
 				if (propertyKey == undefined) {
 					throwMissingPropertyKey(this.ccId, property);
 				} else if (typeof propertyKey !== "number") {
@@ -396,14 +318,105 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						propertyKey,
 					);
 				}
-				return (await this.get(propertyKey))?.[property];
-			}
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
 
-	public async getUsersCount(): Promise<number | undefined> {
+				if (value === UserIDStatus.Available) {
+					// Clear Code
+					result = await this.clear(propertyKey);
+				} else {
+					// We need to set the user code along with the status
+					const userCode = this.getValueDB().getValue<string>(
+						UserCodeCCValues.userCode(propertyKey).endpoint(
+							this.endpoint.index,
+						),
+					);
+					result = await this.set(propertyKey, value, userCode!);
+				}
+			} else if (property === "userCode") {
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				if (typeof value !== "string" && !Buffer.isBuffer(value)) {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"string or Buffer",
+						typeof value,
+					);
+				}
+
+				// We need to set the user id status along with the code
+				let userIdStatus = this.getValueDB().getValue<UserIDStatus>(
+					UserCodeCCValues.userIdStatus(propertyKey).endpoint(
+						this.endpoint.index,
+					),
+				);
+				if (
+					userIdStatus === UserIDStatus.Available
+					|| userIdStatus == undefined
+				) {
+					userIdStatus = UserIDStatus.Enabled;
+				}
+				result = await this.set(
+					propertyKey,
+					userIdStatus as any,
+					value,
+				);
+			} else {
+				throwUnsupportedProperty(this.ccId, property);
+			}
+
+			// Verify the change after a short delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property, propertyKey }, value, {
+					transition: "fast",
+				});
+			}
+
+			return result;
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function(this: UserCodeCCAPI, { property, propertyKey }) {
+			switch (property) {
+				case "keypadMode":
+					return this.getKeypadMode();
+				case "masterCode":
+					return this.getMasterCode();
+				case "userIdStatus":
+				case "userCode": {
+					if (propertyKey == undefined) {
+						throwMissingPropertyKey(this.ccId, property);
+					} else if (typeof propertyKey !== "number") {
+						throwUnsupportedPropertyKey(
+							this.ccId,
+							property,
+							propertyKey,
+						);
+					}
+					return (await this.get(propertyKey))?.[property];
+				}
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
+
+	public async getUsersCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UsersNumberGet,
@@ -413,23 +426,24 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<UserCodeCCUsersNumberReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			UserCodeCCUsersNumberReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.supportedUsers;
 	}
 
 	public async get(
 		userId: number,
 		multiple?: false,
-	): Promise<Pick<UserCode, "userIdStatus" | "userCode"> | undefined>;
+	): Promise<MaybeNotKnown<Pick<UserCode, "userIdStatus" | "userCode">>>;
 	public async get(
 		userId: number,
 		multiple: true,
 	): Promise<
-		{ userCodes: readonly UserCode[]; nextUserId: number } | undefined
+		MaybeNotKnown<{ userCodes: readonly UserCode[]; nextUserId: number }>
 	>;
 
 	@validateArgs()
@@ -447,11 +461,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userId,
 				reportMore: multiple,
 			});
-			const response =
-				await this.applHost.sendCommand<UserCodeCCExtendedUserCodeReport>(
-					cc,
-					this.commandOptions,
-				);
+			const response = await this.applHost.sendCommand<
+				UserCodeCCExtendedUserCodeReport
+			>(
+				cc,
+				this.commandOptions,
+			);
 			if (!response) {
 				return;
 			} else if (multiple) {
@@ -488,7 +503,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		>,
 		userCode: string | Buffer,
 	): Promise<SupervisionResult | undefined> {
-		if (this.version > 1 || userId > 255) {
+		if (userId > 255) {
 			return this.setMany([{ userId, userIdStatus, userCode }]);
 		}
 
@@ -571,8 +586,8 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		} else if (
 			codes.some(
 				(code) =>
-					code.userId === 0 &&
-					code.userIdStatus !== UserIDStatus.Available,
+					code.userId === 0
+					&& code.userIdStatus !== UserIDStatus.Available,
 			)
 		) {
 			throw new ZWaveError(
@@ -588,14 +603,16 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		for (const code of codes) {
 			if (
-				supportedStatuses != undefined &&
-				!supportedStatuses.includes(code.userIdStatus)
+				supportedStatuses != undefined
+				&& !supportedStatuses.includes(code.userIdStatus)
 			) {
 				throw new ZWaveError(
-					`The user ID status ${getEnumMemberName(
-						UserIDStatus,
-						code.userIdStatus,
-					)} is not supported by the node`,
+					`The user ID status ${
+						getEnumMemberName(
+							UserIDStatus,
+							code.userIdStatus,
+						)
+					} is not supported by the node`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (code.userIdStatus === UserIDStatus.Available) {
@@ -669,11 +686,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<UserCodeCCCapabilitiesReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			UserCodeCCCapabilitiesReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"supportsMasterCode",
@@ -688,7 +706,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	public async getKeypadMode(): Promise<KeypadMode | undefined> {
+	public async getKeypadMode(): Promise<MaybeNotKnown<KeypadMode>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.KeypadModeGet,
@@ -698,11 +716,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<UserCodeCCKeypadModeReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			UserCodeCCKeypadModeReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.keypadMode;
 	}
 
@@ -727,10 +746,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			);
 		} else if (!supportedModes.includes(keypadMode)) {
 			throw new ZWaveError(
-				`The keypad mode ${getEnumMemberName(
-					KeypadMode,
-					keypadMode,
-				)} is not supported by the node!`,
+				`The keypad mode ${
+					getEnumMemberName(
+						KeypadMode,
+						keypadMode,
+					)
+				} is not supported by the node!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
@@ -744,7 +765,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getMasterCode(): Promise<string | undefined> {
+	public async getMasterCode(): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeGet,
@@ -754,11 +775,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<UserCodeCCMasterCodeReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			UserCodeCCMasterCodeReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.masterCode;
 	}
 
@@ -784,8 +806,8 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		// Validate the code
 		if (!masterCode) {
-			const supportsDeactivation =
-				UserCodeCC.supportsMasterCodeDeactivationCached(
+			const supportsDeactivation = UserCodeCC
+				.supportsMasterCodeDeactivationCached(
 					this.applHost,
 					this.endpoint,
 				);
@@ -811,7 +833,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getUserCodeChecksum(): Promise<number | undefined> {
+	public async getUserCodeChecksum(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UserCodeChecksumGet,
@@ -821,11 +843,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<UserCodeCCUserCodeChecksumReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			UserCodeCCUserCodeChecksumReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.userCodeChecksum;
 	}
 }
@@ -911,16 +934,15 @@ export class UserCodeCC extends CommandClass {
 		});
 
 		const supportsMasterCode: boolean =
-			this.getValue(applHost, UserCodeCCValues.supportsMasterCode) ??
-			false;
-		const supportsUserCodeChecksum: boolean =
-			this.getValue(
-				applHost,
-				UserCodeCCValues.supportsUserCodeChecksum,
-			) ?? false;
+			this.getValue(applHost, UserCodeCCValues.supportsMasterCode)
+				?? false;
+		const supportsUserCodeChecksum: boolean = this.getValue(
+			applHost,
+			UserCodeCCValues.supportsUserCodeChecksum,
+		) ?? false;
 		const supportedKeypadModes: readonly KeypadMode[] =
-			this.getValue(applHost, UserCodeCCValues.supportedKeypadModes) ??
-			[];
+			this.getValue(applHost, UserCodeCCValues.supportedKeypadModes)
+				?? [];
 		const supportedUsers: number =
 			this.getValue(applHost, UserCodeCCValues.supportedUsers) ?? 0;
 		const supportsMultipleUserCodeReport = !!this.getValue(
@@ -956,8 +978,8 @@ export class UserCodeCC extends CommandClass {
 				currentUserCodeChecksum = await api.getUserCodeChecksum();
 			}
 			if (
-				!supportsUserCodeChecksum ||
-				currentUserCodeChecksum !== storedUserCodeChecksum
+				!supportsUserCodeChecksum
+				|| currentUserCodeChecksum !== storedUserCodeChecksum
 			) {
 				applHost.controllerLog.logNode(node.id, {
 					message:
@@ -975,7 +997,8 @@ export class UserCodeCC extends CommandClass {
 						} else {
 							applHost.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
-								message: `Querying user code #${nextUserId} timed out, skipping the remaining interview...`,
+								message:
+									`Querying user code #${nextUserId} timed out, skipping the remaining interview...`,
 								level: "warn",
 							});
 							break;
@@ -1007,7 +1030,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedUsersCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): number | undefined {
+	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(UserCodeCCValues.supportedUsers.endpoint(endpoint.index));
@@ -1020,7 +1043,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedKeypadModesCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): KeypadMode[] | undefined {
+	): MaybeNotKnown<KeypadMode[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1035,7 +1058,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedUserIDStatusesCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): UserIDStatus[] | undefined {
+	): MaybeNotKnown<UserIDStatus[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1052,7 +1075,7 @@ export class UserCodeCC extends CommandClass {
 	public static getSupportedASCIICharsCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
-	): string | undefined {
+	): MaybeNotKnown<string> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
@@ -1093,27 +1116,60 @@ export class UserCodeCC extends CommandClass {
 				),
 			);
 	}
+
+	/**
+	 * Returns the current status of a user ID.
+	 * This only works AFTER the user IDs have been queried.
+	 */
+	public static getUserIdStatusCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		userId: number,
+	): MaybeNotKnown<UserIDStatus> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue<UserIDStatus>(
+				UserCodeCCValues.userIdStatus(userId).endpoint(endpoint.index),
+			);
+	}
+
+	/**
+	 * Returns the current code belonging to a user ID.
+	 * This only works AFTER the user IDs have been queried.
+	 */
+	public static getUserCodeCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		userId: number,
+	): MaybeNotKnown<string | Buffer> {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue<string | Buffer>(
+				UserCodeCCValues.userCode(userId).endpoint(endpoint.index),
+			);
+	}
 }
 
-type UserCodeCCSetOptions =
+// @publicAPI
+export type UserCodeCCSetOptions =
 	| {
-			userId: 0;
-			userIdStatus: UserIDStatus.Available;
-			userCode?: undefined;
-	  }
+		userId: 0;
+		userIdStatus: UserIDStatus.Available;
+		userCode?: undefined;
+	}
 	| {
-			userId: number;
-			userIdStatus: UserIDStatus.Available;
-			userCode?: undefined;
-	  }
+		userId: number;
+		userIdStatus: UserIDStatus.Available;
+		userCode?: undefined;
+	}
 	| {
-			userId: number;
-			userIdStatus: Exclude<
-				UserIDStatus,
-				UserIDStatus.Available | UserIDStatus.StatusNotAvailable
-			>;
-			userCode: string | Buffer;
-	  };
+		userId: number;
+		userIdStatus: Exclude<
+			UserIDStatus,
+			UserIDStatus.Available | UserIDStatus.StatusNotAvailable
+		>;
+		userCode: string | Buffer;
+	};
 
 @CCCommand(UserCodeCommand.Set)
 @useSupervision()
@@ -1126,11 +1182,17 @@ export class UserCodeCCSet extends UserCodeCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.userId = this.payload[0];
+			this.userIdStatus = this.payload[1];
+			if (
+				this.userIdStatus !== UserIDStatus.Available
+				&& this.userIdStatus !== UserIDStatus.StatusNotAvailable
+			) {
+				this.userCode = this.payload.subarray(2);
+			} else {
+				this.userCode = Buffer.alloc(4, 0x00);
+			}
 		} else {
 			this.userId = options.userId;
 			this.userIdStatus = options.userIdStatus;
@@ -1142,8 +1204,8 @@ export class UserCodeCCSet extends UserCodeCC {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (
-				this.userId === 0 &&
-				this.userIdStatus !== UserIDStatus.Available
+				this.userId === 0
+				&& this.userIdStatus !== UserIDStatus.Available
 			) {
 				throw new ZWaveError(
 					`${this.constructor.name}: User ID 0 may only be used to clear all user codes`,
@@ -1156,9 +1218,7 @@ export class UserCodeCCSet extends UserCodeCC {
 				// Specs say ASCII 0-9, manufacturers don't care :)
 				if (this.userCode.length < 4 || this.userCode.length > 10) {
 					throw new ZWaveError(
-						`${
-							this.constructor.name
-						}: The user code must have a length of 4 to 10 ${
+						`${this.constructor.name}: The user code must have a length of 4 to 10 ${
 							typeof this.userCode === "string"
 								? "characters"
 								: "bytes"
@@ -1184,9 +1244,9 @@ export class UserCodeCCSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1196,52 +1256,63 @@ export class UserCodeCCSet extends UserCodeCC {
 	}
 }
 
+// @publicAPI
+export interface UserCodeCCReportOptions extends CCCommandOptions {
+	userId: number;
+	userIdStatus: UserIDStatus;
+	userCode?: string | Buffer;
+}
+
 @CCCommand(UserCodeCommand.Report)
-export class UserCodeCCReport
-	extends UserCodeCC
+export class UserCodeCCReport extends UserCodeCC
 	implements NotificationEventPayload
 {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: CommandClassDeserializationOptions | UserCodeCCReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.userId = this.payload[0];
-		this.userIdStatus = this.payload[1];
 
-		if (
-			this.payload.length === 2 &&
-			(this.userIdStatus === UserIDStatus.Available ||
-				this.userIdStatus === UserIDStatus.StatusNotAvailable)
-		) {
-			// The user code is not set or not available and this report contains no user code
-			this.userCode = "";
-		} else {
-			// The specs require the user code to be at least 4 digits
-			validatePayload(this.payload.length >= 6);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.userId = this.payload[0];
+			this.userIdStatus = this.payload[1];
 
-			let userCodeBuffer = this.payload.slice(2);
-			// Specs say infer user code from payload length, manufacturers send zero-padded strings
-			while (userCodeBuffer[userCodeBuffer.length - 1] === 0) {
-				userCodeBuffer = userCodeBuffer.slice(0, -1);
-			}
-			// Specs say ASCII 0-9, manufacturers don't care :)
-			// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
-			const userCodeString = userCodeBuffer.toString("utf8");
-			if (isPrintableASCII(userCodeString)) {
-				this.userCode = userCodeString;
-			} else if (
-				this.version === 1 &&
-				isPrintableASCIIWithNewlines(userCodeString)
+			if (
+				this.payload.length === 2
+				&& (this.userIdStatus === UserIDStatus.Available
+					|| this.userIdStatus === UserIDStatus.StatusNotAvailable)
 			) {
-				// Ignore leading and trailing newlines in V1 reports if the rest is ASCII
-				this.userCode = userCodeString
-					.replace(/^[\r\n]*/, "")
-					.replace(/[\r\n]*$/, "");
+				// The user code is not set or not available and this report contains no user code
+				this.userCode = "";
 			} else {
-				this.userCode = userCodeBuffer;
+				// The specs require the user code to be at least 4 digits
+				validatePayload(this.payload.length >= 6);
+
+				let userCodeBuffer = this.payload.subarray(2);
+				// Specs say infer user code from payload length, manufacturers send zero-padded strings
+				while (userCodeBuffer.at(-1) === 0) {
+					userCodeBuffer = userCodeBuffer.subarray(0, -1);
+				}
+				// Specs say ASCII 0-9, manufacturers don't care :)
+				// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
+				const userCodeString = userCodeBuffer.toString("utf8");
+				if (isPrintableASCII(userCodeString)) {
+					this.userCode = userCodeString;
+				} else if (
+					this.version === 1
+					&& isPrintableASCIIWithWhitespace(userCodeString)
+				) {
+					// Ignore leading and trailing whitespace in V1 reports if the rest is ASCII
+					this.userCode = userCodeString.trim();
+				} else {
+					this.userCode = userCodeBuffer;
+				}
 			}
+		} else {
+			this.userId = options.userId;
+			this.userIdStatus = options.userIdStatus;
+			this.userCode = options.userCode ?? "";
 		}
 	}
 
@@ -1262,9 +1333,24 @@ export class UserCodeCCReport
 		return true;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public serialize(): Buffer {
+		let userCodeBuffer: Buffer;
+		if (typeof this.userCode === "string") {
+			userCodeBuffer = Buffer.from(this.userCode, "ascii");
+		} else {
+			userCodeBuffer = this.userCode;
+		}
+
+		this.payload = Buffer.concat([
+			Buffer.from([this.userId, this.userIdStatus]),
+			userCodeBuffer,
+		]);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1279,7 +1365,8 @@ export class UserCodeCCReport
 	}
 }
 
-interface UserCodeCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCGetOptions extends CCCommandOptions {
 	userId: number;
 }
 
@@ -1292,11 +1379,8 @@ export class UserCodeCCGet extends UserCodeCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.userId = this.payload[0];
 		} else {
 			this.userId = options.userId;
 		}
@@ -1309,37 +1393,57 @@ export class UserCodeCCGet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "user id": this.userId },
 		};
 	}
+}
+
+// @publicAPI
+export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
+	supportedUsers: number;
 }
 
 @CCCommand(UserCodeCommand.UsersNumberReport)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| UserCodeCCUsersNumberReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		if (this.payload.length >= 3) {
-			// V2+
-			this.supportedUsers = this.payload.readUInt16BE(1);
+
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			if (this.payload.length >= 3) {
+				// V2+
+				this.supportedUsers = this.payload.readUInt16BE(1);
+			} else {
+				// V1
+				this.supportedUsers = this.payload[0];
+			}
 		} else {
-			// V1
-			this.supportedUsers = this.payload[0];
+			this.supportedUsers = options.supportedUsers;
 		}
 	}
 
 	@ccValue(UserCodeCCValues.supportedUsers)
 	public readonly supportedUsers: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(3);
+		// If the node implements more than 255 users, this field MUST be set to 255
+		this.payload[0] = Math.min(255, this.supportedUsers);
+		this.payload.writeUInt16BE(this.supportedUsers, 1);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "supported users": this.supportedUsers },
 		};
 	}
@@ -1349,61 +1453,95 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCUsersNumberReport)
 export class UserCodeCCUsersNumberGet extends UserCodeCC {}
 
+// @publicAPI
+export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
+	supportsMasterCode: boolean;
+	supportsMasterCodeDeactivation: boolean;
+	supportsUserCodeChecksum: boolean;
+	supportsMultipleUserCodeReport: boolean;
+	supportsMultipleUserCodeSet: boolean;
+	supportedUserIDStatuses: readonly UserIDStatus[];
+	supportedKeypadModes: readonly KeypadMode[];
+	supportedASCIIChars: string;
+}
+
 @CCCommand(UserCodeCommand.CapabilitiesReport)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| UserCodeCCCapabilitiesReportOptions,
 	) {
 		super(host, options);
-		let offset = 0;
 
-		validatePayload(this.payload.length >= offset + 1);
-		this.supportsMasterCode = !!(this.payload[offset] & 0b100_00000);
-		this.supportsMasterCodeDeactivation = !!(
-			this.payload[offset] & 0b010_00000
-		);
-		const statusBitMaskLength = this.payload[offset] & 0b000_11111;
-		offset += 1;
+		if (gotDeserializationOptions(options)) {
+			let offset = 0;
 
-		validatePayload(
-			this.payload.length >= offset + statusBitMaskLength + 1,
-		);
-		this.supportedUserIDStatuses = parseBitMask(
-			this.payload.slice(offset, offset + statusBitMaskLength),
-			UserIDStatus.Available,
-		);
-		offset += statusBitMaskLength;
+			validatePayload(this.payload.length >= offset + 1);
+			this.supportsMasterCode = !!(this.payload[offset] & 0b100_00000);
+			this.supportsMasterCodeDeactivation = !!(
+				this.payload[offset] & 0b010_00000
+			);
+			const statusBitMaskLength = this.payload[offset] & 0b000_11111;
+			offset += 1;
 
-		this.supportsUserCodeChecksum = !!(this.payload[offset] & 0b100_00000);
-		this.supportsMultipleUserCodeReport = !!(
-			this.payload[offset] & 0b010_00000
-		);
-		this.supportsMultipleUserCodeSet = !!(
-			this.payload[offset] & 0b001_00000
-		);
-		const keypadModesBitMaskLength = this.payload[offset] & 0b000_11111;
-		offset += 1;
+			validatePayload(
+				this.payload.length >= offset + statusBitMaskLength + 1,
+			);
+			this.supportedUserIDStatuses = parseBitMask(
+				this.payload.subarray(offset, offset + statusBitMaskLength),
+				UserIDStatus.Available,
+			);
+			offset += statusBitMaskLength;
 
-		validatePayload(
-			this.payload.length >= offset + keypadModesBitMaskLength + 1,
-		);
-		this.supportedKeypadModes = parseBitMask(
-			this.payload.slice(offset, offset + keypadModesBitMaskLength),
-			KeypadMode.Normal,
-		);
-		offset += keypadModesBitMaskLength;
+			this.supportsUserCodeChecksum = !!(
+				this.payload[offset] & 0b100_00000
+			);
+			this.supportsMultipleUserCodeReport = !!(
+				this.payload[offset] & 0b010_00000
+			);
+			this.supportsMultipleUserCodeSet = !!(
+				this.payload[offset] & 0b001_00000
+			);
+			const keypadModesBitMaskLength = this.payload[offset] & 0b000_11111;
+			offset += 1;
 
-		const keysBitMaskLength = this.payload[offset] & 0b000_11111;
-		offset += 1;
+			validatePayload(
+				this.payload.length >= offset + keypadModesBitMaskLength + 1,
+			);
+			this.supportedKeypadModes = parseBitMask(
+				this.payload.subarray(
+					offset,
+					offset + keypadModesBitMaskLength,
+				),
+				KeypadMode.Normal,
+			);
+			offset += keypadModesBitMaskLength;
 
-		validatePayload(this.payload.length >= offset + keysBitMaskLength);
-		this.supportedASCIIChars = Buffer.from(
-			parseBitMask(
-				this.payload.slice(offset, offset + keysBitMaskLength),
-				0,
-			),
-		).toString("ascii");
+			const keysBitMaskLength = this.payload[offset] & 0b000_11111;
+			offset += 1;
+
+			validatePayload(this.payload.length >= offset + keysBitMaskLength);
+			this.supportedASCIIChars = Buffer.from(
+				parseBitMask(
+					this.payload.subarray(offset, offset + keysBitMaskLength),
+					0,
+				),
+			).toString("ascii");
+		} else {
+			this.supportsMasterCode = options.supportsMasterCode;
+			this.supportsMasterCodeDeactivation =
+				options.supportsMasterCodeDeactivation;
+			this.supportsUserCodeChecksum = options.supportsUserCodeChecksum;
+			this.supportsMultipleUserCodeReport =
+				options.supportsMultipleUserCodeReport;
+			this.supportsMultipleUserCodeSet =
+				options.supportsMultipleUserCodeSet;
+			this.supportedUserIDStatuses = options.supportedUserIDStatuses;
+			this.supportedKeypadModes = options.supportedKeypadModes;
+			this.supportedASCIIChars = options.supportedASCIIChars;
+		}
 	}
 
 	@ccValue(UserCodeCCValues.supportsMasterCode)
@@ -1430,9 +1568,46 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.supportedASCIIChars)
 	public readonly supportedASCIIChars: string;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public serialize(): Buffer {
+		const supportedStatusesBitmask = encodeBitMask(
+			this.supportedUserIDStatuses,
+			undefined,
+			UserIDStatus.Available,
+		);
+		const controlByte1 = (this.supportsMasterCode ? 0b100_00000 : 0)
+			| (this.supportsMasterCodeDeactivation ? 0b010_00000 : 0)
+			| (supportedStatusesBitmask.length & 0b000_11111);
+
+		const supportedKeypadModesBitmask = encodeBitMask(
+			this.supportedKeypadModes,
+			undefined,
+			KeypadMode.Normal,
+		);
+		const controlByte2 = (this.supportsUserCodeChecksum ? 0b100_00000 : 0)
+			| (this.supportsMultipleUserCodeReport ? 0b010_00000 : 0)
+			| (this.supportsMultipleUserCodeSet ? 0b001_00000 : 0)
+			| (supportedKeypadModesBitmask.length & 0b000_11111);
+
+		const keysAsNumbers = [...this.supportedASCIIChars].map((char) =>
+			char.charCodeAt(0)
+		);
+		const supportedKeysBitmask = encodeBitMask(keysAsNumbers, undefined, 0);
+		const controlByte3 = supportedKeysBitmask.length & 0b000_11111;
+
+		this.payload = Buffer.concat([
+			Buffer.from([controlByte1]),
+			supportedStatusesBitmask,
+			Buffer.from([controlByte2]),
+			supportedKeypadModesBitmask,
+			Buffer.from([controlByte3]),
+			supportedKeysBitmask,
+		]);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports master code": this.supportsMasterCode,
 				"supports master code deactivation":
@@ -1461,7 +1636,8 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCCapabilitiesReport)
 export class UserCodeCCCapabilitiesGet extends UserCodeCC {}
 
-interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 	keypadMode: KeypadMode;
 }
 
@@ -1476,11 +1652,8 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.keypadMode = this.payload[0];
 		} else {
 			this.keypadMode = options.keypadMode;
 		}
@@ -1493,23 +1666,34 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { mode: getEnumMemberName(KeypadMode, this.keypadMode) },
 		};
 	}
+}
+
+// @publicAPI
+export interface UserCodeCCKeypadModeReportOptions extends CCCommandOptions {
+	keypadMode: KeypadMode;
 }
 
 @CCCommand(UserCodeCommand.KeypadModeReport)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| UserCodeCCKeypadModeReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.keypadMode = this.payload[0];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.keypadMode = this.payload[0];
+		} else {
+			this.keypadMode = options.keypadMode;
+		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
@@ -1536,9 +1720,14 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.keypadMode)
 	public readonly keypadMode: KeypadMode;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.keypadMode]);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				keypadMode: getEnumMemberName(KeypadMode, this.keypadMode),
 			},
@@ -1550,7 +1739,8 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCKeypadModeReport)
 export class UserCodeCCKeypadModeGet extends UserCodeCC {}
 
-interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
 	masterCode: string;
 }
 
@@ -1565,11 +1755,12 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			const codeLength = this.payload[0] & 0b1111;
+			validatePayload(this.payload.length >= 1 + codeLength);
+			this.masterCode = this.payload
+				.subarray(1, 1 + codeLength)
+				.toString("ascii");
 		} else {
 			this.masterCode = options.masterCode;
 		}
@@ -1579,41 +1770,60 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
-			Buffer.from([this.masterCode.length & 0b11111]),
+			Buffer.from([this.masterCode.length & 0b1111]),
 			Buffer.from(this.masterCode, "ascii"),
 		]);
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
+}
+
+// @publicAPI
+export interface UserCodeCCMasterCodeReportOptions extends CCCommandOptions {
+	masterCode: string;
 }
 
 @CCCommand(UserCodeCommand.MasterCodeReport)
 export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| UserCodeCCMasterCodeReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		const codeLength = this.payload[0] & 0b1111;
-		validatePayload(this.payload.length >= 1 + codeLength);
-		this.masterCode = this.payload
-			.slice(1, 1 + codeLength)
-			.toString("ascii");
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			const codeLength = this.payload[0] & 0b1111;
+			validatePayload(this.payload.length >= 1 + codeLength);
+			this.masterCode = this.payload
+				.subarray(1, 1 + codeLength)
+				.toString("ascii");
+		} else {
+			this.masterCode = options.masterCode;
+		}
 	}
 
 	@ccValue(UserCodeCCValues.masterCode)
 	public readonly masterCode: string;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.masterCode.length & 0b1111]),
+			Buffer.from(this.masterCode, "ascii"),
+		]);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
@@ -1623,23 +1833,42 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCMasterCodeReport)
 export class UserCodeCCMasterCodeGet extends UserCodeCC {}
 
+// @publicAPI
+export interface UserCodeCCUserCodeChecksumReportOptions
+	extends CCCommandOptions
+{
+	userCodeChecksum: number;
+}
+
 @CCCommand(UserCodeCommand.UserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| UserCodeCCUserCodeChecksumReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 2);
-		this.userCodeChecksum = this.payload.readUInt16BE(0);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.userCodeChecksum = this.payload.readUInt16BE(0);
+		} else {
+			this.userCodeChecksum = options.userCodeChecksum;
+		}
 	}
 
 	@ccValue(UserCodeCCValues.userCodeChecksum)
 	public readonly userCodeChecksum: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(2);
+		this.payload.writeUInt16BE(this.userCodeChecksum, 0);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "user code checksum": num2hex(this.userCodeChecksum) },
 		};
 	}
@@ -1649,6 +1878,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCUserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCExtendedUserCodeSetOptions extends CCCommandOptions {
 	userCodes: UserCodeCCSetOptions[];
 }
@@ -1705,15 +1935,17 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
-			message[`code #${userId}`] = `${userCodeToLogString(
-				userCode ?? "",
-			)} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
+			message[`code #${userId}`] = `${
+				userCodeToLogString(
+					userCode ?? "",
+				)
+			} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1733,7 +1965,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		// parse each user code
 		for (let i = 0; i < numCodes; i++) {
 			const { code, bytesRead } = parseExtendedUserCode(
-				this.payload.slice(offset),
+				this.payload.subarray(offset),
 			);
 			userCodes.push(code);
 			offset += bytesRead;
@@ -1762,22 +1994,25 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public readonly userCodes: readonly UserCode[];
 	public readonly nextUserId: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
-			message[`code #${userId}`] = `${userCodeToLogString(
-				userCode,
-			)} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
+			message[`code #${userId}`] = `${
+				userCodeToLogString(
+					userCode,
+				)
+			} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		message["next user id"] = this.nextUserId;
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
-interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
 	userId: number;
 	reportMore?: boolean;
 }
@@ -1813,9 +2048,9 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user id": this.userId,
 				"report more": this.reportMore,

@@ -1,29 +1,29 @@
 import {
-	CommandClasses,
-	encodeBitMask,
+	type CommandClasses,
 	MAX_NODES,
-	parseBitMask,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeBitMask,
+	parseBitMask,
 } from "@zwave-js/core/safe";
 import { num2hex, pick, sum } from "@zwave-js/shared/safe";
 import { SUC_MAX_UPDATES } from "../consts";
 import { nodeHasInfo } from "../convert";
 import {
+	type Route,
+	type SUCUpdateEntry,
 	encodeRoute,
 	encodeSUCUpdateEntry,
 	parseRoute,
 	parseSUCUpdateEntry,
-	Route,
-	SUCUpdateEntry,
 } from "../files";
 import {
+	type NVM500NodeInfo,
+	type NVMDescriptor,
+	type NVMModuleDescriptor,
 	encodeNVM500NodeInfo,
 	encodeNVMDescriptor,
 	encodeNVMModuleDescriptor,
-	NVM500NodeInfo,
-	NVMDescriptor,
-	NVMModuleDescriptor,
 	parseNVM500NodeInfo,
 	parseNVMDescriptor,
 	parseNVMModuleDescriptor,
@@ -39,14 +39,14 @@ import {
 	CONFIGURATION_VALID_0,
 	CONFIGURATION_VALID_1,
 	MAGIC_VALUE,
-	NVMData,
-	NVMEntryName,
+	type NVMData,
+	type NVMEntryName,
 	NVMEntrySizes,
 	NVMEntryType,
-	NVMLayout,
+	type NVMLayout,
 	NVMModuleType,
 	NVM_SERIALAPI_HOST_SIZE,
-	ParsedNVMEntry,
+	type ParsedNVMEntry,
 	ROUTECACHE_VALID,
 } from "./shared";
 
@@ -81,11 +81,12 @@ export function createParser(nvm: Buffer): NVMParser | undefined {
 export class NVMParser {
 	public constructor(private readonly impl: NVM500Details, nvm: Buffer) {
 		this.parse(nvm);
-		if (!this.isValid())
+		if (!this.isValid()) {
 			throw new ZWaveError(
 				"Invalid NVM!",
 				ZWaveErrorCodes.NVM_InvalidFormat,
 			);
+		}
 	}
 
 	/** Tests if the given NVM is a valid NVM for this parser version */
@@ -106,12 +107,12 @@ export class NVMParser {
 			?.data[0] as number;
 
 		return (
-			eeoffset_magic === MAGIC_VALUE &&
-			configuration_valid_0 === CONFIGURATION_VALID_0 &&
-			configuration_valid_1 === CONFIGURATION_VALID_1 &&
-			routecache_valid === ROUTECACHE_VALID &&
-			this.impl.protocolVersions.includes(nvm.protocolVersion) &&
-			endMarker === 0
+			eeoffset_magic === MAGIC_VALUE
+			&& configuration_valid_0 === CONFIGURATION_VALID_0
+			&& configuration_valid_1 === CONFIGURATION_VALID_1
+			&& routecache_valid === ROUTECACHE_VALID
+			&& this.impl.protocolVersions.includes(nvm.protocolVersion)
+			&& endMarker === 0
 		);
 	}
 
@@ -151,7 +152,7 @@ export class NVMParser {
 			const data: Buffer[] = [];
 			for (let i = 0; i < entry.count; i++) {
 				data.push(
-					nvm.slice(offset + i * size, offset + (i + 1) * size),
+					nvm.subarray(offset + i * size, offset + (i + 1) * size),
 				);
 			}
 			const converted = data.map((buffer) => {
@@ -164,18 +165,21 @@ export class NVMParser {
 					case NVMEntryType.DWord:
 						return buffer.readUInt32BE(0);
 					case NVMEntryType.NodeInfo:
-						if (buffer.every((byte) => byte === 0))
+						if (buffer.every((byte) => byte === 0)) {
 							return undefined;
+						}
 						return parseNVM500NodeInfo(buffer, 0);
 					case NVMEntryType.NodeMask:
 						return parseBitMask(buffer);
 					case NVMEntryType.SUCUpdateEntry:
-						if (buffer.every((byte) => byte === 0))
+						if (buffer.every((byte) => byte === 0)) {
 							return undefined;
+						}
 						return parseSUCUpdateEntry(buffer, 0);
 					case NVMEntryType.Route:
-						if (buffer.every((byte) => byte === 0))
+						if (buffer.every((byte) => byte === 0)) {
 							return undefined;
+						}
 						return parseRoute(buffer, 0);
 					case NVMEntryType.NVMModuleDescriptor: {
 						const ret = parseNVMModuleDescriptor(buffer);
@@ -632,23 +636,21 @@ export class NVMSerializer {
 				// set size at the start
 				this.setOne<number>(moduleKey!, moduleSize);
 				// and descriptor at the end
-				const moduleType =
-					entry.name === "nvmZWlibraryDescriptor"
-						? NVMModuleType.ZW_LIBRARY
-						: entry.name === "nvmApplicationDescriptor"
-						? NVMModuleType.APPLICATION
-						: entry.name === "nvmHostApplicationDescriptor"
-						? NVMModuleType.HOST_APPLICATION
-						: entry.name === "nvmDescriptorDescriptor"
-						? NVMModuleType.NVM_DESCRIPTOR
-						: 0;
+				const moduleType = entry.name === "nvmZWlibraryDescriptor"
+					? NVMModuleType.ZW_LIBRARY
+					: entry.name === "nvmApplicationDescriptor"
+					? NVMModuleType.APPLICATION
+					: entry.name === "nvmHostApplicationDescriptor"
+					? NVMModuleType.HOST_APPLICATION
+					: entry.name === "nvmDescriptorDescriptor"
+					? NVMModuleType.NVM_DESCRIPTOR
+					: 0;
 				this.setOne<NVMModuleDescriptor>(entry.name, {
 					size: moduleSize,
 					type: moduleType,
-					version:
-						entry.name === "nvmZWlibraryDescriptor"
-							? c.protocolVersion
-							: c.applicationVersion,
+					version: entry.name === "nvmZWlibraryDescriptor"
+						? c.protocolVersion
+						: c.applicationVersion,
 				});
 			}
 		}

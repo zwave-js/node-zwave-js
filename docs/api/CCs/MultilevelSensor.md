@@ -8,24 +8,24 @@
 
 ```ts
 async get(): Promise<
-	(MultilevelSensorValue & { type: number }) | undefined
+	MaybeNotKnown<MultilevelSensorValue & { type: number }>
 >;
 
 async get(
 	sensorType: number,
-): Promise<MultilevelSensorValue | undefined>;
+): Promise<MaybeNotKnown<MultilevelSensorValue>>;
 
 async get(
 	sensorType: number,
 	scale: number,
-): Promise<number | undefined>;
+): Promise<MaybeNotKnown<number>>;
 ```
 
 ### `getSupportedSensorTypes`
 
 ```ts
 async getSupportedSensorTypes(): Promise<
-	readonly number[] | undefined
+	MaybeNotKnown<readonly number[]>
 >;
 ```
 
@@ -34,7 +34,7 @@ async getSupportedSensorTypes(): Promise<
 ```ts
 async getSupportedScales(
 	sensorType: number,
-): Promise<readonly number[] | undefined>;
+): Promise<MaybeNotKnown<readonly number[]>>;
 ```
 
 ### `sendReport`
@@ -59,10 +59,10 @@ async sendReport(
 }
 ```
 
--   **label:** _(dynamic)_
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** _(dynamic)_
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`

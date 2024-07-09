@@ -1,7 +1,7 @@
 import { BinarySwitchCommand, EntryControlCommand } from "@zwave-js/cc";
 import { BinarySwitchCCReport } from "@zwave-js/cc/BinarySwitchCC";
 import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
-import { CommandClasses, type CommandClassInfo } from "@zwave-js/core";
+import { type CommandClassInfo, CommandClasses } from "@zwave-js/core";
 import test from "ava";
 import sinon from "sinon";
 import type { Driver } from "../../driver/Driver";

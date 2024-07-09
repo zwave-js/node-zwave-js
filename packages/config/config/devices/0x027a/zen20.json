@@ -2,7 +2,7 @@
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN20",
-	"description": "Z-Wave Plus Power Strip, VER. 2.0",
+	"description": "Z-Wave Plus Power Strip",
 	"devices": [
 		{
 			"productType": "0xa000",
@@ -28,8 +28,8 @@
 		{
 			"#": "3",
 			"label": "Power (W) Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 2678400,
 			"defaultValue": 30
@@ -37,8 +37,8 @@
 		{
 			"#": "4",
 			"label": "Energy (kWh) Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 2678400,
 			"defaultValue": 300
@@ -47,8 +47,8 @@
 			"#": "35",
 			"$if": "firmwareVersion >= 2.3",
 			"label": "Current (A) Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 2678400,
 			"defaultValue": 30
@@ -57,8 +57,8 @@
 			"#": "36",
 			"$if": "firmwareVersion >= 2.3",
 			"label": "Voltage (V) Report Interval",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 5,
 			"maxValue": 2678400,
 			"defaultValue": 30
@@ -66,8 +66,8 @@
 		{
 			"#": "5",
 			"label": "Overload Protection",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 1500,
 			"defaultValue": 1500

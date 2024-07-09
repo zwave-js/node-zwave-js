@@ -69,13 +69,32 @@
 			"remove": {
 				// At least in FW 33.16 the lock always responds with Supervision session ID 0,
 				// which means Z-Wave JS cannot map the response to the request
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}
 		},
 		// The lock is sometimes a bit slow to respond
-		"reportTimeout": 5000
+		"reportTimeout": 5000,
+		// The lock claims to have 20 schedule slots per user,
+		// but it has 20 users with 1 schedule slot each
+		"overrideQueries": {
+			"Schedule Entry Lock": [
+				{
+					"method": "getNumSlots",
+					"result": {
+						"numWeekDaySlots": 0,
+						"numYearDaySlots": 0,
+						"numDailyRepeatingSlots": 1
+					},
+					"persistValues": {
+						"numWeekDaySlots": 0,
+						"numYearDaySlots": 0,
+						"numDailyRepeatingSlots": 1
+					}
+				}
+			]
+		}
 	},
 	"metadata": {
 		"inclusion": "Put the Z-Wave controller into add mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 1 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the add/inclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",

@@ -1,0 +1,77 @@
+{
+	"manufacturer": "LG U+",
+	"manufacturerId": "0x0233",
+	"label": "SSE-304",
+	"description": "IoT Switch",
+	"devices": [
+		{
+			"productType": "0x0059",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3051
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Switch 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch 2",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Switch 3",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Temperature & Humidity Reporting Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Temperature Change Report Threshold",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 10,
+			"maxValue": 30,
+			"defaultValue": 20
+		},
+		{
+			"#": "3",
+			"label": "Humidity Change Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 20,
+			"defaultValue": 10
+		}
+	],
+	"metadata": {
+		"inclusion": "▶ Add / Remove by the button in the bottom (3rd Button)\n▶ Press the 3rd button for above 5 seconds,\n- Then, red color LED blinks every 0.5 second 6 times.\n- At this time released the button during the red color LED\n blinking.\n- Then, ZWAVE Add / Remove operation is started.\n- Over 30 seconds, Inclusion/ Exclusion mode is stopped",
+		"exclusion": "▶ Press the 3rd button for above 5 seconds,\n- Then, red color LED blinks every 0.5 second 6 times.\n- At this time released the button during the red color LED\n blinking.\n- Then, ZWAVE Add / Remove operation is started.\n- Over 30 seconds, Inclusion/ Exclusion mode is stopped",
+		"reset": "1) Hold the low touch button for 10 seconds.\n- Keep holding the button, then at 5 second, red LED of 3rd\n button is blinking 6 times and keep holding10 seconds\n later, red LED of 3rd is blinking 6 times again. In this time\n factory reset will be started if you release the button.\n2) After factory reset is done, all the lamps will be turned off\n and all variables will be initialized to default values.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3051/Switch_Product_Manual_For_Certification_0801R.pdf"
+	}
+}

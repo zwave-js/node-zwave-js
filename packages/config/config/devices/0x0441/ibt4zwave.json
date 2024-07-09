@@ -2,7 +2,7 @@
 	"manufacturer": "NICE Spa",
 	"manufacturerId": "0x0441",
 	"label": "IBT4ZWAVE",
-	"description": "BusT4-Z-Wave interface",
+	"description": "BusT4-Z-Wave Interface",
 	"devices": [
 		{
 			"productType": "0x2400",
@@ -29,35 +29,35 @@
 					"value": 0
 				},
 				{
-					"label": "Smoke Alarm",
+					"label": "Smoke alarm",
 					"value": 1
 				},
 				{
-					"label": "CO Alarm",
+					"label": "CO alarm",
 					"value": 2
 				},
 				{
-					"label": "CO2 Alarm",
+					"label": "CO2 alarm",
 					"value": 3
 				},
 				{
-					"label": "Heat Alarm",
+					"label": "Heat alarm",
 					"value": 4
 				},
 				{
-					"label": "Water Alarm",
+					"label": "Water alarm",
 					"value": 5
 				},
 				{
-					"label": "Access Control",
+					"label": "Access control",
 					"value": 6
 				},
 				{
-					"label": "Home Security",
+					"label": "Home security",
 					"value": 7
 				},
 				{
-					"label": "Power Management",
+					"label": "Power management",
 					"value": 8
 				},
 				{
@@ -65,7 +65,7 @@
 					"value": 9
 				},
 				{
-					"label": "Emergency Alarm",
+					"label": "Emergency alarm",
 					"value": 10
 				},
 				{
@@ -77,7 +77,7 @@
 					"value": 12
 				},
 				{
-					"label": "Home Health",
+					"label": "Home health",
 					"value": 13
 				},
 				{
@@ -85,11 +85,11 @@
 					"value": 14
 				},
 				{
-					"label": "Water Valve",
+					"label": "Water valve",
 					"value": 15
 				},
 				{
-					"label": "Weather Alarm",
+					"label": "Weather alarm",
 					"value": 16
 				},
 				{
@@ -97,23 +97,23 @@
 					"value": 17
 				},
 				{
-					"label": "Gas Alarm",
+					"label": "Gas alarm",
 					"value": 18
 				},
 				{
-					"label": "Pest Control",
+					"label": "Pest control",
 					"value": 19
 				},
 				{
-					"label": "Light Sensor",
+					"label": "Light sensor",
 					"value": 20
 				},
 				{
-					"label": "Water Quality Monitoring",
+					"label": "Water quality monitoring",
 					"value": 21
 				},
 				{
-					"label": "Home Monitoring",
+					"label": "Home monitoring",
 					"value": 22
 				}
 			]
@@ -128,7 +128,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Any Notification,",
+					"label": "Any notification",
 					"value": 255
 				},
 				{
@@ -156,7 +156,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "No Action",
+					"label": "No action",
 					"value": 0
 				},
 				{
@@ -271,5 +271,16 @@
 		"exclusion": "01. Set the Z-Wave gateway into remove mode (see the Z-Wave gateway’s manual)\n02. On the IBT4ZWAVE press and release the S1 button 3 times x3 S1\n03. LEDs on the IBT4ZW AVE will start slow flashing alternately\n04. Wait for the removing process to end",
 		"reset": "01. Press and hold the S1 button\n03. Wait 3 seconds\n04. LEDs will show adding and antenna status (Table 1 in manual) for 3 seconds\n05. LEDs will turn off for 3 seconds\n06. LEDs will show selected antenna (Table 2 in manual) for 3 seconds\n07. When both LEDs light up simultaneously, release the button\n08. Press and release the S1 button\n09. Both LEDs will flash once at the end of the procedure",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3837/IBT4ZWAVE-T-v0.7.pdf"
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device does not support Supervision correctly. Starting a level change always fails
+				// https://github.com/zwave-js/node-zwave-js/issues/6049
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
 	}
 }

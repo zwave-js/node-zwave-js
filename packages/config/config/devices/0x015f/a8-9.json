@@ -6,12 +6,16 @@
 	"devices": [
 		{
 			"productType": "0xa803",
-			"productId": "0x135a",
-			"zwaveAllianceId": [3456, 3995]
+			"productId": "0x1351"
 		},
 		{
 			"productType": "0xa803",
 			"productId": "0x1352"
+		},
+		{
+			"productType": "0xa803",
+			"productId": "0x135a",
+			"zwaveAllianceId": [3456, 3995]
 		}
 	],
 	"firmwareVersion": {
@@ -29,12 +33,11 @@
 		{
 			"#": "1",
 			"label": "PM2.5 Sensor: Change Report Threshold",
-			"unit": "µg/m³",
 			"valueSize": 1,
+			"unit": "µg/m³",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -45,12 +48,11 @@
 		{
 			"#": "2",
 			"label": "CO2 Sensor: Change Report Threshold",
-			"unit": "5 ppm",
 			"valueSize": 1,
+			"unit": "5 ppm",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -61,12 +63,11 @@
 		{
 			"#": "3",
 			"label": "Temperature Sensor: Change Report Threshold",
-			"unit": "0.5 °C",
 			"valueSize": 1,
+			"unit": "0.5 °C",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -77,12 +78,11 @@
 		{
 			"#": "4",
 			"label": "Humidity Sensor: Change Report Threshold",
-			"unit": "%rF",
 			"valueSize": 1,
+			"unit": "%rF",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -93,12 +93,11 @@
 		{
 			"#": "5",
 			"label": "VOC Sensor: Change Report Threshold",
-			"unit": "5 ppb",
 			"valueSize": 1,
+			"unit": "5 ppb",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -109,12 +108,11 @@
 		{
 			"#": "6",
 			"label": "Brightness Sensor: Change Report Threshold",
-			"unit": "lux",
 			"valueSize": 2,
+			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -125,12 +123,11 @@
 		{
 			"#": "7",
 			"label": "dB Sensor: Change Report Threshold",
-			"unit": "dB",
 			"valueSize": 1,
+			"unit": "dB",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -143,7 +140,6 @@
 			"label": "PIR Sensor: Report Changes",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -163,7 +159,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -179,12 +174,11 @@
 			"#": "10",
 			"label": "Smoke Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 60,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -196,12 +190,11 @@
 			"#": "11",
 			"label": "PIR Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 60,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -213,12 +206,11 @@
 			"#": "12",
 			"label": "PM2.5 Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -230,12 +222,11 @@
 			"#": "13",
 			"label": "CO2 Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -247,12 +238,11 @@
 			"#": "14",
 			"label": "Temperature Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 180,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -264,12 +254,11 @@
 			"#": "15",
 			"label": "Humidity Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 180,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -281,12 +270,11 @@
 			"#": "16",
 			"label": "VOC Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 180,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -298,12 +286,11 @@
 			"#": "17",
 			"label": "Brightness Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 300,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -315,12 +302,11 @@
 			"#": "18",
 			"label": "dB Sensor: Auto-Report Timer",
 			"description": "Allowable Range: 35-32767 s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 300,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -333,7 +319,6 @@
 			"label": "Temperature Unit",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -350,8 +335,8 @@
 			"#": "50",
 			"label": "Temperature Offset",
 			"description": "Offset = value minus 100. Example: 91 => -0.9 °",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
@@ -361,30 +346,28 @@
 			"#": "51",
 			"label": "Humidity Offset",
 			"description": "Offset = value minus 20. Example: 33 => +13 %",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 40,
-			"defaultValue": 20,
-			"unsigned": true
+			"defaultValue": 20
 		},
 		{
 			"#": "52",
 			"label": "CO2 Offset",
 			"description": "Offset = value minus 500. Example: 999 => +499 ppm",
-			"unit": "ppm",
 			"valueSize": 2,
+			"unit": "ppm",
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 500,
-			"unsigned": true
+			"defaultValue": 500
 		},
 		{
 			"#": "53",
 			"label": "PM2.5 Offset",
 			"description": "Offset = value minus 100. Example: 101 => +1 µg/m³",
-			"unit": "µg/m³",
 			"valueSize": 1,
+			"unit": "µg/m³",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
@@ -394,19 +377,18 @@
 			"#": "54",
 			"label": "Brightness Offset",
 			"description": "Offset = value minus 5000. Example: 49 => -4951 lux",
-			"unit": "lux",
 			"valueSize": 2,
+			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 10000,
-			"defaultValue": 5000,
-			"unsigned": true
+			"defaultValue": 5000
 		},
 		{
 			"#": "55",
 			"label": "VOC Offset",
 			"description": "Offset = value minus 100. Example: 101 => +1 ppb",
-			"unit": "ppb",
 			"valueSize": 1,
+			"unit": "ppb",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
@@ -416,12 +398,11 @@
 			"#": "56",
 			"label": "dB Offset",
 			"description": "Offset = value minus 50. Example: 98 => +48 dB",
-			"unit": "dB",
 			"valueSize": 1,
+			"unit": "dB",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50,
-			"unsigned": true
+			"defaultValue": 50
 		},
 		{
 			"#": "255",

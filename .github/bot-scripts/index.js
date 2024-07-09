@@ -8,6 +8,8 @@ module.exports = {
 	approveWorkflows: (...args) => require("./approveWorkflows")(...args),
 	checkAuthorized: (...args) => require("./checkAuthorized")(...args),
 	ensureLogfile: (...args) => require("./ensureLogfile")(...args),
+	ensureLogfileInDiscussion: (...args) =>
+		require("./ensureLogfileInDiscussion")(...args),
 	fixLintFeedback: (...args) => require("./fixLintFeedback")(...args),
 	getFixLintInfo: (...args) => require("./getFixLintInfo")(...args),
 	rebaseFeedback: (...args) => require("./rebaseFeedback")(...args),
@@ -18,4 +20,6 @@ module.exports = {
 		require("./renameCommitFeedback")(...args),
 	importConfigCreatePR: (...args) =>
 		require("./importConfigCreatePR")(...args),
+	shouldAutomerge: (...args) => require("./shouldAutomerge")(...args),
+	packPr: (...args) => require("./packPr")(...args),
 };

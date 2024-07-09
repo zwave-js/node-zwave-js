@@ -36,42 +36,28 @@
 					"value": 0
 				},
 				{
-					"label": "0.5F",
+					"label": "0.5 °F",
 					"value": 1
 				},
 				{
-					"label": "1.0F",
+					"label": "1.0 °F",
 					"value": 2
 				},
 				{
-					"label": "1.5F",
+					"label": "1.5 °F",
 					"value": 3
 				},
 				{
-					"label": "2.0F",
+					"label": "2.0 °F",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Utility Lock Enable/Disable",
-			"description": "Enables or Disables the Utility Lock.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Utility lock disable",
-					"value": 0
-				},
-				{
-					"label": "Utility lock enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Utility Lock",
+			"description": "Enables or Disables the Utility Lock."
 		},
 		{
 			"#": "5",
@@ -86,36 +72,24 @@
 					"value": 0
 				},
 				{
-					"label": "3%RH",
+					"label": "3 %rH",
 					"value": 1
 				},
 				{
-					"label": "5%RH",
+					"label": "5 %rH",
 					"value": 2
 				},
 				{
-					"label": "10%RH",
+					"label": "10 %rH",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Auxiliary/Emergency",
-			"description": "Enables or Disables the Aux / Emergency Heat.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Auxiliary/Emergency heat disable",
-					"value": 0
-				},
-				{
-					"label": "Auxiliary/Emergency heat enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auxiliary/Emergency Heat",
+			"description": "Enables or Disables the Aux / Emergency Heat."
 		},
 		{
 			"#": "7",
@@ -126,35 +100,35 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0.0F",
+					"label": "0.0 °F",
 					"value": 1
 				},
 				{
-					"label": "1F",
+					"label": "1.0 °F",
 					"value": 2
 				},
 				{
-					"label": "1.5F",
+					"label": "1.5 °F",
 					"value": 3
 				},
 				{
-					"label": "2F",
+					"label": "2.0 °F",
 					"value": 4
 				},
 				{
-					"label": "2.5F",
+					"label": "2.5 °F",
 					"value": 5
 				},
 				{
-					"label": "3F",
+					"label": "3.0 °F",
 					"value": 6
 				},
 				{
-					"label": "3.5F",
+					"label": "3.5 °F",
 					"value": 7
 				},
 				{
-					"label": "4F",
+					"label": "4.0 °F",
 					"value": 8
 				}
 			]
@@ -171,57 +145,35 @@
 		{
 			"#": "9",
 			"label": "Thermostat Recovery Mode",
-			"description": "This parameter defines the thermostat recovery mode.",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Recovery Mode is set to fast.",
+					"label": "Fast",
 					"value": 1
 				},
 				{
-					"label": "Recovery Mode is set to economy.",
+					"label": "Economy",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Simple UI Mode Enable/Disable",
-			"description": "Enables or Disables Simple UI Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Simple UI Mode Disabled",
-					"value": 0
-				},
-				{
-					"label": "Simple UI Mode Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Simple UI Mode",
+			"defaultValue": 1
 		},
 		{
 			"#": "12",
-			"label": "Multicast Enable/Disable",
-			"description": "If set to 0, multicast is disabled, if set to 1, will enable the multicast.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Multicast Disabled",
-					"value": 0
-				},
-				{
-					"label": "Function is enabled.",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Multicast"
 		}
-	]
+	],
+	"compat": {
+		// The device has two endpoints, but all reports are received via the root.
+		"preserveRootApplicationCCValueIDs": true,
+		"removeEndpoints": "*"
+	}
 }

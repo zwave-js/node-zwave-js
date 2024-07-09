@@ -1,12 +1,11 @@
 export {
-	DataRate,
-	FLiRS,
-	NodeType,
 	NODE_ID_BROADCAST,
 	NODE_ID_MAX,
+	NodeType,
 	ProtocolDataRate,
 	ProtocolVersion,
 } from "@zwave-js/core/safe";
+export type { DataRate, FLiRS } from "@zwave-js/core/safe";
 export { DeviceClass } from "./lib/node/DeviceClass";
 export type {
 	NodeStatistics,

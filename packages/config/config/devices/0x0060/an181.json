@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Command value",
+			"label": "Command Value",
 			"description": "Set Basic Set Command value to be sent to group 2 when switch is turned on",
 			"valueSize": 2,
 			"minValue": 0,
@@ -24,28 +24,28 @@
 			"defaultValue": 255,
 			"options": [
 				{
-					"label": "No Basic Set Command will be sent",
+					"label": "No Basic Set command will be sent",
 					"value": 0
 				},
 				{
-					"label": "Basic Set Command ON will be sent",
+					"label": "Basic Set command on will be sent",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Delaying time",
+			"label": "Delaying Time",
 			"description": "Set the delaying time to report to Group 1 in seconds",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 3,
 			"maxValue": 25,
 			"defaultValue": 3
 		},
 		{
 			"#": "3",
-			"label": "Remember status",
+			"label": "Remember Status",
 			"description": "Set whether to remember the last status",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -63,9 +63,9 @@
 		},
 		{
 			"#": "4",
-			"label": "Interval for wattage auto report",
-			"unit": "minutes",
+			"label": "Interval for Wattage Auto Report",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 1,
@@ -78,9 +78,9 @@
 		},
 		{
 			"#": "5",
-			"label": "Interval for kW*h auto report",
-			"unit": "minutes",
+			"label": "Interval for kW*h Auto Report",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 60,
@@ -93,9 +93,9 @@
 		},
 		{
 			"#": "6",
-			"label": "Auto report load surpasses value",
-			"unit": "W",
+			"label": "Auto Report Load Surpasses Value",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 2500,
 			"defaultValue": 0,
@@ -108,10 +108,10 @@
 		},
 		{
 			"#": "7",
-			"label": "Auto report change percentage",
+			"label": "Auto Report Change Percentage",
 			"description": "Auto report when the change of wattage surpasses the set percentage",
-			"unit": "Percent",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,

@@ -1,22 +1,26 @@
 import {
 	CommandClasses,
-	Maybe,
-	MessageOrCCLogEntry,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	validatePayload,
+	type MessageRecord,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -31,7 +35,7 @@ import { V } from "../lib/Values";
 import {
 	DoorLockLoggingCommand,
 	DoorLockLoggingEventType,
-	DoorLockLoggingRecord,
+	type DoorLockLoggingRecord,
 	DoorLockLoggingRecordStatus,
 } from "../lib/_Types";
 import { userCodeToLogString } from "./UserCodeCC";
@@ -103,7 +107,9 @@ export const DoorLockLoggingCCValues = Object.freeze({
 
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: DoorLockLoggingCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: DoorLockLoggingCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case DoorLockLoggingCommand.RecordsSupportedGet:
 			case DoorLockLoggingCommand.RecordsSupportedReport:
@@ -114,7 +120,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getRecordsCount(): Promise<number | undefined> {
+	public async getRecordsCount(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordsSupportedGet,
@@ -124,11 +130,12 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<DoorLockLoggingCCRecordsSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			DoorLockLoggingCCRecordsSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.recordsCount;
 	}
 
@@ -136,7 +143,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async getRecord(
 		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
-	): Promise<DoorLockLoggingRecord | undefined> {
+	): Promise<MaybeNotKnown<DoorLockLoggingRecord>> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordGet,
@@ -147,11 +154,12 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			recordNumber,
 		});
-		const response =
-			await this.applHost.sendCommand<DoorLockLoggingCCRecordReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			DoorLockLoggingCCRecordReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.record;
 	}
 }
@@ -231,9 +239,9 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	@ccValue(DoorLockLoggingCCValues.recordsCount)
 	public readonly recordsCount: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported no. of records": this.recordsCount,
 			},
@@ -243,8 +251,8 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 
 function eventTypeToLabel(eventType: DoorLockLoggingEventType): string {
 	return (
-		(eventTypeLabel as any)[DoorLockLoggingEventType[eventType]] ??
-		`Unknown ${num2hex(eventType)}`
+		(eventTypeLabel as any)[DoorLockLoggingEventType[eventType]]
+			?? `Unknown ${num2hex(eventType)}`
 	);
 }
 
@@ -283,7 +291,10 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				this.payload.length >= 11 + userCodeLength,
 			);
 
-			const userCodeBuffer = this.payload.slice(11, 11 + userCodeLength);
+			const userCodeBuffer = this.payload.subarray(
+				11,
+				11 + userCodeLength,
+			);
 			// See User Code CC for a detailed description. We try to parse the code as ASCII if possible
 			// and fall back to a buffer otherwise.
 			const userCodeString = userCodeBuffer.toString("utf8");
@@ -304,7 +315,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public readonly recordNumber: number;
 	public readonly record?: DoorLockLoggingRecord;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 
 		if (!this.record) {
@@ -327,13 +338,14 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			}
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
-interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
 	recordNumber: number;
 }
 
@@ -342,8 +354,8 @@ function testResponseForDoorLockLoggingRecordGet(
 	received: DoorLockLoggingCCRecordReport,
 ) {
 	return (
-		sent.recordNumber === LATEST_RECORD_NUMBER_KEY ||
-		sent.recordNumber === received.recordNumber
+		sent.recordNumber === LATEST_RECORD_NUMBER_KEY
+		|| sent.recordNumber === received.recordNumber
 	);
 }
 
@@ -377,9 +389,9 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "record number": this.recordNumber },
 		};
 	}

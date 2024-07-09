@@ -16,10 +16,10 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Watt counter reporting period",
+			"label": "Watt Counter Reporting Period",
 			"description": "multiples of 5s",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 720,
@@ -32,10 +32,10 @@
 		},
 		{
 			"#": "2",
-			"label": "KWh counter reporting period",
+			"label": "KWh Counter Reporting Period",
 			"description": "number of 10 minute intervals",
-			"unit": "10m",
 			"valueSize": 2,
+			"unit": "10m",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 6,
@@ -48,17 +48,17 @@
 		},
 		{
 			"#": "3",
-			"label": "Definition of warning of current load (A)",
+			"label": "Definition of Warning of Current Load (A)",
 			"description": "1300*0.01A = 13A",
-			"unit": "0.01A",
 			"valueSize": 2,
+			"unit": "0.01A",
 			"minValue": 10,
 			"maxValue": 1300,
 			"defaultValue": 1300
 		},
 		{
 			"#": "4",
-			"label": "load caution threshold",
+			"label": "Load Caution Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
@@ -66,58 +66,40 @@
 		},
 		{
 			"#": "5",
-			"label": "Mode for restoring status",
-			"description": "Restore switch state mode.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch will remain Off.",
-					"value": 0
-				},
-				{
-					"label": "resume previous state",
-					"value": 1
-				},
-				{
-					"label": "Switch will turn On.",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "6",
-			"label": "Switch OFF mode",
+			"label": "Switch OFF Mode",
 			"description": "Mode of switch off function.",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "SWITCH OFF commands received are ignored.",
+					"label": "Switch off commands received are ignored",
 					"value": 0
 				},
 				{
-					"label": "SWITCH OFF commands received are honored.",
+					"label": "Switch off commands received are honored",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "LED display mode",
+			"label": "LED Display Mode",
 			"description": "Display device status",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The LED follows the state of the switch.",
+					"label": "The LED follows the state of the switch",
 					"value": 1
 				},
 				{
-					"label": "LED off with load ON",
+					"label": "LED off with load on",
 					"value": 2
 				},
 				{
@@ -128,10 +110,10 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto off timer",
+			"label": "Auto Off Timer",
 			"description": "Auto off timer. 0 will disable the auto off function.",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
@@ -144,26 +126,26 @@
 		},
 		{
 			"#": "9",
-			"label": "Device from command status",
+			"label": "Device From Command Status",
 			"description": "RF off command mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "When ALL OFF is received, MT2792 goes Off.",
+					"label": "When all off is received, MT2792 goes off",
 					"value": 0
 				},
 				{
-					"label": "Ignore ALL OFF",
+					"label": "Ignore all off",
 					"value": 1
 				},
 				{
-					"label": "If ALL OFF is received, turn ON if it is OFF",
+					"label": "If all off is received, turn on if it is off",
 					"value": 2
 				},
 				{
-					"label": "WhenALL OFF is received, the MT2792 goes On.",
+					"label": "WhenALL off is received, the MT2792 goes on",
 					"value": 3
 				}
 			]

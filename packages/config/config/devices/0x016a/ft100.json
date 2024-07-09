@@ -36,8 +36,7 @@
 			"maxNodes": 5
 		}
 	},
-	//Fantem is an OEM for Aeotec
-	//Fantem is an OEM for Aeotec
+	// Fantem is an OEM for Aeotec
 	"paramInformation": [
 		{
 			"#": "2",
@@ -57,8 +56,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "5",
@@ -113,8 +111,8 @@
 			"#": "41[0xffff00]",
 			"$if": "firmwareVersion > 1.6 && firmwareVersion <= 1.9",
 			"label": "Temperature Change Threshold",
-			"unit": "0.1 °C/°F",
 			"valueSize": 3,
+			"unit": "0.1 °C/°F",
 			"minValue": 10,
 			"maxValue": 2120,
 			"defaultValue": 20
@@ -123,8 +121,8 @@
 			"#": "41[0xffff00]",
 			"$if": "firmwareVersion >= 1.10",
 			"label": "Temperature Change Threshold",
-			"unit": "0.1 °C/°F",
 			"valueSize": 4,
+			"unit": "0.1 °C/°F",
 			"minValue": 10,
 			"maxValue": 2120,
 			"defaultValue": 20
@@ -285,8 +283,7 @@
 			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 30000,
-			"defaultValue": 1000,
-			"unsigned": true
+			"defaultValue": 1000
 		},
 		{
 			"#": "54",
@@ -295,8 +292,7 @@
 			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 30000,
-			"defaultValue": 100,
-			"unsigned": true
+			"defaultValue": 100
 		},
 		{
 			"#": "55",
@@ -304,8 +300,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
-			"defaultValue": 8,
-			"unsigned": true
+			"defaultValue": 8
 		},
 		{
 			"#": "56",
@@ -313,8 +308,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
-			"defaultValue": 4,
-			"unsigned": true
+			"defaultValue": 4
 		},
 		{
 			"#": "57[0xff00]",
@@ -538,7 +532,7 @@
 	],
 	"compat": {
 		// In the default configuration this device sends Basic CC Sets instead of Binary Sensor Reports
-		"enableBasicSetMapping": true
+		"mapBasicSet": "Binary Sensor"
 	},
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Z-Wave button that you can find in the back of the product",

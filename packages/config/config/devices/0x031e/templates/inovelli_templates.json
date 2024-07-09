@@ -1,0 +1,394 @@
+{
+	"hue_color_wheel_white": {
+		"minValue": 0,
+		"maxValue": 255,
+		"unsigned": true,
+		"description": "Uses a scaled hue value (realHue / 360 * 254).",
+		"options": [
+			{
+				"label": "Red",
+				"value": 0
+			},
+			{
+				"label": "Orange",
+				"value": 7
+			},
+			{
+				"label": "Lemon",
+				"value": 28
+			},
+			{
+				"label": "Lime",
+				"value": 64
+			},
+			{
+				"label": "Green",
+				"value": 85
+			},
+			{
+				"label": "Teal",
+				"value": 106
+			},
+			{
+				"label": "Cyan",
+				"value": 127
+			},
+			{
+				"label": "Aqua",
+				"value": 148
+			},
+			{
+				"label": "Blue",
+				"value": 170
+			},
+			{
+				"label": "Violet",
+				"value": 190
+			},
+			{
+				"label": "Magenta",
+				"value": 212
+			},
+			{
+				"label": "Pink",
+				"value": 234
+			},
+			{
+				"label": "White",
+				"value": 255
+			}
+		]
+	},
+	"dimming_speed_0_255_sync_1": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Immediate",
+				"value": 0
+			},
+			{
+				"label": "500 ms",
+				"value": 5
+			},
+			{
+				"label": "1 second",
+				"value": 10
+			},
+			{
+				"label": "2 seconds",
+				"value": 20
+			},
+			{
+				"label": "3 seconds",
+				"value": 30
+			},
+			{
+				"label": "Sync with Parameter 1",
+				"value": 255
+			}
+		]
+	},
+	"dimming_speed_0_255_sync_2": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Immediate",
+				"value": 0
+			},
+			{
+				"label": "500 ms",
+				"value": 5
+			},
+			{
+				"label": "1 second",
+				"value": 10
+			},
+			{
+				"label": "2 seconds",
+				"value": 20
+			},
+			{
+				"label": "3 seconds",
+				"value": 30
+			},
+			{
+				"label": "Sync with Parameter 2",
+				"value": 255
+			}
+		]
+	},
+	"dimming_speed_0_255_sync_3": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Immediate",
+				"value": 0
+			},
+			{
+				"label": "500 ms",
+				"value": 5
+			},
+			{
+				"label": "1 second",
+				"value": 10
+			},
+			{
+				"label": "2 seconds",
+				"value": 20
+			},
+			{
+				"label": "3 seconds",
+				"value": 30
+			},
+			{
+				"label": "Sync with Parameter 3",
+				"value": 255
+			}
+		]
+	},
+	"dimming_speed_0_255_sync_4": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"description": "5-100 = 100 ms (500 ms - 10 seconds); 101-160 = seconds (minus 100); 161-254 = minutes (minus 160)",
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Immediate",
+				"value": 0
+			},
+			{
+				"label": "500 ms",
+				"value": 5
+			},
+			{
+				"label": "1 second",
+				"value": 10
+			},
+			{
+				"label": "2 seconds",
+				"value": 20
+			},
+			{
+				"label": "3 seconds",
+				"value": 30
+			},
+			{
+				"label": "Sync with Parameter 4",
+				"value": 255
+			}
+		]
+	},
+	"level_1-99_0_previous": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 0
+			}
+		]
+	},
+	"level_0-99_100_previous": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 100,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 100
+			}
+		]
+	},
+	"led_effect_duration": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"description": "1-60 = seconds; 61-120 = minutes (minus 60); 121-254 = hours (minus 120)",
+		"options": [
+			{
+				"label": "Indefinitely",
+				"value": 255
+			}
+		]
+	},
+	"led_effect_level": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 100,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"led_effect_color": {
+		"$import": "#hue_color_wheel_white",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"led_effect_effect": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Off",
+				"value": 0
+			},
+			{
+				"label": "Solid",
+				"value": 1
+			},
+			{
+				"label": "Fast blink",
+				"value": 2
+			},
+			{
+				"label": "Slow blink",
+				"value": 3
+			},
+			{
+				"label": "Pulse",
+				"value": 4
+			},
+			{
+				"label": "Chase",
+				"value": 5
+			},
+			{
+				"label": "Falling",
+				"value": 6
+			},
+			{
+				"label": "Rising",
+				"value": 7
+			},
+			{
+				"label": "Aurora",
+				"value": 8
+			},
+			{
+				"label": "Clear",
+				"value": 255
+			}
+		]
+	},
+	"all_led_effect_effect": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Off",
+				"value": 0
+			},
+			{
+				"label": "Solid",
+				"value": 1
+			},
+			{
+				"label": "Fast blink",
+				"value": 2
+			},
+			{
+				"label": "Slow blink",
+				"value": 3
+			},
+			{
+				"label": "Pulse",
+				"value": 4
+			},
+			{
+				"label": "Chase",
+				"value": 5
+			},
+			{
+				"label": "Open/close",
+				"value": 6
+			},
+			{
+				"label": "Small to big",
+				"value": 7
+			},
+			{
+				"label": "Aurora",
+				"value": 8
+			},
+			{
+				"label": "Slow fall",
+				"value": 9
+			},
+			{
+				"label": "Medium fall",
+				"value": 10
+			},
+			{
+				"label": "Fast fall",
+				"value": 11
+			},
+			{
+				"label": "Slow rise",
+				"value": 12
+			},
+			{
+				"label": "Medium rise",
+				"value": 13
+			},
+			{
+				"label": "Fast rise",
+				"value": 14
+			},
+			{
+				"label": "Medium blink",
+				"value": 15
+			},
+			{
+				"label": "Slow chase",
+				"value": 16
+			},
+			{
+				"label": "Fast chase",
+				"value": 17
+			},
+			{
+				"label": "Fast siren",
+				"value": 18
+			},
+			{
+				"label": "Slow siren",
+				"value": 19
+			},
+			{
+				"label": "Clear",
+				"value": 255
+			}
+		]
+	}
+}

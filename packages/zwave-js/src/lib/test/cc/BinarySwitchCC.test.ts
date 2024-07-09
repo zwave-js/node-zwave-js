@@ -30,27 +30,30 @@ test("the Get command should serialize correctly", (t) => {
 	t.deepEqual(cc.serialize(), expected);
 });
 
-test("the Set command (v1) should serialize correctly", (t) => {
+test("the Set command should serialize correctly (no duration)", (t) => {
 	const cc = new BinarySwitchCCSet(host, {
 		nodeId: 2,
 		targetValue: false,
 	});
+	cc.version = 1;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BinarySwitchCommand.Set, // CC Command
 			0x00, // target value
+			0xff, // default duration
 		]),
 	);
 	t.deepEqual(cc.serialize(), expected);
 });
 
-test("the Set command (v2) should serialize correctly", (t) => {
+test("the Set command should serialize correctly", (t) => {
 	const duration = new Duration(2, "minutes");
 	const cc = new BinarySwitchCCSet(host, {
 		nodeId: 2,
 		targetValue: true,
 		duration,
 	});
+	cc.version = 2;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BinarySwitchCommand.Set, // CC Command

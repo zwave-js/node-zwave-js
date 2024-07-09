@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZM1601-5",
-	"description": "Siren with LED strobe light",
+	"description": "Siren with LED Strobe Light",
 	"devices": [
 		{
 			"productType": "0x2005",
@@ -34,8 +34,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "2",
@@ -44,8 +43,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

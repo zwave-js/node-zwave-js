@@ -17,10 +17,10 @@ interface ValueID {
 
 It has four properties:
 
--   `commandClass` - The numeric identifier of the command class.
--   `endpoint` - _(optional)_ The index of the node's endpoint (sub-device). `0`, `undefined` and omitting the index addresses the root device (in fact, these options can be used interchangeably). An index `>= 1` addresses one of the single endpoints.
--   `property` - The name (or a numeric identifier) of the property, for example `targetValue`
--   `propertyKey` - _(optional)_ Allows sub-addressing properties that contain multiple values (like combined sensors).
+- `commandClass` - The numeric identifier of the command class.
+- `endpoint` - _(optional)_ The index of the node's endpoint (sub-device). `0`, `undefined` and omitting the index addresses the root device (in fact, these options can be used interchangeably). An index `>= 1` addresses one of the single endpoints.
+- `property` - The name (or a numeric identifier) of the property, for example `targetValue`
+- `propertyKey` - _(optional)_ Allows sub-addressing properties that contain multiple values (like combined sensors).
 
 These can be considered to represent an hierarchical structure, like the following:
 ![ValueID structure](../_images/value-id-structure.png)
@@ -55,16 +55,20 @@ interface ValueMetadataAny {
 	label?: string;
 	ccSpecific?: Record<string, any>;
 	valueChangeOptions?: (keyof ValueChangeOptions)[];
+	stateful: boolean;
+	secret: boolean;
 }
 ```
 
--   `type`: The type of the value. Can be: `any`, `number`, `boolean`, `string`, `number[]`, `string[]`, `boolean[]`. Depending on the `type`, each metadata can have additional properties (see below).
--   `readable`: Whether the value can be read. Default: `true`
--   `writable`: Whether a value can be written. Default: `true`
--   `description`: A description of the value
--   `label`: A human-readable label for the property
--   `ccSpecific`: CC specific information to help identify this value [(see below)](#CC-specific-fields)
--   `valueChangeOptions`: Parameters that can be passed as `options` to the [`setValue`](api/node.md#setvalue) command for this value.
+- `type`: The type of the value. Can be: `any`, `number`, `boolean`, `string`, `number[]`, `string[]`, `boolean[]`. Depending on the `type`, each metadata can have additional properties (see below).
+- `readable`: Whether the value can be read. Default: `true`
+- `writable`: Whether a value can be written. Default: `true`
+- `description`: A description of the value
+- `label`: A human-readable label for the property
+- `ccSpecific`: CC specific information to help identify this value [(see below)](#CC-specific-fields)
+- `valueChangeOptions`: Parameters that can be passed as `options` to the [`setValue`](api/node.md#setvalue) command for this value.
+- `stateful`: Whether this value represents a state (`true`) or a notification/event (`false`).
+- `secret`: Whether this value should be omitted or obfuscated in logs.
 
 ### Value types
 
@@ -86,19 +90,20 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 	steps?: number;
 	default?: number;
 	states?: Record<number, string>;
+	allowManualEntry?: boolean;
 	unit?: string;
 }
 ```
 
--   `min`: The minimum value that can be assigned to this value
--   `max`: The maximum value that can be assigned to this value
--   `steps`: When only certain values between min and max are allowed, this determines the step size
--   `default`: The default value
--   `states`: Human-readable names for numeric values, for example `{0: "off", 1: "on"}`.
--   `unit`: An optional unit for numeric values
+- `min`: The minimum value that can be assigned to this value
+- `max`: The maximum value that can be assigned to this value
+- `steps`: When only certain values between min and max are allowed, this determines the step size
+- `default`: The default value
+- `states`: Human-readable names for numeric values, for example `{0: "off", 1: "on"}`.
+- `unit`: An optional unit for numeric values
 
 > [!WARNING]
-> A value with `type: "number"` can contain the literal string `"unknown"` if the driver option `preserveUnknownValues` is `true`.
+> A value with `type: "number"` can be `null` to indicate a (known to be) unknown state!
 
 #### `boolean`
 
@@ -108,13 +113,17 @@ interface ValueMetadataNumeric extends ValueMetadataAny {
 interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	default?: number;
+	states?: {
+		true?: string;
+		false?: string;
+	};
 }
 ```
 
--   `default`: The default value
+- `default`: The default value
 
 > [!WARNING]
-> A value with `type: "boolean"` can contain the literal string `"unknown"` if the driver option `preserveUnknownValues` is `true`.
+> A value with `type: "boolean"` can be `null` to indicate a (known to be) unknown state!
 
 #### `string`
 
@@ -129,9 +138,12 @@ interface ValueMetadataString extends ValueMetadataAny {
 }
 ```
 
--   `minLength`: The minimum length this string must have
--   `maxLength`: The maximum length this string may have
--   `default`: The default value
+- `minLength`: The minimum length this string must have
+- `maxLength`: The maximum length this string may have
+- `default`: The default value
+
+> [!WARNING]
+> A value with `type: "string"` can be `null` to indicate a (known to be) unknown state!
 
 ### CC-specific fields
 
@@ -169,7 +181,6 @@ type BinarySensorValueMetadata = ValueMetadata & {
 type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
-		// only present on V2+ indicators:
 		propertyId?: number;
 	};
 };

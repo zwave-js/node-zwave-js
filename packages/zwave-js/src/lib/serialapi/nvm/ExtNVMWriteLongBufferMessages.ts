@@ -1,25 +1,26 @@
 import {
-	MessageOrCCLogEntry,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 
 export interface ExtNVMWriteLongBufferRequestOptions
-	extends MessageBaseOptions {
+	extends MessageBaseOptions
+{
 	offset: number;
 	buffer: Buffer;
 }

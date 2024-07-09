@@ -1,29 +1,31 @@
 import {
-	CommandClasses,
-	CommandClassInfo,
-	Maybe,
+	type CommandClassInfo,
+	type CommandClasses,
+	type MaybeNotKnown,
+	NOT_KNOWN,
 	SecurityClass,
 	securityClassOrder,
-	unknownBoolean,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
-import { isDeepStrictEqual } from "util";
+import { isDeepStrictEqual } from "node:util";
+import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
 import type { MockController } from "./MockController";
 import {
+	type MockEndpointCapabilities,
+	type MockNodeCapabilities,
+	type PartialCCCapabilities,
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
-	MockEndpointCapabilities,
-	PartialCCCapabilities,
-	type MockNodeCapabilities,
 } from "./MockNodeCapabilities";
 import {
-	createMockZWaveAckFrame,
-	MockZWaveAckFrame,
-	MockZWaveFrame,
-	MockZWaveFrameType,
-	MockZWaveRequestFrame,
+	type LazyMockZWaveFrame,
 	MOCK_FRAME_ACK_TIMEOUT,
+	type MockZWaveAckFrame,
+	type MockZWaveFrame,
+	MockZWaveFrameType,
+	type MockZWaveRequestFrame,
+	createMockZWaveAckFrame,
 } from "./MockZWaveFrame";
 
 const defaultCCInfo: CommandClassInfo = {
@@ -60,8 +62,8 @@ export class MockEndpoint {
 		this.index = options.index;
 		this.node = options.node;
 
-		const { commandClasses = [], ...capabilities } =
-			options.capabilities ?? {};
+		const { commandClasses = [], ...capabilities } = options.capabilities
+			?? {};
 		this.capabilities = {
 			...getDefaultMockEndpointCapabilities(this.node.capabilities),
 			...capabilities,
@@ -118,10 +120,9 @@ export class MockNode {
 			hasSecurityClass(
 				nodeId: number,
 				securityClass: SecurityClass,
-			): Maybe<boolean> {
+			): MaybeNotKnown<boolean> {
 				return (
-					securityClasses.get(nodeId)?.get(securityClass) ??
-					unknownBoolean
+					securityClasses.get(nodeId)?.get(securityClass) ?? NOT_KNOWN
 				);
 			},
 			setSecurityClass(
@@ -134,7 +135,9 @@ export class MockNode {
 				}
 				securityClasses.get(nodeId)!.set(securityClass, granted);
 			},
-			getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+			getHighestSecurityClass(
+				nodeId: number,
+			): MaybeNotKnown<SecurityClass> {
 				const map = securityClasses.get(nodeId);
 				if (!map?.size) return undefined;
 				let missingSome = false;
@@ -236,7 +239,9 @@ export class MockNode {
 			return (await expectation) as T;
 		} finally {
 			const index = this.expectedControllerFrames.indexOf(expectation);
-			if (index !== -1) this.expectedControllerFrames.splice(index, 1);
+			if (index !== -1) {
+				void this.expectedControllerFrames.splice(index, 1);
+			}
 		}
 	}
 
@@ -257,17 +262,17 @@ export class MockNode {
 	 * Sends a {@link MockZWaveFrame} to the {@link MockController}
 	 */
 	public async sendToController(
-		frame: MockZWaveFrame,
+		frame: LazyMockZWaveFrame,
 	): Promise<MockZWaveAckFrame | undefined> {
-		let ret: Promise<MockZWaveAckFrame> | undefined;
-		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
-			ret = this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
-		}
-		this.sentControllerFrames.push(frame);
-		process.nextTick(() => {
-			void this.controller.onNodeFrame(this, frame);
+		this.controller["air"].add({
+			source: this.id,
+			onTransmit: (frame) => this.sentControllerFrames.push(frame),
+			...frame,
 		});
-		if (ret) return await ret;
+
+		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
+			return await this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
+		}
 	}
 
 	/** Gets called when a {@link MockZWaveFrame} is received from the {@link MockController} */
@@ -276,10 +281,10 @@ export class MockNode {
 
 		// Ack the frame if desired
 		if (
-			this.autoAckControllerFrames &&
-			frame.type === MockZWaveFrameType.Request
+			this.autoAckControllerFrames
+			&& frame.type === MockZWaveFrameType.Request
 		) {
-			await this.ackControllerRequestFrame(frame);
+			void this.ackControllerRequestFrame(frame);
 		}
 
 		// Handle message buffer. Check for pending expectations first.
@@ -347,17 +352,13 @@ export class MockNode {
 		const index = this.receivedControllerFrames.findIndex(predicate);
 		if (index === -1 && !noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} did not receive a Z-Wave frame matching the predicate!${
+				`Node ${this.id} did not receive a Z-Wave frame matching the predicate!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
 		} else if (index > -1 && noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} received a Z-Wave frame matching the predicate, but this was not expected!${
+				`Node ${this.id} received a Z-Wave frame matching the predicate, but this was not expected!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
@@ -381,17 +382,13 @@ export class MockNode {
 		const index = this.sentControllerFrames.findIndex(predicate);
 		if (index === -1 && !noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} did not send a Z-Wave frame matching the predicate!${
+				`Node ${this.id} did not send a Z-Wave frame matching the predicate!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
 		} else if (index > -1 && noMatch) {
 			throw new Error(
-				`Node ${
-					this.id
-				} sent a Z-Wave frame matching the predicate, but this was not expected!${
+				`Node ${this.id} sent a Z-Wave frame matching the predicate, but this was not expected!${
 					errorMessage ? ` ${errorMessage}` : ""
 				}`,
 			);
@@ -401,6 +398,24 @@ export class MockNode {
 	/** Forgets all recorded frames sent to the controller */
 	public clearSentControllerFrames(): void {
 		this.sentControllerFrames = [];
+	}
+
+	public getCCCapabilities<T extends CommandClasses>(
+		ccId: T,
+		endpointIndex?: number,
+	): Partial<CCIdToCapabilities<T>> | undefined {
+		let ccInfo: CommandClassInfo | undefined;
+		if (endpointIndex) {
+			const endpoint = this.endpoints.get(endpointIndex);
+			ccInfo = endpoint?.implementedCCs.get(ccId);
+		} else {
+			ccInfo = this.implementedCCs.get(ccId);
+		}
+		if (ccInfo) {
+			const { isSupported, isControlled, version, secure, ...ret } =
+				ccInfo;
+			return ret;
+		}
 	}
 }
 

@@ -1,9 +1,9 @@
 import {
 	BasicCCGet,
 	BasicCCSet,
-	CommandClass,
 	CRC16CC,
-	CRC16CCCommandEncapsulation,
+	type CRC16CCCommandEncapsulation,
+	CommandClass,
 	InvalidCC,
 	isEncapsulatingCommandClass,
 } from "@zwave-js/cc";

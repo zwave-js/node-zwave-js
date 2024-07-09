@@ -1,4 +1,4 @@
-import type { Maybe } from "../values/Primitive";
+import type { MaybeNotKnown } from "../values/Primitive";
 
 export enum SecurityClass {
 	/**
@@ -26,9 +26,19 @@ export function securityClassIsS2(
 	secClass: SecurityClass | undefined,
 ): secClass is S2SecurityClass {
 	return (
-		secClass != undefined &&
-		secClass >= SecurityClass.S2_Unauthenticated &&
-		secClass <= SecurityClass.S2_AccessControl
+		secClass != undefined
+		&& secClass >= SecurityClass.S2_Unauthenticated
+		&& secClass <= SecurityClass.S2_AccessControl
+	);
+}
+
+/** Tests if the given security class is valid for use with Z-Wave LR */
+export function securityClassIsLongRange(
+	secClass: SecurityClass | undefined,
+): secClass is S2SecurityClass {
+	return (
+		secClass === SecurityClass.S2_AccessControl
+		|| secClass === SecurityClass.S2_Authenticated
 	);
 }
 
@@ -42,8 +52,8 @@ export const securityClassOrder = [
 
 export interface SecurityClassOwner {
 	readonly id: number;
-	getHighestSecurityClass(): SecurityClass | undefined;
-	hasSecurityClass(securityClass: SecurityClass): Maybe<boolean>;
+	getHighestSecurityClass(): MaybeNotKnown<SecurityClass>;
+	hasSecurityClass(securityClass: SecurityClass): MaybeNotKnown<boolean>;
 	setSecurityClass(securityClass: SecurityClass, granted: boolean): void;
 }
 

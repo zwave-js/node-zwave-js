@@ -1,17 +1,18 @@
 import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
-	allCCs,
-	applicationCCs,
 	CommandClasses,
-	getCCName,
-	IZWaveEndpoint,
-	IZWaveNode,
-	SetValueOptions,
-	TranslatedValueID,
-	ValueID,
+	type IZWaveEndpoint,
+	type IZWaveNode,
+	type MaybeNotKnown,
+	type SetValueOptions,
+	type TranslatedValueID,
+	type ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
+	allCCs,
+	applicationCCs,
+	getCCName,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 
@@ -36,7 +37,7 @@ function setValue(
 export function endpointCountIsDynamic(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	return getValue(
 		applHost,
 		node,
@@ -47,7 +48,7 @@ export function endpointCountIsDynamic(
 export function endpointsHaveIdenticalCapabilities(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): boolean | undefined {
+): MaybeNotKnown<boolean> {
 	return getValue(
 		applHost,
 		node,
@@ -58,7 +59,7 @@ export function endpointsHaveIdenticalCapabilities(
 export function getIndividualEndpointCount(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): number | undefined {
+): MaybeNotKnown<number> {
 	return getValue(
 		applHost,
 		node,
@@ -69,7 +70,7 @@ export function getIndividualEndpointCount(
 export function getAggregatedEndpointCount(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
-): number | undefined {
+): MaybeNotKnown<number> {
 	return getValue(
 		applHost,
 		node,
@@ -82,8 +83,8 @@ export function getEndpointCount(
 	node: IZWaveNode,
 ): number {
 	return (
-		(getIndividualEndpointCount(applHost, node) || 0) +
-		(getAggregatedEndpointCount(applHost, node) || 0)
+		(getIndividualEndpointCount(applHost, node) || 0)
+		+ (getAggregatedEndpointCount(applHost, node) || 0)
 	);
 }
 
@@ -200,9 +201,9 @@ export function shouldHideRootApplicationCCValues(
 	// This is not the case when only individual endpoints should be preserved in addition to the root
 	const preserveEndpoints = compatConfig?.preserveEndpoints;
 	if (
-		preserveEndpoints != undefined &&
-		preserveEndpoints !== "*" &&
-		preserveEndpoints.length !== endpointIndizes.length
+		preserveEndpoints != undefined
+		&& preserveEndpoints !== "*"
+		&& preserveEndpoints.length !== endpointIndizes.length
 	) {
 		return false;
 	}
@@ -232,9 +233,11 @@ export function translateValueID<T extends ValueID>(
 	);
 	if (!ccInstance) {
 		throw new ZWaveError(
-			`Cannot translate a value ID for the non-implemented CC ${getCCName(
-				valueId.commandClass,
-			)}`,
+			`Cannot translate a value ID for the non-implemented CC ${
+				getCCName(
+					valueId.commandClass,
+				)
+			}`,
 			ZWaveErrorCodes.CC_NotImplemented,
 		);
 	}
@@ -261,9 +264,9 @@ export function translateValueID<T extends ValueID>(
  * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
  * Value ID on a non-root endpoint
  */
-export function filterRootApplicationCCValueIDs(
-	allValueIds: ValueID[],
-): ValueID[] {
+export function filterRootApplicationCCValueIDs<T extends ValueID>(
+	allValueIds: T[],
+): T[] {
 	const shouldHideRootValueID = (
 		valueId: ValueID,
 		allValueIds: ValueID[],
@@ -276,12 +279,12 @@ export function filterRootApplicationCCValueIDs(
 		const valueExistsOnAnotherEndpoint = allValueIds.some(
 			(other) =>
 				// same CC
-				other.commandClass === valueId.commandClass &&
+				other.commandClass === valueId.commandClass
 				// non-root endpoint
-				!!other.endpoint &&
+				&& !!other.endpoint
 				// same property and key
-				other.property === valueId.property &&
-				other.propertyKey === valueId.propertyKey,
+				&& other.property === valueId.property
+				&& other.propertyKey === valueId.propertyKey,
 		);
 		return valueExistsOnAnotherEndpoint;
 	};
@@ -296,6 +299,18 @@ export function getDefinedValueIDs(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 ): TranslatedValueID[] {
+	return getDefinedValueIDsInternal(applHost, node, false);
+}
+
+/**
+ * @internal
+ * Returns a list of all value names that are defined on all endpoints of this node
+ */
+export function getDefinedValueIDsInternal(
+	applHost: ZWaveApplicationHost,
+	node: IZWaveNode,
+	includeInternal: boolean = false,
+): TranslatedValueID[] {
 	let ret: ValueID[] = [];
 	const allowControlled: CommandClasses[] = [
 		CommandClasses["Scene Activation"],
@@ -303,8 +318,13 @@ export function getDefinedValueIDs(
 	for (const endpoint of getAllEndpoints(applHost, node)) {
 		for (const cc of allCCs) {
 			if (
-				endpoint.supportsCC(cc) ||
-				(endpoint.controlsCC(cc) && allowControlled.includes(cc))
+				// Create values only for supported CCs
+				endpoint.supportsCC(cc)
+				// ...and some controlled CCs
+				|| (endpoint.controlsCC(cc) && allowControlled.includes(cc))
+				// ...and possibly Basic CC, which has some extra checks to know
+				// whether values should be exposed
+				|| cc === CommandClasses.Basic
 			) {
 				const ccInstance = CommandClass.createInstanceUnchecked(
 					applHost,
@@ -312,7 +332,12 @@ export function getDefinedValueIDs(
 					cc,
 				);
 				if (ccInstance) {
-					ret.push(...ccInstance.getDefinedValueIDs(applHost));
+					ret.push(
+						...ccInstance.getDefinedValueIDs(
+							applHost,
+							includeInternal,
+						),
+					);
 				}
 			}
 		}

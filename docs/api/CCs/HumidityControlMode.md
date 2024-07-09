@@ -7,7 +7,7 @@
 ### `get`
 
 ```ts
-async get(): Promise<HumidityControlMode | undefined>;
+async get(): Promise<MaybeNotKnown<HumidityControlMode>>;
 ```
 
 ### `set`
@@ -22,7 +22,7 @@ async set(
 
 ```ts
 async getSupportedModes(): Promise<
-	readonly HumidityControlMode[] | undefined
+	MaybeNotKnown<readonly HumidityControlMode[]>
 >;
 ```
 
@@ -38,12 +38,12 @@ async getSupportedModes(): Promise<
 }
 ```
 
--   **label:** Humidity control mode
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** Humidity control mode
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

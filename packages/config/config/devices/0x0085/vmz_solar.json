@@ -16,57 +16,57 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "mode",
+			"label": "Mode",
 			"description": "operating mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "manual",
+					"label": "Manual",
 					"value": 0
 				},
 				{
-					"label": "semiauto",
+					"label": "Semiauto",
 					"value": 1
 				},
 				{
-					"label": "auto",
+					"label": "Auto",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Summer/Winter mode",
+			"label": "Summer/Winter Mode",
 			"valueSize": 1,
 			"defaultValue": 50,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "summer mode only",
+					"label": "Summer mode only",
 					"value": 0
 				},
 				{
-					"label": "Auto (summer / winter mode)",
+					"label": "Auto (Summer / Winter mode)",
 					"value": 50
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Measurement frequency",
-			"unit": "min",
+			"label": "Measurement Frequency",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 30,
 			"defaultValue": 3
 		},
 		{
 			"#": "4",
-			"label": "Level of sensitivity for day",
-			"unit": "%",
+			"label": "Level of Sensitivity for Day",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 60
@@ -82,9 +82,9 @@
 		},
 		{
 			"#": "6",
-			"label": "Level of sensitivity for night",
-			"unit": "%",
+			"label": "Level of Sensitivity for Night",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 9,
 			"defaultValue": 3

@@ -26,7 +26,6 @@
 			"label": "Temperature Unit",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -44,11 +43,10 @@
 			"label": "Temperature Reporting Threshold",
 			"description": "Valid range: 3-255; Variation in temperature to induce automatic report",
 			"valueSize": 2,
+			"unit": "0.1 °F/C",
 			"minValue": 0,
 			"maxValue": 255,
-			"unit": "0.1 °F/C",
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -64,7 +62,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 10,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -82,7 +79,6 @@
 			"label": "Display Brightness",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -112,7 +108,6 @@
 			"label": "Beep Volume",
 			"valueSize": 1,
 			"defaultValue": 5,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -144,7 +139,6 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 98,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Default (Celsius)",
@@ -163,7 +157,6 @@
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Default (Celsius)",
@@ -207,7 +200,6 @@
 			"label": "Outdoor Temperature Sensor Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -223,10 +215,9 @@
 		{
 			"#": "22",
 			"label": "Antifreeze Protection",
-			"description": "Automatic heating at 41°F/5°C",
+			"description": "Automatic heating at 41 °F/5 °C",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -244,7 +235,6 @@
 			"label": "Fan Mode Above Set Temperature",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -262,7 +252,6 @@
 			"label": "Fan Working Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -288,7 +277,6 @@
 			"label": "Key Lock Function",
 			"valueSize": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -306,7 +294,6 @@
 			"label": "Ventilation Function",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -326,8 +313,7 @@
 			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 30,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "29",
@@ -337,7 +323,6 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 30,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Default (Celsius)",
@@ -354,7 +339,6 @@
 			"label": "Factory Reset",
 			"valueSize": 1,
 			"defaultValue": 53,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

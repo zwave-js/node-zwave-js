@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "RZI06-1L",
-	"description": "Dimmer switch 600w incandescent",
+	"description": "Dimmer Switch 600W Incandescent",
 	"devices": [
 		{
 			"productType": "0x0401",

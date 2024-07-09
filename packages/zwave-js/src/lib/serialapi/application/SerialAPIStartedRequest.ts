@@ -1,18 +1,18 @@
 import {
-	CommandClasses,
-	encodeCCList,
-	MessageOrCCLogEntry,
+	type CommandClasses,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	encodeCCList,
 	parseCCList,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
-	gotDeserializationOptions,
 	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -29,7 +29,7 @@ export enum SerialAPIWakeUpReason {
 	WatchdogReset = 0x03,
 	/** The Z-Wave API Module has been woken up by an external interrupt. */
 	ExternalInterrupt = 0x04,
-	/** The Z-Wave API Module has been woken up by a powering up. */
+	/** The Z-Wave API Module has been woken up by powering up. */
 	PowerUp = 0x05,
 	/** The Z-Wave API Module has been woken up by USB Suspend. */
 	USBSuspend = 0x06,
@@ -76,7 +76,7 @@ export class SerialAPIStartedRequest extends Message {
 
 			// Parse list of CCs
 			const numCCBytes = this.payload[5];
-			const ccBytes = this.payload.slice(6, 6 + numCCBytes);
+			const ccBytes = this.payload.subarray(6, 6 + numCCBytes);
 			const ccList = parseCCList(ccBytes);
 			this.supportedCCs = ccList.supportedCCs;
 			this.controlledCCs = ccList.controlledCCs;

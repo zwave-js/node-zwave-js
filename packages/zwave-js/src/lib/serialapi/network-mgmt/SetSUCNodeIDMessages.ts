@@ -1,22 +1,23 @@
 import {
-	MessageOrCCLogEntry,
+	type MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
+	encodeNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
+	FunctionType,
+	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	type MessageOptions,
+	MessageType,
 	expectedCallback,
 	expectedResponse,
-	FunctionType,
 	gotDeserializationOptions,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
-	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -38,8 +39,8 @@ export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
 export class SetSUCNodeIdRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== SetSUCNodeIdRequestStatusReport
+			gotDeserializationOptions(options)
+			&& (new.target as any) !== SetSUCNodeIdRequestStatusReport
 		) {
 			return new SetSUCNodeIdRequestStatusReport(host, options);
 		}
@@ -64,8 +65,8 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 			this.sucNodeId = options.sucNodeId ?? host.ownNodeId;
 			this.enableSUC = options.enableSUC;
 			this.enableSIS = options.enableSIS;
-			this.transmitOptions =
-				options.transmitOptions ?? TransmitOptions.DEFAULT;
+			this.transmitOptions = options.transmitOptions
+				?? TransmitOptions.DEFAULT;
 		}
 	}
 
@@ -75,12 +76,15 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public transmitOptions: TransmitOptions;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.sucNodeId,
-			this.enableSUC ? 0x01 : 0x00,
-			this.transmitOptions,
-			this.enableSIS ? 0x01 : 0x00,
-			this.callbackId,
+		const nodeId = encodeNodeID(this.sucNodeId, this.host.nodeIdType);
+		this.payload = Buffer.concat([
+			nodeId,
+			Buffer.from([
+				this.enableSUC ? 0x01 : 0x00,
+				this.transmitOptions,
+				this.enableSIS ? 0x01 : 0x00,
+				this.callbackId,
+			]),
 		]);
 
 		return super.serialize();
@@ -119,8 +123,7 @@ export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 	}
 }
 
-export class SetSUCNodeIdRequestStatusReport
-	extends SetSUCNodeIdRequestBase
+export class SetSUCNodeIdRequestStatusReport extends SetSUCNodeIdRequestBase
 	implements SuccessIndicator
 {
 	public constructor(

@@ -1,9 +1,9 @@
 import { MessageHeaders } from "@zwave-js/serial";
 import type { MockSerialPort } from "@zwave-js/serial/mock";
 import {
+	type ThrowingMap,
 	createThrowingMap,
 	getEnumMemberName,
-	ThrowingMap,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import ava, { type TestFn } from "ava";
@@ -44,16 +44,18 @@ test.afterEach.always(async (t) => {
 
 process.env.LOGLEVEL = "debug";
 
-for (const initialStatus of [
-	NodeStatus.Unknown,
-	NodeStatus.Asleep,
-	NodeStatus.Dead,
-]) {
+for (
+	const initialStatus of [
+		NodeStatus.Unknown,
+		NodeStatus.Asleep,
+		NodeStatus.Dead,
+	]
+) {
 	for (const canSleep of [true, false]) {
 		// Exclude tests that make no sense
 		if (
-			(initialStatus === NodeStatus.Asleep && !canSleep) ||
-			(canSleep && initialStatus === NodeStatus.Dead)
+			(initialStatus === NodeStatus.Asleep && !canSleep)
+			|| (canSleep && initialStatus === NodeStatus.Dead)
 		) {
 			continue;
 		}
@@ -61,10 +63,12 @@ for (const initialStatus of [
 		const expectedStatus = canSleep ? NodeStatus.Awake : NodeStatus.Alive;
 
 		test.serial(
-			`When a ping succeeds, the node should be marked awake/alive (Can sleep: ${canSleep}, initial status: ${getEnumMemberName(
-				NodeStatus,
-				initialStatus,
-			)})`,
+			`When a ping succeeds, the node should be marked awake/alive (Can sleep: ${canSleep}, initial status: ${
+				getEnumMemberName(
+					NodeStatus,
+					initialStatus,
+				)
+			})`,
 			async (t) => {
 				const { driver, serialport } = t.context;
 

@@ -1,6 +1,5 @@
 /*!
- * This scripts ensures that files annotated with @noExternalImports don't import
- * anything from outside the monorepo.
+ * This scripts helps find certain code patterns via the CLI
  */
 
 import {
@@ -13,13 +12,13 @@ import {
 } from "ansi-colors";
 import highlight, { fromJson as themeFromJson } from "cli-highlight";
 import globrex from "globrex";
-import path from "path";
+import path from "node:path";
 import ts from "typescript";
 import yargs from "yargs";
 import { loadTSConfig, projectRoot } from "./tsAPITools";
 
 function relativeToProject(filename: string): string {
-	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+	return path.relative(projectRoot, filename).replaceAll("\\", "/");
 }
 
 export interface CodeFindQuery {
@@ -88,15 +87,14 @@ function formatResult(
 		const prefix = `${i + 1}`.padStart(lineIndicatorLength);
 		if (i === result.line) {
 			ret = `${bold(greenBright(prefix))} | ${ret}`;
-			ret +=
-				"\n" +
-				" ".repeat(prefix.length) +
-				" | " +
+			ret += "\n"
+				+ " ".repeat(prefix.length)
+				+ " | "
 				// Leading tabs are counted as a single character by TS, but we want to
 				// display them as 4 spaces. This means we need to offset the column number
 				// by 3 times the no. of tabs.
-				" ".repeat(3 * leadingTabs[i] + result.character) +
-				bold(greenBright("^".repeat(result.match.length)));
+				+ " ".repeat(3 * leadingTabs[i] + result.character)
+				+ bold(greenBright("^".repeat(result.match.length)));
 		} else {
 			ret = `${gray(prefix)} | ${ret}`;
 		}
@@ -118,32 +116,32 @@ function getNodeName(
 	node: ts.Node,
 ): string | undefined {
 	if (
-		ts.isVariableDeclaration(node) &&
-		ts.isIdentifier(node.name) &&
-		node.initializer &&
-		(ts.isArrowFunction(node.initializer) ||
-			ts.isFunctionExpression(node.initializer) ||
-			ts.isClassExpression(node.initializer)) &&
-		!node.initializer.name
+		ts.isVariableDeclaration(node)
+		&& ts.isIdentifier(node.name)
+		&& node.initializer
+		&& (ts.isArrowFunction(node.initializer)
+			|| ts.isFunctionExpression(node.initializer)
+			|| ts.isClassExpression(node.initializer))
+		&& !node.initializer.name
 	) {
 		// const foo = function() { ... }
 		// const foo = () => { ... }
 		// const foo = class { ... }
 		return node.name?.getText(sourceFile);
 	} else if (
-		(ts.isFunctionDeclaration(node) ||
-			ts.isFunctionExpression(node) ||
-			ts.isMethodDeclaration(node) ||
-			ts.isClassDeclaration(node)) &&
-		node.name
+		(ts.isFunctionDeclaration(node)
+			|| ts.isFunctionExpression(node)
+			|| ts.isMethodDeclaration(node)
+			|| ts.isClassDeclaration(node))
+		&& node.name
 	) {
 		// function foo() { ... }
 		// class foo { ... } (or its methods)
 		return node.name.getText(sourceFile);
 	} else if (
-		ts.isCallExpression(node) &&
-		ts.isIdentifier(node.expression) &&
-		node.arguments.some(
+		ts.isCallExpression(node)
+		&& ts.isIdentifier(node.expression)
+		&& node.arguments.some(
 			(arg) => ts.isArrowFunction(arg) || ts.isFunctionExpression(arg),
 		)
 	) {
@@ -199,18 +197,18 @@ export function codefind(query: CodeFindQuery): Result[] {
 
 		// If an include pattern is given, make sure the relative path matches at least one
 		if (
-			query.filePatterns &&
-			!query.filePatterns.some((pattern) =>
-				relativePathMatchesPattern(pattern),
+			query.filePatterns
+			&& !query.filePatterns.some((pattern) =>
+				relativePathMatchesPattern(pattern)
 			)
 		) {
 			continue;
 		}
 		// If an exclude pattern is given, make sure the relative path matches none
 		if (
-			query.excludeFilePatterns &&
-			query.excludeFilePatterns.some((pattern) =>
-				relativePathMatchesPattern(pattern),
+			query.excludeFilePatterns
+			&& query.excludeFilePatterns.some((pattern) =>
+				relativePathMatchesPattern(pattern)
 			)
 		) {
 			continue;
@@ -241,7 +239,7 @@ export function codefind(query: CodeFindQuery): Result[] {
 				const fullPath = path.join("/");
 				if (
 					excludeCodePatterns?.some((pattern) =>
-						pattern.test(fullPath),
+						pattern.test(fullPath)
 					)
 				) {
 					// This code pattern is excluded
@@ -271,8 +269,9 @@ export function codefind(query: CodeFindQuery): Result[] {
 					} else {
 						// no match, but new path segment to remember
 						// Iterate through children
-						ts.forEachChild(node, (member) =>
-							visit(member, newPath),
+						ts.forEachChild(
+							node,
+							(member) => visit(member, newPath),
 						);
 					}
 				} else {
@@ -295,10 +294,10 @@ export function codefind(query: CodeFindQuery): Result[] {
 				let foundIndex = -1;
 				while (
 					((foundIndex = text.indexOf(query.search, startIndex)),
-					foundIndex !== -1)
+						foundIndex !== -1)
 				) {
-					const matchPosition =
-						node.getStart(sourceFile) + foundIndex;
+					const matchPosition = node.getStart(sourceFile)
+						+ foundIndex;
 					const location = ts.getLineAndCharacterOfPosition(
 						sourceFile,
 						matchPosition,
@@ -327,8 +326,8 @@ export function codefind(query: CodeFindQuery): Result[] {
 				// Find all occurrences of regex in the node
 				const matches = text.matchAll(query.search);
 				for (const match of matches) {
-					const matchPosition =
-						node.getStart(sourceFile) + match.index!;
+					const matchPosition = node.getStart(sourceFile)
+						+ match.index;
 					const location = ts.getLineAndCharacterOfPosition(
 						sourceFile,
 						matchPosition,
@@ -429,9 +428,11 @@ if (require.main === module) {
 	console.log();
 	for (const result of results) {
 		console.log(
-			`${blueBright(bold(result.file))}:${yellow(
-				(result.line + 1).toString(),
-			)}:${yellow((result.character + 1).toString())}`,
+			`${blueBright(bold(result.file))}:${
+				yellow(
+					(result.line + 1).toString(),
+				)
+			}:${yellow((result.character + 1).toString())}`,
 		);
 		console.log(redBright(bold(`⤷ ${result.codePath}`)));
 		console.log(result.formatted);

@@ -2,27 +2,32 @@ import {
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
-	isTransmissionError,
-	IZWaveEndpoint,
-	Maybe,
-	MessageOrCCLogEntry,
+	type IZWaveEndpoint,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	SinglecastCC,
+	type MessageRecord,
+	type SinglecastCC,
+	type SupervisionResult,
 	SupervisionStatus,
 	TransmitOptions,
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isTransmissionError,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -43,8 +48,8 @@ export const SupervisionCCValues = Object.freeze({
 			"ccSupported",
 			(ccId: CommandClasses) => ccId,
 			({ property, propertyKey }) =>
-				property === "commandSupported" &&
-				typeof propertyKey === "number",
+				property === "commandSupported"
+				&& typeof propertyKey === "number",
 			undefined,
 			{ internal: true, supportsEndpoints: false },
 		),
@@ -54,11 +59,13 @@ export const SupervisionCCValues = Object.freeze({
 // @noSetValueAPI - This CC has no values to set
 // @noInterview - This CC is only used for encapsulation
 
-// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
+/* eslint-disable @zwave-js/ccapi-validate-args */
+
 @API(CommandClasses.Supervision)
 export class SupervisionCCAPI extends PhysicalCCAPI {
-	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: SupervisionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case SupervisionCommand.Get:
 			case SupervisionCommand.Report:
@@ -70,13 +77,17 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 	public async sendReport(
 		options: SupervisionCCReportOptions & {
 			encapsulationFlags?: EncapsulationFlags;
+			lowPriority?: boolean;
 		},
 	): Promise<void> {
 		// Here we don't assert support - some devices only half-support Supervision, so we treat them
 		// as if they don't support it. We still need to be able to respond to the Get command though.
 
-		const { encapsulationFlags = EncapsulationFlags.None, ...cmdOptions } =
-			options;
+		const {
+			encapsulationFlags = EncapsulationFlags.None,
+			lowPriority = false,
+			...cmdOptions
+		} = options;
 		const cc = new SupervisionCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -90,7 +101,9 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			await this.applHost.sendCommand(cc, {
 				...this.commandOptions,
 				// Supervision Reports must be prioritized over normal messages
-				priority: MessagePriority.Supervision,
+				priority: lowPriority
+					? MessagePriority.ImmediateLow
+					: MessagePriority.Immediate,
 				// But we don't want to wait for an ACK because this can lock up the network for seconds
 				// if the target node is asleep or unreachable
 				transmitOptions: TransmitOptions.DEFAULT_NOACK,
@@ -119,9 +132,9 @@ export class SupervisionCC extends CommandClass {
 	/** Tests if a command should be supervised and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
-			!!(cc.encapsulationFlags & EncapsulationFlags.Supervision) &&
-			!(cc instanceof SupervisionCCGet) &&
-			!(cc instanceof SupervisionCCReport)
+			!!(cc.encapsulationFlags & EncapsulationFlags.Supervision)
+			&& !(cc instanceof SupervisionCCGet)
+			&& !(cc instanceof SupervisionCCReport)
 		);
 	}
 
@@ -148,8 +161,8 @@ export class SupervisionCC extends CommandClass {
 
 		// Copy the encapsulation flags from the encapsulated command
 		// but omit Supervision, since we're doing that right now
-		ret.encapsulationFlags =
-			cc.encapsulationFlags & ~EncapsulationFlags.Supervision;
+		ret.encapsulationFlags = cc.encapsulationFlags
+			& ~EncapsulationFlags.Supervision;
 
 		return ret;
 	}
@@ -169,7 +182,10 @@ export class SupervisionCC extends CommandClass {
 				CommandClasses.Supervision,
 				SupervisionCommand.Get,
 			) as SupervisionCCGet;
-			if (!supervisionEncapsulation.isMulticast()) {
+			if (
+				supervisionEncapsulation.frameType !== "broadcast"
+				&& supervisionEncapsulation.frameType !== "multicast"
+			) {
 				return supervisionEncapsulation.sessionId;
 			}
 		}
@@ -218,6 +234,7 @@ export class SupervisionCC extends CommandClass {
 		command: T,
 	): command is SinglecastCC<T> {
 		// Supervision may only be used for singlecast CCs that expect no response
+		// The specs mention that Supervision CAN be used for S2 multicast, but conveniently fail to explain how to respond to that.
 		if (!command.isSinglecast()) return false;
 		if (command.expectsCCResponse()) return false;
 
@@ -230,11 +247,11 @@ export class SupervisionCC extends CommandClass {
 		// and only if ...
 		return (
 			// ... the node supports it
-			node.supportsCC(CommandClasses.Supervision) &&
+			node.supportsCC(CommandClasses.Supervision)
 			// ... the command is marked as "should use supervision"
-			shouldUseSupervision(command) &&
+			&& shouldUseSupervision(command)
 			// ... and we haven't previously determined that the node doesn't properly support it
-			SupervisionCC.getCCSupportedWithSupervision(
+			&& SupervisionCC.getCCSupportedWithSupervision(
 				applHost,
 				endpoint,
 				command.ccId,
@@ -243,22 +260,25 @@ export class SupervisionCC extends CommandClass {
 	}
 }
 
-export type SupervisionCCReportOptions = {
-	moreUpdatesFollow: boolean;
-	requestWakeUpOnDemand?: boolean;
-	sessionId: number;
-} & (
-	| {
+// @publicAPI
+export type SupervisionCCReportOptions =
+	& {
+		moreUpdatesFollow: boolean;
+		requestWakeUpOnDemand?: boolean;
+		sessionId: number;
+	}
+	& (
+		| {
 			status: SupervisionStatus.Working;
 			duration: Duration;
-	  }
-	| {
+		}
+		| {
 			status:
 				| SupervisionStatus.NoSupport
 				| SupervisionStatus.Fail
 				| SupervisionStatus.Success;
-	  }
-);
+		}
+	);
 
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
@@ -299,9 +319,9 @@ export class SupervisionCCReport extends SupervisionCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
-				(this.moreUpdatesFollow ? 0b1_0_000000 : 0) |
-					(this.requestWakeUpOnDemand ? 0b0_1_000000 : 0) |
-					(this.sessionId & 0b111111),
+				(this.moreUpdatesFollow ? 0b1_0_000000 : 0)
+				| (this.requestWakeUpOnDemand ? 0b0_1_000000 : 0)
+				| (this.sessionId & 0b111111),
 				this.status,
 			]),
 		]);
@@ -315,7 +335,7 @@ export class SupervisionCCReport extends SupervisionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"session id": this.sessionId,
 			"more updates follow": this.moreUpdatesFollow,
@@ -325,13 +345,27 @@ export class SupervisionCCReport extends SupervisionCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
+
+	public toSupervisionResult(): SupervisionResult {
+		if (this.status === SupervisionStatus.Working) {
+			return {
+				status: this.status,
+				remainingDuration: this.duration!,
+			};
+		} else {
+			return {
+				status: this.status,
+			};
+		}
+	}
 }
 
-interface SupervisionCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface SupervisionCCGetOptions extends CCCommandOptions {
 	requestStatusUpdates: boolean;
 	encapsulated: CommandClass;
 }
@@ -357,13 +391,13 @@ export class SupervisionCCGet extends SupervisionCC {
 			this.sessionId = this.payload[0] & 0b111111;
 
 			this.encapsulated = CommandClass.from(this.host, {
-				data: this.payload.slice(2),
+				data: this.payload.subarray(2),
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
 			});
 		} else {
-			this.sessionId = host.getNextSupervisionSessionId();
+			this.sessionId = host.getNextSupervisionSessionId(this.nodeId);
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
@@ -378,8 +412,8 @@ export class SupervisionCCGet extends SupervisionCC {
 		const encapCC = this.encapsulated.serialize();
 		this.payload = Buffer.concat([
 			Buffer.from([
-				(this.requestStatusUpdates ? 0b10_000000 : 0) |
-					(this.sessionId & 0b111111),
+				(this.requestStatusUpdates ? 0b10_000000 : 0)
+				| (this.sessionId & 0b111111),
 				encapCC.length,
 			]),
 			encapCC,
@@ -392,9 +426,9 @@ export class SupervisionCCGet extends SupervisionCC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"session id": this.sessionId,
 				"request updates": this.requestStatusUpdates,

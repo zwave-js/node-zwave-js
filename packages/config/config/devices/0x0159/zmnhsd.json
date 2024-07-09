@@ -40,24 +40,24 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Input switch type",
+			"label": "Input Switch Type",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable switch type (push button)",
+					"label": "Mono-Stable switch type (Push button)",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable switch type",
+					"label": "Bi-Stable switch type",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Working mode",
+			"label": "Working Mode",
 			"description": "Module presentation on the user interface.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -75,79 +75,65 @@
 		},
 		{
 			"#": "10",
-			"label": "Activate / deactivate functions ALL ON / ALL OFF",
+			"label": "Activate / Deactivate Functions ALL ON / ALL OFF",
 			"description": "DIN dimmer module responds to commands ALL ON / ALL OFF",
 			"valueSize": 2,
 			"defaultValue": 255,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active, ALL OFF is not active",
+					"label": "All on is not active, all off is not active",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active, ALL OFF active",
+					"label": "All on is not active, all off active",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active, ALL OFF is not active",
+					"label": "All on active, all off is not active",
 					"value": 2
 				},
 				{
-					"label": "ALL ON active, ALL OFF active",
+					"label": "All on active, all off active",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Automatic turning off output after set time",
-			"unit": "s",
+			"label": "Automatic Turning Off Output After Set Time",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Auto off DISABLED",
+					"label": "Auto off disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "Automatic turning on output after set time",
-			"unit": "s",
+			"label": "Automatic Turning on Output After Set Time",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Auto on DISABLED",
+					"label": "Auto on disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "Enable / Disable Double click function",
-			"description": "If Double click function is enabled, double click to maximum dimming power",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "double click disabled",
-					"value": 0
-				},
-				{
-					"label": "double click enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double Click Function",
+			"description": "If Double click function is enabled, double click to maximum dimming power"
 		},
 		{
 			"#": "30",
@@ -155,44 +141,44 @@
 		},
 		{
 			"#": "40",
-			"label": "Power reporting in watts on power change",
+			"label": "Power Reporting in Watts on Power Change",
 			"description": "Reporting the power in Watts on power change larger then the setpoint",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5
 		},
 		{
 			"#": "42",
-			"label": "Power reporting in Watts by time interval",
-			"unit": "s",
+			"label": "Power Reporting in Watts by Time Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
 		{
 			"#": "60",
-			"label": "Minimum dimming value",
-			"unit": "%",
+			"label": "Minimum Dimming Value",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 1
 		},
 		{
 			"#": "61",
-			"label": "Maximum dimming value",
-			"unit": "%",
+			"label": "Maximum Dimming Value",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
 		{
 			"#": "65",
-			"label": "Dimming time (soft on/off)",
+			"label": "Dimming Time (Soft On/off)",
 			"description": "Set value means time of moving the Dimmer between min. and max. dimming",
 			"valueSize": 2,
 			"minValue": 1,
@@ -201,7 +187,7 @@
 		},
 		{
 			"#": "66",
-			"label": "Dimming time when key pressed",
+			"label": "Dimming Time When Key Pressed",
 			"description": "Time to moving the Dimmer between min. and max values (in seconds).",
 			"valueSize": 2,
 			"minValue": 1,
@@ -210,26 +196,25 @@
 		},
 		{
 			"#": "67",
-			"label": "Ignore start level",
+			"label": "Ignore Start Level",
 			"description": "Ignore or respect start level when used together with association group 3",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "respect start level",
+					"label": "Respect start level",
 					"value": 0
 				},
 				{
-					"label": "ignore start level",
+					"label": "Ignore start level",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "68",
-			"label": "Dimming duration",
+			"label": "Dimming Duration",
 			"description": "This parameter is used with association group 3.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -238,20 +223,20 @@
 		},
 		{
 			"#": "110",
-			"label": "Temperature sensor offset settings",
-			"description": "32536 = no offset; 1-100 = 0.1°C added; 1001-1100 = 0.1°C subtracted",
-			"unit": "°C",
+			"label": "Temperature Sensor Offset Settings",
+			"description": "32536 = no offset; 1-100 = 0.1 °C added; 1001-1100 = 0.1 °C subtracted",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 1,
 			"maxValue": 32536,
 			"defaultValue": 32536
 		},
 		{
 			"#": "120",
-			"label": "Digital temperature sensor reporting",
+			"label": "Digital Temperature Sensor Reporting",
 			"description": "Reporting temperature when change is larger than defined by this parameter",
-			"unit": "°C",
 			"valueSize": 1,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 5

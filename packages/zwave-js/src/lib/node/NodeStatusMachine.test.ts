@@ -1,11 +1,11 @@
-import { interpret, Interpreter } from "xstate";
+import { type Interpreter, interpret } from "xstate";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
-import test, { ExecutionContext } from "ava";
+import test, { type ExecutionContext } from "ava";
 import {
+	type NodeStatusEvent,
+	type NodeStatusMachine,
+	type NodeStatusStateSchema,
 	createNodeStatusMachine,
-	NodeStatusEvent,
-	NodeStatusMachine,
-	NodeStatusStateSchema,
 } from "./NodeStatusMachine";
 
 const testNodeNonSleeping = { canSleep: false } as any;
@@ -26,7 +26,7 @@ test(`The node should start in the unknown state if it maybe cannot sleep`, (t) 
 	} as any);
 
 	const service = startMachine(t, testMachine);
-	t.is(service.state.value, "unknown");
+	t.is(service.getSnapshot().value, "unknown");
 });
 
 test(`The node should start in the unknown state if it can definitely sleep`, (t) => {
@@ -35,7 +35,7 @@ test(`The node should start in the unknown state if it can definitely sleep`, (t
 	} as any);
 
 	const service = startMachine(t, testMachine);
-	t.is(service.state.value, "unknown");
+	t.is(service.getSnapshot().value, "unknown");
 });
 
 const transitions: {
@@ -162,32 +162,29 @@ const transitions: {
 ];
 
 for (const testCase of transitions) {
-	const prefix =
-		testCase.canSleep != undefined
-			? `Node ${testCase.canSleep ? "can sleep" : "can't sleep"} -> `
-			: "";
-	const name =
-		testCase.start === testCase.target
-			? `${prefix}The ${testCase.event} event should not do anything in the "${testCase.start}" state`
-			: `${prefix}When the ${testCase.event} event is received, it should transition from "${testCase.start}" to "${testCase.target}"`;
+	const prefix = testCase.canSleep != undefined
+		? `Node ${testCase.canSleep ? "can sleep" : "can't sleep"} -> `
+		: "";
+	const name = testCase.start === testCase.target
+		? `${prefix}The ${testCase.event} event should not do anything in the "${testCase.start}" state`
+		: `${prefix}When the ${testCase.event} event is received, it should transition from "${testCase.start}" to "${testCase.target}"`;
 
 	test(name, (t) => {
 		// For these tests, assume that the node does or does not support Wakeup, whatever fits
-		const testNode =
-			testCase.canSleep == undefined
-				? testCase.event === "ASLEEP" || testCase.event === "AWAKE"
-					? testNodeSleeping
-					: testNodeNonSleeping
-				: testCase.canSleep
+		const testNode = testCase.canSleep == undefined
+			? testCase.event === "ASLEEP" || testCase.event === "AWAKE"
 				? testNodeSleeping
-				: testNodeNonSleeping;
+				: testNodeNonSleeping
+			: testCase.canSleep
+			? testNodeSleeping
+			: testNodeNonSleeping;
 
 		const testMachine = createNodeStatusMachine(testNode);
 		testMachine.initial = testCase.start;
 
 		const service = startMachine(t, testMachine);
 		service.send(testCase.event);
-		t.is(service.state.value, testCase.target);
+		t.is(service.getSnapshot().value, testCase.target);
 	});
 }
 
@@ -196,7 +193,7 @@ test("A transition from unknown to awake should not happen if the node cannot sl
 
 	const service = startMachine(t, testMachine);
 	service.send("AWAKE");
-	t.is(service.state.value, "unknown");
+	t.is(service.getSnapshot().value, "unknown");
 });
 
 test("A transition from unknown to asleep should not happen if the node cannot sleep", (t) => {
@@ -204,5 +201,5 @@ test("A transition from unknown to asleep should not happen if the node cannot s
 
 	const service = startMachine(t, testMachine);
 	service.send("ASLEEP");
-	t.is(service.state.value, "unknown");
+	t.is(service.getSnapshot().value, "unknown");
 });

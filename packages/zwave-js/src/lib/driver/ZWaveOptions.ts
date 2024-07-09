@@ -1,6 +1,7 @@
-import type { LogConfig } from "@zwave-js/core";
+import type { LogConfig, LongRangeChannel, RFRegion } from "@zwave-js/core";
 import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
+import { type DeepPartial, type Expand } from "@zwave-js/shared";
 import type { SerialPort } from "serialport";
 import type { InclusionUserCallbacks } from "../controller/Inclusion";
 
@@ -14,13 +15,22 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		byte: number; // >=1, default: 150 ms
 
 		/**
-		 * How long to wait for a controller response. Usually this timeout should never elapse,
-		 * so this is merely a safeguard against the driver stalling.
+		 * How long to wait for a controller response. Usually this should never elapse, but when it does,
+		 * the driver will abort the transmission and try to recover the controller if it is unresponsive.
 		 */
-		response: number; // [500...20000], default: 10000 ms
+		response: number; // [500...60000], default: 10000 ms
 
-		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number; // >=10000, default: 65000 ms
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before aborting the transmission.
+		 */
+		sendDataAbort: number; // >=5000, <=(sendDataCallback - 5000), default: 20000 ms
+
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before considering the controller unresponsive.
+		 */
+		sendDataCallback: number; // >=10000, default: 30000 ms
 
 		/** How much time a node gets to process a request and send a response */
 		report: number; // [500...10000], default: 1000 ms
@@ -28,14 +38,29 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
 
+		/** How long to wait before retrying a command when the controller is jammed */
+		retryJammed: number; // [10...5000], default: 1000 ms
+
 		/**
-		 * @internal
+		 * How long to wait without pending commands before sending a node back to sleep.
+		 * Should be as short as possible to save battery, but long enough to give applications time to react.
+		 */
+		sendToSleep: number; // [10...5000], default: 250 ms
+
+		/**
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
 		 * How long to wait for a poll after setting a value without transition duration
 		 */
 		refreshValue: number;
 
 		/**
-		 * @internal
+		 * **!!! INTERNAL !!!**
+		 *
+		 * Not intended to be used by applications
+		 *
 		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
 		 */
 		refreshValueAfterTransition: number;
@@ -60,6 +85,9 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
 
+		/** How often the driver should retry SendData commands while the controller is jammed */
+		sendDataJammed: number; // [1...10], default: 5
+
 		/**
 		 * How many attempts should be made for each node interview before giving up
 		 */
@@ -82,7 +110,7 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 * Disable the automatic node interview after successful inclusion.
 		 * Note: When this is `true`, the interview must be started manually using
 		 * ```ts
-		 * driver.interviewNode(node: ZWaveNode)
+		 * node.interview()
 		 * ```
 		 *
 		 * Default: `false` (automatic interviews enabled)
@@ -118,13 +146,21 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	};
 
 	/**
-	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
+	 * Specify the security keys to use for encryption (Z-Wave Classic). Each one must be a Buffer of exactly 16 bytes.
 	 */
 	securityKeys?: {
-		S2_Unauthenticated?: Buffer;
-		S2_Authenticated?: Buffer;
 		S2_AccessControl?: Buffer;
+		S2_Authenticated?: Buffer;
+		S2_Unauthenticated?: Buffer;
 		S0_Legacy?: Buffer;
+	};
+
+	/**
+	 * Specify the security keys to use for encryption (Z-Wave Long Range). Each one must be a Buffer of exactly 16 bytes.
+	 */
+	securityKeysLongRange?: {
+		S2_AccessControl?: Buffer;
+		S2_Authenticated?: Buffer;
 	};
 
 	/**
@@ -132,14 +168,6 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
 	 */
 	inclusionUserCallbacks?: InclusionUserCallbacks;
-
-	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
 
 	/**
 	 * Some SET-type commands optimistically update the current value to match the target value
@@ -164,12 +192,40 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	emitValueUpdateAfterSetValue?: boolean;
 
-	/**
-	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
-	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
-	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
-	 */
-	enableSoftReset?: boolean;
+	features: {
+		/**
+		 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+		 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
+		 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
+		 *
+		 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
+		 */
+		softReset?: boolean;
+
+		/**
+		 * When enabled, the driver attempts to detect when the controller becomes unresponsive (meaning it did not
+		 * respond within the configured timeout) and performs appropriate recovery actions.
+		 *
+		 * This includes the following scenarios:
+		 * * A command was not acknowledged by the controller
+		 * * The callback for a Send Data command was not received, even after aborting a timed out transmission
+		 *
+		 * In certain environments however, this feature can interfere with the normal operation more than intended,
+		 * so it can be disabled. However disabling it means that commands can fail unnecessarily and nodes can be
+		 * incorrectly marked as dead.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
+		 */
+		unresponsiveControllerRecovery?: boolean;
+
+		/**
+		 * Controllers of the 700 series and newer have a hardware watchdog that can be enabled to automatically
+		 * reset the chip in case it becomes unresponsive. This option controls whether the watchdog should be enabled.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_WATCHDOG env variable is set.
+		 */
+		watchdog?: boolean;
+	};
 
 	preferences: {
 		/**
@@ -201,6 +257,43 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		scales: Partial<Record<string | number, string | number>>;
 	};
 
+	/**
+	 * RF-related settings that should automatically be configured on startup. If Z-Wave JS detects
+	 * a discrepancy between these settings and the actual configuration, it will automatically try to
+	 * re-configure the controller to match.
+	 */
+	rf?: {
+		/** The RF region the radio should be tuned to. */
+		region?: RFRegion;
+
+		/**
+		 * Whether LR-capable regions should automatically be preferred over their corresponding non-LR regions, e.g. `USA` -> `USA (Long Range)`.
+		 * This also overrides the `rf.region` setting if the desired region is not LR-capable.
+		 *
+		 * Default: true.
+		 */
+		preferLRRegion?: boolean;
+
+		txPower?: {
+			/** The desired TX power in dBm. */
+			powerlevel: number;
+			/** A hardware-specific calibration value. */
+			measured0dBm: number;
+		};
+
+		/** The desired max. powerlevel setting for Z-Wave Long Range in dBm. */
+		maxLongRangePowerlevel?: number;
+
+		/**
+		 * The desired channel to use for Z-Wave Long Range.
+		 * Auto may be unsupported by the controller and will be ignored in that case.
+		 */
+		longRangeChannel?:
+			| LongRangeChannel.A
+			| LongRangeChannel.B
+			| LongRangeChannel.Auto;
+	};
+
 	apiKeys?: {
 		/** API key for the Z-Wave JS Firmware Update Service (https://github.com/zwave-js/firmware-updates/) */
 		firmwareUpdateService?: string;
@@ -224,7 +317,24 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	userAgent?: Record<string, string>;
 
-	/** @internal Used for testing internally */
+	/**
+	 * Specify application-specific information to use in queries from other devices
+	 */
+	vendor?: {
+		manufacturerId: number;
+		productType: number;
+		productId: number;
+
+		/** The version of the hardware the application is running on. Can be omitted if unknown. */
+		hardwareVersion?: number;
+
+		/** The icon type to use for installers. Default: 0x0500 - Generic Gateway */
+		installerIcon?: number;
+		/** The icon type to use for users. Default: 0x0500 - Generic Gateway */
+		userIcon?: number;
+	};
+
+	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {
 		serialPortBinding?: typeof SerialPort;
 		/**
@@ -255,15 +365,93 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	};
 }
 
-export type EditableZWaveOptions = Pick<
-	ZWaveOptions,
-	| "disableOptimisticValueUpdate"
-	| "emitValueUpdateAfterSetValue"
-	| "inclusionUserCallbacks"
-	| "interview"
-	| "logConfig"
-	| "preferences"
-	| "preserveUnknownValues"
-> & {
-	userAgent?: Record<string, string | null | undefined>;
-};
+export type PartialZWaveOptions = Expand<
+	& DeepPartial<
+		Omit<
+			ZWaveOptions,
+			"inclusionUserCallbacks" | "logConfig" | "testingHooks"
+		>
+	>
+	& Partial<
+		Pick<
+			ZWaveOptions,
+			"inclusionUserCallbacks" | "testingHooks" | "vendor"
+		>
+	>
+	& {
+		inclusionUserCallbacks?: ZWaveOptions["inclusionUserCallbacks"];
+		logConfig?: Partial<LogConfig>;
+	}
+>;
+
+export type EditableZWaveOptions = Expand<
+	& Pick<
+		PartialZWaveOptions,
+		| "disableOptimisticValueUpdate"
+		| "emitValueUpdateAfterSetValue"
+		| "inclusionUserCallbacks"
+		| "interview"
+		| "logConfig"
+		| "preferences"
+		| "vendor"
+	>
+	& {
+		userAgent?: Record<string, string | null | undefined>;
+	}
+>;
+
+export const driverPresets = Object.freeze(
+	{
+		/**
+		 * Increases several timeouts to be able to deal with controllers
+		 * and/or nodes that have severe trouble communicating.
+		 */
+		SAFE_MODE: {
+			timeouts: {
+				// 500 series controllers that take long to respond instead of delaying the callback
+				response: 60000,
+				// Any controller having trouble reaching a node
+				sendDataAbort: 60000,
+				sendDataCallback: 65000,
+				// Slow nodes taking long to respond
+				report: 10000,
+				nonce: 20000,
+			},
+			attempts: {
+				// Increase communication attempts with nodes to their maximum
+				sendData: 5,
+				sendDataJammed: 10,
+				nodeInterview: 10,
+			},
+		},
+
+		/**
+		 * Disables the unresponsive controller recovery to be able to deal with controllers
+		 * that frequently become unresponsive for seemingly no reason.
+		 */
+		NO_CONTROLLER_RECOVERY: {
+			features: {
+				unresponsiveControllerRecovery: false,
+			},
+		},
+
+		/**
+		 * Sends battery powered nodes to sleep more quickly in order to save battery.
+		 */
+		BATTERY_SAVE: {
+			timeouts: {
+				sendToSleep: 100,
+			},
+		},
+
+		/**
+		 * Sends battery powered nodes to sleep less quickly to give applications
+		 * more time between interactions.
+		 */
+		AWAKE_LONGER: {
+			timeouts: {
+				sendToSleep: 1000,
+			},
+		},
+	} as const satisfies Record<string, PartialZWaveOptions>,
+);

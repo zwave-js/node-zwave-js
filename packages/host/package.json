@@ -1,32 +1,24 @@
 {
   "name": "@zwave-js/host",
-  "version": "10.10.0",
+  "version": "13.0.0-beta.1",
   "description": "zwave-js: Host abstractions",
   "keywords": [],
   "publishConfig": {
-    "access": "public",
-    "$types": "build/index.d.ts",
-    "$typesVersions": {
-      "*": {
-        "safe": [
-          "build/index_safe.d.ts"
-        ]
-      }
-    }
+    "access": "public"
   },
-  "main": "build/index.js",
+  "type": "commonjs",
   "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js"
-  },
-  "types": "src/index.ts",
-  "typesVersions": {
-    "*": {
-      "safe": [
-        "src/index_safe.ts"
-      ]
-    }
+    ".": {
+      "@@dev": "./src/index.ts",
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    },
+    "./safe": {
+      "@@dev": "./src/index_safe.ts",
+      "types": "./build/index_safe.d.ts",
+      "default": "./build/index_safe.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "build/**/*.{js,d.ts,map}"
@@ -36,28 +28,26 @@
     "email": "d.griesel@gmx.net"
   },
   "license": "MIT",
-  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "homepage": "https://github.com/zwave-js/node-zwave-js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+    "url": "git+https://github.com/zwave-js/node-zwave-js.git"
   },
   "bugs": {
-    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+    "url": "https://github.com/zwave-js/node-zwave-js/issues"
   },
   "funding": {
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
+    "node": ">= 18"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
-    "lint:ts:fix": "yarn run lint:ts --fix",
-    "lint:prettier": "prettier -c \"src/**/*.ts\"",
-    "lint:prettier:fix": "yarn run lint:prettier -w"
+    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "dependencies": {
     "@zwave-js/config": "workspace:*",
@@ -66,10 +56,9 @@
     "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "*",
-    "@types/node": "^14.18.36",
-    "del-cli": "^5.0.0",
-    "prettier": "^2.8.1",
-    "typescript": "4.9.4"
+    "@microsoft/api-extractor": "^7.47.0",
+    "@types/node": "^18.19.31",
+    "del-cli": "^5.1.0",
+    "typescript": "5.5.3"
   }
 }

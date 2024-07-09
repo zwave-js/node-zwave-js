@@ -1,0 +1,69 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YRD216 / YRC216",
+	"description": "Real Living Assure Lock Push Button Deadbolt",
+	"devices": [
+		{
+			"productType": "0x8004",
+			"productId": "0x0600",
+			"zwaveAllianceId": [1971, 3239]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/yale_template.json#volume"
+		},
+		{
+			"#": "2",
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#auto_relock_time_180"
+		},
+		{
+			"#": "4",
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
+		},
+		{
+			"#": "5",
+			"$import": "templates/yale_template.json#language"
+		},
+		{
+			"#": "7",
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
+		},
+		{
+			"#": "8",
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
+		},
+		{
+			"#": "11",
+			"$import": "templates/yale_template.json#one_touch"
+		},
+		{
+			"#": "12",
+			"$import": "templates/yale_template.json#privacy_button"
+		},
+		{
+			"#": "13",
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "15",
+			"$import": "templates/yale_template.json#reset_factory"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 1 key followed by the gear key",
+		"exclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Remove the inside lever with the lever removal tool.\n2. Remove battery cover using hex wrench provided with lock.\n3. Remove four (4) AA batteries.\n4. Remove the 10-32 x 3/4\" pan head screw from the center of the battery housing into the barrel nut of the outside assembly.\n5. Remove inside escutcheon. Cables may stay connected.\n6. Reinstall batteries \n7. On the back of the PC board, push and hold the Reset Button with the lever removal tool for 3 seconds.\n8. While continuing the press the reset button, temporarily remove one AA battery.\n9. Reinstall the battery\n10. Release reset button and wait 15 seconds. Speaker will announce \"Welcome to Yale\"\n11. Reassemble escutcheon",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1971/WGA6ZWManual.pdf"
+	}
+}

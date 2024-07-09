@@ -33,7 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Fail Save timer",
+			"label": "Fail Save Timer",
 			"description": "Enable/Disable the Fail save timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Temperature reporting intervals",
+			"label": "Temperature Reporting Intervals",
 			"description": "Define the time interval for the temperature report that is sent.",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Delta configuration temperature reporting",
+			"label": "Delta Configuration Temperature Reporting",
 			"description": "Set the delta-configuration of the temperature report in Celsius or Fahrenheit",
 			"valueSize": 2,
 			"unit": "°C",

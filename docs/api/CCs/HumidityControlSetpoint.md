@@ -9,7 +9,7 @@
 ```ts
 async get(
 	setpointType: HumidityControlSetpointType,
-): Promise<HumidityControlSetpointValue | undefined>;
+): Promise<MaybeNotKnown<HumidityControlSetpointValue>>;
 ```
 
 ### `set`
@@ -27,14 +27,14 @@ async set(
 ```ts
 async getCapabilities(
 	setpointType: HumidityControlSetpointType,
-): Promise<HumidityControlSetpointCapabilities | undefined>;
+): Promise<MaybeNotKnown<HumidityControlSetpointCapabilities>>;
 ```
 
 ### `getSupportedSetpointTypes`
 
 ```ts
 async getSupportedSetpointTypes(): Promise<
-	readonly HumidityControlSetpointType[] | undefined
+	MaybeNotKnown<readonly HumidityControlSetpointType[]>
 >;
 ```
 
@@ -43,7 +43,7 @@ async getSupportedSetpointTypes(): Promise<
 ```ts
 async getSupportedScales(
 	setpointType: HumidityControlSetpointType,
-): Promise<readonly Scale[] | undefined>;
+): Promise<MaybeNotKnown<readonly Scale[]>>;
 ```
 
 ## Humidity Control Setpoint CC values
@@ -59,13 +59,13 @@ async getSupportedScales(
 }
 ```
 
--   **label:** `Setpoint (${string})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
+- **label:** `Setpoint (${string})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
 
 ### `setpointScale(setpointType: number)`
 
@@ -78,12 +78,12 @@ async getSupportedScales(
 }
 ```
 
--   **label:** `Setpoint scale (${string})`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Setpoint scale (${string})`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255

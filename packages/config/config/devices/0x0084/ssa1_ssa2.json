@@ -24,10 +24,10 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Delay before accept of Basic Set Off",
+			"label": "Delay Before Accept of Basic Set Off",
 			"description": "Delay, from the time the siren-strobe turns on",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,

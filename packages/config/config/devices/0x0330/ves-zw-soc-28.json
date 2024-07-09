@@ -1,0 +1,61 @@
+{
+	"manufacturer": "Vesternet",
+	"manufacturerId": "0x0060",
+	"label": "VES-ZW-SOC-28",
+	"description": "UK Socket Plug",
+	"devices": [
+		{
+			"productType": "0x0034",
+			"productId": "0x0001",
+			"zwaveAllianceId": [4675]
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.0.24",
+		"max": "1.0.26"
+	},
+	"associations": {
+		"1": {
+			"label": "Reports",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
+		},
+		{
+			"#": "2",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				},
+				{
+					"label": "Enabled for 5 seconds",
+					"value": 2
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product for power-on inclusion, or press the button and hold for 3 seconds.",
+		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Press the button and hold for 3 seconds.",
+		"reset": "Step 1. Press the button 3 times within 1.5 seconds.\nStep 2. Within 1 second of Step 1, press the button and hold for over 5 seconds until the LED is off..",
+		"manual": "https://cdn.shopify.com/s/files/1/0066/8149/3559/files/VES-ZW-SOC-28.pdf"
+	}
+}

@@ -1,0 +1,126 @@
+{
+	"w_report_interval": {
+		"label": "Power (W) Report Interval",
+		"valueSize": 2,
+		"unit": "5 seconds",
+		"minValue": 1,
+		"maxValue": 32767,
+		"defaultValue": 720
+	},
+	"kwh_report_interval": {
+		"label": "Energy (kWh) Report Interval",
+		"valueSize": 2,
+		"unit": "10 minutes",
+		"minValue": 1,
+		"maxValue": 32767,
+		"defaultValue": 6
+	},
+	"level_report_mode": {
+		"label": "Level Report Mode",
+		"valueSize": 1,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Every 5 seconds while moving",
+				"value": 1
+			},
+			{
+				"label": "Every 10% change",
+				"value": 2
+			}
+		]
+	},
+	"backlight_brightness": {
+		"label": "Backlight Brightness",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 10,
+		"defaultValue": 10,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"demo_trip": {
+		"label": "Demo Trip",
+		"description": "Run the motor for 3 seconds to read motor data",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Idle",
+				"value": 0
+			},
+			{
+				"label": "Activate",
+				"value": 1
+			}
+		]
+	},
+	"auto_calibrate": {
+		"label": "Auto Calibrate",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Idle",
+				"value": 0
+			},
+			{
+				"label": "Activate",
+				"value": 1
+			}
+		]
+	},
+	"demo_trip_and_calibrate": {
+		"label": "Demo Trip and Auto Calibrate",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Idle",
+				"value": 0
+			},
+			{
+				"label": "Activate",
+				"value": 1
+			}
+		]
+	},
+	"min_shutter_level": {
+		"label": "Minimum Shutter Level (Closed)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 98,
+		"defaultValue": 0
+	},
+	"max_shutter_level": {
+		"label": "Maximum Shutter Level (Open)",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 99
+	},
+	"factory_reset": {
+		"label": "Factory Reset",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal operation",
+				"value": 0
+			},
+			{
+				"label": "Reset",
+				"value": 85
+			}
+		]
+	}
+}

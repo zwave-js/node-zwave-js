@@ -53,3 +53,12 @@ async setNetworkKey(networkKey: Buffer): Promise<void>;
 ```ts
 async getSupportedCommands(): Promise<Pick<SecurityCCCommandsSupportedReport, "supportedCCs" | "controlledCCs"> | undefined>;
 ```
+
+### `reportSupportedCommands`
+
+```ts
+async reportSupportedCommands(
+	supportedCCs: CommandClasses[],
+	controlledCCs: CommandClasses[],
+): Promise<void>;
+```

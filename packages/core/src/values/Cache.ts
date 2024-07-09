@@ -6,15 +6,22 @@ import type { ValueMetadata } from "./Metadata";
 import type { ValueID } from "./_Types";
 
 // export type SerializableValue = number | string | boolean | Map<string | number, any> | JSONObject;
-type SerializedValue = number | string | boolean | JSONObject | undefined;
+export type SerializedValue =
+	| number
+	| string
+	| boolean
+	| JSONObject
+	| undefined;
 
 export interface CacheValue
-	extends Pick<ValueID, "endpoint" | "property" | "propertyKey"> {
+	extends Pick<ValueID, "endpoint" | "property" | "propertyKey">
+{
 	value: SerializedValue;
 }
 
 export interface CacheMetadata
-	extends Pick<ValueID, "endpoint" | "property" | "propertyKey"> {
+	extends Pick<ValueID, "endpoint" | "property" | "propertyKey">
+{
 	metadata: ValueMetadata;
 }
 
@@ -47,11 +54,11 @@ export function serializeCacheValue(value: unknown): SerializedValue {
 			data: value.toString("hex"),
 		};
 	} else if (
-		typeof value === "number" ||
-		typeof value === "string" ||
-		typeof value === "boolean" ||
-		isObject(value) ||
-		isArray(value)
+		typeof value === "number"
+		|| typeof value === "string"
+		|| typeof value === "boolean"
+		|| isObject(value)
+		|| isArray(value)
 	) {
 		return value;
 	}

@@ -2,7 +2,7 @@
 	"manufacturer": "NIE Technology Co., Ltd.",
 	"manufacturerId": "0x0312",
 	"label": "EZW1204",
-	"description": "Flood leak sensor",
+	"description": "Flood Leak Sensor",
 	"devices": [
 		{
 			"productType": "0x2003",

@@ -2,7 +2,7 @@
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
 	"label": "MINI KEYPAD RFID",
-	"description": "Keypad with alarm activation rfid tag",
+	"description": "Keypad with Alarm Activation RFID Tag",
 	"devices": [
 		{
 			"productType": "0x6131",
@@ -24,7 +24,7 @@
 	"associations": {
 		"1": {
 			"label": "Association",
-			"description": "The Association Command Class is used to associate the TagReader to other devices. When a tag or code is read, the TagReader will send a notification to the Z‐Wave devices in its association group. It will also report the state of the tamper alarm to the",
+			"description": "The Association Command Class is used to associate the TagReader to other devices. When a tag or code is read, the TagReader will send a notification to the Z-Wave devices in its association group. It will also report the state of the tamper alarm to the",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Set to default",
+			"label": "Set to Default",
 			"description": "Set all configuration to factory settings",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Feedback time",
+			"label": "Feedback Time",
 			"description": "To configure the time the beep is automatically turned off in seconds.",
 			"valueSize": 1,
 			"defaultValue": 15,
@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Feedback timeout",
+			"label": "Feedback Timeout",
 			"description": "Timeout beep",
 			"valueSize": 1,
 			"minValue": -128,
@@ -76,18 +76,17 @@
 		},
 		{
 			"#": "4",
-			"label": "Feedback beeps per second",
+			"label": "Feedback Beeps Per Second",
 			"description": "To configure the number of beeps per second. Every beep is fixed about 10ms.",
-			"unit": "ms",
 			"valueSize": 1,
+			"unit": "ms",
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 2
 		},
 		{
 			"#": "5",
-			"label": "The mode",
-			"description": "Operating mode",
+			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -97,11 +96,11 @@
 					"value": 1
 				},
 				{
-					"label": "Normal operating mode (like 1)",
+					"label": "Normal operating mode (Like 1)",
 					"value": 2
 				},
 				{
-					"label": "Z‐Wave chip is always on to request",
+					"label": "Z-Wave chip is always on to request",
 					"value": 3
 				}
 			]

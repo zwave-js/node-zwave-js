@@ -37,15 +37,15 @@ async setConfiguration(
 }
 ```
 
--   **label:** `Scene ${string}`
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+- **label:** `Scene ${string}`
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** false
+- **secret:** false
+- **value type:** `"number"`
+- **min. value:** 0
+- **max. value:** 255
 
 ### `slowRefresh`
 
@@ -57,11 +57,11 @@ async setConfiguration(
 }
 ```
 
--   **label:** Send held down notifications at a slow rate
--   **description:** When this is true, KeyHeldDown notifications are sent every 55s. When this is false, the notifications are sent every 200ms.
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Send held down notifications at a slow rate
+- **description:** When this is true, KeyHeldDown notifications are sent every 55s. When this is false, the notifications are sent every 200ms.
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`

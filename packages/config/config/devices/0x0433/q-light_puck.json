@@ -39,40 +39,37 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Minimum brightness level",
+			"label": "Minimum Brightness Level",
 			"description": "Set the desired value from 1 to 98% for the minimum dim level that the dimmer is restricted to, the dimmer will not go lower than the value set here.",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 98,
-			"defaultValue": 15,
-			"unsigned": true
+			"defaultValue": 15
 		},
 		{
 			"#": "2",
-			"label": "Maximum brightness level",
+			"label": "Maximum Brightness Level",
 			"description": "Set the desired value from 2 to 99% for the maximum dim level that the dimmer is restricted to, the dimmer will not go higher than the value set here.",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "3",
-			"label": "Automatic control - dimming step size",
+			"label": "Automatic Control - Dimming Step Size",
 			"description": "This parameter defines the percentage value of dimming step during the automatic control.",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Automatic control - time of a dimming step",
+			"label": "Automatic Control - Time of A Dimming Step",
 			"description": "This parameter defines the time of single dimming step set in parameter 3 during the automatic control.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -82,18 +79,17 @@
 		},
 		{
 			"#": "5",
-			"label": "Manual control - dimming step size",
+			"label": "Manual Control - Dimming Step Size",
 			"description": "This parameter defines the percentage value of dimming step during the manual control.",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "Manual control - time of a dimming step",
+			"label": "Manual Control - Time of A Dimming Step",
 			"description": "This parameter defines the time of single dimming step setin parameter 5 during the manual control.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -107,34 +103,32 @@
 		},
 		{
 			"#": "8",
-			"label": "Switch type",
+			"label": "Switch Type",
 			"description": "Choose between momentary, ON/OFF and roller blind switch. Available settings: 0 – momentary (Push) switch. 1 – ON/OFF switch. 2– roller blind switch-two switches operate the device(S1 to brighter, S2 to dim",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "momentary (Push) switch",
+					"label": "Momentary (Push) switch",
 					"value": 0
 				},
 				{
-					"label": "ON/OFF switch",
+					"label": "On/Off switch",
 					"value": 1
 				},
 				{
-					"label": "roller blind switch-two switches operate the device(S1 to brighter, S2 to dim)",
+					"label": "Roller blind switch-two switches operate the device(S1 to brighter, S2 to dim)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "9",
-			"label": "Switch functionality of S1 and S2",
+			"label": "Switch Functionality of S1 and S2",
 			"description": "Set the desired value from 0 to 1 to turn on/off the memory function. Setting this value to 0 turns off the dimmer's Memory function. Setting this value to 1 turns on the dimmer's Memory function.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -149,7 +143,7 @@
 		},
 		{
 			"#": "10",
-			"label": "S1 Scene ID set",
+			"label": "S1 Scene ID Set",
 			"description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 3 . S1 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -159,7 +153,7 @@
 		},
 		{
 			"#": "11",
-			"label": "S2 Scene ID set",
+			"label": "S2 Scene ID Set",
 			"description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 5. S2 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
 			"valueSize": 1,
 			"minValue": 1,
@@ -175,7 +169,6 @@
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",

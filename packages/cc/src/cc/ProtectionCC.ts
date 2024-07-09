@@ -1,38 +1,41 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
 	MAX_NODES,
-	Maybe,
-	MessageOrCCLogEntry,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	parseBitMask,
-	SupervisionResult,
+	type MessageRecord,
+	type SupervisionResult,
 	Timeout,
-	unknownBoolean,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
-	SetValueImplementation,
+	type PollValueImplementation,
 	SET_VALUE,
+	type SetValueImplementation,
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -64,11 +67,15 @@ export const ProtectionCCValues = Object.freeze({
 			{ minVersion: 2 } as const,
 		),
 
-		...V.staticPropertyWithName("localProtectionState", "local", {
-			...ValueMetadata.Number,
-			label: "Local protection state",
-			states: enumValuesToMetadataStates(LocalProtectionState),
-		} as const),
+		...V.staticPropertyWithName(
+			"localProtectionState",
+			"local",
+			{
+				...ValueMetadata.Number,
+				label: "Local protection state",
+				states: enumValuesToMetadataStates(LocalProtectionState),
+			} as const,
+		),
 
 		...V.staticPropertyWithName(
 			"rfProtectionState",
@@ -107,7 +114,7 @@ export const ProtectionCCValues = Object.freeze({
 
 @API(CommandClasses.Protection)
 export class ProtectionCCAPI extends CCAPI {
-	public supportsCommand(cmd: ProtectionCommand): Maybe<boolean> {
+	public supportsCommand(cmd: ProtectionCommand): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ProtectionCommand.Get:
 				return this.isSinglecast();
@@ -118,96 +125,96 @@ export class ProtectionCCAPI extends CCAPI {
 			case ProtectionCommand.TimeoutGet:
 			case ProtectionCommand.TimeoutSet: {
 				return (
-					this.isSinglecast() &&
-					(this.tryGetValueDB()?.getValue<Maybe<boolean>>(
+					this.isSinglecast()
+					&& this.tryGetValueDB()?.getValue<boolean>(
 						ProtectionCCValues.supportsTimeout.endpoint(
 							this.endpoint.index,
 						),
-					) ??
-						unknownBoolean)
+					)
 				);
 			}
 			case ProtectionCommand.ExclusiveControlGet:
 			case ProtectionCommand.ExclusiveControlSet: {
 				return (
-					this.isSinglecast() &&
-					(this.tryGetValueDB()?.getValue<Maybe<boolean>>(
+					this.isSinglecast()
+					&& this.tryGetValueDB()?.getValue<boolean>(
 						ProtectionCCValues.supportsExclusiveControl.endpoint(
 							this.endpoint.index,
 						),
-					) ??
-						unknownBoolean)
+					)
 				);
 			}
 		}
 		return super.supportsCommand(cmd);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
-		value,
-	) => {
-		const valueDB = this.tryGetValueDB();
-		if (property === "local") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+	protected override get [SET_VALUE](): SetValueImplementation {
+		return async function(this: ProtectionCCAPI, { property }, value) {
+			const valueDB = this.tryGetValueDB();
+			if (property === "local") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				// We need to set both values together, so retrieve the other one from the value DB
+				const rf = valueDB?.getValue<RFProtectionState>(
+					ProtectionCCValues.rfProtectionState.endpoint(
+						this.endpoint.index,
+					),
 				);
-			}
-			// We need to set both values together, so retrieve the other one from the value DB
-			const rf = valueDB?.getValue<RFProtectionState>(
-				ProtectionCCValues.rfProtectionState.endpoint(
-					this.endpoint.index,
-				),
-			);
-			return this.set(value, rf);
-		} else if (property === "rf") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+				return this.set(value, rf);
+			} else if (property === "rf") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				// We need to set both values together, so retrieve the other one from the value DB
+				const local = valueDB?.getValue<LocalProtectionState>(
+					ProtectionCCValues.localProtectionState.endpoint(
+						this.endpoint.index,
+					),
 				);
-			}
-			// We need to set both values together, so retrieve the other one from the value DB
-			const local = valueDB?.getValue<LocalProtectionState>(
-				ProtectionCCValues.localProtectionState.endpoint(
-					this.endpoint.index,
-				),
-			);
-			return this.set(local ?? LocalProtectionState.Unprotected, value);
-		} else if (property === "exclusiveControlNodeId") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
+				return this.set(
+					local ?? LocalProtectionState.Unprotected,
+					value,
 				);
-			}
-			return this.setExclusiveControl(value);
-		} else {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "local":
-			case "rf":
-				return (await this.get())?.[property];
-			case "exclusiveControlNodeId":
-				return this.getExclusiveControl();
-			default:
+			} else if (property === "exclusiveControlNodeId") {
+				if (typeof value !== "number") {
+					throwWrongValueType(
+						this.ccId,
+						property,
+						"number",
+						typeof value,
+					);
+				}
+				return this.setExclusiveControl(value);
+			} else {
 				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+			}
+		};
+	}
+
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function(this: ProtectionCCAPI, { property }) {
+			switch (property) {
+				case "local":
+				case "rf":
+					return (await this.get())?.[property];
+				case "exclusiveControlNodeId":
+					return this.getExclusiveControl();
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
@@ -253,11 +260,12 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ProtectionCCSupportedReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ProtectionCCSupportedReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, [
 				"supportsExclusiveControl",
@@ -268,7 +276,7 @@ export class ProtectionCCAPI extends CCAPI {
 		}
 	}
 
-	public async getExclusiveControl(): Promise<number | undefined> {
+	public async getExclusiveControl(): Promise<MaybeNotKnown<number>> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.ExclusiveControlGet,
@@ -278,11 +286,12 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ProtectionCCExclusiveControlReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ProtectionCCExclusiveControlReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.exclusiveControlNodeId;
 	}
 
@@ -303,7 +312,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getTimeout(): Promise<Timeout | undefined> {
+	public async getTimeout(): Promise<MaybeNotKnown<Timeout>> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.TimeoutGet,
@@ -313,11 +322,12 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ProtectionCCTimeoutReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ProtectionCCTimeoutReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		return response?.timeout;
 	}
 
@@ -377,16 +387,22 @@ export class ProtectionCC extends CommandClass {
 				const logMessage = `received protection capabilities:
 exclusive control:       ${resp.supportsExclusiveControl}
 timeout:                 ${resp.supportsTimeout}
-local protection states: ${resp.supportedLocalStates
-					.map((local) =>
-						getEnumMemberName(LocalProtectionState, local),
-					)
-					.map((str) => `\n· ${str}`)
-					.join("")}
-RF protection states:    ${resp.supportedRFStates
-					.map((local) => getEnumMemberName(RFProtectionState, local))
-					.map((str) => `\n· ${str}`)
-					.join("")}`;
+local protection states: ${
+					resp.supportedLocalStates
+						.map((local) =>
+							getEnumMemberName(LocalProtectionState, local)
+						)
+						.map((str) => `\n· ${str}`)
+						.join("")
+				}
+RF protection states:    ${
+					resp.supportedRFStates
+						.map((local) =>
+							getEnumMemberName(RFProtectionState, local)
+						)
+						.map((str) => `\n· ${str}`)
+						.join("")
+				}`;
 				applHost.controllerLog.logNode(node.id, {
 					message: logMessage,
 					direction: "inbound",
@@ -465,10 +481,9 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 			const nodeId = await api.getExclusiveControl();
 			if (nodeId != undefined) {
 				applHost.controllerLog.logNode(node.id, {
-					message:
-						(nodeId !== 0
-							? `Node ${padStart(nodeId.toString(), 3, "0")}`
-							: `no node`) + ` has exclusive control`,
+					message: (nodeId !== 0
+						? `Node ${padStart(nodeId.toString(), 3, "0")}`
+						: `no node`) + ` has exclusive control`,
 					direction: "inbound",
 				});
 			}
@@ -476,7 +491,8 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 	}
 }
 
-interface ProtectionCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ProtectionCCSetOptions extends CCCommandOptions {
 	local: LocalProtectionState;
 	rf?: RFProtectionState;
 }
@@ -505,15 +521,24 @@ export class ProtectionCCSet extends ProtectionCC {
 	public rf?: RFProtectionState;
 
 	public serialize(): Buffer {
-		const payload = [this.local & 0b1111];
-		if (this.version >= 2 && this.rf != undefined) {
-			payload.push(this.rf & 0b1111);
+		this.payload = Buffer.from([
+			this.local & 0b1111,
+			(this.rf ?? RFProtectionState.Unprotected) & 0b1111,
+		]);
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, only include the local state
+			this.payload = this.payload.subarray(0, 1);
 		}
-		this.payload = Buffer.from(payload);
+
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -521,7 +546,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -547,7 +572,7 @@ export class ProtectionCCReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.rfProtectionState)
 	public readonly rf?: RFProtectionState;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -555,7 +580,7 @@ export class ProtectionCCReport extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -576,11 +601,11 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		this.supportsTimeout = !!(this.payload[0] & 0b1);
 		this.supportsExclusiveControl = !!(this.payload[0] & 0b10);
 		this.supportedLocalStates = parseBitMask(
-			this.payload.slice(1, 3),
+			this.payload.subarray(1, 3),
 			LocalProtectionState.Unprotected,
 		);
 		this.supportedRFStates = parseBitMask(
-			this.payload.slice(3, 5),
+			this.payload.subarray(3, 5),
 			RFProtectionState.Unprotected,
 		);
 	}
@@ -622,15 +647,15 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.supportedRFStates)
 	public readonly supportedRFStates: RFProtectionState[];
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports exclusive control": this.supportsExclusiveControl,
 				"supports timeout": this.supportsTimeout,
 				"local protection states": this.supportedLocalStates
 					.map((local) =>
-						getEnumMemberName(LocalProtectionState, local),
+						getEnumMemberName(LocalProtectionState, local)
 					)
 					.map((str) => `\n· ${str}`)
 					.join(""),
@@ -661,9 +686,9 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
 	public readonly exclusiveControlNodeId: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -675,7 +700,10 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 @expectedCCResponse(ProtectionCCExclusiveControlReport)
 export class ProtectionCCExclusiveControlGet extends ProtectionCC {}
 
-interface ProtectionCCExclusiveControlSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ProtectionCCExclusiveControlSetOptions
+	extends CCCommandOptions
+{
 	exclusiveControlNodeId: number;
 }
 
@@ -708,9 +736,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -732,9 +760,9 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.timeout)
 	public readonly timeout: Timeout;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { timeout: this.timeout.toString() },
 		};
 	}
@@ -744,7 +772,8 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 @expectedCCResponse(ProtectionCCTimeoutReport)
 export class ProtectionCCTimeoutGet extends ProtectionCC {}
 
-interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
 	timeout: Timeout;
 }
 
@@ -777,9 +806,9 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { timeout: this.timeout.toString() },
 		};
 	}

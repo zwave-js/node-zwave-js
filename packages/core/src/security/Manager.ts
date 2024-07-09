@@ -1,6 +1,6 @@
 /** Management class and utils for Security S0 */
 
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { encryptAES128ECB } from "./crypto";
 

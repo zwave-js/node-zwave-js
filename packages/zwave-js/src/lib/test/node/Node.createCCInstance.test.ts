@@ -1,8 +1,8 @@
 import { BasicCC } from "@zwave-js/cc/BasicCC";
 import {
-	assertZWaveError,
 	CommandClasses,
 	ZWaveErrorCodes,
+	assertZWaveError,
 } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
@@ -31,7 +31,6 @@ test.before(async (t) => {
 			t.context.controller = controller;
 		},
 	});
-	await driver.configManager.loadDeviceClasses();
 	t.context.driver = driver;
 });
 

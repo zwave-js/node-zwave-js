@@ -1,0 +1,124 @@
+{
+	"manufacturer": "Alloy",
+	"manufacturerId": "0x0131",
+	"label": "AH-NEO-DS07Z",
+	"description": "Contact Sensor 2",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x1118"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Binary Sensor Report"
+		},
+		{
+			"#": "3",
+			"label": "Temperature Calibration",
+			"valueSize": 1,
+			"unit": "0.1 (°C/°F)",
+			"minValue": -120,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "4",
+			"label": "Humidity Calibration",
+			"valueSize": 1,
+			"unit": "0.1 %rH",
+			"minValue": -120,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "5",
+			"label": "Temperature Change Report Threshold",
+			"valueSize": 1,
+			"unit": "0.1 (°C/°F)",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "6",
+			"label": "Humidity Change Report Threshold",
+			"valueSize": 1,
+			"unit": "0.1 %rH",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20
+		},
+		{
+			"#": "7",
+			"label": "Association Group 2: Basic Set Value (Open)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Off (0x00)",
+					"value": 0
+				},
+				{
+					"label": "On (0xff)",
+					"value": 100
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Association Group 2: Basic Set Off Delay Time (Close)",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 30
+		},
+		{
+			"#": "9",
+			"label": "Sensor Measuring Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 180,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Inclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 1s Interval Until Inclusion Successful.",
+		"exclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Exclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 0.5sinterval Until Exclusion Successful.",
+		"reset": "1. Power Up The Device.\n2. Press And Hold The Button For 10s Until Pink Led Lights Is On, Then Release The Button Before Led Turn Off."
+	}
+}

@@ -1,29 +1,33 @@
 import {
-	APIMethodsOf,
+	type APIMethodsOf,
 	CCAPI,
-	CCAPIs,
-	CCConstructor,
-	CCToAPI,
+	type CCAPIs,
+	type CCConstructor,
+	type CCNameOrId,
+	type CCToAPI,
 	CommandClass,
 	getCommandClassStatic,
+	normalizeCCNameOrId,
 } from "@zwave-js/cc";
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
-import type { IZWaveEndpoint } from "@zwave-js/core";
+import type { IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
 import {
-	actuatorCCs,
+	BasicDeviceClass,
 	CacheBackedMap,
+	type CommandClassInfo,
 	CommandClasses,
-	CommandClassInfo,
-	getCCName,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
+	actuatorCCs,
+	getCCName,
 } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
-import { isDeepStrictEqual } from "util";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { isDeepStrictEqual } from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";
+import type { EndpointDump } from "./Dump";
 import type { ZWaveNode } from "./Node";
 
 /**
@@ -43,7 +47,22 @@ export class Endpoint implements IZWaveEndpoint {
 		deviceClass?: DeviceClass,
 		supportedCCs?: CommandClasses[],
 	) {
-		this.applyDeviceClass(deviceClass);
+		// Initialize class fields
+		this._implementedCommandClasses = new CacheBackedMap(
+			this.driver.networkCache,
+			{
+				prefix:
+					cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
+				suffixSerializer: (cc: CommandClasses) => num2hex(cc),
+				suffixDeserializer: (key: string) => {
+					const ccId = parseInt(key, 16);
+					if (ccId in CommandClasses) return ccId;
+				},
+			},
+		);
+
+		// Optionally initialize the device class
+		if (deviceClass) this.deviceClass = deviceClass;
 
 		// Add optional CCs
 		if (supportedCCs != undefined) {
@@ -60,8 +79,8 @@ export class Endpoint implements IZWaveEndpoint {
 	 * Only used for endpoints which store their device class differently than nodes.
 	 * DO NOT ACCESS directly!
 	 */
-	private _deviceClass: DeviceClass | undefined;
-	public get deviceClass(): DeviceClass | undefined {
+	private _deviceClass: MaybeNotKnown<DeviceClass>;
+	public get deviceClass(): MaybeNotKnown<DeviceClass> {
 		if (this.index > 0) {
 			return this._deviceClass;
 		} else {
@@ -70,7 +89,7 @@ export class Endpoint implements IZWaveEndpoint {
 			);
 		}
 	}
-	protected set deviceClass(deviceClass: DeviceClass | undefined) {
+	protected set deviceClass(deviceClass: MaybeNotKnown<DeviceClass>) {
 		if (this.index > 0) {
 			this._deviceClass = deviceClass;
 		} else {
@@ -96,14 +115,7 @@ export class Endpoint implements IZWaveEndpoint {
 	private _implementedCommandClasses: Map<
 		CommandClasses,
 		Readonly<CommandClassInfo>
-	> = new CacheBackedMap(this.driver.networkCache, {
-		prefix: cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
-		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
-		suffixDeserializer: (key: string) => {
-			const ccId = parseInt(key, 16);
-			if (ccId in CommandClasses) return ccId;
-		},
-	});
+	>;
 
 	/**
 	 * @internal
@@ -118,25 +130,6 @@ export class Endpoint implements IZWaveEndpoint {
 
 	public getCCs(): Iterable<[ccId: CommandClasses, info: CommandClassInfo]> {
 		return this._implementedCommandClasses.entries();
-	}
-
-	/**
-	 * Sets the device class of this endpoint and configures the mandatory CCs.
-	 * **Note:** This does nothing if the device class was already configured
-	 */
-	protected applyDeviceClass(deviceClass?: DeviceClass): void {
-		if (this.deviceClass) return;
-
-		this.deviceClass = deviceClass;
-		// Add mandatory CCs
-		if (deviceClass) {
-			for (const cc of deviceClass.mandatorySupportedCCs) {
-				this.addMandatoryCC(cc, { isSupported: true });
-			}
-			for (const cc of deviceClass.mandatoryControlledCCs) {
-				this.addMandatoryCC(cc, { isControlled: true });
-			}
-		}
 	}
 
 	/**
@@ -164,38 +157,6 @@ export class Endpoint implements IZWaveEndpoint {
 		}
 	}
 
-	/**
-	 * Adds a mandatory CC to the list of command classes implemented by the endpoint or updates the information.
-	 * Performs some sanity checks before adding so the behavior is in compliance with the specifications
-	 */
-	protected addMandatoryCC(
-		cc: CommandClasses,
-		info: Partial<CommandClassInfo>,
-	): void {
-		if (
-			this.getNodeUnsafe()?.isListening &&
-			(cc === CommandClasses.Battery || cc === CommandClasses["Wake Up"])
-		) {
-			// Avoid adding Battery and Wake Up CC to always listening nodes or their endpoints
-			return;
-		} else if (
-			this.index > 0 &&
-			[
-				CommandClasses["CRC-16 Encapsulation"],
-				CommandClasses["Device Reset Locally"],
-				CommandClasses["Manufacturer Specific"],
-				CommandClasses.Powerlevel,
-				CommandClasses.Version,
-				CommandClasses["Transport Service"],
-			].includes(cc)
-		) {
-			// Avoid adding CCs as mandatory to endpoints that should only be implemented by the root device
-			return;
-		}
-
-		this.addCC(cc, info);
-	}
-
 	/** Removes a CC from the list of command classes implemented by the endpoint */
 	public removeCC(cc: CommandClasses): void {
 		this._implementedCommandClasses.delete(cc);
@@ -216,23 +177,32 @@ export class Endpoint implements IZWaveEndpoint {
 		return !!this._implementedCommandClasses.get(cc)?.isControlled;
 	}
 
-	/** Removes the BasicCC from the supported CCs if any other actuator CCs are supported */
-	public hideBasicCCInFavorOfActuatorCCs(): void {
-		// This behavior is defined in SDS14223
-		if (
-			this.supportsCC(CommandClasses.Basic) &&
-			actuatorCCs.some((cc) => this.supportsCC(cc))
-		) {
-			// We still want to know if BasicCC is controlled, so only mark it as not supported
-			this.addCC(CommandClasses.Basic, { isSupported: false });
-			// If the record is now only a dummy, remove the CC
-			if (
-				!this.supportsCC(CommandClasses.Basic) &&
-				!this.controlsCC(CommandClasses.Basic)
-			) {
-				this.removeCC(CommandClasses.Basic);
-			}
+	/**
+	 * Checks if this endpoint is allowed to support Basic CC per the specification.
+	 * This depends on the device type and the other supported CCs
+	 */
+	public maySupportBasicCC(): boolean {
+		// Basic CC must not be offered if any other actuator CC is supported
+		if (actuatorCCs.some((cc) => this.supportsCC(cc))) {
+			return false;
 		}
+		// ...or the device class forbids it
+		return this.deviceClass?.specific.maySupportBasicCC
+			?? this.deviceClass?.generic.maySupportBasicCC
+			?? true;
+	}
+
+	/** Determines if support for a CC was force-removed via config file */
+	public wasCCRemovedViaConfig(cc: CommandClasses): boolean {
+		if (this.supportsCC(cc)) return false;
+
+		const compatConfig = this.getNodeUnsafe()?.deviceConfig?.compat;
+		if (!compatConfig) return false;
+
+		const removedEndpoints = compatConfig.removeCCs?.get(cc);
+		if (!removedEndpoints) return false;
+
+		return removedEndpoints == "*" || removedEndpoints.includes(this.index);
 	}
 
 	/**
@@ -304,7 +274,7 @@ export class Endpoint implements IZWaveEndpoint {
 			.filter((cc) => this.supportsCC(cc))
 			// Filter out CCs we don't implement
 			.map((cc) => this.createCCInstance(cc))
-			.filter((instance) => !!instance) as CommandClass[];
+			.filter((instance) => !!instance);
 		// For endpoint interviews, we skip some CCs
 		if (this.index > 0) {
 			supportedCCInstances = supportedCCInstances.filter(
@@ -327,7 +297,9 @@ export class Endpoint implements IZWaveEndpoint {
 		// Create the dependencies
 		for (const node of ret) {
 			const instance = this.createCCInstance(node.value)!;
-			for (const requiredCCId of instance.determineRequiredCCInterviews()) {
+			for (
+				const requiredCCId of instance.determineRequiredCCInterviews()
+			) {
 				const requiredCC = ret.find(
 					(instance) => instance.value === requiredCCId,
 				);
@@ -356,11 +328,11 @@ export class Endpoint implements IZWaveEndpoint {
 		get: (target, ccNameOrId: string | symbol) => {
 			// Avoid ultra-weird error messages during testing
 			if (
-				process.env.NODE_ENV === "test" &&
-				typeof ccNameOrId === "string" &&
-				(ccNameOrId === "$$typeof" ||
-					ccNameOrId === "constructor" ||
-					ccNameOrId.includes("@@__IMMUTABLE"))
+				process.env.NODE_ENV === "test"
+				&& typeof ccNameOrId === "string"
+				&& (ccNameOrId === "$$typeof"
+					|| ccNameOrId === "constructor"
+					|| ccNameOrId.includes("@@__IMMUTABLE"))
 			) {
 				return undefined;
 			}
@@ -375,24 +347,13 @@ export class Endpoint implements IZWaveEndpoint {
 				// ignore all other symbols
 				return undefined;
 			} else {
-				// typeof ccNameOrId === "string"
-				let ccId: CommandClasses | undefined;
 				// The command classes are exposed to library users by their name or the ID
-				if (/^\d+$/.test(ccNameOrId)) {
-					// Since this is a property accessor, ccNameOrID is passed as a string,
-					// even when it was a number (CommandClasses)
-					ccId = +ccNameOrId;
-				} else {
-					// If a name was given, retrieve the corresponding ID
-					ccId = CommandClasses[ccNameOrId as any] as unknown as
-						| CommandClasses
-						| undefined;
-					if (ccId == undefined) {
-						throw new ZWaveError(
-							`Command Class ${ccNameOrId} is not implemented! If you are sure that the name/id is correct, consider opening an issue at https://github.com/AlCalzone/node-zwave-js`,
-							ZWaveErrorCodes.CC_NotImplemented,
-						);
-					}
+				const ccId = normalizeCCNameOrId(ccNameOrId);
+				if (ccId == undefined) {
+					throw new ZWaveError(
+						`Command Class ${ccNameOrId} is not implemented!`,
+						ZWaveErrorCodes.CC_NotImplemented,
+					);
 				}
 
 				// When accessing a CC API for the first time, we need to create it
@@ -408,7 +369,7 @@ export class Endpoint implements IZWaveEndpoint {
 	/**
 	 * Used to iterate over the commandClasses API without throwing errors by accessing unsupported CCs
 	 */
-	private readonly commandClassesIterator: () => Iterator<CCAPI> = function* (
+	private readonly commandClassesIterator: () => Iterator<CCAPI> = function*(
 		this: Endpoint,
 	) {
 		for (const cc of this.implementedCommandClasses.keys()) {
@@ -426,7 +387,8 @@ export class Endpoint implements IZWaveEndpoint {
 	}
 
 	/** Allows checking whether a CC API is supported before calling it with {@link Endpoint.invokeCCAPI} */
-	public supportsCCAPI(cc: CommandClasses): boolean {
+	public supportsCCAPI(cc: CCNameOrId): boolean {
+		// No need to validate the `cc` parameter, the following line will throw for invalid CCs
 		return ((this.commandClasses as any)[cc] as CCAPI).isSupported();
 	}
 
@@ -435,26 +397,23 @@ export class Endpoint implements IZWaveEndpoint {
 	 * Use {@link Endpoint.supportsCCAPI} to check support first.
 	 */
 	public invokeCCAPI<
-		CC extends CommandClasses,
+		CC extends CCNameOrId,
 		TMethod extends keyof TAPI,
 		TAPI extends Record<
 			string,
 			(...args: any[]) => any
-		> = CommandClasses extends CC ? any : APIMethodsOf<CC>,
+		> = CommandClasses extends CC ? any
+			: Omit<CCNameOrId, CommandClasses> extends CC ? any
+			: APIMethodsOf<CC>,
 	>(
 		cc: CC,
 		method: TMethod,
 		...args: Parameters<TAPI[TMethod]>
 	): ReturnType<TAPI[TMethod]> {
-		if (typeof cc !== "number" || !(cc in CommandClasses)) {
-			throw new ZWaveError(
-				`Invalid CC ${cc}!`,
-				ZWaveErrorCodes.CC_Invalid,
-			);
-		}
-
-		const ccName = getCCName(cc);
+		// No need to validate the `cc` parameter, the following line will throw for invalid CCs
 		const CCAPI = (this.commandClasses as any)[cc];
+		const ccId = normalizeCCNameOrId(cc)!;
+		const ccName = getCCName(ccId);
 		if (!CCAPI) {
 			throw new ZWaveError(
 				`The API for the ${ccName} CC does not exist or is not implemented!`,
@@ -465,9 +424,7 @@ export class Endpoint implements IZWaveEndpoint {
 		const apiMethod = CCAPI[method];
 		if (typeof apiMethod !== "function") {
 			throw new ZWaveError(
-				`Method "${
-					method as string
-				}" does not exist on the API for the ${ccName} CC!`,
+				`Method "${method as string}" does not exist on the API for the ${ccName} CC!`,
 				ZWaveErrorCodes.CC_NotImplemented,
 			);
 		}
@@ -482,16 +439,60 @@ export class Endpoint implements IZWaveEndpoint {
 	}
 
 	/** Z-Wave+ Icon (for management) */
-	public get installerIcon(): number | undefined {
+	public get installerIcon(): MaybeNotKnown<number> {
 		return this.getNodeUnsafe()?.getValue(
 			ZWavePlusCCValues.installerIcon.endpoint(this.index),
 		);
 	}
 
 	/** Z-Wave+ Icon (for end users) */
-	public get userIcon(): number | undefined {
+	public get userIcon(): MaybeNotKnown<number> {
 		return this.getNodeUnsafe()?.getValue(
 			ZWavePlusCCValues.userIcon.endpoint(this.index),
 		);
+	}
+
+	/**
+	 * @internal
+	 * Returns a dump of this endpoint's information for debugging purposes
+	 */
+	public createEndpointDump(): EndpointDump {
+		const ret: EndpointDump = {
+			index: this.index,
+			deviceClass: "unknown",
+			commandClasses: {},
+			maySupportBasicCC: this.maySupportBasicCC(),
+		};
+
+		if (this.deviceClass) {
+			ret.deviceClass = {
+				basic: {
+					key: this.deviceClass.basic,
+					label: getEnumMemberName(
+						BasicDeviceClass,
+						this.deviceClass.basic,
+					),
+				},
+				generic: {
+					key: this.deviceClass.generic.key,
+					label: this.deviceClass.generic.label,
+				},
+				specific: {
+					key: this.deviceClass.specific.key,
+					label: this.deviceClass.specific.label,
+				},
+			};
+		}
+
+		for (const [ccId, info] of this._implementedCommandClasses) {
+			ret.commandClasses[getCCName(ccId)] = { ...info, values: [] };
+		}
+
+		for (const [prop, value] of Object.entries(ret)) {
+			// @ts-expect-error
+			if (value === undefined) delete ret[prop];
+		}
+
+		return ret;
 	}
 }

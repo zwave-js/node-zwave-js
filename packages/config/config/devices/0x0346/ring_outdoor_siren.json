@@ -67,14 +67,14 @@
 			"#": "6",
 			"label": "Supervision Report Timeout",
 			"valueSize": 2,
-			"unit": "milliseconds",
+			"unit": "ms",
 			"minValue": 500,
 			"maxValue": 5000,
 			"defaultValue": 1500
 		},
 		{
 			"#": "7",
-			"label": "ZWave Sleep Timeout",
+			"label": "Z-Wave Sleep Timeout",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,

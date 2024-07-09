@@ -1,9 +1,14 @@
 import {
-	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
+	isZWaveError,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import { getEnumMemberName, TypedClassDecorator } from "@zwave-js/shared/safe";
+import {
+	type TypedClassDecorator,
+	buffer2hex,
+	getEnumMemberName,
+} from "@zwave-js/shared/safe";
 import "reflect-metadata";
 
 enum S2ExtensionType {
@@ -22,7 +27,8 @@ type S2ExtensionMap = Map<
 >;
 
 export type Security2ExtensionConstructor<T extends Security2Extension> =
-	typeof Security2Extension & {
+	& typeof Security2Extension
+	& {
 		new (options: Security2ExtensionOptions): T;
 	};
 
@@ -50,11 +56,13 @@ export function extensionType(
 		Reflect.defineMetadata(METADATA_S2Extension, type, extensionClass);
 
 		const map: S2ExtensionMap =
-			Reflect.getMetadata(METADATA_S2ExtensionMap, Security2Extension) ||
-			new Map();
+			Reflect.getMetadata(METADATA_S2ExtensionMap, Security2Extension)
+			|| new Map();
 		map.set(
 			type,
-			extensionClass as unknown as Security2ExtensionConstructor<Security2Extension>,
+			extensionClass as unknown as Security2ExtensionConstructor<
+				Security2Extension
+			>,
 		);
 		Reflect.defineMetadata(
 			METADATA_S2ExtensionMap,
@@ -86,6 +94,48 @@ export function getExtensionType<T extends Security2Extension>(
 	return ret;
 }
 
+export enum ValidateS2ExtensionResult {
+	OK,
+	DiscardExtension,
+	DiscardCommand,
+}
+
+/** Tests if the extension may be accepted */
+export function validateS2Extension(
+	ext: Security2Extension,
+	wasEncrypted: boolean,
+): ValidateS2ExtensionResult {
+	if (ext instanceof InvalidExtension) {
+		// The extension could not be parsed, ignore it
+		return ValidateS2ExtensionResult.DiscardExtension;
+	}
+
+	if (ext.critical && !(ext.type in S2ExtensionType)) {
+		// A receiving node MUST discard the entire command if the Critical flag
+		// is set to ‘1’ and the Type field advertises a value that the
+		// receiving node does not support.
+		return ValidateS2ExtensionResult.DiscardCommand;
+	}
+
+	// Check if the extension is correctly encrypted or not encrypted
+	switch (ext.type) {
+		case S2ExtensionType.MPAN:
+			if (!wasEncrypted) {
+				return ValidateS2ExtensionResult.DiscardExtension;
+			}
+			break;
+		case S2ExtensionType.SPAN:
+		case S2ExtensionType.MGRP:
+		case S2ExtensionType.MOS:
+			if (wasEncrypted) {
+				return ValidateS2ExtensionResult.DiscardExtension;
+			}
+			break;
+	}
+
+	return ValidateS2ExtensionResult.OK;
+}
+
 interface Security2ExtensionCreationOptions {
 	critical: boolean;
 	payload?: Buffer;
@@ -110,12 +160,11 @@ export class Security2Extension {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(options.data.length >= 2);
 			const totalLength = options.data[0];
-			validatePayload(options.data.length >= totalLength);
 			const controlByte = options.data[1];
 			this.moreToFollow = !!(controlByte & 0b1000_0000);
 			this.critical = !!(controlByte & 0b0100_0000);
 			this.type = controlByte & 0b11_1111;
-			this.payload = options.data.slice(2, totalLength);
+			this.payload = options.data.subarray(2, totalLength);
 		} else {
 			this.type = getExtensionType(this);
 			this.critical = options.critical;
@@ -136,17 +185,39 @@ export class Security2Extension {
 		return Buffer.concat([
 			Buffer.from([
 				2 + this.payload.length,
-				(moreToFollow ? 0b1000_0000 : 0) |
-					(this.critical ? 0b0100_0000 : 0) |
-					(this.type & 0b11_1111),
+				(moreToFollow ? 0b1000_0000 : 0)
+				| (this.critical ? 0b0100_0000 : 0)
+				| (this.type & 0b11_1111),
 			]),
 			this.payload,
 		]);
 	}
 
 	/** Returns the number of bytes the first extension in the buffer occupies */
-	public static getExtensionLength(data: Buffer): number {
-		return data[0];
+	public static getExtensionLength(
+		data: Buffer,
+	): { expected?: number; actual: number } {
+		const actual = data[0];
+		let expected: number | undefined;
+
+		// For known extensions, return the expected length
+		const type = data[1] & 0b11_1111;
+		switch (type) {
+			case S2ExtensionType.SPAN:
+				expected = SPANExtension.expectedLength;
+				break;
+			case S2ExtensionType.MPAN:
+				expected = MPANExtension.expectedLength;
+				break;
+			case S2ExtensionType.MGRP:
+				expected = MGRPExtension.expectedLength;
+				break;
+			case S2ExtensionType.MOS:
+				expected = MOSExtension.expectedLength;
+				break;
+		}
+
+		return { expected, actual };
 	}
 
 	/** Returns the number of bytes the serialized extension will occupy */
@@ -168,8 +239,18 @@ export class Security2Extension {
 	/** Creates an instance of the S2 extension that is serialized in the given buffer */
 	public static from(data: Buffer): Security2Extension {
 		const Constructor = Security2Extension.getConstructor(data);
-		const ret = new Constructor({ data });
-		return ret;
+		try {
+			const ret = new Constructor({ data });
+			return ret;
+		} catch (e) {
+			if (
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+			) {
+				return new InvalidExtension({ data });
+			}
+			throw e;
+		}
 	}
 
 	public toLogEntry(): string {
@@ -181,6 +262,9 @@ export class Security2Extension {
 		}
 		return ret;
 	}
+}
+
+export class InvalidExtension extends Security2Extension {
 }
 
 interface SPANExtensionOptions {
@@ -212,6 +296,8 @@ export class SPANExtension extends Security2Extension {
 
 	public senderEI: Buffer;
 
+	public static readonly expectedLength = 18;
+
 	public serialize(moreToFollow: boolean): Buffer {
 		this.payload = this.senderEI;
 		return super.serialize(moreToFollow);
@@ -240,7 +326,7 @@ export class MPANExtension extends Security2Extension {
 			super(options);
 			validatePayload(this.payload.length === 17);
 			this.groupId = this.payload[0];
-			this.innerMPANState = this.payload.slice(1);
+			this.innerMPANState = this.payload.subarray(1);
 		} else {
 			if (options.innerMPANState.length !== 16) {
 				throw new ZWaveError(
@@ -261,6 +347,8 @@ export class MPANExtension extends Security2Extension {
 		return true;
 	}
 
+	public static readonly expectedLength = 19;
+
 	public serialize(moreToFollow: boolean): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.groupId]),
@@ -270,10 +358,13 @@ export class MPANExtension extends Security2Extension {
 	}
 
 	public toLogEntry(): string {
+		const mpanState = process.env.NODE_ENV === "test"
+				|| process.env.NODE_ENV === "development"
+			? buffer2hex(this.innerMPANState)
+			: "(hidden)";
 		let ret = super.toLogEntry().replace(/^  payload:.+$/m, "");
-		ret += `
-  group ID: ${this.groupId}
-  MPAN state: 0x${this.innerMPANState.toString("hex")}`;
+		ret += `  group ID: ${this.groupId}
+  MPAN state: ${mpanState}`;
 		return ret;
 	}
 }
@@ -301,6 +392,8 @@ export class MGRPExtension extends Security2Extension {
 
 	public groupId: number;
 
+	public static readonly expectedLength = 3;
+
 	public serialize(moreToFollow: boolean): Buffer {
 		this.payload = Buffer.from([this.groupId]);
 		return super.serialize(moreToFollow);
@@ -322,4 +415,6 @@ export class MOSExtension extends Security2Extension {
 			super({ critical: false });
 		}
 	}
+
+	public static readonly expectedLength = 2;
 }

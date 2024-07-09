@@ -1,12 +1,11 @@
-import { detectPackageManager, PackageManager } from "@alcalzone/pak";
-import got from "@esm2cjs/got";
+import { type PackageManager, detectPackageManager } from "@alcalzone/pak";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getErrorMessage } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import execa from "execa";
 import fs from "fs-extra";
-import os from "os";
-import * as path from "path";
+import os from "node:os";
+import * as path from "node:path";
 import * as lockfile from "proper-lockfile";
 import * as semver from "semver";
 
@@ -18,6 +17,7 @@ import * as semver from "semver";
 export async function checkForConfigUpdates(
 	currentVersion: string,
 ): Promise<string | undefined> {
+	const { got } = await import("got");
 	let registry: Record<string, unknown>;
 
 	try {
@@ -42,10 +42,12 @@ export async function checkForConfigUpdates(
 	const allVersions = Object.keys(registry.versions)
 		.filter((v) => !!semver.valid(v))
 		.filter((v) => /\-\d{8}$/.test(v));
-	const updateRange = `>${currentVersion} <${semver.inc(
-		currentVersion,
-		"patch",
-	)}`;
+	const updateRange = `>${currentVersion} <${
+		semver.inc(
+			currentVersion,
+			"patch",
+		)
+	}`;
 	const updateVersion = semver.maxSatisfying(allVersions, updateRange, {
 		includePrerelease: true,
 	});
@@ -92,8 +94,9 @@ export async function installConfigUpdate(newVersion: string): Promise<void> {
 
 	// Free the lock
 	try {
-		if (await lockfile.check(packageJsonPath))
+		if (await lockfile.check(packageJsonPath)) {
 			await lockfile.unlock(packageJsonPath);
+		}
 	} catch {
 		// whatever - just don't crash
 	}
@@ -118,6 +121,8 @@ export async function installConfigUpdateInDocker(
 		cacheDir: string;
 	},
 ): Promise<void> {
+	const { got } = await import("got");
+
 	let registryInfo: any;
 	try {
 		registryInfo = await got
@@ -181,8 +186,9 @@ export async function installConfigUpdateInDocker(
 
 	const freeLock = async () => {
 		try {
-			if (await lockfile.check(lockfilePath, lockfileOptions))
+			if (await lockfile.check(lockfilePath, lockfileOptions)) {
 				await lockfile.unlock(lockfilePath, lockfileOptions);
+			}
 		} catch {
 			// whatever - just don't crash
 		}
@@ -210,9 +216,11 @@ export async function installConfigUpdateInDocker(
 	} catch (e) {
 		await freeLock();
 		throw new ZWaveError(
-			`Config update failed: Could not download tarball. Reason: ${getErrorMessage(
-				e,
-			)}`,
+			`Config update failed: Could not download tarball. Reason: ${
+				getErrorMessage(
+					e,
+				)
+			}`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
 		);
 	}
@@ -220,8 +228,8 @@ export async function installConfigUpdateInDocker(
 	// This should not be necessary in Docker. Leaving it here anyways in case
 	// we want to use this method on Windows at some point
 	function normalizeToUnixStyle(path: string): string {
-		path = path.replace(/:/g, "");
-		path = path.replace(/\\/g, "/");
+		path = path.replaceAll(":", "");
+		path = path.replaceAll("\\", "/");
 		if (!path.startsWith("/")) path = `/${path}`;
 		return path;
 	}

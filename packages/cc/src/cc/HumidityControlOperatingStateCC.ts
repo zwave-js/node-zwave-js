@@ -1,18 +1,22 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
-	Maybe,
-	MessageOrCCLogEntry,
+	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
+	enumValuesToMetadataStates,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	type PollValueImplementation,
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
@@ -38,13 +42,16 @@ export const HumidityControlOperatingStateCCValues = Object.freeze({
 	...V.defineStaticCCValues(
 		CommandClasses["Humidity Control Operating State"],
 		{
-			...V.staticProperty("state", {
-				...ValueMetadata.ReadOnlyUInt8,
-				states: enumValuesToMetadataStates(
-					HumidityControlOperatingState,
-				),
-				label: "Humidity control operating state",
-			} as const),
+			...V.staticProperty(
+				"state",
+				{
+					...ValueMetadata.ReadOnlyUInt8,
+					states: enumValuesToMetadataStates(
+						HumidityControlOperatingState,
+					),
+					label: "Humidity control operating state",
+				} as const,
+			),
 		},
 	),
 });
@@ -53,7 +60,7 @@ export const HumidityControlOperatingStateCCValues = Object.freeze({
 export class HumidityControlOperatingStateCCAPI extends CCAPI {
 	public supportsCommand(
 		cmd: HumidityControlOperatingStateCommand,
-	): Maybe<boolean> {
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case HumidityControlOperatingStateCommand.Get:
 				return this.isSinglecast();
@@ -61,17 +68,20 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "state":
-				return this.get();
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function(
+			this: HumidityControlOperatingStateCCAPI,
+			{ property },
+		) {
+			switch (property) {
+				case "state":
+					return this.get();
 
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	public async get(): Promise<HumidityControlOperatingState | undefined> {
 		this.assertSupportsCommand(
@@ -83,11 +93,12 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<HumidityControlOperatingStateCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			HumidityControlOperatingStateCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return response?.state;
 		}
@@ -136,9 +147,8 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 		if (currentStatus) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message:
-					"received current humidity control operating state: " +
-					getEnumMemberName(
+				message: "received current humidity control operating state: "
+					+ getEnumMemberName(
 						HumidityControlOperatingState,
 						currentStatus,
 					),
@@ -149,7 +159,9 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 }
 
 @CCCommand(HumidityControlOperatingStateCommand.Report)
-export class HumidityControlOperatingStateCCReport extends HumidityControlOperatingStateCC {
+export class HumidityControlOperatingStateCCReport
+	extends HumidityControlOperatingStateCC
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -163,9 +175,9 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
 	@ccValue(HumidityControlOperatingStateCCValues.state)
 	public readonly state: HumidityControlOperatingState;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				state: getEnumMemberName(
 					HumidityControlOperatingState,
@@ -178,4 +190,6 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
 
 @CCCommand(HumidityControlOperatingStateCommand.Get)
 @expectedCCResponse(HumidityControlOperatingStateCCReport)
-export class HumidityControlOperatingStateCCGet extends HumidityControlOperatingStateCC {}
+export class HumidityControlOperatingStateCCGet
+	extends HumidityControlOperatingStateCC
+{}

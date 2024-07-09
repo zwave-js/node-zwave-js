@@ -27,8 +27,7 @@
 			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 3600,
-			"defaultValue": 30,
-			"unsigned": true
+			"defaultValue": 30
 		},
 		{
 			"#": "14",
@@ -49,7 +48,6 @@
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"defaultValue": 2,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,8 +78,7 @@
 			"unit": "hours",
 			"minValue": 1,
 			"maxValue": 744,
-			"defaultValue": 4,
-			"unsigned": true
+			"defaultValue": 4
 		},
 		{
 			"#": "182",
@@ -103,8 +100,7 @@
 			"unit": "°F",
 			"minValue": 1,
 			"maxValue": 144,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "184",
@@ -114,7 +110,6 @@
 			"minValue": 0,
 			"maxValue": 80,
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -130,7 +125,6 @@
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 50,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -139,6 +133,16 @@
 			]
 		}
 	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The wakeup destination cannot be set using Supervision, resulting in missing wakeup reports
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	},
 	"metadata": {
 		"inclusion": "Put your Z-Wave hub into inclusion mode and click the Z-Wave button 3 times as quickly as possible. The LED indicator will start blinking to confirm inclusion mode and turn off once inclusion is completed. The sensor will automatically pair as a repeater if connected to USB power, no special button sequence required",
 		"exclusion": "1. Bring the sensor within direct range of your Z-Wave gateway (hub).\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Press and release the Z-Wave button 3 times quickly.\n4. Your hub will confirm exclusion and the sensor will disappear from your controller's device list",

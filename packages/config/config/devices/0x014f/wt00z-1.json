@@ -35,8 +35,8 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Group 4: Send Reports",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Group 4: Send Reports",
 			"defaultValue": 0
 		},
 		{
@@ -78,27 +78,27 @@
 		},
 		{
 			"#": "13",
-			"label": "Group 4: Send Dimming Commands",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Group 4: Send Dimming Commands",
 			"defaultValue": 0
 		},
 		{
 			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Shade Control Group 2",
-			"description": "Allow the switch to control shade devices",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Allow the switch to control shade devices"
 		},
 		{
 			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Shade Control Group 3",
-			"description": "Allow the switch to control shade devices",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Allow the switch to control shade devices"
 		},
 		{
 			"#": "16",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Shade Control Group 1",
-			"description": "Allow the switch to control shade devices",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"description": "Allow the switch to control shade devices"
 		},
 		{
 			"#": "19",
@@ -106,7 +106,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Poll: minutes",
+			"label": "Poll: Minutes",
 			"description": "Frequency that WT00Z-1 will poll first node in Group 1",
 			"valueSize": 1,
 			"minValue": 1,
@@ -116,11 +116,10 @@
 		},
 		{
 			"#": "21",
-			"label": "Poll first node in group 1",
+			"label": "Poll First Node in Group 1",
 			"description": "Activate/Deactivate polling of first node in Group 1",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -135,6 +134,6 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	}
 }

@@ -10,10 +10,10 @@ The following figure gives you an overview of the (conventional) inclusion proce
 
 _Security S2_ supports multiple security classes, allowing different levels of trust and limiting access in case one of the keys ever gets compromised. In order to offer S2 in your application, you have to provide multiple network keys to the driver. Currently, these are:
 
--   **S2 Access Control** (highest) - Door locks, garage doors, etc.
--   **S2 Authenticated** - Security systems, sensors, lighting, etc.
--   **S2 Unauthenticated** - Like S2 Authenticated, but without verification that the correct device is included
--   **S0 (Legacy)** (lowest) - Legacy door locks without S2 support
+- **S2 Access Control** (highest) - Door locks, garage doors, etc.
+- **S2 Authenticated** - Security systems, sensors, lighting, etc.
+- **S2 Unauthenticated** - Like S2 Authenticated, but without verification that the correct device is included
+- **S0 (Legacy)** (lowest) - Legacy door locks without S2 support
 
 > [!ATTENTION] All keys must be Buffers of 16 bytes length with **different** content. Sharing keys between multiple security classes is a security risk!
 
@@ -87,14 +87,14 @@ Z-Wave JS offers multiple ways to include a device, but we only recommend a few 
 
 Furthermore it has been found that some locks claim to support S2, but don't respond to the key exchange commands. Because it is not possible to try with S0 after S2 has been attempted, an option to **use only S0** must exist.
 
-A UI to choose the inclusion strategy could look as follows:  
+A UI to choose the inclusion strategy could look as follows:\
 ![Inclusion strategies](../_images/s2-inclusion-selection.png)
 
 ### Granting security classes
 
 When using the default strategy and including a device with S2, the user must choose which security classes (network keys) to grant the joining node. Because this can be very confusing unless you have a good understanding of what these things mean, we recommend to explain the different options. A device might not request all possible security classes, so only the ones that are should be selectable.
 
-This could look like this:  
+This could look like this:\
 ![Granting security classes](../_images/s2-grant-keys.png)
 
 This dialog MUST be shown when `zwave-js` calls the `grantSecurityClasses` user callback.
@@ -104,7 +104,7 @@ This dialog MUST be shown when `zwave-js` calls the `grantSecurityClasses` user 
 ### Validating the DSK and entering the device PIN
 
 For authentication inclusion (`Authenticated` and `Access Control`), users MUST validate that they are including the correct device.
-To do so, the DSK must be presented to the user along with a text field to enter the 5-digit PIN. This PIN is the missing first part of the DSK, so the text field should be presented in a way that makes this obvious. We recommend a UI like this:  
+To do so, the DSK must be presented to the user along with a text field to enter the 5-digit PIN. This PIN is the missing first part of the DSK, so the text field should be presented in a way that makes this obvious. We recommend a UI like this:\
 ![DSK validation](../_images/s2-dsk-pin.png)
 
 This dialog MUST be shown when `zwave-js` calls the `validateDSKAndEnterPIN` user callback. The missing part of the DSK MUST be labeled "PIN", since this is what's printed on devices users will have.
@@ -135,6 +135,12 @@ For modern devices, **SmartStart** makes the inclusion even easier for the user 
 ![Smart Start provisioning list](../_images/smart-start.png)
 
 > [!NOTE] Confirming the inclusion process like with normal S2 inclusion is recommended, so users can react to a failed bootstrapping attempt.
+
+## Z-Wave Long Range
+
+Devices using Z-Wave Long Range can only be included via SmartStart. Since not all devices support Long Range, the protocol choice in the above screenshot should only be available after scanning a QR code that indicates support for Long Range (see below), or when the provisioning entry was added manually. Note that the **S2 Unauthenticated** and **S0 Legacy** security classes are not available for Z-Wave Long Range.
+
+> [!NOTE] We recommend to **not** preselect Z-Wave Long Range, even on supporting devices. Z-Wave Long Range is a separate protocol and the devices are not part of the Z-Wave mesh, so this choice should be an opt-in rather than an opt-out.
 
 ## Using QR codes to include devices
 

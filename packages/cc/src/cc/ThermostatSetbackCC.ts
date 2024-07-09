@@ -1,30 +1,34 @@
 import type {
-	Maybe,
 	MessageOrCCLogEntry,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	type MaybeNotKnown,
 	MessagePriority,
-	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
-	PollValueImplementation,
 	POLL_VALUE,
+	type PollValueImplementation,
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	CommandClass,
-	gotDeserializationOptions,
 	type CCCommandOptions,
+	CommandClass,
 	type CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -36,28 +40,34 @@ import {
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
 import { V } from "../lib/Values";
 import {
-	SetbackState,
+	type SetbackState,
 	SetbackType,
 	ThermostatSetbackCommand,
 } from "../lib/_Types";
+import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
 
 export const ThermostatSetbackCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Thermostat Setback"], {
-		...V.staticProperty("setbackType", {
-			// TODO: This should be a value list
-			...ValueMetadata.Any,
-			label: "Setback type",
-		} as const),
+		...V.staticProperty(
+			"setbackType",
+			{
+				// TODO: This should be a value list
+				...ValueMetadata.Any,
+				label: "Setback type",
+			} as const,
+		),
 
-		...V.staticProperty("setbackState", {
-			...ValueMetadata.Int8,
-			min: -12.8,
-			max: 12,
-			label: "Setback state",
-		} as const),
+		...V.staticProperty(
+			"setbackState",
+			{
+				...ValueMetadata.Int8,
+				min: -12.8,
+				max: 12,
+				label: "Setback state",
+			} as const,
+		),
 	}),
 });
 
@@ -66,7 +76,9 @@ export const ThermostatSetbackCCValues = Object.freeze({
 
 @API(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCCAPI extends CCAPI {
-	public supportsCommand(cmd: ThermostatSetbackCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: ThermostatSetbackCommand,
+	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ThermostatSetbackCommand.Get:
 				return this.isSinglecast();
@@ -76,18 +88,18 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "setbackType":
-			case "setbackState":
-				return (await this.get())?.[property];
+	protected get [POLL_VALUE](): PollValueImplementation {
+		return async function(this: ThermostatSetbackCCAPI, { property }) {
+			switch (property) {
+				case "setbackType":
+				case "setbackState":
+					return (await this.get())?.[property];
 
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
+		};
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
@@ -100,11 +112,12 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response =
-			await this.applHost.sendCommand<ThermostatSetbackCCReport>(
-				cc,
-				this.commandOptions,
-			);
+		const response = await this.applHost.sendCommand<
+			ThermostatSetbackCCReport
+		>(
+			cc,
+			this.commandOptions,
+		);
 		if (response) {
 			return pick(response, ["setbackType", "setbackState"]);
 		}
@@ -182,7 +195,8 @@ setback state: ${setbackResp.setbackState}`;
 	}
 }
 
-interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 	setbackType: SetbackType;
 	setbackState: SetbackState;
 }
@@ -221,9 +235,9 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"setback type": getEnumMemberName(
 					SetbackType,
@@ -246,8 +260,8 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		validatePayload(this.payload.length >= 2);
 		this.setbackType = this.payload[0] & 0b11;
 		// If we receive an unknown setback state, return the raw value
-		this.setbackState =
-			decodeSetbackState(this.payload[1]) || this.payload[1];
+		this.setbackState = decodeSetbackState(this.payload[1])
+			|| this.payload[1];
 	}
 
 	@ccValue(ThermostatSetbackCCValues.setbackType)
@@ -257,9 +271,9 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	public readonly setbackState: SetbackState;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"setback type": getEnumMemberName(
 					SetbackType,

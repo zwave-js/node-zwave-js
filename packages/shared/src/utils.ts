@@ -79,7 +79,7 @@ export function isEnumMember(enumeration: unknown, value: number): boolean {
 
 /** Skips the first n bytes of a buffer and returns the rest */
 export function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.slice(n));
+	return Buffer.from(buf.subarray(n));
 }
 
 /**
@@ -194,14 +194,22 @@ export async function discreteBinarySearch(
 /**
  * Using a linear search, this finds the highest discrete value in [rangeMin...rangeMax] where executor returns true, assuming that
  * increasing the value will at some point cause the executor to return false.
+ *
+ * When the executor returns `undefined`, the search will be aborted.
  */
 export async function discreteLinearSearch(
 	rangeMin: number,
 	rangeMax: number,
-	executor: (value: number) => boolean | PromiseLike<boolean>,
+	executor: (
+		value: number,
+	) => boolean | undefined | PromiseLike<boolean | undefined>,
 ): Promise<number | undefined> {
 	for (let val = rangeMin; val <= rangeMax; val++) {
 		const result = await executor(val);
+
+		// Check if the search was aborted
+		if (result === undefined) return undefined;
+
 		if (!result) {
 			// Found the first value where it no longer returns true
 			if (val === rangeMin) {
@@ -222,4 +230,9 @@ export async function discreteLinearSearch(
 
 export function sum(values: number[]): number {
 	return values.reduce((acc, cur) => acc + cur, 0);
+}
+
+/** Does nothing. Can be used for empty `.catch(...)` calls. */
+export function noop(): void {
+	// intentionally empty
 }

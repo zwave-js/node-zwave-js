@@ -36,8 +36,8 @@
 		{
 			"#": "2",
 			"label": "Delay Between Retry Attempts",
-			"unit": "ms",
 			"valueSize": 2,
+			"unit": "ms",
 			"minValue": 10,
 			"maxValue": 5000,
 			"defaultValue": 500
@@ -50,15 +50,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "10 Degrees",
+					"label": "10 degrees",
 					"value": 0
 				},
 				{
-					"label": "30 Degrees",
+					"label": "30 degrees",
 					"value": 1
 				},
 				{
-					"label": "50 Degrees",
+					"label": "50 degrees",
 					"value": 2
 				}
 			]
@@ -71,15 +71,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "30 Degrees",
+					"label": "30 degrees",
 					"value": 0
 				},
 				{
-					"label": "50 Degrees",
+					"label": "50 degrees",
 					"value": 1
 				},
 				{
-					"label": "70 Degrees",
+					"label": "70 degrees",
 					"value": 2
 				}
 			]

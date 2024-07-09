@@ -1,7 +1,7 @@
-import { isZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
+import { ZWaveErrorCodes, isZWaveError } from "@zwave-js/core/safe";
 import { wait } from "alcalzone-shared/async";
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import yargs from "yargs";
 import {
 	ControllerFirmwareUpdateStatus,
@@ -26,9 +26,9 @@ let firmware: Buffer;
 const driver = new Driver(port, {
 	logConfig: verbose
 		? {
-				enabled: true,
-				level: "silly",
-		  }
+			enabled: true,
+			level: "silly",
+		}
 		: { enabled: false },
 	testingHooks: {
 		skipNodeInterview: true,
@@ -78,10 +78,12 @@ async function flash() {
 			process.exit(0);
 		} else {
 			console.log(
-				`Firmware update failed: ${getEnumMemberName(
-					ControllerFirmwareUpdateStatus,
-					r.status,
-				)}`,
+				`Firmware update failed: ${
+					getEnumMemberName(
+						ControllerFirmwareUpdateStatus,
+						r.status,
+					)
+				}`,
 			);
 			await wait(1000);
 			process.exit(2);

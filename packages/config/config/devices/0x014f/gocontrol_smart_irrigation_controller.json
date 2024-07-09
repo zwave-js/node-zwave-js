@@ -18,28 +18,28 @@
 			"#": "2",
 			"label": "Master Valve Delay",
 			"description": "Delay in seconds",
-			"unit": "Number",
 			"valueSize": 2,
+			"unit": "Number",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1
 		},
 		{
 			"#": "12",
-			"label": "Flow Sensor K value",
+			"label": "Flow Sensor K Value",
 			"description": "Unique to flow sensor",
-			"unit": "Number",
 			"valueSize": 4,
+			"unit": "Number",
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		},
 		{
 			"#": "13",
-			"label": "Flow Sensor Offset value",
+			"label": "Flow Sensor Offset Value",
 			"description": "Unique to the flow sensor",
-			"unit": "Number",
 			"valueSize": 4,
+			"unit": "Number",
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 0

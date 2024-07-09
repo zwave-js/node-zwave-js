@@ -24,17 +24,17 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Temperature Auto Report period setting",
-			"unit": "minutes",
+			"label": "Temperature Auto Report Period Setting",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 120
 		},
 		{
 			"#": "2",
-			"label": "Temperature offset for internal sensor",
-			"description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0°C~+8.0°C)",
+			"label": "Temperature Offset for Internal Sensor",
+			"description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0 °C~+8.0 °C)",
 			"valueSize": 1,
 			"unit": "1/10 °C",
 			"minValue": -80,
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Maximum Set point value",
+			"label": "Maximum Set Point Value",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
@@ -52,7 +52,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Minimum Set point value",
+			"label": "Minimum Set Point Value",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Frost protection temperature",
+			"label": "Frost Protection Temperature",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
@@ -70,33 +70,21 @@
 		},
 		{
 			"#": "6",
-			"label": "Open window detect function",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Open Window Detect Function"
 		},
 		{
 			"#": "7",
-			"label": "Open window detect time period",
-			"unit": "minutes",
+			"label": "Open Window Detect Time Period",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 2,
 			"maxValue": 30,
 			"defaultValue": 15
 		},
 		{
 			"#": "8",
-			"label": "Open window detect temperature drop setting",
+			"label": "Open Window Detect Temperature Drop Setting",
 			"valueSize": 1,
 			"defaultValue": 4,
 			"allowManualEntry": false,
@@ -125,9 +113,9 @@
 		},
 		{
 			"#": "9",
-			"label": "Open window detect delay time select",
-			"unit": "minutes",
+			"label": "Open Window Detect Delay Time Select",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 60,
 			"defaultValue": 30
@@ -139,8 +127,7 @@
 			"unit": "30 minutes",
 			"minValue": 1,
 			"maxValue": 48,
-			"defaultValue": 8,
-			"unsigned": true
+			"defaultValue": 8
 		}
 	],
 	"metadata": {
@@ -158,7 +145,7 @@
 		"commandClasses": {
 			"remove": {
 				// The device does not support Supervision correctly
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

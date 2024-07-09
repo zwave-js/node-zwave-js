@@ -1,17 +1,17 @@
 import {
-	MessageOrCCLogEntry,
+	type MessageOrCCLogEntry,
 	MessagePriority,
-	MessageRecord,
-	RSSI,
+	type MessageRecord,
+	type RSSI,
 	rssiToString,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
-	expectedResponse,
 	FunctionType,
 	Message,
-	MessageDeserializationOptions,
+	type MessageDeserializationOptions,
 	MessageType,
+	expectedResponse,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -32,11 +32,13 @@ export class GetBackgroundRSSIResponse extends Message {
 		this.rssiChannel0 = parseRSSI(this.payload, 0);
 		this.rssiChannel1 = parseRSSI(this.payload, 1);
 		this.rssiChannel2 = tryParseRSSI(this.payload, 2);
+		this.rssiChannel3 = tryParseRSSI(this.payload, 3);
 	}
 
 	public readonly rssiChannel0: RSSI;
 	public readonly rssiChannel1: RSSI;
 	public readonly rssiChannel2?: RSSI;
+	public readonly rssiChannel3?: RSSI;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -45,6 +47,9 @@ export class GetBackgroundRSSIResponse extends Message {
 		};
 		if (this.rssiChannel2 != undefined) {
 			message["channel 2"] = rssiToString(this.rssiChannel2);
+		}
+		if (this.rssiChannel3 != undefined) {
+			message["channel 3"] = rssiToString(this.rssiChannel3);
 		}
 		return {
 			...super.toLogEntry(),

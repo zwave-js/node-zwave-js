@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-
 import { MockSerialPort } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
 import proxyquire from "proxyquire";

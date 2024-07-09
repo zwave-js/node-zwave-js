@@ -4,12 +4,12 @@ What started out as an attempt to improve the testing setup, resulted in a huge 
 
 The implementations of serial messages and Command Classes have been decoupled from the `Driver`, `ZWaveNode` and `Endpoint` classes and no longer store direct references to them. Instead, most of the implementations now operate on abstractions:
 
--   `ZWaveHost` - A barebones abstraction of the environment, e.g. for simple test cases
--   `ZWaveApplicationHost` - A feature abstraction of the host environment with access to value DBs, other nodes, configuration, etc. `Driver` is an implementation of this abstraction.
--   `IZWaveEndpoint` - A barebones abstraction of a Z-Wave endpoint
--   `IZWaveNode` - A barebones abstraction of a Z-Wave node. Similar to how `ZWaveNode` is an `Endpoint`, an `IZWaveNode` is an `IZWaveEndpoint`
--   `IVirtualEndpoint` - A barebones abstraction of an endpoint on a virtual (multicast, broadcast) node
--   `IVirtualNode` - A barebones abstraction of a virtual (multicast, broadcast) node. Similar to how `VirtualNode` is a `VirtualEndpoint`, an `IVirtualNode` is an `IVirtualEndpoint`
+- `ZWaveHost` - A barebones abstraction of the environment, e.g. for simple test cases
+- `ZWaveApplicationHost` - A feature abstraction of the host environment with access to value DBs, other nodes, configuration, etc. `Driver` is an implementation of this abstraction.
+- `IZWaveEndpoint` - A barebones abstraction of a Z-Wave endpoint
+- `IZWaveNode` - A barebones abstraction of a Z-Wave node. Similar to how `ZWaveNode` is an `Endpoint`, an `IZWaveNode` is an `IZWaveEndpoint`
+- `IVirtualEndpoint` - A barebones abstraction of an endpoint on a virtual (multicast, broadcast) node
+- `IVirtualNode` - A barebones abstraction of a virtual (multicast, broadcast) node. Similar to how `VirtualNode` is a `VirtualEndpoint`, an `IVirtualNode` is an `IVirtualEndpoint`
 
 These abstractions are mainly used internally. Object instances exposed to applications through the `Driver` will still be `ZWaveNode`s and `Endpoint`s.
 
@@ -148,24 +148,24 @@ Whether supervision is used or not can now be controlled by the `options` argume
 
 ## Removed several deprecated method signatures, enums and properties
 
--   The enum `EventTypes` did not give any context to which CC it belongs and has been removed. Use the `EntryControlEventTypes` enum instead.
--   The enum `RecordStatus` did not give any context to which CC it belongs and has been removed. Use the `DoorLockLoggingRecordStatus` enum instead.
--   The type `Association` was not specific enough and has been deprecated for a long time. It has now been removed. Use `AssociationAddress` instead.
--   The `set` method overload of the `Configuration CC` API with 4 parameters has been removed. Use the overload the single options object instead.
--   The `Controller.beginInclusion` method overload with the `boolean` parameter has been removed. Use the overload with the `InclusionOptions` object instead.
-    **NOTE:** If you do not pass this object, the new node will be included without security.
--   The `Controller.replaceFailedNode` method overload accepting the node ID as the second parameter has been removed. Use the overload with the `ReplaceNodeOptions` object instead.
-    **NOTE:** If you do not pass this object, the new node will be included without security.
--   The `Controller.getAssociationGroups` method overload with the `nodeId: number` parameter has been removed. Use the overload with the `AssociationAddress` object instead.
--   The `Controller.getAssociations` method overload with the `nodeId: number` parameter has been removed. Use the overload with the `AssociationAddress` object instead.
--   The `Controller.isAssociationAllowed` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
--   The `Controller.addAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
--   The `Controller.removeAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
--   The `networkKey` driver option has been removed. Use `securityKeys.S0_Legacy` instead.
--   The `Controller.isSecondary` property was removed. Use `Controller.isPrimary` instead.
--   The `Controller.isStaticUpdateController` property was renamed to `isSUC` to be in line with the similar `isSIS` property.
--   The `Controller.isSlave` property was removed. Use the `Controller.nodeType` property to distinguish between `Controller` and `End Node` instead.
--   The `GetSerialApiInitDataResponse.initVersion` property was removed. Use the `zwaveApiVersion` property instead, which gives additional context.
+- The enum `EventTypes` did not give any context to which CC it belongs and has been removed. Use the `EntryControlEventTypes` enum instead.
+- The enum `RecordStatus` did not give any context to which CC it belongs and has been removed. Use the `DoorLockLoggingRecordStatus` enum instead.
+- The type `Association` was not specific enough and has been deprecated for a long time. It has now been removed. Use `AssociationAddress` instead.
+- The `set` method overload of the `Configuration CC` API with 4 parameters has been removed. Use the overload the single options object instead.
+- The `Controller.beginInclusion` method overload with the `boolean` parameter has been removed. Use the overload with the `InclusionOptions` object instead.
+  **NOTE:** If you do not pass this object, the new node will be included without security.
+- The `Controller.replaceFailedNode` method overload accepting the node ID as the second parameter has been removed. Use the overload with the `ReplaceNodeOptions` object instead.
+  **NOTE:** If you do not pass this object, the new node will be included without security.
+- The `Controller.getAssociationGroups` method overload with the `nodeId: number` parameter has been removed. Use the overload with the `AssociationAddress` object instead.
+- The `Controller.getAssociations` method overload with the `nodeId: number` parameter has been removed. Use the overload with the `AssociationAddress` object instead.
+- The `Controller.isAssociationAllowed` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
+- The `Controller.addAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
+- The `Controller.removeAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
+- The `networkKey` driver option has been removed. Use `securityKeys.S0_Legacy` instead.
+- The `Controller.isSecondary` property was removed. Use `Controller.isPrimary` instead.
+- The `Controller.isStaticUpdateController` property was renamed to `isSUC` to be in line with the similar `isSIS` property.
+- The `Controller.isSlave` property was removed. Use the `Controller.nodeType` property to distinguish between `Controller` and `End Node` instead.
+- The `GetSerialApiInitDataResponse.initVersion` property was removed. Use the `zwaveApiVersion` property instead, which gives additional context.
 
 ## Deprecated the `unprovision` argument to `Controller.beginExclusion`
 
@@ -193,7 +193,7 @@ enum ExclusionStrategy {
 
 ## Further deprecations
 
--   The `"Routing End Node"` enum member for the `NodeType` enum was deprecated. Use the alternative `"End Node"` instead.
+- The `"Routing End Node"` enum member for the `NodeType` enum was deprecated. Use the alternative `"End Node"` instead.
 
 ## Dropped support for Node.js 12
 

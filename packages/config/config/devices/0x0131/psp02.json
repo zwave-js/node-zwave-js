@@ -2,7 +2,7 @@
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "PSP02",
-	"description": "Door/temp/illumination/motion sensor",
+	"description": "Door/temp/illumination/motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -54,65 +54,65 @@
 		},
 		{
 			"#": "8",
-			"label": "PIR motion re-trigger min interval",
-			"unit": "8s ticks",
+			"label": "PIR Motion Re-Trigger Min Interval",
 			"valueSize": 1,
+			"unit": "8s ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
 		{
 			"#": "9",
-			"label": "Light on time hysteresis",
+			"label": "Light on Time Hysteresis",
 			"description": "time to keep the light on without motion",
-			"unit": "8s ticks",
 			"valueSize": 1,
+			"unit": "8s ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 4
 		},
 		{
 			"#": "10",
-			"label": "Battery level auto-report interval",
-			"unit": "ticks",
+			"label": "Battery Level Auto-Report Interval",
 			"valueSize": 1,
+			"unit": "ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
 		{
 			"#": "11",
-			"label": "Door state report interval",
-			"unit": "ticks",
+			"label": "Door State Report Interval",
 			"valueSize": 1,
+			"unit": "ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
 		{
 			"#": "12",
-			"label": "Illumination auto report interval",
-			"unit": "ticks",
+			"label": "Illumination Auto Report Interval",
 			"valueSize": 1,
+			"unit": "ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
 		{
 			"#": "13",
-			"label": "Temperature report interval",
-			"unit": "ticks",
+			"label": "Temperature Report Interval",
 			"valueSize": 1,
+			"unit": "ticks",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
 		{
 			"#": "20",
-			"label": "Tick duration",
+			"label": "Tick Duration",
 			"description": "auto-reports tick duration",
-			"unit": "s",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
@@ -120,25 +120,25 @@
 		},
 		{
 			"#": "21",
-			"label": "Temperature differential to report",
-			"unit": "Fahrenheit",
+			"label": "Temperature Differential to Report",
 			"valueSize": 1,
+			"unit": "Fahrenheit",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
 		},
 		{
 			"#": "22",
-			"label": "Min illumination differential",
-			"unit": "percent",
+			"label": "Min Illumination Differential",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 0
 		},
 		{
 			"#": "5[0x02]",
-			"label": "Operation mode",
+			"label": "Operation Mode",
 			"description": "set test mode if DIP switch in customer mode",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -149,28 +149,16 @@
 					"value": 0
 				},
 				{
-					"label": "test mode",
+					"label": "Test mode",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "5[0x04]",
-			"label": "Disable the door/window function",
-			"description": "Disable/Enable the function",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable the door/window function",
-					"value": 0
-				},
-				{
-					"label": "disable the door/window function",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Door/window Function",
+			"defaultValue": 0
 		},
 		{
 			"#": "5[0x08]",
@@ -191,267 +179,122 @@
 		},
 		{
 			"#": "5[0x10]",
-			"label": "Disable illumination reports",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Illumination Reports",
+			"defaultValue": 0
 		},
 		{
 			"#": "5[0x20]",
-			"label": "Disable temperature reports",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Temperature Reports",
+			"defaultValue": 0
 		},
 		{
 			"#": "5[0x80]",
-			"label": "Back key release action",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Back Key Release Action",
 			"description": "Disable/enable the back key release into test mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6[0x01]",
-			"label": "Magnetic integration for lighting control",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Magnetic Integration for Lighting Control",
 			"description": "Switch control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6[0x02]",
-			"label": "PIR integration to control lighting",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "PIR Integration to Control Lighting",
 			"description": "PIR integration",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6[0x04]",
-			"label": "Magetic/pir integration",
-			"description": "control lighting in association group 2",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Magetic/pir Integration",
+			"description": "control lighting in association group 2"
 		},
 		{
 			"#": "6[0x08]",
-			"label": "Device and lighting in same room",
+			"label": "Device and Lighting in Same Room",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "same room",
+					"label": "Same room",
 					"value": 0
 				},
 				{
-					"label": "different rooms",
+					"label": "Different rooms",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "6[0x10]",
-			"label": "Disable delay to turn off the light",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Delay to Turn Off the Light",
 			"description": "disable/enable delay",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6[0x20]",
-			"label": "Light off control",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Light Off Control",
 			"description": "disable/enable auto turn off the light",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x02]",
-			"label": "Motion Off Report",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Motion Off Report"
 		},
 		{
 			"#": "7[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "PIR Super-Sensitivity",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x08]",
-			"label": "BASIC OFF report",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "BASIC OFF Report",
 			"description": "Disable/enable report after door closed",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x10]",
-			"label": "Door closed report type",
-			"description": "notification or sensor binary report",
+			"label": "Door Closed Report Type",
+			"description": "notification or Binary Sensor report",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "notification report",
+					"label": "Notification Report",
 					"value": 0
 				},
 				{
-					"label": "sensor binary report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7[0x20]",
-			"label": "Multi CC in auto report",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Multi CC in Auto Report",
 			"description": "disable/enable multi CC in report",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x40]",
-			"label": "Battery state reports",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "enable",
-					"value": 0
-				},
-				{
-					"label": "disable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Battery State Reports",
+			"defaultValue": 0
 		}
 	]
 }

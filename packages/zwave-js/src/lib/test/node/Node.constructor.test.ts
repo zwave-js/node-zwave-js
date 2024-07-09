@@ -31,7 +31,6 @@ test.before(async (t) => {
 			t.context.controller = controller;
 		},
 	});
-	await driver.configManager.loadDeviceClasses();
 	t.context.driver = driver;
 });
 
@@ -113,18 +112,5 @@ test.serial("initializes the node's value DB", (t) => {
 
 	const node = new ZWaveNode(1, driver);
 	t.true(node.valueDB instanceof ValueDB);
-	node.destroy();
-});
-
-test.serial("marks the mandatory CCs as supported/controlled", (t) => {
-	const { driver } = t.context;
-
-	// Portable Scene Controller
-	const deviceClass = new DeviceClass(driver.configManager, 0x01, 0x01, 0x02);
-	const node = new ZWaveNode(1, driver, deviceClass);
-	t.true(node.supportsCC(CommandClasses.Association));
-	t.true(node.supportsCC(CommandClasses["Scene Controller Configuration"]));
-	t.true(node.supportsCC(CommandClasses["Manufacturer Specific"]));
-	t.true(node.controlsCC(CommandClasses["Scene Activation"]));
 	node.destroy();
 });

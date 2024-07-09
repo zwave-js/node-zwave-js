@@ -53,7 +53,7 @@
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (synchronize output): current switch state / Other switch types: previous state",
+					"label": "Toggle switch (Synchronize output): Current switch state / Other switch types: Previous state",
 					"value": 2
 				}
 			]
@@ -70,11 +70,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (synchronize output)",
+					"label": "Toggle switch (Synchronize output)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (toggle output)",
+					"label": "Toggle switch (Toggle output)",
 					"value": 2
 				}
 			]
@@ -91,11 +91,11 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (synchronize output)",
+					"label": "Toggle switch (Synchronize output)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (toggle output)",
+					"label": "Toggle switch (Toggle output)",
 					"value": 2
 				}
 			]
@@ -156,8 +156,8 @@
 			"$import": "templates/fibaro_template.json#alarm_configuration_action",
 			"label": "Alarm Configuration – 1st Slot Action",
 			"maxValue": 3,
-			"allowManualEntry": false,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "No action",
@@ -416,11 +416,10 @@
 			"#": "154",
 			"label": "Q1 Output – Time Parameter for Timed Modes",
 			"valueSize": 2,
+			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 32000,
-			"unit": "0.1 seconds",
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "0.1 seconds",
@@ -432,11 +431,10 @@
 			"#": "155",
 			"label": "Q2 Output – Time Parameter for Timed Modes",
 			"valueSize": 2,
+			"unit": "0.1 seconds",
 			"minValue": 0,
 			"maxValue": 32000,
-			"unit": "0.1 seconds",
 			"defaultValue": 5,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "0.1 seconds",
@@ -450,8 +448,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"defaultValue": 255
 		},
 		{
 			"#": "157",
@@ -459,8 +456,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "158",
@@ -468,8 +464,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "159",
@@ -477,8 +472,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"defaultValue": 255
 		},
 		{
 			"#": "160",
@@ -486,8 +480,7 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "161",
@@ -495,15 +488,13 @@
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 99,
-			"unsigned": true
+			"defaultValue": 99
 		},
 		{
 			"#": "162",
 			"label": "Q1 Output Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -521,7 +512,6 @@
 			"label": "Q2 Output Type",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -539,7 +529,6 @@
 			"label": "Prevent Simultaneous Switching of Outputs",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

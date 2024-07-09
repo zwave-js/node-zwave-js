@@ -2,7 +2,7 @@
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "VMZ Solar z-wave plus",
-	"description": "Awning Blind z-wave plus version",
+	"description": "Awning Blind Z-Wave Plus Version",
 	"devices": [
 		{
 			"productType": "0x0006",
@@ -16,58 +16,58 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "operating mode",
+			"label": "Operating Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "manual",
+					"label": "Manual",
 					"value": 0
 				},
 				{
-					"label": "semiauto",
+					"label": "Semiauto",
 					"value": 1
 				},
 				{
-					"label": "auto",
+					"label": "Auto",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Summer / Winter mode",
+			"label": "Summer / Winter Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "summer mode only",
+					"label": "Summer mode only",
 					"value": 1
 				},
 				{
-					"label": "winter mode",
+					"label": "Winter mode",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Delay time",
+			"label": "Delay Time",
 			"description": "delay to auto shade",
-			"unit": "min",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0
 		},
 		{
 			"#": "4",
-			"label": "Level of sensitivity for day",
+			"label": "Level of Sensitivity for Day",
 			"description": "Level of insolation to open/close the shades",
-			"unit": "mA",
 			"valueSize": 1,
+			"unit": "mA",
 			"minValue": 3,
 			"maxValue": 100,
 			"defaultValue": 3
@@ -75,8 +75,8 @@
 		{
 			"#": "5",
 			"label": "Temperature",
-			"unit": "C",
 			"valueSize": 1,
+			"unit": "C",
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
@@ -84,18 +84,18 @@
 		},
 		{
 			"#": "6",
-			"label": "STM active",
+			"label": "STM Active",
 			"description": "STM AutoShade active",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no",
+					"label": "No",
 					"value": 0
 				},
 				{
-					"label": "yes",
+					"label": "Yes",
 					"value": 1
 				}
 			]
@@ -106,10 +106,10 @@
 		},
 		{
 			"#": "17",
-			"label": "Insolation level",
+			"label": "Insolation Level",
 			"description": "Current on autoshade solar panel",
-			"unit": "mA",
 			"valueSize": 1,
+			"unit": "mA",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -118,9 +118,9 @@
 		},
 		{
 			"#": "21",
-			"label": "Motor current",
-			"unit": "mA",
+			"label": "Motor Current",
 			"valueSize": 1,
+			"unit": "mA",
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
@@ -128,9 +128,9 @@
 		},
 		{
 			"#": "77",
-			"label": "CLOSE current",
-			"unit": "mA",
+			"label": "CLOSE Current",
 			"valueSize": 1,
+			"unit": "mA",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
@@ -138,9 +138,9 @@
 		},
 		{
 			"#": "78",
-			"label": "OPEN current",
-			"unit": "mA",
+			"label": "OPEN Current",
 			"valueSize": 1,
+			"unit": "mA",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 1,
@@ -148,7 +148,7 @@
 		},
 		{
 			"#": "79",
-			"label": "CLOSE overload current",
+			"label": "CLOSE Overload Current",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -156,7 +156,7 @@
 		},
 		{
 			"#": "80",
-			"label": "OPEN overload current",
+			"label": "OPEN Overload Current",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,

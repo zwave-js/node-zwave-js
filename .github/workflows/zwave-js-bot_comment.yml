@@ -15,10 +15,10 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
-    - uses: actions/github-script@v6
+    - uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -49,7 +49,7 @@ jobs:
           })
 
     - name: Checkout merged code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         token: ${{secrets.BOT_TOKEN}}
         fetch-depth: 0 # We need the history for versioning with yarn
@@ -58,8 +58,12 @@ jobs:
     - name: Switch to a branch
       run: git switch -c temp
 
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -67,13 +71,16 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
-    - name: Let the bot do its thing
-      uses: ./.github/actions/zwave-js-bot
+    - name: Publish PR build to npm
+      uses: actions/github-script@v7
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       with:
-        githubToken: ${{ secrets.BOT_TOKEN }}
-        npmToken: ${{ secrets.NPM_TOKEN }}
-        task: publish-pr
-        pr: ${{ github.event.issue.number }}
+        github-token: ${{ secrets.BOT_TOKEN }}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.packPr({github, context});
 
 
   # #########################################################################
@@ -87,17 +94,17 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: trusted
 
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -109,7 +116,7 @@ jobs:
     - name: Retrieve PR information
       if: steps.check-permissions.outputs.result == 'true'
       id: pr-info
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
@@ -133,7 +140,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.pr-info.outputs.result).pending
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         token: ${{secrets.BOT_TOKEN}}
         repository: ${{ fromJSON(steps.pr-info.outputs.result).repoName }}
@@ -170,7 +177,7 @@ jobs:
 
     - name: Give feedback
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
         PENDING: ${{ fromJSON(steps.pr-info.outputs.result).pending }}
@@ -193,15 +200,15 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -212,7 +219,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Retrieve PR information
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       id: get-pr
       with:
         script: |
@@ -237,7 +244,7 @@ jobs:
 
     - name: Checkout pull request
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         token: ${{secrets.BOT_TOKEN}}
         repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
@@ -269,7 +276,7 @@ jobs:
 
     - name: Give feedback
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
       with:
@@ -278,97 +285,96 @@ jobs:
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
           return bot.rebaseFeedback({github, context});
 
+  # No longer needed
+  # # #########################################################################
+  # # Rename the single commit of a PR to the title when an authorized person posts "@zwave-js-bot rename commit"
+  # rename-commit:
+  #   if: |
+  #     contains(github.event.issue.html_url, '/pull/') &&
+  #     contains(github.event.comment.body, '@zwave-js-bot rename commit') &&
+  #     (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
 
+  #   runs-on: [ubuntu-latest]
+  #   strategy:
+  #     matrix:
+  #       node-version: [18] # This should be LTS
 
-  # #########################################################################
-  # Rename the single commit of a PR to the title when an authorized person posts "@zwave-js-bot rename commit"
-  rename-commit:
-    if: |
-      contains(github.event.issue.html_url, '/pull/') &&
-      contains(github.event.comment.body, '@zwave-js-bot rename commit') &&
-      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
-
-    runs-on: [ubuntu-latest]
-    strategy:
-      matrix:
-        node-version: [16.x] # This should be LTS
-
-    steps:
-    - name: Checkout master branch
-      uses: actions/checkout@v3
+  #   steps:
+  #   - name: Checkout master branch
+  #     uses: actions/checkout@v4
  
-    - name: Check permissions and necessity
-      id: check-permissions
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{secrets.BOT_TOKEN}}
-        result-encoding: string
-        script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return (
-            (await bot.checkAuthorized({github, context})) &&
-            (await bot.renameCommitCheck({github, context}))
-          );
+  #   - name: Check permissions and necessity
+  #     id: check-permissions
+  #     uses: actions/github-script@v7
+  #     with:
+  #       github-token: ${{secrets.BOT_TOKEN}}
+  #       result-encoding: string
+  #       script: |
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         return (
+  #           (await bot.checkAuthorized({github, context})) &&
+  #           (await bot.renameCommitCheck({github, context}))
+  #         );
 
-    # These steps only run if the check was successful
-    - name: Retrieve PR information
-      if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
-      id: get-pr
-      with:
-        script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return bot.renameCommitGetPRInfo({github, context});
+  #   # These steps only run if the check was successful
+  #   - name: Retrieve PR information
+  #     if: steps.check-permissions.outputs.result == 'true'
+  #     uses: actions/github-script@v7
+  #     id: get-pr
+  #     with:
+  #       script: |
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         return bot.renameCommitGetPRInfo({github, context});
 
-    - name: Save our CI scripts
-      if: steps.check-permissions.outputs.result == 'true'
-      run: |
-        mkdir -p /tmp/.github
-        cp -r .github/* /tmp/.github
+  #   - name: Save our CI scripts
+  #     if: steps.check-permissions.outputs.result == 'true'
+  #     run: |
+  #       mkdir -p /tmp/.github
+  #       cp -r .github/* /tmp/.github
 
-    - name: Checkout pull request
-      if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0 # Fetch the history, or this action will break everything!
-        token: ${{secrets.BOT_TOKEN}}
-        repository: ${{ fromJSON(steps.get-pr.outputs.result).repo }}
-        ref: ${{ fromJSON(steps.get-pr.outputs.result).ref }}
+  #   - name: Checkout pull request
+  #     if: steps.check-permissions.outputs.result == 'true'
+  #     uses: actions/checkout@v4
+  #     with:
+  #       fetch-depth: 0 # Fetch the history, or this action will break everything!
+  #       token: ${{secrets.BOT_TOKEN}}
+  #       repository: ${{ fromJSON(steps.get-pr.outputs.result).repo }}
+  #       ref: ${{ fromJSON(steps.get-pr.outputs.result).ref }}
 
-    - name: Restore our CI scripts
-      if: steps.check-permissions.outputs.result == 'true'
-      run: |
-        rm -rf .github
-        cp -r /tmp/.github .
+  #   - name: Restore our CI scripts
+  #     if: steps.check-permissions.outputs.result == 'true'
+  #     run: |
+  #       rm -rf .github
+  #       cp -r /tmp/.github .
 
-    - name: Rebase the branch
-      env:
-        # sanitize untrusted input by using an env variable
-        TITLE: ${{ fromJSON(steps.get-pr.outputs.result).title }}
-      if: steps.check-permissions.outputs.result == 'true'
-      id: fix
-      run: |
-        # Try to reword the commit
-        git config user.email "bot@zwave-js.io"
-        git config user.name "Z-Wave JS Bot"
-        if git commit --amend -m "$TITLE" ; then
-          # Amending the commit worked
-          git push -f
-          echo "result=success" >> $GITHUB_OUTPUT
-        else
-          echo "result=error" >> $GITHUB_OUTPUT
-        fi
+  #   - name: Rebase the branch
+  #     env:
+  #       # sanitize untrusted input by using an env variable
+  #       TITLE: ${{ fromJSON(steps.get-pr.outputs.result).title }}
+  #     if: steps.check-permissions.outputs.result == 'true'
+  #     id: fix
+  #     run: |
+  #       # Try to reword the commit
+  #       git config user.email "bot@zwave-js.io"
+  #       git config user.name "Z-Wave JS Bot"
+  #       if git commit --amend -m "$TITLE" ; then
+  #         # Amending the commit worked
+  #         git push -f
+  #         echo "result=success" >> $GITHUB_OUTPUT
+  #       else
+  #         echo "result=error" >> $GITHUB_OUTPUT
+  #       fi
 
-    - name: Give feedback
-      if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
-      env:
-        FEEDBACK: ${{ steps.fix.outputs.result }}
-      with:
-        github-token: ${{secrets.BOT_TOKEN}}
-        script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return bot.renameCommitFeedback({github, context});
+  #   - name: Give feedback
+  #     if: steps.check-permissions.outputs.result == 'true'
+  #     uses: actions/github-script@v7
+  #     env:
+  #       FEEDBACK: ${{ steps.fix.outputs.result }}
+  #     with:
+  #       github-token: ${{secrets.BOT_TOKEN}}
+  #       script: |
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         return bot.renameCommitFeedback({github, context});
 
   # #########################################################################
   # Imports a config file when an authorized person posts "@zwave-js-bot import config <device-id> from <source>"
@@ -381,15 +387,15 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -398,9 +404,13 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -417,7 +427,7 @@ jobs:
     - name: Get config file ID
       if: steps.check-permissions.outputs.result == 'true'
       id: config-id
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -462,7 +472,7 @@ jobs:
 
     - name: Create PR
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         RESULT: ${{ steps.import.outputs.result }}
         branchname: ${{ steps.import.outputs.branchname }}
@@ -478,7 +488,7 @@ jobs:
   # Adds a compat flag to an existing file when an authorized person posts
   # @zwave-js-bot add compat flag to <deviceId>
   # ```
-  # enableBasicSetMapping: true
+  # mapBasicSet: "auto"
   # ```
   add-compat-flag:
     if: |
@@ -489,15 +499,15 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -506,9 +516,13 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -525,7 +539,7 @@ jobs:
     - name: Parse command
       if: steps.check-permissions.outputs.result == 'true'
       id: parse-command
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -542,7 +556,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
         flag: ${{ fromJSON(steps.parse-command.outputs.result).flag }}
@@ -585,7 +599,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         RESULT: ${{ steps.commit-changes.outputs.result }}
         branchname: ${{ steps.commit-changes.outputs.branchname }}
@@ -609,15 +623,15 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        node-version: [16.x] # This should be LTS
+        node-version: [18] # This should be LTS
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -626,9 +640,13 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -645,7 +663,7 @@ jobs:
     - name: Parse command
       if: steps.check-permissions.outputs.result == 'true'
       id: parse-command
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -662,7 +680,7 @@ jobs:
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
       id: add-fingerprint
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         fingerprint: ${{ fromJSON(steps.parse-command.outputs.result).fingerprint }}
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
@@ -707,7 +725,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         RESULT: ${{ steps.commit-changes.outputs.result }}
         branchname: ${{ steps.commit-changes.outputs.branchname }}

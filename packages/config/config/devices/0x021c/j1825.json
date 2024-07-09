@@ -1,0 +1,27 @@
+{
+	"manufacturer": "Shenzhen iSurpass Technology Co., Ltd",
+	"manufacturerId": "0x021c",
+	"label": "J1825",
+	"description": "Wall Reader",
+	"devices": [
+		{
+			"productType": "0x5010",
+			"productId": "0x1001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Notification Report",
+			"maxNodes": 5
+		}
+	}
+}

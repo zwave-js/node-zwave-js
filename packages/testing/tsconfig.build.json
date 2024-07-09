@@ -3,8 +3,24 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"rootDir": "src",
-		"outDir": "build"
+		"outDir": "build",
+		// Do not use the @@dev export for compiling
+		"customConditions": []
 	},
+	"references": [
+		{
+			"path": "../core/tsconfig.build.json"
+		},
+		{
+			"path": "../host/tsconfig.build.json"
+		},
+		{
+			"path": "../serial/tsconfig.build.json"
+		},
+		{
+			"path": "../shared/tsconfig.build.json"
+		}
+	],
 	"include": ["src/**/*.ts"],
 	"exclude": ["src/**/*.test.ts"]
 }

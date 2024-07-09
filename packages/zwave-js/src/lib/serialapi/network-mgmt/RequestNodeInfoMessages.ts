@@ -1,18 +1,23 @@
-import { MessageOrCCLogEntry, MessagePriority } from "@zwave-js/core";
+import {
+	type MessageOrCCLogEntry,
+	MessagePriority,
+	encodeNodeID,
+	parseNodeID,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
+	FunctionType,
+	type INodeQuery,
+	Message,
+	type MessageBaseOptions,
+	type MessageDeserializationOptions,
+	MessageType,
+	type SuccessIndicator,
 	expectedCallback,
 	expectedResponse,
-	FunctionType,
 	gotDeserializationOptions,
-	INodeQuery,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageType,
 	messageTypes,
 	priority,
-	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -24,8 +29,7 @@ interface RequestNodeInfoResponseOptions extends MessageBaseOptions {
 }
 
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
-export class RequestNodeInfoResponse
-	extends Message
+export class RequestNodeInfoResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
@@ -68,9 +72,9 @@ function testCallbackForRequestNodeInfoRequest(
 	received: Message,
 ) {
 	return (
-		(received instanceof ApplicationUpdateRequestNodeInfoReceived &&
-			received.nodeId === sent.nodeId) ||
-		received instanceof ApplicationUpdateRequestNodeInfoRequestFailed
+		(received instanceof ApplicationUpdateRequestNodeInfoReceived
+			&& received.nodeId === sent.nodeId)
+		|| received instanceof ApplicationUpdateRequestNodeInfoRequestFailed
 	);
 }
 
@@ -85,7 +89,11 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			this.nodeId = this.payload[0];
+			this.nodeId = parseNodeID(
+				this.payload,
+				this.host.nodeIdType,
+				0,
+			).nodeId;
 		} else {
 			this.nodeId = options.nodeId;
 		}
@@ -99,7 +107,7 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	}
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.nodeId]);
+		this.payload = encodeNodeID(this.nodeId, this.host.nodeIdType);
 		return super.serialize();
 	}
 

@@ -101,10 +101,10 @@
 			"#": "6",
 			"label": "Movement Duration",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
-			"unit": "seconds"
+			"defaultValue": 0
 		},
 		{
 			"#": "7",
@@ -112,8 +112,8 @@
 			"label": "Remote Calibration",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"writeOnly": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Idle",
@@ -152,8 +152,8 @@
 			"description": "Overrides Set commands with a value of 99 to use the value defined in parameter 4 (Default ON Value) instead",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"writeOnly": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -165,5 +165,17 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// https://github.com/zwave-js/node-zwave-js/issues/5686
+		// The device supports Binary Switch CC to control the tilt, but it is not linked
+		// to the Window Covering CC values. Remove the Binary Switch CC to avoid confusion.
+		"commandClasses": {
+			"remove": {
+				"Binary Switch": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }

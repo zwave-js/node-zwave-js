@@ -1,6 +1,6 @@
 import test from "ava";
 
-import { cpp2js, isPrintableASCIIWithNewlines, num2hex } from "./strings";
+import { cpp2js, isPrintableASCIIWithWhitespace, num2hex } from "./strings";
 
 test("cpp2js() -> should truncate null-terminated strings", (t) => {
 	const testCases = [
@@ -39,7 +39,7 @@ test("num2hex() -> when the uppercase parameter is true, the hex digits should b
 	t.is(num2hex(0xabc123, true), "0xABC123");
 });
 
-test("isPrintableASCIIWithNewlines() -> should return true for ASCII strings that start or end with newlines", (t) => {
+test("isPrintableASCIIWithWhitespace() -> should return true for ASCII strings that start or end with newlines", (t) => {
 	const testCases = [
 		["abcdef\n\r", true],
 		["\n\r", true],
@@ -49,6 +49,6 @@ test("isPrintableASCIIWithNewlines() -> should return true for ASCII strings tha
 		["\r\nß\r\n", false],
 	] as const;
 	for (const [inp, result] of testCases) {
-		t.is(isPrintableASCIIWithNewlines(inp), result);
+		t.is(isPrintableASCIIWithWhitespace(inp), result);
 	}
 });

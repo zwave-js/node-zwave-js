@@ -46,8 +46,7 @@
 					"label": "Toggle switch",
 					"value": 1
 				}
-			],
-			"unsigned": true
+			]
 		},
 		{
 			"#": "3",
@@ -61,8 +60,7 @@
 					"label": "Disable",
 					"value": 0
 				}
-			],
-			"unsigned": true
+			]
 		},
 		{
 			"#": "5",
@@ -85,8 +83,7 @@
 					"label": "Toggle switch",
 					"value": 1
 				}
-			],
-			"unsigned": true
+			]
 		},
 		{
 			"#": "4",
@@ -100,8 +97,7 @@
 					"label": "Disable",
 					"value": 0
 				}
-			],
-			"unsigned": true
+			]
 		},
 		{
 			"#": "6",

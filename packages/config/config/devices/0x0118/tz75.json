@@ -16,36 +16,36 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Watt meter report period",
-			"unit": "5s",
+			"label": "Watt Meter Report Period",
 			"valueSize": 2,
+			"unit": "5s",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
 		{
 			"#": "2",
-			"label": "KWH Meter Report period",
-			"unit": "10min",
+			"label": "KWH Meter Report Period",
 			"valueSize": 2,
+			"unit": "10min",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6
 		},
 		{
 			"#": "3",
-			"label": "Threshold of watt for load caution",
-			"unit": "W",
+			"label": "Threshold of Watt for Load Caution",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 10,
 			"maxValue": 1100,
 			"defaultValue": 1100
 		},
 		{
 			"#": "4",
-			"label": "Threshold of KWH for load caution",
-			"unit": "KWH",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
+			"unit": "kWh",
 			"minValue": 0,
 			"maxValue": 10000,
 			"defaultValue": 0

@@ -1,0 +1,430 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "Z-TRM6",
+	"description": "Floor Thermostat",
+	"devices": [
+		{
+			"productType": "0x0030",
+			"productId": "0x3001",
+			"zwaveAllianceId": 4908
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Binary Switch Set",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "Thermostat Setpoint Set",
+			"maxNodes": 10
+		},
+		"4": {
+			"label": "Thermostat Mode Set",
+			"maxNodes": 10
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Local Control",
+			"defaultValue": 0
+		},
+		{
+			"#": "2",
+			"label": "Sensor Mode",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Floor",
+					"value": 0
+				},
+				{
+					"label": "Internal",
+					"value": 1
+				},
+				{
+					"label": "Internal with floor limit",
+					"value": 2
+				},
+				{
+					"label": "External",
+					"value": 3
+				},
+				{
+					"label": "External with floor limit",
+					"value": 4
+				},
+				{
+					"label": "Power regulator",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "External Sensor Resistance",
+			"valueSize": 1,
+			"unit": "kΩ",
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10",
+					"value": 0
+				},
+				{
+					"label": "12",
+					"value": 1
+				},
+				{
+					"label": "15",
+					"value": 2
+				},
+				{
+					"label": "22",
+					"value": 3
+				},
+				{
+					"label": "33",
+					"value": 4
+				},
+				{
+					"label": "47",
+					"value": 5
+				},
+				{
+					"label": "6.8",
+					"value": 6
+				},
+				{
+					"label": "100",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Internal Sensor Min Temp Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50
+		},
+		{
+			"#": "5",
+			"label": "Floor Sensor Min Temp Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50
+		},
+		{
+			"#": "6",
+			"label": "External Sensor Min Temp Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50
+		},
+		{
+			"#": "7",
+			"label": "Internal Sensor Max Temp Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400
+		},
+		{
+			"#": "8",
+			"label": "Floor Sensor Max Temp Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400
+		},
+		{
+			"#": "9",
+			"label": "External Sensor Max Temp Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400
+		},
+		{
+			"#": "10",
+			"label": "Internal Sensor Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": -60,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "11",
+			"label": "Floor Sensor Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": -60,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "12",
+			"label": "External Sensor Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": -60,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "13",
+			"label": "Regulation Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hysteresis",
+					"value": 0
+				},
+				{
+					"label": "PWM",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Temperature Control Hysteresis",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 3,
+			"maxValue": 30,
+			"defaultValue": 5
+		},
+		{
+			"#": "15",
+			"label": "Temperature Display",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Setpoint",
+					"value": 0
+				},
+				{
+					"label": "Measured",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Active Display Brightness",
+			"valueSize": 1,
+			"unit": "10 %",
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 10
+		},
+		{
+			"#": "17",
+			"label": "Standby Display Brightness",
+			"valueSize": 1,
+			"unit": "10 %",
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 5
+		},
+		{
+			"#": "18",
+			"label": "Temperature Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 840,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Temperature Report Hysteresis",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "20",
+			"label": "Meter Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 840,
+			"unsigned": true
+		},
+		{
+			"#": "21",
+			"label": "Turn On Delay After Error",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Stay off (Display error)",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Heating Setpoint",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 210
+		},
+		{
+			"#": "23",
+			"label": "Cooling Setpoint",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 180
+		},
+		{
+			"#": "24",
+			"label": "Eco Setpoint",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 180
+		},
+		{
+			"#": "25",
+			"label": "Power Regulator Active Time",
+			"valueSize": 1,
+			"unit": "10 %",
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 2
+		},
+		{
+			"#": "26",
+			"label": "Thermostat State Report Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 43200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Changes only",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "27",
+			"label": "Operating Mode",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Heating",
+					"value": 1
+				},
+				{
+					"label": "Cooling",
+					"value": 2
+				},
+				{
+					"label": "Eco",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "28",
+			"label": "Open Window Detection",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29",
+			"label": "Load Power",
+			"valueSize": 1,
+			"unit": "100 W",
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Use measured value",
+					"value": 0
+				}
+			]
+		}
+	],
+	"compat": {
+		// The device doesn't accept setpoints with automatic precision
+		"overrideFloatEncoding": {
+			"size": 2
+		}
+	},
+	"metadata": {
+		"inclusion": "Add\nThe primary controller/gateway has a mode for adding devices. Please refer to your primary controller manual on how to set the primary controller in add mode. The device may only be added to the network if the primary controller is in add mode.\nAn always listening node must be powered continuously and reside in a fixed position in the installation to secure the routing table. Adding the device within a 2 meter range from the gateway can minimize faults during the Interview process.\n\nStandard (Manual)\nAdd mode is indicated on the device by rotating LED segments on the display. It indicates this for 90 seconds until a timeout occurs, or until the device has been added to the network. Configuration mode can also be cancelled by performing the same procedure used for starting\nConfiguration mode.\n1. Hold the Center button for 5 seconds.\nThe display will show “OFF”.\n2. Press the ”+” button once to see “CON” in the display.\n3. Start the add device process in your primary controller.\n4. Start the configuration mode on the thermostat by holding the Center button for approximately 2 seconds.\n\nThe device is now ready for use with default settings.\nIf inclusion fails, please perform a ”remove device” process and try again. If inclusion fails again, please see “Factory reset”",
+		"exclusion": "Remove\nThe primary controller/gateway has a mode for removing devices. Please refer to your primary controller manual on how to set the primary controller in remove mode. The device may only be removed from the network if the primary controller is in remove mode.\nWhen the device is removed from the network, it will NOT revert to factory settings.\n\nStandard (Manual)\nRemove mode is indicated on the device by rotating LED segments on the display. It indicates this for 90 seconds until a timeout occurs, or until the device has been removed from the network. Configuration mode can also be cancelled by performing the same procedure used for starting\nConfiguration mode.\n1. Hold the Center button for 5 seconds.\nThe display will show “OFF”.\n2. Press the ”+” button once to see “CON” in the display.\n3. Start the remove device process in your primary controller.\n4. Start the configuration mode on the thermostat by holding the Center button for approximately 2 seconds.\n\nNB! When the device is removed from the gateway, the parameters are not reset. To reset the parameters, see Chapter ”Factory reset”",
+		"reset": "Enter the menu by holding the Center button for about 5 seconds, navigate in the menu with the ”+” button til you see FACT. Press the Center button until you see “-- --” blinking in the display, then hold for about 5 seconds to perform a reset.\nYou may also initiate a reset by holding the Right and Center buttons for 60 seconds.\n\nWhen either of these procedures has been performed, the thermostat will perform a complete factory reset. The device will display “RES” for 5 seconds while performing a factory reset. When “RES” is no longer displayed, the thermostat has been reset.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://media.heatit.com/2926"
+	}
+}

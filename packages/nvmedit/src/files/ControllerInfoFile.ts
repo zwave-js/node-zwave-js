@@ -1,40 +1,43 @@
 import {
-	stripUndefined,
 	ZWaveError,
 	ZWaveErrorCodes,
+	stripUndefined,
 } from "@zwave-js/core/safe";
 import { buffer2hex } from "@zwave-js/shared";
 import type { NVM3Object } from "../nvm3/object";
 import {
+	NVMFile,
+	type NVMFileCreationOptions,
+	type NVMFileDeserializationOptions,
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
-	NVMFile,
-	NVMFileCreationOptions,
-	NVMFileDeserializationOptions,
 	nvmFileID,
 } from "./NVMFile";
 
-export type ControllerInfoFileOptions = NVMFileCreationOptions & {
-	homeId: Buffer;
-	nodeId: number;
-	lastNodeId: number;
-	staticControllerNodeId: number;
-	sucLastIndex: number;
-	controllerConfiguration: number;
-	maxNodeId: number;
-	reservedId: number;
-	systemState: number;
-} & (
+export type ControllerInfoFileOptions =
+	& NVMFileCreationOptions
+	& {
+		homeId: Buffer;
+		nodeId: number;
+		lastNodeId: number;
+		staticControllerNodeId: number;
+		sucLastIndex: number;
+		controllerConfiguration: number;
+		maxNodeId: number;
+		reservedId: number;
+		systemState: number;
+	}
+	& (
 		| {
-				sucAwarenessPushNeeded: number;
-		  }
+			sucAwarenessPushNeeded: number;
+		}
 		| {
-				lastNodeIdLR: number;
-				maxNodeIdLR: number;
-				reservedIdLR: number;
-				primaryLongRangeChannelId: number;
-				dcdcConfig: number;
-		  }
+			lastNodeIdLR: number;
+			maxNodeIdLR: number;
+			reservedIdLR: number;
+			primaryLongRangeChannelId: number;
+			dcdcConfig: number;
+		}
 	);
 
 @nvmFileID(0x50004)
@@ -44,7 +47,7 @@ export class ControllerInfoFile extends NVMFile {
 	) {
 		super(options);
 		if (gotDeserializationOptions(options)) {
-			this.homeId = this.payload.slice(0, 4);
+			this.homeId = this.payload.subarray(0, 4);
 			if (this.payload.length === 13) {
 				this.nodeId = this.payload[4];
 				this.lastNodeId = this.payload[5];

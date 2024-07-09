@@ -19,6 +19,10 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0477"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x00f5"
 		}
 	],
 	"firmwareVersion": {
@@ -36,11 +40,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Turns the main LED OFF",
+					"label": "Turns the main LED off",
 					"value": 0
 				},
 				{
-					"label": "Turns the main LED ON",
+					"label": "Turns the main LED on",
 					"value": 255
 				}
 			]
@@ -75,11 +79,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED OFF",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "LED ON at 20% of maximum level",
+					"label": "LED on at 20% of maximum level",
 					"value": 255
 				}
 			]
@@ -118,7 +122,7 @@
 					"value": 0
 				},
 				{
-					"label": "Reset to Factory Defaults",
+					"label": "Reset to factory defaults",
 					"value": 39015
 				}
 			]

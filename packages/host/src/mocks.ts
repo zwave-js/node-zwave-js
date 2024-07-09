@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
 import {
-	IZWaveNode,
+	type IZWaveNode,
 	MAX_SUPERVISION_SESSION_ID,
+	NodeIDType,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
+	type ThrowingMap,
 	createThrowingMap,
 	createWrappingCounter,
-	type ThrowingMap,
 } from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
@@ -18,8 +19,8 @@ import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
 export interface CreateTestingHostOptions {
 	homeId: ZWaveHost["homeId"];
 	ownNodeId: ZWaveHost["ownNodeId"];
-	getSafeCCVersionForNode: ZWaveHost["getSafeCCVersionForNode"];
-	getSupportedCCVersionForEndpoint?: ZWaveHost["getSupportedCCVersionForEndpoint"];
+	getSafeCCVersion: ZWaveHost["getSafeCCVersion"];
+	getSupportedCCVersion?: ZWaveHost["getSupportedCCVersion"];
 }
 
 export type TestingHost = Overwrite<
@@ -34,13 +35,16 @@ export function createTestingHost(
 	const valuesStorage = new Map();
 	const metadataStorage = new Map();
 	const valueDBCache = new Map<number, ValueDB>();
+	const supervisionSessionIDs = new Map<number, () => number>();
 
 	const ret: TestingHost = {
 		homeId: options.homeId ?? 0x7e570001,
 		ownNodeId: options.ownNodeId ?? 1,
+		nodeIdType: NodeIDType.Short,
 		isControllerNode: (nodeId) => nodeId === ret.ownNodeId,
 		securityManager: undefined,
 		securityManager2: undefined,
+		securityManagerLR: undefined,
 		getDeviceConfig: undefined,
 		controllerLog: new Proxy({} as any, {
 			get() {
@@ -68,15 +72,20 @@ export function createTestingHost(
 				ZWaveErrorCodes.Controller_NodeNotFound,
 			);
 		}),
-		getSafeCCVersionForNode: options.getSafeCCVersionForNode ?? (() => 100),
-		getSupportedCCVersionForEndpoint:
-			options.getSupportedCCVersionForEndpoint ??
-			options.getSafeCCVersionForNode ??
-			(() => 100),
+		getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
+		getSupportedCCVersion: options.getSupportedCCVersion
+			?? options.getSafeCCVersion
+			?? (() => 100),
 		getNextCallbackId: createWrappingCounter(0xff),
-		getNextSupervisionSessionId: createWrappingCounter(
-			MAX_SUPERVISION_SESSION_ID,
-		),
+		getNextSupervisionSessionId: (nodeId) => {
+			if (!supervisionSessionIDs.has(nodeId)) {
+				supervisionSessionIDs.set(
+					nodeId,
+					createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
+				);
+			}
+			return supervisionSessionIDs.get(nodeId)!();
+		},
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
 				valueDBCache.set(
@@ -97,9 +106,9 @@ export function createTestingHost(
 			const node = ret.nodes.get(nodeId);
 			const endpoint = node?.getEndpoint(endpointIndex);
 			return (
-				node?.isSecure !== false &&
-				!!(endpoint ?? node)?.isCCSecure(ccId) &&
-				!!(ret.securityManager || ret.securityManager2)
+				node?.isSecure !== false
+				&& !!(endpoint ?? node)?.isCCSecure(ccId)
+				&& !!(ret.securityManager || ret.securityManager2)
 			);
 		},
 		getHighestSecurityClass: (nodeId) => {

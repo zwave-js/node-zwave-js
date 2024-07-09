@@ -1,7 +1,7 @@
-import { JSONObject, pick } from "@zwave-js/shared/safe";
+import { type JSONObject, pick } from "@zwave-js/shared/safe";
 import { throwInvalidConfig } from "../utils_safe";
 import {
-	ConditionalItem,
+	type ConditionalItem,
 	conditionApplies,
 	validateCondition,
 } from "./ConditionalItem";
@@ -34,8 +34,8 @@ Association ${groupId} has a non-string label`,
 		this.label = definition.label;
 
 		if (
-			definition.description != undefined &&
-			typeof definition.description !== "string"
+			definition.description != undefined
+			&& typeof definition.description !== "string"
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -55,8 +55,8 @@ maxNodes for association ${groupId} is not a number`,
 		this.maxNodes = definition.maxNodes;
 
 		if (
-			definition.isLifeline != undefined &&
-			typeof definition.isLifeline !== "boolean"
+			definition.isLifeline != undefined
+			&& typeof definition.isLifeline !== "boolean"
 		) {
 			throwInvalidConfig(
 				"devices",
@@ -67,8 +67,8 @@ isLifeline in association ${groupId} must be a boolean`,
 		this.isLifeline = !!definition.isLifeline;
 
 		if (
-			definition.multiChannel != undefined &&
-			typeof definition.multiChannel !== "boolean"
+			definition.multiChannel != undefined
+			&& typeof definition.multiChannel !== "boolean"
 		) {
 			throwInvalidConfig(
 				"devices",

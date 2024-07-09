@@ -8,15 +8,12 @@ jobs:
   # Notify issue author when they post the wrong log
   ensure-logfile:
     runs-on: [ubuntu-latest]
-    strategy:
-      matrix:
-        node-version: [16.x] # This should be LTS
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - uses: actions/github-script@v6
+    - uses: actions/github-script@v7
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |

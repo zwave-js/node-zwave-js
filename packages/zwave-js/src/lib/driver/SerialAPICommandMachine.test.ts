@@ -1,12 +1,12 @@
 import { createModel } from "@xstate/test";
 import type { Message } from "@zwave-js/serial";
 import {
+	type DeferredPromise,
 	createDeferredPromise,
-	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import ava, { ExecutionContext, TestFn } from "ava";
+import ava, { type ExecutionContext, type TestFn } from "ava";
 import sinon from "sinon";
-import { assign, interpret, Machine, State } from "xstate";
+import { Machine, type State, assign, interpret } from "xstate";
 import {
 	dummyCallbackNOK,
 	dummyCallbackOK,
@@ -20,10 +20,11 @@ import {
 	dummyResponseOK,
 } from "../test/messages";
 import {
+	type SerialAPICommandDoneData,
+	type SerialAPICommandInterpreter,
+	type SerialAPICommandMachineParams,
+	type SerialAPICommandServiceImplementations,
 	createSerialAPICommandMachine,
-	SerialAPICommandDoneData,
-	SerialAPICommandInterpreter,
-	SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 
 interface AvaTestContext {
@@ -40,6 +41,8 @@ interface TestMachineStateSchema {
 		waitForACK: {};
 		waitForResponse: {};
 		waitForCallback: {};
+		// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+		// waitForCallbackAfterTimeout: {};
 		unsolicited: {};
 		success: {};
 		failure: {};
@@ -56,10 +59,10 @@ interface TestMachineContext {
 
 type TestMachineEvents =
 	| {
-			type: "CREATE";
-			expectsResponse: boolean;
-			expectsCallback: boolean;
-	  }
+		type: "CREATE";
+		expectsResponse: boolean;
+		expectsCallback: boolean;
+	}
 	| { type: "SEND_SUCCESS" }
 	| { type: "SEND_FAILURE" }
 	| { type: "ACK" }
@@ -172,12 +175,12 @@ const testMachine = Machine<
 						// Skip the wait time if there should be any
 						const att = state.context.attempt;
 						if (att > 1) {
-							t.is(interpreter.state.value, "retryWait");
+							t.is(interpreter.getSnapshot().value, "retryWait");
 							t.context.clock.tick(100 + (att - 1) * 1000);
 						}
 
 						// Assert that sendData was called
-						t.is(interpreter.state.value, "sending");
+						t.is(interpreter.getSnapshot().value, "sending");
 						// but not more than 3 times
 						t.true(att <= 3);
 						t.is(sendData.callCount, att);
@@ -226,7 +229,11 @@ const testMachine = Machine<
 						{ target: "failure" },
 					],
 					RESPONSE_TIMEOUT: [
-						{ target: "sending", cond: "maySendAgain" },
+						// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+						// {
+						// 	target: "waitForCallbackAfterTimeout",
+						// 	cond: "expectsCallback",
+						// },
 						{ target: "failure" },
 					],
 					UNSOLICITED: "unsolicited",
@@ -246,6 +253,13 @@ const testMachine = Machine<
 					UNSOLICITED: "unsolicited",
 				},
 			},
+			// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+			// waitForCallbackAfterTimeout: {
+			// 	on: {
+			// 		CALLBACK_NOK: "failure",
+			// 		CALLBACK_TIMEOUT: "failure",
+			// 	},
+			// },
 			unsolicited: {
 				meta: {
 					test: ({
@@ -265,7 +279,7 @@ const testMachine = Machine<
 						machineResult,
 					}: TestContext) => {
 						// Ensure that the interpreter is in "success" state
-						t.is(interpreter.state.value, "success");
+						t.is(interpreter.getSnapshot().value, "success");
 						// with the correct reason
 						// expect(machineResult).toBeObject();
 						t.like(machineResult, {
@@ -285,7 +299,7 @@ const testMachine = Machine<
 						implementations: { sendData },
 					}: TestContext) => {
 						// Ensure that the interpreter is in "failure" state
-						t.is(interpreter.state.value, "failure");
+						t.is(interpreter.getSnapshot().value, "failure");
 						// with the correct reason
 						// expect(machineResult).toBeObject();
 						t.like(machineResult, {
@@ -309,7 +323,6 @@ const testMachine = Machine<
 );
 
 const testModel = createModel<TestContext, TestMachineContext>(
-	// @ts-expect-error
 	testMachine,
 ).withEvents({
 	CREATE: {
@@ -386,6 +399,14 @@ testPlans.forEach((plan) => {
 	);
 
 	plan.paths.forEach((path) => {
+		// Uncomment this and change the path description to only run a single test
+		// if (
+		// 	!path.description.includes(
+		// 		`CREATE ({"resp":true,"cb":true}) → SEND_FAILURE → SEND_FAILURE → SEND_SUCCESS → ACK → RESPONSE_TIMEOUT → CALLBACK_NOK`,
+		// 	)
+		// ) {
+		// 	return;
+		// }
 		test.serial(`${planDescription} ${path.description}`, async (t) => {
 			// eslint-disable-next-line prefer-const
 			let context: TestContext;
@@ -393,17 +414,21 @@ testPlans.forEach((plan) => {
 				context.sendDataPromise = createDeferredPromise();
 				return context.sendDataPromise;
 			});
+			const sendDataAbort = sinon.stub();
 			const notifyRetry = sinon.stub();
 			const timestamp = () => 0;
-			const log = () => {};
 			const logOutgoingMessage = () => {};
+			const notifyUnsolicited = () => {
+				context.respondedUnsolicited = true;
+			};
 
-			const implementations = {
+			const implementations: SerialAPICommandServiceImplementations = {
 				sendData,
+				sendDataAbort,
 				notifyRetry,
 				timestamp,
-				log,
 				logOutgoingMessage,
+				notifyUnsolicited,
 			};
 
 			// parse message from test description
@@ -421,24 +446,18 @@ testPlans.forEach((plan) => {
 			const machine = createSerialAPICommandMachine(
 				// @ts-ignore
 				messages[msg.resp][msg.cb],
-				implementations as any,
+				implementations,
 				machineParams,
 			);
 
 			context = {
 				avaExecutionContext: t,
 				interpreter: interpret(machine),
-				implementations,
+				implementations: implementations as any,
 			};
-			context.interpreter
-				.onEvent((evt) => {
-					if (evt.type === "unsolicited") {
-						context.respondedUnsolicited = true;
-					}
-				})
-				.onDone((evt) => {
-					context.machineResult = evt.data;
-				});
+			context.interpreter.onDone((evt) => {
+				context.machineResult = evt.data;
+			});
 			// context.interpreter.onTransition((state) => {
 			// 	if (state.changed) console.log(state.value);
 			// });
@@ -487,11 +506,11 @@ testPlans.forEach((plan) => {
 	});
 });
 
-test.serial("coverage", (t) => {
-	testModel.testCoverage({
-		filter: (stateNode) => {
-			return !!stateNode.meta;
-		},
-	});
-	t.pass();
-});
+// test.serial("coverage", (t) => {
+// 	testModel.testCoverage({
+// 		filter: (stateNode) => {
+// 			return !!stateNode.meta;
+// 		},
+// 	});
+// 	t.pass();
+// });

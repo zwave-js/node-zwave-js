@@ -1,29 +1,21 @@
+// This is a "solution" tsconfig with references to all "entrypoints" in the monorepo
+// to power IntelliSense without having to open a specific package first
 {
-	"extends": "@tsconfig/node14/tsconfig.json",
+	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
-		"incremental": true,
-		"declaration": true,
-		"declarationMap": true,
-
-		"noEmitOnError": true,
-		"removeComments": false,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": false,
-		"importsNotUsedAsValues": "error",
-		"sourceMap": true,
-		"inlineSourceMap": false,
-		"stripInternal": true,
-
-		"watch": false, // true breaks CI scripts
-		"pretty": true,
-		"types": ["node", "ts-nameof"],
-		"noErrorTruncation": true
+		"noEmit": true
 	},
-	"include": [
-		"packages/**/src/**/*.ts",
-		"packages/**/maintenance/**/*.ts",
-		"maintenance/**/*.ts",
-		"test/**/*.ts"
-	],
-	"exclude": ["**/build/**", "node_modules/**", "packages/**/node_modules"]
+	"files": [],
+	"include": [],
+	"references": [
+		{
+			"path": "./packages/eslint-plugin"
+		},
+		{
+			"path": "./packages/flash"
+		},
+		{
+			"path": "./packages/zwave-js"
+		}
+	]
 }

@@ -1,10 +1,10 @@
-import type { Scale } from "@zwave-js/config/safe";
 import {
-	CommandClasses,
-	DataRate,
-	FLiRS,
-	Maybe,
-	ValueMetadata,
+	type CommandClasses,
+	type DataRate,
+	type FLiRS,
+	type MaybeNotKnown,
+	type Scale,
+	type ValueMetadata,
 	ZWaveDataRate,
 } from "@zwave-js/core/safe";
 
@@ -38,19 +38,24 @@ export enum AssociationCommand {
 	Remove = 0x04,
 	SupportedGroupingsGet = 0x05,
 	SupportedGroupingsReport = 0x06,
-	// TODO: These two commands are V2. I have no clue how this is supposed to function:
-	// SpecificGroupGet = 0x0b,
-	// SpecificGroupReport = 0x0c,
+	SpecificGroupGet = 0x0b,
+	SpecificGroupReport = 0x0c,
+}
 
-	// Here's what the docs have to say:
-	// This functionality allows a supporting multi-button device to detect a key press and subsequently advertise
-	// the identity of the key. The following sequence of events takes place:
-	// * The user activates a special identification sequence and pushes the button to be identified
-	// * The device issues a Node Information frame (NIF)
-	// * The NIF allows the portable controller to determine the NodeID of the multi-button device
-	// * The portable controller issues an Association Specific Group Get Command to the multi-button device
-	// * The multi-button device returns an Association Specific Group Report Command that advertises the
-	//   association group that represents the most recently detected button
+export enum AssociationCheckResult {
+	OK = 0x01,
+	/** The association is forbidden, because the destination is a ZWLR node. ZWLR does not support direct communication between end devices. */
+	Forbidden_DestinationIsLongRange,
+	/** The association is forbidden, because the source is a ZWLR node. ZWLR does not support direct communication between end devices. */
+	Forbidden_SourceIsLongRange,
+	/** The association is forbidden, because a node cannot be associated with itself. */
+	Forbidden_SelfAssociation,
+	/** The association is forbidden, because the source node's CC versions require the source and destination node to have the same (highest) security class. */
+	Forbidden_SecurityClassMismatch,
+	/** The association is forbidden, because the source node's CC versions require the source node to have the key for the destination node's highest security class. */
+	Forbidden_DestinationSecurityClassNotGranted,
+	/** The association is forbidden, because none of the CCs the source node sends are supported by the destination. */
+	Forbidden_NoSupportedCCs,
 }
 
 export enum AssociationGroupInfoCommand {
@@ -500,6 +505,67 @@ export enum DoorLockOperationType {
 
 export type DoorHandleStatus = [boolean, boolean, boolean, boolean];
 
+export enum EnergyProductionCommand {
+	Get = 0x02,
+	Report = 0x03,
+}
+
+export enum EnergyProductionParameter {
+	Power = 0x00,
+	"Production Total" = 0x01,
+	"Production Today" = 0x02,
+	"Total Time" = 0x03,
+}
+
+export interface EnergyProductionScale {
+	key: number;
+	unit: string;
+}
+
+export function getEnergyProductionScale(
+	parameter: EnergyProductionParameter,
+	key: number,
+): EnergyProductionScale {
+	if (parameter === EnergyProductionParameter.Power && key === 0x00) {
+		return {
+			key,
+			unit: "W",
+		};
+	} else if (
+		parameter === EnergyProductionParameter["Production Total"]
+		&& key === 0x00
+	) {
+		return {
+			key,
+			unit: "Wh",
+		};
+	} else if (
+		parameter === EnergyProductionParameter["Production Today"]
+		&& key === 0x00
+	) {
+		return {
+			key,
+			unit: "Wh",
+		};
+	} else if (parameter === EnergyProductionParameter["Total Time"]) {
+		if (key === 0x00) {
+			return {
+				key,
+				unit: "seconds",
+			};
+		} else if (key === 0x01) {
+			return {
+				key,
+				unit: "hours",
+			};
+		}
+	}
+	return {
+		key,
+		unit: "unknown",
+	};
+}
+
 export enum EntryControlEventTypes {
 	Caching = 0x00,
 	CachedKeys = 0x01,
@@ -656,20 +722,8 @@ export interface FirmwareUpdateMetaData {
 	maxFragmentSize?: number;
 	additionalFirmwareIDs: readonly number[];
 	hardwareVersion?: number;
-	continuesToFunction: Maybe<boolean>;
-	supportsActivation: Maybe<boolean>;
-}
-
-export interface FirmwareUpdateMetaData {
-	manufacturerId: number;
-	firmwareId: number;
-	checksum: number;
-	firmwareUpgradable: boolean;
-	maxFragmentSize?: number;
-	additionalFirmwareIDs: readonly number[];
-	hardwareVersion?: number;
-	continuesToFunction: Maybe<boolean>;
-	supportsActivation: Maybe<boolean>;
+	continuesToFunction: MaybeNotKnown<boolean>;
+	supportsActivation: MaybeNotKnown<boolean>;
 }
 
 export enum FirmwareUpdateRequestStatus {
@@ -722,19 +776,19 @@ export enum FirmwareDownloadStatus {
 
 export type FirmwareUpdateCapabilities =
 	| {
-			/** Indicates whether the node's firmware can be upgraded */
-			readonly firmwareUpgradable: false;
-	  }
+		/** Indicates whether the node's firmware can be upgraded */
+		readonly firmwareUpgradable: false;
+	}
 	| {
-			/** Indicates whether the node's firmware can be upgraded */
-			readonly firmwareUpgradable: true;
-			/** An array of firmware targets that can be upgraded */
-			readonly firmwareTargets: readonly number[];
-			/** Indicates whether the node continues to function normally during an upgrade */
-			readonly continuesToFunction: Maybe<boolean>;
-			/** Indicates whether the node supports delayed activation of the new firmware */
-			readonly supportsActivation: Maybe<boolean>;
-	  };
+		/** Indicates whether the node's firmware can be upgraded */
+		readonly firmwareUpgradable: true;
+		/** An array of firmware targets that can be upgraded */
+		readonly firmwareTargets: readonly number[];
+		/** Indicates whether the node continues to function normally during an upgrade */
+		readonly continuesToFunction: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports delayed activation of the new firmware */
+		readonly supportsActivation: MaybeNotKnown<boolean>;
+	};
 
 export interface FirmwareUpdateProgress {
 	/** Which part/file of the firmware update process is currently in progress. This is a number from 1 to `totalFiles` and can be used to display progress. */
@@ -853,6 +907,16 @@ export enum IndicatorCommand {
 	SupportedReport = 0x05,
 	DescriptionGet = 0x06,
 	DescriptionReport = 0x07,
+}
+
+/** Specifies a timeout for an indicator. At least one of the properties must be present. */
+export interface IndicatorTimeout {
+	/** Whole hours (0-255) */
+	hours?: number;
+	/** Whole minutes (0-255) */
+	minutes?: number;
+	/** Whole and 1/100th seconds (0-59.99) */
+	seconds?: number;
 }
 
 export type IndicatorMetadata = ValueMetadata & {
@@ -1023,7 +1087,6 @@ export enum MultilevelSwitchCommand {
 export enum LevelChangeDirection {
 	"up" = 0b0,
 	"down" = 0b1,
-	// "none" = 0b11,
 }
 
 export enum SwitchType {
@@ -1205,6 +1268,12 @@ export interface ScheduleEntryLockWeekDaySchedule {
 	startMinute: number;
 	stopHour: number;
 	stopMinute: number;
+}
+
+export enum ScheduleEntryLockScheduleKind {
+	WeekDay,
+	YearDay,
+	DailyRepeating,
 }
 
 export enum Security2Command {
@@ -1507,6 +1576,43 @@ export enum WakeUpCommand {
 	NoMoreInformation = 0x08,
 	IntervalCapabilitiesGet = 0x09,
 	IntervalCapabilitiesReport = 0x0a,
+}
+
+export enum WindowCoveringCommand {
+	SupportedGet = 0x01,
+	SupportedReport = 0x02,
+	Get = 0x03,
+	Report = 0x04,
+	Set = 0x05,
+	StartLevelChange = 0x06,
+	StopLevelChange = 0x07,
+}
+
+export enum WindowCoveringParameter {
+	"Outbound Left (no position)",
+	"Outbound Left",
+	"Outbound Right (no position)",
+	"Outbound Right",
+	"Inbound Left (no position)",
+	"Inbound Left",
+	"Inbound Right (no position)",
+	"Inbound Right",
+	"Inbound Left/Right (no position)",
+	"Inbound Left/Right",
+	"Vertical Slats Angle (no position)",
+	"Vertical Slats Angle",
+	"Outbound Bottom (no position)",
+	"Outbound Bottom",
+	"Outbound Top (no position)",
+	"Outbound Top",
+	"Inbound Bottom (no position)",
+	"Inbound Bottom",
+	"Inbound Top (no position)",
+	"Inbound Top",
+	"Inbound Top/Bottom (no position)",
+	"Inbound Top/Bottom",
+	"Horizontal Slats Angle (no position)",
+	"Horizontal Slats Angle",
 }
 
 export enum ZWavePlusCommand {

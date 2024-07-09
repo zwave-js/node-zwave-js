@@ -45,6 +45,7 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "1 Stage Conventional",
@@ -55,22 +56,23 @@
 					"value": 1
 				},
 				{
-					"label": "Heat Pump with O-Wire",
+					"label": "Heat pump with O-Wire",
 					"value": 2
 				},
 				{
-					"label": "Heat Pump with B-Wire",
+					"label": "Heat pump with B-Wire",
 					"value": 3
 				},
 				{
-					"label": "Heat Pump with O-Wire and Aux Heating",
+					"label": "Heat pump with O-Wire and Aux heating",
 					"value": 4
 				},
 				{
-					"label": "Heat Pump with B-Wire and Aux Heating",
+					"label": "Heat pump with B-Wire and Aux heating",
 					"value": 5
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "3",
@@ -98,11 +100,11 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "No Change",
+					"label": "No change",
 					"value": 0
 				},
 				{
-					"label": "Restore thermostat factory settings (excluding Z-Wave settings)",
+					"label": "Restore thermostat factory settings (Excluding Z-Wave settings)",
 					"value": 1
 				}
 			]
@@ -111,10 +113,10 @@
 			"#": "5",
 			"label": "Temperature Calibration",
 			"valueSize": 1,
+			"unit": "°F",
 			"minValue": -5,
 			"maxValue": 5,
 			"defaultValue": 0,
-			"unit": "°F",
 			"options": [
 				{
 					"label": "No change",
@@ -171,10 +173,10 @@
 			"label": "Swing Setting",
 			"description": "Number of degrees from the set point at which the HVAC will turn on",
 			"valueSize": 1,
+			"unit": "°F",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"unit": "°F",
 			"options": [
 				{
 					"label": "No swing",
@@ -187,10 +189,10 @@
 			"label": "Differential Setting",
 			"description": "Number of degrees from the set point at which the 2nd stage will engage",
 			"valueSize": 1,
+			"unit": "°F",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 3,
-			"unit": "°F",
 			"options": [
 				{
 					"label": "No differential",
@@ -200,7 +202,7 @@
 		},
 		{
 			"#": "10",
-			"label": "OTA (Over The Air) Programming Error Code",
+			"label": "OTA (Over the Air) Programming Error Code",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -216,7 +218,7 @@
 					"value": 1
 				},
 				{
-					"label": "OTA Cancelled before completion",
+					"label": "OTA cancelled before completion",
 					"value": 2
 				},
 				{
@@ -236,7 +238,7 @@
 					"value": 6
 				},
 				{
-					"label": "Invalid firmware or manufacture ID",
+					"label": "Invalid firmware or manufacturer id",
 					"value": 7
 				},
 				{
@@ -255,21 +257,9 @@
 		},
 		{
 			"#": "11",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Display On in C-Wire Powered Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	],
 	"metadata": {

@@ -2,7 +2,7 @@
 	"manufacturer": "Vemmio",
 	"manufacturerId": "0x030f",
 	"label": "DS100",
-	"description": "Double Switch in a dual relay in-wall module.",
+	"description": "Double Switch in A Dual Relay In-Wall Module.",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -18,8 +18,8 @@
 			"#": "0",
 			"label": "Watt Meter Report Period",
 			"description": "720*5s=3600s=1hour",
-			"unit": "5s",
 			"valueSize": 2,
+			"unit": "5s",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720
@@ -28,8 +28,8 @@
 			"#": "2",
 			"label": "KWH Meter Report Period",
 			"description": "6*10 min = 1 hour",
-			"unit": "10 minutes",
 			"valueSize": 2,
+			"unit": "10 minutes",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 6
@@ -57,66 +57,61 @@
 		},
 		{
 			"#": "4",
-			"label": "Edge or Pulse mode or Edge-Toggle mode",
+			"label": "Edge or Pulse Mode or Edge-Toggle Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Edge Mode",
+					"label": "Edge mode",
 					"value": 1
 				},
 				{
-					"label": "Pulse Mode",
+					"label": "Pulse mode",
 					"value": 2
 				},
 				{
-					"label": "Edge-Toggle Mode",
+					"label": "Edge-Toggle mode",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Threshold of current for load caution",
+			"label": "Threshold of Current for Load Caution",
 			"description": "750*0.01A=7.5A",
-			"unit": "0.01A",
 			"valueSize": 2,
+			"unit": "0.01A",
 			"minValue": 10,
 			"maxValue": 750,
 			"defaultValue": 750
 		},
 		{
 			"#": "6",
-			"label": "Threshold of KWH for load caution",
-			"unit": "1KWh",
+			"label": "Threshold of kWh for Load Caution",
 			"valueSize": 2,
+			"unit": "1KWh",
 			"minValue": 1,
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
 		{
 			"#": "7",
-			"label": "Restore switch state mode",
-			"description": "0: Switch off, 1: Last switch, 2: Switch on",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "8",
-			"label": "Auto off timer",
+			"label": "Auto Off Timer",
 			"description": "0: Disable auto off function, 1: 0x0-0x7FFF 1s-32767s",
-			"unit": "1s",
 			"valueSize": 2,
+			"unit": "1s",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
 		{
 			"#": "9",
-			"label": "RF off command mode",
+			"label": "RF Off Command Mode",
 			"description": "0: Switch off, 1: Ignore, 2: Switch toggle, 3: Switch on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -125,7 +120,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Existence of endpoint 3",
+			"label": "Existence of Endpoint 3",
 			"description": "1: endpoint 3 exists, 2: No endpoint 3",
 			"valueSize": 1,
 			"minValue": 1,

@@ -1,0 +1,7 @@
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"countIsDynamic\"}","v":false,"ts":1693226159259}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"identicalCapabilities\"}","v":false,"ts":1693226159260}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"individualCount\"}","v":1,"ts":1693226159260}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":1,\"property\":\"deviceClass\"}","v":{"generic":6,"specific":1},"ts":1693226159330}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":1,\"property\":\"commandClasses\"}","v":[49],"ts":1693226159330}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"endpointIndizes\"}","v":[1],"ts":1693226159395}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"interviewComplete\"}","v":true,"ts":1693226159395}

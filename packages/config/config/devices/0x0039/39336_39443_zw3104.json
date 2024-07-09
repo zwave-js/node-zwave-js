@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39336 / 39443 / ZW3104",
-	"description": "Plug-in 1-Outlet Dimmer, 500S",
+	"description": "Plug-In 1-Outlet Dimmer, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",
@@ -37,30 +37,28 @@
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED on when light is turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always Off",
+					"label": "LED always off",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "6",
-			"label": "Dim up/down rate",
+			"label": "Dim Up/down Rate",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -80,8 +78,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
@@ -91,8 +88,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "9",
@@ -101,8 +97,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "10",
@@ -112,8 +107,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "11",
@@ -123,8 +117,7 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		},
 		{
 			"#": "12",
@@ -134,40 +127,25 @@
 			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "16",
-			"label": "Enable/disable switch mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch Mode"
 		},
 		{
 			"#": "20",
-			"label": "Minimum dim level",
+			"label": "Minimum Dim Level",
 			"description": "Number of Steps",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"defaultValue": 1
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add\nthe smart dimmer to the Z-Wave network.\n2. Once the controller is ready to add your smart dimmer, single\npress and release the manual/program button on the smart\ndimmer to add it in the network.\nPlease reference the controller/gateway’s manual for instructions",

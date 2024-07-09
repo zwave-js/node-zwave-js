@@ -47,7 +47,7 @@ async setTimezone(
 ### `getTimezone`
 
 ```ts
-async getTimezone(): Promise<DSTInfo | undefined>;
+async getTimezone(): Promise<MaybeNotKnown<DSTInfo>>;
 ```
 
 ### `reportTimezone`

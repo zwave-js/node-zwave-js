@@ -21,6 +21,7 @@
 			"minValue": 0,
 			"maxValue": 9,
 			"readOnly": true,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "EU (868.4 MHz, 869.85 MHz)",
@@ -63,6 +64,7 @@
 					"value": 9
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "3",
@@ -75,8 +77,8 @@
 		{
 			"#": "4",
 			"label": "Energy Consumption",
-			"unit": "kW",
 			"valueSize": 4,
+			"unit": "kW",
 			"minValue": 0,
 			"maxValue": 0,
 			"readOnly": true
@@ -106,11 +108,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -123,11 +125,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -140,11 +142,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]
@@ -187,8 +189,8 @@
 			"#": "12",
 			"label": "Fan Low Speed Relay: Load Power",
 			"description": "The power of the connected device, which is used to determine energy consumption.",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
@@ -197,8 +199,8 @@
 			"#": "13",
 			"label": "Fan Medium Speed Relay: Load Power",
 			"description": "The power of the connected device, which is used to determine energy consumption.",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
@@ -207,8 +209,8 @@
 			"#": "14",
 			"label": "Fan High Speed Relay: Load Power",
 			"description": "The power of the connected device, which is used to determine energy consumption.",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
@@ -217,8 +219,8 @@
 			"#": "15",
 			"label": "Heating Valve Relay: Load Power",
 			"description": "The power of the connected device, which is used to determine energy consumption.",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
@@ -227,8 +229,8 @@
 			"#": "16",
 			"label": "Cooling Valve Relay: Load Power",
 			"description": "The power of the connected device, which is used to determine energy consumption.",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 1100,
 			"defaultValue": 0
@@ -236,8 +238,8 @@
 		{
 			"#": "17",
 			"label": "Air Temperature Calibration",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0
@@ -245,8 +247,8 @@
 		{
 			"#": "18",
 			"label": "Temperature Hysteresis",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 2,
 			"maxValue": 100,
 			"defaultValue": 5
@@ -325,8 +327,8 @@
 		{
 			"#": "22",
 			"label": "Time Override",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 0
@@ -335,21 +337,21 @@
 			"#": "23",
 			"label": "Time Mode Operation",
 			"description": "This Parameter determines the Climate Mode (Heating or Cooling)",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Heating and Cooling Mode",
+					"label": "Heating and cooling mode",
 					"value": 1
 				},
 				{
-					"label": "Heating Mode",
+					"label": "Heating mode",
 					"value": 2
 				},
 				{
-					"label": "Cooling Mode",
+					"label": "Cooling mode",
 					"value": 3
 				}
 			]
@@ -357,8 +359,8 @@
 		{
 			"#": "41",
 			"label": "Morning Start Time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 600
@@ -366,8 +368,8 @@
 		{
 			"#": "42",
 			"label": "Day Start Time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 900
@@ -375,8 +377,8 @@
 		{
 			"#": "43",
 			"label": "Evening Start Time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 1800
@@ -384,8 +386,8 @@
 		{
 			"#": "44",
 			"label": "Night Start Time",
-			"unit": "HHMM",
 			"valueSize": 2,
+			"unit": "HHMM",
 			"minValue": 0,
 			"maxValue": 2359,
 			"defaultValue": 2300
@@ -393,8 +395,8 @@
 		{
 			"#": "45",
 			"label": "Monday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -402,8 +404,8 @@
 		{
 			"#": "46",
 			"label": "Monday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -411,8 +413,8 @@
 		{
 			"#": "47",
 			"label": "Monday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -420,8 +422,8 @@
 		{
 			"#": "48",
 			"label": "Monday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -429,8 +431,8 @@
 		{
 			"#": "49",
 			"label": "Tuesday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -438,8 +440,8 @@
 		{
 			"#": "50",
 			"label": "Tuesday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -447,8 +449,8 @@
 		{
 			"#": "51",
 			"label": "Tuesday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -456,8 +458,8 @@
 		{
 			"#": "52",
 			"label": "Tuesday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -465,8 +467,8 @@
 		{
 			"#": "53",
 			"label": "Wednesday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -474,8 +476,8 @@
 		{
 			"#": "54",
 			"label": "Wednesday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -483,8 +485,8 @@
 		{
 			"#": "55",
 			"label": "Wednesday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -492,8 +494,8 @@
 		{
 			"#": "56",
 			"label": "Wednesday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -501,8 +503,8 @@
 		{
 			"#": "57",
 			"label": "Thursday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -510,8 +512,8 @@
 		{
 			"#": "58",
 			"label": "Thursday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -519,8 +521,8 @@
 		{
 			"#": "59",
 			"label": "Thursday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -528,8 +530,8 @@
 		{
 			"#": "60",
 			"label": "Thursday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -537,8 +539,8 @@
 		{
 			"#": "61",
 			"label": "Friday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -546,8 +548,8 @@
 		{
 			"#": "62",
 			"label": "Friday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -555,8 +557,8 @@
 		{
 			"#": "63",
 			"label": "Friday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -564,8 +566,8 @@
 		{
 			"#": "64",
 			"label": "Friday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -573,8 +575,8 @@
 		{
 			"#": "65",
 			"label": "Saturday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -582,8 +584,8 @@
 		{
 			"#": "66",
 			"label": "Saturday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -591,8 +593,8 @@
 		{
 			"#": "67",
 			"label": "Saturday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -600,8 +602,8 @@
 		{
 			"#": "68",
 			"label": "Saturday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -609,8 +611,8 @@
 		{
 			"#": "69",
 			"label": "Sunday Morning Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 240
@@ -618,8 +620,8 @@
 		{
 			"#": "70",
 			"label": "Sunday Day Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 200
@@ -627,8 +629,8 @@
 		{
 			"#": "71",
 			"label": "Sunday Evening Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 230
@@ -636,8 +638,8 @@
 		{
 			"#": "72",
 			"label": "Sunday Night Temperature",
-			"unit": "0.1 °C",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 10,
 			"maxValue": 370,
 			"defaultValue": 180
@@ -645,8 +647,8 @@
 		{
 			"#": "141",
 			"label": "Energy Consumption Report Interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 120,
 			"defaultValue": 10
@@ -671,8 +673,8 @@
 		{
 			"#": "143",
 			"label": "Sensors Consecutive Reporting Interval",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 120,
 			"defaultValue": 10
@@ -680,8 +682,8 @@
 		{
 			"#": "144",
 			"label": "Air Temperature Sensors Report Threshold",
-			"unit": "0.1 °C",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 2
@@ -689,8 +691,8 @@
 		{
 			"#": "145",
 			"label": "Humidity Sensor Report Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 25,
 			"defaultValue": 2
@@ -698,8 +700,8 @@
 		{
 			"#": "146",
 			"label": "Light Sensor Report Threshold",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 50
@@ -711,48 +713,50 @@
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
-					"label": "No Action",
+					"label": "No action",
 					"value": 0
 				},
 				{
-					"label": "COM with Heating & Cooling Climate Mode",
+					"label": "COM with heating & cooling climate mode",
 					"value": 1
 				},
 				{
-					"label": "COM with Heating Climate Mode",
+					"label": "COM with heating climate mode",
 					"value": 2
 				},
 				{
-					"label": "COM with Cooling Climate Mode",
+					"label": "COM with cooling climate mode",
 					"value": 3
 				},
 				{
-					"label": "TIME with Heating & Cooling Climate Mode",
+					"label": "TIME with heating & cooling climate mode",
 					"value": 4
 				},
 				{
-					"label": "TIME with Heating Climate Mode",
+					"label": "TIME with heating climate mode",
 					"value": 5
 				},
 				{
-					"label": "TIME with Cooling Climate Mode",
+					"label": "TIME with cooling climate mode",
 					"value": 6
 				},
 				{
-					"label": "ECO with Heating Climate Mode",
+					"label": "ECO with heating climate mode",
 					"value": 7
 				},
 				{
-					"label": "ECO with Cooling Climate Mode",
+					"label": "ECO with cooling climate mode",
 					"value": 8
 				},
 				{
-					"label": "Ventilation Climate Mode",
+					"label": "Ventilation climate mode",
 					"value": 9
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		}
 	],
 	"compat": {
@@ -760,7 +764,7 @@
 		"$if": "firmwareVersion < 2.6",
 		"commandClasses": {
 			"remove": {
-				"0x6c": {
+				"Supervision": {
 					"endpoints": "*"
 				}
 			}

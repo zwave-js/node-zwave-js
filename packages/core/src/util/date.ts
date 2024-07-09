@@ -15,8 +15,9 @@ export interface DSTInfo {
  */
 export function getDefaultDSTInfo(defaultOffset?: number): DSTInfo {
 	const thisYear = new Date().getUTCFullYear();
-	if (defaultOffset == undefined)
+	if (defaultOffset == undefined) {
 		defaultOffset = -new Date().getTimezoneOffset();
+	}
 	return {
 		startDate: new Date(Date.UTC(thisYear, 2, 31, 1)),
 		endDate: new Date(Date.UTC(thisYear, 9, 31, 1)),
@@ -38,8 +39,8 @@ function findSwitchDate(
 
 	function middleDate(date1: Date, date2: Date): Date {
 		const middleTime =
-			Math.floor((date1.getTime() + date2.getTime()) / 2 / stepSize) *
-			stepSize;
+			Math.floor((date1.getTime() + date2.getTime()) / 2 / stepSize)
+			* stepSize;
 		return new Date(middleTime);
 	}
 
@@ -61,8 +62,8 @@ export function getDSTInfo(now: Date = new Date()): DSTInfo {
 	const halfAYearAgo = dayjs(now).subtract(6, "months").toDate();
 	const inAHalfYear = dayjs(now).add(6, "months").toDate();
 	if (
-		now.getTimezoneOffset() === halfAYearAgo.getTimezoneOffset() ||
-		now.getTimezoneOffset() === inAHalfYear.getTimezoneOffset()
+		now.getTimezoneOffset() === halfAYearAgo.getTimezoneOffset()
+		|| now.getTimezoneOffset() === inAHalfYear.getTimezoneOffset()
 	) {
 		// There is no DST in this timezone
 		return getDefaultDSTInfo();
@@ -108,7 +109,7 @@ export function highResTimestamp(): number {
 }
 
 export const timespan = Object.freeze({
-	seconds: (num: number) => num * 1000,
+	seconds: (num: number) => Math.round(num * 1000),
 	minutes: (num: number) => timespan.seconds(num * 60),
 	hours: (num: number) => timespan.minutes(num * 60),
 	days: (num: number) => timespan.hours(num * 24),

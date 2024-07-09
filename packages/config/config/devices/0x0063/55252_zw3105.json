@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "55252 / ZW3105",
-	"description": "Plug-in 2-Outlet Dimmer, 1 Controlled, 500S",
+	"description": "Plug-In 2-Outlet Dimmer, 1 Controlled, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",
@@ -61,7 +61,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press the program button of the smart dimmer",

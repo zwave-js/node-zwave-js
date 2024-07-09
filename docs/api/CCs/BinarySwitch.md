@@ -7,7 +7,7 @@
 ### `get`
 
 ```ts
-async get(): Promise<{ currentValue: Maybe<boolean>; targetValue: boolean | undefined; duration: Duration | undefined; } | undefined>;
+async get(): Promise<{ currentValue: boolean; targetValue: MaybeUnknown<boolean> | undefined; duration: Duration | undefined; } | undefined>;
 ```
 
 ### `set`
@@ -23,8 +23,8 @@ Sets the switch to the given value.
 
 **Parameters:**
 
--   `targetValue`: The target value to set
--   `duration`: The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
+- `targetValue`: The target value to set
+- `duration`: The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 
 ## Binary Switch CC values
 
@@ -38,13 +38,13 @@ Sets the switch to the given value.
 }
 ```
 
--   **label:** Current value
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Current value
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`
 
 ### `duration`
 
@@ -56,13 +56,13 @@ Sets the switch to the given value.
 }
 ```
 
--   **label:** Remaining duration
--   **min. CC version:** 2
--   **readable:** true
--   **writeable:** false
--   **stateful:** true
--   **secret:** false
--   **value type:** `"duration"`
+- **label:** Remaining duration
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** false
+- **stateful:** true
+- **secret:** false
+- **value type:** `"duration"`
 
 ### `targetValue`
 
@@ -74,10 +74,10 @@ Sets the switch to the given value.
 }
 ```
 
--   **label:** Target value
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
--   **value type:** `"boolean"`
+- **label:** Target value
+- **min. CC version:** 1
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** false
+- **value type:** `"boolean"`

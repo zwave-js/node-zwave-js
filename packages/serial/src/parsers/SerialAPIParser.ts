@@ -1,4 +1,5 @@
-import { Transform, TransformCallback } from "stream";
+import { num2hex } from "@zwave-js/shared";
+import { Transform, type TransformCallback } from "node:stream";
 import type { SerialLogger } from "../Logger";
 import { MessageHeaders } from "../MessageHeaders";
 
@@ -26,6 +27,9 @@ export class SerialAPIParser extends Transform {
 
 	private receiveBuffer = Buffer.allocUnsafe(0);
 
+	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
+	public ignoreAckHighNibble: boolean = false;
+
 	_transform(
 		chunk: any,
 		encoding: string,
@@ -42,6 +46,7 @@ export class SerialAPIParser extends Transform {
 					case MessageHeaders.ACK: {
 						this.logger?.ACK("inbound");
 						this.push(MessageHeaders.ACK);
+						this.ignoreAckHighNibble = false;
 						break;
 					}
 					case MessageHeaders.NAK: {
@@ -58,21 +63,39 @@ export class SerialAPIParser extends Transform {
 						// INS12350: A host or a Z-Wave chip waiting for new traffic MUST ignore all other
 						// byte values than 0x06 (ACK), 0x15 (NAK), 0x18 (CAN) or 0x01 (Data frame).
 
+						// Work around a bug in the 700 series firmware that causes the high nibble of an ACK
+						// to be corrupted after a soft reset
+						if (
+							this.ignoreAckHighNibble
+							&& (this.receiveBuffer[0] & 0x0f)
+								=== MessageHeaders.ACK
+						) {
+							this.logger?.message(
+								`received corrupted ACK: ${
+									num2hex(this.receiveBuffer[0])
+								}`,
+							);
+							this.logger?.ACK("inbound");
+							this.push(MessageHeaders.ACK);
+							this.ignoreAckHighNibble = false;
+							break;
+						}
+
 						// Scan ahead until the next valid byte and log the invalid bytes
 						while (skip < this.receiveBuffer.length) {
 							const byte = this.receiveBuffer[skip];
 							if (
-								byte === MessageHeaders.SOF ||
-								byte === MessageHeaders.ACK ||
-								byte === MessageHeaders.NAK ||
-								byte === MessageHeaders.CAN
+								byte === MessageHeaders.SOF
+								|| byte === MessageHeaders.ACK
+								|| byte === MessageHeaders.NAK
+								|| byte === MessageHeaders.CAN
 							) {
 								// Next byte is valid, keep it
 								break;
 							}
 							skip++;
 						}
-						const discarded = this.receiveBuffer.slice(0, skip);
+						const discarded = this.receiveBuffer.subarray(0, skip);
 						this.logger?.discarded(discarded);
 						this.onDiscarded?.(discarded);
 					}
@@ -89,7 +112,7 @@ export class SerialAPIParser extends Transform {
 				// We have at least one complete message
 				const msgLength = getMessageLength(this.receiveBuffer);
 				// emit it and slice the read bytes from the buffer
-				const msg = this.receiveBuffer.slice(0, msgLength);
+				const msg = this.receiveBuffer.subarray(0, msgLength);
 				this.receiveBuffer = skipBytes(this.receiveBuffer, msgLength);
 
 				this.logger?.data("inbound", msg);
@@ -102,5 +125,5 @@ export class SerialAPIParser extends Transform {
 
 /** Skips the first n bytes of a buffer and returns the rest */
 export function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.slice(n));
+	return Buffer.from(buf.subarray(n));
 }

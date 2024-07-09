@@ -1,6 +1,6 @@
 import { NoOperationCC } from "@zwave-js/cc/NoOperationCC";
 import { MessagePriority } from "@zwave-js/core";
-import { getDefaultPriority, Message } from "@zwave-js/serial";
+import { type Message, getDefaultPriority } from "@zwave-js/serial";
 import test from "ava";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/_Types";
@@ -9,14 +9,14 @@ import { RemoveFailedNodeRequest } from "../serialapi/network-mgmt/RemoveFailedN
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import type { Driver } from "./Driver";
 import {
-	MessageGenerator,
+	type MessageGenerator,
 	Transaction,
-	TransactionOptions,
+	type TransactionOptions,
 } from "./Transaction";
 
 function createDummyMessageGenerator(msg: Message): MessageGenerator {
 	return {
-		start: async function* () {
+		start: async function*() {
 			this.current = msg;
 			yield msg;
 		},
@@ -52,8 +52,8 @@ test("should compare priority, then the timestamp", (t) => {
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},
@@ -150,8 +150,8 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},
@@ -163,14 +163,13 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 		priority: MessagePriority = MessagePriority.NodeQuery,
 	) {
 		const driver = driverMock as any as Driver;
-		const msg =
-			nodeId != undefined
-				? new SendDataRequest(driver, {
-						command: new NoOperationCC(driver, {
-							nodeId,
-						}),
-				  })
-				: new GetControllerVersionRequest(driver);
+		const msg = nodeId != undefined
+			? new SendDataRequest(driver, {
+				command: new NoOperationCC(driver, {
+					nodeId,
+				}),
+			})
+			: new GetControllerVersionRequest(driver);
 		const ret = createDummyTransaction(driverMock, {
 			priority,
 			message: msg,
@@ -264,8 +263,8 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},
@@ -360,8 +359,8 @@ test("Controller message should be preferred over messages for sleeping nodes", 
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},
@@ -405,8 +404,8 @@ test("should capture a stack trace where it was created", (t) => {
 		get nodes() {
 			return driverMock.controller.nodes;
 		},
-		getSafeCCVersionForNode() {},
-		getSupportedCCVersionForEndpoint() {},
+		getSafeCCVersion() {},
+		getSupportedCCVersion() {},
 		isCCSecure: () => false,
 		options: {
 			attempts: {},

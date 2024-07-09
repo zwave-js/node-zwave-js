@@ -1,0 +1,312 @@
+{
+	"manufacturer": "Building 36 Technologies",
+	"manufacturerId": "0x0190",
+	"label": "ADC-SWM150",
+	"description": "Smart Water Valve & Meter",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		// These parameters are reverse-engineered from Zniffer traces. They may contain errors.
+		{
+			"#": "7",
+			"label": "High Flow Timer",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 1
+		},
+		{
+			"#": "1",
+			"label": "High Flow Threshold",
+			"valueSize": 1,
+			"unit": "L/minute",
+			"minValue": 3,
+			"maxValue": 100,
+			"defaultValue": 28
+		},
+		{
+			"#": "4[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Unexpected High Flow: Close Valve"
+		},
+		{
+			"#": "4[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Unexpected High Flow: Sound Buzzer"
+		},
+
+		{
+			"#": "8",
+			"label": "Medium Flow Timer",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 240,
+			"defaultValue": 40,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Medium Flow Threshold",
+			"valueSize": 1,
+			"unit": "L/minute",
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 4
+		},
+		{
+			"#": "5[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Unexpected Medium Flow: Close Valve"
+		},
+		{
+			"#": "5[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Unexpected Medium Flow: Sound Buzzer"
+		},
+
+		{
+			"#": "9",
+			"label": "Low Flow Timer",
+			"valueSize": 1,
+			"unit": "hours",
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 2
+		},
+		{
+			"#": "6[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Unexpected Low Flow: Close Valve"
+		},
+		{
+			"#": "6[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Unexpected Low Flow: Sound Buzzer"
+		},
+
+		{
+			"#": "89",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Notify Before Closing Valve",
+			"defaultValue": 255
+		},
+
+		{
+			"#": "10",
+			"label": "Low Temperature Threshold",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 40
+		},
+		{
+			"#": "11",
+			"label": "High Temperature Threshold",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 200,
+			"maxValue": 650,
+			"defaultValue": 640
+		},
+
+		{
+			"#": "19",
+			"label": "Calibration",
+			"valueSize": 4,
+			"defaultValue": 1379350, // Not sure
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Uncalibrated / Calibrate meter",
+					"value": 1379350
+				},
+				{
+					"label": "Calibrated",
+					"value": 4278717462
+				}
+			]
+		}
+		// Need to figure out what these do:
+		// {
+		// 	"#": "3",
+		// 	"label": "Unknown param 3",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 70,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "12",
+		// 	"label": "Unknown param 12",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 4,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "13",
+		// 	"label": "Unknown param 13",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 4,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "14",
+		// 	"label": "Unknown param 14",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 4,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "15",
+		// 	"label": "Unknown param 15",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 10,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "16",
+		// 	"label": "Unknown param 16",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 20,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "17",
+		// 	"label": "Unknown param 17",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 11,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "18",
+		// 	"label": "Unknown param 18",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 2,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "20",
+		// 	"label": "Unknown param 20",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 255,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "25",
+		// 	"label": "Unknown param 25",
+		// 	"valueSize": 2,
+		// 	"minValue": 0,
+		// 	"maxValue": 65535,
+		// 	"defaultValue": 1082,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "26",
+		// 	"label": "Unknown param 26",
+		// 	"valueSize": 2,
+		// 	"defaultValue": 771,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "36",
+		// 	"label": "Unknown param 36",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 7,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "37",
+		// 	"label": "Unknown param 37",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 4,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "39",
+		// 	"label": "Unknown param 39",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 1,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "40",
+		// 	"label": "Unknown param 40",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 5,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "81",
+		// 	"label": "Unknown param 81",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 0,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "84",
+		// 	"label": "Unknown param 84",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 0,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "167",
+		// 	"label": "Unknown param 167",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 1,
+		// 	"unsigned": true
+		// },
+		// {
+		// 	"#": "169",
+		// 	"label": "Unknown param 169",
+		// 	"valueSize": 1,
+		// 	"minValue": 0,
+		// 	"maxValue": 255,
+		// 	"defaultValue": 1,
+		// 	"unsigned": true
+		// }
+	]
+}

@@ -1,9 +1,9 @@
-import type { ZWaveLogInfo } from "@zwave-js/core";
 import { ansiRegex, stripColor } from "ansi-colors";
-import type { ExecutionContext } from "ava";
+import type { Assertions } from "ava";
 import sinon from "sinon";
 import { MESSAGE } from "triple-beam";
 import Transport from "winston-transport";
+import type { ZWaveLogInfo } from "../log/shared_safe";
 
 const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
 const timestampPrefixRegex = new RegExp(
@@ -16,7 +16,7 @@ const channelPrefixRegex = new RegExp(
 	"gm",
 );
 
-/** Log to a Sinon spy in order to perform assertions during unit tests */
+/** Log to a sinon.spy() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
 	public constructor() {
 		super({
@@ -36,7 +36,7 @@ export class SpyTransport extends Transport {
 
 /** Tests a printed log message */
 export function assertMessage(
-	t: ExecutionContext,
+	t: Assertions,
 	transport: SpyTransport,
 	options: Partial<{
 		message: string;
@@ -63,13 +63,13 @@ export function assertMessage(
 	if (options.ignoreTimestamp !== false) {
 		actualMessage = actualMessage
 			.replace(timestampPrefixRegex, "")
-			.replace(/^ {13}/gm, "");
+			.replaceAll(/^ {13}/gm, "");
 	}
 	// by default, strip away the channel label and placeholder
 	if (options.ignoreChannel !== false) {
 		actualMessage = actualMessage
 			.replace(channelPrefixRegex, "")
-			.replace(/^ {7}/gm, "");
+			.replaceAll(/^ {7}/gm, "");
 	}
 	if (typeof options.message === "string") {
 		if (ignoreColor) {
@@ -83,7 +83,7 @@ export function assertMessage(
 }
 
 export function assertLogInfo(
-	t: ExecutionContext,
+	t: Assertions,
 	transport: SpyTransport,
 	options: Partial<{
 		level: string;

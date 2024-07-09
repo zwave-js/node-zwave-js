@@ -1,0 +1,23 @@
+{
+	"manufacturer": "Airzone",
+	"manufacturerId": "0x044e",
+	"label": "AZAI6ZWEFU2",
+	"description": "Aidoo Control HVAC Unit",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 4561
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"compat": {
+		// This device only accepts Thermostat Setpoint Set commands with a precision of 1
+		"overrideFloatEncoding": {
+			"precision": 1
+		}
+	}
+}

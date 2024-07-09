@@ -1,0 +1,67 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YRC652-ZW3",
+	"description": "Assure 2nd Generation Interconnected Keyless Touch Screen Deadbolt",
+	"devices": [
+		{
+			"productType": "0x8109",
+			"productId": "0x4dc5"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/yale_template.json#volume"
+		},
+		{
+			"#": "2",
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#auto_relock_time_180"
+		},
+		{
+			"#": "4",
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
+		},
+		{
+			"#": "5",
+			"$import": "templates/yale_template.json#language"
+		},
+		{
+			"#": "7",
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_132"
+		},
+		{
+			"#": "8",
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy"
+		},
+		{
+			"#": "11",
+			"$import": "templates/yale_template.json#one_touch",
+			"defaultValue": 255
+		},
+		{
+			"#": "12",
+			"$import": "templates/yale_template.json#privacy_button"
+		},
+		{
+			"#": "13",
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "28",
+			"$import": "templates/yale_template.json#expiring_pin_lifetime"
+		}
+	],
+	"metadata": {
+		"$import": "templates/yale_template.json#assure_zw3_metadata",
+		"reset": "When lock is reset to factory defaults all Entry Codes\n(including the Master Entry Code*) are deleted and all\nprogramming features are reset to original default\nsettings (see below).\n1. Remove battery cover and batteries.\n2. Remove inside lock to access reset button.\n3. Reset button (see image at right) is located beside\ncable adapter.\n4. While pressing reset button reinstall batteries. Hold\nreset button a minimum of 3 seconds then release.\n5. Replace battery cover.\nAfter reset, Master Entry Code creation is the only\noption available and must be performed prior to\nany other programming of the lock"
+	}
+}

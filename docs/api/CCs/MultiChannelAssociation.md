@@ -7,11 +7,17 @@
 ### `getGroupCount`
 
 ```ts
-async getGroupCount(): Promise<number | undefined>;
+async getGroupCount(): Promise<MaybeNotKnown<number>>;
 ```
 
 Returns the number of association groups a node supports.
 Association groups are consecutive, starting at 1.
+
+### `reportGroupCount`
+
+```ts
+async reportGroupCount(groupCount: number): Promise<void>;
+```
 
 ### `getGroup`
 
@@ -20,6 +26,14 @@ async getGroup(groupId: number): Promise<Pick<MultiChannelAssociationCCReport, "
 ```
 
 Returns information about an association group.
+
+### `sendReport`
+
+```ts
+async sendReport(
+	options: MultiChannelAssociationCCReportOptions,
+): Promise<void>;
+```
 
 ### `addDestinations`
 

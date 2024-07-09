@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "VRCS4-M0",
-	"description": "4-Scene controller with load control",
+	"description": "4-Scene Controller with Load Control",
 	"devices": [
 		{
 			"productType": "0x1302",

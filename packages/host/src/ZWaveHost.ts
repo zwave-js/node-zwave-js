@@ -4,7 +4,8 @@ import type {
 	ControllerLogger,
 	ICommandClass,
 	IZWaveNode,
-	Maybe,
+	MaybeNotKnown,
+	NodeIDType,
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
@@ -23,17 +24,22 @@ export interface ZWaveHost {
 	/** The Home ID of the current network */
 	homeId: number;
 
+	/** How many bytes a node ID occupies in serial API commands */
+	readonly nodeIdType?: NodeIDType;
+
 	/** Management of Security S0 keys and nonces */
 	securityManager: SecurityManager | undefined;
-	/** Management of Security S2 keys and nonces */
+	/** Management of Security S2 keys and nonces (Z-Wave Classic) */
 	securityManager2: SecurityManager2 | undefined;
+	/** Management of Security S2 keys and nonces (Z-Wave Long Range) */
+	securityManagerLR: SecurityManager2 | undefined;
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
 	 * Returns 1 if the node claims that it does not support a CC.
 	 * Throws if the CC is not implemented in this library yet.
 	 */
-	getSafeCCVersionForNode(
+	getSafeCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex?: number,
@@ -43,8 +49,7 @@ export interface ZWaveHost {
 	 * Retrieves the maximum version of a command class the given node/endpoint has reported support for.
 	 * Returns 0 when the CC is not supported or that information is not known yet.
 	 */
-	// TODO: Rename this to getSupportedCCVersionForNode in v11
-	getSupportedCCVersionForEndpoint(
+	getSupportedCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex?: number,
@@ -59,12 +64,12 @@ export interface ZWaveHost {
 		endpointIndex?: number,
 	): boolean;
 
-	getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(
 		nodeId: number,
 		securityClass: SecurityClass,
-	): Maybe<boolean>;
+	): MaybeNotKnown<boolean>;
 
 	setSecurityClass(
 		nodeId: number,
@@ -81,15 +86,24 @@ export interface ZWaveHost {
 	/**
 	 * Returns the next session ID for supervised communication
 	 */
-	getNextSupervisionSessionId(): number;
+	getNextSupervisionSessionId(nodeId: number): number;
 
 	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
 
 	__internalIsMockNode?: boolean;
 }
 
+/** Host application abstractions that provide support for reading and writing values to a database */
+export interface ZWaveValueHost {
+	/** Returns the value DB which belongs to the node with the given ID, or throws if the Value DB cannot be accessed */
+	getValueDB(nodeId: number): ValueDB;
+
+	/** Returns the value DB which belongs to the node with the given ID, or `undefined` if the Value DB cannot be accessed */
+	tryGetValueDB(nodeId: number): ValueDB | undefined;
+}
+
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
-export interface ZWaveApplicationHost extends ZWaveHost {
+export interface ZWaveApplicationHost extends ZWaveValueHost, ZWaveHost {
 	/** Gives access to the configuration files */
 	configManager: ConfigManager;
 
@@ -97,12 +111,6 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;
-
-	/** Returns the value DB which belongs to the node with the given ID, or throws if the Value DB cannot be accessed */
-	getValueDB(nodeId: number): ValueDB;
-
-	/** Returns the value DB which belongs to the node with the given ID, or `undefined` if the Value DB cannot be accessed */
-	tryGetValueDB(nodeId: number): ValueDB | undefined;
 
 	/** Readonly access to all node instances known to the host */
 	nodes: ReadonlyThrowingMap<number, IZWaveNode>;

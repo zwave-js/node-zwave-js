@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Saving load state",
+			"label": "Saving Load State",
 			"description": "Saving load state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Enable/disable to send report",
+			"label": "Enable/disable to Send Report",
 			"description": "basic report to the Lifeline when the load state changed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,13 +34,13 @@
 		},
 		{
 			"#": "4",
-			"label": "Default fade time",
+			"label": "Default Fade Time",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
-			"unsigned": true,
-			"unit": "seconds"
+			"unsigned": true
 		},
 		{
 			"#": "5",
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "7",
-			"label": "removal from network",
+			"label": "Removal From Network",
 			"description": "Enable/disable external switch to be added to and removed from a network",
 			"valueSize": 1,
 			"minValue": 0,

@@ -1,6 +1,6 @@
 # Z-Wave JS: NVM editor
 
-CLI utility to convert binary NVM backups from Z-Wave controllers into JSON and back. Can be used to edit a Z-Wave controller's memory or convert it between different firmware revisions.  
+CLI utility to convert binary NVM backups from Z-Wave controllers into JSON and back. Can be used to edit a Z-Wave controller's memory or convert it between different firmware revisions.\
 **WARNING:** This is highly experimental. Use at your own risk!
 
 (Probably) supports all NVM files in the NVM3 format, which is used starting with Z-Wave SDK 6.61+.
@@ -29,8 +29,8 @@ The following documentation will use the first approach.
 npx @zwave-js/nvmedit convert --source <source> --target <target> --out <output>
 ```
 
-`<source>` specifies the source NVM filename. This file will be converted to match the target NVM.  
-`<target>` specifies the target NVM filename. This file will used to determine how to convert the source NVM.  
+`<source>` specifies the source NVM filename. This file will be converted to match the target NVM.\
+`<target>` specifies the target NVM filename. This file will used to determine how to convert the source NVM.\
 The resulting NVM will be written to `<output>`.
 
 ## Convert binary NVM file to JSON

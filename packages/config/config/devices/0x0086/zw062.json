@@ -198,7 +198,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{
@@ -218,7 +217,6 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true,
 			"options": [
 				{
@@ -256,20 +254,19 @@
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": true
 		},
 		{
 			"#": "47",
 			"$import": "~/templates/master_template.json#base_options_nounit",
-			"label": "Short/Long Press Function of Button- And Button+",
+			"label": "Short/Long Press Function of Button- and Button+",
 			"options": [
 				{
-					"label": "Short --> Volume; Long --> Next sound",
+					"label": "Short --> volume; Long --> next sound",
 					"value": 0
 				},
 				{
-					"label": "Short --> Next sound; Long --> Volume",
+					"label": "Short --> next sound; Long --> volume",
 					"value": 1
 				}
 			]
@@ -296,7 +293,6 @@
 			"minValue": 0,
 			"maxValue": 1431655681,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Stop pairing",

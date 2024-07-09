@@ -1,0 +1,316 @@
+{
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "ZKS31",
+	"description": "Z-Wave Knob Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0x7002",
+			"zwaveAllianceId": 4779
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"label": "LED Indicator Behavior"
+		},
+		{
+			"#": "2",
+			"label": "LED Indicator Color",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Blue",
+					"value": 0
+				},
+				{
+					"label": "Green",
+					"value": 1
+				},
+				{
+					"label": "Red",
+					"value": 2
+				},
+				{
+					"label": "White",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				},
+				{
+					"label": "Cyan",
+					"value": 5
+				},
+				{
+					"label": "Magenta",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$import": "templates/minoston_template.json#led_indicator_brightness_mr40z",
+			"label": "LED Indicator Brightness"
+		},
+		{
+			"#": "4",
+			"label": "Knob Step Size",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 2
+		},
+		{
+			"#": "10",
+			"label": "Up Press: Behavior",
+			"description": "Adjust brightness value with parameter 5",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Scene control",
+					"value": 1
+				},
+				{
+					"label": "Brightness control",
+					"value": 2
+				},
+				{
+					"label": "Both",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Up Press: Brightness",
+			"description": "Values 102...255 turn on to the previous brightness. Only applies when parameter10 has brightness control enabled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 0
+				},
+				{
+					"label": "Minimum brightness",
+					"value": 100
+				},
+				{
+					"label": "Maximum brightness",
+					"value": 101
+				},
+				{
+					"label": "Turn on",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "11",
+			"$import": "#paramInformation/10",
+			"label": "Down Press: Behavior",
+			"description": "Adjust brightness value with parameter 6"
+		},
+		{
+			"#": "6",
+			"$import": "#paramInformation/5",
+			"label": "Down Press: Brightness",
+			"description": "Values 102...255 turn on to the previous brightness. Only applies when parameter11 has brightness control enabled."
+		},
+		{
+			"#": "12",
+			"$import": "#paramInformation/10",
+			"label": "Left Press: Behavior",
+			"description": "Adjust brightness value with parameter 7"
+		},
+
+		{
+			"#": "7",
+			"$import": "#paramInformation/5",
+			"label": "Left Press: Brightness",
+			"description": "Values 102...255 turn on to the previous brightness. Only applies when parameter12 has brightness control enabled."
+		},
+		{
+			"#": "13",
+			"$import": "#paramInformation/10",
+			"label": "Right Press: Behavior",
+			"description": "Adjust brightness value with parameter 8"
+		},
+		{
+			"#": "8",
+			"$import": "#paramInformation/5",
+			"label": "Right Press: Brightness",
+			"description": "Values 102...255 turn on to the previous brightness. Only applies when parameter13 has brightness control enabled."
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Center Press: Scene Control",
+			"defaultValue": 1
+		},
+		{
+			"#": "24",
+			"label": "Center Press: Brightness",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default brightness (Parameter 25)",
+					"value": 0
+				},
+				{
+					"label": "100 %",
+					"value": 1
+				},
+				{
+					"label": "Maximum brightness (Parameter 18)",
+					"value": 2
+				},
+				{
+					"label": "Previous brightness",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "14",
+			"$import": "templates/minoston_template.json#auto_off_timer"
+		},
+		{
+			"#": "15",
+			"$import": "templates/minoston_template.json#auto_on_timer"
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
+		},
+		{
+			"#": "17",
+			"$import": "~/templates/master_template.json#minimum_dim_level_0-99"
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-99"
+		},
+		{
+			"#": "25",
+			"label": "Default Brightness",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 80
+		},
+		{
+			"#": "19",
+			"label": "External Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle switch",
+					"value": 0
+				},
+				{
+					"label": "Momentary button",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Diming Rate (Manual On)",
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Diming Rate (Manual Off)",
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "22",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Diming Rate (Z-Wave On)",
+			"unit": "seconds",
+			"defaultValue": 255,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				},
+				{
+					"label": "Same as manual on",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "23",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Diming Rate (Z-Wave Off)",
+			"unit": "seconds",
+			"defaultValue": 255,
+			"options": [
+				{
+					"label": "Instant",
+					"value": 0
+				},
+				{
+					"label": "Same as manual off",
+					"value": 255
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Network Wide Inclusion To A Z-Wave™ Network\nRefer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the z-wave button Three times",
+		"exclusion": "Network Wide Inclusion To A Z-Wave™ Network\nRefer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the z-wave button Three times .\nREMOVE/Exclusion to a Z-Wave Network Same operation",
+		"reset": "Factory Reset : Press the knob(center) twice and hold for 10 seconds (Tap -> Tap -> Press and hold for 10 seconds) to reset the device. Indicate: RED led will flashes, and then the GREEN led be solid for 2 seconds.\nZKS31 User Manual"
+	}
+}

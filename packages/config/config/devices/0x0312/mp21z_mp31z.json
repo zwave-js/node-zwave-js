@@ -1,0 +1,46 @@
+{
+	"manufacturer": "Minoston",
+	"manufacturerId": "0x0312",
+	"label": "MP21Z / MP31Z",
+	"description": "Mini Smart Plug",
+	"devices": [
+		{
+			"productType": "0xff00",
+			"productId": "0xff0c",
+			"zwaveAllianceId": 3973
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_three_options_inverted"
+		},
+		{
+			"#": "2",
+			"$import": "templates/minoston_template.json#auto_off_timer"
+		},
+		{
+			"#": "4",
+			"$import": "templates/minoston_template.json#auto_on_timer"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "7",
+			"$import": "templates/minoston_template.json#led_indicator_brightness",
+			"defaultValue": 2
+		}
+	],
+	"metadata": {
+		"inclusion": "ADD the MP21Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP21Z to/from a Z-Wave Gateway with supporting Security.The MP21Z can support the Primary Controller that implemented the security S2",
+		"exclusion": "Remove the MP21Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second.\nInclude MP21Z to/from a Z-Wave Gateway with supporting Security.The MP21Z can support the Primary Controller that implemented the security S2",
+		"reset": "MANUAL RESET\n ---Power off MP21Z\n ---keep holding the PROG button\n ---Power on,Press and keep holding the PROG button for no less than 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.\"",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3973/MP21Z%20manual-20200817.pdf"
+	}
+}

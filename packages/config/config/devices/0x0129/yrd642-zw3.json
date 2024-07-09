@@ -1,0 +1,75 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YRD642-ZW3",
+	"description": "Assure 2nd Generation Fire Rated Keyless Touch Screen Deadbolt",
+	"devices": [
+		{
+			"productType": "0x8103",
+			"productId": "0x52d4"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/yale_template.json#volume"
+		},
+		{
+			"#": "2",
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#auto_relock_time_180"
+		},
+		{
+			"#": "4",
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
+		},
+		{
+			"#": "5",
+			"$import": "templates/yale_template.json#language"
+		},
+		{
+			"#": "7",
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_132"
+		},
+		{
+			"#": "8",
+			"$import": "templates/yale_template.json#operating_mode_normal_vacation_privacy_passage"
+		},
+		{
+			"#": "11",
+			"$import": "templates/yale_template.json#one_touch",
+			"defaultValue": 255
+		},
+		{
+			"#": "12",
+			"$import": "templates/yale_template.json#privacy_button"
+		},
+		{
+			"#": "13",
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "16",
+			"$import": "templates/yale_template.json#enable_escape_mode"
+		},
+		{
+			"#": "21",
+			"$import": "templates/yale_template.json#eco_mode"
+		},
+		{
+			"#": "28",
+			"$import": "templates/yale_template.json#expiring_pin_lifetime"
+		}
+	],
+	"metadata": {
+		"$import": "templates/yale_template.json#assure_zw3_metadata",
+		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}
