@@ -356,12 +356,18 @@
 		}
 	],
 	"compat": {
-		// The device can be controlled using Multilevel Switch CC, but it does not advertise it.
 		"commandClasses": {
 			"add": {
+				// The device can be controlled using Multilevel Switch CC, but it does not advertise it.
 				"Multilevel Switch": {
 					"isSupported": true,
 					"version": 2
+				}
+			},
+			// The device exposes Binary Switch CC, but Multilevel Switch CC supersedes it
+			"remove": {
+				"Binary Switch": {
+					"endpoints": "*"
 				}
 			}
 		}
