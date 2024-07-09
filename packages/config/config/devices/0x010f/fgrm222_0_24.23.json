@@ -354,5 +354,16 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// The device can be controlled using Multilevel Switch CC, but it does not advertise it.
+		"commandClasses": {
+			"add": {
+				"Multilevel Switch": {
+					"isSupported": true,
+					"version": 2
+				}
+			}
+		}
+	}
 }
