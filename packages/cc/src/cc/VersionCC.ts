@@ -471,10 +471,20 @@ export class VersionCC extends CommandClass {
 				// Remember which CC version this endpoint supports
 				let logMessage: string;
 				if (supportedVersion > 0) {
-					endpoint.addCC(cc, {
-						isSupported: true,
-						version: supportedVersion,
-					});
+					// Basic CC has special rules for when it is considered supported
+					// Therefore we mark all other CCs as supported, but not Basic CC,
+					// for which support is determined later.
+					if (cc === CommandClasses.Basic) {
+						endpoint.addCC(cc, {
+							isControlled: true,
+							version: supportedVersion,
+						});
+					} else {
+						endpoint.addCC(cc, {
+							isSupported: true,
+							version: supportedVersion,
+						});
+					}
 					logMessage = `  supports CC ${CommandClasses[cc]} (${
 						num2hex(cc)
 					}) in version ${supportedVersion}`;
