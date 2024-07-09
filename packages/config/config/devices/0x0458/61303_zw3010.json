@@ -1,9 +1,11 @@
 {
+	"manufacturer": "iDevices",
 	"manufacturerId": "0x0458",
-	"label": "61303/ZW3010",
+	"label": "61303 / ZW3010",
 	"description": "In-Wall Smart Dimmer",
 	"devices": [
 		{
+			// This device is a re-branded Jasco 46564 / ZW3010
 			"productType": "0x4944",
 			"productId": "0x3236",
 			"zwaveAllianceId": 4319
@@ -32,138 +34,35 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Led Indication",
-			"description": "Led indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Device is on, LED is off; device is off, LED is on",
-					"value": 0
-				},
-				{
-					"label": "Device is on, LED is on; device is off, LED is off",
-					"value": 1
-				},
-				{
-					"label": "Led always off",
-					"value": 2
-				},
-				{
-					"label": "Led always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "6",
-			"label": "Dim Up/Down Rate",
-			"description": "Dim up/down rate",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Dim up/down the light to the specified level quickly by command except value 0 and ff",
-					"value": 0
-				},
-				{
-					"label": "Dim up/down the light to the specified level slowly by command except value 0 and ff",
-					"value": 1
-				}
-			]
+			"$import": "~/0x0063/templates/jasco_template.json#dim_rate"
 		},
 		{
 			"#": "16",
-			"label": "Switch Mode",
-			"description": "Switch mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Disable- normal operation",
-					"value": 0
-				},
-				{
-					"label": "Press two times on button and two times off button, LED will flash 5 times if device is successfully excluded",
-					"value": 1
-				}
-			]
+			"$import": "~/0x0063/templates/jasco_template.json#switch_mode"
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
-			"description": "Alternate exclusion",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Normal operation, press any button to exclude device",
-					"value": 0
-				},
-				{
-					"label": "Press two times on button and two times off button, LED will flash 5 times if device is successfully excluded",
-					"value": 1
-				}
-			]
+			"$import": "~/0x0063/templates/jasco_template.json#alternate_exclusion"
 		},
 		{
 			"#": "30",
-			"label": "Minimum Dim Threshold",
-			"description": "Set the minimum dimmer threshold when manually or remotely controlled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true
+			"$import": "~/0x0063/templates/jasco_template.json#dim_threshold_min"
 		},
 		{
 			"#": "31",
-			"label": "Maximum Brightness Threshold",
-			"description": "Set the maximum brightness threshold when manually or remotely controlled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true
+			"$import": "~/0x0063/templates/jasco_template.json#dim_threshold_max"
 		},
 		{
 			"#": "32",
-			"label": "Default Brightness Level",
-			"description": "Default brightness level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Default",
-					"value": 0
-				}
-			]
+			"$import": "~/0x0063/templates/jasco_template.json#default_brightness_level"
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "Adding your device to a Z-Wave network\n1. Follow the instructions for your Z-Wave certified controller to\nadd a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker)",
