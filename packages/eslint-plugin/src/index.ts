@@ -16,7 +16,7 @@ import { preferDefaultValue } from "./rules/prefer-defaultvalue.js";
 import { configFiles as configFilesConfig } from "./configs/configFiles.js";
 import { noInternalCCTypes } from "./rules/no-internal-cc-types.js";
 
-module.exports = {
+export default {
 	rules: {
 		"auto-unsigned": autoUnsigned,
 		"ccapi-validate-args": ccAPIValidateArgs,

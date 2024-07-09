@@ -4,7 +4,7 @@ import {
 	ESLintUtils,
 	type TSESTree,
 } from "@typescript-eslint/utils";
-import { type Rule } from "../utils";
+import { type Rule } from "../utils.js";
 
 // const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
 

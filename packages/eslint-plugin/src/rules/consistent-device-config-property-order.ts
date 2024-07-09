@@ -1,6 +1,6 @@
 import { type AST as ESLintAST } from "eslint";
 import type { AST } from "jsonc-eslint-parser";
-import { type JSONCRule, paramInfoPropertyOrder } from "../utils";
+import { type JSONCRule, paramInfoPropertyOrder } from "../utils.js";
 
 export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 	create(context) {

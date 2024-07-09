@@ -2,7 +2,7 @@ import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { type Rule } from "../utils";
+import { type Rule } from "../utils.js";
 
 // Whitelist some imports that are known not to import forbidden modules
 const whitelistedImports = [
