@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
-	"label": "GD00Z-7",
+	"label": "GD00Z-6 / GD00Z-7 / GD00Z-8",
 	"description": "Z-Wave Garage Door Controller",
 	"devices": [
 		{
