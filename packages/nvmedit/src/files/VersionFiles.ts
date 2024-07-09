@@ -64,6 +64,14 @@ export const ApplicationVersionFileID = getNVMFileIDStatic(
 	ApplicationVersionFile,
 );
 
+// The 800 series has a shared application/protocol file system
+// and uses a different ID for the application version file
+@nvmFileID(0x41000)
+export class ApplicationVersionFile800 extends VersionFile {}
+export const ApplicationVersionFile800ID = getNVMFileIDStatic(
+	ApplicationVersionFile800,
+);
+
 @nvmFileID(0x50000)
 export class ProtocolVersionFile extends VersionFile {}
 export const ProtocolVersionFileID = getNVMFileIDStatic(ProtocolVersionFile);

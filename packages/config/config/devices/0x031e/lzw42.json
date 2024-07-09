@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "State after Power Loss",
+			"label": "State After Power Loss",
 			"description": "This state will be chosen when the power is restored",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -66,5 +66,16 @@
 		"exclusion": "Put your hub in exclusion mode and turn the power to the bulb on.  Your bulb will blink twice (2x) indicating it's in exclusion mode.  When exclusion is successful, it will blink one more time (1x) to confirm.  Your hub should say that the device is excluded.",
 		"reset": "You may power on/off the bulb 6x (between 0.5-2 seconds each time) or use a certified controller to remove the device from your network to factory default.  Only use this procedure in the event that the network primary controller is missing or otherwise inoperable.  Your bulb will flash twice to confirm factory reset.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3613/LZW42%20Manual.pdf"
+	},
+	"compat": {
+		// The device supports Color Switch V2, despite only reporting support for V1
+		"commandClasses": {
+			"add": {
+				"Color Switch": {
+					"isSupported": true,
+					"version": 2
+				}
+			}
+		}
 	}
 }

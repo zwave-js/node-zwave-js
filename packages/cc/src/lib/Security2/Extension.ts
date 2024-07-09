@@ -1,6 +1,7 @@
 import {
 	ZWaveError,
 	ZWaveErrorCodes,
+	isZWaveError,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import {
@@ -93,12 +94,46 @@ export function getExtensionType<T extends Security2Extension>(
 	return ret;
 }
 
+export enum ValidateS2ExtensionResult {
+	OK,
+	DiscardExtension,
+	DiscardCommand,
+}
+
 /** Tests if the extension may be accepted */
-export function isValidExtension(ext: Security2Extension): boolean {
-	if (ext.critical && !(ext.type in S2ExtensionType)) {
-		return false;
+export function validateS2Extension(
+	ext: Security2Extension,
+	wasEncrypted: boolean,
+): ValidateS2ExtensionResult {
+	if (ext instanceof InvalidExtension) {
+		// The extension could not be parsed, ignore it
+		return ValidateS2ExtensionResult.DiscardExtension;
 	}
-	return true;
+
+	if (ext.critical && !(ext.type in S2ExtensionType)) {
+		// A receiving node MUST discard the entire command if the Critical flag
+		// is set to ‘1’ and the Type field advertises a value that the
+		// receiving node does not support.
+		return ValidateS2ExtensionResult.DiscardCommand;
+	}
+
+	// Check if the extension is correctly encrypted or not encrypted
+	switch (ext.type) {
+		case S2ExtensionType.MPAN:
+			if (!wasEncrypted) {
+				return ValidateS2ExtensionResult.DiscardExtension;
+			}
+			break;
+		case S2ExtensionType.SPAN:
+		case S2ExtensionType.MGRP:
+		case S2ExtensionType.MOS:
+			if (wasEncrypted) {
+				return ValidateS2ExtensionResult.DiscardExtension;
+			}
+			break;
+	}
+
+	return ValidateS2ExtensionResult.OK;
 }
 
 interface Security2ExtensionCreationOptions {
@@ -125,7 +160,6 @@ export class Security2Extension {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(options.data.length >= 2);
 			const totalLength = options.data[0];
-			validatePayload(options.data.length >= totalLength);
 			const controlByte = options.data[1];
 			this.moreToFollow = !!(controlByte & 0b1000_0000);
 			this.critical = !!(controlByte & 0b0100_0000);
@@ -160,8 +194,30 @@ export class Security2Extension {
 	}
 
 	/** Returns the number of bytes the first extension in the buffer occupies */
-	public static getExtensionLength(data: Buffer): number {
-		return data[0];
+	public static getExtensionLength(
+		data: Buffer,
+	): { expected?: number; actual: number } {
+		const actual = data[0];
+		let expected: number | undefined;
+
+		// For known extensions, return the expected length
+		const type = data[1] & 0b11_1111;
+		switch (type) {
+			case S2ExtensionType.SPAN:
+				expected = SPANExtension.expectedLength;
+				break;
+			case S2ExtensionType.MPAN:
+				expected = MPANExtension.expectedLength;
+				break;
+			case S2ExtensionType.MGRP:
+				expected = MGRPExtension.expectedLength;
+				break;
+			case S2ExtensionType.MOS:
+				expected = MOSExtension.expectedLength;
+				break;
+		}
+
+		return { expected, actual };
 	}
 
 	/** Returns the number of bytes the serialized extension will occupy */
@@ -183,8 +239,18 @@ export class Security2Extension {
 	/** Creates an instance of the S2 extension that is serialized in the given buffer */
 	public static from(data: Buffer): Security2Extension {
 		const Constructor = Security2Extension.getConstructor(data);
-		const ret = new Constructor({ data });
-		return ret;
+		try {
+			const ret = new Constructor({ data });
+			return ret;
+		} catch (e) {
+			if (
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+			) {
+				return new InvalidExtension({ data });
+			}
+			throw e;
+		}
 	}
 
 	public toLogEntry(): string {
@@ -196,6 +262,9 @@ export class Security2Extension {
 		}
 		return ret;
 	}
+}
+
+export class InvalidExtension extends Security2Extension {
 }
 
 interface SPANExtensionOptions {
@@ -226,6 +295,8 @@ export class SPANExtension extends Security2Extension {
 	}
 
 	public senderEI: Buffer;
+
+	public static readonly expectedLength = 18;
 
 	public serialize(moreToFollow: boolean): Buffer {
 		this.payload = this.senderEI;
@@ -276,6 +347,8 @@ export class MPANExtension extends Security2Extension {
 		return true;
 	}
 
+	public static readonly expectedLength = 19;
+
 	public serialize(moreToFollow: boolean): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.groupId]),
@@ -319,6 +392,8 @@ export class MGRPExtension extends Security2Extension {
 
 	public groupId: number;
 
+	public static readonly expectedLength = 3;
+
 	public serialize(moreToFollow: boolean): Buffer {
 		this.payload = Buffer.from([this.groupId]);
 		return super.serialize(moreToFollow);
@@ -340,4 +415,6 @@ export class MOSExtension extends Security2Extension {
 			super({ critical: false });
 		}
 	}
+
+	public static readonly expectedLength = 2;
 }

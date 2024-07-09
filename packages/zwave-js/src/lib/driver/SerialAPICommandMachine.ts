@@ -13,6 +13,7 @@ import {
 	createMachine,
 	raise,
 } from "xstate";
+import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
 /* eslint-disable @typescript-eslint/ban-types */
@@ -26,7 +27,6 @@ export interface SerialAPICommandStateSchema {
 		retryWait: {};
 		failure: {};
 		success: {};
-		aborted: {};
 	};
 }
 /* eslint-enable @typescript-eslint/ban-types */
@@ -55,7 +55,6 @@ export type SerialAPICommandEvent =
 	| { type: "ACK" }
 	| { type: "CAN" }
 	| { type: "NAK" }
-	| { type: "abort" } // The serial API command was aborted by the driver
 	| { type: "message"; message: Message } // A message that might or might not be expected
 	| { type: "response"; message: Message } // Gets forwarded when a response-type message is expected
 	| { type: "callback"; message: Message }; // Gets forwarded when a callback-type message is expected
@@ -79,8 +78,7 @@ export type SerialAPICommandDoneData =
 					| "NAK"
 					| "ACK timeout"
 					| "response timeout"
-					| "callback timeout"
-					| "aborted";
+					| "callback timeout";
 				result?: undefined;
 			}
 			| {
@@ -93,6 +91,7 @@ export type SerialAPICommandDoneData =
 export interface SerialAPICommandServiceImplementations {
 	timestamp: () => number;
 	sendData: (data: Buffer) => Promise<void>;
+	sendDataAbort: () => Promise<void>;
 	notifyRetry: (
 		lastError: SerialAPICommandError | undefined,
 		message: Message,
@@ -137,7 +136,7 @@ export type SerialAPICommandMachineOptions = Partial<
 export type SerialAPICommandMachineParams = {
 	timeouts: Pick<
 		ZWaveOptions["timeouts"],
-		"ack" | "response" | "sendDataCallback"
+		"ack" | "response" | "sendDataAbort" | "sendDataCallback"
 	>;
 	attempts: Pick<ZWaveOptions["attempts"], "controller">;
 };
@@ -148,9 +147,13 @@ export function getSerialAPICommandMachineConfig(
 		timestamp,
 		logOutgoingMessage,
 		notifyUnsolicited,
+		sendDataAbort,
 	}: Pick<
 		SerialAPICommandServiceImplementations,
-		"timestamp" | "logOutgoingMessage" | "notifyUnsolicited"
+		| "timestamp"
+		| "logOutgoingMessage"
+		| "notifyUnsolicited"
+		| "sendDataAbort"
 	>,
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
 ): SerialAPICommandMachineConfig {
@@ -179,7 +182,6 @@ export function getSerialAPICommandMachineConfig(
 					},
 				},
 			],
-			abort: "aborted",
 		},
 		states: {
 			sending: {
@@ -205,6 +207,7 @@ export function getSerialAPICommandMachineConfig(
 				},
 			},
 			waitForACK: {
+				always: [{ target: "success", cond: "expectsNoAck" }],
 				on: {
 					CAN: {
 						target: "retry",
@@ -255,12 +258,25 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
-					RESPONSE_TIMEOUT: {
-						target: "retry",
-						actions: assign({
-							lastError: (_) => "response timeout",
-						}),
-					},
+					// Do not retry when a response times out
+					RESPONSE_TIMEOUT: [
+						{
+							cond: "isSendData",
+							target: "waitForCallback",
+							actions: [
+								() => sendDataAbort(),
+								assign({
+									lastError: (_) => "response timeout",
+								}),
+							],
+						},
+						{
+							target: "failure",
+							actions: assign({
+								lastError: (_) => "response timeout",
+							}),
+						},
+					],
 				},
 			},
 			waitForCallback: {
@@ -268,9 +284,16 @@ export function getSerialAPICommandMachineConfig(
 				on: {
 					callback: [
 						{
+							// Preserve "response timeout" errors
+							// A NOK callback afterwards is expected, but we're not interested in it
+							target: "failure",
+							cond: "callbackIsNOKAfterTimedOutResponse",
+						},
+						{
 							target: "failure",
 							cond: "callbackIsNOK",
 							actions: assign({
+								// Preserve "response timeout" errors
 								lastError: (_) => "callback NOK",
 								result: (_, evt) => (evt as any).message,
 							}),
@@ -286,6 +309,13 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
+					// Abort Send Data when it takes too long
+					SENDDATA_ABORT_TIMEOUT: {
+						cond: "isSendData",
+						actions: [
+							() => sendDataAbort(),
+						],
+					},
 					CALLBACK_TIMEOUT: {
 						target: "failure",
 						actions: assign({
@@ -326,14 +356,6 @@ export function getSerialAPICommandMachineConfig(
 					result: (ctx: SerialAPICommandContext) => ctx.result!,
 				},
 			},
-			aborted: {
-				type: "final",
-				data: {
-					type: "failure",
-					reason: "aborted",
-					result: undefined,
-				},
-			},
 		},
 	};
 }
@@ -342,7 +364,10 @@ export function getSerialAPICommandMachineOptions(
 	{
 		sendData,
 		notifyRetry,
-	}: Pick<SerialAPICommandServiceImplementations, "sendData" | "notifyRetry">,
+	}: Pick<
+		SerialAPICommandServiceImplementations,
+		"sendData" | "sendDataAbort" | "notifyRetry"
+	>,
 	timeoutConfig: SerialAPICommandMachineParams["timeouts"],
 ): SerialAPICommandMachineOptions {
 	return {
@@ -365,6 +390,8 @@ export function getSerialAPICommandMachineOptions(
 		},
 		guards: {
 			mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
+			isSendData: (ctx) => isSendData(ctx.msg),
+			expectsNoAck: (ctx) => !ctx.msg.expectsAck(),
 			expectsNoResponse: (ctx) => !ctx.msg.expectsResponse(),
 			expectsNoCallback: (ctx) => !ctx.msg.expectsCallback(),
 			isExpectedMessage: (ctx, evt, meta) =>
@@ -378,6 +405,13 @@ export function getSerialAPICommandMachineOptions(
 				// assume responses without success indication to be OK
 				&& isSuccessIndicator(evt.message)
 				&& !evt.message.isOK(),
+			callbackIsNOKAfterTimedOutResponse: (ctx, evt) =>
+				evt.type === "callback"
+				// assume callbacks without success indication to be OK
+				&& isSuccessIndicator(evt.message)
+				&& !evt.message.isOK()
+				&& isSendData(ctx.msg)
+				&& ctx.lastError === "response timeout",
 			callbackIsNOK: (ctx, evt) =>
 				evt.type === "callback"
 				// assume callbacks without success indication to be OK
@@ -409,6 +443,7 @@ export function getSerialAPICommandMachineOptions(
 					|| timeoutConfig.sendDataCallback
 				);
 			},
+			SENDDATA_ABORT_TIMEOUT: timeoutConfig.sendDataAbort,
 			ACK_TIMEOUT: timeoutConfig.ack,
 		},
 	};

@@ -858,13 +858,12 @@ export class DeviceConfig {
 			// Copy some simple flags over
 			for (
 				const prop of [
-					"enableBasicSetMapping",
 					"forceSceneControllerGroupCount",
 					"mapRootReportsToEndpoint",
+					"mapBasicSet",
 					"preserveRootApplicationCCValueIDs",
 					"preserveEndpoints",
 					"removeEndpoints",
-					"treatBasicSetAsEvent",
 					"treatMultilevelSwitchSetAsEvent",
 				] as const
 			) {
@@ -889,6 +888,9 @@ export class DeviceConfig {
 			}
 			if (this.compat.removeCCs) {
 				c.removeCCs = Object.fromEntries(this.compat.removeCCs);
+			}
+			if (this.compat.treatSetAsReport) {
+				c.treatSetAsReport = [...this.compat.treatSetAsReport].sort();
 			}
 
 			c = sortObject(c);

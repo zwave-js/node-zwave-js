@@ -18,7 +18,7 @@ const codegen = () =>
 		await codegen();
 	}
 })().catch((e) => {
-	console.error(red(e.message));
+	console.error(red(e.stack));
 	console.error(" ");
 	process.exit(1);
 });

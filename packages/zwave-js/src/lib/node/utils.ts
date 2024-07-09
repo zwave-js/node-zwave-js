@@ -299,6 +299,18 @@ export function getDefinedValueIDs(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 ): TranslatedValueID[] {
+	return getDefinedValueIDsInternal(applHost, node, false);
+}
+
+/**
+ * @internal
+ * Returns a list of all value names that are defined on all endpoints of this node
+ */
+export function getDefinedValueIDsInternal(
+	applHost: ZWaveApplicationHost,
+	node: IZWaveNode,
+	includeInternal: boolean = false,
+): TranslatedValueID[] {
 	let ret: ValueID[] = [];
 	const allowControlled: CommandClasses[] = [
 		CommandClasses["Scene Activation"],
@@ -306,8 +318,13 @@ export function getDefinedValueIDs(
 	for (const endpoint of getAllEndpoints(applHost, node)) {
 		for (const cc of allCCs) {
 			if (
+				// Create values only for supported CCs
 				endpoint.supportsCC(cc)
+				// ...and some controlled CCs
 				|| (endpoint.controlsCC(cc) && allowControlled.includes(cc))
+				// ...and possibly Basic CC, which has some extra checks to know
+				// whether values should be exposed
+				|| cc === CommandClasses.Basic
 			) {
 				const ccInstance = CommandClass.createInstanceUnchecked(
 					applHost,
@@ -315,7 +332,12 @@ export function getDefinedValueIDs(
 					cc,
 				);
 				if (ccInstance) {
-					ret.push(...ccInstance.getDefinedValueIDs(applHost));
+					ret.push(
+						...ccInstance.getDefinedValueIDs(
+							applHost,
+							includeInternal,
+						),
+					);
 				}
 			}
 		}

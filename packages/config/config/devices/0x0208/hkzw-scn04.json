@@ -2,7 +2,7 @@
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
 	"label": "SCN04",
-	"description": "Four-key Scene Controller",
+	"description": "Four-Key Scene Controller",
 	"devices": [
 		{
 			"productType": "0x0200",
@@ -20,7 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "254",
-			"label": "Enable configuration",
+			"label": "Enable Configuration",
 			"description": "Lock/unlock all configuration parameters.",
 			"valueSize": 1,
 			"defaultValue": 0,

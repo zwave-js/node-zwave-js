@@ -531,10 +531,18 @@ interface LifelineHealthCheckResult {
 	 * Will use the time in TX reports if available, otherwise fall back to measuring the round trip time.
 	 */
 	latency: number;
-	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
-	numNeighbors: number;
-	/** How many pings were not ACKed by the node. Lower = better, ideally 0. */
+
+	/**
+	 * How many routing neighbors this node has (Z-Wave Classic only). Higher = better, ideally > 2.
+	 * For Z-Wave LR, this is undefined.
+	 */
+	numNeighbors?: number;
+
+	/**
+	 * How many pings were not ACKed by the node. Lower = better, ideally 0.
+	 */
 	failedPingsNode: number;
+
 	/**
 	 * The minimum powerlevel where all pings from the node were ACKed by the controller. Higher = better, ideally 6dBm or more.
 	 *
@@ -547,6 +555,7 @@ interface LifelineHealthCheckResult {
 	 * Only available if the node supports Powerlevel CC
 	 */
 	failedPingsController?: number;
+
 	/**
 	 * An estimation of the Signal-to-Noise Ratio Margin in dBm.
 	 *
@@ -884,44 +893,36 @@ interface DeviceClass {
 	readonly basic: BasicDeviceClass;
 	readonly generic: GenericDeviceClass;
 	readonly specific: SpecificDeviceClass;
-	readonly mandatorySupportedCCs: readonly CommandClasses[];
-	readonly mandatoryControlledCCs: readonly CommandClasses[];
 }
 ```
 
-<!-- #import BasicDeviceClass from "@zwave-js/config" -->
+<!-- #import BasicDeviceClass from "@zwave-js/core" -->
 
 ```ts
-interface BasicDeviceClass {
-	key: number;
-	label: string;
+enum BasicDeviceClass {
+	Controller = 0x01,
+	"Static Controller" = 0x02,
+	"End Node" = 0x03,
+	"Routing End Node" = 0x04,
 }
 ```
 
-<!-- #import GenericDeviceClass from "@zwave-js/config" -->
+<!-- #import GenericDeviceClass from "@zwave-js/core" -->
 
 ```ts
 interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
-	readonly requiresSecurity?: boolean;
-	readonly supportedCCs: readonly CommandClasses[];
-	readonly controlledCCs: readonly CommandClasses[];
-	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
+	readonly zwavePlusDeviceType?: string;
+	readonly requiresSecurity: boolean;
+	readonly maySupportBasicCC: boolean;
 }
 ```
 
-<!-- #import SpecificDeviceClass from "@zwave-js/config" -->
+<!-- #import SpecificDeviceClass from "@zwave-js/core" -->
 
 ```ts
-interface SpecificDeviceClass {
-	readonly key: number;
-	readonly label: string;
-	readonly zwavePlusDeviceType?: string;
-	readonly requiresSecurity?: boolean;
-	readonly supportedCCs: readonly CommandClasses[];
-	readonly controlledCCs: readonly CommandClasses[];
-}
+type SpecificDeviceClass = GenericDeviceClass;
 ```
 
 ### `zwavePlusVersion`
@@ -944,7 +945,7 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node typ
 
 ```ts
 enum ZWavePlusNodeType {
-	Node = 0,
+	Node = 0, // ZWave+ Node
 	IPGateway = 2,
 }
 ```
@@ -1108,7 +1109,7 @@ readonly deviceConfig: DeviceConfig | undefined
 
 Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
 
-This information may change after an update of the config files. To check whether a change occured that requires a re-interview, use the [`hasDeviceConfigChanged`](#hasdeviceconfigchanged) method.
+This information may change after an update of the config files. To check whether a change occurred that requires a re-interview, use the [`hasDeviceConfigChanged`](#hasdeviceconfigchanged) method.
 
 ### `deviceDatabaseUrl`
 
@@ -1149,6 +1150,14 @@ number | undefined;
 While the volume for sound switch commands can be provided on a per-command basis as part of the [`setValue`](#setvalue) method, it may be desirable to configure a persistent default for a node.
 
 This can be done using the `defaultVolume` property. It accepts a volume between 0 and 100 (in `%`) and will be used for all sound switch commands that do not specify a volume.
+
+### `protocol`
+
+```ts
+readonly protocol: Protocols
+```
+
+Which protocol is used to communicate with this node, Z-Wave (Classic) or Z-Wave Long Range.
 
 ## ZWaveNode events
 
@@ -1549,7 +1558,7 @@ interface NodeStatistics {
 ```ts
 interface RouteStatistics {
 	/** The protocol and used data rate for this route */
-	protocolDataRate: ProtocolDataRate;
+	protocolDataRate?: ProtocolDataRate;
 	/** Which nodes are repeaters for this route */
 	repeaters: number[];
 

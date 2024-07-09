@@ -380,7 +380,7 @@
 	},
 	"low_temp_alarm": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Low Temperature Alarm (-15°C)"
+		"label": "Low Temperature Alarm (-15 °C)"
 	},
 	"below_temp_report": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -845,7 +845,7 @@
 	"overheat_protection": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Overheat Protection",
-		"description": "Output will be turned off after 30 seconds if internal temperature exceeds 100°C"
+		"description": "Output will be turned off after 30 seconds if internal temperature exceeds 100 °C"
 	},
 	"auto_report_interval": {
 		"$import": "#base_interval",
@@ -1679,7 +1679,7 @@
 		]
 	},
 	"association_group_2_command_type": {
-		"label": "Association Group 2: Command Type ",
+		"label": "Association Group 2: Command Type",
 		"valueSize": 1,
 		"defaultValue": 2,
 		"unsigned": true,

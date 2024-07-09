@@ -11,20 +11,23 @@ import {
 	actuatorCCs,
 	getCCName,
 	isActuatorCC,
+	isLongRangeNodeId,
 	isSensorCC,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
-import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
+import {
+	ObjectKeyMap,
+	type ReadonlyObjectKeyMap,
+	getEnumMemberName,
+} from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import { AssociationCC, AssociationCCValues } from "../cc/AssociationCC";
 import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC";
-import {
-	MultiChannelAssociationCC,
-	MultiChannelAssociationCCValues,
-} from "../cc/MultiChannelAssociationCC";
+import { MultiChannelAssociationCC } from "../cc/MultiChannelAssociationCC";
 import { CCAPI } from "./API";
 import {
 	type AssociationAddress,
+	AssociationCheckResult,
 	type AssociationGroup,
 	AssociationGroupInfoProfile,
 	type EndpointAddress,
@@ -106,12 +109,12 @@ export function getAllAssociations(
 	return ret;
 }
 
-export function isAssociationAllowed(
+export function checkAssociation(
 	applHost: ZWaveApplicationHost,
 	endpoint: IZWaveEndpoint,
 	group: number,
 	destination: AssociationAddress,
-): boolean {
+): AssociationCheckResult {
 	// Check that the target endpoint exists except when adding an association to the controller
 	const targetNode = applHost.nodes.getOrThrow(destination.nodeId);
 	const targetEndpoint = destination.nodeId === applHost.ownNodeId
@@ -130,8 +133,25 @@ export function isAssociationAllowed(
 		);
 	}
 
+	// Associations to and from ZWLR devices are not allowed
+	if (isLongRangeNodeId(destination.nodeId)) {
+		return AssociationCheckResult.Forbidden_DestinationIsLongRange;
+	} else if (isLongRangeNodeId(endpoint.nodeId)) {
+		// Except the lifeline back to the host
+		if (group !== 1 || destination.nodeId !== applHost.ownNodeId) {
+			return AssociationCheckResult.Forbidden_SourceIsLongRange;
+		}
+	}
+
 	// The following checks don't apply to Lifeline associations
-	if (destination.nodeId === applHost.ownNodeId) return true;
+	if (destination.nodeId === applHost.ownNodeId) {
+		return AssociationCheckResult.OK;
+	}
+
+	// Disallow self-associations
+	if (destination.nodeId === endpoint.nodeId) {
+		return AssociationCheckResult.Forbidden_SelfAssociation;
+	}
 
 	// For Association version 1 and version 2 / MCA version 1-3:
 	// A controlling node MUST NOT associate Node A to a Node B destination
@@ -165,7 +185,7 @@ export function isAssociationAllowed(
 			securityClassMustMatch
 			&& sourceSecurityClass !== targetSecurityClass
 		) {
-			return false;
+			return AssociationCheckResult.Forbidden_SecurityClassMismatch;
 		} else if (
 			// Commands to insecure nodes are allowed
 			targetSecurityClass !== SecurityClass.None
@@ -173,7 +193,8 @@ export function isAssociationAllowed(
 			&& !securityClassMustMatch
 			&& !sourceNode.hasSecurityClass(targetSecurityClass)
 		) {
-			return false;
+			return AssociationCheckResult
+				.Forbidden_DestinationSecurityClassNotGranted;
 		}
 	}
 
@@ -184,7 +205,7 @@ export function isAssociationAllowed(
 	// To determine this, the node must support the AGI CC or we have no way of knowing which
 	// CCs the node will control
 	if (!endpoint.supportsCC(CommandClasses["Association Group Information"])) {
-		return true;
+		return AssociationCheckResult.OK;
 	}
 
 	const groupCommandList = AssociationGroupInfoCC.getIssuedCommandsCached(
@@ -194,7 +215,7 @@ export function isAssociationAllowed(
 	);
 	if (!groupCommandList || !groupCommandList.size) {
 		// We don't know which CCs this group controls, just allow it
-		return true;
+		return AssociationCheckResult.OK;
 	}
 	const groupCCs = [...groupCommandList.keys()];
 
@@ -204,11 +225,15 @@ export function isAssociationAllowed(
 		groupCCs.includes(CommandClasses.Basic)
 		&& actuatorCCs.some((cc) => targetEndpoint?.supportsCC(cc))
 	) {
-		return true;
+		return AssociationCheckResult.OK;
 	}
 
 	// Enforce that at least one issued CC is supported
-	return groupCCs.some((cc) => targetEndpoint?.supportsCC(cc));
+	if (groupCCs.some((cc) => targetEndpoint?.supportsCC(cc))) {
+		return AssociationCheckResult.OK;
+	} else {
+		return AssociationCheckResult.Forbidden_NoSupportedCCs;
+	}
 }
 
 export function getAssociationGroups(
@@ -365,6 +390,22 @@ export async function addAssociations(
 		);
 	}
 
+	// Disallow associating a node with itself. This is technically checked as part of
+	// checkAssociations, but here we provide a better error message.
+	const selfAssociations = destinations.filter((d) =>
+		d.nodeId === endpoint.nodeId
+	);
+	if (selfAssociations.length > 0) {
+		throw new ZWaveError(
+			`Associating a node with itself is not allowed!`,
+			ZWaveErrorCodes.AssociationCC_NotAllowed,
+			selfAssociations.map((a) => ({
+				...a,
+				checkResult: AssociationCheckResult.Forbidden_SelfAssociation,
+			})),
+		);
+	}
+
 	const assocGroupCount =
 		assocInstance?.getGroupCountCached(applHost, endpoint) ?? 0;
 	const mcGroupCount = mcInstance?.getGroupCountCached(applHost, endpoint)
@@ -385,8 +426,13 @@ export async function addAssociations(
 
 	if (groupIsMultiChannel) {
 		// Check that all associations are allowed
-		const disallowedAssociations = destinations.filter(
-			(a) => !isAssociationAllowed(applHost, endpoint, group, a),
+		const disallowedAssociations = destinations.map(
+			(a) => ({
+				...a,
+				checkResult: checkAssociation(applHost, endpoint, group, a),
+			}),
+		).filter(({ checkResult }) =>
+			checkResult !== AssociationCheckResult.OK
 		);
 		if (disallowedAssociations.length) {
 			let message = `The following associations are not allowed:`;
@@ -395,12 +441,18 @@ export async function addAssociations(
 					(a) =>
 						`\n· Node ${a.nodeId}${
 							a.endpoint ? `, endpoint ${a.endpoint}` : ""
+						}: ${
+							getEnumMemberName(
+								AssociationCheckResult,
+								a.checkResult,
+							).replace("Forbidden_", "")
 						}`,
 				)
 				.join("");
 			throw new ZWaveError(
 				message,
 				ZWaveErrorCodes.AssociationCC_NotAllowed,
+				disallowedAssociations,
 			);
 		}
 
@@ -427,17 +479,33 @@ export async function addAssociations(
 		}
 
 		// Check that all associations are allowed
-		const disallowedAssociations = destinations.filter(
-			(a) => !isAssociationAllowed(applHost, endpoint, group, a),
+		const disallowedAssociations = destinations.map(
+			(a) => ({
+				...a,
+				checkResult: checkAssociation(applHost, endpoint, group, a),
+			}),
+		).filter(({ checkResult }) =>
+			checkResult !== AssociationCheckResult.OK
 		);
 		if (disallowedAssociations.length) {
+			let message =
+				`The associations to the following nodes are not allowed`;
+			message += disallowedAssociations
+				.map(
+					(a) =>
+						`\n· Node ${a.nodeId}: ${
+							getEnumMemberName(
+								AssociationCheckResult,
+								a.checkResult,
+							).replace("Forbidden_", "")
+						}`,
+				)
+				.join("");
+
 			throw new ZWaveError(
-				`The associations to the following nodes are not allowed: ${
-					disallowedAssociations
-						.map((a) => a.nodeId)
-						.join(", ")
-				}`,
+				message,
 				ZWaveErrorCodes.AssociationCC_NotAllowed,
+				disallowedAssociations,
 			);
 		}
 
@@ -738,7 +806,9 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 		});
 
 		// Figure out which associations exist and may need to be removed
-		const isAssignedAsNodeAssociation = (): boolean => {
+		const isAssignedAsNodeAssociation = (
+			endpoint: IZWaveEndpoint,
+		): boolean => {
 			if (groupSupportsMultiChannelAssociation && mcInstance) {
 				if (
 					// Only consider a group if it doesn't share its associations with the root endpoint
@@ -773,7 +843,9 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			return false;
 		};
 
-		const isAssignedAsEndpointAssociation = (): boolean => {
+		const isAssignedAsEndpointAssociation = (
+			endpoint: IZWaveEndpoint,
+		): boolean => {
 			if (mcInstance) {
 				if (
 					// Only consider a group if it doesn't share its associations with the root endpoint
@@ -841,7 +913,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 
 		// First try: node association
 		if (!mustUseMultiChannelAssociation) {
-			if (isAssignedAsNodeAssociation()) {
+			if (isAssignedAsNodeAssociation(endpoint)) {
 				// We already have the correct association
 				hasLifeline = true;
 				applHost.controllerLog.logNode(node.id, {
@@ -863,7 +935,10 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 						`Assigning lifeline group #${group} with a node association via Association CC...`,
 					direction: "outbound",
 				});
-				if (isAssignedAsEndpointAssociation() && mcAPI.isSupported()) {
+				if (
+					isAssignedAsEndpointAssociation(endpoint)
+					&& mcAPI.isSupported()
+				) {
 					await mcAPI.removeDestinations({
 						groupId: group,
 						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
@@ -907,7 +982,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 						`Assigning lifeline group #${group} with a node association via Multi Channel Association CC...`,
 					direction: "outbound",
 				});
-				if (isAssignedAsEndpointAssociation()) {
+				if (isAssignedAsEndpointAssociation(endpoint)) {
 					await mcAPI.removeDestinations({
 						groupId: group,
 						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
@@ -943,7 +1018,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 		// Third try: Use an endpoint association (target endpoint 0)
 		// This is only supported starting in Multi Channel Association CC V3
 		if (!hasLifeline && !mustUseNodeAssociation) {
-			if (isAssignedAsEndpointAssociation()) {
+			if (isAssignedAsEndpointAssociation(endpoint)) {
 				// We already have the correct association
 				hasLifeline = true;
 				applHost.controllerLog.logNode(node.id, {
@@ -964,7 +1039,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 						`Assigning lifeline group #${group} with a multi channel association...`,
 					direction: "outbound",
 				});
-				if (isAssignedAsNodeAssociation()) {
+				if (isAssignedAsNodeAssociation(endpoint)) {
 					// It has been found that some devices don't correctly share the node associations between
 					// Association CC and Multi Channel Association CC, so we remove the nodes from both lists
 					await mcAPI.removeDestinations({
@@ -1034,17 +1109,7 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 			});
 
 			if (!rootMustUseNodeAssociation) {
-				const rootNodesValueId =
-					MultiChannelAssociationCCValues.nodeIds(group).id;
-				const rootHasNodeAssociation = !!valueDB
-					.getValue<number[]>(rootNodesValueId)
-					?.some((a) => a === ownNodeId);
-				const rootEndpointsValueId =
-					MultiChannelAssociationCCValues.endpoints(group).id;
-				const rootHasEndpointAssociation = !!valueDB
-					.getValue<EndpointAddress[]>(rootEndpointsValueId)
-					?.some((a) => a.nodeId === ownNodeId && a.endpoint === 0);
-				if (rootHasEndpointAssociation) {
+				if (isAssignedAsEndpointAssociation(node)) {
 					// We already have the correct association
 					hasLifeline = true;
 					applHost.controllerLog.logNode(node.id, {
@@ -1059,6 +1124,11 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 						applHost,
 						node,
 					);
+					const rootAssocAPI = CCAPI.create(
+						CommandClasses.Association,
+						applHost,
+						node,
+					);
 					if (rootMCAPI.isSupported()) {
 						applHost.controllerLog.logNode(node.id, {
 							endpoint: endpoint.index,
@@ -1067,11 +1137,21 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 							direction: "outbound",
 						});
 						// Clean up node associations because they might prevent us from adding the endpoint association
-						if (rootHasNodeAssociation) {
+						if (isAssignedAsNodeAssociation(node)) {
+							// It has been found that some devices don't correctly share the node associations between
+							// Association CC and Multi Channel Association CC, so we remove the nodes from both lists
 							await rootMCAPI.removeDestinations({
 								groupId: group,
 								nodeIds: [ownNodeId],
 							});
+							if (rootAssocAPI.isSupported()) {
+								await rootAssocAPI.removeNodeIds({
+									groupId: group,
+									nodeIds: [ownNodeId],
+								});
+								// refresh the associations - don't trust that it worked
+								await rootAssocAPI.getGroup(group);
+							}
 						}
 						await rootMCAPI.addDestinations({
 							groupId: group,

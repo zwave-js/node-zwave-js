@@ -40,19 +40,19 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF",
+					"label": "LED on when load is off",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED on when light is turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always Off",
+					"label": "LED always off",
 					"value": 2
 				},
 				{
-					"label": "LED always ON",
+					"label": "LED always on",
 					"value": 3
 				}
 			]
@@ -65,7 +65,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Orientation",
+					"label": "Normal orientation",
 					"value": 0
 				},
 				{
@@ -134,7 +134,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\ninclude a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker) to include it in the network",

@@ -15,7 +15,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
@@ -1146,7 +1150,8 @@ export class UserCodeCC extends CommandClass {
 	}
 }
 
-type UserCodeCCSetOptions =
+// @publicAPI
+export type UserCodeCCSetOptions =
 	| {
 		userId: 0;
 		userIdStatus: UserIDStatus.Available;
@@ -1239,9 +1244,9 @@ export class UserCodeCCSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1251,6 +1256,7 @@ export class UserCodeCCSet extends UserCodeCC {
 	}
 }
 
+// @publicAPI
 export interface UserCodeCCReportOptions extends CCCommandOptions {
 	userId: number;
 	userIdStatus: UserIDStatus;
@@ -1342,9 +1348,9 @@ export class UserCodeCCReport extends UserCodeCC
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1359,7 +1365,8 @@ export class UserCodeCCReport extends UserCodeCC
 	}
 }
 
-interface UserCodeCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCGetOptions extends CCCommandOptions {
 	userId: number;
 }
 
@@ -1386,14 +1393,15 @@ export class UserCodeCCGet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "user id": this.userId },
 		};
 	}
 }
 
+// @publicAPI
 export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
 	supportedUsers: number;
 }
@@ -1433,9 +1441,9 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "supported users": this.supportedUsers },
 		};
 	}
@@ -1445,6 +1453,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCUsersNumberReport)
 export class UserCodeCCUsersNumberGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
 	supportsMasterCode: boolean;
 	supportsMasterCodeDeactivation: boolean;
@@ -1596,9 +1605,9 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports master code": this.supportsMasterCode,
 				"supports master code deactivation":
@@ -1627,7 +1636,8 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCCapabilitiesReport)
 export class UserCodeCCCapabilitiesGet extends UserCodeCC {}
 
-interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 	keypadMode: KeypadMode;
 }
 
@@ -1656,14 +1666,15 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { mode: getEnumMemberName(KeypadMode, this.keypadMode) },
 		};
 	}
 }
 
+// @publicAPI
 export interface UserCodeCCKeypadModeReportOptions extends CCCommandOptions {
 	keypadMode: KeypadMode;
 }
@@ -1714,9 +1725,9 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				keypadMode: getEnumMemberName(KeypadMode, this.keypadMode),
 			},
@@ -1728,6 +1739,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCKeypadModeReport)
 export class UserCodeCCKeypadModeGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
 	masterCode: string;
 }
@@ -1764,14 +1776,15 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
 }
 
+// @publicAPI
 export interface UserCodeCCMasterCodeReportOptions extends CCCommandOptions {
 	masterCode: string;
 }
@@ -1808,9 +1821,9 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
@@ -1820,6 +1833,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCMasterCodeReport)
 export class UserCodeCCMasterCodeGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCUserCodeChecksumReportOptions
 	extends CCCommandOptions
 {
@@ -1852,9 +1866,9 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "user code checksum": num2hex(this.userCodeChecksum) },
 		};
 	}
@@ -1864,6 +1878,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 @expectedCCResponse(UserCodeCCUserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumGet extends UserCodeCC {}
 
+// @publicAPI
 export interface UserCodeCCExtendedUserCodeSetOptions extends CCCommandOptions {
 	userCodes: UserCodeCCSetOptions[];
 }
@@ -1920,7 +1935,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${
@@ -1930,7 +1945,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 			} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1979,7 +1994,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public readonly userCodes: readonly UserCode[];
 	public readonly nextUserId: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${
@@ -1990,13 +2005,14 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		}
 		message["next user id"] = this.nextUserId;
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
-interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
 	userId: number;
 	reportMore?: boolean;
 }
@@ -2032,9 +2048,9 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"user id": this.userId,
 				"report more": this.reportMore,

@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "0",
-			"label": "Motion timeout",
+			"label": "Motion Timeout",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
@@ -34,6 +34,6 @@
 	],
 	"compat": {
 		// This device uses Basic Set to report the motion sensor status
-		"enableBasicSetMapping": true
+		"mapBasicSet": "auto"
 	}
 }

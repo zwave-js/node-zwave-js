@@ -12,7 +12,7 @@
 	],
 	"firmwareVersion": {
 		"min": "2.4.5",
-		"max": "2.4.7"
+		"max": "2.5.6"
 	},
 	"paramInformation": [
 		{
@@ -79,7 +79,7 @@
 					"value": 0
 				},
 				{
-					"label": "Calibrate / calibrated",
+					"label": "Calibrate / Calibrated",
 					"value": 1
 				}
 			]
@@ -122,7 +122,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Send Central Scene Commands In Response To Inputs",
+			"label": "Send Central Scene Commands in Response to Inputs",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -223,6 +223,16 @@
 			]
 		}
 	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device probably has a bugged Window Covering CC implementation
+				"0x6a": {
+					"endpoints": "*"
+				}
+			}
+		}
+	},
 	"metadata": {
 		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.\n Step 3. The connected light will stay on solid for 3 seconds to indicate successful inclusion.",
 		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Triple press the action button.",

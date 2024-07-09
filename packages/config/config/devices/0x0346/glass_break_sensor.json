@@ -8,6 +8,11 @@
 			"productType": "0x0a01",
 			"productId": "0x0301",
 			"zwaveAllianceId": 4554
+		},
+		{
+			"productType": "0x0a01",
+			"productId": "0x0401",
+			"zwaveAllianceId": 4560
 		}
 	],
 	"firmwareVersion": {
@@ -156,7 +161,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Mic-off Time",
+			"label": "Mic-Off Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,

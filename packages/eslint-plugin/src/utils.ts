@@ -8,6 +8,10 @@ import { type Rule as ESLintRule } from "eslint";
 import { type AST as JSONC_AST } from "jsonc-eslint-parser";
 import path from "node:path";
 
+export type ReportFixGenerator = (
+	fixer: ESLintRule.RuleFixer,
+) => Generator<ESLintRule.Fix, void, unknown>;
+
 export const repoRoot = path.normalize(
 	__dirname.slice(0, __dirname.lastIndexOf(`${path.sep}packages${path.sep}`)),
 );
@@ -211,13 +215,21 @@ export function insertBeforeJSONProperty(
 	options: {
 		indent?: boolean;
 		ownLine?: boolean;
+		isComment?: boolean;
 	} = {},
-): ESLintRule.ReportFixer {
-	const { indent = true, ownLine = true } = options;
-	const [actualStart] = getFullPropertyRangeIncludingComments(
-		context,
-		property,
-	);
+): ReportFixGenerator {
+	const { indent = true, ownLine = true, isComment = false } = options;
+	let actualStart: number;
+	if (isComment) {
+		// Prevent inserting the comment after the previous property's trailing comma
+		// TODO: getFullPropertyRangeIncludingComments should take this into account
+		actualStart = getPropertyStartIncludingComments(context, property);
+	} else {
+		[actualStart] = getFullPropertyRangeIncludingComments(
+			context,
+			property,
+		);
+	}
 	let suffix = "";
 
 	// If desired, try to fix the indentation before/after the inserted text
@@ -230,11 +242,12 @@ export function insertBeforeJSONProperty(
 		suffix = "\n" + suffix;
 	}
 
-	return (fixer) =>
-		fixer.insertTextBeforeRange([
+	return function*(fixer) {
+		yield fixer.insertTextBeforeRange([
 			actualStart,
 			actualStart,
 		], text + suffix);
+	};
 }
 
 export function insertAfterJSONProperty(
@@ -246,7 +259,7 @@ export function insertAfterJSONProperty(
 		indent?: boolean;
 		ownLine?: boolean;
 	} = {},
-): ESLintRule.ReportFixer {
+): ReportFixGenerator {
 	const { indent = true, ownLine = true, insertComma = false } = options;
 	const [, actualEnd] = getFullPropertyRangeIncludingComments(
 		context,
@@ -377,7 +390,7 @@ export function getJSONIndentationAtNode(
 	node: JSONC_AST.JSONNode,
 ): string {
 	return context.sourceCode
-		.getLines()[node.loc.start.line - 1]!
+		.getLines()[node.loc.start.line - 1]
 		.slice(
 			0,
 			node.loc.start.column,

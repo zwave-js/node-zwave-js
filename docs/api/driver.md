@@ -5,12 +5,31 @@ The driver is the core of this library. It controls the serial interface, handle
 ## Constructor
 
 ```ts
-new (port: string, options?: PartialZWaveOptions) => Driver
+new (
+	port: string,
+	...optionsAndPresets: PartialZWaveOptions[]
+) => Driver
 ```
 
 The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Remote serial port over TCP](usage/tcp-connection.md).
 
-For more control, the constructor accepts an optional options object as the second argument. `PartialZWaveOptions` are a subset of [`ZWaveOptions`](#ZWaveOptions), allowing you to specify just what's necessary.
+For most scenarios the default configuration should be sufficient. For more control, the constructor optionally accepts a list of options objects or presets. Multiple sets of options are deep-merged where the later ones have higher priority. `PartialZWaveOptions` are a subset of [`ZWaveOptions`](#ZWaveOptions), allowing you to specify just what's necessary.
+
+Some curated presets are included in the library:
+
+| Preset                   | Description                                                                                                                                                                                                                                                                                       |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SAFE_MODE`              | Increases several timeouts to be able to deal with controllers and/or nodes that have severe trouble communicating. This should not be enabled permanently, as it can decrease the performance of the network significantly                                                                       |
+| `NO_CONTROLLER_RECOVERY` | Disables the unresponsive controller recovery to be able to deal with controllers that frequently become unresponsive for seemingly no reason. This is meant as a last resort for unstable 500 series controllers, but will result in failed commands and nodes that randomly get marked as dead. |
+| `BATTERY_SAVE`           | Sends battery powered nodes to sleep more quickly in order to save battery.                                                                                                                                                                                                                       |
+| `AWAKE_LONGER`           | Sends battery powered nodes to sleep less quickly to give applications more time between interactions.                                                                                                                                                                                            |
+
+These can be used like this:
+
+```ts
+import { Driver, driverPresets } from "zwave-js"; // Or from "zwave-js/Utils"
+const driver = new Driver("/path/to/serial", driverPresets.BATTERY_SAVE);
+```
 
 ## Driver methods
 
@@ -424,8 +443,7 @@ interface LogConfig {
 By default, Z-Wave JS has two internal transports, a file transport and a console transport. Both share the following options:
 
 - `enable`: If `false`, the internal transports will be disabled. Default: `true`.
-- `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.
-  \
+- `level`: The loglevel, ranging from `"error"` to `"silly"`, based on the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js). The default is `"debug"` or whatever is configured with the `LOGLEVEL` environment variable.\
   For convenience, the numeric loglevels `0` (`"error"`) to `6` (`"silly"`) can be used instead, but will be converted to their string counterpart internally.
 - `nodeFilter`: If set, only messages regarding the given node IDs are logged
 
@@ -684,13 +702,22 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		byte: number; // >=1, default: 150 ms
 
 		/**
-		 * How long to wait for a controller response. Usually this timeout should never elapse,
-		 * so this is merely a safeguard against the driver stalling.
+		 * How long to wait for a controller response. Usually this should never elapse, but when it does,
+		 * the driver will abort the transmission and try to recover the controller if it is unresponsive.
 		 */
-		response: number; // [500...20000], default: 10000 ms
+		response: number; // [500...60000], default: 10000 ms
 
-		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number; // >=10000, default: 65000 ms
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before aborting the transmission.
+		 */
+		sendDataAbort: number; // >=5000, <=(sendDataCallback - 5000), default: 20000 ms
+
+		/**
+		 * How long to wait for a callback from the host for a SendData[Multicast]Request
+		 * before considering the controller unresponsive.
+		 */
+		sendDataCallback: number; // >=10000, default: 30000 ms
 
 		/** How much time a node gets to process a request and send a response */
 		report: number; // [500...10000], default: 1000 ms
@@ -800,13 +827,21 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	};
 
 	/**
-	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
+	 * Specify the security keys to use for encryption (Z-Wave Classic). Each one must be a Buffer of exactly 16 bytes.
 	 */
 	securityKeys?: {
-		S2_Unauthenticated?: Buffer;
-		S2_Authenticated?: Buffer;
 		S2_AccessControl?: Buffer;
+		S2_Authenticated?: Buffer;
+		S2_Unauthenticated?: Buffer;
 		S0_Legacy?: Buffer;
+	};
+
+	/**
+	 * Specify the security keys to use for encryption (Z-Wave Long Range). Each one must be a Buffer of exactly 16 bytes.
+	 */
+	securityKeysLongRange?: {
+		S2_AccessControl?: Buffer;
+		S2_Authenticated?: Buffer;
 	};
 
 	/**
@@ -838,14 +873,40 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	emitValueUpdateAfterSetValue?: boolean;
 
-	/**
-	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
-	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
-	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
-	 *
-	 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
-	 */
-	enableSoftReset?: boolean;
+	features: {
+		/**
+		 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+		 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
+		 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
+		 *
+		 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
+		 */
+		softReset?: boolean;
+
+		/**
+		 * When enabled, the driver attempts to detect when the controller becomes unresponsive (meaning it did not
+		 * respond within the configured timeout) and performs appropriate recovery actions.
+		 *
+		 * This includes the following scenarios:
+		 * * A command was not acknowledged by the controller
+		 * * The callback for a Send Data command was not received, even after aborting a timed out transmission
+		 *
+		 * In certain environments however, this feature can interfere with the normal operation more than intended,
+		 * so it can be disabled. However disabling it means that commands can fail unnecessarily and nodes can be
+		 * incorrectly marked as dead.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
+		 */
+		unresponsiveControllerRecovery?: boolean;
+
+		/**
+		 * Controllers of the 700 series and newer have a hardware watchdog that can be enabled to automatically
+		 * reset the chip in case it becomes unresponsive. This option controls whether the watchdog should be enabled.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_WATCHDOG env variable is set.
+		 */
+		watchdog?: boolean;
+	};
 
 	preferences: {
 		/**
@@ -886,12 +947,32 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		/** The RF region the radio should be tuned to. */
 		region?: RFRegion;
 
+		/**
+		 * Whether LR-capable regions should automatically be preferred over their corresponding non-LR regions, e.g. `USA` -> `USA (Long Range)`.
+		 * This also overrides the `rf.region` setting if the desired region is not LR-capable.
+		 *
+		 * Default: true.
+		 */
+		preferLRRegion?: boolean;
+
 		txPower?: {
 			/** The desired TX power in dBm. */
 			powerlevel: number;
 			/** A hardware-specific calibration value. */
 			measured0dBm: number;
 		};
+
+		/** The desired max. powerlevel setting for Z-Wave Long Range in dBm. */
+		maxLongRangePowerlevel?: number;
+
+		/**
+		 * The desired channel to use for Z-Wave Long Range.
+		 * Auto may be unsupported by the controller and will be ignored in that case.
+		 */
+		longRangeChannel?:
+			| LongRangeChannel.A
+			| LongRangeChannel.B
+			| LongRangeChannel.Auto;
 	};
 
 	apiKeys?: {
@@ -916,6 +997,23 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
 	 */
 	userAgent?: Record<string, string>;
+
+	/**
+	 * Specify application-specific information to use in queries from other devices
+	 */
+	vendor?: {
+		manufacturerId: number;
+		productType: number;
+		productId: number;
+
+		/** The version of the hardware the application is running on. Can be omitted if unknown. */
+		hardwareVersion?: number;
+
+		/** The icon type to use for installers. Default: 0x0500 - Generic Gateway */
+		installerIcon?: number;
+		/** The icon type to use for users. Default: 0x0500 - Generic Gateway */
+		userIcon?: number;
+	};
 
 	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {

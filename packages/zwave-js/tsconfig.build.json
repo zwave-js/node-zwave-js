@@ -8,7 +8,9 @@
 			"src/lib/@types",
 			"node_modules/@types",
 			"../../node_modules/@types"
-		]
+		],
+		// Do not use the @@dev export for compiling
+		"customConditions": []
 	},
 	"references": [
 		{

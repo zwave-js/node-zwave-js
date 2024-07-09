@@ -2,7 +2,7 @@
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
 	"label": "BW8510",
-	"description": "Scene master 8 button remote",
+	"description": "Scene Master 8 Button Remote",
 	"devices": [
 		{
 			"productType": "0x0000",

@@ -1,8 +1,12 @@
 // The firmware versions on this device are a mess
-// 1.1 -> (10.0 = 2.0) -> (10.10 = 2.10) -> (10.20 = 2.20 = 3.10) -> 3.20
+// 1.1 -> (10.0 = 2.0) -> (10.10 = 2.10) -> (10.20 = 2.20 = 3.10) -> 3.20 -> 3.30
 
 // Conditionals:
-// 2.0 / 10.0 and later: firmwareVersion >= 2.0
+// 10.0 and later: firmwareVersion >= 2.0
+// 10.10 and later: firmwareVersion >= 10.10 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
+// 10.20 and later: firmwareVersion >= 10.20 || firmwareVersion >= 2.20 && firmwareVersion < 10.0
+// 3.20 and later: firmwareVersion >= 3.20 && firmwareVersion < 10.0
+// 3.30 and later: firmwareVersion >= 3.30 && firmwareVersion < 10.0
 // 800 series: firmwareVersion >= 3.10 && firmwareVersion < 10.0
 
 {
@@ -49,11 +53,43 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/zooz_template.json#auto_off_timer_0x_3x_7x"
+			"$import": "templates/zooz_template.json#auto_off_timer_0x_1x_3x_7x"
 		},
 		{
 			"#": "5",
-			"$import": "templates/zooz_template.json#auto_on_timer_0x_3x_7x"
+			"$import": "templates/zooz_template.json#auto_on_timer_0x_1x_3x_7x"
+		},
+		{
+			"#": "7[0x01]",
+			"$if": "firmwareVersion >= 10.20 || firmwareVersion >= 2.20 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Local Control",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"defaultValue": 1
+		},
+		{
+			"#": "7[0x02]",
+			"$if": "firmwareVersion >= 10.20 || firmwareVersion >= 2.20 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: 3-Way",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"defaultValue": 1
+		},
+		{
+			"#": "7[0x04]",
+			"$if": "firmwareVersion >= 10.20 || firmwareVersion >= 2.20 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Z-Wave",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"defaultValue": 1
+		},
+		{
+			"#": "7[0x08]",
+			"$if": "firmwareVersion >= 10.20 || firmwareVersion >= 2.20 && firmwareVersion < 10.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Timer",
+			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
@@ -62,6 +98,11 @@
 		{
 			"#": "9",
 			"$import": "templates/zooz_template.json#enable_scene_control"
+		},
+		{
+			"#": "18",
+			"$if": "firmwareVersion >= 10.20 || firmwareVersion >= 2.20 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#enable_scene_control_3way"
 		},
 		{
 			"#": "11",
@@ -82,6 +123,11 @@
 		{
 			"#": "15",
 			"$import": "templates/zooz_template.json#led_indicator_brightness"
+		},
+		{
+			"#": "19",
+			"$if": "firmwareVersion >= 10.20 || firmwareVersion >= 2.20 && firmwareVersion < 10.0",
+			"$import": "templates/zooz_template.json#led_confirm_config_change"
 		},
 		{
 			"#": "16",

@@ -1,0 +1,71 @@
+{
+	"manufacturer": "Dawon DNS",
+	"manufacturerId": "0x018c",
+	"label": "PM-B400ZW-N",
+	"description": "Smart Plug with Power Meter",
+	"devices": [
+		{
+			"productType": "0x0042",
+			"productId": "0x0006",
+			"zwaveAllianceId": 1870
+		},
+		{
+			"productType": "0x0042",
+			"productId": "0x0005"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1[0xff]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Standby Power Cutoff",
+			"valueSize": 4
+		},
+		{
+			"#": "1[0xffffff00]",
+			"label": "Standby Power Cutoff Threshold",
+			"valueSize": 4,
+			"unit": "0.01 W",
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 0
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Energy (kWh) Reporting",
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Accumulation of kWh Values",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Connected Device in Use"
+		},
+		{
+			"#": "5",
+			"label": "Energy (kWh) Report Interval",
+			"valueSize": 1,
+			"unit": "10 minutes",
+			"minValue": 0,
+			"maxValue": 144,
+			"defaultValue": 6,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "After mounting the UZB controller to your PC and running the PC Controller program, click the Add button in the PC Controller program. Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet and it will include to the network controller, while flashing the red button on the LED Smart Plug",
+		"exclusion": "After mounting the UZB controller to your PC and run the PC Controller program you can click the Remove button in the PC Controller program. Press the button on the Smart Plug for more than five seconds after you plug the Smart Plug into a power outlet will Exclusion in the network controller, while the flashing red button LED Smart Plug",
+		"reset": "Press the button on the Smart Plug for more than 10 seconds after you plug the Smart Plug into a power outlet will make a Exclusion in the network controller, while the flashing red button LED Smart Plug. And all the variables are initialized.\n\n※ Please use this procedure only in the event that the network primary \n controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1870/PB-B400ZWN_Manual.pdf"
+	}
+}

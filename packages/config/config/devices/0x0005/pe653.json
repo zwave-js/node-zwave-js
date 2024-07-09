@@ -21,11 +21,11 @@
 			"valueSize": 2,
 			"options": [
 				{
-					"label": "One Speed",
+					"label": "One speed",
 					"value": 0
 				},
 				{
-					"label": "Two Speed",
+					"label": "Two speed",
 					"value": 1
 				}
 			]
@@ -53,19 +53,19 @@
 					"value": 2
 				},
 				{
-					"label": "VSP Speed 1",
+					"label": "VSP speed 1",
 					"value": 3
 				},
 				{
-					"label": "VSP Speed 2",
+					"label": "VSP speed 2",
 					"value": 4
 				},
 				{
-					"label": "VSP Speed 3",
+					"label": "VSP speed 3",
 					"value": 5
 				},
 				{
-					"label": "VSP Speed 4",
+					"label": "VSP speed 4",
 					"value": 6
 				}
 			]
@@ -150,19 +150,19 @@
 					"value": 2
 				},
 				{
-					"label": "VSP Speed 1",
+					"label": "VSP speed 1",
 					"value": 3
 				},
 				{
-					"label": "VSP Speed 2",
+					"label": "VSP speed 2",
 					"value": 4
 				},
 				{
-					"label": "VSP Speed 3",
+					"label": "VSP speed 3",
 					"value": 5
 				},
 				{
-					"label": "VSP Speed 4",
+					"label": "VSP speed 4",
 					"value": 6
 				}
 			]
@@ -274,19 +274,19 @@
 					"value": 0
 				},
 				{
-					"label": "VSP Speed 1",
+					"label": "VSP speed 1",
 					"value": 2
 				},
 				{
-					"label": "VSP Speed 2",
+					"label": "VSP speed 2",
 					"value": 3
 				},
 				{
-					"label": "VSP Speed 3",
+					"label": "VSP speed 3",
 					"value": 4
 				},
 				{
-					"label": "VSP Speed 4",
+					"label": "VSP speed 4",
 					"value": 5
 				}
 			]
@@ -523,7 +523,7 @@
 			},
 			// The device sometimes sends BASIC_SET to the lifeline association when the state of Switch 1
 			// changes but the value is always 0 so treat it as an event.
-			"treatBasicSetAsEvent": true
+			"mapBasicSet": "event"
 		},
 		{
 			"commandClasses": {

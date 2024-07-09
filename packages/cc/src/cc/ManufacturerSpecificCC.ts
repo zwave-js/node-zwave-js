@@ -8,7 +8,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -87,8 +91,10 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 	): MaybeNotKnown<boolean> {
 		switch (cmd) {
 			case ManufacturerSpecificCommand.Get:
+			case ManufacturerSpecificCommand.Report:
 				return true; // This is mandatory
 			case ManufacturerSpecificCommand.DeviceSpecificGet:
+			case ManufacturerSpecificCommand.DeviceSpecificReport:
 				return this.version >= 2;
 		}
 		return super.supportsCommand(cmd);
@@ -141,6 +147,23 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			this.commandOptions,
 		);
 		return response?.deviceId;
+	}
+
+	@validateArgs()
+	public async sendReport(
+		options: ManufacturerSpecificCCReportOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			ManufacturerSpecificCommand,
+			ManufacturerSpecificCommand.Report,
+		);
+
+		const cc = new ManufacturerSpecificCCReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -201,7 +224,8 @@ export class ManufacturerSpecificCC extends CommandClass {
 	}
 }
 
-export interface ManufacturerSpecificCCReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface ManufacturerSpecificCCReportOptions {
 	manufacturerId: number;
 	productType: number;
 	productId: number;
@@ -212,7 +236,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
 		host: ZWaveHost,
 		options:
-			| ManufacturerSpecificCCReportOptions
+			| (ManufacturerSpecificCCReportOptions & CCCommandOptions)
 			| CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -246,9 +270,9 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"manufacturer id": num2hex(this.manufacturerId),
 				"product type": num2hex(this.productType),
@@ -293,9 +317,9 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 	)
 	public readonly deviceId: string;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"device id type": getEnumMemberName(DeviceIdType, this.type),
 				"device id": this.deviceId,
@@ -304,7 +328,8 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 	}
 }
 
-interface ManufacturerSpecificCCDeviceSpecificGetOptions
+// @publicAPI
+export interface ManufacturerSpecificCCDeviceSpecificGetOptions
 	extends CCCommandOptions
 {
 	deviceIdType: DeviceIdType;
@@ -339,9 +364,9 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"device id type": getEnumMemberName(
 					DeviceIdType,

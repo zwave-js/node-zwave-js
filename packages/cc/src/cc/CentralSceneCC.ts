@@ -14,7 +14,11 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -83,6 +87,7 @@ export const CentralSceneCCValues = Object.freeze({
 				...ValueMetadata.ReadOnlyUInt8,
 				label: `Scene ${padStart(sceneNumber.toString(), 3, "0")}`,
 			} as const),
+			{ stateful: false } as const,
 		),
 	}),
 });
@@ -332,7 +337,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 	public readonly sceneNumber: number;
 	public readonly slowRefresh: boolean | undefined;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"key attribute": getEnumMemberName(
@@ -345,7 +350,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 			message["slow refresh"] = this.slowRefresh;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -428,7 +433,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return this._supportedKeyAttributes;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"scene count": this.sceneCount,
 			"supports slow refresh": maybeUnknownToString(
@@ -441,7 +446,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -466,9 +471,9 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	@ccValue(CentralSceneCCValues.slowRefresh)
 	public readonly slowRefresh: boolean;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "slow refresh": this.slowRefresh },
 		};
 	}
@@ -478,7 +483,10 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 @expectedCCResponse(CentralSceneCCConfigurationReport)
 export class CentralSceneCCConfigurationGet extends CentralSceneCC {}
 
-interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface CentralSceneCCConfigurationSetOptions
+	extends CCCommandOptions
+{
 	slowRefresh: boolean;
 }
 
@@ -509,9 +517,9 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "slow refresh": this.slowRefresh },
 		};
 	}

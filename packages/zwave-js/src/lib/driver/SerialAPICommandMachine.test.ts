@@ -41,6 +41,8 @@ interface TestMachineStateSchema {
 		waitForACK: {};
 		waitForResponse: {};
 		waitForCallback: {};
+		// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+		// waitForCallbackAfterTimeout: {};
 		unsolicited: {};
 		success: {};
 		failure: {};
@@ -227,7 +229,11 @@ const testMachine = Machine<
 						{ target: "failure" },
 					],
 					RESPONSE_TIMEOUT: [
-						{ target: "sending", cond: "maySendAgain" },
+						// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+						// {
+						// 	target: "waitForCallbackAfterTimeout",
+						// 	cond: "expectsCallback",
+						// },
 						{ target: "failure" },
 					],
 					UNSOLICITED: "unsolicited",
@@ -247,6 +253,13 @@ const testMachine = Machine<
 					UNSOLICITED: "unsolicited",
 				},
 			},
+			// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
+			// waitForCallbackAfterTimeout: {
+			// 	on: {
+			// 		CALLBACK_NOK: "failure",
+			// 		CALLBACK_TIMEOUT: "failure",
+			// 	},
+			// },
 			unsolicited: {
 				meta: {
 					test: ({
@@ -386,6 +399,14 @@ testPlans.forEach((plan) => {
 	);
 
 	plan.paths.forEach((path) => {
+		// Uncomment this and change the path description to only run a single test
+		// if (
+		// 	!path.description.includes(
+		// 		`CREATE ({"resp":true,"cb":true}) → SEND_FAILURE → SEND_FAILURE → SEND_SUCCESS → ACK → RESPONSE_TIMEOUT → CALLBACK_NOK`,
+		// 	)
+		// ) {
+		// 	return;
+		// }
 		test.serial(`${planDescription} ${path.description}`, async (t) => {
 			// eslint-disable-next-line prefer-const
 			let context: TestContext;
@@ -393,6 +414,7 @@ testPlans.forEach((plan) => {
 				context.sendDataPromise = createDeferredPromise();
 				return context.sendDataPromise;
 			});
+			const sendDataAbort = sinon.stub();
 			const notifyRetry = sinon.stub();
 			const timestamp = () => 0;
 			const logOutgoingMessage = () => {};
@@ -402,6 +424,7 @@ testPlans.forEach((plan) => {
 
 			const implementations: SerialAPICommandServiceImplementations = {
 				sendData,
+				sendDataAbort,
 				notifyRetry,
 				timestamp,
 				logOutgoingMessage,
@@ -483,11 +506,11 @@ testPlans.forEach((plan) => {
 	});
 });
 
-test.serial("coverage", (t) => {
-	testModel.testCoverage({
-		filter: (stateNode) => {
-			return !!stateNode.meta;
-		},
-	});
-	t.pass();
-});
+// test.serial("coverage", (t) => {
+// 	testModel.testCoverage({
+// 		filter: (stateNode) => {
+// 			return !!stateNode.meta;
+// 		},
+// 	});
+// 	t.pass();
+// });

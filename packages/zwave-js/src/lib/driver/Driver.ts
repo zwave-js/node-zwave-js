@@ -3,12 +3,12 @@ import {
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	type CommandClass,
-	DeviceResetLocallyCCNotification,
 	type FirmwareUpdateResult,
 	type ICommandClassContainer,
 	InvalidCC,
 	KEXFailType,
 	MultiChannelCC,
+	type Powerlevel,
 	Security2CC,
 	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,
@@ -16,7 +16,10 @@ import {
 	Security2CCNonceReport,
 	Security2Command,
 	SecurityCC,
+	SecurityCCCommandEncapsulation,
 	SecurityCCCommandEncapsulationNonceGet,
+	SecurityCCCommandsSupportedGet,
+	SecurityCCCommandsSupportedReport,
 	SecurityCommand,
 	SupervisionCC,
 	type SupervisionCCGet,
@@ -59,6 +62,8 @@ import {
 	type MaybeNotKnown,
 	MessagePriority,
 	type MessageRecord,
+	type MulticastDestination,
+	NUM_NODEMASK_BYTES,
 	NodeIDType,
 	RFRegion,
 	SPANState,
@@ -84,14 +89,18 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	highResTimestamp,
+	isEncapsulationCC,
+	isLongRangeNodeId,
 	isMissingControllerACK,
 	isMissingControllerCallback,
+	isMissingControllerResponse,
 	isZWaveError,
 	messageRecordToLines,
 	securityClassIsS2,
 	serializeCacheValue,
 	stripUndefined,
 	timespan,
+	wasControllerReset,
 } from "@zwave-js/core";
 import type {
 	NodeSchedulePollOptions,
@@ -105,6 +114,7 @@ import {
 	Message,
 	MessageHeaders,
 	MessageType,
+	type SuccessIndicator,
 	XModemMessageHeaders,
 	ZWaveSerialMode,
 	ZWaveSerialPort,
@@ -162,7 +172,10 @@ import {
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
-import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
+import {
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+} from "../serialapi/application/SerialAPIStartedRequest";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
 import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
@@ -183,6 +196,11 @@ import {
 	isSendDataTransmitReport,
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
+
+import {
+	SendTestFrameRequest,
+	SendTestFrameTransmitReport,
+} from "../serialapi/transport/SendTestFrameMessages";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import {
 	type AppInfo,
@@ -237,22 +255,25 @@ export const libName: string = packageJson.name;
 
 // This is made with cfonts:
 const libNameString = `
-███████╗ ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗             ██╗ ███████╗
-╚══███╔╝ ██║    ██║ ██╔══██╗ ██║   ██║ ██╔════╝             ██║ ██╔════╝
-  ███╔╝  ██║ █╗ ██║ ███████║ ██║   ██║ █████╗   █████╗      ██║ ███████╗
- ███╔╝   ██║███╗██║ ██╔══██║ ╚██╗ ██╔╝ ██╔══╝   ╚════╝ ██   ██║ ╚════██║
-███████╗ ╚███╔███╔╝ ██║  ██║  ╚████╔╝  ███████╗        ╚█████╔╝ ███████║
-╚══════╝  ╚══╝╚══╝  ╚═╝  ╚═╝   ╚═══╝   ╚══════╝         ╚════╝  ╚══════╝
+███████╗        ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗          ██╗ ███████╗
+╚══███╔╝        ██║    ██║ ██╔══██╗ ██║   ██║ ██╔════╝          ██║ ██╔════╝
+  ███╔╝  █████╗ ██║ █╗ ██║ ███████║ ██║   ██║ █████╗            ██║ ███████╗
+ ███╔╝   ╚════╝ ██║███╗██║ ██╔══██║ ╚██╗ ██╔╝ ██╔══╝       ██   ██║ ╚════██║
+███████╗        ╚███╔███╔╝ ██║  ██║  ╚████╔╝  ███████╗     ╚█████╔╝ ███████║
+╚══════╝         ╚══╝╚══╝  ╚═╝  ╚═╝   ╚═══╝   ╚══════╝      ╚════╝  ╚══════╝
 `;
 
 const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
+		// Ideally we'd want to have this as low as possible, but some
+		// 500 series controllers can take several seconds to respond sometimes.
 		response: 10000,
 		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
-		sendDataCallback: 65000, // as defined in INS13954
+		sendDataAbort: 20000, // If a controller takes over 15s to reach a node, it's probably not going to happen
+		sendDataCallback: 30000, // INS13954 defines this to be 65000 ms, but waiting that long causes issues with reporting devices
 		sendToSleep: 250, // The default should be enough time for applications to react to devices waking up
 		retryJammed: 1000,
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
@@ -267,8 +288,15 @@ const defaultOptions: ZWaveOptions = {
 		nodeInterview: 5,
 	},
 	disableOptimisticValueUpdate: false,
-	// By default enable soft reset unless the env variable is set
-	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+	features: {
+		// By default enable soft reset unless the env variable is set
+		softReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
+		// By default enable the unresponsive controller recovery unless the env variable is set
+		unresponsiveControllerRecovery: !process.env
+			.ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY,
+		// By default enable the watchdog, unless the env variable is set
+		watchdog: !process.env.ZWAVEJS_DISABLE_WATCHDOG,
+	},
 	interview: {
 		queryAllUserCodes: false,
 	},
@@ -297,9 +325,9 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.response < 500 || options.timeouts.response > 20000) {
+	if (options.timeouts.response < 500 || options.timeouts.response > 60000) {
 		throw new ZWaveError(
-			`The Response timeout must be between 500 and 20000 milliseconds!`,
+			`The Response timeout must be between 500 and 60000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -334,6 +362,18 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.sendDataCallback < 10000) {
 		throw new ZWaveError(
 			`The Send Data Callback timeout must be at least 10000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.sendDataAbort < 5000
+		|| options.timeouts.sendDataAbort
+			> options.timeouts.sendDataCallback - 5000
+	) {
+		throw new ZWaveError(
+			`The Send Data Abort Callback timeout must be between 5000 and ${
+				options.timeouts.sendDataCallback - 5000
+			} milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -497,9 +537,12 @@ type PrefixedNodeEvents = {
 
 const enum ControllerRecoveryPhase {
 	None,
-	NoACK,
+	ACKTimeout,
+	ACKTimeoutAfterReset,
 	CallbackTimeout,
 	CallbackTimeoutAfterReset,
+	Jammed,
+	JammedAfterReset,
 }
 
 // Strongly type the event emitter events
@@ -523,7 +566,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
-		options?: PartialZWaveOptions,
+		...optionsAndPresets: (PartialZWaveOptions | undefined)[]
 	) {
 		super();
 
@@ -538,22 +581,31 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			);
 		}
 
-		// merge given options with defaults
+		// Deep-Merge all given options/presets
+		const definedOptionsAndPresets = optionsAndPresets.filter(
+			(o): o is PartialZWaveOptions => !!o,
+		);
+		let mergedOptions: PartialZWaveOptions = {};
+		for (const preset of definedOptionsAndPresets) {
+			mergedOptions = mergeDeep(mergedOptions, preset, true);
+		}
+		// Finally apply the defaults, without overwriting any existing settings
 		this._options = mergeDeep(
-			options,
+			mergedOptions,
 			cloneDeep(defaultOptions),
 		) as ZWaveOptions;
+
 		// And make sure they contain valid values
 		checkOptions(this._options);
-		if (options?.userAgent) {
-			if (!isObject(options.userAgent)) {
+		if (this._options.userAgent) {
+			if (!isObject(this._options.userAgent)) {
 				throw new ZWaveError(
 					`The userAgent property must be an object!`,
 					ZWaveErrorCodes.Driver_InvalidOptions,
 				);
 			}
 
-			this.updateUserAgent(options.userAgent);
+			this.updateUserAgent(this._options.userAgent);
 		}
 
 		// Initialize logging
@@ -580,6 +632,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				if (this.controller.status === ControllerStatus.Unresponsive) {
 					return t.message instanceof SoftResetRequest
 						|| t.message instanceof GetControllerVersionRequest;
+				}
+
+				// While the controller is jammed, only soft resetting is allowed
+				if (this.controller.status === ControllerStatus.Jammed) {
+					return t.message instanceof SoftResetRequest;
 				}
 
 				// All other messages on the immediate queue may always be sent as long as the controller is ready to send
@@ -651,6 +708,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			});
 		}
 		return this.nodeSessions.get(nodeId)!;
+	}
+
+	private _requestContext: Map<FunctionType, Record<string, unknown>> =
+		new Map();
+	/**
+	 * @internal
+	 * Stores data from Serial API command requests to be used by their responses
+	 */
+	public get requestContext(): Map<FunctionType, Record<string, unknown>> {
+		return this._requestContext;
 	}
 
 	public readonly cacheDir: string;
@@ -753,6 +820,25 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	 */
 	public get securityManager2(): SecurityManager2 | undefined {
 		return this._securityManager2;
+	}
+
+	private _securityManagerLR: SecurityManager2 | undefined;
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public get securityManagerLR(): SecurityManager2 | undefined {
+		return this._securityManagerLR;
+	}
+
+	/** @internal */
+	public getSecurityManager2(
+		destination: number | MulticastDestination,
+	): SecurityManager2 | undefined {
+		const nodeId = isArray(destination) ? destination[0] : destination;
+		const isLongRange = isLongRangeNodeId(nodeId);
+		return isLongRange ? this.securityManagerLR : this.securityManager2;
 	}
 
 	/**
@@ -952,6 +1038,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			"inclusionUserCallbacks",
 			"interview",
 			"preferences",
+			"vendor",
 		]);
 
 		// Create a new deep-merged copy of the options so we can check them for validity
@@ -1271,10 +1358,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		);
 		this._networkCache = new JsonlDB(networkCacheFile, {
 			...options,
-			serializer: (key, value) =>
-				serializeNetworkCacheValue(this, key, value),
-			reviver: (key, value) =>
-				deserializeNetworkCacheValue(this, key, value),
+			serializer: serializeNetworkCacheValue,
+			reviver: deserializeNetworkCacheValue,
 		});
 		await this._networkCache.open();
 
@@ -1333,7 +1418,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 			try {
 				await migrateLegacyNetworkCache(
-					this,
 					this.controller.homeId,
 					this._networkCache,
 					this._valueDB,
@@ -1379,64 +1463,66 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		if (!this._options.testingHooks?.skipControllerIdentification) {
-			// Determine controller IDs to open the Value DBs
-			// We need to do this first because some older controllers, especially the UZB1 and
-			// some 500-series sticks in virtualized environments don't respond after a soft reset
+			// Determine what the controller can do
+			const { nodeIds } = await this.controller.queryCapabilities();
 
-			// No need to initialize databases if skipInterview is true, because it is only used in some
-			// Driver unit tests that don't need access to them
+			// Configure the radio
+			await this.controller.queryAndConfigureRF();
 
-			// Identify the controller and determine if it supports soft reset
-			await this.controller.identify();
-			await this.initNetworkCache(this.controller.homeId!);
-
+			// Soft-reset the stick if possible.
+			// On 700+ series, we'll also learn about whether the stick supports
+			// Z-Wave Long Range in the current region.
 			const maySoftReset = this.maySoftReset();
-			if (this._options.enableSoftReset && !maySoftReset) {
+			if (this._options.features.softReset && !maySoftReset) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
 				);
-				this._options.enableSoftReset = false;
+				this._options.features.softReset = false;
 			}
 
 			if (maySoftReset) {
 				await this.softResetInternal(false);
 			}
 
-			// There are situations where a controller claims it has the ID 0,
-			// which isn't valid. In this case try again after having soft-reset the stick
-			// TODO: Check if this is still necessary now that we support 16-bit node IDs
-			if (this.controller.ownNodeId === 0 && maySoftReset) {
-				this.driverLog.print(
-					`Controller identification returned invalid node ID 0 - trying again...`,
-					"warn",
-				);
-				// We might end up with a different home ID, so close the cache before re-identifying the controller
-				await this._networkCache?.close();
-				await this.controller.identify();
-				await this.initNetworkCache(this.controller.homeId!);
+			let lrNodeIds: readonly number[] | undefined;
+			if (this.controller.supportsLongRange) {
+				// If the controller supports ZWLR, we need to query the node IDs again
+				// to get the full list of nodes
+				lrNodeIds = (await this.controller.queryLongRangeCapabilities())
+					.lrNodeIds;
 			}
 
-			if (this.controller.ownNodeId === 0) {
-				this.driverLog.print(
-					`Controller identification returned invalid node ID 0`,
-					"error",
-				);
-				await this.destroy();
-				return;
-			}
+			// If the controller supports ZWLR in the current region, switch to
+			// 16-bit node IDs. Otherwise, make sure that it is actually using 8-bit node IDs.
+			await this.controller.trySetNodeIDType(
+				this.controller.supportsLongRange
+					? NodeIDType.Long
+					: NodeIDType.Short,
+			);
+
+			// Now that we know the node ID type, we can identify the controller
+			await this.controller.identify();
+
+			// Perform additional configuration
+			await this.controller.configure();
 
 			// now that we know the home ID, we can open the databases
+			await this.initNetworkCache(this.controller.homeId!);
 			await this.initValueDBs(this.controller.homeId!);
 			await this.performCacheMigration();
 
-			// Interview the controller.
-			await this._controller.interview(async () => {
-				// Try to restore the network information from the cache
-				if (process.env.NO_CACHE !== "true") {
-					await this.restoreNetworkStructureFromCache();
-				}
-			});
+			// Initialize all nodes and restore the data from cache
+			await this._controller.initNodes(
+				nodeIds,
+				lrNodeIds ?? [],
+				async () => {
+					// Try to restore the network information from the cache
+					if (process.env.NO_CACHE !== "true") {
+						await this.restoreNetworkStructureFromCache();
+					}
+				},
+			);
 
 			// Auto-enable smart start inclusion
 			this._controller.autoProvisionSmartStart();
@@ -1493,6 +1579,33 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		} else {
 			this.driverLog.print(
 				"No network key for S2 configured, communication with secure (S2) devices won't work!",
+				"warn",
+			);
+		}
+
+		if (
+			this._options.securityKeysLongRange?.S2_AccessControl
+			|| this._options.securityKeysLongRange?.S2_Authenticated
+		) {
+			this.driverLog.print(
+				"At least one network key for Z-Wave Long Range configured, enabling security manager...",
+			);
+			this._securityManagerLR = new SecurityManager2();
+			if (this._options.securityKeysLongRange?.S2_AccessControl) {
+				this._securityManagerLR.setKey(
+					SecurityClass.S2_AccessControl,
+					this._options.securityKeysLongRange.S2_AccessControl,
+				);
+			}
+			if (this._options.securityKeysLongRange?.S2_Authenticated) {
+				this._securityManagerLR.setKey(
+					SecurityClass.S2_Authenticated,
+					this._options.securityKeysLongRange.S2_Authenticated,
+				);
+			}
+		} else {
+			this.driverLog.print(
+				"No network key for Z-Wave Long Range configured, communication won't work!",
 				"warn",
 			);
 		}
@@ -1561,18 +1674,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					} else if (node.isListening || node.isFrequentListening) {
 						// Ping non-sleeping nodes to determine their status
 						await node.ping();
-					}
-
-					// Previous versions of zwave-js didn't configure the SUC return route. Make sure each node has one
-					// and remember that we did. If the node is not responsive - tough luck, try again next time
-					if (
-						!node.hasSUCReturnRoute
-						&& node.status !== NodeStatus.Dead
-					) {
-						node.hasSUCReturnRoute = await this.controller
-							.assignSUCReturnRoutes(
-								node.id,
-							);
 					}
 				})();
 			}
@@ -1785,6 +1886,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (
 			oldStatus === NodeStatus.Dead
 			&& node.interviewStage !== InterviewStage.Complete
+			&& !this._options.testingHooks?.skipNodeInterview
 		) {
 			void this.interviewNodeInternal(node);
 		}
@@ -2084,6 +2186,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// Remove the node from all security manager instances
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
+		this.securityManagerLR?.deleteNonce(node.id);
 
 		this.rejectAllTransactionsForNode(
 			node.id,
@@ -2153,6 +2256,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// Reset nonces etc. to prevent false-positive duplicates after the update
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
+		this.securityManagerLR?.deleteNonce(node.id);
 
 		// waitTime should always be defined, but just to be sure
 		const waitTime = result.waitTime ?? 5;
@@ -2390,7 +2494,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (securityClassIsS2(securityClass)) {
 			// Use secure communication if the CC is supported. This avoids silly things like S2-encapsulated pings
 			return (
-				!!this.securityManager2
+				!!this.getSecurityManager2(nodeId)
 				&& (isBasicCC || (endpoint ?? node).supportsCC(ccId))
 			);
 		}
@@ -2461,7 +2565,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		// No clear indication, make the result depend on the config option
-		return !!this._options.enableSoftReset;
+		return !!this._options.features.softReset;
 	}
 
 	/**
@@ -2551,6 +2655,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		// This is a bit hacky, but what the heck...
 		if (!this._enteringBootloader) {
+			// Start the watchdog again, unless disabled
+			if (this.options.features.watchdog) {
+				void this._controller?.startWatchdog();
+			}
+
 			// If desired, re-configure the controller to use 16 bit node IDs
 			void this._controller?.trySetNodeIDType(NodeIDType.Long);
 
@@ -2593,6 +2702,18 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		});
 	}
 
+	/**
+	 * Checks whether recovering an unresponsive controller is enabled
+	 * and whether the driver is in a state where it makes sense.
+	 */
+	private mayRecoverUnresponsiveController(): boolean {
+		if (!this._options.features.unresponsiveControllerRecovery) {
+			return false;
+		}
+		// Only recover after we know the controller has been responsive
+		return this._controllerInterviewed;
+	}
+
 	private async ensureSerialAPI(): Promise<boolean> {
 		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
 		// Z-Wave 700 sticks are relatively fast, so we also wait for the Serial API started command
@@ -2604,8 +2725,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		).catch(() => false as const);
 
 		if (waitResult) {
-			// Serial API did start, maybe do something with the information?
+			// Serial API did start
 			this.controllerLog.print("reconnected and restarted");
+			this.controller["_supportsLongRange"] =
+				waitResult.supportsLongRange;
 			return true;
 		}
 
@@ -2631,6 +2754,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (waitResult) {
 			// Serial API did start, maybe do something with the information?
 			this.controllerLog.print("Serial API started");
+			this.controller["_supportsLongRange"] =
+				waitResult.supportsLongRange;
 			return true;
 		}
 
@@ -2858,6 +2983,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				...this.awaitedMessages.map((m) => m.timeout),
 				...this.awaitedMessageHeaders.map((h) => h.timeout),
 				...this.awaitedBootloaderChunks.map((b) => b.timeout),
+				this._powerlevelTestNodeContext?.timeout,
 			]
 		) {
 			if (timeout) clearTimeout(timeout);
@@ -2932,7 +3058,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			msg = Message.from(this, {
 				data,
 				sdkVersion: this._controller?.sdkVersion,
-			});
+			}, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
 				const node = this.getNodeUnsafe(msg);
@@ -3257,15 +3383,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		// With the MGRP extension present
 		const node = this.getNodeUnsafe(msg);
+		if (!node) return false;
 		const groupId = encapS2.getMulticastGroupId();
+		if (groupId == undefined) return false;
+		const securityManager = this.getSecurityManager2(node.id);
 		if (
-			node
-			&& groupId != undefined
 			// but where we don't have an MPAN stored
-			&& this.securityManager2?.getPeerMPAN(
-					msg.command.nodeId as number,
-					groupId,
-				).type !== MPANState.MPAN
+			securityManager?.getPeerMPAN(
+				msg.command.nodeId as number,
+				groupId,
+			).type !== MPANState.MPAN
 		) {
 			return true;
 		}
@@ -3316,11 +3443,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 			if (this.controller.bootstrappingS2NodeId === nodeId) {
 				// The node is currently being bootstrapped.
-				if (this.securityManager2?.tempKeys.has(nodeId)) {
+				const securityManager = this.getSecurityManager2(nodeId);
+				if (securityManager?.tempKeys.has(nodeId)) {
 					// The DSK has been verified, so we should be able to decode this command.
 					// If this is the first attempt, we need to request a nonce first
 					if (
-						this.securityManager2.getSPANState(nodeId).type
+						securityManager.getSPANState(nodeId).type
 							=== SPANState.None
 					) {
 						this.controllerLog.logNode(nodeId, {
@@ -3491,25 +3619,51 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 	}
 
-	private handleUnresponsiveController(
+	/**
+	 * @internal
+	 * Handles the case that the controller didn't acknowledge a command in time
+	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
+	 */
+	private handleMissingControllerACK(
 		transaction: Transaction,
-		error: ZWaveError,
+		error: ZWaveError & {
+			code: ZWaveErrorCodes.Controller_Timeout;
+			context: "ACK";
+		},
 	): boolean {
-		if (!this._controller) return false;
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
 
-		const fail = (message: string) => {
-			this.rejectTransaction(transaction, error);
+		const recoverByReopeningSerialport = async () => {
+			if (!this.serial) return;
+			this.driverLog.print(
+				"Attempting to recover unresponsive controller by reopening the serial port...",
+				"warn",
+			);
+			if (this.serial.isOpen) await this.serial.close();
+			await wait(1000);
+			await this.openSerialport();
 
-			void this.destroyWithMessage(message);
+			this.driverLog.print(
+				"Serial port reopened. Returning to normal operation and hoping for the best...",
+				"warn",
+			);
+
+			// We don't know if this worked
+			// Go back to normal operation and hope for the best.
+			this._controller?.setStatus(ControllerStatus.Ready);
+			this._recoveryPhase = ControllerRecoveryPhase.None;
 		};
 
 		if (
-			this._recoveryPhase
-				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
+			(this._controller.status !== ControllerStatus.Unresponsive
+				&& !this.maySoftReset())
+			|| this._recoveryPhase
+				=== ControllerRecoveryPhase.ACKTimeoutAfterReset
 		) {
-			// The controller is still timing out transmitting after a soft reset, don't try again.
-			// Reject the transaction and destroy the driver.
-			fail("Controller is still timing out. Restarting the driver...");
+			// Either we can/could not do a soft reset or the controller is still timing out afterwards
+			void recoverByReopeningSerialport().catch(noop);
 
 			return true;
 		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
@@ -3519,45 +3673,273 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				ControllerStatus.Unresponsive,
 			);
 
-			this._recoveryPhase = isMissingControllerACK(error)
-				? ControllerRecoveryPhase.NoACK
-				: ControllerRecoveryPhase.CallbackTimeout;
+			this._recoveryPhase = ControllerRecoveryPhase.ACKTimeout;
 
 			this.driverLog.print(
-				"Attempting to recover unresponsive controller...",
+				"Attempting to recover unresponsive controller by restarting it...",
 				"warn",
 			);
-
-			// Re-queue the transaction.
-			// Its message generator may have finished, so reset that too.
-			transaction.reset();
-			this.queue.add(transaction.clone());
 
 			// Execute the soft-reset asynchronously
 			void this.softReset().then(() => {
 				// The controller responded. It is no longer unresponsive
-				this._controller?.setStatus(ControllerStatus.Ready);
 
-				if (this._recoveryPhase === ControllerRecoveryPhase.NoACK) {
-					this._recoveryPhase = ControllerRecoveryPhase.None;
-				} else if (
-					this._recoveryPhase
-						=== ControllerRecoveryPhase.CallbackTimeout
-				) {
-					this._recoveryPhase =
-						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
-				}
-			}).catch(() => {
-				// Soft-reset failed. Reject the original transaction and try restarting the driver.
-				fail(
-					"Recovering unresponsive controller failed. Restarting the driver...",
+				// Re-queue the transaction, so it can get handled next.
+				// Its message generator may have finished, so reset that too.
+				transaction.reset();
+				this.getQueueForTransaction(transaction).add(
+					transaction.clone(),
 				);
+
+				this._controller?.setStatus(ControllerStatus.Ready);
+				this._recoveryPhase = ControllerRecoveryPhase.None;
+			}).catch(() => {
+				// Soft-reset failed. Reject the transaction
+				this.rejectTransaction(transaction, error);
+
+				// and reopen the serial port
+				return recoverByReopeningSerialport();
 			});
 
 			return true;
 		} else {
-			// We already attempted to recover from an unresponsive controller.
-			// Ending up here means the soft-reset also failed and the driver is about to be destroyed
+			// Not sure what to do here
+			return false;
+		}
+	}
+
+	/**
+	 * @internal
+	 * Handles the case that the controller didn't send the callback for a SendData in time
+	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
+	 */
+	private handleMissingSendDataResponseOrCallback(
+		transaction: Transaction,
+		error: ZWaveError & {
+			code: ZWaveErrorCodes.Controller_Timeout;
+			context: "callback" | "response";
+		},
+	): boolean {
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
+
+		if (
+			// The SendData response can time out on older controllers trying to reach a dead node.
+			// In this case, we do not want to reset the controller, but just mark the node as dead.
+			error.context === "response"
+			// Also do this if the callback is timing out even after restarting the controller
+			|| this._recoveryPhase
+				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
+		) {
+			const node = this.getNodeUnsafe(transaction.message);
+			if (!node) return false; // This should never happen, but whatever
+
+			// The controller is still timing out transmitting after a soft reset, don't try again.
+			// Real-world experience has shown that for older controllers this situation can be caused by unresponsive nodes.
+
+			// The following is essentially a copy of handleMissingNodeACK, but with updated error messages
+			const messagePart1 =
+				"The node is causing the controller to become unresponsive";
+
+			let handled: boolean;
+
+			if (node.canSleep) {
+				if (node.status === NodeStatus.Asleep) {
+					// We already moved the messages to the wakeup queue before. If we end up here, this means a command
+					// was sent that may be sent to potentially asleep nodes - including pings.
+					return false;
+				}
+				this.controllerLog.logNode(
+					node.id,
+					`${messagePart1}. It is probably asleep, moving its messages to the wakeup queue.`,
+					"warn",
+				);
+
+				// There is no longer a reference to the current transaction. If it should be moved to the wakeup queue,
+				// it temporarily needs to be added to the queue again.
+				handled = this.mayMoveToWakeupQueue(transaction);
+				if (handled) {
+					this.queue.add(transaction);
+				}
+
+				// Mark the node as asleep. This will move the messages to the wakeup queue
+				node.markAsAsleep();
+			} else {
+				const errorMsg = `${messagePart1}, it is presumed dead`;
+				this.controllerLog.logNode(node.id, errorMsg, "warn");
+
+				node.markAsDead();
+
+				// There is no longer a reference to the current transaction on the queue, so we need to reject it separately.
+				transaction.setProgress({
+					state: TransactionState.Failed,
+					reason: errorMsg,
+				});
+
+				transaction.abort(error);
+				this.rejectAllTransactionsForNode(node.id, errorMsg);
+
+				handled = true;
+			}
+
+			// If the controller is still timing out, reset it once more
+			if (
+				this._recoveryPhase
+					=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
+			) {
+				this.driverLog.print(
+					"Attempting to recover controller again...",
+					"warn",
+				);
+				void this.softReset().catch(() => {
+					this.driverLog.print(
+						"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
+						"warn",
+					);
+				}).finally(() => {
+					this._recoveryPhase = ControllerRecoveryPhase.None;
+					this._controller?.setStatus(ControllerStatus.Ready);
+				});
+			}
+
+			return handled;
+		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
+			// The controller was responsive before this transaction failed.
+
+			if (this.maySoftReset()) {
+				// Mark it as unresponsive and try to soft-reset it.
+				this.controller.setStatus(
+					ControllerStatus.Unresponsive,
+				);
+
+				this._recoveryPhase = ControllerRecoveryPhase.CallbackTimeout;
+
+				this.driverLog.print(
+					"Controller missed Send Data callback. Attempting to recover...",
+					"warn",
+				);
+
+				// Execute the soft-reset asynchronously
+				void this.softReset().then(() => {
+					// The controller responded. It is no longer unresponsive.
+
+					// Re-queue the transaction, so it can get handled next.
+					// Its message generator may have finished, so reset that too.
+					transaction.reset();
+					this.getQueueForTransaction(transaction).add(
+						transaction.clone(),
+					);
+
+					this._controller?.setStatus(ControllerStatus.Ready);
+					this._recoveryPhase =
+						ControllerRecoveryPhase.CallbackTimeoutAfterReset;
+				}).catch(() => {
+					// Soft-reset failed. Just reject the transaction
+					this.rejectTransaction(transaction, error);
+
+					this.driverLog.print(
+						"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
+						"warn",
+					);
+					this._recoveryPhase = ControllerRecoveryPhase.None;
+					this._controller?.setStatus(ControllerStatus.Ready);
+				});
+			} else {
+				this.driverLog.print(
+					"Controller missed Send Data callback. Cannot recover automatically because the soft reset feature is unsupported or disabled. Returning to normal operation and hoping for the best...",
+					"warn",
+				);
+				this.rejectTransaction(transaction, error);
+			}
+
+			return true;
+		} else {
+			// Not sure what to do here
+			return false;
+		}
+	}
+
+	/**
+	 * @internal
+	 * Handles the case that the controller locks up and fails to transmit continuously
+	 */
+	private handleJammedController(
+		transaction: Transaction,
+		error: ZWaveError,
+	): boolean {
+		if (!this._controller || !this.mayRecoverUnresponsiveController()) {
+			return false;
+		}
+
+		if (
+			// Transmits still fail even after restarting the controller
+			this._recoveryPhase
+				=== ControllerRecoveryPhase.JammedAfterReset
+		) {
+			// Maybe this isn't actually the controller being jammed. Give up on this command.
+			this.driverLog.print(
+				"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
+				"warn",
+			);
+			this._recoveryPhase = ControllerRecoveryPhase.None;
+			this._controller.setStatus(ControllerStatus.Ready);
+
+			return false;
+		} else if (this._controller.status === ControllerStatus.Jammed) {
+			// The controller failed to transmit continuously. Try to soft-reset it if we can.
+			if (this.controller.sdkVersionLt("7.0")) {
+				// The workaround only makes sense on 700/800 series
+				this.driverLog.print(
+					"Cannot recover jammed controller automatically. Returning to normal operation and hoping for the best...",
+					"warn",
+				);
+				this._controller?.setStatus(ControllerStatus.Ready);
+				this.rejectTransaction(transaction, error);
+			} else if (this.maySoftReset()) {
+				this._recoveryPhase = ControllerRecoveryPhase.Jammed;
+
+				this.driverLog.print(
+					"Attempting to recover jammed controller...",
+					"warn",
+				);
+
+				// Execute the soft-reset asynchronously
+				void this.softReset().then(() => {
+					// The controller responded. It is no longer unresponsive.
+
+					// Re-queue the transaction, so it can get handled next.
+					// Its message generator may have finished, so reset that too.
+					transaction.reset();
+					this.getQueueForTransaction(transaction).add(
+						transaction.clone(),
+					);
+
+					this._recoveryPhase =
+						ControllerRecoveryPhase.JammedAfterReset;
+				}).catch(() => {
+					// Soft-reset failed. Just reject the transaction
+					this.rejectTransaction(transaction, error);
+
+					this.driverLog.print(
+						"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
+						"warn",
+					);
+					this._recoveryPhase = ControllerRecoveryPhase.None;
+					this._controller?.setStatus(ControllerStatus.Ready);
+				});
+			} else {
+				this.driverLog.print(
+					"Cannot recover jammed controller automatically because the soft reset feature is unsupported or disabled. Returning to normal operation and hoping for the best...",
+					"warn",
+				);
+				this._controller?.setStatus(ControllerStatus.Ready);
+				this.rejectTransaction(transaction, error);
+			}
+
+			return true;
+		} else {
+			// Not sure what to do here
 			return false;
 		}
 	}
@@ -3833,6 +4215,69 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	/**
+	 * Is called when the Serial API restart unexpectedly.
+	 */
+	private async handleSerialAPIStartedUnexpectedly(
+		msg: SerialAPIStartedRequest,
+	): Promise<boolean> {
+		// Normally, the soft reset command includes waiting for this message.
+		// If we end up here, it is unexpected.
+
+		switch (msg.wakeUpReason) {
+			// All wakeup reasons that indicate a reset of the Serial API
+			// need to be handled here, so we interpret node IDs correctly.
+			case SerialAPIWakeUpReason.Reset:
+			case SerialAPIWakeUpReason.WatchdogReset:
+			case SerialAPIWakeUpReason.SoftwareReset:
+			case SerialAPIWakeUpReason.EmergencyWatchdogReset:
+			case SerialAPIWakeUpReason.BrownoutCircuit: {
+				// The Serial API restarted unexpectedly
+				this.controllerLog.print(
+					`Serial API restarted unexpectedly.`,
+					"warn",
+				);
+
+				// In this situation, we may be executing a Serial API command, which will never complete.
+				// Bail out of it, without rejecting the actual transaction
+				if (
+					this.serialAPIInterpreter?.status
+						=== InterpreterStatus.Running
+				) {
+					this.serialAPIInterpreter.stop();
+				}
+				if (this._currentSerialAPICommandPromise) {
+					this.controllerLog.print(
+						`Currently active command will be retried...`,
+						"warn",
+					);
+					this._currentSerialAPICommandPromise.reject(
+						new ZWaveError(
+							"The Serial API restarted unexpectedly",
+							ZWaveErrorCodes.Controller_Reset,
+						),
+					);
+				}
+
+				// Restart the watchdog unless disabled
+				if (this.options.features.watchdog) {
+					await this._controller?.startWatchdog();
+				}
+
+				if (this._controller?.nodeIdType === NodeIDType.Long) {
+					// We previously used 16 bit node IDs, but the controller was reset.
+					// Remember this and try to go back to 16 bit.
+					this._controller.nodeIdType = NodeIDType.Short;
+					await this._controller.trySetNodeIDType(NodeIDType.Long);
+				}
+
+				return true; // Don't invoke any more handlers
+			}
+		}
+
+		return false; // Not handled
+	}
+
+	/**
 	 * Registers a handler for messages that are not handled by the driver as part of a message exchange.
 	 * The handler function needs to return a boolean indicating if the message has been handled.
 	 * Registered handlers are called in sequence until a handler returns `true`.
@@ -3917,18 +4362,6 @@ ${handlers.length} left`,
 			return this.isSecurityLevelTooLow(cc.encapsulated);
 		}
 
-		if (
-			cc.constructor.name.endsWith("Get")
-			&& (cc.frameType === "multicast" || cc.frameType === "broadcast")
-		) {
-			this.controllerLog.logNode(
-				cc.nodeId as number,
-				`received GET-type command via ${cc.frameType} - discarding...`,
-				"warn",
-			);
-			return true;
-		}
-
 		const secClass = node.getHighestSecurityClass();
 		if (
 			secClass === SecurityClass.None
@@ -3943,28 +4376,9 @@ ${handlers.length} left`,
 			? CommandClasses.Security
 			: undefined;
 
-		const discardAnyways = (cmd: CommandClass): boolean => {
-			// S2-encapsulated CCs must always be discarded if they are received using a lower security class, except:
-			// - CommandsSupportedGet and CommandsSupportedReport
-			// - multicast commands
-			if (!(cmd instanceof Security2CCMessageEncapsulation)) return false;
-			if (cmd.getMulticastGroupId() != undefined) return false;
-			// This shouldn't happen, but better be sure
-			if (cmd.securityClass == undefined) return true;
-			// Received at the highest security class -> ok
-			if (cmd.securityClass === secClass) return false;
-
-			if (
-				cmd.encapsulated instanceof Security2CCCommandsSupportedGet
-				|| cmd.encapsulated
-					instanceof Security2CCCommandsSupportedReport
-			) {
-				return false;
-			}
-			return true;
-		};
-
-		const acceptAnyways = (cmd: CommandClass): boolean => {
+		const isCCConsideredSecure = (
+			cmd: CommandClass,
+		): MaybeNotKnown<boolean> => {
 			// Some CCs are always accepted, regardless of security class
 			if (cmd instanceof SecurityCC) {
 				switch (cmd.ccCommand) {
@@ -3974,29 +4388,59 @@ ${handlers.length} left`,
 					case SecurityCommand.SchemeGet:
 					case SecurityCommand.SchemeReport:
 						return true;
+				}
 
-					// Needs to be accepted to be able interview/respond to S0 queries
-					case SecurityCommand.CommandsSupportedGet:
-					case SecurityCommand.CommandsSupportedReport:
-						return cmd.isEncapsulatedWith(
-							CommandClasses.Security,
-							SecurityCommand.CommandEncapsulation,
-						);
+				if (cmd instanceof SecurityCCCommandEncapsulation) {
+					// CommandsSupportedReport is always accepted to be able to learn security classes and interview nodes
+					// CommandsSupportedGet is always accepted, so others can learn our security classes
+					if (
+						cmd.encapsulated
+							instanceof SecurityCCCommandsSupportedReport
+						|| cmd.encapsulated
+							instanceof SecurityCCCommandsSupportedGet
+					) {
+						return true;
+					}
+
+					// Other S0 commands are only accepted if S0 is the highest security class
+					return secClass === SecurityClass.S0_Legacy;
+				}
+			} else if (cmd instanceof Security2CC) {
+				if (cmd instanceof Security2CCMessageEncapsulation) {
+					// CommandsSupportedReport is always accepted to be able to learn security classes and interview nodes
+					if (
+						cmd.encapsulated
+							instanceof Security2CCCommandsSupportedReport
+					) {
+						return true;
+					}
+
+					// CommandsSupportedGet is always accepted, so others can learn our security classes
+					if (
+						cmd.encapsulated
+							instanceof Security2CCCommandsSupportedGet
+					) {
+						return true;
+					}
+
+					// Multicast commands are always accepted
+					if (cmd.getMulticastGroupId() != undefined) return true;
+
+					// This shouldn't happen, but better be sure
+					if (cmd.securityClass == undefined) return false;
+
+					// All other commands are only accepted if the highest security class is used
+					return cmd.securityClass === secClass;
 				}
 			}
-			return false;
+
+			return cmd.ccId === expectedSecurityCC;
 		};
 
-		let isSecure = false;
 		let requiresSecurity = securityClassIsS2(secClass);
-		while (true) {
-			if (
-				(cc.ccId === expectedSecurityCC && !discardAnyways(cc))
-				|| acceptAnyways(cc)
-			) {
-				isSecure = true;
-			}
+		const isSecure = isCCConsideredSecure(cc);
 
+		while (true) {
 			if (isEncapsulatingCommandClass(cc)) {
 				cc = cc.encapsulated;
 			} else if (isMultiEncapsulatingCommandClass(cc)) {
@@ -4038,6 +4482,18 @@ ${handlers.length} left`,
 			this.controllerLog.logNode(
 				cc.nodeId as number,
 				`is unknown - discarding received command...`,
+				"warn",
+			);
+			return true;
+		}
+
+		if (
+			cc.constructor.name.endsWith("Get")
+			&& (cc.frameType === "multicast" || cc.frameType === "broadcast")
+		) {
+			this.controllerLog.logNode(
+				cc.nodeId as number,
+				`received GET-type command via ${cc.frameType} - discarding...`,
 				"warn",
 			);
 			return true;
@@ -4152,30 +4608,6 @@ ${handlers.length} left`,
 			const nodeSessions = this.nodeSessions.get(nodeId);
 			// Check if we need to handle the command ourselves
 			if (
-				msg.command.ccId === CommandClasses["Device Reset Locally"]
-				&& msg.command instanceof DeviceResetLocallyCCNotification
-			) {
-				this.controllerLog.logNode(msg.command.nodeId, {
-					message: `The node was reset locally, removing it`,
-					direction: "inbound",
-				});
-
-				try {
-					await this.controller.removeFailedNodeInternal(
-						msg.command.nodeId,
-						RemoveNodeReason.Reset,
-					);
-				} catch (e) {
-					this.controllerLog.logNode(msg.command.nodeId, {
-						message: `removing the node failed: ${
-							getErrorMessage(
-								e,
-							)
-						}`,
-						level: "error",
-					});
-				}
-			} else if (
 				msg.command.ccId === CommandClasses.Supervision
 				&& msg.command instanceof SupervisionCCReport
 				&& nodeSessions?.supervision.has(msg.command.sessionId)
@@ -4207,21 +4639,24 @@ ${handlers.length} left`,
 
 				const encapsulationFlags = msg.command.encapsulationFlags;
 
-				let reply: (success: boolean) => Promise<void>;
+				let reply: (
+					status:
+						| SupervisionStatus.Success
+						| SupervisionStatus.Fail
+						| SupervisionStatus.NoSupport,
+				) => Promise<void>;
 				if (supervisionSessionId != undefined) {
 					// The command was supervised, and we must respond with a Supervision Report
 					const endpoint = node.getEndpoint(msg.command.endpointIndex)
 						?? node;
-					reply = (success) =>
+					reply = (status) =>
 						endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.withOptions({ s2MulticastOutOfSync })
 							.sendReport({
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
-								status: success
-									? SupervisionStatus.Success
-									: SupervisionStatus.Fail,
+								status,
 								requestWakeUpOnDemand: this
 									.shouldRequestWakeupOnDemand(node),
 								encapsulationFlags,
@@ -4255,7 +4690,7 @@ ${handlers.length} left`,
 						entry.handler(msg.command);
 
 						// and possibly reply to a supervised command
-						await reply(true);
+						await reply(SupervisionStatus.Success);
 						return;
 					}
 				}
@@ -4263,13 +4698,28 @@ ${handlers.length} left`,
 				// No one is waiting, dispatch the command to the node itself
 				try {
 					await node.handleCommand(msg.command);
-					await reply(true);
+					await reply(SupervisionStatus.Success);
 				} catch (e) {
-					await reply(false);
+					let handled = false;
+					if (isZWaveError(e)) {
+						if (e.code === ZWaveErrorCodes.CC_OperationFailed) {
+							// The sending node tried to do something that didn't work
+							await reply(SupervisionStatus.Fail);
+							handled = true;
+						} else if (e.code === ZWaveErrorCodes.CC_NotSupported) {
+							// The sending node sent a command we could not handle
+							await reply(SupervisionStatus.NoSupport);
+							handled = true;
+						}
+					}
 
-					// We only caught the error to be able to respond to supervised requests.
-					// Re-Throw so it can be handled accordingly
-					throw e;
+					if (!handled) {
+						// Something unexpected happened.
+						// Report failure, then re-throw the error, so it can be handled accordingly
+						await reply(SupervisionStatus.Fail);
+
+						throw e;
+					}
 				}
 			}
 
@@ -4278,6 +4728,10 @@ ${handlers.length} left`,
 			// Make sure we're ready to handle this command
 			this.ensureReady(true);
 			return this.controller.handleApplicationUpdateRequest(msg);
+		} else if (msg instanceof SerialAPIStartedRequest) {
+			if (await this.handleSerialAPIStartedUnexpectedly(msg)) {
+				return;
+			}
 		} else {
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
@@ -4386,8 +4840,9 @@ ${handlers.length} left`,
 			if (node?.supportsCC(CommandClasses["Security 2"])) {
 				// ... the node supports S2 and has a valid security class
 				const nodeSecClass = node.getHighestSecurityClass();
+				const securityManager = this.getSecurityManager2(node.id);
 				maybeS2 = securityClassIsS2(nodeSecClass)
-					|| !!this.securityManager2?.tempKeys.has(node.id);
+					|| !!securityManager?.tempKeys.has(node.id);
 			} else if (options.s2MulticastGroupId != undefined) {
 				// ... or we're dealing with S2 multicast
 				maybeS2 = true;
@@ -4417,7 +4872,13 @@ ${handlers.length} left`,
 		) {
 			const unwrapped = msg.command.encapsulated;
 			if (isArray(unwrapped)) {
-				// Multi Command CC cannot be further unwrapped
+				// Multi Command CC cannot be further unwrapped. Preserve the encapsulation flags though.
+				for (const cmd of unwrapped) {
+					cmd.toggleEncapsulationFlag(
+						msg.command.encapsulationFlags,
+						true,
+					);
+				}
 				return;
 			}
 
@@ -4449,9 +4910,43 @@ ${handlers.length} left`,
 		}
 	}
 
+	private shouldPersistCCValues(cc: CommandClass): boolean {
+		// Always persist encapsulation CCs, otherwise interviews don't work.
+		if (isEncapsulationCC(cc.ccId)) return true;
+
+		// Do not persist values for a node or endpoint that does not exist
+		const endpoint = this.tryGetEndpoint(cc);
+		const node = endpoint?.getNodeUnsafe();
+		if (!node) return false;
+
+		// Do not persist values for a CC that was force-removed via config
+		if (endpoint?.wasCCRemovedViaConfig(cc.ccId)) return false;
+
+		// Do not persist values for a CC that's being mapped to another endpoint.
+		// FIXME: This duplicates logic in Node.ts -> handleCommand
+		const compatConfig = node?.deviceConfig?.compat;
+		if (
+			cc.endpointIndex === 0
+			&& cc.constructor.name.endsWith("Report")
+			&& node.getEndpointCount() >= 1
+			// Only map reports from the root device to an endpoint if we know which one
+			&& compatConfig?.mapRootReportsToEndpoint != undefined
+		) {
+			const targetEndpoint = node.getEndpoint(
+				compatConfig.mapRootReportsToEndpoint,
+			);
+			if (targetEndpoint?.supportsCC(cc.ccId)) return false;
+		}
+
+		return true;
+	}
+
 	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
 	private persistCCValues(cc: CommandClass) {
-		cc.persistValues(this);
+		if (this.shouldPersistCCValues(cc)) {
+			cc.persistValues(this);
+		}
+
 		if (isEncapsulatingCommandClass(cc)) {
 			this.persistCCValues(cc.encapsulated);
 		} else if (isMultiEncapsulatingCommandClass(cc)) {
@@ -4646,6 +5141,12 @@ ${handlers.length} left`,
 		transaction.start();
 		transaction.setProgress({ state: TransactionState.Active });
 
+		const maxJammedAttempts =
+			this._recoveryPhase === ControllerRecoveryPhase.JammedAfterReset
+				// After attempting soft-reset, only try sending once
+				? 1
+				: this.options.attempts.sendDataJammed;
+
 		// Step through the transaction as long as it gives us a next message
 		while ((msg = await transaction.generateNextMessage(prevResult))) {
 			// Keep track of how often the controller failed to send a command, to prevent ending up in an infinite loop
@@ -4668,10 +5169,7 @@ ${handlers.length} left`,
 							&& prevResult.txReport?.txTicks === 0
 						) {
 							jammedAttempts++;
-							if (
-								jammedAttempts
-									< this.options.attempts.sendDataJammed
-							) {
+							if (jammedAttempts < maxJammedAttempts) {
 								// The controller is jammed. Wait a bit, then try again.
 								this.controller.setStatus(
 									ControllerStatus.Jammed,
@@ -4683,11 +5181,7 @@ ${handlers.length} left`,
 
 								continue attemptMessage;
 							} else {
-								// Maybe this isn't actually the controller being jammed. Give up on this command.
-								this.controller.setStatus(
-									ControllerStatus.Ready,
-								);
-
+								// Reject the transaction so we can attempt to recover
 								throw new ZWaveError(
 									`Failed to send the command after ${jammedAttempts} attempts`,
 									ZWaveErrorCodes.Controller_MessageDropped,
@@ -4722,25 +5216,15 @@ ${handlers.length} left`,
 						zwError = createMessageDroppedUnexpectedError(e);
 					} else {
 						if (
-							e.code === ZWaveErrorCodes.Controller_CommandAborted
-						) {
-							// This transaction was aborted by the driver due to a controller timeout.
-							// Rejections, re-queuing etc. have been handled, so just drop it silently and
-							// continue with the next message
-							transaction.setProgress({
-								state: TransactionState.Failed,
-								reason: "Aborted due to controller timeout",
-							});
-							return;
-						} else if (
 							isSendData(msg) && isMissingControllerCallback(e)
 						) {
-							// If the callback to SendData times out, we need to issue a SendDataAbort
-							await this.abortSendData();
-							// Reject the transaction - this will trigger the recovery mechanism and retry the command afterwards
+							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
 							throw e;
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
+							throw e;
+						} else if (wasControllerReset(e)) {
+							// The controller was reset unexpectedly. Reject the transaction, so we can attempt to recover
 							throw e;
 						} else if (
 							e.code === ZWaveErrorCodes.Controller_MessageDropped
@@ -4754,7 +5238,7 @@ ${handlers.length} left`,
 								msg,
 								// Ignore the number of attempts while jammed
 								attemptNumber - jammedAttempts,
-								e.code,
+								e,
 							)
 						) {
 							// Retry the command
@@ -4774,6 +5258,13 @@ ${handlers.length} left`,
 		transaction.setProgress({ state: TransactionState.Completed });
 	}
 
+	/**
+	 * Provides access to the result Promise for the currently executed serial API command
+	 */
+	private _currentSerialAPICommandPromise:
+		| DeferredPromise<Message | undefined>
+		| undefined;
+
 	/** Handles sequencing of queued Serial API commands */
 	private async drainSerialAPIQueue(): Promise<void> {
 		for await (const item of this.serialAPIQueue) {
@@ -4786,6 +5277,8 @@ ${handlers.length} left`,
 				result.resolve(ret);
 			} catch (e) {
 				result.reject(e);
+			} finally {
+				this._currentSerialAPICommandPromise = undefined;
 			}
 		}
 	}
@@ -4814,19 +5307,29 @@ ${handlers.length} left`,
 	private mayRetrySerialAPICommand(
 		msg: Message,
 		attemptNumber: number,
-		errorCode: ZWaveErrorCodes,
+		error: ZWaveError,
 	): boolean {
+		// Only retry Send Data, nothing else
 		if (!isSendData(msg)) return false;
+
+		// Don't try to resend SendData commands when the response times out
 		if (
-			msg instanceof SendDataMulticastRequest
-			|| msg instanceof SendDataMulticastBridgeRequest
+			error.code === ZWaveErrorCodes.Controller_Timeout
+			&& error.context === "response"
 		) {
-			// Don't try to resend multicast messages if they were already transmitted.
-			// One or more nodes might have already reacted
-			if (errorCode === ZWaveErrorCodes.Controller_CallbackNOK) {
-				return false;
-			}
+			return false;
 		}
+
+		// Don't try to resend multicast messages if they were already transmitted.
+		// One or more nodes might have already reacted
+		if (
+			(msg instanceof SendDataMulticastRequest
+				|| msg instanceof SendDataMulticastBridgeRequest)
+			&& error.code === ZWaveErrorCodes.Controller_CallbackNOK
+		) {
+			return false;
+		}
+
 		return attemptNumber < msg.maxSendAttempts;
 	}
 
@@ -4841,7 +5344,8 @@ ${handlers.length} left`,
 		const machine = createSerialAPICommandMachine(
 			msg,
 			{
-				sendData: this.writeSerial.bind(this),
+				sendData: (data) => this.writeSerial(data),
+				sendDataAbort: () => this.abortSendData(),
 				notifyUnsolicited: (msg) => {
 					void this.handleUnsolicitedMessage(msg);
 				},
@@ -4902,6 +5406,15 @@ ${handlers.length} left`,
 
 		const result = createDeferredPromise<Message | undefined>();
 
+		// Work around an issue in the 700 series firmware where the ACK after a soft-reset has a random high nibble.
+		// This was broken in 7.19, not fixed so far
+		if (
+			msg.functionType === FunctionType.SoftReset
+			&& this.controller.sdkVersionGte("7.19.0")
+		) {
+			this.serial?.ignoreAckHighNibbleOnce();
+		}
+
 		this.serialAPIInterpreter = interpret(machine).onDone((evt) => {
 			this.serialAPIInterpreter?.stop();
 			this.serialAPIInterpreter = undefined;
@@ -4929,9 +5442,30 @@ ${handlers.length} left`,
 			}
 		});
 
+		// Uncomment this for debugging state machine transitions
+		// this.serialAPIInterpreter.onTransition((state) => {
+		// 	if (state.changed) {
+		// 		this.driverLog.print(
+		// 			`CMDMACHINE: ${JSON.stringify(state.toStrings())}`,
+		// 		);
+		// 	}
+		// });
+
 		this.serialAPIInterpreter.start();
 
+		this._currentSerialAPICommandPromise = result;
 		return result;
+	}
+
+	private getQueueForTransaction(t: Transaction): TransactionQueue {
+		if (
+			t.priority === MessagePriority.Immediate
+			|| t.priority === MessagePriority.ControllerImmediate
+		) {
+			return this.immediateQueue;
+		} else {
+			return this.queue;
+		}
 	}
 
 	/**
@@ -4946,19 +5480,8 @@ ${handlers.length} left`,
 		this.ensureReady();
 
 		let node: ZWaveNode | undefined;
-
-		// Don't send messages to dead nodes
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			node = this.getNodeUnsafe(msg);
-			if (!messageIsPing(msg) && node?.status === NodeStatus.Dead) {
-				// Instead of throwing immediately, try to ping the node first - if it responds, continue
-				if (!(await node.ping())) {
-					throw new ZWaveError(
-						`The message cannot be sent because node ${node.id} is dead`,
-						ZWaveErrorCodes.Controller_MessageDropped,
-					);
-				}
-			}
 		}
 
 		if (options.priority == undefined) {
@@ -5043,14 +5566,7 @@ ${handlers.length} left`,
 		transaction.tag = options.tag;
 
 		// And queue it
-		if (
-			transaction.priority === MessagePriority.Immediate
-			|| transaction.priority === MessagePriority.ControllerImmediate
-		) {
-			this.immediateQueue.add(transaction);
-		} else {
-			this.queue.add(transaction);
-		}
+		this.getQueueForTransaction(transaction).add(transaction);
 		transaction.setProgress({ state: TransactionState.Queued });
 
 		// If the transaction should expire, start the timeout
@@ -5097,7 +5613,7 @@ ${handlers.length} left`,
 			}
 
 			if (maybeSendToSleep && node && node.canSleep && !node.keepAwake) {
-				setImmediate(() => this.debounceSendNodeToSleep(node!));
+				setImmediate(() => this.debounceSendNodeToSleep(node));
 			}
 
 			// Set the transaction progress to completed before resolving the Promise
@@ -5338,8 +5854,22 @@ ${handlers.length} left`,
 		}
 
 		// Fall back to non-supervised commands
+		const result = await this.sendCommandInternal(command, options);
+
+		// When sending S2 multicast commands to supporting nodes, the singlecast followups
+		// may use supervision. In this case, the multicast message generator returns a
+		// synthetic SupervisionCCReport.
+		// sendCommand is supposed to return a SupervisionResult though.
+		if (
+			options?.s2MulticastGroupId != undefined
+			&& result instanceof SupervisionCCReport
+		) {
+			// @ts-expect-error TS doesn't know we've narrowed the return type to match
+			return result.toSupervisionResult();
+		}
+
 		// @ts-expect-error TS doesn't know we've narrowed the return type to match
-		return this.sendCommandInternal(command, options);
+		return result;
 	}
 
 	/** @internal */
@@ -5362,9 +5892,7 @@ ${handlers.length} left`,
 		});
 	}
 
-	private async abortSendData(
-		abortInterpreter: boolean = false,
-	): Promise<void> {
+	private async abortSendData(): Promise<void> {
 		try {
 			const abort = new SendDataAbort(this);
 			await this.writeSerial(abort.serialize());
@@ -5375,16 +5903,6 @@ ${handlers.length} left`,
 			// We're bypassing the serial API machine, so we need to wait for the ACK ourselves
 			// This could also cause a NAK or CAN, but we don't really care
 			await this.waitForMessageHeader(() => true, 500).catch(noop);
-
-			// Abort the currently active command machine only if the controller has timed out.
-			// SendData commands we abort early MUST result in the normal callback.
-			if (
-				abortInterpreter
-				&& this.serialAPIInterpreter?.status
-					=== InterpreterStatus.Running
-			) {
-				this.serialAPIInterpreter.send("abort");
-			}
 		} catch {
 			// ignore
 		}
@@ -5564,10 +6082,32 @@ ${handlers.length} left`,
 		// If a node failed to respond in time, it might be sleeping
 		if (this.isMissingNodeACK(transaction, error)) {
 			if (this.handleMissingNodeACK(transaction as any, error)) return;
+		} else if (isMissingControllerACK(error)) {
+			if (this.handleMissingControllerACK(transaction, error)) return;
 		} else if (
-			isMissingControllerACK(error) || isMissingControllerCallback(error)
+			// 700/800 series controllers can be jammed due to a bug,
+			// which a soft-reset is supposed to work around
+			isSendData(transaction.message)
+			&& this.controller.status === ControllerStatus.Jammed
 		) {
-			if (this.handleUnresponsiveController(transaction, error)) return;
+			if (this.handleJammedController(transaction, error)) return;
+		} else if (
+			isSendData(transaction.message)
+			&& (isMissingControllerResponse(error)
+				|| isMissingControllerCallback(error))
+		) {
+			if (
+				this.handleMissingSendDataResponseOrCallback(transaction, error)
+			) return;
+		} else if (wasControllerReset(error)) {
+			// The controller was reset in the middle of a transaction.
+			// Re-queue the transaction, so it can get handled again
+			// Its message generator may have finished, so reset that too.
+			transaction.reset();
+			this.getQueueForTransaction(transaction).add(
+				transaction.clone(),
+			);
+			return;
 		}
 
 		this.rejectTransaction(transaction, error);
@@ -5960,7 +6500,54 @@ ${handlers.length} left`,
 		msg.command = this.encapsulateCommands(
 			msg.command,
 		) as SinglecastCC<CommandClass>;
-		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+		return msg.command.getMaxPayloadLength(this.getMaxPayloadLength(msg));
+	}
+
+	/** Computes the maximum payload size that can be transmitted with the given message */
+	public getMaxPayloadLength(msg: SendDataMessage): number {
+		const nodeId = msg.getNodeId();
+
+		// For ZWLR, the result is simply the maximum payload size
+		if (
+			nodeId != undefined
+			&& isLongRangeNodeId(nodeId)
+			&& this._controller?.maxPayloadSizeLR
+		) {
+			return this._controller.maxPayloadSizeLR;
+		}
+
+		// For ZW Classic, it depends on the frame type and transmit options
+		const maxExplorerPayloadSinglecast = this._controller?.maxPayloadSize
+			?? 46;
+		if (isSendDataSinglecast(msg)) {
+			// From INS13954-7, chapter 4.3.3.1.5
+			if (msg.transmitOptions & TransmitOptions.Explore) {
+				return maxExplorerPayloadSinglecast;
+			}
+			if (msg.transmitOptions & TransmitOptions.AutoRoute) {
+				return maxExplorerPayloadSinglecast + 2;
+			}
+			return maxExplorerPayloadSinglecast + 8;
+		} else {
+			// Multicast needs space for the nodes bitmask
+			const maxExplorerPayloadMulticast = maxExplorerPayloadSinglecast
+				- NUM_NODEMASK_BYTES;
+
+			// From INS13954-13, chapter 4.3.3.6
+			if (msg.transmitOptions & TransmitOptions.ACK) {
+				if (msg.transmitOptions & TransmitOptions.Explore) {
+					return maxExplorerPayloadMulticast;
+				}
+				if (msg.transmitOptions & TransmitOptions.AutoRoute) {
+					return maxExplorerPayloadMulticast + 2;
+				}
+			}
+			return maxExplorerPayloadMulticast + 8;
+		}
+	}
+
+	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
+		return msg.serializeCC().length > this.getMaxPayloadLength(msg);
 	}
 
 	/** Determines time in milliseconds to wait for a report from a node */
@@ -6302,6 +6889,100 @@ ${handlers.length} left`,
 				clearTimeout(this.pollBackgroundRSSITimer);
 				this.pollBackgroundRSSITimer = undefined;
 			}
+		}
+	}
+
+	private _powerlevelTestNodeContext: {
+		testNodeId: number;
+		timeout: NodeJS.Timeout | undefined;
+		acknowledgedFrames: number;
+	} | undefined;
+
+	/**
+	 * @internal
+	 * Begins a powerlevel test for the given node using NOP power frames
+	 */
+	public async sendNOPPowerFrames(
+		testNodeId: number,
+		powerlevel: Powerlevel,
+		frameCount: number,
+	): Promise<number> {
+		if (this._powerlevelTestNodeContext) {
+			// Cancel the previous test
+			clearTimeout(this._powerlevelTestNodeContext.timeout);
+			this._powerlevelTestNodeContext = undefined;
+		}
+
+		if (frameCount < 1) return 0;
+
+		const ret = createDeferredPromise<number>();
+
+		const context = {
+			testNodeId,
+			acknowledgedFrames: 0,
+			// This is set below after defining sendFrame
+			timeout: undefined as NodeJS.Timeout | undefined,
+		};
+		this._powerlevelTestNodeContext = context;
+
+		// We're expected to send these pretty quickly (260 frames in 25s for the CTT test)
+		const interval = 50;
+
+		const sendFrame = async () => {
+			const result = await this.sendTestFrame(testNodeId, powerlevel);
+			if (result === TransmitStatus.OK) {
+				context.acknowledgedFrames++;
+			}
+			frameCount--;
+
+			if (frameCount > 0) {
+				context.timeout = setTimeout(sendFrame, interval);
+			} else {
+				context.timeout = undefined;
+				ret.resolve(context.acknowledgedFrames);
+			}
+		};
+
+		context.timeout = setTimeout(sendFrame, interval);
+
+		return ret;
+	}
+
+	/** Sends a NOP Power frame to the given node and returns the transmit status if the frame was sent */
+	public async sendTestFrame(
+		nodeId: number,
+		powerlevel: Powerlevel,
+	): Promise<TransmitStatus | undefined> {
+		const result = await this.sendMessage<
+			Message & SuccessIndicator
+		>(
+			new SendTestFrameRequest(this, {
+				testNodeId: nodeId,
+				powerlevel,
+			}),
+		);
+
+		if (result instanceof SendTestFrameTransmitReport) {
+			return result.transmitStatus;
+		}
+	}
+
+	/**
+	 * @internal
+	 * Returns the status of a potentially ongoing NOP power test
+	 */
+	public getNOPPowerTestStatus(): {
+		testNodeId: number;
+		inProgress: boolean;
+		acknowledgedFrames: number;
+	} | undefined {
+		if (this._powerlevelTestNodeContext) {
+			return {
+				inProgress: !!this._powerlevelTestNodeContext.timeout,
+				testNodeId: this._powerlevelTestNodeContext.testNodeId,
+				acknowledgedFrames:
+					this._powerlevelTestNodeContext.acknowledgedFrames,
+			};
 		}
 	}
 }

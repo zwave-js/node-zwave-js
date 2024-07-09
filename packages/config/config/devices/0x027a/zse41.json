@@ -47,11 +47,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Closed (Report open when magnet is away)",
+					"label": "Normally closed (Report open when magnet is away)",
 					"value": 0
 				},
 				{
-					"label": "Normally Open (Report open when magnet is near)",
+					"label": "Normally open (Report open when magnet is near)",
 					"value": 1
 				}
 			]

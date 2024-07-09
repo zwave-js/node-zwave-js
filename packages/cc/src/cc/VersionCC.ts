@@ -15,7 +15,11 @@ import {
 	securityClassOrder,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -218,7 +222,10 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			case VersionCommand.CommandClassGet:
 			case VersionCommand.CommandClassReport:
 				return true; // This is mandatory
+
 			case VersionCommand.CapabilitiesGet:
+			case VersionCommand.CapabilitiesReport:
+			case VersionCommand.ZWaveSoftwareReport:
 				// The API might have been created before the versions were determined,
 				// so `this.version` may contains a wrong value
 				return (
@@ -303,11 +310,31 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CommandClassReport,
 		);
 
+		let ccVersion: number;
+		switch (requestedCC) {
+			case CommandClasses["Z-Wave Protocol"]:
+			case CommandClasses["Z-Wave Long Range"]:
+				// These two are only for internal use
+				ccVersion = 0;
+				break;
+			case CommandClasses.Hail:
+			case CommandClasses["Manufacturer Proprietary"]:
+				// These CCs are obsolete, we cannot enter them in the certification portal
+				// but not doing so fails a certification test. Just respond that they
+				// are not supported or controlled
+				ccVersion = 0;
+				break;
+
+			default:
+				ccVersion = getImplementedVersion(requestedCC);
+				break;
+		}
+
 		const cc = new VersionCCCommandClassReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedCC,
-			ccVersion: getImplementedVersion(requestedCC),
+			ccVersion,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
@@ -332,6 +359,21 @@ export class VersionCCAPI extends PhysicalCCAPI {
 		if (response) {
 			return pick(response, ["supportsZWaveSoftwareGet"]);
 		}
+	}
+
+	public async reportCapabilities(): Promise<void> {
+		this.assertSupportsCommand(
+			VersionCommand,
+			VersionCommand.CapabilitiesReport,
+		);
+
+		const cc = new VersionCCCapabilitiesReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			// At this time, we do not support responding to Z-Wave Software Get
+			supportsZWaveSoftwareGet: false,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -433,9 +475,20 @@ export class VersionCC extends CommandClass {
 				// Remember which CC version this endpoint supports
 				let logMessage: string;
 				if (supportedVersion > 0) {
-					endpoint.addCC(cc, {
-						version: supportedVersion,
-					});
+					// Basic CC has special rules for when it is considered supported
+					// Therefore we mark all other CCs as supported, but not Basic CC,
+					// for which support is determined later.
+					if (cc === CommandClasses.Basic) {
+						endpoint.addCC(cc, {
+							isControlled: true,
+							version: supportedVersion,
+						});
+					} else {
+						endpoint.addCC(cc, {
+							isSupported: true,
+							version: supportedVersion,
+						});
+					}
 					logMessage = `  supports CC ${CommandClasses[cc]} (${
 						num2hex(cc)
 					}) in version ${supportedVersion}`;
@@ -542,9 +595,19 @@ export class VersionCC extends CommandClass {
 			message: "querying CC versions...",
 			direction: "outbound",
 		});
+		// Basic CC is not included in the NIF, so it won't be returned by endpoint.getCCs() at this point
+		{
+			const cc = CommandClasses.Basic;
+			// Skip the query of endpoint CCs that are also supported by the root device
+			if (this.endpointIndex === 0 || node.getCCVersion(cc) === 0) {
+				await queryCCVersion(cc);
+			}
+		}
 		for (const [cc] of endpoint.getCCs()) {
 			// We already queried the Version CC version at the start of this interview
 			if (cc === CommandClasses.Version) continue;
+			// And we queried Basic CC just before this
+			if (cc === CommandClasses.Basic) continue;
 			// Skip the query of endpoint CCs that are also supported by the root device
 			if (this.endpointIndex > 0 && node.getCCVersion(cc) > 0) continue;
 			await queryCCVersion(cc);
@@ -591,6 +654,7 @@ export class VersionCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export interface VersionCCReportOptions {
 	libraryType: ZWaveLibraryTypes;
 	protocolVersion: string;
@@ -630,7 +694,7 @@ export class VersionCCReport extends VersionCC {
 		} else {
 			if (!/^\d+\.\d+(\.\d+)?$/.test(options.protocolVersion)) {
 				throw new ZWaveError(
-					`protocolVersion must be a string in the format "major.minor", received "${options.protocolVersion}"`,
+					`protocolVersion must be a string in the format "major.minor" or "major.minor.patch", received "${options.protocolVersion}"`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (
@@ -639,7 +703,7 @@ export class VersionCCReport extends VersionCC {
 				)
 			) {
 				throw new ZWaveError(
-					`firmwareVersions must be an array of strings in the format "major.minor", received "${
+					`firmwareVersions must be an array of strings in the format "major.minor" or "major.minor.patch", received "${
 						JSON.stringify(
 							options.firmwareVersions,
 						)
@@ -677,33 +741,28 @@ export class VersionCCReport extends VersionCC {
 				.split(".")
 				.map((n) => parseInt(n))
 				.slice(0, 2),
+			this.hardwareVersion ?? 0x00,
+			this.firmwareVersions.length - 1,
 		]);
-		if (this.version >= 2) {
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([
-					// The value 0x00 SHOULD NOT be used for the Hardware Version
-					this.hardwareVersion ?? 0x01,
-				]),
-			]);
-			if (this.firmwareVersions.length > 1) {
-				const firmwaresBuffer = Buffer.allocUnsafe(
-					(this.firmwareVersions.length - 1) * 2,
-				);
-				for (let i = 1; i < this.firmwareVersions.length; i++) {
-					const [major, minor] = this.firmwareVersions[i]
-						.split(".")
-						.map((n) => parseInt(n));
-					firmwaresBuffer[2 * (i - 1)] = major;
-					firmwaresBuffer[2 * (i - 1) + 1] = minor;
-				}
+
+		if (this.firmwareVersions.length > 1) {
+			const firmwaresBuffer = Buffer.allocUnsafe(
+				(this.firmwareVersions.length - 1) * 2,
+			);
+			for (let i = 1; i < this.firmwareVersions.length; i++) {
+				const [major, minor] = this.firmwareVersions[i]
+					.split(".")
+					.map((n) => parseInt(n));
+				firmwaresBuffer[2 * (i - 1)] = major;
+				firmwaresBuffer[2 * (i - 1) + 1] = minor;
 			}
+			this.payload = Buffer.concat([this.payload, firmwaresBuffer]);
 		}
 
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"library type": getEnumMemberName(
 				ZWaveLibraryTypes,
@@ -716,7 +775,7 @@ export class VersionCCReport extends VersionCC {
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -726,7 +785,8 @@ export class VersionCCReport extends VersionCC {
 @expectedCCResponse(VersionCCReport)
 export class VersionCCGet extends VersionCC {}
 
-interface VersionCCCommandClassReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface VersionCCCommandClassReportOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 	ccVersion: number;
 }
@@ -758,9 +818,9 @@ export class VersionCCCommandClassReport extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				CC: getCCName(this.requestedCC),
 				version: this.ccVersion,
@@ -769,7 +829,8 @@ export class VersionCCCommandClassReport extends VersionCC {
 	}
 }
 
-interface VersionCCCommandClassGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
@@ -809,33 +870,51 @@ export class VersionCCCommandClassGet extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
+}
+
+// @publicAPI
+export interface VersionCCCapabilitiesReportOptions {
+	supportsZWaveSoftwareGet: boolean;
 }
 
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (VersionCCCapabilitiesReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		const capabilities = this.payload[0];
-		this.supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			const capabilities = this.payload[0];
+			this.supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+		} else {
+			this.supportsZWaveSoftwareGet = options.supportsZWaveSoftwareGet;
+		}
 	}
 
 	@ccValue(VersionCCValues.supportsZWaveSoftwareGet)
-	public readonly supportsZWaveSoftwareGet: boolean;
+	public supportsZWaveSoftwareGet: boolean;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			(this.supportsZWaveSoftwareGet ? 0b100 : 0) | 0b11,
+		]);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports Z-Wave Software Get command":
 					this.supportsZWaveSoftwareGet,
@@ -913,7 +992,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 	@ccValue(VersionCCValues.applicationBuildNumber)
 	public readonly applicationBuildNumber: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"SDK version": this.sdkVersion,
 		};
@@ -938,7 +1017,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			message["application build number"] = this.applicationBuildNumber;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

@@ -2,7 +2,7 @@
 	"manufacturer": "Alarm.com",
 	"manufacturerId": "0x0094",
 	"label": "ADC-NK-100T",
-	"description": "Alarm.com Hub",
+	"description": "Hub",
 	"devices": [
 		{
 			"productType": "0x0001",

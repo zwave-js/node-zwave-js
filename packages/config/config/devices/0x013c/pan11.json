@@ -2,7 +2,7 @@
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PAN11",
-	"description": "Smart Energy Plug In Switch",
+	"description": "Smart Energy Plug in Switch",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "W meter report period",
+			"label": "W Meter Report Period",
 			"description": "Set automatic W meter reporting interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "2",
-			"label": "kWh meter report period",
+			"label": "kWh Meter Report Period",
 			"description": "Set automatic kWh meter reporting interval.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -42,7 +42,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Threshold of Watt for load caution",
+			"label": "Threshold of Watt for Load Caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1300,
@@ -59,55 +59,38 @@
 		},
 		{
 			"#": "5",
-			"label": "Restore switch state mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch Off",
-					"value": 0
-				},
-				{
-					"label": "Last State",
-					"value": 1
-				},
-				{
-					"label": "Switch On",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "6",
-			"label": "Mode of switch Off function",
+			"label": "Mode of Switch Off Function",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "SWITCH OFF commands received are ignored.",
+					"label": "Switch off commands received are ignored",
 					"value": 0
 				},
 				{
-					"label": "SWITCH OFF commands received are honored.",
+					"label": "Switch off commands received are honored",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7",
-			"label": "LED indication mode",
+			"label": "LED Indication Mode",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The LED follows the state of the switch.",
+					"label": "The LED follows the state of the switch",
 					"value": 1
 				},
 				{
-					"label": "LED off with load ON",
+					"label": "LED off with load on",
 					"value": 2
 				},
 				{
@@ -127,13 +110,13 @@
 		},
 		{
 			"#": "9",
-			"label": "RF Off command mode",
+			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch Off",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -141,11 +124,11 @@
 					"value": 1
 				},
 				{
-					"label": "Switch Toggle",
+					"label": "Switch toggle",
 					"value": 2
 				},
 				{
-					"label": "Switch On",
+					"label": "Switch on",
 					"value": 3
 				}
 			]

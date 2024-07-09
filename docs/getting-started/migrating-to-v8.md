@@ -50,8 +50,7 @@ Many manufacturers seem to get multi channel associations "wrong". We now prefer
 1. Try a node association on the current endpoint/root
 2. If Association CC is not supported, try assigning a node association with the Multi Channel Association CC
 3. If that did not work, fall back to a multi channel association (target endpoint 0)
-4. If that did not work either, the endpoint index is `> 0` and the node supports Z-Wave+:
-   \
+4. If that did not work either, the endpoint index is `> 0` and the node supports Z-Wave+:\
    Fall back to a multi channel association (target endpoint 0) on the root, if it doesn't have one yet.
 
 Incorrect lifeline associations like the ones set up by OZW with target endpoint 1 will automatically get cleaned up during the process.
@@ -75,7 +74,7 @@ It is recommended to only query the necessary user codes on demand instead after
 
 Using the new `interview.queryAllUserCodes` property of `ZWaveOptions`, the interview behavior can be toggled back to query all codes if you wish to do so.
 
-## Restructing of the Driver's `ZWaveOptions` object
+## Restructuring of the Driver's `ZWaveOptions` object
 
 We have unified all interview behavior options under a single key (`interview`). This likely does not affect you, unless you were previously using the internal `skipInterview` property.
 The new structure simply wraps the prior key inside `interview` and adds additional options as seen below:

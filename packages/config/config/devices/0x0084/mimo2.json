@@ -2,7 +2,7 @@
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "MIMO2+",
-	"description": "Dual Digital or Analog Voltage input and Dual Contact Relay",
+	"description": "Dual Digital or Analog Voltage Input and Dual Contact Relay",
 	"devices": [
 		{
 			"productType": "0x0463",
@@ -106,23 +106,23 @@
 					"value": 0
 				},
 				{
-					"label": "Trigger on Sensor 1",
+					"label": "Trigger on sensor 1",
 					"value": 1
 				},
 				{
-					"label": "Trigger on Sensor 2",
+					"label": "Trigger on sensor 2",
 					"value": 2
 				},
 				{
-					"label": "Trigger on Sensor 1 or Sensor 2",
+					"label": "Trigger on sensor 1 or sensor 2",
 					"value": 3
 				},
 				{
-					"label": "Trigger on Sensor 1 and Sensor 2",
+					"label": "Trigger on sensor 1 and sensor 2",
 					"value": 4
 				},
 				{
-					"label": "Trigger on Sensor 1 and/or Sensor 2",
+					"label": "Trigger on sensor 1 and/or sensor 2",
 					"value": 7
 				}
 			]
@@ -150,23 +150,23 @@
 					"value": 0
 				},
 				{
-					"label": "Trigger on Sensor 1",
+					"label": "Trigger on sensor 1",
 					"value": 1
 				},
 				{
-					"label": "Trigger on Sensor 2",
+					"label": "Trigger on sensor 2",
 					"value": 2
 				},
 				{
-					"label": "Trigger on Sensor 1 or Sensor 2",
+					"label": "Trigger on sensor 1 or sensor 2",
 					"value": 3
 				},
 				{
-					"label": "Trigger on Sensor 1 and Sensor 2",
+					"label": "Trigger on sensor 1 and sensor 2",
 					"value": 4
 				},
 				{
-					"label": "Trigger on Sensor 1 and/or Sensor 2",
+					"label": "Trigger on sensor 1 and/or sensor 2",
 					"value": 7
 				}
 			]
@@ -195,7 +195,7 @@
 					"value": 0
 				},
 				{
-					"label": "On Change",
+					"label": "On change",
 					"value": 1
 				}
 			]
@@ -243,7 +243,7 @@
 					"value": 0
 				},
 				{
-					"label": "On Change",
+					"label": "On change",
 					"value": 1
 				}
 			]

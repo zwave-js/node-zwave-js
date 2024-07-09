@@ -1,5 +1,10 @@
 export {
+	ProtocolDataRate,
+	ProtocolType,
+	ProtocolVersion,
+	Protocols,
 	QRCodeVersion,
+	RouteProtocolDataRate,
 	extractFirmware,
 	guessFirmwareFileFormat,
 	parseQRCodeString,
@@ -8,12 +13,7 @@ export {
 export type {
 	Firmware,
 	FirmwareFileFormat,
-	ProtocolDataRate,
-	ProtocolType,
-	ProtocolVersion,
-	Protocols,
 	QRProvisioningInformation,
-	RouteProtocolDataRate,
 	protocolDataRateToString,
 } from "@zwave-js/core";
 export {
@@ -23,6 +23,7 @@ export {
 	num2hex,
 } from "@zwave-js/shared/safe";
 export { createDefaultBehaviors as createDefaultMockControllerBehaviors } from "./lib/controller/MockControllerBehaviors";
+export { driverPresets } from "./lib/driver/ZWaveOptions";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,

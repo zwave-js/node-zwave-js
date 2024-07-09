@@ -2,7 +2,7 @@
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "PID15903",
-	"description": "Plug In Power Monitor",
+	"description": "Plug in Power Monitor",
 	"devices": [
 		{
 			"productType": "0x201a",

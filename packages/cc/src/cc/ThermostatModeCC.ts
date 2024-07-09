@@ -14,7 +14,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -297,6 +301,7 @@ export class ThermostatModeCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export type ThermostatModeCCSetOptions =
 	& CCCommandOptions
 	& (
@@ -347,11 +352,11 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	public manufacturerData?: Buffer;
 
 	public serialize(): Buffer {
-		const manufacturerData = this.version >= 3
-				&& this.mode === ThermostatMode["Manufacturer specific"]
+		const manufacturerData =
+			this.mode === ThermostatMode["Manufacturer specific"]
 				&& this.manufacturerData
-			? this.manufacturerData
-			: Buffer.from([]);
+				? this.manufacturerData
+				: Buffer.from([]);
 		const manufacturerDataLength = manufacturerData.length;
 		this.payload = Buffer.concat([
 			Buffer.from([
@@ -362,7 +367,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatMode, this.mode),
 		};
@@ -370,12 +375,13 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 			message["manufacturer data"] = buffer2hex(this.manufacturerData);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
+// @publicAPI
 export type ThermostatModeCCReportOptions =
 	& CCCommandOptions
 	& (
@@ -483,7 +489,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatMode, this.mode),
 		};
@@ -491,7 +497,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			message["manufacturer data"] = buffer2hex(this.manufacturerData);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -501,6 +507,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 @expectedCCResponse(ThermostatModeCCReport)
 export class ThermostatModeCCGet extends ThermostatModeCC {}
 
+// @publicAPI
 export interface ThermostatModeCCSupportedReportOptions
 	extends CCCommandOptions
 {
@@ -554,9 +561,9 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

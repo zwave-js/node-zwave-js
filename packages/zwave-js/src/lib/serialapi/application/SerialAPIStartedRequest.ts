@@ -29,7 +29,7 @@ export enum SerialAPIWakeUpReason {
 	WatchdogReset = 0x03,
 	/** The Z-Wave API Module has been woken up by an external interrupt. */
 	ExternalInterrupt = 0x04,
-	/** The Z-Wave API Module has been woken up by a powering up. */
+	/** The Z-Wave API Module has been woken up by powering up. */
 	PowerUp = 0x05,
 	/** The Z-Wave API Module has been woken up by USB Suspend. */
 	USBSuspend = 0x06,

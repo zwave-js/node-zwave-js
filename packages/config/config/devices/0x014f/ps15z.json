@@ -22,11 +22,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Flash Mode",
+					"label": "Flash mode",
 					"value": 0
 				},
 				{
-					"label": "ON/OFF Operation",
+					"label": "On/Off operation",
 					"value": 1
 				}
 			]

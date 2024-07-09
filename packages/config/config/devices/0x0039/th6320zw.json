@@ -187,5 +187,8 @@
 		// The device responds in a weird way to these requests which causes S2 collisions
 		"skipConfigurationNameQuery": true,
 		"skipConfigurationInfoQuery": true
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=Manuals/2893/33-00414-01-min.pdf"
 	}
 }

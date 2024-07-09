@@ -10,7 +10,10 @@ body:
     attributes:
       value: |
         We appreciate you taking your time and reporting an issue.
-        Please note that this template is **NOT** for bug reports! To report a problem with an existing config file or if a device is not working correctly, please use the **bug report** template.
+
+        Please note that this template is **NOT** for bug reports!
+        To report a problem with an existing config file or if a device is not working correctly,
+        please [use this template](https://github.com/zwave-js/node-zwave-js/discussions/new?category=request-support-investigate-issue) instead!
 
         To speed things up, consider [contributing](https://zwave-js.github.io/node-zwave-js/#/config-files/contributing-files) a config file yourself.
 
@@ -25,6 +28,9 @@ body:
           required: true
         - label: |
             It was not [merged recently](https://github.com/zwave-js/node-zwave-js/pulls?q=is%3Apr+is%3Aclosed) or has a [pending PR](https://github.com/zwave-js/node-zwave-js/pulls?q=is%3Aopen+is%3Apr)
+          required: true
+        - label: |
+            The device was interviewed completely and has no missing or `undefined` IDs
           required: true
 
   - type: input

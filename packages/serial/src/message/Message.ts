@@ -38,6 +38,8 @@ export interface MessageDeserializationOptions {
 	parseCCs?: boolean;
 	/** If known already, this contains the SDK version of the stick which can be used to interpret payloads differently */
 	sdkVersion?: string;
+	/** Optional context used during deserialization */
+	context?: unknown;
 }
 
 /**
@@ -70,7 +72,7 @@ export type MessageOptions =
  */
 export class Message {
 	public constructor(
-		protected host: ZWaveHost,
+		public readonly host: ZWaveHost,
 		options: MessageOptions = {},
 	) {
 		// decide which implementation we follow
@@ -251,8 +253,19 @@ export class Message {
 	public static from(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,
+		contextStore?: Map<FunctionType, Record<string, unknown>>,
 	): Message {
 		const Constructor = Message.getConstructor(options.data);
+
+		// Take the context out of the context store if it exists
+		if (contextStore) {
+			const functionType = getFunctionTypeStatic(Constructor)!;
+			if (contextStore.has(functionType)) {
+				options.context = contextStore.get(functionType)!;
+				contextStore.delete(functionType);
+			}
+		}
+
 		const ret = new Constructor(host, options);
 		return ret;
 	}
@@ -317,6 +330,12 @@ export class Message {
 		}
 	}
 
+	/** Tests whether this message expects an ACK from the controller */
+	public expectsAck(): boolean {
+		// By default, all commands expect an ACK
+		return true;
+	}
+
 	/** Tests whether this message expects a response from the controller */
 	public expectsResponse(): boolean {
 		return !!this.expectedResponse;
@@ -355,12 +374,18 @@ export class Message {
 	/** Checks if a message is an expected callback for this message */
 	public isExpectedCallback(msg: Message): boolean {
 		if (msg.type !== MessageType.Request) return false;
-		// If a received request included a callback id, enforce that the response contains the same
-		if (
-			this.hasCallbackId()
-			&& (!msg.hasCallbackId() || this._callbackId !== msg._callbackId)
-		) {
-			return false;
+
+		// Some controllers have a bug causing them to send a callback with a function type of 0 and no callback ID
+		// To prevent this from triggering the unresponsive controller detection we need to forward these messages as if they were correct
+		if (msg.functionType !== 0 as any) {
+			// If a received request included a callback id, enforce that the response contains the same
+			if (
+				this.hasCallbackId()
+				&& (!msg.hasCallbackId()
+					|| this._callbackId !== msg._callbackId)
+			) {
+				return false;
+			}
 		}
 
 		return this.testMessage(msg, this.expectedCallback);

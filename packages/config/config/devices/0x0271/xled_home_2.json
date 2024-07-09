@@ -2,7 +2,7 @@
 	"manufacturer": "STEINEL GmbH",
 	"manufacturerId": "0x0271",
 	"label": "XLED Home 2",
-	"description": "PIR sensor with relay and light",
+	"description": "PIR Sensor with Relay and Light",
 	"devices": [
 		{
 			"productType": "0x0001",

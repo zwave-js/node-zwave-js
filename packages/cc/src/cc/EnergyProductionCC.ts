@@ -8,7 +8,11 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -179,6 +183,7 @@ export class EnergyProductionCC extends CommandClass {
 	}
 }
 
+// @publicAPI
 export interface EnergyProductionCCReportOptions extends CCCommandOptions {
 	parameter: EnergyProductionParameter;
 	scale: EnergyProductionScale;
@@ -238,9 +243,9 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				[
 					getEnumMemberName(
@@ -253,7 +258,8 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 	}
 }
 
-interface EnergyProductionCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface EnergyProductionCCGetOptions extends CCCommandOptions {
 	parameter: EnergyProductionParameter;
 }
 
@@ -292,9 +298,9 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				parameter: getEnumMemberName(
 					EnergyProductionParameter,

@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Re-trigger Wait Time",
+			"label": "Re-Trigger Wait Time",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,
@@ -33,6 +33,6 @@
 		}
 	],
 	"compat": {
-		"enableBasicSetMapping": true
+		"mapBasicSet": "auto"
 	}
 }

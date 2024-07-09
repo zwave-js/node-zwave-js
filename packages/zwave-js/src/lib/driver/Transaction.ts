@@ -80,6 +80,8 @@ export class Transaction implements Comparable<Transaction> {
 				"creationTimestamp",
 				"changeNodeStatusOnTimeout",
 				"pauseSendThread",
+				"priority",
+				"tag",
 				"requestWakeUpOnDemand",
 			] as const
 		) {

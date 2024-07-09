@@ -1,4 +1,5 @@
 import { ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
+import { FunctionType } from "@zwave-js/serial";
 import { type MockControllerBehavior } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import Sinon from "sinon";
@@ -55,9 +56,19 @@ integrationTest(
 );
 
 integrationTest(
-	"When the controller is still unresponsive after soft reset, destroy the driver",
+	"When the controller is still unresponsive after soft reset, re-open the serial port",
 	{
 		// debug: true,
+
+		additionalDriverOptions: {
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+			attempts: {
+				// Spend less time waiting
+				controller: 1,
+			},
+		},
 
 		async customSetup(driver, mockController, mockNode) {
 			const doNotRespond: MockControllerBehavior = {
@@ -74,8 +85,13 @@ integrationTest(
 			shouldRespond = false;
 			mockController.autoAckHostMessages = false;
 
-			const errorSpy = Sinon.spy();
-			driver.on("error", errorSpy);
+			const serialPortCloseSpy = Sinon.stub().callsFake(() => {
+				shouldRespond = true;
+				mockController.autoAckHostMessages = true;
+			});
+			mockController.serial.on("close", serialPortCloseSpy);
+
+			await wait(1000);
 
 			await assertZWaveError(
 				t,
@@ -90,11 +106,81 @@ integrationTest(
 				},
 			);
 
-			// The driver should have been destroyed
+			// The serial port should have been closed and reopened
 			await wait(100);
-			assertZWaveError(t, errorSpy.getCall(0).args[0], {
-				errorCode: ZWaveErrorCodes.Driver_Failed,
-			});
+			t.true(serialPortCloseSpy.called);
+
+			// FIXME: When closing the serial port, we lose the connection between the mock port instance and the controller
+			// Fix it at some point, then enable the below test.
+
+			// await wait(1000);
+
+			// // Sending a command should work again, assuming the controller is responsive again
+			// await t.notThrowsAsync(() =>
+			// 	driver.sendMessage<GetControllerIdResponse>(
+			// 		new GetControllerIdRequest(driver),
+			// 		{ supportCheck: false },
+			// 	)
+			// );
+
+			// driver.driverLog.print("TEST PASSED");
+		},
+	},
+);
+
+integrationTest(
+	"The unresponsive controller recovery does not kick in when it was enabled via config",
+	{
+		// debug: true,
+
+		additionalDriverOptions: {
+			attempts: {
+				controller: 1,
+			},
+			features: {
+				unresponsiveControllerRecovery: false,
+			},
+		},
+
+		async customSetup(driver, mockController, mockNode) {
+			const doNotRespond: MockControllerBehavior = {
+				onHostMessage(host, controller, msg) {
+					if (!shouldRespond) {
+						return true;
+					}
+
+					return false;
+				},
+			};
+			mockController.defineBehavior(doNotRespond);
+		},
+
+		async testBody(t, driver, node, mockController, mockNode) {
+			shouldRespond = false;
+			mockController.autoAckHostMessages = false;
+
+			// The command fails
+			await assertZWaveError(
+				t,
+				() =>
+					driver.sendMessage<GetControllerIdResponse>(
+						new GetControllerIdRequest(driver),
+						{ supportCheck: false },
+					),
+				{
+					errorCode: ZWaveErrorCodes.Controller_Timeout,
+					context: "ACK",
+				},
+			);
+
+			await wait(500);
+
+			// And the controller does not get soft-reset
+			t.throws(() =>
+				mockController.assertReceivedHostMessage((msg) =>
+					msg.functionType === FunctionType.SoftReset
+				)
+			);
 		},
 	},
 );

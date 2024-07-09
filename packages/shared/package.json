@@ -1,19 +1,20 @@
 {
   "name": "@zwave-js/shared",
-  "version": "12.0.0",
+  "version": "13.0.0-beta.1",
   "description": "zwave-js: shared utilities",
   "keywords": [],
   "publishConfig": {
     "access": "public"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "type": "commonjs",
   "exports": {
     ".": {
+      "@@dev": "./src/index.ts",
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
     "./safe": {
+      "@@dev": "./src/index_safe.ts",
       "types": "./build/index_safe.d.ts",
       "default": "./build/index_safe.js"
     },
@@ -27,13 +28,13 @@
     "email": "d.griesel@gmx.net"
   },
   "license": "MIT",
-  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "homepage": "https://github.com/zwave-js/node-zwave-js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+    "url": "git+https://github.com/zwave-js/node-zwave-js.git"
   },
   "bugs": {
-    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+    "url": "https://github.com/zwave-js/node-zwave-js/issues"
   },
   "funding": {
     "url": "https://github.com/sponsors/AlCalzone/"
@@ -43,7 +44,7 @@
   },
   "dependencies": {
     "alcalzone-shared": "^4.0.8",
-    "fs-extra": "^11.1.1"
+    "fs-extra": "^11.2.0"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
@@ -55,15 +56,15 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.37.3",
-    "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.17.14",
-    "@types/sinon": "^10.0.16",
-    "ava": "^5.3.1",
+    "@microsoft/api-extractor": "^7.47.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^18.19.31",
+    "@types/sinon": "^17.0.3",
+    "ava": "^6.1.2",
     "del-cli": "^5.1.0",
-    "esbuild": "0.19.2",
-    "esbuild-register": "^3.4.2",
-    "sinon": "^15.2.0",
-    "typescript": "5.2.2"
+    "esbuild": "0.21.5",
+    "esbuild-register": "^3.5.0",
+    "sinon": "^17.0.1",
+    "typescript": "5.5.3"
   }
 }

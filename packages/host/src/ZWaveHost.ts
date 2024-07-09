@@ -29,8 +29,10 @@ export interface ZWaveHost {
 
 	/** Management of Security S0 keys and nonces */
 	securityManager: SecurityManager | undefined;
-	/** Management of Security S2 keys and nonces */
+	/** Management of Security S2 keys and nonces (Z-Wave Classic) */
 	securityManager2: SecurityManager2 | undefined;
+	/** Management of Security S2 keys and nonces (Z-Wave Long Range) */
+	securityManagerLR: SecurityManager2 | undefined;
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
@@ -91,8 +93,17 @@ export interface ZWaveHost {
 	__internalIsMockNode?: boolean;
 }
 
+/** Host application abstractions that provide support for reading and writing values to a database */
+export interface ZWaveValueHost {
+	/** Returns the value DB which belongs to the node with the given ID, or throws if the Value DB cannot be accessed */
+	getValueDB(nodeId: number): ValueDB;
+
+	/** Returns the value DB which belongs to the node with the given ID, or `undefined` if the Value DB cannot be accessed */
+	tryGetValueDB(nodeId: number): ValueDB | undefined;
+}
+
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
-export interface ZWaveApplicationHost extends ZWaveHost {
+export interface ZWaveApplicationHost extends ZWaveValueHost, ZWaveHost {
 	/** Gives access to the configuration files */
 	configManager: ConfigManager;
 
@@ -100,12 +111,6 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;
-
-	/** Returns the value DB which belongs to the node with the given ID, or throws if the Value DB cannot be accessed */
-	getValueDB(nodeId: number): ValueDB;
-
-	/** Returns the value DB which belongs to the node with the given ID, or `undefined` if the Value DB cannot be accessed */
-	tryGetValueDB(nodeId: number): ValueDB | undefined;
 
 	/** Readonly access to all node instances known to the host */
 	nodes: ReadonlyThrowingMap<number, IZWaveNode>;

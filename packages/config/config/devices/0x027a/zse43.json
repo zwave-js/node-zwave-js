@@ -129,15 +129,15 @@
 					"value": 0
 				},
 				{
-					"label": "0xff (on) when tilt detected",
+					"label": "0xff (On) when tilt detected",
 					"value": 1
 				},
 				{
-					"label": "0x00 (off) when tilt cleared",
+					"label": "0x00 (Off) when tilt cleared",
 					"value": 2
 				},
 				{
-					"label": "0xff (on) when tilt detected; 0x00 (off) when tilt cleared",
+					"label": "0xff (On) when tilt detected; 0x00 (Off) when tilt cleared",
 					"value": 3
 				}
 			]
@@ -154,15 +154,15 @@
 					"value": 0
 				},
 				{
-					"label": "0xff (on) when shock detected",
+					"label": "0xff (On) when shock detected",
 					"value": 1
 				},
 				{
-					"label": "0x00 (off) when shock cleared",
+					"label": "0x00 (Off) when shock cleared",
 					"value": 2
 				},
 				{
-					"label": "0xff (on) when shock detected; 0x00 (off) when shock cleared",
+					"label": "0xff (On) when shock detected; 0x00 (Off) when shock cleared",
 					"value": 3
 				}
 			]

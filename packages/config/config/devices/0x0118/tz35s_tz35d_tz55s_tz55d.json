@@ -1,0 +1,105 @@
+{
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ35S / TZ35D / TZ55S / TZ55D",
+	"description": "Single/Dual Paddle Wall Dimmer",
+	"devices": [
+		{
+			"productType": "0x0808",
+			"productId": "0x0808",
+			"zwaveAllianceId": [1359, 1360, 1361, 1362]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Group 1 Control",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Ignore Start Level Bit",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don't ignore start level",
+					"value": 0
+				},
+				{
+					"label": "Ignore start level",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Night Light",
+			"description": "Indicates if LED is on when load is ON",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Night LED on",
+					"value": 0
+				},
+				{
+					"label": "Night LED off",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Invert Switch",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On command on top",
+					"value": 0
+				},
+				{
+					"label": "Off command on top",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "LED Transmission Indicator",
+			"description": "LED flickering during transmission",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No flicker",
+					"value": 0
+				},
+				{
+					"label": "Flicker all time",
+					"value": 1
+				},
+				{
+					"label": "One second flicker",
+					"value": 2
+				}
+			]
+		}
+	],
+	"compat": {
+		// The right paddle sends its status via Basic Set commands
+		"mapBasicSet": "event"
+	}
+}

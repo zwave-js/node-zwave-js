@@ -2,7 +2,7 @@
 	"manufacturer": "Shenzhen Saykey Technology Co., Ltd.",
 	"manufacturerId": "0x032c",
 	"label": "SK-3007-05",
-	"description": "Curtain Motor Control external module",
+	"description": "Curtain Motor Control External Module",
 	"devices": [
 		{
 			"productType": "0x3007",
@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Set motor direction",
+			"label": "Motor Direction",
 			"description": "Toggle motor direction between reverse and default",
 			"valueSize": 1,
 			"minValue": -128,
@@ -35,7 +35,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Clear motor lead tail endpoint setting",
+			"label": "Clear Motor Lead Tail Endpoint Setting",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Enable manual pull function",
+			"label": "Enable Manual Pull Function",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Disable manual pull function",
+			"label": "Disable Manual Pull Function",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,

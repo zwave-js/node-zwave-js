@@ -1,0 +1,80 @@
+{
+	"manufacturer": "UltraPro",
+	"manufacturerId": "0x0063",
+	"label": "59368 / ZWA4012",
+	"description": "In-Wall Toggle Switch, QFSW, 700S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3334",
+			"zwaveAllianceId": 4571
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Press",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "5",
+			"$import": "templates/jasco_template.json#three_way_setup"
+		},
+		{
+			"#": "19",
+			"$import": "templates/jasco_template.json#alternate_exclusion"
+		},
+		{
+			"#": "34",
+			"$import": "templates/jasco_template.json#led_indicator_color"
+		},
+		{
+			"#": "35",
+			"$import": "templates/jasco_template.json#led_indicator_intensity"
+		},
+		{
+			"#": "36",
+			"$import": "templates/jasco_template.json#led_indicator_intensity",
+			"label": "Guidelight Mode Intensity"
+		},
+		{
+			"#": "39",
+			"$import": "templates/jasco_template.json#control_groups"
+		},
+		{
+			"#": "84",
+			"$import": "templates/jasco_template.json#factory_default"
+		}
+	],
+	"compat": {
+		// Needed for double-tap support
+		"mapBasicSet": "event"
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"reset": "Pull the airgap switch. Press and hold the bottom button, push the airgap switch in and continue holding the bottom button for 10 seconds. The LED will flash once each of the 8 colors then stop"
+	}
+}

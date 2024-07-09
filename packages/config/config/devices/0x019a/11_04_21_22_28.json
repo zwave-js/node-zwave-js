@@ -29,26 +29,26 @@
 		},
 		{
 			"#": "4",
-			"label": "Temperature & Humidity Reporting",
+			"label": "Temperature Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 2,
+			"defaultValue": 0,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable - change threshold reporting",
+					"label": "Enable - Change threshold reporting",
 					"value": 1
 				},
 				{
-					"label": "Enable - timed reporting of actual values",
+					"label": "Enable - Timed reporting of actual values",
 					"value": 2
 				},
 				{
-					"label": "Enable - timed reporting of average values",
+					"label": "Enable - Timed reporting of average values",
 					"value": 3
 				}
 			]
@@ -65,7 +65,7 @@
 		{
 			"#": "7",
 			"label": "High Temperature Threshold",
-			"valueSize": 2,
+			"valueSize": 1,
 			"unit": "°C",
 			"minValue": -20,
 			"maxValue": 80,
@@ -74,7 +74,7 @@
 		{
 			"#": "8",
 			"label": "Low Temperature Threshold",
-			"valueSize": 2,
+			"valueSize": 1,
 			"unit": "°C",
 			"minValue": -20,
 			"maxValue": 60,

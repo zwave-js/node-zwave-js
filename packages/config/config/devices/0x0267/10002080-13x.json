@@ -56,11 +56,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Turns the LED OFF (default)",
+					"label": "Turns the LED off",
 					"value": 0
 				},
 				{
-					"label": "Turns the LED ON",
+					"label": "Turns the LED on",
 					"value": 255
 				}
 			]
@@ -74,7 +74,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Sets the UP time in seconds",
+					"label": "Sets the up time in seconds",
 					"value": 1
 				},
 				{
@@ -91,7 +91,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Sets the DOWN time in seconds",
+					"label": "Sets the down time in seconds",
 					"value": 1
 				},
 				{
@@ -120,11 +120,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED OFF",
+					"label": "LED off",
 					"value": 0
 				},
 				{
-					"label": "LED ON at 20% of maximum level",
+					"label": "LED on at 20% of maximum level",
 					"value": 255
 				}
 			]
@@ -139,11 +139,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unlock the direct control of load.",
+					"label": "Unlock the direct control of load",
 					"value": 0
 				},
 				{
-					"label": "Lock the direct control of load.",
+					"label": "Lock the direct control of load",
 					"value": 255
 				}
 			]
@@ -189,29 +189,29 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Calibration is not required.",
+					"label": "Calibration is not required",
 					"value": 0
 				},
 				{
-					"label": "It is necessary to calibrate the device.",
+					"label": "It is necessary to calibrate the device",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "27",
-			"label": "Lock long press",
+			"label": "Lock Long Press",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Long press works as default.",
+					"label": "Long press works as default",
 					"value": 0
 				},
 				{
-					"label": "Long press works as overview.",
+					"label": "Long press works as overview",
 					"value": 255
 				}
 			]

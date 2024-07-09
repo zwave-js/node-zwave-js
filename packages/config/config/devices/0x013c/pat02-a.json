@@ -36,21 +36,10 @@
 		},
 		{
 			"#": "5[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Flood Sensor Function",
 			"description": "Enable or disable the flood function.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "5[0x08]",
@@ -72,21 +61,10 @@
 		},
 		{
 			"#": "5[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Temperature Report When Triggered",
 			"description": "Determines whether a temperature report is sent after an event is triggered.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "6",
@@ -108,21 +86,10 @@
 		},
 		{
 			"#": "7[0x08]",
-			"label": "Disable Basic Off after flood",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Basic Off After Flood",
 			"description": "Determines whether a Basic Off event is sent after a flood event is cleared.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x10]",
@@ -133,50 +100,28 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Notification report",
+					"label": "Notification Report",
 					"value": 0
 				},
 				{
-					"label": "Sensor binary report",
+					"label": "Binary Sensor Report",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "7[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Multi CC Reports",
 			"description": "Determines whether a Multi CC report is sent when sending the automatic report.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7[0x40]",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Report Battery State When Triggered",
 			"description": "Determines whether the battery state is reported when the device is triggered.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 1
-				},
-				{
-					"label": "Enabled",
-					"value": 0
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "10",

@@ -50,7 +50,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable ",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -327,7 +327,7 @@
 					"value": 0
 				},
 				{
-					"label": "External temperature (floor temperature)",
+					"label": "External temperature (Floor temperature)",
 					"value": 1
 				}
 			]

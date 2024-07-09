@@ -2,6 +2,7 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA022",
+	// eslint-disable-next-line @zwave-js/consistent-config-string-case
 	"description": "illumino WallMote 7",
 	"devices": [
 		{
@@ -58,11 +59,11 @@
 					"value": 0
 				},
 				{
-					"label": "Central scene only",
+					"label": "Central Scene only",
 					"value": 1
 				},
 				{
-					"label": "Group association and central scene",
+					"label": "Group association and Central Scene",
 					"value": 2
 				}
 			]
@@ -79,7 +80,7 @@
 					"value": 0
 				},
 				{
-					"label": "Binary switch set",
+					"label": "Binary Switch Set",
 					"value": 1
 				}
 			]

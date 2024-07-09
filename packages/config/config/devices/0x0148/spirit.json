@@ -24,17 +24,17 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LCD Invert",
+			"label": "Invert LCD",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LCD-content normal",
+					"label": "Normal",
 					"value": 0
 				},
 				{
-					"label": "LCD-content inverted (UK Edition)",
+					"label": "Inverted (UK edition)",
 					"value": 1
 				}
 			]
@@ -49,41 +49,30 @@
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "No Timeout LCD always on",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Backlight",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Backlight disabled",
-					"value": 0
-				},
-				{
-					"label": "Backlight enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Battery report",
+			"label": "Battery Report",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "system notification",
+					"label": "System notification",
 					"value": 0
 				},
 				{
-					"label": "Send battery status unsolicited once a day.",
+					"label": "Send battery status unsolicited once a day",
 					"value": 1
 				}
 			]
@@ -99,7 +88,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Valve opening percentage report",
+			"label": "Valve Opening Percentage Report",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -108,7 +97,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Window open detection",
+			"label": "Window Open Detection",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
@@ -147,10 +136,29 @@
 			]
 		}
 	],
-	"metadata": {
-		"comments": {
-			"level": "warning",
-			"text": "The thermostat is missing \"Manufacturer Specific\" from its list of supported modes, although the mode is supported. Application-specific workarounds may be necessary to switch to \"Manufacturer Specific\" mode."
+	"compat": {
+		"overrideQueries": {
+			// The device does not report "Manufacturer specific" as a supported thermostat mode
+			"Thermostat Mode": [
+				{
+					"method": "getSupportedModes",
+					"result": [0, 1, 11, 15, 31], // Off / Heat / Energy heat / Full power / Manufacturer specific
+					"persistValues": {
+						"supportedModes": [0, 1, 11, 15, 31]
+					},
+					"extendMetadata": {
+						"thermostatMode": {
+							"states": {
+								"0": "Off",
+								"1": "Heat",
+								"11": "Energy heat",
+								"15": "Full power",
+								"31": "Manufacturer specific"
+							}
+						}
+					}
+				}
+			]
 		}
 	}
 }

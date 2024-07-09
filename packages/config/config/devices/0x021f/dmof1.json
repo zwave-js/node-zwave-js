@@ -2,7 +2,7 @@
 	"manufacturer": "Elexa Consumer Products Inc.",
 	"manufacturerId": "0x021f",
 	"label": "DMOF1",
-	"description": "Dome On/Off zwave wall plug for controlling small appliances and lights.",
+	"description": "Dome On/Off Zwave Wall Plug for Controlling Small Appliances and Lights.",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -31,21 +31,9 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Disable Meter Functionality",
-			"description": "Enable/Disable the meter report.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Meter Functionality",
-					"value": 0
-				},
-				{
-					"label": "Enable Meter Functionality",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Meter Functionality",
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
@@ -60,10 +48,10 @@
 		},
 		{
 			"#": "3",
-			"label": "Set \"Overload\" Current level",
+			"label": "Set \"Overload\" Current Level",
 			"description": "Maximum current the plug will pass",
 			"valueSize": 1,
-			"unit": "amps",
+			"unit": "A",
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 13
@@ -73,7 +61,7 @@
 			"label": "Set \"Alert\" Current Level",
 			"description": "Current level warning threshold",
 			"valueSize": 1,
-			"unit": "amps",
+			"unit": "A",
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 12
@@ -98,7 +86,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Current change METER_REPORT level",
+			"label": "Current Change METER_REPORT Level",
 			"description": "Report of relative change in current flow",
 			"valueSize": 1,
 			"unit": "%",
@@ -108,21 +96,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Remember On/Off status",
-			"description": "Remember status from last plug in.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Don't Remember",
-					"value": 0
-				},
-				{
-					"label": "Remember",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		{
 			"#": "8",
@@ -154,21 +128,9 @@
 		},
 		{
 			"#": "10",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable/Disable BUTTON",
-			"description": "Turn off the button",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Button",
-					"value": 0
-				},
-				{
-					"label": "Enable Button",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	]
 }

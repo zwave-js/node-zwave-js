@@ -11,7 +11,11 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -221,7 +225,8 @@ export class TimeCC extends CommandClass {
 	}
 }
 
-interface TimeCCTimeReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface TimeCCTimeReportOptions extends CCCommandOptions {
 	hour: number;
 	minute: number;
 	second: number;
@@ -262,9 +267,9 @@ export class TimeCCTimeReport extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				time: `${padStart(this.hour.toString(), 2, "0")}:${
 					padStart(
@@ -282,7 +287,8 @@ export class TimeCCTimeReport extends TimeCC {
 @expectedCCResponse(TimeCCTimeReport)
 export class TimeCCTimeGet extends TimeCC {}
 
-interface TimeCCDateReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface TimeCCDateReportOptions extends CCCommandOptions {
 	year: number;
 	month: number;
 	day: number;
@@ -323,9 +329,9 @@ export class TimeCCDateReport extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				date: `${padStart(this.year.toString(), 4, "0")}-${
 					padStart(
@@ -343,7 +349,8 @@ export class TimeCCDateReport extends TimeCC {
 @expectedCCResponse(TimeCCDateReport)
 export class TimeCCDateGet extends TimeCC {}
 
-interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 	standardOffset: number;
 	dstOffset: number;
 	dstStart: Date;
@@ -397,9 +404,9 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -410,7 +417,8 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 	}
 }
 
-interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
+// @publicAPI
+export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
 	standardOffset: number;
 	dstOffset: number;
 	dstStart: Date;
@@ -480,9 +488,9 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,

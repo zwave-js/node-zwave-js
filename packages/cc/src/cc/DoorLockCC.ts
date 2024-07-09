@@ -15,7 +15,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -810,7 +814,8 @@ latch status:       ${status.latchStatus}`;
 	}
 }
 
-interface DoorLockCCOperationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface DoorLockCCOperationSetOptions extends CCCommandOptions {
 	mode: DoorLockMode;
 }
 
@@ -848,9 +853,9 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"target mode": getEnumMemberName(DoorLockMode, this.mode),
 			},
@@ -961,7 +966,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.lockTimeout)
 	public readonly lockTimeout?: number; // in seconds
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current mode": getEnumMemberName(DoorLockMode, this.currentMode),
 			"active outside handles": this.outsideHandlesCanOpenDoor.join(", "),
@@ -991,7 +996,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			message["lock timeout"] = `${this.lockTimeout} seconds`;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1112,7 +1117,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 		return true;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"operation type": getEnumMemberName(
 				DoorLockOperationType,
@@ -1143,7 +1148,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			message["block-to-block enabled"] = this.blockToBlock;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1153,7 +1158,8 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 @expectedCCResponse(DoorLockCCConfigurationReport)
 export class DoorLockCCConfigurationGet extends DoorLockCC {}
 
-type DoorLockCCConfigurationSetOptions =
+// @publicAPI
+export type DoorLockCCConfigurationSetOptions =
 	& (
 		| {
 			operationType: DoorLockOperationType.Timed;
@@ -1240,43 +1246,33 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 			lockTimeoutSeconds = this.lockTimeoutConfiguration! % 60;
 		}
 
+		const flags = (this.twistAssist ? 0b1 : 0)
+			| (this.blockToBlock ? 0b10 : 0);
+
 		this.payload = Buffer.from([
 			this.operationType,
 			handles,
 			lockTimeoutMinutes,
 			lockTimeoutSeconds,
+			// placeholder for auto relock time
+			0,
+			0,
+			// placeholder for hold and release time
+			0,
+			0,
+			flags,
 		]);
-		if (
-			this.version >= 4
-			&& (this.twistAssist != undefined
-				|| this.blockToBlock != undefined
-				|| this.autoRelockTime != undefined
-				|| this.holdAndReleaseTime != undefined)
-		) {
-			const flags = (this.twistAssist ? 0b1 : 0)
-				| (this.blockToBlock ? 0b10 : 0);
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([
-					// placeholder for auto relock time
-					0,
-					0,
-					// placeholder for hold and release time
-					0,
-					0,
-					flags,
-				]),
-			]);
-			this.payload.writeUInt16BE((this.autoRelockTime ?? 0) & 0xffff, 4);
-			this.payload.writeUInt16BE(
-				(this.holdAndReleaseTime ?? 0) & 0xffff,
-				6,
-			);
-		}
+
+		this.payload.writeUInt16BE((this.autoRelockTime ?? 0) & 0xffff, 4);
+		this.payload.writeUInt16BE(
+			(this.holdAndReleaseTime ?? 0) & 0xffff,
+			6,
+		);
+
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const insideHandles = isArray(
 				this.insideHandlesCanOpenDoorConfiguration,
 			)
@@ -1315,7 +1311,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 			message["enable block-to-block"] = this.blockToBlock;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1400,9 +1396,9 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.blockToBlockSupported)
 	public readonly blockToBlockSupported: boolean;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				door: this.doorSupported,
 				bolt: this.boltSupported,

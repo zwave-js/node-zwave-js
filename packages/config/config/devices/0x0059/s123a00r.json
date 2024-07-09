@@ -2,7 +2,7 @@
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
 	"label": "S123XXXR",
-	"description": "Z-Wave home energy meter",
+	"description": "Z-Wave Home Energy Meter",
 	"devices": [
 		{
 			"productType": "0x0005",

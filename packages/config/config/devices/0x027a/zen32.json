@@ -2,7 +2,7 @@
 // 1.1 -> 10.0 -> 10.10 -> 10.20 -> 10.30 -> (10.40 ≅ 2.10) -> 2.20
 
 // Conditionals:
-// 10.0  and later: firmwareVersion >= 10.0 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
+// 10.0 and later: firmwareVersion >= 2.10
 // 10.10 and later: firmwareVersion >= 10.10 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
 // 10.20 and later: firmwareVersion >= 10.20 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
 // 10.30 and later: firmwareVersion >= 10.30 || firmwareVersion >= 2.10 && firmwareVersion < 10.0
@@ -200,12 +200,12 @@
 		},
 		{
 			"#": "16",
-			"$import": "templates/zooz_template.json#auto_off_timer_0x_3x_7x",
+			"$import": "templates/zooz_template.json#auto_off_timer_0x_1x_3x_7x",
 			"label": "Auto-Off Timer (Relay)"
 		},
 		{
 			"#": "17",
-			"$import": "templates/zooz_template.json#auto_on_timer_0x_3x_7x",
+			"$import": "templates/zooz_template.json#auto_on_timer_0x_1x_3x_7x",
 			"label": "Auto-On Timer (Relay)"
 		},
 		{
@@ -220,16 +220,16 @@
 		{
 			"#": "20",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Report and Toggle LED on Button Press if Relay Disabled"
+			"label": "Send Report and Toggle LED on Button Press If Relay Disabled"
 		},
 		{
 			"#": "21",
-			"$if": "firmwareVersion >= 10.0 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$if": "firmwareVersion >= 2.10",
 			"$import": "templates/zooz_template.json#3way_switch_type"
 		},
 		{
 			"#": "22",
-			"$if": "firmwareVersion >= 10.0 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
+			"$if": "firmwareVersion >= 2.10",
 			"$import": "templates/zooz_template.json#local_programming"
 		},
 		{

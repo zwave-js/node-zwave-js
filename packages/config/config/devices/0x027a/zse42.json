@@ -57,11 +57,11 @@
 					"value": 0
 				},
 				{
-					"label": "0xff (on) when water detected; 0x00 (off) when cleared",
+					"label": "0xff (On) when water detected; 0x00 (Off) when cleared",
 					"value": 1
 				},
 				{
-					"label": "0x00 (off) when water detected; 0xff (on) when cleared",
+					"label": "0x00 (Off) when water detected; 0xff (On) when cleared",
 					"value": 2
 				}
 			]

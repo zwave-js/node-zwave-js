@@ -2,7 +2,7 @@
 	"manufacturer": "GreenWave Reality Inc.",
 	"manufacturerId": "0x0099",
 	"label": "DE220",
-	"description": "GreenWave Reality In Home Display",
+	"description": "GreenWave Reality in Home Display",
 	"devices": [
 		{
 			"productType": "0x0006",

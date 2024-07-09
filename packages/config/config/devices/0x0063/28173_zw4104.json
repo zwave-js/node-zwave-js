@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "28713 / ZW4104",
-	"description": "Plug-in 2-Outlet Switch, 1 Controlled, 500S",
+	"description": "Plug-In 2-Outlet Switch, 1 Controlled, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",
@@ -37,7 +37,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network.\n2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart switch to include it in the network.\n3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance",

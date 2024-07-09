@@ -2,7 +2,7 @@
 	"manufacturer": "Poly-control",
 	"manufacturerId": "0x010e",
 	"label": "Danalock V3-BTZE",
-	"description": "Z-Wave controlled door lock with Bluetooth Smart",
+	"description": "Z-Wave Controlled Door Lock with Bluetooth Smart",
 	"devices": [
 		{
 			"productType": "0x0009",

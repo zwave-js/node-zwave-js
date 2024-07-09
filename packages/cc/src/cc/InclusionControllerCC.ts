@@ -4,7 +4,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
@@ -86,7 +86,8 @@ export class InclusionControllerCCAPI extends CCAPI {
 	}
 }
 
-interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
+// @publicAPI
+export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
 	step: InclusionControllerStep;
 	status: InclusionControllerStatus;
 }
@@ -121,9 +122,9 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				step: getEnumMemberName(InclusionControllerStep, this.step),
 				status: getEnumMemberName(
@@ -135,7 +136,8 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 	}
 }
 
-interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
+// @publicAPI
+export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
 	includedNodeId: number;
 	step: InclusionControllerStep;
 }
@@ -170,9 +172,9 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"included node id": this.includedNodeId,
 				step: getEnumMemberName(InclusionControllerStep, this.step),

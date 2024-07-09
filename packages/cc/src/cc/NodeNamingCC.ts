@@ -9,7 +9,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -257,7 +261,10 @@ export class NodeNamingAndLocationCC extends CommandClass {
 	}
 }
 
-interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NodeNamingAndLocationCCNameSetOptions
+	extends CCCommandOptions
+{
 	name: string;
 }
 
@@ -305,9 +312,9 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { name: this.name },
 		};
 	}
@@ -333,9 +340,9 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	@ccValue(NodeNamingAndLocationCCValues.name)
 	public readonly name: string;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { name: this.name },
 		};
 	}
@@ -345,7 +352,10 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 @expectedCCResponse(NodeNamingAndLocationCCNameReport)
 export class NodeNamingAndLocationCCNameGet extends NodeNamingAndLocationCC {}
 
-interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NodeNamingAndLocationCCLocationSetOptions
+	extends CCCommandOptions
+{
 	location: string;
 }
 
@@ -395,9 +405,9 @@ export class NodeNamingAndLocationCCLocationSet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { location: this.location },
 		};
 	}
@@ -425,9 +435,9 @@ export class NodeNamingAndLocationCCLocationReport
 	@ccValue(NodeNamingAndLocationCCValues.location)
 	public readonly location: string;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { location: this.location },
 		};
 	}

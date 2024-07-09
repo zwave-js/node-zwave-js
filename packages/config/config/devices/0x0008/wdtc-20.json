@@ -12,5 +12,36 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"compat": {
+		// The device reports version 0 for several of its command classes
+		"commandClasses": {
+			"add": {
+				"Binary Switch": {
+					"isSupported": true,
+					"version": 1
+				},
+				"Indicator": {
+					"isSupported": true,
+					"version": 1
+				},
+				"Multilevel Sensor": {
+					"isSupported": true,
+					"version": 1
+				},
+				"Thermostat Mode": {
+					"isSupported": true,
+					"version": 1
+				},
+				"Thermostat Setpoint": {
+					"isSupported": true,
+					"version": 1
+				},
+				"Thermostat Operating State": {
+					"isSupported": true,
+					"version": 1
+				}
+			}
+		}
 	}
 }

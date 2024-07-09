@@ -25,7 +25,7 @@
 		{
 			"#": "4",
 			"$import": "templates/aeotec_template.json#enable_notifications",
-			"label": "Motor start delay time",
+			"label": "Motor Start Delay Time",
 			"unit": "ms"
 		},
 		{

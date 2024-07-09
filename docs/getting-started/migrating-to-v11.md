@@ -77,7 +77,7 @@ However, the type `ConfigValue` has been changed to just `number`, so we treat t
 
 ## Changed `Node.setValue` and `VirtualNode.setValue` to return a `SetValueResult`
 
-Historically, these methods returned a `boolean` indicating whether the value was successfully set or not. While convenient, simply returning `true` or `false` isn't very helpful, especially since Z-Wave JS started using Supervision whereever possible in v10.
+Historically, these methods returned a `boolean` indicating whether the value was successfully set or not. While convenient, simply returning `true` or `false` isn't very helpful, especially since Z-Wave JS started using Supervision wherever possible in v10.
 
 For example, it is not possible to know from a simple `true` whether the command was actually executed by the device or whether it just acknowledged an unsupervised command but didn't actually do anything.
 Likewise, returning `false` seems too generic when there are a multitude of possible reasons for this:

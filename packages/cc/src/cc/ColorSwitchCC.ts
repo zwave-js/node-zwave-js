@@ -16,7 +16,11 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
 	isEnumMember,
@@ -472,7 +476,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 								value,
 								supportedColors
 									.map((c) => colorComponentToTableKey(c))
-									.filter((c) => !!c) as ColorKey[],
+									.filter((c) => !!c),
 							);
 						}
 					}
@@ -687,9 +691,9 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	@ccValue(ColorSwitchCCValues.supportedColorComponents)
 	public readonly supportedColorComponents: readonly ColorComponent[];
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported color components": this.supportedColorComponents
 					.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
@@ -799,7 +803,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	@ccValue(ColorSwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
 				ColorComponent,
@@ -814,13 +818,14 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
-interface ColorSwitchCCGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface ColorSwitchCCGetOptions extends CCCommandOptions {
 	colorComponent: ColorComponent;
 }
 
@@ -869,9 +874,9 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"color component": getEnumMemberName(
 					ColorComponent,
@@ -882,6 +887,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 	}
 }
 
+// @publicAPI
 export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 	duration?: Duration | string;
 };
@@ -930,7 +936,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	public serialize(): Buffer {
 		const populatedColorCount = Object.keys(this.colorTable).length;
 		this.payload = Buffer.allocUnsafe(
-			1 + populatedColorCount * 2 + (this.version >= 2 ? 1 : 0),
+			1 + populatedColorCount * 2 + 1,
 		);
 		this.payload[0] = populatedColorCount & 0b11111;
 		let i = 1;
@@ -940,15 +946,23 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload[i + 1] = clamp(value, 0, 0xff);
 			i += 2;
 		}
-		if (this.version >= 2) {
-			this.payload[i] = (
-				this.duration ?? Duration.default()
-			).serializeSet();
+		this.payload[i] = (
+			this.duration ?? Duration.default()
+		).serializeSet();
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, omit the duration byte
+			this.payload = this.payload.subarray(0, -1);
 		}
+
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const [key, value] of Object.entries(this.colorTable)) {
 			const realKey: string = key in ColorComponentMap
@@ -960,13 +974,14 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
-type ColorSwitchCCStartLevelChangeOptions =
+// @publicAPI
+export type ColorSwitchCCStartLevelChangeOptions =
 	& {
 		colorComponent: ColorComponent;
 		direction: keyof typeof LevelChangeDirection;
@@ -1020,16 +1035,26 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public serialize(): Buffer {
 		const controlByte = (LevelChangeDirection[this.direction] << 6)
 			| (this.ignoreStartLevel ? 0b0010_0000 : 0);
-		const payload = [controlByte, this.colorComponent, this.startLevel];
+		this.payload = Buffer.from([
+			controlByte,
+			this.colorComponent,
+			this.startLevel,
+			(this.duration ?? Duration.default()).serializeSet(),
+		]);
 
-		if (this.version >= 3) {
-			payload.push((this.duration ?? Duration.default()).serializeSet());
+		if (
+			this.version < 3 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1 or 2, omit the duration byte
+			this.payload = this.payload.subarray(0, -1);
 		}
-		this.payload = Buffer.from(payload);
+
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
 				ColorComponent,
@@ -1044,12 +1069,13 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
+// @publicAPI
 export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
 	colorComponent: ColorComponent;
 }
@@ -1082,9 +1108,9 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"color component": getEnumMemberName(
 					ColorComponent,

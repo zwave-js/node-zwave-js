@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Value of The Basic Set",
+			"label": "Value of the Basic Set",
 			"description": "Door/window sensor can reverse its value of Basic Set when the magnet is triggered",
 			"valueSize": 1,
 			"defaultValue": 0,

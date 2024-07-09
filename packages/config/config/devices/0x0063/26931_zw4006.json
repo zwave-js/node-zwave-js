@@ -24,9 +24,8 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Double Tap",
-			"maxNodes": 5,
-			"isLifeline": true
+			"label": "Local Load",
+			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
@@ -72,6 +71,6 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	}
 }

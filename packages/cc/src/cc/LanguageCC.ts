@@ -12,7 +12,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
@@ -153,7 +157,8 @@ export class LanguageCC extends CommandClass {
 	}
 }
 
-interface LanguageCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface LanguageCCSetOptions extends CCCommandOptions {
 	language: string;
 	country?: string;
 }
@@ -217,13 +222,13 @@ export class LanguageCCSet extends LanguageCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this._country != undefined) {
 			message.country = this._country;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -251,13 +256,13 @@ export class LanguageCCReport extends LanguageCC {
 	@ccValue(LanguageCCValues.country)
 	public readonly country: MaybeNotKnown<string>;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this.country != undefined) {
 			message.country = this.country;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

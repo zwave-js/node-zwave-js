@@ -18,7 +18,7 @@
 			"#": "2",
 			"label": "MEAS_PERIOD",
 			"valueSize": 1,
-			"unit": "s",
+			"unit": "seconds",
 			"minValue": 30,
 			"maxValue": 120,
 			"defaultValue": 30
@@ -66,11 +66,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Clamp placed Correctly",
+					"label": "Clamp placed correctly",
 					"value": 0
 				},
 				{
-					"label": "Clamp is REVERSED",
+					"label": "Clamp is reversed",
 					"value": 1
 				},
 				{

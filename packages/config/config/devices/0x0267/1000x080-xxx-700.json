@@ -64,7 +64,7 @@
 					"value": 0
 				},
 				{
-					"label": "Enable (20% Brightness)",
+					"label": "Enable (20% brightness)",
 					"value": 255
 				}
 			]
@@ -104,7 +104,7 @@
 					"value": 39015
 				},
 				{
-					"label": "Reset config parameters, except Long Press",
+					"label": "Reset config parameters, except long press",
 					"value": 17170
 				}
 			]
@@ -166,7 +166,7 @@
 					"value": 0
 				},
 				{
-					"label": "Sun Blinds",
+					"label": "Sun blinds",
 					"value": 255
 				}
 			]
@@ -190,15 +190,5 @@
 				}
 			]
 		}
-	],
-	"compat": {
-		"commandClasses": {
-			"remove": {
-				// The device identifies as Z-Wave+ v2, but does not support the mandatory Supervision CC
-				"Supervision": {
-					"endpoints": "*"
-				}
-			}
-		}
-	}
+	]
 }

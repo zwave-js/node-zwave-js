@@ -1,52 +1,33 @@
-import { getImplementedVersion } from "@zwave-js/cc";
-import { CommandClasses, allCCs, encapsulationCCs } from "@zwave-js/core/safe";
+import { BasicDeviceClass, CommandClasses } from "@zwave-js/core/safe";
 
 export function determineNIF(): {
-	basicDeviceClass: number;
+	basicDeviceClass: BasicDeviceClass;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 } {
-	const basicDeviceClass = 0x02; // Static Controller
-	const genericDeviceClass = 0x02; // Static Controller
-	const specificDeviceClass = 0x07; // Gateway
+	const basicDeviceClass = BasicDeviceClass["Static Controller"];
+	const genericDeviceClass = 0x01; // Generic Controller
+	const specificDeviceClass = 0x00; // Not used
 
-	const implementedCCs = allCCs.filter((cc) => getImplementedVersion(cc) > 0);
-
-	// Encapsulation CCs are always supported
-	const implementedEncapsulationCCs = encapsulationCCs.filter(
-		(cc) =>
-			implementedCCs.includes(cc)
-			// A node MUST advertise support for Multi Channel Command Class only if it implements End Points.
-			// A node able to communicate using the Multi Channel encapsulation but implementing no End Point
-			// MUST NOT advertise support for the Multi Channel Command Class.
-			// --> We do not implement end points
-			&& cc !== CommandClasses["Multi Channel"],
-	);
-
-	const supportedCCs = new Set([
-		// Z-Wave Plus Info must be listed first
-		CommandClasses["Z-Wave Plus Info"],
-		// Gateway device type MUST support Inclusion Controller and Time CC
-		CommandClasses["Inclusion Controller"],
-		CommandClasses.Time,
-		// All devices must support Indicator CC
-		CommandClasses.Indicator,
-		// Supporting lifeline associations is also mandatory
-		CommandClasses.Association,
-		// And apparently we must advertise that we're able to send Device Reset Locally notifications
-		CommandClasses["Device Reset Locally"],
-		...implementedEncapsulationCCs,
-	]);
-
-	// CC:0000.00.00.12.004: It is NOT RECOMMENDED to advertise controlled Command Classes.
-
+	// When included securely, the NIF must only contain CCs that must ALWAYS be supported
+	// Since we have no way to change it without factory reset, just advertise the minimum.
 	return {
 		basicDeviceClass,
 		genericDeviceClass,
 		specificDeviceClass,
-		supportedCCs: [...supportedCCs],
+		supportedCCs: [
+			CommandClasses["Z-Wave Plus Info"],
+			CommandClasses.Security,
+			CommandClasses["Security 2"],
+			CommandClasses["Transport Service"],
+			CommandClasses.Supervision,
+			CommandClasses["CRC-16 Encapsulation"],
+			CommandClasses["Multi Command"],
+			CommandClasses["Inclusion Controller"],
+		],
+		// CC:0000.00.00.12.004: It is NOT RECOMMENDED to advertise controlled Command Classes.
 		controlledCCs: [],
 	};
 }

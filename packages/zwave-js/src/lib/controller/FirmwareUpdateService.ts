@@ -85,7 +85,7 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 
 	// Check if we can cache the response
 	if (response.statusCode === 200 && response.headers["cache-control"]) {
-		const cacheControl = response.headers["cache-control"]!;
+		const cacheControl = response.headers["cache-control"];
 
 		let maxAge: number | undefined;
 		const maxAgeMatch = cacheControl.match(/max-age=(\d+)/);
@@ -226,6 +226,7 @@ export async function getAvailableFirmwareUpdates(
 	return result.map((update) => ({
 		device: deviceId,
 		...update,
+		channel: update.channel ?? "stable",
 	}));
 }
 

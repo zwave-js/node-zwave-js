@@ -1,0 +1,265 @@
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGR-224",
+	"description": "Roller Shutter 4",
+	"devices": [
+		{
+			"productType": "0x0304",
+			"productId": "0x1000",
+			"zwaveAllianceId": 4992
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "20",
+			"label": "Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Monostable switches - Click to move"
+				},
+				{
+					"value": 1,
+					"label": "Monostable switches - Hold to move"
+				},
+				{
+					"value": 2,
+					"label": "Single monostable switch"
+				},
+				{
+					"value": 3,
+					"label": "Bistable switches"
+				},
+				{
+					"value": 4,
+					"label": "Single bistable switch"
+				},
+				{
+					"value": 5,
+					"label": "Three-State switch"
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Switch Orientation",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Switch 1 = up, switch 2 = down"
+				},
+				{
+					"value": 1,
+					"label": "Switch 1 = down, switch 2 = up"
+				}
+			]
+		},
+		{
+			"#": "25",
+			"label": "Outputs Orientation",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Output 1 = up, output 2 = down"
+				},
+				{
+					"value": 1,
+					"label": "Output 1 = down, output 2 = up"
+				}
+			]
+		},
+		{
+			"#": "40[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 1: Send Scenes (Key Pressed 1x)",
+			"defaultValue": 1
+		},
+		{
+			"#": "40[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 1: Send Scenes (Key Pressed 2x)",
+			"defaultValue": 1
+		},
+		{
+			"#": "40[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 1: Send Scenes (Key Pressed 3x)",
+			"defaultValue": 1
+		},
+		{
+			"#": "40[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 1: Send Scenes (Key Held Down & Released)",
+			"defaultValue": 1
+		},
+		{
+			"#": "41[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 2: Send Scenes (Key Pressed 1x)",
+			"defaultValue": 1
+		},
+		{
+			"#": "41[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 2: Send Scenes (Key Pressed 2x)",
+			"defaultValue": 1
+		},
+		{
+			"#": "41[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 2: Send Scenes (Key Pressed 3x)",
+			"defaultValue": 1
+		},
+		{
+			"#": "41[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Switch 2: Send Scenes (Key Held Down & Released)",
+			"defaultValue": 1
+		},
+		{
+			"#": "150",
+			"label": "Calibration",
+			"description": "Set this parameter to 3 to start automatic calibration. A re-interview may be required after changing this parameter.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Not calibrated"
+				},
+				{
+					"value": 1,
+					"label": "Calibration successful"
+				},
+				{
+					"value": 2,
+					"label": "Calibration failed"
+				},
+				{
+					"value": 3,
+					"label": "Start calibration / Calibrating"
+				},
+				{
+					"value": 4,
+					"label": "Manual calibration"
+				}
+			]
+		},
+		{
+			"#": "151",
+			"label": "Operating Mode",
+			"description": "A re-interview may be required after changing this parameter.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Roller blind, awning, pergola, curtain"
+				},
+				{
+					"value": 1,
+					"label": "Venetian blind 90°"
+				},
+				{
+					"value": 2,
+					"label": "Venetian blind 180°"
+				}
+			]
+		},
+		{
+			"#": "152",
+			"label": "Venetion Blind: Slat Turning Duration",
+			"valueSize": 2,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "156",
+			"label": "Up Movement Duration",
+			"description": "Set automatically during calibration. Can be overridden if there are problems with automatic calibration.",
+			"valueSize": 2,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"unsigned": true
+		},
+		{
+			"#": "157",
+			"label": "Down Movement Duration",
+			"description": "Set automatically during calibration. Can be overridden if there are problems with automatic calibration.",
+			"valueSize": 2,
+			"unit": "0.1 seconds",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"unsigned": true
+		},
+		{
+			"#": "158",
+			"label": "Shutter: Minimum Position",
+			"description": "Used to prevent the shutter from fully closing, for example to protect a flowerpot on the windowsill.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0
+		},
+		{
+			"#": "159",
+			"label": "Shutter: Favorite Position",
+			"description": "Allowable range: 0-99, 255.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true,
+			"options": [
+				{
+					"value": 255,
+					"label": "Disable"
+				}
+			]
+		},
+		{
+			"#": "160",
+			"label": "Slats: Favorite Angle",
+			"description": "Allowable range: 0-99, 255.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true,
+			"options": [
+				{
+					"value": 255,
+					"label": "Disable"
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "To add the device to the Z-Wave network manually:\n1. Power the device.\n2. Identify the PROG button or the S1/S2 switches.\n3. Set the main controller in (Security/non-Security Mode) add\nmode (see the controller’s manual).\n4. Quickly, click PROG button three times. Optionally, click S1 or S2\nthree times.\n5. If you are adding in Security S2 Authenticated, input the PIN\nCode (label on the device, also underlined part of the DSK on t he\nlabel on the bottom of the box).\n6. Wait for the LED indicator to blink yellow.\n7. Successful adding will be confirmed by the Z-Wave controller’s\nmessage and the device’s LED indicator:\n• Green – successful (non-secure, S0, S2 non-authenticated),\n• Magenta – successful (Security S2 Authenticated),\n• Red – not successful",
+		"exclusion": "Removing (Exclusion) – Z-Wave device learning mode, allowing to\nremove the device from existing Z-Wave network.\nTo remove the device from the Z-Wave network:\n1. Make sure the device is powered.\n2. Identify the PROG button or the S1/S2 switches.\n3. Set the main controller in remove mode (see the controller’s\nmanual).\n4. Quickly, click PROG button three times. Optionally, click S1 or S2\nthree times within 10 minutes of powering up the device.\n5. Wait for the removing process to end.\n6. Successful removing will be confirmed by the Z-Wave controller’s\nmessage and the device’s LED indicator - Red.\n7. Removing the device from the Z-Wave network doesn’t cause\nfactory reset",
+		"reset": "Reset procedure allows to restore the device back to its factor y\nsettings, which means all information about the Z-Wave controller\nand user configuration will be deleted.\n1. Switch off the mains voltage (disable the fuse).\n2. Remove the device from the wall switch box.\n3. Switch on the mains voltage.\n4. Press and hold the PROG button to enter the menu.\n5. Wait for the LED indicator to glow yellow.\n6. Quickly release and click the PROG button again.\n7. During the factory reset, the LED indicator will blink yellow.\n8. After few seconds the device will be restarted, which is signal led\nwith the red LED indicator colour",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=cert_portal/certs/948/FGR-224-T-EN-v1.22.pdf"
+	}
+}

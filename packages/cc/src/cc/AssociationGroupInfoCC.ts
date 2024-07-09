@@ -10,7 +10,11 @@ import {
 	parseCCId,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -452,6 +456,7 @@ profile:         ${
 	}
 }
 
+// @publicAPI
 export interface AssociationGroupInfoCCNameReportOptions
 	extends CCCommandOptions
 {
@@ -510,9 +515,9 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"group id": this.groupId,
 				name: this.name,
@@ -521,7 +526,8 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	}
 }
 
-interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 	groupId: number;
 }
 
@@ -550,9 +556,9 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -565,6 +571,7 @@ export interface AssociationGroupInfo {
 	eventCode: number;
 }
 
+// @publicAPI
 export interface AssociationGroupInfoCCInfoReportSpecificOptions {
 	isListMode: boolean;
 	hasDynamicInfo: boolean;
@@ -653,9 +660,9 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"is list mode": this.isListMode,
 				"has dynamic info": this.hasDynamicInfo,
@@ -675,7 +682,8 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	}
 }
 
-type AssociationGroupInfoCCInfoGetOptions =
+// @publicAPI
+export type AssociationGroupInfoCCInfoGetOptions =
 	& CCCommandOptions
 	& {
 		refreshCache: boolean;
@@ -729,7 +737,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.groupId != undefined) {
 			message["group id"] = this.groupId;
@@ -739,12 +747,13 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		}
 		message["refresh cache"] = this.refreshCache;
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
+// @publicAPI
 export interface AssociationGroupInfoCCCommandListReportOptions
 	extends CCCommandOptions
 {
@@ -815,9 +824,9 @@ export class AssociationGroupInfoCCCommandListReport
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"group id": this.groupId,
 				commands: `${
@@ -836,7 +845,10 @@ export class AssociationGroupInfoCCCommandListReport
 	}
 }
 
-interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface AssociationGroupInfoCCCommandListGetOptions
+	extends CCCommandOptions
+{
 	allowCache: boolean;
 	groupId: number;
 }
@@ -874,9 +886,9 @@ export class AssociationGroupInfoCCCommandListGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"group id": this.groupId,
 				"allow cache": this.allowCache,

@@ -107,7 +107,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Basic Set Value For Group 2",
+			"label": "Basic Set Value for Group 2",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

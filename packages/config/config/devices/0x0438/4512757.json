@@ -104,6 +104,7 @@
 			"valueSize": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
+			/* eslint-disable @zwave-js/consistent-config-string-case */
 			"options": [
 				{
 					"label": "A",
@@ -130,6 +131,7 @@
 					"value": 6
 				}
 			]
+			/* eslint-enable @zwave-js/consistent-config-string-case */
 		},
 		{
 			"#": "58",
@@ -406,5 +408,12 @@
 		"exclusion": "Select menu item “Net”, then find OUT and long-press M for 2s.",
 		"reset": "Select menu item “Net”, then find OUT and long-press M for 2s.",
 		"manual": "https://www.elektroimportoren.no/docs/lib/4512757-Manual-18.pdf"
+	},
+	"compat": {
+		// This device only accepts Thermostat Setpoint Set commands with a specific float encoding
+		"overrideFloatEncoding": {
+			"precision": 1,
+			"size": 2
+		}
 	}
 }

@@ -104,27 +104,27 @@
 					"value": 1
 				},
 				{
-					"label": "0xff (on) to Group 2 only",
+					"label": "0xff (On) to group 2 only",
 					"value": 2
 				},
 				{
-					"label": "0xff (on) to Lifeline and Group 2",
+					"label": "0xff (On) to Lifeline and group 2",
 					"value": 3
 				},
 				{
-					"label": "0x00 (off) to Group 2 only",
+					"label": "0x00 (Off) to group 2 only",
 					"value": 4
 				},
 				{
-					"label": "0x00 (off) to Lifeline and Group 2",
+					"label": "0x00 (Off) to Lifeline and group 2",
 					"value": 5
 				},
 				{
-					"label": "0xff (on) and 0x00 (off) to Group 2 only",
+					"label": "0xff (On) and 0x00 (Off) to group 2 only",
 					"value": 6
 				},
 				{
-					"label": "0xff (on) and 0x00 (off) to Lifeline and Group 2",
+					"label": "0xff (On) and 0x00 (Off) to Lifeline and group 2",
 					"value": 7
 				}
 			]
@@ -165,27 +165,27 @@
 					"value": 1
 				},
 				{
-					"label": "0xff (on) to Group 3 only",
+					"label": "0xff (On) to group 3 only",
 					"value": 2
 				},
 				{
-					"label": "0xff (on) to Lifeline and Group 3",
+					"label": "0xff (On) to Lifeline and group 3",
 					"value": 3
 				},
 				{
-					"label": "0x00 (off) to Group 3 only",
+					"label": "0x00 (Off) to group 3 only",
 					"value": 4
 				},
 				{
-					"label": "0x00 (off) to Lifeline and Group 3",
+					"label": "0x00 (Off) to Lifeline and group 3",
 					"value": 5
 				},
 				{
-					"label": "0xff (on) and 0x00 (off) to Group 3 only",
+					"label": "0xff (On) and 0x00 (Off) to group 3 only",
 					"value": 6
 				},
 				{
-					"label": "0xff (on) and 0x00 (off) to Lifeline and Group 3",
+					"label": "0xff (On) and 0x00 (Off) to Lifeline and group 3",
 					"value": 7
 				}
 			]
@@ -213,27 +213,27 @@
 					"value": 1
 				},
 				{
-					"label": "0xff (on) to Group 4 only",
+					"label": "0xff (On) to group 4 only",
 					"value": 2
 				},
 				{
-					"label": "0xff (on) to Lifeline and Group 4",
+					"label": "0xff (On) to Lifeline and group 4",
 					"value": 3
 				},
 				{
-					"label": "0x00 (off) to Group 4 only",
+					"label": "0x00 (Off) to group 4 only",
 					"value": 4
 				},
 				{
-					"label": "0x00 (off) to Lifeline and Group 4",
+					"label": "0x00 (Off) to Lifeline and group 4",
 					"value": 5
 				},
 				{
-					"label": "0xff (on) and 0x00 (off) to Group 4 only",
+					"label": "0xff (On) and 0x00 (Off) to group 4 only",
 					"value": 6
 				},
 				{
-					"label": "0xff (on) and 0x00 (off) to Lifeline and Group 4",
+					"label": "0xff (On) and 0x00 (Off) to Lifeline and group 4",
 					"value": 7
 				}
 			]
@@ -261,27 +261,27 @@
 					"value": 1
 				},
 				{
-					"label": "0xff (on) to Group 5 only",
+					"label": "0xff (On) to group 5 only",
 					"value": 2
 				},
 				{
-					"label": "0xff (on) to Lifeline and Group 5",
+					"label": "0xff (On) to Lifeline and group 5",
 					"value": 3
 				},
 				{
-					"label": "0x00 (off) to Group 5 only",
+					"label": "0x00 (Off) to group 5 only",
 					"value": 4
 				},
 				{
-					"label": "0x00 (off) to Lifeline and Group 5",
+					"label": "0x00 (Off) to Lifeline and group 5",
 					"value": 5
 				},
 				{
-					"label": "0xff (on) and 0x00 (off) to Group 5 only",
+					"label": "0xff (On) and 0x00 (Off) to group 5 only",
 					"value": 6
 				},
 				{
-					"label": "0xff (on) and 0x00 (off) to Lifeline and Group 5",
+					"label": "0xff (On) and 0x00 (Off) to Lifeline and group 5",
 					"value": 7
 				}
 			]

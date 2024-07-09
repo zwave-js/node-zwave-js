@@ -2,7 +2,7 @@
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ77",
-	"description": "RGB dimmer switch",
+	"description": "RGB Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0x0311",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Indicator light state",
+			"label": "Indicator Light State",
 			"description": "Change the state of indicator light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Memory function",
+			"label": "Memory Function",
 			"description": "Socket status when powered on",
 			"valueSize": 1,
 			"minValue": 0,

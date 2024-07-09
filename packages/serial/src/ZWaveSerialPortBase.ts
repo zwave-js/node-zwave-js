@@ -1,15 +1,10 @@
 import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "node:events";
-import {
-	type Duplex,
-	PassThrough,
-	type Readable,
-	type Writable,
-} from "node:stream";
+import { PassThrough, type Readable, type Writable } from "node:stream";
 import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
+import { type ZWaveSerialPortImplementation } from "./ZWaveSerialPortImplementation";
 import {
 	type BootloaderChunk,
 	BootloaderParser,
@@ -70,27 +65,6 @@ export interface ZWaveSerialPortBase {
 	): boolean;
 }
 
-export function isZWaveSerialPortImplementation(
-	obj: unknown,
-): obj is ZWaveSerialPortImplementation {
-	return (
-		isObject(obj)
-		&& typeof obj.create === "function"
-		&& typeof obj.open === "function"
-		&& typeof obj.close === "function"
-	);
-}
-
-export interface ZWaveSerialPortImplementation {
-	create(): Duplex & EventEmitter;
-	open(
-		port: ReturnType<ZWaveSerialPortImplementation["create"]>,
-	): Promise<void>;
-	close(
-		port: ReturnType<ZWaveSerialPortImplementation["create"]>,
-	): Promise<void>;
-}
-
 const IS_TEST = process.env.NODE_ENV === "test" || !!process.env.CI;
 
 // This is basically a duplex transform stream wrapper around any stream (network, serial, ...)
@@ -114,6 +88,11 @@ export class ZWaveSerialPortBase extends PassThrough {
 
 	// Allow switching between modes
 	public mode: ZWaveSerialMode | undefined;
+
+	// Allow ignoring the high nibble of an ACK once to work around an issue in the 700 series firmware
+	public ignoreAckHighNibbleOnce(): void {
+		this.parser.ignoreAckHighNibble = true;
+	}
 
 	// Allow strongly-typed async iteration
 	declare public [Symbol.asyncIterator]: () => AsyncIterableIterator<

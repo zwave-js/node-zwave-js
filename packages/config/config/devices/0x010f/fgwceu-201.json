@@ -66,7 +66,7 @@
 					"value": 4
 				},
 				{
-					"label": "Roller Shutter controller mode",
+					"label": "Roller shutter controller mode",
 					"value": 5
 				},
 				{
@@ -78,7 +78,7 @@
 		{
 			"#": "150",
 			"label": "LED Frame: First Channel Color",
-			"valueSize": 1,
+			"valueSize": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -4,6 +4,11 @@ import {
 	type ConfigValueFormat,
 } from "@zwave-js/core";
 
+export interface BinarySensorCCCapabilities {
+	supportedSensorTypes: number[];
+	getValue?: (sensorType: number | undefined) => boolean | undefined;
+}
+
 export interface ConfigurationCCCapabilities {
 	// We don't have bulk support implemented in the mocks
 	bulkSupport?: false;
@@ -26,6 +31,38 @@ export interface ConfigurationCCCapabilities {
 export interface NotificationCCCapabilities {
 	supportsV1Alarm: false;
 	notificationTypesAndEvents: Record<number, number[]>;
+}
+
+export interface MeterCCCapabilities {
+	meterType: number;
+	supportedScales: number[];
+	supportedRateTypes: number[];
+	supportsReset: boolean;
+	getValue?: (
+		scale: number,
+		rateType: number,
+	) => number | {
+		value: number;
+		deltaTime: number;
+		prevValue?: number;
+	} | undefined;
+	onReset?: (
+		options?: {
+			scale: number;
+			rateType: number;
+			targetValue: number;
+		},
+	) => void;
+}
+
+export interface MultilevelSensorCCCapabilities {
+	sensors: Record<number, {
+		supportedScales: number[];
+	}>;
+	getValue?: (
+		sensorType: number | undefined,
+		scale: number | undefined,
+	) => number | undefined;
 }
 
 export interface SoundSwitchCCCapabilities {
@@ -105,6 +142,8 @@ export interface ScheduleEntryLockCCCapabilities {
 export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
+	[48 /* Binary Sensor */]: BinarySensorCCCapabilities;
+	[49 /* Multilevel Sensor */]: MultilevelSensorCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
 	[106 /* Window Covering */]: WindowCoveringCCCapabilities;
 	[144 /* Energy Production */]: EnergyProductionCCCapabilities;
@@ -112,6 +151,7 @@ export type CCSpecificCapabilities = {
 	[67 /* Thermostat Setpoint */]: ThermostatSetpointCCCapabilities;
 	[99 /* User Code */]: UserCodeCCCapabilities;
 	[78 /* Schedule Entry Lock */]: ScheduleEntryLockCCCapabilities;
+	[CommandClasses.Meter]: MeterCCCapabilities;
 };
 
 export type CCIdToCapabilities<T extends CommandClasses = CommandClasses> =

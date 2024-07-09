@@ -2,7 +2,7 @@
 	"manufacturer": "Monster Cable",
 	"manufacturerId": "0x007e",
 	"label": "ML LD300",
-	"description": "Scene Capable Plug-in Dimmer",
+	"description": "Scene Capable Plug-In Dimmer",
 	"devices": [
 		{
 			"productType": "0x0200",

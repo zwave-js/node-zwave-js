@@ -2,7 +2,7 @@
 	"manufacturer": "DucoTronic",
 	"manufacturerId": "0x0080",
 	"label": "CO2 sensor",
-	"description": "CO2 sensor",
+	"description": "CO2 Sensor",
 	"devices": [
 		{
 			"productType": "0x0004",

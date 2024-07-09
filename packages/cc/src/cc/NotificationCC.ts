@@ -1,12 +1,14 @@
 import {
 	type Notification,
-	NotificationParameterWithCommandClass,
-	NotificationParameterWithDuration,
-	NotificationParameterWithEnum,
-	NotificationParameterWithValue,
-	type NotificationValueDefinition,
-} from "@zwave-js/config";
-import { timespan } from "@zwave-js/core";
+	type NotificationState,
+	type NotificationValue,
+	getNotification,
+	getNotificationEventName,
+	getNotificationName,
+	getNotificationValue,
+	getNotificationValueName,
+	timespan,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -29,7 +31,11 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -119,6 +125,29 @@ export const NotificationCCValues = Object.freeze({
 				autoCreate: shouldAutoCreateSimpleDoorSensorValue,
 			} as const,
 		),
+
+		// Binary tilt value extracted from the Door state variable.
+		...V.staticPropertyAndKeyWithName(
+			"doorTiltState",
+			"Access Control",
+			"Door tilt state",
+			{
+				// Must be a number for compatibility reasons
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Door tilt state",
+				states: {
+					[0x00]: "Window/door is not tilted",
+					[0x01]: "Window/door is tilted",
+				},
+				ccSpecific: {
+					notificationType: 0x06,
+				},
+			} as const,
+			{
+				// This is created when the tilt state is first received.
+				autoCreate: false,
+			} as const,
+		),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses.Notification, {
@@ -206,20 +235,6 @@ function shouldAutoCreateSimpleDoorSensorValue(
 			0x17,
 		)
 	);
-}
-
-function lookupNotificationNames(
-	applHost: ZWaveApplicationHost,
-	notificationTypes: readonly number[],
-): string[] {
-	return notificationTypes
-		.map((n) => {
-			const ret = applHost.configManager.lookupNotification(n);
-			return [n, ret] as const;
-		})
-		.map(([type, ntfcn]) =>
-			ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`
-		);
 }
 
 @API(CommandClasses.Notification)
@@ -388,15 +403,15 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 }
 
 export function getNotificationEnumBehavior(
-	notificationConfig: Notification,
-	valueConfig: NotificationValueDefinition & { type: "state" },
+	notification: Notification,
+	valueConfig: NotificationState,
 ): "none" | "extend" | "replace" {
-	const variable = notificationConfig.variables.find((v) =>
+	const variable = notification.variables.find((v) =>
 		v.states.has(valueConfig.value)
 	);
 	if (!variable) return "none";
 	const numStatesWithEnums = [...variable.states.values()].filter(
-		(val) => val.parameter instanceof NotificationParameterWithEnum,
+		(val) => val.parameter?.type === "enum",
 	).length;
 	if (numStatesWithEnums === 0) return "none";
 	// An enum value replaces the original value if there is only a single possible state
@@ -421,29 +436,32 @@ export function getNotificationStateValueWithEnum(
  */
 export function getNotificationValueMetadata(
 	previous: ValueMetadataNumeric | undefined,
-	notificationConfig: Notification,
-	valueConfig: NotificationValueDefinition & { type: "state" },
+	notification: Notification,
+	valueConfig: NotificationState,
 ): ValueMetadataNumeric {
 	const metadata: ValueMetadataNumeric = previous ?? {
 		...ValueMetadata.ReadOnlyUInt8,
 		label: valueConfig.variableName,
 		states: {},
 		ccSpecific: {
-			notificationType: notificationConfig.id,
+			notificationType: notification.type,
 		},
 	};
 	if (valueConfig.idle) {
 		metadata.states![0] = "idle";
 	}
 	const enumBehavior = getNotificationEnumBehavior(
-		notificationConfig,
+		notification,
 		valueConfig,
 	);
 	if (enumBehavior !== "replace") {
 		metadata.states![valueConfig.value] = valueConfig.label;
 	}
-	if (valueConfig.parameter instanceof NotificationParameterWithEnum) {
-		for (const [value, label] of valueConfig.parameter.values) {
+	if (valueConfig.parameter?.type === "enum") {
+		for (
+			const [key, label] of Object.entries(valueConfig.parameter.values)
+		) {
+			const value = parseInt(key);
 			const stateKey = enumBehavior === "replace"
 				? value
 				: getNotificationStateValueWithEnum(valueConfig.value, value);
@@ -600,9 +618,8 @@ export class NotificationCC extends CommandClass {
 			supportsV1Alarm = suppResponse.supportsV1Alarm;
 			const supportedNotificationTypes =
 				suppResponse.supportedNotificationTypes;
-			const supportedNotificationNames = lookupNotificationNames(
-				applHost,
-				supportedNotificationTypes,
+			const supportedNotificationNames = supportedNotificationTypes.map(
+				getNotificationName,
 			);
 			const supportedNotificationEvents = new Map<
 				number,
@@ -673,8 +690,7 @@ export class NotificationCC extends CommandClass {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
-					const notificationConfig = applHost.configManager
-						.lookupNotification(type);
+					const notification = getNotification(type);
 
 					// Enable reports for each notification type
 					applHost.controllerLog.logNode(node.id, {
@@ -685,15 +701,13 @@ export class NotificationCC extends CommandClass {
 					await api.set(type, true);
 
 					// Set the value to idle if possible and there is no value yet
-					if (notificationConfig) {
+					if (notification) {
 						const events = supportedNotificationEvents.get(type);
 						if (events) {
 							// Find all variables that are supported by this node and have an idle state
 							for (
-								const variable of notificationConfig.variables
-									.filter(
-										(v) => !!v.idle,
-									)
+								const variable of notification.variables
+									.filter((v) => !!v.idle)
 							) {
 								if (
 									[...variable.states.keys()].some((key) =>
@@ -702,7 +716,7 @@ export class NotificationCC extends CommandClass {
 								) {
 									const value = NotificationCCValues
 										.notificationVariable(
-											notificationConfig.name,
+											notification.name,
 											variable.name,
 										);
 
@@ -739,27 +753,38 @@ export class NotificationCC extends CommandClass {
 			?.compat?.alarmMapping;
 		if (mappings) {
 			// Find all mappings to a valid notification variable
+			const supportedNotifications = new Map<number, Set<number>>();
 			for (const { to } of mappings) {
-				const notificationConfig = applHost.configManager
-					.lookupNotification(
-						to.notificationType,
-					);
-				if (!notificationConfig) continue;
-				const valueConfig = notificationConfig.lookupValue(
+				const notification = getNotification(to.notificationType);
+				if (!notification) continue;
+				const valueConfig = getNotificationValue(
+					notification,
 					to.notificationEvent,
 				);
+
+				// Remember supported notification types and events to create the internal values later
+				if (!supportedNotifications.has(to.notificationType)) {
+					supportedNotifications.set(
+						to.notificationType,
+						new Set(),
+					);
+				}
+				const supportedNotificationTypesSet = supportedNotifications
+					.get(to.notificationType)!;
+				supportedNotificationTypesSet.add(to.notificationEvent);
+
 				if (valueConfig?.type !== "state") continue;
 
 				const notificationValue = NotificationCCValues
 					.notificationVariable(
-						notificationConfig.name,
+						notification.name,
 						valueConfig.variableName,
 					);
 
 				// Create or update the metadata
 				const metadata = getNotificationValueMetadata(
 					this.getMetadata(applHost, notificationValue),
-					notificationConfig,
+					notification,
 					valueConfig,
 				);
 				this.setMetadata(applHost, notificationValue, metadata);
@@ -779,6 +804,20 @@ export class NotificationCC extends CommandClass {
 						);
 					}
 				}
+			}
+
+			// Remember supported notification types and events in the cache
+			this.setValue(
+				applHost,
+				NotificationCCValues.supportedNotificationTypes,
+				[...supportedNotifications.keys()],
+			);
+			for (const [type, events] of supportedNotifications) {
+				this.setValue(
+					applHost,
+					NotificationCCValues.supportedNotificationEvents(type),
+					[...events],
+				);
 			}
 		}
 
@@ -804,9 +843,8 @@ export class NotificationCC extends CommandClass {
 				applHost,
 				NotificationCCValues.supportedNotificationTypes,
 			) ?? [];
-			const supportedNotificationNames = lookupNotificationNames(
-				applHost,
-				supportedNotificationTypes,
+			const supportedNotificationNames = supportedNotificationTypes.map(
+				getNotificationName,
 			);
 
 			for (let i = 0; i < supportedNotificationTypes.length; i++) {
@@ -863,7 +901,8 @@ export class NotificationCC extends CommandClass {
 	}
 }
 
-interface NotificationCCSetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NotificationCCSetOptions extends CCCommandOptions {
 	notificationType: number;
 	notificationStatus: boolean;
 }
@@ -896,19 +935,18 @@ export class NotificationCCSet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 				status: this.notificationStatus,
 			},
 		};
 	}
 }
 
+// @publicAPI
 export type NotificationCCReportOptions =
 	| {
 		alarmType: number;
@@ -1099,7 +1137,7 @@ export class NotificationCCReport extends NotificationCC {
 
 	public sequenceNumber: number | undefined;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (this.alarmType) {
 			message = {
@@ -1108,22 +1146,21 @@ export class NotificationCCReport extends NotificationCC {
 			};
 		}
 
-		let valueConfig: NotificationValueDefinition | undefined;
+		let valueConfig: NotificationValue | undefined;
 		if (this.notificationType) {
-			try {
-				valueConfig = applHost.configManager
-					.lookupNotification(this.notificationType)
-					?.lookupValue(this.notificationEvent!);
-			} catch {
-				/* ignore */
+			const notification = getNotification(this.notificationType);
+			if (notification) {
+				valueConfig = getNotificationValue(
+					notification,
+					this.notificationEvent!,
+				);
 			}
 			if (valueConfig) {
 				message = {
 					...message,
-					"notification type": applHost.configManager
-						.getNotificationName(
-							this.notificationType,
-						),
+					"notification type": getNotificationName(
+						this.notificationType,
+					),
 					"notification status": this.notificationStatus!,
 					[`notification ${valueConfig.type}`]: valueConfig.label
 						?? `Unknown (${num2hex(this.notificationEvent)})`,
@@ -1155,12 +1192,10 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to look up the enum label
 				let found = false;
 				if (
-					valueConfig?.parameter
-						instanceof NotificationParameterWithEnum
+					valueConfig?.parameter?.type === "enum"
 				) {
-					const label = valueConfig.parameter.values.get(
-						this.eventParameters,
-					);
+					const label =
+						valueConfig.parameter.values[this.eventParameters];
 					if (label) {
 						message["state parameters"] = label;
 						found = true;
@@ -1180,49 +1215,60 @@ export class NotificationCCReport extends NotificationCC {
 					.map(([param, val]) => `\n  ${param}: ${num2hex(val)}`)
 					.join("");
 			}
+		} else if (
+			valueConfig?.parameter?.type === "enum"
+			&& valueConfig.parameter.default != undefined
+		) {
+			const label = valueConfig.parameter.values[
+				valueConfig.parameter.default
+			];
+			if (label) {
+				message["state parameters"] = `${label} (omitted)`;
+			}
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 
 	private parseEventParameters(applHost: ZWaveApplicationHost): void {
-		// This only makes sense for V2+ notifications with a non-empty event parameters buffer
+		// This only makes sense for V2+ notifications
 		if (
 			this.notificationType == undefined
 			|| this.notificationEvent == undefined
-			|| !Buffer.isBuffer(this.eventParameters)
 		) {
 			return;
 		}
 
 		// Look up the received notification and value in the config
-		const notificationConfig = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
-		if (!notificationConfig) return;
-		const valueConfig = notificationConfig.lookupValue(
+		const notification = getNotification(this.notificationType);
+		if (!notification) return;
+		const valueConfig = getNotificationValue(
+			notification,
 			this.notificationEvent,
 		);
 		if (!valueConfig) return;
 
 		// Parse the event parameters if possible
-		if (
-			valueConfig.parameter instanceof NotificationParameterWithDuration
-		) {
+		if (valueConfig.parameter?.type === "duration") {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters contain a Duration
 			this.eventParameters = Duration.parseReport(
 				this.eventParameters[0],
 			);
-		} else if (
-			valueConfig.parameter
-				instanceof NotificationParameterWithCommandClass
-		) {
+		} else if (valueConfig.parameter?.type === "commandclass") {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters **should** contain a CC, however there might be some exceptions
 			if (
 				this.eventParameters.length === 1
-				&& notificationConfig.id === 0x06
+				&& notification.type === 0x06
 				&& (this.notificationEvent === 0x05
 					|| this.notificationEvent === 0x06)
 			) {
@@ -1293,9 +1339,11 @@ export class NotificationCCReport extends NotificationCC {
 					}
 				}
 			}
-		} else if (
-			valueConfig.parameter instanceof NotificationParameterWithValue
-		) {
+		} else if (valueConfig.parameter?.type === "value") {
+			// This only makes sense if the event parameters are a buffer
+			if (!Buffer.isBuffer(this.eventParameters)) {
+				return;
+			}
 			// The parameters contain a named value
 			this.eventParameters = {
 				[valueConfig.parameter.propertyName]: this.eventParameters
@@ -1304,13 +1352,22 @@ export class NotificationCCReport extends NotificationCC {
 						this.eventParameters.length,
 					),
 			};
-		} else if (
-			valueConfig.parameter instanceof NotificationParameterWithEnum
-		) {
+		} else if (valueConfig.parameter?.type === "enum") {
 			// The parameters may contain an enum value
-			this.eventParameters = this.eventParameters.length === 1
+			this.eventParameters = Buffer.isBuffer(this.eventParameters)
+					&& this.eventParameters.length === 1
 				? this.eventParameters[0]
 				: undefined;
+
+			// Some devices send notifications without an event parameter when they should.
+			// In this case, fall back to the default value where possible.
+
+			if (
+				this.eventParameters == undefined
+				&& valueConfig.parameter.default != undefined
+			) {
+				this.eventParameters = valueConfig.parameter.default;
+			}
 		}
 	}
 
@@ -1378,7 +1435,8 @@ type NotificationCCGetSpecificOptions =
 		notificationType: number;
 		notificationEvent?: number;
 	};
-type NotificationCCGetOptions =
+// @publicAPI
+export type NotificationCCGetOptions =
 	& CCCommandOptions
 	& NotificationCCGetSpecificOptions;
 
@@ -1431,30 +1489,30 @@ export class NotificationCCGet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.alarmType != undefined) {
 			message["V1 alarm type"] = this.alarmType;
 		}
 		if (this.notificationType != undefined) {
-			message["notification type"] = applHost.configManager
-				.getNotificationName(
-					this.notificationType,
-				);
+			message["notification type"] = getNotificationName(
+				this.notificationType,
+			);
 			if (this.notificationEvent != undefined) {
-				message["notification event"] = applHost.configManager
-					.lookupNotification(this.notificationType)
-					?.events.get(this.notificationEvent)?.label
-					?? `Unknown (${num2hex(this.notificationEvent)})`;
+				message["notification event"] = getNotificationEventName(
+					this.notificationType,
+					this.notificationEvent,
+				);
 			}
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
 }
 
+// @publicAPI
 export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
 	supportsV1Alarm: boolean;
 	supportedNotificationTypes: number[];
@@ -1515,19 +1573,14 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports V1 alarm": this.supportsV1Alarm,
 				"supported notification types": this.supportedNotificationTypes
 					.map(
-						(t) =>
-							`\n· ${
-								applHost.configManager.getNotificationName(
-									t,
-								)
-							}`,
+						(t) => `\n· ${getNotificationName(t)}`,
 					)
 					.join(""),
 			},
@@ -1539,6 +1592,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 @expectedCCResponse(NotificationCCSupportedReport)
 export class NotificationCCSupportedGet extends NotificationCC {}
 
+// @publicAPI
 export interface NotificationCCEventSupportedReportOptions
 	extends CCCommandOptions
 {
@@ -1592,11 +1646,9 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		);
 
 		// For each event, predefine the value metadata
-		const notificationConfig = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
+		const notification = getNotification(this.notificationType);
 
-		if (!notificationConfig) {
+		if (!notification) {
 			// This is an unknown notification
 			this.setMetadata(
 				applHost,
@@ -1609,11 +1661,11 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			let isFirst = true;
 			for (const value of this.supportedEvents) {
 				// Find out which property we need to update
-				const valueConfig = notificationConfig.lookupValue(value);
+				const valueConfig = getNotificationValue(notification, value);
 				if (valueConfig?.type === "state") {
 					const notificationValue = NotificationCCValues
 						.notificationVariable(
-							notificationConfig.name,
+							notification.name,
 							valueConfig.variableName,
 						);
 
@@ -1622,7 +1674,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 						isFirst
 							? undefined
 							: this.getMetadata(applHost, notificationValue),
-						notificationConfig,
+						notification,
 						valueConfig,
 					);
 
@@ -1654,22 +1706,19 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		const notification = applHost.configManager.lookupNotification(
-			this.notificationType,
-		);
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 				"supported events": this.supportedEvents
 					.map(
 						(e) =>
 							`\n· ${
-								notification?.lookupValue(e)?.label
-									?? `Unknown (${num2hex(e)})`
+								getNotificationValueName(
+									this.notificationType,
+									e,
+								)
 							}`,
 					)
 					.join(""),
@@ -1678,7 +1727,10 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	}
 }
 
-interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
+// @publicAPI
+export interface NotificationCCEventSupportedGetOptions
+	extends CCCommandOptions
+{
 	notificationType: number;
 }
 
@@ -1707,13 +1759,11 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
-				"notification type": applHost.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type": getNotificationName(this.notificationType),
 			},
 		};
 	}

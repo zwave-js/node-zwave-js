@@ -27,18 +27,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal detection(water detected)",
+					"label": "Normal detection(Water detected)",
 					"value": 1
 				},
 				{
-					"label": "Reverse detection(dry detected)",
+					"label": "Reverse detection(Dry detected)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "22",
-			"label": "Temperature Report Interval (when Battery Operated)",
+			"label": "Temperature Report Interval (When Battery Operated)",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 1440,
@@ -108,7 +108,7 @@
 		},
 		{
 			"#": "52",
-			"label": "Temperature Report Interval (when Usb Operated)",
+			"label": "Temperature Report Interval (When USB Operated)",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 360,
@@ -122,7 +122,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(default) - red LED continuous flash and beeps",
+					"label": "Red LED continuous flash and beeps",
 					"value": 1
 				},
 				{
@@ -138,7 +138,7 @@
 					"value": 4
 				},
 				{
-					"label": "No led, no beeps",
+					"label": "No LED, no beeps",
 					"value": 5
 				}
 			]

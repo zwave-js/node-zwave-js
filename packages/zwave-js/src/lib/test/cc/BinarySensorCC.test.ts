@@ -22,17 +22,18 @@ function buildCCBuffer(payload: Buffer): Buffer {
 	]);
 }
 
-test("the Get command (v1) should serialize correctly", (t) => {
+test("the Get command should serialize correctly (no sensor type)", (t) => {
 	const cc = new BinarySensorCCGet(host, { nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BinarySensorCommand.Get, // CC Command
+			BinarySensorType.Any, // sensor type
 		]),
 	);
 	t.deepEqual(cc.serialize(), expected);
 });
 
-test("the Get command (v2) should serialize correctly", (t) => {
+test("the Get command should serialize correctly", (t) => {
 	const cc = new BinarySensorCCGet(host, {
 		nodeId: 1,
 		sensorType: BinarySensorType.CO,

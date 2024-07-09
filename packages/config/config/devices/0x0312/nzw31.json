@@ -2,7 +2,7 @@
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x0312",
 	"label": "NZW31",
-	"description": "In-wall Dimming Switch",
+	"description": "In-Wall Dimming Switch",
 	"devices": [
 		{
 			"productType": "0x1f01",
@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Dimmer Step configuration",
+			"label": "Dimmer Step Configuration",
 			"description": "Dimmer speed setting (On/Off)",
 			"valueSize": 1,
 			"minValue": 1,

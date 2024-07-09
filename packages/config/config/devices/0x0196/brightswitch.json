@@ -2,7 +2,7 @@
 	"manufacturer": "Bellatrix Systems, Inc.",
 	"manufacturerId": "0x0196",
 	"label": "BrightSwitch",
-	"description": "Touch screen wall switch",
+	"description": "Touch Screen Wall Switch",
 	"devices": [
 		{
 			"productType": "0x00b7",

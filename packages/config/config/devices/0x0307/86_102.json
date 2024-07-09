@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Led Indicator",
+			"label": "LED Indicator",
 			"description": "The LED indicator will be on when the connected appliance is on, and vice versa",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -39,7 +39,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Orientation of The On/Off On The Rocker Switch Can Be Inverted",
+			"label": "Orientation of the On/Off On the Rocker Switch Can Be Inverted",
 			"description": "The orientation of the on/off on the rocker switch can be inverted by changing the following configuration with a controller(if supported)",
 			"valueSize": 1,
 			"defaultValue": 0,

@@ -36,8 +36,7 @@
 	"paramInformation": [
 		{
 			"#": "21",
-			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "24",
@@ -55,7 +54,7 @@
 					"value": 1
 				},
 				{
-					"label": "Enabled (manual control only)",
+					"label": "Enabled (Manual control only)",
 					"value": 2
 				}
 			]

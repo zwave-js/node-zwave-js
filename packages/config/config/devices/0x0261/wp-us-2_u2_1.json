@@ -2,7 +2,7 @@
 	"manufacturer": "KOOL KONCEPTS",
 	"manufacturerId": "0x0261",
 	"label": "WP-US-2/U2/1",
-	"description": "Wall plug smart switch",
+	"description": "Wall Plug Smart Switch",
 	"devices": [
 		{
 			"productType": "0x0101",

@@ -16,6 +16,6 @@
 	},
 	"compat": {
 		// The right paddle sends its status via Basic Set commands
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	}
 }

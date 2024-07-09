@@ -2,7 +2,7 @@
 	"manufacturer": "neusta next GmbH & Co. KG",
 	"manufacturerId": "0x0248",
 	"label": "PSMZ0001",
-	"description": "Plug module",
+	"description": "Plug Module",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -16,20 +16,9 @@
 	"paramInformation": [
 		{
 			"#": "31",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Local Control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Local Control On",
-					"value": 0
-				},
-				{
-					"label": "Local Control Off",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		}
 	]
 }
