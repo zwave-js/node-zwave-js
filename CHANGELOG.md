@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.12.3 (2024-07-09)
 ### Bugfixes
 * Fixed an issue where `Basic CC` values would be exposed unnecessarily for devices with a compat flag that maps `Basic CC Set` to a different CC (#6984)
 
