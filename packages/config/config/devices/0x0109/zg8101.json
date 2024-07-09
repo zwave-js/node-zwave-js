@@ -26,7 +26,7 @@
 		}
 	},
 	"compat": {
-		"enableBasicSetMapping": true,
+		"mapBasicSet": "auto",
 		// The device does not idle its own notifications
 		"forceNotificationIdleReset": true
 	},

@@ -99,7 +99,8 @@
 	},
 	"enable_shock_alarm": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Enable / Disable Shock Alarm"
+		"label": "Enable / Disable Shock Alarm",
+		"defaultValue": 1
 	},
 	"dimming_step": {
 		"$import": "~/templates/master_template.json#dimming_timing",
@@ -280,6 +281,43 @@
 			},
 			{
 				"label": "Blink",
+				"value": 1
+			}
+		]
+	},
+	"range_sensitivity": {
+		"$import": "~/templates/master_template.json#base_0-100_nounit",
+		"label": "Range Sensitivity",
+		"description": "Higher values increase sensitivity"
+	},
+	"led_indicator": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "On when load is off",
+				"value": 0
+			},
+			{
+				"label": "Off when load is off",
+				"value": 1
+			}
+		]
+	},
+	"led_indicator_inverted": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Off when load is off",
+				"value": 0
+			},
+			{
+				"label": "On when load is off",
 				"value": 1
 			}
 		]

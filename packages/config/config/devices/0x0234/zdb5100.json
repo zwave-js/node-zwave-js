@@ -717,6 +717,6 @@
 	},
 	"compat": {
 		// Starting in Firmware 1.6, the device no longer uses Central Scene for Pressed / Released, only Basic CC
-		"disableBasicMapping": true
+		"mapBasicReport": false
 	}
 }

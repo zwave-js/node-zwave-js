@@ -15,6 +15,7 @@ export type {
 	AssociationCCRemoveOptions,
 	AssociationCCReportSpecificOptions,
 	AssociationCCSetOptions,
+	AssociationCCSpecificGroupReportOptions,
 	AssociationCCSupportedGroupingsReportOptions,
 } from "./AssociationCC";
 export {
@@ -23,6 +24,8 @@ export {
 	AssociationCCRemove,
 	AssociationCCReport,
 	AssociationCCSet,
+	AssociationCCSpecificGroupGet,
+	AssociationCCSpecificGroupReport,
 	AssociationCCSupportedGroupingsGet,
 	AssociationCCSupportedGroupingsReport,
 	AssociationCCValues,
@@ -82,6 +85,7 @@ export {
 export type {
 	BinarySensorCCGetOptions,
 	BinarySensorCCReportOptions,
+	BinarySensorCCSupportedReportOptions,
 } from "./BinarySensorCC";
 export {
 	BinarySensorCC,
@@ -233,6 +237,7 @@ export {
 } from "./EntryControlCC";
 export type {
 	FirmwareUpdateMetaDataCCActivationSetOptions,
+	FirmwareUpdateMetaDataCCMetaDataReportOptions,
 	FirmwareUpdateMetaDataCCPrepareGetOptions,
 	FirmwareUpdateMetaDataCCReportOptions,
 	FirmwareUpdateMetaDataCCRequestGetOptions,
@@ -299,6 +304,7 @@ export {
 } from "./InclusionControllerCC";
 export type {
 	IndicatorCCDescriptionGetOptions,
+	IndicatorCCDescriptionReportOptions,
 	IndicatorCCGetOptions,
 	IndicatorCCReportSpecificOptions,
 	IndicatorCCSetOptions,
@@ -383,6 +389,7 @@ export type {
 	MeterCCGetOptions,
 	MeterCCReportOptions,
 	MeterCCResetOptions,
+	MeterCCSupportedReportOptions,
 } from "./MeterCC";
 export {
 	MeterCC,
@@ -396,7 +403,9 @@ export {
 export type {
 	MultiChannelAssociationCCGetOptions,
 	MultiChannelAssociationCCRemoveOptions,
+	MultiChannelAssociationCCReportOptions,
 	MultiChannelAssociationCCSetOptions,
+	MultiChannelAssociationCCSupportedGroupingsReportOptions,
 } from "./MultiChannelAssociationCC";
 export {
 	MultiChannelAssociationCC,
@@ -508,7 +517,9 @@ export {
 	NotificationCCValues,
 } from "./NotificationCC";
 export type {
+	PowerlevelCCReportOptions,
 	PowerlevelCCSetOptions,
+	PowerlevelCCTestNodeReportOptions,
 	PowerlevelCCTestNodeSetOptions,
 } from "./PowerlevelCC";
 export {
@@ -827,6 +838,7 @@ export {
 	UserCodeCCValues,
 } from "./UserCodeCC";
 export type {
+	VersionCCCapabilitiesReportOptions,
 	VersionCCCommandClassGetOptions,
 	VersionCCCommandClassReportOptions,
 	VersionCCReportOptions,
@@ -873,6 +885,7 @@ export {
 	WindowCoveringCCSupportedReport,
 	WindowCoveringCCValues,
 } from "./WindowCoveringCC";
+export { ZWaveLongRangeCC } from "./ZWaveLongRangeCC";
 export type { ZWavePlusCCReportOptions } from "./ZWavePlusCC";
 export {
 	ZWavePlusCC,

@@ -39,6 +39,12 @@ test.beforeEach(async (t) => {
 		removeAllListeners: () => {},
 	} as any;
 
+	driver.controller.nodes.getOrThrow = (nodeId: number) => {
+		const node = driver.controller.nodes.get(nodeId);
+		if (!node) throw new Error(`Node ${nodeId} not found`);
+		return node;
+	};
+
 	t.context = { driver, serialport };
 });
 

@@ -390,7 +390,7 @@ export function getJSONIndentationAtNode(
 	node: JSONC_AST.JSONNode,
 ): string {
 	return context.sourceCode
-		.getLines()[node.loc.start.line - 1]!
+		.getLines()[node.loc.start.line - 1]
 		.slice(
 			0,
 			node.loc.start.column,

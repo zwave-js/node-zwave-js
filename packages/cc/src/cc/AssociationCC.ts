@@ -13,7 +13,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -82,10 +86,9 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			case AssociationCommand.SupportedGroupingsGet:
 			case AssociationCommand.SupportedGroupingsReport:
 				return true;
-				// Not implemented:
-				// case AssociationCommand.SpecificGroupGet:
-				// return this.version >= 2;
-				// This is mandatory
+			case AssociationCommand.SpecificGroupGet:
+			case AssociationCommand.SpecificGroupReport:
+				return this.version >= 2;
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -237,6 +240,49 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			}
 		}
 	}
+
+	/**
+	 * Request the association group that represents the most recently detected button press
+	 */
+	@validateArgs()
+	public async getSpecificGroup(): Promise<number | undefined> {
+		this.assertSupportsCommand(
+			AssociationCommand,
+			AssociationCommand.SpecificGroupGet,
+		);
+
+		const cc = new AssociationCCSpecificGroupGet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = await this.applHost.sendCommand<
+			AssociationCCSpecificGroupReport
+		>(
+			cc,
+			this.commandOptions,
+		);
+		return response?.group;
+	}
+
+	/**
+	 * Report the association group that represents the most recently detected button press
+	 */
+	@validateArgs()
+	public async reportSpecificGroup(
+		group: number,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			AssociationCommand,
+			AssociationCommand.SpecificGroupReport,
+		);
+
+		const cc = new AssociationCCSpecificGroupReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			group,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
 }
 
 @commandClass(CommandClasses.Association)
@@ -309,7 +355,7 @@ export class AssociationCC extends CommandClass {
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached(applHost, endpoint);
-		const valueDB = applHost.getValueDB(endpoint.nodeId)!;
+		const valueDB = applHost.getValueDB(endpoint.nodeId);
 		for (let i = 1; i <= groupCount; i++) {
 			// Add all root destinations
 			const nodes = valueDB.getValue<number[]>(
@@ -474,7 +520,7 @@ export class AssociationCCSet extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds.length
@@ -482,7 +528,7 @@ export class AssociationCCSet extends AssociationCC {
 				: "all nodes",
 		};
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -547,7 +593,7 @@ export class AssociationCCRemove extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds && this.nodeIds.length
@@ -555,7 +601,7 @@ export class AssociationCCRemove extends AssociationCC {
 				: "all nodes",
 		};
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -638,9 +684,9 @@ export class AssociationCCReport extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"group id": this.groupId,
 				"max # of nodes": this.maxNodes,
@@ -685,9 +731,9 @@ export class AssociationCCGet extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -726,9 +772,9 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "group count": this.groupCount },
 		};
 	}
@@ -737,3 +783,45 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 @CCCommand(AssociationCommand.SupportedGroupingsGet)
 @expectedCCResponse(AssociationCCSupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsGet extends AssociationCC {}
+
+// @publicAPI
+export interface AssociationCCSpecificGroupReportOptions {
+	group: number;
+}
+
+@CCCommand(AssociationCommand.SpecificGroupReport)
+export class AssociationCCSpecificGroupReport extends AssociationCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (AssociationCCSpecificGroupReportOptions & CCCommandOptions),
+	) {
+		super(host, options);
+
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.group = this.payload[0];
+		} else {
+			this.group = options.group;
+		}
+	}
+
+	public group: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.group]);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(host),
+			message: { group: this.group },
+		};
+	}
+}
+
+@CCCommand(AssociationCommand.SpecificGroupGet)
+@expectedCCResponse(AssociationCCSpecificGroupReport)
+export class AssociationCCSpecificGroupGet extends AssociationCC {}

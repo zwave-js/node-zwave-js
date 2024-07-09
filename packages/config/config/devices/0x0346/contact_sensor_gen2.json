@@ -13,6 +13,11 @@
 			"productType": "0x0201",
 			"productId": "0x0401",
 			"zwaveAllianceId": 4147
+		},
+		{
+			// ZWLR variant
+			"productType": "0x0201",
+			"productId": "0x0601"
 		}
 	],
 	"firmwareVersion": {

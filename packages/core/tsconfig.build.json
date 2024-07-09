@@ -5,7 +5,9 @@
 		"rootDir": "src",
 		"outDir": "build",
 		// Some @internal members need to be accessed from other modules in this monorepo
-		"stripInternal": false
+		"stripInternal": false,
+		// Do not use the @@dev export for compiling
+		"customConditions": []
 	},
 	"references": [
 		{

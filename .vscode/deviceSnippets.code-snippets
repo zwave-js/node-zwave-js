@@ -135,7 +135,7 @@
 		"body": [
 			"\"compat\": {",
 			"\t$LINE_COMMENT This device incorrectly ${1:[problem]}",
-			"\t\"${2|disableBasicMapping,disableStrictEntryControlDataValidation,disableStrictMeasurementValidation,enableBasicSetMapping,forceNotificationIdleReset,mapRootReportsToEndpoint,preserveRootApplicationCCValueIDs,skipConfigurationNameQuery,skipConfigurationInfoQuery,treatBasicSetAsEvent,treatMultilevelSwitchSetAsEvent,treatSetAsReport,treatDestinationEndpointAsSource|}\": true",
+			"\t\"${2|disableStrictEntryControlDataValidation,disableStrictMeasurementValidation,forceNotificationIdleReset,mapRootReportsToEndpoint,preserveRootApplicationCCValueIDs,skipConfigurationNameQuery,skipConfigurationInfoQuery,treatMultilevelSwitchSetAsEvent,treatSetAsReport,treatDestinationEndpointAsSource|}\": true",
 			"},"
 		],
 		"description": "Insert parameter condition"

@@ -70,7 +70,7 @@ export default function transformer(
 
 		// Remove @zwave-js/transformers import
 		const selfImports = file.statements
-			.filter((s): s is ts.ImportDeclaration => ts.isImportDeclaration(s))
+			.filter((s) => ts.isImportDeclaration(s))
 			.filter(
 				(i) =>
 					i.moduleSpecifier

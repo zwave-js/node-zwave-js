@@ -170,6 +170,7 @@ interface PlannedProvisioningEntry {
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
 	securityClasses: SecurityClass[];
+	// ...other fields are irrelevant for this inclusion procedure
 }
 ```
 
@@ -238,6 +239,7 @@ provisionSmartStartNode(entry: PlannedProvisioningEntry): void
 ```
 
 Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry. The node will be included out of band when it powers up.
+If the `protocol` field is set to `Protocols.ZWaveLongRange`, the node will be included using Z-Wave Long Range instead of Z-Wave Classic.
 
 > [!ATTENTION] This method will throw when SmartStart is not supported by the controller!
 
@@ -255,6 +257,14 @@ interface PlannedProvisioningEntry {
 
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
+
+	/** Which protocol to use for inclusion. Default: Z-Wave Classic */
+	protocol?: Protocols;
+	/**
+	 * The protocols that are **supported** by the device.
+	 * When this is not set, applications should default to Z-Wave classic.
+	 */
+	supportedProtocols?: readonly Protocols[];
 
 	/** The security classes that have been **granted** by the user */
 	securityClasses: SecurityClass[];
@@ -364,7 +374,7 @@ interface LifelineRoutes {
 ```ts
 interface RouteStatistics {
 	/** The protocol and used data rate for this route */
-	protocolDataRate: ProtocolDataRate;
+	protocolDataRate?: ProtocolDataRate;
 	/** Which nodes are repeaters for this route */
 	repeaters: number[];
 
@@ -686,7 +696,7 @@ getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<
 	ReadonlyMap<number, readonly AssociationAddress[]>
 >;
 
-isAssociationAllowed(source: AssociationAddress, group: number, destination: AssociationAddress): boolean;
+checkAssociation(source: AssociationAddress, group: number, destination: AssociationAddress): AssociationCheckResult;
 
 addAssociations(source: AssociationAddress, group: number, destinations: AssociationAddress[]): Promise<void>;
 
@@ -698,7 +708,7 @@ removeNodeFromAllAssociations(nodeId: number): Promise<void>;
 - `getAllAssociationGroups` returns all association groups of a given **node and all its endpoints**. The returned `Map` uses the endpoint index as keys and its values are `Map`s of group IDs to their definition
 - `getAssociations` returns all defined associations of a given node **or** endpoint. If no endpoint is given, the associations for the root endpoint (`0`) are returned.
 - `getAllAssociations` returns all defined associations of a given **node and all its endpoints**. The returned `Map` uses the source node+endpoint as keys and its values are `Map`s of association group IDs to target node+endpoint.
-- `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `isAssociationAllowed` before doing so.
+- `addAssociations` can be used to add one or more associations to a node's or endpoint's group. You should check if each association is allowed using `checkAssociation` before doing so.
 - To remove a previously added association, use `removeAssociations`
 - A node can be removed from all other nodes' associations using `removeNodeFromAllAssociations`
 
@@ -742,6 +752,30 @@ If the target endpoint is not given, the association is a "node association". If
 
 A target endpoint of `0` (i.e. the root endpoint), the association targets the node itself and acts like a node association for the target node. However, you should note that some devices don't like having a root endpoint association as the lifeline and must be configured with a node association.
 
+#### `AssociationCheckResult` enum
+
+This tells you whether an association is allowed, and if not, why:
+
+<!-- #import AssociationCheckResult from "zwave-js" -->
+
+```ts
+enum AssociationCheckResult {
+	OK = 1,
+	/** The association is forbidden, because the destination is a ZWLR node. ZWLR does not support direct communication between end devices. */
+	Forbidden_DestinationIsLongRange = 2,
+	/** The association is forbidden, because the source is a ZWLR node. ZWLR does not support direct communication between end devices. */
+	Forbidden_SourceIsLongRange = 3,
+	/** The association is forbidden, because a node cannot be associated with itself. */
+	Forbidden_SelfAssociation = 4,
+	/** The association is forbidden, because the source node's CC versions require the source and destination node to have the same (highest) security class. */
+	Forbidden_SecurityClassMismatch = 5,
+	/** The association is forbidden, because the source node's CC versions require the source node to have the key for the destination node's highest security class. */
+	Forbidden_DestinationSecurityClassNotGranted = 6,
+	/** The association is forbidden, because none of the CCs the source node sends are supported by the destination. */
+	Forbidden_NoSupportedCCs = 7,
+}
+```
+
 ### Controlling multiple nodes at once (multicast / broadcast)
 
 When controlling multiple nodes, a "waterfall" effect can often be observed, because nodes get the commands after another. This can be avoided by using multicast or broadcast, which sends commands to multiple/all nodes at once.
@@ -784,11 +818,17 @@ Returns a reference to the (virtual) broadcast node. This can be used to send a 
 #### Configure RF region
 
 ```ts
+readonly rfRegion: MaybeNotKnown<RFRegion>
+```
+
+Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet). This value is cached and can be changed through the following API.
+
+```ts
 setRFRegion(region: RFRegion): Promise<boolean>
 getRFRegion(): Promise<RFRegion>
 ```
 
-Configure or read the RF region at the Z-Wave API Module. The possible regions are:
+Configure or read the RF region from the Z-Wave API Module. The possible regions are:
 
 ```ts
 export enum RFRegion {
@@ -808,7 +848,17 @@ export enum RFRegion {
 }
 ```
 
+> [!NOTE] Long Range capable regions are automatically preferred over their non-LR counterparts. This behavior can be disabled by setting the driver option `rf.preferLRRegion` to `false`.
+
 > [!ATTENTION] Not all controllers support configuring the RF region. These methods will throw if they are not supported
+
+To determine which regions are supported by the current controller, use the following method:
+
+```ts
+getSupportedRFRegions(filterSubsets: boolean): MaybeNotKnown<readonly RFRegion[]>
+```
+
+The `filterSubsets` parameter (`true` by default) can be used to filter out regions that are subsets of other supported regions. For example, if the controller supports both `USA` and `USA (Long Range)`, only `USA (Long Range)` will be returned, since it includes the `USA` region.
 
 #### Configure TX powerlevel
 
@@ -817,7 +867,7 @@ setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
 getPowerlevel(): Promise<{powerlevel: number, measured0dBm: number}>;
 ```
 
-Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm and serves as a calibration. Both are in dBm and must satisfy the following constraints:
+Configure or read the TX powerlevel setting for Z-Wave Classic. `powerlevel` is the normal powerlevel, `measured0dBm` the measured output power at 0 dBm and serves as a calibration. Both are in dBm and must satisfy the following constraints:
 
 - `powerlevel` between `-10` and either `+12.7`, `+14` or `+20` dBm (depending on the controller)
 - `measured0dBm` between `-10` and `+10` or between `-12.8` and `+12.7` dBm (depending on the controller)
@@ -827,6 +877,60 @@ Unfortunately there doesn't seem to be a way to determine which constrains apply
 > [!ATTENTION] Not all controllers support configuring the TX powerlevel. These methods will throw if they are not supported.
 
 > [!WARNING] Increasing the powerlevel (i.e. "shouting louder") does not improve reception of the controller and may even be **against the law**. Use at your own risk!
+
+#### Configure maximum Long Range TX powerlevel
+
+```ts
+readonly maxLongRangePowerlevel: MaybeNotKnown<number>;
+```
+
+The maximum powerlevel to use for Z-Wave Long Range, or `undefined` if it could not be determined (yet). This value is cached and can be changed through the following API.
+
+```ts
+setMaxLongRangePowerlevel(limit: number): Promise<boolean>;
+getMaxLongRangePowerlevel(): Promise<number>;
+```
+
+Z-Wave Long Range dynamically adjusts its transmit power. This API is used to configure or read the maximum TX power to use for this. The value is in dBm and must be between `-10.0` and `+14.0` or `+20.0`, depending on the controller hardware.
+
+#### Configure Long Range RF channel
+
+```ts
+readonly longRangeChannel: MaybeNotKnown<LongRangeChannel>;
+readonly supportsLongRangeAutoChannelSelection: MaybeNotKnown<boolean>
+```
+
+The channel to use for Z-Wave Long Range, whether automatic channel selection is supported by the controller, or `undefined` if this information could not be determined (yet). These values are cached. The channel can changed through the following API.
+
+```ts
+setLongRangeChannel(
+	channel:
+		| LongRangeChannel.A
+		| LongRangeChannel.B
+		| LongRangeChannel.Auto,
+): Promise<boolean>;
+getLongRangeChannel(): Promise<{
+	channel: LongRangeChannel;
+	supportsAutoChannelSelection: boolean
+}>;
+```
+
+Request the channel setting and capabilities for Z-Wave Long Range. The following channels exist:
+
+<!-- #import LongRangeChannel from "@zwave-js/core" -->
+
+```ts
+enum LongRangeChannel {
+	/** Indicates that Long Range is not supported by the currently set RF region */
+	Unsupported = 0x00,
+	A = 0x01,
+	B = 0x02,
+	/** Z-Wave Long Range Channel automatically selected by the Z-Wave algorithm */
+	Auto = 0xff,
+}
+```
+
+> [!NOTE] `supportsAutoChannelSelection` indicates whether the controller supports automatic channel selection. `LongRangeChannel.Auto` is only allowed if supported.
 
 #### Turn Z-Wave Radio on/off
 
@@ -1275,16 +1379,24 @@ readonly rfRegion: RFRegion | undefined
 Which RF region the controller is currently set to, or `undefined` if it could not be determined (yet).
 This value is cached and updated automatically when using [`getRFRegion` or `setRFRegion`](#configure-rf-region).
 
+### `supportsLongRange`
+
+```ts
+readonly supportsLongRange: MaybeNotKnown<boolean>;
+```
+
+Returns whether the controller supports the Z-Wave Long Range protocol. This depends on the configured RF region.
+
 ## Controller events
 
 The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are available:
 
 ### `"inclusion started"`
 
-The process to include a node into the network was started successfully. The event handler takes a parameter which tells you whether the inclusion should be secure or not:
+The process to include a node into the network was started successfully. The event handler has a parameter which indicates which inclusion strategy is used to include the node, and which can also be used to determine whether the inclusion is supposed to be secure.
 
 ```ts
-(secure: boolean) => void
+(strategy: InclusionStrategy) => void
 ```
 
 > [!NOTE]
@@ -1488,6 +1600,10 @@ interface ControllerStatistics {
 			current: number;
 		};
 		channel2?: {
+			average: number;
+			current: number;
+		};
+		channel3?: {
 			average: number;
 			current: number;
 		};

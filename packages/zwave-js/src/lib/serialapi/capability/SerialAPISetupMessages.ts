@@ -34,17 +34,16 @@ export enum SerialAPISetupCommand {
 	Unsupported = 0x00,
 	GetSupportedCommands = 0x01,
 	SetTxStatusReport = 0x02,
+	SetLongRangeMaximumTxPower = 0x03,
 	SetPowerlevel = 0x04,
+	GetLongRangeMaximumTxPower = 0x05,
 	GetPowerlevel = 0x08,
 	GetMaximumPayloadSize = 0x10,
 	GetRFRegion = 0x20,
 	SetRFRegion = 0x40,
 	SetNodeIDType = 0x80,
 
-	// These are added "inbetween" the existing commands
-	SetLRMaximumTxPower = 0x03,
-	GetLRMaximumTxPower = 0x05,
-	GetLRMaximumPayloadSize = 0x11,
+	GetLongRangeMaximumPayloadSize = 0x11,
 	SetPowerlevel16Bit = 0x12,
 	GetPowerlevel16Bit = 0x13,
 }
@@ -787,18 +786,18 @@ export class SerialAPISetup_SetPowerlevel16BitResponse
 
 // =============================================================================
 
-@subCommandRequest(SerialAPISetupCommand.GetLRMaximumTxPower)
-export class SerialAPISetup_GetLRMaximumTxPowerRequest
+@subCommandRequest(SerialAPISetupCommand.GetLongRangeMaximumTxPower)
+export class SerialAPISetup_GetLongRangeMaximumTxPowerRequest
 	extends SerialAPISetupRequest
 {
 	public constructor(host: ZWaveHost, options?: MessageOptions) {
 		super(host, options);
-		this.command = SerialAPISetupCommand.GetLRMaximumTxPower;
+		this.command = SerialAPISetupCommand.GetLongRangeMaximumTxPower;
 	}
 }
 
-@subCommandResponse(SerialAPISetupCommand.GetLRMaximumTxPower)
-export class SerialAPISetup_GetLRMaximumTxPowerResponse
+@subCommandResponse(SerialAPISetupCommand.GetLongRangeMaximumTxPower)
+export class SerialAPISetup_GetLongRangeMaximumTxPowerResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
@@ -811,7 +810,7 @@ export class SerialAPISetup_GetLRMaximumTxPowerResponse
 		this.limit = this.payload.readInt16BE(0) / 10;
 	}
 
-	/** The maximum LR TX power dBm */
+	/** The maximum LR TX power in dBm */
 	public readonly limit: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -828,24 +827,24 @@ export class SerialAPISetup_GetLRMaximumTxPowerResponse
 
 // =============================================================================
 
-export interface SerialAPISetup_SetLRMaximumTxPowerOptions
+export interface SerialAPISetup_SetLongRangeMaximumTxPowerOptions
 	extends MessageBaseOptions
 {
 	limit: number;
 }
 
-@subCommandRequest(SerialAPISetupCommand.SetLRMaximumTxPower)
-export class SerialAPISetup_SetLRMaximumTxPowerRequest
+@subCommandRequest(SerialAPISetupCommand.SetLongRangeMaximumTxPower)
+export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest
 	extends SerialAPISetupRequest
 {
 	public constructor(
 		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
-			| SerialAPISetup_SetLRMaximumTxPowerOptions,
+			| SerialAPISetup_SetLongRangeMaximumTxPowerOptions,
 	) {
 		super(host, options);
-		this.command = SerialAPISetupCommand.SetLRMaximumTxPower;
+		this.command = SerialAPISetupCommand.SetLongRangeMaximumTxPower;
 
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
@@ -864,11 +863,12 @@ export class SerialAPISetup_SetLRMaximumTxPowerRequest
 		}
 	}
 
+	/** The maximum LR TX power in dBm */
 	public limit: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
-		// The values are in 0.1 dBm
+		// The values are in 0.1 dBm, signed
 		this.payload.writeInt16BE(Math.round(this.limit * 10), 0);
 
 		return super.serialize();
@@ -886,8 +886,8 @@ export class SerialAPISetup_SetLRMaximumTxPowerRequest
 	}
 }
 
-@subCommandResponse(SerialAPISetupCommand.SetLRMaximumTxPower)
-export class SerialAPISetup_SetLRMaximumTxPowerResponse
+@subCommandResponse(SerialAPISetupCommand.SetLongRangeMaximumTxPower)
+export class SerialAPISetup_SetLongRangeMaximumTxPowerResponse
 	extends SerialAPISetupResponse
 	implements SuccessIndicator
 {
@@ -951,18 +951,18 @@ export class SerialAPISetup_GetMaximumPayloadSizeResponse
 
 // =============================================================================
 
-@subCommandRequest(SerialAPISetupCommand.GetLRMaximumPayloadSize)
-export class SerialAPISetup_GetLRMaximumPayloadSizeRequest
+@subCommandRequest(SerialAPISetupCommand.GetLongRangeMaximumPayloadSize)
+export class SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest
 	extends SerialAPISetupRequest
 {
 	public constructor(host: ZWaveHost, options?: MessageOptions) {
 		super(host, options);
-		this.command = SerialAPISetupCommand.GetLRMaximumPayloadSize;
+		this.command = SerialAPISetupCommand.GetLongRangeMaximumPayloadSize;
 	}
 }
 
-@subCommandResponse(SerialAPISetupCommand.GetLRMaximumPayloadSize)
-export class SerialAPISetup_GetLRMaximumPayloadSizeResponse
+@subCommandResponse(SerialAPISetupCommand.GetLongRangeMaximumPayloadSize)
+export class SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(

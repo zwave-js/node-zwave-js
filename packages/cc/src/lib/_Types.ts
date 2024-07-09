@@ -1,9 +1,9 @@
-import type { Scale } from "@zwave-js/config/safe";
 import {
 	type CommandClasses,
 	type DataRate,
 	type FLiRS,
 	type MaybeNotKnown,
+	type Scale,
 	type ValueMetadata,
 	ZWaveDataRate,
 } from "@zwave-js/core/safe";
@@ -38,19 +38,24 @@ export enum AssociationCommand {
 	Remove = 0x04,
 	SupportedGroupingsGet = 0x05,
 	SupportedGroupingsReport = 0x06,
-	// TODO: These two commands are V2. I have no clue how this is supposed to function:
-	// SpecificGroupGet = 0x0b,
-	// SpecificGroupReport = 0x0c,
+	SpecificGroupGet = 0x0b,
+	SpecificGroupReport = 0x0c,
+}
 
-	// Here's what the docs have to say:
-	// This functionality allows a supporting multi-button device to detect a key press and subsequently advertise
-	// the identity of the key. The following sequence of events takes place:
-	// * The user activates a special identification sequence and pushes the button to be identified
-	// * The device issues a Node Information frame (NIF)
-	// * The NIF allows the portable controller to determine the NodeID of the multi-button device
-	// * The portable controller issues an Association Specific Group Get Command to the multi-button device
-	// * The multi-button device returns an Association Specific Group Report Command that advertises the
-	//   association group that represents the most recently detected button
+export enum AssociationCheckResult {
+	OK = 0x01,
+	/** The association is forbidden, because the destination is a ZWLR node. ZWLR does not support direct communication between end devices. */
+	Forbidden_DestinationIsLongRange,
+	/** The association is forbidden, because the source is a ZWLR node. ZWLR does not support direct communication between end devices. */
+	Forbidden_SourceIsLongRange,
+	/** The association is forbidden, because a node cannot be associated with itself. */
+	Forbidden_SelfAssociation,
+	/** The association is forbidden, because the source node's CC versions require the source and destination node to have the same (highest) security class. */
+	Forbidden_SecurityClassMismatch,
+	/** The association is forbidden, because the source node's CC versions require the source node to have the key for the destination node's highest security class. */
+	Forbidden_DestinationSecurityClassNotGranted,
+	/** The association is forbidden, because none of the CCs the source node sends are supported by the destination. */
+	Forbidden_NoSupportedCCs,
 }
 
 export enum AssociationGroupInfoCommand {

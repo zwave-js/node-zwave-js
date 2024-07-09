@@ -2,6 +2,7 @@ import {
 	BasicCCReport,
 	BasicCCValues,
 	BinarySwitchCCReport,
+	BinarySwitchCCValues,
 	type CommandClass,
 	InvalidCC,
 	Security2CC,
@@ -175,8 +176,8 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			// Send a secure Basic SET to sync the SPAN
-			await node.commandClasses.Basic.set(1);
+			// Send a secure Binary Switch SET to sync the SPAN
+			await node.commandClasses["Binary Switch"].set(false);
 
 			driver.driverLog.print("----------");
 			driver.driverLog.print("START TEST");
@@ -187,9 +188,9 @@ integrationTest(
 			// Now create a collision by having both parties send at the same time
 			const nodeToHost = Security2CC.encapsulate(
 				mockNode.host,
-				new BasicCCReport(mockNode.host, {
+				new BinarySwitchCCReport(mockNode.host, {
 					nodeId: mockController.host.ownNodeId,
-					currentValue: 99,
+					currentValue: true,
 				}),
 			);
 			const p1 = mockNode.sendToController(
@@ -197,7 +198,7 @@ integrationTest(
 					ackRequested: true,
 				}),
 			);
-			const p2 = node.commandClasses.Basic.set(0);
+			const p2 = node.commandClasses["Binary Switch"].set(false);
 
 			const [, p2result] = await Promise.all([p1, p2]);
 
@@ -205,10 +206,12 @@ integrationTest(
 			await wait(250);
 
 			// If the collision was handled gracefully, we should now have the value reported by the node
-			const currentValue = node.getValue(BasicCCValues.currentValue.id);
-			t.is(currentValue, 99);
+			const currentValue = node.getValue(
+				BinarySwitchCCValues.currentValue.id,
+			);
+			t.is(currentValue, true);
 
-			// Ensure the Basic Set causing a collision eventually gets resolved
+			// Ensure the Binary Switch Set causing a collision eventually gets resolved
 			t.like(p2result, {
 				status: SupervisionStatus.Success,
 			});

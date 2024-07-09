@@ -2,7 +2,7 @@
 
 <h2 align="center">Z-Wave device driver written entirely in JavaScript/TypeScript</h2>
 
-![Test and Release](https://github.com/AlCalzone/node-zwave-js/workflows/Test%20and%20Release/badge.svg)
+![Test and Release](https://github.com/zwave-js/node-zwave-js/workflows/Test%20and%20Release/badge.svg)
 [![Discord](https://img.shields.io/discord/1111193770935996459?color=D82167&label=Chat%20on%20Discord&logo=Discord&logoColor=ffffff)](https://discord.gg/HFqcyFNfWd)
 
 [![node](https://img.shields.io/node/v/zwave-js.svg) ![npm](https://img.shields.io/npm/v/zwave-js.svg)](https://www.npmjs.com/package/zwave-js)
@@ -19,7 +19,7 @@
 Z-Wave is an amazing piece of technology, but it is difficult to get started with and develop for.\
 **It shouldn't be!** We've got you covered.
 
-Built on Node.js and compatible with all known 500 and 700 series Z-Wave controller hardware adapters, **Z-Wave JS** runs on almost anything with a little bit of computing power and a serial port. Check out the [documentation](https://zwave-js.github.io/node-zwave-js) to get started!
+Built on Node.js and compatible with all known 500, 700 and 800 series Z-Wave controller hardware adapters, **Z-Wave JS** runs on almost anything with a little bit of computing power and a serial port. Check out the [documentation](https://zwave-js.github.io/node-zwave-js) to get started!
 
 ## Quick Links
 

@@ -1538,7 +1538,7 @@ async function parseZWAProduct(
 			addCompat = true;
 
 			newConfig.compat ??= {};
-			newConfig.compat.treatBasicSetAsEvent = true;
+			newConfig.compat.mapBasicSet = "event";
 		}
 
 		newAssociations[ass.GroupNumber] = {

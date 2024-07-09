@@ -629,5 +629,22 @@
 			"maxValue": 370,
 			"defaultValue": 180
 		}
-	]
+	],
+	"compat": {
+		"overrideQueries": {
+			// The response to the supported scales query is off by one bit: https://github.com/zwave-js/node-zwave-js/issues/6680
+			"Multilevel Sensor": [
+				{
+					"method": "getSupportedScales",
+					"matchArgs": [3], // Illuminance
+					"result": [
+						1 // Lux
+					],
+					"persistValues": {
+						"supportedScales(3)": [1]
+					}
+				}
+			]
+		}
+	}
 }

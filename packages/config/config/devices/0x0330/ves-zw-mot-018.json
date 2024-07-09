@@ -223,6 +223,16 @@
 			]
 		}
 	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// The device probably has a bugged Window Covering CC implementation
+				"0x6a": {
+					"endpoints": "*"
+				}
+			}
+		}
+	},
 	"metadata": {
 		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.\n Step 3. The connected light will stay on solid for 3 seconds to indicate successful inclusion.",
 		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Triple press the action button.",

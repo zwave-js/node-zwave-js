@@ -1,12 +1,13 @@
 {
   "name": "@zwave-js/flash",
-  "version": "12.4.1",
+  "version": "13.0.0-beta.3",
   "description": "zwave-js: firmware flash utility",
   "keywords": [],
   "publishConfig": {
     "access": "public"
   },
   "main": "build/cli.js",
+  "type": "commonjs",
   "files": [
     "bin/",
     "build/**/*.{js,d.ts,map}"
@@ -17,13 +18,13 @@
     "email": "d.griesel@gmx.net"
   },
   "license": "MIT",
-  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "homepage": "https://github.com/zwave-js/node-zwave-js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+    "url": "git+https://github.com/zwave-js/node-zwave-js.git"
   },
   "bugs": {
-    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+    "url": "https://github.com/zwave-js/node-zwave-js/issues"
   },
   "funding": {
     "url": "https://github.com/sponsors/AlCalzone/"
@@ -33,7 +34,7 @@
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
-    "fs-extra": "^11.1.1",
+    "fs-extra": "^11.2.0",
     "yargs": "^17.7.2",
     "zwave-js": "workspace:*"
   },
@@ -44,10 +45,10 @@
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.17.14",
-    "@types/yargs": "^17.0.24",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^18.19.31",
+    "@types/yargs": "^17.0.32",
     "del-cli": "^5.1.0",
-    "typescript": "5.2.2"
+    "typescript": "5.5.3"
   }
 }

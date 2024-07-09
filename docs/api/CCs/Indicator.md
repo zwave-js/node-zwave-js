@@ -20,6 +20,14 @@ async set(
 ): Promise<SupervisionResult | undefined>;
 ```
 
+### `sendReport`
+
+```ts
+async sendReport(
+	options: IndicatorCCReportSpecificOptions,
+): Promise<void>;
+```
+
 ### `getSupported`
 
 ```ts
@@ -40,6 +48,15 @@ async reportSupported(
 	indicatorId: number,
 	supportedProperties: readonly number[],
 	nextIndicatorId: number,
+): Promise<void>;
+```
+
+### `reportDescription`
+
+```ts
+async reportDescription(
+	indicatorId: number,
+	description: string,
 ): Promise<void>;
 ```
 

@@ -1,0 +1,128 @@
+{
+	"manufacturer": "Shelly Europe Ltd.",
+	"manufacturerId": "0x0460",
+	"label": "QPSW-0A2X16",
+	"description": "Wave Pro 2",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x008c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW1 Switch Type"
+		},
+		{
+			"#": "2",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW2 Switch Type"
+		},
+		{
+			"#": "6",
+			"$import": "templates/wave_template.json#swap_inputs"
+		},
+		{
+			"#": "16",
+			"$import": "templates/wave_template.json#swap_outputs"
+		},
+		{
+			"#": "17",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O1: State After Power Failure"
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O2: State After Power Failure"
+		},
+		{
+			"#": "19",
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O1: Auto-Off Timer"
+		},
+		{
+			"#": "20",
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O1: Auto-On Timer"
+		},
+		{
+			"#": "25",
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O1: Auto-On/Off Timer Unit"
+		},
+		{
+			"#": "21",
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O2: Auto-Off Timer"
+		},
+		{
+			"#": "22",
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O2: Auto-On Timer"
+		},
+		{
+			"#": "26",
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O2: Auto-On/Off Timer Unit"
+		},
+		{
+			"#": "23",
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O1: Relay Type"
+		},
+		{
+			"#": "24",
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O2: Relay Type"
+		},
+		{
+			"#": "91",
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Water"
+		},
+		{
+			"#": "92",
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Smoke"
+		},
+		{
+			"#": "93",
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: CO"
+		},
+		{
+			"#": "94",
+			"$import": "templates/wave_template.json#alarm_configuration",
+			"label": "Alarm Configuration: Heat"
+		},
+		{
+			"#": "120",
+			"$import": "templates/wave_template.json#factory_reset"
+		},
+		{
+			"#": "201",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 1"
+		},
+		{
+			"#": "202",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 2"
+		},
+		{
+			"#": "203",
+			"$import": "templates/wave_template.json#serial_number",
+			"label": "Serial Number: Part 3"
+		}
+	],
+	"metadata": {
+		"$import": "templates/wave_template.json#default_metadata"
+	}
+}

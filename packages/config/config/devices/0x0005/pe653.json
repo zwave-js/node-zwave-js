@@ -523,7 +523,7 @@
 			},
 			// The device sometimes sends BASIC_SET to the lifeline association when the state of Switch 1
 			// changes but the value is always 0 so treat it as an event.
-			"treatBasicSetAsEvent": true
+			"mapBasicSet": "event"
 		},
 		{
 			"commandClasses": {

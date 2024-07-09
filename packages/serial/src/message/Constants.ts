@@ -1,3 +1,5 @@
+import { ZnifferMessageHeaders } from "../MessageHeaders";
+
 /** Indicates the type of a data message */
 export enum MessageType {
 	Request = 0x0,
@@ -52,7 +54,7 @@ export enum FunctionType {
 	UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 0x24,
 
 	EnterBootloader = 0x27, // Leave Serial API and enter bootloader (700+ series only). Enter Auto-Programming mode (500 series only).
-	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ZW_NVRGetValue(offset, length) => NVRdata[], see INS13954-13
 
 	GetNVMId = 0x29, // Returns information about the external NVM
 	ExtNVMReadLongBuffer = 0x2a, // Reads a buffer from the external NVM
@@ -155,24 +157,31 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_UNKNOWN_0xB4 = 0xb4, // ??
 
-	UNKNOWN_FUNC_WATCH_DOG_ENABLE = 0xb6,
-	UNKNOWN_FUNC_WATCH_DOG_DISABLE = 0xb7,
-	UNKNOWN_FUNC_WATCH_DOG_KICK = 0xb8,
+	EnableWatchdog500 = 0xb6, // Enable Watchdog (500 series and older)
+	DisableWatchdog500 = 0xb7, // Disable Watchdog (500 series and older)
+	KickWatchdog500 = 0xb8, // Kick Watchdog (500 series and older)
 	UNKNOWN_FUNC_UNKNOWN_0xB9 = 0xb9, // ??
 	UNKNOWN_FUNC_RF_POWERLEVEL_GET = 0xba, // Get RF Power level
 
 	UNKNOWN_FUNC_GET_LIBRARY_TYPE = 0xbd,
-	UNKNOWN_FUNC_SEND_TEST_FRAME = 0xbe,
+	SendTestFrame = 0xbe, // Sends a NOP Power frame to the given node
 	UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 0xbf,
 
 	FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 0xd0, // Set controller into promiscuous mode to listen to all messages
 	FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 0xd1,
 
-	UNKNOWN_FUNC_UNKNOWN_0xD2 = 0xd2, // ??
-	UNKNOWN_FUNC_UNKNOWN_0xD3 = 0xd3, // ??
+	StartWatchdog = 0xd2, // Start Hardware Watchdog (700 series and newer)
+	StopWatchdog = 0xd3, // Stop Hardware Watchdog (700 series and newer)
+
 	UNKNOWN_FUNC_UNKNOWN_0xD4 = 0xd4, // ??
 
 	Shutdown = 0xd9, // Instruct the Z-Wave API to shut down in order to safely remove the power
+
+	// Long range controller support
+	GetLongRangeNodes = 0xda, // Used after GetSerialApiInitData to get the nodes with IDs > 0xFF
+	GetLongRangeChannel = 0xdb,
+	SetLongRangeChannel = 0xdc,
+	SetLongRangeShadowNodeIDs = 0xdd,
 
 	UNKNOWN_FUNC_UNKNOWN_0xEF = 0xef, // ??
 
@@ -182,4 +191,27 @@ export enum FunctionType {
 	UNKNOWN_FUNC_ZMEBootloaderFlash = 0xf4,
 	UNKNOWN_FUNC_ZMECapabilities = 0xf5,
 	UNKNOWN_FUNC_ZMESerialAPIOptions = 0xf8,
+}
+
+export enum ZnifferFunctionType {
+	GetVersion = 0x01,
+	SetFrequency = 0x02,
+	GetFrequencies = 0x03,
+	Start = 0x04,
+	Stop = 0x05,
+	SetBaudRate = 0x0e,
+	GetFrequencyInfo = 0x13,
+}
+
+export enum ZnifferMessageType {
+	Command = ZnifferMessageHeaders.SOCF,
+	Data = ZnifferMessageHeaders.SODF,
+}
+
+export enum ZnifferFrameType {
+	Command = 0x00,
+	Data = 0x01,
+	BeamFrame = 0x02,
+	BeamStart = 0x04,
+	BeamStop = 0x05,
 }

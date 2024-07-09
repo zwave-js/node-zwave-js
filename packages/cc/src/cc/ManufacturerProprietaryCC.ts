@@ -196,7 +196,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		const manufacturerId = this.getManufacturerIdOrThrow();
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
-		super.ccCommand = (manufacturerId >>> 8) & 0xff;
+		(this.ccCommand as unknown as number) = (manufacturerId >>> 8) & 0xff;
 		// The 2nd byte is in the payload
 		this.payload = Buffer.concat([
 			Buffer.from([

@@ -21,7 +21,7 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 							p,
 						] as const;
 					}
-				}).filter((p): p is [number, AST.JSONProperty] => !!p);
+				}).filter((p) => !!p);
 
 				const isSomePropertyOutOfOrder = properties.some(
 					([index], i, arr) => i > 0 && index < arr[i - 1][0],
@@ -75,7 +75,7 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 					});
 
 					const indentation = context.sourceCode
-						.getLines()[withRanges[0].property.loc.start.line]!
+						.getLines()[withRanges[0].property.loc.start.line]
 						.slice(
 							0,
 							withRanges[0].property.loc.start.column,
