@@ -84,12 +84,18 @@
 			// Some devices report this param, some don't, may be related to firmware version.
 			// But even when not reported by the device, it is supported.
 			"#": "6",
-			"label": "Valve Opening Percentage Report",
+			"label": "Valve Opening Report Change Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "7",
