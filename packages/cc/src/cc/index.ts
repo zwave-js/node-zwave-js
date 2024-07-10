@@ -802,14 +802,14 @@ export {
 	isTransportServiceEncapsulation,
 } from "./TransportServiceCC";
 export type {
+	UserCodeCCAdminCodeReportOptions,
+	UserCodeCCAdminCodeSetOptions,
 	UserCodeCCCapabilitiesReportOptions,
 	UserCodeCCExtendedUserCodeGetOptions,
 	UserCodeCCExtendedUserCodeSetOptions,
 	UserCodeCCGetOptions,
 	UserCodeCCKeypadModeReportOptions,
 	UserCodeCCKeypadModeSetOptions,
-	UserCodeCCMasterCodeReportOptions,
-	UserCodeCCMasterCodeSetOptions,
 	UserCodeCCReportOptions,
 	UserCodeCCSetOptions,
 	UserCodeCCUserCodeChecksumReportOptions,
@@ -817,6 +817,9 @@ export type {
 } from "./UserCodeCC";
 export {
 	UserCodeCC,
+	UserCodeCCAdminCodeGet,
+	UserCodeCCAdminCodeReport,
+	UserCodeCCAdminCodeSet,
 	UserCodeCCCapabilitiesGet,
 	UserCodeCCCapabilitiesReport,
 	UserCodeCCExtendedUserCodeGet,
@@ -826,9 +829,6 @@ export {
 	UserCodeCCKeypadModeGet,
 	UserCodeCCKeypadModeReport,
 	UserCodeCCKeypadModeSet,
-	UserCodeCCMasterCodeGet,
-	UserCodeCCMasterCodeReport,
-	UserCodeCCMasterCodeSet,
 	UserCodeCCReport,
 	UserCodeCCSet,
 	UserCodeCCUserCodeChecksumGet,

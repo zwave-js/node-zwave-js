@@ -120,8 +120,8 @@ export interface ThermostatSetpointCCCapabilities {
 
 export interface UserCodeCCCapabilities {
 	numUsers: number;
-	supportsMasterCode?: boolean;
-	supportsMasterCodeDeactivation?: boolean;
+	supportsAdminCode?: boolean;
+	supportsAdminCodeDeactivation?: boolean;
 	supportsUserCodeChecksum?: boolean;
 	// Not implemented in mocks:
 	// supportsMultipleUserCodeReport?: boolean;
