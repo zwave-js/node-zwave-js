@@ -13,7 +13,11 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -726,9 +730,9 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported parameters": this.supportedParameters
 					.map(
@@ -783,9 +787,9 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 	)
 	public readonly duration: Duration;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				parameter: getEnumMemberName(
 					WindowCoveringParameter,
@@ -836,9 +840,9 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				parameter: getEnumMemberName(
 					WindowCoveringParameter,
@@ -904,7 +908,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { parameter, value } of this.targetValues) {
 			message[getEnumMemberName(WindowCoveringParameter, parameter)] =
@@ -914,7 +918,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -965,7 +969,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			parameter: getEnumMemberName(
 				WindowCoveringParameter,
@@ -977,7 +981,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1018,9 +1022,9 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				parameter: getEnumMemberName(
 					WindowCoveringParameter,

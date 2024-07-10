@@ -7,6 +7,7 @@ export {
 } from "@zwave-js/core/safe";
 export type { DataRate, FLiRS } from "@zwave-js/core/safe";
 export { DeviceClass } from "./lib/node/DeviceClass";
+export type { NodeDump } from "./lib/node/Dump";
 export { Endpoint } from "./lib/node/Endpoint";
 export { ZWaveNode } from "./lib/node/Node";
 export type {

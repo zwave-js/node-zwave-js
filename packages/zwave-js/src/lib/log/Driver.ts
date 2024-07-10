@@ -210,11 +210,13 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 						}]`
 						: "";
 					const command = isCommandClassContainer(trns.message)
-						? ` (${trns.message.command.constructor.name})`
+						? `: ${trns.message.command.constructor.name}`
 						: "";
 					message += `\n· ${prefix} ${
 						FunctionType[trns.message.functionType]
-					}${command}${postfix}`;
+					}${command}${postfix} (P: ${
+						getEnumMemberName(MessagePriority, trns.priority)
+					})`;
 				}
 			} else {
 				message += " (empty)";

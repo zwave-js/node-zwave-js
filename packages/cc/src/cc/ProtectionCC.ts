@@ -14,7 +14,11 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -521,10 +525,20 @@ export class ProtectionCCSet extends ProtectionCC {
 			this.local & 0b1111,
 			(this.rf ?? RFProtectionState.Unprotected) & 0b1111,
 		]);
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, only include the local state
+			this.payload = this.payload.subarray(0, 1);
+		}
+
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -532,7 +546,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -558,7 +572,7 @@ export class ProtectionCCReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.rfProtectionState)
 	public readonly rf?: RFProtectionState;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -566,7 +580,7 @@ export class ProtectionCCReport extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -633,9 +647,9 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.supportedRFStates)
 	public readonly supportedRFStates: RFProtectionState[];
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports exclusive control": this.supportsExclusiveControl,
 				"supports timeout": this.supportsTimeout,
@@ -672,9 +686,9 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
 	public readonly exclusiveControlNodeId: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -722,9 +736,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -746,9 +760,9 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.timeout)
 	public readonly timeout: Timeout;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { timeout: this.timeout.toString() },
 		};
 	}
@@ -792,9 +806,9 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { timeout: this.timeout.toString() },
 		};
 	}

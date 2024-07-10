@@ -1,6 +1,7 @@
 import {
 	type AssociationAddress,
 	AssociationCC,
+	type AssociationCheckResult,
 	type AssociationGroup,
 	ECDHProfiles,
 	FLiRS2WakeUpTime,
@@ -32,6 +33,7 @@ import {
 } from "@zwave-js/cc";
 import { type IndicatorObject } from "@zwave-js/cc/IndicatorCC";
 import {
+	BasicDeviceClass,
 	CommandClasses,
 	ControllerStatus,
 	EMPTY_ROUTE,
@@ -130,10 +132,7 @@ import {
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
-import {
-	type SerialAPIStartedRequest,
-	SerialAPIWakeUpReason,
-} from "../serialapi/application/SerialAPIStartedRequest";
+
 import {
 	ShutdownRequest,
 	type ShutdownResponse,
@@ -216,6 +215,10 @@ import {
 	SetSerialApiTimeoutsRequest,
 	type SetSerialApiTimeoutsResponse,
 } from "../serialapi/misc/SetSerialApiTimeoutsMessages";
+import {
+	StartWatchdogRequest,
+	StopWatchdogRequest,
+} from "../serialapi/misc/WatchdogMessages";
 import {
 	AddNodeDSKToNetworkRequest,
 	AddNodeStatus,
@@ -387,7 +390,7 @@ interface ControllerEventCallbacks
 {
 	"inclusion failed": () => void;
 	"exclusion failed": () => void;
-	"inclusion started": (secure: boolean, strategy: InclusionStrategy) => void;
+	"inclusion started": (strategy: InclusionStrategy) => void;
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
@@ -448,10 +451,6 @@ export class ZWaveController
 		driver.registerRequestHandler(
 			FunctionType.ReplaceFailedNode,
 			this.handleReplaceNodeStatusReport.bind(this),
-		);
-		driver.registerRequestHandler(
-			FunctionType.SerialAPIStarted,
-			this.handleSerialAPIStartedUnexpectedly.bind(this),
 		);
 	}
 
@@ -738,6 +737,10 @@ export class ZWaveController
 	/** Whether the controller is configured to use 8 or 16 bit node IDs */
 	public get nodeIdType(): NodeIDType {
 		return this._nodeIdType;
+	}
+	/** @internal */
+	public set nodeIdType(value: NodeIDType) {
+		this._nodeIdType = value;
 	}
 
 	/** Returns the node with the given DSK */
@@ -1888,6 +1891,63 @@ export class ZWaveController
 		}
 	}
 
+	/**
+	 * Starts the hardware watchdog on supporting 700+ series controllers.
+	 * Returns whether the operation was successful.
+	 */
+	public async startWatchdog(): Promise<boolean> {
+		if (
+			this.sdkVersionGte("7.0")
+			&& this.isFunctionSupported(FunctionType.StartWatchdog)
+		) {
+			try {
+				this.driver.controllerLog.print(
+					"Starting hardware watchdog...",
+				);
+				await this.driver.sendMessage(
+					new StartWatchdogRequest(this.driver),
+				);
+
+				return true;
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Starting the hardware watchdog failed: ${
+						getErrorMessage(e)
+					}`,
+					"error",
+				);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Stops the hardware watchdog on supporting controllers.
+	 * Returns whether the operation was successful.
+	 */
+	public async stopWatchdog(): Promise<boolean> {
+		if (this.isFunctionSupported(FunctionType.StopWatchdog)) {
+			try {
+				this.driver.controllerLog.print(
+					"Stopping hardware watchdog...",
+				);
+				await this.driver.sendMessage(
+					new StopWatchdogRequest(this.driver),
+				);
+
+				return true;
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Stopping the hardware watchdog failed: ${
+						getErrorMessage(e)
+					}`,
+					"error",
+				);
+			}
+		}
+		return false;
+	}
+
 	private _inclusionState: InclusionState = InclusionState.Idle;
 	public get inclusionState(): InclusionState {
 		return this._inclusionState;
@@ -1978,12 +2038,7 @@ export class ZWaveController
 				`The controller is now ready to add nodes`,
 			);
 
-			this.emit(
-				"inclusion started",
-				// TODO: Remove first parameter in next major version
-				options.strategy !== InclusionStrategy.Insecure,
-				options.strategy,
-			);
+			this.emit("inclusion started", options.strategy);
 		} catch (e) {
 			this.setInclusionState(InclusionState.Idle);
 			if (
@@ -2052,12 +2107,7 @@ export class ZWaveController
 				}),
 			);
 
-			this.emit(
-				"inclusion started",
-				// TODO: Remove first parameter in next major version
-				true,
-				InclusionStrategy.SmartStart,
-			);
+			this.emit("inclusion started", InclusionStrategy.SmartStart);
 		} catch (e) {
 			this.setInclusionState(InclusionState.Idle);
 			// Error handling for this happens at the call site
@@ -2578,7 +2628,6 @@ export class ZWaveController
 			this.setInclusionState(InclusionState.Busy);
 
 			const deviceClass = new DeviceClass(
-				this.driver.configManager,
 				nodeInfo.basicDeviceClass,
 				nodeInfo.genericDeviceClass,
 				nodeInfo.specificDeviceClass,
@@ -2603,11 +2652,20 @@ export class ZWaveController
 			});
 
 			this.driver.controllerLog.print(
-				`Node ${newNode.id} was included by another controller:
-basic device class:    ${newNode.deviceClass?.basic.label}
-generic device class:  ${newNode.deviceClass?.generic.label}
-specific device class: ${newNode.deviceClass?.specific.label}
-supported CCs: ${
+				`Node ${newNode.id} was included by another controller:${
+					newNode.deviceClass
+						? `
+  basic device class:    ${
+							getEnumMemberName(
+								BasicDeviceClass,
+								newNode.deviceClass.basic,
+							)
+						}
+  generic device class:  ${newNode.deviceClass.generic.label}
+  specific device class: ${newNode.deviceClass.specific.label}`
+						: ""
+				}
+  supported CCs: ${
 					nodeInfo.supportedCCs
 						.map((cc) =>
 							`\n  · ${CommandClasses[cc]} (${num2hex(cc)})`
@@ -2826,7 +2884,6 @@ supported CCs: ${
 				// TODO: Check if this stuff works for a normal replace too
 				// eslint-disable-next-line @typescript-eslint/dot-notation
 				newNode["deviceClass"] = new DeviceClass(
-					this.driver.configManager,
 					requestedNodeInfo.basicDeviceClass,
 					requestedNodeInfo.genericDeviceClass,
 					requestedNodeInfo.specificDeviceClass,
@@ -3764,7 +3821,6 @@ supported CCs: ${
 					msg.statusContext!.nodeId,
 					this.driver,
 					new DeviceClass(
-						this.driver.configManager,
 						msg.statusContext!.basicDeviceClass!,
 						msg.statusContext!.genericDeviceClass!,
 						msg.statusContext!.specificDeviceClass!,
@@ -3850,10 +3906,19 @@ supported CCs: ${
 				});
 
 				this.driver.controllerLog.print(
-					`finished adding node ${newNode.id}:
-  basic device class:    ${newNode.deviceClass?.basic.label}
-  generic device class:  ${newNode.deviceClass?.generic.label}
-  specific device class: ${newNode.deviceClass?.specific.label}
+					`finished adding node ${newNode.id}:${
+						newNode.deviceClass
+							? `
+  basic device class:    ${
+								getEnumMemberName(
+									BasicDeviceClass,
+									newNode.deviceClass.basic,
+								)
+							}
+  generic device class:  ${newNode.deviceClass.generic.label}
+  specific device class: ${newNode.deviceClass.specific.label}`
+							: ""
+					}
   supported CCs: ${
 						supportedCCs
 							.map((cc) =>
@@ -4098,13 +4163,7 @@ supported CCs: ${
 				this.driver.controllerLog.print(
 					`The failed node is ready to be replaced, inclusion started...`,
 				);
-				this.emit(
-					"inclusion started",
-					// TODO: Remove first parameter in next major version
-					this._inclusionOptions.strategy
-						!== InclusionStrategy.Insecure,
-					this._inclusionOptions.strategy,
-				);
+				this.emit("inclusion started", this._inclusionOptions.strategy);
 				this.setInclusionState(InclusionState.Including);
 				this._replaceFailedPromise?.resolve(true);
 
@@ -4329,43 +4388,6 @@ supported CCs: ${
 		}
 		// not sure what to do with this message
 		return false;
-	}
-
-	/**
-	 * Is called when the Serial API restart unexpectedly.
-	 */
-	private async handleSerialAPIStartedUnexpectedly(
-		msg: SerialAPIStartedRequest,
-	): Promise<boolean> {
-		// Normally, the soft reset command includes waiting for this message.
-		// If we end up here, it is unexpected.
-
-		switch (msg.wakeUpReason) {
-			// All wakeup reasons that indicate a reset of the Serial API
-			// need to be handled here, so we interpret node IDs correctly.
-			case SerialAPIWakeUpReason.Reset:
-			case SerialAPIWakeUpReason.WatchdogReset:
-			case SerialAPIWakeUpReason.SoftwareReset:
-			case SerialAPIWakeUpReason.EmergencyWatchdogReset:
-			case SerialAPIWakeUpReason.BrownoutCircuit: {
-				// The Serial API restarted unexpectedly
-				if (this._nodeIdType === NodeIDType.Long) {
-					this.driver.controllerLog.print(
-						`Serial API restarted unexpectedly.`,
-						"warn",
-					);
-
-					// We previously used 16 bit node IDs, but the controller was reset.
-					// Remember this and try to go back to 16 bit.
-					this._nodeIdType = NodeIDType.Short;
-					await this.trySetNodeIDType(NodeIDType.Long);
-				}
-
-				return true; // Don't invoke any more handlers
-			}
-		}
-
-		return false; // Not handled
 	}
 
 	private _rebuildRoutesProgress = new Map<number, RebuildRoutesStatus>();
@@ -4744,34 +4766,39 @@ supported CCs: ${
 				/* ignore */
 			}
 
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `assigning return routes to the following nodes:
+			if (associatedNodes.length > 0) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `assigning return routes to the following nodes:
 ${associatedNodes.join(", ")}`,
-				direction: "outbound",
-			});
-			for (const destinationNodeId of associatedNodes) {
-				for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-					this.driver.controllerLog.logNode(nodeId, {
-						message:
-							`assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
-						direction: "outbound",
-					});
-
-					if (
-						await this.assignReturnRoutes(nodeId, destinationNodeId)
-					) {
-						// this step was successful, continue with the next
-						break;
-					}
-
-					if (attempt === maxAttempts) {
+					direction: "outbound",
+				});
+				for (const destinationNodeId of associatedNodes) {
+					for (let attempt = 1; attempt <= maxAttempts; attempt++) {
 						this.driver.controllerLog.logNode(nodeId, {
 							message:
-								`rebuilding routes failed: failed to assign return route after ${maxAttempts} attempts`,
-							level: "warn",
-							direction: "none",
+								`assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
+							direction: "outbound",
 						});
-						return false;
+
+						if (
+							await this.assignReturnRoutes(
+								nodeId,
+								destinationNodeId,
+							)
+						) {
+							// this step was successful, continue with the next
+							break;
+						}
+
+						if (attempt === maxAttempts) {
+							this.driver.controllerLog.logNode(nodeId, {
+								message:
+									`rebuilding routes failed: failed to assign return route after ${maxAttempts} attempts`,
+								level: "warn",
+								direction: "none",
+							});
+							return false;
+						}
 					}
 				}
 			}
@@ -5818,15 +5845,15 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Checks if a given association is allowed.
 	 */
-	public isAssociationAllowed(
+	public checkAssociation(
 		source: AssociationAddress,
 		group: number,
 		destination: AssociationAddress,
-	): boolean {
+	): AssociationCheckResult {
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
-		return ccUtils.isAssociationAllowed(
+		return ccUtils.checkAssociation(
 			this.driver,
 			endpoint,
 			group,
@@ -5835,7 +5862,22 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * Adds associations to a node or endpoint
+	 * Adds associations to a node or endpoint.
+	 *
+	 * **Note:** This method will throw if:
+	 * * the source node, endpoint or association group does not exist,
+	 * * the source node is a ZWLR node and the destination is not the SIS
+	 * * the destination node is a ZWLR node
+	 * * the association is not allowed for other reasons. In this case, the error's
+	 * `context` property will contain an array with all forbidden destinations, each with an added `checkResult` property
+	 * which contains the reason why the association is forbidden:
+	 *     ```ts
+	 *     {
+	 *         checkResult: AssociationCheckResult;
+	 *         nodeId: number;
+	 *         endpoint?: number | undefined;
+	 *     }[]
+	 *     ```
 	 */
 	public async addAssociations(
 		source: AssociationAddress,
@@ -5851,6 +5893,8 @@ ${associatedNodes.join(", ")}`,
 			group,
 			destinations,
 		);
+
+		if (isLongRangeNodeId(source.nodeId)) return;
 
 		// Nodes need a return route to be able to send commands to other nodes
 		const destinationNodeIDs = distinct(
@@ -6207,6 +6251,41 @@ ${associatedNodes.join(", ")}`,
 		return result.region;
 	}
 
+	/**
+	 * Returns the RF regions supported by this controller, or `undefined` if the information is not known yet.
+	 *
+	 * @param filterSubsets Whether to exclude regions that are subsets of other regions,
+	 * for example `USA` which is a subset of `USA (Long Range)`
+	 */
+	public getSupportedRFRegions(
+		filterSubsets: boolean = true,
+	): MaybeNotKnown<readonly RFRegion[]> {
+		// FIXME: Once supported in firmware, query the controller for supported regions instead of hardcoding
+		const ret = new Set([
+			// Always supported
+			RFRegion.Europe,
+			RFRegion.USA,
+			RFRegion["Australia/New Zealand"],
+			RFRegion["Hong Kong"],
+			RFRegion.India,
+			RFRegion.Israel,
+			RFRegion.Russia,
+			RFRegion.China,
+			RFRegion.Japan,
+			RFRegion.Korea,
+			RFRegion["Default (EU)"],
+		]);
+
+		if (this.isLongRangeCapable()) {
+			ret.add(RFRegion["USA (Long Range)"]);
+			if (filterSubsets) {
+				ret.delete(RFRegion.USA);
+			}
+		}
+
+		return [...ret].sort((a, b) => a - b);
+	}
+
 	/** Configure the Powerlevel setting of the Z-Wave API */
 	public async setPowerlevel(
 		powerlevel: number,
@@ -6531,12 +6610,21 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * Returns the known list of neighbors for a node
+	 * Returns the known list of neighbors for a node.
+	 *
+	 * Throws when the node is a Long Range node.
 	 */
 	public async getNodeNeighbors(
 		nodeId: number,
 		onlyRepeaters: boolean = false,
 	): Promise<readonly number[]> {
+		if (isLongRangeNodeId(nodeId)) {
+			throw new ZWaveError(
+				`Cannot request node neighbors for Long Range node ${nodeId}`,
+				ZWaveErrorCodes.Controller_NotSupportedForLongRange,
+			);
+		}
+
 		this.driver.controllerLog.logNode(nodeId, {
 			message: "requesting node neighbors...",
 			direction: "outbound",
@@ -6938,6 +7026,9 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
+		// Disable watchdog to prevent resets during NVM access
+		await this.stopWatchdog();
+
 		let ret: Buffer;
 		try {
 			if (this.sdkVersionGte("7.0")) {
@@ -6945,6 +7036,7 @@ ${associatedNodes.join(", ")}`,
 				// All 7.xx versions so far seem to have a bug where the NVM is not properly closed after reading
 				// resulting in extremely strange controller behavior after a backup. To work around this, restart the stick if possible
 				await this.driver.trySoftReset();
+				// Soft-resetting will enable the watchdog again
 			} else {
 				ret = await this.backupNVMRaw500(onProgress);
 			}
@@ -7063,6 +7155,9 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Controller_ResponseNOK,
 			);
 		}
+
+		// Disable watchdog to prevent resets during NVM access
+		await this.stopWatchdog();
 
 		// Restoring a potentially incompatible NVM happens in three steps:
 		// 1. the current NVM is read
@@ -7935,16 +8030,23 @@ ${associatedNodes.join(", ")}`,
 				// We're done, send EOT and wait for the menu screen
 				await this.driver.bootloader.finishUpload();
 				try {
-					await this.driver.waitForBootloaderChunk(
-						(c) =>
-							c.type === BootloaderChunkType.Message
-							&& c.message.includes("upload complete"),
-						1000,
-					);
-					await this.driver.waitForBootloaderChunk(
-						(c) => c.type === BootloaderChunkType.Menu,
-						1000,
-					);
+					// The bootloader sends the confirmation and the menu screen very quickly.
+					// Waiting for them separately can cause us to miss the menu screen and
+					// incorrectly assume the update timed out.
+
+					await Promise.all([
+						this.driver.waitForBootloaderChunk(
+							(c) =>
+								c.type === BootloaderChunkType.Message
+								&& c.message.includes("upload complete"),
+							1000,
+						),
+
+						this.driver.waitForBootloaderChunk(
+							(c) => c.type === BootloaderChunkType.Menu,
+							1000,
+						),
+					]);
 				} catch (e) {
 					this.driver.controllerLog.print(
 						"OTW update failed: The bootloader did not acknowledge the end of transfer.",

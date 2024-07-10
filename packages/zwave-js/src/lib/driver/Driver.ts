@@ -100,6 +100,7 @@ import {
 	serializeCacheValue,
 	stripUndefined,
 	timespan,
+	wasControllerReset,
 } from "@zwave-js/core";
 import type {
 	NodeSchedulePollOptions,
@@ -171,7 +172,10 @@ import {
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
-import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
+import {
+	SerialAPIStartedRequest,
+	SerialAPIWakeUpReason,
+} from "../serialapi/application/SerialAPIStartedRequest";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
 import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
@@ -290,6 +294,8 @@ const defaultOptions: ZWaveOptions = {
 		// By default enable the unresponsive controller recovery unless the env variable is set
 		unresponsiveControllerRecovery: !process.env
 			.ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY,
+		// By default enable the watchdog, unless the env variable is set
+		watchdog: !process.env.ZWAVEJS_DISABLE_WATCHDOG,
 	},
 	interview: {
 		queryAllUserCodes: false,
@@ -588,17 +594,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			mergedOptions,
 			cloneDeep(defaultOptions),
 		) as ZWaveOptions;
-
-		// Normalize deprecated options
-		// TODO: Remove test in packages/zwave-js/src/lib/test/driver/sendDataMissingCallbackAbort.test.ts
-		// when the deprecated option is removed
-		if (
-			// eslint-disable-next-line deprecation/deprecation
-			this._options.enableSoftReset === false
-			&& this._options.features.softReset
-		) {
-			this._options.features.softReset = false;
-		}
 
 		// And make sure they contain valid values
 		checkOptions(this._options);
@@ -1043,6 +1038,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			"inclusionUserCallbacks",
 			"interview",
 			"preferences",
+			"vendor",
 		]);
 
 		// Create a new deep-merged copy of the options so we can check them for validity
@@ -1362,10 +1358,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		);
 		this._networkCache = new JsonlDB(networkCacheFile, {
 			...options,
-			serializer: (key, value) =>
-				serializeNetworkCacheValue(this, key, value),
-			reviver: (key, value) =>
-				deserializeNetworkCacheValue(this, key, value),
+			serializer: serializeNetworkCacheValue,
+			reviver: deserializeNetworkCacheValue,
 		});
 		await this._networkCache.open();
 
@@ -1424,7 +1418,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 			try {
 				await migrateLegacyNetworkCache(
-					this,
 					this.controller.homeId,
 					this._networkCache,
 					this._valueDB,
@@ -2662,6 +2655,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		// This is a bit hacky, but what the heck...
 		if (!this._enteringBootloader) {
+			// Start the watchdog again, unless disabled
+			if (this.options.features.watchdog) {
+				void this._controller?.startWatchdog();
+			}
+
 			// If desired, re-configure the controller to use 16 bit node IDs
 			void this._controller?.trySetNodeIDType(NodeIDType.Long);
 
@@ -3744,6 +3742,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			const messagePart1 =
 				"The node is causing the controller to become unresponsive";
 
+			let handled: boolean;
+
 			if (node.canSleep) {
 				if (node.status === NodeStatus.Asleep) {
 					// We already moved the messages to the wakeup queue before. If we end up here, this means a command
@@ -3758,15 +3758,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 				// There is no longer a reference to the current transaction. If it should be moved to the wakeup queue,
 				// it temporarily needs to be added to the queue again.
-				const handled = this.mayMoveToWakeupQueue(transaction);
+				handled = this.mayMoveToWakeupQueue(transaction);
 				if (handled) {
 					this.queue.add(transaction);
 				}
 
 				// Mark the node as asleep. This will move the messages to the wakeup queue
 				node.markAsAsleep();
-
-				return handled;
 			} else {
 				const errorMsg = `${messagePart1}, it is presumed dead`;
 				this.controllerLog.logNode(node.id, errorMsg, "warn");
@@ -3782,8 +3780,30 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				transaction.abort(error);
 				this.rejectAllTransactionsForNode(node.id, errorMsg);
 
-				return true;
+				handled = true;
 			}
+
+			// If the controller is still timing out, reset it once more
+			if (
+				this._recoveryPhase
+					=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
+			) {
+				this.driverLog.print(
+					"Attempting to recover controller again...",
+					"warn",
+				);
+				void this.softReset().catch(() => {
+					this.driverLog.print(
+						"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
+						"warn",
+					);
+				}).finally(() => {
+					this._recoveryPhase = ControllerRecoveryPhase.None;
+					this._controller?.setStatus(ControllerStatus.Ready);
+				});
+			}
+
+			return handled;
 		} else if (this._controller.status !== ControllerStatus.Unresponsive) {
 			// The controller was responsive before this transaction failed.
 
@@ -4192,6 +4212,69 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			this.driverLog.transactionResponse(msg, undefined, "unexpected");
 			this.driverLog.print("unexpected response, discarding...", "warn");
 		}
+	}
+
+	/**
+	 * Is called when the Serial API restart unexpectedly.
+	 */
+	private async handleSerialAPIStartedUnexpectedly(
+		msg: SerialAPIStartedRequest,
+	): Promise<boolean> {
+		// Normally, the soft reset command includes waiting for this message.
+		// If we end up here, it is unexpected.
+
+		switch (msg.wakeUpReason) {
+			// All wakeup reasons that indicate a reset of the Serial API
+			// need to be handled here, so we interpret node IDs correctly.
+			case SerialAPIWakeUpReason.Reset:
+			case SerialAPIWakeUpReason.WatchdogReset:
+			case SerialAPIWakeUpReason.SoftwareReset:
+			case SerialAPIWakeUpReason.EmergencyWatchdogReset:
+			case SerialAPIWakeUpReason.BrownoutCircuit: {
+				// The Serial API restarted unexpectedly
+				this.controllerLog.print(
+					`Serial API restarted unexpectedly.`,
+					"warn",
+				);
+
+				// In this situation, we may be executing a Serial API command, which will never complete.
+				// Bail out of it, without rejecting the actual transaction
+				if (
+					this.serialAPIInterpreter?.status
+						=== InterpreterStatus.Running
+				) {
+					this.serialAPIInterpreter.stop();
+				}
+				if (this._currentSerialAPICommandPromise) {
+					this.controllerLog.print(
+						`Currently active command will be retried...`,
+						"warn",
+					);
+					this._currentSerialAPICommandPromise.reject(
+						new ZWaveError(
+							"The Serial API restarted unexpectedly",
+							ZWaveErrorCodes.Controller_Reset,
+						),
+					);
+				}
+
+				// Restart the watchdog unless disabled
+				if (this.options.features.watchdog) {
+					await this._controller?.startWatchdog();
+				}
+
+				if (this._controller?.nodeIdType === NodeIDType.Long) {
+					// We previously used 16 bit node IDs, but the controller was reset.
+					// Remember this and try to go back to 16 bit.
+					this._controller.nodeIdType = NodeIDType.Short;
+					await this._controller.trySetNodeIDType(NodeIDType.Long);
+				}
+
+				return true; // Don't invoke any more handlers
+			}
+		}
+
+		return false; // Not handled
 	}
 
 	/**
@@ -4645,6 +4728,10 @@ ${handlers.length} left`,
 			// Make sure we're ready to handle this command
 			this.ensureReady(true);
 			return this.controller.handleApplicationUpdateRequest(msg);
+		} else if (msg instanceof SerialAPIStartedRequest) {
+			if (await this.handleSerialAPIStartedUnexpectedly(msg)) {
+				return;
+			}
 		} else {
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
@@ -5136,6 +5223,9 @@ ${handlers.length} left`,
 						} else if (isMissingControllerACK(e)) {
 							// The controller is unresponsive. Reject the transaction, so we can attempt to recover
 							throw e;
+						} else if (wasControllerReset(e)) {
+							// The controller was reset unexpectedly. Reject the transaction, so we can attempt to recover
+							throw e;
 						} else if (
 							e.code === ZWaveErrorCodes.Controller_MessageDropped
 						) {
@@ -5168,6 +5258,13 @@ ${handlers.length} left`,
 		transaction.setProgress({ state: TransactionState.Completed });
 	}
 
+	/**
+	 * Provides access to the result Promise for the currently executed serial API command
+	 */
+	private _currentSerialAPICommandPromise:
+		| DeferredPromise<Message | undefined>
+		| undefined;
+
 	/** Handles sequencing of queued Serial API commands */
 	private async drainSerialAPIQueue(): Promise<void> {
 		for await (const item of this.serialAPIQueue) {
@@ -5180,6 +5277,8 @@ ${handlers.length} left`,
 				result.resolve(ret);
 			} catch (e) {
 				result.reject(e);
+			} finally {
+				this._currentSerialAPICommandPromise = undefined;
 			}
 		}
 	}
@@ -5354,6 +5453,7 @@ ${handlers.length} left`,
 
 		this.serialAPIInterpreter.start();
 
+		this._currentSerialAPICommandPromise = result;
 		return result;
 	}
 
@@ -5380,19 +5480,8 @@ ${handlers.length} left`,
 		this.ensureReady();
 
 		let node: ZWaveNode | undefined;
-
-		// Don't send messages to dead nodes
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			node = this.getNodeUnsafe(msg);
-			if (!messageIsPing(msg) && node?.status === NodeStatus.Dead) {
-				// Instead of throwing immediately, try to ping the node first - if it responds, continue
-				if (!(await node.ping())) {
-					throw new ZWaveError(
-						`The message cannot be sent because node ${node.id} is dead`,
-						ZWaveErrorCodes.Controller_MessageDropped,
-					);
-				}
-			}
 		}
 
 		if (options.priority == undefined) {
@@ -6010,6 +6099,15 @@ ${handlers.length} left`,
 			if (
 				this.handleMissingSendDataResponseOrCallback(transaction, error)
 			) return;
+		} else if (wasControllerReset(error)) {
+			// The controller was reset in the middle of a transaction.
+			// Re-queue the transaction, so it can get handled again
+			// Its message generator may have finished, so reset that too.
+			transaction.reset();
+			this.getQueueForTransaction(transaction).add(
+				transaction.clone(),
+			);
+			return;
 		}
 
 		this.rejectTransaction(transaction, error);

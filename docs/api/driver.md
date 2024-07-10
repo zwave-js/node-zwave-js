@@ -898,7 +898,16 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
 		 */
 		unresponsiveControllerRecovery?: boolean;
+
+		/**
+		 * Controllers of the 700 series and newer have a hardware watchdog that can be enabled to automatically
+		 * reset the chip in case it becomes unresponsive. This option controls whether the watchdog should be enabled.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_WATCHDOG env variable is set.
+		 */
+		watchdog?: boolean;
 	};
+
 	preferences: {
 		/**
 		 * The preferred scales to use when querying sensors. The key is either:
@@ -988,6 +997,23 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	 * This will be used to build a user-agent string for requests to Z-Wave JS webservices.
 	 */
 	userAgent?: Record<string, string>;
+
+	/**
+	 * Specify application-specific information to use in queries from other devices
+	 */
+	vendor?: {
+		manufacturerId: number;
+		productType: number;
+		productId: number;
+
+		/** The version of the hardware the application is running on. Can be omitted if unknown. */
+		hardwareVersion?: number;
+
+		/** The icon type to use for installers. Default: 0x0500 - Generic Gateway */
+		installerIcon?: number;
+		/** The icon type to use for users. Default: 0x0500 - Generic Gateway */
+		userIcon?: number;
+	};
 
 	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {

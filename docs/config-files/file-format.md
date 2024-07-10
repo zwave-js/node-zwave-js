@@ -376,6 +376,10 @@ Without the additional integrity checks that encapsulation CCs like `CRC-16`, `S
 
 Some devices incorrectly encode this support information though, making the checks discard otherwise correct data. To disable the checks, set `disableStrictMeasurementValidation` to `true`.
 
+### `encodeCCsUsingTargetVersion`
+
+Because command classes are extended in a backwards-compatible way, the Z-Wave specifications recommend encoding command classes using the version the sender supports, regardless of the receiver's version. However it has been found that some devices do not correctly parse commands from a newer version and do not react to them. When `encodeCCsUsingTargetVersion` is set to `true` for a device, Z-Wave JS will encode commands using the version the receiver supports instead.
+
 ### `forceNotificationIdleReset`
 
 Version 8 of the `Notification CC` added the requirement that devices must issue an idle notification after a notification variable is no longer active. Several legacy devices and some misbehaving V8 devices do not return their variables to idle automatically. By setting `forceNotificationIdleReset` to `true`, `zwave-js` auto-idles supporting notification variables after 5 minutes.

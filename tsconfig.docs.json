@@ -1,0 +1,8 @@
+// Custom tsconfig for documentation generation
+{
+	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"customConditions": []
+	},
+	"include": ["packages/**/src/**/*.ts"]
+}

@@ -1,0 +1,73 @@
+{
+	"manufacturer": "iDevices",
+	"manufacturerId": "0x0458",
+	"label": "61303 / ZW3010",
+	"description": "In-Wall Smart Dimmer",
+	"devices": [
+		{
+			// This device is a re-branded Jasco 46564 / ZW3010
+			"productType": "0x4944",
+			"productId": "0x3236",
+			"zwaveAllianceId": 4319
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "6",
+			"$import": "~/0x0063/templates/jasco_template.json#dim_rate"
+		},
+		{
+			"#": "16",
+			"$import": "~/0x0063/templates/jasco_template.json#switch_mode"
+		},
+		{
+			"#": "19",
+			"$import": "~/0x0063/templates/jasco_template.json#alternate_exclusion"
+		},
+		{
+			"#": "30",
+			"$import": "~/0x0063/templates/jasco_template.json#dim_threshold_min"
+		},
+		{
+			"#": "31",
+			"$import": "~/0x0063/templates/jasco_template.json#dim_threshold_max"
+		},
+		{
+			"#": "32",
+			"$import": "~/0x0063/templates/jasco_template.json#default_brightness_level"
+		}
+	],
+	"compat": {
+		"mapBasicSet": "event"
+	},
+	"metadata": {
+		"inclusion": "Adding your device to a Z-Wave network\n1. Follow the instructions for your Z-Wave certified controller to\nadd a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker)",
+		"exclusion": "To remove and reset the device\n1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press\nand release the top or bottom of the wireless smart dimmer\n(rocker)",
+		"reset": "1. Quickly press ON (top) button three times then immediately\npress the OFF (bottom) button three times. The LED will flash\nON/OFF five times when completed successfully.\nNote: This should only be used if your network’s primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4319/61303-1%20EnFrSp%20QSG%20v1.pdf"
+	}
+}

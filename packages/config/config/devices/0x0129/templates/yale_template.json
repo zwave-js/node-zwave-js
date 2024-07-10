@@ -330,18 +330,33 @@
 		]
 	},
 	"door_propped_timer": {
-		"$import": "~/templates/master_template.json#base_0-127_nounit",
 		"label": "Door Propped Time Limit",
 		"unit": "10 seconds",
-		"minValue": 10,
-		"defaultValue": 0
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 127,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
 	},
-	"door_propped_timer_255": {
-		"$import": "~/templates/master_template.json#base_0-255_nounit",
+	"door_propped_timer_254": {
 		"label": "Door Propped Time Limit",
 		"unit": "10 seconds",
-		"minValue": 10,
-		"defaultValue": 0
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 254,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
 	},
 	"dps_alarm": {
 		"$import": "~/templates/master_template.json#base_enable_disable_255",

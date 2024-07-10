@@ -85,6 +85,7 @@ export {
 export type {
 	BinarySensorCCGetOptions,
 	BinarySensorCCReportOptions,
+	BinarySensorCCSupportedReportOptions,
 } from "./BinarySensorCC";
 export {
 	BinarySensorCC,
@@ -388,6 +389,7 @@ export type {
 	MeterCCGetOptions,
 	MeterCCReportOptions,
 	MeterCCResetOptions,
+	MeterCCSupportedReportOptions,
 } from "./MeterCC";
 export {
 	MeterCC,

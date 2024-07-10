@@ -174,8 +174,6 @@ export interface ConfigurationMetadata extends ValueMetadataAny {
 	format?: ConfigValueFormat;
 	label?: string;
 	description?: string;
-	/** @deprecated */
-	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	requiresReInclusion?: boolean;
 	states?: Record<number, string>;

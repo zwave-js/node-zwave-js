@@ -13,13 +13,13 @@ const branchName = "docs/update-typed-docs";
 const reviewers = ["AlCalzone"];
 const assignees = [];
 
-const checkPaths = ["docs/", "packages/*/api.md"];
+const checkPaths = ["docs/", "packages/*/*.api.md"];
 
 /**
  * @param {{github: Github, context: Context}} param
  */
 async function main(param) {
-	const { github, context } = param;
+	const { github } = param;
 
 	// check if our local working copy has any changes in the docs directory
 	const isChanged = !!(await exec.exec(

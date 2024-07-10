@@ -66,14 +66,20 @@ export function formatLifelineHealthCheckRound(
 export function formatLifelineHealthCheckSummary(
 	summary: LifelineHealthCheckSummary,
 ): string {
-	return `
+	let ret = `
 rating:                   ${summary.rating} (${
 		healthCheckRatingToWord(
 			summary.rating,
 		)
-	})
-no. of routing neighbors: ${summary.results.at(-1)!.numNeighbors}
- 
+	})`;
+	const numNeighbors = summary.results.at(-1)!.numNeighbors;
+	if (numNeighbors != undefined) {
+		ret += `
+no. of routing neighbors: ${summary.results.at(-1)!.numNeighbors}`;
+	}
+
+	ret += `
+
 Check rounds:
 ${
 		summary.results
@@ -81,7 +87,9 @@ ${
 				formatLifelineHealthCheckRound(i + 1, summary.results.length, r)
 			)
 			.join("\n \n")
-	}`.trim();
+	}`;
+
+	return ret.trim();
 }
 
 export function formatRouteHealthCheckRound(
@@ -134,14 +142,20 @@ export function formatRouteHealthCheckSummary(
 	targetNodeId: number,
 	summary: RouteHealthCheckSummary,
 ): string {
-	return `
+	let ret = `
 rating:                   ${summary.rating} (${
 		healthCheckRatingToWord(
 			summary.rating,
 		)
-	})
-no. of routing neighbors: ${summary.results.at(-1)!.numNeighbors}
- 
+	})`;
+	const numNeighbors = summary.results.at(-1)!.numNeighbors;
+	if (numNeighbors != undefined) {
+		ret += `
+no. of routing neighbors: ${summary.results.at(-1)!.numNeighbors}`;
+	}
+
+	ret += `
+
 Check rounds:
 ${
 		summary.results
@@ -155,5 +169,7 @@ ${
 				)
 			)
 			.join("\n \n")
-	}`.trim();
+	}`;
+
+	return ret.trim();
 }

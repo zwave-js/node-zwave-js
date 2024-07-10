@@ -34,7 +34,11 @@ import {
 	NODE_ID_BROADCAST,
 	encodeCCList,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -1332,7 +1336,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	private getMGRPExtension(): MGRPExtension | undefined {
 		return this.extensions.find(
-			(e): e is MGRPExtension => e instanceof MGRPExtension,
+			(e) => e instanceof MGRPExtension,
 		);
 	}
 
@@ -1343,7 +1347,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	private getMPANExtension(): MPANExtension | undefined {
 		return this.extensions.find(
-			(e): e is MPANExtension => e instanceof MPANExtension,
+			(e) => e instanceof MPANExtension,
 		);
 	}
 
@@ -1354,7 +1358,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
 	public getSenderEI(): Buffer | undefined {
 		const spanExtension = this.extensions.find(
-			(e): e is SPANExtension => e instanceof SPANExtension,
+			(e) => e instanceof SPANExtension,
 		);
 		return spanExtension?.senderEI;
 	}
@@ -1411,7 +1415,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// Add or update the SPAN extension
 			let spanExtension = this.extensions.find(
-				(e): e is SPANExtension => e instanceof SPANExtension,
+				(e) => e instanceof SPANExtension,
 			);
 			if (spanExtension) {
 				spanExtension.senderEI = senderEI;
@@ -1529,7 +1533,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		);
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 		};
@@ -1583,7 +1587,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1873,7 +1877,7 @@ export class Security2CCNonceReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			SOS: this.SOS,
@@ -1883,7 +1887,7 @@ export class Security2CCNonceReport extends Security2CC {
 			message["receiver entropy"] = buffer2hex(this.receiverEI);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1935,9 +1939,9 @@ export class Security2CCNonceGet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "sequence number": this.sequenceNumber },
 		};
 	}
@@ -2021,9 +2025,9 @@ export class Security2CCKEXReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				echo: this.echo,
 				"supported schemes": this.supportedKEXSchemes
@@ -2120,9 +2124,9 @@ export class Security2CCKEXSet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				echo: this.echo,
 				"selected scheme": getEnumMemberName(
@@ -2169,9 +2173,9 @@ export class Security2CCKEXFail extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { reason: getEnumMemberName(KEXFailType, this.failType) },
 		};
 	}
@@ -2213,9 +2217,9 @@ export class Security2CCPublicKeyReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"is including node": this.includingNode,
 				"public key": buffer2hex(this.publicKey),
@@ -2262,9 +2266,9 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"security class": getEnumMemberName(
 					SecurityClass,
@@ -2307,9 +2311,9 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"security class": getEnumMemberName(
 					SecurityClass,
@@ -2358,9 +2362,9 @@ export class Security2CCTransferEnd extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"key verified": this.keyVerified,
 				"request complete": this.keyRequestComplete,
@@ -2404,9 +2408,9 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported CCs": this.supportedCCs
 					.map((cc) => getCCName(cc))

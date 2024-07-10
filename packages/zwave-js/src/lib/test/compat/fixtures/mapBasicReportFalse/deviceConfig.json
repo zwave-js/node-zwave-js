@@ -1,0 +1,19 @@
+{
+	"manufacturer": "Test Manufacturer",
+	"manufacturerId": "0xdead",
+	"label": "Test Device",
+	"description": "With Basic Event",
+	"devices": [
+		{
+			"productType": "0xbeef",
+			"productId": "0xcafe"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"compat": {
+		"mapBasicReport": false
+	}
+}

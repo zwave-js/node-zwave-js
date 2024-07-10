@@ -330,6 +330,12 @@ export class Message {
 		}
 	}
 
+	/** Tests whether this message expects an ACK from the controller */
+	public expectsAck(): boolean {
+		// By default, all commands expect an ACK
+		return true;
+	}
+
 	/** Tests whether this message expects a response from the controller */
 	public expectsResponse(): boolean {
 		return !!this.expectedResponse;

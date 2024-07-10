@@ -1,5 +1,6 @@
 import { sum } from "@zwave-js/shared/safe";
 import { NodeIDType } from "../consts";
+import { type BasicDeviceClass } from "../index_safe";
 import { validatePayload } from "../util/misc";
 import { CommandClasses } from "./CommandClasses";
 
@@ -32,7 +33,7 @@ export function encodeApplicationNodeInformation(
 
 export interface NodeUpdatePayload extends ApplicationNodeInformation {
 	nodeId: number;
-	basicDeviceClass: number;
+	basicDeviceClass: BasicDeviceClass;
 }
 
 export function parseNodeUpdatePayload(
@@ -203,7 +204,7 @@ export interface NodeProtocolInfo {
 export interface NodeProtocolInfoAndDeviceClass
 	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass">
 {
-	basicDeviceClass: number;
+	basicDeviceClass: BasicDeviceClass;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
 }

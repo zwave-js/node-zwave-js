@@ -4,6 +4,96 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+<!-- ### Application compatibility
+Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
+* Home Assistant **TBD** or higher
+* `zwave-js-server` **TBD**
+-->
+## 13.0.0-beta.3 (2024-07-09)
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v13)
+* Align Meter CC Reset v6 with specifications, add mocks, add API for report commands (#6921)
+* Convert all Z-Wave specific configs except devices and manufacturers into code, move from ConfigManager methods to utility functions (#6925, #6929)
+* Remove `ZWaveApplicationHost` dependency from `CommandClass.toLogEntry()` (#6927)
+* Removed some deprecated things (#6928)
+* Replace `Controller.isAssociationAllowed` with `Controller.checkAssociation` (#6935)
+* Fixed health checks for ZWLR nodes, throw when requesting neighbors (#6939)
+* The repo now uses Yarn 4 and Corepack to manage its dependencies (#6949)
+
+### Changes under the hood
+* Upgrade to TypeScript 5.5 (#6919)
+* The root `tsconfig.json` is now set up in "solution-style", which should improve the goto references functionality. In addition, linting, testing and running locally no longer requires all modules to be compiled first. (#6748)
+
+## 12.12.3 (2024-07-09)
+### Bugfixes
+* Fixed an issue where `Basic CC` values would be exposed unnecessarily for devices with a compat flag that maps `Basic CC Set` to a different CC (#6984)
+
+## 12.12.2 (2024-07-05)
+### Bugfixes
+* When responding to `Version CC Get` queries, Z-Wave JS's own version is now included as the `Firmware 1` version (#6982)
+* When receiving a notification with an unknown notification type, the created "unknown" value now correctly has metadata set (#6981)
+* When receiving an idle notification, the values for unknown notification events are now also reset to idle (#6980)
+* Auto-enable all supported Barrier Operator signaling subsystem during the interview (#6979)
+
+## 12.12.1 (2024-06-26)
+### Bugfixes
+* Fixed an issue where the watchdog feature could cause Z-Wave JS to stall after attempting controller recovery (#6968)
+* Reset controller again when transmitting to a problematic node makes the controller become unresponsive again after automatic recovery (#6968)
+* Node interviews are now aborted in more cases when node is determined to be dead (#6967)
+* Expose Basic CC `currentValue` when certain compat flags are set (#6964)
+
+## 12.12.0 (2024-06-24)
+We were informed by Silicon Labs that 700/800 series controllers have a hardware watchdog that can reset the controller when it becomes unresponsive. This feature is now enabled by default in Z-Wave JS and should prevent the controller from hanging indefinitely.
+
+In case this causes new issues, the feature can be disabled by setting the environment variable `ZWAVEJS_DISABLE_WATCHDOG` to any non-empty value, or by setting the driver option `features.watchdog` to `false`.
+
+Please let us know if this actually helps or not.
+
+### Features
+* Enable hardware watchdog on 700/800 series controllers (#6954)
+* Add method to query supported RF regions (#6957)
+* Add notification variable for Door/Window tilt state (#6958)
+
+### Bugfixes
+* Fixed an issue where value metadata for unknown notification events with known notification types would only be created if the CC version was exactly 2 (#6959)
+
+## 12.11.2 (2024-06-22)
+### Bugfixes
+* Fixed a regression from 12.11.1 causing commands to sleeping nodes to block the send queue (#6953)
+* Fixed how routes for inbound frames are parsed in Zniffer (#6945)
+
+## 12.11.1 (2024-06-17)
+### Bugfixes
+* Add compat flag to always encode Set-type commands using target node's CC version (#6918)
+* Export `NodeDump` type (#6915)
+* Redact secret values in `NodeDump` (#6934)
+* Added a workaround for devices that incorrectly send their `Binary Sensor Reports` using the sensor type `Any (0xff)`. Those reports are now interpreted as if they were using the first supported sensor type (#6933)
+* After adding an association to a LR node, Z-Wave JS no longer attempts assigning routes (#6936)
+* Removed some unnecessary log outputs during `rebuildNodeRoutes` when the node has no other associations than the controller (#6940)
+* Pings in route health checks no longer use explorer frames (#6942)
+* When attempting communication with a node that's considered dead, the command is now sent immediately instead of pinging first (#6944)
+* Fixed an issue where the priority and tag of a transaction would not be preserved when moving it to the wakeup queue (#6944)
+
+### Config file changes
+* Remove endpoint workaround for Zooz ZEN30 800LR (#6931)
+* Encode CCs using target's CC version for `TKB Home TZ67` (#6918)
+
+### Changes under the hood
+* GitHub links in the released `package.json` now point to the Z-Wave JS org (#6930)
+
+## 12.11.0 (2024-06-10)
+### Features
+* Add `ZWaveNode.createDump()` method to save debug information in a format Z-Wave JS understands (#6906)
+* Support node dumps created by `ZWaveNode.createDump()` as input for `mock-server' (#6907)
+* `mock-server`: enable mDNS discovery (#6909)
+* Add driver option to configure vendor-specific constants Z-Wave JS uses to reply to requests from other nodes, including manufacturer ID, product type/ID and hardware version (#6876)
+
+### Bugfixes
+* Fixed a race condition that would cause a timeout error to be shown after an actually successful OTW update (#6912)
+* Create `supportedNotificationTypes` and `supportedNotificationEvents` values with `alarmMapping` compat flag (#6914)
+
+### Config file changes
+* Correct config parameters for Minoston MP21ZD Dimmer Plug (#6686)
+
 ## 12.10.1 (2024-06-06)
 This release implements the workaround mentioned by Silicon Labs in their SDK 7.21.3 release notes. Jammed 700/800 series controllers (fail to transmit continuously) are now restarted when this situation is detected, which hopefully resolves the issue temporarily.
 

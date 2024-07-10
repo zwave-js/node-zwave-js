@@ -22,7 +22,11 @@ import {
 	parseCCId,
 	valueIdToString,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
 	type JSONObject,
@@ -272,8 +276,8 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/** Whether the interview for this CC was previously completed */
-	public isInterviewComplete(applHost: ZWaveApplicationHost): boolean {
-		return !!this.getValueDB(applHost).getValue<boolean>({
+	public isInterviewComplete(host: ZWaveValueHost): boolean {
+		return !!this.getValueDB(host).getValue<boolean>({
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
 			property: "interviewComplete",
@@ -282,10 +286,10 @@ export class CommandClass implements ICommandClass {
 
 	/** Marks the interview for this CC as complete or not */
 	public setInterviewComplete(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		complete: boolean,
 	): void {
-		this.getValueDB(applHost).setValue(
+		this.getValueDB(host).setValue(
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
@@ -456,7 +460,7 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/** Generates a representation of this CC for the log */
-	public toLogEntry(_applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(_host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
 		const message: MessageRecord = {};
 		if (this.constructor === CommandClass) {
@@ -629,10 +633,10 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/** Returns the value DB for this CC's node */
-	protected getValueDB(applHost: ZWaveApplicationHost): ValueDB {
+	protected getValueDB(host: ZWaveValueHost): ValueDB {
 		if (this.isSinglecast()) {
 			try {
-				return applHost.getValueDB(this.nodeId);
+				return host.getValueDB(this.nodeId);
 			} catch {
 				throw new ZWaveError(
 					"The node for this CC does not exist or the driver is not ready yet",
@@ -652,11 +656,11 @@ export class CommandClass implements ICommandClass {
 	 * @param meta Will be used in place of the predefined metadata when given
 	 */
 	protected ensureMetadata(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		ccValue: CCValue,
 		meta?: ValueMetadata,
 	): void {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(host);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		if (!valueDB.hasMetadata(valueId)) {
 			valueDB.setMetadata(valueId, meta ?? ccValue.meta);
@@ -668,10 +672,10 @@ export class CommandClass implements ICommandClass {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected removeMetadata(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		ccValue: CCValue,
 	): void {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(host);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.setMetadata(valueId, undefined);
 	}
@@ -682,11 +686,11 @@ export class CommandClass implements ICommandClass {
 	 * @param meta Will be used in place of the predefined metadata when given
 	 */
 	protected setMetadata(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		ccValue: CCValue,
 		meta?: ValueMetadata,
 	): void {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(host);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.setMetadata(valueId, meta ?? ccValue.meta);
 	}
@@ -696,10 +700,10 @@ export class CommandClass implements ICommandClass {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getMetadata<T extends ValueMetadata>(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		ccValue: CCValue,
 	): T | undefined {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(host);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		return valueDB.getMetadata(valueId) as any;
 	}
@@ -709,11 +713,11 @@ export class CommandClass implements ICommandClass {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected setValue(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		ccValue: CCValue,
 		value: unknown,
 	): void {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(host);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.setValue(valueId, value);
 	}
@@ -723,10 +727,10 @@ export class CommandClass implements ICommandClass {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected removeValue(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		ccValue: CCValue,
 	): void {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(host);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.removeValue(valueId);
 	}
@@ -736,10 +740,10 @@ export class CommandClass implements ICommandClass {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getValue<T>(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		ccValue: CCValue,
 	): T | undefined {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(host);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		return valueDB.getValue(valueId);
 	}
@@ -749,10 +753,10 @@ export class CommandClass implements ICommandClass {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getValueTimestamp(
-		applHost: ZWaveApplicationHost,
+		host: ZWaveValueHost,
 		ccValue: CCValue,
 	): number | undefined {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(host);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		return valueDB.getTimestamp(valueId);
 	}
@@ -804,7 +808,10 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */
-	public getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[] {
+	public getDefinedValueIDs(
+		applHost: ZWaveApplicationHost,
+		includeInternal: boolean = false,
+	): ValueID[] {
 		// In order to compare value ids, we need them to be strings
 		const ret = new Map<string, ValueID>();
 
@@ -844,7 +851,7 @@ export class CommandClass implements ICommandClass {
 			}
 
 			// Skip internal values
-			if (value.options.internal) continue;
+			if (value.options.internal && !includeInternal) continue;
 
 			// And determine if this value should be automatically "created"
 			if (!this.shouldAutoCreateValue(applHost, value)) continue;
@@ -864,7 +871,7 @@ export class CommandClass implements ICommandClass {
 			// ... which don't have a CC value definition
 			// ... or one that does not mark the value ID as internal
 			const ccValue = ccValues.find((value) => value.is(valueId));
-			if (!ccValue || !ccValue.options.internal) {
+			if (!ccValue || !ccValue.options.internal || includeInternal) {
 				addValueId(valueId.property, valueId.propertyKey);
 			}
 		}
@@ -1171,7 +1178,7 @@ export class InvalidCC extends CommandClass {
 	}
 	public readonly reason?: string | ZWaveErrorCodes;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(_host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
 			tags: [this.ccName, "INVALID"],
 			message: this.reason != undefined
