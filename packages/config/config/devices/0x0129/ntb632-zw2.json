@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "18",
-			"$import": "templates/yale_template.json#door_propped_timer_255"
+			"$import": "templates/yale_template.json#door_propped_timer_254"
 		},
 		{
 			"#": "19",
