@@ -1,0 +1,92 @@
+{
+	"manufacturer": "Ultrapro",
+	"manufacturerId": "0x0063",
+	"label": "59350 / 59372 / 59373 / ZWA3016",
+	"description": "In-Wall Smart Dimmer, QFSW, 700S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3433",
+			"zwaveAllianceId": 4812
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "5",
+			"$import": "templates/jasco_template.json#three_way_setup"
+		},
+		{
+			"#": "16",
+			"$import": "templates/jasco_template.json#switch_mode"
+		},
+		{
+			"#": "19",
+			"$import": "templates/jasco_template.json#alternate_exclusion"
+		},
+		{
+			"#": "30",
+			"$import": "templates/jasco_template.json#dim_threshold_min"
+		},
+		{
+			"#": "31",
+			"$import": "templates/jasco_template.json#dim_threshold_max"
+		},
+		{
+			"#": "32",
+			"$import": "templates/jasco_template.json#default_brightness_level"
+		},
+		{
+			"#": "34",
+			"$import": "templates/jasco_template.json#led_indicator_color"
+		},
+		{
+			"#": "35",
+			"$import": "templates/jasco_template.json#led_indicator_intensity"
+		},
+		{
+			"#": "36",
+			"$import": "templates/jasco_template.json#led_indicator_intensity",
+			"label": "Guidelight Mode Intensity"
+		},
+		{
+			"#": "84",
+			"$import": "templates/jasco_template.json#factory_default"
+		}
+	],
+	"compat": {
+		"mapBasicSet": "event"
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"reset": "1. Pull up the air gap switch. 2. While pressing the OFF (bottom) button,push in the air gap and continue pressing the OFF button. The LED flashes through the eight colors once"
+	}
+}
