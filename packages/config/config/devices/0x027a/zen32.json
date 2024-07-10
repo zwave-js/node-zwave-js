@@ -249,8 +249,7 @@
 		{
 			"#": "26",
 			"$if": "firmwareVersion >= 10.40 || firmwareVersion >= 2.10 && firmwareVersion < 10.0",
-			"$import": "templates/zooz_template.json#enable_scene_control_3way",
-			"label": "Scene Control (Relay)"
+			"$import": "templates/zooz_template.json#enable_scene_control_3way"
 		},
 		{
 			"#": "25[0x01]",
