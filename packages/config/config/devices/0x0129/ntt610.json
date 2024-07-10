@@ -61,8 +61,7 @@
 		},
 		{
 			"#": "18",
-			"$import": "templates/yale_template.json#door_propped_timer",
-			"minValue": 10
+			"$import": "templates/yale_template.json#door_propped_timer"
 		},
 		{
 			"#": "19",

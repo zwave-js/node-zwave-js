@@ -1,5 +1,7 @@
 // @ts-check
-const { MockServer } = require("../build/mockServer");
+const { MockServer, createMockNodeOptionsFromDump } = require(
+	"../build/mockServer",
+);
 const { readFileSync, statSync, readdirSync } = require("fs");
 const path = require("path");
 
@@ -91,6 +93,16 @@ function getConfig(filename) {
 	} else if (filename.endsWith(".json")) {
 		// TODO: JSON5 support
 		return JSON.parse(readFileSync(filename, "utf8"));
+	} else if (filename.endsWith(".dump")) {
+		const node = createMockNodeOptionsFromDump(
+			JSON.parse(
+				readFileSync(
+					filename,
+					"utf8",
+				),
+			),
+		);
+		return { nodes: [node] };
 	}
 }
 
@@ -114,7 +126,9 @@ if (configPath) {
 		const files = readdirSync(absolutePath)
 			.filter(
 				(filename) =>
-					filename.endsWith(".js") || filename.endsWith(".json"),
+					filename.endsWith(".js")
+					|| filename.endsWith(".json")
+					|| filename.endsWith(".dump"),
 			)
 			.map((filename) => {
 				const fullPath = path.join(absolutePath, filename);

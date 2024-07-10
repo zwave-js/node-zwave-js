@@ -8,7 +8,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -266,9 +270,9 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"manufacturer id": num2hex(this.manufacturerId),
 				"product type": num2hex(this.productType),
@@ -313,9 +317,9 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 	)
 	public readonly deviceId: string;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"device id type": getEnumMemberName(DeviceIdType, this.type),
 				"device id": this.deviceId,
@@ -360,9 +364,9 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"device id type": getEnumMemberName(
 					DeviceIdType,

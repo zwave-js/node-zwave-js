@@ -34,13 +34,12 @@ import {
 	NODE_ID_BROADCAST,
 	encodeCCList,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import {
-	buffer2hex,
-	getEnumMemberName,
-	num2hex,
-	pick,
-} from "@zwave-js/shared/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
+import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
 import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI } from "../lib/API";
@@ -64,7 +63,8 @@ import {
 	MPANExtension,
 	SPANExtension,
 	Security2Extension,
-	isValidExtension,
+	ValidateS2ExtensionResult,
+	validateS2Extension,
 } from "../lib/Security2/Extension";
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "../lib/Security2/shared";
 import { Security2Command } from "../lib/_Types";
@@ -168,7 +168,9 @@ function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 	}
 }
 
-const DECRYPT_ATTEMPTS = 5;
+const MAX_DECRYPT_ATTEMPTS_SINGLECAST = 5;
+const MAX_DECRYPT_ATTEMPTS_MULTICAST = 5;
+const MAX_DECRYPT_ATTEMPTS_SC_FOLLOWUP = 1;
 
 // @publicAPI
 export interface DecryptionResult {
@@ -937,34 +939,75 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			let offset = 2;
 			this.extensions = [];
-			const parseExtensions = (buffer: Buffer) => {
+			let mustDiscardCommand = false;
+
+			const parseExtensions = (buffer: Buffer, wasEncrypted: boolean) => {
 				while (true) {
-					// we need to read at least the length byte
-					validatePayload(buffer.length >= offset + 1);
-					const extensionLength = Security2Extension
-						.getExtensionLength(
-							buffer.subarray(offset),
-						);
-					// Parse the extension
-					const ext = Security2Extension.from(
-						buffer.subarray(offset, offset + extensionLength),
-					);
-					if (!isValidExtension(ext)) {
-						validatePayload.fail(
-							`Unknown S2 extension ${
-								num2hex(
-									ext.type,
-								)
-							} with critical flag`,
-						);
+					if (buffer.length < offset + 2) {
+						// An S2 extension was expected, but the buffer is too short
+						mustDiscardCommand = true;
+						return;
 					}
-					this.extensions.push(ext);
+
+					// The length field could be too large, which would cause part of the actual ciphertext
+					// to be ignored. Try to avoid this for known extensions by checking the actual and expected length.
+					const { actual: actualLength, expected: expectedLength } =
+						Security2Extension
+							.getExtensionLength(
+								buffer.subarray(offset),
+							);
+
+					// Parse the extension using the expected length if possible
+					const extensionLength = expectedLength ?? actualLength;
+					if (extensionLength < 2) {
+						// An S2 extension was expected, but the length is too short
+						mustDiscardCommand = true;
+						return;
+					} else if (
+						extensionLength
+							> buffer.length
+								- offset
+								- (wasEncrypted
+									? 0
+									: SECURITY_S2_AUTH_TAG_LENGTH)
+					) {
+						// The supposed length is longer than the space the extensions may occupy
+						mustDiscardCommand = true;
+						return;
+					}
+
+					const extensionData = buffer.subarray(
+						offset,
+						offset + extensionLength,
+					);
 					offset += extensionLength;
+
+					const ext = Security2Extension.from(extensionData);
+
+					switch (validateS2Extension(ext, wasEncrypted)) {
+						case ValidateS2ExtensionResult.OK:
+							if (
+								expectedLength != undefined
+								&& actualLength !== expectedLength
+							) {
+								// The extension length field does not match, ignore the extension
+							} else {
+								this.extensions.push(ext);
+							}
+							break;
+						case ValidateS2ExtensionResult.DiscardExtension:
+							// Do nothing
+							break;
+						case ValidateS2ExtensionResult.DiscardCommand:
+							mustDiscardCommand = true;
+							break;
+					}
+
 					// Check if that was the last extension
 					if (!ext.moreToFollow) break;
 				}
 			};
-			if (hasExtensions) parseExtensions(this.payload);
+			if (hasExtensions) parseExtensions(this.payload, false);
 
 			const ctx = ((): MulticastContext => {
 				const multicastGroupId = this.getMulticastGroupId();
@@ -985,6 +1028,22 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					return { isMulticast: false, groupId: multicastGroupId };
 				}
 			})();
+
+			// If a command is to be discarded before decryption,
+			// we still need to increment the SPAN or MPAN state
+			if (mustDiscardCommand) {
+				if (ctx.isMulticast) {
+					this.securityManager.nextPeerMPAN(
+						sendingNodeId,
+						ctx.groupId,
+					);
+				} else {
+					this.securityManager.nextNonce(sendingNodeId);
+				}
+				throw validatePayload.fail(
+					"Invalid S2 extension",
+				);
+			}
 
 			let prevSequenceNumber: number | undefined;
 			let mpanState:
@@ -1086,7 +1145,17 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
 			// the Receiver SHOULD try decrypting the message with one or more of the following SPAN values,
 			// stopping when decryption is successful or the maximum number of iterations is reached.
-			for (let i = 0; i < DECRYPT_ATTEMPTS; i++) {
+
+			// If the Receiver is unable to decrypt the S2 MC frame with the current MPAN, the Receiver MAY try
+			// decrypting the frame with one or more of the subsequent MPAN values, stopping when decryption is
+			// successful or the maximum number of iterations is reached.
+			const decryptAttempts = ctx.isMulticast
+				? MAX_DECRYPT_ATTEMPTS_MULTICAST
+				: ctx.groupId != undefined
+				? MAX_DECRYPT_ATTEMPTS_SC_FOLLOWUP
+				: MAX_DECRYPT_ATTEMPTS_SINGLECAST;
+
+			for (let i = 0; i < decryptAttempts; i++) {
 				({
 					plaintext,
 					authOK,
@@ -1129,7 +1198,12 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			this.securityClass = decryptionSecurityClass;
 
 			offset = 0;
-			if (hasEncryptedExtensions) parseExtensions(plaintext);
+			if (hasEncryptedExtensions) parseExtensions(plaintext, true);
+
+			// Before we can continue, check if the command must be discarded
+			if (mustDiscardCommand) {
+				throw validatePayload.fail("Invalid extension");
+			}
 
 			// If the MPAN extension was received, store the MPAN
 			if (!ctx.isMulticast) {
@@ -1262,7 +1336,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	private getMGRPExtension(): MGRPExtension | undefined {
 		return this.extensions.find(
-			(e): e is MGRPExtension => e instanceof MGRPExtension,
+			(e) => e instanceof MGRPExtension,
 		);
 	}
 
@@ -1273,7 +1347,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	private getMPANExtension(): MPANExtension | undefined {
 		return this.extensions.find(
-			(e): e is MPANExtension => e instanceof MPANExtension,
+			(e) => e instanceof MPANExtension,
 		);
 	}
 
@@ -1284,7 +1358,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
 	public getSenderEI(): Buffer | undefined {
 		const spanExtension = this.extensions.find(
-			(e): e is SPANExtension => e instanceof SPANExtension,
+			(e) => e instanceof SPANExtension,
 		);
 		return spanExtension?.senderEI;
 	}
@@ -1341,7 +1415,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// Add or update the SPAN extension
 			let spanExtension = this.extensions.find(
-				(e): e is SPANExtension => e instanceof SPANExtension,
+				(e) => e instanceof SPANExtension,
 			);
 			if (spanExtension) {
 				spanExtension.senderEI = senderEI;
@@ -1459,7 +1533,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		);
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 		};
@@ -1513,7 +1587,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1563,10 +1637,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			) {
 				const nonce = spanState.currentSPAN.nonce;
 				spanState.currentSPAN = undefined;
-				return {
-					...decryptWithNonce(nonce),
-					securityClass: spanState.securityClass,
-				};
+
+				// If we could decrypt this way, we're done...
+				const result = decryptWithNonce(nonce);
+				if (result.authOK) {
+					return {
+						...result,
+						securityClass: spanState.securityClass,
+					};
+				}
+				// ...otherwise, we need to try the normal way
 			} else {
 				// forgetting the current SPAN shouldn't be necessary but better be safe than sorry
 				spanState.currentSPAN = undefined;
@@ -1797,7 +1877,7 @@ export class Security2CCNonceReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			SOS: this.SOS,
@@ -1807,7 +1887,7 @@ export class Security2CCNonceReport extends Security2CC {
 			message["receiver entropy"] = buffer2hex(this.receiverEI);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -1859,9 +1939,9 @@ export class Security2CCNonceGet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "sequence number": this.sequenceNumber },
 		};
 	}
@@ -1945,9 +2025,9 @@ export class Security2CCKEXReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				echo: this.echo,
 				"supported schemes": this.supportedKEXSchemes
@@ -2044,9 +2124,9 @@ export class Security2CCKEXSet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				echo: this.echo,
 				"selected scheme": getEnumMemberName(
@@ -2093,9 +2173,9 @@ export class Security2CCKEXFail extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { reason: getEnumMemberName(KEXFailType, this.failType) },
 		};
 	}
@@ -2137,9 +2217,9 @@ export class Security2CCPublicKeyReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"is including node": this.includingNode,
 				"public key": buffer2hex(this.publicKey),
@@ -2186,9 +2266,9 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"security class": getEnumMemberName(
 					SecurityClass,
@@ -2231,9 +2311,9 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"security class": getEnumMemberName(
 					SecurityClass,
@@ -2282,9 +2362,9 @@ export class Security2CCTransferEnd extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"key verified": this.keyVerified,
 				"request complete": this.keyRequestComplete,
@@ -2328,9 +2408,9 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported CCs": this.supportedCCs
 					.map((cc) => getCCName(cc))

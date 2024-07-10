@@ -119,6 +119,19 @@ compat option disableStrictMeasurementValidation must be true or omitted`,
 				definition.disableStrictMeasurementValidation;
 		}
 
+		if (definition.encodeCCsUsingTargetVersion != undefined) {
+			if (definition.encodeCCsUsingTargetVersion !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option encodeCCsUsingTargetVersion must be true or omitted`,
+				);
+			}
+
+			this.encodeCCsUsingTargetVersion =
+				definition.encodeCCsUsingTargetVersion;
+		}
+
 		if (definition.forceNotificationIdleReset != undefined) {
 			if (definition.forceNotificationIdleReset !== true) {
 				throwInvalidConfig(
@@ -602,6 +615,7 @@ compat option overrideQueries must be an object!`,
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly disableStrictMeasurementValidation?: boolean;
 	public readonly disableCallbackFunctionTypeCheck?: number[];
+	public readonly encodeCCsUsingTargetVersion?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
 	public readonly forceSceneControllerGroupCount?: number;
 	public readonly manualValueRefreshDelayMs?: number;
@@ -646,6 +660,7 @@ compat option overrideQueries must be an object!`,
 			"disableCallbackFunctionTypeCheck",
 			"disableStrictEntryControlDataValidation",
 			"disableStrictMeasurementValidation",
+			"encodeCCsUsingTargetVersion",
 			"forceNotificationIdleReset",
 			"forceSceneControllerGroupCount",
 			"manualValueRefreshDelayMs",

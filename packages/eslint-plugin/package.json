@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/eslint-plugin",
-  "version": "12.9.0",
+  "version": "13.0.0-beta.1",
   "description": "zwave-js: custom ESLint rules",
   "private": true,
   "keywords": [],
@@ -13,13 +13,13 @@
     "email": "d.griesel@gmx.net"
   },
   "license": "MIT",
-  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "homepage": "https://github.com/zwave-js/node-zwave-js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+    "url": "git+https://github.com/zwave-js/node-zwave-js.git"
   },
   "bugs": {
-    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+    "url": "https://github.com/zwave-js/node-zwave-js/issues"
   },
   "funding": {
     "url": "https://github.com/sponsors/AlCalzone/"
@@ -29,14 +29,16 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",
+    "bootstrap": "yarn build",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.7",
-    "@typescript-eslint/utils": "^7.5.0",
+    "@typescript-eslint/utils": "^7.13.0",
     "@zwave-js/core": "workspace:*",
-    "typescript": "5.4.4"
+    "eslint": "^8.57.0",
+    "typescript": "5.5.3"
   }
 }

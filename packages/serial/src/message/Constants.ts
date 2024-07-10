@@ -157,21 +157,22 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_UNKNOWN_0xB4 = 0xb4, // ??
 
-	UNKNOWN_FUNC_WATCH_DOG_ENABLE = 0xb6,
-	UNKNOWN_FUNC_WATCH_DOG_DISABLE = 0xb7,
-	UNKNOWN_FUNC_WATCH_DOG_KICK = 0xb8,
+	EnableWatchdog500 = 0xb6, // Enable Watchdog (500 series and older)
+	DisableWatchdog500 = 0xb7, // Disable Watchdog (500 series and older)
+	KickWatchdog500 = 0xb8, // Kick Watchdog (500 series and older)
 	UNKNOWN_FUNC_UNKNOWN_0xB9 = 0xb9, // ??
 	UNKNOWN_FUNC_RF_POWERLEVEL_GET = 0xba, // Get RF Power level
 
 	UNKNOWN_FUNC_GET_LIBRARY_TYPE = 0xbd,
-	UNKNOWN_FUNC_SEND_TEST_FRAME = 0xbe,
+	SendTestFrame = 0xbe, // Sends a NOP Power frame to the given node
 	UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 0xbf,
 
 	FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 0xd0, // Set controller into promiscuous mode to listen to all messages
 	FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 0xd1,
 
-	UNKNOWN_FUNC_UNKNOWN_0xD2 = 0xd2, // ??
-	UNKNOWN_FUNC_UNKNOWN_0xD3 = 0xd3, // ??
+	StartWatchdog = 0xd2, // Start Hardware Watchdog (700 series and newer)
+	StopWatchdog = 0xd3, // Stop Hardware Watchdog (700 series and newer)
+
 	UNKNOWN_FUNC_UNKNOWN_0xD4 = 0xd4, // ??
 
 	Shutdown = 0xd9, // Instruct the Z-Wave API to shut down in order to safely remove the power

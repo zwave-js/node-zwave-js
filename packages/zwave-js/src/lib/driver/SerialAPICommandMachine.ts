@@ -207,6 +207,7 @@ export function getSerialAPICommandMachineConfig(
 				},
 			},
 			waitForACK: {
+				always: [{ target: "success", cond: "expectsNoAck" }],
 				on: {
 					CAN: {
 						target: "retry",
@@ -390,6 +391,7 @@ export function getSerialAPICommandMachineOptions(
 		guards: {
 			mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
 			isSendData: (ctx) => isSendData(ctx.msg),
+			expectsNoAck: (ctx) => !ctx.msg.expectsAck(),
 			expectsNoResponse: (ctx) => !ctx.msg.expectsResponse(),
 			expectsNoCallback: (ctx) => !ctx.msg.expectsCallback(),
 			isExpectedMessage: (ctx, evt, meta) =>

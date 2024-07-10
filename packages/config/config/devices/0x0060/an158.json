@@ -28,37 +28,31 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "True Period",
-			"description": "Time of switching status to send status message",
+			"label": "Debounce Time",
+			"description": "How long the state must be stable before sending a report",
 			"valueSize": 1,
+			"unit": "100ms",
 			"minValue": 0,
-			"maxValue": 254,
+			"maxValue": 120,
 			"defaultValue": 10,
-			"unsigned": true
-		},
-		{
-			"#": "2",
-			"label": "Send Out Basic Command",
-			"description": "Enable or Disable the status message function",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
+					"value": 0,
+					"label": "Disable"
 				}
 			]
 		},
 		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Group 2: Send Basic Set",
+			"description": "Enable or Disable the status message function"
+		},
+		{
 			"#": "3",
-			"label": "Meter Report Period",
-			"description": "Autoreporting meter value interval",
+			"label": "Meter Report Interval",
 			"valueSize": 2,
+			"unit": "10 seconds",
 			"minValue": 0,
 			"maxValue": 3240,
 			"defaultValue": 3

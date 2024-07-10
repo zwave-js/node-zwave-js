@@ -18,6 +18,14 @@ async deviceSpecificGet(
 ): Promise<MaybeNotKnown<string>>;
 ```
 
+### `sendReport`
+
+```ts
+async sendReport(
+	options: ManufacturerSpecificCCReportOptions,
+): Promise<void>;
+```
+
 ## Manufacturer Specific CC values
 
 ### `deviceId(type: DeviceIdType)`

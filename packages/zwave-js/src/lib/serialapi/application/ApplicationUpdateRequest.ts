@@ -1,4 +1,5 @@
 import {
+	BasicDeviceClass,
 	type CommandClasses,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
@@ -200,7 +201,7 @@ class ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 	public readonly remoteNodeId: number;
 	public readonly nwiHomeId: Buffer;
 
-	public readonly basicDeviceClass: number;
+	public readonly basicDeviceClass: BasicDeviceClass;
 	public readonly genericDeviceClass: number;
 	public readonly specificDeviceClass: number;
 	public readonly supportedCCs: readonly CommandClasses[];
@@ -210,7 +211,10 @@ class ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 			type: getEnumMemberName(ApplicationUpdateTypes, this.updateType),
 			"remote node ID": this.remoteNodeId,
 			"NWI home ID": buffer2hex(this.nwiHomeId),
-			"basic device class": this.basicDeviceClass,
+			"basic device class": getEnumMemberName(
+				BasicDeviceClass,
+				this.basicDeviceClass,
+			),
 			"generic device class": this.genericDeviceClass,
 			"specific device class": this.specificDeviceClass,
 			"supported CCs": this.supportedCCs

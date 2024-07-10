@@ -65,3 +65,21 @@ async removeNodeIdsFromAllGroups(
 ```
 
 Removes nodes from all association groups.
+
+### `getSpecificGroup`
+
+```ts
+async getSpecificGroup(): Promise<number | undefined>;
+```
+
+Request the association group that represents the most recently detected button press.
+
+### `reportSpecificGroup`
+
+```ts
+async reportSpecificGroup(
+	group: number,
+): Promise<void>;
+```
+
+Report the association group that represents the most recently detected button press.

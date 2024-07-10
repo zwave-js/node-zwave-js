@@ -11,7 +11,11 @@ import {
 	getCCName,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -391,7 +395,7 @@ export class SceneActuatorConfigurationCCSet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			sceneId: this.sceneId,
 			dimmingDuration: this.dimmingDuration.toString(),
@@ -401,7 +405,7 @@ export class SceneActuatorConfigurationCCSet
 		}
 
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -457,7 +461,7 @@ export class SceneActuatorConfigurationCCReport
 		return true;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			sceneId: this.sceneId,
 		};
@@ -469,7 +473,7 @@ export class SceneActuatorConfigurationCCReport
 		}
 
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -524,9 +528,9 @@ export class SceneActuatorConfigurationCCGet
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "scene id": this.sceneId },
 		};
 	}

@@ -63,6 +63,7 @@ integrationTest(
 			const sendQueue = driver["queue"];
 			driver.driverLog.sendQueue(sendQueue);
 			t.is(sendQueue.length, 2);
+			// with priority WakeUp
 			t.is(
 				sendQueue.transactions.get(0)?.priority,
 				MessagePriority.WakeUp,

@@ -1,0 +1,5 @@
+REGEX Replace:
+
+^2024-\d+-\d+ \d+:\d+:\d+\.\d+ .+(\n(?!2024).*)*\n
+
+with empty string

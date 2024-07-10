@@ -31,7 +31,7 @@ import { formatWithDprint } from "./dprint";
 import {
 	getCommandClassFromClassDeclaration,
 	projectRoot,
-	tsConfigFilePath,
+	tsConfigFilePathForDocs as tsConfigFilePath,
 } from "./tsAPITools";
 
 export function findSourceNode(
@@ -434,7 +434,7 @@ ${
 							t.text.slice(firstSpace + 1),
 						] as const;
 					})
-					.filter((t): t is [string, string] => !!t);
+					.filter((t) => !!t);
 
 				if (paramTags.length > 0) {
 					text += "**Parameters:**  \n\n";

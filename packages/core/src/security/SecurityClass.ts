@@ -32,6 +32,16 @@ export function securityClassIsS2(
 	);
 }
 
+/** Tests if the given security class is valid for use with Z-Wave LR */
+export function securityClassIsLongRange(
+	secClass: SecurityClass | undefined,
+): secClass is S2SecurityClass {
+	return (
+		secClass === SecurityClass.S2_AccessControl
+		|| secClass === SecurityClass.S2_Authenticated
+	);
+}
+
 /** An array of security classes, ordered from high (index 0) to low (index > 0) */
 export const securityClassOrder = [
 	SecurityClass.S2_AccessControl,

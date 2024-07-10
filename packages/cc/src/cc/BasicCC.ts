@@ -13,7 +13,11 @@ import {
 	parseMaybeNumber,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { type AllOrNone, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -257,17 +261,20 @@ export class BasicCC extends CommandClass {
 			direction: "none",
 		});
 
+		// Assume that the endpoint supports Basic CC, so the values get persisted correctly.
+		endpoint.addCC(CommandClasses.Basic, { isSupported: true });
+
 		// try to query the current state
 		await this.refreshValues(applHost);
 
-		// Remove Basic CC support when there was no response
+		// Remove Basic CC support again when there was no response
 		if (
 			this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
-					"No response to Basic Get command, assuming the node does not support Basic CC...",
+					"No response to Basic Get command, assuming Basic CC is unsupported...",
 			});
 			// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
 			// endpoint) if no Basic Report is returned.
@@ -327,14 +334,20 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			ret.push(...super.getDefinedValueIDs(applHost));
 		}
 
-		if (
-			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat?.mapBasicSet
-				=== "event"
-		) {
+		const compat = applHost.getDeviceConfig?.(endpoint.nodeId)?.compat;
+		if (compat?.mapBasicSet === "event") {
 			// Add the compat event value if it should be exposed
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
-		} else if (endpoint.controlsCC(CommandClasses.Basic)) {
-			// Otherwise, only expose currentValue on devices that only control Basic CC
+		} else if (
+			!endpoint.supportsCC(CommandClasses.Basic) && (
+				(endpoint.controlsCC(CommandClasses.Basic)
+					&& compat?.mapBasicSet !== "Binary Sensor")
+				|| compat?.mapBasicReport === false
+				|| compat?.mapBasicSet === "report"
+			)
+		) {
+			// Otherwise, only expose currentValue on devices that only control Basic CC,
+			// or devices where a compat flag indicates that currentValue is meant to be exposed
 			ret.push(BasicCCValues.currentValue.endpoint(endpoint.index));
 		}
 
@@ -370,9 +383,9 @@ export class BasicCCSet extends BasicCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "target value": this.targetValue },
 		};
 	}
@@ -431,16 +444,69 @@ export class BasicCCReport extends BasicCC {
 	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		// Basic CC Report persists its values itself, since there are some
+		// specific rules when which value may be persisted.
+		// These rules are essentially encoded in the getDefinedValueIDs overload,
+		// so we simply reuse that here.
+
+		// Figure out which values may be persisted.
+		const definedValueIDs = this.getDefinedValueIDs(applHost);
+		const shouldPersistCurrentValue = definedValueIDs.some((vid) =>
+			BasicCCValues.currentValue.is(vid)
+		);
+		const shouldPersistTargetValue = definedValueIDs.some((vid) =>
+			BasicCCValues.targetValue.is(vid)
+		);
+		const shouldPersistDuration = definedValueIDs.some((vid) =>
+			BasicCCValues.duration.is(vid)
+		);
+
+		if (this.currentValue !== undefined && shouldPersistCurrentValue) {
+			this.setValue(
+				applHost,
+				BasicCCValues.currentValue,
+				this.currentValue,
+			);
+		}
+		if (this.targetValue !== undefined && shouldPersistTargetValue) {
+			this.setValue(
+				applHost,
+				BasicCCValues.targetValue,
+				this.targetValue,
+			);
+		}
+		if (this.duration !== undefined && shouldPersistDuration) {
+			this.setValue(
+				applHost,
+				BasicCCValues.duration,
+				this.duration,
+			);
+		}
+
+		return true;
+	}
+
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
 			this.currentValue ?? 0xfe,
 			this.targetValue ?? 0xfe,
 			(this.duration ?? Duration.unknown()).serializeReport(),
 		]);
+
+		if (
+			this.version < 2 && this.host.getDeviceConfig?.(
+				this.nodeId as number,
+			)?.compat?.encodeCCsUsingTargetVersion
+		) {
+			// When forcing CC version 1, only send the current value
+			this.payload = this.payload.subarray(0, 1);
+		}
+
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};
@@ -451,7 +517,7 @@ export class BasicCCReport extends BasicCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

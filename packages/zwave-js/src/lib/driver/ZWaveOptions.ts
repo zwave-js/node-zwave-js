@@ -217,18 +217,15 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		 * Default: `true`, except when the ZWAVEJS_DISABLE_UNRESPONSIVE_CONTROLLER_RECOVERY env variable is set.
 		 */
 		unresponsiveControllerRecovery?: boolean;
-	};
 
-	/**
-	 * @deprecated Use `features.softReset` instead.
-	 *
-	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
-	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
-	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
-	 *
-	 * **Note:** This option has no effect on 700+ series controllers. For those, soft reset is always enabled.
-	 */
-	enableSoftReset?: boolean;
+		/**
+		 * Controllers of the 700 series and newer have a hardware watchdog that can be enabled to automatically
+		 * reset the chip in case it becomes unresponsive. This option controls whether the watchdog should be enabled.
+		 *
+		 * Default: `true`, except when the ZWAVEJS_DISABLE_WATCHDOG env variable is set.
+		 */
+		watchdog?: boolean;
+	};
 
 	preferences: {
 		/**
@@ -320,6 +317,23 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 */
 	userAgent?: Record<string, string>;
 
+	/**
+	 * Specify application-specific information to use in queries from other devices
+	 */
+	vendor?: {
+		manufacturerId: number;
+		productType: number;
+		productId: number;
+
+		/** The version of the hardware the application is running on. Can be omitted if unknown. */
+		hardwareVersion?: number;
+
+		/** The icon type to use for installers. Default: 0x0500 - Generic Gateway */
+		installerIcon?: number;
+		/** The icon type to use for users. Default: 0x0500 - Generic Gateway */
+		userIcon?: number;
+	};
+
 	/** DO NOT USE! Used for testing internally */
 	testingHooks?: {
 		serialPortBinding?: typeof SerialPort;
@@ -361,7 +375,7 @@ export type PartialZWaveOptions = Expand<
 	& Partial<
 		Pick<
 			ZWaveOptions,
-			"inclusionUserCallbacks" | "testingHooks"
+			"inclusionUserCallbacks" | "testingHooks" | "vendor"
 		>
 	>
 	& {
@@ -379,6 +393,7 @@ export type EditableZWaveOptions = Expand<
 		| "interview"
 		| "logConfig"
 		| "preferences"
+		| "vendor"
 	>
 	& {
 		userAgent?: Record<string, string | null | undefined>;

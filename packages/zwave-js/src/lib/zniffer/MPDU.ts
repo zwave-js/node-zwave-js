@@ -79,13 +79,26 @@ function formatRoute(
 	source: number,
 	repeaters: readonly number[],
 	destination: number,
+	direction: "outbound" | "inbound",
 	currentHop: number,
+	failedHop?: number,
 ): string {
 	return [
-		formatNodeId(source),
+		direction === "outbound"
+			? formatNodeId(source)
+			: formatNodeId(destination),
 		...repeaters.map(formatNodeId),
-		formatNodeId(destination),
-	].map((id, i) => (i === 0 ? "" : i === currentHop + 1 ? " » " : " › ") + id)
+		direction === "outbound"
+			? formatNodeId(destination)
+			: formatNodeId(source),
+	].map((id, i) => {
+		if (i === 0) return id;
+		if (i - 1 === failedHop) return " × " + id;
+		if (i - 1 === currentHop) {
+			return (direction === "outbound" ? " » " : " « ") + id;
+		}
+		return (direction === "outbound" ? " › " : " ‹ ") + id;
+	})
 		.join("");
 }
 
@@ -205,7 +218,14 @@ export class LongRangeMPDU implements MPDU {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const tags = [
-			formatRoute(this.sourceNodeId, [], this.destinationNodeId, 0),
+			formatRoute(
+				this.sourceNodeId,
+				[],
+				this.destinationNodeId,
+				// Singlecast frames do not contain a bit for this, we consider them all "outbound"
+				"outbound",
+				0,
+			),
 		];
 		if (this.headerType === MPDUHeaderType.Acknowledgement) {
 			tags.unshift("ACK");
@@ -424,7 +444,14 @@ export class SinglecastZWaveMPDU extends ZWaveMPDU {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const { tags, message: original } = super.toLogEntry();
-		tags[0] = formatRoute(this.sourceNodeId, [], this.destinationNodeId, 0);
+		tags[0] = formatRoute(
+			this.sourceNodeId,
+			[],
+			this.destinationNodeId,
+			// Singlecast frames do not contain a bit for this, we consider them all "outbound"
+			"outbound",
+			0,
+		);
 
 		const message: MessageRecord = {
 			...original,
@@ -449,7 +476,14 @@ export class AckZWaveMPDU extends ZWaveMPDU {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const { tags, message } = super.toLogEntry();
-		tags[0] = formatRoute(this.sourceNodeId, [], this.destinationNodeId, 0);
+		tags[0] = formatRoute(
+			this.sourceNodeId,
+			[],
+			this.destinationNodeId,
+			// ACK frames do not contain a bit for this, we consider them all "inbound"
+			"inbound",
+			0,
+		);
 		tags.unshift("ACK");
 
 		return {
@@ -477,6 +511,16 @@ export class RoutedZWaveMPDU extends ZWaveMPDU {
 		}
 
 		this.hop = this.payload[1] & 0b1111;
+		// The hop field in the MPDU indicates which repeater should handle the frame next.
+		// This means that for an inbound frame between repeater 0 and 1, the value is one
+		// less (0) than for an outbound frame (1). This also means that the field overflows
+		// to 0x0f when the frame returns to the source node.
+		//
+		// We normalize this, so hop = 0 always means the frame is transmitted between the source node and repeater 0.
+		if (this.direction === "inbound") {
+			this.hop = (this.hop + 1) % 16;
+		}
+
 		const numRepeaters = this.payload[1] >>> 4;
 		this.repeaters = [...this.payload.subarray(2, 2 + numRepeaters)];
 
@@ -529,7 +573,9 @@ export class RoutedZWaveMPDU extends ZWaveMPDU {
 			this.sourceNodeId,
 			this.repeaters,
 			this.destinationNodeId,
+			this.direction,
 			this.hop,
+			this.failedHop,
 		);
 
 		const message: MessageRecord = {
@@ -636,6 +682,8 @@ export class NormalExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 			this.sourceNodeId,
 			this.repeaters,
 			this.destinationNodeId,
+			// Explorer frames do not contain a bit for the direction, we consider them all "outbound"
+			"outbound",
 			4 - this.ttl,
 		);
 		tags.unshift("EXPLORER");
@@ -669,6 +717,8 @@ export class InclusionRequestExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 			this.sourceNodeId,
 			this.repeaters,
 			this.destinationNodeId,
+			// Explorer frames do not contain a bit for the direction, we consider them all "outbound"
+			"outbound",
 			4 - this.ttl,
 		);
 		tags.unshift("INCL REQUEST");
@@ -718,6 +768,8 @@ export class SearchResultExplorerZWaveMPDU extends ExplorerZWaveMPDU {
 			this.sourceNodeId,
 			this.repeaters,
 			this.destinationNodeId,
+			// Explorer frames do not contain a bit for the direction, we consider their responses "inbound"
+			"inbound",
 			4 - this.ttl,
 		);
 		tags.unshift("EXPLORER RESULT");

@@ -81,6 +81,23 @@
 			]
 		},
 		{
+			// Some devices report this param, some don't, may be related to firmware version.
+			// But even when not reported by the device, it is supported.
+			"#": "6",
+			"label": "Valve Opening Report Change Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
 			"#": "7",
 			"label": "Open Window Detection",
 			"valueSize": 1,
@@ -116,6 +133,38 @@
 			"defaultValue": 0
 		}
 	],
+	"compat": {
+		"overrideQueries": {
+			// The device does not report "Manufacturer specific" as a supported thermostat mode
+			"Thermostat Mode": [
+				{
+					"method": "getSupportedModes",
+					"result": [0, 1, 11, 15, 31], // Off / Heat / Energy heat / Full power / Manufacturer specific
+					"persistValues": {
+						"supportedModes": [0, 1, 11, 15, 31]
+					},
+					"extendMetadata": {
+						"thermostatMode": {
+							"states": {
+								"0": "Off",
+								"1": "Heat",
+								"11": "Energy heat",
+								"15": "Full power",
+								"31": "Manufacturer specific"
+							}
+						}
+					}
+				}
+			]
+		},
+		"commandClasses": {
+			"remove": {
+				"Supervision": {
+					"endpoints": "*"
+				}
+			}
+		}
+	},
 	"metadata": {
 		"manual": "https://eurotronic.org/wp-content/uploads/2023/04/Comet-Z-Wave-EN-2023-04-06.pdf"
 	}

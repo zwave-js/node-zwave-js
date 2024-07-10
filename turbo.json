@@ -5,6 +5,11 @@
 			"cache": false
 		},
 
+		"bootstrap": {
+			// Dummy task to enable running all bootstrap tasks
+			"cache": false // TypeScript does the caching
+		},
+
 		"codegen": {
 			// Dummy task to enable running all codegen tasks
 		},
@@ -40,7 +45,7 @@
 
 		// Specific linting tasks: ESLint
 		"lint:ts": {
-			"dependsOn": ["//#build:turbo"],
+			"dependsOn": ["bootstrap"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
@@ -52,7 +57,7 @@
 			]
 		},
 		"lint:ts:fix": {
-			"dependsOn": ["//#build:turbo"],
+			"dependsOn": ["bootstrap"],
 			"inputs": [
 				// https://github.com/vercel/turborepo/issues/1407
 				":!:build/",
@@ -66,8 +71,8 @@
 		},
 
 		"lint:zwave": {
+			"dependsOn": ["bootstrap"]
 			// Dummy task to enable running all lint:zwave tasks
-			"dependsOn": ["//#build:turbo"]
 		},
 		"@zwave-js/config#lint:zwave": {
 			"inputs": ["**/*.ts", "config/**/*.json"]
@@ -81,7 +86,7 @@
 		},
 
 		"test:ts": {
-			"dependsOn": ["//#build:turbo"],
+			// "dependsOn": ["//#build:turbo"],
 			"inputs": ["src/**/*.ts", "ava.config.cjs", "../../ava.config.cjs"]
 			// TODO: consider snapshot files
 		}
@@ -91,6 +96,7 @@
 		"yarn.lock",
 		// Build fresh when TS related stuff changes
 		"tsconfig.json",
+		"tsconfig.base.json",
 		"tsconfig.build.json"
 	]
 }
