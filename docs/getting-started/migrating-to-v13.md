@@ -119,6 +119,21 @@ Since Z-Wave Long Range (ZWLR) does not support routing, a few changes had to be
 
 It is recommended to check if `node.protocol === Protocols.ZWaveLongRange` or `isLongRangeNodeId(nodeId)` is true before calling any of these methods.
 
+## Rename "Master Code" to "Admin Code"
+
+The Z-Wave specifications have been changed in language to replace "Master" with "Admin" where applicable. With this PR, we follow suit.
+
+This requires some breaking API changes though:
+
+- Renamed `DoorLockLoggingEventType.MasterCodeChanged` to `DoorLockLoggingEventType.AdminCodeChanged`
+- Renamed the `UserCodeCommand` enum members `MasterCodeSet`, `MasterCodeGet`, `MasterCodeReport` to `AdminCodeSet`, `AdminCodeGet`, `AdminCodeReport` respectively
+- Renamed the corresponding `User Code CC` subclasses to `UserCodeCCAdminCodeSet`, `UserCodeCCAdminCodeGet` and `UserCodeCCAdminCodeReport`
+- Renamed all occurences of the `masterCode` property in `User Code CC` to `adminCode`
+- Renamed `UserCodeCC.supportsMasterCodeDeactivationCached(...)` to `UserCodeCC.supportsAdminCodeDeactivationCached(...)`
+- Renamed the User Code CC APIs `getMasterCode` and `setMasterCode` to `getAdminCode` and `setAdminCode`, respectively
+
+For end users, the `property` of the Admin Code value ID has been changed from `masterCode` to `adminCode`, which means the old value will no longer be updated on changes.
+
 ## Removed deprecated things
 
 - The first (`secure: boolean`) parameter of the `"inclusion started"` event has been replaced with the second parameter (`strategy: InclusionStrategy`), which was unfortunately undocumented, except in types. To determine whether an inclusion is supposed to be secure, check if `strategy !== InclusionStrategy.Insecure`.
