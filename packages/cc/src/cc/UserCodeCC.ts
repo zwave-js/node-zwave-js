@@ -63,12 +63,30 @@ import { KeypadMode, UserCodeCommand, UserIDStatus } from "../lib/_Types";
 export const UserCodeCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["User Code"], {
 		...V.staticProperty("supportedUsers", undefined, { internal: true }),
-		...V.staticProperty("supportsMasterCode", undefined, {
+		...V.staticProperty("supportsAdminCode", undefined, {
 			internal: true,
 		}),
-		...V.staticProperty("supportsMasterCodeDeactivation", undefined, {
+		...V.staticProperty("supportsAdminCodeDeactivation", undefined, {
 			internal: true,
 		}),
+		// The following two properties are only kept for compatibility with devices
+		// that were interviewed before the rename to admin code
+		...V.staticPropertyWithName(
+			"_deprecated_supportsMasterCode",
+			"supportsMasterCode",
+			undefined,
+			{
+				internal: true,
+			},
+		),
+		...V.staticPropertyWithName(
+			"_deprecated_supportsMasterCodeDeactivation",
+			"supportsMasterCodeDeactivation",
+			undefined,
+			{
+				internal: true,
+			},
+		),
 		...V.staticProperty("supportsUserCodeChecksum", undefined, {
 			internal: true,
 		}),
@@ -99,10 +117,10 @@ export const UserCodeCCValues = Object.freeze({
 		),
 
 		...V.staticProperty(
-			"masterCode",
+			"adminCode",
 			{
 				...ValueMetadata.String,
-				label: "Master Code",
+				label: "Admin Code",
 				minLength: 4,
 				maxLength: 10,
 			} as const,
@@ -259,11 +277,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			case UserCodeCommand.ExtendedUserCodeGet:
 				return this.version >= 2;
 
-			case UserCodeCommand.MasterCodeSet:
-			case UserCodeCommand.MasterCodeGet: {
+			case UserCodeCommand.AdminCodeSet:
+			case UserCodeCommand.AdminCodeGet: {
 				if (this.version < 2) return false;
 				return this.tryGetValueDB()?.getValue<boolean>(
-					UserCodeCCValues.supportsMasterCode.endpoint(
+					UserCodeCCValues.supportsAdminCode.endpoint(
 						this.endpoint.index,
 					),
 				);
@@ -298,7 +316,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 					);
 				}
 				result = await this.setKeypadMode(value);
-			} else if (property === "masterCode") {
+			} else if (
+				property === "adminCode"
+				// Support devices that were interviewed before the rename to adminCode
+				|| property === "masterCode"
+			) {
 				if (typeof value !== "string") {
 					throwWrongValueType(
 						this.ccId,
@@ -307,7 +329,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 						typeof value,
 					);
 				}
-				result = await this.setMasterCode(value);
+				result = await this.setAdminCode(value);
 			} else if (property === "userIdStatus") {
 				if (propertyKey == undefined) {
 					throwMissingPropertyKey(this.ccId, property);
@@ -395,8 +417,8 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			switch (property) {
 				case "keypadMode":
 					return this.getKeypadMode();
-				case "masterCode":
-					return this.getMasterCode();
+				case "adminCode":
+					return this.getAdminCode();
 				case "userIdStatus":
 				case "userCode": {
 					if (propertyKey == undefined) {
@@ -694,8 +716,8 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		);
 		if (response) {
 			return pick(response, [
-				"supportsMasterCode",
-				"supportsMasterCodeDeactivation",
+				"supportsAdminCode",
+				"supportsAdminCodeDeactivation",
 				"supportsUserCodeChecksum",
 				"supportsMultipleUserCodeReport",
 				"supportsMultipleUserCodeSet",
@@ -765,32 +787,32 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getMasterCode(): Promise<MaybeNotKnown<string>> {
+	public async getAdminCode(): Promise<MaybeNotKnown<string>> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
-			UserCodeCommand.MasterCodeGet,
+			UserCodeCommand.AdminCodeGet,
 		);
 
-		const cc = new UserCodeCCMasterCodeGet(this.applHost, {
+		const cc = new UserCodeCCAdminCodeGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
 		const response = await this.applHost.sendCommand<
-			UserCodeCCMasterCodeReport
+			UserCodeCCAdminCodeReport
 		>(
 			cc,
 			this.commandOptions,
 		);
-		return response?.masterCode;
+		return response?.adminCode;
 	}
 
 	@validateArgs()
-	public async setMasterCode(
-		masterCode: string,
+	public async setAdminCode(
+		adminCode: string,
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
-			UserCodeCommand.MasterCodeSet,
+			UserCodeCommand.AdminCodeSet,
 		);
 
 		const supportedASCIIChars = UserCodeCC.getSupportedASCIICharsCached(
@@ -799,35 +821,35 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		);
 		if (!supportedASCIIChars) {
 			throw new ZWaveError(
-				`The master code can only be set after the interview is complete!`,
+				`The admin code can only be set after the interview is complete!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 
 		// Validate the code
-		if (!masterCode) {
+		if (!adminCode) {
 			const supportsDeactivation = UserCodeCC
-				.supportsMasterCodeDeactivationCached(
+				.supportsAdminCodeDeactivationCached(
 					this.applHost,
 					this.endpoint,
 				);
 			if (!supportsDeactivation) {
 				throw new ZWaveError(
-					`The node does not support deactivating the master code!`,
+					`The node does not support deactivating the admin code!`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-		} else if (!validateCode(masterCode, supportedASCIIChars)) {
+		} else if (!validateCode(adminCode, supportedASCIIChars)) {
 			throw new ZWaveError(
-				`The master code must consist of 4 to 10 of the following characters: ${supportedASCIIChars}`,
+				`The admin code must consist of 4 to 10 of the following characters: ${supportedASCIIChars}`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 
-		const cc = new UserCodeCCMasterCodeSet(this.applHost, {
+		const cc = new UserCodeCCAdminCodeSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			masterCode,
+			adminCode,
 		});
 
 		return this.applHost.sendCommand(cc, this.commandOptions);
@@ -933,9 +955,10 @@ export class UserCodeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		const supportsMasterCode: boolean =
-			this.getValue(applHost, UserCodeCCValues.supportsMasterCode)
-				?? false;
+		const supportsAdminCode: boolean = UserCodeCC.supportsAdminCodeCached(
+			applHost,
+			endpoint,
+		);
 		const supportsUserCodeChecksum: boolean = this.getValue(
 			applHost,
 			UserCodeCCValues.supportsUserCodeChecksum,
@@ -952,12 +975,12 @@ export class UserCodeCC extends CommandClass {
 
 		// Check for changed values and codes
 		if (this.version >= 2) {
-			if (supportsMasterCode) {
+			if (supportsAdminCode) {
 				applHost.controllerLog.logNode(node.id, {
-					message: "querying master code...",
+					message: "querying admin code...",
 					direction: "outbound",
 				});
-				await api.getMasterCode();
+				await api.getAdminCode();
 			}
 			if (supportedKeypadModes.length > 1) {
 				applHost.controllerLog.logNode(node.id, {
@@ -1084,20 +1107,46 @@ export class UserCodeCC extends CommandClass {
 	}
 
 	/**
-	 * Returns whether deactivating the master code is supported.
+	 * Returns whether the admin code functionality is supported.
 	 * This only works AFTER the interview process
 	 */
-	public static supportsMasterCodeDeactivationCached(
+	public static supportsAdminCodeCached(
 		applHost: ZWaveApplicationHost,
 		endpoint: IZWaveEndpoint,
 	): boolean {
-		return !!applHost
-			.getValueDB(endpoint.nodeId)
-			.getValue<boolean>(
-				UserCodeCCValues.supportsMasterCodeDeactivation.endpoint(
+		const valueDB = applHost
+			.getValueDB(endpoint.nodeId);
+		return valueDB.getValue<boolean>(
+			UserCodeCCValues.supportsAdminCode.endpoint(
+				endpoint.index,
+			),
+		) ?? valueDB.getValue<boolean>(
+			UserCodeCCValues._deprecated_supportsMasterCode.endpoint(
+				endpoint.index,
+			),
+		) ?? false;
+	}
+
+	/**
+	 * Returns whether deactivating the admin code is supported.
+	 * This only works AFTER the interview process
+	 */
+	public static supportsAdminCodeDeactivationCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+	): boolean {
+		const valueDB = applHost
+			.getValueDB(endpoint.nodeId);
+		return valueDB.getValue<boolean>(
+			UserCodeCCValues.supportsAdminCodeDeactivation.endpoint(
+				endpoint.index,
+			),
+		) ?? valueDB.getValue<boolean>(
+			UserCodeCCValues._deprecated_supportsMasterCodeDeactivation
+				.endpoint(
 					endpoint.index,
 				),
-			);
+		) ?? false;
 	}
 
 	/**
@@ -1455,8 +1504,8 @@ export class UserCodeCCUsersNumberGet extends UserCodeCC {}
 
 // @publicAPI
 export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
-	supportsMasterCode: boolean;
-	supportsMasterCodeDeactivation: boolean;
+	supportsAdminCode: boolean;
+	supportsAdminCodeDeactivation: boolean;
 	supportsUserCodeChecksum: boolean;
 	supportsMultipleUserCodeReport: boolean;
 	supportsMultipleUserCodeSet: boolean;
@@ -1479,8 +1528,8 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 			let offset = 0;
 
 			validatePayload(this.payload.length >= offset + 1);
-			this.supportsMasterCode = !!(this.payload[offset] & 0b100_00000);
-			this.supportsMasterCodeDeactivation = !!(
+			this.supportsAdminCode = !!(this.payload[offset] & 0b100_00000);
+			this.supportsAdminCodeDeactivation = !!(
 				this.payload[offset] & 0b010_00000
 			);
 			const statusBitMaskLength = this.payload[offset] & 0b000_11111;
@@ -1530,9 +1579,9 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 				),
 			).toString("ascii");
 		} else {
-			this.supportsMasterCode = options.supportsMasterCode;
-			this.supportsMasterCodeDeactivation =
-				options.supportsMasterCodeDeactivation;
+			this.supportsAdminCode = options.supportsAdminCode;
+			this.supportsAdminCodeDeactivation =
+				options.supportsAdminCodeDeactivation;
 			this.supportsUserCodeChecksum = options.supportsUserCodeChecksum;
 			this.supportsMultipleUserCodeReport =
 				options.supportsMultipleUserCodeReport;
@@ -1544,11 +1593,11 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		}
 	}
 
-	@ccValue(UserCodeCCValues.supportsMasterCode)
-	public readonly supportsMasterCode: boolean;
+	@ccValue(UserCodeCCValues.supportsAdminCode)
+	public readonly supportsAdminCode: boolean;
 
-	@ccValue(UserCodeCCValues.supportsMasterCodeDeactivation)
-	public readonly supportsMasterCodeDeactivation: boolean;
+	@ccValue(UserCodeCCValues.supportsAdminCodeDeactivation)
+	public readonly supportsAdminCodeDeactivation: boolean;
 
 	@ccValue(UserCodeCCValues.supportsUserCodeChecksum)
 	public readonly supportsUserCodeChecksum: boolean;
@@ -1574,8 +1623,8 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 			undefined,
 			UserIDStatus.Available,
 		);
-		const controlByte1 = (this.supportsMasterCode ? 0b100_00000 : 0)
-			| (this.supportsMasterCodeDeactivation ? 0b010_00000 : 0)
+		const controlByte1 = (this.supportsAdminCode ? 0b100_00000 : 0)
+			| (this.supportsAdminCodeDeactivation ? 0b010_00000 : 0)
 			| (supportedStatusesBitmask.length & 0b000_11111);
 
 		const supportedKeypadModesBitmask = encodeBitMask(
@@ -1609,9 +1658,9 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		return {
 			...super.toLogEntry(host),
 			message: {
-				"supports master code": this.supportsMasterCode,
-				"supports master code deactivation":
-					this.supportsMasterCodeDeactivation,
+				"supports admin code": this.supportsAdminCode,
+				"supports admin code deactivation":
+					this.supportsAdminCodeDeactivation,
 				"supports user code checksum": this.supportsUserCodeChecksum,
 				"supports multiple codes in report":
 					this.supportsMultipleUserCodeReport,
@@ -1740,38 +1789,38 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 export class UserCodeCCKeypadModeGet extends UserCodeCC {}
 
 // @publicAPI
-export interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
-	masterCode: string;
+export interface UserCodeCCAdminCodeSetOptions extends CCCommandOptions {
+	adminCode: string;
 }
 
-@CCCommand(UserCodeCommand.MasterCodeSet)
+@CCCommand(UserCodeCommand.AdminCodeSet)
 @useSupervision()
-export class UserCodeCCMasterCodeSet extends UserCodeCC {
+export class UserCodeCCAdminCodeSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
-			| UserCodeCCMasterCodeSetOptions,
+			| UserCodeCCAdminCodeSetOptions,
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const codeLength = this.payload[0] & 0b1111;
 			validatePayload(this.payload.length >= 1 + codeLength);
-			this.masterCode = this.payload
+			this.adminCode = this.payload
 				.subarray(1, 1 + codeLength)
 				.toString("ascii");
 		} else {
-			this.masterCode = options.masterCode;
+			this.adminCode = options.adminCode;
 		}
 	}
 
-	public masterCode: string;
+	public adminCode: string;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
-			Buffer.from([this.masterCode.length & 0b1111]),
-			Buffer.from(this.masterCode, "ascii"),
+			Buffer.from([this.adminCode.length & 0b1111]),
+			Buffer.from(this.adminCode, "ascii"),
 		]);
 		return super.serialize();
 	}
@@ -1779,44 +1828,44 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
-			message: { "master code": userCodeToLogString(this.masterCode) },
+			message: { "admin code": userCodeToLogString(this.adminCode) },
 		};
 	}
 }
 
 // @publicAPI
-export interface UserCodeCCMasterCodeReportOptions extends CCCommandOptions {
-	masterCode: string;
+export interface UserCodeCCAdminCodeReportOptions extends CCCommandOptions {
+	adminCode: string;
 }
 
-@CCCommand(UserCodeCommand.MasterCodeReport)
-export class UserCodeCCMasterCodeReport extends UserCodeCC {
+@CCCommand(UserCodeCommand.AdminCodeReport)
+export class UserCodeCCAdminCodeReport extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
-			| UserCodeCCMasterCodeReportOptions,
+			| UserCodeCCAdminCodeReportOptions,
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const codeLength = this.payload[0] & 0b1111;
 			validatePayload(this.payload.length >= 1 + codeLength);
-			this.masterCode = this.payload
+			this.adminCode = this.payload
 				.subarray(1, 1 + codeLength)
 				.toString("ascii");
 		} else {
-			this.masterCode = options.masterCode;
+			this.adminCode = options.adminCode;
 		}
 	}
 
-	@ccValue(UserCodeCCValues.masterCode)
-	public readonly masterCode: string;
+	@ccValue(UserCodeCCValues.adminCode)
+	public readonly adminCode: string;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
-			Buffer.from([this.masterCode.length & 0b1111]),
-			Buffer.from(this.masterCode, "ascii"),
+			Buffer.from([this.adminCode.length & 0b1111]),
+			Buffer.from(this.adminCode, "ascii"),
 		]);
 		return super.serialize();
 	}
@@ -1824,14 +1873,14 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
-			message: { "master code": userCodeToLogString(this.masterCode) },
+			message: { "admin code": userCodeToLogString(this.adminCode) },
 		};
 	}
 }
 
-@CCCommand(UserCodeCommand.MasterCodeGet)
-@expectedCCResponse(UserCodeCCMasterCodeReport)
-export class UserCodeCCMasterCodeGet extends UserCodeCC {}
+@CCCommand(UserCodeCommand.AdminCodeGet)
+@expectedCCResponse(UserCodeCCAdminCodeReport)
+export class UserCodeCCAdminCodeGet extends UserCodeCC {}
 
 // @publicAPI
 export interface UserCodeCCUserCodeChecksumReportOptions

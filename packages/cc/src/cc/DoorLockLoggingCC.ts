@@ -88,7 +88,7 @@ const eventTypeLabel = {
 	UserCodeAdded: "User Code Added",
 	UserCodeDeleted: "User Code Deleted",
 	AllUserCodesDeleted: "All User Codes Deleted",
-	MasterCodeChanged: "Master Code Changed",
+	AdminCodeChanged: "Admin Code Changed",
 	UserCodeChanged: "User Code Changed",
 	LockReset: "Lock Reset",
 	ConfigurationChanged: "Configuration Changed",
