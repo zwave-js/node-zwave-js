@@ -177,7 +177,7 @@ function getCodePathAtPosition(
 }
 
 export function codefind(query: CodeFindQuery): Result[] {
-	const tsConfig = loadTSConfig(undefined, false);
+	const tsConfig = loadTSConfig("zwave-js", false);
 	const program = ts.createProgram(tsConfig.fileNames, {
 		...tsConfig.options,
 		preserveSymlinks: false,
