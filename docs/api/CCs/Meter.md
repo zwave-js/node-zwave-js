@@ -7,7 +7,9 @@
 ### `get`
 
 ```ts
-async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: import("/home/dominic/Repositories/node-zwave-js/packages/core/build/index").MeterScale; } | undefined>;
+async get(
+	options?: MeterCCGetOptions,
+): Promise<MeterReading | undefined>;
 ```
 
 ### `sendReport`
@@ -21,7 +23,9 @@ async sendReport(
 ### `getAll`
 
 ```ts
-async getAll(accumulatedOnly: boolean = false): Promise<{ rateType: RateType; value: number; previousValue: MaybeNotKnown<number>; deltaTime: MaybeUnknown<number>; type: number; scale: import("/home/dominic/Repositories/node-zwave-js/packages/core/build/index").MeterScale; }[]>;
+async getAll(
+	accumulatedOnly: boolean = false,
+): Promise<MeterReading[]>;
 ```
 
 ### `getSupported`

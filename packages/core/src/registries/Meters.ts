@@ -20,7 +20,7 @@ export interface Meter extends MeterDefinition {
 	readonly key: number;
 }
 
-const meters = Object.freeze(
+export const meters = Object.freeze(
 	{
 		[0x01]: {
 			name: "Electric",
@@ -117,12 +117,12 @@ const meters = Object.freeze(
 		},
 	} as const satisfies Record<number, MeterDefinition>,
 );
+export type Meters = typeof meters;
 
 /** Returns the meter definition for the given key */
 export function getMeter<MeterType extends number>(
 	type: MeterType,
-): MeterType extends keyof typeof meters
-	? ({ key: MeterType } & (typeof meters[MeterType]))
+): MeterType extends keyof Meters ? ({ key: MeterType } & (Meters[MeterType]))
 	: (Meter | undefined)
 {
 	const meter: MeterDefinition | undefined = (meters as any)[type];
@@ -153,9 +153,9 @@ export function getMeterScale<
 >(
 	type: MeterType,
 	scale: ScaleKey,
-): MeterType extends keyof typeof meters
-	? ScaleKey extends keyof typeof meters[MeterType]["scales"]
-		? ({ key: ScaleKey } & (typeof meters[MeterType]["scales"][ScaleKey]))
+): MeterType extends keyof Meters
+	? ScaleKey extends keyof Meters[MeterType]["scales"]
+		? ({ key: ScaleKey } & (Meters[MeterType]["scales"][ScaleKey]))
 	: (MeterScale | undefined)
 	: (MeterScale | undefined)
 {

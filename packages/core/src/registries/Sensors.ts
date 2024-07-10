@@ -731,11 +731,12 @@ const sensors = Object.freeze(
 		},
 	} as const satisfies Record<number, SensorDefinition>,
 );
+export type Sensors = typeof sensors;
 
 /** Returns the sensor definition for the given sensor type */
 export function getSensor<Key extends number>(
 	type: Key,
-): Key extends keyof typeof sensors ? typeof sensors[Key]
+): Key extends keyof Sensors ? Sensors[Key]
 	: (Sensor | undefined)
 {
 	const sensor: SensorDefinition | undefined = (sensors as any)[type];
@@ -766,9 +767,9 @@ export function getSensorScale<
 >(
 	type: SensorType,
 	scale: ScaleKey,
-): SensorType extends keyof typeof sensors
-	? ScaleKey extends keyof typeof sensors[SensorType]["scales"]
-		? ({ key: ScaleKey } & (typeof sensors[SensorType]["scales"][ScaleKey]))
+): SensorType extends keyof Sensors
+	? ScaleKey extends keyof Sensors[SensorType]["scales"]
+		? ({ key: ScaleKey } & (Sensors[SensorType]["scales"][ScaleKey]))
 	: (Scale | undefined)
 	: (Scale | undefined)
 {
