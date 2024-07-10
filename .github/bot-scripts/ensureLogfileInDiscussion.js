@@ -88,11 +88,6 @@ Please consider uploading a logfile that captures your problem. As a reminder, h
 		}
 	}
 
-	const options = {
-		owner: context.repo.owner,
-		repo: context.repo.repo,
-	};
-
 	// TODO: Consider if we want to delete outdated comments. That may delete replies as well though.
 	if (hasZjsLog || !message) return;
 

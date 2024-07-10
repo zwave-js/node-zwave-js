@@ -1,19 +1,20 @@
 {
   "name": "@zwave-js/host",
-  "version": "12.12.0",
+  "version": "13.0.0-beta.1",
   "description": "zwave-js: Host abstractions",
   "keywords": [],
   "publishConfig": {
     "access": "public"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "type": "commonjs",
   "exports": {
     ".": {
+      "@@dev": "./src/index.ts",
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
     "./safe": {
+      "@@dev": "./src/index_safe.ts",
       "types": "./build/index_safe.d.ts",
       "default": "./build/index_safe.js"
     },
@@ -55,9 +56,9 @@
     "alcalzone-shared": "^4.0.8"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.43.0",
+    "@microsoft/api-extractor": "^7.47.0",
     "@types/node": "^18.19.31",
     "del-cli": "^5.1.0",
-    "typescript": "5.4.4"
+    "typescript": "5.5.3"
   }
 }

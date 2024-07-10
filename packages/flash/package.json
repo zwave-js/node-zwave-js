@@ -1,12 +1,13 @@
 {
   "name": "@zwave-js/flash",
-  "version": "12.12.1",
+  "version": "13.0.0-beta.3",
   "description": "zwave-js: firmware flash utility",
   "keywords": [],
   "publishConfig": {
     "access": "public"
   },
   "main": "build/cli.js",
+  "type": "commonjs",
   "files": [
     "bin/",
     "build/**/*.{js,d.ts,map}"
@@ -48,6 +49,6 @@
     "@types/node": "^18.19.31",
     "@types/yargs": "^17.0.32",
     "del-cli": "^5.1.0",
-    "typescript": "5.4.4"
+    "typescript": "5.5.3"
   }
 }

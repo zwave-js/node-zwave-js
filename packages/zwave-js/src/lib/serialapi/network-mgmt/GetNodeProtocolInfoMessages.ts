@@ -1,4 +1,5 @@
 import {
+	type BasicDeviceClass,
 	type DataRate,
 	type FLiRS,
 	MessagePriority,
@@ -138,7 +139,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 	/** Whether this node can issue wakeup beams to FLiRS nodes */
 	public supportsBeaming: boolean;
 
-	public basicDeviceClass: number;
+	public basicDeviceClass: BasicDeviceClass;
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 

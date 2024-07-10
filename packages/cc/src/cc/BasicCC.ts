@@ -13,7 +13,11 @@ import {
 	parseMaybeNumber,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { type AllOrNone, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -257,17 +261,20 @@ export class BasicCC extends CommandClass {
 			direction: "none",
 		});
 
+		// Assume that the endpoint supports Basic CC, so the values get persisted correctly.
+		endpoint.addCC(CommandClasses.Basic, { isSupported: true });
+
 		// try to query the current state
 		await this.refreshValues(applHost);
 
-		// Remove Basic CC support when there was no response
+		// Remove Basic CC support again when there was no response
 		if (
 			this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
-					"No response to Basic Get command, assuming the node does not support Basic CC...",
+					"No response to Basic Get command, assuming Basic CC is unsupported...",
 			});
 			// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
 			// endpoint) if no Basic Report is returned.
@@ -333,7 +340,8 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
 		} else if (
 			!endpoint.supportsCC(CommandClasses.Basic) && (
-				endpoint.controlsCC(CommandClasses.Basic)
+				(endpoint.controlsCC(CommandClasses.Basic)
+					&& compat?.mapBasicSet !== "Binary Sensor")
 				|| compat?.mapBasicReport === false
 				|| compat?.mapBasicSet === "report"
 			)
@@ -375,9 +383,9 @@ export class BasicCCSet extends BasicCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "target value": this.targetValue },
 		};
 	}
@@ -498,7 +506,7 @@ export class BasicCCReport extends BasicCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};
@@ -509,7 +517,7 @@ export class BasicCCReport extends BasicCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

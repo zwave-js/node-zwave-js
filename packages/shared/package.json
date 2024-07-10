@@ -1,19 +1,20 @@
 {
   "name": "@zwave-js/shared",
-  "version": "12.11.1",
+  "version": "13.0.0-beta.1",
   "description": "zwave-js: shared utilities",
   "keywords": [],
   "publishConfig": {
     "access": "public"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "type": "commonjs",
   "exports": {
     ".": {
+      "@@dev": "./src/index.ts",
       "types": "./build/index.d.ts",
       "default": "./build/index.js"
     },
     "./safe": {
+      "@@dev": "./src/index_safe.ts",
       "types": "./build/index_safe.d.ts",
       "default": "./build/index_safe.js"
     },
@@ -55,15 +56,15 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.43.0",
+    "@microsoft/api-extractor": "^7.47.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.31",
     "@types/sinon": "^17.0.3",
     "ava": "^6.1.2",
     "del-cli": "^5.1.0",
-    "esbuild": "0.20.2",
+    "esbuild": "0.21.5",
     "esbuild-register": "^3.5.0",
     "sinon": "^17.0.1",
-    "typescript": "5.4.4"
+    "typescript": "5.5.3"
   }
 }

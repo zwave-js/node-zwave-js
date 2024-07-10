@@ -58,6 +58,10 @@ jobs:
     - name: Switch to a branch
       run: git switch -c temp
 
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -400,6 +404,10 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
       uses: actions/setup-node@v4
@@ -508,6 +516,10 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
       uses: actions/setup-node@v4
@@ -628,6 +640,10 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
       uses: actions/setup-node@v4
