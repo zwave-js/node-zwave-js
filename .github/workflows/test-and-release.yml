@@ -47,9 +47,7 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
-      run: |
-        # yarn clean $TURBO_FLAGS
-        yarn build $TURBO_FLAGS
+      run: yarn build $TURBO_FLAGS
 
     - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload
@@ -118,8 +116,6 @@ jobs:
   # ===================
 
   lint:
-    needs: [build]
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -129,19 +125,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-    # For linting to succeed, we need to build the eslint plugin first.
-    # Thanks to caching from the previous job, this should be almost a no-op
-    - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS
 
     - name: Run linters
       run: yarn run lint $TURBO_FLAGS
@@ -179,8 +167,6 @@ jobs:
   # ===================
 
   lint-zwave:
-    needs: [build]
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -189,9 +175,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -205,8 +188,6 @@ jobs:
   # ===================
   # Runs unit tests on all supported node versions and OSes
   unit-tests:
-    needs: [build]
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -217,19 +198,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-    # For the partial tests to succeed, we need to build the packages first.
-    # Thanks to caching from the previous job, this should be almost a no-op
-    - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS
 
     # For pull requests, only run tests for changed files
     - name: Run component tests (changes)
@@ -300,8 +273,6 @@ jobs:
       github.ref == 'refs/heads/master' &&
       github.event_name == 'push'
 
-    needs: [build]
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -312,17 +283,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS
 
     - name: Update CC table # (maybe)
       uses: actions/github-script@v7
@@ -343,8 +308,6 @@ jobs:
       github.ref == 'refs/heads/master' &&
       github.event_name == 'push'
 
-    needs: [build]
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -355,17 +318,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Restore Turbo Cache from previous jobs
-      uses: ./.github/actions/build-cache-download
-
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Compile TypeScript code
-      run: yarn build $TURBO_FLAGS
 
     - name: Update overview
       uses: actions/github-script@v7
@@ -386,7 +343,7 @@ jobs:
       github.event_name == 'push' &&
       startsWith(github.ref, 'refs/tags/v')
 
-    needs: [lint, lint-zwave, unit-tests, test-packages]
+    needs: [build, lint, lint-zwave, unit-tests, test-packages]
 
     runs-on: ubuntu-latest
     strategy:
@@ -431,7 +388,7 @@ jobs:
       run: |
         yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
         yarn npm whoami
-        yarn workspaces foreach -vti --no-private npm publish --tolerate-republish $TAG
+        yarn workspaces foreach --all -vti --no-private npm publish --tolerate-republish $TAG
 
 
     - name: Create Github Release

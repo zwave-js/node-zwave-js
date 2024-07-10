@@ -1,18 +1,10 @@
 // tsconfig for IntelliSense - active in all files in the current package
 {
-	"extends": "../../tsconfig.json",
+	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"newLine": "lf",
 		"resolveJsonModule": true
 	},
-	"references": [
-		{
-			"path": "../core"
-		},
-		{
-			"path": "../shared"
-		}
-	],
 	"include": ["src/**/*.ts", "src/**/*.json"],
 	"exclude": ["build/**", "node_modules/**"]
 }

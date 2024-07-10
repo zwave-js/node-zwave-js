@@ -15,7 +15,11 @@ import {
 	securityClassOrder,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -471,10 +475,20 @@ export class VersionCC extends CommandClass {
 				// Remember which CC version this endpoint supports
 				let logMessage: string;
 				if (supportedVersion > 0) {
-					endpoint.addCC(cc, {
-						isSupported: true,
-						version: supportedVersion,
-					});
+					// Basic CC has special rules for when it is considered supported
+					// Therefore we mark all other CCs as supported, but not Basic CC,
+					// for which support is determined later.
+					if (cc === CommandClasses.Basic) {
+						endpoint.addCC(cc, {
+							isControlled: true,
+							version: supportedVersion,
+						});
+					} else {
+						endpoint.addCC(cc, {
+							isSupported: true,
+							version: supportedVersion,
+						});
+					}
 					logMessage = `  supports CC ${CommandClasses[cc]} (${
 						num2hex(cc)
 					}) in version ${supportedVersion}`;
@@ -680,7 +694,7 @@ export class VersionCCReport extends VersionCC {
 		} else {
 			if (!/^\d+\.\d+(\.\d+)?$/.test(options.protocolVersion)) {
 				throw new ZWaveError(
-					`protocolVersion must be a string in the format "major.minor", received "${options.protocolVersion}"`,
+					`protocolVersion must be a string in the format "major.minor" or "major.minor.patch", received "${options.protocolVersion}"`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (
@@ -689,7 +703,7 @@ export class VersionCCReport extends VersionCC {
 				)
 			) {
 				throw new ZWaveError(
-					`firmwareVersions must be an array of strings in the format "major.minor", received "${
+					`firmwareVersions must be an array of strings in the format "major.minor" or "major.minor.patch", received "${
 						JSON.stringify(
 							options.firmwareVersions,
 						)
@@ -748,7 +762,7 @@ export class VersionCCReport extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"library type": getEnumMemberName(
 				ZWaveLibraryTypes,
@@ -761,7 +775,7 @@ export class VersionCCReport extends VersionCC {
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -804,9 +818,9 @@ export class VersionCCCommandClassReport extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				CC: getCCName(this.requestedCC),
 				version: this.ccVersion,
@@ -856,9 +870,9 @@ export class VersionCCCommandClassGet extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -898,9 +912,9 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supports Z-Wave Software Get command":
 					this.supportsZWaveSoftwareGet,
@@ -978,7 +992,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 	@ccValue(VersionCCValues.applicationBuildNumber)
 	public readonly applicationBuildNumber: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"SDK version": this.sdkVersion,
 		};
@@ -1003,7 +1017,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			message["application build number"] = this.applicationBuildNumber;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}

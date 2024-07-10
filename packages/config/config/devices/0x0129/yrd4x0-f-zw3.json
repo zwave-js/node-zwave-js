@@ -1,0 +1,109 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": [
+		{
+			"$if": "productId === 0x49d1",
+			"value": "YRD410-F-ZW3"
+		},
+		{
+			"$if": "productId === 0x49d2",
+			"value": "YRD420-F-ZW3"
+		},
+		{
+			"$if": "productId === 0x49d3",
+			"value": "YRD430-F-ZW3"
+		},
+		{
+			"$if": "productId === 0x49d5",
+			"value": "YRD450-F-ZW3"
+		},
+		"YRD4X0-F-ZW3"
+	],
+	"description": "Assure 2 Biometric Deadbolt",
+	"devices": [
+		// YRD410-F-ZW3 (Keyed Push Button)
+		{
+			"productType": "0x8107",
+			"productId": "0x49d1",
+			"zwaveAllianceId": 4936
+		},
+		// YRD420-F-ZW3 (Keyed Touch Screen)
+		{
+			"productType": "0x8107",
+			"productId": "0x49d2",
+			"zwaveAllianceId": 4929
+		},
+		// YRD430-F-ZW3 (Keyless Push Button)
+		{
+			"productType": "0x8107",
+			"productId": "0x49d3",
+			"zwaveAllianceId": 4934
+		},
+		// YRD450-F-ZW3 (Keyless Touch Screen)
+		{
+			"productType": "0x8107",
+			"productId": "0x49d5",
+			"zwaveAllianceId": 4913
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/yale_template.json#volume",
+			"defaultValue": 1
+		},
+		{
+			"#": "2",
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#auto_relock_time_180"
+		},
+		{
+			"#": "4",
+			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10",
+			"defaultValue": 3
+		},
+		{
+			"#": "7",
+			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_132"
+		},
+		{
+			"#": "8",
+			"$import": "templates/yale_template.json#operating_mode_normal_privacy_passage"
+		},
+		{
+			"#": "11",
+			"$import": "templates/yale_template.json#one_touch",
+			"defaultValue": 255
+		},
+		{
+			"#": "13",
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "18",
+			"$import": "templates/yale_template.json#door_propped_timer_254"
+		},
+		{
+			"#": "19",
+			"$import": "templates/yale_template.json#dps_alarm",
+			"defaultValue": 255
+		},
+		{
+			"#": "28",
+			"$import": "templates/yale_template.json#expiring_pin_lifetime"
+		}
+	],
+	"metadata": {
+		"$import": "templates/yale_template.json#assure2_zw3_metadata",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Remove the inside lever with the lever removal tool.\n2. Remove battery cover using hex wrench provided with lock.\n3. Remove four (4) AA batteries.\n4. Remove the 10-32 x 3/4\" pan head screw from the center of the battery housing into the barrel nut of the outside assembly.\n5. Remove inside escutcheon. Cables may stay connected.\n6. Reinstall batteries \n7. On the back of the PC board, push and hold the Reset Button with the lever removal tool for 3 seconds.\n8. While continuing the press the reset button, temporarily remove one AA battery.\n9. Reinstall the battery\n10. Release reset button and wait 15 seconds. Speaker will announce \"Welcome to Yale\"\n11. Reassemble escutcheon",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=cert_portal/certs/859/YRD420_F_ZW3_MNL_1.pdf"
+	}
+}

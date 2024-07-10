@@ -389,6 +389,7 @@ export type {
 	MeterCCGetOptions,
 	MeterCCReportOptions,
 	MeterCCResetOptions,
+	MeterCCSupportedReportOptions,
 } from "./MeterCC";
 export {
 	MeterCC,

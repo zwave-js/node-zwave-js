@@ -12,6 +12,7 @@ import {
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import type { IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
 import {
+	BasicDeviceClass,
 	CacheBackedMap,
 	type CommandClassInfo,
 	CommandClasses,
@@ -21,7 +22,7 @@ import {
 	actuatorCCs,
 	getCCName,
 } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
@@ -176,57 +177,19 @@ export class Endpoint implements IZWaveEndpoint {
 		return !!this._implementedCommandClasses.get(cc)?.isControlled;
 	}
 
-	/** Checks if this device type is allowed to support Basic CC per the specification */
+	/**
+	 * Checks if this endpoint is allowed to support Basic CC per the specification.
+	 * This depends on the device type and the other supported CCs
+	 */
 	public maySupportBasicCC(): boolean {
+		// Basic CC must not be offered if any other actuator CC is supported
+		if (actuatorCCs.some((cc) => this.supportsCC(cc))) {
+			return false;
+		}
+		// ...or the device class forbids it
 		return this.deviceClass?.specific.maySupportBasicCC
 			?? this.deviceClass?.generic.maySupportBasicCC
 			?? true;
-	}
-
-	/** Adds Basic CC to the supported CCs if no other actuator CCs are supported */
-	public maybeAddBasicCCAsFallback(): void {
-		if (
-			!this.supportsCC(CommandClasses.Basic)
-			&& this.maySupportBasicCC()
-			&& !actuatorCCs.some((cc) => this.supportsCC(cc))
-		) {
-			this.addCC(CommandClasses.Basic, { isSupported: true });
-		}
-	}
-
-	/** Removes the BasicCC from the supported CCs if the device type forbids it */
-	public removeBasicCCSupportIfForbidden(): void {
-		if (
-			this.supportsCC(CommandClasses.Basic)
-			&& !this.maySupportBasicCC()
-		) {
-			// We assume that the device reports support for this CC in error, and that it actually controls it.
-			// TODO: Consider if we should check additional sources, like the issued commands in AGI CC
-			this.addCC(CommandClasses.Basic, {
-				isSupported: false,
-				isControlled: true,
-			});
-		}
-	}
-
-	/** Removes the BasicCC from the supported CCs if any other actuator CCs are supported */
-	public hideBasicCCInFavorOfActuatorCCs(): void {
-		// This behavior is defined in SDS14223
-		if (
-			this.supportsCC(CommandClasses.Basic)
-			&& actuatorCCs.some((cc) => this.supportsCC(cc))
-		) {
-			// Mark the CC as not supported, but remember if it is controlled
-			this.addCC(CommandClasses.Basic, { isSupported: false });
-
-			// If the record is now only a dummy, remove the CC entirely
-			if (
-				!this.supportsCC(CommandClasses.Basic)
-				&& !this.controlsCC(CommandClasses.Basic)
-			) {
-				this.removeCC(CommandClasses.Basic);
-			}
-		}
 	}
 
 	/** Determines if support for a CC was force-removed via config file */
@@ -311,7 +274,7 @@ export class Endpoint implements IZWaveEndpoint {
 			.filter((cc) => this.supportsCC(cc))
 			// Filter out CCs we don't implement
 			.map((cc) => this.createCCInstance(cc))
-			.filter((instance) => !!instance) as CommandClass[];
+			.filter((instance) => !!instance);
 		// For endpoint interviews, we skip some CCs
 		if (this.index > 0) {
 			supportedCCInstances = supportedCCInstances.filter(
@@ -504,8 +467,11 @@ export class Endpoint implements IZWaveEndpoint {
 		if (this.deviceClass) {
 			ret.deviceClass = {
 				basic: {
-					key: this.deviceClass.basic.key,
-					label: this.deviceClass.basic.label,
+					key: this.deviceClass.basic,
+					label: getEnumMemberName(
+						BasicDeviceClass,
+						this.deviceClass.basic,
+					),
 				},
 				generic: {
 					key: this.deviceClass.generic.key,
