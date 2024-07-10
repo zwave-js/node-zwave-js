@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "18",
-			"$import": "templates/yale_template.json#door_propped_timer_255"
+			"$import": "templates/yale_template.json#door_propped_timer_254"
 		},
 		{
 			"#": "19",
@@ -103,6 +103,7 @@
 	],
 	"metadata": {
 		"$import": "templates/yale_template.json#assure2_zw3_metadata",
-		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Remove the inside lever with the lever removal tool.\n2. Remove battery cover using hex wrench provided with lock.\n3. Remove four (4) AA batteries.\n4. Remove the 10-32 x 3/4\" pan head screw from the center of the battery housing into the barrel nut of the outside assembly.\n5. Remove inside escutcheon. Cables may stay connected.\n6. Reinstall batteries \n7. On the back of the PC board, push and hold the Reset Button with the lever removal tool for 3 seconds.\n8. While continuing the press the reset button, temporarily remove one AA battery.\n9. Reinstall the battery\n10. Release reset button and wait 15 seconds. Speaker will announce \"Welcome to Yale\"\n11. Reassemble escutcheon"
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1. Remove the inside lever with the lever removal tool.\n2. Remove battery cover using hex wrench provided with lock.\n3. Remove four (4) AA batteries.\n4. Remove the 10-32 x 3/4\" pan head screw from the center of the battery housing into the barrel nut of the outside assembly.\n5. Remove inside escutcheon. Cables may stay connected.\n6. Reinstall batteries \n7. On the back of the PC board, push and hold the Reset Button with the lever removal tool for 3 seconds.\n8. While continuing the press the reset button, temporarily remove one AA battery.\n9. Reinstall the battery\n10. Release reset button and wait 15 seconds. Speaker will announce \"Welcome to Yale\"\n11. Reassemble escutcheon",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=cert_portal/certs/859/YRD420_F_ZW3_MNL_1.pdf"
 	}
 }
