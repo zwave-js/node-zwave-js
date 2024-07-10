@@ -1,7 +1,26 @@
+// The firmware versions on this device are a mess. Firmwares in one column are the same feature-wise
+// Features:   (a)    (b)          (c)     (d)
+// Revision 1: 1.3 -> 1.5       -> 1.11
+// Revision 2:        2.0 = 2.1 -> 2.11
+// Revision 3:              3.0 -> 3.10 -> 3.20
+// 800LR:                                  4.10
+
+// Conditionals:
+// (b):   firmwareVersion >= 1.5
+// (c):   firmwareVersion >= 1.11 && firmwareVersion < 2.0 || firmwareVersion >= 2.11 && firmwareVersion < 3.0 || firmwareVersion >= 3.10
+// (d):   firmwareVersion >= 3.20
+// 800LR: firmwareVersion >= 4.10
+
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN30",
+	"label": [
+		{
+			"$if": "firmwareVersion >= 4.10",
+			"value": "ZEN30 800LR"
+		},
+		"ZEN30"
+	],
 	"description": "Dimmer & Dry Contact Relay",
 	"devices": [
 		{
@@ -132,10 +151,34 @@
 				}
 			]
 		},
+		// Ramp Rate Control
+		{
+			// This parameter was changed in firmware 3.20 and split into parameters 13, 31, 32, and 33
+			"#": "13",
+			"$if": "firmwareVersion >= 3.20",
+			"$import": "templates/zooz_template.json#dimmer_on_ramp_rate"
+		},
 		{
 			"#": "13",
+			"$if": "firmwareVersion < 3.20",
 			"$import": "templates/zooz_template.json#dimmer_ramp_rate",
-			"defaultValue": 1
+			"label": "Ramp Rate On/Off (Both Zwave and Manual)"
+		},
+		{
+			"#": "31",
+			"$if": "firmwareVersion >= 3.20",
+			"$import": "templates/zooz_template.json#dimmer_off_ramp_rate",
+			"defaultValue": 2
+		},
+		{
+			"#": "32",
+			"$if": "firmwareVersion >= 3.20",
+			"$import": "templates/zooz_template.json#zwave_on_dimmer_ramp_rate_match_manual_255"
+		},
+		{
+			"#": "33",
+			"$if": "firmwareVersion >= 3.20",
+			"$import": "templates/zooz_template.json#zwave_off_dimmer_ramp_rate_match_manual_255"
 		},
 		{
 			"#": "14",
@@ -147,6 +190,12 @@
 		},
 		{
 			"#": "17",
+			"$if": "firmwareVersion >= 3.20",
+			"$import": "templates/zooz_template.json#zen7x_double_tap_up_behavior"
+		},
+		{
+			"#": "17",
+			"$if": "firmwareVersion < 3.20",
 			"label": "Double Tap Function for Dimmer",
 			"description": "Brightness level after double-tapping the upper paddle.",
 			"valueSize": 1,
@@ -165,6 +214,12 @@
 		},
 		{
 			"#": "18",
+			"$if": "firmwareVersion >= 3.20",
+			"$import": "templates/zooz_template.json#single_tap_up_behavior"
+		},
+		{
+			"#": "18",
+			"$if": "firmwareVersion < 3.20",
 			"label": "Enable/Disable Double-Tap for Dimmer",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -187,14 +242,12 @@
 		{
 			"#": "19",
 			"$import": "~/templates/master_template.json#smart_switch_mode_0-2",
-			"label": "Enable/Disable Load Control for Dimmer",
-			"defaultValue": 1
+			"label": "Enable/Disable Load Control for Dimmer"
 		},
 		{
 			"#": "20",
 			"$import": "~/templates/master_template.json#smart_switch_mode_0-2",
-			"label": "Enable/Disable Load Control for Relay",
-			"defaultValue": 1
+			"label": "Enable/Disable Load Control for Relay"
 		},
 		{
 			"#": "21",
@@ -216,47 +269,46 @@
 		},
 		{
 			"#": "24",
-			"$if": "firmwareVersion >= 1.4",
+			"$if": "firmwareVersion >= 1.5",
 			"$import": "templates/zooz_template.json#smart_switch_mode_reporting",
 			"label": "Dimmer Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable dimmer reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled."
 		},
 		{
 			"#": "25",
-			"$if": "firmwareVersion >= 1.4",
+			"$if": "firmwareVersion >= 1.5",
 			"$import": "templates/zooz_template.json#smart_switch_mode_reporting",
 			"label": "Relay Reporting Behavior When Physical Control Is Disabled",
-			"description": "Enable or disable relay reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
-			"defaultValue": 0
+			"description": "Enable or disable relay reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled."
 		},
 		{
 			"#": "26",
-			"$if": "firmwareVersion >= 1.4",
+			"$if": "firmwareVersion >= 1.5",
 			"$import": "templates/zooz_template.json#night_light_mode",
 			"defaultValue": 0
 		},
 		{
 			"#": "27",
-			"$if": "firmwareVersion >= 1.4",
+			"$if": "firmwareVersion >= 1.5",
 			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
 		{
 			"#": "28",
-			"$if": "firmwareVersion >= 1.2",
+			"$if": "firmwareVersion >= 1.11 && firmwareVersion < 2.0 || firmwareVersion >= 2.11 && firmwareVersion < 3.0 || firmwareVersion >= 3.10",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene Control (Dimmer)",
 			"defaultValue": 1
 		},
 		{
 			"#": "29",
-			"$if": "firmwareVersion >= 1.2",
+			"$if": "firmwareVersion >= 1.11 && firmwareVersion < 2.0 || firmwareVersion >= 2.11 && firmwareVersion < 3.0 || firmwareVersion >= 3.10",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene Control (Relay)",
 			"defaultValue": 1
 		},
 		{
 			"#": "30",
-			"$if": "firmwareVersion >= 1.2",
+			"$if": "firmwareVersion >= 1.11 && firmwareVersion < 2.0 || firmwareVersion >= 2.11 && firmwareVersion < 3.0 || firmwareVersion >= 3.10",
 			"$import": "templates/zooz_template.json#local_programming"
 		}
 	],
