@@ -30,7 +30,7 @@
 			"description": "Device will wakeup once after the configured delay",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
 			"options": [
