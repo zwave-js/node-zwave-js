@@ -111,7 +111,7 @@
 		],
 		"overrideQueries": {
 			// The lock reports support for 250 lock codes, but slot 251 is
-			// the master code which isn't available otherwise in CC version 1.
+			// the admin code which isn't available otherwise in CC version 1.
 			"User Code": [
 				{
 					"method": "getUsersCount",
