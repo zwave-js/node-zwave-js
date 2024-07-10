@@ -26,7 +26,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -587,7 +591,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
-		let values: ReadonlyMap<number, ConfigValue>;
+		let values: ReadonlyMap<number, ConfigValue> | undefined;
 
 		// If the parameters are consecutive, we may use BulkGet
 		const distinctParameters = distinct(options.map((o) => o.parameter));
@@ -636,7 +640,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Combine the returned values with the requested ones
 		const cc = createConfigurationCCInstance(this.applHost, this.endpoint);
 		return options.map((o) => {
-			let value = values.get(o.parameter);
+			let value = values?.get(o.parameter);
 			if (typeof value === "number" && o.bitMask) {
 				const paramInfo = cc.getParamInformation(
 					this.applHost,
@@ -1262,7 +1266,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			const parameters = distinct(
 				this.getDefinedValueIDs(applHost)
 					.map((v) => v.property)
-					.filter((p): p is number => typeof p === "number"),
+					.filter((p) => typeof p === "number"),
 			);
 			for (const param of parameters) {
 				if (
@@ -1386,7 +1390,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const parameters = distinct(
 			this.getDefinedValueIDs(applHost)
 				.map((v) => v.property)
-				.filter((p): p is number => typeof p === "number"),
+				.filter((p) => typeof p === "number"),
 		);
 		return composeObject(
 			parameters.map((p) => [
@@ -1739,9 +1743,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"parameter #": this.parameter,
 				"value size": this.valueSize,
@@ -1798,9 +1802,9 @@ export class ConfigurationCCGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -1922,7 +1926,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this.parameter,
 			"reset to default": this.resetToDefault,
@@ -1940,7 +1944,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			message.value = configValueToString(this.value);
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -2086,7 +2090,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			handshake: this.handshake,
 			"reset to default": this.resetToDefault,
@@ -2105,7 +2109,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -2214,7 +2218,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		return this._values;
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"handshake response": this._isHandshakeResponse,
 			"default values": this._defaultValues,
@@ -2230,7 +2234,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -2280,9 +2284,9 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { parameters: this.parameters.join(", ") },
 		};
 	}
@@ -2391,9 +2395,9 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 			.reduce((prev, cur) => prev + cur, "");
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"parameter #": this.parameter,
 				name: this.name,
@@ -2427,9 +2431,9 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -2551,9 +2555,9 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 			.reduce((prev, cur) => prev + cur, "");
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"parameter #": this.parameter,
 				info: this.info,
@@ -2587,9 +2591,9 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -2807,7 +2811,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		this.payload = Buffer.allocUnsafe(
 			3 // preamble
 				+ 3 * this.valueSize // min, max, default value
-				+ 2, // next parameter
+				+ 2 // next parameter
+				+ 1, // options2
 		);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		const options1 = (this.altersCapabilities ? 0b1000_0000 : 0)
@@ -2844,20 +2849,16 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			offset += this.valueSize;
 		}
 		this.payload.writeUInt16BE(this.nextParameter, offset);
+		offset += 2;
 
-		if (this.version >= 4) {
-			const options2 = (this.isAdvanced ? 0b1 : 0)
-				| (this.noBulkSupport ? 0b10 : 0);
-			this.payload = Buffer.concat([
-				this.payload,
-				Buffer.from([options2]),
-			]);
-		}
+		const options2 = (this.isAdvanced ? 0b1 : 0)
+			| (this.noBulkSupport ? 0b10 : 0);
+		this.payload[offset] = options2;
 
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this.parameter,
 			"next param #": this.nextParameter,
@@ -2889,7 +2890,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			message["bulk support"] = !this.noBulkSupport;
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -2919,9 +2920,9 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "parameter #": this.parameter },
 		};
 	}

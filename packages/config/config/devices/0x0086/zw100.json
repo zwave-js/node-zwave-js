@@ -567,7 +567,7 @@
 	],
 	"compat": {
 		// In the default configuration this device sends Basic CC Sets instead of Binary Sensor Reports
-		"enableBasicSetMapping": true,
+		"mapBasicSet": "Binary Sensor",
 		// Querying some values can take a bit longer if certain reports are disabled
 		"reportTimeout": 2000
 	},

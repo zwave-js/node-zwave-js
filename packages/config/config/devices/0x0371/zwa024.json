@@ -5,6 +5,10 @@
 	"description": "MultiSensor 7",
 	"devices": [
 		{
+			"productType": "0x0202",
+			"productId": "0x0018"
+		},
+		{
 			"productType": "0x0102",
 			"productId": "0x0018",
 			"zwaveAllianceId": 4088

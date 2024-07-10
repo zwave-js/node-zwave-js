@@ -50,15 +50,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true,
-		"commandClasses": {
-			"remove": {
-				"Supervision": {
-					// The device does not support supervision although it is mandatory for the device type
-					"endpoints": "*"
-				}
-			}
-		}
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press and release the top or bottom of the smart fan control switch (rocker) to include it in the network.\n3. Once your controller has confirmed the device has been included, refresh the Z-Wave network to optimize performance",

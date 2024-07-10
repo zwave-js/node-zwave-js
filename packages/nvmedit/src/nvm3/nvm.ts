@@ -1,8 +1,11 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { pick } from "@zwave-js/shared/safe";
+import { ApplicationVersionFile800ID } from "../files";
 import {
-	FLASH_MAX_PAGE_SIZE,
+	FLASH_MAX_PAGE_SIZE_700,
+	FLASH_MAX_PAGE_SIZE_800,
 	NVM3_COUNTER_SIZE,
+	NVM3_OBJ_HEADER_SIZE_LARGE,
 	NVM3_OBJ_HEADER_SIZE_SMALL,
 	NVM3_PAGE_HEADER_SIZE,
 	NVM3_WORD_SIZE,
@@ -11,6 +14,7 @@ import {
 	PageWriteSize,
 	ZWAVE_APPLICATION_NVM_SIZE,
 	ZWAVE_PROTOCOL_NVM_SIZE,
+	ZWAVE_SHARED_NVM_SIZE,
 } from "./consts";
 import {
 	type NVM3Object,
@@ -30,6 +34,7 @@ function comparePages(p1: NVM3Page, p2: NVM3Page) {
 }
 
 export interface NVMMeta {
+	sharedFileSystem: boolean;
 	pageSize: number;
 	deviceFamily: number;
 	writeSize: PageWriteSize;
@@ -63,12 +68,27 @@ export function parseNVM(
 		offset += bytesRead;
 	}
 
-	const applicationPages = pages.filter(
-		(p) => p.header.offset < ZWAVE_APPLICATION_NVM_SIZE,
+	// 800 series has a shared NVM for protocol and application data.
+	// We can distinguish between the two, because the application version is stored in a different file ID
+
+	const isSharedFileSystem = pages.some(
+		(p) => p.objects.some((o) => o.key === ApplicationVersionFile800ID),
 	);
-	const protocolPages = pages.filter(
-		(p) => p.header.offset >= ZWAVE_APPLICATION_NVM_SIZE,
-	);
+	// By convention, we only use the applicationPages in that case
+	let applicationPages: NVM3Page[];
+	let protocolPages: NVM3Page[];
+
+	if (isSharedFileSystem) {
+		applicationPages = pages;
+		protocolPages = [];
+	} else {
+		applicationPages = pages.filter(
+			(p) => p.header.offset < ZWAVE_APPLICATION_NVM_SIZE,
+		);
+		protocolPages = pages.filter(
+			(p) => p.header.offset >= ZWAVE_APPLICATION_NVM_SIZE,
+		);
+	}
 
 	// The pages are written in a ring buffer, find the one with the lowest erase count and start reading from there in order
 	applicationPages.sort(comparePages);
@@ -121,9 +141,12 @@ export function encodeNVM(
 		writeSize = PageWriteSize.WRITE_SIZE_16,
 		memoryMapped = true,
 	} = options ?? {};
+	const maxPageSize = options?.sharedFileSystem
+		? FLASH_MAX_PAGE_SIZE_800
+		: FLASH_MAX_PAGE_SIZE_700;
 	const pageSize = Math.min(
-		options?.pageSize ?? FLASH_MAX_PAGE_SIZE,
-		FLASH_MAX_PAGE_SIZE,
+		options?.pageSize ?? maxPageSize,
+		maxPageSize,
 	);
 
 	const createEmptyPage = (): Buffer => {
@@ -140,16 +163,6 @@ export function encodeNVM(
 		}).copy(ret, 0);
 		return ret;
 	};
-
-	const applicationPages: Buffer[] = [];
-	for (let i = 0; i < ZWAVE_APPLICATION_NVM_SIZE / pageSize; i++) {
-		applicationPages.push(createEmptyPage());
-	}
-
-	const protocolPages: Buffer[] = [];
-	for (let i = 0; i < ZWAVE_PROTOCOL_NVM_SIZE / pageSize; i++) {
-		protocolPages.push(createEmptyPage());
-	}
 
 	const writeObjects = (
 		pages: Buffer[],
@@ -200,6 +213,11 @@ export function encodeNVM(
 				|| obj.type === ObjectType.DataLarge
 			) {
 				// Large objects may be fragmented
+
+				// We need to start a new page, if the remaining space is not enough for
+				// the object header plus additional data
+				if (remainingSpace <= NVM3_OBJ_HEADER_SIZE_LARGE) nextPage();
+
 				fragments = fragmentLargeObject(
 					obj as any,
 					remainingSpace,
@@ -219,17 +237,45 @@ export function encodeNVM(
 		}
 	};
 
-	writeObjects(applicationPages, applicationObjects);
-	writeObjects(protocolPages, protocolObjects);
+	if (options?.sharedFileSystem) {
+		const pages: Buffer[] = [];
+		for (let i = 0; i < ZWAVE_SHARED_NVM_SIZE / pageSize; i++) {
+			pages.push(createEmptyPage());
+		}
 
-	return Buffer.concat([...applicationPages, ...protocolPages]);
+		const objects = new Map([
+			...applicationObjects,
+			...protocolObjects,
+		]);
+		writeObjects(pages, objects);
+
+		return Buffer.concat(pages);
+	} else {
+		const applicationPages: Buffer[] = [];
+		for (let i = 0; i < ZWAVE_APPLICATION_NVM_SIZE / pageSize; i++) {
+			applicationPages.push(createEmptyPage());
+		}
+
+		const protocolPages: Buffer[] = [];
+		for (let i = 0; i < ZWAVE_PROTOCOL_NVM_SIZE / pageSize; i++) {
+			protocolPages.push(createEmptyPage());
+		}
+
+		writeObjects(applicationPages, applicationObjects);
+		writeObjects(protocolPages, protocolObjects);
+
+		return Buffer.concat([...applicationPages, ...protocolPages]);
+	}
 }
 
-export function getNVMMeta(page: NVM3Page): NVMMeta {
-	return pick(page.header, [
-		"pageSize",
-		"writeSize",
-		"memoryMapped",
-		"deviceFamily",
-	]);
+export function getNVMMeta(page: NVM3Page, sharedFileSystem: boolean): NVMMeta {
+	return {
+		sharedFileSystem,
+		...pick(page.header, [
+			"pageSize",
+			"writeSize",
+			"memoryMapped",
+			"deviceFamily",
+		]),
+	};
 }

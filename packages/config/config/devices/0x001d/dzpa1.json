@@ -27,7 +27,7 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#locator_led"
+			"$import": "templates/leviton_template.json#locator_led"
 		}
 	]
 }

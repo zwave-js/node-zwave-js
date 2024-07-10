@@ -1,0 +1,70 @@
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "4SS1S80EN0",
+	"description": "Ring Smoke/CO Listener",
+	"devices": [
+		{
+			"productType": "0x0601",
+			"productId": "0x0101",
+			"zwaveAllianceId": 3161
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Battery Report Interval",
+			"description": "Allowable range: 255-4200 in increments of 255.",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 255,
+			"maxValue": 4200,
+			"defaultValue": 4200
+		},
+		{
+			"#": "2",
+			"label": "Listening Mode",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Smoke detector siren only",
+					"value": 1
+				},
+				{
+					"label": "Smoke & CO detector sirens",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Test Mode",
+			"description": "Disabled automatically after 15 minutes of inactivity",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cancel / Idle",
+					"value": 0
+				},
+				{
+					"label": "Start",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Inclusion Instructions -\nBegin the setup process near your Ring Alarm Base Station.\nIn the Ring app, tap Set Up a Device. Choose Security Devices, then Sensors, then Ring Smoke/CO Listener, then tap Add Device.To complete the setup process, follow the in-app instructions.\n\nWhen prompted, scan the QR Code or enter the PIN.\nThis begins the pairing process. The QR Code and PIN are on the back of your Listener and in the product packaging.\n\nWhen prompted, pull out the clear tab.\nThis turns the Listener on. Your Alarm Base Station then finds it automatically.\nAs the Listener pairs to your Alarm Base Station, its LED ring blinks slowly, then quickly. Once it pairs, the LED glows blue for three seconds.",
+		"exclusion": "Exclusion Instructions - \nto remove Ring Smoke/CO Listener from your system:\nOpen the side menu in the Ring app and tap Devices, then Base Station. Next, select your Listener and tap the gear- shaped icon. Then tap Remove Device.\nWhen prompted, open the Listener and remove and reinstall the battery to complete the removal.",
+		"reset": "Reset Instructions -\nTo factory reset, press and hold the Setup button for 10 seconds. When the LED ring stops blinking, your Listener has reset.\nThis process disconnects the Listener from Ring Alarm. To begin using the Listener again, repeat the setup process in the Ring app.\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3161/Ring Smoke-CO Listerner Zwave Manual.pdf"
+	}
+}

@@ -6,15 +6,21 @@
 // 800LR:                                  4.10
 
 // Conditionals:
-// (b): firmwareVersion >= 1.5
-// (c): firmwareVersion >= 1.11 && firmwareVersion < 2.0 || firmwareVersion >= 2.11 && firmwareVersion < 3.0 || firmwareVersion >= 3.10
-// (d): firmwareVersion >= 3.20
-// 800: firmwareVersion >= 4.10
+// (b):   firmwareVersion >= 1.5
+// (c):   firmwareVersion >= 1.11 && firmwareVersion < 2.0 || firmwareVersion >= 2.11 && firmwareVersion < 3.0 || firmwareVersion >= 3.10
+// (d):   firmwareVersion >= 3.20
+// 800LR: firmwareVersion >= 4.10
 
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN30",
+	"label": [
+		{
+			"$if": "firmwareVersion >= 4.10",
+			"value": "ZEN30 800LR"
+		},
+		"ZEN30"
+	],
 	"description": "Dimmer & Dry Contact Relay",
 	"devices": [
 		{
@@ -82,22 +88,22 @@
 		},
 		{
 			"#": "8",
-			"$import": "templates/zooz_template.json#auto_timer_base_0x_3x_7x",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x",
 			"label": "Auto Turn-Off Timer for Dimmer"
 		},
 		{
 			"#": "9",
-			"$import": "templates/zooz_template.json#auto_timer_base_0x_3x_7x",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x",
 			"label": "Auto Turn-On Timer for Dimmer"
 		},
 		{
 			"#": "10",
-			"$import": "templates/zooz_template.json#auto_timer_base_0x_3x_7x",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x",
 			"label": "Auto Turn-Off Timer for Relay"
 		},
 		{
 			"#": "11",
-			"$import": "templates/zooz_template.json#auto_timer_base_0x_3x_7x",
+			"$import": "templates/zooz_template.json#auto_timer_base_0x_1x_3x_7x",
 			"label": "Auto Turn-On Timer for Relay"
 		},
 		{
@@ -306,12 +312,16 @@
 			"$import": "templates/zooz_template.json#local_programming"
 		}
 	],
-	"compat": {
-		// This device exposes a Multilevel Switch (Dimmer) on endpoint 0, and a Binary Switch (Relay) on endpoint 1
-		// Our heuristic currently detects endpoint 1 as unnecessary and hides it from the user.
-		"preserveEndpoints": "*",
-		"preserveRootApplicationCCValueIDs": true
-	},
+	"compat": [
+		{
+			// This device exposes a Multilevel Switch (Dimmer) on endpoint 0, and a Binary Switch (Relay) on endpoint 1
+			// Our heuristic currently detects endpoint 1 as unnecessary and hides it from the user.
+			// This problem is fixed in the 800 series version of the device (firmwareVersion >= 4.0)
+			"$if": "firmwareVersion < 4.0",
+			"preserveEndpoints": "*",
+			"preserveRootApplicationCCValueIDs": true
+		}
+	],
 	"metadata": {
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Finalize inclusion at the switch. Tap the upper paddle of the dimmer 3 times quickly. The LED indicators will blink to signal communication and remain on for 2 seconds to confirm inclusion",
 		"exclusion": "Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode \n3. Tap the lower paddle on the dimmer 3 times quickly\n4. Your hub will confirm exclusion and the device will disappear from your\ncontroller's device list",

@@ -12,12 +12,14 @@ process.on("unhandledRejection", (_r) => {
 
 // const port = "tcp://Z-Net-R2v2.local:2001";
 // 500/700 series
-const port = require("node:os").platform() === "win32"
-	? "COM5"
-	: "/dev/ttyACM0";
+// const port = require("node:os").platform() === "win32"
+// 	? "COM5"
+// 	: "/dev/ttyACM0";
 // const port = require("os").platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 // 800 series
-// const port = require("node:os").platform() === "win32" ? "COM5" : "/dev/serial/by-id/usb-1a86_USB_Single_Serial_5479014030-if00";
+const port = require("node:os").platform() === "win32"
+	? "COM5"
+	: "/dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00";
 
 const driver = new Driver(port, {
 	// logConfig: {
@@ -27,7 +29,6 @@ const driver = new Driver(port, {
 	// testingHooks: {
 	// 	skipNodeInterview: true,
 	// },
-	enableSoftReset: false,
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(
@@ -43,6 +44,19 @@ const driver = new Driver(port, {
 			"hex",
 		),
 	},
+	securityKeysLongRange: {
+		S2_Authenticated: Buffer.from(
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			"hex",
+		),
+		S2_AccessControl: Buffer.from(
+			"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+			"hex",
+		),
+	},
+	rf: {
+		preferLRRegion: false,
+	},
 	storage: {
 		cacheDir: path.join(__dirname, "cache"),
 		lockDir: path.join(__dirname, "cache/locks"),
@@ -52,15 +66,6 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-		await wait(10000);
-		console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-		console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-		console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-		console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-
-		await driver["writeSerial"](Buffer.from("010800130201002503c1", "hex"));
-		await wait(3);
-		await driver["writeSerial"](Buffer.from("01030016ea", "hex"));
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader

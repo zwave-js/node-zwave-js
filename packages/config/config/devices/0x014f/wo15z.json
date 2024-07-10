@@ -20,7 +20,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "Put the controller in to INCLUDE mode. Press the button on the unit once.",

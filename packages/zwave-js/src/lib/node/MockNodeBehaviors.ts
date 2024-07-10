@@ -28,9 +28,11 @@ import {
 
 import { CommandClasses } from "@zwave-js/core";
 import { BasicCCBehaviors } from "./mockCCBehaviors/Basic";
+import { BinarySensorCCBehaviors } from "./mockCCBehaviors/BinarySensor";
 import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
 import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
+import { MeterCCBehaviors } from "./mockCCBehaviors/Meter";
 import { MultilevelSensorCCBehaviors } from "./mockCCBehaviors/MultilevelSensor";
 import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
@@ -51,6 +53,9 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 				nodeId: self.id,
 				...self.capabilities,
 				supportedCCs: [...self.implementedCCs]
+					// Basic CC must not be included in the NIF
+					.filter(([ccId]) => ccId !== CommandClasses.Basic)
+					// Only include supported CCs
 					.filter(([, info]) => info.isSupported)
 					.map(([ccId]) => ccId),
 			});
@@ -291,9 +296,11 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		respondToS2ZWavePlusCCGet,
 
 		...BasicCCBehaviors,
+		...BinarySensorCCBehaviors,
 		...ConfigurationCCBehaviors,
 		...EnergyProductionCCBehaviors,
 		...ManufacturerSpecificCCBehaviors,
+		...MeterCCBehaviors,
 		...MultilevelSensorCCBehaviors,
 		...NotificationCCBehaviors,
 		...ScheduleEntryLockCCBehaviors,

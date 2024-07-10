@@ -2,8 +2,7 @@
 
 If you need to test changes from GitHub, e.g. a branch that fixes an issue you have, here's what you need to do:
 
-1. **This repo uses `yarn v2` workspaces**, so make sure you have `yarn` installed.
-   \
+1. **This repo uses `yarn v2` workspaces**, so make sure you have `yarn` installed.\
    If not: `npm i -g yarn`
 1. Clone and open this repo, check out the branch:
    ```bash

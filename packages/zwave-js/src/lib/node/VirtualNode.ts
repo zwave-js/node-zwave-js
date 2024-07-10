@@ -176,11 +176,6 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 				options,
 			);
 
-			// api.setValue could technically return a SupervisionResult
-			// but supervision isn't used for multicast / broadcast
-
-			// FIXME: It just may for S2 multicast
-
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value
 				// for each node that was affected by this command
@@ -306,7 +301,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		const exposedEndpoints = distinct(
 			[...ret.values()]
 				.map((v) => v.endpoint)
-				.filter((e): e is number => e !== undefined),
+				.filter((e) => e !== undefined),
 		);
 		for (const endpoint of exposedEndpoints) {
 			// TODO: This should be defined in the Basic CC file

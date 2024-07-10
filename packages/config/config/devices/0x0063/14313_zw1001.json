@@ -37,7 +37,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-wave certified\ncontroller to include a device to the Z-wave network.\n2. Once the controller is ready to include your device, press and\nrelease the Program Button to include it in the network.\n3. Once your controller has confirmed that the device has been\nincluded, refresh the Z-wave network to optimize performance",

@@ -1,4 +1,5 @@
 import {
+	AssociationCheckResult,
 	AssociationGroupInfoCCValues,
 	BasicCommand,
 	utils as ccUtils,
@@ -80,9 +81,10 @@ test("associations between insecure nodes are allowed", (t) => {
 		commands,
 	);
 
-	t.true(
-		ccUtils.isAssociationAllowed(host, node2, groupId, {
+	t.is(
+		ccUtils.checkAssociation(host, node2, groupId, {
 			nodeId: 3,
 		}),
+		AssociationCheckResult.OK,
 	);
 });

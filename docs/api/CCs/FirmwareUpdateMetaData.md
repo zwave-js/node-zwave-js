@@ -12,6 +12,14 @@ async getMetaData(): Promise<MaybeNotKnown<FirmwareUpdateMetaData>>;
 
 Requests information about the current firmware on the device.
 
+### `reportMetaData`
+
+```ts
+async reportMetaData(
+	options: FirmwareUpdateMetaDataCCMetaDataReportOptions,
+): Promise<void>;
+```
+
 ### `requestUpdate`
 
 ```ts

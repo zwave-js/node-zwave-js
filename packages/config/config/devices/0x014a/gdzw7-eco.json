@@ -1,0 +1,78 @@
+{
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "GDZW7-ECO",
+	"description": "Garage Door Controller",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x4731",
+			"zwaveAllianceId": 4475
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Unattended Close Wait Period",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 60,
+			"defaultValue": 5
+		},
+		{
+			"#": "2",
+			"label": "Relay Turn On Duration",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 100,
+			"maxValue": 5000,
+			"defaultValue": 2000
+		},
+		{
+			"#": "3",
+			"label": "Door Open Timeout",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 60,
+			"defaultValue": 30
+		},
+		{
+			"#": "4",
+			"label": "Door Close Timeout",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 60,
+			"defaultValue": 30
+		},
+		{
+			"#": "5",
+			"label": "Accelerometer Sensitivity",
+			"description": "1 is least sensitive, 100 is most sensitive.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 26
+		},
+		{
+			"#": "6",
+			"label": "Application-Level Retries",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions of the Z-Wave controller to put the Z-Wave controller into manual or classic Z-Wave inclusion mode.\n2. Locate and press the hub button on the device.\n3. When it is successfully added, the device will beep and blink green once.",
+		"exclusion": "1. Follow the Z-Wave controller's instructions on putting the Z-Wave controller into removal/exclusion mode.\n2. Locate and press the hub button.\n3. Device's status indicator will blink red and beep three times to indicate successful removal",
+		"reset": "Hold the reset button down for ten seconds. The status indicator will blink red while the reset button is pressed and will go out after ten seconds.\nThe device's status indicator will turn green when the reset operation is complete.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=cert_portal/certs/74/GarageDoorControllerUserManualV3.pdf"
+	}
+}

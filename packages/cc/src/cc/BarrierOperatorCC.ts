@@ -14,8 +14,17 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
+import {
+	getEnumMemberName,
+	isEnumMember,
+	noop,
+	pick,
+} from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -449,6 +458,25 @@ export class BarrierOperatorCC extends CommandClass {
 				}`,
 				direction: "inbound",
 			});
+
+			// Enable all supported subsystems
+			for (const subsystemType of resp) {
+				// Some devices report invalid subsystem types, but the CC API checks
+				// for valid values and throws otherwise.
+				if (!isEnumMember(SubsystemType, subsystemType)) continue;
+
+				applHost.controllerLog.logNode(node.id, {
+					message: `Enabling subsystem ${
+						getEnumMemberName(
+							SubsystemType,
+							subsystemType,
+						)
+					}...`,
+					direction: "outbound",
+				});
+				await api.setEventSignaling(subsystemType, SubsystemState.On)
+					.catch(noop);
+			}
 		}
 
 		await this.refreshValues(applHost);
@@ -541,9 +569,9 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "target state": this.targetState },
 		};
 	}
@@ -593,9 +621,9 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	@ccValue(BarrierOperatorCCValues.position)
 	public readonly position: MaybeUnknown<number>;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"barrier position": maybeUnknownToString(this.position),
 				"barrier state": this.currentState != undefined
@@ -629,9 +657,9 @@ export class BarrierOperatorCCSignalingCapabilitiesReport
 	@ccValue(BarrierOperatorCCValues.supportedSubsystemTypes)
 	public readonly supportedSubsystemTypes: readonly SubsystemType[];
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported types": this.supportedSubsystemTypes
 					.map((t) => `\n· ${getEnumMemberName(SubsystemType, t)}`)
@@ -684,9 +712,9 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,
@@ -730,9 +758,9 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public readonly subsystemType: SubsystemType;
 	public readonly subsystemState: SubsystemState;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,
@@ -782,9 +810,9 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,

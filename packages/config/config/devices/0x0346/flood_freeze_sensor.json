@@ -1,0 +1,77 @@
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "4SF1S8-0EN0",
+	"description": "Flood Freeze Sensor",
+	"devices": [
+		{
+			"productType": "0x0501",
+			"productId": "0x0101",
+			"zwaveAllianceId": 3160
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Heartbeat Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 255,
+			"maxValue": 4200,
+			"defaultValue": 4080
+		},
+		{
+			"#": "2",
+			"label": "One-Time Wakeup Delay",
+			"description": "Device will wakeup once after the configured delay",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Message Retry Attempt Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5
+		},
+		{
+			"#": "4",
+			"label": "Delay Between Retry Attempts",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 6
+		},
+		{
+			"#": "5",
+			"label": "Supervision Report Timeout",
+			"description": "How long to wait for a Supervision Report response to a Supervision Get",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 500,
+			"maxValue": 5000,
+			"defaultValue": 1500
+		}
+	],
+	"metadata": {
+		"inclusion": "To include begin the setup process near your Ring Alarm Base Station. \n\n- In the Ring app, tap Set Up a Device. Choose Security Devices, then Sensors, then Ring Flood/Freeze Sensor, then tap Add Device.\n- To complete the setup process, follow the in-app instructions. \n- When prompted, scan the QR Code or enter the PIN. \n- This begins the pairing process. \n- When prompted, open the lid and pull out the clear tab. \n- Twist the lid to the left to unlock, then lift it to remove. Next, pull out the clear battery tab. This turns on the Sensor. \n- Your Base Station finds it automatically. \n\nNote: The QR Code and PIN are on the back of your sensor and in the product packaging.",
+		"exclusion": "To remove this Sensor from your system: \n- Open the side menu in the Ring app and tap Devices, then Base Station. \n- Next, select your Sensor, then tap the gear-shaped icon, and tap Remove Device. \n- When prompted, open the sensor and remove and reinstall the battery to complete the removal.",
+		"reset": "To factory reset, press and hold the Setup button for 10 seconds. When the LED ring stops blinking, the Sensor has reset. \nThis process disconnects the Sensor from Ring Alarm. To begin using the Sensor again, repeat the setup process in the Ring app. \n\nNote: Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3160/Ring%20FloodFreeze-Zwave-Manual.pdf"
+	}
+}

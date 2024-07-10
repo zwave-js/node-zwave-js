@@ -6,6 +6,8 @@
   - [Our Philosophy](getting-started/philosophy.md)
   - [Frequently Asked Questions](getting-started/faq.md)
   - [Security S2](getting-started/security-s2.md)
+  - [Z-Wave Long Range](getting-started/long-range.md)
+  - [Migrating to v13](getting-started/migrating-to-v13.md)
   - [Migrating to v12](getting-started/migrating-to-v12.md)
   - [Migrating to v11](getting-started/migrating-to-v11.md)
   - [Migrating to v10](getting-started/migrating-to-v10.md)
@@ -26,6 +28,7 @@
   - [Values and Metadata](api/valueid.md)
   - [ConfigManager](api/config-manager.md)
   - [Utilities](api/utils.md)
+  - [Zniffer](api/zniffer.md)
   - [Command Classes](api/CCs/index.md)
 
     - [Alarm Sensor CC](api/CCs/AlarmSensor.md)
@@ -111,6 +114,7 @@
   - [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
   - [Some values are missing](troubleshooting/missing-values.md)
   - [Upgrading the controller firmware](troubleshooting/otw-upgrade.md)
+  - [Creating a Zniffer](troubleshooting/zniffer.md)
 
 - Device Configuration Files
 

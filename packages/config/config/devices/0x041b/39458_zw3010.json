@@ -139,7 +139,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "This dimmer is SmartStart enabled. If your controller supports SmartStart inclusion, this dimmer can be added into the Z-Wave network by following the instructions for your controller or hub and scanning the Z-Wave QR Code on the front or on the package when instructed. No further action is required, and the dimmer will be added automatically within 10 minutes of being powered up while in range Z-Wave network.",

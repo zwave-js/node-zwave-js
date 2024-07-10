@@ -60,5 +60,9 @@ export interface ControllerStatistics {
 			average: number;
 			current: number;
 		};
+		channel3?: {
+			average: number;
+			current: number;
+		};
 	};
 }

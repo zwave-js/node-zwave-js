@@ -27,7 +27,7 @@
 		}
 	},
 	"compat": {
-		"disableBasicMapping": true
+		"mapBasicReport": false
 	},
 	"metadata": {
 		"inclusion": "1. Put the controller into INCLUSION mode. Follow the instructions\nprovided by the controller manufacturer.\n\n2. Press and hold the config button for more than 2 seconds. ALL indicator lights will blink 3 times. At this point release the config button, the device will start the inclusion process",

@@ -177,7 +177,7 @@ function sentenceCaseWord(word: string, isFirstWord: boolean): string {
 		const exception = titleCaseExceptions.find(
 			(ex) => ex.toLowerCase() === lowercase,
 		);
-		if (exception) exception;
+		if (exception) return exception;
 	}
 	if (
 		titleCaseIgnored.some((re) => re.test(word))

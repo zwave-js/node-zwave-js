@@ -1,14 +1,14 @@
 import { KeypadMode, UserIDStatus } from "@zwave-js/cc";
 import {
+	UserCodeCCAdminCodeGet,
+	UserCodeCCAdminCodeReport,
+	UserCodeCCAdminCodeSet,
 	UserCodeCCCapabilitiesGet,
 	UserCodeCCCapabilitiesReport,
 	UserCodeCCGet,
 	UserCodeCCKeypadModeGet,
 	UserCodeCCKeypadModeReport,
 	UserCodeCCKeypadModeSet,
-	UserCodeCCMasterCodeGet,
-	UserCodeCCMasterCodeReport,
-	UserCodeCCMasterCodeSet,
 	UserCodeCCReport,
 	UserCodeCCSet,
 	UserCodeCCUserCodeChecksumGet,
@@ -27,8 +27,8 @@ import {
 export const defaultCapabilities: UserCodeCCCapabilities = {
 	numUsers: 1,
 	supportedASCIIChars: "0123456789",
-	supportsMasterCode: true,
-	supportsMasterCodeDeactivation: true,
+	supportsAdminCode: true,
+	supportsAdminCodeDeactivation: true,
 	supportsUserCodeChecksum: true,
 	supportedKeypadModes: [KeypadMode.Normal],
 	supportedUserIDStatuses: [
@@ -43,7 +43,7 @@ const StateKeys = {
 	userCode: (userId: number) => `${STATE_KEY_PREFIX}userCode_${userId}`,
 	userIdStatus: (userId: number) =>
 		`${STATE_KEY_PREFIX}userIdStatus_${userId}`,
-	masterCode: `${STATE_KEY_PREFIX}masterCode`,
+	adminCode: `${STATE_KEY_PREFIX}adminCode`,
 	keypadMode: `${STATE_KEY_PREFIX}keypadMode`,
 } as const;
 
@@ -166,9 +166,9 @@ const respondToUserCodeCapabilitiesGet: MockNodeBehavior = {
 			};
 			const cc = new UserCodeCCCapabilitiesReport(self.host, {
 				nodeId: controller.host.ownNodeId,
-				supportsMasterCode: capabilities.supportsMasterCode!,
-				supportsMasterCodeDeactivation: capabilities
-					.supportsMasterCodeDeactivation!,
+				supportsAdminCode: capabilities.supportsAdminCode!,
+				supportsAdminCodeDeactivation: capabilities
+					.supportsAdminCodeDeactivation!,
 				supportsUserCodeChecksum: capabilities
 					.supportsUserCodeChecksum!,
 				supportsMultipleUserCodeReport: false,
@@ -246,11 +246,11 @@ const respondToUserCodeKeypadModeSet: MockNodeBehavior = {
 	},
 };
 
-const respondToUserCodeMasterCodeSet: MockNodeBehavior = {
+const respondToUserCodeAdminCodeSet: MockNodeBehavior = {
 	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCMasterCodeSet
+			&& frame.payload instanceof UserCodeCCAdminCodeSet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -259,15 +259,15 @@ const respondToUserCodeMasterCodeSet: MockNodeBehavior = {
 					frame.payload.endpointIndex,
 				),
 			};
-			const masterCode = frame.payload.masterCode;
-			if (capabilities.supportsMasterCode) {
+			const adminCode = frame.payload.adminCode;
+			if (capabilities.supportsAdminCode) {
 				if (
-					masterCode.length > 0
-					|| capabilities.supportsMasterCodeDeactivation
+					adminCode.length > 0
+					|| capabilities.supportsAdminCodeDeactivation
 				) {
 					self.state.set(
-						StateKeys.masterCode,
-						frame.payload.masterCode,
+						StateKeys.adminCode,
+						frame.payload.adminCode,
 					);
 				}
 			}
@@ -278,11 +278,11 @@ const respondToUserCodeMasterCodeSet: MockNodeBehavior = {
 	},
 };
 
-const respondToUserCodeMasterCodeGet: MockNodeBehavior = {
+const respondToUserCodeAdminCodeGet: MockNodeBehavior = {
 	async onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCMasterCodeGet
+			&& frame.payload instanceof UserCodeCCAdminCodeGet
 		) {
 			const capabilities = {
 				...defaultCapabilities,
@@ -291,14 +291,14 @@ const respondToUserCodeMasterCodeGet: MockNodeBehavior = {
 					frame.payload.endpointIndex,
 				),
 			};
-			let masterCode: string | undefined;
-			if (capabilities.supportsMasterCode) {
-				masterCode = self.state.get(StateKeys.masterCode) as string;
+			let adminCode: string | undefined;
+			if (capabilities.supportsAdminCode) {
+				adminCode = self.state.get(StateKeys.adminCode) as string;
 			}
 
-			const cc = new UserCodeCCMasterCodeReport(self.host, {
+			const cc = new UserCodeCCAdminCodeReport(self.host, {
 				nodeId: controller.host.ownNodeId,
-				masterCode: masterCode ?? "",
+				adminCode: adminCode ?? "",
 			});
 			await self.sendToController(
 				createMockZWaveRequestFrame(cc, {
@@ -376,7 +376,7 @@ export const UserCodeCCBehaviors = [
 	respondToUserCodeCapabilitiesGet,
 	respondToUserCodeKeypadModeGet,
 	respondToUserCodeKeypadModeSet,
-	respondToUserCodeMasterCodeGet,
-	respondToUserCodeMasterCodeSet,
+	respondToUserCodeAdminCodeGet,
+	respondToUserCodeAdminCodeSet,
 	respondToUserCodeUserCodeChecksumGet,
 ];

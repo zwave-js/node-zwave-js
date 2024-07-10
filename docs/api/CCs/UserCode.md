@@ -68,7 +68,7 @@ Clears one or all user code.
 ### `getCapabilities`
 
 ```ts
-async getCapabilities(): Promise<Pick<UserCodeCCCapabilitiesReport, "supportsMasterCode" | "supportsMasterCodeDeactivation" | "supportsUserCodeChecksum" | "supportsMultipleUserCodeReport" | "supportsMultipleUserCodeSet" | "supportedUserIDStatuses" | "supportedKeypadModes" | "supportedASCIIChars"> | undefined>;
+async getCapabilities(): Promise<Pick<UserCodeCCCapabilitiesReport, "supportsAdminCode" | "supportsAdminCodeDeactivation" | "supportsUserCodeChecksum" | "supportsMultipleUserCodeReport" | "supportsMultipleUserCodeSet" | "supportedUserIDStatuses" | "supportedKeypadModes" | "supportedASCIIChars"> | undefined>;
 ```
 
 ### `getKeypadMode`
@@ -85,17 +85,17 @@ async setKeypadMode(
 ): Promise<SupervisionResult | undefined>;
 ```
 
-### `getMasterCode`
+### `getAdminCode`
 
 ```ts
-async getMasterCode(): Promise<MaybeNotKnown<string>>;
+async getAdminCode(): Promise<MaybeNotKnown<string>>;
 ```
 
-### `setMasterCode`
+### `setAdminCode`
 
 ```ts
-async setMasterCode(
-	masterCode: string,
+async setAdminCode(
+	adminCode: string,
 ): Promise<SupervisionResult | undefined>;
 ```
 
@@ -106,6 +106,26 @@ async getUserCodeChecksum(): Promise<MaybeNotKnown<number>>;
 ```
 
 ## User Code CC values
+
+### `adminCode`
+
+```ts
+{
+	commandClass: CommandClasses["User Code"],
+	endpoint: number,
+	property: "adminCode",
+}
+```
+
+- **label:** Admin Code
+- **min. CC version:** 2
+- **readable:** true
+- **writeable:** true
+- **stateful:** true
+- **secret:** true
+- **value type:** `"string"`
+- **min. length:** 4
+- **max. length:** 10
 
 ### `keypadMode`
 
@@ -124,26 +144,6 @@ async getUserCodeChecksum(): Promise<MaybeNotKnown<number>>;
 - **stateful:** true
 - **secret:** false
 - **value type:** `"number"`
-
-### `masterCode`
-
-```ts
-{
-	commandClass: CommandClasses["User Code"],
-	endpoint: number,
-	property: "masterCode",
-}
-```
-
-- **label:** Master Code
-- **min. CC version:** 2
-- **readable:** true
-- **writeable:** true
-- **stateful:** true
-- **secret:** true
-- **value type:** `"string"`
-- **min. length:** 4
-- **max. length:** 10
 
 ### `userCode(userId: number)`
 

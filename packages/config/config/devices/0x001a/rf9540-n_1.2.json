@@ -180,6 +180,6 @@
 		}
 	],
 	"compat": {
-		"enableBasicSetMapping": true
+		"mapBasicSet": "auto"
 	}
 }

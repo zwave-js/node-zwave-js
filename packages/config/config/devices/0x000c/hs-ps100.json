@@ -1,0 +1,114 @@
+{
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-PS100",
+	"description": "Z-Wave Presence Sensor",
+	"devices": [
+		{
+			"productType": "0x0204",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Off Delay After Motion",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 3600,
+			"defaultValue": 10
+		},
+		{
+			"#": "2",
+			"label": "Distance Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 600,
+			"defaultValue": 10
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Bluetooth",
+			"description": "After changing this setting, the unit will need to be power cycled before it will take effect."
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Motion LED",
+			"description": "Enable / Disable the LED flash when motion is sensed (red) and times out (green).",
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"$import": "templates/homeseer_template.json#range_sensitivity",
+			"label": "Range 0-75cm (0-2.4ft) Sensitivity",
+			"defaultValue": 50
+		},
+		{
+			"#": "7",
+			"$import": "templates/homeseer_template.json#range_sensitivity",
+			"label": "Range 75-150cm (2.4-4.9ft) Sensitivity",
+			"defaultValue": 50
+		},
+		{
+			"#": "8",
+			"$import": "templates/homeseer_template.json#range_sensitivity",
+			"label": "Range 150-225cm (4.9-7.3ft) Sensitivity",
+			"defaultValue": 50
+		},
+		{
+			"#": "9",
+			"$import": "templates/homeseer_template.json#range_sensitivity",
+			"label": "Range 225-300cm (7.3-9.8ft) Sensitivity",
+			"defaultValue": 50
+		},
+		{
+			"#": "10",
+			"$import": "templates/homeseer_template.json#range_sensitivity",
+			"label": "Range 300-375cm (9.8-12.3ft) Sensitivity",
+			"defaultValue": 90
+		},
+		{
+			"#": "11",
+			"$import": "templates/homeseer_template.json#range_sensitivity",
+			"label": "Range 375-450cm (12.3-14.7ft) Sensitivity",
+			"defaultValue": 90
+		},
+		{
+			"#": "12",
+			"$import": "templates/homeseer_template.json#range_sensitivity",
+			"label": "Range 450-525cm (14.7-17.2ft) Sensitivity",
+			"defaultValue": 90
+		},
+		{
+			"#": "13",
+			"$import": "templates/homeseer_template.json#range_sensitivity",
+			"label": "Range 525-600cm (17.2-19.6ft) Sensitivity",
+			"defaultValue": 90
+		}
+	],
+	"metadata": {
+		"inclusion": "1) Set the main controller in inclusion mode (see the controller’s manual).\n2) Press and release the sensor’s Z-Wave network button.",
+		"exclusion": "1) Set the main controller in exclusion mode (see the controller’s manual).\n2) Press and release the sensor’s Z-Wave network button.",
+		"reset": "1) Power on the device\n2) Press and hold the Z-Wave network button for 30 seconds.",
+		"manual": "https://docs.homeseer.com/products/ps100-g8-user-guide"
+	}
+}

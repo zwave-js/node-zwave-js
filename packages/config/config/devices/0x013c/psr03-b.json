@@ -126,6 +126,6 @@
 	},
 	"compat": {
 		// The device uses Basic Set to indicate pressed buttons in Lighting Control Mode
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	}
 }

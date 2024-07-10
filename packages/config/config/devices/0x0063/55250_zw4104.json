@@ -37,7 +37,7 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"mapBasicSet": "event"
 	},
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart switch to the Z-Wave network.\n2. Once the controller is ready to add your smart switch, press and release the manual/program button on the smart switch",

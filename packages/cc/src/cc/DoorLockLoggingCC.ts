@@ -8,7 +8,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -84,7 +88,7 @@ const eventTypeLabel = {
 	UserCodeAdded: "User Code Added",
 	UserCodeDeleted: "User Code Deleted",
 	AllUserCodesDeleted: "All User Codes Deleted",
-	MasterCodeChanged: "Master Code Changed",
+	AdminCodeChanged: "Admin Code Changed",
 	UserCodeChanged: "User Code Changed",
 	LockReset: "Lock Reset",
 	ConfigurationChanged: "Configuration Changed",
@@ -235,9 +239,9 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	@ccValue(DoorLockLoggingCCValues.recordsCount)
 	public readonly recordsCount: number;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: {
 				"supported no. of records": this.recordsCount,
 			},
@@ -311,7 +315,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public readonly recordNumber: number;
 	public readonly record?: DoorLockLoggingRecord;
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 
 		if (!this.record) {
@@ -334,7 +338,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			}
 		}
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message,
 		};
 	}
@@ -385,9 +389,9 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(applHost),
+			...super.toLogEntry(host),
 			message: { "record number": this.recordNumber },
 		};
 	}
