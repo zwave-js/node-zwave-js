@@ -108,7 +108,17 @@
 			{
 				"$import": "templates/yale_template.json#alarm_map_auto_relock"
 			}
-		]
+		],
+		"overrideQueries": {
+			// The lock reports support for 250 lock codes, but slot 251 is
+			// the admin code which isn't available otherwise in CC version 1.
+			"User Code": [
+				{
+					"method": "getUsersCount",
+					"result": 251
+				}
+			]
+		}
 	},
 	"metadata": {
 		"inclusion": "Enter the 4-8 master Pin code followed by the gear key.\nPress the 7 key followed by the gear key\nPress the 1 key followed by the gear key",
