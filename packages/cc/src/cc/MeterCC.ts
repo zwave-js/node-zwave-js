@@ -69,7 +69,7 @@ import {
 	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
-import { MeterCommand, RateType } from "../lib/_Types";
+import { MeterCommand, type MeterReading, RateType } from "../lib/_Types";
 
 export const MeterCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Meter, {
@@ -348,8 +348,9 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get(options?: MeterCCGetOptions) {
+	public async get(
+		options?: MeterCCGetOptions,
+	): Promise<MeterReading | undefined> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Get);
 
 		const cc = new MeterCCGet(this.applHost, {
@@ -391,8 +392,9 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getAll(accumulatedOnly: boolean = false) {
+	public async getAll(
+		accumulatedOnly: boolean = false,
+	): Promise<MeterReading[]> {
 		const valueDB = this.tryGetValueDB();
 
 		if (this.version >= 2) {

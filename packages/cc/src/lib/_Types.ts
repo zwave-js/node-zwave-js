@@ -3,6 +3,8 @@ import {
 	type DataRate,
 	type FLiRS,
 	type MaybeNotKnown,
+	type MaybeUnknown,
+	type MeterScale,
 	type Scale,
 	type ValueMetadata,
 	ZWaveDataRate,
@@ -1011,6 +1013,15 @@ export type MeterMetadata = ValueMetadata & {
 		scale?: number;
 	};
 };
+
+export interface MeterReading {
+	rateType: RateType;
+	value: number;
+	previousValue: MaybeNotKnown<number>;
+	deltaTime: MaybeUnknown<number>;
+	type: number;
+	scale: MeterScale;
+}
 
 export enum MultiChannelAssociationCommand {
 	Set = 0x01,

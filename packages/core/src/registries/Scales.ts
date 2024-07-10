@@ -105,13 +105,14 @@ const namedScales = Object.freeze(
 		},
 	} as const satisfies Record<string, ScaleGroup>,
 );
+export type NamedScales = typeof namedScales;
 
 /** Returns the group of scale definitions with the given name */
 export function getNamedScaleGroup<
-	Name extends keyof typeof namedScales,
+	Name extends keyof NamedScales,
 >(
 	group: Name,
-): typeof namedScales[Name] {
+): NamedScales[Name] {
 	const scaleGroup = namedScales[group];
 	if (!scaleGroup) {
 		throw new ZWaveError(
@@ -131,12 +132,12 @@ export function getAllNamedScaleGroups(): readonly NamedScaleGroup[] {
 
 /** Returns a scale definition for a scale with known name and key */
 export function getNamedScale<
-	Name extends keyof typeof namedScales,
-	Key extends (keyof typeof namedScales[Name]) & number,
+	Name extends keyof NamedScales,
+	Key extends (keyof NamedScales[Name]) & number,
 >(
 	group: Name,
 	key: Key,
-): { key: Key } & (typeof namedScales[Name][Key]) {
+): { key: Key } & (NamedScales[Name][Key]) {
 	const scaleGroup = getNamedScaleGroup(group);
 
 	const scaleDef = scaleGroup[key];

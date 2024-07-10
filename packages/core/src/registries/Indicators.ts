@@ -187,12 +187,13 @@ const indicatorProperties = Object.freeze(
 		},
 	} as const satisfies Record<number, IndicatorPropertyDefinition>,
 );
+export type IndicatorProperties = typeof indicatorProperties;
 
 /** Returns the indicator property definition for the given id */
 export function getIndicatorProperty<ID extends number>(
 	id: ID,
-): ID extends keyof typeof indicatorProperties
-	? ({ id: ID } & (typeof indicatorProperties[ID]))
+): ID extends keyof IndicatorProperties
+	? ({ id: ID } & (IndicatorProperties[ID]))
 	: (IndicatorProperty | undefined)
 {
 	const property: IndicatorPropertyDefinition | undefined =
