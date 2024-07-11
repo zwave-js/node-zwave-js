@@ -480,7 +480,6 @@ export class VersionCC extends CommandClass {
 					// for which support is determined later.
 					if (cc === CommandClasses.Basic) {
 						endpoint.addCC(cc, {
-							isControlled: true,
 							version: supportedVersion,
 						});
 					} else {

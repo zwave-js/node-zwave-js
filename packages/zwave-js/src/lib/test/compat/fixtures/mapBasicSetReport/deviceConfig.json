@@ -2,7 +2,7 @@
 	"manufacturer": "Test Manufacturer",
 	"manufacturerId": "0xdead",
 	"label": "Test Device",
-	"description": "With Basic Set as Binary Sensor",
+	"description": "With Basic Set as Report",
 	"devices": [
 		{
 			"productType": "0xbeef",
@@ -14,6 +14,6 @@
 		"max": "255.255"
 	},
 	"compat": {
-		"mapBasicSet": "Binary Sensor"
+		"mapBasicSet": "report"
 	}
 }
