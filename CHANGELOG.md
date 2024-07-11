@@ -4,6 +4,11 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where CC values could be returned for the controller node (#7002)
+* Fixed a regression from v12.12.3 would result in Basic CC values being exposed unnecessarily for some devices (#7001)
+
 ## 12.12.3 (2024-07-09)
 ### Bugfixes
 * Fixed an issue where `Basic CC` values would be exposed unnecessarily for devices with a compat flag that maps `Basic CC Set` to a different CC (#6984)
