@@ -311,6 +311,9 @@ export function getDefinedValueIDsInternal(
 	node: IZWaveNode,
 	includeInternal: boolean = false,
 ): TranslatedValueID[] {
+	// The controller has no values. Even if some ended up in the cache somehow, do not return any.
+	if (applHost.isControllerNode(node.id)) return [];
+
 	let ret: ValueID[] = [];
 	const allowControlled: CommandClasses[] = [
 		CommandClasses["Scene Activation"],
