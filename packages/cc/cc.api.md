@@ -70,6 +70,7 @@ import { MessageOrCCLogEntry } from '@zwave-js/core';
 import { MessageOrCCLogEntry as MessageOrCCLogEntry_2 } from '@zwave-js/core/safe';
 import { MessageOrigin } from '@zwave-js/serial';
 import { MeterCCAPI } from '../cc/MeterCC';
+import { MeterScale } from '@zwave-js/core/safe';
 import { MulticastCC } from '@zwave-js/core';
 import { MulticastDestination } from '@zwave-js/core';
 import { MultiChannelAssociationCCAPI } from '../cc/MultiChannelAssociationCC';
@@ -5998,6 +5999,8 @@ export enum DoorLockLoggingCommand {
 // @public (undocumented)
 export enum DoorLockLoggingEventType {
     // (undocumented)
+    AdminCodeChanged = 26,
+    // (undocumented)
     AllUserCodesDeleted = 25,
     // (undocumented)
     ConfigurationChanged = 29,
@@ -6029,8 +6032,6 @@ export enum DoorLockLoggingEventType {
     LockUnsecured = 22,
     // (undocumented)
     LowBattery = 30,
-    // (undocumented)
-    MasterCodeChanged = 26,
     // (undocumented)
     NewBattery = 31,
     // (undocumented)
@@ -11438,6 +11439,24 @@ export type MeterMetadata = ValueMetadata_2 & {
         scale?: number;
     };
 };
+
+// Warning: (ae-missing-release-tag) "MeterReading" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MeterReading {
+    // (undocumented)
+    deltaTime: MaybeUnknown<number>;
+    // (undocumented)
+    previousValue: MaybeNotKnown<number>;
+    // (undocumented)
+    rateType: RateType;
+    // (undocumented)
+    scale: MeterScale;
+    // (undocumented)
+    type: number;
+    // (undocumented)
+    value: number;
+}
 
 // Warning: (ae-missing-release-tag) "MGRPExtension" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -18776,8 +18795,57 @@ export class UserCodeCC extends CommandClass {
     interview(applHost: ZWaveApplicationHost_2): Promise<void>;
     // (undocumented)
     refreshValues(applHost: ZWaveApplicationHost_2): Promise<void>;
-    static supportsMasterCodeDeactivationCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): boolean;
+    static supportsAdminCodeCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): boolean;
+    static supportsAdminCodeDeactivationCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): boolean;
     static supportsMultipleUserCodeSetCached(applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2): boolean;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCAdminCodeGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UserCodeCCAdminCodeGet extends UserCodeCC {
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCAdminCodeReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UserCodeCCAdminCodeReport extends UserCodeCC {
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCAdminCodeReportOptions);
+    // (undocumented)
+    readonly adminCode: string;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCAdminCodeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCAdminCodeReportOptions extends CCCommandOptions {
+    // (undocumented)
+    adminCode: string;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCAdminCodeSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class UserCodeCCAdminCodeSet extends UserCodeCC {
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCAdminCodeSetOptions);
+    // (undocumented)
+    adminCode: string;
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "UserCodeCCAdminCodeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface UserCodeCCAdminCodeSetOptions extends CCCommandOptions {
+    // (undocumented)
+    adminCode: string;
 }
 
 // Warning: (ae-missing-release-tag) "UserCodeCCCapabilitiesGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -18800,9 +18868,9 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
     // (undocumented)
     readonly supportedUserIDStatuses: readonly UserIDStatus[];
     // (undocumented)
-    readonly supportsMasterCode: boolean;
+    readonly supportsAdminCode: boolean;
     // (undocumented)
-    readonly supportsMasterCodeDeactivation: boolean;
+    readonly supportsAdminCodeDeactivation: boolean;
     // (undocumented)
     readonly supportsMultipleUserCodeReport: boolean;
     // (undocumented)
@@ -18824,9 +18892,9 @@ export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
     // (undocumented)
     supportedUserIDStatuses: readonly UserIDStatus[];
     // (undocumented)
-    supportsMasterCode: boolean;
+    supportsAdminCode: boolean;
     // (undocumented)
-    supportsMasterCodeDeactivation: boolean;
+    supportsAdminCodeDeactivation: boolean;
     // (undocumented)
     supportsMultipleUserCodeReport: boolean;
     // (undocumented)
@@ -18967,54 +19035,6 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
     // (undocumented)
     keypadMode: KeypadMode;
-}
-
-// Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class UserCodeCCMasterCodeGet extends UserCodeCC {
-}
-
-// Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class UserCodeCCMasterCodeReport extends UserCodeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCMasterCodeReportOptions);
-    // (undocumented)
-    readonly masterCode: string;
-    // (undocumented)
-    serialize(): Buffer;
-    // (undocumented)
-    toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry_2;
-}
-
-// Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface UserCodeCCMasterCodeReportOptions extends CCCommandOptions {
-    // (undocumented)
-    masterCode: string;
-}
-
-// Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export class UserCodeCCMasterCodeSet extends UserCodeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | UserCodeCCMasterCodeSetOptions);
-    // (undocumented)
-    masterCode: string;
-    // (undocumented)
-    serialize(): Buffer;
-    // (undocumented)
-    toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry_2;
-}
-
-// Warning: (ae-missing-release-tag) "UserCodeCCMasterCodeSetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
-    // (undocumented)
-    masterCode: string;
 }
 
 // Warning: (ae-forgotten-export) The symbol "NotificationEventPayload" needs to be exported by the entry point index.d.ts
@@ -19212,19 +19232,19 @@ export const UserCodeCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    masterCode: {
+    adminCode: {
         readonly id: {
             commandClass: (typeof CommandClasses)["User Code"];
-            property: "masterCode";
+            property: "adminCode";
         };
         readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
         readonly commandClass: (typeof CommandClasses)["User Code"];
         readonly endpoint: number;
-        readonly property: "masterCode";
+        readonly property: "adminCode";
         }>;
         readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
         readonly meta: {
-            readonly label: "Master Code";
+            readonly label: "Admin Code";
             readonly minLength: 4;
             readonly maxLength: 10;
             readonly type: "string";
@@ -19441,7 +19461,7 @@ export const UserCodeCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    supportsMasterCodeDeactivation: {
+    _deprecated_supportsMasterCodeDeactivation: {
         readonly id: {
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsMasterCodeDeactivation";
@@ -19466,7 +19486,7 @@ export const UserCodeCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    supportsMasterCode: {
+    _deprecated_supportsMasterCode: {
         readonly id: {
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsMasterCode";
@@ -19475,6 +19495,56 @@ export const UserCodeCCValues: Readonly<{
         readonly commandClass: (typeof CommandClasses)["User Code"];
         readonly endpoint: number;
         readonly property: "supportsMasterCode";
+        }>;
+        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+    supportsAdminCodeDeactivation: {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["User Code"];
+            property: "supportsAdminCodeDeactivation";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
+        readonly commandClass: (typeof CommandClasses)["User Code"];
+        readonly endpoint: number;
+        readonly property: "supportsAdminCodeDeactivation";
+        }>;
+        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+    supportsAdminCode: {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["User Code"];
+            property: "supportsAdminCode";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
+        readonly commandClass: (typeof CommandClasses)["User Code"];
+        readonly endpoint: number;
+        readonly property: "supportsAdminCode";
         }>;
         readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
         readonly meta: {
@@ -19523,6 +19593,12 @@ export const UserCodeCCValues: Readonly<{
 // @public (undocumented)
 export enum UserCodeCommand {
     // (undocumented)
+    AdminCodeGet = 15,
+    // (undocumented)
+    AdminCodeReport = 16,
+    // (undocumented)
+    AdminCodeSet = 14,
+    // (undocumented)
     CapabilitiesGet = 6,
     // (undocumented)
     CapabilitiesReport = 7,
@@ -19540,12 +19616,6 @@ export enum UserCodeCommand {
     KeypadModeReport = 10,
     // (undocumented)
     KeypadModeSet = 8,
-    // (undocumented)
-    MasterCodeGet = 15,
-    // (undocumented)
-    MasterCodeReport = 16,
-    // (undocumented)
-    MasterCodeSet = 14,
     // (undocumented)
     Report = 3,
     // (undocumented)
@@ -21946,7 +22016,7 @@ export enum ZWaveProtocolCommand {
 //
 // src/cc/TransportServiceCC.ts:47:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
 // src/cc/TransportServiceCC.ts:49:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
 
 // (No @packageDocumentation comment for this package)
 
