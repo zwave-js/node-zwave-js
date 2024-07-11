@@ -9,7 +9,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Home Assistant **TBD** or higher
 * `zwave-js-server` **TBD**
 -->
-## __WORK IN PROGRESS__
+## 13.0.0-beta.4 (2024-07-11)
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v13)
 * Align Meter CC Reset v6 with specifications, add mocks, add API for report commands (#6921)
 * Convert all Z-Wave specific configs except devices and manufacturers into code, move from ConfigManager methods to utility functions (#6925, #6929)
