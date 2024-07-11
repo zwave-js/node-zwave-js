@@ -21,6 +21,7 @@
 		}
 	],
 	"dprint.experimentalLsp": true,
+	"dprint.path": "./node_modules/dprint/dprint",
 	"editor.defaultFormatter": "dprint.dprint",
 	"[jsonc]": {
 		"editor.formatOnSave": true,

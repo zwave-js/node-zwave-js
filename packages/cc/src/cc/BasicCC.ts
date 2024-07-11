@@ -323,27 +323,20 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 		applHost: ZWaveApplicationHost,
 	): ValueID[] {
 		const ret: ValueID[] = [];
-
-		// Defer to the base implementation if Basic CC is supported
 		const endpoint = this.getEndpoint(applHost)!;
-		if (endpoint.supportsCC(this.ccId)) {
-			ret.push(...super.getDefinedValueIDs(applHost));
-		}
 
 		const compat = applHost.getDeviceConfig?.(endpoint.nodeId)?.compat;
 		if (compat?.mapBasicSet === "event") {
 			// Add the compat event value if it should be exposed
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
-		} else if (
-			!endpoint.supportsCC(CommandClasses.Basic) && (
-				(endpoint.controlsCC(CommandClasses.Basic)
-					&& compat?.mapBasicSet !== "Binary Sensor")
-				|| compat?.mapBasicReport === false
-				|| compat?.mapBasicSet === "report"
-			)
-		) {
-			// Otherwise, only expose currentValue on devices that only control Basic CC,
-			// or devices where a compat flag indicates that currentValue is meant to be exposed
+		}
+
+		if (endpoint.supportsCC(this.ccId)) {
+			// Defer to the base implementation if Basic CC is supported.
+			// This implies that no other actuator CC is supported.
+			ret.push(...super.getDefinedValueIDs(applHost));
+		} else if (endpoint.controlsCC(CommandClasses.Basic)) {
+			// During the interview, we mark Basic CC as controlled only if we want to expose currentValue
 			ret.push(BasicCCValues.currentValue.endpoint(endpoint.index));
 		}
 

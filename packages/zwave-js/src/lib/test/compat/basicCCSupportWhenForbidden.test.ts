@@ -4,19 +4,33 @@ import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
-	"On devices that MUST not support Basic CC, but use Basic Set to report status, ONLY currentValue should be exposed",
+	"On devices that MUST not support Basic CC, and treat Basic Set as a report, ONLY currentValue should be exposed",
 	{
 		// debug: true,
 
 		nodeCapabilities: {
+			manufacturerId: 0xdead,
+			productType: 0xbeef,
+			productId: 0xcafe,
+
 			// Routing Multilevel Sensor, MUST not support Basic CC
 			genericDeviceClass: 0x21,
 			specificDeviceClass: 0x01,
 			commandClasses: [
+				CommandClasses["Manufacturer Specific"],
 				CommandClasses.Version,
 				// But it reports support if asked
 				CommandClasses.Basic,
 			],
+		},
+
+		additionalDriverOptions: {
+			storage: {
+				deviceConfigPriorityDir: path.join(
+					__dirname,
+					"fixtures/mapBasicSetReport",
+				),
+			},
 		},
 
 		async testBody(t, driver, node, mockController, mockNode) {
