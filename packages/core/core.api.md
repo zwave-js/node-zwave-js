@@ -1138,13 +1138,12 @@ export function getGenericDeviceClass(generic: number): GenericDeviceClass;
 // @public (undocumented)
 export function getHighestSecurityClass(securityClasses: SecurityClass[]): SecurityClass;
 
-// Warning: (ae-forgotten-export) The symbol "indicatorProperties" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "getIndicatorProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function getIndicatorProperty<ID extends number>(id: ID): ID extends keyof typeof indicatorProperties ? ({
+export function getIndicatorProperty<ID extends number>(id: ID): ID extends keyof IndicatorProperties ? ({
     id: ID;
-} & (typeof indicatorProperties[ID])) : (IndicatorProperty | undefined);
+} & (IndicatorProperties[ID])) : (IndicatorProperty | undefined);
 
 // Warning: (ae-missing-release-tag) "getIntegerLimits" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1159,13 +1158,12 @@ export function getIntegerLimits(size: 1 | 2 | 3 | 4, signed: boolean): {
 // @public
 export function getLegalRangeForBitMask(mask: number, unsigned: boolean): [min: number, max: number];
 
-// Warning: (ae-forgotten-export) The symbol "meters" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "getMeter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function getMeter<MeterType extends number>(type: MeterType): MeterType extends keyof typeof meters ? ({
+export function getMeter<MeterType extends number>(type: MeterType): MeterType extends keyof Meters ? ({
     key: MeterType;
-} & (typeof meters[MeterType])) : (Meter | undefined);
+} & (Meters[MeterType])) : (Meter | undefined);
 
 // Warning: (ae-missing-release-tag) "getMeterName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1175,9 +1173,9 @@ export function getMeterName(meterType: number): string;
 // Warning: (ae-missing-release-tag) "getMeterScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function getMeterScale<MeterType extends number, ScaleKey extends number>(type: MeterType, scale: ScaleKey): MeterType extends keyof typeof meters ? ScaleKey extends keyof typeof meters[MeterType]["scales"] ? ({
+export function getMeterScale<MeterType extends number, ScaleKey extends number>(type: MeterType, scale: ScaleKey): MeterType extends keyof Meters ? ScaleKey extends keyof Meters[MeterType]["scales"] ? ({
     key: ScaleKey;
-} & (typeof meters[MeterType]["scales"][ScaleKey])) : (MeterScale | undefined) : (MeterScale | undefined);
+} & (Meters[MeterType]["scales"][ScaleKey])) : (MeterScale | undefined) : (MeterScale | undefined);
 
 // Warning: (ae-missing-release-tag) "getMinimumShiftForBitMask" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1189,18 +1187,17 @@ export function getMinimumShiftForBitMask(mask: number): number;
 // @public (undocumented)
 export function getMinIntegerSize(value: number, signed: boolean): 1 | 2 | 4 | undefined;
 
-// Warning: (ae-forgotten-export) The symbol "namedScales" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "getNamedScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function getNamedScale<Name extends keyof typeof namedScales, Key extends (keyof typeof namedScales[Name]) & number>(group: Name, key: Key): {
+export function getNamedScale<Name extends keyof NamedScales, Key extends (keyof NamedScales[Name]) & number>(group: Name, key: Key): {
     key: Key;
-} & (typeof namedScales[Name][Key]);
+} & (NamedScales[Name][Key]);
 
 // Warning: (ae-missing-release-tag) "getNamedScaleGroup" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function getNamedScaleGroup<Name extends keyof typeof namedScales>(group: Name): typeof namedScales[Name];
+export function getNamedScaleGroup<Name extends keyof NamedScales>(group: Name): NamedScales[Name];
 
 // Warning: (ae-missing-release-tag) "getNodeTag" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1237,11 +1234,10 @@ export function getNotificationValueName(type: number, event: number): string;
 // @public
 export function getNumericEnumValues<T extends Record<string, any>>(enumeration: T): readonly number[];
 
-// Warning: (ae-forgotten-export) The symbol "sensors" needs to be exported by the entry point index.d.ts
 // Warning: (ae-missing-release-tag) "getSensor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function getSensor<Key extends number>(type: Key): Key extends keyof typeof sensors ? typeof sensors[Key] : (Sensor | undefined);
+export function getSensor<Key extends number>(type: Key): Key extends keyof Sensors ? Sensors[Key] : (Sensor | undefined);
 
 // Warning: (ae-missing-release-tag) "getSensorName" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1251,9 +1247,9 @@ export function getSensorName(sensorType: number): string;
 // Warning: (ae-missing-release-tag) "getSensorScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function getSensorScale<SensorType extends number, ScaleKey extends number>(type: SensorType, scale: ScaleKey): SensorType extends keyof typeof sensors ? ScaleKey extends keyof typeof sensors[SensorType]["scales"] ? ({
+export function getSensorScale<SensorType extends number, ScaleKey extends number>(type: SensorType, scale: ScaleKey): SensorType extends keyof Sensors ? ScaleKey extends keyof Sensors[SensorType]["scales"] ? ({
     key: ScaleKey;
-} & (typeof sensors[SensorType]["scales"][ScaleKey])) : (Scale | undefined) : (Scale | undefined);
+} & (Sensors[SensorType]["scales"][ScaleKey])) : (Scale | undefined) : (Scale | undefined);
 
 // Warning: (ae-missing-release-tag) "getSpecificDeviceClass" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -1553,6 +1549,12 @@ export enum Indicator {
     // (undocumented)
     "Ready" = 3
 }
+
+// Warning: (ae-forgotten-export) The symbol "indicatorProperties" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "IndicatorProperties" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type IndicatorProperties = typeof indicatorProperties;
 
 // Warning: (ae-missing-release-tag) "IndicatorProperty" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2062,6 +2064,110 @@ export interface MeterDefinition {
     readonly scales: MeterScaleGroup;
 }
 
+// Warning: (ae-missing-release-tag) "Meters" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type Meters = typeof meters;
+
+// Warning: (ae-missing-release-tag) "meters" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export const meters: Readonly<{
+    readonly 1: {
+        readonly name: "Electric";
+        readonly scales: {
+            readonly 0: {
+                readonly label: "kWh";
+                readonly unit: "kWh";
+            };
+            readonly 1: {
+                readonly label: "kVAh";
+                readonly unit: "kVAh";
+            };
+            readonly 2: {
+                readonly label: "W";
+                readonly unit: "W";
+            };
+            readonly 3: {
+                readonly label: "Pulse count";
+            };
+            readonly 4: {
+                readonly label: "V";
+                readonly unit: "V";
+            };
+            readonly 5: {
+                readonly label: "A";
+                readonly unit: "A";
+            };
+            readonly 6: {
+                readonly label: "Power Factor";
+            };
+            readonly 7: {
+                readonly label: "kVar";
+                readonly unit: "kVar";
+            };
+            readonly 8: {
+                readonly label: "kVarh";
+                readonly unit: "kVarh";
+            };
+        };
+    };
+    readonly 2: {
+        readonly name: "Gas";
+        readonly scales: {
+            readonly 0: {
+                readonly label: "Cubic meters";
+                readonly unit: "m³";
+            };
+            readonly 1: {
+                readonly label: "Cubic feet";
+                readonly unit: "ft³";
+            };
+            readonly 3: {
+                readonly label: "Pulse count";
+            };
+        };
+    };
+    readonly 3: {
+        readonly name: "Water";
+        readonly scales: {
+            readonly 0: {
+                readonly label: "Cubic meters";
+                readonly unit: "m³";
+            };
+            readonly 1: {
+                readonly label: "Cubic feet";
+                readonly unit: "ft³";
+            };
+            readonly 2: {
+                readonly label: "US gallons";
+                readonly unit: "gal";
+            };
+            readonly 3: {
+                readonly label: "Pulse count";
+            };
+        };
+    };
+    readonly 4: {
+        readonly name: "Heating";
+        readonly scales: {
+            readonly 0: {
+                readonly label: "kWh";
+                readonly unit: "kWh";
+            };
+        };
+    };
+    readonly 5: {
+        readonly name: "Cooling";
+        readonly scales: {
+            readonly 0: {
+                readonly label: "kWh";
+                readonly unit: "kWh";
+            };
+        };
+    };
+}>;
+
 // Warning: (ae-missing-release-tag) "MeterScale" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -2153,6 +2259,12 @@ export interface NamedScaleGroup {
     // (undocumented)
     scales: Record<number, ScaleDefinition>;
 }
+
+// Warning: (ae-forgotten-export) The symbol "namedScales" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "NamedScales" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type NamedScales = typeof namedScales;
 
 // Warning: (ae-missing-release-tag) "NODE_ID_BROADCAST" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3088,6 +3200,12 @@ export interface SensorDefinition {
     // (undocumented)
     readonly scales: ScaleGroup;
 }
+
+// Warning: (ae-forgotten-export) The symbol "sensors" needs to be exported by the entry point index.d.ts
+// Warning: (ae-missing-release-tag) "Sensors" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type Sensors = typeof sensors;
 
 // Warning: (ae-missing-release-tag) "SerializableTXReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

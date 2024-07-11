@@ -485,9 +485,9 @@ export interface UserCodeCCCapabilities {
     // (undocumented)
     supportedUserIDStatuses?: number[];
     // (undocumented)
-    supportsMasterCode?: boolean;
+    supportsAdminCode?: boolean;
     // (undocumented)
-    supportsMasterCodeDeactivation?: boolean;
+    supportsAdminCodeDeactivation?: boolean;
     // (undocumented)
     supportsUserCodeChecksum?: boolean;
 }
@@ -502,7 +502,7 @@ export interface WindowCoveringCCCapabilities {
 
 // Warnings were encountered during analysis:
 //
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
 
 // (No @packageDocumentation comment for this package)
 

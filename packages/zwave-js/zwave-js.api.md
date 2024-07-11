@@ -595,15 +595,12 @@ export class Endpoint implements IZWaveEndpoint {
     getCCVersion(cc: CommandClasses_2): number;
     getNodeUnsafe(): ZWaveNode | undefined;
     getSupportedCCInstances(): readonly CommandClass[];
-    hideBasicCCInFavorOfActuatorCCs(): void;
     readonly index: number;
     get installerIcon(): MaybeNotKnown<number>;
     invokeCCAPI<CC extends CCNameOrId, TMethod extends keyof TAPI, TAPI extends Record<string, (...args: any[]) => any> = CommandClasses_2 extends CC ? any : Omit<CCNameOrId, CommandClasses_2> extends CC ? any : APIMethodsOf<CC>>(cc: CC, method: TMethod, ...args: Parameters<TAPI[TMethod]>): ReturnType<TAPI[TMethod]>;
     isCCSecure(cc: CommandClasses_2): boolean;
-    maybeAddBasicCCAsFallback(): void;
     maySupportBasicCC(): boolean;
     readonly nodeId: number;
-    removeBasicCCSupportIfForbidden(): void;
     removeCC(cc: CommandClasses_2): void;
     protected reset(): void;
     supportsCC(cc: CommandClasses_2): boolean;
@@ -2235,22 +2232,22 @@ export * from "@zwave-js/cc";
 
 // Warnings were encountered during analysis:
 //
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:477:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:477:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1273:41 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1273:41 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1280:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1280:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1398:40 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1398:40 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1338:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1338:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
 //   Property 'groupId' is missing in type 'Security2Extension' but required in type 'MGRPExtension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1349:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1349:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
 //   Type 'Security2Extension' is missing the following properties from type 'MPANExtension': groupId, innerMPANState
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1363:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1421:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/dominic/Repositories/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1363:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1421:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
 // src/lib/controller/Controller.ts:852:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
 // src/lib/driver/Driver.ts:701:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
 // src/lib/driver/Driver.ts:4191:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -2262,7 +2259,7 @@ export * from "@zwave-js/cc";
 // src/lib/driver/Driver.ts:5913:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/driver/ZWaveOptions.ts:270:120 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
 // src/lib/node/Node.ts:1028:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
-// src/lib/node/Node.ts:2941:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/node/Node.ts:3003:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/zniffer/Zniffer.ts:620:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/zniffer/Zniffer.ts:621:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 
