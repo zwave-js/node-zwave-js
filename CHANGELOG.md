@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.12.4 (2024-07-11)
 ### Bugfixes
 * Fixed an issue where CC values could be returned for the controller node (#7002)
 * Fixed a regression from v12.12.3 would result in Basic CC values being exposed unnecessarily for some devices (#7001)
