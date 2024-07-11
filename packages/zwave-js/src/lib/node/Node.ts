@@ -2393,8 +2393,6 @@ protocol version:      ${this.protocolVersion}`;
 			if (typeof action === "boolean") return action;
 		}
 
-		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
-		// to map the Basic CC to other CCs or expose Basic Set as an event
 		this.modifySupportedCCBeforeInterview(this);
 
 		// We determine the correct interview order of the remaining CCs by topologically sorting two dependency graph
@@ -2754,7 +2752,11 @@ protocol version:      ${this.protocolVersion}`;
 
 		// At the very end, figure out if Basic CC is supposed to be supported
 		// First on the root device
-		if (!this.wasCCRemovedViaConfig(CommandClasses.Basic)) {
+		const compat = this.deviceConfig?.compat;
+		if (
+			!this.wasCCRemovedViaConfig(CommandClasses.Basic)
+			&& this.getCCVersion(CommandClasses.Basic) > 0
+		) {
 			if (this.maySupportBasicCC()) {
 				// The device probably supports Basic CC and is allowed to.
 				// Interview the Basic CC to figure out if it actually supports it
@@ -2767,14 +2769,18 @@ protocol version:      ${this.protocolVersion}`;
 				const action = await interviewEndpoint(
 					this,
 					CommandClasses.Basic,
+					true,
 				);
 				if (typeof action === "boolean") return action;
 			} else {
-				// The device is supposed to only control Basic CC
-				this.driver.controllerLog.logNode(this.id, {
-					message:
-						"Node implements Basic CC but is not supposed to support it. Assuming it only controls Basic CC...",
-				});
+				// Consider the device to control Basic CC, but only if we want to expose the currentValue
+				if (
+					compat?.mapBasicReport === false
+					|| compat?.mapBasicSet === "report"
+				) {
+					// TODO: Figure out if we need to consider mapBasicSet === "auto" in the case where it falls back to Basic CC currentValue
+					this.addCC(CommandClasses.Basic, { isControlled: true });
+				}
 			}
 		}
 
@@ -2783,6 +2789,7 @@ protocol version:      ${this.protocolVersion}`;
 			const endpoint = this.getEndpoint(endpointIndex);
 			if (!endpoint) continue;
 			if (endpoint.wasCCRemovedViaConfig(CommandClasses.Basic)) continue;
+			if (endpoint.getCCVersion(CommandClasses.Basic) === 0) continue;
 
 			if (endpoint.maySupportBasicCC()) {
 				// The endpoint probably supports Basic CC and is allowed to.
@@ -2796,15 +2803,20 @@ protocol version:      ${this.protocolVersion}`;
 				const action = await interviewEndpoint(
 					endpoint,
 					CommandClasses.Basic,
+					true,
 				);
 				if (typeof action === "boolean") return action;
 			} else {
-				// The device is supposed to only control Basic CC
-				this.driver.controllerLog.logNode(this.id, {
-					endpoint: endpoint.index,
-					message:
-						"Endpoint implements Basic CC but is not supposed to support it. Assuming it only controls Basic CC...",
-				});
+				// Consider the device to control Basic CC, but only if we want to expose the currentValue
+				if (
+					compat?.mapBasicReport === false
+					|| compat?.mapBasicSet === "report"
+				) {
+					// TODO: Figure out if we need to consider mapBasicSet === "auto" in the case where it falls back to Basic CC currentValue
+					endpoint.addCC(CommandClasses.Basic, {
+						isControlled: true,
+					});
+				}
 			}
 		}
 
@@ -2818,6 +2830,10 @@ protocol version:      ${this.protocolVersion}`;
 	public updateNodeInfo(nodeInfo: NodeUpdatePayload): void {
 		if (this.interviewStage < InterviewStage.NodeInfo) {
 			for (const cc of nodeInfo.supportedCCs) {
+				if (cc === CommandClasses.Basic) {
+					// Basic CC MUST not be in the NIF and we have special rules to determine support
+					continue;
+				}
 				this.addCC(cc, { isSupported: true });
 			}
 		}
