@@ -360,6 +360,8 @@ integrationTest(
 					) {
 						frame.payload.mergePartialCCs(undefined as any, []);
 					}
+
+					return undefined;
 				},
 			};
 			mockNode.defineBehavior(parseS0CC);
