@@ -297,6 +297,19 @@ export class MockNode {
 			handler.resolve(frame);
 		} else {
 			let response: MockNodeResponse | undefined;
+
+			// Transform incoming frames with hooks, e.g. to support unwrapping encapsulated CCs
+			for (const behavior of this.behaviors) {
+				if (behavior.transformIncomingFrame) {
+					frame = await behavior.transformIncomingFrame(
+						this.controller,
+						this,
+						frame,
+					);
+				}
+			}
+
+			// Figure out what to do with the frame
 			for (const behavior of this.behaviors) {
 				response = await behavior.onControllerFrame?.(
 					this.controller,
@@ -306,10 +319,22 @@ export class MockNode {
 				if (response) break;
 			}
 
+			// If no behavior handled the frame, or we're supposed to stop, stop
 			if (!response || response.action === "stop") return;
 
-			// FIXME: Transform responses with hooks, e.g. to support Supervision or other encapsulation
+			// Transform responses with hooks, e.g. to support Supervision or other encapsulation
+			for (const behavior of this.behaviors) {
+				if (behavior.transformResponse) {
+					response = await behavior.transformResponse(
+						this.controller,
+						this,
+						frame,
+						response!,
+					);
+				}
+			}
 
+			// Finally send a CC to the controller if we're supposed to
 			if (response.action === "sendCC") {
 				await this.sendToController(
 					createMockZWaveRequestFrame(response.cc, {
@@ -449,10 +474,25 @@ export type MockNodeResponse = {
 };
 
 export interface MockNodeBehavior {
+	/** Gets called before the `onControllerFrame` handlers and can transform an incoming `MockZWaveFrame` into another */
+	transformIncomingFrame?: (
+		controller: MockController,
+		self: MockNode,
+		frame: MockZWaveFrame,
+	) => Promise<MockZWaveFrame> | MockZWaveFrame;
+
 	/** Gets called when a message from the controller is received. Returns an action to be performed in response, or `undefined` if there is nothing to do. */
 	onControllerFrame?: (
 		controller: MockController,
 		self: MockNode,
 		frame: MockZWaveFrame,
 	) => Promise<MockNodeResponse | undefined> | MockNodeResponse | undefined;
+
+	/** Gets called after the `onControllerFrame` handlers and can transform one `MockNodeResponse` into another */
+	transformResponse?: (
+		controller: MockController,
+		self: MockNode,
+		receivedFrame: MockZWaveFrame,
+		response: MockNodeResponse,
+	) => Promise<MockNodeResponse> | MockNodeResponse;
 }

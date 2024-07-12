@@ -33,6 +33,10 @@ import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
 import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
 import { MeterCCBehaviors } from "./mockCCBehaviors/Meter";
+import {
+	MultiChannelCCBehaviors,
+	MultiChannelCCHooks,
+} from "./mockCCBehaviors/MultiChannel";
 import { MultilevelSensorCCBehaviors } from "./mockCCBehaviors/MultilevelSensor";
 import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
@@ -97,67 +101,6 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 				endpoint: "index" in endpoint ? endpoint.index : undefined,
 				requestedCC: frame.payload.requestedCC,
 				ccVersion: version,
-			});
-			return { action: "sendCC", cc };
-		}
-	},
-};
-
-const respondToMultiChannelCCEndPointGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultiChannelCCEndPointGet
-		) {
-			const cc = new MultiChannelCCEndPointReport(self.host, {
-				nodeId: controller.host.ownNodeId,
-				countIsDynamic: false,
-				identicalCapabilities: false,
-				individualCount: self.endpoints.size,
-			});
-			return { action: "sendCC", cc };
-		}
-	},
-};
-
-const respondToMultiChannelCCEndPointFind: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultiChannelCCEndPointFind
-		) {
-			const request = frame.payload;
-			const cc = new MultiChannelCCEndPointFindReport(self.host, {
-				nodeId: controller.host.ownNodeId,
-				genericClass: request.genericClass,
-				specificClass: request.specificClass,
-				foundEndpoints: [...self.endpoints.keys()],
-				reportsToFollow: 0,
-			});
-			return { action: "sendCC", cc };
-		}
-	},
-};
-
-const respondToMultiChannelCCCapabilityGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultiChannelCCCapabilityGet
-		) {
-			const endpoint = self.endpoints.get(
-				frame.payload.requestedEndpoint,
-			)!;
-			const cc = new MultiChannelCCCapabilityReport(self.host, {
-				nodeId: controller.host.ownNodeId,
-				endpointIndex: endpoint.index,
-				genericDeviceClass: endpoint?.capabilities.genericDeviceClass
-					?? self.capabilities.genericDeviceClass,
-				specificDeviceClass: endpoint?.capabilities.specificDeviceClass
-					?? self.capabilities.specificDeviceClass,
-				isDynamic: false,
-				wasRemoved: false,
-				supportedCCs: [...endpoint.implementedCCs.keys()],
 			});
 			return { action: "sendCC", cc };
 		}
@@ -242,10 +185,11 @@ const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
 export function createDefaultBehaviors(): MockNodeBehavior[] {
 	return [
 		respondToRequestNodeInfo,
+
+		...MultiChannelCCHooks,
+		...MultiChannelCCBehaviors,
+
 		respondToVersionCCCommandClassGet,
-		respondToMultiChannelCCEndPointGet,
-		respondToMultiChannelCCEndPointFind,
-		respondToMultiChannelCCCapabilityGet,
 
 		respondToZWavePlusCCGet,
 		respondToS0ZWavePlusCCGet,
