@@ -143,7 +143,9 @@ integrationTest(
 
 			const doNotAnswerWhenAsleep: MockNodeBehavior = {
 				onControllerFrame(controller, self, frame) {
-					if (!mockNode10.autoAckControllerFrames) return true;
+					if (!mockNode10.autoAckControllerFrames) {
+						return { action: "stop" };
+					}
 				},
 			};
 			mockNode10.defineBehavior(doNotAnswerWhenAsleep);
@@ -258,7 +260,9 @@ integrationTest(
 
 			const doNotAnswerWhenAsleep: MockNodeBehavior = {
 				onControllerFrame(controller, self, frame) {
-					if (!mockNode10.autoAckControllerFrames) return true;
+					if (!mockNode10.autoAckControllerFrames) {
+						return { action: "stop" };
+					}
 				},
 			};
 			mockNode10.defineBehavior(doNotAnswerWhenAsleep);

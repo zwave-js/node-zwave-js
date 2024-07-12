@@ -28,7 +28,7 @@ const StateKeys = {
 } as const;
 
 const respondToSoundSwitchConfigurationGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof SoundSwitchCCConfigurationGet
@@ -49,14 +49,8 @@ const respondToSoundSwitchConfigurationGet: MockNodeBehavior = {
 					(self.state.get(StateKeys.defaultVolume) as number)
 						?? capabilities.defaultVolume,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
@@ -74,15 +68,13 @@ const respondToSoundSwitchConfigurationSet: MockNodeBehavior = {
 				StateKeys.defaultVolume,
 				frame.payload.defaultVolume,
 			);
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToSoundSwitchToneNumberGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof SoundSwitchCCTonesNumberGet
@@ -98,19 +90,13 @@ const respondToSoundSwitchToneNumberGet: MockNodeBehavior = {
 				nodeId: controller.host.ownNodeId,
 				toneCount: capabilities.tones.length,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToSoundSwitchToneInfoGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof SoundSwitchCCToneInfoGet
@@ -129,15 +115,10 @@ const respondToSoundSwitchToneInfoGet: MockNodeBehavior = {
 					toneId: frame.payload.toneId,
 					...tone,
 				});
-				await self.sendToController(
-					createMockZWaveRequestFrame(cc, {
-						ackRequested: false,
-					}),
-				);
-				return true;
+				return { action: "sendCC", cc };
 			}
+			return { action: "stop" };
 		}
-		return false;
 	},
 };
 

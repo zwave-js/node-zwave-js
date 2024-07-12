@@ -47,9 +47,8 @@ integrationTest(
 						await wait(100);
 
 						await self.ackControllerRequestFrame(frame);
-						return true;
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToBasicGetWithDelayedAck);

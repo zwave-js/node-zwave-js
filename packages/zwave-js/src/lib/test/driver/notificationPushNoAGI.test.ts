@@ -36,7 +36,7 @@ integrationTest(
 
 		customSetup: async (driver, controller, mockNode) => {
 			const respondToNotificationGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof NotificationCCGet
@@ -50,14 +50,8 @@ integrationTest(
 								? 0x06 /* Keypad unlock */
 								: 0xfe,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToNotificationGet);

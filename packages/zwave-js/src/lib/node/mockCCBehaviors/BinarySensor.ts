@@ -18,7 +18,7 @@ const defaultCapabilities: BinarySensorCCCapabilities = {
 };
 
 const respondToBinarySensorSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof BinarySensorCCSupportedGet
@@ -34,19 +34,13 @@ const respondToBinarySensorSupportedGet: MockNodeBehavior = {
 				nodeId: controller.host.ownNodeId,
 				supportedSensorTypes: capabilities.supportedSensorTypes,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToBinarySensorGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof BinarySensorCCGet
@@ -77,15 +71,10 @@ const respondToBinarySensorGet: MockNodeBehavior = {
 					type: sensorType,
 					value,
 				});
-				await self.sendToController(
-					createMockZWaveRequestFrame(cc, {
-						ackRequested: false,
-					}),
-				);
+				return { action: "sendCC", cc };
 			}
-			return true;
+			return { action: "stop" };
 		}
-		return false;
 	},
 };
 

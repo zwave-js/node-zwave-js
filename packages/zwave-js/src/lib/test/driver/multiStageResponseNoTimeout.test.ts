@@ -66,9 +66,9 @@ integrationTest(
 								ackRequested: false,
 							}),
 						);
-						return true;
+
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToConfigurationNameGet);
@@ -159,9 +159,8 @@ integrationTest(
 								ackRequested: false,
 							}),
 						);
-						return true;
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToConfigurationNameGet);
@@ -190,7 +189,7 @@ integrationTest("GET requests DO time out if there's no matching response", {
 
 	async customSetup(driver, mockController, mockNode) {
 		const respondToConfigurationNameGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
+			onControllerFrame(controller, self, frame) {
 				if (
 					frame.type === MockZWaveFrameType.Request
 					&& frame.payload instanceof ConfigurationCCNameGet
@@ -200,14 +199,8 @@ integrationTest("GET requests DO time out if there's no matching response", {
 						nodeId: controller.host.ownNodeId,
 						currentValue: 1,
 					});
-					await self.sendToController(
-						createMockZWaveRequestFrame(cc, {
-							ackRequested: false,
-						}),
-					);
-					return true;
+					return { action: "sendCC", cc };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToConfigurationNameGet);

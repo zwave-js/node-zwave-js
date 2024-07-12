@@ -37,7 +37,7 @@ const defaultCapabilities: EnergyProductionCCCapabilities = {
 };
 
 const respondToEnergyProductionGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof EnergyProductionCCGet
@@ -66,14 +66,8 @@ const respondToEnergyProductionGet: MockNodeBehavior = {
 					result?.scale ?? 0,
 				),
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

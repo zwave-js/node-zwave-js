@@ -33,7 +33,7 @@ integrationTest(
 
 		customSetup: async (driver, mockController, mockNode) => {
 			const respondToBinarySensorGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof BinarySensorCCGet
@@ -52,15 +52,8 @@ integrationTest(
 							type: BinarySensorType.Any,
 							value: true,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToBinarySensorGet);

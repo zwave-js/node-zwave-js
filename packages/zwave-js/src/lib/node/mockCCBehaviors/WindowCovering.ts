@@ -15,7 +15,7 @@ const defaultCapabilities: WindowCoveringCCCapabilities = {
 };
 
 const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof WindowCoveringCCSupportedGet
@@ -31,14 +31,8 @@ const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
 				nodeId: controller.host.ownNodeId,
 				supportedParameters: capabilities.supportedParameters,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

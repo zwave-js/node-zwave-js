@@ -43,7 +43,7 @@ integrationTest("Communication via Security S0 works", {
 
 		// Respond to S0 Nonce Get
 		const respondToS0NonceGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
+			onControllerFrame(controller, self, frame) {
 				if (
 					frame.type === MockZWaveFrameType.Request
 					&& frame.payload instanceof SecurityCCNonceGet
@@ -56,14 +56,8 @@ integrationTest("Communication via Security S0 works", {
 						nodeId: controller.host.ownNodeId,
 						nonce,
 					});
-					await self.sendToController(
-						createMockZWaveRequestFrame(cc, {
-							ackRequested: false,
-						}),
-					);
-					return true;
+					return { action: "sendCC", cc };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToS0NonceGet);
@@ -115,9 +109,8 @@ integrationTest("Communication via Security S0 works", {
 						}),
 					);
 
-					return true;
+					return { action: "stop" };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToS0CommandsSupportedGet);
@@ -165,16 +158,15 @@ integrationTest("Communication via Security S0 works", {
 						}),
 					);
 
-					return true;
+					return { action: "stop" };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToS0BasicGet);
 
 		// Parse Security CC commands. This MUST be defined last, since defineBehavior will prepend it to the list
 		const parseS0CC: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
+			onControllerFrame(controller, self, frame) {
 				// We don't support sequenced commands here
 				if (
 					frame.type === MockZWaveFrameType.Request
@@ -183,7 +175,6 @@ integrationTest("Communication via Security S0 works", {
 					frame.payload.mergePartialCCs(undefined as any, []);
 				}
 				// This just decodes - we need to call further handlers
-				return false;
 			},
 		};
 		mockNode.defineBehavior(parseS0CC);

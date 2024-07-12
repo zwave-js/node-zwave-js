@@ -63,9 +63,8 @@ integrationTest(
 							}),
 						);
 
-						return true;
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToSupervisionGet);

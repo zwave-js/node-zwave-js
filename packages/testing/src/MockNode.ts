@@ -1,3 +1,4 @@
+import type { CommandClass } from "@zwave-js/cc";
 import {
 	type CommandClassInfo,
 	type CommandClasses,
@@ -26,6 +27,7 @@ import {
 	MockZWaveFrameType,
 	type MockZWaveRequestFrame,
 	createMockZWaveAckFrame,
+	createMockZWaveRequestFrame,
 } from "./MockZWaveFrame";
 
 const defaultCCInfo: CommandClassInfo = {
@@ -294,16 +296,26 @@ export class MockNode {
 		if (handler) {
 			handler.resolve(frame);
 		} else {
+			let response: MockNodeResponse | undefined;
 			for (const behavior of this.behaviors) {
-				if (
-					await behavior.onControllerFrame?.(
-						this.controller,
-						this,
-						frame,
-					)
-				) {
-					return;
-				}
+				response = await behavior.onControllerFrame?.(
+					this.controller,
+					this,
+					frame,
+				);
+				if (response) break;
+			}
+
+			if (!response || response.action === "stop") return;
+
+			// FIXME: Transform responses with hooks, e.g. to support Supervision or other encapsulation
+
+			if (response.action === "sendCC") {
+				await this.sendToController(
+					createMockZWaveRequestFrame(response.cc, {
+						ackRequested: response.ackRequested,
+					}),
+				);
 			}
 		}
 	}
@@ -419,11 +431,28 @@ export class MockNode {
 	}
 }
 
+/** What the mock node should do after receiving a controller frame */
+export type MockNodeResponse = {
+	// Send a CC
+	action: "sendCC";
+	cc: CommandClass;
+	ackRequested?: boolean; // Defaults to false
+} | {
+	// Stop processing and do nothing
+	action: "stop";
+} | {
+	// Stop processing and indicate success to the sending node
+	action: "ok";
+} | {
+	// Stop processing and indicate failure to the sending node
+	action: "fail";
+};
+
 export interface MockNodeBehavior {
-	/** Gets called when a message from the controller is received. Return `true` to indicate that the message has been handled. */
+	/** Gets called when a message from the controller is received. Returns an action to be performed in response, or `undefined` if there is nothing to do. */
 	onControllerFrame?: (
 		controller: MockController,
 		self: MockNode,
 		frame: MockZWaveFrame,
-	) => Promise<boolean | undefined> | boolean | undefined;
+	) => Promise<MockNodeResponse | undefined> | MockNodeResponse | undefined;
 }

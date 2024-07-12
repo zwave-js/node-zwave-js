@@ -78,7 +78,6 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.31",
     "@zwave-js/maintenance": "workspace:*",
-    "@zwave-js/testing": "workspace:*",
     "@zwave-js/transformers": "workspace:*",
     "ava": "^6.1.2",
     "del-cli": "^5.1.0",

@@ -54,7 +54,7 @@ integrationTest(
 
 			// Respond to S2 Nonce Get
 			const respondToS2NonceGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof Security2CCNonceGet
@@ -68,14 +68,8 @@ integrationTest(
 							MOS: false,
 							receiverEI: nonce,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToS2NonceGet);

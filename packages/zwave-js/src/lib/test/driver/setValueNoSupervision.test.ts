@@ -31,7 +31,7 @@ integrationTest("setValue without supervision: expect validation GET", {
 
 		// and always report OFF
 		const respondToBinarySwitchGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
+			onControllerFrame(controller, self, frame) {
 				if (
 					frame.type === MockZWaveFrameType.Request
 					&& frame.payload instanceof BinarySwitchCCGet
@@ -40,14 +40,8 @@ integrationTest("setValue without supervision: expect validation GET", {
 						nodeId: controller.host.ownNodeId,
 						currentValue: false,
 					});
-					await self.sendToController(
-						createMockZWaveRequestFrame(cc, {
-							ackRequested: false,
-						}),
-					);
-					return true;
+					return { action: "sendCC", cc };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToBinarySwitchGet);

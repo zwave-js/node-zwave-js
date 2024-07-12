@@ -24,9 +24,6 @@
 			"path": "../maintenance/tsconfig.build.json"
 		},
 		{
-			"path": "../testing/tsconfig.build.json"
-		},
-		{
 			"path": "../transformers/tsconfig.build.json"
 		}
 	],

@@ -51,7 +51,7 @@ const StateKeys = {
 } as const;
 
 const respondToScheduleEntryLockSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof ScheduleEntryLockCCSupportedGet
@@ -67,14 +67,8 @@ const respondToScheduleEntryLockSupportedGet: MockNodeBehavior = {
 				nodeId: controller.host.ownNodeId,
 				...capabilities,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
@@ -89,15 +83,13 @@ const respondToScheduleEntryLockTimeOffsetSet: MockNodeBehavior = {
 				frame.payload.standardOffset,
 			);
 			self.state.set(StateKeys.dstOffset, frame.payload.dstOffset);
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockTimeOffsetGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof ScheduleEntryLockCCTimeOffsetGet
@@ -108,14 +100,8 @@ const respondToScheduleEntryLockTimeOffsetGet: MockNodeBehavior = {
 					?? 0) as number,
 				dstOffset: (self.state.get(StateKeys.dstOffset) ?? 0) as number,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
@@ -126,9 +112,8 @@ const respondToScheduleEntryLockEnableSet: MockNodeBehavior = {
 			&& frame.payload instanceof ScheduleEntryLockCCEnableSet
 		) {
 			// No need to do anything, this cannot be queried
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
@@ -139,9 +124,8 @@ const respondToScheduleEntryLockEnableAllSet: MockNodeBehavior = {
 			&& frame.payload instanceof ScheduleEntryLockCCEnableAllSet
 		) {
 			// No need to do anything, this cannot be queried
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
@@ -160,7 +144,9 @@ const respondToScheduleEntryLockWeekDayScheduleSet: MockNodeBehavior = {
 			};
 			// If the user identifier is out of range, the command will be ignored
 			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
@@ -171,7 +157,9 @@ const respondToScheduleEntryLockWeekDayScheduleSet: MockNodeBehavior = {
 			};
 			const slotId = frame.payload.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numWeekDaySlots) return true;
+			if (slotId > capabilities.numWeekDaySlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.WeekDay;
 
@@ -187,15 +175,13 @@ const respondToScheduleEntryLockWeekDayScheduleSet: MockNodeBehavior = {
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof ScheduleEntryLockCCWeekDayScheduleGet
@@ -209,7 +195,9 @@ const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
 			};
 			// If the user identifier is out of range, the command will be ignored
 			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
@@ -220,7 +208,9 @@ const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
 			};
 			const slotId = frame.payload.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numWeekDaySlots) return true;
+			if (slotId > capabilities.numWeekDaySlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.WeekDay;
 
@@ -234,14 +224,8 @@ const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
 				slotId,
 				...schedule,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
@@ -260,7 +244,9 @@ const respondToScheduleEntryLockYearDayScheduleSet: MockNodeBehavior = {
 			};
 			// If the user identifier is out of range, the command will be ignored
 			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
@@ -271,7 +257,9 @@ const respondToScheduleEntryLockYearDayScheduleSet: MockNodeBehavior = {
 			};
 			const slotId = frame.payload.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numYearDaySlots) return true;
+			if (slotId > capabilities.numYearDaySlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.YearDay;
 
@@ -292,15 +280,13 @@ const respondToScheduleEntryLockYearDayScheduleSet: MockNodeBehavior = {
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof ScheduleEntryLockCCYearDayScheduleGet
@@ -314,7 +300,9 @@ const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
 			};
 			// If the user identifier is out of range, the command will be ignored
 			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
@@ -325,7 +313,9 @@ const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
 			};
 			const slotId = frame.payload.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numYearDaySlots) return true;
+			if (slotId > capabilities.numYearDaySlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.YearDay;
 
@@ -339,14 +329,8 @@ const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
 				slotId,
 				...schedule,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
@@ -366,7 +350,9 @@ const respondToScheduleEntryLockDailyRepeatingScheduleSet: MockNodeBehavior = {
 			};
 			// If the user identifier is out of range, the command will be ignored
 			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
@@ -377,7 +363,9 @@ const respondToScheduleEntryLockDailyRepeatingScheduleSet: MockNodeBehavior = {
 			};
 			const slotId = frame.payload.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numDailyRepeatingSlots) return true;
+			if (slotId > capabilities.numDailyRepeatingSlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.DailyRepeating;
 
@@ -393,15 +381,13 @@ const respondToScheduleEntryLockDailyRepeatingScheduleSet: MockNodeBehavior = {
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload
@@ -416,7 +402,9 @@ const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
 			};
 			// If the user identifier is out of range, the command will be ignored
 			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
@@ -427,7 +415,9 @@ const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
 			};
 			const slotId = frame.payload.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numDailyRepeatingSlots) return true;
+			if (slotId > capabilities.numDailyRepeatingSlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.DailyRepeating;
 
@@ -444,14 +434,8 @@ const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
 					...schedule,
 				},
 			);
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

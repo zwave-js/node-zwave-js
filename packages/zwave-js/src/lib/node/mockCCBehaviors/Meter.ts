@@ -22,7 +22,7 @@ export const defaultCapabilities: MeterCCCapabilities = {
 };
 
 const respondToMeterSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof MeterCCSupportedGet
@@ -41,19 +41,13 @@ const respondToMeterSupportedGet: MockNodeBehavior = {
 				supportedRateTypes: capabilities.supportedRateTypes,
 				supportsReset: capabilities.supportsReset,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToMeterGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof MeterCCGet
@@ -89,14 +83,8 @@ const respondToMeterGet: MockNodeBehavior = {
 				rateType,
 				...normalizedValue,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
@@ -129,10 +117,8 @@ const respondToMeterReset: MockNodeBehavior = {
 			} else {
 				capabilities.onReset?.();
 			}
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 

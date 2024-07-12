@@ -34,7 +34,7 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Just have the node respond to all Supervision Get positively
 			const respondToSupervisionGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof SupervisionCCGet
@@ -45,14 +45,8 @@ integrationTest(
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Success,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToSupervisionGet);

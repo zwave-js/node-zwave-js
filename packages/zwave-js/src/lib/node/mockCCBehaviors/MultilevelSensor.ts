@@ -19,7 +19,7 @@ const defaultCapabilities: MultilevelSensorCCCapabilities = {
 };
 
 const respondToMultilevelSensorGetSupportedSensor: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof MultilevelSensorCCGetSupportedSensor
@@ -37,19 +37,13 @@ const respondToMultilevelSensorGetSupportedSensor: MockNodeBehavior = {
 					capabilities.sensors,
 				).map((t) => parseInt(t)),
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToMultilevelSensorGetSupportedScale: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof MultilevelSensorCCGetSupportedScale
@@ -69,19 +63,13 @@ const respondToMultilevelSensorGetSupportedScale: MockNodeBehavior = {
 				sensorType,
 				supportedScales,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToMultilevelSensorGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof MultilevelSensorCCGet
@@ -110,14 +98,8 @@ const respondToMultilevelSensorGet: MockNodeBehavior = {
 				scale,
 				value,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

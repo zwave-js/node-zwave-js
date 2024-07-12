@@ -45,14 +45,8 @@ integrationTest(
 							status: SupervisionStatus.Success,
 						});
 						await wait(500);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToSupervisionGet);

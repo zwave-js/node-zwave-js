@@ -35,14 +35,13 @@ const respondToThermostatModeSet: MockNodeBehavior = {
 				StateKeys.manufacturerData,
 				frame.payload.manufacturerData,
 			);
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToThermostatModeGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof ThermostatModeCCGet
@@ -61,19 +60,13 @@ const respondToThermostatModeGet: MockNodeBehavior = {
 				// @ts-expect-error I know...
 				manufacturerData,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToThermostatModeSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof ThermostatModeCCSupportedGet
@@ -90,14 +83,8 @@ const respondToThermostatModeSupportedGet: MockNodeBehavior = {
 				nodeId: controller.host.ownNodeId,
 				supportedModes: capabilities.supportedModes,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

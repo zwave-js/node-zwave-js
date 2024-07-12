@@ -18,7 +18,7 @@ const defaultCapabilities: NotificationCCCapabilities = {
 };
 
 const respondToNotificationSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof NotificationCCSupportedGet
@@ -37,19 +37,13 @@ const respondToNotificationSupportedGet: MockNodeBehavior = {
 					capabilities.notificationTypesAndEvents,
 				).map((t) => parseInt(t)),
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToNotificationEventSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof NotificationCCEventSupportedGet
@@ -72,15 +66,10 @@ const respondToNotificationEventSupportedGet: MockNodeBehavior = {
 						frame.payload.notificationType
 					],
 				});
-				await self.sendToController(
-					createMockZWaveRequestFrame(cc, {
-						ackRequested: false,
-					}),
-				);
-				return true;
+				return { action: "sendCC", cc };
 			}
+			return { action: "stop" };
 		}
-		return false;
 	},
 };
 

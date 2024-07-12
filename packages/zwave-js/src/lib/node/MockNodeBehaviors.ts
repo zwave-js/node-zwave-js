@@ -43,7 +43,7 @@ import { UserCodeCCBehaviors } from "./mockCCBehaviors/UserCode";
 import { WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload
@@ -59,18 +59,13 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 					.filter(([, info]) => info.isSupported)
 					.map(([ccId]) => ccId),
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
 	},
 };
 
 const respondToVersionCCCommandClassGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof VersionCCCommandClassGet
@@ -78,7 +73,7 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 			const endpoint = frame.payload.endpointIndex === 0
 				? self
 				: self.endpoints.get(frame.payload.endpointIndex);
-			if (!endpoint) return false;
+			if (!endpoint) return;
 
 			let version = 0;
 			for (const ep of [self, ...self.endpoints.values()]) {
@@ -103,19 +98,13 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 				requestedCC: frame.payload.requestedCC,
 				ccVersion: version,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-
-			return true;
+			return { action: "sendCC", cc };
 		}
 	},
 };
 
 const respondToMultiChannelCCEndPointGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof MultiChannelCCEndPointGet
@@ -126,19 +115,13 @@ const respondToMultiChannelCCEndPointGet: MockNodeBehavior = {
 				identicalCapabilities: false,
 				individualCount: self.endpoints.size,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToMultiChannelCCEndPointFind: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof MultiChannelCCEndPointFind
@@ -151,19 +134,13 @@ const respondToMultiChannelCCEndPointFind: MockNodeBehavior = {
 				foundEndpoints: [...self.endpoints.keys()],
 				reportsToFollow: 0,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToMultiChannelCCCapabilityGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof MultiChannelCCCapabilityGet
@@ -182,19 +159,13 @@ const respondToMultiChannelCCCapabilityGet: MockNodeBehavior = {
 				wasRemoved: false,
 				supportedCCs: [...endpoint.implementedCCs.keys()],
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToZWavePlusCCGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof ZWavePlusCCGet
@@ -211,19 +182,14 @@ const respondToZWavePlusCCGet: MockNodeBehavior = {
 				installerIcon: 0x0000,
 				userIcon: 0x0000,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: true,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc, ackRequested: true };
 		}
 	},
 };
 
 // TODO: We should handle this more generically:
 const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof SecurityCCCommandEncapsulation
@@ -242,18 +208,13 @@ const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
 				userIcon: 0x0000,
 			});
 			cc = SecurityCC.encapsulate(self.host, cc);
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: true,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc, ackRequested: true };
 		}
 	},
 };
 
 const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof Security2CCMessageEncapsulation
@@ -272,12 +233,7 @@ const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
 				userIcon: 0x0000,
 			});
 			cc = Security2CC.encapsulate(self.host, cc);
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: true,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
 	},
 };

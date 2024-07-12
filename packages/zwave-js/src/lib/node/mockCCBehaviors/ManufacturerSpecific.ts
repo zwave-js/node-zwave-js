@@ -9,7 +9,7 @@ import {
 } from "@zwave-js/testing";
 
 const respondToManufacturerSpecificGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	onControllerFrame(controller, self, frame) {
 		if (
 			frame.type === MockZWaveFrameType.Request
 			&& frame.payload instanceof ManufacturerSpecificCCGet
@@ -20,13 +20,7 @@ const respondToManufacturerSpecificGet: MockNodeBehavior = {
 				productType: self.capabilities.productType,
 				productId: self.capabilities.productId,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-
-			return true;
+			return { action: "sendCC", cc };
 		}
 	},
 };

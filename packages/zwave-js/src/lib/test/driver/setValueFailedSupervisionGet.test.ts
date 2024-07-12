@@ -34,7 +34,7 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Have the node respond to all Supervision Get negatively
 			const respondToSupervisionGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof SupervisionCCGet
@@ -45,20 +45,14 @@ integrationTest(
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Fail,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 
 			// and always report OFF
 			const respondToBinarySwitchGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof BinarySwitchCCGet
@@ -67,14 +61,8 @@ integrationTest(
 							nodeId: controller.host.ownNodeId,
 							currentValue: false,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(

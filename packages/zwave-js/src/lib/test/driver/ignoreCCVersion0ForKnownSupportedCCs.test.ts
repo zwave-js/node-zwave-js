@@ -71,7 +71,7 @@ integrationTest(
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof Security2CCNonceGet
@@ -85,21 +85,15 @@ integrationTest(
 							MOS: false,
 							receiverEI: nonce,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToNonceGet);
 
 			// Handle decode errors
 			const handleInvalidCC: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof InvalidCC
@@ -119,21 +113,15 @@ integrationTest(
 								MOS: false,
 								receiverEI: nonce,
 							});
-							await self.sendToController(
-								createMockZWaveRequestFrame(cc, {
-									ackRequested: false,
-								}),
-							);
-							return true;
+							return { action: "sendCC", cc };
 						}
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(handleInvalidCC);
 
 			const reportSecurelySupportedCCs: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload
@@ -155,20 +143,14 @@ integrationTest(
 								},
 							);
 						cc = Security2CC.encapsulate(self.host, cc);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(reportSecurelySupportedCCs);
 
 			const respondWithInvalidVersionReport: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload
@@ -188,14 +170,8 @@ integrationTest(
 							},
 						);
 						cc = Security2CC.encapsulate(self.host, cc);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondWithInvalidVersionReport);
@@ -238,7 +214,7 @@ integrationTest(
 
 			// Respond to S0 Nonce Get
 			const respondToS0NonceGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					if (
 						frame.type === MockZWaveFrameType.Request
 						&& frame.payload instanceof SecurityCCNonceGet
@@ -251,14 +227,8 @@ integrationTest(
 							nodeId: controller.host.ownNodeId,
 							nonce,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToS0NonceGet);
@@ -308,15 +278,14 @@ integrationTest(
 							);
 						const cc = SecurityCC.encapsulate(self.host, response);
 						cc.nonce = receiverNonce;
-
 						await self.sendToController(
 							createMockZWaveRequestFrame(cc, {
 								ackRequested: false,
 							}),
 						);
-						return true;
+
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(reportSecurelySupportedCCs);
@@ -368,22 +337,21 @@ integrationTest(
 
 						const cc = SecurityCC.encapsulate(self.host, response);
 						cc.nonce = receiverNonce;
-
 						await self.sendToController(
 							createMockZWaveRequestFrame(cc, {
 								ackRequested: false,
 							}),
 						);
-						return true;
+
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondWithInvalidVersionReport);
 
 			// Parse Security CC commands
 			const parseS0CC: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				onControllerFrame(controller, self, frame) {
 					// We don't support sequenced commands here
 					if (
 						frame.type === MockZWaveFrameType.Request
@@ -392,7 +360,6 @@ integrationTest(
 					) {
 						frame.payload.mergePartialCCs(undefined as any, []);
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(parseS0CC);
