@@ -71,11 +71,8 @@ integrationTest(
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof Security2CCNonceGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
 							controller.host.ownNodeId,
 						);
@@ -93,15 +90,12 @@ integrationTest(
 
 			// Handle decode errors
 			const handleInvalidCC: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof InvalidCC
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof InvalidCC) {
 						if (
-							frame.payload.reason
+							receivedCC.reason
 								=== ZWaveErrorCodes.Security2CC_CannotDecode
-							|| frame.payload.reason
+							|| receivedCC.reason
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
@@ -121,14 +115,13 @@ integrationTest(
 			mockNode.defineBehavior(handleInvalidCC);
 
 			const reportSecurelySupportedCCs: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
+						receivedCC
 							instanceof Security2CCMessageEncapsulation
-						&& frame.payload.securityClass
+						&& receivedCC.securityClass
 							=== SecurityClass.S2_Unauthenticated
-						&& frame.payload.encapsulated
+						&& receivedCC.encapsulated
 							instanceof Security2CCCommandsSupportedGet
 					) {
 						let cc: CommandClass =
@@ -150,14 +143,13 @@ integrationTest(
 			mockNode.defineBehavior(reportSecurelySupportedCCs);
 
 			const respondWithInvalidVersionReport: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
+						receivedCC
 							instanceof Security2CCMessageEncapsulation
-						&& frame.payload.encapsulated
+						&& receivedCC.encapsulated
 							instanceof VersionCCCommandClassGet
-						&& frame.payload.encapsulated.requestedCC
+						&& receivedCC.encapsulated.requestedCC
 							=== CommandClasses["Security 2"]
 					) {
 						let cc: CommandClass = new VersionCCCommandClassReport(
@@ -165,7 +157,7 @@ integrationTest(
 							{
 								nodeId: controller.host.ownNodeId,
 								requestedCC:
-									frame.payload.encapsulated.requestedCC,
+									receivedCC.encapsulated.requestedCC,
 								ccVersion: 0,
 							},
 						);
@@ -214,11 +206,8 @@ integrationTest(
 
 			// Respond to S0 Nonce Get
 			const respondToS0NonceGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof SecurityCCNonceGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof SecurityCCNonceGet) {
 						const nonce = sm0Node.generateNonce(
 							controller.host.ownNodeId,
 							8,
@@ -234,12 +223,10 @@ integrationTest(
 			mockNode.defineBehavior(respondToS0NonceGet);
 
 			const reportSecurelySupportedCCs: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				async handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
-							instanceof SecurityCCCommandEncapsulation
-						&& frame.payload.encapsulated
+						receivedCC instanceof SecurityCCCommandEncapsulation
+						&& receivedCC.encapsulated
 							instanceof SecurityCCCommandsSupportedGet
 					) {
 						const nonceGet = new SecurityCCNonceGet(self.host, {
@@ -291,14 +278,13 @@ integrationTest(
 			mockNode.defineBehavior(reportSecurelySupportedCCs);
 
 			const respondWithInvalidVersionReport: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				async handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
+						receivedCC
 							instanceof SecurityCCCommandEncapsulation
-						&& frame.payload.encapsulated
+						&& receivedCC.encapsulated
 							instanceof VersionCCCommandClassGet
-						&& frame.payload.encapsulated.requestedCC
+						&& receivedCC.encapsulated.requestedCC
 							=== CommandClasses.Security
 					) {
 						await wait(100);
@@ -330,7 +316,7 @@ integrationTest(
 								{
 									nodeId: controller.host.ownNodeId,
 									requestedCC:
-										frame.payload.encapsulated.requestedCC,
+										receivedCC.encapsulated.requestedCC,
 									ccVersion: 0,
 								},
 							);
@@ -351,14 +337,12 @@ integrationTest(
 
 			// Parse Security CC commands
 			const parseS0CC: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					// We don't support sequenced commands here
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
-							instanceof SecurityCCCommandEncapsulation
+						receivedCC instanceof SecurityCCCommandEncapsulation
 					) {
-						frame.payload.mergePartialCCs(undefined as any, []);
+						receivedCC.mergePartialCCs(undefined as any, []);
 					}
 
 					return undefined;

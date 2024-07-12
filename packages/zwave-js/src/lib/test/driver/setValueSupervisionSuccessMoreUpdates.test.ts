@@ -33,14 +33,11 @@ integrationTest(
 		customSetup: async (_driver, _controller, mockNode) => {
 			// Just have the node respond to all Supervision Get positively, but claim that more updates follow
 			const respondToSupervisionGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof SupervisionCCGet
-					) {
+				async handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof SupervisionCCGet) {
 						const cc = new SupervisionCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
-							sessionId: frame.payload.sessionId,
+							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: true, // <-- this is the important part
 							status: SupervisionStatus.Success,
 						});

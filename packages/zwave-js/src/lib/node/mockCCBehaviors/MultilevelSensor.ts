@@ -19,16 +19,13 @@ const defaultCapabilities: MultilevelSensorCCCapabilities = {
 };
 
 const respondToMultilevelSensorGetSupportedSensor: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultilevelSensorCCGetSupportedSensor
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MultilevelSensorCCGetSupportedSensor) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Multilevel Sensor"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new MultilevelSensorCCSupportedSensorReport(self.host, {
@@ -43,19 +40,16 @@ const respondToMultilevelSensorGetSupportedSensor: MockNodeBehavior = {
 };
 
 const respondToMultilevelSensorGetSupportedScale: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultilevelSensorCCGetSupportedScale
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MultilevelSensorCCGetSupportedScale) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Multilevel Sensor"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const sensorType = frame.payload.sensorType;
+			const sensorType = receivedCC.sensorType;
 			const supportedScales =
 				capabilities.sensors[sensorType]?.supportedScales ?? [];
 			const cc = new MultilevelSensorCCSupportedScaleReport(self.host, {
@@ -69,26 +63,23 @@ const respondToMultilevelSensorGetSupportedScale: MockNodeBehavior = {
 };
 
 const respondToMultilevelSensorGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultilevelSensorCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MultilevelSensorCCGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Multilevel Sensor"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const firstSupportedSensorType =
 				Object.keys(capabilities.sensors).length > 0
 					? parseInt(Object.keys(capabilities.sensors)[0])
 					: undefined;
-			const sensorType = frame.payload.sensorType
+			const sensorType = receivedCC.sensorType
 				?? firstSupportedSensorType
 				?? 1;
-			const scale = frame.payload.scale
+			const scale = receivedCC.scale
 				?? capabilities.sensors[sensorType].supportedScales[0]
 				?? 0;
 			const value = capabilities.getValue?.(sensorType, scale) ?? 0;

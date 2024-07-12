@@ -22,16 +22,13 @@ export const defaultCapabilities: MeterCCCapabilities = {
 };
 
 const respondToMeterSupportedGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MeterCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MeterCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Meter,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new MeterCCSupportedReport(self.host, {
@@ -47,21 +44,18 @@ const respondToMeterSupportedGet: MockNodeBehavior = {
 };
 
 const respondToMeterGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MeterCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MeterCCGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Meter,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const scale = frame.payload.scale
+			const scale = receivedCC.scale
 				?? capabilities.supportedScales[0];
-			const rateType = frame.payload.rateType
+			const rateType = receivedCC.rateType
 				?? capabilities.supportedRateTypes[0]
 				?? RateType.Consumed;
 
@@ -89,20 +83,17 @@ const respondToMeterGet: MockNodeBehavior = {
 };
 
 const respondToMeterReset: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MeterCCReset
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MeterCCReset) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Meter,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 
-			const cc = frame.payload;
+			const cc = receivedCC;
 			if (
 				cc.type != undefined
 				&& cc.scale != undefined

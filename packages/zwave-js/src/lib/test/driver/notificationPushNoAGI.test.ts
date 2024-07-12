@@ -36,12 +36,9 @@ integrationTest(
 
 		customSetup: async (driver, controller, mockNode) => {
 			const respondToNotificationGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof NotificationCCGet
-					) {
-						const notificationType = frame.payload.notificationType
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof NotificationCCGet) {
+						const notificationType = receivedCC.notificationType
 							|| 0x06;
 						const cc = new NotificationCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,

@@ -47,10 +47,9 @@ import { UserCodeCCBehaviors } from "./mockCCBehaviors/UserCode";
 import { WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
 
 const respondToRequestNodeInfo: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
+	handleCC(controller, self, receivedCC) {
 		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload
+			receivedCC
 				instanceof ZWaveProtocolCCRequestNodeInformationFrame
 		) {
 			const cc = new ZWaveProtocolCCNodeInformationFrame(self.host, {
@@ -69,19 +68,16 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 };
 
 const respondToVersionCCCommandClassGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof VersionCCCommandClassGet
-		) {
-			const endpoint = frame.payload.endpointIndex === 0
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof VersionCCCommandClassGet) {
+			const endpoint = receivedCC.endpointIndex === 0
 				? self
-				: self.endpoints.get(frame.payload.endpointIndex);
+				: self.endpoints.get(receivedCC.endpointIndex);
 			if (!endpoint) return;
 
 			let version = 0;
 			for (const ep of [self, ...self.endpoints.values()]) {
-				const info = ep.implementedCCs.get(frame.payload.requestedCC);
+				const info = ep.implementedCCs.get(receivedCC.requestedCC);
 				if (info?.version) {
 					version = info.version;
 					break;
@@ -90,8 +86,7 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 
 			// Basic CC is always supported implicitly
 			if (
-				version === 0
-				&& frame.payload.requestedCC === CommandClasses.Basic
+				version === 0 && receivedCC.requestedCC === CommandClasses.Basic
 			) {
 				version = 1;
 			}
@@ -99,7 +94,7 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 			const cc = new VersionCCCommandClassReport(self.host, {
 				nodeId: self.id,
 				endpoint: "index" in endpoint ? endpoint.index : undefined,
-				requestedCC: frame.payload.requestedCC,
+				requestedCC: receivedCC.requestedCC,
 				ccVersion: version,
 			});
 			return { action: "sendCC", cc };
@@ -108,11 +103,8 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 };
 
 const respondToZWavePlusCCGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ZWavePlusCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ZWavePlusCCGet) {
 			const cc = new ZWavePlusCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				zwavePlusVersion: 2,
@@ -132,11 +124,10 @@ const respondToZWavePlusCCGet: MockNodeBehavior = {
 
 // TODO: We should handle this more generically:
 const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
+	handleCC(controller, self, receivedCC) {
 		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof SecurityCCCommandEncapsulation
-			&& frame.payload.encapsulated instanceof ZWavePlusCCGet
+			receivedCC instanceof SecurityCCCommandEncapsulation
+			&& receivedCC.encapsulated instanceof ZWavePlusCCGet
 		) {
 			let cc: CommandClass = new ZWavePlusCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
@@ -157,11 +148,10 @@ const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
 };
 
 const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
+	handleCC(controller, self, receivedCC) {
 		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof Security2CCMessageEncapsulation
-			&& frame.payload.encapsulated instanceof ZWavePlusCCGet
+			receivedCC instanceof Security2CCMessageEncapsulation
+			&& receivedCC.encapsulated instanceof ZWavePlusCCGet
 		) {
 			let cc: CommandClass = new ZWavePlusCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,

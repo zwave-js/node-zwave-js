@@ -29,11 +29,8 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Do not respond to CC version queries
 			const noResponseToVersionCommandClassGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof VersionCCCommandClassGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof VersionCCCommandClassGet) {
 						return { action: "stop" };
 					}
 				},
@@ -42,11 +39,8 @@ integrationTest(
 
 			// Respond to binary switch state
 			const respondToBinarySwitchGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof BinarySwitchCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof BinarySwitchCCGet) {
 						const cc = new BinarySwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							currentValue: true,
@@ -81,11 +75,8 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Respond to binary switch state
 			const respondToBinarySwitchGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof BinarySwitchCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof BinarySwitchCCGet) {
 						const cc = new BinarySwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							currentValue: true,

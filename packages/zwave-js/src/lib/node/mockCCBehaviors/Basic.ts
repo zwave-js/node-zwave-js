@@ -12,11 +12,8 @@ const StateKeys = {
 } as const;
 
 const respondToBasicGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof BasicCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof BasicCCGet) {
 			// Do not respond if BasicCC is not explicitly listed as supported
 			if (!self.implementedCCs.get(CommandClasses.Basic)?.isSupported) {
 				return;
@@ -33,12 +30,9 @@ const respondToBasicGet: MockNodeBehavior = {
 };
 
 const respondToBasicSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof BasicCCSet
-		) {
-			self.state.set(StateKeys.currentValue, frame.payload.targetValue);
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof BasicCCSet) {
+			self.state.set(StateKeys.currentValue, receivedCC.targetValue);
 			return { action: "ok" };
 		}
 	},

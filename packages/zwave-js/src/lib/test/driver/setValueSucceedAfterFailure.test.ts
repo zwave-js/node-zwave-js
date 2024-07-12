@@ -37,12 +37,11 @@ integrationTest(
 		async customSetup(driver, mockController, mockNode) {
 			// The default mock implementation does not support endpoints
 			const respondToBasicGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
+						receivedCC
 							instanceof MultiChannelCCCommandEncapsulation
-						&& frame.payload.encapsulated instanceof BasicCCGet
+						&& receivedCC.encapsulated instanceof BasicCCGet
 					) {
 						// Do not respond if BasicCC is not explicitly listed as supported
 						if (!self.implementedCCs.has(CommandClasses.Basic)) {
@@ -55,8 +54,8 @@ integrationTest(
 						});
 						cc = new MultiChannelCCCommandEncapsulation(self.host, {
 							nodeId: controller.host.ownNodeId,
-							destination: frame.payload.endpointIndex,
-							endpoint: frame.payload.destination as number,
+							destination: receivedCC.endpointIndex,
+							endpoint: receivedCC.destination as number,
 							encapsulated: cc,
 						});
 						return { action: "sendCC", cc };

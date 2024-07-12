@@ -142,7 +142,7 @@ integrationTest(
 			const [mockNode10] = mockNodes;
 
 			const doNotAnswerWhenAsleep: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (!mockNode10.autoAckControllerFrames) {
 						return { action: "stop" };
 					}
@@ -259,7 +259,7 @@ integrationTest(
 			const [mockNode10] = mockNodes;
 
 			const doNotAnswerWhenAsleep: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (!mockNode10.autoAckControllerFrames) {
 						return { action: "stop" };
 					}

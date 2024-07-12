@@ -18,16 +18,13 @@ const defaultCapabilities: NotificationCCCapabilities = {
 };
 
 const respondToNotificationSupportedGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof NotificationCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof NotificationCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Notification,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new NotificationCCSupportedReport(self.host, {
@@ -43,27 +40,24 @@ const respondToNotificationSupportedGet: MockNodeBehavior = {
 };
 
 const respondToNotificationEventSupportedGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof NotificationCCEventSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof NotificationCCEventSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Notification,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			if (
-				frame.payload.notificationType
+				receivedCC.notificationType
 					in capabilities.notificationTypesAndEvents
 			) {
 				const cc = new NotificationCCEventSupportedReport(self.host, {
 					nodeId: controller.host.ownNodeId,
-					notificationType: frame.payload.notificationType,
+					notificationType: receivedCC.notificationType,
 					supportedEvents: capabilities.notificationTypesAndEvents[
-						frame.payload.notificationType
+						receivedCC.notificationType
 					],
 				});
 				return { action: "sendCC", cc };

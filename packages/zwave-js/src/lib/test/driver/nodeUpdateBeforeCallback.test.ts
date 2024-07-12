@@ -29,11 +29,8 @@ integrationTest(
 			mockNode.autoAckControllerFrames = false;
 
 			const respondToBasicGetWithDelayedAck: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof BasicCCGet
-					) {
+				async handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof BasicCCGet) {
 						const cc = new BasicCCReport(controller.host, {
 							nodeId: self.id,
 							currentValue: 55,
@@ -46,8 +43,7 @@ integrationTest(
 
 						await wait(100);
 
-						await self.ackControllerRequestFrame(frame);
-						return { action: "stop" };
+						return { action: "ack" };
 					}
 				},
 			};

@@ -42,11 +42,8 @@ integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {
 	customSetup: async (driver, controller, mockNode) => {
 		// Respond to Basic CC Get, so the driver doesn't assume Basic CC is unsupported
 		const respondToBasicGet: MockNodeBehavior = {
-			onControllerFrame(controller, self, frame) {
-				if (
-					frame.type === MockZWaveFrameType.Request
-					&& frame.payload instanceof BasicCCGet
-				) {
+			handleCC(controller, self, receivedCC) {
+				if (receivedCC instanceof BasicCCGet) {
 					const cc = new BasicCCReport(self.host, {
 						nodeId: controller.host.ownNodeId,
 						currentValue: 0,

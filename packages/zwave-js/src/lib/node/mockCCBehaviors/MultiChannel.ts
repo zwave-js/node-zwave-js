@@ -13,32 +13,28 @@ import { CommandClasses } from "@zwave-js/core";
 import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
 
 const encapsulateMultiChannelCC: MockNodeBehavior = {
-	transformIncomingFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultiChannelCCCommandEncapsulation
-		) {
+	transformIncomingCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MultiChannelCCCommandEncapsulation) {
 			// The existing machinery interprets endpointIndex from the view
 			// of the controller, but we are the end node here, so re-interpret
 			// the destination as the endpoint index
-			frame.payload.encapsulated.endpointIndex = frame.payload
+			receivedCC.encapsulated.endpointIndex = receivedCC
 				.destination as number;
-			frame.payload = frame.payload.encapsulated;
+			receivedCC = receivedCC.encapsulated;
 		}
-		return frame;
+		return receivedCC;
 	},
 
-	transformResponse(controller, self, receivedFrame, response) {
+	transformResponse(controller, self, receivedCC, response) {
 		if (
 			response.action === "sendCC"
-			&& receivedFrame.type === MockZWaveFrameType.Request
-			&& receivedFrame.payload instanceof CommandClass
-			&& receivedFrame.payload.isEncapsulatedWith(
+			&& receivedCC instanceof CommandClass
+			&& receivedCC.isEncapsulatedWith(
 				CommandClasses["Multi Channel"],
 			)
 			&& !response.cc.isEncapsulatedWith(CommandClasses["Multi Channel"])
 		) {
-			const multiChannelEncap = receivedFrame.payload.getEncapsulatingCC(
+			const multiChannelEncap = receivedCC.getEncapsulatingCC(
 				CommandClasses["Multi Channel"],
 			);
 			if (!multiChannelEncap) return response;
@@ -62,11 +58,8 @@ const encapsulateMultiChannelCC: MockNodeBehavior = {
 };
 
 const respondToMultiChannelCCEndPointGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultiChannelCCEndPointGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MultiChannelCCEndPointGet) {
 			const cc = new MultiChannelCCEndPointReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				countIsDynamic: false,
@@ -79,12 +72,9 @@ const respondToMultiChannelCCEndPointGet: MockNodeBehavior = {
 };
 
 const respondToMultiChannelCCEndPointFind: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultiChannelCCEndPointFind
-		) {
-			const request = frame.payload;
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MultiChannelCCEndPointFind) {
+			const request = receivedCC;
 			const cc = new MultiChannelCCEndPointFindReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				genericClass: request.genericClass,
@@ -98,13 +88,10 @@ const respondToMultiChannelCCEndPointFind: MockNodeBehavior = {
 };
 
 const respondToMultiChannelCCCapabilityGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MultiChannelCCCapabilityGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MultiChannelCCCapabilityGet) {
 			const endpoint = self.endpoints.get(
-				frame.payload.requestedEndpoint,
+				receivedCC.requestedEndpoint,
 			)!;
 			const cc = new MultiChannelCCCapabilityReport(self.host, {
 				nodeId: controller.host.ownNodeId,

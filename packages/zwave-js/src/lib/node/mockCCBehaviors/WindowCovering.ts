@@ -15,16 +15,13 @@ const defaultCapabilities: WindowCoveringCCCapabilities = {
 };
 
 const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof WindowCoveringCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof WindowCoveringCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Window Covering"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new WindowCoveringCCSupportedReport(self.host, {

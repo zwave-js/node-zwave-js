@@ -295,26 +295,27 @@ export class MockNode {
 		);
 		if (handler) {
 			handler.resolve(frame);
-		} else {
+		} else if (frame.type === MockZWaveFrameType.Request) {
+			let cc = frame.payload;
 			let response: MockNodeResponse | undefined;
 
 			// Transform incoming frames with hooks, e.g. to support unwrapping encapsulated CCs
 			for (const behavior of this.behaviors) {
-				if (behavior.transformIncomingFrame) {
-					frame = await behavior.transformIncomingFrame(
+				if (behavior.transformIncomingCC) {
+					cc = await behavior.transformIncomingCC(
 						this.controller,
 						this,
-						frame,
+						cc,
 					);
 				}
 			}
 
 			// Figure out what to do with the frame
 			for (const behavior of this.behaviors) {
-				response = await behavior.onControllerFrame?.(
+				response = await behavior.handleCC?.(
 					this.controller,
 					this,
-					frame,
+					cc,
 				);
 				if (response) break;
 			}
@@ -328,7 +329,7 @@ export class MockNode {
 					response = await behavior.transformResponse(
 						this.controller,
 						this,
-						frame,
+						cc,
 						response!,
 					);
 				}
@@ -341,6 +342,9 @@ export class MockNode {
 						ackRequested: response.ackRequested,
 					}),
 				);
+			} else if (response.action === "ack") {
+				// Or ack the frame
+				await this.ackControllerRequestFrame(frame);
 			}
 		}
 	}
@@ -463,36 +467,39 @@ export type MockNodeResponse = {
 	cc: CommandClass;
 	ackRequested?: boolean; // Defaults to false
 } | {
-	// Stop processing and do nothing
+	// Acknowledge the incoming frame
+	action: "ack";
+} | {
+	// do nothing
 	action: "stop";
 } | {
-	// Stop processing and indicate success to the sending node
+	// indicate success to the sending node
 	action: "ok";
 } | {
-	// Stop processing and indicate failure to the sending node
+	// indicate failure to the sending node
 	action: "fail";
 };
 
 export interface MockNodeBehavior {
-	/** Gets called before the `onControllerFrame` handlers and can transform an incoming `MockZWaveFrame` into another */
-	transformIncomingFrame?: (
+	/** Gets called before the `handleCC` handlers and can transform an incoming `CommandClass` into another */
+	transformIncomingCC?: (
 		controller: MockController,
 		self: MockNode,
-		frame: MockZWaveFrame,
-	) => Promise<MockZWaveFrame> | MockZWaveFrame;
+		cc: CommandClass,
+	) => Promise<CommandClass> | CommandClass;
 
-	/** Gets called when a message from the controller is received. Returns an action to be performed in response, or `undefined` if there is nothing to do. */
-	onControllerFrame?: (
+	/** Gets called when a CC from the controller is received. Returns an action to be performed in response, or `undefined` if there is nothing to do. */
+	handleCC?: (
 		controller: MockController,
 		self: MockNode,
-		frame: MockZWaveFrame,
+		receivedCC: CommandClass,
 	) => Promise<MockNodeResponse | undefined> | MockNodeResponse | undefined;
 
 	/** Gets called after the `onControllerFrame` handlers and can transform one `MockNodeResponse` into another */
 	transformResponse?: (
 		controller: MockController,
 		self: MockNode,
-		receivedFrame: MockZWaveFrame,
+		receivedCC: CommandClass,
 		response: MockNodeResponse,
 	) => Promise<MockNodeResponse> | MockNodeResponse;
 }

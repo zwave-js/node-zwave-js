@@ -29,20 +29,17 @@ const StateKeys = {
 } as const;
 
 const respondToConfigurationGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ConfigurationCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ConfigurationCCGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Configuration,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 
-			const parameter = frame.payload.parameter;
+			const parameter = receivedCC.parameter;
 
 			const paramInfo = capabilities.parameters.find(
 				(p) => p["#"] === parameter,
@@ -68,31 +65,28 @@ const respondToConfigurationGet: MockNodeBehavior = {
 };
 
 const respondToConfigurationSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ConfigurationCCSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ConfigurationCCSet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Configuration,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const parameter = frame.payload.parameter;
+			const parameter = receivedCC.parameter;
 			const paramInfo = capabilities.parameters.find(
 				(p) => p["#"] === parameter,
 			);
 			// Do nothing if the parameter is not supported
 			if (!paramInfo) return { action: "fail" };
 
-			if (frame.payload.resetToDefault) {
+			if (receivedCC.resetToDefault) {
 				self.state.delete(StateKeys.value(parameter));
 				return { action: "ok" };
 			}
 
-			const value = frame.payload.value!;
+			const value = receivedCC.value!;
 
 			// Do nothing if the value is out of range
 			if (paramInfo.minValue != undefined && value < paramInfo.minValue) {
@@ -111,16 +105,13 @@ const respondToConfigurationSet: MockNodeBehavior = {
 };
 
 const respondToConfigurationDefaultReset: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ConfigurationCCDefaultReset
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ConfigurationCCDefaultReset) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Configuration,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			for (const paramInfo of capabilities.parameters) {
@@ -132,19 +123,16 @@ const respondToConfigurationDefaultReset: MockNodeBehavior = {
 };
 
 const respondToConfigurationNameGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ConfigurationCCNameGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ConfigurationCCNameGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Configuration,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const parameter = frame.payload.parameter;
+			const parameter = receivedCC.parameter;
 			const paramInfo = capabilities.parameters.find(
 				(p) => p["#"] === parameter,
 			);
@@ -163,19 +151,16 @@ const respondToConfigurationNameGet: MockNodeBehavior = {
 };
 
 const respondToConfigurationInfoGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ConfigurationCCInfoGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ConfigurationCCInfoGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Configuration,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const parameter = frame.payload.parameter;
+			const parameter = receivedCC.parameter;
 			const paramInfo = capabilities.parameters.find(
 				(p) => p["#"] === parameter,
 			);
@@ -194,19 +179,16 @@ const respondToConfigurationInfoGet: MockNodeBehavior = {
 };
 
 const respondToConfigurationPropertiesGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ConfigurationCCPropertiesGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ConfigurationCCPropertiesGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Configuration,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const parameter = frame.payload.parameter;
+			const parameter = receivedCC.parameter;
 			const paramIndex = capabilities.parameters.findIndex(
 				(p) => p["#"] === parameter,
 			);

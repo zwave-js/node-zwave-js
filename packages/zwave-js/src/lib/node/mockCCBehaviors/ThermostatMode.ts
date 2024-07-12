@@ -25,15 +25,12 @@ const StateKeys = {
 } as const;
 
 const respondToThermostatModeSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ThermostatModeCCSet
-		) {
-			self.state.set(StateKeys.mode, frame.payload.mode);
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ThermostatModeCCSet) {
+			self.state.set(StateKeys.mode, receivedCC.mode);
 			self.state.set(
 				StateKeys.manufacturerData,
-				frame.payload.manufacturerData,
+				receivedCC.manufacturerData,
 			);
 			return { action: "ok" };
 		}
@@ -41,11 +38,8 @@ const respondToThermostatModeSet: MockNodeBehavior = {
 };
 
 const respondToThermostatModeGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ThermostatModeCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ThermostatModeCCGet) {
 			const mode = (self.state.get(StateKeys.mode)
 				?? ThermostatMode.Off) as ThermostatMode;
 			const manufacturerData =
@@ -66,16 +60,13 @@ const respondToThermostatModeGet: MockNodeBehavior = {
 };
 
 const respondToThermostatModeSupportedGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ThermostatModeCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ThermostatModeCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Thermostat Mode"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 

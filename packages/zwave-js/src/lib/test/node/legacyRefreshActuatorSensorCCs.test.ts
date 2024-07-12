@@ -33,12 +33,9 @@ integrationTest(
 			let lastBrightness = 88;
 			let currentBrightness = 0;
 			const respondToMultilevelSwitchSet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof MultilevelSwitchCCSet
-					) {
-						const targetValue = frame.payload.targetValue;
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof MultilevelSwitchCCSet) {
+						const targetValue = receivedCC.targetValue;
 						if (targetValue === 255) {
 							currentBrightness = lastBrightness;
 						} else {
@@ -56,11 +53,8 @@ integrationTest(
 
 			// Report Multilevel Switch status
 			const respondToMultilevelSwitchGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof MultilevelSwitchCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof MultilevelSwitchCCGet) {
 						const cc = new MultilevelSwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							targetValue: 88,

@@ -28,16 +28,13 @@ const StateKeys = {
 } as const;
 
 const respondToSoundSwitchConfigurationGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof SoundSwitchCCConfigurationGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof SoundSwitchCCConfigurationGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Sound Switch"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new SoundSwitchCCConfigurationReport(self.host, {
@@ -55,18 +52,15 @@ const respondToSoundSwitchConfigurationGet: MockNodeBehavior = {
 };
 
 const respondToSoundSwitchConfigurationSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof SoundSwitchCCConfigurationSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof SoundSwitchCCConfigurationSet) {
 			self.state.set(
 				StateKeys.defaultToneId,
-				frame.payload.defaultToneId,
+				receivedCC.defaultToneId,
 			);
 			self.state.set(
 				StateKeys.defaultVolume,
-				frame.payload.defaultVolume,
+				receivedCC.defaultVolume,
 			);
 			return { action: "ok" };
 		}
@@ -74,16 +68,13 @@ const respondToSoundSwitchConfigurationSet: MockNodeBehavior = {
 };
 
 const respondToSoundSwitchToneNumberGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof SoundSwitchCCTonesNumberGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof SoundSwitchCCTonesNumberGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Sound Switch"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new SoundSwitchCCTonesNumberReport(self.host, {
@@ -96,23 +87,20 @@ const respondToSoundSwitchToneNumberGet: MockNodeBehavior = {
 };
 
 const respondToSoundSwitchToneInfoGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof SoundSwitchCCToneInfoGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof SoundSwitchCCToneInfoGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Sound Switch"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const tone = capabilities.tones[frame.payload.toneId - 1];
+			const tone = capabilities.tones[receivedCC.toneId - 1];
 			if (tone) {
 				const cc = new SoundSwitchCCToneInfoReport(self.host, {
 					nodeId: controller.host.ownNodeId,
-					toneId: frame.payload.toneId,
+					toneId: receivedCC.toneId,
 					...tone,
 				});
 				return { action: "sendCC", cc };

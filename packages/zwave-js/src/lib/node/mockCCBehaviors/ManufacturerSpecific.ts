@@ -9,11 +9,8 @@ import {
 } from "@zwave-js/testing";
 
 const respondToManufacturerSpecificGet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ManufacturerSpecificCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ManufacturerSpecificCCGet) {
 			const cc = new ManufacturerSpecificCCReport(self.host, {
 				nodeId: self.id,
 				manufacturerId: self.capabilities.manufacturerId,

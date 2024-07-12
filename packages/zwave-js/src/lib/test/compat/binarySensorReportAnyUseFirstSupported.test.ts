@@ -33,16 +33,13 @@ integrationTest(
 
 		customSetup: async (driver, mockController, mockNode) => {
 			const respondToBinarySensorGet: MockNodeBehavior = {
-				onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof BinarySensorCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof BinarySensorCCGet) {
 						const capabilities = {
 							...defaultCapabilities,
 							...self.getCCCapabilities(
 								CommandClasses["Binary Sensor"],
-								frame.payload.endpointIndex,
+								receivedCC.endpointIndex,
 							),
 						};
 
