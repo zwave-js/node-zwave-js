@@ -7,11 +7,7 @@ import {
 	SupervisionCCReport,
 } from "@zwave-js/cc";
 import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -34,47 +30,29 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Have the node respond to all Supervision Get negatively
 			const respondToSupervisionGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof SupervisionCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof SupervisionCCGet) {
 						const cc = new SupervisionCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
-							sessionId: frame.payload.sessionId,
+							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Fail,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 
 			// and always report OFF
 			const respondToBinarySwitchGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof BinarySwitchCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof BinarySwitchCCGet) {
 						const cc = new BinarySwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							currentValue: false,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(

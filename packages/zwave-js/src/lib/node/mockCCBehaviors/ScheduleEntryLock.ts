@@ -27,9 +27,7 @@ import { CommandClasses } from "@zwave-js/core/safe";
 import { type AllOrNone } from "@zwave-js/shared/safe";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	type ScheduleEntryLockCCCapabilities,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { defaultCapabilities as defaultUserCodeCapabilities } from "./UserCode";
 
@@ -51,176 +49,145 @@ const StateKeys = {
 } as const;
 
 const respondToScheduleEntryLockSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Schedule Entry Lock"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new ScheduleEntryLockCCSupportedReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				...capabilities,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockTimeOffsetSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCTimeOffsetSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCTimeOffsetSet) {
 			self.state.set(
 				StateKeys.standardOffset,
-				frame.payload.standardOffset,
+				receivedCC.standardOffset,
 			);
-			self.state.set(StateKeys.dstOffset, frame.payload.dstOffset);
-
-			return true;
+			self.state.set(StateKeys.dstOffset, receivedCC.dstOffset);
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockTimeOffsetGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCTimeOffsetGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCTimeOffsetGet) {
 			const cc = new ScheduleEntryLockCCTimeOffsetReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				standardOffset: (self.state.get(StateKeys.standardOffset)
 					?? 0) as number,
 				dstOffset: (self.state.get(StateKeys.dstOffset) ?? 0) as number,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockEnableSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCEnableSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCEnableSet) {
 			// No need to do anything, this cannot be queried
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockEnableAllSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCEnableAllSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCEnableAllSet) {
 			// No need to do anything, this cannot be queried
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockWeekDayScheduleSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCWeekDayScheduleSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCWeekDayScheduleSet) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			// If the user identifier is out of range, the command will be ignored
-			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			const userId = receivedCC.userId;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Schedule Entry Lock"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const slotId = frame.payload.slotId;
+			const slotId = receivedCC.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numWeekDaySlots) return true;
+			if (slotId > capabilities.numWeekDaySlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.WeekDay;
 
 			const schedule =
-				frame.payload.action === ScheduleEntryLockSetAction.Set
+				receivedCC.action === ScheduleEntryLockSetAction.Set
 					? {
-						weekday: frame.payload.weekday!,
-						startHour: frame.payload.startHour!,
-						startMinute: frame.payload.startMinute!,
-						stopHour: frame.payload.stopHour!,
-						stopMinute: frame.payload.stopMinute!,
+						weekday: receivedCC.weekday!,
+						startHour: receivedCC.startHour!,
+						startMinute: receivedCC.startMinute!,
+						stopHour: receivedCC.stopHour!,
+						stopMinute: receivedCC.stopMinute!,
 					}
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCWeekDayScheduleGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCWeekDayScheduleGet) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			// If the user identifier is out of range, the command will be ignored
-			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			const userId = receivedCC.userId;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Schedule Entry Lock"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const slotId = frame.payload.slotId;
+			const slotId = receivedCC.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numWeekDaySlots) return true;
+			if (slotId > capabilities.numWeekDaySlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.WeekDay;
 
@@ -234,98 +201,92 @@ const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
 				slotId,
 				...schedule,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockYearDayScheduleSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCYearDayScheduleSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCYearDayScheduleSet) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			// If the user identifier is out of range, the command will be ignored
-			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			const userId = receivedCC.userId;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Schedule Entry Lock"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const slotId = frame.payload.slotId;
+			const slotId = receivedCC.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numYearDaySlots) return true;
+			if (slotId > capabilities.numYearDaySlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.YearDay;
 
 			const schedule =
-				frame.payload.action === ScheduleEntryLockSetAction.Set
+				receivedCC.action === ScheduleEntryLockSetAction.Set
 					? {
-						startYear: frame.payload.startYear!,
-						startMonth: frame.payload.startMonth!,
-						startDay: frame.payload.startDay!,
-						startHour: frame.payload.startHour!,
-						startMinute: frame.payload.startMinute!,
-						stopYear: frame.payload.stopYear!,
-						stopMonth: frame.payload.stopMonth!,
-						stopDay: frame.payload.stopDay!,
-						stopHour: frame.payload.stopHour!,
-						stopMinute: frame.payload.stopMinute!,
+						startYear: receivedCC.startYear!,
+						startMonth: receivedCC.startMonth!,
+						startDay: receivedCC.startDay!,
+						startHour: receivedCC.startHour!,
+						startMinute: receivedCC.startMinute!,
+						stopYear: receivedCC.stopYear!,
+						stopMonth: receivedCC.stopMonth!,
+						stopDay: receivedCC.stopDay!,
+						stopHour: receivedCC.stopHour!,
+						stopMinute: receivedCC.stopMinute!,
 					}
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ScheduleEntryLockCCYearDayScheduleGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ScheduleEntryLockCCYearDayScheduleGet) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			// If the user identifier is out of range, the command will be ignored
-			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			const userId = receivedCC.userId;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Schedule Entry Lock"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const slotId = frame.payload.slotId;
+			const slotId = receivedCC.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numYearDaySlots) return true;
+			if (slotId > capabilities.numYearDaySlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.YearDay;
 
@@ -339,95 +300,93 @@ const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
 				slotId,
 				...schedule,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockDailyRepeatingScheduleSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
+	handleCC(controller, self, receivedCC) {
 		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload
+			receivedCC
 				instanceof ScheduleEntryLockCCDailyRepeatingScheduleSet
 		) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			// If the user identifier is out of range, the command will be ignored
-			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			const userId = receivedCC.userId;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Schedule Entry Lock"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const slotId = frame.payload.slotId;
+			const slotId = receivedCC.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numDailyRepeatingSlots) return true;
+			if (slotId > capabilities.numDailyRepeatingSlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.DailyRepeating;
 
 			const schedule =
-				frame.payload.action === ScheduleEntryLockSetAction.Set
+				receivedCC.action === ScheduleEntryLockSetAction.Set
 					? {
-						weekdays: frame.payload.weekdays!,
-						startHour: frame.payload.startHour!,
-						startMinute: frame.payload.startMinute!,
-						durationHour: frame.payload.durationHour!,
-						durationMinute: frame.payload.durationMinute!,
+						weekdays: receivedCC.weekdays!,
+						startHour: receivedCC.startHour!,
+						startMinute: receivedCC.startMinute!,
+						durationHour: receivedCC.durationHour!,
+						durationMinute: receivedCC.durationMinute!,
 					}
 					: undefined;
 
 			self.state.set(StateKeys.schedule(userId, slotId, kind), schedule);
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
+	handleCC(controller, self, receivedCC) {
 		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload
+			receivedCC
 				instanceof ScheduleEntryLockCCDailyRepeatingScheduleGet
 		) {
 			const userCodeCapabilities = {
 				...defaultUserCodeCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			// If the user identifier is out of range, the command will be ignored
-			const userId = frame.payload.userId;
-			if (userId > userCodeCapabilities.numUsers) return true;
+			const userId = receivedCC.userId;
+			if (userId > userCodeCapabilities.numUsers) {
+				return { action: "fail" };
+			}
 
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Schedule Entry Lock"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const slotId = frame.payload.slotId;
+			const slotId = receivedCC.slotId;
 			// Ignore out of range slot queries
-			if (slotId > capabilities.numDailyRepeatingSlots) return true;
+			if (slotId > capabilities.numDailyRepeatingSlots) {
+				return { action: "fail" };
+			}
 
 			const kind = ScheduleEntryLockScheduleKind.DailyRepeating;
 
@@ -444,14 +403,8 @@ const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
 					...schedule,
 				},
 			);
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

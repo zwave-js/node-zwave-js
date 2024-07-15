@@ -15,7 +15,6 @@ import {
 } from "@zwave-js/core";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
@@ -42,25 +41,16 @@ integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {
 	customSetup: async (driver, controller, mockNode) => {
 		// Respond to Basic CC Get, so the driver doesn't assume Basic CC is unsupported
 		const respondToBasicGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
-				if (
-					frame.type === MockZWaveFrameType.Request
-					&& frame.payload instanceof BasicCCGet
-				) {
+			handleCC(controller, self, receivedCC) {
+				if (receivedCC instanceof BasicCCGet) {
 					const cc = new BasicCCReport(self.host, {
 						nodeId: controller.host.ownNodeId,
 						currentValue: 0,
 						targetValue: 0,
 						duration: new Duration(0, "seconds"),
 					});
-					await self.sendToController(
-						createMockZWaveRequestFrame(cc, {
-							ackRequested: false,
-						}),
-					);
-					return true;
+					return { action: "sendCC", cc };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToBasicGet);

@@ -7,67 +7,51 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import type { BinarySensorCCCapabilities } from "@zwave-js/testing";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior } from "@zwave-js/testing";
 
 const defaultCapabilities: BinarySensorCCCapabilities = {
 	supportedSensorTypes: [],
 };
 
 const respondToBinarySensorSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof BinarySensorCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof BinarySensorCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Binary Sensor"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new BinarySensorCCSupportedReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				supportedSensorTypes: capabilities.supportedSensorTypes,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToBinarySensorGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof BinarySensorCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof BinarySensorCCGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Binary Sensor"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 
 			let sensorType: BinarySensorType | undefined;
 			if (
-				frame.payload.sensorType == undefined
-				|| frame.payload.sensorType === BinarySensorType.Any
+				receivedCC.sensorType == undefined
+				|| receivedCC.sensorType === BinarySensorType.Any
 			) {
 				// If the sensor type is not specified, use the first supported one
 				sensorType = capabilities.supportedSensorTypes[0];
 			} else {
-				sensorType = frame.payload.sensorType;
+				sensorType = receivedCC.sensorType;
 			}
 
 			if (sensorType != undefined) {
@@ -77,15 +61,10 @@ const respondToBinarySensorGet: MockNodeBehavior = {
 					type: sensorType,
 					value,
 				});
-				await self.sendToController(
-					createMockZWaveRequestFrame(cc, {
-						ackRequested: false,
-					}),
-				);
+				return { action: "sendCC", cc };
 			}
-			return true;
+			return { action: "stop" };
 		}
-		return false;
 	},
 };
 

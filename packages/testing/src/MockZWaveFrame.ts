@@ -1,4 +1,4 @@
-import type { ICommandClass } from "@zwave-js/core";
+import { type CommandClass } from "@zwave-js/cc";
 
 /**
  * Is used to simulate communication between a {@link MockController} and a {@link MockNode}.
@@ -15,7 +15,7 @@ export interface MockZWaveRequestFrame {
 	/** Whether an ACK is requested from the destination */
 	ackRequested: boolean;
 	/** The Command Class contained in the frame */
-	payload: ICommandClass;
+	payload: CommandClass;
 }
 
 export interface LazyMockZWaveRequestFrame {
@@ -25,7 +25,7 @@ export interface LazyMockZWaveRequestFrame {
 	/** Whether an ACK is requested from the destination */
 	ackRequested: boolean;
 	/** The Command Class contained in the frame */
-	payload: ICommandClass | (() => ICommandClass);
+	payload: CommandClass | (() => CommandClass);
 }
 
 export interface MockZWaveAckFrame {
@@ -44,7 +44,7 @@ export enum MockZWaveFrameType {
 }
 
 export function createMockZWaveRequestFrame(
-	payload: ICommandClass | (() => ICommandClass),
+	payload: CommandClass | (() => CommandClass),
 	options: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">> = {},
 ): LazyMockZWaveRequestFrame {
 	const { repeaters = [], ackRequested = true } = options;

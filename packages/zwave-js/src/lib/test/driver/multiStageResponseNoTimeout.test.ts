@@ -11,7 +11,6 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
@@ -35,15 +34,12 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const respondToConfigurationNameGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof ConfigurationCCNameGet
-					) {
+				async handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof ConfigurationCCNameGet) {
 						await wait(700);
 						let cc = new ConfigurationCCNameReport(self.host, {
 							nodeId: controller.host.ownNodeId,
-							parameter: frame.payload.parameter,
+							parameter: receivedCC.parameter,
 							name: "Test para",
 							reportsToFollow: 1,
 						});
@@ -57,7 +53,7 @@ integrationTest(
 
 						cc = new ConfigurationCCNameReport(self.host, {
 							nodeId: controller.host.ownNodeId,
-							parameter: frame.payload.parameter,
+							parameter: receivedCC.parameter,
 							name: "meter",
 							reportsToFollow: 0,
 						});
@@ -66,9 +62,9 @@ integrationTest(
 								ackRequested: false,
 							}),
 						);
-						return true;
+
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToConfigurationNameGet);
@@ -102,16 +98,13 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const respondToConfigurationNameGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof ConfigurationCCNameGet
-					) {
+				async handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof ConfigurationCCNameGet) {
 						const configCC = new ConfigurationCCNameReport(
 							self.host,
 							{
 								nodeId: controller.host.ownNodeId,
-								parameter: frame.payload.parameter,
+								parameter: receivedCC.parameter,
 								name:
 									"Veeeeeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooong parameter name",
 								reportsToFollow: 0,
@@ -159,9 +152,8 @@ integrationTest(
 								ackRequested: false,
 							}),
 						);
-						return true;
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToConfigurationNameGet);
@@ -190,24 +182,15 @@ integrationTest("GET requests DO time out if there's no matching response", {
 
 	async customSetup(driver, mockController, mockNode) {
 		const respondToConfigurationNameGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
-				if (
-					frame.type === MockZWaveFrameType.Request
-					&& frame.payload instanceof ConfigurationCCNameGet
-				) {
+			handleCC(controller, self, receivedCC) {
+				if (receivedCC instanceof ConfigurationCCNameGet) {
 					// This is not the response you're looking for
 					const cc = new BasicCCReport(self.host, {
 						nodeId: controller.host.ownNodeId,
 						currentValue: 1,
 					});
-					await self.sendToController(
-						createMockZWaveRequestFrame(cc, {
-							ackRequested: false,
-						}),
-					);
-					return true;
+					return { action: "sendCC", cc };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToConfigurationNameGet);

@@ -5,9 +5,7 @@ import {
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	type WindowCoveringCCCapabilities,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: WindowCoveringCCCapabilities = {
@@ -15,30 +13,21 @@ const defaultCapabilities: WindowCoveringCCCapabilities = {
 };
 
 const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof WindowCoveringCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof WindowCoveringCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Window Covering"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new WindowCoveringCCSupportedReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				supportedParameters: capabilities.supportedParameters,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

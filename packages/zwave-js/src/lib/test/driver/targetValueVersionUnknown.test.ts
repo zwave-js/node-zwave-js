@@ -5,11 +5,7 @@ import {
 	VersionCCCommandClassGet,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
@@ -29,37 +25,24 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Do not respond to CC version queries
 			const noResponseToVersionCommandClassGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof VersionCCCommandClassGet
-					) {
-						return true;
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof VersionCCCommandClassGet) {
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(noResponseToVersionCommandClassGet);
 
 			// Respond to binary switch state
 			const respondToBinarySwitchGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof BinarySwitchCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof BinarySwitchCCGet) {
 						const cc = new BinarySwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							currentValue: true,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToBinarySwitchGet);
@@ -88,23 +71,14 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Respond to binary switch state
 			const respondToBinarySwitchGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof BinarySwitchCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof BinarySwitchCCGet) {
 						const cc = new BinarySwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							currentValue: true,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToBinarySwitchGet);

@@ -11,8 +11,6 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import {
 	type EnergyProductionCCCapabilities,
 	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: EnergyProductionCCCapabilities = {
@@ -37,43 +35,34 @@ const defaultCapabilities: EnergyProductionCCCapabilities = {
 };
 
 const respondToEnergyProductionGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof EnergyProductionCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof EnergyProductionCCGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Energy Production"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 
 			const result = capabilities.values[
 				getEnumMemberName(
 					EnergyProductionParameter,
-					frame.payload.parameter,
+					receivedCC.parameter,
 				) as unknown as keyof typeof capabilities.values
 			];
 
 			const cc = new EnergyProductionCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
-				parameter: frame.payload.parameter,
+				parameter: receivedCC.parameter,
 				value: result?.value ?? 0,
 				scale: getEnergyProductionScale(
-					frame.payload.parameter,
+					receivedCC.parameter,
 					result?.scale ?? 0,
 				),
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

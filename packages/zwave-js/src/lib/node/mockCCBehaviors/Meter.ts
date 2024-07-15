@@ -10,8 +10,6 @@ import { CommandClasses } from "@zwave-js/core";
 import {
 	type MeterCCCapabilities,
 	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 export const defaultCapabilities: MeterCCCapabilities = {
@@ -22,16 +20,13 @@ export const defaultCapabilities: MeterCCCapabilities = {
 };
 
 const respondToMeterSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MeterCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MeterCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Meter,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new MeterCCSupportedReport(self.host, {
@@ -41,33 +36,24 @@ const respondToMeterSupportedGet: MockNodeBehavior = {
 				supportedRateTypes: capabilities.supportedRateTypes,
 				supportsReset: capabilities.supportsReset,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToMeterGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MeterCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MeterCCGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Meter,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const scale = frame.payload.scale
+			const scale = receivedCC.scale
 				?? capabilities.supportedScales[0];
-			const rateType = frame.payload.rateType
+			const rateType = receivedCC.rateType
 				?? capabilities.supportedRateTypes[0]
 				?? RateType.Consumed;
 
@@ -89,32 +75,23 @@ const respondToMeterGet: MockNodeBehavior = {
 				rateType,
 				...normalizedValue,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToMeterReset: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof MeterCCReset
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof MeterCCReset) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses.Meter,
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 
-			const cc = frame.payload;
+			const cc = receivedCC;
 			if (
 				cc.type != undefined
 				&& cc.scale != undefined
@@ -129,10 +106,8 @@ const respondToMeterReset: MockNodeBehavior = {
 			} else {
 				capabilities.onReset?.();
 			}
-
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 

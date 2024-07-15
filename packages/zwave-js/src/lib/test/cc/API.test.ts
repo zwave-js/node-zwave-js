@@ -1,5 +1,5 @@
 import { API, CCAPI } from "@zwave-js/cc";
-import { unknownBoolean } from "@zwave-js/core";
+import { NOT_KNOWN } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";
@@ -16,7 +16,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-@API(0xff)
+@API(0xff as any)
 export class DummyCCAPI extends CCAPI {}
 
 test.before(async (t) => {
@@ -49,8 +49,8 @@ test.after.always(async (t) => {
 	driver.removeAllListeners();
 });
 
-test.serial(`supportsCommand() returns "unknown" by default`, (t) => {
+test.serial(`supportsCommand() returns NOT_KNOWN by default`, (t) => {
 	const { node2, driver } = t.context;
 	const API = new DummyCCAPI(driver, node2);
-	t.is(API.supportsCommand(null as any), unknownBoolean);
+	t.is(API.supportsCommand(null as any), NOT_KNOWN);
 });

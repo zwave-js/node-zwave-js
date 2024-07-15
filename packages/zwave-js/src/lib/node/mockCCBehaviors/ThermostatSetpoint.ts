@@ -11,9 +11,7 @@ import {
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	type ThermostatSetpointCCCapabilities,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: ThermostatSetpointCCCapabilities = {
@@ -34,59 +32,52 @@ const StateKeys = {
 } as const;
 
 const respondToThermostatSetpointSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ThermostatSetpointCCSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ThermostatSetpointCCSet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Thermostat Setpoint"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const setpointCaps =
-				capabilities.setpoints[frame.payload.setpointType];
-			if (!setpointCaps) return true;
+				capabilities.setpoints[receivedCC.setpointType];
+			if (!setpointCaps) return { action: "fail" };
 
-			const value = frame.payload.value;
+			const value = receivedCC.value;
 			if (
 				value > setpointCaps.minValue
 				|| value > setpointCaps.maxValue
 			) {
-				return true;
+				return { action: "fail" };
 			}
 
 			self.state.set(
-				StateKeys.setpoint(frame.payload.setpointType),
+				StateKeys.setpoint(receivedCC.setpointType),
 				value,
 			);
 			self.state.set(
-				StateKeys.scale(frame.payload.setpointType),
-				frame.payload.scale,
+				StateKeys.scale(receivedCC.setpointType),
+				receivedCC.scale,
 			);
-			return true;
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 
 const respondToThermostatSetpointGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ThermostatSetpointCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ThermostatSetpointCCGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Thermostat Setpoint"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 
-			const setpointType = frame.payload.setpointType;
+			const setpointType = receivedCC.setpointType;
 
 			const setpointCaps = capabilities.setpoints[setpointType];
 
@@ -121,29 +112,19 @@ const respondToThermostatSetpointGet: MockNodeBehavior = {
 					value: 0,
 				});
 			}
-
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToThermostatSetpointSupportedGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ThermostatSetpointCCSupportedGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ThermostatSetpointCCSupportedGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Thermostat Setpoint"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 
@@ -153,32 +134,23 @@ const respondToThermostatSetpointSupportedGet: MockNodeBehavior = {
 					(k) => parseInt(k),
 				),
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToThermostatSetpointCapabilitiesGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof ThermostatSetpointCCCapabilitiesGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof ThermostatSetpointCCCapabilitiesGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["Thermostat Setpoint"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 
-			const setpointType = frame.payload.setpointType;
+			const setpointType = receivedCC.setpointType;
 			const setpointCaps = capabilities.setpoints[setpointType];
 
 			let cc: ThermostatSetpointCCCapabilitiesReport;
@@ -201,15 +173,8 @@ const respondToThermostatSetpointCapabilitiesGet: MockNodeBehavior = {
 					maxValueScale: 0,
 				});
 			}
-
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 

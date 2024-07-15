@@ -21,11 +21,7 @@ import {
 	SecurityManager2,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
@@ -124,11 +120,8 @@ integrationTest(
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof Security2CCNonceGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
 							controller.host.ownNodeId,
 						);
@@ -138,29 +131,20 @@ integrationTest(
 							MOS: false,
 							receiverEI: nonce,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToNonceGet);
 
 			// Handle decode errors
 			const handleInvalidCC: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof InvalidCC
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof InvalidCC) {
 						if (
-							frame.payload.reason
+							receivedCC.reason
 								=== ZWaveErrorCodes.Security2CC_CannotDecode
-							|| frame.payload.reason
+							|| receivedCC.reason
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
@@ -172,30 +156,23 @@ integrationTest(
 								MOS: false,
 								receiverEI: nonce,
 							});
-							await self.sendToController(
-								createMockZWaveRequestFrame(cc, {
-									ackRequested: false,
-								}),
-							);
-							return true;
+							return { action: "sendCC", cc };
 						}
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(handleInvalidCC);
 
 			// The node was granted the S2_Unauthenticated key
 			const respondToS2CommandsSupportedGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
+						receivedCC
 							instanceof Security2CCMessageEncapsulation
-						&& frame.payload.encapsulated
+						&& receivedCC.encapsulated
 							instanceof Security2CCCommandsSupportedGet
 					) {
-						const isHighestGranted = frame.payload.securityClass
+						const isHighestGranted = receivedCC.securityClass
 							=== self.host.getHighestSecurityClass(self.id);
 
 						const cc = Security2CC.encapsulate(
@@ -216,25 +193,18 @@ integrationTest(
 									: [],
 							}),
 						);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToS2CommandsSupportedGet);
 
 			const respondToS2MultiChannelCCEndPointGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
+						receivedCC
 							instanceof Security2CCMessageEncapsulation
-						&& frame.payload.encapsulated
+						&& receivedCC.encapsulated
 							instanceof MultiChannelCCEndPointGet
 					) {
 						const cc = Security2CC.encapsulate(
@@ -246,28 +216,21 @@ integrationTest(
 								individualCount: self.endpoints.size,
 							}),
 						);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToS2MultiChannelCCEndPointGet);
 
 			const respondToS2MultiChannelCCEndPointFind: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
+						receivedCC
 							instanceof Security2CCMessageEncapsulation
-						&& frame.payload.encapsulated
+						&& receivedCC.encapsulated
 							instanceof MultiChannelCCEndPointFind
 					) {
-						const request = frame.payload.encapsulated;
+						const request = receivedCC.encapsulated;
 						const cc = Security2CC.encapsulate(
 							self.host,
 							new MultiChannelCCEndPointFindReport(self.host, {
@@ -278,29 +241,22 @@ integrationTest(
 								reportsToFollow: 0,
 							}),
 						);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToS2MultiChannelCCEndPointFind);
 
 			const respondToS2MultiChannelCCCapabilityGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
+				handleCC(controller, self, receivedCC) {
 					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload
+						receivedCC
 							instanceof Security2CCMessageEncapsulation
-						&& frame.payload.encapsulated
+						&& receivedCC.encapsulated
 							instanceof MultiChannelCCCapabilityGet
 					) {
 						const endpoint = self.endpoints.get(
-							frame.payload.encapsulated.requestedEndpoint,
+							receivedCC.encapsulated.requestedEndpoint,
 						)!;
 						const cc = Security2CC.encapsulate(
 							self.host,
@@ -320,14 +276,8 @@ integrationTest(
 								],
 							}),
 						);
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToS2MultiChannelCCCapabilityGet);

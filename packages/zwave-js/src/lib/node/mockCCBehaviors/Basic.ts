@@ -1,10 +1,6 @@
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "@zwave-js/cc/BasicCC";
 import { CommandClasses } from "@zwave-js/core/safe";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior } from "@zwave-js/testing";
 
 const STATE_KEY_PREFIX = "Basic_";
 const StateKeys = {
@@ -12,14 +8,11 @@ const StateKeys = {
 } as const;
 
 const respondToBasicGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof BasicCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof BasicCCGet) {
 			// Do not respond if BasicCC is not explicitly listed as supported
 			if (!self.implementedCCs.get(CommandClasses.Basic)?.isSupported) {
-				return false;
+				return;
 			}
 
 			const cc = new BasicCCReport(self.host, {
@@ -27,28 +20,17 @@ const respondToBasicGet: MockNodeBehavior = {
 				currentValue: (self.state.get(StateKeys.currentValue)
 					?? 0) as number,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToBasicSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof BasicCCSet
-		) {
-			self.state.set(StateKeys.currentValue, frame.payload.targetValue);
-
-			return true;
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof BasicCCSet) {
+			self.state.set(StateKeys.currentValue, receivedCC.targetValue);
+			return { action: "ok" };
 		}
-		return false;
 	},
 };
 

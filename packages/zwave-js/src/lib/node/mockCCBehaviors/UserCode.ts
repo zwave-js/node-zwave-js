@@ -19,9 +19,7 @@ import {
 import { CRC16_CCITT, CommandClasses } from "@zwave-js/core/safe";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	type UserCodeCCCapabilities,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 export const defaultCapabilities: UserCodeCCCapabilities = {
@@ -48,47 +46,35 @@ const StateKeys = {
 } as const;
 
 const respondToUsersNumberGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCUsersNumberGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCUsersNumberGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new UserCodeCCUsersNumberReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				supportedUsers: capabilities.numUsers ?? 1,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToUserGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const userId = frame.payload.userId;
+			const userId = receivedCC.userId;
 			let cc: UserCodeCCReport;
 			if (capabilities.numUsers >= userId) {
 				cc = new UserCodeCCReport(self.host, {
@@ -108,60 +94,47 @@ const respondToUserGet: MockNodeBehavior = {
 					userIdStatus: UserIDStatus.StatusNotAvailable,
 				});
 			}
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToUserCodeSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCSet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const userId = frame.payload.userId;
-			const userIdStatus = frame.payload.userIdStatus;
+			const userId = receivedCC.userId;
+			const userIdStatus = receivedCC.userIdStatus;
 			if (capabilities.numUsers >= userId) {
 				self.state.set(StateKeys.userIdStatus(userId), userIdStatus);
 
 				const code = userIdStatus !== UserIDStatus.Available
 						&& userIdStatus !== UserIDStatus.StatusNotAvailable
-					? frame.payload.userCode
+					? receivedCC.userCode
 					: undefined;
 
 				self.state.set(StateKeys.userCode(userId), code);
+				return { action: "ok" };
 			}
-
-			return true;
+			return { action: "fail" };
 		}
-		return false;
 	},
 };
 
 const respondToUserCodeCapabilitiesGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCCapabilitiesGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCCapabilitiesGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new UserCodeCCCapabilitiesReport(self.host, {
@@ -177,29 +150,19 @@ const respondToUserCodeCapabilitiesGet: MockNodeBehavior = {
 				supportedKeypadModes: capabilities.supportedKeypadModes!,
 				supportedASCIIChars: capabilities.supportedASCIIChars!,
 			});
-
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToUserCodeKeypadModeGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCKeypadModeGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCKeypadModeGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			const cc = new UserCodeCCKeypadModeReport(self.host, {
@@ -208,58 +171,45 @@ const respondToUserCodeKeypadModeGet: MockNodeBehavior = {
 					?? capabilities.supportedKeypadModes?.[0]
 					?? KeypadMode.Normal) as KeypadMode,
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToUserCodeKeypadModeSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCKeypadModeSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCKeypadModeSet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			if (
 				capabilities.supportedKeypadModes?.includes(
-					frame.payload.keypadMode,
+					receivedCC.keypadMode,
 				)
 			) {
-				self.state.set(StateKeys.keypadMode, frame.payload.keypadMode);
+				self.state.set(StateKeys.keypadMode, receivedCC.keypadMode);
+				return { action: "ok" };
 			}
-
-			return true;
+			return { action: "fail" };
 		}
-		return false;
 	},
 };
 
 const respondToUserCodeAdminCodeSet: MockNodeBehavior = {
-	onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCAdminCodeSet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCAdminCodeSet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
-			const adminCode = frame.payload.adminCode;
+			const adminCode = receivedCC.adminCode;
 			if (capabilities.supportsAdminCode) {
 				if (
 					adminCode.length > 0
@@ -267,28 +217,24 @@ const respondToUserCodeAdminCodeSet: MockNodeBehavior = {
 				) {
 					self.state.set(
 						StateKeys.adminCode,
-						frame.payload.adminCode,
+						receivedCC.adminCode,
 					);
+					return { action: "ok" };
 				}
 			}
-
-			return true;
+			return { action: "fail" };
 		}
-		return false;
 	},
 };
 
 const respondToUserCodeAdminCodeGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCAdminCodeGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCAdminCodeGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			let adminCode: string | undefined;
@@ -300,28 +246,19 @@ const respondToUserCodeAdminCodeGet: MockNodeBehavior = {
 				nodeId: controller.host.ownNodeId,
 				adminCode: adminCode ?? "",
 			});
-			await self.sendToController(
-				createMockZWaveRequestFrame(cc, {
-					ackRequested: false,
-				}),
-			);
-			return true;
+			return { action: "sendCC", cc };
 		}
-		return false;
 	},
 };
 
 const respondToUserCodeUserCodeChecksumGet: MockNodeBehavior = {
-	async onControllerFrame(controller, self, frame) {
-		if (
-			frame.type === MockZWaveFrameType.Request
-			&& frame.payload instanceof UserCodeCCUserCodeChecksumGet
-		) {
+	handleCC(controller, self, receivedCC) {
+		if (receivedCC instanceof UserCodeCCUserCodeChecksumGet) {
 			const capabilities = {
 				...defaultCapabilities,
 				...self.getCCCapabilities(
 					CommandClasses["User Code"],
-					frame.payload.endpointIndex,
+					receivedCC.endpointIndex,
 				),
 			};
 			if (capabilities.supportsUserCodeChecksum) {
@@ -356,16 +293,10 @@ const respondToUserCodeUserCodeChecksumGet: MockNodeBehavior = {
 					nodeId: controller.host.ownNodeId,
 					userCodeChecksum: checksum,
 				});
-				await self.sendToController(
-					createMockZWaveRequestFrame(cc, {
-						ackRequested: false,
-					}),
-				);
+				return { action: "sendCC", cc };
 			}
-
-			return true;
+			return { action: "stop" };
 		}
-		return false;
 	},
 };
 

@@ -6,7 +6,6 @@ import {
 	ZWaveProtocolCCRequestNodeInformationFrame,
 } from "@zwave-js/cc/ZWaveProtocolCC";
 import {
-	type ICommandClass,
 	NodeType,
 	TransmitOptions,
 	TransmitStatus,
@@ -92,7 +91,7 @@ function createLazySendDataPayload(
 	controller: MockController,
 	node: MockNode,
 	msg: SendDataRequest | SendDataMulticastRequest,
-): () => ICommandClass {
+): () => CommandClass {
 	return () => {
 		try {
 			const cmd = CommandClass.from(node.host, {

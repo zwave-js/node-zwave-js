@@ -4,11 +4,7 @@ import {
 	MultilevelSwitchCCSet,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { ApplicationUpdateRequestNodeInfoReceived } from "../../serialapi/application/ApplicationUpdateRequest";
 import { integrationTest } from "../integrationTestSuite";
@@ -33,12 +29,9 @@ integrationTest(
 			let lastBrightness = 88;
 			let currentBrightness = 0;
 			const respondToMultilevelSwitchSet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof MultilevelSwitchCCSet
-					) {
-						const targetValue = frame.payload.targetValue;
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof MultilevelSwitchCCSet) {
+						const targetValue = receivedCC.targetValue;
 						if (targetValue === 255) {
 							currentBrightness = lastBrightness;
 						} else {
@@ -48,33 +41,23 @@ integrationTest(
 							}
 						}
 
-						return true;
+						return { action: "ok" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToMultilevelSwitchSet);
 
 			// Report Multilevel Switch status
 			const respondToMultilevelSwitchGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof MultilevelSwitchCCGet
-					) {
+				handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof MultilevelSwitchCCGet) {
 						const cc = new MultilevelSwitchCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							targetValue: 88,
 							currentValue: 88,
 						});
-						await self.sendToController(
-							createMockZWaveRequestFrame(cc, {
-								ackRequested: false,
-							}),
-						);
-						return true;
+						return { action: "sendCC", cc };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToMultilevelSwitchGet);

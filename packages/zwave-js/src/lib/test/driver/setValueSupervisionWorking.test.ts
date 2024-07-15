@@ -6,7 +6,6 @@ import {
 import { CommandClasses, Duration, SupervisionStatus } from "@zwave-js/core";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
@@ -31,14 +30,11 @@ integrationTest(
 		customSetup: async (_driver, _controller, mockNode) => {
 			// When receiving a Supervision Get, first respond with "Working" and after a delay with "Success"
 			const respondToSupervisionGet: MockNodeBehavior = {
-				async onControllerFrame(controller, self, frame) {
-					if (
-						frame.type === MockZWaveFrameType.Request
-						&& frame.payload instanceof SupervisionCCGet
-					) {
+				async handleCC(controller, self, receivedCC) {
+					if (receivedCC instanceof SupervisionCCGet) {
 						let cc = new SupervisionCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
-							sessionId: frame.payload.sessionId,
+							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: true,
 							status: SupervisionStatus.Working,
 							duration: new Duration(10, "seconds"),
@@ -53,7 +49,7 @@ integrationTest(
 
 						cc = new SupervisionCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
-							sessionId: frame.payload.sessionId,
+							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Success,
 						});
@@ -63,9 +59,8 @@ integrationTest(
 							}),
 						);
 
-						return true;
+						return { action: "stop" };
 					}
-					return false;
 				},
 			};
 			mockNode.defineBehavior(respondToSupervisionGet);

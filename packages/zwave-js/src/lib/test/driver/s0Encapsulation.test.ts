@@ -43,11 +43,8 @@ integrationTest("Communication via Security S0 works", {
 
 		// Respond to S0 Nonce Get
 		const respondToS0NonceGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
-				if (
-					frame.type === MockZWaveFrameType.Request
-					&& frame.payload instanceof SecurityCCNonceGet
-				) {
+			handleCC(controller, self, receivedCC) {
+				if (receivedCC instanceof SecurityCCNonceGet) {
 					const nonce = sm0Node.generateNonce(
 						controller.host.ownNodeId,
 						8,
@@ -56,25 +53,18 @@ integrationTest("Communication via Security S0 works", {
 						nodeId: controller.host.ownNodeId,
 						nonce,
 					});
-					await self.sendToController(
-						createMockZWaveRequestFrame(cc, {
-							ackRequested: false,
-						}),
-					);
-					return true;
+					return { action: "sendCC", cc };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToS0NonceGet);
 
 		// Respond to S0 Commands Supported Get
 		const respondToS0CommandsSupportedGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
+			async handleCC(controller, self, receivedCC) {
 				if (
-					frame.type === MockZWaveFrameType.Request
-					&& frame.payload instanceof SecurityCCCommandEncapsulation
-					&& frame.payload.encapsulated
+					receivedCC instanceof SecurityCCCommandEncapsulation
+					&& receivedCC.encapsulated
 						instanceof SecurityCCCommandsSupportedGet
 				) {
 					const nonceGet = new SecurityCCNonceGet(self.host, {
@@ -115,9 +105,8 @@ integrationTest("Communication via Security S0 works", {
 						}),
 					);
 
-					return true;
+					return { action: "stop" };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToS0CommandsSupportedGet);
@@ -125,11 +114,10 @@ integrationTest("Communication via Security S0 works", {
 		// Respond to S0-encapsulated Basic Get with a level that increases with each request
 		let queryCount = 0;
 		const respondToS0BasicGet: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
+			async handleCC(controller, self, receivedCC) {
 				if (
-					frame.type === MockZWaveFrameType.Request
-					&& frame.payload instanceof SecurityCCCommandEncapsulation
-					&& frame.payload.encapsulated instanceof BasicCCGet
+					receivedCC instanceof SecurityCCCommandEncapsulation
+					&& receivedCC.encapsulated instanceof BasicCCGet
 				) {
 					const nonceGet = new SecurityCCNonceGet(self.host, {
 						nodeId: controller.host.ownNodeId,
@@ -165,25 +153,21 @@ integrationTest("Communication via Security S0 works", {
 						}),
 					);
 
-					return true;
+					return { action: "stop" };
 				}
-				return false;
 			},
 		};
 		mockNode.defineBehavior(respondToS0BasicGet);
 
 		// Parse Security CC commands. This MUST be defined last, since defineBehavior will prepend it to the list
 		const parseS0CC: MockNodeBehavior = {
-			async onControllerFrame(controller, self, frame) {
+			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
-				if (
-					frame.type === MockZWaveFrameType.Request
-					&& frame.payload instanceof SecurityCCCommandEncapsulation
-				) {
-					frame.payload.mergePartialCCs(undefined as any, []);
+				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
+					receivedCC.mergePartialCCs(undefined as any, []);
 				}
 				// This just decodes - we need to call further handlers
-				return false;
+				return undefined;
 			},
 		};
 		mockNode.defineBehavior(parseS0CC);

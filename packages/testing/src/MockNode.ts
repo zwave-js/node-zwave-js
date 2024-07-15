@@ -1,3 +1,4 @@
+import type { CommandClass } from "@zwave-js/cc";
 import {
 	type CommandClassInfo,
 	type CommandClasses,
@@ -26,6 +27,7 @@ import {
 	MockZWaveFrameType,
 	type MockZWaveRequestFrame,
 	createMockZWaveAckFrame,
+	createMockZWaveRequestFrame,
 } from "./MockZWaveFrame";
 
 const defaultCCInfo: CommandClassInfo = {
@@ -293,17 +295,56 @@ export class MockNode {
 		);
 		if (handler) {
 			handler.resolve(frame);
-		} else {
+		} else if (frame.type === MockZWaveFrameType.Request) {
+			let cc = frame.payload;
+			let response: MockNodeResponse | undefined;
+
+			// Transform incoming frames with hooks, e.g. to support unwrapping encapsulated CCs
 			for (const behavior of this.behaviors) {
-				if (
-					await behavior.onControllerFrame?.(
+				if (behavior.transformIncomingCC) {
+					cc = await behavior.transformIncomingCC(
 						this.controller,
 						this,
-						frame,
-					)
-				) {
-					return;
+						cc,
+					);
 				}
+			}
+
+			// Figure out what to do with the frame
+			for (const behavior of this.behaviors) {
+				response = await behavior.handleCC?.(
+					this.controller,
+					this,
+					cc,
+				);
+				if (response) break;
+			}
+
+			// If no behavior handled the frame, or we're supposed to stop, stop
+			if (!response || response.action === "stop") return;
+
+			// Transform responses with hooks, e.g. to support Supervision or other encapsulation
+			for (const behavior of this.behaviors) {
+				if (behavior.transformResponse) {
+					response = await behavior.transformResponse(
+						this.controller,
+						this,
+						cc,
+						response,
+					);
+				}
+			}
+
+			// Finally send a CC to the controller if we're supposed to
+			if (response.action === "sendCC") {
+				await this.sendToController(
+					createMockZWaveRequestFrame(response.cc, {
+						ackRequested: response.ackRequested,
+					}),
+				);
+			} else if (response.action === "ack") {
+				// Or ack the frame
+				await this.ackControllerRequestFrame(frame);
 			}
 		}
 	}
@@ -419,11 +460,46 @@ export class MockNode {
 	}
 }
 
+/** What the mock node should do after receiving a controller frame */
+export type MockNodeResponse = {
+	// Send a CC
+	action: "sendCC";
+	cc: CommandClass;
+	ackRequested?: boolean; // Defaults to false
+} | {
+	// Acknowledge the incoming frame
+	action: "ack";
+} | {
+	// do nothing
+	action: "stop";
+} | {
+	// indicate success to the sending node
+	action: "ok";
+} | {
+	// indicate failure to the sending node
+	action: "fail";
+};
+
 export interface MockNodeBehavior {
-	/** Gets called when a message from the controller is received. Return `true` to indicate that the message has been handled. */
-	onControllerFrame?: (
+	/** Gets called before the `handleCC` handlers and can transform an incoming `CommandClass` into another */
+	transformIncomingCC?: (
 		controller: MockController,
 		self: MockNode,
-		frame: MockZWaveFrame,
-	) => Promise<boolean | undefined> | boolean | undefined;
+		cc: CommandClass,
+	) => Promise<CommandClass> | CommandClass;
+
+	/** Gets called when a CC from the controller is received. Returns an action to be performed in response, or `undefined` if there is nothing to do. */
+	handleCC?: (
+		controller: MockController,
+		self: MockNode,
+		receivedCC: CommandClass,
+	) => Promise<MockNodeResponse | undefined> | MockNodeResponse | undefined;
+
+	/** Gets called after the `onControllerFrame` handlers and can transform one `MockNodeResponse` into another */
+	transformResponse?: (
+		controller: MockController,
+		self: MockNode,
+		receivedCC: CommandClass,
+		response: MockNodeResponse,
+	) => Promise<MockNodeResponse> | MockNodeResponse;
 }
