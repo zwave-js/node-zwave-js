@@ -4,6 +4,11 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Supported CCs of endpoints are now reset during a re-interview (#7008)
+* Basic CC is no longer automatically marked as supported if included in the list of securely supported commands (#7010)
+
 ## 12.12.4 (2024-07-11)
 ### Bugfixes
 * Fixed an issue where CC values could be returned for the controller node (#7002)
