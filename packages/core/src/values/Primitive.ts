@@ -262,7 +262,7 @@ export function encodeBitMask(
 	maxValue: number = Math.max(...values),
 	startValue: number = 1,
 ): Buffer {
-	if (values.length === 0) return Buffer.from([0]);
+	if (!Number.isFinite(maxValue)) return Buffer.from([0]);
 
 	const numBytes = Math.ceil((maxValue - startValue + 1) / 8);
 	const ret = Buffer.alloc(numBytes, 0);
