@@ -2375,7 +2375,11 @@ protocol version:      ${this.protocolVersion}`;
 			);
 
 			for (const [ccId, info] of this.getCCs()) {
-				if (info.isSupported) {
+				if (
+					info.isSupported
+					// The support status of Basic CC is not known yet at this point
+					|| ccId === CommandClasses.Basic
+				) {
 					this.addCC(ccId, { version: getImplementedVersion(ccId) });
 				}
 			}
@@ -2678,7 +2682,11 @@ protocol version:      ${this.protocolVersion}`;
 				});
 
 				for (const [ccId, info] of endpoint.getCCs()) {
-					if (info.isSupported) {
+					if (
+						info.isSupported
+						// The support status of Basic CC is not known yet at this point
+						|| ccId === CommandClasses.Basic
+					) {
 						endpoint.addCC(ccId, {
 							version: getImplementedVersion(ccId),
 						});
