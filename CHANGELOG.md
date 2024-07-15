@@ -47,6 +47,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 ### Bugfixes
 * Supported CCs of endpoints are now reset during a re-interview (#7008)
 * Basic CC is no longer automatically marked as supported if included in the list of securely supported commands (#7010)
+* Set highest version also for Basic CC if Version CC is not supported (#7012)
 
 ## 12.12.4 (2024-07-11)
 ### Bugfixes
