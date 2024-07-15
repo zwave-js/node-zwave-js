@@ -381,10 +381,30 @@ export class SecurityCC extends CommandClass {
 
 		// Remember which commands are supported securely
 		for (const cc of supportedCCs) {
-			endpoint.addCC(cc, { isSupported: true, secure: true });
+			// Basic CC has special rules for when it is considered supported
+			// Therefore we mark all other CCs as supported, but not Basic CC,
+			// for which support is determined later.
+			if (cc === CommandClasses.Basic) {
+				endpoint.addCC(cc, { secure: true });
+			} else {
+				endpoint.addCC(cc, {
+					isSupported: true,
+					secure: true,
+				});
+			}
 		}
 		for (const cc of controlledCCs) {
-			endpoint.addCC(cc, { isControlled: true, secure: true });
+			// Basic CC has special rules for when it is considered supported
+			// Therefore we mark all other CCs as supported, but not Basic CC,
+			// for which support is determined later.
+			if (cc === CommandClasses.Basic) {
+				endpoint.addCC(cc, { secure: true });
+			} else {
+				endpoint.addCC(cc, {
+					isControlled: true,
+					secure: true,
+				});
+			}
 		}
 
 		// We know for sure that the node is included securely

@@ -479,9 +479,7 @@ export class VersionCC extends CommandClass {
 					// Therefore we mark all other CCs as supported, but not Basic CC,
 					// for which support is determined later.
 					if (cc === CommandClasses.Basic) {
-						endpoint.addCC(cc, {
-							version: supportedVersion,
-						});
+						endpoint.addCC(cc, { version: supportedVersion });
 					} else {
 						endpoint.addCC(cc, {
 							isSupported: true,
