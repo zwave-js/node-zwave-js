@@ -10,8 +10,6 @@ import { CommandClasses } from "@zwave-js/core";
 import {
 	type MeterCCCapabilities,
 	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 export const defaultCapabilities: MeterCCCapabilities = {

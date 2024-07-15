@@ -7,11 +7,7 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import type { BinarySensorCCCapabilities } from "@zwave-js/testing";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior } from "@zwave-js/testing";
 
 const defaultCapabilities: BinarySensorCCCapabilities = {
 	supportedSensorTypes: [],

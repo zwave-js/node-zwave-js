@@ -128,7 +128,7 @@ export function parseMPDU(
 		case 3:
 			return LongRangeMPDU.from(frame);
 		default:
-			validatePayload.fail(
+			throw validatePayload.fail(
 				`Unsupported channel ${frame.channel}. MPDU payload: ${
 					buffer2hex(frame.payload)
 				}`,
@@ -142,7 +142,7 @@ export class LongRangeMPDU implements MPDU {
 		this.frameInfo = options.frameInfo;
 
 		if (options.frameInfo.channel !== 3) {
-			validatePayload.fail(
+			throw validatePayload.fail(
 				`Unsupported channel ${options.frameInfo.channel} for LongRangeMPDU`,
 			);
 		}
@@ -179,7 +179,7 @@ export class LongRangeMPDU implements MPDU {
 			? SinglecastLongRangeMPDU
 			: undefined;
 		if (!Constructor) {
-			validatePayload.fail(
+			throw validatePayload.fail(
 				`Unsupported Long Range MPDU header type ${this.headerType}`,
 			);
 		} else if (
@@ -330,12 +330,12 @@ export class ZWaveMPDU implements MPDU {
 				break;
 			}
 			case 3: {
-				validatePayload.fail(
+				throw validatePayload.fail(
 					`Channel 3 (ZWLR) must be parsed as a LongRangeMPDU!`,
 				);
 			}
 			default: {
-				validatePayload.fail(
+				throw validatePayload.fail(
 					`Unsupported channel ${options.frameInfo.channel}. MPDU payload: ${
 						buffer2hex(data)
 					}`,
@@ -357,7 +357,7 @@ export class ZWaveMPDU implements MPDU {
 			? ExplorerZWaveMPDU
 			: undefined;
 		if (!Constructor) {
-			validatePayload.fail(
+			throw validatePayload.fail(
 				`Unsupported MPDU header type ${this.headerType}`,
 			);
 		} else if (
@@ -645,7 +645,7 @@ export class ExplorerZWaveMPDU extends ZWaveMPDU {
 			: undefined;
 
 		if (!Constructor) {
-			validatePayload.fail(
+			throw validatePayload.fail(
 				`Unsupported Explorer MPDU command ${this.command}`,
 			);
 		} else if (
@@ -813,7 +813,7 @@ export function parseBeamFrame(
 			});
 		}
 		default:
-			validatePayload.fail(
+			throw validatePayload.fail(
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
 					buffer2hex(frame.payload)
@@ -834,12 +834,12 @@ export class ZWaveBeamStart {
 				// OK
 				break;
 			case "4": {
-				validatePayload.fail(
+				throw validatePayload.fail(
 					`Channel configuration 4 (ZWLR) must be parsed as a LongRangeMPDU!`,
 				);
 			}
 			default: {
-				validatePayload.fail(
+				throw validatePayload.fail(
 					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 					`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
 						buffer2hex(data)
@@ -891,12 +891,12 @@ export class LongRangeBeamStart {
 				// OK
 				break;
 			case "4": {
-				validatePayload.fail(
+				throw validatePayload.fail(
 					`Channel configuration 4 (ZWLR) must be parsed as a LongRangeMPDU!`,
 				);
 			}
 			default: {
-				validatePayload.fail(
+				throw validatePayload.fail(
 					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 					`Unsupported channel configuration ${channelConfig}. MPDU payload: ${
 						buffer2hex(data)

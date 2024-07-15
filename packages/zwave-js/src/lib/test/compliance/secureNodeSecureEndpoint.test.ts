@@ -21,11 +21,7 @@ import {
 	SecurityManager2,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

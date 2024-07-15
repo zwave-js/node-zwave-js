@@ -19,9 +19,7 @@ import {
 import { CRC16_CCITT, CommandClasses } from "@zwave-js/core/safe";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	type UserCodeCCCapabilities,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 export const defaultCapabilities: UserCodeCCCapabilities = {

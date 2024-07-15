@@ -27,9 +27,7 @@ import { CommandClasses } from "@zwave-js/core/safe";
 import { type AllOrNone } from "@zwave-js/shared/safe";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	type ScheduleEntryLockCCCapabilities,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { defaultCapabilities as defaultUserCodeCapabilities } from "./UserCode";
 

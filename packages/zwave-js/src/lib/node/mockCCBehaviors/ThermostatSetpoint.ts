@@ -11,9 +11,7 @@ import {
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	type ThermostatSetpointCCCapabilities,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: ThermostatSetpointCCCapabilities = {

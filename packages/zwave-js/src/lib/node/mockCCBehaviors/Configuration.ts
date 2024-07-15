@@ -14,8 +14,6 @@ import { CommandClasses, ConfigValueFormat } from "@zwave-js/core/safe";
 import {
 	type ConfigurationCCCapabilities,
 	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: ConfigurationCCCapabilities = {

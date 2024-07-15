@@ -5,8 +5,6 @@ import { CommandClasses, NodeStatus } from "@zwave-js/core";
 import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";

@@ -11,7 +11,6 @@ import {
 import { CommandClasses } from "@zwave-js/core";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";

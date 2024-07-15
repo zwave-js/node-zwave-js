@@ -330,7 +330,7 @@ export class MockNode {
 						this.controller,
 						this,
 						cc,
-						response!,
+						response,
 					);
 				}
 			}

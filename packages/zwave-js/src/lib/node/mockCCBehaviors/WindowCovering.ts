@@ -5,9 +5,7 @@ import {
 import { CommandClasses } from "@zwave-js/core/safe";
 import {
 	type MockNodeBehavior,
-	MockZWaveFrameType,
 	type WindowCoveringCCCapabilities,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: WindowCoveringCCCapabilities = {

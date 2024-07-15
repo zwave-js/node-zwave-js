@@ -1,4 +1,4 @@
-import { CommandClass } from "@zwave-js/cc";
+import { type CommandClass } from "@zwave-js/cc";
 
 /**
  * Is used to simulate communication between a {@link MockController} and a {@link MockNode}.

@@ -1,5 +1,5 @@
 import { API, CCAPI } from "@zwave-js/cc";
-import { NOT_KNOWN, UNKNOWN_STATE } from "@zwave-js/core";
+import { NOT_KNOWN } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import ava, { type TestFn } from "ava";

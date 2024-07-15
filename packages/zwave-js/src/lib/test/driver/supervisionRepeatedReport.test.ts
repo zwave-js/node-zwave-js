@@ -4,11 +4,7 @@ import {
 	SupervisionCCReport,
 } from "@zwave-js/cc";
 import { CommandClasses, SupervisionStatus } from "@zwave-js/core";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior } from "@zwave-js/testing";
 import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 

@@ -1,10 +1,6 @@
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "@zwave-js/cc/BasicCC";
 import { CommandClasses } from "@zwave-js/core/safe";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior } from "@zwave-js/testing";
 
 const STATE_KEY_PREFIX = "Basic_";
 const StateKeys = {

@@ -5,12 +5,7 @@ import {
 	BinarySensorType,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	ccCaps,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior, ccCaps } from "@zwave-js/testing";
 import { defaultCapabilities } from "../../node/mockCCBehaviors/UserCode";
 import { integrationTest } from "../integrationTestSuite";
 

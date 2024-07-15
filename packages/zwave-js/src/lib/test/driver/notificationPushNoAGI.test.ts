@@ -4,12 +4,7 @@ import {
 	NotificationCCValues,
 } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses } from "@zwave-js/core";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	ccCaps,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior, ccCaps } from "@zwave-js/testing";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(

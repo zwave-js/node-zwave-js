@@ -245,7 +245,7 @@ export class ZnifferDataMessage extends ZnifferMessage
 				this.checksumOK = true;
 				this.payload = Buffer.alloc(0);
 			} else {
-				validatePayload.fail(
+				throw validatePayload.fail(
 					`Unsupported frame type ${
 						getEnumMemberName(ZnifferFrameType, this.frameType)
 					}`,

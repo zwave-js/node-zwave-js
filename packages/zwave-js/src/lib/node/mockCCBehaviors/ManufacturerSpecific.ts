@@ -2,11 +2,7 @@ import {
 	ManufacturerSpecificCCGet,
 	ManufacturerSpecificCCReport,
 } from "@zwave-js/cc/ManufacturerSpecificCC";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
+import { type MockNodeBehavior } from "@zwave-js/testing";
 
 const respondToManufacturerSpecificGet: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {

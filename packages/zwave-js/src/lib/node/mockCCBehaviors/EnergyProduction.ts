@@ -11,8 +11,6 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import {
 	type EnergyProductionCCCapabilities,
 	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: EnergyProductionCCCapabilities = {
