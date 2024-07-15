@@ -20,6 +20,9 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * The repo now uses Yarn 4 and Corepack to manage its dependencies (#6949)
 * "Master Code" was renamed to "Admin Code" (#6995)
 
+### Features
+* `mock-server` now supports communication with endpoints (#7005)
+
 ### Config file changes
 * Update Zooz ZEN30 to latest revisions (#6630)
 * Support MCO Home MH-S412 parameters properly (#6623)
