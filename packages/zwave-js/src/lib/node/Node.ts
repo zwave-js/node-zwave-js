@@ -1740,6 +1740,9 @@ export class ZWaveNode extends Endpoint
 		this.deviceConfigHash = undefined;
 		this._hasEmittedNoS0NetworkKeyError = false;
 		this._hasEmittedNoS2NetworkKeyError = false;
+		for (const ep of this.getAllEndpoints()) {
+			ep["reset"]();
+		}
 		this._valueDB.clear({ noEvent: true });
 		this._endpointInstances.clear();
 		super.reset();
