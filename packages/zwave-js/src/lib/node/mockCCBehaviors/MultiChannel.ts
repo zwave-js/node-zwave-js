@@ -1,6 +1,5 @@
 import {
 	CommandClass,
-	MultiChannelCC,
 	MultiChannelCCCapabilityGet,
 	MultiChannelCCCapabilityReport,
 	MultiChannelCCCommandEncapsulation,
@@ -10,7 +9,7 @@ import {
 	MultiChannelCCEndPointReport,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { type MockNodeBehavior, MockZWaveFrameType } from "@zwave-js/testing";
+import { type MockNodeBehavior } from "@zwave-js/testing";
 
 const encapsulateMultiChannelCC: MockNodeBehavior = {
 	transformIncomingCC(controller, self, receivedCC) {
@@ -102,7 +101,9 @@ const respondToMultiChannelCCCapabilityGet: MockNodeBehavior = {
 					?? self.capabilities.specificDeviceClass,
 				isDynamic: false,
 				wasRemoved: false,
-				supportedCCs: [...endpoint.implementedCCs.keys()],
+				supportedCCs: [...endpoint.implementedCCs.keys()]
+					// Basic CC must not be included in the NIF
+					.filter((ccId) => ccId !== CommandClasses.Basic),
 			});
 			return { action: "sendCC", cc };
 		}

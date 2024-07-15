@@ -1,11 +1,5 @@
 import {
 	type CommandClass,
-	MultiChannelCCCapabilityGet,
-	MultiChannelCCCapabilityReport,
-	MultiChannelCCEndPointFind,
-	MultiChannelCCEndPointFindReport,
-	MultiChannelCCEndPointGet,
-	MultiChannelCCEndPointReport,
 	Security2CC,
 	Security2CCMessageEncapsulation,
 	SecurityCC,
@@ -20,13 +14,9 @@ import {
 	ZWaveProtocolCCNodeInformationFrame,
 	ZWaveProtocolCCRequestNodeInformationFrame,
 } from "@zwave-js/cc/ZWaveProtocolCC";
-import {
-	type MockNodeBehavior,
-	MockZWaveFrameType,
-	createMockZWaveRequestFrame,
-} from "@zwave-js/testing";
-
 import { CommandClasses } from "@zwave-js/core";
+import { type MockNodeBehavior } from "@zwave-js/testing";
+
 import { BasicCCBehaviors } from "./mockCCBehaviors/Basic";
 import { BinarySensorCCBehaviors } from "./mockCCBehaviors/BinarySensor";
 import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";

@@ -6,7 +6,6 @@ import {
 	ZWaveProtocolCCRequestNodeInformationFrame,
 } from "@zwave-js/cc/ZWaveProtocolCC";
 import {
-	type ICommandClass,
 	NodeType,
 	TransmitOptions,
 	TransmitStatus,
