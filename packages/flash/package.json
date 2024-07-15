@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/flash",
-  "version": "12.12.4",
+  "version": "12.12.5",
   "description": "zwave-js: firmware flash utility",
   "keywords": [],
   "publishConfig": {
