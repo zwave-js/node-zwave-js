@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.13.0 (2024-07-16)
 This release adds a feature similar to PC Controller's ERTT that allow sending a series of commands to a node, collecting statistics along the way.
 Note that for now this is considered **unstable** and can change at any time without notice.
 
