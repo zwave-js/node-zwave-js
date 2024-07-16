@@ -11,6 +11,7 @@ import {
 	type MulticastCC,
 	type MulticastDestination,
 	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	type SinglecastCC,
 	type ValueDB,
 	type ValueID,
@@ -575,7 +576,8 @@ export class CommandClass implements ICommandClass {
 			// transmitted
 			|| (this.frameType == undefined
 				&& typeof this.nodeId === "number"
-				&& this.nodeId !== NODE_ID_BROADCAST)
+				&& this.nodeId !== NODE_ID_BROADCAST
+				&& this.nodeId !== NODE_ID_BROADCAST_LR)
 		);
 	}
 
@@ -594,7 +596,8 @@ export class CommandClass implements ICommandClass {
 			this.frameType === "broadcast"
 			// transmitted
 			|| (this.frameType == undefined
-				&& this.nodeId === NODE_ID_BROADCAST)
+				&& (this.nodeId === NODE_ID_BROADCAST
+					|| this.nodeId === NODE_ID_BROADCAST_LR))
 		);
 	}
 

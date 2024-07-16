@@ -7,6 +7,7 @@ import {
 	type IZWaveNode,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	NOT_KNOWN,
 	type SendCommandOptions,
 	type SupervisionResult,
@@ -199,7 +200,8 @@ export class CCAPI {
 						if (endpoint.virtual) {
 							const hasNodeId =
 								typeof endpoint.nodeId === "number"
-								&& endpoint.nodeId !== NODE_ID_BROADCAST;
+								&& endpoint.nodeId !== NODE_ID_BROADCAST
+								&& endpoint.nodeId !== NODE_ID_BROADCAST_LR;
 							messageStart = `${
 								hasNodeId ? "The" : "This"
 							} virtual node${
@@ -355,7 +357,7 @@ export class CCAPI {
 	 * Retrieves the version of the given CommandClass this endpoint implements
 	 */
 	public get version(): number {
-		if (this.isSinglecast() && this.endpoint.nodeId !== NODE_ID_BROADCAST) {
+		if (this.isSinglecast()) {
 			return this.applHost.getSafeCCVersion(
 				this.ccId,
 				this.endpoint.nodeId,
@@ -519,6 +521,7 @@ export class CCAPI {
 			!this.endpoint.virtual
 			&& typeof this.endpoint.nodeId === "number"
 			&& this.endpoint.nodeId !== NODE_ID_BROADCAST
+			&& this.endpoint.nodeId !== NODE_ID_BROADCAST_LR
 		);
 	}
 
@@ -532,11 +535,13 @@ export class CCAPI {
 
 	protected isBroadcast(): this is this & {
 		endpoint: IVirtualEndpoint & {
-			nodeId: typeof NODE_ID_BROADCAST;
+			nodeId: typeof NODE_ID_BROADCAST | typeof NODE_ID_BROADCAST_LR;
 		};
 	} {
 		return (
-			this.endpoint.virtual && this.endpoint.nodeId === NODE_ID_BROADCAST
+			this.endpoint.virtual
+			&& (this.endpoint.nodeId === NODE_ID_BROADCAST
+				|| this.endpoint.nodeId === NODE_ID_BROADCAST_LR)
 		);
 	}
 

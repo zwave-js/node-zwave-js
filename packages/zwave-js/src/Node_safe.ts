@@ -1,5 +1,6 @@
 export {
 	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	NODE_ID_MAX,
 	NodeType,
 	ProtocolDataRate,

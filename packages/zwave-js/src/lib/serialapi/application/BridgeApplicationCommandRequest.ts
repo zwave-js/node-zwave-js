@@ -5,9 +5,11 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	type RSSI,
 	RssiError,
 	type SinglecastCC,
+	isLongRangeNodeId,
 	parseNodeBitMask,
 	parseNodeID,
 } from "@zwave-js/core";
@@ -88,7 +90,9 @@ export class BridgeApplicationCommandRequest extends Message
 		} else if (this.frameType === "singlecast") {
 			this.targetNodeId = destinationNodeId;
 		} else {
-			this.targetNodeId = NODE_ID_BROADCAST;
+			this.targetNodeId = isLongRangeNodeId(sourceNodeId)
+				? NODE_ID_BROADCAST_LR
+				: NODE_ID_BROADCAST;
 		}
 		offset += multicastNodesLength;
 
