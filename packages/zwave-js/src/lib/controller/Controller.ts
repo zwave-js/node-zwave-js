@@ -43,6 +43,7 @@ import {
 	type MaybeNotKnown,
 	type MaybeUnknown,
 	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	NOT_KNOWN,
 	NodeIDType,
 	NodeType,
@@ -814,6 +815,18 @@ export class ZWaveController
 	public getBroadcastNode(): VirtualNode {
 		return new VirtualNode(
 			NODE_ID_BROADCAST,
+			this.driver,
+			this.nodes.values(),
+		);
+	}
+
+	/**
+	 * Returns a reference to the (virtual) broadcast node for Z-Wave Long Range, which allows sending commands to all LR nodes.
+	 * This automatically groups nodes by security class, ignores nodes that cannot be controlled via multicast/broadcast, and will fall back to multicast(s) if necessary.
+	 */
+	public getBroadcastNodeLR(): VirtualNode {
+		return new VirtualNode(
+			NODE_ID_BROADCAST_LR,
 			this.driver,
 			this.nodes.values(),
 		);
@@ -3860,10 +3873,13 @@ export class ZWaveController
 					this.setInclusionState(InclusionState.Idle);
 					this._nodePendingInclusion = undefined;
 					return true;
-				} else if (nodeId === NODE_ID_BROADCAST) {
+				} else if (
+					nodeId === NODE_ID_BROADCAST
+					|| nodeId === NODE_ID_BROADCAST_LR
+				) {
 					// No idea how this can happen but it dit at least once
 					this.driver.controllerLog.print(
-						`Cannot add a node with the Node ID ${NODE_ID_BROADCAST}, aborting...`,
+						`Cannot add a node with the broadcast node ID, aborting...`,
 						"warn",
 					);
 					this.setInclusionState(InclusionState.Idle);

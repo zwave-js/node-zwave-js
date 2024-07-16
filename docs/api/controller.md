@@ -808,10 +808,19 @@ Creates a virtual node that can be used to send commands to multiple supporting 
 getBroadcastNode(): VirtualNode
 ```
 
-Returns a reference to the (virtual) broadcast node. This can be used to send a command to all nodes in the network with a single command. You can target individual endpoints as usual.
+Returns a reference to the (virtual) Z-Wave Classic broadcast node. This can be used to send a command to all Z-Wave Classic nodes in the network with a single command. You can target individual endpoints as usual.
 
 > [!NOTE]
-> When the network contains devices with mixed security classes, this will do the same as `getMulticastGroup` instead and send multiple commands.
+> When the network contains Z-Wave Classic devices with mixed security classes, this will do the same as `getMulticastGroup` instead and send multiple commands.
+
+```ts
+getBroadcastNodeLR(): VirtualNode
+```
+
+Returns a reference to the (virtual) Z-Wave LR broadcast node. This can be used to send a command to all Z-Wave LR nodes in the network with a single command. You can target individual endpoints as usual.
+
+> [!NOTE]
+> When the network contains Z-Wave LR devices with mixed security classes, this will do the same as `getMulticastGroup` instead and send multiple commands.
 
 ### Configuring the Z-Wave radio
 

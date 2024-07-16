@@ -32,6 +32,7 @@ import {
 	EncapsulationFlags,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
+	NODE_ID_BROADCAST_LR,
 	encodeCCList,
 } from "@zwave-js/core/safe";
 import type {
@@ -837,7 +838,16 @@ export class Security2CC extends CommandClass {
 
 		// Make sure that S2 multicast uses broadcasts. While the specs mention that both multicast and broadcast
 		// are possible, it has been found that devices treat multicasts like singlecast followups and respond incorrectly.
-		const nodeId = cc.isMulticast() ? NODE_ID_BROADCAST : cc.nodeId;
+		let nodeId: number;
+		if (cc.isMulticast()) {
+			if (cc.nodeId.some((nodeId) => isLongRangeNodeId(nodeId))) {
+				nodeId = NODE_ID_BROADCAST_LR;
+			} else {
+				nodeId = NODE_ID_BROADCAST;
+			}
+		} else {
+			nodeId = cc.nodeId as number;
+		}
 
 		const ret = new Security2CCMessageEncapsulation(host, {
 			nodeId,

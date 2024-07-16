@@ -100,12 +100,14 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 				&& endpoint.node.physicalNodes.length > 1
 			) {
 				// The API for S2 needs to know the multicast group ID
+				const secMan = this.driver.getSecurityManager2(
+					endpoint.node.physicalNodes[0].id,
+				);
 				return CCAPI.create(ccId, this.driver, endpoint).withOptions({
-					s2MulticastGroupId: this.driver.securityManager2
-						?.createMulticastGroup(
-							endpoint.node.physicalNodes.map((n) => n.id),
-							secClass,
-						),
+					s2MulticastGroupId: secMan?.createMulticastGroup(
+						endpoint.node.physicalNodes.map((n) => n.id),
+						secClass,
+					),
 				});
 			} else {
 				return CCAPI.create(ccId, this.driver, endpoint);
