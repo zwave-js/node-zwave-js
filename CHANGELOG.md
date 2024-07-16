@@ -4,6 +4,13 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release adds a feature similar to PC Controller's ERTT that allow sending a series of commands to a node, collecting statistics along the way.
+Note that for now this is considered **unstable** and can change at any time without notice.
+
+### Features
+* Add link reliability check feature (#7020)
+
 ## 12.12.5 (2024-07-15)
 ### Bugfixes
 * Supported CCs of endpoints are now reset during a re-interview (#7008)
