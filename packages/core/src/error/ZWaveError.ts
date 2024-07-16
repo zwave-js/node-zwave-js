@@ -125,6 +125,8 @@ export enum ZWaveErrorCodes {
 
 	/** The node is currently busy with another health check */
 	HealthCheck_Busy = 400,
+	/** The node is currently busy with another link reliability check */
+	LinkReliabilityCheck_Busy,
 
 	// Here follow CC specific errors
 

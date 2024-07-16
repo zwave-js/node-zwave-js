@@ -226,6 +226,7 @@ import {
 	Mixin,
 	ObjectKeyMap,
 	type TypedEventEmitter,
+	cloneDeep,
 	discreteLinearSearch,
 	formatId,
 	getEnumMemberName,
@@ -292,15 +293,18 @@ import {
 	createNodeStatusMachine,
 	nodeStatusMachineStateToNodeStatus,
 } from "./NodeStatusMachine";
-import type {
-	DateAndTime,
-	LifelineHealthCheckResult,
-	LifelineHealthCheckSummary,
-	RefreshInfoOptions,
-	RouteHealthCheckResult,
-	RouteHealthCheckSummary,
-	ZWaveNodeEventCallbacks,
-	ZWaveNodeValueEventCallbacks,
+import {
+	type DateAndTime,
+	type LifelineHealthCheckResult,
+	type LifelineHealthCheckSummary,
+	LinkReliabilityCheckMode,
+	type LinkReliabilityCheckOptions,
+	type LinkReliabilityCheckResult,
+	type RefreshInfoOptions,
+	type RouteHealthCheckResult,
+	type RouteHealthCheckSummary,
+	type ZWaveNodeEventCallbacks,
+	type ZWaveNodeValueEventCallbacks,
 } from "./_Types";
 import { InterviewStage, NodeStatus } from "./_Types";
 import * as nodeUtils from "./utils";
@@ -7138,6 +7142,239 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		);
 
 		return summary;
+	}
+
+	private _linkReliabilityCheckInProgress: boolean = false;
+	/**
+	 * Returns whether a link reliability check is currently in progress for this node
+	 */
+	public isLinkReliabilityCheckInProgress(): boolean {
+		return this._linkReliabilityCheckInProgress;
+	}
+
+	private _linkReliabilityCheckAborted: boolean = false;
+	private _abortLinkReliabilityCheckPromise:
+		| DeferredPromise<void>
+		| undefined;
+
+	/**
+	 * Aborts an ongoing link reliability check if one is currently in progress.
+	 *
+	 * **Note:** The link reliability check may take a few seconds to actually be aborted.
+	 * When it is, the promise returned by {@link checkLinkReliability} will be resolved with the results obtained so far.
+	 */
+	public abortLinkReliabilityCheck(): void {
+		this._linkReliabilityCheckAborted = true;
+		this._abortLinkReliabilityCheckPromise?.resolve();
+	}
+
+	/**
+	 * Tests the reliability of the link between the controller and this node and returns the results.
+	 */
+	public async checkLinkReliability(
+		options: LinkReliabilityCheckOptions,
+	): Promise<LinkReliabilityCheckResult> {
+		if (this._linkReliabilityCheckInProgress) {
+			throw new ZWaveError(
+				"A link reliability check is already in progress for this node!",
+				ZWaveErrorCodes.LinkReliabilityCheck_Busy,
+			);
+		}
+
+		if (typeof options.rounds === "number" && options.rounds < 1) {
+			throw new ZWaveError(
+				"The number of rounds must be at least 1!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		try {
+			this._linkReliabilityCheckInProgress = true;
+			this._abortLinkReliabilityCheckPromise = createDeferredPromise();
+
+			switch (options.mode) {
+				case LinkReliabilityCheckMode.BasicSetOnOff:
+					return await this.checkLinkReliabilityBasicSetOnOff(
+						options,
+					);
+			}
+		} finally {
+			this._linkReliabilityCheckInProgress = false;
+			this._linkReliabilityCheckAborted = false;
+			this._abortLinkReliabilityCheckPromise = undefined;
+		}
+	}
+
+	private async checkLinkReliabilityBasicSetOnOff(
+		options: LinkReliabilityCheckOptions,
+	): Promise<LinkReliabilityCheckResult> {
+		this.driver.controllerLog.logNode(
+			this.id,
+			`Starting link reliability check (Basic Set On/Off) with ${options.rounds} round${
+				options.rounds !== 1 ? "s" : ""
+			}...`,
+		);
+
+		const useSupervision = this.supportsCC(CommandClasses.Supervision);
+		const result: LinkReliabilityCheckResult = {
+			rounds: 0,
+			commandsSent: 0,
+			commandErrors: 0,
+			missingResponses: useSupervision ? 0 : undefined,
+			latency: {
+				min: Number.POSITIVE_INFINITY,
+				max: 0,
+				average: 0,
+			},
+			ackRSSI: {
+				min: 0,
+				max: Number.NEGATIVE_INFINITY,
+				average: Number.NEGATIVE_INFINITY,
+			},
+			responseRSSI: useSupervision
+				? {
+					min: 0,
+					max: Number.NEGATIVE_INFINITY,
+					average: Number.NEGATIVE_INFINITY,
+				}
+				: undefined,
+		};
+
+		const aborted = () => {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`Link reliability check aborted`,
+			);
+			return result;
+		};
+
+		let lastProgressReport = 0;
+		const reportProgress = () => {
+			if (Date.now() - lastProgressReport >= 250) {
+				options.onProgress?.(cloneDeep(result));
+				lastProgressReport = Date.now();
+			}
+		};
+
+		if (this.canSleep && this.status !== NodeStatus.Awake) {
+			// Wait for node to wake up to avoid incorrectly long delays in the first health check round
+			this.driver.controllerLog.logNode(
+				this.id,
+				`waiting for node to wake up...`,
+			);
+			await Promise.race([
+				this.waitForWakeup(),
+				this._abortLinkReliabilityCheckPromise,
+			]);
+			if (this._linkReliabilityCheckAborted) return aborted();
+		}
+
+		// TODO: report progress with throttle
+
+		let txReport: TXReport | undefined;
+		let latency = 0;
+
+		const basicSetAPI = this.commandClasses.Basic.withOptions({
+			// Don't change the node status when the ACK is missing. We're likely testing the limits here.
+			changeNodeStatusOnMissingACK: false,
+			// Avoid using explorer frames, because they can create a ton of delay
+			transmitOptions: TransmitOptions.ACK
+				| TransmitOptions.AutoRoute,
+			// And remember the transmit report, so we can evaluate it
+			onTXReport: (report) => {
+				txReport = report;
+			},
+		});
+
+		let lastStart: number;
+		for (
+			let round = 1;
+			round <= (options.rounds ?? Number.POSITIVE_INFINITY);
+			round++
+		) {
+			if (this._linkReliabilityCheckAborted) return aborted();
+
+			result.rounds = round;
+
+			lastStart = Date.now();
+			// Reset TX report before each command
+			txReport = undefined as any;
+
+			try {
+				await basicSetAPI.set(
+					round % 2 === 1 ? 0xff : 0x00,
+				);
+				// The command was sent successfully (and possibly got a response)
+				result.commandsSent++;
+
+				// Measure the RTT or latency, whatever is available
+				const rtt = Date.now() - lastStart;
+				latency = Math.max(
+					latency,
+					txReport ? txReport.txTicks * 10 : rtt,
+				);
+				result.latency.min = Math.min(result.latency.min, latency);
+				result.latency.max = Math.max(result.latency.max, latency);
+				// incrementally update the average latency
+				result.latency.average += (latency - result.latency.average)
+					/ round;
+			} catch (e) {
+				if (isZWaveError(e)) {
+					if (
+						e.code === ZWaveErrorCodes.Controller_ResponseNOK
+						|| e.code === ZWaveErrorCodes.Controller_CallbackNOK
+					) {
+						// The command could not be sent or was not acknowledged
+						result.commandErrors++;
+					} else if (
+						e.code === ZWaveErrorCodes.Controller_NodeTimeout
+					) {
+						// The command was sent using Supervision and a response was
+						// expected but none came
+						result.missingResponses ??= 0;
+						result.missingResponses++;
+					}
+				}
+			}
+
+			if (
+				txReport?.ackRSSI != undefined
+				&& !isRssiError(txReport.ackRSSI)
+			) {
+				result.ackRSSI.min = Math.min(
+					result.ackRSSI.min,
+					txReport.ackRSSI,
+				);
+				result.ackRSSI.max = Math.max(
+					result.ackRSSI.max,
+					txReport.ackRSSI,
+				);
+				// incrementally update the average RSSI
+				if (Number.isFinite(result.ackRSSI.average)) {
+					result.ackRSSI.average +=
+						(txReport.ackRSSI - result.ackRSSI.average)
+						/ round;
+				} else {
+					result.ackRSSI.average = txReport.ackRSSI;
+				}
+			}
+
+			// TODO: Capture incoming RSSI and average it
+
+			reportProgress();
+
+			// Throttle the next command
+			const waitDurationMs = Math.max(
+				0,
+				options.interval - (Date.now() - lastStart),
+			);
+			await Promise.race([
+				wait(waitDurationMs, true),
+				this._abortLinkReliabilityCheckPromise,
+			]);
+		}
+
+		return result;
 	}
 
 	/**
