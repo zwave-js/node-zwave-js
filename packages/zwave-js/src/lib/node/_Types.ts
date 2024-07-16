@@ -377,6 +377,43 @@ export interface RouteHealthCheckSummary {
 	rating: number;
 }
 
+export enum LinkReliabilityCheckMode {
+	BasicSetOnOff,
+}
+
+export interface LinkReliabilityCheckOptions {
+	mode: LinkReliabilityCheckMode;
+	interval: number;
+	rounds?: number;
+	onProgress?: (progress: LinkReliabilityCheckResult) => void;
+}
+
+export interface LinkReliabilityCheckResult {
+	rounds: number;
+
+	commandsSent: number;
+	commandErrors: number;
+	missingResponses?: number;
+
+	latency: {
+		min: number;
+		max: number;
+		average: number;
+	};
+
+	ackRSSI: {
+		min: number;
+		max: number;
+		average: number;
+	};
+
+	responseRSSI?: {
+		min: number;
+		max: number;
+		average: number;
+	};
+}
+
 export interface RefreshInfoOptions {
 	/**
 	 * Whether a re-interview should also reset the known security classes.
