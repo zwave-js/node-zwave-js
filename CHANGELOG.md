@@ -9,7 +9,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Home Assistant **TBD** or higher
 * `zwave-js-server` **TBD**
 -->
-## 13.0.0-beta.6 (2024-07-15)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v13)
 * Align Meter CC Reset v6 with specifications, add mocks, add API for report commands (#6921)
 * Convert all Z-Wave specific configs except devices and manufacturers into code, move from ConfigManager methods to utility functions (#6925, #6929)
@@ -45,6 +45,13 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Fixed some minor issues found by code scanning (#6992)
 * Fixed an issue where `yarn codefind` was loading no source files (#6993)
 * Fixed an issue where `import(...)` types with absolute paths could appear in in CC docs (#6996)
+
+## 12.13.0 (2024-07-16)
+This release adds a feature similar to PC Controller's ERTT that allow sending a series of commands to a node, collecting statistics along the way.
+Note that for now this is considered **unstable** and can change at any time without notice.
+
+### Features
+* Add link reliability check feature (#7020)
 
 ## 12.12.5 (2024-07-15)
 ### Bugfixes
