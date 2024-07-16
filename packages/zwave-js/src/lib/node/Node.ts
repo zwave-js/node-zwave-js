@@ -6518,6 +6518,7 @@ protocol version:      ${this.protocolVersion}`;
 	 * {@link checkRouteHealth} will be resolved with the results obtained so far.
 	 */
 	public abortHealthCheck(): void {
+		if (!this._healthCheckInProgress) return;
 		this._healthCheckAborted = true;
 		this._abortHealthCheckPromise?.resolve();
 	}
@@ -6550,6 +6551,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		try {
 			this._healthCheckInProgress = true;
+			this._healthCheckAborted = false;
 			this._abortHealthCheckPromise = createDeferredPromise();
 
 			return await this.checkLifelineHealthInternal(rounds, onProgress);
@@ -6875,6 +6877,7 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 
 		try {
 			this._healthCheckInProgress = true;
+			this._healthCheckAborted = false;
 			this._abortHealthCheckPromise = createDeferredPromise();
 
 			return await this.checkRouteHealthInternal(
@@ -7178,6 +7181,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 	 * When it is, the promise returned by {@link checkLinkReliability} will be resolved with the results obtained so far.
 	 */
 	public abortLinkReliabilityCheck(): void {
+		if (!this._linkReliabilityCheckInProgress) return;
 		this._linkReliabilityCheckAborted = true;
 		this._abortLinkReliabilityCheckPromise?.resolve();
 	}
@@ -7204,6 +7208,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 
 		try {
 			this._linkReliabilityCheckInProgress = true;
+			this._linkReliabilityCheckAborted = false;
 			this._abortLinkReliabilityCheckPromise = createDeferredPromise();
 
 			switch (options.mode) {
