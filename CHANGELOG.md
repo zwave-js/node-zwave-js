@@ -4,15 +4,15 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-<!-- ### Application compatibility
+## __WORK IN PROGRESS__
+### Application compatibility
 Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
 * Home Assistant **TBD** or higher
-* `zwave-js-server` **TBD**
--->
-## 13.0.0-beta.7 (2024-07-16)
+* `zwave-js-server` **1.37.0**
+
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v13)
 * Align Meter CC Reset v6 with specifications, add mocks, add API for report commands (#6921)
-* Convert all Z-Wave specific configs except devices and manufacturers into code, move from ConfigManager methods to utility functions (#6925, #6929)
+* Convert all Z-Wave specific configs except devices and manufacturers into code, move from ConfigManager methods to utility functions (#6925, #6929, #7023)
 * Remove `ZWaveApplicationHost` dependency from `CommandClass.toLogEntry()` (#6927)
 * Removed some deprecated things (#6928)
 * Replace `Controller.isAssociationAllowed` with `Controller.checkAssociation` (#6935)
@@ -22,6 +22,9 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 
 ### Features
 * `mock-server` now supports communication with endpoints (#7005)
+
+### Bugfixes
+* Reset aborted flags when starting link reliability or route health check (#7022)
 
 ### Config file changes
 * Update Zooz ZEN30 to latest revisions (#6630)
@@ -38,6 +41,7 @@ Home Assistant users who manage `zwave-js-server` themselves, **must** install t
 * Disable Supervision for Zooz ZSE11 (#6990)
 * Clarify parameters and units for Everspring AN158 (#6364)
 * Force-add support for Multilevel Switch CC to FGRM-222, remove Binary Switch CC (#6986)
+* Add ZVIDAR Z-PI 800 Series PI Module (#7018)
 
 ### Changes under the hood
 * Upgrade to TypeScript 5.5 (#6919)
