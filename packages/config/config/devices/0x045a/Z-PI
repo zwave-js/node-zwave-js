@@ -1,0 +1,16 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "Z-PI",
+	"description": "800 Series PI Module",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0611"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}
