@@ -7,19 +7,19 @@ export enum BasicDeviceClass {
 	"Routing End Node" = 0x04,
 }
 
-interface GenericDeviceClassDefinition {
-	readonly label: string;
+interface DeviceClassProperties {
 	readonly zwavePlusDeviceType?: string;
 	readonly requiresSecurity?: boolean;
 	readonly maySupportBasicCC?: boolean;
+}
+
+interface GenericDeviceClassDefinition extends DeviceClassProperties {
+	readonly label: string;
 	readonly specific: Record<number, SpecificDeviceClassDefinition>;
 }
 
-interface SpecificDeviceClassDefinition {
+interface SpecificDeviceClassDefinition extends DeviceClassProperties {
 	readonly label: string;
-	readonly zwavePlusDeviceType?: string;
-	readonly requiresSecurity?: boolean;
-	readonly maySupportBasicCC?: boolean;
 }
 
 export interface GenericDeviceClass {
@@ -506,13 +506,21 @@ export function getSpecificDeviceClass(
 ): SpecificDeviceClass {
 	const genericClass: GenericDeviceClassDefinition | undefined =
 		(deviceClasses as any)[generic];
-	// @ts-expect-error We're in the false branch of the conditional type
-	if (!genericClass) return getUnknownSpecificDeviceClass(specific);
+	if (!genericClass) {
+		return getUnknownSpecificDeviceClass(
+			getUnknownGenericDeviceClass(generic),
+			specific,
+		);
+	}
 
 	const specificClass: SpecificDeviceClassDefinition | undefined =
 		genericClass.specific[specific];
-	// @ts-expect-error We're in the false branch of the conditional type
-	if (!specificClass) return getUnknownSpecificDeviceClass(specific);
+	if (!specificClass) {
+		return getUnknownSpecificDeviceClass(
+			genericClass,
+			specific,
+		);
+	}
 
 	return {
 		key: specific,
@@ -529,7 +537,7 @@ export function getSpecificDeviceClass(
 }
 
 function getUnknownSpecificDeviceClass(
-	genericClass: GenericDeviceClassDefinition,
+	genericClass: DeviceClassProperties,
 	specific: number,
 ): SpecificDeviceClass {
 	if (specific === 0) {
