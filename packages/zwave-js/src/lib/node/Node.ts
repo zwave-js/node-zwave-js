@@ -7299,6 +7299,8 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			// Avoid using explorer frames, because they can create a ton of delay
 			transmitOptions: TransmitOptions.ACK
 				| TransmitOptions.AutoRoute,
+			// Do not wait for SOS NonceReports, as it slows down the test
+			s2VerifyDelivery: false,
 			// And remember the transmit report, so we can evaluate it
 			onTXReport: (report) => {
 				txReport = report;
