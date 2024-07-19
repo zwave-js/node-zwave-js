@@ -4,6 +4,11 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a regression that could cause incorrect units and missing sensor readings (#7031)
+* Don't verify delivery of S2 frames in link reliability check (#7030)
+
 ## 13.0.0 (2024-07-17)
 ### Application compatibility
 Home Assistant users who manage `zwave-js-server` themselves, **must** install the following upgrades before upgrading to this driver version:
