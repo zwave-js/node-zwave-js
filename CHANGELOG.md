@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.0.1 (2024-07-19)
 ### Bugfixes
 * Fixed a regression that could cause incorrect units and missing sensor readings (#7031)
 * Don't verify delivery of S2 frames in link reliability check (#7030)
