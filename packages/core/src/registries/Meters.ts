@@ -169,7 +169,7 @@ export function getMeterScale<
 	if (!scaleDef) return;
 
 	return {
-		key: type,
+		key: scale,
 		...scaleDef,
 	} satisfies MeterScale as any;
 }
