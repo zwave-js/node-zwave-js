@@ -11,7 +11,7 @@ import {
 	ZWaveErrorCodes,
 	encodeBitMask,
 	encodeFloatWithScale,
-	getNamedScaleGroup,
+	getNamedScale,
 	getUnknownScale,
 	parseBitMask,
 	parseFloatWithScale,
@@ -73,9 +73,9 @@ const thermostatSetpointTypeMap = [
 	0x0f,
 ];
 
-const temperatureScale = getNamedScaleGroup("temperature");
 function getScale(scale: number): Scale {
-	return (temperatureScale as any)[scale] ?? getUnknownScale(scale);
+	return getNamedScale("temperature", scale as any)
+		?? getUnknownScale(scale);
 }
 function getSetpointUnit(scale: number): string {
 	return getScale(scale).unit ?? "";

@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeFloatWithScale,
-	getNamedScaleGroup,
+	getNamedScale,
 	getUnknownScale,
 	parseBitMask,
 	parseFloatWithScale,
@@ -103,9 +103,8 @@ export const HumidityControlSetpointCCValues = Object.freeze({
 	}),
 });
 
-const humidityScale = getNamedScaleGroup("humidity");
 function getScale(scale: number): Scale {
-	return (humidityScale as any)[scale] ?? getUnknownScale(scale);
+	return getNamedScale("humidity", scale as any) ?? getUnknownScale(scale);
 }
 function getSetpointUnit(scale: number): string {
 	return getScale(scale).unit ?? "";
