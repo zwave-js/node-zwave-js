@@ -7245,6 +7245,11 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 				max: 0,
 				average: 0,
 			},
+			rtt: {
+				min: Number.POSITIVE_INFINITY,
+				max: 0,
+				average: 0,
+			},
 			ackRSSI: {
 				min: 0,
 				max: Number.NEGATIVE_INFINITY,
@@ -7329,12 +7334,34 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 
 				// Measure the RTT or latency, whatever is available
 				const rtt = Date.now() - lastStart;
-				const latency = txReport ? txReport.txTicks * 10 : rtt;
-				result.latency.min = Math.min(result.latency.min, latency);
-				result.latency.max = Math.max(result.latency.max, latency);
-				// incrementally update the average latency
-				result.latency.average += (latency - result.latency.average)
-					/ round;
+				result.rtt.min = Math.min(result.rtt.min, rtt);
+				result.rtt.max = Math.max(result.rtt.max, rtt);
+				// incrementally update the average rtt
+				result.rtt.average += (rtt - result.rtt.average) / round;
+
+				if (txReport) {
+					const latency = txReport.txTicks * 10;
+					if (result.latency) {
+						result.latency.min = Math.min(
+							result.latency.min,
+							latency,
+						);
+						result.latency.max = Math.max(
+							result.latency.max,
+							latency,
+						);
+						// incrementally update the average RTT
+						result.latency.average +=
+							(latency - result.latency.average)
+							/ round;
+					} else {
+						result.latency = {
+							min: latency,
+							max: latency,
+							average: latency,
+						};
+					}
+				}
 			} catch (e) {
 				if (isZWaveError(e)) {
 					if (

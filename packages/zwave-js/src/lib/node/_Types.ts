@@ -395,7 +395,13 @@ export interface LinkReliabilityCheckResult {
 	commandErrors: number;
 	missingResponses?: number;
 
-	latency: {
+	latency?: {
+		min: number;
+		max: number;
+		average: number;
+	};
+
+	rtt: {
 		min: number;
 		max: number;
 		average: number;
