@@ -49,14 +49,16 @@ async function main(param) {
 		// Bump versions
 		await exec.exec(
 			"yarn",
-			`workspaces foreach version ${newVersion} --deferred`.split(" "),
+			`workspaces foreach --all version ${newVersion} --deferred`.split(
+				" ",
+			),
 		);
 		await exec.exec("yarn", ["version", "apply", "--all"]);
 
 		// and release changed packages
 		await exec.exec(
 			"yarn",
-			`workspaces foreach -vti --no-private npm publish --tolerate-republish --tag next`
+			`workspaces foreach --all -vti --no-private npm publish --tolerate-republish --tag next`
 				.split(
 					" ",
 				),
