@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed latency calculation in link reliability check, distinguish between latency and RTT (#7038)
+
 ## 13.0.1 (2024-07-19)
 ### Bugfixes
 * Fixed a regression that could cause incorrect units and missing sensor readings (#7031)
