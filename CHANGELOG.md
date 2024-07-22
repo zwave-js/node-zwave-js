@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.0.2 (2024-07-22)
 ### Bugfixes
 * Fixed latency calculation in link reliability check, distinguish between latency and RTT (#7038)
 
