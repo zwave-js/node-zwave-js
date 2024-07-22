@@ -7291,7 +7291,6 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		// TODO: report progress with throttle
 
 		let txReport: TXReport | undefined;
-		let latency = 0;
 
 		const basicSetAPI = this.commandClasses.Basic.withOptions({
 			// Don't change the node status when the ACK is missing. We're likely testing the limits here.
@@ -7330,10 +7329,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 
 				// Measure the RTT or latency, whatever is available
 				const rtt = Date.now() - lastStart;
-				latency = Math.max(
-					latency,
-					txReport ? txReport.txTicks * 10 : rtt,
-				);
+				const latency = txReport ? txReport.txTicks * 10 : rtt;
 				result.latency.min = Math.min(result.latency.min, latency);
 				result.latency.max = Math.max(result.latency.max, latency);
 				// incrementally update the average latency
