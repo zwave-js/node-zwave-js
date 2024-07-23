@@ -65,10 +65,10 @@
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"
   },
   "dependencies": {
-    "@zwave-js/core": "workspace:*",
-    "@zwave-js/host": "workspace:*",
-    "@zwave-js/serial": "workspace:*",
-    "@zwave-js/shared": "workspace:*",
+    "@zwave-js/core": "*",
+    "@zwave-js/host": "*",
+    "@zwave-js/serial": "*",
+    "@zwave-js/shared": "*",
     "alcalzone-shared": "^4.0.8",
     "ansi-colors": "^4.1.3",
     "reflect-metadata": "^0.2.2"
@@ -77,8 +77,8 @@
     "@microsoft/api-extractor": "^7.47.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.31",
-    "@zwave-js/maintenance": "workspace:*",
-    "@zwave-js/transformers": "workspace:*",
+    "@zwave-js/maintenance": "*",
+    "@zwave-js/transformers": "*",
     "ava": "^6.1.2",
     "del-cli": "^5.1.0",
     "fs-extra": "^11.2.0",

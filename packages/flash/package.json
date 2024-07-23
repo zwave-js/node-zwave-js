@@ -33,10 +33,10 @@
     "node": ">= 18"
   },
   "dependencies": {
-    "@zwave-js/core": "workspace:*",
+    "@zwave-js/core": "*",
     "fs-extra": "^11.2.0",
     "yargs": "^17.7.2",
-    "zwave-js": "workspace:*"
+    "zwave-js": "*"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --pretty",

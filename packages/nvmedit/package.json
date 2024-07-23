@@ -45,8 +45,8 @@
     "node": ">= 18"
   },
   "dependencies": {
-    "@zwave-js/core": "workspace:*",
-    "@zwave-js/shared": "workspace:*",
+    "@zwave-js/core": "*",
+    "@zwave-js/shared": "*",
     "alcalzone-shared": "^4.0.8",
     "fs-extra": "^11.2.0",
     "reflect-metadata": "^0.2.2",
