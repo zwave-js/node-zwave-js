@@ -191,6 +191,21 @@ test("createMulticastGroup() -> should return a different group ID for a differe
 	t.not(group1, group2);
 });
 
+test("createMulticastGroup() -> should return a different group ID for a different node set for LR nodes", (t) => {
+	const man = new SecurityManager2();
+	dummyInit(man);
+	const group1 = man.createMulticastGroup(
+		[260, 261, 262],
+		SecurityClass.S2_Authenticated,
+	);
+	const group2 = man.createMulticastGroup(
+		[259, 260, 261],
+		SecurityClass.S2_Authenticated,
+	);
+
+	t.not(group1, group2);
+});
+
 //
 
 test("createMulticastGroup() -> should return the same group ID for a previously used node set", (t) => {
@@ -202,6 +217,21 @@ test("createMulticastGroup() -> should return the same group ID for a previously
 	);
 	const group2 = man.createMulticastGroup(
 		[2, 3, 4],
+		SecurityClass.S2_Authenticated,
+	);
+
+	t.is(group1, group2);
+});
+
+test("createMulticastGroup() -> should return the same group ID for a previously used LR node set", (t) => {
+	const man = new SecurityManager2();
+	dummyInit(man);
+	const group1 = man.createMulticastGroup(
+		[260, 261, 262],
+		SecurityClass.S2_Authenticated,
+	);
+	const group2 = man.createMulticastGroup(
+		[260, 261, 262],
 		SecurityClass.S2_Authenticated,
 	);
 

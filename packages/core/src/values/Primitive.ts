@@ -1,5 +1,5 @@
 import {
-	MAX_NODES,
+	MAX_NODES_LR,
 	NUM_LR_NODES_PER_SEGMENT,
 	NUM_NODEMASK_BYTES,
 } from "../consts";
@@ -287,7 +287,7 @@ export function parseLongRangeNodeBitMask(
 }
 
 export function encodeNodeBitMask(nodeIDs: readonly number[]): Buffer {
-	return encodeBitMask(nodeIDs, MAX_NODES);
+	return encodeBitMask(nodeIDs, MAX_NODES_LR);
 }
 
 export function encodeLongRangeNodeBitMask(
