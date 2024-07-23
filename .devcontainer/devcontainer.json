@@ -1,8 +1,6 @@
 {
 	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
 
-	"updateContentCommand": "yarn workspaces focus -A && yarn build",
-
 	"customizations": {
 		"vscode": {
 			"extensions": [
