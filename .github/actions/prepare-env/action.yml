@@ -24,7 +24,9 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: yarn install --immutable
+      run: |
+        yarn install --immutable
+        yarn bootstrap
 
     - name: TurboRepo local server
       uses: felixmosh/turborepo-gh-artifacts@v3.0.3

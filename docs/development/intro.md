@@ -44,7 +44,7 @@ git submodule update
 After the repository has been cloned, install all dependencies and compile the code by executing
 
 ```
-yarn
+yarn bootstrap
 yarn build
 ```
 

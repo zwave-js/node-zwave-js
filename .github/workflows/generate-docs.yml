@@ -32,19 +32,13 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Enable Corepack
-      shell: bash
-      run: corepack enable
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+    - name: Prepare environment
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install dependencies
-      run: yarn install --immutable
-
+    # FIXME: Check if this build step is still needed
     - name: Compile TypeScript code
       run: yarn run build
 

@@ -62,6 +62,7 @@ jobs:
         # ===============================
 
         yarn install --immutable
+        yarn bootstrap
 
         # ===============================
         # Double-check changes with yarn
