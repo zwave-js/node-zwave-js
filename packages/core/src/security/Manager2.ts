@@ -2,8 +2,9 @@
 
 import { createWrappingCounter, getEnumMemberName } from "@zwave-js/shared";
 import * as crypto from "node:crypto";
+import { deflateSync } from "node:zlib";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { encodeNodeBitMask } from "../index_safe";
+import { MAX_NODES_LR, encodeBitMask } from "../index_safe";
 import { highResTimestamp } from "../util/date";
 import { type S2SecurityClass, SecurityClass } from "./SecurityClass";
 import { increment } from "./bufferUtils";
@@ -155,7 +156,7 @@ export class SecurityManager2 {
 		s2SecurityClass: S2SecurityClass,
 	): number {
 		// Check if we already have a group for these nodes
-		const newHash = encodeNodeBitMask(nodeIDs).toString("hex");
+		const newHash = hashNodeIds(nodeIDs);
 		if (this.multicastGroupLookup.has(newHash)) {
 			return this.multicastGroupLookup.get(newHash)!;
 		}
@@ -167,7 +168,7 @@ export class SecurityManager2 {
 		if (this.multicastGroups.has(groupId)) {
 			const oldGroup = this.multicastGroups.get(groupId)!;
 			this.multicastGroups.delete(groupId);
-			const oldHash = encodeNodeBitMask(oldGroup.nodeIDs).toString("hex");
+			const oldHash = hashNodeIds(oldGroup.nodeIDs);
 			this.multicastGroupLookup.delete(oldHash);
 		}
 
@@ -554,4 +555,13 @@ export class SecurityManager2 {
 		}
 		this.peerMPANs.get(peerNodeId)!.set(groupId, mpanState);
 	}
+}
+
+/** Creates a unique string that can be used to look up existing node ID arrays */
+function hashNodeIds(nodeIds: readonly number[]): string {
+	const raw = encodeBitMask(nodeIds, MAX_NODES_LR);
+	// Compress the bitmask to avoid 1000 character strings as keys.
+	// This compresses considerably well, usually in the 12-20 byte range
+	const compressed = deflateSync(raw);
+	return compressed.toString("hex");
 }
