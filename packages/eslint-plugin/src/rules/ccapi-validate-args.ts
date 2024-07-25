@@ -7,7 +7,7 @@ import {
 	type Rule,
 	findDecoratorContainingCCId,
 	getCCNameFromDecorator,
-} from "../utils";
+} from "../utils.js";
 
 const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
 

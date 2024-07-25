@@ -1,5 +1,5 @@
 import type { AST } from "jsonc-eslint-parser";
-import { type JSONCRule, removeJSONProperty } from "../utils";
+import { type JSONCRule, removeJSONProperty } from "../utils.js";
 
 export const noUnnecessaryMinMaxValue: JSONCRule.RuleModule = {
 	create(context) {

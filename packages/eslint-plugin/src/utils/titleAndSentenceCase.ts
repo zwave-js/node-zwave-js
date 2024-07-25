@@ -5,7 +5,7 @@ import {
 	isHyphenatedWord,
 	joinWords,
 	splitIntoWords,
-} from "./wordsAndNames";
+} from "./wordsAndNames.js";
 
 const titleCaseExceptions = [
 	"with",

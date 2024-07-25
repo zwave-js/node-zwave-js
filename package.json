@@ -47,8 +47,6 @@
     "@types/node": "^18.19.31",
     "@types/semver": "^7.5.8",
     "@types/source-map-support": "^0.5.10",
-    "@typescript-eslint/eslint-plugin": "^7.13.0",
-    "@typescript-eslint/parser": "^7.13.0",
     "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
@@ -88,6 +86,7 @@
     "ts-patch": "3.2.1",
     "turbo": "1.7.4",
     "typescript": "5.5.3",
+    "typescript-eslint": "^7.16.0",
     "zwave-js": "workspace:*"
   },
   "resolutions": {

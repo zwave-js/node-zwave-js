@@ -1,5 +1,5 @@
 import { type AST } from "jsonc-eslint-parser";
-import { type JSONCRule } from "../utils";
+import { type JSONCRule } from "../utils.js";
 
 function isSurroundedByWhitespace(str: string) {
 	return /^\s/.test(str) || /\s$/.test(str);

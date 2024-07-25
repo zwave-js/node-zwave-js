@@ -11,7 +11,7 @@ import {
 	findDecoratorContainingCCId,
 	getCCIdFromDecorator,
 	getCCIdFromExpression,
-} from "../utils";
+} from "../utils.js";
 
 const apiBaseClasses = new Set(["CCAPI", "PhysicalCCAPI"]);
 

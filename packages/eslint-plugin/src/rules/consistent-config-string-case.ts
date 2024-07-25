@@ -1,11 +1,11 @@
 import { type AST } from "jsonc-eslint-parser";
-import { CONFIG_OPTION, CONFIG_PARAM, ROOT } from "../jsonSelectors";
+import { CONFIG_OPTION, CONFIG_PARAM, ROOT } from "../jsonSelectors.js";
 import {
 	type JSONCRule,
 	insertAfterJSONProperty,
 	insertBeforeJSONProperty,
-} from "../utils";
-import { toSentenceCase, toTitleCase } from "../utils/titleAndSentenceCase";
+} from "../utils.js";
+import { toSentenceCase, toTitleCase } from "../utils/titleAndSentenceCase.js";
 
 // TODO: Avoid Enable/Disable in param labels
 // remove Z-Wave and all its variants

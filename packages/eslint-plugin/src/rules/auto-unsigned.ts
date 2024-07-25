@@ -9,7 +9,7 @@ import {
 	insertBeforeJSONProperty,
 	paramInfoPropertyOrder,
 	removeJSONProperty,
-} from "../utils";
+} from "../utils.js";
 
 export const autoUnsigned: JSONCRule.RuleModule = {
 	create(context) {

@@ -1,10 +1,14 @@
-import { type ESLint } from "eslint";
+import { Linter } from "eslint";
+import jsoncParser from "jsonc-eslint-parser";
+import zjs from "../index.js";
 
-export const configFiles: ESLint.ConfigData = {
-	parser: "jsonc-eslint-parser",
-	plugins: [
-		"@zwave-js",
-	],
+export const configFiles: Linter.FlatConfig = {
+	languageOptions: {
+		parser: jsoncParser,
+	},
+	plugins: {
+		"@zwave-js": zjs,
+	},
 	rules: {
 		"@zwave-js/auto-unsigned": "error",
 		"@zwave-js/consistent-config-string-case": "error",
