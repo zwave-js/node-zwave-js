@@ -1,8 +1,11 @@
 {
 	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+	"containerEnv": {
+		"YARN_ENABLE_GLOBAL_CACHE": "false", // Avoids cross-link issues due to different filesystems between /home and /workspaces
+		"COREPACK_ENABLE_DOWNLOAD_PROMPT": "0" // Avoids interactive prompt causing container creation to hang
+	},
 
-	"updateContentCommand": "yarn && yarn build",
-
+	"updateContentCommand": "sudo corepack enable && yarn && yarn build",
 	"customizations": {
 		"vscode": {
 			"extensions": [
