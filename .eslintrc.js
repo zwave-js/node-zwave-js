@@ -18,7 +18,7 @@ module.exports = {
 	parserOptions: {
 		ecmaVersion: 2023, // Allows for the parsing of modern ECMAScript features
 		sourceType: "module", // Allows for the use of imports
-		project: "./tsconfig.eslint.json",
+		project: "./tsconfig.all.json",
 		tsconfigRootDir: __dirname,
 	},
 	extends: [

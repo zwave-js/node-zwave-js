@@ -53,7 +53,7 @@
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 				"../../.eslintrc.js",
 				"../../.eslintignore",
-				"../../tsconfig.eslint.json"
+				"../../tsconfig.all.json"
 			]
 		},
 		"lint:ts:fix": {
@@ -65,7 +65,7 @@
 				// The style based linting tasks depend on the corresponding configuration in the repo root
 				"../../.eslintrc.js",
 				"../../.eslintignore",
-				"../../tsconfig.eslint.json"
+				"../../tsconfig.all.json"
 			],
 			"outputs": ["**/*.{ts,json}"]
 		},

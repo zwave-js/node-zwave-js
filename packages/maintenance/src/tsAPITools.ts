@@ -16,7 +16,7 @@ export const tsConfigFilePathForDocs = path.join(
 
 export function loadTSConfig(
 	packageName: string = "",
-	build: boolean = true,
+	variant: string = "build",
 ): {
 	options: ts.CompilerOptions;
 	fileNames: string[];
@@ -25,7 +25,7 @@ export function loadTSConfig(
 		packageName ? path.join(repoRoot, `packages/${packageName}`) : repoRoot,
 		// eslint-disable-next-line @typescript-eslint/unbound-method
 		ts.sys.fileExists,
-		build ? "tsconfig.build.json" : "tsconfig.json",
+		variant ? `tsconfig.${variant}.json` : "tsconfig.json",
 	);
 	if (!configFileName) throw new Error("tsconfig.json not found");
 
@@ -38,6 +38,8 @@ export function loadTSConfig(
 		ts.sys as any,
 	);
 	if (!parsedCommandLine) throw new Error("could not parse tsconfig.json");
+
+	// FIXME: If parsedCommandLine contains project references, but no fileNames, we need to resolve the references
 
 	return {
 		options: parsedCommandLine.options,
