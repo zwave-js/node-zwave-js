@@ -206,7 +206,7 @@ export async function resolveDirtyTests(
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
 
-	const tsConfig = loadTSConfig(undefined, false);
+	const tsConfig = loadTSConfig(undefined, "all");
 	const program = ts.createProgram(tsConfig.fileNames, {
 		...tsConfig.options,
 		preserveSymlinks: false,
