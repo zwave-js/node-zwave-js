@@ -144,3 +144,5 @@ For end users, the `property` of the Admin Code value ID has been changed from `
 ## Migrated to Yarn 4 and Corepack
 
 The repository has been migrated to Yarn v4 and now uses [Corepack](https://github.com/nodejs/corepack) to automatically install the correct package manager version, without having to check it into git. This should work out of the box, unless `yarn` was previously installed globally as a system package on Linux. In that case, you may have to uninstall the Linux package and remove any additions to the `PATH` environment variable.
+
+It was found that Yarn 4 interacts with already-installed packages differently than Yarn 3. We patch `typescript` and it seems that Yarn 4 always undoes this when executing `yarn` or `yarn install`. Therefore you should not install packages yourself, but rather use the `yarn bootstrap` script to take care of everything.

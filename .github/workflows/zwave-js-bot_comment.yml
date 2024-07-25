@@ -58,18 +58,11 @@ jobs:
     - name: Switch to a branch
       run: git switch -c temp
 
-    - name: Enable Corepack
-      shell: bash
-      run: corepack enable
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+    - name: Prepare environment
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-
-    - name: Install dependencies
-      run: yarn install --immutable
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish PR build to npm
       uses: actions/github-script@v7
@@ -404,20 +397,12 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
-    - name: Enable Corepack
-      shell: bash
-      run: corepack enable
-
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Prepare environment
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v4
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-
-    - name: Install dependencies
-      if: steps.check-permissions.outputs.result == 'true'
-      run: yarn install --immutable
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       if: steps.check-permissions.outputs.result == 'true'
@@ -516,20 +501,12 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
-    - name: Enable Corepack
-      shell: bash
-      run: corepack enable
-
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Prepare environment
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v4
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-
-    - name: Install dependencies
-      if: steps.check-permissions.outputs.result == 'true'
-      run: yarn install --immutable
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       if: steps.check-permissions.outputs.result == 'true'
@@ -640,20 +617,12 @@ jobs:
           return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
-    - name: Enable Corepack
-      shell: bash
-      run: corepack enable
-
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Prepare environment
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v4
+      uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-
-    - name: Install dependencies
-      if: steps.check-permissions.outputs.result == 'true'
-      run: yarn install --immutable
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       if: steps.check-permissions.outputs.result == 'true'
