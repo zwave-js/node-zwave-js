@@ -19,6 +19,7 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 	ZnifferRegion,
+	ZnifferRegionLegacy,
 	getChipTypeAndVersion,
 	isLongRangeNodeId,
 	securityClassIsS2,
@@ -51,6 +52,7 @@ import {
 import {
 	TypedEventEmitter,
 	getEnumMemberName,
+	isEnumMember,
 	noop,
 	num2hex,
 	pick,
@@ -60,6 +62,7 @@ import {
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import fs from "node:fs/promises";
+import { sdkVersionGte } from "../controller/utils";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
 import { ZnifferCCParsingContext } from "./CCParsingContext";
@@ -325,47 +328,55 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		this._currentFrequency = freqs.currentFrequency;
 		if (is700PlusSeries(this._chipType)) {
 			// The frequencies match the ZnifferRegion enum
-			this.znifferLog.print(
-				`received frequency info:
-  current frequency:     ${
-					getEnumMemberName(ZnifferRegion, freqs.currentFrequency)
-				}
-  supported frequencies: ${
-					freqs.supportedFrequencies.map((f) =>
-						`\n  · ${f.toString().padStart(2, " ")}: ${
-							getEnumMemberName(ZnifferRegion, f)
-						}`
-					).join("")
-				}`,
-				"info",
-			);
-
 			for (const freq of freqs.supportedFrequencies) {
 				this._supportedFrequencies.set(
 					freq,
 					getEnumMemberName(ZnifferRegion, freq),
 				);
 			}
-		} else {
+			// ... but there might be unknown regions. Query those from the Zniffer
+			const unknownRegions = freqs.supportedFrequencies.filter((f) =>
+				!isEnumMember(ZnifferRegion, f)
+			);
+			for (const freq of unknownRegions) {
+				const freqInfo = await this.getFrequencyInfo(freq);
+				this._supportedFrequencies.set(freq, freqInfo.frequencyName);
+			}
+		} else if (
+			// Version 2.55+ supports querying the frequency names
+			sdkVersionGte(
+				`${versionInfo.majorVersion}.${versionInfo.minorVersion}`,
+				"2.55",
+			)
+		) {
 			// The frequencies are firmware-specific. Query them from the Zniffer
 			for (const freq of freqs.supportedFrequencies) {
 				const freqInfo = await this.getFrequencyInfo(freq);
 				this._supportedFrequencies.set(freq, freqInfo.frequencyName);
 			}
-			this.znifferLog.print(
-				`received frequency info:
-  current frequency:     ${this._supportedFrequencies.get(
-					freqs.currentFrequency,
-				)!}
-  supported frequencies: ${
-					freqs.supportedFrequencies.map((f) =>
-						`\n  · ${f.toString().padStart(2, " ")}: ${this
-							._supportedFrequencies.get(f)!}`
-					).join("")
-				}`,
-				"info",
-			);
+		} else {
+			// The frequencies match the ZnifferRegionLegacy enum, and their info cannot be queried
+			for (const freq of freqs.supportedFrequencies) {
+				this._supportedFrequencies.set(
+					freq,
+					getEnumMemberName(ZnifferRegionLegacy, freq),
+				);
+			}
 		}
+
+		this.znifferLog.print(
+			`received frequency info:
+current frequency:     ${
+				this._supportedFrequencies.get(freqs.currentFrequency)
+					?? `unknown (${num2hex(freqs.currentFrequency)})`
+			}
+supported frequencies: ${
+				[...this._supportedFrequencies].map(([region, name]) =>
+					`\n  · ${region.toString().padStart(2, " ")}: ${name}`
+				).join("")
+			}`,
+			"info",
+		);
 
 		if (
 			typeof this._options.defaultFrequency === "number"
