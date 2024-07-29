@@ -19,6 +19,8 @@ import { type MockNodeBehavior } from "@zwave-js/testing";
 
 import { BasicCCBehaviors } from "./mockCCBehaviors/Basic";
 import { BinarySensorCCBehaviors } from "./mockCCBehaviors/BinarySensor";
+import { BinarySwitchCCBehaviors } from "./mockCCBehaviors/BinarySwitch";
+import { ColorSwitchCCBehaviors } from "./mockCCBehaviors/ColorSwitch";
 import { ConfigurationCCBehaviors } from "./mockCCBehaviors/Configuration";
 import { EnergyProductionCCBehaviors } from "./mockCCBehaviors/EnergyProduction";
 import { ManufacturerSpecificCCBehaviors } from "./mockCCBehaviors/ManufacturerSpecific";
@@ -177,6 +179,8 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 
 		...BasicCCBehaviors,
 		...BinarySensorCCBehaviors,
+		...BinarySwitchCCBehaviors,
+		...ColorSwitchCCBehaviors,
 		...ConfigurationCCBehaviors,
 		...EnergyProductionCCBehaviors,
 		...ManufacturerSpecificCCBehaviors,
