@@ -95,6 +95,7 @@ import {
 	type ReadonlyThrowingMap,
 	type ThrowingMap,
 	TypedEventEmitter,
+	cloneDeep,
 	createThrowingMap,
 	flatMap,
 	getEnumMemberName,
@@ -876,18 +877,7 @@ export class ZWaveController
 		// And that the entry contains valid data
 		assertProvisioningEntry(entry);
 
-		// Discard any invalid security classes that may have been granted. This can happen
-		// when switching the protocol to ZWLR for a device that requests S2 Unauthenticated
-		// for Z-Wave Classic.
-		if (entry.protocol === Protocols.ZWaveLongRange) {
-			entry.securityClasses = entry.securityClasses.filter((sc) =>
-				sc === SecurityClass.S2_AccessControl
-				|| sc === SecurityClass.S2_Authenticated
-			);
-		}
-
 		const provisioningList = [...this.provisioningList];
-
 		const index = provisioningList.findIndex((e) => e.dsk === entry.dsk);
 		if (index === -1) {
 			provisioningList.push(entry);
@@ -2537,7 +2527,7 @@ export class ZWaveController
 			}
 
 			// Check if the node is on the provisioning list
-			const provisioningEntry = this.provisioningList.find((entry) => {
+			const entry = this.provisioningList.find((entry) => {
 				if (
 					!nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
 						msg.nwiHomeId,
@@ -2552,18 +2542,30 @@ export class ZWaveController
 				return (entryProtocol === Protocols.ZWaveLongRange)
 					=== isLongRange;
 			});
-			if (!provisioningEntry) {
+			if (!entry) {
 				this.driver.controllerLog.print(
 					"NWI Home ID not found in provisioning list, ignoring request...",
 				);
 				return;
 			} else if (
-				provisioningEntry.status === ProvisioningEntryStatus.Inactive
+				entry.status === ProvisioningEntryStatus.Inactive
 			) {
 				this.driver.controllerLog.print(
 					"The provisioning entry for this node is inactive, ignoring request...",
 				);
 				return;
+			}
+
+			// Discard any invalid security classes that may have been granted. This can happen
+			// when switching the protocol to ZWLR for a device that requests S2 Unauthenticated
+			// for Z-Wave Classic.
+			const provisioningEntry = cloneDeep(entry);
+			if (isLongRange) {
+				provisioningEntry.securityClasses = provisioningEntry
+					.securityClasses.filter((sc) =>
+						sc === SecurityClass.S2_AccessControl
+						|| sc === SecurityClass.S2_Authenticated
+					);
 			}
 
 			// Ignore provisioning entries where some of the granted keys are not configured
