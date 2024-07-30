@@ -140,9 +140,11 @@ export type { ClockCCSetOptions } from "./ClockCC";
 export { ClockCC, ClockCCGet, ClockCCReport, ClockCCSet } from "./ClockCC";
 export type {
 	ColorSwitchCCGetOptions,
+	ColorSwitchCCReportOptions,
 	ColorSwitchCCSetOptions,
 	ColorSwitchCCStartLevelChangeOptions,
 	ColorSwitchCCStopLevelChangeOptions,
+	ColorSwitchCCSupportedReportOptions,
 } from "./ColorSwitchCC";
 export {
 	ColorSwitchCC,
