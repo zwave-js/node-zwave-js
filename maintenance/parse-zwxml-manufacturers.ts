@@ -58,7 +58,7 @@ ${
 				}`;
 			}
 			return `	"${formatId(m.id)}": "${
-				m.name.replace("\"", "\\\"")
+				m.name.replaceAll("\"", "\\\"")
 			}",${former}`;
 		}).join("\n")
 	}
