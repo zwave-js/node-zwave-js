@@ -2105,6 +2105,7 @@ __metadata:
     "@types/node": "npm:^18.19.31"
     "@types/semver": "npm:^7.5.8"
     "@types/source-map-support": "npm:^0.5.10"
+    "@types/xml2js": "npm:^0.4.14"
     "@typescript-eslint/eslint-plugin": "npm:^7.13.0"
     "@typescript-eslint/parser": "npm:^7.13.0"
     "@zwave-js/cc": "workspace:*"
@@ -2146,6 +2147,7 @@ __metadata:
     ts-patch: "npm:3.2.1"
     turbo: "npm:1.7.4"
     typescript: "npm:5.5.3"
+    xml2js: "npm:^0.6.2"
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
