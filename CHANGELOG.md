@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.0.3 (2024-07-30)
 ### Bugfixes
 * Fixed an issue causing all ZWLR multicast groups to be considered identical (#7042)
 * Fixed a startup crash on Zniffers older than FW 2.55 (#7051)
