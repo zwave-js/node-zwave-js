@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue causing all ZWLR multicast groups to be considered identical (#7042)
+* Fixed a startup crash on Zniffers older than FW 2.55 (#7051)
+
+### Changes under the hood
+* Fixed the devcontainer setup (#7041)
+* Look at all test files to resolve dirty tests (#7045)
+* Introduce `yarn bootstrap` command to set up environment (#7046)
+* Add mocks for Binary and Color Switch CC (#7056)
+
 ## 13.0.2 (2024-07-22)
 ### Bugfixes
 * Fixed latency calculation in link reliability check, distinguish between latency and RTT (#7038)
