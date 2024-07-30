@@ -1,5 +1,5 @@
 import { BinarySwitchCCSet, BinarySwitchCCValues } from "@zwave-js/cc";
-import { CommandClasses } from "@zwave-js/core";
+import { CommandClasses, NOT_KNOWN, UNKNOWN_STATE } from "@zwave-js/core";
 import { MockZWaveFrameType } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuiteMulti";
@@ -31,10 +31,16 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 	testBody: async (t, driver, nodes, mockController, mockNodes) => {
 		const [node2, node3] = nodes;
 
-		t.is(node2.getValue(BinarySwitchCCValues.targetValue.id), undefined);
-		t.is(node3.getValue(BinarySwitchCCValues.targetValue.id), undefined);
-		t.is(node2.getValue(BinarySwitchCCValues.currentValue.id), undefined);
-		t.is(node3.getValue(BinarySwitchCCValues.currentValue.id), undefined);
+		t.is(node2.getValue(BinarySwitchCCValues.targetValue.id), NOT_KNOWN);
+		t.is(node3.getValue(BinarySwitchCCValues.targetValue.id), NOT_KNOWN);
+		t.is(
+			node2.getValue(BinarySwitchCCValues.currentValue.id),
+			UNKNOWN_STATE,
+		);
+		t.is(
+			node3.getValue(BinarySwitchCCValues.currentValue.id),
+			UNKNOWN_STATE,
+		);
 
 		const mcGroup = driver.controller.getMulticastGroup([2, 3]);
 

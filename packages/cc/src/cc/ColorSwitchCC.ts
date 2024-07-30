@@ -15,13 +15,14 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import { type MaybeNotKnown, encodeBitMask } from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import {
+	type AllOrNone,
 	getEnumMemberName,
 	isEnumMember,
 	keysOf,
@@ -671,25 +672,45 @@ export class ColorSwitchCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface ColorSwitchCCSupportedReportOptions {
+	supportedColorComponents: readonly ColorComponent[];
+}
+
 @CCCommand(ColorSwitchCommand.SupportedReport)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (ColorSwitchCCSupportedReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		// Docs say 'variable length', but the table shows 2 bytes.
-		validatePayload(this.payload.length >= 2);
+		if (gotDeserializationOptions(options)) {
+			// Docs say 'variable length', but the table shows 2 bytes.
+			validatePayload(this.payload.length >= 2);
 
-		this.supportedColorComponents = parseBitMask(
-			this.payload.subarray(0, 2),
-			ColorComponent["Warm White"],
-		);
+			this.supportedColorComponents = parseBitMask(
+				this.payload.subarray(0, 2),
+				ColorComponent["Warm White"],
+			);
+		} else {
+			this.supportedColorComponents = options.supportedColorComponents;
+		}
 	}
 
 	@ccValue(ColorSwitchCCValues.supportedColorComponents)
 	public readonly supportedColorComponents: readonly ColorComponent[];
+
+	public serialize(): Buffer {
+		this.payload = encodeBitMask(
+			this.supportedColorComponents,
+			15, // fixed 2 bytes
+			ColorComponent["Warm White"],
+		);
+		return super.serialize();
+	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
@@ -707,21 +728,41 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 @expectedCCResponse(ColorSwitchCCSupportedReport)
 export class ColorSwitchCCSupportedGet extends ColorSwitchCC {}
 
+// @publicAPI
+export type ColorSwitchCCReportOptions =
+	& {
+		colorComponent: ColorComponent;
+		currentValue: number;
+	}
+	& AllOrNone<{
+		targetValue: number;
+		duration: Duration | string;
+	}>;
+
 @CCCommand(ColorSwitchCommand.Report)
 export class ColorSwitchCCReport extends ColorSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (ColorSwitchCCReportOptions & CCCommandOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 2);
-		this.colorComponent = this.payload[0];
-		this.currentValue = this.payload[1];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.colorComponent = this.payload[0];
+			this.currentValue = this.payload[1];
 
-		if (this.version >= 3 && this.payload.length >= 4) {
-			this.targetValue = this.payload[2];
-			this.duration = Duration.parseReport(this.payload[3]);
+			if (this.version >= 3 && this.payload.length >= 4) {
+				this.targetValue = this.payload[2];
+				this.duration = Duration.parseReport(this.payload[3]);
+			}
+		} else {
+			this.colorComponent = options.colorComponent;
+			this.currentValue = options.currentValue;
+			this.targetValue = options.targetValue;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
@@ -803,6 +844,23 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	@ccValue(ColorSwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.colorComponent,
+			this.currentValue,
+		]);
+		if (this.targetValue != undefined && this.duration != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([
+					this.targetValue ?? 0xfe,
+					(this.duration ?? Duration.default()).serializeReport(),
+				]),
+			]);
+		}
+		return super.serialize();
+	}
+
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
@@ -845,11 +903,8 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this._colorComponent = this.payload[0];
 		} else {
 			this._colorComponent = options.colorComponent;
 		}
@@ -903,11 +958,23 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			const populatedColorCount = this.payload[0] & 0b11111;
+
+			validatePayload(this.payload.length >= 1 + populatedColorCount * 2);
+			this.colorTable = {};
+			let offset = 1;
+			for (let color = 0; color < populatedColorCount; color++) {
+				const component = this.payload[offset];
+				const value = this.payload[offset + 1];
+				const key = colorComponentToTableKey(component);
+				// @ts-expect-error
+				if (key) this.colorTable[key] = value;
+				offset += 2;
+			}
+			if (this.payload.length > offset) {
+				this.duration = Duration.parseSet(this.payload[offset]);
+			}
 		} else {
 			// Populate properties from options object
 			if ("hexColor" in options) {
@@ -1012,11 +1079,18 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 3);
+			const ignoreStartLevel = (this.payload[0] & 0b0_0_1_00000) >>> 5;
+			this.ignoreStartLevel = !!ignoreStartLevel;
+			const direction = (this.payload[0] & 0b0_1_0_00000) >>> 6;
+			this.direction = direction ? "down" : "up";
+
+			this.colorComponent = this.payload[1];
+			this.startLevel = this.payload[2];
+
+			if (this.payload.length >= 4) {
+				this.duration = Duration.parseSet(this.payload[3]);
+			}
 		} else {
 			this.duration = Duration.from(options.duration);
 			this.ignoreStartLevel = options.ignoreStartLevel;
@@ -1091,11 +1165,8 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.colorComponent = this.payload[0];
 		} else {
 			this.colorComponent = options.colorComponent;
 		}

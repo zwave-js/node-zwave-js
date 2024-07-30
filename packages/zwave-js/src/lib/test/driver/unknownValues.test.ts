@@ -158,11 +158,17 @@ integrationTest(
 			commandClasses: [CommandClasses["Binary Switch"]],
 		},
 
+		additionalDriverOptions: {
+			testingHooks: {
+				skipNodeInterview: true,
+			},
+		},
+
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			const targetValueId = BinarySwitchCCValues.targetValue.id;
 			const currentValueId = BinarySwitchCCValues.currentValue.id;
 
-			// At the start, values are not known yet
+			// At the start, values are not known yet, because the interview was skipped
 			t.is(node.getValue(targetValueId), NOT_KNOWN);
 			t.is(node.getValue(currentValueId), NOT_KNOWN);
 
