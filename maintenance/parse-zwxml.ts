@@ -24,8 +24,6 @@ async function main() {
 			xmlParserOptions_default,
 		);
 
-	cmd_class.sort((a, b) => a.name.localeCompare(b.name));
-
 	const ccs = new Map<string, any>();
 	for (const cc of cmd_class) {
 		if (ccs.has(cc.key) && ccs.get(cc.key).version > cc.version) {
@@ -45,7 +43,7 @@ async function main() {
 	);
 
 	const implemented = `{
-	${
+${
 		allCCs.map((cc) => {
 			let info = "";
 			if (cc.comment?.toLowerCase().includes("deprecated")) {
@@ -59,5 +57,11 @@ async function main() {
 }`;
 
 	await fs.writeFile("implemented.txt", implemented);
+
+	const enumm = allCCs.map((cc) => `	"${cc.name}" = ${cc.key},`).join(
+		"\n",
+	);
+
+	await fs.writeFile("enum.txt", enumm);
 }
 void main();
