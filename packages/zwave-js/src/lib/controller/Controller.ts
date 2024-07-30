@@ -396,6 +396,7 @@ interface ControllerEventCallbacks
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
+	"inclusion state changed": (state: InclusionState) => void;
 	"node found": (node: FoundNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, reason: RemoveNodeReason) => void;
@@ -1960,6 +1961,7 @@ export class ZWaveController
 	public setInclusionState(state: InclusionState): void {
 		if (this._inclusionState === state) return;
 		this._inclusionState = state;
+		this.emit("inclusion state changed", state);
 		if (
 			state === InclusionState.Idle
 			&& this._smartStartEnabled

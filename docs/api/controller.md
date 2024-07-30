@@ -1423,6 +1423,31 @@ A node could not be included into or excluded from the network for some reason.
 
 The process to include or exclude a node was stopped successfully. Note that these events are also emitted after a node was included or excluded.
 
+### `"inclusion state changed"`
+
+The controller's inclusion state has changed. The new state is passed as an argument.
+
+```ts
+(state: InclusionState) => void
+```
+
+<!-- #import InclusionState from "zwave-js" -->
+
+```ts
+enum InclusionState {
+	/** The controller isn't doing anything regarding inclusion. */
+	Idle,
+	/** The controller is waiting for a node to be included. */
+	Including,
+	/** The controller is waiting for a node to be excluded. */
+	Excluding,
+	/** The controller is busy including or excluding a node. */
+	Busy,
+	/** The controller listening for SmartStart nodes to announce themselves. */
+	SmartStart,
+}
+```
+
 ### `"node found"`
 
 A node has successfully been added to the network.
