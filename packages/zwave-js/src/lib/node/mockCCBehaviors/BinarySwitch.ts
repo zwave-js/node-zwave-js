@@ -3,6 +3,7 @@ import {
 	BinarySwitchCCReport,
 	BinarySwitchCCSet,
 } from "@zwave-js/cc/BinarySwitchCC";
+import { type MaybeUnknown, UNKNOWN_STATE } from "@zwave-js/core";
 import { type MockNodeBehavior } from "@zwave-js/testing";
 
 const STATE_KEY_PREFIX = "BinarySwitch_";
@@ -15,7 +16,8 @@ const respondToBinarySwitchGet: MockNodeBehavior = {
 		if (receivedCC instanceof BinarySwitchCCGet) {
 			const cc = new BinarySwitchCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
-				currentValue: !!self.state.get(StateKeys.currentValue),
+				currentValue: (self.state.get(StateKeys.currentValue)
+					?? UNKNOWN_STATE) as MaybeUnknown<boolean>,
 			});
 			return { action: "sendCC", cc };
 		}
