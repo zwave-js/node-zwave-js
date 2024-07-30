@@ -180,7 +180,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 }
 
 @commandClass(CommandClasses["Humidity Control Mode"])
-@implementedVersion(2)
+@implementedVersion(1)
 @ccValues(HumidityControlModeCCValues)
 export class HumidityControlModeCC extends CommandClass {
 	declare ccCommand: HumidityControlModeCommand;
