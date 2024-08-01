@@ -65,7 +65,7 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.47.0",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^18.19.31",
+    "@types/node": "^18.19.42",
     "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.32",
     "ava": "^6.1.2",

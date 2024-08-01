@@ -42,7 +42,7 @@
     "@dprint/typescript": "^0.91.1",
     "@types/fs-extra": "^11.0.4",
     "@types/globrex": "^0.1.4",
-    "@types/node": "^18.19.31",
+    "@types/node": "^18.19.42",
     "@types/yargs": "^17.0.32",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/fmt": "^1.0.1",
