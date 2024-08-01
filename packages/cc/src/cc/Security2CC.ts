@@ -2086,6 +2086,7 @@ export class Security2CCKEXSet extends Security2CC {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
+			this._reserved = this.payload[0] & 0b1111_1100;
 			this.permitCSA = !!(this.payload[0] & 0b10);
 			this.echo = !!(this.payload[0] & 0b1);
 			// The bit mask starts at 0, but bit 0 is not used
@@ -2108,6 +2109,7 @@ export class Security2CCKEXSet extends Security2CC {
 				SecurityClass.S2_Unauthenticated,
 			);
 		} else {
+			this._reserved = 0;
 			this.permitCSA = options.permitCSA;
 			this.echo = options.echo;
 			this.selectedKEXScheme = options.selectedKEXScheme;
@@ -2116,6 +2118,7 @@ export class Security2CCKEXSet extends Security2CC {
 		}
 	}
 
+	public readonly _reserved: number;
 	public permitCSA: boolean;
 	public echo: boolean;
 	public selectedKEXScheme: KEXSchemes;
