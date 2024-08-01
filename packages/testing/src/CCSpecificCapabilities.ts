@@ -37,7 +37,8 @@ export interface ConfigurationCCCapabilities {
 }
 
 export interface ColorSwitchCCCapabilities {
-	supportedColorComponents: ColorComponent[];
+	/** Supported colors and their default values */
+	colorComponents: Partial<Record<ColorComponent, number | undefined>>;
 }
 
 export interface NotificationCCCapabilities {
