@@ -38,7 +38,7 @@
     "@commitlint/config-conventional": "^19.1.0",
     "@dprint/formatter": "^0.3.0",
     "@dprint/json": "^0.19.3",
-    "@dprint/markdown": "^0.17.1",
+    "@dprint/markdown": "^0.17.2",
     "@dprint/typescript": "^0.91.1",
     "@microsoft/api-extractor": "^7.47.0",
     "@monorepo-utils/workspaces-to-typescript-project-references": "^2.10.4",
