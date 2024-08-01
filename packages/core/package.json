@@ -68,7 +68,7 @@
     "triple-beam": "*",
     "winston": "^3.13.0",
     "winston-daily-rotate-file": "^5.0.0",
-    "winston-transport": "^4.7.0"
+    "winston-transport": "^4.7.1"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.47.0",

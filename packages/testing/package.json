@@ -62,6 +62,6 @@
     "esbuild-register": "^3.5.0",
     "triple-beam": "*",
     "typescript": "5.5.3",
-    "winston-transport": "^4.7.0"
+    "winston-transport": "^4.7.1"
   }
 }
