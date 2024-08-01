@@ -3563,6 +3563,15 @@ export class ZWaveController
 				});
 				await abort(KEXFailType.WrongSecurityLevel);
 				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (kexSetEcho._reserved !== 0) {
+				this.driver.controllerLog.logNode(node.id, {
+					message:
+						`Security S2 bootstrapping failed: Invalid KEXSet received`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.NodeCanceled;
 			} else if (
 				!kexSetEcho.isEncapsulatedWith(
 					CommandClasses["Security 2"],
