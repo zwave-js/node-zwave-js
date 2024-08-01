@@ -16,7 +16,7 @@ import {
 } from "@zwave-js/testing";
 
 const defaultCapabilities: ColorSwitchCCCapabilities = {
-	supportedColorComponents: [],
+	colorComponents: {},
 };
 
 const STATE_KEY_PREFIX = "ColorSwitch_";
@@ -37,7 +37,11 @@ const respondToColorSwitchSupportedGet: MockNodeBehavior = {
 			};
 			const cc = new ColorSwitchCCSupportedReport(self.host, {
 				nodeId: controller.host.ownNodeId,
-				supportedColorComponents: capabilities.supportedColorComponents,
+				supportedColorComponents: Object.keys(
+					capabilities.colorComponents,
+				).map(
+					(c) => parseInt(c),
+				),
 			});
 			return { action: "sendCC", cc };
 		}
@@ -69,12 +73,13 @@ const respondToColorSwitchGet: MockNodeBehavior = {
 				),
 			};
 			const component = receivedCC.colorComponent;
-			if (capabilities.supportedColorComponents.includes(component)) {
+			if (component in capabilities.colorComponents) {
 				const cc = new ColorSwitchCCReport(self.host, {
 					nodeId: controller.host.ownNodeId,
 					colorComponent: component,
 					currentValue:
 						(self.state.get(StateKeys.component(component))
+							?? capabilities.colorComponents[component]
 							?? 0) as number,
 				});
 				return { action: "sendCC", cc };
@@ -97,7 +102,7 @@ const respondToColorSwitchStartLevelChange: MockNodeBehavior = {
 			};
 
 			const component = receivedCC.colorComponent;
-			if (capabilities.supportedColorComponents.includes(component)) {
+			if (component in capabilities.colorComponents) {
 				// TODO: A proper simulation should gradually transition the value. We just set it to the target value.
 				self.state.set(
 					StateKeys.component(component),
@@ -124,7 +129,7 @@ const respondToColorSwitchStopLevelChange: MockNodeBehavior = {
 			};
 
 			const component = receivedCC.colorComponent;
-			if (capabilities.supportedColorComponents.includes(component)) {
+			if (component in capabilities.colorComponents) {
 				return { action: "ok" };
 			} else {
 				return { action: "fail" };
