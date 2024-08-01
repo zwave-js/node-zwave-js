@@ -1887,7 +1887,7 @@ __metadata:
     "@zwave-js/transformers": "workspace:*"
     alcalzone-shared: "npm:^4.0.8"
     ansi-colors: "npm:^4.1.3"
-    ava: "npm:^6.1.2"
+    ava: "npm:^6.1.3"
     del-cli: "npm:^5.1.0"
     fs-extra: "npm:^11.2.0"
     reflect-metadata: "npm:^0.2.2"
@@ -1914,7 +1914,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: "npm:^4.0.8"
     ansi-colors: "npm:^4.1.3"
-    ava: "npm:^6.1.2"
+    ava: "npm:^6.1.3"
     comment-json: "npm:^4.2.3"
     del-cli: "npm:^5.1.0"
     esbuild: "npm:0.21.5"
@@ -1947,7 +1947,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: "npm:^4.0.8"
     ansi-colors: "npm:^4.1.3"
-    ava: "npm:^6.1.2"
+    ava: "npm:^6.1.3"
     dayjs: "npm:^1.11.10"
     del-cli: "npm:^5.1.0"
     esbuild: "npm:0.21.5"
@@ -2068,7 +2068,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: "npm:^4.0.8"
-    ava: "npm:^6.1.2"
+    ava: "npm:^6.1.3"
     del-cli: "npm:^5.1.0"
     esbuild: "npm:0.21.5"
     esbuild-register: "npm:^3.5.0"
@@ -2167,7 +2167,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: "npm:^4.0.8"
     ansi-colors: "npm:^4.1.3"
-    ava: "npm:^6.1.2"
+    ava: "npm:^6.1.3"
     del-cli: "npm:^5.1.0"
     esbuild: "npm:0.21.5"
     esbuild-register: "npm:^3.5.0"
@@ -2187,7 +2187,7 @@ __metadata:
     "@types/node": "npm:^18.19.42"
     "@types/sinon": "npm:^17.0.3"
     alcalzone-shared: "npm:^4.0.8"
-    ava: "npm:^6.1.2"
+    ava: "npm:^6.1.3"
     del-cli: "npm:^5.1.0"
     esbuild: "npm:0.21.5"
     esbuild-register: "npm:^3.5.0"
@@ -2225,7 +2225,7 @@ __metadata:
   resolution: "@zwave-js/transformers@workspace:packages/transformers"
   dependencies:
     "@types/fs-extra": "npm:^11.0.4"
-    ava: "npm:^6.1.2"
+    ava: "npm:^6.1.3"
     cpy-cli: "npm:^5.0.0"
     del-cli: "npm:^5.1.0"
     execa: "npm:^5.1.1"
@@ -2689,9 +2689,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ava@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "ava@npm:6.1.2"
+"ava@npm:^6.1.3":
+  version: 6.1.3
+  resolution: "ava@npm:6.1.3"
   dependencies:
     "@vercel/nft": "npm:^0.26.2"
     acorn: "npm:^8.11.3"
@@ -2740,7 +2740,7 @@ __metadata:
       optional: true
   bin:
     ava: entrypoints/cli.mjs
-  checksum: 10/57800d0a94e4e5e379d90120ded619188534d2b075a9557d05f44f50f685a3cf346bdd2247b1fdcf850526d3e1c0ade06cabc56ca16108bb77f0d26223025215
+  checksum: 10/89d2ba8b3b6f60e1c12094d84f0087455e43a4a4c7191ae33b462c653ec7343efc5475ffb9c93f1e27effd1fbd9e0e5b1392f7b70693246d0ba726c554bff830
   languageName: node
   linkType: hard
 
@@ -9455,7 +9455,7 @@ __metadata:
     "@zwave-js/transformers": "workspace:*"
     alcalzone-shared: "npm:^4.0.8"
     ansi-colors: "npm:^4.1.3"
-    ava: "npm:^6.1.2"
+    ava: "npm:^6.1.3"
     del-cli: "npm:^5.1.0"
     esbuild: "npm:0.21.5"
     esbuild-register: "npm:^3.5.0"
