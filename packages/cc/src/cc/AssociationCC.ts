@@ -286,7 +286,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 }
 
 @commandClass(CommandClasses.Association)
-@implementedVersion(3)
+@implementedVersion(4)
 @ccValues(AssociationCCValues)
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
