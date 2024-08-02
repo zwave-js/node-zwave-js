@@ -5574,6 +5574,12 @@ protocol version:      ${this.protocolVersion}`;
 		const additionalFirmwareIDs = this.getValue<number[]>(
 			FirmwareUpdateMetaDataCCValues.additionalFirmwareIDs.id,
 		);
+		const supportsResuming = this.getValue<boolean>(
+			FirmwareUpdateMetaDataCCValues.supportsResuming.id,
+		);
+		const supportsNonSecureTransfer = this.getValue<boolean>(
+			FirmwareUpdateMetaDataCCValues.supportsNonSecureTransfer.id,
+		);
 
 		// Ensure all information was queried
 		if (
@@ -5590,6 +5596,8 @@ protocol version:      ${this.protocolVersion}`;
 				.map((_, i) => i),
 			continuesToFunction,
 			supportsActivation,
+			supportsResuming,
+			supportsNonSecureTransfer,
 		};
 	}
 
@@ -5620,6 +5628,8 @@ protocol version:      ${this.protocolVersion}`;
 				.fill(0).map((_, i) => i),
 			continuesToFunction: meta.continuesToFunction,
 			supportsActivation: meta.supportsActivation,
+			supportsResuming: meta.supportsResuming,
+			supportsNonSecureTransfer: meta.supportsNonSecureTransfer,
 		};
 	}
 

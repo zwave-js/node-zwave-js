@@ -63,6 +63,12 @@ export const FirmwareUpdateMetaDataCCValues = Object.freeze({
 		...V.staticProperty("continuesToFunction", undefined, {
 			internal: true,
 		}),
+		...V.staticProperty("supportsResuming", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsNonSecureTransfer", undefined, {
+			internal: true,
+		}),
 	}),
 });
 
@@ -127,6 +133,8 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 				"hardwareVersion",
 				"continuesToFunction",
 				"supportsActivation",
+				"supportsResuming",
+				"supportsNonSecureTransfer",
 			]);
 		}
 	}
@@ -240,7 +248,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 }
 
 @commandClass(CommandClasses["Firmware Update Meta Data"])
-@implementedVersion(7)
+@implementedVersion(8)
 @ccValues(FirmwareUpdateMetaDataCCValues)
 export class FirmwareUpdateMetaDataCC extends CommandClass {
 	declare ccCommand: FirmwareUpdateMetaDataCommand;
@@ -277,9 +285,17 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 			let logMessage = `Received firmware update capabilities:`;
 			if (caps.firmwareUpgradable) {
 				logMessage += `
-  firmware targets:      ${[0, ...caps.additionalFirmwareIDs].join(", ")}
-  continues to function: ${caps.continuesToFunction}
-  supports activation:   ${caps.supportsActivation}`;
+  firmware targets:             ${[0, ...caps.additionalFirmwareIDs].join(", ")}
+  continues to function:        ${caps.continuesToFunction}
+  supports activation:          ${caps.supportsActivation}`;
+				if (caps.supportsResuming != undefined) {
+					logMessage += `
+  supports resuming:            ${caps.supportsResuming}`;
+				}
+				if (caps.supportsNonSecureTransfer != undefined) {
+					logMessage += `
+  supports non-secure transfer: ${caps.supportsNonSecureTransfer}`;
+				}
 			} else {
 				logMessage += `\nfirmware upgradeable: false`;
 			}
@@ -312,6 +328,8 @@ export interface FirmwareUpdateMetaDataCCMetaDataReportOptions {
 	hardwareVersion?: number;
 	continuesToFunction?: MaybeNotKnown<boolean>;
 	supportsActivation?: MaybeNotKnown<boolean>;
+	supportsResuming?: MaybeNotKnown<boolean>;
+	supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataReport)
@@ -368,6 +386,11 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 						if (this.version >= 7) {
 							this.supportsActivation = !!(capabilities & 0b10);
 						}
+						if (this.version >= 8) {
+							this.supportsResuming = !!(capabilities & 0b1000);
+							this.supportsNonSecureTransfer =
+								!!(capabilities & 0b100);
+						}
 					}
 				}
 			}
@@ -381,6 +404,8 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 			this.hardwareVersion = options.hardwareVersion;
 			this.continuesToFunction = options.continuesToFunction;
 			this.supportsActivation = options.supportsActivation;
+			this.supportsResuming = options.supportsResuming;
+			this.supportsNonSecureTransfer = options.supportsNonSecureTransfer;
 		}
 	}
 
@@ -395,9 +420,12 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	public readonly hardwareVersion?: number;
 	@ccValue(FirmwareUpdateMetaDataCCValues.continuesToFunction)
 	public readonly continuesToFunction: MaybeNotKnown<boolean>;
-
 	@ccValue(FirmwareUpdateMetaDataCCValues.supportsActivation)
 	public readonly supportsActivation: MaybeNotKnown<boolean>;
+	@ccValue(FirmwareUpdateMetaDataCCValues.supportsResuming)
+	public readonly supportsResuming?: MaybeNotKnown<boolean>;
+	@ccValue(FirmwareUpdateMetaDataCCValues.supportsNonSecureTransfer)
+	public readonly supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.alloc(
@@ -415,9 +443,10 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 			offset += 2;
 		}
 		this.payload[offset++] = this.hardwareVersion ?? 0xff;
-		this.payload[offset++] = (this.continuesToFunction ? 0b1 : 0) | (
-			this.supportsActivation ? 0b10 : 0
-		);
+		this.payload[offset++] = (this.continuesToFunction ? 0b1 : 0)
+			| (this.supportsActivation ? 0b10 : 0)
+			| (this.supportsNonSecureTransfer ? 0b100 : 0)
+			| (this.supportsResuming ? 0b1000 : 0);
 
 		return super.serialize();
 	}
@@ -446,6 +475,13 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 		if (this.supportsActivation != undefined) {
 			message["supports activation"] = this.supportsActivation;
 		}
+		if (this.supportsResuming != undefined) {
+			message["supports resuming"] = this.supportsResuming;
+		}
+		if (this.supportsNonSecureTransfer != undefined) {
+			message["supports non-secure transfer"] =
+				this.supportsNonSecureTransfer;
+		}
 
 		return {
 			...super.toLogEntry(host),
@@ -471,19 +507,32 @@ export class FirmwareUpdateMetaDataCCRequestReport
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.status = this.payload[0];
+		if (this.payload.length >= 2) {
+			this.resume = !!(this.payload[1] & 0b100);
+			this.nonSecureTransfer = !!(this.payload[1] & 0b10);
+		}
 	}
 
 	public readonly status: FirmwareUpdateRequestStatus;
+	public resume?: boolean;
+	public nonSecureTransfer?: boolean;
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			status: getEnumMemberName(
+				FirmwareUpdateRequestStatus,
+				this.status,
+			),
+		};
+		if (this.resume != undefined) {
+			message.resume = this.resume;
+		}
+		if (this.nonSecureTransfer != undefined) {
+			message["non-secure transfer"] = this.nonSecureTransfer;
+		}
 		return {
 			...super.toLogEntry(host),
-			message: {
-				status: getEnumMemberName(
-					FirmwareUpdateRequestStatus,
-					this.status,
-				),
-			},
+			message,
 		};
 	}
 }
@@ -503,6 +552,9 @@ export type FirmwareUpdateMetaDataCCRequestGetOptions =
 		activation?: boolean;
 		// V5+
 		hardwareVersion?: number;
+		// V8+
+		resume?: boolean;
+		nonSecureTransfer?: boolean;
 	}>;
 
 @CCCommand(FirmwareUpdateMetaDataCommand.RequestGet)
@@ -533,6 +585,8 @@ export class FirmwareUpdateMetaDataCCRequestGet
 				this.fragmentSize = options.fragmentSize;
 				this.activation = options.activation ?? false;
 				this.hardwareVersion = options.hardwareVersion;
+				this.resume = options.resume;
+				this.nonSecureTransfer = options.nonSecureTransfer;
 			}
 		}
 	}
@@ -544,12 +598,14 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	public fragmentSize?: number;
 	public activation?: boolean;
 	public hardwareVersion?: number;
+	public resume?: boolean;
+	public nonSecureTransfer?: boolean;
 
 	public serialize(): Buffer {
 		const isV3 = this.version >= 3
 			&& this.firmwareTarget != undefined
 			&& this.fragmentSize != undefined;
-		const isV4 = isV3 && this.version >= 4 && this.activation != undefined;
+		const isV4 = isV3 && this.version >= 4;
 		const isV5 = isV4
 			&& this.version >= 5
 			&& this.hardwareVersion != undefined;
@@ -564,7 +620,9 @@ export class FirmwareUpdateMetaDataCCRequestGet
 			this.payload.writeUInt16BE(this.fragmentSize!, 7);
 		}
 		if (isV4) {
-			this.payload[9] = this.activation ? 1 : 0;
+			this.payload[9] = (this.activation ? 0b1 : 0)
+				| (this.nonSecureTransfer ? 0b10 : 0)
+				| (this.resume ? 0b100 : 0);
 		}
 		if (isV5) {
 			this.payload[10] = this.hardwareVersion!;
@@ -586,6 +644,12 @@ export class FirmwareUpdateMetaDataCCRequestGet
 		}
 		if (this.activation != undefined) {
 			message.activation = this.activation;
+		}
+		if (this.resume != undefined) {
+			message.resume = this.resume;
+		}
+		if (this.nonSecureTransfer != undefined) {
+			message["non-secure transfer"] = this.nonSecureTransfer;
 		}
 		if (this.hardwareVersion != undefined) {
 			message["hardware version"] = this.hardwareVersion;
