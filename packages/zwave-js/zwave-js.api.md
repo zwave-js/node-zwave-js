@@ -98,7 +98,8 @@ import { MulticastDestination } from '@zwave-js/core/safe';
 import { MultilevelSwitchCommand } from '@zwave-js/cc/safe';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_BROADCAST as NODE_ID_BROADCAST_2 } from '@zwave-js/core';
-import { NODE_ID_BROADCAST_LR } from '@zwave-js/core';
+import { NODE_ID_BROADCAST_LR } from '@zwave-js/core/safe';
+import { NODE_ID_BROADCAST_LR as NODE_ID_BROADCAST_LR_2 } from '@zwave-js/core';
 import { NODE_ID_MAX } from '@zwave-js/core/safe';
 import { NodeIDType } from '@zwave-js/core';
 import type { NodeSchedulePollOptions } from '@zwave-js/host';
@@ -869,6 +870,66 @@ export interface LifelineRoutes {
     nlwr?: RouteStatistics;
 }
 
+// Warning: (ae-missing-release-tag) "LinkReliabilityCheckMode" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export enum LinkReliabilityCheckMode {
+    // (undocumented)
+    BasicSetOnOff = 0
+}
+
+// Warning: (ae-missing-release-tag) "LinkReliabilityCheckOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LinkReliabilityCheckOptions {
+    // (undocumented)
+    interval: number;
+    // (undocumented)
+    mode: LinkReliabilityCheckMode;
+    // (undocumented)
+    onProgress?: (progress: LinkReliabilityCheckResult) => void;
+    // (undocumented)
+    rounds?: number;
+}
+
+// Warning: (ae-missing-release-tag) "LinkReliabilityCheckResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface LinkReliabilityCheckResult {
+    // (undocumented)
+    ackRSSI: {
+        min: number;
+        max: number;
+        average: number;
+    };
+    // (undocumented)
+    commandErrors: number;
+    // (undocumented)
+    commandsSent: number;
+    // (undocumented)
+    latency?: {
+        min: number;
+        max: number;
+        average: number;
+    };
+    // (undocumented)
+    missingResponses?: number;
+    // (undocumented)
+    responseRSSI?: {
+        min: number;
+        max: number;
+        average: number;
+    };
+    // (undocumented)
+    rounds: number;
+    // (undocumented)
+    rtt: {
+        min: number;
+        max: number;
+        average: number;
+    };
+}
+
 // Warning: (ae-missing-release-tag) "LongRangeFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -891,7 +952,7 @@ export type LongRangeFrame = {
     payload: Buffer | CommandClass;
 } | {
     type: LongRangeFrameType.Broadcast;
-    destinationNodeId: typeof NODE_ID_BROADCAST_LR;
+    destinationNodeId: typeof NODE_ID_BROADCAST_LR_2;
     ackRequested: boolean;
     payload: Buffer | CommandClass;
 } | {
@@ -981,6 +1042,8 @@ export { MPDUHeaderType }
 export { MultilevelSwitchCommand }
 
 export { NODE_ID_BROADCAST }
+
+export { NODE_ID_BROADCAST_LR }
 
 export { NODE_ID_MAX }
 
@@ -1498,6 +1561,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
         rssiChannel3?: RSSI_2;
     }>;
     getBroadcastNode(): VirtualNode;
+    getBroadcastNodeLR(): VirtualNode;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignCustomReturnRoutes"
     getCustomReturnRoutesCached(nodeId: number, destinationNodeId: number): Route[];
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "assignCustomSUCReturnRoutes"
@@ -1800,11 +1864,14 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkLifelineHealth"
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkRouteHealth"
     abortHealthCheck(): void;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "checkLinkReliability"
+    abortLinkReliabilityCheck(): void;
     // (undocumented)
     get aggregatedEndpointCount(): MaybeNotKnown<number>;
     // (undocumented)
     get canSleep(): MaybeNotKnown<boolean>;
     checkLifelineHealth(rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: LifelineHealthCheckResult) => void): Promise<LifelineHealthCheckSummary>;
+    checkLinkReliability(options: LinkReliabilityCheckOptions): Promise<LinkReliabilityCheckResult>;
     checkRouteHealth(targetNodeId: number, rounds?: number, onProgress?: (round: number, totalRounds: number, lastRating: number, lastResult: RouteHealthCheckResult) => void): Promise<RouteHealthCheckSummary>;
     createDump(): NodeDump;
     get defaultTransitionDuration(): string | undefined;
@@ -1860,6 +1927,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     isFirmwareUpdateInProgress(): boolean;
     get isFrequentListening(): MaybeNotKnown<FLiRS_2>;
     isHealthCheckInProgress(): boolean;
+    isLinkReliabilityCheckInProgress(): boolean;
     get isListening(): MaybeNotKnown<boolean>;
     get isRouting(): MaybeNotKnown<boolean>;
     get isSecure(): MaybeNotKnown<boolean>;
@@ -2232,7 +2300,7 @@ export * from "@zwave-js/cc";
 
 // Warnings were encountered during analysis:
 //
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:477:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:478:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
 // /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1273:41 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
@@ -2241,14 +2309,13 @@ export * from "@zwave-js/cc";
 //   Type 'string' is not assignable to type 'number'.
 // /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1398:40 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1338:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1355:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
 //   Property 'groupId' is missing in type 'Security2Extension' but required in type 'MGRPExtension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1349:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1366:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
 //   Type 'Security2Extension' is missing the following properties from type 'MPANExtension': groupId, innerMPANState
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1363:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1421:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
-// src/lib/controller/Controller.ts:852:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1380:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1438:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// src/lib/controller/Controller.ts:867:2 - (ae-missing-getter) The property "provisioningList" has a setter but no getter.
 // src/lib/driver/Driver.ts:701:24 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
 // src/lib/driver/Driver.ts:4191:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/driver/Driver.ts:5340:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "zwave-js" does not have an export "drainSerialAPIQueue"
@@ -2258,10 +2325,10 @@ export * from "@zwave-js/cc";
 // src/lib/driver/Driver.ts:5777:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/driver/Driver.ts:5913:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 // src/lib/driver/ZWaveOptions.ts:270:120 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/lib/node/Node.ts:1028:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
-// src/lib/node/Node.ts:3003:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/zniffer/Zniffer.ts:620:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-// src/lib/zniffer/Zniffer.ts:621:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/node/Node.ts:1032:2 - (ae-missing-getter) The property "deviceConfigHash" has a setter but no getter.
+// src/lib/node/Node.ts:3018:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/zniffer/Zniffer.ts:631:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+// src/lib/zniffer/Zniffer.ts:632:5 - (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
 
 // (No @packageDocumentation comment for this package)
 

@@ -108,7 +108,7 @@ export enum BeamingInfo {
 //
 // @public (undocumented)
 export type BroadcastCC<T extends ICommandClass = ICommandClass> = T & {
-    nodeId: typeof NODE_ID_BROADCAST;
+    nodeId: typeof NODE_ID_BROADCAST | typeof NODE_ID_BROADCAST_LR;
 };
 
 // Warning: (ae-missing-release-tag) "CacheBackedMap" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -357,6 +357,8 @@ export enum CommandClasses {
     "Transport Service" = 85,
     // (undocumented)
     "User Code" = 99,
+    // (undocumented)
+    "User Credential" = 131,
     // (undocumented)
     "Wake Up" = 132,
     // (undocumented)
@@ -4126,6 +4128,58 @@ export enum ZnifferRegion {
     "USA" = 1
 }
 
+// Warning: (ae-missing-release-tag) "ZnifferRegionLegacy" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export enum ZnifferRegionLegacy {
+    // (undocumented)
+    ANZ = 2,
+    // (undocumented)
+    CN = 29,
+    // (undocumented)
+    EU = 0,
+    // (undocumented)
+    HK = 3,
+    // (undocumented)
+    IL = 27,
+    // (undocumented)
+    IN = 9,
+    // (undocumented)
+    JP = 10,
+    // (undocumented)
+    KR = 28,
+    // (undocumented)
+    MY = 8,
+    // (undocumented)
+    RU = 26,
+    // (undocumented)
+    TF_835_3CH = 24,
+    // (undocumented)
+    TF_840_3CH = 16,
+    // (undocumented)
+    TF_850_3CH = 17,
+    // (undocumented)
+    TF_866 = 4,
+    // (undocumented)
+    TF_870 = 5,
+    // (undocumented)
+    TF_878 = 11,
+    // (undocumented)
+    TF_882 = 12,
+    // (undocumented)
+    TF_886 = 13,
+    // (undocumented)
+    TF_906 = 6,
+    // (undocumented)
+    TF_910 = 7,
+    // (undocumented)
+    TF_932_3CH = 14,
+    // (undocumented)
+    TF_940_3CH = 15,
+    // (undocumented)
+    US = 1
+}
+
 // Warning: (ae-missing-release-tag) "ZWaveApiVersion" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -4262,6 +4316,7 @@ export enum ZWaveErrorCodes {
     FWUpdateService_RequestError = 261,
     HealthCheck_Busy = 400,
     Invalid_Firmware_File = 1506,
+    LinkReliabilityCheck_Busy = 401,
     ManufacturerProprietaryCC_NoManufacturerId = 1200,
     NVM_InvalidFormat = 283,
     NVM_InvalidJSON = 281,
@@ -4386,8 +4441,8 @@ export interface ZWaveLogInfo<TContext extends LogContext = LogContext> extends 
 
 // Warnings were encountered during analysis:
 //
-// src/security/Manager2.ts:116:79 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
-// src/security/Manager2.ts:116:98 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/security/Manager2.ts:117:79 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+// src/security/Manager2.ts:117:98 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
 // src/security/QR.ts:99:3 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/core" does not have an export "requestedSecurityClasses"
 
 // (No @packageDocumentation comment for this package)
