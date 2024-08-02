@@ -41,8 +41,8 @@ import type {
 	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async";
 import { isArray } from "alcalzone-shared/typeguards";
+import { setTimeout as wait } from "node:timers/promises";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,

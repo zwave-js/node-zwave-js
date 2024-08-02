@@ -9,8 +9,8 @@ import {
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { AsyncQueue } from "@zwave-js/shared";
 import { TimedExpectation, createWrappingCounter } from "@zwave-js/shared/safe";
-import { wait } from "alcalzone-shared/async";
 import { randomInt } from "node:crypto";
+import { setTimeout as wait } from "node:timers/promises";
 import {
 	type MockControllerCapabilities,
 	getDefaultMockControllerCapabilities,
