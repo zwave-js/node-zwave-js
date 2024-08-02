@@ -114,10 +114,6 @@ export class CommandClass implements ICommandClass {
 	// empty constructor to parse messages
 	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		this.host = host;
-		// Extract the cc from declared metadata if not provided by the CC constructor
-		this.ccId = "ccId" in options && options.ccId != undefined
-			? options.ccId
-			: getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;
@@ -130,10 +126,11 @@ export class CommandClass implements ICommandClass {
 			const CCConstructor =
 				getCCConstructor(CommandClass.getCommandClass(options.data))
 					?? CommandClass;
+			const ccId = CommandClass.getCommandClass(options.data);
 			const ccCommand = CCConstructor.getCCCommand(options.data);
 			if (ccCommand != undefined) {
 				const CommandConstructor = getCCCommandConstructor(
-					this.ccId,
+					ccId,
 					ccCommand,
 				);
 				if (
@@ -167,10 +164,14 @@ export class CommandClass implements ICommandClass {
 		} else if (gotCCCommandOptions(options)) {
 			const {
 				nodeId,
+				endpoint = 0,
+				ccId = getCommandClass(this),
 				ccCommand = getCCCommand(this),
 				payload = Buffer.allocUnsafe(0),
 			} = options;
 			this.nodeId = nodeId;
+			this.endpointIndex = endpoint;
+			this.ccId = ccId;
 			this.ccCommand = ccCommand;
 			this.payload = payload;
 		}
@@ -224,7 +225,7 @@ export class CommandClass implements ICommandClass {
 	protected host: ZWaveHost;
 
 	/** This CC's identifier */
-	public ccId: CommandClasses;
+	public ccId!: CommandClasses;
 	public ccCommand?: number;
 	public get ccName(): string {
 		return getCCName(this.ccId);
@@ -369,7 +370,6 @@ export class CommandClass implements ICommandClass {
 	 * It is assumed that the buffer only contains the serialized CC. This throws if the CC is not implemented.
 	 */
 	public static getConstructor(ccData: Buffer): CCConstructor<CommandClass> {
-		// Encapsulated CCs don't have the two header bytes
 		const cc = CommandClass.getCommandClass(ccData);
 		const ret = getCCConstructor(cc);
 		if (!ret) {
@@ -390,10 +390,11 @@ export class CommandClass implements ICommandClass {
 		options: CommandClassDeserializationOptions,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
-		const Constructor = CommandClass.getConstructor(options.data);
+		const ccId = CommandClass.getCommandClass(options.data);
+		const Constructor = getCCConstructor(ccId) ?? CommandClass;
+
 		try {
-			const ret = new Constructor(host, options);
-			return ret;
+			return new Constructor(host, options);
 		} catch (e) {
 			// Indicate invalid payloads with a special CC type
 			if (
