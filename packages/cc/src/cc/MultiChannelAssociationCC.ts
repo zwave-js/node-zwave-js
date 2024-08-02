@@ -348,7 +348,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 }
 
 @commandClass(CommandClasses["Multi Channel Association"])
-@implementedVersion(4)
+@implementedVersion(5)
 @ccValues(MultiChannelAssociationCCValues)
 export class MultiChannelAssociationCC extends CommandClass {
 	declare ccCommand: MultiChannelAssociationCommand;
