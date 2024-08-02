@@ -726,6 +726,8 @@ export interface FirmwareUpdateMetaData {
 	hardwareVersion?: number;
 	continuesToFunction: MaybeNotKnown<boolean>;
 	supportsActivation: MaybeNotKnown<boolean>;
+	supportsResuming?: MaybeNotKnown<boolean>;
+	supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 }
 
 export enum FirmwareUpdateRequestStatus {
@@ -790,6 +792,10 @@ export type FirmwareUpdateCapabilities =
 		readonly continuesToFunction: MaybeNotKnown<boolean>;
 		/** Indicates whether the node supports delayed activation of the new firmware */
 		readonly supportsActivation: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports resuming aborted firmware transfers */
+		readonly supportsResuming: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports non-secure firmware transfers */
+		readonly supportsNonSecureTransfer: MaybeNotKnown<boolean>;
 	};
 
 export interface FirmwareUpdateProgress {
