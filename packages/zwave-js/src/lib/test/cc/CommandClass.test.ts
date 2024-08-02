@@ -9,11 +9,7 @@ import {
 	getImplementedVersionStatic,
 	implementedVersion,
 } from "@zwave-js/cc";
-import {
-	CommandClasses,
-	ZWaveErrorCodes,
-	assertZWaveError,
-} from "@zwave-js/core";
+import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
@@ -49,19 +45,17 @@ test(`creating and serializing should work for unspecified commands`, (t) => {
 	);
 });
 
-test("from() throws CC_NotImplemented when receiving a non-implemented CC", (t) => {
+test("from() returns an un-specialized instance when receiving a non-implemented CC", (t) => {
 	// This is a Node Provisioning CC. Change it when that CC is implemented
-	assertZWaveError(
-		t,
-		() =>
-			CommandClass.from(host, {
-				data: Buffer.from("78030100", "hex"),
-				nodeId: 5,
-			}),
-		{
-			errorCode: ZWaveErrorCodes.CC_NotImplemented,
-		},
-	);
+	const cc = CommandClass.from(host, {
+		data: Buffer.from("78030100", "hex"),
+		nodeId: 5,
+	});
+	t.is(cc.constructor, CommandClass);
+	t.is(cc.nodeId, 5);
+	t.is(cc.ccId, 0x78);
+	t.is(cc.ccCommand, 0x03);
+	t.deepEqual(cc.payload, Buffer.from([0x01, 0x00]));
 });
 
 test("from() does not throw when the CC is implemented", (t) => {
