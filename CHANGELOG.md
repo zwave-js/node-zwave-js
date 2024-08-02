@@ -4,6 +4,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Update list of manufacturers and existing CCs (#7060)
+* Add `inclusion state changed` event (#7059)
+* Add support for new notifications (#7072)
+* Bump version of `Association CC` and `Multi Channel Association CC` (#7078)
+
+### Bugfixes
+* Preserve granted security classes of provisioning entries when switching protocols (#7058)
+* Version of Humidity Control Mode CC is 1, not 2 (#7062)
+* Abort S2 bootstrapping when `KEXSetEcho` has reserved bits set (#7070)
+* Fixed an issue causing non-implemented CCs to be dropped before applications could handle them (#7080)
+
+### Changes under the hood
+* Include default value in `Color Switch CC` mocks (#7071)
+
 ## 13.0.3 (2024-07-30)
 ### Bugfixes
 * Fixed an issue causing all ZWLR multicast groups to be considered identical (#7042)
