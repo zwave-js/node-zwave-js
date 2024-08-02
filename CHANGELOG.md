@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.1.0 (2024-08-02)
 ### Features
 * Update list of manufacturers and existing CCs (#7060)
 * Add `inclusion state changed` event (#7059)
