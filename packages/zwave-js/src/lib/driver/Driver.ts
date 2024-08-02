@@ -142,7 +142,6 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
-import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
@@ -153,6 +152,7 @@ import { randomBytes } from "node:crypto";
 import type { EventEmitter } from "node:events";
 import os from "node:os";
 import path from "node:path";
+import { setTimeout as wait } from "node:timers/promises";
 import { URL } from "node:url";
 import * as util from "node:util";
 import { SerialPort } from "serialport";
@@ -2283,7 +2283,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				`Firmware updated. No restart or re-interview required. Refreshing version information in ${waitTime} seconds...`,
 			);
 
-			await wait(waitTime * 1000, true);
+			await wait(waitTime * 1000, undefined, { ref: false });
 
 			try {
 				const versionAPI = node.commandClasses.Version;
@@ -5176,7 +5176,8 @@ ${handlers.length} left`,
 								);
 								await wait(
 									this.options.timeouts.retryJammed,
-									true,
+									undefined,
+									{ ref: false },
 								);
 
 								continue attemptMessage;
@@ -6715,7 +6716,7 @@ ${handlers.length} left`,
 			this._enterBootloaderPromise = createDeferredPromise();
 			const success = await Promise.race([
 				this._enterBootloaderPromise.then(() => true),
-				wait(5000, true).then(() => false),
+				wait(5000, false, { ref: false }),
 			]);
 			if (success) {
 				this.controllerLog.print("Entered bootloader");

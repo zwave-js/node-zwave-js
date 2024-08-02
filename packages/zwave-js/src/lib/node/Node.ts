@@ -237,7 +237,6 @@ import {
 	throttle,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
-import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
@@ -248,6 +247,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
 import path from "node:path";
+import { setTimeout as wait } from "node:timers/promises";
 import { isDeepStrictEqual } from "node:util";
 import semver from "semver";
 import { RemoveNodeReason } from "../controller/Inclusion";
@@ -5874,7 +5874,11 @@ protocol version:      ${this.protocolVersion}`;
 					`Continuing with next part in ${conservativeWaitTime} seconds...`,
 				);
 
-				await wait(conservativeWaitTime * 1000, true);
+				await wait(
+					conservativeWaitTime * 1000,
+					undefined,
+					{ ref: false },
+				);
 			}
 		}
 
@@ -7413,7 +7417,11 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 				options.interval - (Date.now() - lastStart),
 			);
 			await Promise.race([
-				wait(waitDurationMs, true),
+				await wait(
+					waitDurationMs,
+					undefined,
+					{ ref: false },
+				),
 				this._abortLinkReliabilityCheckPromise,
 			]);
 		}

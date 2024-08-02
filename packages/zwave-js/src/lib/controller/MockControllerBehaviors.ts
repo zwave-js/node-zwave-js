@@ -23,7 +23,7 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
+import { setTimeout as wait } from "node:timers/promises";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	type ApplicationUpdateRequest,
