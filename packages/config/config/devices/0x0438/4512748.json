@@ -67,7 +67,7 @@
 			"#": "6",
 			"label": "Starting Positioning Calibration Performed",
 			"valueSize": 1,
-			"writeOnly": true
+			"writeOnly": true,
 			"defaultValue": 0
 		},
 		{
