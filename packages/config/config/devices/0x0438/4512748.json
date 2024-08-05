@@ -162,7 +162,7 @@
 			"valueSize": 4,
 			"defaultValue": 3600
 		}
-	]
+	],
 	"metadata": {
 		"inclusion": "Select menu item “Net”, then find IN and long-press M for 2s.",
 		"exclusion": "Select menu item “Net”, then find OUT and long-press M for 2s.",
