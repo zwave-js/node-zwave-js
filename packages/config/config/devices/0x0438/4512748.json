@@ -1,0 +1,170 @@
+{
+  "manufacturer": "Namron",
+  "manufacturerId": "0x0438",  
+  "label": "4512748",
+  "description": "Awning Controller",
+  "devices": [
+    {
+      "productType": "0x0004",  
+      "productId": "0x53261"     
+    }
+  ],
+  "firmwareVersion": {
+    "min": "0.0",
+    "max": "255.255"
+  },
+  "associations": {
+    "1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+  },
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Enable/Disable State Report Threshold",
+			"valueSize": 1,
+      		"description": "0: Disable to report actively 1- 10: value to report, unit is one percent",
+      		"defaultValue": 5
+		},
+		{
+			"#": "3",
+			"label": "Working Mode",
+			"valueSize": 1,
+      		"defaultValue": 2,
+      		"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Light Mode"
+				},
+				{
+					"value": 1,
+					"label": "Shutter mode without positioning"
+				},
+				{
+					"value": 2,
+					"label": "Shutter mode without positioning"
+				}
+			]
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/Disable Save Positioning Percentage",
+			"valueSize": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/Disable Overcurrent Protection",
+			"valueSize": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"label": "Starting Positioning Calibration Performed",
+			"valueSize": 1,
+			"writeOnly": true
+			"defaultValue": 0
+		},
+		{
+			"#": "7",
+			"label": "Configuration Of Button S1 And S2 Control",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Value=0",
+					"value": 0
+				},
+				{
+					"label": "Value=1",
+					"value": 1
+				},
+				{
+					"label": "Value=2",
+					"value": 2
+				},
+				{
+					"label": "Value=3",
+					"value": 3
+				},
+				{
+					"label": "Value=4",
+					"value": 4
+				}
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/Disable Inclusion/Exclusion Through S1 Button",
+			"valueSize": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "9",
+			"label": "Enable/Disable Scene Activation Through S1 and S2 Switches",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable to send for action of both S1 and S2",
+					"value": 0
+				},
+				{
+					"label": "Enable to send for action of both S1 and S2",
+					"value": 1
+				},
+				{
+					"label": "Enable to send for action of only S1",
+					"value": 2
+				},
+				{
+					"label": "Enable to send for action of only S2",
+					"value": 3
+				}
+		},
+		{
+			"#": "10",
+			"label": "Power Change Threshold Limit",
+			"valueSize": 1,
+			"defaultValue": 10
+		},
+		{
+			"#": "11",
+			"label": "Current Change Threshold Limit",
+			"valueSize": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "12",
+			"label": "Voltage Change Threshold Limit",
+			"valueSize": 1,
+			"defaultValue": 2
+		},
+		{
+			"#": "13",
+			"label": "Slats Rotation Time",
+			"valueSize": 1,
+			"defaultValue": 0
+		},
+		{
+			"#": "14",
+			"label": "Time Cycle To Report Energy Consumption Value",
+			"valueSize": 4,
+			"defaultValue": 3600
+		}
+	]
+	"metadata": {
+		"inclusion": "Select menu item “Net”, then find IN and long-press M for 2s.",
+		"exclusion": "Select menu item “Net”, then find OUT and long-press M for 2s.",
+		"reset": "Select menu item “Net”, then find OUT and long-press M for 2s.",
+		"manual": "https://www.elektroimportoren.no/docs/lib/4512748-Brukerveiledning-5.pdf"
+	}
+}
