@@ -124,7 +124,7 @@
     "commit": "git-cz",
     "release": "release-script",
     "release:all": "release-script --publish-all",
-    "bootstrap": "yarn && ts-patch install && yarn node maintenance/patch-typescript.js && yarn turbo run bootstrap",
+    "bootstrap": "./maintenance/bootstrap.sh",
     "config": "yarn ts packages/config/maintenance/importConfig.ts",
     "docs": "docsify serve docs",
     "docs:generate": "yarn ts packages/maintenance/src/generateTypedDocs.ts",
