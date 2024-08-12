@@ -38,7 +38,7 @@
 				"packages/*/src/**",
 				// TODO: Figure out how to exclude test files from inputs
 				// :!:**/*.test.ts doesn't work
-				":!:**/*.test.ts"
+				":!:*/**/*.test.ts"
 			],
 			"outputs": ["packages/*/build/**", "packages/*/*.tsbuildinfo"]
 		},
