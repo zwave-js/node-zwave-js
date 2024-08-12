@@ -17,6 +17,7 @@ echo "🏗️  Preparing VSCode extension..."
 echo ""
 git submodule update --init -- .vscode/extensions/zwave-js-config-editor
 cd .vscode/extensions/zwave-js-config-editor
+git checkout main
 npm i
 # TODO check if this can be made better. We want to build in any case.
 if [ -d out ]; then
