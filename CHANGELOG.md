@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.2.0 (2024-08-12)
 ### Features
 * Add method to enumerate all device classes (#7094)
 
