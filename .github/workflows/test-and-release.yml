@@ -183,7 +183,8 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Lint config files and Z-Wave specifics
-      run: yarn run lint:zwave $TURBO_FLAGS
+      # Disable log prefix, so GitHub recognizes annotations in the output
+      run: yarn run lint:zwave $TURBO_FLAGS --log-prefix=none
 
   # ===================
   # Runs unit tests on all supported node versions and OSes
