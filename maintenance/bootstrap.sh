@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e
 
-echo "CI = '$CI'"
-
 # Setup main repo
 echo "🏗️  Preparing repository..."
 echo ""
@@ -13,7 +11,7 @@ yarn turbo run bootstrap
 echo "✅ Repository ready"
 
 # Do not install VSCode extension on CI
-if [ -n "$CI" ]; then
+if [ -z "$CI" ]; then
 	# Install/Update VSCode extension
 	echo ""
 	echo "🏗️  Preparing VSCode extension..."
