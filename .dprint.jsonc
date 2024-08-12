@@ -57,6 +57,7 @@
 		".yarn/plugins",
 		".yarn/releases",
 		".tmp/",
+		".vscode/extensions/",
 		"cache/",
 		"packages/*/*.api.md",
 		"CHANGELOG*.md",

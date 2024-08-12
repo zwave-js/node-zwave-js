@@ -1,3 +1,10 @@
 [submodule "specs"]
 	path = specs
 	url = https://github.com/zwave-js/specs
+	branch = master
+	update = rebase
+[submodule ".vscode/extensions/zwave-js-config-editor"]
+	path = .vscode/extensions/zwave-js-config-editor
+	url = https://github.com/zwave-js/vscode-config-editor
+	branch = main
+	update = rebase
