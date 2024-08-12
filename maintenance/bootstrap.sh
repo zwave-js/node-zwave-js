@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+echo "CI = '$CI'"
+
 # Setup main repo
 echo "🏗️  Preparing repository..."
 echo ""
