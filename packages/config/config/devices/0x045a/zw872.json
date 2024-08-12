@@ -1,0 +1,16 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "ZW872",
+	"description": "800 Series Pi Module",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0368"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}
