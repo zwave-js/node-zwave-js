@@ -5,7 +5,12 @@ import {
 	getMinimumShiftForBitMask,
 } from "@zwave-js/core";
 import { reportProblem } from "@zwave-js/maintenance";
-import { formatId, getErrorMessage, num2hex } from "@zwave-js/shared";
+import {
+	enumFilesRecursive,
+	formatId,
+	getErrorMessage,
+	num2hex,
+} from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
@@ -201,10 +206,6 @@ interface LintDevicesContext extends LintDevicesContextConditional {
 
 async function lintDevices(): Promise<void> {
 	process.env.NODE_ENV = "test";
-	await configManager.loadDeviceIndex();
-	const index = configManager.getIndex()!;
-	// Device config files are lazy-loaded, so we need to parse them all
-	const uniqueFiles = distinct(index.map((e) => e.filename)).sort();
 
 	const errors = new Map<string, string[]>();
 	function addError(
@@ -254,8 +255,27 @@ async function lintDevices(): Promise<void> {
 		warnings.get(filename)!.push(errorPrefix + warning);
 	}
 
+	const rootDir = path.join(configDir, "devices");
+
+	const forbiddenFiles = await enumFilesRecursive(
+		rootDir,
+		(filename) => !filename.endsWith(".json"),
+	);
+	for (const file of forbiddenFiles) {
+		addError(
+			path.relative(rootDir, file),
+			`Invalid extension for device config file. Expected ".json", got "${
+				path.extname(file)
+			}"`,
+		);
+	}
+
+	await configManager.loadDeviceIndex();
+	const index = configManager.getIndex()!;
+	// Device config files are lazy-loaded, so we need to parse them all
+	const uniqueFiles = distinct(index.map((e) => e.filename)).sort();
+
 	for (const file of uniqueFiles) {
-		const rootDir = path.join(configDir, "devices");
 		const filePath = path.join(rootDir, file);
 
 		// Try parsing the file
