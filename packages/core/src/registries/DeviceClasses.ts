@@ -30,6 +30,10 @@ export interface GenericDeviceClass {
 	readonly maySupportBasicCC: boolean;
 }
 
+export interface GenericDeviceClassWithSpecific extends GenericDeviceClass {
+	readonly specific: SpecificDeviceClass[];
+}
+
 export type SpecificDeviceClass = GenericDeviceClass;
 
 const deviceClasses: Record<number, GenericDeviceClassDefinition> = Object
@@ -488,6 +492,32 @@ export function getGenericDeviceClass(generic: number): GenericDeviceClass {
 		requiresSecurity: genericClass.requiresSecurity ?? false,
 		maySupportBasicCC: genericClass.maySupportBasicCC ?? true,
 	};
+}
+
+/** Returns all generic device classes and their specific subclasses */
+export function getAllDeviceClasses(): readonly GenericDeviceClassWithSpecific[] {
+	const ret: GenericDeviceClassWithSpecific[] = [];
+
+	const genericDeviceClassKeys = Object.keys(deviceClasses).map((k) =>
+		parseInt(k, 10)
+	);
+	for (const generic of genericDeviceClassKeys) {
+		const genericClass = getGenericDeviceClass(generic);
+		const specificDeviceClassKeys = Object.keys(
+			deviceClasses[generic].specific,
+		).map((k) => parseInt(k, 10));
+
+		const specificClasses = specificDeviceClassKeys.map((specific) =>
+			getSpecificDeviceClass(generic, specific)
+		);
+
+		ret.push({
+			...genericClass,
+			specific: specificClasses,
+		});
+	}
+
+	return ret;
 }
 
 function getUnknownGenericDeviceClass(key: number): GenericDeviceClass {
