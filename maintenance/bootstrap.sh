@@ -15,7 +15,7 @@ echo "✅ Repository ready"
 echo ""
 echo "🏗️  Preparing VSCode extension..."
 echo ""
-git submodule update -- .vscode/extensions/zwave-js-config-editor
+git submodule update --init -- .vscode/extensions/zwave-js-config-editor
 cd .vscode/extensions/zwave-js-config-editor
 npm i
 # TODO check if this can be made better. We want to build in any case.
