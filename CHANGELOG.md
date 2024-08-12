@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add method to enumerate all device classes (#7094)
+
+### Config file changes
+* Add ZVIDAR ZW872 800 series Pi Module (#7026)
+* Add ZVIDAR ZW871 800 series USB Controller (#7025)
+* Rename Zvidar config file name Z-PI to Z-PI.json (#7024)
+
+### Changes under the hood
+* The VSCode extension for editing config files is now incuded locally in the workspace as a git submodule. Running `yarn bootstrap` automatically downloads and builds it. To use, install the recommended workspace extension (#6989)
+
 ## 13.1.0 (2024-08-02)
 ### Features
 * Update list of manufacturers and existing CCs (#7060)
