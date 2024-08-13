@@ -1644,15 +1644,7 @@ export class ZWaveController
 			}
 		}
 
-		// if it's a bridge controller, request the virtual nodes
-		if (
-			this.type === ZWaveLibraryTypes["Bridge Controller"]
-			&& this.isFunctionSupported(
-				FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES,
-			)
-		) {
-			// TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
-		}
+		// TODO: if it's a bridge controller, request the virtual nodes
 
 		if (
 			this.type !== ZWaveLibraryTypes["Bridge Controller"]
