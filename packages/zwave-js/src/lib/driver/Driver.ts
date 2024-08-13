@@ -6985,4 +6985,22 @@ ${handlers.length} left`,
 			};
 		}
 	}
+
+	/**
+	 * Resets the S2 singlecast encryption state (SPAN) for the given node, which forces
+	 * a re-synchronization on the next communication attempt.
+	 */
+	public resetSPAN(nodeId: number): void {
+		this.getSecurityManager2(nodeId)?.deleteNonce(nodeId);
+	}
+
+	/**
+	 * Resets the S2 singlecast encryption state (SPAN) for all nodes, which forces
+	 * a re-synchronization on the next communication attempt.
+	 */
+	public resetAllSPANs(): void {
+		for (const nodeId of this.controller.nodes.keys()) {
+			this.resetSPAN(nodeId);
+		}
+	}
 }
