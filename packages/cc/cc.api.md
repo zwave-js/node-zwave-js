@@ -79,6 +79,7 @@ import { MultiCommandCCAPI } from '../cc/MultiCommandCC';
 import { MultilevelSensorCCAPI } from '../cc/MultilevelSensorCC';
 import { MultilevelSwitchCCAPI } from '../cc/MultilevelSwitchCC';
 import { NODE_ID_BROADCAST } from '@zwave-js/core';
+import { NODE_ID_BROADCAST_LR } from '@zwave-js/core';
 import { NodeInformationFrame } from '@zwave-js/core';
 import { NodeNamingAndLocationCCAPI } from '../cc/NodeNamingCC';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
@@ -2915,7 +2916,7 @@ export class CCAPI {
     // (undocumented)
     protected isBroadcast(): this is this & {
         endpoint: IVirtualEndpoint & {
-            nodeId: typeof NODE_ID_BROADCAST;
+            nodeId: typeof NODE_ID_BROADCAST | typeof NODE_ID_BROADCAST_LR;
         };
     };
     // (undocumented)
@@ -3848,7 +3849,7 @@ export interface ColorSwitchCCGetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export class ColorSwitchCCReport extends ColorSwitchCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (ColorSwitchCCReportOptions & CCCommandOptions));
     // (undocumented)
     readonly colorComponent: ColorComponent;
     // (undocumented)
@@ -3858,10 +3859,23 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
     // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
     readonly targetValue: number | undefined;
     // (undocumented)
     toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry;
 }
+
+// Warning: (ae-missing-release-tag) "ColorSwitchCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ColorSwitchCCReportOptions = {
+    colorComponent: ColorComponent;
+    currentValue: number;
+} & AllOrNone<{
+    targetValue: number;
+    duration: Duration_2 | string;
+}>;
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -3955,11 +3969,21 @@ export class ColorSwitchCCSupportedGet extends ColorSwitchCC {
 //
 // @public (undocumented)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (ColorSwitchCCSupportedReportOptions & CCCommandOptions));
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly supportedColorComponents: readonly ColorComponent[];
     // (undocumented)
     toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry;
+}
+
+// Warning: (ae-missing-release-tag) "ColorSwitchCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ColorSwitchCCSupportedReportOptions {
+    // (undocumented)
+    supportedColorComponents: readonly ColorComponent[];
 }
 
 // Warning: (ae-missing-release-tag) "ColorSwitchCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -15953,6 +15977,8 @@ export class Security2CCKEXSet extends Security2CC {
     // (undocumented)
     permitCSA: boolean;
     // (undocumented)
+    readonly _reserved: number;
+    // (undocumented)
     selectedECDHProfile: ECDHProfiles;
     // (undocumented)
     selectedKEXScheme: KEXSchemes;
@@ -22016,7 +22042,6 @@ export enum ZWaveProtocolCommand {
 //
 // src/cc/TransportServiceCC.ts:47:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
 // src/cc/TransportServiceCC.ts:49:2 - (ae-unresolved-link) The @link reference could not be resolved: The package "@zwave-js/cc" does not have an export "RELAXED_TIMING_THRESHOLD"
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
 
 // (No @packageDocumentation comment for this package)
 

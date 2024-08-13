@@ -4,15 +4,22 @@
 
 ```ts
 
+import type { ColorComponent } from '@zwave-js/cc';
+import { CommandClass } from '@zwave-js/cc';
 import { CommandClasses } from '@zwave-js/core';
 import { CommandClassInfo } from '@zwave-js/core';
-import { ConfigValue } from '@zwave-js/core';
-import { ConfigValueFormat } from '@zwave-js/core';
+import type { ConfigValue } from '@zwave-js/core';
+import type { ConfigValueFormat } from '@zwave-js/core';
 import { FunctionType } from '@zwave-js/serial/safe';
 import { ICommandClass } from '@zwave-js/core';
+import type { KeypadMode } from '@zwave-js/cc';
 import { Message } from '@zwave-js/serial';
 import type { MockPortBinding } from '@zwave-js/serial/mock';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
+import type { ThermostatMode } from '@zwave-js/cc';
+import type { ThermostatSetpointType } from '@zwave-js/cc';
+import type { UserIDStatus } from '@zwave-js/cc';
+import type { WindowCoveringParameter } from '@zwave-js/cc';
 import { ZWaveApiVersion } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
@@ -45,6 +52,7 @@ export type CCSpecificCapabilities = {
     [CommandClasses.Notification]: NotificationCCCapabilities;
     [48]: BinarySensorCCCapabilities;
     [49]: MultilevelSensorCCCapabilities;
+    [51]: ColorSwitchCCCapabilities;
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
     [144]: EnergyProductionCCCapabilities;
@@ -54,6 +62,13 @@ export type CCSpecificCapabilities = {
     [78]: ScheduleEntryLockCCCapabilities;
     [CommandClasses.Meter]: MeterCCCapabilities;
 };
+
+// Warning: (ae-missing-release-tag) "ColorSwitchCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ColorSwitchCCCapabilities {
+    colorComponents: Partial<Record<ColorComponent, number | undefined>>;
+}
 
 // Warning: (ae-missing-release-tag) "ConfigurationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -85,7 +100,7 @@ export function createMockZWaveAckFrame(options?: Partial<Omit<MockZWaveAckFrame
 // Warning: (ae-missing-release-tag) "createMockZWaveRequestFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export function createMockZWaveRequestFrame(payload: ICommandClass | (() => ICommandClass), options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): LazyMockZWaveRequestFrame;
+export function createMockZWaveRequestFrame(payload: CommandClass | (() => CommandClass), options?: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">>): LazyMockZWaveRequestFrame;
 
 // Warning: (ae-missing-release-tag) "EnergyProductionCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -142,7 +157,7 @@ export type LazyMockZWaveFrame = LazyMockZWaveRequestFrame | MockZWaveAckFrame;
 // @public (undocumented)
 export interface LazyMockZWaveRequestFrame {
     ackRequested: boolean;
-    payload: ICommandClass | (() => ICommandClass);
+    payload: CommandClass | (() => CommandClass);
     repeaters: number[];
     // (undocumented)
     type: MockZWaveFrameType.Request;
@@ -333,7 +348,9 @@ export class MockNode {
 //
 // @public (undocumented)
 export interface MockNodeBehavior {
-    onControllerFrame?: (controller: MockController, self: MockNode, frame: MockZWaveFrame) => Promise<boolean | undefined> | boolean | undefined;
+    handleCC?: (controller: MockController, self: MockNode, receivedCC: CommandClass) => Promise<MockNodeResponse | undefined> | MockNodeResponse | undefined;
+    transformIncomingCC?: (controller: MockController, self: MockNode, cc: CommandClass) => Promise<CommandClass> | CommandClass;
+    transformResponse?: (controller: MockController, self: MockNode, receivedCC: CommandClass, response: MockNodeResponse) => Promise<MockNodeResponse> | MockNodeResponse;
 }
 
 // Warning: (ae-missing-release-tag) "MockNodeOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -352,6 +369,23 @@ export interface MockNodeOptions {
     // (undocumented)
     id: number;
 }
+
+// Warning: (ae-missing-release-tag) "MockNodeResponse" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type MockNodeResponse = {
+    action: "sendCC";
+    cc: CommandClass;
+    ackRequested?: boolean;
+} | {
+    action: "ack";
+} | {
+    action: "stop";
+} | {
+    action: "ok";
+} | {
+    action: "fail";
+};
 
 // Warning: (ae-missing-release-tag) "MockZWaveAckFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -384,7 +418,7 @@ export enum MockZWaveFrameType {
 // @public (undocumented)
 export interface MockZWaveRequestFrame {
     ackRequested: boolean;
-    payload: ICommandClass;
+    payload: CommandClass;
     repeaters: number[];
     // (undocumented)
     type: MockZWaveFrameType.Request;
@@ -451,7 +485,7 @@ export interface SoundSwitchCCCapabilities {
 // @public (undocumented)
 export interface ThermostatModeCCCapabilities {
     // (undocumented)
-    supportedModes: number[];
+    supportedModes: ThermostatMode[];
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetpointCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -459,12 +493,12 @@ export interface ThermostatModeCCCapabilities {
 // @public (undocumented)
 export interface ThermostatSetpointCCCapabilities {
     // (undocumented)
-    setpoints: Record<number, {
+    setpoints: Partial<Record<ThermostatSetpointType, {
         minValue: number;
         maxValue: number;
         defaultValue?: number;
         scale: "°C" | "°F";
-    }>;
+    }>>;
 }
 
 // Warning: (ae-missing-release-tag) "unlazyMockZWaveFrame" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -481,9 +515,9 @@ export interface UserCodeCCCapabilities {
     // (undocumented)
     supportedASCIIChars?: string;
     // (undocumented)
-    supportedKeypadModes?: number[];
+    supportedKeypadModes?: KeypadMode[];
     // (undocumented)
-    supportedUserIDStatuses?: number[];
+    supportedUserIDStatuses?: UserIDStatus[];
     // (undocumented)
     supportsAdminCode?: boolean;
     // (undocumented)
@@ -497,12 +531,26 @@ export interface UserCodeCCCapabilities {
 // @public (undocumented)
 export interface WindowCoveringCCCapabilities {
     // (undocumented)
-    supportedParameters: number[];
+    supportedParameters: WindowCoveringParameter[];
 }
 
 // Warnings were encountered during analysis:
 //
-// /home/runner/work/node-zwave-js/node-zwave-js/packages/serial/src/message/ZnifferMessages.ts:268:18 - (TS2564) Property 'checksumOK' has no initializer and is not definitely assigned in the constructor.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:478:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+//   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
+//     Type 'undefined' is not assignable to type 'string | number | symbol'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1273:41 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1280:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1398:40 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+//   Type 'string' is not assignable to type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1355:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
+//   Property 'groupId' is missing in type 'Security2Extension' but required in type 'MGRPExtension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1366:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
+//   Type 'Security2Extension' is missing the following properties from type 'MPANExtension': groupId, innerMPANState
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1380:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1438:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
 
 // (No @packageDocumentation comment for this package)
 
