@@ -7,14 +7,7 @@
   - [Frequently Asked Questions](getting-started/faq.md)
   - [Security S2](getting-started/security-s2.md)
   - [Z-Wave Long Range](getting-started/long-range.md)
-  - [Migrating to v13](getting-started/migrating-to-v13.md)
-  - [Migrating to v12](getting-started/migrating-to-v12.md)
-  - [Migrating to v11](getting-started/migrating-to-v11.md)
-  - [Migrating to v10](getting-started/migrating-to-v10.md)
-  - [Migrating to v9](getting-started/migrating-to-v9.md)
-  - [Migrating to v8](getting-started/migrating-to-v8.md)
-  - [Migrating to v7](getting-started/migrating-to-v7.md)
-  - [Migrating to v6](getting-started/migrating-to-v6.md)
+  - [Migrating from previous versions](getting-started/migrating/)
   - [🦎's device review](getting-started/device-review.md)
 
 - API

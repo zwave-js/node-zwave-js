@@ -8,6 +8,14 @@
   - [Security S2](getting-started/security-s2.md)
   - [Z-Wave Long Range](getting-started/long-range.md)
   - [Migrating from previous versions](getting-started/migrating/)
+    - [Migrating to v13](getting-started/migrating/v13.md)
+    - [Migrating to v12](getting-started/migrating/v12.md)
+    - [Migrating to v11](getting-started/migrating/v11.md)
+    - [Migrating to v10](getting-started/migrating/v10.md)
+    - [Migrating to v9](getting-started/migrating/v9.md)
+    - [Migrating to v8](getting-started/migrating/v8.md)
+    - [Migrating to v7](getting-started/migrating/v7.md)
+    - [Migrating to v6](getting-started/migrating/v6.md)
   - [🦎's device review](getting-started/device-review.md)
 
 - API
@@ -23,7 +31,6 @@
   - [Utilities](api/utils.md)
   - [Zniffer](api/zniffer.md)
   - [Command Classes](api/CCs/index.md)
-    <!-- AUTO-GENERATE: CC Links -->
 
 - Advanced usage
 
