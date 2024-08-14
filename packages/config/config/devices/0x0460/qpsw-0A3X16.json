@@ -77,7 +77,7 @@
 		{
 			"#": "29",
 			"$import": "templates/wave_template.json#auto_off_timer",
-			"label": "O2: Auto-Off Timer"
+			"label": "O3: Auto-Off Timer"
 		},
 		{
 			"#": "30",
