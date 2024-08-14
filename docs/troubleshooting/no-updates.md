@@ -28,7 +28,7 @@ This section is meant to help you figure out why and reduce debugging time for u
 
    If this is not the case, see b). Otherwise, this seems to be okay from the `node-zwave-js` point of view.
 
-   b) **No source endpoint:**\
+   b) **No source endpoint**\
    The device sends un-encapsulated reports (no source endpoint information):
 
    ```log
@@ -40,7 +40,7 @@ This section is meant to help you figure out why and reduce debugging time for u
 
    This means that we don't know which endpoint this report is from. If it was meant to come from an endpoint, we might be able to work around the missing info - see 4.
 
-   c) **None:**\
+   c) **None**\
    Most likely the lifeline is not set up correctly. Some devices spread their reports across multiple association groups. Consult the manual to figure out which reports are sent in which group.
 
 1. Check if the Command Class included in the report is supported on more than one endpoint (excluding endpoint `0`).\

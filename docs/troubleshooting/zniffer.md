@@ -17,39 +17,96 @@ A Zniffer is a Z-Wave controller with special firmware that can capture Z-Wave t
 ## Installation
 
 1. Install Simplicity Studio
-1. If using an 700/800 series Zniffer, install the Z-Wave (Gecko) SDK in the latest version inside Simplicity Studio.
+1. If using an 800 series Zniffer, install the **Simplicity SDK** in the latest version inside Simplicity Studio.
+1. If using an 700 series Zniffer, install the **Gecko SDK** in the latest version inside Simplicity Studio.
 1. If using the 500 series Zniffer, figure out where to get the Zniffer firmware and drivers from.
 
 ## Converting a 700/800 series controller into a Zniffer
 
 1. Open Simplicity Studio and connect the Z-Wave controller to your PC.
-1. (optional) **Enable Debug Access** - this can be necessary if the device behaves erratically after flashing:
+1. If switching from a controller to a Zniffer, **erase the device**:
    1. Click on **Tools**
-   1. Click on **Flash Programmer**, then OK
+   1. Click on **Simplicity Commander**, then OK
+   1. Select your device in the top left corner under _Select Kit..._
+   1. Go to the **Flash** tab
+   1. Click on **Erase User Data** _(not sure if necessary)_
+   1. Click on **Erase chip**
    1. Click on **Unlock Debug Access**, then confirm that the device will be erased
+   1. Close Simplify Commander
 1. (optional) Install the Gecko **Bootloader** - this is only necessary the first time and after enabling debug access:
    1. Open the Welcome page
    1. Select your device, click **Start**
-   1. Make sure that the latest Gecko SDK is selected under **Preferred SDK**
+   1. Make sure that the latest Gecko SDK (700 series) or Simplicity SDK (800 series) is selected under **Preferred SDK**
    1. Click on the **Example Projects & Demos** tab
-   1. Select filters: **Z-Wave**, **NCP**,
-   1. In the **Bootloader - NCP UART XMODEM (For Z-Wave Applications)** card, click **CREATE**
-   1. Accept the defaults on the following dialog and click **FINISH**
-   1. Wait for the project to be created
-   1. In the Project explorer, right-click your project. From the context menu, select **Run As** → **1 Silicon Labs ARM Program**
+   1. Select filters: **Z-Wave**, search for **bootloader**
+   1. If the list contains a demo with an **OTW Bootloader** for your board, e.g. **Z-Wave OTW BRD2603A Bootloader**:
+      1. On that card, click **RUN**
+   1. If not:
+      1. In the **Bootloader - NCP UART XMODEM (For Z-Wave Applications)** card, click **CREATE**
+      1. Accept the defaults on the following dialog and click **FINISH**
+      1. Wait for the project to be created
+      1. In the Project explorer, right-click your project. From the context menu, select **Run As** → **1 Silicon Labs ARM Program**
    1. Wait for the flashing to complete. The bootloader is now installed.
 1. Install the **Zniffer firmware**:
    1. Open the Welcome page
    1. Select your device, click **Start**
-   1. Make sure that the latest Gecko SDK is selected under **Preferred SDK**
+   1. Make sure that the latest Gecko SDK (700 series) or Simplicity SDK (800 series) is selected under **Preferred SDK**
    1. Click on the **Example Projects & Demos** tab
-   1. Select filters: **Z-Wave**, **NCP**,
-   1. In the **Z-Wave - NCP Zniffer PTI** card, click **CREATE**
-   1. Accept the defaults on the following dialog and click **FINISH**
-   1. Wait for the project to be created
-   1. In the Project explorer, right-click your project. From the context menu, select **Run As** → **1 Silicon Labs ARM Program**
+   1. Select filters: **Z-Wave**, search for **Zniffer**
+   1. If the list contains a demo with **NCP Zniffer Beta** in the name (the region does not matter, as you can change it in software):
+      1. On that card, click **RUN**
+   1. If not:
+      1. In the **Z-Wave - NCP Zniffer Beta** card, click **CREATE**
+      1. Accept the defaults on the following dialog and click **FINISH**
+      1. Wait for the project to be created
+      1. In the Project explorer, right-click your project. From the context menu, select **Run As** → **1 Silicon Labs ARM Program**
    1. Wait for the flashing to complete. The Zniffer firmware is now installed.
    1. On Windows, you can immediately verify that it works by starting **Tools** → **Z-Wave Zniffer**.
+
+## Updating the Zniffer
+
+See [Converting a 700/800 series controller into a Zniffer](#converting-a-700800-series-controller-into-a-zniffer), step _4. Install the Zniffer firmware_.
+
+## Converting a 700/800 Zniffer back into a controller
+
+1. Open Simplicity Studio and connect the Zniffer to your PC.
+1. **Erase the device**:
+   1. Click on **Tools**
+   1. Click on **Simplicity Commander**, then OK
+   1. Select your device in the top left corner under _Select Kit..._
+   1. Go to the **Flash** tab
+   1. Click on **Erase User Data** _(not sure if necessary)_
+   1. Click on **Erase chip**
+   1. Click on **Unlock Debug Access**, then confirm that the device will be erased
+   1. Close Simplify Commander
+1. Install the Gecko **Bootloader**:
+   1. Open the Welcome page
+   1. Select your device, click **Start**
+   1. Make sure that the latest Gecko SDK (700 series) or Simplicity SDK (800 series) is selected under **Preferred SDK**
+   1. Click on the **Example Projects & Demos** tab
+   1. Select filters: **Z-Wave**, search for **bootloader**
+   1. If the list contains a demo with an **OTW Bootloader** for your board, e.g. **Z-Wave OTW BRD2603A Bootloader**:
+      1. On that card, click **RUN**
+   1. If not:
+      1. In the **Bootloader - NCP UART XMODEM (For Z-Wave Applications)** card, click **CREATE**
+      1. Accept the defaults on the following dialog and click **FINISH**
+      1. Wait for the project to be created
+      1. In the Project explorer, right-click your project. From the context menu, select **Run As** → **1 Silicon Labs ARM Program**
+   1. Wait for the flashing to complete. The bootloader is now installed.
+1. Install the **Controller firmware**:
+   1. Open the Welcome page
+   1. Select your device, click **Start**
+   1. Make sure that the latest Gecko SDK (700 series) or Simplicity SDK (800 series) is selected under **Preferred SDK**
+   1. Click on the **Example Projects & Demos** tab
+   1. Select filters: **Z-Wave**, search for **Serial api**
+   1. If the list contains a demo with **NCP Serial API Controller** in the name (the region does not matter, as you can change it in software):
+      1. On that card, click **RUN**
+   1. If not:
+      1. In the **Z-Wave - NCP Serial API Controller** card, click **CREATE**
+      1. Accept the defaults on the following dialog and click **FINISH**
+      1. Wait for the project to be created
+      1. In the Project explorer, right-click your project. From the context menu, select **Run As** → **1 Silicon Labs ARM Program**
+   1. Wait for the flashing to complete. The Controller firmware is now installed.
 
 ## Converting a UZB3 into a Zniffer
 
