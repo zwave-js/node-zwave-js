@@ -40,7 +40,9 @@ Here's how it **DOES NOT** look like. This is an **application log** from `zwave
 
 ## Rule #2: Thou shalt only use the "debug" level
 
-There are multiple log levels, but **only** the "debug" level contains enough info for troubleshooting.
+There are multiple log levels, but **only** the **debug** level contains enough info for troubleshooting.
+It may be tempting to go even higher and use the **silly** level, but like the name suggests, it adds silly amounts of information
+that is only used to troubleshoot very specific issues. For all others, it just makes the logs harder to read.
 
 <details>
 <summary>Click here for another counter example</summary>

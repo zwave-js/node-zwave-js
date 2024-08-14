@@ -42,16 +42,8 @@
 - Troubleshooting
 
   - [Overview](troubleshooting/index.md)
-  - [Connectivity issues](troubleshooting/connectivity-issues.md)
-  - [Problems with 700 series sticks](troubleshooting/otw-upgrade.md)
-  - [Nonsensical values appear randomly](troubleshooting/nonsensical-values.md)
-  - [Improving the network health](troubleshooting/network-health.md)
-  - [Missing updates from a device](troubleshooting/no-updates.md)
-  - [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
-  - [A device is not identified (unknown product)](troubleshooting/unidentified-device.md)
-  - [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
-  - [Some values are missing](troubleshooting/missing-values.md)
-  - [Upgrading the controller firmware](troubleshooting/otw-upgrade.md)
+  - [First steps](troubleshooting/first-steps.md)
+  - [Common issues](troubleshooting/common-issues.md)
   - [Creating a Zniffer](troubleshooting/zniffer.md)
 
 - Device Configuration Files
