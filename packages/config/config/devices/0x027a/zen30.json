@@ -264,8 +264,8 @@
 		{
 			// This device exposes a Multilevel Switch (Dimmer) on endpoint 0, and a Binary Switch (Relay) on endpoint 1
 			// Our heuristic currently detects endpoint 1 as unnecessary and hides it from the user.
-			// This problem is fixed in the 800 series version of the device (firmwareVersion >= 4.0)
-			"$if": "firmwareVersion < 4.0",
+			// This problem is fixed in firmare 3.20 and higher
+			"$if": "firmwareVersion < 3.20",
 			"preserveEndpoints": "*",
 			"preserveRootApplicationCCValueIDs": true
 		}
