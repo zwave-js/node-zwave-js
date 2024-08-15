@@ -1,67 +1,17 @@
 {
 	"manufacturer": "Shelly Europe Ltd.",
 	"manufacturerId": "0x0460",
-	"label": "QNSW-002P16",
-	"description": "Wave 2PM",
+	"label": "QPSW-0A3X16",
+	"description": "Wave Pro 3",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0081",
-			"zwaveAllianceId": 5115
+			"productId": "0x0091"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
-	},
-	"endpoints": {
-		"0": {
-			"associations": {
-				"1": {
-					"label": "Lifeline",
-					"maxNodes": 9,
-					"isLifeline": true
-				},
-				"2": {
-					"label": "SW1: On/Off",
-					"maxNodes": 9
-				},
-				"3": {
-					"label": "SW1: Start/Stop Level Change",
-					"maxNodes": 9
-				},
-				"4": {
-					"label": "SW2: On/Off",
-					"maxNodes": 9
-				},
-				"5": {
-					"label": "SW2: Start/Stop Level Change",
-					"maxNodes": 9
-				}
-			}
-		},
-		"1": {
-			"associations": {
-				"1": {
-					"$import": "#endpoints/0/associations/2",
-					"isLifeline": false
-				},
-				"2": {
-					"$import": "#endpoints/0/associations/3"
-				}
-			}
-		},
-		"2": {
-			"associations": {
-				"1": {
-					"$import": "#endpoints/0/associations/4",
-					"isLifeline": false
-				},
-				"2": {
-					"$import": "#endpoints/0/associations/5"
-				}
-			}
-		}
 	},
 	"paramInformation": [
 		{
@@ -75,12 +25,9 @@
 			"label": "SW2 Switch Type"
 		},
 		{
-			"#": "6",
-			"$import": "templates/wave_template.json#swap_inputs"
-		},
-		{
-			"#": "16",
-			"$import": "templates/wave_template.json#swap_outputs"
+			"#": "3",
+			"$import": "templates/wave_template.json#switch_type",
+			"label": "SW3 Switch Type"
 		},
 		{
 			"#": "17",
@@ -91,6 +38,11 @@
 			"#": "18",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
 			"label": "O2: State After Power Failure"
+		},
+		{
+			"#": "27",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "O3: State After Power Failure"
 		},
 		{
 			"#": "19",
@@ -123,6 +75,21 @@
 			"label": "O2: Auto-On/Off Timer Unit"
 		},
 		{
+			"#": "29",
+			"$import": "templates/wave_template.json#auto_off_timer",
+			"label": "O3: Auto-Off Timer"
+		},
+		{
+			"#": "30",
+			"$import": "templates/wave_template.json#auto_on_timer",
+			"label": "O3: Auto-On Timer"
+		},
+		{
+			"#": "108",
+			"$import": "templates/wave_template.json#timer_unit",
+			"label": "O3: Auto-On/Off Timer Unit"
+		},
+		{
 			"#": "23",
 			"$import": "templates/wave_template.json#out_relay_type",
 			"label": "O1: Relay Type"
@@ -133,24 +100,9 @@
 			"label": "O2: Relay Type"
 		},
 		{
-			"#": "36",
-			"$import": "templates/wave_template.json#power_change_report_treshold",
-			"label": "O1: Power Change Report Threshold"
-		},
-		{
-			"#": "39",
-			"$import": "templates/wave_template.json#min_time_between_reports",
-			"label": "O1: Minimum Time Between Power Reports"
-		},
-		{
-			"#": "37",
-			"$import": "templates/wave_template.json#power_change_report_treshold",
-			"label": "O2: Power Change Report Threshold"
-		},
-		{
-			"#": "40",
-			"$import": "templates/wave_template.json#min_time_between_reports",
-			"label": "O2: Minimum Time Between Power Reports"
+			"#": "106",
+			"$import": "templates/wave_template.json#out_relay_type",
+			"label": "O3: Relay Type"
 		},
 		{
 			"#": "91",
