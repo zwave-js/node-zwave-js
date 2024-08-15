@@ -77,6 +77,7 @@ import {
 	isValidDSK,
 	isZWaveError,
 	nwiHomeIdFromDSK,
+	parseBitMask,
 	securityClassIsS2,
 	securityClassOrder,
 } from "@zwave-js/core";
@@ -310,6 +311,15 @@ import {
 	ExtNVMWriteLongByteRequest,
 	type ExtNVMWriteLongByteResponse,
 } from "../serialapi/nvm/ExtNVMWriteLongByteMessages";
+import {
+	ExtendedNVMOperationStatus,
+	ExtendedNVMOperationsCloseRequest,
+	ExtendedNVMOperationsCommand,
+	ExtendedNVMOperationsOpenRequest,
+	ExtendedNVMOperationsReadRequest,
+	type ExtendedNVMOperationsResponse,
+	ExtendedNVMOperationsWriteRequest,
+} from "../serialapi/nvm/ExtendedNVMOperationsMessages";
 import {
 	FirmwareUpdateNVM_GetNewImageRequest,
 	type FirmwareUpdateNVM_GetNewImageResponse,
@@ -6897,9 +6907,11 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * **Z-Wave 700 series only**
+	 * **Z-Wave 700+ series only**
 	 *
 	 * Reads a buffer from the external NVM at the given offset
+	 *
+	 * **Note:** Prefer {@link externalNVMReadBufferExt} if supported, as that command supports larger NVMs than 64 KiB.
 	 */
 	public async externalNVMReadBuffer700(
 		offset: number,
@@ -6933,6 +6945,50 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
+	 * **Z-Wave 700+ series only**
+	 *
+	 * Reads a buffer from the external NVM at the given offset
+	 *
+	 * **Note:** If supported, this command should be preferred over {@link externalNVMReadBuffer700} as it supports larger NVMs than 64 KiB.
+	 */
+	public async externalNVMReadBufferExt(
+		offset: number,
+		length: number,
+	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
+		const ret = await this.driver.sendMessage<
+			ExtendedNVMOperationsResponse
+		>(
+			new ExtendedNVMOperationsReadRequest(this.driver, {
+				offset,
+				length,
+			}),
+		);
+		if (!ret.isOK()) {
+			let message = "Could not read from the external NVM";
+			if (
+				ret.status
+					=== ExtendedNVMOperationStatus.Error_OperationInterference
+			) {
+				message += ": interference between read and write operation.";
+			} else if (
+				ret.status
+					=== ExtendedNVMOperationStatus.Error_OperationMismatch
+			) {
+				message += ": wrong operation requested.";
+			}
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+
+		return {
+			buffer: ret.bufferOrBitmask,
+			endOfFile: ret.status === ExtendedNVMOperationStatus.EndOfFile,
+		};
+	}
+
+	/**
 	 * **Z-Wave 500 series only**
 	 *
 	 * Writes a buffer to the external NVM at the given offset
@@ -6957,9 +7013,12 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * **Z-Wave 700 series only**
+	 * **Z-Wave 700+ series only**
 	 *
 	 * Writes a buffer to the external NVM at the given offset
+	 *
+	 * **Note:** Prefer {@link externalNVMWriteBufferExt} if supported, as that command supports larger NVMs than 64 KiB.
+	 *
 	 * **WARNING:** This function can write in the full NVM address space and is not offset to start at the application area.
 	 * Take care not to accidentally overwrite the protocol NVM area!
 	 */
@@ -6995,9 +7054,63 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * **Z-Wave 700 series only**
+	 * **Z-Wave 700+ series only**
+	 *
+	 * Writes a buffer to the external NVM at the given offset
+	 *
+	 * **Note:** If supported, this command should be preferred over {@link externalNVMWriteBuffer700} as it supports larger NVMs than 64 KiB.
+	 *
+	 * **WARNING:** This function can write in the full NVM address space and is not offset to start at the application area.
+	 * Take care not to accidentally overwrite the protocol NVM area!
+	 */
+	public async externalNVMWriteBufferExt(
+		offset: number,
+		buffer: Buffer,
+	): Promise<{ endOfFile: boolean }> {
+		const ret = await this.driver.sendMessage<
+			ExtendedNVMOperationsResponse
+		>(
+			new ExtendedNVMOperationsWriteRequest(this.driver, {
+				offset,
+				buffer,
+			}),
+		);
+
+		if (!ret.isOK()) {
+			let message = "Could not write to the external NVM";
+			if (
+				ret.status
+					=== ExtendedNVMOperationStatus.Error_OperationInterference
+			) {
+				message += ": interference between read and write operation.";
+			} else if (
+				ret.status
+					=== ExtendedNVMOperationStatus.Error_OperationMismatch
+			) {
+				message += ": wrong operation requested.";
+			} else if (
+				ret.status
+					=== ExtendedNVMOperationStatus.Error_SubCommandNotSupported
+			) {
+				message += ": sub-command not supported.";
+			}
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+
+		return {
+			endOfFile: ret.status === ExtendedNVMOperationStatus.EndOfFile,
+		};
+	}
+
+	/**
+	 * **Z-Wave 700+ series only**
 	 *
 	 * Opens the controller's external NVM for reading/writing and returns the NVM size
+	 *
+	 * **Note:** Prefer {@link externalNVMOpenExt} if supported, as that command supports larger NVMs than 64 KiB.
 	 */
 	public async externalNVMOpen(): Promise<number> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
@@ -7013,13 +7126,69 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * **Z-Wave 700 series only**
+	 * **Z-Wave 700+ series only**
+	 *
+	 * Opens the controller's external NVM for reading/writing and returns the NVM size and supported operations.
+	 *
+	 * **Note:** If supported, this command should be preferred over {@link externalNVMOpen} as it supports larger NVMs than 64 KiB.
+	 */
+	public async externalNVMOpenExt(): Promise<{
+		size: number;
+		supportedOperations: ExtendedNVMOperationsCommand[];
+	}> {
+		const ret = await this.driver.sendMessage<
+			ExtendedNVMOperationsResponse
+		>(
+			new ExtendedNVMOperationsOpenRequest(this.driver),
+		);
+		if (!ret.isOK()) {
+			throw new ZWaveError(
+				"Failed to open the external NVM",
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+		const size = ret.offsetOrSize;
+		const supportedOperations = parseBitMask(
+			ret.bufferOrBitmask,
+			ExtendedNVMOperationsCommand.Open,
+		);
+		return {
+			size,
+			supportedOperations,
+		};
+	}
+
+	/**
+	 * **Z-Wave 700+ series only**
 	 *
 	 * Closes the controller's external NVM
+	 *
+	 * **Note:** Prefer {@link externalNVMCloseExt} if supported, as that command supports larger NVMs than 64 KiB.
 	 */
 	public async externalNVMClose(): Promise<void> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
 			new NVMOperationsCloseRequest(this.driver),
+		);
+		if (!ret.isOK()) {
+			throw new ZWaveError(
+				"Failed to close the external NVM",
+				ZWaveErrorCodes.Controller_CommandError,
+			);
+		}
+	}
+
+	/**
+	 * **Z-Wave 700+ series only**
+	 *
+	 * Closes the controller's external NVM
+	 *
+	 * **Note:** If supported, this command should be preferred over {@link externalNVMClose} as it supports larger NVMs than 64 KiB.
+	 */
+	public async externalNVMCloseExt(): Promise<void> {
+		const ret = await this.driver.sendMessage<
+			ExtendedNVMOperationsResponse
+		>(
+			new ExtendedNVMOperationsCloseRequest(this.driver),
 		);
 		if (!ret.isOK()) {
 			throw new ZWaveError(
@@ -7114,8 +7283,34 @@ ${associatedNodes.join(", ")}`,
 	private async backupNVMRaw700(
 		onProgress?: (bytesRead: number, total: number) => void,
 	): Promise<Buffer> {
+		let open: () => Promise<number>;
+		let read: (
+			offset: number,
+			length: number,
+		) => Promise<{ buffer: Buffer; endOfFile: boolean }>;
+		let close: () => Promise<void>;
+
+		if (
+			this.supportedFunctionTypes?.includes(
+				FunctionType.ExtendedNVMOperations,
+			)
+		) {
+			open = async () => {
+				const { size } = await this.externalNVMOpenExt();
+				return size;
+			};
+			read = (offset, length) =>
+				this.externalNVMReadBufferExt(offset, length);
+			close = () => this.externalNVMCloseExt();
+		} else {
+			open = () => this.externalNVMOpen();
+			read = (offset, length) =>
+				this.externalNVMReadBuffer700(offset, length);
+			close = () => this.externalNVMClose();
+		}
+
 		// Open NVM for reading
-		const size = await this.externalNVMOpen();
+		const size = await open();
 
 		const ret = Buffer.allocUnsafe(size);
 		let offset = 0;
@@ -7124,11 +7319,10 @@ ${associatedNodes.join(", ")}`,
 		let chunkSize: number = Math.min(0xff, ret.length);
 		try {
 			while (offset < ret.length) {
-				const { buffer: chunk, endOfFile } = await this
-					.externalNVMReadBuffer700(
-						offset,
-						Math.min(chunkSize, ret.length - offset),
-					);
+				const { buffer: chunk, endOfFile } = await read(
+					offset,
+					Math.min(chunkSize, ret.length - offset),
+				);
 				if (chunkSize === 0xff && chunk.length === 0) {
 					// Some SDK versions return an empty buffer when trying to read a buffer that is too long
 					// Fallback to a sane (but maybe slow) size
@@ -7146,7 +7340,7 @@ ${associatedNodes.join(", ")}`,
 			}
 		} finally {
 			// Whatever happens, close the NVM
-			await this.externalNVMClose();
+			await close();
 		}
 
 		return ret;
@@ -7347,8 +7541,42 @@ ${associatedNodes.join(", ")}`,
 		nvmData: Buffer,
 		onProgress?: (bytesWritten: number, total: number) => void,
 	): Promise<void> {
+		let open: () => Promise<number>;
+		let read: (
+			offset: number,
+			length: number,
+		) => Promise<{ buffer: Buffer; endOfFile: boolean }>;
+		let write: (
+			offset: number,
+			buffer: Buffer,
+		) => Promise<{ endOfFile: boolean }>;
+		let close: () => Promise<void>;
+
+		if (
+			this.supportedFunctionTypes?.includes(
+				FunctionType.ExtendedNVMOperations,
+			)
+		) {
+			open = async () => {
+				const { size } = await this.externalNVMOpenExt();
+				return size;
+			};
+			read = (offset, length) =>
+				this.externalNVMReadBufferExt(offset, length);
+			write = (offset, buffer) =>
+				this.externalNVMWriteBufferExt(offset, buffer);
+			close = () => this.externalNVMCloseExt();
+		} else {
+			open = () => this.externalNVMOpen();
+			read = (offset, length) =>
+				this.externalNVMReadBuffer700(offset, length);
+			write = (offset, buffer) =>
+				this.externalNVMWriteBuffer700(offset, buffer);
+			close = () => this.externalNVMClose();
+		}
+
 		// Open NVM for reading
-		const size = await this.externalNVMOpen();
+		const size = await open();
 
 		if (size !== nvmData.length) {
 			throw new ZWaveError(
@@ -7361,15 +7589,14 @@ ${associatedNodes.join(", ")}`,
 		// For some reason, there is no documentation and no official command for this
 		// The write requests have the same size as the read response - if this yields no
 		// data, default to a sane (but maybe slow) size
-		const chunkSize =
-			(await this.externalNVMReadBuffer700(0, 0xff)).buffer.length || 48;
+		const chunkSize = (await read(0, 0xff)).buffer.length || 48;
 
 		// Close NVM and re-open again for writing
-		await this.externalNVMClose();
-		await this.externalNVMOpen();
+		await close();
+		await open();
 
 		for (let offset = 0; offset < nvmData.length; offset += chunkSize) {
-			const { endOfFile } = await this.externalNVMWriteBuffer700(
+			const { endOfFile } = await write(
 				offset,
 				nvmData.subarray(offset, offset + chunkSize),
 			);
@@ -7380,7 +7607,7 @@ ${associatedNodes.join(", ")}`,
 			if (endOfFile) break;
 		}
 		// Close NVM
-		await this.externalNVMClose();
+		await close();
 	}
 
 	/**

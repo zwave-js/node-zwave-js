@@ -62,7 +62,7 @@ export enum FunctionType {
 	ExtNVMReadLongByte = 0x2c, // Reads a byte from the external NVM
 	ExtExtWriteLongByte = 0x2d, // Writes a byte to the external NVM
 
-	NVMOperations = 0x2e, // 700-series command to read and write from/to the external NVM
+	NVMOperations = 0x2e, // Read and write from/to the external NVM (700+ series)
 
 	UNKNOWN_FUNC_CLOCK_SET = 0x30, // ??
 	UNKNOWN_FUNC_CLOCK_GET = 0x31, // ??
@@ -80,6 +80,9 @@ export enum FunctionType {
 
 	GetBackgroundRSSI = 0x3b, // request the most recent background RSSI levels detected
 	SetListenBeforeTalkThreshold = 0x3c, // Set the RSSI threshold above which the stick will not transmit
+
+	ExtendedNVMOperations = 0x3d, // Read and write from/to the external NVM with 32-bit addresses (700+ series)
+
 	RemoveSpecificNodeIdFromNetwork = 0x3f, // Trigger removal of a specific node that desires exclusion from the network
 
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40, // Not implemented
