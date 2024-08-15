@@ -741,6 +741,14 @@ export enum FirmwareUpdateRequestStatus {
 	OK = 0xff,
 }
 
+export interface FirmwareUpdateInitResult {
+	status: FirmwareUpdateRequestStatus;
+	/** Whether the node will resume a previous transfer */
+	resume?: boolean;
+	/** Whether the node will accept non-secure firmware fragments */
+	nonSecureTransfer?: boolean;
+}
+
 export enum FirmwareUpdateStatus {
 	// Error_Timeout is not part of the Z-Wave standard, but we use it to report
 	// that no status report was received
@@ -820,6 +828,18 @@ export interface FirmwareUpdateResult {
 	waitTime?: number;
 	/** Whether the device will be re-interviewed. If this is `true`, applications should wait for the `"ready"` event to interact with the device again. */
 	reInterview: boolean;
+}
+
+export interface FirmwareUpdateOptions {
+	/**
+	 * Whether a previous attempt to update this node's firmware should be resumed (if supported).
+	 */
+	resume?: boolean;
+	/**
+	 * Whether the firmware data should be transferred without encryption (if supported).
+	 * This can massively reduce the time needed.
+	 */
+	nonSecureTransfer?: boolean;
 }
 
 export enum HailCommand {

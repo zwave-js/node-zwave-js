@@ -41,6 +41,7 @@ import { V } from "../lib/Values";
 import {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
+	type FirmwareUpdateInitResult,
 	type FirmwareUpdateMetaData,
 	FirmwareUpdateMetaDataCommand,
 	FirmwareUpdateRequestStatus,
@@ -163,7 +164,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async requestUpdate(
 		options: FirmwareUpdateMetaDataCCRequestGetOptions,
-	): Promise<FirmwareUpdateRequestStatus> {
+	): Promise<FirmwareUpdateInitResult> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.RequestGet,
@@ -183,15 +184,20 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			// Do not wait for Nonce Reports
 			s2VerifyDelivery: false,
 		});
-		const { status } = await this.applHost.waitForCommand<
-			FirmwareUpdateMetaDataCCRequestReport
-		>(
-			(cc) =>
-				cc instanceof FirmwareUpdateMetaDataCCRequestReport
-				&& cc.nodeId === this.endpoint.nodeId,
-			60000,
-		);
-		return status;
+		const result = await this.applHost
+			.waitForCommand<
+				FirmwareUpdateMetaDataCCRequestReport
+			>(
+				(cc) =>
+					cc instanceof FirmwareUpdateMetaDataCCRequestReport
+					&& cc.nodeId === this.endpoint.nodeId,
+				60000,
+			);
+		return pick(result, [
+			"status",
+			"resume",
+			"nonSecureTransfer",
+		]);
 	}
 
 	/**
