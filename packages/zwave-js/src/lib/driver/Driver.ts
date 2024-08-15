@@ -6488,6 +6488,7 @@ ${handlers.length} left`,
 	/** Computes the maximum net CC payload size for the given CC or SendDataRequest */
 	public computeNetCCPayloadSize(
 		commandOrMsg: CommandClass | SendDataRequest | SendDataBridgeRequest,
+		ignoreEncapsulation: boolean = false,
 	): number {
 		// Recreate the correct encapsulation structure
 		let msg: SendDataRequest | SendDataBridgeRequest;
@@ -6497,9 +6498,11 @@ ${handlers.length} left`,
 			const SendDataConstructor = this.getSendDataSinglecastConstructor();
 			msg = new SendDataConstructor(this, { command: commandOrMsg });
 		}
-		msg.command = this.encapsulateCommands(
-			msg.command,
-		) as SinglecastCC<CommandClass>;
+		if (!ignoreEncapsulation) {
+			msg.command = this.encapsulateCommands(
+				msg.command,
+			) as SinglecastCC<CommandClass>;
+		}
 		return msg.command.getMaxPayloadLength(this.getMaxPayloadLength(msg));
 	}
 

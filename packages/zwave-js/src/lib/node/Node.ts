@@ -5743,7 +5743,8 @@ protocol version:      ${this.protocolVersion}`;
 		};
 
 		// Prepare the firmware update
-		let fragmentSize: number;
+		let fragmentSizeSecure: number;
+		let fragmentSizeNonSecure: number;
 		let meta: FirmwareUpdateMetaData;
 		try {
 			const prepareResult = await this.prepareFirmwareUpdateInternal(
@@ -5764,7 +5765,8 @@ protocol version:      ${this.protocolVersion}`;
 			}
 
 			// If the firmware update was not aborted, prepareResult is definitely defined
-			({ fragmentSize, ...meta } = prepareResult!);
+			({ fragmentSizeSecure, fragmentSizeNonSecure, ...meta } =
+				prepareResult!);
 		} catch {
 			restore(false);
 			// Not sure what the error is, but we'll label it "transmission failed"
@@ -5776,6 +5778,11 @@ protocol version:      ${this.protocolVersion}`;
 
 			return result;
 		}
+
+		// The resume and non-secure transfer features may not be supported by the node
+		// If not, disable them, even though the application requested them
+		if (!meta.supportsResuming) options.resume = false;
+		if (!meta.supportsNonSecureTransfer) options.nonSecureTransfer = false;
 
 		// Throttle the progress emitter so applications can handle the load of events
 		const notifyProgress = throttle(
@@ -5791,7 +5798,6 @@ protocol version:      ${this.protocolVersion}`;
 		}));
 		let skipFinishedFiles = -1;
 		let shouldResume = options.resume
-			&& meta.supportsResuming
 			&& this._previousFirmwareCRC != undefined;
 		if (shouldResume) {
 			skipFinishedFiles = updatesWithChecksum.findIndex(
@@ -5806,14 +5812,11 @@ protocol version:      ${this.protocolVersion}`;
 		>;
 		let conservativeWaitTime: number;
 
-		// FIXME: progress should be computed based on the total data, not number of fragments
-		// since a node may or may not accept secure transfer for all files
-		const totalFragments: number = updatesWithChecksum.reduce(
-			(total, update) =>
-				total + Math.ceil(update.data.length / fragmentSize),
+		const totalBytes: number = updatesWithChecksum.reduce(
+			(total, update) => total + update.data.length,
 			0,
 		);
-		let sentFragmentsOfPreviousFiles = 0;
+		let sentBytesOfPreviousFiles = 0;
 
 		for (let i = 0; i < updatesWithChecksum.length; i++) {
 			const { firmwareTarget: target = 0, data, checksum } =
@@ -5827,8 +5830,7 @@ protocol version:      ${this.protocolVersion}`;
 						i + 1
 					} / ${updatesWithChecksum.length})...`,
 				);
-				const numFragments = Math.ceil(data.length / fragmentSize);
-				sentFragmentsOfPreviousFiles += numFragments;
+				sentBytesOfPreviousFiles += data.length;
 				continue;
 			}
 
@@ -5838,6 +5840,11 @@ protocol version:      ${this.protocolVersion}`;
 					i + 1
 				} / ${updatesWithChecksum.length})...`,
 			);
+
+			// For determining the initial fragment size, assume the node respects our
+			let fragmentSize = options.nonSecureTransfer
+				? fragmentSizeNonSecure
+				: fragmentSizeSecure;
 
 			// Tell the node to start requesting fragments
 			const { resume, nonSecureTransfer } = await this
@@ -5850,7 +5857,13 @@ protocol version:      ${this.protocolVersion}`;
 					shouldResume,
 					options.nonSecureTransfer,
 				);
-			// And remember the checksum, so we can resume if necessary
+
+			// If the node did not accept non-secure transfer, revisit our choice of fragment size
+			fragmentSize = options.nonSecureTransfer
+				? fragmentSizeNonSecure
+				: fragmentSizeSecure;
+
+			// Remember the checksum, so we can resume if necessary
 			this._previousFirmwareCRC = checksum;
 
 			if (shouldResume) {
@@ -5881,9 +5894,14 @@ protocol version:      ${this.protocolVersion}`;
 						sentFragments: fragment,
 						totalFragments: total,
 						progress: roundTo(
-							((sentFragmentsOfPreviousFiles + fragment)
-								/ totalFragments)
-								* 100,
+							(
+								(sentBytesOfPreviousFiles
+									+ Math.min(
+										fragment * fragmentSize,
+										data.length,
+									))
+								/ totalBytes
+							) * 100,
 							2,
 						),
 					};
@@ -5891,7 +5909,7 @@ protocol version:      ${this.protocolVersion}`;
 
 					// When this file is done, add the fragments to the total, so we can compute the total progress correctly
 					if (fragment === total) {
-						sentFragmentsOfPreviousFiles += fragment;
+						sentBytesOfPreviousFiles += data.length;
 					}
 				},
 			);
@@ -5972,7 +5990,8 @@ protocol version:      ${this.protocolVersion}`;
 	): Promise<
 		| undefined
 		| (FirmwareUpdateMetaData & {
-			fragmentSize: number;
+			fragmentSizeSecure: number;
+			fragmentSizeNonSecure: number;
 		})
 	> {
 		const api = this.commandClasses["Firmware Update Meta Data"];
@@ -6019,12 +6038,26 @@ protocol version:      ${this.protocolVersion}`;
 		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
 			nodeId: this.id,
 		});
-		const maxNetPayloadSize = this.driver.computeNetCCPayloadSize(fcc)
+		const maxGrossPayloadSizeSecure = this.driver.computeNetCCPayloadSize(
+			fcc,
+		);
+		const maxGrossPayloadSizeNonSecure = this.driver
+			.computeNetCCPayloadSize(fcc, true);
+
+		const maxNetPayloadSizeSecure = maxGrossPayloadSizeSecure
 			- 2 // report number
 			- (fcc.version >= 2 ? 2 : 0); // checksum
+		const maxNetPayloadSizeNonSecure = maxGrossPayloadSizeNonSecure
+			- 2 // report number
+			- (fcc.version >= 2 ? 2 : 0); // checksum
+
 		// Use the smallest allowed payload
-		const fragmentSize = Math.min(
-			maxNetPayloadSize,
+		const fragmentSizeSecure = Math.min(
+			maxNetPayloadSizeSecure,
+			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
+		);
+		const fragmentSizeNonSecure = Math.min(
+			maxNetPayloadSizeNonSecure,
 			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
 		);
 
@@ -6032,7 +6065,11 @@ protocol version:      ${this.protocolVersion}`;
 			abortContext.abortPromise.resolve(true);
 			return;
 		} else {
-			return { ...meta, fragmentSize };
+			return {
+				...meta,
+				fragmentSizeSecure,
+				fragmentSizeNonSecure,
+			};
 		}
 	}
 
