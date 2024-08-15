@@ -12,12 +12,12 @@ import {
 	num2hex,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
-import { wait } from "alcalzone-shared/async";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { green, red, white } from "ansi-colors";
 import levenshtein from "js-levenshtein";
 import type { RulesLogic } from "json-logic-js";
 import * as path from "node:path";
+import { setTimeout as wait } from "node:timers/promises";
 import type { ConditionalParamInfoMap, ParamInfoMap } from "../src";
 import { ConfigManager } from "../src/ConfigManager";
 import { parseLogic } from "../src/Logic";

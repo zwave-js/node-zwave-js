@@ -44,11 +44,11 @@ import {
 } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
-import { wait } from "alcalzone-shared/async";
 import {
 	type DeferredPromise,
 	createDeferredPromise,
 } from "alcalzone-shared/deferred-promise";
+import { setTimeout as wait } from "node:timers/promises";
 import {
 	isSendData,
 	isTransmitReport,
@@ -319,7 +319,11 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 					if (isFirstTransferredSegment) {
 						isFirstTransferredSegment = false;
 					} else if (segmentDelay) {
-						await wait(segmentDelay, true);
+						await wait(
+							segmentDelay,
+							undefined,
+							{ ref: false },
+						);
 					}
 					const segment = unsentSegments.shift()!;
 
@@ -395,7 +399,11 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 							level: "debug",
 						});
 
-						await wait(waitTime, true);
+						await wait(
+							waitTime,
+							undefined,
+							{ ref: false },
+						);
 						continue attempts;
 					}
 
