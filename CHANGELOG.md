@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 12.13.1 (2024-08-15)
 ### Config file changes
 * Remove endpoint workaround for Zooz ZEN30, FW 3.20+ (#7115)
 
