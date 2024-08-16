@@ -14,6 +14,13 @@ export enum RFRegion {
 	"Default (EU)" = 0xff,
 }
 
+export interface RFRegionInfo {
+	region: RFRegion;
+	supportsZWave: boolean;
+	supportsLongRange: boolean;
+	includesRegion?: RFRegion;
+}
+
 export enum ZnifferRegion {
 	"Europe" = 0x00,
 	"USA" = 0x01,
