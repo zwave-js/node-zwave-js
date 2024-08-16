@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Sprue Safety Products Ltd.",
+	"manufacturer": "Sprue Safety Products, Ltd.",
 	"manufacturerId": "0x026f",
 	"label": "ZHT-630",
 	"description": "Thermistek Heat Alarm/Detector",
@@ -13,6 +13,13 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
 	},
 	"metadata": {
 		"inclusion": "‘ADDING’ YOUR Z-WAVE UNITS\nDo not attempt to add your Z-Wave Module unless you are familiar with the operation of your Z-Wave Controller.\n1. Read the instructions for your Z-Wave Controller regarding adding new devices. Then initiate the inclusion function from your Z-Wave Controller.\n2. Triple-press the add button once the Z-Wave Module is on the device. The LED will show a quick blink once per second while the module is being added. This process may take as long as 30 seconds, but typically is much quicker. If you triple-press too quickly or too slowly, inclusion will not start. In this case wait a few seconds and then try again.\n3. Upon successful inclusion, the Z-Wave Module LED will flash 3 times. If inclusion fails, the LED will simply stop its blink pattern.\n4. If inclusion does not succeed, restart at step 1.\n5. If successful, place the alarm on its base and wait at least 30 seconds.\n6. Press the alarm’s test button and verify the Z-Wave Controller receives Notification Reports.\n7. After the Z-Wave Module is included, you may define association groups or perform other configuration operations from the Z-Wave Controller.",
