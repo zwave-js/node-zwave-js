@@ -5782,7 +5782,16 @@ protocol version:      ${this.protocolVersion}`;
 		// The resume and non-secure transfer features may not be supported by the node
 		// If not, disable them, even though the application requested them
 		if (!meta.supportsResuming) options.resume = false;
-		if (!meta.supportsNonSecureTransfer) options.nonSecureTransfer = false;
+
+		const securityClass = this.getHighestSecurityClass();
+		const isSecure = securityClass === SecurityClass.S0_Legacy
+			|| securityClassIsS2(securityClass);
+		if (!isSecure) {
+			// The nonSecureTransfer option is only relevant for secure devices
+			options.nonSecureTransfer = false;
+		} else if (!meta.supportsNonSecureTransfer) {
+			options.nonSecureTransfer = false;
+		}
 
 		// Throttle the progress emitter so applications can handle the load of events
 		const notifyProgress = throttle(
@@ -5841,7 +5850,8 @@ protocol version:      ${this.protocolVersion}`;
 				} / ${updatesWithChecksum.length})...`,
 			);
 
-			// For determining the initial fragment size, assume the node respects our
+			// For determining the initial fragment size, assume the node respects our choice.
+			// If the node is not secure, these two values are identical anyways.
 			let fragmentSize = options.nonSecureTransfer
 				? fragmentSizeNonSecure
 				: fragmentSizeSecure;
@@ -5859,9 +5869,9 @@ protocol version:      ${this.protocolVersion}`;
 				);
 
 			// If the node did not accept non-secure transfer, revisit our choice of fragment size
-			fragmentSize = options.nonSecureTransfer
-				? fragmentSizeNonSecure
-				: fragmentSizeSecure;
+			if (options.nonSecureTransfer && !nonSecureTransfer) {
+				fragmentSize = fragmentSizeSecure;
+			}
 
 			// Remember the checksum, so we can resume if necessary
 			this._previousFirmwareCRC = checksum;
