@@ -726,6 +726,8 @@ export interface FirmwareUpdateMetaData {
 	hardwareVersion?: number;
 	continuesToFunction: MaybeNotKnown<boolean>;
 	supportsActivation: MaybeNotKnown<boolean>;
+	supportsResuming?: MaybeNotKnown<boolean>;
+	supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 }
 
 export enum FirmwareUpdateRequestStatus {
@@ -737,6 +739,14 @@ export enum FirmwareUpdateRequestStatus {
 	Error_FirmwareUpgradeInProgress = 5,
 	Error_BatteryLow = 6,
 	OK = 0xff,
+}
+
+export interface FirmwareUpdateInitResult {
+	status: FirmwareUpdateRequestStatus;
+	/** Whether the node will resume a previous transfer */
+	resume?: boolean;
+	/** Whether the node will accept non-secure firmware fragments */
+	nonSecureTransfer?: boolean;
 }
 
 export enum FirmwareUpdateStatus {
@@ -790,6 +800,10 @@ export type FirmwareUpdateCapabilities =
 		readonly continuesToFunction: MaybeNotKnown<boolean>;
 		/** Indicates whether the node supports delayed activation of the new firmware */
 		readonly supportsActivation: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports resuming aborted firmware transfers */
+		readonly supportsResuming: MaybeNotKnown<boolean>;
+		/** Indicates whether the node supports non-secure firmware transfers */
+		readonly supportsNonSecureTransfer: MaybeNotKnown<boolean>;
 	};
 
 export interface FirmwareUpdateProgress {
@@ -814,6 +828,18 @@ export interface FirmwareUpdateResult {
 	waitTime?: number;
 	/** Whether the device will be re-interviewed. If this is `true`, applications should wait for the `"ready"` event to interact with the device again. */
 	reInterview: boolean;
+}
+
+export interface FirmwareUpdateOptions {
+	/**
+	 * Whether a previous attempt to update this node's firmware should be resumed (if supported).
+	 */
+	resume?: boolean;
+	/**
+	 * Whether the firmware data should be transferred without encryption (if supported).
+	 * This can massively reduce the time needed.
+	 */
+	nonSecureTransfer?: boolean;
 }
 
 export enum HailCommand {

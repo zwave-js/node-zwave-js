@@ -11,6 +11,7 @@ import {
 	EntryControlDataTypes,
 	type FirmwareUpdateCapabilities,
 	type FirmwareUpdateMetaData,
+	type FirmwareUpdateOptions,
 	type FirmwareUpdateProgress,
 	FirmwareUpdateRequestStatus,
 	type FirmwareUpdateResult,
@@ -5550,6 +5551,10 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
+	// Stores the CRC of the previously transferred firmware image.
+	// Allows detecting whether resuming is supported and where to continue in a multi-file transfer.
+	private _previousFirmwareCRC: number | undefined;
+
 	private _abortFirmwareUpdate: (() => Promise<void>) | undefined;
 
 	/** Is used to remember fragment requests that came in before they were able to be handled */
@@ -5574,6 +5579,12 @@ protocol version:      ${this.protocolVersion}`;
 		const additionalFirmwareIDs = this.getValue<number[]>(
 			FirmwareUpdateMetaDataCCValues.additionalFirmwareIDs.id,
 		);
+		const supportsResuming = this.getValue<boolean>(
+			FirmwareUpdateMetaDataCCValues.supportsResuming.id,
+		);
+		const supportsNonSecureTransfer = this.getValue<boolean>(
+			FirmwareUpdateMetaDataCCValues.supportsNonSecureTransfer.id,
+		);
 
 		// Ensure all information was queried
 		if (
@@ -5590,6 +5601,8 @@ protocol version:      ${this.protocolVersion}`;
 				.map((_, i) => i),
 			continuesToFunction,
 			supportsActivation,
+			supportsResuming,
+			supportsNonSecureTransfer,
 		};
 	}
 
@@ -5620,6 +5633,8 @@ protocol version:      ${this.protocolVersion}`;
 				.fill(0).map((_, i) => i),
 			continuesToFunction: meta.continuesToFunction,
 			supportsActivation: meta.supportsActivation,
+			supportsResuming: meta.supportsResuming,
+			supportsNonSecureTransfer: meta.supportsNonSecureTransfer,
 		};
 	}
 
@@ -5636,6 +5651,7 @@ protocol version:      ${this.protocolVersion}`;
 	 */
 	public async updateFirmware(
 		updates: Firmware[],
+		options: FirmwareUpdateOptions = {},
 	): Promise<FirmwareUpdateResult> {
 		if (updates.length === 0) {
 			throw new ZWaveError(
@@ -5681,11 +5697,7 @@ protocol version:      ${this.protocolVersion}`;
 		this._firmwareUpdateInProgress = true;
 
 		// Support aborting the update
-		const abortContext: {
-			abort: boolean;
-			tooLateToAbort: boolean;
-			abortPromise: DeferredPromise<boolean>;
-		} = {
+		const abortContext = {
 			abort: false,
 			tooLateToAbort: false,
 			abortPromise: createDeferredPromise<boolean>(),
@@ -5731,7 +5743,8 @@ protocol version:      ${this.protocolVersion}`;
 		};
 
 		// Prepare the firmware update
-		let fragmentSize: number;
+		let fragmentSizeSecure: number;
+		let fragmentSizeNonSecure: number;
 		let meta: FirmwareUpdateMetaData;
 		try {
 			const prepareResult = await this.prepareFirmwareUpdateInternal(
@@ -5752,7 +5765,8 @@ protocol version:      ${this.protocolVersion}`;
 			}
 
 			// If the firmware update was not aborted, prepareResult is definitely defined
-			({ fragmentSize, ...meta } = prepareResult!);
+			({ fragmentSizeSecure, fragmentSizeNonSecure, ...meta } =
+				prepareResult!);
 		} catch {
 			restore(false);
 			// Not sure what the error is, but we'll label it "transmission failed"
@@ -5765,6 +5779,20 @@ protocol version:      ${this.protocolVersion}`;
 			return result;
 		}
 
+		// The resume and non-secure transfer features may not be supported by the node
+		// If not, disable them, even though the application requested them
+		if (!meta.supportsResuming) options.resume = false;
+
+		const securityClass = this.getHighestSecurityClass();
+		const isSecure = securityClass === SecurityClass.S0_Legacy
+			|| securityClassIsS2(securityClass);
+		if (!isSecure) {
+			// The nonSecureTransfer option is only relevant for secure devices
+			options.nonSecureTransfer = false;
+		} else if (!meta.supportsNonSecureTransfer) {
+			options.nonSecureTransfer = false;
+		}
+
 		// Throttle the progress emitter so applications can handle the load of events
 		const notifyProgress = throttle(
 			(progress) => this.emit("firmware update progress", this, progress),
@@ -5772,49 +5800,118 @@ protocol version:      ${this.protocolVersion}`;
 			true,
 		);
 
+		// If resuming is supported and desired, try to figure out with which file to continue
+		const updatesWithChecksum = updates.map((u) => ({
+			...u,
+			checksum: CRC16_CCITT(u.data),
+		}));
+		let skipFinishedFiles = -1;
+		let shouldResume = options.resume
+			&& this._previousFirmwareCRC != undefined;
+		if (shouldResume) {
+			skipFinishedFiles = updatesWithChecksum.findIndex(
+				(u) => u.checksum === this._previousFirmwareCRC,
+			);
+			if (skipFinishedFiles === -1) shouldResume = false;
+		}
+
 		// Perform all firmware updates in sequence
 		let updateResult!: Awaited<
 			ReturnType<ZWaveNode["doFirmwareUpdateInternal"]>
 		>;
 		let conservativeWaitTime: number;
 
-		const totalFragments: number = updates.reduce(
-			(total, update) =>
-				total + Math.ceil(update.data.length / fragmentSize),
+		const totalBytes: number = updatesWithChecksum.reduce(
+			(total, update) => total + update.data.length,
 			0,
 		);
-		let sentFragmentsOfPreviousFiles = 0;
+		let sentBytesOfPreviousFiles = 0;
 
-		for (let i = 0; i < updates.length; i++) {
+		for (let i = 0; i < updatesWithChecksum.length; i++) {
+			const { firmwareTarget: target = 0, data, checksum } =
+				updatesWithChecksum[i];
+
+			if (i < skipFinishedFiles) {
+				// If we are resuming, skip this file since it was already done before
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Skipping already completed firmware update (part ${
+						i + 1
+					} / ${updatesWithChecksum.length})...`,
+				);
+				sentBytesOfPreviousFiles += data.length;
+				continue;
+			}
+
 			this.driver.controllerLog.logNode(
 				this.id,
-				`Updating firmware (part ${i + 1} / ${updates.length})...`,
+				`Updating firmware (part ${
+					i + 1
+				} / ${updatesWithChecksum.length})...`,
 			);
 
-			const { firmwareTarget: target = 0, data } = updates[i];
+			// For determining the initial fragment size, assume the node respects our choice.
+			// If the node is not secure, these two values are identical anyways.
+			let fragmentSize = options.nonSecureTransfer
+				? fragmentSizeNonSecure
+				: fragmentSizeSecure;
+
 			// Tell the node to start requesting fragments
-			await this.beginFirmwareUpdateInternal(
-				data,
-				target,
-				meta,
-				fragmentSize,
-			);
+			const { resume, nonSecureTransfer } = await this
+				.beginFirmwareUpdateInternal(
+					data,
+					target,
+					meta,
+					fragmentSize,
+					checksum,
+					shouldResume,
+					options.nonSecureTransfer,
+				);
+
+			// If the node did not accept non-secure transfer, revisit our choice of fragment size
+			if (options.nonSecureTransfer && !nonSecureTransfer) {
+				fragmentSize = fragmentSizeSecure;
+			}
+
+			// Remember the checksum, so we can resume if necessary
+			this._previousFirmwareCRC = checksum;
+
+			if (shouldResume) {
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Node ${
+						resume ? "accepted" : "did not accept"
+					} resuming the update...`,
+				);
+			}
+			if (nonSecureTransfer) {
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Firmware will be transferred without encryption...`,
+				);
+			}
 
 			// And handle them
 			updateResult = await this.doFirmwareUpdateInternal(
 				data,
 				fragmentSize,
+				nonSecureTransfer,
 				abortContext,
 				(fragment, total) => {
 					const progress: FirmwareUpdateProgress = {
 						currentFile: i + 1,
-						totalFiles: updates.length,
+						totalFiles: updatesWithChecksum.length,
 						sentFragments: fragment,
 						totalFragments: total,
 						progress: roundTo(
-							((sentFragmentsOfPreviousFiles + fragment)
-								/ totalFragments)
-								* 100,
+							(
+								(sentBytesOfPreviousFiles
+									+ Math.min(
+										fragment * fragmentSize,
+										data.length,
+									))
+								/ totalBytes
+							) * 100,
 							2,
 						),
 					};
@@ -5822,7 +5919,7 @@ protocol version:      ${this.protocolVersion}`;
 
 					// When this file is done, add the fragments to the total, so we can compute the total progress correctly
 					if (fragment === total) {
-						sentFragmentsOfPreviousFiles += fragment;
+						sentBytesOfPreviousFiles += data.length;
 					}
 				},
 			);
@@ -5837,7 +5934,7 @@ protocol version:      ${this.protocolVersion}`;
 				this.driver.controllerLog.logNode(this.id, {
 					message: `Firmware update (part ${
 						i + 1
-					} / ${updates.length}) failed with status ${
+					} / ${updatesWithChecksum.length}) failed with status ${
 						getEnumMemberName(
 							FirmwareUpdateStatus,
 							updateResult.status,
@@ -5854,13 +5951,13 @@ protocol version:      ${this.protocolVersion}`;
 				this.emit("firmware update finished", this, result);
 				restore(false);
 				return result;
-			} else if (i < updates.length - 1) {
+			} else if (i < updatesWithChecksum.length - 1) {
 				// Update succeeded, but we're not done yet
 
 				this.driver.controllerLog.logNode(this.id, {
 					message: `Firmware update (part ${
 						i + 1
-					} / ${updates.length}) succeeded with status ${
+					} / ${updatesWithChecksum.length}) succeeded with status ${
 						getEnumMemberName(
 							FirmwareUpdateStatus,
 							updateResult.status,
@@ -5874,9 +5971,15 @@ protocol version:      ${this.protocolVersion}`;
 					`Continuing with next part in ${conservativeWaitTime} seconds...`,
 				);
 
+				// If we've resumed the previous file, there's no need to resume the next one too
+				shouldResume = false;
+
 				await wait(conservativeWaitTime * 1000, true);
 			}
 		}
+
+		// We're done. No need to resume this update
+		this._previousFirmwareCRC = undefined;
 
 		const result: FirmwareUpdateResult = {
 			...updateResult,
@@ -5897,7 +6000,8 @@ protocol version:      ${this.protocolVersion}`;
 	): Promise<
 		| undefined
 		| (FirmwareUpdateMetaData & {
-			fragmentSize: number;
+			fragmentSizeSecure: number;
+			fragmentSizeNonSecure: number;
 		})
 	> {
 		const api = this.commandClasses["Firmware Update Meta Data"];
@@ -5944,12 +6048,26 @@ protocol version:      ${this.protocolVersion}`;
 		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
 			nodeId: this.id,
 		});
-		const maxNetPayloadSize = this.driver.computeNetCCPayloadSize(fcc)
+		const maxGrossPayloadSizeSecure = this.driver.computeNetCCPayloadSize(
+			fcc,
+		);
+		const maxGrossPayloadSizeNonSecure = this.driver
+			.computeNetCCPayloadSize(fcc, true);
+
+		const maxNetPayloadSizeSecure = maxGrossPayloadSizeSecure
 			- 2 // report number
 			- (fcc.version >= 2 ? 2 : 0); // checksum
+		const maxNetPayloadSizeNonSecure = maxGrossPayloadSizeNonSecure
+			- 2 // report number
+			- (fcc.version >= 2 ? 2 : 0); // checksum
+
 		// Use the smallest allowed payload
-		const fragmentSize = Math.min(
-			maxNetPayloadSize,
+		const fragmentSizeSecure = Math.min(
+			maxNetPayloadSizeSecure,
+			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
+		);
+		const fragmentSizeNonSecure = Math.min(
+			maxNetPayloadSizeNonSecure,
 			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
 		);
 
@@ -5957,17 +6075,27 @@ protocol version:      ${this.protocolVersion}`;
 			abortContext.abortPromise.resolve(true);
 			return;
 		} else {
-			return { ...meta, fragmentSize };
+			return {
+				...meta,
+				fragmentSizeSecure,
+				fragmentSizeNonSecure,
+			};
 		}
 	}
 
-	/** Kicks off a firmware update of a single target */
+	/** Kicks off a firmware update of a single target. Returns whether the node accepted resuming and non-secure transfer */
 	private async beginFirmwareUpdateInternal(
 		data: Buffer,
 		target: number,
 		meta: FirmwareUpdateMetaData,
 		fragmentSize: number,
-	): Promise<void> {
+		checksum: number,
+		resume: boolean | undefined,
+		nonSecureTransfer: boolean | undefined,
+	): Promise<{
+		resume: boolean;
+		nonSecureTransfer: boolean;
+	}> {
 		const api = this.commandClasses["Firmware Update Meta Data"];
 
 		// ================================
@@ -5980,16 +6108,18 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Request the node to start the upgrade
 		// TODO: Should manufacturer id and firmware id be provided externally?
-		const requestUpdateStatus = await api.requestUpdate({
+		const result = await api.requestUpdate({
 			manufacturerId: meta.manufacturerId,
 			firmwareId: target == 0
 				? meta.firmwareId
 				: meta.additionalFirmwareIDs[target - 1],
 			firmwareTarget: target,
 			fragmentSize,
-			checksum: CRC16_CCITT(data),
+			checksum,
+			resume,
+			nonSecureTransfer,
 		});
-		switch (requestUpdateStatus) {
+		switch (result.status) {
 			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:
 				throw new ZWaveError(
 					`Failed to start the update: A manual authentication event (e.g. button push) was expected!`,
@@ -6031,12 +6161,18 @@ protocol version:      ${this.protocolVersion}`;
 				// Keep the node awake until the update is done.
 				this.keepAwake = true;
 		}
+
+		return {
+			resume: !!result.resume,
+			nonSecureTransfer: !!result.nonSecureTransfer,
+		};
 	}
 
 	/** Performs the firmware update of a single target */
 	private async doFirmwareUpdateInternal(
 		data: Buffer,
 		fragmentSize: number,
+		nonSecureTransfer: boolean,
 		abortContext: AbortFirmwareUpdateContext,
 		onProgress: (fragment: number, total: number) => void,
 	): Promise<
@@ -6099,6 +6235,7 @@ protocol version:      ${this.protocolVersion}`;
 				await this.sendCorruptedFirmwareUpdateReport(
 					fragmentRequest.reportNumber,
 					randomBytes(fragmentSize),
+					nonSecureTransfer,
 				);
 				// This will cause the node to abort the process, wait for that
 				break update;
@@ -6123,6 +6260,7 @@ protocol version:      ${this.protocolVersion}`;
 					await this.sendCorruptedFirmwareUpdateReport(
 						fragmentRequest.reportNumber,
 						randomBytes(fragment.length),
+						nonSecureTransfer,
 					);
 					// This will cause the node to abort the process, wait for that
 					break update;
@@ -6144,9 +6282,12 @@ protocol version:      ${this.protocolVersion}`;
 					const isLast = num === numFragments;
 
 					try {
-						await this.commandClasses[
-							"Firmware Update Meta Data"
-						].sendFirmwareFragment(num, isLast, fragment);
+						await this.commandClasses["Firmware Update Meta Data"]
+							.withOptions({
+								// Only encapsulate if the transfer is secure
+								autoEncapsulate: !nonSecureTransfer,
+							})
+							.sendFirmwareFragment(num, isLast, fragment);
 
 						onProgress(num, numFragments);
 
@@ -6228,11 +6369,15 @@ protocol version:      ${this.protocolVersion}`;
 	private async sendCorruptedFirmwareUpdateReport(
 		reportNum: number,
 		fragment: Buffer,
+		nonSecureTransfer: boolean = false,
 	): Promise<void> {
 		try {
-			await this.commandClasses[
-				"Firmware Update Meta Data"
-			].sendFirmwareFragment(reportNum, true, fragment);
+			await this.commandClasses["Firmware Update Meta Data"]
+				.withOptions({
+					// Only encapsulate if the transfer is secure
+					autoEncapsulate: !nonSecureTransfer,
+				})
+				.sendFirmwareFragment(reportNum, true, fragment);
 		} catch {
 			// ignore
 		}

@@ -5,6 +5,7 @@ import {
 	type AssociationGroup,
 	ECDHProfiles,
 	FLiRS2WakeUpTime,
+	type FirmwareUpdateOptions,
 	type FirmwareUpdateResult,
 	InclusionControllerCCComplete,
 	InclusionControllerCCInitiate,
@@ -7848,6 +7849,7 @@ ${associatedNodes.join(", ")}`,
 	public async firmwareUpdateOTA(
 		nodeId: number,
 		updateInfo: FirmwareUpdateInfo,
+		options?: FirmwareUpdateOptions,
 	): Promise<FirmwareUpdateResult> {
 		// Don't let two firmware updates happen in parallel
 		if (this.isAnyOTAFirmwareUpdateInProgress()) {
@@ -7954,7 +7956,7 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
-		return node.updateFirmware(firmwares);
+		return node.updateFirmware(firmwares, options);
 	}
 
 	private _firmwareUpdateInProgress: boolean = false;
