@@ -52,6 +52,7 @@ import {
 	ProtocolType,
 	Protocols,
 	RFRegion,
+	type RFRegionInfo,
 	type RSSI,
 	type Route,
 	RouteKind,
@@ -187,8 +188,12 @@ import {
 	type SerialAPISetup_GetPowerlevelResponse,
 	SerialAPISetup_GetRFRegionRequest,
 	type SerialAPISetup_GetRFRegionResponse,
+	SerialAPISetup_GetRegionInfoRequest,
+	type SerialAPISetup_GetRegionInfoResponse,
 	SerialAPISetup_GetSupportedCommandsRequest,
 	type SerialAPISetup_GetSupportedCommandsResponse,
+	SerialAPISetup_GetSupportedRegionsRequest,
+	type SerialAPISetup_GetSupportedRegionsResponse,
 	SerialAPISetup_SetLongRangeMaximumTxPowerRequest,
 	type SerialAPISetup_SetLongRangeMaximumTxPowerResponse,
 	SerialAPISetup_SetNodeIDTypeRequest,
@@ -697,6 +702,14 @@ export class ZWaveController
 	private _supportsTimers: MaybeNotKnown<boolean>;
 	public get supportsTimers(): MaybeNotKnown<boolean> {
 		return this._supportsTimers;
+	}
+
+	private _supportedRegions: MaybeNotKnown<Map<RFRegion, RFRegionInfo>>;
+	/** Which RF regions are supported by the controller, including information about them */
+	public get supportedRegions(): MaybeNotKnown<
+		ReadonlyMap<RFRegion, Readonly<RFRegionInfo>>
+	> {
+		return this._supportedRegions;
 	}
 
 	private _rfRegion: MaybeNotKnown<RFRegion>;
@@ -1282,8 +1295,19 @@ export class ZWaveController
 
 	/** Tries to determine the LR capable replacement of the given region. If none is found, the given region is returned. */
 	private tryGetLRCapableRegion(region: RFRegion): RFRegion {
-		// There is no official API to query whether a given region is supported,
-		// but there are ways to figure out if LR regions are.
+		if (this._supportedRegions) {
+			// If the region supports LR, use it
+			if (this._supportedRegions.get(region)?.supportsLongRange) {
+				return region;
+			}
+
+			// Find a possible LR capable superset for this region
+			for (const info of this._supportedRegions.values()) {
+				if (info.supportsLongRange && info.includesRegion === region) {
+					return info.region;
+				}
+			}
+		}
 
 		// US_LR is the first supported LR region, so if the controller supports LR, US_LR is supported
 		if (region === RFRegion.USA && this.isLongRangeCapable()) {
@@ -1298,6 +1322,58 @@ export class ZWaveController
 	 * Queries the region and powerlevel settings and configures them if necessary
 	 */
 	public async queryAndConfigureRF(): Promise<void> {
+		// Figure out which regions are supported
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetSupportedRegions,
+			)
+		) {
+			this.driver.controllerLog.print(
+				`Querying supported RF regions and their information...`,
+			);
+			const supportedRegions = await this.querySupportedRFRegions().catch(
+				() => [],
+			);
+			this._supportedRegions = new Map();
+
+			for (const region of supportedRegions) {
+				try {
+					const info = await this.queryRFRegionInfo(region);
+					if (info.region === RFRegion.Unknown) continue;
+					this._supportedRegions.set(region, info);
+				} catch {
+					continue;
+				}
+			}
+
+			this.driver.controllerLog.print(
+				`supported regions:${
+					[...this._supportedRegions.values()]
+						.map((info) => {
+							let ret = `\n· ${
+								getEnumMemberName(RFRegion, info.region)
+							}`;
+							if (info.includesRegion != undefined) {
+								ret += ` · superset of ${
+									getEnumMemberName(
+										RFRegion,
+										info.includesRegion,
+									)
+								}`;
+							}
+							if (info.supportsLongRange) {
+								ret += " · ZWLR";
+								if (!info.supportsZWave) {
+									ret += " only";
+								}
+							}
+							return ret;
+						})
+						.join("")
+				}`,
+			);
+		}
+
 		// Check and possibly update the RF region to the desired value
 		if (
 			this.isSerialAPISetupCommandSupported(
@@ -6284,6 +6360,56 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
+	 * Query the supported regions of the Z-Wave API Module
+	 *
+	 * **Note:** Applications should prefer using {@link getSupportedRFRegions} instead
+	 */
+	public async querySupportedRFRegions(): Promise<RFRegion[]> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetSupportedRegionsResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetSupportedRegionsRequest(this.driver));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the supported RF regions!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return result.supportedRegions;
+	}
+
+	/**
+	 * Query the supported regions of the Z-Wave API Module
+	 *
+	 * **Note:** Applications should prefer reading the cached value from {@link supportedRFRegions} instead
+	 */
+	public async queryRFRegionInfo(
+		region: RFRegion,
+	): Promise<{
+		region: RFRegion;
+		supportsZWave: boolean;
+		supportsLongRange: boolean;
+		includesRegion?: RFRegion;
+	}> {
+		const result = await this.driver.sendMessage<
+			| SerialAPISetup_GetRegionInfoResponse
+			| SerialAPISetup_CommandUnsupportedResponse
+		>(new SerialAPISetup_GetRegionInfoRequest(this.driver, { region }));
+		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
+			throw new ZWaveError(
+				`Your hardware does not support getting the RF region info!`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+		return pick(result, [
+			"region",
+			"supportsZWave",
+			"supportsLongRange",
+			"includesRegion",
+		]);
+	}
+
+	/**
 	 * Returns the RF regions supported by this controller, or `undefined` if the information is not known yet.
 	 *
 	 * @param filterSubsets Whether to exclude regions that are subsets of other regions,
@@ -6292,7 +6418,25 @@ ${associatedNodes.join(", ")}`,
 	public getSupportedRFRegions(
 		filterSubsets: boolean = true,
 	): MaybeNotKnown<readonly RFRegion[]> {
-		// FIXME: Once supported in firmware, query the controller for supported regions instead of hardcoding
+		// If supported by the firmware, rely on the queried information
+		if (
+			this.isSerialAPISetupCommandSupported(
+				SerialAPISetupCommand.GetSupportedRegions,
+			)
+		) {
+			if (this._supportedRegions == NOT_KNOWN) return NOT_KNOWN;
+			const allRegions = new Set(this._supportedRegions.keys());
+			if (filterSubsets) {
+				for (const region of this._supportedRegions.values()) {
+					if (region.includesRegion != undefined) {
+						allRegions.delete(region.includesRegion);
+					}
+				}
+			}
+			return [...allRegions].sort((a, b) => a - b);
+		}
+
+		// Fallback: Hardcoded list of known supported regions
 		const ret = new Set([
 			// Always supported
 			RFRegion.Europe,

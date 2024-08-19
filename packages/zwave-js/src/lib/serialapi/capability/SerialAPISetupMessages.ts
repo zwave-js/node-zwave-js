@@ -46,6 +46,8 @@ export enum SerialAPISetupCommand {
 	GetLongRangeMaximumPayloadSize = 0x11,
 	SetPowerlevel16Bit = 0x12,
 	GetPowerlevel16Bit = 0x13,
+	GetSupportedRegions = 0x15,
+	GetRegionInfo = 0x16,
 }
 
 // We need to define the decorators for Requests and Responses separately
@@ -980,6 +982,131 @@ export class SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse
 		const message = ret.message!;
 		message["maximum payload size"] = `${this.maxPayloadSize} bytes`;
 		delete message.payload;
+		return ret;
+	}
+}
+
+// =============================================================================
+
+@subCommandRequest(SerialAPISetupCommand.GetSupportedRegions)
+export class SerialAPISetup_GetSupportedRegionsRequest
+	extends SerialAPISetupRequest
+{
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, options);
+		this.command = SerialAPISetupCommand.GetSupportedRegions;
+	}
+}
+
+@subCommandResponse(SerialAPISetupCommand.GetSupportedRegions)
+export class SerialAPISetup_GetSupportedRegionsResponse
+	extends SerialAPISetupResponse
+{
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+		validatePayload(this.payload.length >= 1);
+
+		const numRegions = this.payload[0];
+		validatePayload(numRegions > 0, this.payload.length >= 1 + numRegions);
+
+		this.supportedRegions = [...this.payload.subarray(1, 1 + numRegions)];
+	}
+
+	public readonly supportedRegions: RFRegion[];
+}
+
+// =============================================================================
+
+export interface SerialAPISetup_GetRegionInfoOptions
+	extends MessageBaseOptions
+{
+	region: RFRegion;
+}
+
+@subCommandRequest(SerialAPISetupCommand.GetRegionInfo)
+export class SerialAPISetup_GetRegionInfoRequest extends SerialAPISetupRequest {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| MessageDeserializationOptions
+			| SerialAPISetup_GetRegionInfoOptions,
+	) {
+		super(host, options);
+		this.command = SerialAPISetupCommand.GetRegionInfo;
+
+		if (gotDeserializationOptions(options)) {
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.region = options.region;
+		}
+	}
+
+	public region: RFRegion;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.region]);
+		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message: MessageRecord = {
+			...ret.message!,
+			region: getEnumMemberName(RFRegion, this.region),
+		};
+		delete message.payload;
+		ret.message = message;
+		return ret;
+	}
+}
+
+@subCommandResponse(SerialAPISetupCommand.GetRegionInfo)
+export class SerialAPISetup_GetRegionInfoResponse
+	extends SerialAPISetupResponse
+{
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+		this.region = this.payload[0];
+		this.supportsZWave = !!(this.payload[1] & 0b1);
+		this.supportsLongRange = !!(this.payload[1] & 0b10);
+		if (this.payload.length > 2) {
+			this.includesRegion = this.payload[2];
+			if (this.includesRegion === RFRegion.Unknown) {
+				this.includesRegion = undefined;
+			}
+		}
+	}
+
+	public readonly region: RFRegion;
+	public readonly supportsZWave: boolean;
+	public readonly supportsLongRange: boolean;
+	public readonly includesRegion?: RFRegion;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = { ...super.toLogEntry() };
+		const message: MessageRecord = {
+			...ret.message!,
+			region: getEnumMemberName(RFRegion, this.region),
+			"supports Z-Wave": this.supportsZWave,
+			"supports Long Range": this.supportsLongRange,
+		};
+		if (this.includesRegion != undefined) {
+			message["includes region"] = getEnumMemberName(
+				RFRegion,
+				this.includesRegion,
+			);
+		}
+		delete message.payload;
+		ret.message = message;
 		return ret;
 	}
 }
