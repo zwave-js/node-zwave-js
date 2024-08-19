@@ -1296,9 +1296,14 @@ export class ZWaveController
 	/** Tries to determine the LR capable replacement of the given region. If none is found, the given region is returned. */
 	private tryGetLRCapableRegion(region: RFRegion): RFRegion {
 		if (this._supportedRegions) {
-			// Find a possible superset for this region
+			// If the region supports LR, use it
+			if (this._supportedRegions.get(region)?.supportsLongRange) {
+				return region;
+			}
+
+			// Find a possible LR capable superset for this region
 			for (const info of this._supportedRegions.values()) {
-				if (info.includesRegion === region) {
+				if (info.supportsLongRange && info.includesRegion === region) {
 					return info.region;
 				}
 			}
@@ -1340,6 +1345,33 @@ export class ZWaveController
 					continue;
 				}
 			}
+
+			this.driver.controllerLog.print(
+				`supported regions:${
+					[...this._supportedRegions.values()]
+						.map((info) => {
+							let ret = `\n· ${
+								getEnumMemberName(RFRegion, info.region)
+							}`;
+							if (info.includesRegion != undefined) {
+								ret += ` · superset of ${
+									getEnumMemberName(
+										RFRegion,
+										info.includesRegion,
+									)
+								}`;
+							}
+							if (info.supportsLongRange) {
+								ret += " · ZWLR";
+								if (!info.supportsZWave) {
+									ret += " only";
+								}
+							}
+							return ret;
+						})
+						.join("")
+				}`,
+			);
 		}
 
 		// Check and possibly update the RF region to the desired value
