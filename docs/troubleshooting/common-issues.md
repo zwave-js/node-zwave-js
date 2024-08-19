@@ -156,4 +156,5 @@ See [above](#_700800-series-controller-is-quotjammedquot-or-becomes-unresponsive
 If this happens after a firmware upgrade/downgrade, you may have bricked the controller. While 700/800 series bootloaders should prevent this, we've still seen reports of it happen. Contact the manufacturer for support.
 
 **Incorrect VM settings, e.g. USB passthrough**\
-Good luck, you're on your own.
+If using a 500 series controller or older, read [this issue](https://github.com/zwave-js/node-zwave-js/issues/6341) and follow the steps proposed there.
+If none of that helps: good luck, you're on your own.
