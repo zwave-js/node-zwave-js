@@ -92,5 +92,18 @@
 			"defaultValue": 255,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		"alarmMapping": [
+			{
+				"$import": "templates/schlage_template.json#alarm_map_keymap_disabled"
+			},
+			{
+				"$import": "templates/schlage_template.json#alarm_map_keypad_busy"
+			},
+			{
+				"$import": "templates/schlage_template.json#alarm_map_keypad_unlock"
+			}
+		]
+	}
 }
