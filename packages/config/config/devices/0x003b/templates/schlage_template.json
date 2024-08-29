@@ -1,0 +1,34 @@
+{
+	"alarm_map_keymap_disabled": {
+		"from": {
+			"alarmType": 96,
+			"alarmLevel": 255
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 16 // Keypad temporary disabled
+		}
+	},
+	"alarm_map_keypad_busy": {
+		"from": {
+			"alarmType": 144,
+			"alarmLevel": 255
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 17 // Keypad busy
+		}
+	},
+	"alarm_map_keypad_unlock": {
+		"from": {
+			"alarmType": 16
+		},
+		"to": {
+			"notificationType": 6, // Access Control
+			"notificationEvent": 6, // Keypad unlock operation
+			"eventParameters": {
+				"userId": "alarmLevel"
+			}
+		}
+	}
+}
