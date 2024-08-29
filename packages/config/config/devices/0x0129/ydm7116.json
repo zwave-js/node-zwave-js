@@ -1,0 +1,41 @@
+{
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "YDM7116",
+	"description": "Yale A",
+	"devices": [
+		{
+			"productType": "0xe00d",
+			"productId": "0x200a",
+			"zwaveAllianceId": 4778
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "4",
+			"label": "Wrong Code Entry Limit",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "How to add (pairing) the product into Z-Wave network\n1. Operate on lock following guide below:\n1) Enter Master Code-> ‘R’ -> ‘9’ -> ‘#’ -> ‘1’ -> ‘#’ (only can be activated in advanced mode)",
+		"exclusion": "How to remove the product from Z-Wave network\n1. Operate on lock following guide below:\n1) Enter Master Code-> ‘R’ -> ‘9’ -> ‘#’ -> ‘3’ -> ‘#’ -> Master Code -> ‘#’ (only can be activated in advanced mode)",
+		"reset": "How to factory reset for Z-Wave\nNote: please use this procedure only when the network primary controller is missing or otherwise inoperable.\n1) Press and hold the \"factory reset\" key after the lock body\n2) Power off the lock body for more than 5S, and plug in the battery again\n3) Plug in the battery again and wait for 5S to release the \"factory reset\" key"
+	}
+}
