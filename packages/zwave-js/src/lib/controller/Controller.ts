@@ -300,6 +300,12 @@ import {
 	type RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
 } from "../serialapi/network-mgmt/RequestNodeNeighborUpdateMessages";
+import {
+	LearnModeIntent,
+	LearnModeStatus,
+	type SetLearnModeCallback,
+	SetLearnModeRequest,
+} from "../serialapi/network-mgmt/SetLearnModeMessages";
 import { SetPriorityRouteRequest } from "../serialapi/network-mgmt/SetPriorityRouteMessages";
 import { SetSUCNodeIdRequest } from "../serialapi/network-mgmt/SetSUCNodeIDMessages";
 import {
@@ -417,6 +423,10 @@ interface ControllerEventCallbacks
 	"node found": (node: FoundNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, reason: RemoveNodeReason) => void;
+	"joined network": () => void;
+	"joining network failed": () => void;
+	"left network": () => void;
+	"leaving network failed": () => void;
 	"rebuild routes progress": (
 		progress: ReadonlyMap<number, RebuildRoutesStatus>,
 	) => void;
@@ -471,6 +481,10 @@ export class ZWaveController
 		driver.registerRequestHandler(
 			FunctionType.ReplaceFailedNode,
 			this.handleReplaceNodeStatusReport.bind(this),
+		);
+		driver.registerRequestHandler(
+			FunctionType.SetLearnMode,
+			this.handleLearnModeCallback.bind(this),
 		);
 	}
 
@@ -8479,5 +8493,182 @@ ${associatedNodes.join(", ")}`,
 			await this.driver.leaveBootloader(destroy);
 			this._firmwareUpdateInProgress = false;
 		}
+	}
+
+	private _currentLearnMode: LearnModeIntent | undefined;
+
+	public async beginJoiningNetwork(
+		// FIXME: SmartStart
+	): Promise<boolean> {
+		if (this._currentLearnMode != undefined) return false;
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetLearnModeRequest(this.driver, {
+					intent: LearnModeIntent.Inclusion,
+				}),
+			);
+
+			if (result.isOK()) {
+				this._currentLearnMode = LearnModeIntent.Inclusion;
+				return true;
+			}
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Joining a network failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		this._currentLearnMode = undefined;
+		return false;
+	}
+
+	public async stopJoiningNetwork(): Promise<boolean> {
+		if (
+			this._currentLearnMode !== LearnModeIntent.ClassicInclusionExclusion
+			// FIXME: ^ only for actual exclusion
+			&& this._currentLearnMode !== LearnModeIntent.Inclusion
+		) {
+			return false;
+		}
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetLearnModeRequest(this.driver, {
+					intent: LearnModeIntent.Stop,
+				}),
+			);
+
+			if (result.isOK()) {
+				this._currentLearnMode = undefined;
+				return true;
+			}
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Failed to stop joining a network: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		return false;
+	}
+
+	public async beginLeavingNetwork(): Promise<boolean> {
+		if (this._currentLearnMode != undefined) return false;
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetLearnModeRequest(this.driver, {
+					intent: LearnModeIntent.NetworkWideExclusion,
+				}),
+			);
+
+			if (result.isOK()) {
+				this._currentLearnMode = LearnModeIntent.NetworkWideExclusion;
+				return true;
+			}
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Leaving the current network failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		this._currentLearnMode = undefined;
+		return false;
+	}
+
+	public async stopLeavingNetwork(): Promise<boolean> {
+		if (
+			this._currentLearnMode !== LearnModeIntent.ClassicInclusionExclusion
+			// FIXME: ^ only for actual exclusion
+			&& this._currentLearnMode
+				!== LearnModeIntent.ClassicNetworkWideExclusion
+			&& this._currentLearnMode !== LearnModeIntent.DirectExclusion
+			&& this._currentLearnMode !== LearnModeIntent.NetworkWideExclusion
+		) {
+			return false;
+		}
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetLearnModeRequest(this.driver, {
+					intent: LearnModeIntent.Stop,
+				}),
+			);
+
+			if (result.isOK()) {
+				this._currentLearnMode = undefined;
+				return true;
+			}
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Failed to stop leaving a network: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Is called when a RemoveNode request is received from the controller.
+	 * Handles and controls the exclusion process.
+	 */
+	private handleLearnModeCallback(
+		msg: SetLearnModeCallback,
+	): boolean {
+		// not sure what to do with this message, we're not in learn mode
+		if (this._currentLearnMode == undefined) return false;
+
+		const wasJoining = this._currentLearnMode === LearnModeIntent.Inclusion
+			|| this._currentLearnMode === LearnModeIntent.SmartStart;
+		const wasLeaving =
+			this._currentLearnMode === LearnModeIntent.DirectExclusion
+			|| this._currentLearnMode
+				=== LearnModeIntent.NetworkWideExclusion;
+
+		if (msg.status === LearnModeStatus.Started) {
+			// cool, cool, cool...
+			return true;
+		} else if (msg.status === LearnModeStatus.Failed) {
+			if (wasJoining) {
+				this._currentLearnMode = undefined;
+				this.emit("joining network failed");
+				return true;
+			} else if (wasLeaving) {
+				this._currentLearnMode = undefined;
+				this.emit("leaving network failed");
+				return true;
+			}
+		} else if (
+			msg.status === LearnModeStatus.Completed
+			|| (this._currentLearnMode >= LearnModeIntent.Inclusion
+				&& msg.status === LearnModeStatus.ProtocolDone)
+		) {
+			if (wasJoining) {
+				// FIXME: Update own node ID and other controller flags.
+				this._homeId;
+				this._currentLearnMode = undefined;
+				this.emit("joined network");
+				return true;
+			} else if (wasLeaving) {
+				this._currentLearnMode = undefined;
+				this.emit("left network");
+				return true;
+			}
+		}
+
+		// not sure what to do with this message
+		return false;
 	}
 }
