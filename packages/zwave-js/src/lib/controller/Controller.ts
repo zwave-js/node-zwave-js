@@ -6459,6 +6459,8 @@ ${associatedNodes.join(", ")}`,
 			if (filterSubsets) ret.delete(RFRegion.USA);
 
 			// EU Long Range was added in SDK 7.22 for 800 series chips
+			// 7.22.1 adds support for querying the supported regions, so the following
+			// is really only necessary for 7.22.0.
 			if (
 				typeof this._zwaveChipType === "string"
 				&& getChipTypeAndVersion(this._zwaveChipType)?.type === 8
