@@ -36,6 +36,7 @@ import { type IndicatorObject } from "@zwave-js/cc/IndicatorCC";
 import {
 	BasicDeviceClass,
 	CommandClasses,
+	type ControllerCapabilities,
 	ControllerStatus,
 	EMPTY_ROUTE,
 	type Firmware,
@@ -57,6 +58,7 @@ import {
 	type Route,
 	RouteKind,
 	SecurityClass,
+	type SerialApiInitData,
 	type SinglecastCC,
 	TransmitStatus,
 	UNKNOWN_STATE,
@@ -1078,46 +1080,7 @@ export class ZWaveController
 		);
 
 		// Request additional information about the controller/Z-Wave chip
-		this.driver.controllerLog.print(
-			`querying additional controller information...`,
-		);
-		const initData = await this.driver.sendMessage<
-			GetSerialApiInitDataResponse
-		>(
-			new GetSerialApiInitDataRequest(this.driver),
-		);
-		// and remember the new info
-		this._zwaveApiVersion = initData.zwaveApiVersion;
-		this._zwaveChipType = initData.zwaveChipType;
-		this._isPrimary = initData.isPrimary;
-		this._isSIS = initData.isSIS;
-		this._nodeType = initData.nodeType;
-		this._supportsTimers = initData.supportsTimers;
-		// ignore the initVersion, no clue what to do with it
-		this.driver.controllerLog.print(
-			`received additional controller information:
-  Z-Wave API version:         ${this._zwaveApiVersion.version} (${this._zwaveApiVersion.kind})${
-				this._zwaveChipType
-					? `
-  Z-Wave chip type:           ${
-						typeof this._zwaveChipType === "string"
-							? this._zwaveChipType
-							: `unknown (type: ${
-								num2hex(
-									this._zwaveChipType.type,
-								)
-							}, version: ${
-								num2hex(this._zwaveChipType.version)
-							})`
-					}`
-					: ""
-			}
-  node type                   ${getEnumMemberName(NodeType, this._nodeType)}
-  controller role:            ${this._isPrimary ? "primary" : "secondary"}
-  controller is the SIS:      ${this._isSIS}
-  controller supports timers: ${this._supportsTimers}
-  Z-Wave Classic nodes:       ${initData.nodeIds.join(", ")}`,
-		);
+		const initData = await this.getSerialApiInitData();
 
 		// Get basic controller version info
 		this.driver.controllerLog.print(`querying version info...`);
@@ -1174,29 +1137,7 @@ export class ZWaveController
 		this._sdkVersion = protocolVersionToSDKVersion(this._protocolVersion);
 
 		// find out what the controller can do
-		this.driver.controllerLog.print(`querying controller capabilities...`);
-		const ctrlCaps = await this.driver.sendMessage<
-			GetControllerCapabilitiesResponse
-		>(
-			new GetControllerCapabilitiesRequest(this.driver),
-			{
-				supportCheck: false,
-			},
-		);
-		this._isPrimary = !ctrlCaps.isSecondary;
-		this._isUsingHomeIdFromOtherNetwork =
-			ctrlCaps.isUsingHomeIdFromOtherNetwork;
-		this._isSISPresent = ctrlCaps.isSISPresent;
-		this._wasRealPrimary = ctrlCaps.wasRealPrimary;
-		this._isSUC = ctrlCaps.isStaticUpdateController;
-		this.driver.controllerLog.print(
-			`received controller capabilities:
-  controller role:      ${this._isPrimary ? "primary" : "secondary"}
-  is the SUC:           ${this._isSUC}
-  started this network: ${!this._isUsingHomeIdFromOtherNetwork}
-  SIS is present:       ${this._isSISPresent}
-  was real primary:     ${this._wasRealPrimary}`,
-		);
+		await this.getControllerCapabilities();
 
 		// If the serial API can be configured, figure out which sub commands are supported
 		// This MUST be done after querying the SDK version due to a bug in some 7.xx firmwares, which incorrectly encode the bitmask
@@ -6878,6 +6819,100 @@ ${associatedNodes.join(", ")}`,
 		return ret;
 	}
 
+	/** Request additional information about the controller/Z-Wave chip */
+	public async getSerialApiInitData(): Promise<SerialApiInitData> {
+		this.driver.controllerLog.print(
+			`querying additional controller information...`,
+		);
+		const initData = await this.driver.sendMessage<
+			GetSerialApiInitDataResponse
+		>(
+			new GetSerialApiInitDataRequest(this.driver),
+		);
+
+		this.driver.controllerLog.print(
+			`received additional controller information:
+  Z-Wave API version:         ${initData.zwaveApiVersion.version} (${initData.zwaveApiVersion.kind})${
+				initData.zwaveChipType
+					? `
+  Z-Wave chip type:           ${
+						typeof initData.zwaveChipType === "string"
+							? initData.zwaveChipType
+							: `unknown (type: ${
+								num2hex(initData.zwaveChipType.type)
+							}, version: ${
+								num2hex(initData.zwaveChipType.version)
+							})`
+					}`
+					: ""
+			}
+  node type                   ${getEnumMemberName(NodeType, initData.nodeType)}
+  controller role:            ${initData.isPrimary ? "primary" : "secondary"}
+  controller is the SIS:      ${initData.isSIS}
+  controller supports timers: ${initData.supportsTimers}
+  Z-Wave Classic nodes:       ${initData.nodeIds.join(", ")}`,
+		);
+
+		const ret: SerialApiInitData = {
+			...pick(initData, [
+				"zwaveApiVersion",
+				"zwaveChipType",
+				"isPrimary",
+				"isSIS",
+				"nodeType",
+				"supportsTimers",
+			]),
+			nodeIds: [...initData.nodeIds],
+			// ignore the initVersion, no clue what to do with it
+		};
+
+		// and remember the new info
+		this._zwaveApiVersion = initData.zwaveApiVersion;
+		this._zwaveChipType = initData.zwaveChipType;
+		this._isPrimary = initData.isPrimary;
+		this._isSIS = initData.isSIS;
+		this._nodeType = initData.nodeType;
+		this._supportsTimers = initData.supportsTimers;
+
+		return ret;
+	}
+
+	/** Determines the controller's network role/capabilities */
+	public async getControllerCapabilities(): Promise<ControllerCapabilities> {
+		this.driver.controllerLog.print(`querying controller capabilities...`);
+		const result = await this.driver.sendMessage<
+			GetControllerCapabilitiesResponse
+		>(
+			new GetControllerCapabilitiesRequest(this.driver),
+			{ supportCheck: false },
+		);
+
+		const ret: ControllerCapabilities = {
+			isPrimary: !result.isSecondary,
+			isUsingHomeIdFromOtherNetwork: result.isUsingHomeIdFromOtherNetwork,
+			isSISPresent: result.isSISPresent,
+			wasRealPrimary: result.wasRealPrimary,
+			isSUC: result.isStaticUpdateController,
+		};
+
+		this.driver.controllerLog.print(
+			`received controller capabilities:
+  controller role:      ${ret.isPrimary ? "primary" : "secondary"}
+  is the SUC:           ${ret.isSUC}
+  started this network: ${!ret.isUsingHomeIdFromOtherNetwork}
+  SIS is present:       ${ret.isSISPresent}
+  was real primary:     ${ret.wasRealPrimary}`,
+		);
+
+		this._isPrimary = ret.isPrimary;
+		this._isUsingHomeIdFromOtherNetwork = ret.isUsingHomeIdFromOtherNetwork;
+		this._isSISPresent = ret.isSISPresent;
+		this._wasRealPrimary = ret.wasRealPrimary;
+		this._isSUC = ret.isSUC;
+
+		return ret;
+	}
+
 	/**
 	 * @internal
 	 * Deserializes the controller information and all nodes from the cache.
@@ -8680,11 +8715,16 @@ ${associatedNodes.join(", ")}`,
 				&& msg.status === LearnModeStatus.ProtocolDone)
 		) {
 			if (wasJoining) {
-				// FIXME: Update own node ID and other controller flags.
-				this._ownNodeId = msg.nodeId;
+				process.nextTick(async () => {
+					// Update own node ID and other controller flags.
+					await this.identify().catch(noop);
+					await this.getControllerCapabilities().catch(noop);
+					await this.getSerialApiInitData().catch(noop);
+
+					this.emit("joined network");
+				});
 
 				this._currentLearnMode = undefined;
-				this.emit("joined network");
 				return true;
 			} else if (wasLeaving) {
 				this._currentLearnMode = undefined;
