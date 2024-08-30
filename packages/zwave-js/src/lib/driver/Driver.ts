@@ -1459,7 +1459,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				.on(
 					"status changed",
 					this.onControllerStatusChanged.bind(this),
-				);
+				)
+				.on("joined network", this.onNetworkJoined.bind(this))
+				.on("left network", this.onNetworkLeft.bind(this));
 		}
 
 		if (!this._options.testingHooks?.skipControllerIdentification) {
@@ -1505,7 +1507,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			await this.controller.identify();
 
 			// Perform additional configuration
-			await this.controller.configure();
+			await this.controller.configure(
+				nodeIds.length <= 1 && !lrNodeIds?.length,
+			);
 
 			// now that we know the home ID, we can open the databases
 			await this.initNetworkCache(this.controller.homeId!);
@@ -1513,7 +1517,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			await this.performCacheMigration();
 
 			// Initialize all nodes and restore the data from cache
-			await this._controller.initNodes(
+			await this.controller.initNodes(
 				nodeIds,
 				lrNodeIds ?? [],
 				async () => {
@@ -1524,8 +1528,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				},
 			);
 
-			// Auto-enable smart start inclusion
-			this._controller.autoProvisionSmartStart();
+			if (this.controller.isActuallyPrimary) {
+				// Auto-enable smart start inclusion
+				this.controller.autoProvisionSmartStart();
+			}
 		}
 
 		// Set up the S0 security manager. We can only do that after the controller
@@ -1619,70 +1625,121 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		for (const node of this._controller.nodes.values()) {
 			this.addNodeEventHandlers(node);
 		}
-		// Before interviewing nodes reset our knowledge about their ready state
-		this._nodesReady.clear();
-		this._nodesReadyEventEmitted = false;
 
-		if (!this._options.testingHooks?.skipNodeInterview) {
-			// Now interview all nodes
-			// First complete the controller interview
-			const controllerNode = this._controller.nodes.get(
-				this._controller.ownNodeId!,
-			)!;
-			await this.interviewNodeInternal(controllerNode);
-			// The controller node is always alive
-			controllerNode.markAsAlive();
+		if (this.controller.isActuallyPrimary) {
+			// Before interviewing nodes reset our knowledge about their ready state
+			this._nodesReady.clear();
+			this._nodesReadyEventEmitted = false;
 
-			// Then do all the nodes in parallel, but prioritize nodes that are more likely to be ready
-			const nodeInterviewOrder = [...this._controller.nodes.values()]
-				.filter((n) => n.id !== this._controller!.ownNodeId)
-				.sort((a, b) =>
-					// Fully-interviewed devices first (need the least amount of communication now)
-					(b.interviewStage - a.interviewStage)
-					// Always listening -> FLiRS -> sleeping
-					|| (
-						(b.isListening ? 2 : b.isFrequentListening ? 1 : 0)
-						- (a.isListening ? 2 : a.isFrequentListening ? 1 : 0)
-					)
-					// Then by last seen, more recently first
-					|| (
-						(b.lastSeen?.getTime() ?? 0)
-						- (a.lastSeen?.getTime() ?? 0)
-					)
-					// Lastly ascending by node ID
-					|| (a.id - b.id)
-				);
+			if (!this._options.testingHooks?.skipNodeInterview) {
+				// Now interview all nodes
+				// First complete the controller interview
+				const controllerNode = this._controller.nodes.get(
+					this._controller.ownNodeId!,
+				)!;
+				await this.interviewNodeInternal(controllerNode);
+				// The controller node is always alive
+				controllerNode.markAsAlive();
 
-			this.controllerLog.print(
-				`Interviewing nodes and/or determining their status: ${
-					nodeInterviewOrder.map((n) => n.id).join(", ")
-				}`,
-			);
-			for (const node of nodeInterviewOrder) {
-				if (node.id === this._controller.ownNodeId) {
-					continue;
-				} else if (node.canSleep) {
-					// A node that can sleep should be assumed to be sleeping after resuming from cache
-					node.markAsAsleep();
-				}
+				// Then do all the nodes in parallel, but prioritize nodes that are more likely to be ready
+				const nodeInterviewOrder = [...this._controller.nodes.values()]
+					.filter((n) => n.id !== this._controller!.ownNodeId)
+					.sort((a, b) =>
+						// Fully-interviewed devices first (need the least amount of communication now)
+						(b.interviewStage - a.interviewStage)
+						// Always listening -> FLiRS -> sleeping
+						|| (
+							(b.isListening ? 2 : b.isFrequentListening ? 1 : 0)
+							- (a.isListening
+								? 2
+								: a.isFrequentListening
+								? 1
+								: 0)
+						)
+						// Then by last seen, more recently first
+						|| (
+							(b.lastSeen?.getTime() ?? 0)
+							- (a.lastSeen?.getTime() ?? 0)
+						)
+						// Lastly ascending by node ID
+						|| (a.id - b.id)
+					);
 
-				void (async () => {
-					// Continue the interview if necessary. If that is not necessary, at least
-					// determine the node's status
-					if (node.interviewStage < InterviewStage.Complete) {
-						await this.interviewNodeInternal(node);
-					} else if (node.isListening || node.isFrequentListening) {
-						// Ping non-sleeping nodes to determine their status
-						await node.ping();
+				if (nodeInterviewOrder.length) {
+					this.controllerLog.print(
+						`Interviewing nodes and/or determining their status: ${
+							nodeInterviewOrder.map((n) => n.id).join(", ")
+						}`,
+					);
+					for (const node of nodeInterviewOrder) {
+						if (node.canSleep) {
+							// A node that can sleep should be assumed to be sleeping after resuming from cache
+							node.markAsAsleep();
+						}
+
+						void (async () => {
+							// Continue the interview if necessary. If that is not necessary, at least
+							// determine the node's status
+							if (node.interviewStage < InterviewStage.Complete) {
+								await this.interviewNodeInternal(node);
+							} else if (
+								node.isListening || node.isFrequentListening
+							) {
+								// Ping non-sleeping nodes to determine their status
+								await node.ping();
+							}
+						})();
 					}
-				})();
+				}
 			}
+		} else {
+			if (!this._options.testingHooks?.skipNodeInterview) {
+				// We're a secondary controller. Just determine if nodes are ready and do the interview at another time.
 
-			// If we only have sleeping nodes or a controller-only network, the send
-			// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
-			// So do it manually.
-			this.handleQueueIdleChange(this.queueIdle);
+				// First complete the controller "interview"
+				const controllerNode = this._controller.nodes.get(
+					this._controller.ownNodeId!,
+				)!;
+				await this.interviewNodeInternal(controllerNode);
+				// The controller node is always alive
+				controllerNode.markAsAlive();
+
+				// Then ping (frequently) listening nodes to determine their status
+				const nodeInterviewOrder = [...this._controller.nodes.values()]
+					.filter((n) => n.id !== this._controller!.ownNodeId)
+					.filter((n) => n.isListening || n.isFrequentListening)
+					.sort((a, b) =>
+						// Always listening -> FLiRS
+						(
+							(b.isListening ? 1 : 0)
+							- (a.isListening ? 1 : 0)
+						)
+						// Then by last seen, more recently first
+						|| (
+							(b.lastSeen?.getTime() ?? 0)
+							- (a.lastSeen?.getTime() ?? 0)
+						)
+						// Lastly ascending by node ID
+						|| (a.id - b.id)
+					);
+
+				if (nodeInterviewOrder.length) {
+					this.controllerLog.print(
+						`Determining node status: ${
+							nodeInterviewOrder.map((n) => n.id).join(", ")
+						}`,
+					);
+					for (const node of nodeInterviewOrder) {
+						void node.ping();
+					}
+				}
+			}
 		}
+
+		// If we only have sleeping nodes or a controller-only network, the send
+		// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
+		// So do it manually.
+		this.handleQueueIdleChange(this.queueIdle);
 	}
 
 	private autoRefreshNodeValueTimers = new Map<number, NodeJS.Timeout>();
@@ -2219,6 +2276,53 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 	private onControllerStatusChanged(_status: ControllerStatus): void {
 		this.triggerQueues();
+	}
+
+	private async onNetworkJoined(): Promise<void> {
+		try {
+			this.driverLog.print(
+				`Joined network with home ID ${
+					num2hex(this.controller.homeId)
+				}, switching to new network cache...`,
+			);
+			await this.recreateNetworkCacheAndValueDBs();
+		} catch (e) {
+			this.driverLog.print(
+				`Recreating the network cache and value DBs failed: ${
+					getErrorMessage(e)
+				}`,
+				"error",
+			);
+		}
+	}
+
+	private async onNetworkLeft(): Promise<void> {
+		try {
+			this.driverLog.print(
+				`Left the previous network, switching network cache to new home ID ${
+					num2hex(this.controller.homeId)
+				}...`,
+			);
+			await this.recreateNetworkCacheAndValueDBs();
+		} catch (e) {
+			this.driverLog.print(
+				`Recreating the network cache and value DBs failed: ${
+					getErrorMessage(e)
+				}`,
+				"error",
+			);
+		}
+	}
+
+	private async recreateNetworkCacheAndValueDBs(): Promise<void> {
+		await this._networkCache?.close();
+		await this._valueDB?.close();
+		await this._metadataDB?.close();
+
+		// Reopen with the new home ID
+		await this.initNetworkCache(this.controller.homeId!);
+		await this.initValueDBs(this.controller.homeId!);
+		await this.performCacheMigration();
 	}
 
 	/**

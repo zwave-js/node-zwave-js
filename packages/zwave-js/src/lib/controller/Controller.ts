@@ -533,6 +533,13 @@ export class ZWaveController
 		return this._isPrimary;
 	}
 
+	/** @internal DO NOT USE, for internal purposes only */
+	public get isActuallyPrimary(): MaybeNotKnown<boolean> {
+		// For some reason the firmware claims we are the primary after joining a network that has a SUC/SIS
+		// We consider ourselves secondary unless we also have the SUC/SIS role
+		return this._isPrimary && this._isSISPresent && this._isSUC;
+	}
+
 	private _isUsingHomeIdFromOtherNetwork: MaybeNotKnown<boolean>;
 	public get isUsingHomeIdFromOtherNetwork(): MaybeNotKnown<boolean> {
 		return this._isUsingHomeIdFromOtherNetwork;
@@ -1617,7 +1624,7 @@ export class ZWaveController
 	 * @internal
 	 * Performs additional controller configuration
 	 */
-	public async configure(): Promise<void> {
+	public async configure(isOnlyNode: boolean): Promise<void> {
 		// Enable TX status report if supported
 		if (
 			this.isSerialAPISetupCommandSupported(
@@ -1657,9 +1664,10 @@ export class ZWaveController
 		}
 
 		// There needs to be a SUC/SIS in the network. If not, we promote ourselves to one if the following conditions are met:
-		// We are the primary controller, but we are not SUC, there is no SUC and there is no SIS
+		// We are the primary controller, but we are not SUC, there is no SUC and there is no SIS, and there are no nodes in the network yet
 		if (
 			this._isPrimary
+			&& isOnlyNode
 			&& this._sucNodeId === 0
 			&& !this._isSUC
 			&& !this._isSISPresent
@@ -1675,6 +1683,8 @@ export class ZWaveController
 				);
 				if (result) {
 					this._sucNodeId = this._ownNodeId;
+					this._isSUC = true;
+					this._isSISPresent = true;
 				}
 				this.driver.controllerLog.print(
 					`Promotion to SUC/SIS ${result ? "succeeded" : "failed"}.`,
