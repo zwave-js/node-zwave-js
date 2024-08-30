@@ -4064,7 +4064,10 @@ protocol version:      ${this.protocolVersion}`;
 	private async handleZWavePlusGet(command: ZWavePlusCCGet): Promise<void> {
 		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
 
-		await endpoint.commandClasses["Z-Wave Plus Info"]
+		// We are being queried, so the device may actually not support the CC, just control it.
+		// Using the commandClasses property would throw in that case
+		await endpoint
+			.createAPI(CommandClasses["Z-Wave Plus Info"], false)
 			.withOptions({
 				// Answer with the same encapsulation as asked, but omit
 				// Supervision as it shouldn't be used for Get-Report flows

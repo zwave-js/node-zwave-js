@@ -8681,6 +8681,8 @@ ${associatedNodes.join(", ")}`,
 		) {
 			if (wasJoining) {
 				// FIXME: Update own node ID and other controller flags.
+				this._ownNodeId = msg.nodeId;
+
 				this._currentLearnMode = undefined;
 				this.emit("joined network");
 				return true;
