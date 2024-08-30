@@ -241,7 +241,9 @@ export class ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
 {}
 
 @applicationUpdateType(ApplicationUpdateTypes.SUC_IdChanged)
-export class ApplicationUpdateSUCIdChanged extends ApplicationUpdateRequest {
+export class ApplicationUpdateRequestSUCIdChanged
+	extends ApplicationUpdateRequest
+{
 	public constructor(
 		host: ZWaveHost,
 		options: MessageDeserializationOptions,

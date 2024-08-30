@@ -135,6 +135,7 @@ import {
 	ApplicationUpdateRequestNodeAdded,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeRemoved,
+	ApplicationUpdateRequestSUCIdChanged,
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
@@ -2932,6 +2933,9 @@ export class ZWaveController
 					});
 				}
 			});
+		} else if (msg instanceof ApplicationUpdateRequestSUCIdChanged) {
+			this._sucNodeId = msg.sucNodeID;
+			// TODO: Emit event or what?
 		}
 	}
 
