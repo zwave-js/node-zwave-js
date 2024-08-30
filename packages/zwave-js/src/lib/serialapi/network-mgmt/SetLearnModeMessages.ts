@@ -24,10 +24,12 @@ import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 const LEARN_MODE_EMPTY_NODE_ID = 0xef; // who knows why...
 
 export enum LearnModeIntent {
-	Stop = 0,
-	ClassicInclusionExclusion = 0x01,
-	ClassicNetworkWideInclusion = 0x02,
-	ClassicNetworkWideExclusion = 0x03,
+	LegacyStop = 0,
+	LegacyInclusionExclusion = 0x01,
+	LegacyNetworkWideInclusion = 0x02,
+	LegacyNetworkWideExclusion = 0x03,
+
+	Stop = 0x80,
 	// The Z-Wave API Module SHOULD try a direct range inclusion followed by 4 NWI attempts
 	Inclusion = 0x81,
 	DirectExclusion = 0x82,

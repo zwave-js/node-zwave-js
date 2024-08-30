@@ -8528,7 +8528,7 @@ ${associatedNodes.join(", ")}`,
 
 	public async stopJoiningNetwork(): Promise<boolean> {
 		if (
-			this._currentLearnMode !== LearnModeIntent.ClassicInclusionExclusion
+			this._currentLearnMode !== LearnModeIntent.LegacyInclusionExclusion
 			// FIXME: ^ only for actual exclusion
 			&& this._currentLearnMode !== LearnModeIntent.Inclusion
 		) {
@@ -8540,7 +8540,12 @@ ${associatedNodes.join(", ")}`,
 				Message & SuccessIndicator
 			>(
 				new SetLearnModeRequest(this.driver, {
-					intent: LearnModeIntent.Stop,
+					// TODO: We should be using .Stop here for the non-legacy
+					// inclusion/exclusion, but that command results in a
+					// negative response on current firmwares, even though it works.
+					// Using LegacyStop avoids that, but results in an unexpected
+					// LearnModeFailed callback.
+					intent: LearnModeIntent.LegacyStop,
 				}),
 			);
 
@@ -8587,10 +8592,10 @@ ${associatedNodes.join(", ")}`,
 
 	public async stopLeavingNetwork(): Promise<boolean> {
 		if (
-			this._currentLearnMode !== LearnModeIntent.ClassicInclusionExclusion
+			this._currentLearnMode !== LearnModeIntent.LegacyInclusionExclusion
 			// FIXME: ^ only for actual exclusion
 			&& this._currentLearnMode
-				!== LearnModeIntent.ClassicNetworkWideExclusion
+				!== LearnModeIntent.LegacyNetworkWideExclusion
 			&& this._currentLearnMode !== LearnModeIntent.DirectExclusion
 			&& this._currentLearnMode !== LearnModeIntent.NetworkWideExclusion
 		) {
@@ -8602,7 +8607,12 @@ ${associatedNodes.join(", ")}`,
 				Message & SuccessIndicator
 			>(
 				new SetLearnModeRequest(this.driver, {
-					intent: LearnModeIntent.Stop,
+					// TODO: We should be using .Stop here for the non-legacy
+					// inclusion/exclusion, but that command results in a
+					// negative response on current firmwares, even though it works.
+					// Using LegacyStop avoids that, but results in an unexpected
+					// LearnModeFailed callback.
+					intent: LearnModeIntent.LegacyStop,
 				}),
 			);
 
@@ -8631,11 +8641,21 @@ ${associatedNodes.join(", ")}`,
 		if (this._currentLearnMode == undefined) return false;
 
 		const wasJoining = this._currentLearnMode === LearnModeIntent.Inclusion
-			|| this._currentLearnMode === LearnModeIntent.SmartStart;
+			|| this._currentLearnMode === LearnModeIntent.SmartStart
+			|| this._currentLearnMode
+				=== LearnModeIntent.LegacyNetworkWideInclusion
+			|| (this._currentLearnMode
+					=== LearnModeIntent.LegacyInclusionExclusion
+				&& this._isPrimary);
 		const wasLeaving =
 			this._currentLearnMode === LearnModeIntent.DirectExclusion
 			|| this._currentLearnMode
-				=== LearnModeIntent.NetworkWideExclusion;
+				=== LearnModeIntent.NetworkWideExclusion
+			|| this._currentLearnMode
+				=== LearnModeIntent.LegacyNetworkWideExclusion
+			|| (this._currentLearnMode
+					=== LearnModeIntent.LegacyInclusionExclusion
+				&& !this._isPrimary);
 
 		if (msg.status === LearnModeStatus.Started) {
 			// cool, cool, cool...
@@ -8657,7 +8677,6 @@ ${associatedNodes.join(", ")}`,
 		) {
 			if (wasJoining) {
 				// FIXME: Update own node ID and other controller flags.
-				this._homeId;
 				this._currentLearnMode = undefined;
 				this.emit("joined network");
 				return true;
