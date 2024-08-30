@@ -8731,6 +8731,12 @@ ${associatedNodes.join(", ")}`,
 					await this.getControllerCapabilities().catch(noop);
 					await this.getSerialApiInitData().catch(noop);
 
+					// Read protocol information of all nodes
+					for (const node of this.nodes.values()) {
+						if (node.isControllerNode) continue;
+						await node["queryProtocolInfo"]();
+					}
+
 					this.emit("joined network");
 				});
 

@@ -1704,6 +1704,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				// The controller node is always alive
 				controllerNode.markAsAlive();
 
+				// Query the protocol information from the controller
+				for (const node of this._controller.nodes.values()) {
+					if (node.isControllerNode) continue;
+					await node["queryProtocolInfo"]();
+				}
+
 				// Then ping (frequently) listening nodes to determine their status
 				const nodeInterviewOrder = [...this._controller.nodes.values()]
 					.filter((n) => n.id !== this._controller!.ownNodeId)
