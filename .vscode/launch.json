@@ -49,6 +49,29 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Debug primary and secondary",
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": [
+				"node",
+				"--async-stack-traces",
+				"-r",
+				"./maintenance/esbuild-register.js",
+				"--conditions=@@dev",
+				"${workspaceFolder}/test/run_duplex.ts"
+			],
+			"env": {
+				"NODE_ENV": "development"
+				// "NO_CACHE": "true"
+				// "LOGLEVEL": "info"
+			},
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true
+			// "preLaunchTask": "npm: build"
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Generate typed docs",
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
