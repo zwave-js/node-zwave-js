@@ -62,6 +62,7 @@ import {
 	type Route,
 	RouteKind,
 	SecurityClass,
+	SecurityManager,
 	SecurityManager2,
 	type SerialApiInitData,
 	type SinglecastCC,
@@ -8739,6 +8740,7 @@ ${associatedNodes.join(", ")}`,
 				this.driver["_securityManager"] = undefined;
 				this.driver["_securityManager2"] = new SecurityManager2();
 				this.driver["_securityManagerLR"] = new SecurityManager2();
+				this._nodes.clear();
 
 				process.nextTick(() => this.afterJoiningNetwork().catch(noop));
 				return true;
@@ -8763,18 +8765,18 @@ ${associatedNodes.join(", ")}`,
 	): Promise<
 		SecurityBootstrapFailure | undefined
 	> {
-		const unGrantSecurityClasses = () => {
-			for (const secClass of securityClassOrder) {
-				bootstrappingNode.securityClasses.set(secClass, false);
-			}
-		};
-
 		const api = bootstrappingNode.commandClasses["Security 2"]
 			.withOptions({
 				// Do not wait for Nonce Reports after SET-type commands.
 				// Timing is critical here
 				s2VerifyDelivery: false,
 			});
+
+		const unGrantSecurityClasses = () => {
+			for (const secClass of securityClassOrder) {
+				bootstrappingNode.securityClasses.set(secClass, false);
+			}
+		};
 
 		// FIXME: Abstract this out so it can be reused as primary and secondary
 		const securityManager = isLongRangeNodeId(this._ownNodeId!)
@@ -8786,6 +8788,8 @@ ${associatedNodes.join(", ")}`,
 			unGrantSecurityClasses();
 			return SecurityBootstrapFailure.NoKeysConfigured;
 		}
+
+		const receivedKeys = new Map<SecurityClass, Buffer>();
 
 		const deleteTempKey = () => {
 			// Whatever happens, no further communication needs the temporary key
@@ -9121,7 +9125,16 @@ ${associatedNodes.join(", ")}`,
 				}
 
 				// Store the network key
+				receivedKeys.set(securityClass, keyReport.networkKey);
 				securityManager.setKey(securityClass, keyReport.networkKey);
+				if (securityClass === SecurityClass.S0_Legacy) {
+					// TODO: This is awkward to have here
+					this.driver["_securityManager"] = new SecurityManager({
+						ownNodeId: this._ownNodeId!,
+						networkKey: keyReport.networkKey,
+						nonceTimeout: this.driver.options.timeouts.nonce,
+					});
+				}
 
 				// Force nonce synchronization, then verify the network key
 				securityManager.deleteNonce(bootstrappingNode.id);
@@ -9185,6 +9198,13 @@ ${associatedNodes.join(", ")}`,
 					kexSet.grantedKeys.includes(securityClass),
 				);
 			}
+			// And store the keys
+			for (const [secClass, key] of receivedKeys) {
+				this.driver.cacheSet(
+					cacheKeys.controller.securityKeys(secClass),
+					key,
+				);
+			}
 
 			this.driver.driverLog.print(
 				`Security S2 bootstrapping successful with these security classes:${
@@ -9236,6 +9256,7 @@ ${associatedNodes.join(", ")}`,
 		// - no later than 10..30 seconds after the inclusion if S0 is supported
 		// - no later than 30 seconds after the inclusion if only S2 is supported
 		// For simplicity, we wait the full 30s.
+		this.driver.driverLog.print("waiting for security bootstrapping...");
 		const bootstrapInitPromise = this.driver.waitForCommand<
 			Security2CCKEXGet | SecurityCCSchemeGet
 		>(
@@ -9248,11 +9269,17 @@ ${associatedNodes.join(", ")}`,
 		const identifySelf = async () => {
 			// Update own node ID and other controller flags.
 			await this.identify().catch(noop);
-			await this.getControllerCapabilities().catch(noop);
-			await this.getSerialApiInitData().catch(noop);
 
 			// Notify applications that we're now part of a new network
+			// The driver will point the databases to the new home ID
 			this.emit("network found", this._homeId!, this._ownNodeId!);
+
+			// Figure out the controller's network role
+			await this.getControllerCapabilities().catch(noop);
+
+			// Create new node instances
+			const { nodeIds } = await this.getSerialApiInitData();
+			await this.initNodes(nodeIds, [], () => Promise.resolve());
 		};
 
 		// Do the self-identification while waiting for the bootstrap init command
@@ -9278,55 +9305,52 @@ ${associatedNodes.join(", ")}`,
 				});
 			} else {
 				// We definitely know that the node supports S2
-				if (
-					!bootstrappingNode.supportsCC(CommandClasses["Security 2"])
-				) {
-					bootstrappingNode.addCC(CommandClasses["Security 2"], {
-						secure: true,
-						isSupported: true,
+				bootstrappingNode.addCC(CommandClasses["Security 2"], {
+					secure: true,
+					isSupported: true,
+				});
+
+				let grant: InclusionGrant | undefined;
+
+				switch (this._joinNetworkOptions?.strategy) {
+					// @ts-expect-error not implemented yet
+					case JoinNetworkStrategy.SmartStart:
+						break;
+					case JoinNetworkStrategy.Security_S2: {
+						grant = this._joinNetworkOptions.requested;
+						break;
+					}
+					default: {
+						// No options given, just request all keys
+						grant = {
+							securityClasses: [...securityClassOrder],
+							clientSideAuth: false,
+						};
+						break;
+					}
+				}
+
+				if (grant) {
+					this.driver.controllerLog.logNode(nodeId, {
+						message:
+							`Received S2 bootstrap initiation, requesting keys: ${
+								grant.securityClasses.map((sc) =>
+									`\n· ${
+										getEnumMemberName(SecurityClass, sc)
+									}\n`
+								).join("")
+							}
+  client-side auth: ${grant.clientSideAuth}`,
+						level: "warn",
 					});
 
-					let grant: InclusionGrant | undefined;
+					const _bootstrapResult = await this
+						.expectSecurityBootstrapS2(
+							bootstrappingNode,
+							grant,
+						);
 
-					switch (this._joinNetworkOptions?.strategy) {
-						// @ts-expect-error not implemented yet
-						case JoinNetworkStrategy.SmartStart:
-							break;
-						case JoinNetworkStrategy.Security_S2: {
-							grant = this._joinNetworkOptions.requested;
-							break;
-						}
-						default: {
-							// No options given, just request all keys
-							grant = {
-								securityClasses: [...securityClassOrder],
-								clientSideAuth: false,
-							};
-							break;
-						}
-					}
-
-					if (grant) {
-						this.driver.controllerLog.logNode(nodeId, {
-							message:
-								`Received S2 bootstrap initiation, requesting keys: ${
-									grant.securityClasses.map((sc) =>
-										`\n· ${
-											getEnumMemberName(SecurityClass, sc)
-										}\n`
-									).join("")
-								}
-  client-side auth: ${grant.clientSideAuth}`,
-							level: "warn",
-						});
-
-						const _bootstrapResult = await this
-							.expectSecurityBootstrapS2(
-								bootstrappingNode,
-								grant,
-							);
-						// TODO: Handle failures
-					}
+					// TODO: Handle failures
 				}
 			}
 		}

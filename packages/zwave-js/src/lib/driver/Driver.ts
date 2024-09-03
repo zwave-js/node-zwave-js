@@ -97,6 +97,7 @@ import {
 	isZWaveError,
 	messageRecordToLines,
 	securityClassIsS2,
+	securityClassOrder,
 	serializeCacheValue,
 	stripUndefined,
 	timespan,
@@ -1535,86 +1536,166 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			}
 		}
 
-		// Set up the S0 security manager. We can only do that after the controller
-		// interview because we need to know the controller node id.
-		const S0Key = this._options.securityKeys?.S0_Legacy;
-		if (S0Key) {
-			this.driverLog.print(
-				"Network key for S0 configured, enabling S0 security manager...",
-			);
-			this._securityManager = new SecurityManager({
-				networkKey: S0Key,
-				ownNodeId: this._controller.ownNodeId!,
-				nonceTimeout: this._options.timeouts.nonce,
-			});
-		} else {
-			this.driverLog.print(
-				"No network key for S0 configured, communication with secure (S0) devices won't work!",
-				"warn",
-			);
-		}
+		if (this.controller.isActuallyPrimary) {
+			// Set up the S0 security manager. We can only do that after the controller
+			// interview because we need to know the controller node id.
+			const S0Key = this._options.securityKeys?.S0_Legacy;
+			if (S0Key) {
+				this.driverLog.print(
+					"Network key for S0 configured, enabling S0 security manager...",
+				);
+				this._securityManager = new SecurityManager({
+					networkKey: S0Key,
+					ownNodeId: this._controller.ownNodeId!,
+					nonceTimeout: this._options.timeouts.nonce,
+				});
+			} else {
+				this.driverLog.print(
+					"No network key for S0 configured, communication with secure (S0) devices won't work!",
+					"warn",
+				);
+			}
 
-		// The S2 security manager could be initialized earlier, but we do it here for consistency
-		if (
-			this._options.securityKeys
-			// Only set it up if we have security keys for at least one S2 security class
-			&& Object.keys(this._options.securityKeys).some(
-				(key) =>
-					key.startsWith("S2_")
-					&& key in SecurityClass
-					&& securityClassIsS2((SecurityClass as any)[key]),
-			)
-		) {
-			this.driverLog.print(
-				"At least one network key for S2 configured, enabling S2 security manager...",
-			);
-			this._securityManager2 = new SecurityManager2();
-			// Set up all keys
-			for (
-				const secClass of [
-					"S2_Unauthenticated",
-					"S2_Authenticated",
-					"S2_AccessControl",
-					"S0_Legacy",
-				] as const
+			// The S2 security manager could be initialized earlier, but we do it here for consistency
+			if (
+				this._options.securityKeys
+				// Only set it up if we have security keys for at least one S2 security class
+				&& Object.keys(this._options.securityKeys).some(
+					(key) =>
+						key.startsWith("S2_")
+						&& key in SecurityClass
+						&& securityClassIsS2((SecurityClass as any)[key]),
+				)
 			) {
-				const key = this._options.securityKeys[secClass];
-				if (key) {
-					this._securityManager2.setKey(SecurityClass[secClass], key);
+				this.driverLog.print(
+					"At least one network key for S2 configured, enabling S2 security manager...",
+				);
+				this._securityManager2 = new SecurityManager2();
+				// Set up all keys
+				for (
+					const secClass of [
+						"S2_Unauthenticated",
+						"S2_Authenticated",
+						"S2_AccessControl",
+						"S0_Legacy",
+					] as const
+				) {
+					const key = this._options.securityKeys[secClass];
+					if (key) {
+						this._securityManager2.setKey(
+							SecurityClass[secClass],
+							key,
+						);
+					}
+				}
+			} else {
+				this.driverLog.print(
+					"No network key for S2 configured, communication with secure (S2) devices won't work!",
+					"warn",
+				);
+			}
+
+			if (
+				this._options.securityKeysLongRange?.S2_AccessControl
+				|| this._options.securityKeysLongRange?.S2_Authenticated
+			) {
+				this.driverLog.print(
+					"At least one network key for Z-Wave Long Range configured, enabling security manager...",
+				);
+				this._securityManagerLR = new SecurityManager2();
+				if (this._options.securityKeysLongRange?.S2_AccessControl) {
+					this._securityManagerLR.setKey(
+						SecurityClass.S2_AccessControl,
+						this._options.securityKeysLongRange.S2_AccessControl,
+					);
+				}
+				if (this._options.securityKeysLongRange?.S2_Authenticated) {
+					this._securityManagerLR.setKey(
+						SecurityClass.S2_Authenticated,
+						this._options.securityKeysLongRange.S2_Authenticated,
+					);
+				}
+			} else {
+				this.driverLog.print(
+					"No network key for Z-Wave Long Range configured, communication won't work!",
+					"warn",
+				);
+			}
+		} else {
+			// Secondary controller - load security keys from cache.
+			// Either LR or S2+S0, not both
+			if (isLongRangeNodeId(this.controller.ownNodeId!)) {
+				const securityKeysLongRange = [
+					SecurityClass.S2_AccessControl,
+					SecurityClass.S2_Authenticated,
+				].map(
+					(sc) => ([
+						sc,
+						this.cacheGet<Buffer>(
+							cacheKeys.controller.securityKeysLongRange(sc),
+						),
+					] as [SecurityClass, Buffer | undefined]),
+				).filter((v): v is [SecurityClass, Buffer] =>
+					v[1] != undefined
+				);
+				if (securityKeysLongRange.length) {
+					this.driverLog.print(
+						"At least one network key for Z-Wave Long Range found in cache, enabling security manager...",
+					);
+					this._securityManagerLR = new SecurityManager2();
+					for (const [sc, key] of securityKeysLongRange) {
+						this._securityManagerLR.setKey(sc, key);
+					}
+				} else {
+					this.driverLog.print(
+						"No network key for Z-Wave Long Range configured, communication won't work!",
+						"warn",
+					);
+				}
+			} else {
+				const s0Key = this.cacheGet<Buffer>(
+					cacheKeys.controller.securityKeys(SecurityClass.S0_Legacy),
+				);
+				if (s0Key) {
+					this.driverLog.print(
+						"Network key for S0 found in cache, enabling S0 security manager...",
+					);
+					this._securityManager = new SecurityManager({
+						networkKey: s0Key,
+						ownNodeId: this._controller.ownNodeId!,
+						nonceTimeout: this._options.timeouts.nonce,
+					});
+				} else {
+					this.driverLog.print(
+						"No network key for S0 found in cache, communication with secure (S0) devices won't work!",
+						"warn",
+					);
+				}
+				const securityKeys = securityClassOrder.map(
+					(sc) => ([
+						sc,
+						this.cacheGet<Buffer>(
+							cacheKeys.controller.securityKeys(sc),
+						),
+					] as [SecurityClass, Buffer | undefined]),
+				).filter((v): v is [SecurityClass, Buffer] =>
+					v[1] != undefined
+				);
+				if (securityKeys.length) {
+					this.driverLog.print(
+						"At least one network key for S2 found in cache, enabling S2 security manager...",
+					);
+					this._securityManager2 = new SecurityManager2();
+					for (const [sc, key] of securityKeys) {
+						this._securityManager2.setKey(sc, key);
+					}
+				} else {
+					this.driverLog.print(
+						"No network key for S2 found in cache, communication with secure (S2) devices won't work!",
+						"warn",
+					);
 				}
 			}
-		} else {
-			this.driverLog.print(
-				"No network key for S2 configured, communication with secure (S2) devices won't work!",
-				"warn",
-			);
-		}
-
-		if (
-			this._options.securityKeysLongRange?.S2_AccessControl
-			|| this._options.securityKeysLongRange?.S2_Authenticated
-		) {
-			this.driverLog.print(
-				"At least one network key for Z-Wave Long Range configured, enabling security manager...",
-			);
-			this._securityManagerLR = new SecurityManager2();
-			if (this._options.securityKeysLongRange?.S2_AccessControl) {
-				this._securityManagerLR.setKey(
-					SecurityClass.S2_AccessControl,
-					this._options.securityKeysLongRange.S2_AccessControl,
-				);
-			}
-			if (this._options.securityKeysLongRange?.S2_Authenticated) {
-				this._securityManagerLR.setKey(
-					SecurityClass.S2_Authenticated,
-					this._options.securityKeysLongRange.S2_Authenticated,
-				);
-			}
-		} else {
-			this.driverLog.print(
-				"No network key for Z-Wave Long Range configured, communication won't work!",
-				"warn",
-			);
 		}
 
 		// in any case we need to emit the driver ready event here
