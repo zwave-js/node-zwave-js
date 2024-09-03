@@ -2,7 +2,7 @@ import { num2hex } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
-import { type S2SecurityClass } from "../security/SecurityClass";
+import { type SecurityClass } from "../security/SecurityClass";
 import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
@@ -271,7 +271,7 @@ export type SupervisionOptions =
 
 export type SendCommandSecurityS2Options = {
 	/** Send the command using a different (lower) security class */
-	s2OverrideSecurityClass?: S2SecurityClass;
+	s2OverrideSecurityClass?: SecurityClass;
 	/** Whether delivery of non-supervised SET-type commands is verified by waiting for potential Nonce Reports. Default: true */
 	s2VerifyDelivery?: boolean;
 	/** Whether the MOS extension should be included in S2 message encapsulation. */

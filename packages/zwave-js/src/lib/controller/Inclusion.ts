@@ -291,3 +291,16 @@ export enum RemoveNodeReason {
 	/** SmartStart inclusion failed, and the node was auto-removed as a result. */
 	SmartStartFailed,
 }
+
+export enum JoinNetworkStrategy {
+	SmartStart,
+	Security_S2,
+	Security_S0,
+	Insecure,
+}
+
+export type JoinNetworkOptions = {
+	strategy: JoinNetworkStrategy.Security_S2;
+	requested: InclusionGrant;
+};
+// FIXME: Implement other strategies

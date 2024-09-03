@@ -17,12 +17,16 @@ import {
 	MultiChannelAssociationCC,
 	Powerlevel,
 	Security2CCKEXFail,
+	Security2CCKEXGet,
+	Security2CCKEXReport,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
+	Security2CCNetworkKeyReport,
 	Security2CCNetworkKeyVerify,
 	Security2CCPublicKeyReport,
 	Security2CCTransferEnd,
 	Security2Command,
+	SecurityCCSchemeGet,
 	VersionCCValues,
 	VersionCommand,
 	ZWaveProtocolCCAssignReturnRoute,
@@ -58,6 +62,7 @@ import {
 	type Route,
 	RouteKind,
 	SecurityClass,
+	SecurityManager2,
 	type SerialApiInitData,
 	type SinglecastCC,
 	TransmitStatus,
@@ -70,12 +75,14 @@ import {
 	authHomeIdFromDSK,
 	averageRSSI,
 	computePRK,
-	decodeX25519KeyDER,
 	deriveTempKeys,
 	dskFromString,
 	dskToString,
-	encodeX25519KeyDERSPKI,
+	extractRawECDHPublicKey,
+	generateECDHKeyPair,
 	getChipTypeAndVersion,
+	getHighestSecurityClass,
+	importRawECDHPublicKey,
 	indexDBsByNode,
 	isEmptyRoute,
 	isLongRangeNodeId,
@@ -119,7 +126,6 @@ import {
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "node:crypto";
-import util from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
@@ -378,12 +384,15 @@ import {
 	type ExclusionOptions,
 	ExclusionStrategy,
 	type FoundNode,
+	type InclusionGrant,
 	type InclusionOptions,
 	type InclusionOptionsInternal,
 	type InclusionResult,
 	InclusionState,
 	InclusionStrategy,
 	type InclusionUserCallbacks,
+	type JoinNetworkOptions,
+	JoinNetworkStrategy,
 	type PlannedProvisioningEntry,
 	ProvisioningEntryStatus,
 	RemoveNodeReason,
@@ -426,9 +435,10 @@ interface ControllerEventCallbacks
 	"node found": (node: FoundNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, reason: RemoveNodeReason) => void;
-	"joined network": () => void;
+	"network found": (homeId: number, ownNodeId: number) => void;
 	"joining network failed": () => void;
-	"left network": () => void;
+	"network joined": () => void;
+	"network left": () => void;
 	"leaving network failed": () => void;
 	"rebuild routes progress": (
 		progress: ReadonlyMap<number, RebuildRoutesStatus>,
@@ -3482,15 +3492,8 @@ export class ZWaveController
 
 			// Generate ECDH key pair. We need to immediately send the other node our public key,
 			// so it won't abort bootstrapping
-			const keyPair = await util.promisify(crypto.generateKeyPair)(
-				"x25519",
-			);
-			const publicKey = decodeX25519KeyDER(
-				keyPair.publicKey.export({
-					type: "spki",
-					format: "der",
-				}),
-			);
+			const keyPair = await generateECDHKeyPair();
+			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
 			await api.sendPublicKey(publicKey);
 			// After this, the node will start sending us a KEX SET every 10 seconds.
 			// We won't be able to decode it until the DSK was verified
@@ -3545,11 +3548,7 @@ export class ZWaveController
 			// After the user has verified the DSK, we can derive the shared secret
 			// Z-Wave works with the "raw" keys, so this is a tad complicated
 			const sharedSecret = crypto.diffieHellman({
-				publicKey: crypto.createPublicKey({
-					key: encodeX25519KeyDERSPKI(nodePublicKey),
-					format: "der",
-					type: "spki",
-				}),
+				publicKey: importRawECDHPublicKey(nodePublicKey),
 				privateKey: keyPair.privateKey,
 			});
 
@@ -3648,7 +3647,7 @@ export class ZWaveController
 				return SecurityBootstrapFailure.S2WrongSecurityLevel;
 			}
 			// Confirm the keys - the node will start requesting the granted keys in response
-			await api.confirmGrantedKeys({
+			await api.confirmRequestedKeys({
 				requestCSA: kexParams.requestCSA,
 				requestedKeys: [...kexParams.requestedKeys],
 				supportedECDHProfiles: [...kexParams.supportedECDHProfiles],
@@ -3719,6 +3718,11 @@ export class ZWaveController
 					return SecurityBootstrapFailure.S2WrongSecurityLevel;
 				}
 
+				// We need to temporarily mark this security class as granted, so the following exchange will use this
+				// key for decryption
+				// FIXME: Is this actually necessary?
+				node.securityClasses.set(securityClass, true);
+
 				// Send the node the requested key
 				await api.sendNetworkKey(
 					securityClass,
@@ -3726,9 +3730,6 @@ export class ZWaveController
 						securityClass,
 					).pnk,
 				);
-				// We need to temporarily mark this security class as granted, so the following exchange will use this
-				// key for decryption
-				node.securityClasses.set(securityClass, true);
 
 				// And wait for verification
 				const verify = await this.driver.waitForCommand<
@@ -3740,6 +3741,7 @@ export class ZWaveController
 					inclusionTimeouts.TA4,
 				).catch(() => "timeout" as const);
 				if (verify === "timeout") return abortTimeout();
+
 				if (verify instanceof Security2CCKEXFail) {
 					this.driver.controllerLog.logNode(node.id, {
 						message:
@@ -8545,11 +8547,14 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	private _currentLearnMode: LearnModeIntent | undefined;
+	private _joinNetworkOptions: JoinNetworkOptions | undefined;
 
 	public async beginJoiningNetwork(
-		// FIXME: SmartStart
+		options?: JoinNetworkOptions,
 	): Promise<boolean> {
 		if (this._currentLearnMode != undefined) return false;
+
+		// FIXME: If the join strategy says S0, remove S2 from the NIF before joining
 
 		try {
 			const result = await this.driver.sendMessage<
@@ -8562,6 +8567,7 @@ ${associatedNodes.join(", ")}`,
 
 			if (result.isOK()) {
 				this._currentLearnMode = LearnModeIntent.Inclusion;
+				this._joinNetworkOptions = options;
 				return true;
 			}
 		} catch (e) {
@@ -8600,6 +8606,7 @@ ${associatedNodes.join(", ")}`,
 
 			if (result.isOK()) {
 				this._currentLearnMode = undefined;
+				this._joinNetworkOptions = undefined;
 				return true;
 			}
 		} catch (e) {
@@ -8689,6 +8696,8 @@ ${associatedNodes.join(", ")}`,
 		// not sure what to do with this message, we're not in learn mode
 		if (this._currentLearnMode == undefined) return false;
 
+		// FIXME: Reset security manager on successful join or leave
+
 		const wasJoining = this._currentLearnMode === LearnModeIntent.Inclusion
 			|| this._currentLearnMode === LearnModeIntent.SmartStart
 			|| this._currentLearnMode
@@ -8712,6 +8721,7 @@ ${associatedNodes.join(", ")}`,
 		} else if (msg.status === LearnModeStatus.Failed) {
 			if (wasJoining) {
 				this._currentLearnMode = undefined;
+				this._joinNetworkOptions = undefined;
 				this.emit("joining network failed");
 				return true;
 			} else if (wasLeaving) {
@@ -8725,31 +8735,611 @@ ${associatedNodes.join(", ")}`,
 				&& msg.status === LearnModeStatus.ProtocolDone)
 		) {
 			if (wasJoining) {
-				process.nextTick(async () => {
-					// Update own node ID and other controller flags.
-					await this.identify().catch(noop);
-					await this.getControllerCapabilities().catch(noop);
-					await this.getSerialApiInitData().catch(noop);
-
-					// Read protocol information of all nodes
-					for (const node of this.nodes.values()) {
-						if (node.isControllerNode) continue;
-						await node["queryProtocolInfo"]();
-					}
-
-					this.emit("joined network");
-				});
-
 				this._currentLearnMode = undefined;
+				this.driver["_securityManager"] = undefined;
+				this.driver["_securityManager2"] = new SecurityManager2();
+				this.driver["_securityManagerLR"] = new SecurityManager2();
+
+				process.nextTick(() => this.afterJoiningNetwork().catch(noop));
 				return true;
 			} else if (wasLeaving) {
 				this._currentLearnMode = undefined;
-				this.emit("left network");
+				this.emit("network left");
 				return true;
 			}
 		}
 
 		// not sure what to do with this message
 		return false;
+	}
+
+	private async expectSecurityBootstrapS0(): Promise<void> {
+		// FIXME: Implement
+	}
+
+	private async expectSecurityBootstrapS2(
+		bootstrappingNode: ZWaveNode,
+		requested: InclusionGrant,
+	): Promise<
+		SecurityBootstrapFailure | undefined
+	> {
+		const unGrantSecurityClasses = () => {
+			for (const secClass of securityClassOrder) {
+				bootstrappingNode.securityClasses.set(secClass, false);
+			}
+		};
+
+		const api = bootstrappingNode.commandClasses["Security 2"]
+			.withOptions({
+				// Do not wait for Nonce Reports after SET-type commands.
+				// Timing is critical here
+				s2VerifyDelivery: false,
+			});
+
+		// FIXME: Abstract this out so it can be reused as primary and secondary
+		const securityManager = isLongRangeNodeId(this._ownNodeId!)
+			? this.driver.securityManagerLR
+			: this.driver.securityManager2;
+
+		if (!securityManager) {
+			// This should not happen when joining a network.
+			unGrantSecurityClasses();
+			return SecurityBootstrapFailure.NoKeysConfigured;
+		}
+
+		const deleteTempKey = () => {
+			// Whatever happens, no further communication needs the temporary key
+			securityManager.deleteNonce(bootstrappingNode.id);
+			securityManager.tempKeys.delete(bootstrappingNode.id);
+		};
+
+		const abort = async (failType?: KEXFailType): Promise<void> => {
+			if (failType != undefined) {
+				try {
+					await api.abortKeyExchange(failType);
+				} catch {
+					// ignore
+				}
+			}
+			// Un-grant S2 security classes we might have granted
+			unGrantSecurityClasses();
+			deleteTempKey();
+		};
+
+		const abortTimeout = async () => {
+			this.driver.controllerLog.logNode(bootstrappingNode.id, {
+				message:
+					`Security S2 bootstrapping failed: a secure inclusion timer has elapsed`,
+				level: "warn",
+			});
+
+			await abort();
+			return SecurityBootstrapFailure.Timeout;
+		};
+
+		const abortCanceled = async () => {
+			this.driver.controllerLog.logNode(bootstrappingNode.id, {
+				message:
+					`The including node canceled the Security S2 bootstrapping.`,
+				direction: "inbound",
+				level: "warn",
+			});
+			await abort();
+			return SecurityBootstrapFailure.NodeCanceled;
+		};
+
+		try {
+			// Send with our desired keys
+			await api.requestKeys({
+				requestedKeys: requested.securityClasses,
+				requestCSA: false,
+				supportedECDHProfiles: [ECDHProfiles.Curve25519],
+				supportedKEXSchemes: [KEXSchemes.KEXScheme1],
+			});
+
+			// Wait for including node to grant keys
+			const kexSet = await this.driver.waitForCommand<
+				Security2CCKEXSet | Security2CCKEXFail
+			>(
+				(cc) =>
+					cc instanceof Security2CCKEXSet
+					|| cc instanceof Security2CCKEXFail,
+				inclusionTimeouts.TB2,
+			).catch(() => "timeout" as const);
+
+			if (kexSet === "timeout") return abortTimeout();
+			if (kexSet instanceof Security2CCKEXFail) {
+				return abortCanceled();
+			}
+
+			// Validate the command
+			// Echo flag must be false
+			if (kexSet.echo) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: KEX Set unexpectedly has the echo flag set.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoVerify);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (
+				kexSet.selectedKEXScheme !== KEXSchemes.KEXScheme1
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Unsupported key exchange scheme.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoSupportedScheme);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (
+				kexSet.selectedECDHProfile !== ECDHProfiles.Curve25519
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Unsupported ECDH profile.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoSupportedCurve);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (kexSet.permitCSA !== false) {
+				// We do not support CSA at the moment, so it is never requested.
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: CSA granted but not requested.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			}
+
+			const matchingKeys = kexSet.grantedKeys.filter((k) =>
+				securityClassOrder.includes(k as any)
+				&& requested.securityClasses.includes(k)
+			);
+			if (!matchingKeys.length) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: None of the requested security classes are granted.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoKeyMatch);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			}
+
+			// FIXME: We should have 2 key pairs, one for authenticated (static)
+			// and one for unauthenticated (dynamic)
+
+			const highestGranted = getHighestSecurityClass(matchingKeys);
+			const requiresAuthentication =
+				highestGranted === SecurityClass.S2_AccessControl
+				|| highestGranted === SecurityClass.S2_Authenticated;
+
+			// If authentication is required, we MUST (FIXME:) use the Authenticated
+			// ECDH public key and obfuscate its first 2 bytes with 0
+			const keyPair = await generateECDHKeyPair();
+			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
+			if (requiresAuthentication) {
+				publicKey.writeUInt16BE(0x0000, 0);
+			}
+			await api.sendPublicKey(publicKey, false);
+
+			// Wait for including node to send its public key
+			const pubKeyReport = await this.driver.waitForCommand<
+				Security2CCPublicKeyReport | Security2CCKEXFail
+			>(
+				(cc) =>
+					cc instanceof Security2CCPublicKeyReport
+					|| cc instanceof Security2CCKEXFail,
+				inclusionTimeouts.TB3,
+			).catch(() => "timeout" as const);
+
+			if (pubKeyReport === "timeout") return abortTimeout();
+			if (pubKeyReport instanceof Security2CCKEXFail) {
+				return abortCanceled();
+			}
+
+			const includingNodePubKey = pubKeyReport.publicKey;
+			const sharedSecret = crypto.diffieHellman({
+				publicKey: importRawECDHPublicKey(includingNodePubKey),
+				privateKey: keyPair.privateKey,
+			});
+
+			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
+			const tempKeys = deriveTempKeys(
+				computePRK(sharedSecret, includingNodePubKey, publicKey),
+			);
+			securityManager.deleteNonce(bootstrappingNode.id);
+			securityManager.tempKeys.set(bootstrappingNode.id, {
+				keyCCM: tempKeys.tempKeyCCM,
+				personalizationString: tempKeys.tempPersonalizationString,
+			});
+
+			// Wait for the confirmation of the requested keys and
+			// retransmit the KEXSet echo every 10 seconds until a response is
+			// received or the process timed out.
+			let kexReportEcho:
+				| Security2CCKEXReport
+				| Security2CCKEXFail
+				| "timeout"
+				| undefined;
+			const waitForKEXReportEcho = async () => {
+				kexReportEcho = await this.driver.waitForCommand<
+					Security2CCKEXReport | Security2CCKEXFail
+				>(
+					(cc) =>
+						cc instanceof Security2CCKEXReport
+						|| cc instanceof Security2CCKEXFail,
+					240000,
+				).catch(() => "timeout" as const);
+			};
+			const retransmitKEXSetEcho = async () => {
+				for (let i = 0; i <= 25; i++) {
+					await api.confirmGrantedKeys({
+						grantedKeys: kexSet.grantedKeys,
+						permitCSA: kexSet.permitCSA,
+						selectedECDHProfile: kexSet.selectedECDHProfile,
+						selectedKEXScheme: kexSet.selectedKEXScheme,
+						_reserved: kexSet._reserved,
+					}).catch(noop);
+					if (kexReportEcho != undefined) return;
+					await wait(10000, true);
+					if (kexReportEcho != undefined) return;
+				}
+			};
+			await Promise.race([
+				retransmitKEXSetEcho(),
+				waitForKEXReportEcho(),
+			]);
+
+			if (!kexReportEcho || kexReportEcho === "timeout") {
+				return abortTimeout();
+			} else if (kexReportEcho instanceof Security2CCKEXFail) {
+				return abortCanceled();
+			}
+
+			// Validate the response
+			if (!kexReportEcho.echo) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: KEXReport received without echo flag`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (kexReportEcho.requestCSA !== false) {
+				// We don't request CSA
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Invalid KEXReport received`,
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (kexReportEcho._reserved !== 0) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Invalid KEXReport received`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (
+				!kexReportEcho.isEncapsulatedWith(
+					CommandClasses["Security 2"],
+					Security2Command.MessageEncapsulation,
+				)
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Command received without encryption`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.S2WrongSecurityLevel;
+			} else if (
+				kexReportEcho.requestedKeys.length
+					!== requested.securityClasses.length
+				|| !kexReportEcho.requestedKeys.every((k) =>
+					requested.securityClasses.includes(k)
+				)
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Granted key mismatch.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.S2WrongSecurityLevel;
+			}
+
+			for (const key of kexSet.grantedKeys) {
+				// Request network key and wait for including node to respond
+				const keyReportPromise = this.driver.waitForCommand<
+					Security2CCNetworkKeyReport | Security2CCKEXFail
+				>(
+					(cc) =>
+						cc instanceof Security2CCNetworkKeyReport
+						|| cc instanceof Security2CCKEXFail,
+					inclusionTimeouts.TB4,
+				).catch(() => "timeout" as const);
+
+				await api.requestNetworkKey(key);
+				const keyReport = await keyReportPromise;
+
+				if (keyReport === "timeout") return abortTimeout();
+				if (keyReport instanceof Security2CCKEXFail) {
+					return abortCanceled();
+				}
+
+				if (
+					!keyReport.isEncapsulatedWith(
+						CommandClasses["Security 2"],
+						Security2Command.MessageEncapsulation,
+					)
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Command received without encryption`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
+				}
+
+				// Ensure it was received encrypted with the temporary key
+				if (
+					!securityManager.hasUsedSecurityClass(
+						bootstrappingNode.id,
+						SecurityClass.Temporary,
+					)
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Node used wrong key to communicate.`,
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
+				}
+
+				const securityClass = keyReport.grantedKey;
+				if (securityClass !== key) {
+					// and that the granted key is the requested key
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Received key for wrong security class`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.DifferentKey);
+					return SecurityBootstrapFailure.ParameterMismatch;
+				}
+
+				// Store the network key
+				securityManager.setKey(securityClass, keyReport.networkKey);
+
+				// Force nonce synchronization, then verify the network key
+				securityManager.deleteNonce(bootstrappingNode.id);
+				await api.withOptions({
+					s2OverrideSecurityClass: securityClass,
+				}).verifyNetworkKey();
+
+				// Force nonce synchronization again for the temporary key
+				securityManager.deleteNonce(bootstrappingNode.id);
+
+				// Wait for including node to send its public key
+				const transferEnd = await this.driver.waitForCommand<
+					Security2CCTransferEnd | Security2CCKEXFail
+				>(
+					(cc) =>
+						cc instanceof Security2CCTransferEnd
+						|| cc instanceof Security2CCKEXFail,
+					inclusionTimeouts.TB5,
+				).catch(() => "timeout" as const);
+
+				if (transferEnd === "timeout") return abortTimeout();
+				if (transferEnd instanceof Security2CCKEXFail) {
+					return abortCanceled();
+				}
+
+				if (
+					!keyReport.isEncapsulatedWith(
+						CommandClasses["Security 2"],
+						Security2Command.MessageEncapsulation,
+					)
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Command received without encryption`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
+				} else if (
+					!transferEnd.keyVerified || transferEnd.keyRequestComplete
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Invalid TransferEnd received`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.NodeCanceled;
+				}
+			}
+
+			// Confirm end of bootstrapping
+			await api.endKeyExchange();
+
+			// Remember all security classes we were granted
+			for (const securityClass of securityClassOrder) {
+				bootstrappingNode.securityClasses.set(
+					securityClass,
+					kexSet.grantedKeys.includes(securityClass),
+				);
+			}
+
+			this.driver.driverLog.print(
+				`Security S2 bootstrapping successful with these security classes:${
+					[
+						...bootstrappingNode.securityClasses.entries(),
+					]
+						.filter(([, v]) => v)
+						.map(([k]) =>
+							`\n· ${getEnumMemberName(SecurityClass, k)}`
+						)
+						.join("")
+				}`,
+			);
+
+			// success 🎉
+		} catch (e) {
+			let errorMessage =
+				`Security S2 bootstrapping failed, no S2 security classes were granted`;
+			let result = SecurityBootstrapFailure.Unknown;
+			if (!isZWaveError(e)) {
+				errorMessage += `: ${e as any}`;
+			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
+				errorMessage += ": a secure inclusion timer has elapsed.";
+				result = SecurityBootstrapFailure.Timeout;
+			} else if (
+				e.code !== ZWaveErrorCodes.Controller_MessageDropped
+				&& e.code !== ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				errorMessage += `: ${e.message}`;
+			}
+			this.driver.controllerLog.logNode(
+				bootstrappingNode.id,
+				errorMessage,
+				"warn",
+			);
+			// Remember that we were NOT granted any S2 security classes
+			unGrantSecurityClasses();
+			bootstrappingNode.removeCC(CommandClasses["Security 2"]);
+
+			return result;
+		} finally {
+			// Whatever happens, no further communication needs the temporary key
+			deleteTempKey();
+		}
+	}
+
+	private async afterJoiningNetwork(): Promise<void> {
+		// KEX Get must be received:
+		// - no later than 10..30 seconds after the inclusion if S0 is supported
+		// - no later than 30 seconds after the inclusion if only S2 is supported
+		// For simplicity, we wait the full 30s.
+		const bootstrapInitPromise = this.driver.waitForCommand<
+			Security2CCKEXGet | SecurityCCSchemeGet
+		>(
+			(cc) =>
+				cc instanceof SecurityCCSchemeGet
+				|| cc instanceof Security2CCKEXGet,
+			inclusionTimeouts.TB1,
+		).catch(() => "timeout" as const);
+
+		const identifySelf = async () => {
+			// Update own node ID and other controller flags.
+			await this.identify().catch(noop);
+			await this.getControllerCapabilities().catch(noop);
+			await this.getSerialApiInitData().catch(noop);
+
+			// Notify applications that we're now part of a new network
+			this.emit("network found", this._homeId!, this._ownNodeId!);
+		};
+
+		// Do the self-identification while waiting for the bootstrap init command
+		const [bootstrapInit] = await Promise.all([
+			bootstrapInitPromise,
+			identifySelf(),
+		]);
+
+		if (bootstrapInit === "timeout") {
+			this.driver.controllerLog.print(
+				"No security bootstrapping command received, continuing without encryption...",
+			);
+		} else if (bootstrapInit instanceof SecurityCCSchemeGet) {
+			await this.expectSecurityBootstrapS0();
+		} else if (bootstrapInit instanceof Security2CCKEXGet) {
+			const nodeId = bootstrapInit.nodeId as number;
+			const bootstrappingNode = this.nodes.get(nodeId);
+			if (!bootstrappingNode) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message:
+						"Received S2 bootstrap initiation from unknown node, ignoring...",
+					level: "warn",
+				});
+			} else {
+				// We definitely know that the node supports S2
+				if (
+					!bootstrappingNode.supportsCC(CommandClasses["Security 2"])
+				) {
+					bootstrappingNode.addCC(CommandClasses["Security 2"], {
+						secure: true,
+						isSupported: true,
+					});
+
+					let grant: InclusionGrant | undefined;
+
+					switch (this._joinNetworkOptions?.strategy) {
+						// @ts-expect-error not implemented yet
+						case JoinNetworkStrategy.SmartStart:
+							break;
+						case JoinNetworkStrategy.Security_S2: {
+							grant = this._joinNetworkOptions.requested;
+							break;
+						}
+						default: {
+							// No options given, just request all keys
+							grant = {
+								securityClasses: [...securityClassOrder],
+								clientSideAuth: false,
+							};
+							break;
+						}
+					}
+
+					if (grant) {
+						this.driver.controllerLog.logNode(nodeId, {
+							message:
+								`Received S2 bootstrap initiation, requesting keys: ${
+									grant.securityClasses.map((sc) =>
+										`\n· ${
+											getEnumMemberName(SecurityClass, sc)
+										}\n`
+									).join("")
+								}
+  client-side auth: ${grant.clientSideAuth}`,
+							level: "warn",
+						});
+
+						const _bootstrapResult = await this
+							.expectSecurityBootstrapS2(
+								bootstrappingNode,
+								grant,
+							);
+						// TODO: Handle failures
+					}
+				}
+			}
+		}
+
+		this._joinNetworkOptions = undefined;
+
+		// Read protocol information of all nodes
+		for (const node of this.nodes.values()) {
+			if (node.isControllerNode) continue;
+			await node["queryProtocolInfo"]();
+		}
+
+		// Notify applications that joining the network is complete
+		this.emit("network joined");
 	}
 }

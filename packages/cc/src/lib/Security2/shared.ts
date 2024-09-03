@@ -31,5 +31,11 @@ export const inclusionTimeouts = Object.freeze(
 		TA5: 10000,
 		TAI1: 240000,
 		TAI2: 240000,
+		TB1: 30000,
+		TB2: 240000,
+		TB3: 10000,
+		TB4: 10000,
+		TB5: 10000,
+		TBI1: 240000,
 	} as const,
 );

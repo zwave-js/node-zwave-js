@@ -137,7 +137,7 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 
 		this.callbackId = this.payload[0];
 		this.status = this.payload[1];
-		this.nodeId = this.payload[2];
+		this.assignedNodeId = this.payload[2];
 		if (this.payload.length > 3) {
 			const msgLength = this.payload[3];
 			this.statusMessage = this.payload.subarray(4, 4 + msgLength);
@@ -145,7 +145,7 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 	}
 
 	public readonly status: LearnModeStatus;
-	public readonly nodeId: number;
+	public readonly assignedNodeId: number;
 	public readonly statusMessage?: Buffer;
 
 	isOK(): boolean {
@@ -159,9 +159,9 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 		};
 		if (
 			this.status !== LearnModeStatus.Started
-			|| this.nodeId !== LEARN_MODE_EMPTY_NODE_ID
+			|| this.assignedNodeId !== LEARN_MODE_EMPTY_NODE_ID
 		) {
-			message["node id"] = this.nodeId;
+			message["assigned node id"] = this.assignedNodeId;
 		}
 		if (this.statusMessage?.length) {
 			message["status message"] = buffer2hex(this.statusMessage);

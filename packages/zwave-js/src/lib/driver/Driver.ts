@@ -1460,8 +1460,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					"status changed",
 					this.onControllerStatusChanged.bind(this),
 				)
-				.on("joined network", this.onNetworkJoined.bind(this))
-				.on("left network", this.onNetworkLeft.bind(this));
+				.on("network found", this.onNetworkFound.bind(this))
+				.on("network joined", this.onNetworkJoined.bind(this))
+				.on("network left", this.onNetworkLeft.bind(this));
 		}
 
 		if (!this._options.testingHooks?.skipControllerIdentification) {
@@ -2284,11 +2285,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		this.triggerQueues();
 	}
 
-	private async onNetworkJoined(): Promise<void> {
+	private async onNetworkFound(
+		homeId: number,
+		_ownNodeId: number,
+	): Promise<void> {
 		try {
 			this.driverLog.print(
 				`Joined network with home ID ${
-					num2hex(this.controller.homeId)
+					num2hex(homeId)
 				}, switching to new network cache...`,
 			);
 			await this.recreateNetworkCacheAndValueDBs();
@@ -2300,6 +2304,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				"error",
 			);
 		}
+	}
+
+	private onNetworkJoined(): void {
+		this.driverLog.print(`Finished joining network`);
 	}
 
 	private async onNetworkLeft(): Promise<void> {
