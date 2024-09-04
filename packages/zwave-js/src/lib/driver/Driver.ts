@@ -51,6 +51,7 @@ import {
 import {
 	CommandClasses,
 	ControllerLogger,
+	ControllerRole,
 	ControllerStatus,
 	Duration,
 	EncapsulationFlags,
@@ -1509,9 +1510,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			await this.controller.identify();
 
 			// Perform additional configuration
-			await this.controller.configure(
-				nodeIds.length <= 1 && !lrNodeIds?.length,
-			);
+			await this.controller.configure();
 
 			// now that we know the home ID, we can open the databases
 			await this.initNetworkCache(this.controller.homeId!);
@@ -1530,13 +1529,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				},
 			);
 
-			if (this.controller.isActuallyPrimary) {
+			if (this.controller.role === ControllerRole.Primary) {
 				// Auto-enable smart start inclusion
 				this.controller.autoProvisionSmartStart();
 			}
 		}
 
-		if (this.controller.isActuallyPrimary) {
+		if (this.controller.role === ControllerRole.Primary) {
 			// Set up the S0 security manager. We can only do that after the controller
 			// interview because we need to know the controller node id.
 			const S0Key = this._options.securityKeys?.S0_Legacy;
@@ -1708,7 +1707,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			this.addNodeEventHandlers(node);
 		}
 
-		if (this.controller.isActuallyPrimary) {
+		if (this.controller.role === ControllerRole.Primary) {
 			// Before interviewing nodes reset our knowledge about their ready state
 			this._nodesReady.clear();
 			this._nodesReadyEventEmitted = false;

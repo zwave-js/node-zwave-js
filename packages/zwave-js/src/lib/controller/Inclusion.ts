@@ -299,6 +299,20 @@ export enum JoinNetworkStrategy {
 	Insecure,
 }
 
+export enum JoinNetworkResult {
+	OK,
+	Error_Busy,
+	Error_NotPermitted,
+	Error_Failed,
+}
+
+export enum LeaveNetworkResult {
+	OK,
+	Error_Busy,
+	Error_NotPermitted,
+	Error_Failed,
+}
+
 export type JoinNetworkOptions = {
 	strategy: JoinNetworkStrategy.Security_S2;
 	requested: InclusionGrant;

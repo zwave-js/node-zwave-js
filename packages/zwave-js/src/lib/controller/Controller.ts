@@ -41,6 +41,7 @@ import {
 	BasicDeviceClass,
 	CommandClasses,
 	type ControllerCapabilities,
+	ControllerRole,
 	ControllerStatus,
 	EMPTY_ROUTE,
 	type Firmware,
@@ -393,7 +394,9 @@ import {
 	InclusionStrategy,
 	type InclusionUserCallbacks,
 	type JoinNetworkOptions,
+	JoinNetworkResult,
 	JoinNetworkStrategy,
+	LeaveNetworkResult,
 	type PlannedProvisioningEntry,
 	ProvisioningEntryStatus,
 	RemoveNodeReason,
@@ -539,19 +542,22 @@ export class ZWaveController
 		return this._ownNodeId;
 	}
 
-	private _isPrimary: MaybeNotKnown<boolean>;
+	/** @deprecated Use {@link role} instead */
 	public get isPrimary(): MaybeNotKnown<boolean> {
-		return this._isPrimary;
+		switch (this.role) {
+			case NOT_KNOWN:
+				return NOT_KNOWN;
+			case ControllerRole.Primary:
+				return true;
+			default:
+				return false;
+		}
 	}
 
-	/** @internal DO NOT USE, for internal purposes only */
-	public get isActuallyPrimary(): MaybeNotKnown<boolean> {
-		// For some reason the firmware claims we are the primary after joining a network that has a SUC/SIS
-		// We consider ourselves secondary unless we also have the SUC/SIS role
-		return this._isPrimary && this._isSISPresent && this._isSUC;
-	}
+	private _isSecondary: MaybeNotKnown<boolean>;
 
 	private _isUsingHomeIdFromOtherNetwork: MaybeNotKnown<boolean>;
+	/** @deprecated Use {@link role} instead */
 	public get isUsingHomeIdFromOtherNetwork(): MaybeNotKnown<boolean> {
 		return this._isUsingHomeIdFromOtherNetwork;
 	}
@@ -562,6 +568,7 @@ export class ZWaveController
 	}
 
 	private _wasRealPrimary: MaybeNotKnown<boolean>;
+	/** @deprecated Use {@link role} instead */
 	public get wasRealPrimary(): MaybeNotKnown<boolean> {
 		return this._wasRealPrimary;
 	}
@@ -575,6 +582,8 @@ export class ZWaveController
 	public get isSUC(): MaybeNotKnown<boolean> {
 		return this._isSUC;
 	}
+
+	private _noNodesIncluded: MaybeNotKnown<boolean>;
 
 	private _nodeType: MaybeNotKnown<NodeType>;
 	public get nodeType(): MaybeNotKnown<NodeType> {
@@ -856,6 +865,30 @@ export class ZWaveController
 	/** @internal */
 	public set powerlevel(value: { powerlevel: Powerlevel; until: Date }) {
 		this._powerlevel = value;
+	}
+
+	/** The role of the controller on the network */
+	public get role(): MaybeNotKnown<ControllerRole> {
+		if (this._wasRealPrimary) return ControllerRole.Primary;
+		switch (this._isSecondary) {
+			case true:
+				return ControllerRole.Secondary;
+			case false:
+				return ControllerRole.Inclusion;
+			default:
+				return NOT_KNOWN;
+		}
+	}
+
+	/** Returns whether learn mode may be enabled on this controller */
+	public get isLearnModePermitted(): boolean {
+		// The primary controller may only enter learn mode, if hasn't included nodes yet
+		if (this.role === ControllerRole.Primary) {
+			return !!this._noNodesIncluded;
+		} else {
+			// Secondary controllers may only enter learn mode if they are not the SUC
+			return this._isSUC === false;
+		}
 	}
 
 	/**
@@ -1635,7 +1668,7 @@ export class ZWaveController
 	 * @internal
 	 * Performs additional controller configuration
 	 */
-	public async configure(isOnlyNode: boolean): Promise<void> {
+	public async configure(): Promise<void> {
 		// Enable TX status report if supported
 		if (
 			this.isSerialAPISetupCommandSupported(
@@ -1677,8 +1710,8 @@ export class ZWaveController
 		// There needs to be a SUC/SIS in the network. If not, we promote ourselves to one if the following conditions are met:
 		// We are the primary controller, but we are not SUC, there is no SUC and there is no SIS, and there are no nodes in the network yet
 		if (
-			this._isPrimary
-			&& isOnlyNode
+			this.role === ControllerRole.Primary
+			&& this._noNodesIncluded
 			&& this._sucNodeId === 0
 			&& !this._isSUC
 			&& !this._isSISPresent
@@ -6882,7 +6915,7 @@ ${associatedNodes.join(", ")}`,
 		// and remember the new info
 		this._zwaveApiVersion = initData.zwaveApiVersion;
 		this._zwaveChipType = initData.zwaveChipType;
-		this._isPrimary = initData.isPrimary;
+		this._isSecondary = !initData.isPrimary;
 		this._isSIS = initData.isSIS;
 		this._nodeType = initData.nodeType;
 		this._supportsTimers = initData.supportsTimers;
@@ -6901,27 +6934,29 @@ ${associatedNodes.join(", ")}`,
 		);
 
 		const ret: ControllerCapabilities = {
-			isPrimary: !result.isSecondary,
+			isSecondary: result.isSecondary,
 			isUsingHomeIdFromOtherNetwork: result.isUsingHomeIdFromOtherNetwork,
 			isSISPresent: result.isSISPresent,
 			wasRealPrimary: result.wasRealPrimary,
 			isSUC: result.isStaticUpdateController,
+			noNodesIncluded: result.noNodesIncluded,
 		};
+
+		this._isSecondary = ret.isSecondary;
+		this._isUsingHomeIdFromOtherNetwork = ret.isUsingHomeIdFromOtherNetwork;
+		this._isSISPresent = ret.isSISPresent;
+		this._wasRealPrimary = ret.wasRealPrimary;
+		this._isSUC = ret.isSUC;
+		this._noNodesIncluded = ret.noNodesIncluded;
 
 		this.driver.controllerLog.print(
 			`received controller capabilities:
-  controller role:      ${ret.isPrimary ? "primary" : "secondary"}
+  controller role:      ${getEnumMemberName(ControllerRole, this.role!)}
   is the SUC:           ${ret.isSUC}
   started this network: ${!ret.isUsingHomeIdFromOtherNetwork}
   SIS is present:       ${ret.isSISPresent}
   was real primary:     ${ret.wasRealPrimary}`,
 		);
-
-		this._isPrimary = ret.isPrimary;
-		this._isUsingHomeIdFromOtherNetwork = ret.isUsingHomeIdFromOtherNetwork;
-		this._isSISPresent = ret.isSISPresent;
-		this._wasRealPrimary = ret.wasRealPrimary;
-		this._isSUC = ret.isSUC;
 
 		return ret;
 	}
@@ -8552,8 +8587,12 @@ ${associatedNodes.join(", ")}`,
 
 	public async beginJoiningNetwork(
 		options?: JoinNetworkOptions,
-	): Promise<boolean> {
-		if (this._currentLearnMode != undefined) return false;
+	): Promise<JoinNetworkResult> {
+		if (this._currentLearnMode != undefined) {
+			return JoinNetworkResult.Error_Busy;
+		} else if (!this.isLearnModePermitted) {
+			return JoinNetworkResult.Error_NotPermitted;
+		}
 
 		// FIXME: If the join strategy says S0, remove S2 from the NIF before joining
 
@@ -8569,7 +8608,7 @@ ${associatedNodes.join(", ")}`,
 			if (result.isOK()) {
 				this._currentLearnMode = LearnModeIntent.Inclusion;
 				this._joinNetworkOptions = options;
-				return true;
+				return JoinNetworkResult.OK;
 			}
 		} catch (e) {
 			this.driver.controllerLog.print(
@@ -8579,7 +8618,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		this._currentLearnMode = undefined;
-		return false;
+		return JoinNetworkResult.Error_Failed;
 	}
 
 	public async stopJoiningNetwork(): Promise<boolean> {
@@ -8620,8 +8659,12 @@ ${associatedNodes.join(", ")}`,
 		return false;
 	}
 
-	public async beginLeavingNetwork(): Promise<boolean> {
-		if (this._currentLearnMode != undefined) return false;
+	public async beginLeavingNetwork(): Promise<LeaveNetworkResult> {
+		if (this._currentLearnMode != undefined) {
+			return LeaveNetworkResult.Error_Busy;
+		} else if (!this.isLearnModePermitted) {
+			return LeaveNetworkResult.Error_NotPermitted;
+		}
 
 		try {
 			const result = await this.driver.sendMessage<
@@ -8634,7 +8677,7 @@ ${associatedNodes.join(", ")}`,
 
 			if (result.isOK()) {
 				this._currentLearnMode = LearnModeIntent.NetworkWideExclusion;
-				return true;
+				return LeaveNetworkResult.OK;
 			}
 		} catch (e) {
 			this.driver.controllerLog.print(
@@ -8644,7 +8687,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		this._currentLearnMode = undefined;
-		return false;
+		return LeaveNetworkResult.Error_Failed;
 	}
 
 	public async stopLeavingNetwork(): Promise<boolean> {
@@ -8705,7 +8748,9 @@ ${associatedNodes.join(", ")}`,
 				=== LearnModeIntent.LegacyNetworkWideInclusion
 			|| (this._currentLearnMode
 					=== LearnModeIntent.LegacyInclusionExclusion
-				&& this._isPrimary);
+				// TODO: Secondary controller may also use this to accept controller shift
+				// Figure out how to detect that.
+				&& this.role === ControllerRole.Primary);
 		const wasLeaving =
 			this._currentLearnMode === LearnModeIntent.DirectExclusion
 			|| this._currentLearnMode
@@ -8714,7 +8759,7 @@ ${associatedNodes.join(", ")}`,
 				=== LearnModeIntent.LegacyNetworkWideExclusion
 			|| (this._currentLearnMode
 					=== LearnModeIntent.LegacyInclusionExclusion
-				&& !this._isPrimary);
+				&& this.role !== ControllerRole.Primary);
 
 		if (msg.status === LearnModeStatus.Started) {
 			// cool, cool, cool...
