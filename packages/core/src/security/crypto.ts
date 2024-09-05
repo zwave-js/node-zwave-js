@@ -97,14 +97,25 @@ export function encodeX25519KeyDERSPKI(key: Buffer): Buffer {
 	return Buffer.concat([Buffer.from("302a300506032b656e032100", "hex"), key]);
 }
 
-/** Generates an x25519 / ECDH key pair */
-export async function generateECDHKeyPair(): Promise<{
+export interface KeyPair {
 	publicKey: crypto.KeyObject;
 	privateKey: crypto.KeyObject;
-}> {
+}
+
+/** Generates an x25519 / ECDH key pair */
+export async function generateECDHKeyPair(): Promise<KeyPair> {
 	return util.promisify(crypto.generateKeyPair)(
 		"x25519",
 	);
+}
+
+export function keyPairFromRawECDHPrivateKey(privateKey: Buffer): KeyPair {
+	const privateKeyObject = importRawECDHPrivateKey(privateKey);
+	const publicKeyObject = crypto.createPublicKey(privateKeyObject);
+	return {
+		privateKey: privateKeyObject,
+		publicKey: publicKeyObject,
+	};
 }
 
 /** Takes an ECDH public KeyObject and returns the raw key as a buffer */

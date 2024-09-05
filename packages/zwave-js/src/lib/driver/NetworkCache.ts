@@ -43,6 +43,7 @@ export const cacheKeys = {
 					secClass,
 				)
 			}`,
+		privateKey: "controller.privateKey",
 	},
 	// TODO: somehow these functions should be combined with the pattern matching below
 	node: (nodeId: number) => {
@@ -477,6 +478,11 @@ export function deserializeNetworkCacheValue(
 			if (value) return value;
 			throw fail();
 		}
+		case cacheKeys.controller.privateKey: {
+			value = tryParseBuffer(value);
+			if (value) return value;
+			throw fail();
+		}
 	}
 
 	return value;
@@ -566,6 +572,9 @@ export function serializeNetworkCacheValue(
 				ret.push(serialized);
 			}
 			return ret;
+		}
+		case cacheKeys.controller.privateKey: {
+			return (value as Buffer).toString("hex");
 		}
 	}
 

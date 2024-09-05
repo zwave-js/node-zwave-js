@@ -8956,19 +8956,19 @@ ${associatedNodes.join(", ")}`,
 				return SecurityBootstrapFailure.ParameterMismatch;
 			}
 
-			// FIXME: We should have 2 key pairs, one for authenticated (static)
-			// and one for unauthenticated (dynamic)
-
 			const highestGranted = getHighestSecurityClass(matchingKeys);
 			const requiresAuthentication =
 				highestGranted === SecurityClass.S2_AccessControl
 				|| highestGranted === SecurityClass.S2_Authenticated;
 
-			// If authentication is required, we MUST (FIXME:) use the Authenticated
-			// ECDH public key and obfuscate its first 2 bytes with 0
-			const keyPair = await generateECDHKeyPair();
+			// If authentication is required, use the (static) authenticated ECDH key pair,
+			// otherwise generate a new one
+			const keyPair = requiresAuthentication
+				? await this.driver.getLearnModeAuthenticatedKeyPair()
+				: await generateECDHKeyPair();
 			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
 			if (requiresAuthentication) {
+				// Authentication requires obfuscating the public key
 				publicKey.writeUInt16BE(0x0000, 0);
 			}
 			await api.sendPublicKey(publicKey, false);

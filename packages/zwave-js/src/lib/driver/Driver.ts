@@ -56,6 +56,7 @@ import {
 	Duration,
 	EncapsulationFlags,
 	type ICommandClass,
+	type KeyPair,
 	type LogConfig,
 	MAX_SUPERVISION_SESSION_ID,
 	MAX_TRANSPORT_SERVICE_SESSION_ID,
@@ -88,6 +89,8 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 	deserializeCacheValue,
+	extractRawECDHPrivateKey,
+	generateECDHKeyPair,
 	getCCName,
 	highResTimestamp,
 	isEncapsulationCC,
@@ -96,6 +99,7 @@ import {
 	isMissingControllerCallback,
 	isMissingControllerResponse,
 	isZWaveError,
+	keyPairFromRawECDHPrivateKey,
 	messageRecordToLines,
 	securityClassIsS2,
 	securityClassOrder,
@@ -841,6 +845,32 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		const nodeId = isArray(destination) ? destination[0] : destination;
 		const isLongRange = isLongRangeNodeId(nodeId);
 		return isLongRange ? this.securityManagerLR : this.securityManager2;
+	}
+
+	private _learnModeAuthenticatedKeyPair: KeyPair | undefined;
+	/** @internal */
+	public async getLearnModeAuthenticatedKeyPair(): Promise<KeyPair> {
+		if (this._learnModeAuthenticatedKeyPair == undefined) {
+			// Try restoring from cache
+			const privateKey = this.cacheGet<Buffer>(
+				cacheKeys.controller.privateKey,
+			);
+			if (privateKey) {
+				this._learnModeAuthenticatedKeyPair =
+					keyPairFromRawECDHPrivateKey(privateKey);
+			} else {
+				// Not found in cache, create a new one and cache it
+				this._learnModeAuthenticatedKeyPair =
+					await generateECDHKeyPair();
+				this.cacheSet(
+					cacheKeys.controller.privateKey,
+					extractRawECDHPrivateKey(
+						this._learnModeAuthenticatedKeyPair.privateKey,
+					),
+				);
+			}
+		}
+		return this._learnModeAuthenticatedKeyPair;
 	}
 
 	/**
@@ -3014,6 +3044,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			);
 		}
 
+		// Preserve the private key for the authenticated learn mode ECDH key pair
+		const oldPrivateKey = this.cacheGet<Buffer>(
+			cacheKeys.controller.privateKey,
+		);
+
 		// Update the controller NIF prior to hard resetting
 		await this.controller.setControllerNIF();
 		await this.controller.hardReset();
@@ -3037,6 +3072,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		this._controllerInterviewed = false;
 		void this.initializeControllerAndNodes();
+
+		// Save the key pair in the new cache again
+		if (oldPrivateKey) {
+			this.once("driver ready", () => {
+				this.cacheSet(cacheKeys.controller.privateKey, oldPrivateKey);
+			});
+		}
 	}
 
 	/**
