@@ -9582,11 +9582,12 @@ ${associatedNodes.join(", ")}`,
 				let grant: InclusionGrant | undefined;
 
 				switch (this._joinNetworkOptions?.strategy) {
-					case JoinNetworkStrategy.Security_S2: {
-						grant = this._joinNetworkOptions.requested;
-						break;
-					}
+					// case JoinNetworkStrategy.Security_S2: {
+					// 	grant = this._joinNetworkOptions.requested;
+					// 	break;
+					// }
 					// case JoinNetworkStrategy.SmartStart:
+					case JoinNetworkStrategy.Default:
 					default: {
 						// No options given, just request all keys
 						grant = {

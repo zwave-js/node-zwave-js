@@ -308,10 +308,11 @@ export interface JoinNetworkUserCallbacks {
 }
 
 export enum JoinNetworkStrategy {
-	Security_S2,
+	Default,
 	// TODO: Implement
 	// SmartStart,
 	// These require modifying the NIF prior to joining
+	// Security_S2,
 	// Security_S0,
 	// Insecure,
 }
@@ -331,11 +332,19 @@ export enum LeaveNetworkResult {
 }
 
 export type JoinNetworkOptions = {
-	strategy: JoinNetworkStrategy.Security_S2;
-	requested: InclusionGrant;
+	strategy: JoinNetworkStrategy.Default;
 	/**
 	 * Allows overriding the user callbacks for this attempt at joining a network.
 	 * If not given, the join network user callbacks of the driver options will be used.
 	 */
 	userCallbacks?: JoinNetworkUserCallbacks;
 };
+// | {
+// 	strategy: JoinNetworkStrategy.Security_S2;
+// 	requested: InclusionGrant;
+// 	/**
+// 	 * Allows overriding the user callbacks for this attempt at joining a network.
+// 	 * If not given, the join network user callbacks of the driver options will be used.
+// 	 */
+// 	userCallbacks?: JoinNetworkUserCallbacks;
+// };
