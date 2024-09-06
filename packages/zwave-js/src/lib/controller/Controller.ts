@@ -547,14 +547,17 @@ export class ZWaveController
 		return this._ownNodeId;
 	}
 
+	private _dsk: Buffer | undefined;
 	/**
-	 * The device specific key (DSK) of the controller in the standard format.
+	 * The device specific key (DSK) of the controller in binary format.
 	 */
-	public async getDSK(): Promise<string> {
-		const keyPair = await this.driver.getLearnModeAuthenticatedKeyPair();
-		const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
-		const dsk = publicKey.subarray(0, 16);
-		return dskToString(dsk);
+	public get dsk(): Buffer {
+		if (this._dsk == undefined) {
+			const keyPair = this.driver.getLearnModeAuthenticatedKeyPair();
+			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
+			this._dsk = publicKey.subarray(0, 16);
+		}
+		return this._dsk;
 	}
 
 	/** @deprecated Use {@link role} instead */
@@ -3547,7 +3550,7 @@ export class ZWaveController
 
 			// Generate ECDH key pair. We need to immediately send the other node our public key,
 			// so it won't abort bootstrapping
-			const keyPair = await generateECDHKeyPair();
+			const keyPair = generateECDHKeyPair();
 			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
 			await api.sendPublicKey(publicKey);
 			// After this, the node will start sending us a KEX SET every 10 seconds.
@@ -9143,8 +9146,8 @@ ${associatedNodes.join(", ")}`,
 			// If authentication is required, use the (static) authenticated ECDH key pair,
 			// otherwise generate a new one
 			const keyPair = requiresAuthentication
-				? await this.driver.getLearnModeAuthenticatedKeyPair()
-				: await generateECDHKeyPair();
+				? this.driver.getLearnModeAuthenticatedKeyPair()
+				: generateECDHKeyPair();
 			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
 			const transmittedPublicKey = Buffer.from(publicKey);
 			if (requiresAuthentication) {

@@ -868,7 +868,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 	private _learnModeAuthenticatedKeyPair: KeyPair | undefined;
 	/** @internal */
-	public async getLearnModeAuthenticatedKeyPair(): Promise<KeyPair> {
+	public getLearnModeAuthenticatedKeyPair(): KeyPair {
 		if (this._learnModeAuthenticatedKeyPair == undefined) {
 			// Try restoring from cache
 			const privateKey = this.cacheGet<Buffer>(
@@ -879,8 +879,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					keyPairFromRawECDHPrivateKey(privateKey);
 			} else {
 				// Not found in cache, create a new one and cache it
-				this._learnModeAuthenticatedKeyPair =
-					await generateECDHKeyPair();
+				this._learnModeAuthenticatedKeyPair = generateECDHKeyPair();
 				this.cacheSet(
 					cacheKeys.controller.privateKey,
 					extractRawECDHPrivateKey(

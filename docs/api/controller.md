@@ -1281,7 +1281,7 @@ type JoinNetworkOptions = {
 For joining with _Security S2_, callbacks into the application should be defined as part of the [driver options](api/driver.md#ZWaveOptions) (`joinNetworkUserCallbacks`). They can optionally be overridden for individual inclusion attempts by setting the `userCallbacks` property in the `JoinNetworkOptions`.
 
 > [!ATTENTION]
-> If the callbacks are not defined, the application should have its own way of displaying the controller's DSK to the user to enable joining with `S2 Authenticated` and `S2 Access Control`. The DSK can be read using the [`getDSK`](#getdsk) method.
+> If the callbacks are not defined, the application should have an appropriate way of displaying the controller's DSK to the user to enable joining with `S2 Authenticated` and `S2 Access Control`. The DSK can be read using the [`dsk`](#dsk) property.
 
 The callbacks are defined as follows:
 
@@ -1343,14 +1343,6 @@ async stopLeavingNetwork(): Promise<boolean>
 ```
 
 Stops the process to leave the current network. The returned promise resolves to `true` if stopping was successful, `false` if it failed or if it was not active.
-
-#### `getDSK`
-
-```ts
-async getDSK(): Promise<string>
-```
-
-Returns the controller's DSK in the standard format `aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222`.
 
 ## Controller properties
 
@@ -1440,6 +1432,14 @@ Returns the ID of the controller in the current network.
 * readonly sucNodeId: number
 * readonly supportsTimers: boolean
 -->
+
+#### `dsk`
+
+```ts
+dsk(): Buffer
+```
+
+Returns the controller's DSK in binary format.
 
 ### `status`
 

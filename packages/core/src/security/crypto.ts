@@ -1,5 +1,4 @@
 import * as crypto from "node:crypto";
-import util from "node:util";
 import { leftShift1, xor, zeroPad } from "./bufferUtils";
 
 function encrypt(
@@ -103,10 +102,8 @@ export interface KeyPair {
 }
 
 /** Generates an x25519 / ECDH key pair */
-export async function generateECDHKeyPair(): Promise<KeyPair> {
-	return util.promisify(crypto.generateKeyPair)(
-		"x25519",
-	);
+export function generateECDHKeyPair(): KeyPair {
+	return crypto.generateKeyPairSync("x25519");
 }
 
 export function keyPairFromRawECDHPrivateKey(privateKey: Buffer): KeyPair {
