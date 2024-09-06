@@ -1,7 +1,9 @@
+import { SecurityClass } from "@zwave-js/core";
 import { wait as _wait } from "alcalzone-shared/async";
 import path from "node:path";
 import "reflect-metadata";
-import { Driver, RFRegion } from "zwave-js";
+import fs from "node:fs/promises";
+import { Driver, InclusionStrategy, RFRegion } from "zwave-js";
 
 const wait = _wait;
 
@@ -19,7 +21,7 @@ process.on("unhandledRejection", (_r) => {
 const port_primary =
 	"/dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00";
 const port_secondary =
-	"/dev/serial/by-id/usb-Silicon_Labs_J-Link_Pro_OB_000440194188-if00";
+	"/dev/serial/by-id/usb-Silicon_Labs_CP2102N_USB_to_UART_Bridge_Controller_ca4d95064355ee118d4d1294de9da576-if00-port0";
 
 const driver_primary = new Driver(port_primary, {
 	logConfig: {
@@ -68,30 +70,39 @@ const driver_primary = new Driver(port_primary, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-		// await wait(1000);
-		// await driver_primary.hardReset();
-		// await wait(5000);
-		// await driver_primary.controller.beginInclusion({
-		// 	strategy: InclusionStrategy.Default,
-		// 	userCallbacks: {
-		// 		abort() {},
-		// 		async grantSecurityClasses(requested) {
-		// 			return {
-		// 				clientSideAuth: false,
-		// 				securityClasses: [
-		// 					SecurityClass.S0_Legacy,
-		// 					SecurityClass.S2_Unauthenticated,
-		// 				],
-		// 			};
-		// 		},
-		// 		async validateDSKAndEnterPIN(dsk) {
-		// 			return "12345";
-		// 		},
-		// 	},
-		// });
-
+		await wait(1000);
+		await driver_primary.hardReset();
 		await wait(5000);
-		await driver_primary.controller.nodes.get(2)?.refreshInfo();
+		await driver_primary.controller.beginInclusion({
+			strategy: InclusionStrategy.Default,
+			userCallbacks: {
+				abort() {},
+				async grantSecurityClasses(requested) {
+					return {
+						clientSideAuth: false,
+						securityClasses: [
+							SecurityClass.S0_Legacy,
+							SecurityClass.S2_Unauthenticated,
+							SecurityClass.S2_Authenticated,
+						],
+					};
+				},
+				async validateDSKAndEnterPIN(dsk) {
+					// Try to read PIN from the file pin.txt
+					for (let i = 0; i < 100; i++) {
+						const pin = await fs.readFile("pin.txt", "utf8").catch(
+							() => undefined as any,
+						);
+						if (pin?.length === 5) {
+							await fs.truncate("pin.txt");
+							return pin;
+						}
+						await wait(1000);
+					}
+					return false;
+				},
+			},
+		});
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader
@@ -146,10 +157,10 @@ const driver_secondary = new Driver(port_secondary, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-		// await wait(5000);
-		// await driver_secondary.hardReset();
-		// await wait(5000);
-		// await driver_secondary.controller.beginJoiningNetwork();
+		await wait(5000);
+		await driver_secondary.hardReset();
+		await wait(5000);
+		await driver_secondary.controller.beginJoiningNetwork();
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader
