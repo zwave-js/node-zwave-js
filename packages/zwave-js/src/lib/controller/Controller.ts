@@ -547,6 +547,16 @@ export class ZWaveController
 		return this._ownNodeId;
 	}
 
+	/**
+	 * The device specific key (DSK) of the controller in the standard format.
+	 */
+	public async getDSK(): Promise<string> {
+		const keyPair = await this.driver.getLearnModeAuthenticatedKeyPair();
+		const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
+		const dsk = publicKey.subarray(0, 16);
+		return dskToString(dsk);
+	}
+
 	/** @deprecated Use {@link role} instead */
 	public get isPrimary(): MaybeNotKnown<boolean> {
 		switch (this.role) {
