@@ -26,7 +26,10 @@ import {
 	Security2CCPublicKeyReport,
 	Security2CCTransferEnd,
 	Security2Command,
+	SecurityCCNetworkKeySet,
+	SecurityCCNonceGet,
 	SecurityCCSchemeGet,
+	SecurityCCSchemeInherit,
 	VersionCCValues,
 	VersionCommand,
 	ZWaveProtocolCCAssignReturnRoute,
@@ -45,6 +48,7 @@ import {
 	ControllerStatus,
 	EMPTY_ROUTE,
 	type Firmware,
+	type ICommandClass,
 	LongRangeChannel,
 	MAX_NODES,
 	type MaybeNotKnown,
@@ -3197,6 +3201,12 @@ export class ZWaveController
 
 			// Remember that the node was granted the S0 security class
 			node.securityClasses.set(SecurityClass.S0_Legacy, true);
+
+			this.driver.controllerLog.logNode(node.id, {
+				message: `Security S0 bootstrapping successful`,
+			});
+
+			// success 🎉
 		} catch (e) {
 			let errorMessage =
 				`Security S0 bootstrapping failed, the node was not granted the S0 security class`;
@@ -8800,8 +8810,152 @@ ${associatedNodes.join(", ")}`,
 		return false;
 	}
 
-	private async expectSecurityBootstrapS0(): Promise<void> {
-		// FIXME: Implement
+	private async expectSecurityBootstrapS0(
+		bootstrappingNode: ZWaveNode,
+	): Promise<SecurityBootstrapFailure | undefined> {
+		// When bootstrapping with S0, no other keys are granted
+		for (const secClass of securityClassOrder) {
+			if (secClass !== SecurityClass.S0_Legacy) {
+				bootstrappingNode.securityClasses.set(secClass, false);
+			}
+		}
+
+		const unGrantSecurityClass = () => {
+			this.driver["_securityManager"] = undefined;
+			bootstrappingNode.securityClasses.set(
+				SecurityClass.S0_Legacy,
+				false,
+			);
+		};
+
+		const abortTimeout = () => {
+			this.driver.controllerLog.logNode(bootstrappingNode.id, {
+				message:
+					`Security S0 bootstrapping failed: a secure inclusion timer has elapsed`,
+				level: "warn",
+			});
+
+			unGrantSecurityClass();
+			return SecurityBootstrapFailure.Timeout;
+		};
+
+		try {
+			const api = bootstrappingNode.commandClasses.Security;
+
+			// For the first part of the bootstrapping, a temporary key needs to be used
+			this.driver["_securityManager"] = new SecurityManager({
+				ownNodeId: this._ownNodeId!,
+				networkKey: Buffer.alloc(16, 0),
+				nonceTimeout: this.driver.options.timeouts.nonce,
+			});
+
+			// Report the supported schemes
+			await api.reportSecurityScheme(false);
+
+			// Expect a NonceGet within 10 seconds
+			let nonceGet = await this.driver.waitForCommand<SecurityCCNonceGet>(
+				(cc) => cc instanceof SecurityCCNonceGet,
+				10000,
+			).catch(() => "timeout" as const);
+			if (nonceGet === "timeout") return abortTimeout();
+
+			// Send nonce
+			await api.sendNonce();
+
+			// Expect NetworkKeySet within 10 seconds
+			const networkKeySet = await this.driver.waitForCommand<
+				SecurityCCNetworkKeySet
+			>(
+				(cc) => cc instanceof SecurityCCNetworkKeySet,
+				10000,
+			).catch(() => "timeout" as const);
+			if (networkKeySet === "timeout") return abortTimeout();
+
+			// Now that the key is known, we can create the real security manager
+			this.driver["_securityManager"] = new SecurityManager({
+				ownNodeId: this._ownNodeId!,
+				networkKey: networkKeySet.networkKey,
+				nonceTimeout: this.driver.options.timeouts.nonce,
+			});
+
+			// Request a new nonce to respond, which should be answered within 10 seconds
+			let nonce = await api.withOptions({ reportTimeoutMs: 10000 })
+				.getNonce();
+			if (!nonce) return abortTimeout();
+
+			// Verify the key
+			await api.verifyNetworkKey();
+
+			// We are a controller, so continue with scheme inherit
+
+			// Expect a NonceGet within 10 seconds
+			nonceGet = await this.driver.waitForCommand<SecurityCCNonceGet>(
+				(cc) => cc instanceof SecurityCCNonceGet,
+				10000,
+			).catch(() => "timeout" as const);
+			if (nonceGet === "timeout") return abortTimeout();
+
+			// Send nonce
+			await api.sendNonce();
+
+			// Expect SchemeInherit within 10 seconds
+			const schemeInherit = await this.driver.waitForCommand<
+				SecurityCCSchemeInherit
+			>(
+				(cc) => cc instanceof SecurityCCSchemeInherit,
+				10000,
+			).catch(() => "timeout" as const);
+			if (schemeInherit === "timeout") return abortTimeout();
+
+			// Request a new nonce to respond, which should be answered within 10 seconds
+			nonce = await api.withOptions({ reportTimeoutMs: 10000 })
+				.getNonce();
+			if (!nonce) return abortTimeout();
+
+			// Report the supported schemes. This isn't technically correct, but since
+			// S0 won't get any extensions, we can just report the default scheme again
+			await api.reportSecurityScheme(true);
+
+			// Remember that the S0 key was granted
+			bootstrappingNode.securityClasses.set(
+				SecurityClass.S0_Legacy,
+				true,
+			);
+
+			// Store the key
+			this.driver.cacheSet(
+				cacheKeys.controller.securityKeys(SecurityClass.S0_Legacy),
+				networkKeySet.networkKey,
+			);
+
+			this.driver.driverLog.print(
+				`Security S0 bootstrapping successful`,
+			);
+
+			// success 🎉
+		} catch (e) {
+			let errorMessage = `Security S0 bootstrapping failed`;
+			let result = SecurityBootstrapFailure.Unknown;
+			if (!isZWaveError(e)) {
+				errorMessage += `: ${e as any}`;
+			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
+				errorMessage += ": a secure inclusion timer has elapsed.";
+				result = SecurityBootstrapFailure.Timeout;
+			} else if (
+				e.code !== ZWaveErrorCodes.Controller_MessageDropped
+				&& e.code !== ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				errorMessage += `: ${e.message}`;
+			}
+			this.driver.controllerLog.logNode(
+				bootstrappingNode.id,
+				errorMessage,
+				"warn",
+			);
+			unGrantSecurityClass();
+
+			return result;
+		}
 	}
 
 	private async expectSecurityBootstrapS2(
@@ -9295,19 +9449,41 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	private async afterJoiningNetwork(): Promise<void> {
+		this.driver.driverLog.print("waiting for security bootstrapping...");
+
+		const bootstrapInitStart = Date.now();
+		const supportedCCs = determineNIF().supportedCCs;
+		const supportsS0 = supportedCCs.includes(CommandClasses.Security);
+		const supportsS2 = supportedCCs.includes(CommandClasses["Security 2"]);
+
+		let initTimeout: number;
+		let initPredicate: (cc: ICommandClass) => boolean;
+
 		// KEX Get must be received:
 		// - no later than 10..30 seconds after the inclusion if S0 is supported
 		// - no later than 30 seconds after the inclusion if only S2 is supported
-		// For simplicity, we wait the full 30s.
-		this.driver.driverLog.print("waiting for security bootstrapping...");
+		//   For simplicity, we wait the full 30s.
+		// SecurityCCSchemeGet must be received no later than 10 seconds
+		//   after the inclusion if S0 is supported
+		if (supportsS0 && supportsS2) {
+			initTimeout = inclusionTimeouts.TB1;
+			initPredicate = (cc) =>
+				cc instanceof SecurityCCSchemeGet
+				|| cc instanceof Security2CCKEXGet;
+		} else if (supportsS2) {
+			initTimeout = inclusionTimeouts.TB1;
+			initPredicate = (cc) => cc instanceof Security2CCKEXGet;
+		} else if (supportsS0) {
+			initTimeout = 10000;
+			initPredicate = (cc) => cc instanceof SecurityCCSchemeGet;
+		} else {
+			initTimeout = 0;
+			initPredicate = () => false;
+		}
+
 		const bootstrapInitPromise = this.driver.waitForCommand<
 			Security2CCKEXGet | SecurityCCSchemeGet
-		>(
-			(cc) =>
-				cc instanceof SecurityCCSchemeGet
-				|| cc instanceof Security2CCKEXGet,
-			inclusionTimeouts.TB1,
-		).catch(() => "timeout" as const);
+		>(initPredicate, initTimeout).catch(() => "timeout" as const);
 
 		const identifySelf = async () => {
 			// Update own node ID and other controller flags.
@@ -9336,7 +9512,38 @@ ${associatedNodes.join(", ")}`,
 				"No security bootstrapping command received, continuing without encryption...",
 			);
 		} else if (bootstrapInit instanceof SecurityCCSchemeGet) {
-			await this.expectSecurityBootstrapS0();
+			const nodeId = bootstrapInit.nodeId;
+			const bootstrappingNode = this.nodes.get(nodeId);
+			if (!bootstrappingNode) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message:
+						"Received S2 bootstrap initiation from unknown node, ignoring...",
+					level: "warn",
+				});
+			} else if (Date.now() - bootstrapInitStart > 10000) {
+				// Received too late, S0 bootstrapping must not continue
+				this.driver.controllerLog.print(
+					"Security S0 bootstrapping command received too late, continuing without encryption...",
+				);
+			} else {
+				// We definitely know that the node supports S0
+				bootstrappingNode.addCC(CommandClasses.Security, {
+					secure: true,
+					isSupported: true,
+				});
+
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `Received S0 bootstrap initiation`,
+				});
+
+				const bootstrapResult = await this.expectSecurityBootstrapS0(
+					bootstrappingNode,
+				);
+				if (bootstrapResult !== undefined) {
+					// If there was a failure, mark S0 as not supported
+					bootstrappingNode.removeCC(CommandClasses.Security);
+				}
+			}
 		} else if (bootstrapInit instanceof Security2CCKEXGet) {
 			const nodeId = bootstrapInit.nodeId as number;
 			const bootstrappingNode = this.nodes.get(nodeId);
@@ -9384,16 +9591,19 @@ ${associatedNodes.join(", ")}`,
 								).join("")
 							}
   client-side auth: ${grant.clientSideAuth}`,
-						level: "warn",
 					});
 
-					const _bootstrapResult = await this
+					const bootstrapResult = await this
 						.expectSecurityBootstrapS2(
 							bootstrappingNode,
 							grant,
 						);
-
-					// TODO: Handle failures
+					if (bootstrapResult !== undefined) {
+						// If there was a failure, mark S2 as not supported
+						bootstrappingNode.removeCC(
+							CommandClasses["Security 2"],
+						);
+					}
 				}
 			}
 		}
