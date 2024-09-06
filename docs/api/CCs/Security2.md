@@ -63,6 +63,16 @@ async reportSupportedCommands(
 async getKeyExchangeParameters(): Promise<Pick<Security2CCKEXReport, "requestCSA" | "echo" | "supportedKEXSchemes" | "supportedECDHProfiles" | "requestedKeys" | "_reserved"> | undefined>;
 ```
 
+### `requestKeys`
+
+```ts
+async requestKeys(
+	params: Omit<Security2CCKEXReportOptions, "echo">,
+): Promise<void>;
+```
+
+Requests the given keys from an including node.
+
 ### `grantKeys`
 
 ```ts
@@ -73,15 +83,25 @@ async grantKeys(
 
 Grants the joining node the given keys.
 
-### `confirmGrantedKeys`
+### `confirmRequestedKeys`
 
 ```ts
-async confirmGrantedKeys(
+async confirmRequestedKeys(
 	params: Omit<Security2CCKEXReportOptions, "echo">,
 ): Promise<void>;
 ```
 
-Confirms the keys that were granted to a node.
+Confirms the keys that were requested by a node.
+
+### `confirmGrantedKeys`
+
+```ts
+async confirmGrantedKeys(
+	params: Omit<Security2CCKEXSetOptions, "echo">,
+): Promise<Security2CCKEXReport | Security2CCKEXFail | undefined>;
+```
+
+Confirms the keys that were granted by the including node.
 
 ### `abortKeyExchange`
 
@@ -94,7 +114,18 @@ Notifies the other node that the ongoing key exchange was aborted.
 ### `sendPublicKey`
 
 ```ts
-async sendPublicKey(publicKey: Buffer): Promise<void>;
+async sendPublicKey(
+	publicKey: Buffer,
+	includingNode: boolean = true,
+): Promise<void>;
+```
+
+### `requestNetworkKey`
+
+```ts
+async requestNetworkKey(
+	securityClass: SecurityClass,
+): Promise<void>;
 ```
 
 ### `sendNetworkKey`
@@ -106,8 +137,20 @@ async sendNetworkKey(
 ): Promise<void>;
 ```
 
+### `verifyNetworkKey`
+
+```ts
+async verifyNetworkKey(): Promise<void>;
+```
+
 ### `confirmKeyVerification`
 
 ```ts
 async confirmKeyVerification(): Promise<void>;
+```
+
+### `endKeyExchange`
+
+```ts
+async endKeyExchange(): Promise<void>;
 ```

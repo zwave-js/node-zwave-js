@@ -25,6 +25,7 @@ export interface GetControllerCapabilitiesResponseOptions
 	isSISPresent: boolean;
 	wasRealPrimary: boolean;
 	isStaticUpdateController: boolean;
+	noNodesIncluded: boolean;
 }
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
@@ -54,6 +55,9 @@ export class GetControllerCapabilitiesResponse extends Message {
 			this.isStaticUpdateController = !!(
 				capabilityFlags & ControllerCapabilityFlags.SUC
 			);
+			this.noNodesIncluded = !!(
+				capabilityFlags & ControllerCapabilityFlags.NoNodesIncluded
+			);
 		} else {
 			this.isSecondary = options.isSecondary;
 			this.isUsingHomeIdFromOtherNetwork =
@@ -61,6 +65,7 @@ export class GetControllerCapabilitiesResponse extends Message {
 			this.isSISPresent = options.isSISPresent;
 			this.wasRealPrimary = options.wasRealPrimary;
 			this.isStaticUpdateController = options.isStaticUpdateController;
+			this.noNodesIncluded = options.noNodesIncluded;
 		}
 	}
 
@@ -69,6 +74,7 @@ export class GetControllerCapabilitiesResponse extends Message {
 	public isSISPresent: boolean;
 	public wasRealPrimary: boolean;
 	public isStaticUpdateController: boolean;
+	public noNodesIncluded: boolean;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
@@ -82,6 +88,9 @@ export class GetControllerCapabilitiesResponse extends Message {
 				: 0)
 			| (this.isStaticUpdateController
 				? ControllerCapabilityFlags.SUC
+				: 0)
+			| (this.noNodesIncluded
+				? ControllerCapabilityFlags.NoNodesIncluded
 				: 0),
 		]);
 		return super.serialize();

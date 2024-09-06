@@ -29,6 +29,21 @@ export const cacheKeys = {
 	controller: {
 		provisioningList: "controller.provisioningList",
 		associations: (groupId: number) => `controller.associations.${groupId}`,
+		securityKeys: (secClass: SecurityClass) =>
+			`controller.securityKeys.${
+				getEnumMemberName(
+					SecurityClass,
+					secClass,
+				)
+			}`,
+		securityKeysLongRange: (secClass: SecurityClass) =>
+			`controller.securityKeyLongRange.${
+				getEnumMemberName(
+					SecurityClass,
+					secClass,
+				)
+			}`,
+		privateKey: "controller.privateKey",
 	},
 	// TODO: somehow these functions should be combined with the pattern matching below
 	node: (nodeId: number) => {
@@ -336,6 +351,18 @@ function tryParseAssociationAddress(
 	}
 }
 
+function tryParseBuffer(
+	value: unknown,
+): Buffer | undefined {
+	if (typeof value === "string") {
+		try {
+			return Buffer.from(value, "hex");
+		} catch {
+			// ignore
+		}
+	}
+}
+
 export function deserializeNetworkCacheValue(
 	key: string,
 	value: unknown,
@@ -428,12 +455,9 @@ export function deserializeNetworkCacheValue(
 		}
 
 		case "deviceConfigHash": {
-			if (typeof value !== "string") throw fail();
-			try {
-				return Buffer.from(value, "hex");
-			} catch {
-				throw fail();
-			}
+			value = tryParseBuffer(value);
+			if (value) return value;
+			throw fail();
 		}
 	}
 
@@ -442,11 +466,20 @@ export function deserializeNetworkCacheValue(
 		value = tryParseAssociationAddress(value);
 		if (value) return value;
 		throw fail();
+	} else if (key.startsWith("controller.securityKeys.")) {
+		value = tryParseBuffer(value);
+		if (value) return value;
+		throw fail();
 	}
 
 	switch (key) {
 		case cacheKeys.controller.provisioningList: {
 			value = tryParseProvisioningList(value);
+			if (value) return value;
+			throw fail();
+		}
+		case cacheKeys.controller.privateKey: {
+			value = tryParseBuffer(value);
 			if (value) return value;
 			throw fail();
 		}
@@ -498,7 +531,12 @@ export function serializeNetworkCacheValue(
 		}
 	}
 
-	// Other properties
+	// Other dynamic properties
+	if (key.startsWith("controller.securityKeys.")) {
+		return (value as Buffer).toString("hex");
+	}
+
+	// Other fixed properties
 	switch (key) {
 		case cacheKeys.controller.provisioningList: {
 			const ret: any = [];
@@ -534,6 +572,9 @@ export function serializeNetworkCacheValue(
 				ret.push(serialized);
 			}
 			return ret;
+		}
+		case cacheKeys.controller.privateKey: {
+			return (value as Buffer).toString("hex");
 		}
 	}
 

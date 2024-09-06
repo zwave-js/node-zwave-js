@@ -17,12 +17,19 @@ import {
 	MultiChannelAssociationCC,
 	Powerlevel,
 	Security2CCKEXFail,
+	Security2CCKEXGet,
+	type Security2CCKEXReport,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
+	Security2CCNetworkKeyReport,
 	Security2CCNetworkKeyVerify,
 	Security2CCPublicKeyReport,
 	Security2CCTransferEnd,
 	Security2Command,
+	SecurityCCNetworkKeySet,
+	SecurityCCNonceGet,
+	SecurityCCSchemeGet,
+	SecurityCCSchemeInherit,
 	VersionCCValues,
 	VersionCommand,
 	ZWaveProtocolCCAssignReturnRoute,
@@ -36,9 +43,12 @@ import { type IndicatorObject } from "@zwave-js/cc/IndicatorCC";
 import {
 	BasicDeviceClass,
 	CommandClasses,
+	type ControllerCapabilities,
+	ControllerRole,
 	ControllerStatus,
 	EMPTY_ROUTE,
 	type Firmware,
+	type ICommandClass,
 	LongRangeChannel,
 	MAX_NODES,
 	type MaybeNotKnown,
@@ -57,6 +67,9 @@ import {
 	type Route,
 	RouteKind,
 	SecurityClass,
+	SecurityManager,
+	SecurityManager2,
+	type SerialApiInitData,
 	type SinglecastCC,
 	TransmitStatus,
 	UNKNOWN_STATE,
@@ -68,12 +81,14 @@ import {
 	authHomeIdFromDSK,
 	averageRSSI,
 	computePRK,
-	decodeX25519KeyDER,
 	deriveTempKeys,
 	dskFromString,
 	dskToString,
-	encodeX25519KeyDERSPKI,
+	extractRawECDHPublicKey,
+	generateECDHKeyPair,
 	getChipTypeAndVersion,
+	getHighestSecurityClass,
+	importRawECDHPublicKey,
 	indexDBsByNode,
 	isEmptyRoute,
 	isLongRangeNodeId,
@@ -117,7 +132,6 @@ import {
 import { roundTo } from "alcalzone-shared/math";
 import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "node:crypto";
-import util from "node:util";
 import type { Driver } from "../driver/Driver";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
@@ -135,6 +149,7 @@ import {
 	ApplicationUpdateRequestNodeAdded,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeRemoved,
+	ApplicationUpdateRequestSUCIdChanged,
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
@@ -300,6 +315,12 @@ import {
 	type RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
 } from "../serialapi/network-mgmt/RequestNodeNeighborUpdateMessages";
+import {
+	LearnModeIntent,
+	LearnModeStatus,
+	type SetLearnModeCallback,
+	SetLearnModeRequest,
+} from "../serialapi/network-mgmt/SetLearnModeMessages";
 import { SetPriorityRouteRequest } from "../serialapi/network-mgmt/SetPriorityRouteMessages";
 import { SetSUCNodeIdRequest } from "../serialapi/network-mgmt/SetSUCNodeIDMessages";
 import {
@@ -369,12 +390,18 @@ import {
 	type ExclusionOptions,
 	ExclusionStrategy,
 	type FoundNode,
+	type InclusionGrant,
 	type InclusionOptions,
 	type InclusionOptionsInternal,
 	type InclusionResult,
 	InclusionState,
 	InclusionStrategy,
 	type InclusionUserCallbacks,
+	type JoinNetworkOptions,
+	JoinNetworkResult,
+	JoinNetworkStrategy,
+	type JoinNetworkUserCallbacks,
+	LeaveNetworkResult,
 	type PlannedProvisioningEntry,
 	ProvisioningEntryStatus,
 	RemoveNodeReason,
@@ -417,6 +444,11 @@ interface ControllerEventCallbacks
 	"node found": (node: FoundNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, reason: RemoveNodeReason) => void;
+	"network found": (homeId: number, ownNodeId: number) => void;
+	"joining network failed": () => void;
+	"network joined": () => void;
+	"network left": () => void;
+	"leaving network failed": () => void;
 	"rebuild routes progress": (
 		progress: ReadonlyMap<number, RebuildRoutesStatus>,
 	) => void;
@@ -472,6 +504,10 @@ export class ZWaveController
 			FunctionType.ReplaceFailedNode,
 			this.handleReplaceNodeStatusReport.bind(this),
 		);
+		driver.registerRequestHandler(
+			FunctionType.SetLearnMode,
+			this.handleLearnModeCallback.bind(this),
+		);
 	}
 
 	private _type: MaybeNotKnown<ZWaveLibraryTypes>;
@@ -511,12 +547,35 @@ export class ZWaveController
 		return this._ownNodeId;
 	}
 
-	private _isPrimary: MaybeNotKnown<boolean>;
-	public get isPrimary(): MaybeNotKnown<boolean> {
-		return this._isPrimary;
+	private _dsk: Buffer | undefined;
+	/**
+	 * The device specific key (DSK) of the controller in binary format.
+	 */
+	public get dsk(): Buffer {
+		if (this._dsk == undefined) {
+			const keyPair = this.driver.getLearnModeAuthenticatedKeyPair();
+			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
+			this._dsk = publicKey.subarray(0, 16);
+		}
+		return this._dsk;
 	}
 
+	/** @deprecated Use {@link role} instead */
+	public get isPrimary(): MaybeNotKnown<boolean> {
+		switch (this.role) {
+			case NOT_KNOWN:
+				return NOT_KNOWN;
+			case ControllerRole.Primary:
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	private _isSecondary: MaybeNotKnown<boolean>;
+
 	private _isUsingHomeIdFromOtherNetwork: MaybeNotKnown<boolean>;
+	/** @deprecated Use {@link role} instead */
 	public get isUsingHomeIdFromOtherNetwork(): MaybeNotKnown<boolean> {
 		return this._isUsingHomeIdFromOtherNetwork;
 	}
@@ -527,6 +586,7 @@ export class ZWaveController
 	}
 
 	private _wasRealPrimary: MaybeNotKnown<boolean>;
+	/** @deprecated Use {@link role} instead */
 	public get wasRealPrimary(): MaybeNotKnown<boolean> {
 		return this._wasRealPrimary;
 	}
@@ -540,6 +600,8 @@ export class ZWaveController
 	public get isSUC(): MaybeNotKnown<boolean> {
 		return this._isSUC;
 	}
+
+	private _noNodesIncluded: MaybeNotKnown<boolean>;
 
 	private _nodeType: MaybeNotKnown<NodeType>;
 	public get nodeType(): MaybeNotKnown<NodeType> {
@@ -823,6 +885,30 @@ export class ZWaveController
 		this._powerlevel = value;
 	}
 
+	/** The role of the controller on the network */
+	public get role(): MaybeNotKnown<ControllerRole> {
+		if (this._wasRealPrimary) return ControllerRole.Primary;
+		switch (this._isSecondary) {
+			case true:
+				return ControllerRole.Secondary;
+			case false:
+				return ControllerRole.Inclusion;
+			default:
+				return NOT_KNOWN;
+		}
+	}
+
+	/** Returns whether learn mode may be enabled on this controller */
+	public get isLearnModePermitted(): boolean {
+		// The primary controller may only enter learn mode, if hasn't included nodes yet
+		if (this.role === ControllerRole.Primary) {
+			return !!this._noNodesIncluded;
+		} else {
+			// Secondary controllers may only enter learn mode if they are not the SUC
+			return this._isSUC === false;
+		}
+	}
+
 	/**
 	 * @internal
 	 * Remembers the indicator values set by another node
@@ -1063,46 +1149,7 @@ export class ZWaveController
 		);
 
 		// Request additional information about the controller/Z-Wave chip
-		this.driver.controllerLog.print(
-			`querying additional controller information...`,
-		);
-		const initData = await this.driver.sendMessage<
-			GetSerialApiInitDataResponse
-		>(
-			new GetSerialApiInitDataRequest(this.driver),
-		);
-		// and remember the new info
-		this._zwaveApiVersion = initData.zwaveApiVersion;
-		this._zwaveChipType = initData.zwaveChipType;
-		this._isPrimary = initData.isPrimary;
-		this._isSIS = initData.isSIS;
-		this._nodeType = initData.nodeType;
-		this._supportsTimers = initData.supportsTimers;
-		// ignore the initVersion, no clue what to do with it
-		this.driver.controllerLog.print(
-			`received additional controller information:
-  Z-Wave API version:         ${this._zwaveApiVersion.version} (${this._zwaveApiVersion.kind})${
-				this._zwaveChipType
-					? `
-  Z-Wave chip type:           ${
-						typeof this._zwaveChipType === "string"
-							? this._zwaveChipType
-							: `unknown (type: ${
-								num2hex(
-									this._zwaveChipType.type,
-								)
-							}, version: ${
-								num2hex(this._zwaveChipType.version)
-							})`
-					}`
-					: ""
-			}
-  node type                   ${getEnumMemberName(NodeType, this._nodeType)}
-  controller role:            ${this._isPrimary ? "primary" : "secondary"}
-  controller is the SIS:      ${this._isSIS}
-  controller supports timers: ${this._supportsTimers}
-  Z-Wave Classic nodes:       ${initData.nodeIds.join(", ")}`,
-		);
+		const initData = await this.getSerialApiInitData();
 
 		// Get basic controller version info
 		this.driver.controllerLog.print(`querying version info...`);
@@ -1159,29 +1206,7 @@ export class ZWaveController
 		this._sdkVersion = protocolVersionToSDKVersion(this._protocolVersion);
 
 		// find out what the controller can do
-		this.driver.controllerLog.print(`querying controller capabilities...`);
-		const ctrlCaps = await this.driver.sendMessage<
-			GetControllerCapabilitiesResponse
-		>(
-			new GetControllerCapabilitiesRequest(this.driver),
-			{
-				supportCheck: false,
-			},
-		);
-		this._isPrimary = !ctrlCaps.isSecondary;
-		this._isUsingHomeIdFromOtherNetwork =
-			ctrlCaps.isUsingHomeIdFromOtherNetwork;
-		this._isSISPresent = ctrlCaps.isSISPresent;
-		this._wasRealPrimary = ctrlCaps.wasRealPrimary;
-		this._isSUC = ctrlCaps.isStaticUpdateController;
-		this.driver.controllerLog.print(
-			`received controller capabilities:
-  controller role:      ${this._isPrimary ? "primary" : "secondary"}
-  is the SUC:           ${this._isSUC}
-  started this network: ${!this._isUsingHomeIdFromOtherNetwork}
-  SIS is present:       ${this._isSISPresent}
-  was real primary:     ${this._wasRealPrimary}`,
-		);
+		await this.getControllerCapabilities();
 
 		// If the serial API can be configured, figure out which sub commands are supported
 		// This MUST be done after querying the SDK version due to a bug in some 7.xx firmwares, which incorrectly encode the bitmask
@@ -1701,9 +1726,10 @@ export class ZWaveController
 		}
 
 		// There needs to be a SUC/SIS in the network. If not, we promote ourselves to one if the following conditions are met:
-		// We are the primary controller, but we are not SUC, there is no SUC and there is no SIS
+		// We are the primary controller, but we are not SUC, there is no SUC and there is no SIS, and there are no nodes in the network yet
 		if (
-			this._isPrimary
+			this.role === ControllerRole.Primary
+			&& this._noNodesIncluded
 			&& this._sucNodeId === 0
 			&& !this._isSUC
 			&& !this._isSISPresent
@@ -1719,6 +1745,8 @@ export class ZWaveController
 				);
 				if (result) {
 					this._sucNodeId = this._ownNodeId;
+					this._isSUC = true;
+					this._isSISPresent = true;
 				}
 				this.driver.controllerLog.print(
 					`Promotion to SUC/SIS ${result ? "succeeded" : "failed"}.`,
@@ -2918,6 +2946,9 @@ export class ZWaveController
 					});
 				}
 			});
+		} else if (msg instanceof ApplicationUpdateRequestSUCIdChanged) {
+			this._sucNodeId = msg.sucNodeID;
+			// TODO: Emit event or what?
 		}
 	}
 
@@ -3184,6 +3215,12 @@ export class ZWaveController
 
 			// Remember that the node was granted the S0 security class
 			node.securityClasses.set(SecurityClass.S0_Legacy, true);
+
+			this.driver.controllerLog.logNode(node.id, {
+				message: `Security S0 bootstrapping successful`,
+			});
+
+			// success 🎉
 		} catch (e) {
 			let errorMessage =
 				`Security S0 bootstrapping failed, the node was not granted the S0 security class`;
@@ -3513,15 +3550,8 @@ export class ZWaveController
 
 			// Generate ECDH key pair. We need to immediately send the other node our public key,
 			// so it won't abort bootstrapping
-			const keyPair = await util.promisify(crypto.generateKeyPair)(
-				"x25519",
-			);
-			const publicKey = decodeX25519KeyDER(
-				keyPair.publicKey.export({
-					type: "spki",
-					format: "der",
-				}),
-			);
+			const keyPair = generateECDHKeyPair();
+			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
 			await api.sendPublicKey(publicKey);
 			// After this, the node will start sending us a KEX SET every 10 seconds.
 			// We won't be able to decode it until the DSK was verified
@@ -3576,11 +3606,7 @@ export class ZWaveController
 			// After the user has verified the DSK, we can derive the shared secret
 			// Z-Wave works with the "raw" keys, so this is a tad complicated
 			const sharedSecret = crypto.diffieHellman({
-				publicKey: crypto.createPublicKey({
-					key: encodeX25519KeyDERSPKI(nodePublicKey),
-					format: "der",
-					type: "spki",
-				}),
+				publicKey: importRawECDHPublicKey(nodePublicKey),
 				privateKey: keyPair.privateKey,
 			});
 
@@ -3679,7 +3705,7 @@ export class ZWaveController
 				return SecurityBootstrapFailure.S2WrongSecurityLevel;
 			}
 			// Confirm the keys - the node will start requesting the granted keys in response
-			await api.confirmGrantedKeys({
+			await api.confirmRequestedKeys({
 				requestCSA: kexParams.requestCSA,
 				requestedKeys: [...kexParams.requestedKeys],
 				supportedECDHProfiles: [...kexParams.supportedECDHProfiles],
@@ -3750,6 +3776,11 @@ export class ZWaveController
 					return SecurityBootstrapFailure.S2WrongSecurityLevel;
 				}
 
+				// We need to temporarily mark this security class as granted, so the following exchange will use this
+				// key for decryption
+				// FIXME: Is this actually necessary?
+				node.securityClasses.set(securityClass, true);
+
 				// Send the node the requested key
 				await api.sendNetworkKey(
 					securityClass,
@@ -3757,9 +3788,6 @@ export class ZWaveController
 						securityClass,
 					).pnk,
 				);
-				// We need to temporarily mark this security class as granted, so the following exchange will use this
-				// key for decryption
-				node.securityClasses.set(securityClass, true);
 
 				// And wait for verification
 				const verify = await this.driver.waitForCommand<
@@ -3771,6 +3799,7 @@ export class ZWaveController
 					inclusionTimeouts.TA4,
 				).catch(() => "timeout" as const);
 				if (verify === "timeout") return abortTimeout();
+
 				if (verify instanceof Security2CCKEXFail) {
 					this.driver.controllerLog.logNode(node.id, {
 						message:
@@ -6860,6 +6889,102 @@ ${associatedNodes.join(", ")}`,
 		return ret;
 	}
 
+	/** Request additional information about the controller/Z-Wave chip */
+	public async getSerialApiInitData(): Promise<SerialApiInitData> {
+		this.driver.controllerLog.print(
+			`querying additional controller information...`,
+		);
+		const initData = await this.driver.sendMessage<
+			GetSerialApiInitDataResponse
+		>(
+			new GetSerialApiInitDataRequest(this.driver),
+		);
+
+		this.driver.controllerLog.print(
+			`received additional controller information:
+  Z-Wave API version:         ${initData.zwaveApiVersion.version} (${initData.zwaveApiVersion.kind})${
+				initData.zwaveChipType
+					? `
+  Z-Wave chip type:           ${
+						typeof initData.zwaveChipType === "string"
+							? initData.zwaveChipType
+							: `unknown (type: ${
+								num2hex(initData.zwaveChipType.type)
+							}, version: ${
+								num2hex(initData.zwaveChipType.version)
+							})`
+					}`
+					: ""
+			}
+  node type                   ${getEnumMemberName(NodeType, initData.nodeType)}
+  controller role:            ${initData.isPrimary ? "primary" : "secondary"}
+  controller is the SIS:      ${initData.isSIS}
+  controller supports timers: ${initData.supportsTimers}
+  Z-Wave Classic nodes:       ${initData.nodeIds.join(", ")}`,
+		);
+
+		const ret: SerialApiInitData = {
+			...pick(initData, [
+				"zwaveApiVersion",
+				"zwaveChipType",
+				"isPrimary",
+				"isSIS",
+				"nodeType",
+				"supportsTimers",
+			]),
+			nodeIds: [...initData.nodeIds],
+			// ignore the initVersion, no clue what to do with it
+		};
+
+		// and remember the new info
+		this._zwaveApiVersion = initData.zwaveApiVersion;
+		this._zwaveChipType = initData.zwaveChipType;
+		this._isSecondary = !initData.isPrimary;
+		this._isSIS = initData.isSIS;
+		this._nodeType = initData.nodeType;
+		this._supportsTimers = initData.supportsTimers;
+
+		return ret;
+	}
+
+	/** Determines the controller's network role/capabilities */
+	public async getControllerCapabilities(): Promise<ControllerCapabilities> {
+		this.driver.controllerLog.print(`querying controller capabilities...`);
+		const result = await this.driver.sendMessage<
+			GetControllerCapabilitiesResponse
+		>(
+			new GetControllerCapabilitiesRequest(this.driver),
+			{ supportCheck: false },
+		);
+
+		const ret: ControllerCapabilities = {
+			isSecondary: result.isSecondary,
+			isUsingHomeIdFromOtherNetwork: result.isUsingHomeIdFromOtherNetwork,
+			isSISPresent: result.isSISPresent,
+			wasRealPrimary: result.wasRealPrimary,
+			isSUC: result.isStaticUpdateController,
+			noNodesIncluded: result.noNodesIncluded,
+		};
+
+		this._isSecondary = ret.isSecondary;
+		this._isUsingHomeIdFromOtherNetwork = ret.isUsingHomeIdFromOtherNetwork;
+		this._isSISPresent = ret.isSISPresent;
+		this._wasRealPrimary = ret.wasRealPrimary;
+		this._isSUC = ret.isSUC;
+		this._noNodesIncluded = ret.noNodesIncluded;
+
+		this.driver.controllerLog.print(
+			`received controller capabilities:
+  controller role:      ${getEnumMemberName(ControllerRole, this.role!)}
+  is the SUC:           ${ret.isSUC}
+  started this network: ${!ret.isUsingHomeIdFromOtherNetwork}
+  SIS is present:       ${ret.isSISPresent}
+  was real primary:     ${ret.wasRealPrimary}`,
+		);
+
+		return ret;
+	}
+
 	/**
 	 * @internal
 	 * Deserializes the controller information and all nodes from the cache.
@@ -8479,5 +8604,1050 @@ ${associatedNodes.join(", ")}`,
 			await this.driver.leaveBootloader(destroy);
 			this._firmwareUpdateInProgress = false;
 		}
+	}
+
+	private _currentLearnMode: LearnModeIntent | undefined;
+	private _joinNetworkOptions: JoinNetworkOptions | undefined;
+
+	public async beginJoiningNetwork(
+		options?: JoinNetworkOptions,
+	): Promise<JoinNetworkResult> {
+		if (this._currentLearnMode != undefined) {
+			return JoinNetworkResult.Error_Busy;
+		} else if (!this.isLearnModePermitted) {
+			return JoinNetworkResult.Error_NotPermitted;
+		}
+
+		// FIXME: If the join strategy says S0, remove S2 from the NIF before joining
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetLearnModeRequest(this.driver, {
+					intent: LearnModeIntent.Inclusion,
+				}),
+			);
+
+			if (result.isOK()) {
+				this._currentLearnMode = LearnModeIntent.Inclusion;
+				this._joinNetworkOptions = options;
+				return JoinNetworkResult.OK;
+			}
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Joining a network failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		this._currentLearnMode = undefined;
+		return JoinNetworkResult.Error_Failed;
+	}
+
+	public async stopJoiningNetwork(): Promise<boolean> {
+		if (
+			this._currentLearnMode !== LearnModeIntent.LegacyInclusionExclusion
+			// FIXME: ^ only for actual exclusion
+			&& this._currentLearnMode !== LearnModeIntent.Inclusion
+		) {
+			return false;
+		}
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetLearnModeRequest(this.driver, {
+					// TODO: We should be using .Stop here for the non-legacy
+					// inclusion/exclusion, but that command results in a
+					// negative response on current firmwares, even though it works.
+					// Using LegacyStop avoids that, but results in an unexpected
+					// LearnModeFailed callback.
+					intent: LearnModeIntent.LegacyStop,
+				}),
+			);
+
+			if (result.isOK()) {
+				this._currentLearnMode = undefined;
+				this._joinNetworkOptions = undefined;
+				return true;
+			}
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Failed to stop joining a network: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		return false;
+	}
+
+	public async beginLeavingNetwork(): Promise<LeaveNetworkResult> {
+		if (this._currentLearnMode != undefined) {
+			return LeaveNetworkResult.Error_Busy;
+		} else if (!this.isLearnModePermitted) {
+			return LeaveNetworkResult.Error_NotPermitted;
+		}
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetLearnModeRequest(this.driver, {
+					intent: LearnModeIntent.NetworkWideExclusion,
+				}),
+			);
+
+			if (result.isOK()) {
+				this._currentLearnMode = LearnModeIntent.NetworkWideExclusion;
+				return LeaveNetworkResult.OK;
+			}
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Leaving the current network failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		this._currentLearnMode = undefined;
+		return LeaveNetworkResult.Error_Failed;
+	}
+
+	public async stopLeavingNetwork(): Promise<boolean> {
+		if (
+			this._currentLearnMode !== LearnModeIntent.LegacyInclusionExclusion
+			// FIXME: ^ only for actual exclusion
+			&& this._currentLearnMode
+				!== LearnModeIntent.LegacyNetworkWideExclusion
+			&& this._currentLearnMode !== LearnModeIntent.DirectExclusion
+			&& this._currentLearnMode !== LearnModeIntent.NetworkWideExclusion
+		) {
+			return false;
+		}
+
+		try {
+			const result = await this.driver.sendMessage<
+				Message & SuccessIndicator
+			>(
+				new SetLearnModeRequest(this.driver, {
+					// TODO: We should be using .Stop here for the non-legacy
+					// inclusion/exclusion, but that command results in a
+					// negative response on current firmwares, even though it works.
+					// Using LegacyStop avoids that, but results in an unexpected
+					// LearnModeFailed callback.
+					intent: LearnModeIntent.LegacyStop,
+				}),
+			);
+
+			if (result.isOK()) {
+				this._currentLearnMode = undefined;
+				return true;
+			}
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`Failed to stop leaving a network: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Is called when a RemoveNode request is received from the controller.
+	 * Handles and controls the exclusion process.
+	 */
+	private handleLearnModeCallback(
+		msg: SetLearnModeCallback,
+	): boolean {
+		// not sure what to do with this message, we're not in learn mode
+		if (this._currentLearnMode == undefined) return false;
+
+		// FIXME: Reset security manager on successful join or leave
+
+		const wasJoining = this._currentLearnMode === LearnModeIntent.Inclusion
+			|| this._currentLearnMode === LearnModeIntent.SmartStart
+			|| this._currentLearnMode
+				=== LearnModeIntent.LegacyNetworkWideInclusion
+			|| (this._currentLearnMode
+					=== LearnModeIntent.LegacyInclusionExclusion
+				// TODO: Secondary controller may also use this to accept controller shift
+				// Figure out how to detect that.
+				&& this.role === ControllerRole.Primary);
+		const wasLeaving =
+			this._currentLearnMode === LearnModeIntent.DirectExclusion
+			|| this._currentLearnMode
+				=== LearnModeIntent.NetworkWideExclusion
+			|| this._currentLearnMode
+				=== LearnModeIntent.LegacyNetworkWideExclusion
+			|| (this._currentLearnMode
+					=== LearnModeIntent.LegacyInclusionExclusion
+				&& this.role !== ControllerRole.Primary);
+
+		if (msg.status === LearnModeStatus.Started) {
+			// cool, cool, cool...
+			return true;
+		} else if (msg.status === LearnModeStatus.Failed) {
+			if (wasJoining) {
+				this._currentLearnMode = undefined;
+				this._joinNetworkOptions = undefined;
+				this.emit("joining network failed");
+				return true;
+			} else if (wasLeaving) {
+				this._currentLearnMode = undefined;
+				this.emit("leaving network failed");
+				return true;
+			}
+		} else if (
+			msg.status === LearnModeStatus.Completed
+			|| (this._currentLearnMode >= LearnModeIntent.Inclusion
+				&& msg.status === LearnModeStatus.ProtocolDone)
+		) {
+			if (wasJoining) {
+				this._currentLearnMode = undefined;
+				this.driver["_securityManager"] = undefined;
+				this.driver["_securityManager2"] = new SecurityManager2();
+				this.driver["_securityManagerLR"] = new SecurityManager2();
+				this._nodes.clear();
+
+				process.nextTick(() => this.afterJoiningNetwork().catch(noop));
+				return true;
+			} else if (wasLeaving) {
+				this._currentLearnMode = undefined;
+				this.emit("network left");
+				return true;
+			}
+		}
+
+		// not sure what to do with this message
+		return false;
+	}
+
+	private async expectSecurityBootstrapS0(
+		bootstrappingNode: ZWaveNode,
+	): Promise<SecurityBootstrapFailure | undefined> {
+		// When bootstrapping with S0, no other keys are granted
+		for (const secClass of securityClassOrder) {
+			if (secClass !== SecurityClass.S0_Legacy) {
+				bootstrappingNode.securityClasses.set(secClass, false);
+			}
+		}
+
+		const unGrantSecurityClass = () => {
+			this.driver["_securityManager"] = undefined;
+			bootstrappingNode.securityClasses.set(
+				SecurityClass.S0_Legacy,
+				false,
+			);
+		};
+
+		const abortTimeout = () => {
+			this.driver.controllerLog.logNode(bootstrappingNode.id, {
+				message:
+					`Security S0 bootstrapping failed: a secure inclusion timer has elapsed`,
+				level: "warn",
+			});
+
+			unGrantSecurityClass();
+			return SecurityBootstrapFailure.Timeout;
+		};
+
+		try {
+			const api = bootstrappingNode.commandClasses.Security;
+
+			// For the first part of the bootstrapping, a temporary key needs to be used
+			this.driver["_securityManager"] = new SecurityManager({
+				ownNodeId: this._ownNodeId!,
+				networkKey: Buffer.alloc(16, 0),
+				nonceTimeout: this.driver.options.timeouts.nonce,
+			});
+
+			// Report the supported schemes
+			await api.reportSecurityScheme(false);
+
+			// Expect a NonceGet within 10 seconds
+			let nonceGet = await this.driver.waitForCommand<SecurityCCNonceGet>(
+				(cc) => cc instanceof SecurityCCNonceGet,
+				10000,
+			).catch(() => "timeout" as const);
+			if (nonceGet === "timeout") return abortTimeout();
+
+			// Send nonce
+			await api.sendNonce();
+
+			// Expect NetworkKeySet within 10 seconds
+			const networkKeySet = await this.driver.waitForCommand<
+				SecurityCCNetworkKeySet
+			>(
+				(cc) => cc instanceof SecurityCCNetworkKeySet,
+				10000,
+			).catch(() => "timeout" as const);
+			if (networkKeySet === "timeout") return abortTimeout();
+
+			// Now that the key is known, we can create the real security manager
+			this.driver["_securityManager"] = new SecurityManager({
+				ownNodeId: this._ownNodeId!,
+				networkKey: networkKeySet.networkKey,
+				nonceTimeout: this.driver.options.timeouts.nonce,
+			});
+
+			// Request a new nonce to respond, which should be answered within 10 seconds
+			let nonce = await api.withOptions({ reportTimeoutMs: 10000 })
+				.getNonce();
+			if (!nonce) return abortTimeout();
+
+			// Verify the key
+			await api.verifyNetworkKey();
+
+			// We are a controller, so continue with scheme inherit
+
+			// Expect a NonceGet within 10 seconds
+			nonceGet = await this.driver.waitForCommand<SecurityCCNonceGet>(
+				(cc) => cc instanceof SecurityCCNonceGet,
+				10000,
+			).catch(() => "timeout" as const);
+			if (nonceGet === "timeout") return abortTimeout();
+
+			// Send nonce
+			await api.sendNonce();
+
+			// Expect SchemeInherit within 10 seconds
+			const schemeInherit = await this.driver.waitForCommand<
+				SecurityCCSchemeInherit
+			>(
+				(cc) => cc instanceof SecurityCCSchemeInherit,
+				10000,
+			).catch(() => "timeout" as const);
+			if (schemeInherit === "timeout") return abortTimeout();
+
+			// Request a new nonce to respond, which should be answered within 10 seconds
+			nonce = await api.withOptions({ reportTimeoutMs: 10000 })
+				.getNonce();
+			if (!nonce) return abortTimeout();
+
+			// Report the supported schemes. This isn't technically correct, but since
+			// S0 won't get any extensions, we can just report the default scheme again
+			await api.reportSecurityScheme(true);
+
+			// Remember that the S0 key was granted
+			bootstrappingNode.securityClasses.set(
+				SecurityClass.S0_Legacy,
+				true,
+			);
+
+			// Store the key
+			this.driver.cacheSet(
+				cacheKeys.controller.securityKeys(SecurityClass.S0_Legacy),
+				networkKeySet.networkKey,
+			);
+
+			this.driver.driverLog.print(
+				`Security S0 bootstrapping successful`,
+			);
+
+			// success 🎉
+		} catch (e) {
+			let errorMessage = `Security S0 bootstrapping failed`;
+			let result = SecurityBootstrapFailure.Unknown;
+			if (!isZWaveError(e)) {
+				errorMessage += `: ${e as any}`;
+			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
+				errorMessage += ": a secure inclusion timer has elapsed.";
+				result = SecurityBootstrapFailure.Timeout;
+			} else if (
+				e.code !== ZWaveErrorCodes.Controller_MessageDropped
+				&& e.code !== ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				errorMessage += `: ${e.message}`;
+			}
+			this.driver.controllerLog.logNode(
+				bootstrappingNode.id,
+				errorMessage,
+				"warn",
+			);
+			unGrantSecurityClass();
+
+			return result;
+		}
+	}
+
+	private async expectSecurityBootstrapS2(
+		bootstrappingNode: ZWaveNode,
+		requested: InclusionGrant,
+		userCallbacks: JoinNetworkUserCallbacks | undefined =
+			this.driver.options.joinNetworkUserCallbacks,
+	): Promise<
+		SecurityBootstrapFailure | undefined
+	> {
+		const api = bootstrappingNode.commandClasses["Security 2"]
+			.withOptions({
+				// Do not wait for Nonce Reports after SET-type commands.
+				// Timing is critical here
+				s2VerifyDelivery: false,
+			});
+
+		const unGrantSecurityClasses = () => {
+			for (const secClass of securityClassOrder) {
+				bootstrappingNode.securityClasses.set(secClass, false);
+			}
+		};
+
+		// FIXME: Abstract this out so it can be reused as primary and secondary
+		const securityManager = isLongRangeNodeId(this._ownNodeId!)
+			? this.driver.securityManagerLR
+			: this.driver.securityManager2;
+
+		if (!securityManager) {
+			// This should not happen when joining a network.
+			unGrantSecurityClasses();
+			return SecurityBootstrapFailure.NoKeysConfigured;
+		}
+
+		const receivedKeys = new Map<SecurityClass, Buffer>();
+
+		const deleteTempKey = () => {
+			// Whatever happens, no further communication needs the temporary key
+			securityManager.deleteNonce(bootstrappingNode.id);
+			securityManager.tempKeys.delete(bootstrappingNode.id);
+		};
+
+		let dskHidden = false;
+		const applicationHideDSK = () => {
+			if (dskHidden) return;
+			dskHidden = true;
+			try {
+				userCallbacks?.done();
+			} catch {
+				// ignore application-level errors
+			}
+		};
+
+		const abort = async (failType?: KEXFailType): Promise<void> => {
+			applicationHideDSK();
+			if (failType != undefined) {
+				try {
+					await api.abortKeyExchange(failType);
+				} catch {
+					// ignore
+				}
+			}
+			// Un-grant S2 security classes we might have granted
+			unGrantSecurityClasses();
+			deleteTempKey();
+		};
+
+		const abortTimeout = async () => {
+			this.driver.controllerLog.logNode(bootstrappingNode.id, {
+				message:
+					`Security S2 bootstrapping failed: a secure inclusion timer has elapsed`,
+				level: "warn",
+			});
+
+			await abort();
+			return SecurityBootstrapFailure.Timeout;
+		};
+
+		const abortCanceled = async () => {
+			this.driver.controllerLog.logNode(bootstrappingNode.id, {
+				message:
+					`The including node canceled the Security S2 bootstrapping.`,
+				direction: "inbound",
+				level: "warn",
+			});
+			await abort();
+			return SecurityBootstrapFailure.NodeCanceled;
+		};
+
+		try {
+			// Send with our desired keys
+			await api.requestKeys({
+				requestedKeys: requested.securityClasses,
+				requestCSA: false,
+				supportedECDHProfiles: [ECDHProfiles.Curve25519],
+				supportedKEXSchemes: [KEXSchemes.KEXScheme1],
+			});
+
+			// Wait for including node to grant keys
+			const kexSet = await this.driver.waitForCommand<
+				Security2CCKEXSet | Security2CCKEXFail
+			>(
+				(cc) =>
+					cc instanceof Security2CCKEXSet
+					|| cc instanceof Security2CCKEXFail,
+				inclusionTimeouts.TB2,
+			).catch(() => "timeout" as const);
+
+			if (kexSet === "timeout") return abortTimeout();
+			if (kexSet instanceof Security2CCKEXFail) {
+				return abortCanceled();
+			}
+
+			// Validate the command
+			// Echo flag must be false
+			if (kexSet.echo) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: KEX Set unexpectedly has the echo flag set.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoVerify);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (
+				kexSet.selectedKEXScheme !== KEXSchemes.KEXScheme1
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Unsupported key exchange scheme.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoSupportedScheme);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (
+				kexSet.selectedECDHProfile !== ECDHProfiles.Curve25519
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Unsupported ECDH profile.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoSupportedCurve);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			} else if (kexSet.permitCSA !== false) {
+				// We do not support CSA at the moment, so it is never requested.
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: CSA granted but not requested.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.BootstrappingCanceled);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			}
+
+			const matchingKeys = kexSet.grantedKeys.filter((k) =>
+				securityClassOrder.includes(k as any)
+				&& requested.securityClasses.includes(k)
+			);
+			if (!matchingKeys.length) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: None of the requested security classes are granted.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.NoKeyMatch);
+				return SecurityBootstrapFailure.ParameterMismatch;
+			}
+
+			const highestGranted = getHighestSecurityClass(matchingKeys);
+			const requiresAuthentication =
+				highestGranted === SecurityClass.S2_AccessControl
+				|| highestGranted === SecurityClass.S2_Authenticated;
+
+			// If authentication is required, use the (static) authenticated ECDH key pair,
+			// otherwise generate a new one
+			const keyPair = requiresAuthentication
+				? this.driver.getLearnModeAuthenticatedKeyPair()
+				: generateECDHKeyPair();
+			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
+			const transmittedPublicKey = Buffer.from(publicKey);
+			if (requiresAuthentication) {
+				// Authentication requires obfuscating the public key
+				transmittedPublicKey.writeUInt16BE(0x0000, 0);
+
+				// Show the DSK to the user
+				const dsk = dskToString(publicKey.subarray(0, 16));
+				try {
+					userCallbacks?.showDSK(dsk);
+				} catch {
+					// ignore application-level errors
+				}
+			}
+			await api.sendPublicKey(transmittedPublicKey, false);
+
+			// Wait for including node to send its public key
+			const pubKeyReport = await this.driver.waitForCommand<
+				Security2CCPublicKeyReport | Security2CCKEXFail
+			>(
+				(cc) =>
+					cc instanceof Security2CCPublicKeyReport
+					|| cc instanceof Security2CCKEXFail,
+				inclusionTimeouts.TB3,
+			).catch(() => "timeout" as const);
+
+			if (pubKeyReport === "timeout") return abortTimeout();
+			if (pubKeyReport instanceof Security2CCKEXFail) {
+				return abortCanceled();
+			}
+
+			const includingNodePubKey = pubKeyReport.publicKey;
+			const sharedSecret = crypto.diffieHellman({
+				publicKey: importRawECDHPublicKey(includingNodePubKey),
+				privateKey: keyPair.privateKey,
+			});
+
+			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
+			const tempKeys = deriveTempKeys(
+				computePRK(sharedSecret, includingNodePubKey, publicKey),
+			);
+			securityManager.deleteNonce(bootstrappingNode.id);
+			securityManager.tempKeys.set(bootstrappingNode.id, {
+				keyCCM: tempKeys.tempKeyCCM,
+				personalizationString: tempKeys.tempPersonalizationString,
+			});
+
+			// Wait for the confirmation of the requested keys and
+			// retransmit the KEXSet echo every 10 seconds until a response is
+			// received or the process timed out.
+			const confirmKeysStartTime = Date.now();
+			let kexReportEcho:
+				| Security2CCKEXReport
+				| Security2CCKEXFail
+				| "timeout"
+				| undefined;
+			for (let i = 0; i <= 25; i++) {
+				try {
+					kexReportEcho = await api.withOptions({
+						reportTimeoutMs: 10000,
+					}).confirmGrantedKeys({
+						grantedKeys: kexSet.grantedKeys,
+						permitCSA: kexSet.permitCSA,
+						selectedECDHProfile: kexSet.selectedECDHProfile,
+						selectedKEXScheme: kexSet.selectedKEXScheme,
+						_reserved: kexSet._reserved,
+					});
+				} catch {
+					// ignore
+				}
+				if (kexReportEcho != undefined) break;
+				if (Date.now() - confirmKeysStartTime > 240000) break;
+			}
+
+			if (!kexReportEcho || kexReportEcho === "timeout") {
+				return abortTimeout();
+			} else if (kexReportEcho instanceof Security2CCKEXFail) {
+				return abortCanceled();
+			}
+
+			// The application no longer needs to show the DSK
+			applicationHideDSK();
+
+			// Validate the response
+			if (!kexReportEcho.echo) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: KEXReport received without echo flag`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (kexReportEcho.requestCSA !== false) {
+				// We don't request CSA
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Invalid KEXReport received`,
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (kexReportEcho._reserved !== 0) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Invalid KEXReport received`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.NodeCanceled;
+			} else if (
+				!kexReportEcho.isEncapsulatedWith(
+					CommandClasses["Security 2"],
+					Security2Command.MessageEncapsulation,
+				)
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Command received without encryption`,
+					direction: "inbound",
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.S2WrongSecurityLevel;
+			} else if (
+				kexReportEcho.requestedKeys.length
+					!== requested.securityClasses.length
+				|| !kexReportEcho.requestedKeys.every((k) =>
+					requested.securityClasses.includes(k)
+				)
+			) {
+				this.driver.controllerLog.logNode(bootstrappingNode.id, {
+					message:
+						`Security S2 bootstrapping failed: Granted key mismatch.`,
+					level: "warn",
+				});
+				await abort(KEXFailType.WrongSecurityLevel);
+				return SecurityBootstrapFailure.S2WrongSecurityLevel;
+			}
+
+			for (const key of kexSet.grantedKeys) {
+				// Request network key and wait for including node to respond
+				const keyReportPromise = this.driver.waitForCommand<
+					Security2CCNetworkKeyReport | Security2CCKEXFail
+				>(
+					(cc) =>
+						cc instanceof Security2CCNetworkKeyReport
+						|| cc instanceof Security2CCKEXFail,
+					inclusionTimeouts.TB4,
+				).catch(() => "timeout" as const);
+
+				await api.requestNetworkKey(key);
+				const keyReport = await keyReportPromise;
+
+				if (keyReport === "timeout") return abortTimeout();
+				if (keyReport instanceof Security2CCKEXFail) {
+					return abortCanceled();
+				}
+
+				if (
+					!keyReport.isEncapsulatedWith(
+						CommandClasses["Security 2"],
+						Security2Command.MessageEncapsulation,
+					)
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Command received without encryption`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
+				}
+
+				// Ensure it was received encrypted with the temporary key
+				if (
+					!securityManager.hasUsedSecurityClass(
+						bootstrappingNode.id,
+						SecurityClass.Temporary,
+					)
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Node used wrong key to communicate.`,
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
+				}
+
+				const securityClass = keyReport.grantedKey;
+				if (securityClass !== key) {
+					// and that the granted key is the requested key
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Received key for wrong security class`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.DifferentKey);
+					return SecurityBootstrapFailure.ParameterMismatch;
+				}
+
+				// Store the network key
+				receivedKeys.set(securityClass, keyReport.networkKey);
+				securityManager.setKey(securityClass, keyReport.networkKey);
+				if (securityClass === SecurityClass.S0_Legacy) {
+					// TODO: This is awkward to have here
+					this.driver["_securityManager"] = new SecurityManager({
+						ownNodeId: this._ownNodeId!,
+						networkKey: keyReport.networkKey,
+						nonceTimeout: this.driver.options.timeouts.nonce,
+					});
+				}
+
+				// Force nonce synchronization, then verify the network key
+				securityManager.deleteNonce(bootstrappingNode.id);
+				await api.withOptions({
+					s2OverrideSecurityClass: securityClass,
+				}).verifyNetworkKey();
+
+				// Force nonce synchronization again for the temporary key
+				securityManager.deleteNonce(bootstrappingNode.id);
+
+				// Wait for including node to send its public key
+				const transferEnd = await this.driver.waitForCommand<
+					Security2CCTransferEnd | Security2CCKEXFail
+				>(
+					(cc) =>
+						cc instanceof Security2CCTransferEnd
+						|| cc instanceof Security2CCKEXFail,
+					inclusionTimeouts.TB5,
+				).catch(() => "timeout" as const);
+
+				if (transferEnd === "timeout") return abortTimeout();
+				if (transferEnd instanceof Security2CCKEXFail) {
+					return abortCanceled();
+				}
+
+				if (
+					!keyReport.isEncapsulatedWith(
+						CommandClasses["Security 2"],
+						Security2Command.MessageEncapsulation,
+					)
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Command received without encryption`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.S2WrongSecurityLevel;
+				} else if (
+					!transferEnd.keyVerified || transferEnd.keyRequestComplete
+				) {
+					this.driver.controllerLog.logNode(bootstrappingNode.id, {
+						message:
+							`Security S2 bootstrapping failed: Invalid TransferEnd received`,
+						direction: "inbound",
+						level: "warn",
+					});
+					await abort(KEXFailType.WrongSecurityLevel);
+					return SecurityBootstrapFailure.NodeCanceled;
+				}
+			}
+
+			// Confirm end of bootstrapping
+			await api.endKeyExchange();
+
+			// Remember all security classes we were granted
+			for (const securityClass of securityClassOrder) {
+				bootstrappingNode.securityClasses.set(
+					securityClass,
+					kexSet.grantedKeys.includes(securityClass),
+				);
+			}
+			// And store the keys
+			for (const [secClass, key] of receivedKeys) {
+				this.driver.cacheSet(
+					cacheKeys.controller.securityKeys(secClass),
+					key,
+				);
+			}
+
+			this.driver.driverLog.print(
+				`Security S2 bootstrapping successful with these security classes:${
+					[
+						...bootstrappingNode.securityClasses.entries(),
+					]
+						.filter(([, v]) => v)
+						.map(([k]) =>
+							`\n· ${getEnumMemberName(SecurityClass, k)}`
+						)
+						.join("")
+				}`,
+			);
+
+			// success 🎉
+		} catch (e) {
+			let errorMessage =
+				`Security S2 bootstrapping failed, no S2 security classes were granted`;
+			let result = SecurityBootstrapFailure.Unknown;
+			if (!isZWaveError(e)) {
+				errorMessage += `: ${e as any}`;
+			} else if (e.code === ZWaveErrorCodes.Controller_MessageExpired) {
+				errorMessage += ": a secure inclusion timer has elapsed.";
+				result = SecurityBootstrapFailure.Timeout;
+			} else if (
+				e.code !== ZWaveErrorCodes.Controller_MessageDropped
+				&& e.code !== ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				errorMessage += `: ${e.message}`;
+			}
+			this.driver.controllerLog.logNode(
+				bootstrappingNode.id,
+				errorMessage,
+				"warn",
+			);
+			// Remember that we were NOT granted any S2 security classes
+			unGrantSecurityClasses();
+			bootstrappingNode.removeCC(CommandClasses["Security 2"]);
+
+			return result;
+		} finally {
+			// Whatever happens, no further communication needs the temporary key
+			deleteTempKey();
+		}
+	}
+
+	private async afterJoiningNetwork(): Promise<void> {
+		this.driver.driverLog.print("waiting for security bootstrapping...");
+
+		const bootstrapInitStart = Date.now();
+		const supportedCCs = determineNIF().supportedCCs;
+		const supportsS0 = supportedCCs.includes(CommandClasses.Security);
+		const supportsS2 = supportedCCs.includes(CommandClasses["Security 2"]);
+
+		let initTimeout: number;
+		let initPredicate: (cc: ICommandClass) => boolean;
+
+		// KEX Get must be received:
+		// - no later than 10..30 seconds after the inclusion if S0 is supported
+		// - no later than 30 seconds after the inclusion if only S2 is supported
+		//   For simplicity, we wait the full 30s.
+		// SecurityCCSchemeGet must be received no later than 10 seconds
+		//   after the inclusion if S0 is supported
+		if (supportsS0 && supportsS2) {
+			initTimeout = inclusionTimeouts.TB1;
+			initPredicate = (cc) =>
+				cc instanceof SecurityCCSchemeGet
+				|| cc instanceof Security2CCKEXGet;
+		} else if (supportsS2) {
+			initTimeout = inclusionTimeouts.TB1;
+			initPredicate = (cc) => cc instanceof Security2CCKEXGet;
+		} else if (supportsS0) {
+			initTimeout = 10000;
+			initPredicate = (cc) => cc instanceof SecurityCCSchemeGet;
+		} else {
+			initTimeout = 0;
+			initPredicate = () => false;
+		}
+
+		const bootstrapInitPromise = this.driver.waitForCommand<
+			Security2CCKEXGet | SecurityCCSchemeGet
+		>(initPredicate, initTimeout).catch(() => "timeout" as const);
+
+		const identifySelf = async () => {
+			// Update own node ID and other controller flags.
+			await this.identify().catch(noop);
+
+			// Notify applications that we're now part of a new network
+			// The driver will point the databases to the new home ID
+			this.emit("network found", this._homeId!, this._ownNodeId!);
+
+			// Figure out the controller's network role
+			await this.getControllerCapabilities().catch(noop);
+
+			// Create new node instances
+			const { nodeIds } = await this.getSerialApiInitData();
+			await this.initNodes(nodeIds, [], () => Promise.resolve());
+		};
+
+		// Do the self-identification while waiting for the bootstrap init command
+		const [bootstrapInit] = await Promise.all([
+			bootstrapInitPromise,
+			identifySelf(),
+		]);
+
+		if (bootstrapInit === "timeout") {
+			this.driver.controllerLog.print(
+				"No security bootstrapping command received, continuing without encryption...",
+			);
+		} else if (bootstrapInit instanceof SecurityCCSchemeGet) {
+			const nodeId = bootstrapInit.nodeId;
+			const bootstrappingNode = this.nodes.get(nodeId);
+			if (!bootstrappingNode) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message:
+						"Received S2 bootstrap initiation from unknown node, ignoring...",
+					level: "warn",
+				});
+			} else if (Date.now() - bootstrapInitStart > 10000) {
+				// Received too late, S0 bootstrapping must not continue
+				this.driver.controllerLog.print(
+					"Security S0 bootstrapping command received too late, continuing without encryption...",
+				);
+			} else {
+				// We definitely know that the node supports S0
+				bootstrappingNode.addCC(CommandClasses.Security, {
+					secure: true,
+					isSupported: true,
+				});
+
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `Received S0 bootstrap initiation`,
+				});
+
+				const bootstrapResult = await this.expectSecurityBootstrapS0(
+					bootstrappingNode,
+				);
+				if (bootstrapResult !== undefined) {
+					// If there was a failure, mark S0 as not supported
+					bootstrappingNode.removeCC(CommandClasses.Security);
+				}
+			}
+		} else if (bootstrapInit instanceof Security2CCKEXGet) {
+			const nodeId = bootstrapInit.nodeId as number;
+			const bootstrappingNode = this.nodes.get(nodeId);
+			if (!bootstrappingNode) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message:
+						"Received S2 bootstrap initiation from unknown node, ignoring...",
+					level: "warn",
+				});
+			} else {
+				// We definitely know that the node supports S2
+				bootstrappingNode.addCC(CommandClasses["Security 2"], {
+					secure: true,
+					isSupported: true,
+				});
+
+				let grant: InclusionGrant | undefined;
+
+				switch (this._joinNetworkOptions?.strategy) {
+					// case JoinNetworkStrategy.Security_S2: {
+					// 	grant = this._joinNetworkOptions.requested;
+					// 	break;
+					// }
+					// case JoinNetworkStrategy.SmartStart:
+					case JoinNetworkStrategy.Default:
+					default: {
+						// No options given, just request all keys
+						grant = {
+							securityClasses: [...securityClassOrder],
+							clientSideAuth: false,
+						};
+						break;
+					}
+				}
+
+				if (grant) {
+					this.driver.controllerLog.logNode(nodeId, {
+						message:
+							`Received S2 bootstrap initiation, requesting keys: ${
+								grant.securityClasses.map((sc) =>
+									`\n· ${
+										getEnumMemberName(SecurityClass, sc)
+									}\n`
+								).join("")
+							}
+  client-side auth: ${grant.clientSideAuth}`,
+					});
+
+					const bootstrapResult = await this
+						.expectSecurityBootstrapS2(
+							bootstrappingNode,
+							grant,
+						);
+					if (bootstrapResult !== undefined) {
+						// If there was a failure, mark S2 as not supported
+						bootstrappingNode.removeCC(
+							CommandClasses["Security 2"],
+						);
+					}
+				}
+			}
+		}
+
+		this._joinNetworkOptions = undefined;
+
+		// Read protocol information of all nodes
+		for (const node of this.nodes.values()) {
+			if (node.isControllerNode) continue;
+			await node["queryProtocolInfo"]();
+		}
+
+		// Notify applications that joining the network is complete
+		this.emit("network joined");
 	}
 }

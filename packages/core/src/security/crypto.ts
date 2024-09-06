@@ -96,6 +96,63 @@ export function encodeX25519KeyDERSPKI(key: Buffer): Buffer {
 	return Buffer.concat([Buffer.from("302a300506032b656e032100", "hex"), key]);
 }
 
+export interface KeyPair {
+	publicKey: crypto.KeyObject;
+	privateKey: crypto.KeyObject;
+}
+
+/** Generates an x25519 / ECDH key pair */
+export function generateECDHKeyPair(): KeyPair {
+	return crypto.generateKeyPairSync("x25519");
+}
+
+export function keyPairFromRawECDHPrivateKey(privateKey: Buffer): KeyPair {
+	const privateKeyObject = importRawECDHPrivateKey(privateKey);
+	const publicKeyObject = crypto.createPublicKey(privateKeyObject);
+	return {
+		privateKey: privateKeyObject,
+		publicKey: publicKeyObject,
+	};
+}
+
+/** Takes an ECDH public KeyObject and returns the raw key as a buffer */
+export function extractRawECDHPublicKey(publicKey: crypto.KeyObject): Buffer {
+	return decodeX25519KeyDER(
+		publicKey.export({
+			type: "spki",
+			format: "der",
+		}),
+	);
+}
+
+/** Converts a raw public key to an ECDH KeyObject */
+export function importRawECDHPublicKey(publicKey: Buffer): crypto.KeyObject {
+	return crypto.createPublicKey({
+		key: encodeX25519KeyDERSPKI(publicKey),
+		format: "der",
+		type: "spki",
+	});
+}
+
+/** Takes an ECDH private KeyObject and returns the raw key as a buffer */
+export function extractRawECDHPrivateKey(privateKey: crypto.KeyObject): Buffer {
+	return decodeX25519KeyDER(
+		privateKey.export({
+			type: "pkcs8",
+			format: "der",
+		}),
+	);
+}
+
+/** Converts a raw private key to an ECDH KeyObject */
+export function importRawECDHPrivateKey(privateKey: Buffer): crypto.KeyObject {
+	return crypto.createPrivateKey({
+		key: encodeX25519KeyDERPKCS8(privateKey),
+		format: "der",
+		type: "pkcs8",
+	});
+}
+
 // Decoding with asn1js for reference:
 // const asn1 = require("asn1js");
 // const public = asn1.fromBER(keypair.publicKey.buffer);

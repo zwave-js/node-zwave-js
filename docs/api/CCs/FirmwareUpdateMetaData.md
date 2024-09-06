@@ -25,7 +25,7 @@ async reportMetaData(
 ```ts
 async requestUpdate(
 	options: FirmwareUpdateMetaDataCCRequestGetOptions,
-): Promise<FirmwareUpdateRequestStatus>;
+): Promise<FirmwareUpdateInitResult>;
 ```
 
 Requests the device to start the firmware update process.

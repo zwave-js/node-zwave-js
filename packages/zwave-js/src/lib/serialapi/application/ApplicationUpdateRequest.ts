@@ -239,3 +239,32 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived
 export class ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived
 	extends ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 {}
+
+@applicationUpdateType(ApplicationUpdateTypes.SUC_IdChanged)
+export class ApplicationUpdateRequestSUCIdChanged
+	extends ApplicationUpdateRequest
+{
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
+
+		const { nodeId } = parseNodeID(this.payload, host.nodeIdType, 0);
+		this.sucNodeID = nodeId;
+		// byte 1/2 is 0, meaning unknown
+	}
+
+	public sucNodeID: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			type: getEnumMemberName(ApplicationUpdateTypes, this.updateType),
+			"SUC node ID": this.sucNodeID,
+		};
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
+}

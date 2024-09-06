@@ -17,6 +17,7 @@ export interface MockControllerCapabilities {
 	isSISPresent: boolean;
 	wasRealPrimary: boolean;
 	isStaticUpdateController: boolean;
+	noNodesIncluded: boolean;
 	sucNodeId: number;
 
 	supportsTimers: boolean;
@@ -65,6 +66,7 @@ export function getDefaultMockControllerCapabilities(): MockControllerCapabiliti
 		isStaticUpdateController: true,
 		wasRealPrimary: true,
 		isUsingHomeIdFromOtherNetwork: false,
+		noNodesIncluded: false,
 		sucNodeId: 0,
 
 		supportsTimers: false,

@@ -3,6 +3,7 @@ import {
 	MessagePriority,
 	NUM_NODEMASK_BYTES,
 	NodeType,
+	type SerialApiInitData,
 	encodeBitMask,
 	parseNodeBitMask,
 } from "@zwave-js/core";
@@ -31,16 +32,8 @@ import type { ZWaveApiVersion } from "../_Types";
 export class GetSerialApiInitDataRequest extends Message {}
 
 export interface GetSerialApiInitDataResponseOptions
-	extends MessageBaseOptions
-{
-	zwaveApiVersion: ZWaveApiVersion;
-	isPrimary: boolean;
-	nodeType: NodeType;
-	supportsTimers: boolean;
-	isSIS: boolean;
-	nodeIds: number[];
-	zwaveChipType?: string | UnknownZWaveChipType;
-}
+	extends MessageBaseOptions, SerialApiInitData
+{}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {

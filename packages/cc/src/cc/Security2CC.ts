@@ -46,6 +46,7 @@ import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCResponseRole,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
@@ -427,6 +428,24 @@ export class Security2CCAPI extends CCAPI {
 		}
 	}
 
+	/** Requests the given keys from an including node */
+	public async requestKeys(
+		params: Omit<Security2CCKEXReportOptions, "echo">,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.KEXReport,
+		);
+
+		const cc = new Security2CCKEXReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...params,
+			echo: false,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
 	/** Grants the joining node the given keys */
 	public async grantKeys(
 		params: Omit<Security2CCKEXSetOptions, "echo">,
@@ -442,8 +461,8 @@ export class Security2CCAPI extends CCAPI {
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	/** Confirms the keys that were granted to a node */
-	public async confirmGrantedKeys(
+	/** Confirms the keys that were requested by a node */
+	public async confirmRequestedKeys(
 		params: Omit<Security2CCKEXReportOptions, "echo">,
 	): Promise<void> {
 		this.assertSupportsCommand(
@@ -460,6 +479,24 @@ export class Security2CCAPI extends CCAPI {
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
+	/** Confirms the keys that were granted by the including node */
+	public async confirmGrantedKeys(
+		params: Omit<Security2CCKEXSetOptions, "echo">,
+	): Promise<Security2CCKEXReport | Security2CCKEXFail | undefined> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.KEXSet,
+		);
+
+		const cc = new Security2CCKEXSet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...params,
+			echo: true,
+		});
+		return this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
 	/** Notifies the other node that the ongoing key exchange was aborted */
 	public async abortKeyExchange(failType: KEXFailType): Promise<void> {
 		this.assertSupportsCommand(Security2Command, Security2Command.KEXFail);
@@ -472,7 +509,10 @@ export class Security2CCAPI extends CCAPI {
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async sendPublicKey(publicKey: Buffer): Promise<void> {
+	public async sendPublicKey(
+		publicKey: Buffer,
+		includingNode: boolean = true,
+	): Promise<void> {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.PublicKeyReport,
@@ -481,8 +521,24 @@ export class Security2CCAPI extends CCAPI {
 		const cc = new Security2CCPublicKeyReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			includingNode: true,
+			includingNode,
 			publicKey,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	public async requestNetworkKey(
+		securityClass: SecurityClass,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NetworkKeyGet,
+		);
+
+		const cc = new Security2CCNetworkKeyGet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			requestedKey: securityClass,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
@@ -505,6 +561,19 @@ export class Security2CCAPI extends CCAPI {
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
+	public async verifyNetworkKey(): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.NetworkKeyVerify,
+		);
+
+		const cc = new Security2CCNetworkKeyVerify(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
 	public async confirmKeyVerification(): Promise<void> {
 		this.assertSupportsCommand(
 			Security2Command,
@@ -522,6 +591,21 @@ export class Security2CCAPI extends CCAPI {
 			// Don't wait for an ACK from the node
 			transmitOptions: TransmitOptions.DEFAULT & ~TransmitOptions.ACK,
 		});
+	}
+
+	public async endKeyExchange(): Promise<void> {
+		this.assertSupportsCommand(
+			Security2Command,
+			Security2Command.TransferEnd,
+		);
+
+		const cc = new Security2CCTransferEnd(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			keyVerified: false,
+			keyRequestComplete: true,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -819,7 +903,7 @@ export class Security2CC extends CommandClass {
 		host: ZWaveHost,
 		cc: CommandClass,
 		options?: {
-			securityClass?: S2SecurityClass;
+			securityClass?: SecurityClass;
 			multicastOutOfSync?: boolean;
 			multicastGroupId?: number;
 			verifyDelivery?: boolean;
@@ -871,7 +955,7 @@ export interface Security2CCMessageEncapsulationOptions
 	extends CCCommandOptions
 {
 	/** Can be used to override the default security class for the command */
-	securityClass?: S2SecurityClass;
+	securityClass?: SecurityClass;
 	extensions?: Security2Extension[];
 	encapsulated?: CommandClass;
 	verifyDelivery?: boolean;
@@ -882,19 +966,36 @@ function getCCResponseForMessageEncapsulation(
 	sent: Security2CCMessageEncapsulation,
 ) {
 	if (sent.encapsulated?.expectsCCResponse()) {
-		return [
+		const ret = [
 			Security2CCMessageEncapsulation as any,
 			Security2CCNonceReport as any,
 		];
+
+		if (
+			sent.encapsulated instanceof Security2CCKEXSet
+			|| sent.encapsulated instanceof Security2CCKEXReport
+			|| sent.encapsulated instanceof Security2CCNetworkKeyGet
+			|| sent.encapsulated instanceof Security2CCNetworkKeyReport
+			|| sent.encapsulated instanceof Security2CCNetworkKeyVerify
+		) {
+			ret.push(Security2CCKEXFail as any);
+		}
+
+		return ret;
 	}
 }
 
 function testCCResponseForMessageEncapsulation(
 	sent: Security2CCMessageEncapsulation,
-	received: Security2CCMessageEncapsulation | Security2CCNonceReport,
+	received:
+		| Security2CCMessageEncapsulation
+		| Security2CCNonceReport
+		| Security2CCKEXFail,
 ) {
 	if (received instanceof Security2CCMessageEncapsulation) {
 		return "checkEncapsulated";
+	} else if (received instanceof Security2CCKEXFail) {
+		return true;
 	} else {
 		return received.SOS && !!received.receiverEI;
 	}
@@ -1404,9 +1505,12 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			);
 			const receiverEI = spanState.receiverEI;
 
-			// While bootstrapping a node, the controller only sends commands encrypted
-			// with the temporary key
-			if (this.securityManager.tempKeys.has(receiverNodeId)) {
+			// While bootstrapping a node, prefer the temporary key, unless the
+			// specific command specifies a security class
+			if (
+				this.securityClass == undefined
+				&& this.securityManager.tempKeys.has(receiverNodeId)
+			) {
 				this.securityManager.initializeTempSPAN(
 					receiverNodeId,
 					senderEI,
@@ -2070,12 +2174,36 @@ export class Security2CCKEXGet extends Security2CC {}
 export interface Security2CCKEXSetOptions {
 	permitCSA: boolean;
 	echo: boolean;
+	_reserved?: number;
 	selectedKEXScheme: KEXSchemes;
 	selectedECDHProfile: ECDHProfiles;
 	grantedKeys: SecurityClass[];
 }
 
+function getExpectedResponseForKEXSet(sent: Security2CCKEXSet) {
+	if (sent.echo) {
+		return [Security2CCKEXReport, Security2CCKEXFail];
+	} else {
+		return undefined;
+	}
+}
+
+function testExpectedResponseForKEXSet(
+	sent: Security2CCKEXSet,
+	received: any,
+): CCResponseRole {
+	if (sent.echo) {
+		if (received instanceof Security2CCKEXReport) {
+			return received.echo;
+		} else if (received instanceof Security2CCKEXFail) {
+			return true;
+		}
+	}
+	return false;
+}
+
 @CCCommand(Security2Command.KEXSet)
+@expectedCCResponse(getExpectedResponseForKEXSet, testExpectedResponseForKEXSet)
 export class Security2CCKEXSet extends Security2CC {
 	public constructor(
 		host: ZWaveHost,
@@ -2109,9 +2237,9 @@ export class Security2CCKEXSet extends Security2CC {
 				SecurityClass.S2_Unauthenticated,
 			);
 		} else {
-			this._reserved = 0;
 			this.permitCSA = options.permitCSA;
 			this.echo = options.echo;
+			this._reserved = options._reserved ?? 0;
 			this.selectedKEXScheme = options.selectedKEXScheme;
 			this.selectedECDHProfile = options.selectedECDHProfile;
 			this.grantedKeys = options.grantedKeys;
@@ -2127,7 +2255,11 @@ export class Security2CCKEXSet extends Security2CC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
-			Buffer.from([(this.permitCSA ? 0b10 : 0) + (this.echo ? 0b1 : 0)]),
+			Buffer.from([
+				this._reserved
+				+ (this.permitCSA ? 0b10 : 0)
+				+ (this.echo ? 0b1 : 0),
+			]),
 			// The bit mask starts at 0, but bit 0 is not used
 			encodeBitMask([this.selectedKEXScheme], 7, 0),
 			encodeBitMask(
@@ -2264,11 +2396,9 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 17);
+			this.grantedKey = bitMaskToSecurityClass(this.payload, 0);
+			this.networkKey = this.payload.subarray(1, 17);
 		} else {
 			this.grantedKey = options.grantedKey;
 			this.networkKey = options.networkKey;
@@ -2307,7 +2437,8 @@ export interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(Security2Command.NetworkKeyGet)
-@expectedCCResponse(Security2CCNetworkKeyReport)
+// Don't expect a response - we need to distinguish between Report and Fail
+// FIXME: maybe use the dynamic @expectedCCResponse instead?
 export class Security2CCNetworkKeyGet extends Security2CC {
 	public constructor(
 		host: ZWaveHost,

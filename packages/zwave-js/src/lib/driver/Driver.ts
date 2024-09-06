@@ -51,10 +51,12 @@ import {
 import {
 	CommandClasses,
 	ControllerLogger,
+	ControllerRole,
 	ControllerStatus,
 	Duration,
 	EncapsulationFlags,
 	type ICommandClass,
+	type KeyPair,
 	type LogConfig,
 	MAX_SUPERVISION_SESSION_ID,
 	MAX_TRANSPORT_SERVICE_SESSION_ID,
@@ -87,6 +89,8 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 	deserializeCacheValue,
+	extractRawECDHPrivateKey,
+	generateECDHKeyPair,
 	getCCName,
 	highResTimestamp,
 	isEncapsulationCC,
@@ -95,8 +99,10 @@ import {
 	isMissingControllerCallback,
 	isMissingControllerResponse,
 	isZWaveError,
+	keyPairFromRawECDHPrivateKey,
 	messageRecordToLines,
 	securityClassIsS2,
+	securityClassOrder,
 	serializeCacheValue,
 	stripUndefined,
 	timespan,
@@ -453,6 +459,25 @@ function checkOptions(options: ZWaveOptions): void {
 		) {
 			throw new ZWaveError(
 				`The inclusionUserCallbacks must contain the following functions: grantSecurityClasses, validateDSKAndEnterPIN, abort!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+	}
+
+	if (options.joinNetworkUserCallbacks) {
+		if (!isObject(options.joinNetworkUserCallbacks)) {
+			throw new ZWaveError(
+				`The joinNetworkUserCallbacks must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (
+			typeof options.joinNetworkUserCallbacks.showDSK
+				!== "function"
+			|| typeof options.joinNetworkUserCallbacks.done
+				!== "function"
+		) {
+			throw new ZWaveError(
+				`The joinNetworkUserCallbacks must contain the following functions: showDSK, done!`,
 				ZWaveErrorCodes.Driver_InvalidOptions,
 			);
 		}
@@ -841,6 +866,31 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return isLongRange ? this.securityManagerLR : this.securityManager2;
 	}
 
+	private _learnModeAuthenticatedKeyPair: KeyPair | undefined;
+	/** @internal */
+	public getLearnModeAuthenticatedKeyPair(): KeyPair {
+		if (this._learnModeAuthenticatedKeyPair == undefined) {
+			// Try restoring from cache
+			const privateKey = this.cacheGet<Buffer>(
+				cacheKeys.controller.privateKey,
+			);
+			if (privateKey) {
+				this._learnModeAuthenticatedKeyPair =
+					keyPairFromRawECDHPrivateKey(privateKey);
+			} else {
+				// Not found in cache, create a new one and cache it
+				this._learnModeAuthenticatedKeyPair = generateECDHKeyPair();
+				this.cacheSet(
+					cacheKeys.controller.privateKey,
+					extractRawECDHPrivateKey(
+						this._learnModeAuthenticatedKeyPair.privateKey,
+					),
+				);
+			}
+		}
+		return this._learnModeAuthenticatedKeyPair;
+	}
+
 	/**
 	 * **!!! INTERNAL !!!**
 	 *
@@ -1036,6 +1086,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			"disableOptimisticValueUpdate",
 			"emitValueUpdateAfterSetValue",
 			"inclusionUserCallbacks",
+			"joinNetworkUserCallbacks",
 			"interview",
 			"preferences",
 			"vendor",
@@ -1459,7 +1510,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				.on(
 					"status changed",
 					this.onControllerStatusChanged.bind(this),
-				);
+				)
+				.on("network found", this.onNetworkFound.bind(this))
+				.on("network joined", this.onNetworkJoined.bind(this))
+				.on("network left", this.onNetworkLeft.bind(this));
 		}
 
 		if (!this._options.testingHooks?.skipControllerIdentification) {
@@ -1513,7 +1567,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			await this.performCacheMigration();
 
 			// Initialize all nodes and restore the data from cache
-			await this._controller.initNodes(
+			await this.controller.initNodes(
 				nodeIds,
 				lrNodeIds ?? [],
 				async () => {
@@ -1524,90 +1578,178 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				},
 			);
 
-			// Auto-enable smart start inclusion
-			this._controller.autoProvisionSmartStart();
-		}
-
-		// Set up the S0 security manager. We can only do that after the controller
-		// interview because we need to know the controller node id.
-		const S0Key = this._options.securityKeys?.S0_Legacy;
-		if (S0Key) {
-			this.driverLog.print(
-				"Network key for S0 configured, enabling S0 security manager...",
-			);
-			this._securityManager = new SecurityManager({
-				networkKey: S0Key,
-				ownNodeId: this._controller.ownNodeId!,
-				nonceTimeout: this._options.timeouts.nonce,
-			});
+			if (this.controller.role === ControllerRole.Primary) {
+				// Auto-enable smart start inclusion
+				this.controller.autoProvisionSmartStart();
+			}
 		} else {
-			this.driverLog.print(
-				"No network key for S0 configured, communication with secure (S0) devices won't work!",
-				"warn",
-			);
+			// When skipping the controller identification, set the flags to consider the controller a primary
+			this.controller["_wasRealPrimary"] = true;
+			this.controller["_isSUC"] = true;
+			this.controller["_isSISPresent"] = true;
+			this.controller["_sucNodeId"] = 1;
 		}
 
-		// The S2 security manager could be initialized earlier, but we do it here for consistency
-		if (
-			this._options.securityKeys
-			// Only set it up if we have security keys for at least one S2 security class
-			&& Object.keys(this._options.securityKeys).some(
-				(key) =>
-					key.startsWith("S2_")
-					&& key in SecurityClass
-					&& securityClassIsS2((SecurityClass as any)[key]),
-			)
-		) {
-			this.driverLog.print(
-				"At least one network key for S2 configured, enabling S2 security manager...",
-			);
-			this._securityManager2 = new SecurityManager2();
-			// Set up all keys
-			for (
-				const secClass of [
-					"S2_Unauthenticated",
-					"S2_Authenticated",
-					"S2_AccessControl",
-					"S0_Legacy",
-				] as const
+		if (this.controller.role === ControllerRole.Primary) {
+			// Set up the S0 security manager. We can only do that after the controller
+			// interview because we need to know the controller node id.
+			const S0Key = this._options.securityKeys?.S0_Legacy;
+			if (S0Key) {
+				this.driverLog.print(
+					"Network key for S0 configured, enabling S0 security manager...",
+				);
+				this._securityManager = new SecurityManager({
+					networkKey: S0Key,
+					ownNodeId: this._controller.ownNodeId!,
+					nonceTimeout: this._options.timeouts.nonce,
+				});
+			} else {
+				this.driverLog.print(
+					"No network key for S0 configured, communication with secure (S0) devices won't work!",
+					"warn",
+				);
+			}
+
+			// The S2 security manager could be initialized earlier, but we do it here for consistency
+			if (
+				this._options.securityKeys
+				// Only set it up if we have security keys for at least one S2 security class
+				&& Object.keys(this._options.securityKeys).some(
+					(key) =>
+						key.startsWith("S2_")
+						&& key in SecurityClass
+						&& securityClassIsS2((SecurityClass as any)[key]),
+				)
 			) {
-				const key = this._options.securityKeys[secClass];
-				if (key) {
-					this._securityManager2.setKey(SecurityClass[secClass], key);
+				this.driverLog.print(
+					"At least one network key for S2 configured, enabling S2 security manager...",
+				);
+				this._securityManager2 = new SecurityManager2();
+				// Set up all keys
+				for (
+					const secClass of [
+						"S2_Unauthenticated",
+						"S2_Authenticated",
+						"S2_AccessControl",
+						"S0_Legacy",
+					] as const
+				) {
+					const key = this._options.securityKeys[secClass];
+					if (key) {
+						this._securityManager2.setKey(
+							SecurityClass[secClass],
+							key,
+						);
+					}
+				}
+			} else {
+				this.driverLog.print(
+					"No network key for S2 configured, communication with secure (S2) devices won't work!",
+					"warn",
+				);
+			}
+
+			if (
+				this._options.securityKeysLongRange?.S2_AccessControl
+				|| this._options.securityKeysLongRange?.S2_Authenticated
+			) {
+				this.driverLog.print(
+					"At least one network key for Z-Wave Long Range configured, enabling security manager...",
+				);
+				this._securityManagerLR = new SecurityManager2();
+				if (this._options.securityKeysLongRange?.S2_AccessControl) {
+					this._securityManagerLR.setKey(
+						SecurityClass.S2_AccessControl,
+						this._options.securityKeysLongRange.S2_AccessControl,
+					);
+				}
+				if (this._options.securityKeysLongRange?.S2_Authenticated) {
+					this._securityManagerLR.setKey(
+						SecurityClass.S2_Authenticated,
+						this._options.securityKeysLongRange.S2_Authenticated,
+					);
+				}
+			} else {
+				this.driverLog.print(
+					"No network key for Z-Wave Long Range configured, communication won't work!",
+					"warn",
+				);
+			}
+		} else {
+			// Secondary controller - load security keys from cache.
+			// Either LR or S2+S0, not both
+			if (isLongRangeNodeId(this.controller.ownNodeId!)) {
+				const securityKeysLongRange = [
+					SecurityClass.S2_AccessControl,
+					SecurityClass.S2_Authenticated,
+				].map(
+					(sc) => ([
+						sc,
+						this.cacheGet<Buffer>(
+							cacheKeys.controller.securityKeysLongRange(sc),
+						),
+					] as [SecurityClass, Buffer | undefined]),
+				).filter((v): v is [SecurityClass, Buffer] =>
+					v[1] != undefined
+				);
+				if (securityKeysLongRange.length) {
+					this.driverLog.print(
+						"At least one network key for Z-Wave Long Range found in cache, enabling security manager...",
+					);
+					this._securityManagerLR = new SecurityManager2();
+					for (const [sc, key] of securityKeysLongRange) {
+						this._securityManagerLR.setKey(sc, key);
+					}
+				} else {
+					this.driverLog.print(
+						"No network key for Z-Wave Long Range configured, communication won't work!",
+						"warn",
+					);
+				}
+			} else {
+				const s0Key = this.cacheGet<Buffer>(
+					cacheKeys.controller.securityKeys(SecurityClass.S0_Legacy),
+				);
+				if (s0Key) {
+					this.driverLog.print(
+						"Network key for S0 found in cache, enabling S0 security manager...",
+					);
+					this._securityManager = new SecurityManager({
+						networkKey: s0Key,
+						ownNodeId: this._controller.ownNodeId!,
+						nonceTimeout: this._options.timeouts.nonce,
+					});
+				} else {
+					this.driverLog.print(
+						"No network key for S0 found in cache, communication with secure (S0) devices won't work!",
+						"warn",
+					);
+				}
+				const securityKeys = securityClassOrder.map(
+					(sc) => ([
+						sc,
+						this.cacheGet<Buffer>(
+							cacheKeys.controller.securityKeys(sc),
+						),
+					] as [SecurityClass, Buffer | undefined]),
+				).filter((v): v is [SecurityClass, Buffer] =>
+					v[1] != undefined
+				);
+				if (securityKeys.length) {
+					this.driverLog.print(
+						"At least one network key for S2 found in cache, enabling S2 security manager...",
+					);
+					this._securityManager2 = new SecurityManager2();
+					for (const [sc, key] of securityKeys) {
+						this._securityManager2.setKey(sc, key);
+					}
+				} else {
+					this.driverLog.print(
+						"No network key for S2 found in cache, communication with secure (S2) devices won't work!",
+						"warn",
+					);
 				}
 			}
-		} else {
-			this.driverLog.print(
-				"No network key for S2 configured, communication with secure (S2) devices won't work!",
-				"warn",
-			);
-		}
-
-		if (
-			this._options.securityKeysLongRange?.S2_AccessControl
-			|| this._options.securityKeysLongRange?.S2_Authenticated
-		) {
-			this.driverLog.print(
-				"At least one network key for Z-Wave Long Range configured, enabling security manager...",
-			);
-			this._securityManagerLR = new SecurityManager2();
-			if (this._options.securityKeysLongRange?.S2_AccessControl) {
-				this._securityManagerLR.setKey(
-					SecurityClass.S2_AccessControl,
-					this._options.securityKeysLongRange.S2_AccessControl,
-				);
-			}
-			if (this._options.securityKeysLongRange?.S2_Authenticated) {
-				this._securityManagerLR.setKey(
-					SecurityClass.S2_Authenticated,
-					this._options.securityKeysLongRange.S2_Authenticated,
-				);
-			}
-		} else {
-			this.driverLog.print(
-				"No network key for Z-Wave Long Range configured, communication won't work!",
-				"warn",
-			);
 		}
 
 		// in any case we need to emit the driver ready event here
@@ -1619,70 +1761,127 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		for (const node of this._controller.nodes.values()) {
 			this.addNodeEventHandlers(node);
 		}
-		// Before interviewing nodes reset our knowledge about their ready state
-		this._nodesReady.clear();
-		this._nodesReadyEventEmitted = false;
 
-		if (!this._options.testingHooks?.skipNodeInterview) {
-			// Now interview all nodes
-			// First complete the controller interview
-			const controllerNode = this._controller.nodes.get(
-				this._controller.ownNodeId!,
-			)!;
-			await this.interviewNodeInternal(controllerNode);
-			// The controller node is always alive
-			controllerNode.markAsAlive();
+		if (this.controller.role === ControllerRole.Primary) {
+			// Before interviewing nodes reset our knowledge about their ready state
+			this._nodesReady.clear();
+			this._nodesReadyEventEmitted = false;
 
-			// Then do all the nodes in parallel, but prioritize nodes that are more likely to be ready
-			const nodeInterviewOrder = [...this._controller.nodes.values()]
-				.filter((n) => n.id !== this._controller!.ownNodeId)
-				.sort((a, b) =>
-					// Fully-interviewed devices first (need the least amount of communication now)
-					(b.interviewStage - a.interviewStage)
-					// Always listening -> FLiRS -> sleeping
-					|| (
-						(b.isListening ? 2 : b.isFrequentListening ? 1 : 0)
-						- (a.isListening ? 2 : a.isFrequentListening ? 1 : 0)
-					)
-					// Then by last seen, more recently first
-					|| (
-						(b.lastSeen?.getTime() ?? 0)
-						- (a.lastSeen?.getTime() ?? 0)
-					)
-					// Lastly ascending by node ID
-					|| (a.id - b.id)
-				);
+			if (!this._options.testingHooks?.skipNodeInterview) {
+				// Now interview all nodes
+				// First complete the controller interview
+				const controllerNode = this._controller.nodes.get(
+					this._controller.ownNodeId!,
+				)!;
+				await this.interviewNodeInternal(controllerNode);
+				// The controller node is always alive
+				controllerNode.markAsAlive();
 
-			this.controllerLog.print(
-				`Interviewing nodes and/or determining their status: ${
-					nodeInterviewOrder.map((n) => n.id).join(", ")
-				}`,
-			);
-			for (const node of nodeInterviewOrder) {
-				if (node.id === this._controller.ownNodeId) {
-					continue;
-				} else if (node.canSleep) {
-					// A node that can sleep should be assumed to be sleeping after resuming from cache
-					node.markAsAsleep();
+				// Then do all the nodes in parallel, but prioritize nodes that are more likely to be ready
+				const nodeInterviewOrder = [...this._controller.nodes.values()]
+					.filter((n) => n.id !== this._controller!.ownNodeId)
+					.sort((a, b) =>
+						// Fully-interviewed devices first (need the least amount of communication now)
+						(b.interviewStage - a.interviewStage)
+						// Always listening -> FLiRS -> sleeping
+						|| (
+							(b.isListening ? 2 : b.isFrequentListening ? 1 : 0)
+							- (a.isListening
+								? 2
+								: a.isFrequentListening
+								? 1
+								: 0)
+						)
+						// Then by last seen, more recently first
+						|| (
+							(b.lastSeen?.getTime() ?? 0)
+							- (a.lastSeen?.getTime() ?? 0)
+						)
+						// Lastly ascending by node ID
+						|| (a.id - b.id)
+					);
+
+				if (nodeInterviewOrder.length) {
+					this.controllerLog.print(
+						`Interviewing nodes and/or determining their status: ${
+							nodeInterviewOrder.map((n) => n.id).join(", ")
+						}`,
+					);
+					for (const node of nodeInterviewOrder) {
+						if (node.canSleep) {
+							// A node that can sleep should be assumed to be sleeping after resuming from cache
+							node.markAsAsleep();
+						}
+
+						void (async () => {
+							// Continue the interview if necessary. If that is not necessary, at least
+							// determine the node's status
+							if (node.interviewStage < InterviewStage.Complete) {
+								await this.interviewNodeInternal(node);
+							} else if (
+								node.isListening || node.isFrequentListening
+							) {
+								// Ping non-sleeping nodes to determine their status
+								await node.ping();
+							}
+						})();
+					}
+				}
+			}
+		} else {
+			if (!this._options.testingHooks?.skipNodeInterview) {
+				// We're a secondary controller. Just determine if nodes are ready and do the interview at another time.
+
+				// First complete the controller "interview"
+				const controllerNode = this._controller.nodes.get(
+					this._controller.ownNodeId!,
+				)!;
+				await this.interviewNodeInternal(controllerNode);
+				// The controller node is always alive
+				controllerNode.markAsAlive();
+
+				// Query the protocol information from the controller
+				for (const node of this._controller.nodes.values()) {
+					if (node.isControllerNode) continue;
+					await node["queryProtocolInfo"]();
 				}
 
-				void (async () => {
-					// Continue the interview if necessary. If that is not necessary, at least
-					// determine the node's status
-					if (node.interviewStage < InterviewStage.Complete) {
-						await this.interviewNodeInternal(node);
-					} else if (node.isListening || node.isFrequentListening) {
-						// Ping non-sleeping nodes to determine their status
-						await node.ping();
-					}
-				})();
-			}
+				// Then ping (frequently) listening nodes to determine their status
+				const nodeInterviewOrder = [...this._controller.nodes.values()]
+					.filter((n) => n.id !== this._controller!.ownNodeId)
+					.filter((n) => n.isListening || n.isFrequentListening)
+					.sort((a, b) =>
+						// Always listening -> FLiRS
+						(
+							(b.isListening ? 1 : 0)
+							- (a.isListening ? 1 : 0)
+						)
+						// Then by last seen, more recently first
+						|| (
+							(b.lastSeen?.getTime() ?? 0)
+							- (a.lastSeen?.getTime() ?? 0)
+						)
+						// Lastly ascending by node ID
+						|| (a.id - b.id)
+					);
 
-			// If we only have sleeping nodes or a controller-only network, the send
-			// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
-			// So do it manually.
-			this.handleQueueIdleChange(this.queueIdle);
+				if (nodeInterviewOrder.length) {
+					this.controllerLog.print(
+						`Determining node status: ${
+							nodeInterviewOrder.map((n) => n.id).join(", ")
+						}`,
+					);
+					for (const node of nodeInterviewOrder) {
+						void node.ping();
+					}
+				}
+			}
 		}
+
+		// If we only have sleeping nodes or a controller-only network, the send
+		// thread is idle before the driver gets marked ready, the idle tasks won't be triggered.
+		// So do it manually.
+		this.handleQueueIdleChange(this.queueIdle);
 	}
 
 	private autoRefreshNodeValueTimers = new Map<number, NodeJS.Timeout>();
@@ -2219,6 +2418,60 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 	private onControllerStatusChanged(_status: ControllerStatus): void {
 		this.triggerQueues();
+	}
+
+	private async onNetworkFound(
+		homeId: number,
+		_ownNodeId: number,
+	): Promise<void> {
+		try {
+			this.driverLog.print(
+				`Joined network with home ID ${
+					num2hex(homeId)
+				}, switching to new network cache...`,
+			);
+			await this.recreateNetworkCacheAndValueDBs();
+		} catch (e) {
+			this.driverLog.print(
+				`Recreating the network cache and value DBs failed: ${
+					getErrorMessage(e)
+				}`,
+				"error",
+			);
+		}
+	}
+
+	private onNetworkJoined(): void {
+		this.driverLog.print(`Finished joining network`);
+	}
+
+	private async onNetworkLeft(): Promise<void> {
+		try {
+			this.driverLog.print(
+				`Left the previous network, switching network cache to new home ID ${
+					num2hex(this.controller.homeId)
+				}...`,
+			);
+			await this.recreateNetworkCacheAndValueDBs();
+		} catch (e) {
+			this.driverLog.print(
+				`Recreating the network cache and value DBs failed: ${
+					getErrorMessage(e)
+				}`,
+				"error",
+			);
+		}
+	}
+
+	private async recreateNetworkCacheAndValueDBs(): Promise<void> {
+		await this._networkCache?.close();
+		await this._valueDB?.close();
+		await this._metadataDB?.close();
+
+		// Reopen with the new home ID
+		await this.initNetworkCache(this.controller.homeId!);
+		await this.initValueDBs(this.controller.homeId!);
+		await this.performCacheMigration();
 	}
 
 	/**
@@ -2816,6 +3069,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			);
 		}
 
+		// Preserve the private key for the authenticated learn mode ECDH key pair
+		const oldPrivateKey = this.cacheGet<Buffer>(
+			cacheKeys.controller.privateKey,
+		);
+
 		// Update the controller NIF prior to hard resetting
 		await this.controller.setControllerNIF();
 		await this.controller.hardReset();
@@ -2839,6 +3097,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		this._controllerInterviewed = false;
 		void this.initializeControllerAndNodes();
+
+		// Save the key pair in the new cache again
+		if (oldPrivateKey) {
+			this.once("driver ready", () => {
+				this.cacheSet(cacheKeys.controller.privateKey, oldPrivateKey);
+			});
+		}
 	}
 
 	/**

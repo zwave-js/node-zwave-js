@@ -219,6 +219,26 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		return [0];
 	}
 
+	public async reportSecurityScheme(encapsulated: boolean): Promise<void> {
+		this.assertSupportsCommand(
+			SecurityCommand,
+			SecurityCommand.SchemeReport,
+		);
+
+		let cc: CommandClass = new SecurityCCSchemeReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		if (encapsulated) {
+			cc = new SecurityCCCommandEncapsulation(this.applHost, {
+				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
+				encapsulated: cc,
+			});
+		}
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
 	public async inheritSecurityScheme(): Promise<void> {
 		this.assertSupportsCommand(
 			SecurityCommand,
@@ -249,6 +269,19 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			encapsulated: keySet,
 			alternativeNetworkKey: Buffer.alloc(16, 0),
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	public async verifyNetworkKey(): Promise<void> {
+		this.assertSupportsCommand(
+			SecurityCommand,
+			SecurityCommand.NetworkKeyVerify,
+		);
+
+		const cc = new SecurityCCNetworkKeyVerify(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
@@ -298,7 +331,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 @implementedVersion(1)
 export class SecurityCC extends CommandClass {
 	declare ccCommand: SecurityCommand;
-	// Force singlecast for the Security CC (for now)
+	// Force singlecast for the Security CC
 	declare nodeId: number;
 	// Define the securityManager as existing
 	declare host: ZWaveHost & {
@@ -764,11 +797,27 @@ export class SecurityCCCommandEncapsulationNonceGet
 export class SecurityCCSchemeReport extends SecurityCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		// The including controller MUST NOT perform any validation of the Supported Security Schemes byte
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			// The including controller MUST NOT perform any validation of the Supported Security Schemes byte
+		}
+	}
+
+	public serialize(): Buffer {
+		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
+		this.payload = Buffer.from([0]);
+		return super.serialize();
+	}
+
+	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(host),
+			// Hide the default payload line
+			message: undefined,
+		};
 	}
 }
 
@@ -843,11 +892,8 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 16);
+			this.networkKey = this.payload.subarray(0, 16);
 		} else {
 			if (options.networkKey.length !== 16) {
 				throw new ZWaveError(
@@ -866,7 +912,11 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 		return super.serialize();
 	}
 
-	// @noLogEntry - The network key shouldn't be logged, so users can safely post their logs online
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		// The network key shouldn't be logged, so users can safely post their logs online
+		const { message, ...log } = super.toLogEntry(applHost);
+		return log;
+	}
 }
 
 // @publicAPI
