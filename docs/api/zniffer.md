@@ -131,6 +131,7 @@ enum ZnifferRegion {
 	"China" = 0x08,
 	"USA (Long Range)" = 0x09,
 	"USA (Long Range, backup)" = 0x0a,
+	"Europe (Long Range)" = 0x0b,
 	"Japan" = 0x20,
 	"Korea" = 0x21,
 	"USA (Long Range, end device)" = 0x30,

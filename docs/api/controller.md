@@ -22,7 +22,9 @@ enum ZWaveFeature {
 }
 ```
 
-### `beginInclusion`
+### Including and excluding nodes
+
+#### `beginInclusion`
 
 ```ts
 async beginInclusion(options: InclusionOptions): Promise<boolean>
@@ -96,7 +98,7 @@ type InclusionOptions =
 	};
 ```
 
-For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](#ZWaveOptions) (`inclusionUserCallbacks`). They can optionally be overridden for individual inclusion attempts by setting the `userCallbacks` property in the `InclusionOptions`. The callbacks are defined as follows:
+For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](api/driver.md#ZWaveOptions) (`inclusionUserCallbacks`). They can optionally be overridden for individual inclusion attempts by setting the `userCallbacks` property in the `InclusionOptions`. The callbacks are defined as follows:
 
 <!-- #import InclusionUserCallbacks from "zwave-js" -->
 
@@ -178,7 +180,7 @@ interface PlannedProvisioningEntry {
 
 > [!ATTENTION] The intended use case for this is inclusion after scanning a S2 QR code. Otherwise, care must be taken to give correct information. If the included node has a different DSK than the provided one, the secure inclusion will fail. Furthermore, the node will be granted only those security classes that are requested and the provided list. If there is no overlap, the secure inclusion will fail.
 
-### `stopInclusion`
+#### `stopInclusion`
 
 ```ts
 async stopInclusion(): Promise<boolean>
@@ -186,7 +188,7 @@ async stopInclusion(): Promise<boolean>
 
 Stops the inclusion process for a new node. The returned promise resolves to `true` if stopping the inclusion was successful, `false` if it failed or if it was not active.
 
-### `beginExclusion`
+#### `beginExclusion`
 
 ```ts
 async beginExclusion(options?: ExclusionOptions): Promise<boolean>
@@ -224,7 +226,7 @@ enum ExclusionStrategy {
 
 > [!NOTE] The default behavior is disabling the provisioning entry.
 
-### `stopExclusion`
+#### `stopExclusion`
 
 ```ts
 async stopExclusion(): Promise<boolean>
@@ -232,7 +234,9 @@ async stopExclusion(): Promise<boolean>
 
 Stops the exclusion process to remove a node from the network. The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
 
-### `provisionSmartStartNode`
+### SmartStart provisioning
+
+#### `provisionSmartStartNode`
 
 ```ts
 provisionSmartStartNode(entry: PlannedProvisioningEntry): void
@@ -283,7 +287,7 @@ interface PlannedProvisioningEntry {
 
 > [!NOTE] This method accepts a `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is a `SmartStart` QR code by checking the `version` field.
 
-### `unprovisionSmartStartNode`
+#### `unprovisionSmartStartNode`
 
 ```ts
 unprovisionSmartStartNode(dskOrNodeId: string | number): void
@@ -293,7 +297,7 @@ Removes the given DSK or node ID from the controller's SmartStart provisioning l
 
 > [!NOTE] If this entry corresponds to an already-included node, it will **NOT** be excluded.
 
-### `getProvisioningEntry`
+#### `getProvisioningEntry`
 
 ```ts
 getProvisioningEntry(dsk: string): SmartStartProvisioningEntry | undefined
@@ -316,7 +320,7 @@ interface SmartStartProvisioningEntry {
 
 The `nodeId` will be set when the entry corresponds to an included node.
 
-### `getProvisioningEntries`
+#### `getProvisioningEntries`
 
 ```ts
 getProvisioningEntries(): SmartStartProvisioningEntry[]
@@ -1154,7 +1158,7 @@ Many Z-Wave devices only have a single upgradeable firmware target (chip), so th
 
 > [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
 
-This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects and non-commercial use). The API key can also be passed via the `options` argument:
+This method requires an API key to be set in the [driver options](api/driver.md#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects and non-commercial use). The API key can also be passed via the `options` argument:
 
 <!-- #import GetFirmwareUpdatesOptions from "zwave-js" -->
 
@@ -1225,6 +1229,128 @@ isFirmwareUpdateInProgress(): boolean;
 ```
 
 Return whether a firmware update is in progress for the controller.
+
+### Joining and leaving a network
+
+Aside from managing its own network, Z-Wave JS can also become a secondary controller and join an existing network. This is done with the following APIs:
+
+#### `beginJoiningNetwork`
+
+```ts
+beginJoiningNetwork(options?: JoinNetworkOptions): Promise<JoinNetworkResult>
+```
+
+Starts the process to join another network. The result indicates whether the process was started or if there was an error:
+
+<!-- #import JoinNetworkResult from "zwave-js" -->
+
+```ts
+enum JoinNetworkResult {
+	/** The process to join the network was started successfully */
+	OK,
+	/** Another join/leave process is already in progress. */
+	Error_Busy,
+	/** Joining another network is not permitted due to the controller's network role */
+	Error_NotPermitted,
+	/** There was an unknown error while joining the network */
+	Error_Failed,
+}
+```
+
+The progress will be reported through the [`"network found"`](#quotnetwork-foundquot), [`"network joined"`](#quotnetwork-joinedquot), and/or [`"joining network failed"`](#quotjoining-network-failedquot) events.
+
+The options parameter is used to specify the joining strategy and provide callbacks to the application which may be necessary to support joining with Security S2. Currently, only one strategy is defined:
+
+- `JoinStrategy.Default`: Leave the choice of encryption (Security S2, Security S0 or no encryption) up to the including controller. This is the default when no options are specified.
+
+Depending on the chosen inclusion strategy, the options object requires additional properties:
+
+<!-- #import JoinNetworkOptions from "zwave-js" -->
+
+```ts
+type JoinNetworkOptions = {
+	strategy: JoinNetworkStrategy.Default;
+	/**
+	 * Allows overriding the user callbacks for this attempt at joining a network.
+	 * If not given, the join network user callbacks of the driver options will be used.
+	 */
+	userCallbacks?: JoinNetworkUserCallbacks;
+};
+```
+
+For joining with _Security S2_, callbacks into the application should be defined as part of the [driver options](api/driver.md#ZWaveOptions) (`joinNetworkUserCallbacks`). They can optionally be overridden for individual inclusion attempts by setting the `userCallbacks` property in the `JoinNetworkOptions`.
+
+> [!ATTENTION]
+> If the callbacks are not defined, the application should have its own way of displaying the controller's DSK to the user to enable joining with `S2 Authenticated` and `S2 Access Control`. The DSK can be read using the [`getDSK`](#getdsk) method.
+
+The callbacks are defined as follows:
+
+<!-- #import JoinNetworkUserCallbacks from "zwave-js" -->
+
+```ts
+interface JoinNetworkUserCallbacks {
+	/**
+	 * Instruct the application to display the controller's DSK so the user can enter it in the including controller's UI.
+	 * @param dsk The partial DSK in the form `aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222`
+	 */
+	showDSK(dsk: string): void;
+
+	/**
+	 * Called by the driver when the DSK has been verified, or the bootstrapping has timed out, and user interaction is no longer necessary.
+	 * The application should hide any prompts created by joining a network.
+	 */
+	done(): void;
+}
+```
+
+#### `stopJoiningNetwork`
+
+```ts
+async stopJoiningNetwork(): Promise<boolean>
+```
+
+Stops the process to join a network. The returned promise resolves to `true` if stopping was successful, `false` if it failed or if it was not active.
+
+#### `beginLeavingNetwork`
+
+```ts
+async beginLeavingNetwork(): Promise<LeaveNetworkResult>
+```
+
+Starts the process to leave the current network. The result indicates whether the process was started or if there was an error:
+
+<!-- #import LeaveNetworkResult from "zwave-js" -->
+
+```ts
+enum LeaveNetworkResult {
+	/** The process to leave the network was started successfully */
+	OK,
+	/** Another join/leave process is already in progress. */
+	Error_Busy,
+	/** Leaving the network is not permitted due to the controller's network role */
+	Error_NotPermitted,
+	/** There was an unknown error while leaving the network */
+	Error_Failed,
+}
+```
+
+The progress will be reported through the [`"network left"`](#quotnetwork-leftquot) or [`"leaving network failed"`](#quotleaving-network-failedquot) events.
+
+#### `stopLeavingNetwork`
+
+```ts
+async stopLeavingNetwork(): Promise<boolean>
+```
+
+Stops the process to leave the current network. The returned promise resolves to `true` if stopping was successful, `false` if it failed or if it was not active.
+
+#### `getDSK`
+
+```ts
+async getDSK(): Promise<string>
+```
+
+Returns the controller's DSK in the standard format `aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222`.
 
 ## Controller properties
 
@@ -1713,3 +1839,29 @@ This is emitted when another node instructs Z-Wave JS to identify itself using t
 > The node is RECOMMENDED to use a visible LED for an identify function if it has an LED. If the node is itself a light source, e.g. a light bulb, this MAY be used in place of a dedicated LED.
 >
 > The event signature may be extended to accommodate this after clarification.
+
+### `"network found"`
+
+This is emitted while joining another network, as soon as the inclusion is successful.
+
+```ts
+(homeId: number, ownNodeId: number) => void
+```
+
+> [!NOTE] Applications should wait before interacting with the network until the `"network joined"` event is received.
+
+### `"network joined"`
+
+This is emitted after joining another network, once security bootstrapping is done or the network is joined without security.
+
+### `"joining network failed"`
+
+This is emitted if joining another network failed. In this case, the `"network found"` and `"network joined"` events will not be emitted.
+
+### `"network left"`
+
+This is emitted after successfully leaving the current network.
+
+### `"joining network failed"`
+
+This is emitted if leaving the current network failed. In this case, the `"network left"` event will not be emitted.

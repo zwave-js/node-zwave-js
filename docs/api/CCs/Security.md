@@ -36,6 +36,12 @@ The return value indicates whether a nonce was successfully sent.
 async getSecurityScheme(): Promise<[0]>;
 ```
 
+### `reportSecurityScheme`
+
+```ts
+async reportSecurityScheme(encapsulated: boolean): Promise<void>;
+```
+
 ### `inheritSecurityScheme`
 
 ```ts
@@ -46,6 +52,12 @@ async inheritSecurityScheme(): Promise<void>;
 
 ```ts
 async setNetworkKey(networkKey: Buffer): Promise<void>;
+```
+
+### `verifyNetworkKey`
+
+```ts
+async verifyNetworkKey(): Promise<void>;
 ```
 
 ### `getSupportedCommands`

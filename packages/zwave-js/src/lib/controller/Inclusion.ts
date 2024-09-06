@@ -318,16 +318,24 @@ export enum JoinNetworkStrategy {
 }
 
 export enum JoinNetworkResult {
+	/** The process to join the network was started successfully */
 	OK,
+	/** Another join/leave process is already in progress. */
 	Error_Busy,
+	/** Joining another network is not permitted due to the controller's network role */
 	Error_NotPermitted,
+	/** There was an unknown error while joining the network */
 	Error_Failed,
 }
 
 export enum LeaveNetworkResult {
+	/** The process to leave the network was started successfully */
 	OK,
+	/** Another join/leave process is already in progress. */
 	Error_Busy,
+	/** Leaving the network is not permitted due to the controller's network role */
 	Error_NotPermitted,
+	/** There was an unknown error while leaving the network */
 	Error_Failed,
 }
 

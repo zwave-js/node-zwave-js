@@ -851,6 +851,13 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	inclusionUserCallbacks?: InclusionUserCallbacks;
 
 	/**
+	 * Defines the callbacks that are necessary to trigger user interaction during S2 bootstrapping when joining a network.
+	 * If not given, joining a network with S2 may not be possible, unless the application handles
+	 * displaying the DSK to the user on its own.
+	 */
+	joinNetworkUserCallbacks?: JoinNetworkUserCallbacks;
+
+	/**
 	 * Some SET-type commands optimistically update the current value to match the target value
 	 * when the device acknowledges the command.
 	 *

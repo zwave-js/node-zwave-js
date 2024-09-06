@@ -330,6 +330,10 @@ type FirmwareUpdateCapabilities = {
 	readonly continuesToFunction: MaybeNotKnown<boolean>;
 	/** Indicates whether the node supports delayed activation of the new firmware */
 	readonly supportsActivation: MaybeNotKnown<boolean>;
+	/** Indicates whether the node supports resuming aborted firmware transfers */
+	readonly supportsResuming: MaybeNotKnown<boolean>;
+	/** Indicates whether the node supports non-secure firmware transfers */
+	readonly supportsNonSecureTransfer: MaybeNotKnown<boolean>;
 };
 ```
 
