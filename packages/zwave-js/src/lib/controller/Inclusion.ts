@@ -293,10 +293,10 @@ export enum RemoveNodeReason {
 }
 
 export enum JoinNetworkStrategy {
-	SmartStart,
 	Security_S2,
-	Security_S0,
-	Insecure,
+	// SmartStart,
+	// Security_S0,
+	// Insecure,
 }
 
 export enum JoinNetworkResult {
