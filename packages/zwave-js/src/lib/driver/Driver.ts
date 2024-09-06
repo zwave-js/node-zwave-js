@@ -1583,6 +1583,12 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				// Auto-enable smart start inclusion
 				this.controller.autoProvisionSmartStart();
 			}
+		} else {
+			// When skipping the controller identification, set the flags to consider the controller a primary
+			this.controller["_wasRealPrimary"] = true;
+			this.controller["_isSUC"] = true;
+			this.controller["_isSISPresent"] = true;
+			this.controller["_sucNodeId"] = 1;
 		}
 
 		if (this.controller.role === ControllerRole.Primary) {
