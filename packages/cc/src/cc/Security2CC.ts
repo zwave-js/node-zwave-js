@@ -46,6 +46,7 @@ import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCResponseRole,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
@@ -481,7 +482,7 @@ export class Security2CCAPI extends CCAPI {
 	/** Confirms the keys that were granted by the including node */
 	public async confirmGrantedKeys(
 		params: Omit<Security2CCKEXSetOptions, "echo">,
-	): Promise<void> {
+	): Promise<Security2CCKEXReport | Security2CCKEXFail | undefined> {
 		this.assertSupportsCommand(
 			Security2Command,
 			Security2Command.KEXSet,
@@ -493,7 +494,7 @@ export class Security2CCAPI extends CCAPI {
 			...params,
 			echo: true,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Notifies the other node that the ongoing key exchange was aborted */
@@ -965,19 +966,36 @@ function getCCResponseForMessageEncapsulation(
 	sent: Security2CCMessageEncapsulation,
 ) {
 	if (sent.encapsulated?.expectsCCResponse()) {
-		return [
+		const ret = [
 			Security2CCMessageEncapsulation as any,
 			Security2CCNonceReport as any,
 		];
+
+		if (
+			sent.encapsulated instanceof Security2CCKEXSet
+			|| sent.encapsulated instanceof Security2CCKEXReport
+			|| sent.encapsulated instanceof Security2CCNetworkKeyGet
+			|| sent.encapsulated instanceof Security2CCNetworkKeyReport
+			|| sent.encapsulated instanceof Security2CCNetworkKeyVerify
+		) {
+			ret.push(Security2CCKEXFail as any);
+		}
+
+		return ret;
 	}
 }
 
 function testCCResponseForMessageEncapsulation(
 	sent: Security2CCMessageEncapsulation,
-	received: Security2CCMessageEncapsulation | Security2CCNonceReport,
+	received:
+		| Security2CCMessageEncapsulation
+		| Security2CCNonceReport
+		| Security2CCKEXFail,
 ) {
 	if (received instanceof Security2CCMessageEncapsulation) {
 		return "checkEncapsulated";
+	} else if (received instanceof Security2CCKEXFail) {
+		return true;
 	} else {
 		return received.SOS && !!received.receiverEI;
 	}
@@ -2162,7 +2180,30 @@ export interface Security2CCKEXSetOptions {
 	grantedKeys: SecurityClass[];
 }
 
+function getExpectedResponseForKEXSet(sent: Security2CCKEXSet) {
+	if (sent.echo) {
+		return [Security2CCKEXReport, Security2CCKEXFail];
+	} else {
+		return undefined;
+	}
+}
+
+function testExpectedResponseForKEXSet(
+	sent: Security2CCKEXSet,
+	received: any,
+): CCResponseRole {
+	if (sent.echo) {
+		if (received instanceof Security2CCKEXReport) {
+			return received.echo;
+		} else if (received instanceof Security2CCKEXFail) {
+			return true;
+		}
+	}
+	return false;
+}
+
 @CCCommand(Security2Command.KEXSet)
+@expectedCCResponse(getExpectedResponseForKEXSet, testExpectedResponseForKEXSet)
 export class Security2CCKEXSet extends Security2CC {
 	public constructor(
 		host: ZWaveHost,

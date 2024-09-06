@@ -42,7 +42,7 @@ export interface ColorSwitchCCCapabilities {
 }
 
 export interface NotificationCCCapabilities {
-	supportsV1Alarm: false;
+	supportsV1Alarm: boolean;
 	notificationTypesAndEvents: Record<number, number[]>;
 }
 

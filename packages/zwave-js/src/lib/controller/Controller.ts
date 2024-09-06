@@ -18,7 +18,7 @@ import {
 	Powerlevel,
 	Security2CCKEXFail,
 	Security2CCKEXGet,
-	Security2CCKEXReport,
+	type Security2CCKEXReport,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
 	Security2CCNetworkKeyReport,
@@ -8967,11 +8967,17 @@ ${associatedNodes.join(", ")}`,
 				? await this.driver.getLearnModeAuthenticatedKeyPair()
 				: await generateECDHKeyPair();
 			const publicKey = extractRawECDHPublicKey(keyPair.publicKey);
+			const transmittedPublicKey = Buffer.from(publicKey);
 			if (requiresAuthentication) {
 				// Authentication requires obfuscating the public key
-				publicKey.writeUInt16BE(0x0000, 0);
+				const dsk = dskToString(publicKey.subarray(0, 16));
+				// FIXME: Expose as a callback
+				this.driver.controllerLog.print("DSK: " + dsk);
+				console.debug("DSK: " + dsk);
+
+				transmittedPublicKey.writeUInt16BE(0x0000, 0);
 			}
-			await api.sendPublicKey(publicKey, false);
+			await api.sendPublicKey(transmittedPublicKey, false);
 
 			// Wait for including node to send its public key
 			const pubKeyReport = await this.driver.waitForCommand<
@@ -8982,6 +8988,8 @@ ${associatedNodes.join(", ")}`,
 					|| cc instanceof Security2CCKEXFail,
 				inclusionTimeouts.TB3,
 			).catch(() => "timeout" as const);
+
+			// FIXME: Tell application to stop showing the DSK
 
 			if (pubKeyReport === "timeout") return abortTimeout();
 			if (pubKeyReport instanceof Security2CCKEXFail) {
@@ -9007,39 +9015,29 @@ ${associatedNodes.join(", ")}`,
 			// Wait for the confirmation of the requested keys and
 			// retransmit the KEXSet echo every 10 seconds until a response is
 			// received or the process timed out.
+			const confirmKeysStartTime = Date.now();
 			let kexReportEcho:
 				| Security2CCKEXReport
 				| Security2CCKEXFail
 				| "timeout"
 				| undefined;
-			const waitForKEXReportEcho = async () => {
-				kexReportEcho = await this.driver.waitForCommand<
-					Security2CCKEXReport | Security2CCKEXFail
-				>(
-					(cc) =>
-						cc instanceof Security2CCKEXReport
-						|| cc instanceof Security2CCKEXFail,
-					240000,
-				).catch(() => "timeout" as const);
-			};
-			const retransmitKEXSetEcho = async () => {
-				for (let i = 0; i <= 25; i++) {
-					await api.confirmGrantedKeys({
+			for (let i = 0; i <= 25; i++) {
+				try {
+					kexReportEcho = await api.withOptions({
+						reportTimeoutMs: 10000,
+					}).confirmGrantedKeys({
 						grantedKeys: kexSet.grantedKeys,
 						permitCSA: kexSet.permitCSA,
 						selectedECDHProfile: kexSet.selectedECDHProfile,
 						selectedKEXScheme: kexSet.selectedKEXScheme,
 						_reserved: kexSet._reserved,
-					}).catch(noop);
-					if (kexReportEcho != undefined) return;
-					await wait(10000, true);
-					if (kexReportEcho != undefined) return;
+					});
+				} catch {
+					// ignore
 				}
-			};
-			await Promise.race([
-				retransmitKEXSetEcho(),
-				waitForKEXReportEcho(),
-			]);
+				if (kexReportEcho != undefined) break;
+				if (Date.now() - confirmKeysStartTime > 240000) break;
+			}
 
 			if (!kexReportEcho || kexReportEcho === "timeout") {
 				return abortTimeout();
