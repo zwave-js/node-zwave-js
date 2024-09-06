@@ -2,7 +2,6 @@ import { SecurityClass } from "@zwave-js/core";
 import { wait as _wait } from "alcalzone-shared/async";
 import path from "node:path";
 import "reflect-metadata";
-import fs from "node:fs/promises";
 import { Driver, InclusionStrategy, RFRegion } from "zwave-js";
 
 const wait = _wait;
@@ -22,6 +21,8 @@ const port_primary =
 	"/dev/serial/by-id/usb-Zooz_800_Z-Wave_Stick_533D004242-if00";
 const port_secondary =
 	"/dev/serial/by-id/usb-Silicon_Labs_CP2102N_USB_to_UART_Bridge_Controller_ca4d95064355ee118d4d1294de9da576-if00-port0";
+
+let pin: string | undefined;
 
 const driver_primary = new Driver(port_primary, {
 	logConfig: {
@@ -84,17 +85,14 @@ const driver_primary = new Driver(port_primary, {
 							SecurityClass.S0_Legacy,
 							SecurityClass.S2_Unauthenticated,
 							SecurityClass.S2_Authenticated,
+							SecurityClass.S2_AccessControl,
 						],
 					};
 				},
 				async validateDSKAndEnterPIN(dsk) {
 					// Try to read PIN from the file pin.txt
 					for (let i = 0; i < 100; i++) {
-						const pin = await fs.readFile("pin.txt", "utf8").catch(
-							() => undefined as any,
-						);
-						if (pin?.length === 5) {
-							await fs.truncate("pin.txt");
+						if (typeof pin === "string" && pin?.length === 5) {
 							return pin;
 						}
 						await wait(1000);
@@ -153,6 +151,14 @@ const driver_secondary = new Driver(port_secondary, {
 		lockDir: path.join(__dirname, "cache2/locks"),
 	},
 	allowBootloaderOnly: true,
+	joinNetworkUserCallbacks: {
+		showDSK(dsk) {
+			pin = dsk.split("-")[0];
+		},
+		done() {
+			pin = undefined;
+		},
+	},
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
