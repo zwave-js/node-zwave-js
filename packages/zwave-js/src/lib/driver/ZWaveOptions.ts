@@ -3,7 +3,10 @@ import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import { type DeepPartial, type Expand } from "@zwave-js/shared";
 import type { SerialPort } from "serialport";
-import type { InclusionUserCallbacks } from "../controller/Inclusion";
+import type {
+	InclusionUserCallbacks,
+	JoinNetworkUserCallbacks,
+} from "../controller/Inclusion";
 
 export interface ZWaveOptions extends ZWaveHostOptions {
 	/** Specify timeouts in milliseconds */
@@ -168,6 +171,13 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
 	 */
 	inclusionUserCallbacks?: InclusionUserCallbacks;
+
+	/**
+	 * Defines the callbacks that are necessary to trigger user interaction during S2 bootstrapping when joining a network.
+	 * If not given, joining a network with S2 may not be possible, unless the application handles
+	 * displaying the DSK to the user on its own.
+	 */
+	joinNetworkUserCallbacks?: JoinNetworkUserCallbacks;
 
 	/**
 	 * Some SET-type commands optimistically update the current value to match the target value
@@ -369,17 +379,22 @@ export type PartialZWaveOptions = Expand<
 	& DeepPartial<
 		Omit<
 			ZWaveOptions,
-			"inclusionUserCallbacks" | "logConfig" | "testingHooks"
+			| "inclusionUserCallbacks"
+			| "joinNetworkUserCallbacks"
+			| "logConfig"
+			| "testingHooks"
 		>
 	>
 	& Partial<
 		Pick<
 			ZWaveOptions,
-			"inclusionUserCallbacks" | "testingHooks" | "vendor"
+			| "testingHooks"
+			| "vendor"
 		>
 	>
 	& {
 		inclusionUserCallbacks?: ZWaveOptions["inclusionUserCallbacks"];
+		joinNetworkUserCallbacks?: ZWaveOptions["joinNetworkUserCallbacks"];
 		logConfig?: Partial<LogConfig>;
 	}
 >;
@@ -390,6 +405,7 @@ export type EditableZWaveOptions = Expand<
 		| "disableOptimisticValueUpdate"
 		| "emitValueUpdateAfterSetValue"
 		| "inclusionUserCallbacks"
+		| "joinNetworkUserCallbacks"
 		| "interview"
 		| "logConfig"
 		| "preferences"

@@ -292,9 +292,26 @@ export enum RemoveNodeReason {
 	SmartStartFailed,
 }
 
+/** Defines the callbacks that are necessary to trigger user interaction during S2 bootstrapping when joining a network */
+export interface JoinNetworkUserCallbacks {
+	/**
+	 * Instruct the application to display the controller's DSK so the user can enter it in the including controller's UI.
+	 * @param dsk The partial DSK in the form `aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222`
+	 */
+	showDSK(dsk: string): void;
+
+	/**
+	 * Called by the driver when the DSK has been verified, or the bootstrapping has timed out, and user interaction is no longer necessary.
+	 * The application should hide any prompts created by joining a network.
+	 */
+	done(): void;
+}
+
 export enum JoinNetworkStrategy {
 	Security_S2,
+	// TODO: Implement
 	// SmartStart,
+	// These require modifying the NIF prior to joining
 	// Security_S0,
 	// Insecure,
 }
@@ -316,5 +333,9 @@ export enum LeaveNetworkResult {
 export type JoinNetworkOptions = {
 	strategy: JoinNetworkStrategy.Security_S2;
 	requested: InclusionGrant;
+	/**
+	 * Allows overriding the user callbacks for this attempt at joining a network.
+	 * If not given, the join network user callbacks of the driver options will be used.
+	 */
+	userCallbacks?: JoinNetworkUserCallbacks;
 };
-// FIXME: Implement other strategies

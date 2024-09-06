@@ -400,6 +400,7 @@ import {
 	type JoinNetworkOptions,
 	JoinNetworkResult,
 	JoinNetworkStrategy,
+	type JoinNetworkUserCallbacks,
 	LeaveNetworkResult,
 	type PlannedProvisioningEntry,
 	ProvisioningEntryStatus,
@@ -8961,6 +8962,8 @@ ${associatedNodes.join(", ")}`,
 	private async expectSecurityBootstrapS2(
 		bootstrappingNode: ZWaveNode,
 		requested: InclusionGrant,
+		userCallbacks: JoinNetworkUserCallbacks | undefined =
+			this.driver.options.joinNetworkUserCallbacks,
 	): Promise<
 		SecurityBootstrapFailure | undefined
 	> {
@@ -8996,7 +8999,19 @@ ${associatedNodes.join(", ")}`,
 			securityManager.tempKeys.delete(bootstrappingNode.id);
 		};
 
+		let dskHidden = false;
+		const applicationHideDSK = () => {
+			if (dskHidden) return;
+			dskHidden = true;
+			try {
+				userCallbacks?.done();
+			} catch {
+				// ignore application-level errors
+			}
+		};
+
 		const abort = async (failType?: KEXFailType): Promise<void> => {
+			applicationHideDSK();
 			if (failType != undefined) {
 				try {
 					await api.abortKeyExchange(failType);
@@ -9124,12 +9139,15 @@ ${associatedNodes.join(", ")}`,
 			const transmittedPublicKey = Buffer.from(publicKey);
 			if (requiresAuthentication) {
 				// Authentication requires obfuscating the public key
-				const dsk = dskToString(publicKey.subarray(0, 16));
-				// FIXME: Expose as a callback
-				this.driver.controllerLog.print("DSK: " + dsk);
-				console.debug("DSK: " + dsk);
-
 				transmittedPublicKey.writeUInt16BE(0x0000, 0);
+
+				// Show the DSK to the user
+				const dsk = dskToString(publicKey.subarray(0, 16));
+				try {
+					userCallbacks?.showDSK(dsk);
+				} catch {
+					// ignore application-level errors
+				}
 			}
 			await api.sendPublicKey(transmittedPublicKey, false);
 
@@ -9142,8 +9160,6 @@ ${associatedNodes.join(", ")}`,
 					|| cc instanceof Security2CCKEXFail,
 				inclusionTimeouts.TB3,
 			).catch(() => "timeout" as const);
-
-			// FIXME: Tell application to stop showing the DSK
 
 			if (pubKeyReport === "timeout") return abortTimeout();
 			if (pubKeyReport instanceof Security2CCKEXFail) {
@@ -9198,6 +9214,9 @@ ${associatedNodes.join(", ")}`,
 			} else if (kexReportEcho instanceof Security2CCKEXFail) {
 				return abortCanceled();
 			}
+
+			// The application no longer needs to show the DSK
+			applicationHideDSK();
 
 			// Validate the response
 			if (!kexReportEcho.echo) {
@@ -9563,13 +9582,11 @@ ${associatedNodes.join(", ")}`,
 				let grant: InclusionGrant | undefined;
 
 				switch (this._joinNetworkOptions?.strategy) {
-					// @ts-expect-error not implemented yet
-					case JoinNetworkStrategy.SmartStart:
-						break;
 					case JoinNetworkStrategy.Security_S2: {
 						grant = this._joinNetworkOptions.requested;
 						break;
 					}
+					// case JoinNetworkStrategy.SmartStart:
 					default: {
 						// No options given, just request all keys
 						grant = {

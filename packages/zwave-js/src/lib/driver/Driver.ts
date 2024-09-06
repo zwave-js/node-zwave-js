@@ -464,6 +464,25 @@ function checkOptions(options: ZWaveOptions): void {
 		}
 	}
 
+	if (options.joinNetworkUserCallbacks) {
+		if (!isObject(options.joinNetworkUserCallbacks)) {
+			throw new ZWaveError(
+				`The joinNetworkUserCallbacks must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (
+			typeof options.joinNetworkUserCallbacks.showDSK
+				!== "function"
+			|| typeof options.joinNetworkUserCallbacks.done
+				!== "function"
+		) {
+			throw new ZWaveError(
+				`The joinNetworkUserCallbacks must contain the following functions: showDSK, done!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+	}
+
 	if (options.rf != undefined) {
 		if (options.rf.region != undefined) {
 			if (
@@ -1068,6 +1087,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			"disableOptimisticValueUpdate",
 			"emitValueUpdateAfterSetValue",
 			"inclusionUserCallbacks",
+			"joinNetworkUserCallbacks",
 			"interview",
 			"preferences",
 			"vendor",
