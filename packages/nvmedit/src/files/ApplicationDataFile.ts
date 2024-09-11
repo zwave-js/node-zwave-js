@@ -2,16 +2,19 @@ import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export interface ApplicationDataFileOptions extends NVMFileCreationOptions {
 	data: Buffer;
 }
 
-@nvmFileID(200)
+export const ApplicationDataFileID = 200;
+
+@nvmFileID(ApplicationDataFileID)
+@nvmSection("application")
 export class ApplicationDataFile extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | ApplicationDataFileOptions,
@@ -30,4 +33,3 @@ export class ApplicationDataFile extends NVMFile {
 		this.payload = value;
 	}
 }
-export const ApplicationDataFileID = getNVMFileIDStatic(ApplicationDataFile);

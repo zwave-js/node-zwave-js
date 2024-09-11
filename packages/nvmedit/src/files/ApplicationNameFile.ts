@@ -1,19 +1,22 @@
 import { cpp2js } from "@zwave-js/shared";
-import { type NVMObject } from "..";
+import { type NVM3Object } from "../nvm3/object";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export interface ApplicationNameFileOptions extends NVMFileCreationOptions {
 	name: string;
 }
 
-@nvmFileID(0x4100c)
+export const ApplicationNameFileID = 0x4100c;
+
+@nvmFileID(ApplicationNameFileID)
+@nvmSection("application")
 export class ApplicationNameFile extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | ApplicationNameFileOptions,
@@ -28,7 +31,7 @@ export class ApplicationNameFile extends NVMFile {
 
 	public name: string;
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object & { data: Buffer } {
 		// Return a zero-terminated string with a fixed length of 30 bytes
 		const nameAsString = Buffer.from(this.name, "utf8");
 		this.payload = Buffer.alloc(30, 0);
@@ -36,4 +39,3 @@ export class ApplicationNameFile extends NVMFile {
 		return super.serialize();
 	}
 }
-export const ApplicationNameFileID = getNVMFileIDStatic(ApplicationNameFile);

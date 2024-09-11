@@ -15,9 +15,9 @@ import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export const SUC_UPDATES_PER_FILE_V5 = 8;
@@ -73,7 +73,10 @@ export function encodeSUCUpdateEntry(
 	return ret;
 }
 
-@nvmFileID(0x50003)
+export const SUCUpdateEntriesFileIDV0 = 0x50003;
+
+@nvmFileID(SUCUpdateEntriesFileIDV0)
+@nvmSection("protocol")
 export class SUCUpdateEntriesFileV0 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | SUCUpdateEntriesFileOptions,
@@ -93,7 +96,7 @@ export class SUCUpdateEntriesFileV0 extends NVMFile {
 
 	public updateEntries: SUCUpdateEntry[];
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		this.payload = Buffer.alloc(SUC_MAX_UPDATES * SUC_UPDATE_ENTRY_SIZE, 0);
 		for (let i = 0; i < this.updateEntries.length; i++) {
 			const offset = i * SUC_UPDATE_ENTRY_SIZE;
@@ -112,11 +115,10 @@ export class SUCUpdateEntriesFileV0 extends NVMFile {
 	}
 }
 
-export const SUCUpdateEntriesFileIDV0 = getNVMFileIDStatic(
-	SUCUpdateEntriesFileV0,
-);
-
 export const SUCUpdateEntriesFileV5IDBase = 0x54000;
+export const SUCUpdateEntriesFileV5IDMax = SUCUpdateEntriesFileV5IDBase
+	+ SUC_MAX_UPDATES / SUC_UPDATES_PER_FILE_V5
+	- 1;
 export function sucUpdateIndexToSUCUpdateEntriesFileIDV5(
 	index: number,
 ): number {
@@ -129,10 +131,9 @@ export function sucUpdateIndexToSUCUpdateEntriesFileIDV5(
 @nvmFileID(
 	(id) =>
 		id >= SUCUpdateEntriesFileV5IDBase
-		&& id
-			< SUCUpdateEntriesFileV5IDBase
-				+ SUC_MAX_UPDATES / SUC_UPDATES_PER_FILE_V5,
+		&& id <= SUCUpdateEntriesFileV5IDMax,
 )
+@nvmSection("protocol")
 export class SUCUpdateEntriesFileV5 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | SUCUpdateEntriesFileOptions,
@@ -152,7 +153,7 @@ export class SUCUpdateEntriesFileV5 extends NVMFile {
 
 	public updateEntries: SUCUpdateEntry[];
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		this.payload = Buffer.alloc(
 			SUC_UPDATES_PER_FILE_V5 * SUC_UPDATE_ENTRY_SIZE,
 			0xff,

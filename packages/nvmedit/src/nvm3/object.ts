@@ -21,6 +21,19 @@ import {
 	validateBergerCodeMulti,
 } from "./utils";
 
+export interface NVM3ObjectHeader {
+	offset: number;
+	type: ObjectType;
+	key: number;
+	fragmentType: FragmentType;
+	/** The length of the header */
+	headerSize: number;
+	/** The length of the object data */
+	fragmentSize: number;
+	/** The total length of the object in the NVM */
+	alignedSize: number;
+}
+
 export interface NVM3Object {
 	type: ObjectType;
 	fragmentType: FragmentType;
@@ -125,7 +138,7 @@ export function readObjects(buffer: Buffer): {
 	};
 }
 
-export function writeObject(obj: NVM3Object): Buffer {
+export function serializeObject(obj: NVM3Object): Buffer {
 	const isLarge = obj.type === ObjectType.DataLarge
 		|| obj.type === ObjectType.CounterLarge;
 	const headerSize = isLarge
@@ -257,4 +270,54 @@ export function compressObjects(objects: NVM3Object[]) {
 		});
 	}
 	return ret;
+}
+
+export function getAlignedSize(size: number): number {
+	return (size + NVM3_WORD_SIZE - 1) & ~(NVM3_WORD_SIZE - 1);
+}
+
+export function getHeaderSize(obj: NVM3Object): number {
+	switch (obj.type) {
+		case ObjectType.Deleted:
+		case ObjectType.CounterSmall:
+		case ObjectType.DataSmall:
+			return NVM3_OBJ_HEADER_SIZE_SMALL;
+		case ObjectType.CounterLarge:
+		case ObjectType.DataLarge:
+			return NVM3_OBJ_HEADER_SIZE_LARGE;
+	}
+}
+
+export function getFragmentSize(obj: NVM3Object): number {
+	switch (obj.type) {
+		case ObjectType.Deleted:
+			return 0;
+		case ObjectType.CounterSmall:
+			return NVM3_COUNTER_SIZE;
+		case ObjectType.DataSmall:
+		case ObjectType.DataLarge:
+		case ObjectType.CounterLarge:
+			return obj.data?.length ?? 0;
+	}
+}
+
+export function getRequiredSpace(obj: NVM3Object): number {
+	return getHeaderSize(obj) + getAlignedSize(getFragmentSize(obj));
+}
+
+export function getObjectHeader(
+	obj: NVM3Object,
+	offset: number,
+): NVM3ObjectHeader {
+	const headerSize = getHeaderSize(obj);
+	const fragmentSize = getFragmentSize(obj);
+	return {
+		offset,
+		key: obj.key,
+		type: obj.type,
+		fragmentType: obj.fragmentType,
+		headerSize,
+		fragmentSize,
+		alignedSize: headerSize + getAlignedSize(fragmentSize),
+	};
 }

@@ -4,9 +4,9 @@ import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export interface ApplicationCCsFileOptions extends NVMFileCreationOptions {
@@ -17,7 +17,10 @@ export interface ApplicationCCsFileOptions extends NVMFileCreationOptions {
 
 const MAX_CCs = 35;
 
-@nvmFileID(103)
+export const ApplicationCCsFileID = 103;
+
+@nvmFileID(ApplicationCCsFileID)
+@nvmSection("application")
 export class ApplicationCCsFile extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | ApplicationCCsFileOptions,
@@ -52,7 +55,7 @@ export class ApplicationCCsFile extends NVMFile {
 	public includedSecurelyInsecureCCs: CommandClasses[];
 	public includedSecurelySecureCCs: CommandClasses[];
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		this.payload = Buffer.alloc((1 + MAX_CCs) * 3);
 		let offset = 0;
 		for (
@@ -85,4 +88,3 @@ export class ApplicationCCsFile extends NVMFile {
 		};
 	}
 }
-export const ApplicationCCsFileID = getNVMFileIDStatic(ApplicationCCsFile);

@@ -9,9 +9,9 @@ import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export type ControllerInfoFileOptions =
@@ -40,7 +40,10 @@ export type ControllerInfoFileOptions =
 		}
 	);
 
-@nvmFileID(0x50004)
+export const ControllerInfoFileID = 0x50004;
+
+@nvmFileID(ControllerInfoFileID)
+@nvmSection("protocol")
 export class ControllerInfoFile extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | ControllerInfoFileOptions,
@@ -117,7 +120,7 @@ export class ControllerInfoFile extends NVMFile {
 	public primaryLongRangeChannelId?: number;
 	public dcdcConfig?: number;
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		if (this.lastNodeIdLR != undefined) {
 			this.payload = Buffer.allocUnsafe(22);
 			this.homeId.copy(this.payload, 0);
@@ -176,4 +179,3 @@ export class ControllerInfoFile extends NVMFile {
 		});
 	}
 }
-export const ControllerInfoFileID = getNVMFileIDStatic(ControllerInfoFile);

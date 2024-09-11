@@ -3,9 +3,9 @@ import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export interface VersionFileOptions extends NVMFileCreationOptions {
@@ -38,7 +38,7 @@ export class VersionFile extends NVMFile {
 	public minor: number;
 	public patch: number;
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		this.payload = Buffer.from([
 			this.patch,
 			this.minor,
@@ -58,20 +58,20 @@ export class VersionFile extends NVMFile {
 	}
 }
 
-@nvmFileID(0x51000)
+export const ApplicationVersionFileID = 0x51000;
+
+@nvmFileID(ApplicationVersionFileID)
 export class ApplicationVersionFile extends VersionFile {}
-export const ApplicationVersionFileID = getNVMFileIDStatic(
-	ApplicationVersionFile,
-);
 
 // The 800 series has a shared application/protocol file system
 // and uses a different ID for the application version file
-@nvmFileID(0x41000)
-export class ApplicationVersionFile800 extends VersionFile {}
-export const ApplicationVersionFile800ID = getNVMFileIDStatic(
-	ApplicationVersionFile800,
-);
+export const ApplicationVersionFile800ID = 0x41000;
 
-@nvmFileID(0x50000)
+@nvmFileID(ApplicationVersionFile800ID)
+export class ApplicationVersionFile800 extends VersionFile {}
+
+export const ProtocolVersionFileID = 0x50000;
+
+@nvmFileID(ProtocolVersionFileID)
+@nvmSection("protocol")
 export class ProtocolVersionFile extends VersionFile {}
-export const ProtocolVersionFileID = getNVMFileIDStatic(ProtocolVersionFile);

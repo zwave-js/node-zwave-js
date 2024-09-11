@@ -285,7 +285,7 @@ export function nvmObjectsToJSON(
 		fileVersion: string,
 	): T => {
 		const obj = getObjectOrThrow(id);
-		return NVMFile.from(obj, fileVersion) as T;
+		return NVMFile.from(obj.key, obj.data!, fileVersion) as T;
 	};
 
 	const getFile = <T extends NVMFile>(
@@ -293,8 +293,8 @@ export function nvmObjectsToJSON(
 		fileVersion: string,
 	): T | undefined => {
 		const obj = getObject(id);
-		if (!obj) return undefined;
-		return NVMFile.from(obj, fileVersion) as T;
+		if (!obj || !obj.data) return undefined;
+		return NVMFile.from(obj.key, obj.data, fileVersion) as T;
 	};
 
 	// === Protocol NVM files ===
@@ -1699,8 +1699,8 @@ function hasShiftedAppVersion800File(
 		fileVersion: string,
 	): T | undefined => {
 		const obj = getObject(id);
-		if (!obj) return undefined;
-		return NVMFile.from(obj, fileVersion) as T;
+		if (!obj || !obj.data) return undefined;
+		return NVMFile.from(obj.key, obj.data, fileVersion) as T;
 	};
 
 	const protocolVersionFile = getFile<ProtocolVersionFile>(

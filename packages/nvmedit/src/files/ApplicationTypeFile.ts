@@ -3,9 +3,9 @@ import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export interface ApplicationTypeFileOptions extends NVMFileCreationOptions {
@@ -15,7 +15,10 @@ export interface ApplicationTypeFileOptions extends NVMFileCreationOptions {
 	specificDeviceClass: number;
 }
 
-@nvmFileID(102)
+export const ApplicationTypeFileID = 102;
+
+@nvmFileID(ApplicationTypeFileID)
+@nvmSection("application")
 export class ApplicationTypeFile extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | ApplicationTypeFileOptions,
@@ -39,7 +42,7 @@ export class ApplicationTypeFile extends NVMFile {
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		this.payload = Buffer.from([
 			(this.isListening ? 0b1 : 0)
 			| (this.optionalFunctionality ? 0b10 : 0),
@@ -60,4 +63,3 @@ export class ApplicationTypeFile extends NVMFile {
 		};
 	}
 }
-export const ApplicationTypeFileID = getNVMFileIDStatic(ApplicationTypeFile);

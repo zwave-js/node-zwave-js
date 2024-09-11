@@ -4,9 +4,9 @@ import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export interface ProtocolNodeMaskFileOptions extends NVMFileCreationOptions {
@@ -19,16 +19,22 @@ export class ProtocolNodeMaskFile extends NVMFile {
 	) {
 		super(options);
 		if (gotDeserializationOptions(options)) {
-			this.nodeIds = parseBitMask(this.payload);
+			this.nodeIdSet = new Set(parseBitMask(this.payload));
 		} else {
-			this.nodeIds = options.nodeIds;
+			this.nodeIdSet = new Set(options.nodeIds);
 		}
 	}
 
-	public nodeIds: number[];
+	public nodeIdSet: Set<number>;
+	public get nodeIds(): number[] {
+		return [...this.nodeIdSet];
+	}
+	public set nodeIds(value: number[]) {
+		this.nodeIdSet = new Set(value);
+	}
 
-	public serialize(): NVM3Object {
-		this.payload = encodeBitMask(this.nodeIds, NODE_ID_MAX);
+	public serialize(): NVM3Object & { data: Buffer } {
+		this.payload = encodeBitMask([...this.nodeIdSet], NODE_ID_MAX);
 		return super.serialize();
 	}
 
@@ -36,81 +42,92 @@ export class ProtocolNodeMaskFile extends NVMFile {
 	public toJSON() {
 		return {
 			...super.toJSON(),
-			"node IDs": this.nodeIds.join(", "),
+			"node IDs": [...this.nodeIdSet].join(", "),
 		};
 	}
 }
 
-@nvmFileID(0x50002)
+export const ProtocolPreferredRepeatersFileID = 0x50002;
+
+@nvmFileID(ProtocolPreferredRepeatersFileID)
+@nvmSection("protocol")
 export class ProtocolPreferredRepeatersFile extends ProtocolNodeMaskFile {}
-export const ProtocolPreferredRepeatersFileID = getNVMFileIDStatic(
-	ProtocolPreferredRepeatersFile,
-);
 
-@nvmFileID(0x50005)
+export const ProtocolNodeListFileID = 0x50005;
+
+@nvmFileID(ProtocolNodeListFileID)
+@nvmSection("protocol")
 export class ProtocolNodeListFile extends ProtocolNodeMaskFile {}
-export const ProtocolNodeListFileID = getNVMFileIDStatic(ProtocolNodeListFile);
 
-@nvmFileID(0x50006)
+export const ProtocolAppRouteLockNodeMaskFileID = 0x50006;
+
+@nvmFileID(ProtocolAppRouteLockNodeMaskFileID)
+@nvmSection("protocol")
 export class ProtocolAppRouteLockNodeMaskFile extends ProtocolNodeMaskFile {}
-export const ProtocolAppRouteLockNodeMaskFileID = getNVMFileIDStatic(
-	ProtocolAppRouteLockNodeMaskFile,
-);
 
-@nvmFileID(0x50007)
+export const ProtocolRouteSlaveSUCNodeMaskFileID = 0x50007;
+
+@nvmFileID(ProtocolRouteSlaveSUCNodeMaskFileID)
+@nvmSection("protocol")
 export class ProtocolRouteSlaveSUCNodeMaskFile extends ProtocolNodeMaskFile {}
-export const ProtocolRouteSlaveSUCNodeMaskFileID = getNVMFileIDStatic(
-	ProtocolRouteSlaveSUCNodeMaskFile,
-);
 
-@nvmFileID(0x50008)
+export const ProtocolSUCPendingUpdateNodeMaskFileID = 0x50008;
+
+@nvmFileID(ProtocolSUCPendingUpdateNodeMaskFileID)
+@nvmSection("protocol")
 export class ProtocolSUCPendingUpdateNodeMaskFile
 	extends ProtocolNodeMaskFile
 {}
-export const ProtocolSUCPendingUpdateNodeMaskFileID = getNVMFileIDStatic(
-	ProtocolSUCPendingUpdateNodeMaskFile,
-);
 
-@nvmFileID(0x50009)
+export const ProtocolVirtualNodeMaskFileID = 0x50009;
+
+@nvmFileID(ProtocolVirtualNodeMaskFileID)
+@nvmSection("protocol")
 export class ProtocolVirtualNodeMaskFile extends ProtocolNodeMaskFile {}
-export const ProtocolVirtualNodeMaskFileID = getNVMFileIDStatic(
-	ProtocolVirtualNodeMaskFile,
-);
 
-@nvmFileID(0x5000a)
+export const ProtocolPendingDiscoveryNodeMaskFileID = 0x5000a;
+
+@nvmFileID(ProtocolPendingDiscoveryNodeMaskFileID)
+@nvmSection("protocol")
 export class ProtocolPendingDiscoveryNodeMaskFile
 	extends ProtocolNodeMaskFile
 {}
-export const ProtocolPendingDiscoveryNodeMaskFileID = getNVMFileIDStatic(
-	ProtocolPendingDiscoveryNodeMaskFile,
-);
 
-@nvmFileID(0x5000b)
+export const ProtocolRouteCacheExistsNodeMaskFileID = 0x5000b;
+
+@nvmFileID(ProtocolRouteCacheExistsNodeMaskFileID)
+@nvmSection("protocol")
 export class ProtocolRouteCacheExistsNodeMaskFile
 	extends ProtocolNodeMaskFile
 {}
-export const ProtocolRouteCacheExistsNodeMaskFileID = getNVMFileIDStatic(
-	ProtocolRouteCacheExistsNodeMaskFile,
-);
 
-@nvmFileID(0x5000c)
+export const ProtocolLRNodeListFileID = 0x5000c;
+
+@nvmFileID(ProtocolLRNodeListFileID)
+@nvmSection("protocol")
 export class ProtocolLRNodeListFile extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | ProtocolNodeMaskFileOptions,
 	) {
 		super(options);
 		if (gotDeserializationOptions(options)) {
-			this.nodeIds = parseBitMask(this.payload, 256);
+			this.nodeIdSet = new Set(parseBitMask(this.payload, 256));
 		} else {
-			this.nodeIds = options.nodeIds;
+			this.nodeIdSet = new Set(options.nodeIds);
 		}
 	}
 
-	public nodeIds: number[];
+	public nodeIdSet: Set<number>;
+	public get nodeIds(): number[] {
+		return [...this.nodeIdSet];
+	}
+	public set nodeIds(value: number[]) {
+		this.nodeIdSet = new Set(value);
+	}
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		// There are only 128 bytes for the bitmask, so the LR node IDs only go up to 1279
-		this.payload = encodeBitMask(this.nodeIds, 1279, 256);
+		this.payload = encodeBitMask([...this.nodeIdSet], 1279, 256);
 		return super.serialize();
 	}
 
@@ -118,11 +135,7 @@ export class ProtocolLRNodeListFile extends NVMFile {
 	public toJSON() {
 		return {
 			...super.toJSON(),
-			payload: this.payload.toString("hex"),
-			"node IDs": this.nodeIds.join(", "),
+			"node IDs": [...this.nodeIdSet].join(", "),
 		};
 	}
 }
-export const ProtocolLRNodeListFileID = getNVMFileIDStatic(
-	ProtocolLRNodeListFile,
-);

@@ -1,5 +1,6 @@
+import { createSimpleReflectionDecorator } from "@zwave-js/core";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
-import type { TypedClassDecorator } from "@zwave-js/shared";
+import { type TypedClassDecorator, num2hex } from "@zwave-js/shared";
 import {
 	FragmentType,
 	NVM3_MAX_OBJ_SIZE_SMALL,
@@ -12,13 +13,14 @@ export interface NVMFileBaseOptions {
 	fileVersion: string;
 }
 export interface NVMFileDeserializationOptions extends NVMFileBaseOptions {
-	object: NVM3Object;
+	fileId: number;
+	data: Buffer;
 }
 
 export function gotDeserializationOptions(
 	options: NVMFileOptions,
 ): options is NVMFileDeserializationOptions {
-	return "object" in options;
+	return "data" in options && Buffer.isBuffer(options.data);
 }
 
 export interface NVMFileCreationOptions extends NVMFileBaseOptions {}
@@ -32,61 +34,54 @@ export class NVMFile {
 		this.fileVersion = options.fileVersion;
 
 		if (gotDeserializationOptions(options)) {
-			this.fileId = options.object.key;
-			this.object = options.object;
+			this.fileId = options.fileId;
+			this.payload = options.data;
 		} else {
 			const fileId = getNVMFileID(this);
 			if (typeof fileId === "number") {
 				this.fileId = fileId;
 			}
-
-			this.object = {
-				key: this.fileId,
-				fragmentType: FragmentType.None,
-				type: ObjectType.DataLarge,
-			};
+			this.payload = Buffer.allocUnsafe(0);
 		}
-
-		this.payload = this.object.data ?? Buffer.allocUnsafe(0);
 	}
 
-	protected object: NVM3Object;
 	protected payload: Buffer;
 	public fileId: number = 0;
 	public fileVersion: string;
 
 	/**
-	 * Creates an instance of the CC that is serialized in the given buffer
+	 * Creates an instance of the NVM file that is contained in the given NVM object
 	 */
-	public static from(object: NVM3Object, fileVersion: string): NVMFile {
-		// Fall back to unspecified command class in case we receive one that is not implemented
-		const Constructor = getNVMFileConstructor(object.key)!;
+	public static from(
+		fileId: number,
+		data: Buffer,
+		fileVersion: string,
+	): NVMFile {
+		const Constructor = getNVMFileConstructor(fileId)!;
 		return new Constructor({
-			fileId: object.key,
+			fileId,
 			fileVersion,
-			object,
+			data,
 		});
 	}
 
 	/**
 	 * Serializes this NVMFile into an NVM Object
 	 */
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		if (!this.fileId) {
 			throw new Error("The NVM file ID must be set before serializing");
 		}
-		this.object.key = this.fileId;
-		this.object.data = this.payload;
-		// We only support large and small data objects for now
-		if (this.payload.length <= NVM3_MAX_OBJ_SIZE_SMALL) {
-			this.object.type = ObjectType.DataSmall;
-		} else {
-			this.object.type = ObjectType.DataLarge;
-		}
-		// By default output unfragmented objects, they will be split later
-		this.object.fragmentType = FragmentType.None;
-
-		return this.object;
+		return {
+			key: this.fileId,
+			data: this.payload,
+			// We only support large and small data objects for now
+			type: this.payload.length <= NVM3_MAX_OBJ_SIZE_SMALL
+				? ObjectType.DataSmall
+				: ObjectType.DataLarge,
+			// By default output unfragmented objects, they will be split later
+			fragmentType: FragmentType.None,
+		};
 	}
 
 	public toJSON(): Record<string, any> {
@@ -182,4 +177,39 @@ export function getNVMFileIDStatic<T extends NVMFileConstructor<NVMFile>>(
 		);
 	}
 	return ret;
+}
+
+export type NVMSection = "application" | "protocol";
+
+const nvmSectionDecorator = createSimpleReflectionDecorator<
+	NVMFile,
+	[section: NVMSection]
+>({
+	name: "nvmSection",
+});
+
+/** Defines in which section an NVM file is stored */
+export const nvmSection = nvmSectionDecorator.decorator;
+
+/** Returns in which section an NVM file is stored (using an instance of the file) */
+export const getNVMSection = nvmSectionDecorator.lookupValue;
+
+/** Returns in which section an NVM file is stored (using the constructor of the file) */
+export const getNVMSectionStatic = nvmSectionDecorator.lookupValueStatic;
+
+/** Returns in which NVM section the file with the given ID resides in */
+export function getNVMSectionByFileID(fileId: number): NVMSection {
+	const File = getNVMFileConstructor(fileId);
+	let ret: NVMSection | undefined;
+	if (File) {
+		ret = getNVMSectionStatic(File);
+	}
+	if (ret) return ret;
+
+	throw new ZWaveError(
+		`NVM section for file with ID ${
+			num2hex(fileId)
+		} could not be determined`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
 }

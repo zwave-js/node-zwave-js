@@ -87,6 +87,8 @@ export enum ZWaveErrorCodes {
 	NVM_InvalidFormat,
 	/** Not enough space in the NVM */
 	NVM_NoSpace,
+	/** The NVM hasn't been opened yet */
+	NVM_NotOpen,
 
 	CC_Invalid = 300,
 	CC_NoNodeID,

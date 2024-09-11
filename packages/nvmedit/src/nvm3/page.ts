@@ -101,7 +101,10 @@ export function readPage(
 		deviceFamily,
 	};
 	const bytesRead = pageSize;
-	const data = buffer.subarray(offset + 20, offset + bytesRead);
+	const data = buffer.subarray(
+		offset + NVM3_PAGE_HEADER_SIZE,
+		offset + bytesRead,
+	);
 
 	const { objects } = readObjects(data);
 
@@ -174,7 +177,7 @@ function isValidPageHeaderAtOffset(
 	}
 }
 
-export function writePageHeader(
+export function serializePageHeader(
 	header: Omit<NVM3PageHeader, "offset">,
 ): Buffer {
 	const ret = Buffer.alloc(NVM3_PAGE_HEADER_SIZE);

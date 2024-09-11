@@ -12,6 +12,7 @@ import {
 	type NVMFileDeserializationOptions,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export const ROUTECACHES_PER_FILE_V1 = 8;
@@ -94,6 +95,7 @@ export function nodeIdToRouteCacheFileIDV0(nodeId: number): number {
 	(id) =>
 		id >= RouteCacheFileV0IDBase && id < RouteCacheFileV0IDBase + MAX_NODES,
 )
+@nvmSection("protocol")
 export class RouteCacheFileV0 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | RouteCacheFileV0Options,
@@ -111,7 +113,7 @@ export class RouteCacheFileV0 extends NVMFile {
 
 	public routeCache: RouteCache;
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		this.fileId = nodeIdToRouteCacheFileIDV0(this.routeCache.nodeId);
 		this.payload = Buffer.concat([
 			encodeRoute(this.routeCache.lwr),
@@ -146,6 +148,7 @@ export function nodeIdToRouteCacheFileIDV1(nodeId: number): number {
 		id >= RouteCacheFileV1IDBase
 		&& id < RouteCacheFileV1IDBase + MAX_NODES / ROUTECACHES_PER_FILE_V1,
 )
+@nvmSection("protocol")
 export class RouteCacheFileV1 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | RouteCacheFileV1Options,
@@ -180,7 +183,7 @@ export class RouteCacheFileV1 extends NVMFile {
 
 	public routeCaches: RouteCache[];
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		// The route infos must be sorted by node ID
 		this.routeCaches.sort((a, b) => a.nodeId - b.nodeId);
 		const minNodeId = this.routeCaches[0].nodeId;

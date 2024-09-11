@@ -11,9 +11,9 @@ import {
 	NVMFile,
 	type NVMFileCreationOptions,
 	type NVMFileDeserializationOptions,
-	getNVMFileIDStatic,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export type ApplicationRFConfigFileOptions =
@@ -31,7 +31,10 @@ export type ApplicationRFConfigFileOptions =
 		nodeIdType?: number;
 	};
 
-@nvmFileID(104)
+export const ApplicationRFConfigFileID = 104;
+
+@nvmFileID(ApplicationRFConfigFileID)
+@nvmSection("application")
 export class ApplicationRFConfigFile extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | ApplicationRFConfigFileOptions,
@@ -82,7 +85,7 @@ export class ApplicationRFConfigFile extends NVMFile {
 	public maxTXPower?: number;
 	public nodeIdType?: NodeIDType;
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		if (semver.lt(this.fileVersion, "7.18.1")) {
 			this.payload = Buffer.alloc(
 				semver.gte(this.fileVersion, "7.15.3") ? 6 : 3,
@@ -137,6 +140,3 @@ export class ApplicationRFConfigFile extends NVMFile {
 		return ret;
 	}
 }
-export const ApplicationRFConfigFileID = getNVMFileIDStatic(
-	ApplicationRFConfigFile,
-);

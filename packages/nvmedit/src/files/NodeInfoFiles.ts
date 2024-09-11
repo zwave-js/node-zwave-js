@@ -19,6 +19,7 @@ import {
 	type NVMFileDeserializationOptions,
 	gotDeserializationOptions,
 	nvmFileID,
+	nvmSection,
 } from "./NVMFile";
 
 export const NODEINFOS_PER_FILE_V1 = 4;
@@ -195,6 +196,7 @@ export function nodeIdToNodeInfoFileIDV0(nodeId: number): number {
 @nvmFileID(
 	(id) => id >= NodeInfoFileV0IDBase && id < NodeInfoFileV0IDBase + MAX_NODES,
 )
+@nvmSection("protocol")
 export class NodeInfoFileV0 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | NodeInfoFileV0Options,
@@ -213,7 +215,7 @@ export class NodeInfoFileV0 extends NVMFile {
 
 	public nodeInfo: NodeInfo;
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		this.fileId = nodeIdToNodeInfoFileIDV0(this.nodeInfo.nodeId);
 		this.payload = encodeNodeInfo(this.nodeInfo);
 		return super.serialize();
@@ -244,6 +246,7 @@ export function nodeIdToNodeInfoFileIDV1(nodeId: number): number {
 		id >= NodeInfoFileV1IDBase
 		&& id < NodeInfoFileV1IDBase + MAX_NODES / NODEINFOS_PER_FILE_V1,
 )
+@nvmSection("protocol")
 export class NodeInfoFileV1 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | NodeInfoFileV1Options,
@@ -277,7 +280,7 @@ export class NodeInfoFileV1 extends NVMFile {
 
 	public nodeInfos: NodeInfo[];
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		// The infos must be sorted by node ID
 		this.nodeInfos.sort((a, b) => a.nodeId - b.nodeId);
 		const minNodeId = this.nodeInfos[0].nodeId;
@@ -329,6 +332,7 @@ export function nodeIdToLRNodeInfoFileIDV5(nodeId: number): number {
 		&& id
 			< LRNodeInfoFileV5IDBase + MAX_NODES_LR / LR_NODEINFOS_PER_FILE_V5,
 )
+@nvmSection("protocol")
 export class LRNodeInfoFileV5 extends NVMFile {
 	public constructor(
 		options: NVMFileDeserializationOptions | LRNodeInfoFileV5Options,
@@ -362,7 +366,7 @@ export class LRNodeInfoFileV5 extends NVMFile {
 
 	public nodeInfos: LRNodeInfo[];
 
-	public serialize(): NVM3Object {
+	public serialize(): NVM3Object & { data: Buffer } {
 		// The infos must be sorted by node ID
 		this.nodeInfos.sort((a, b) => a.nodeId - b.nodeId);
 		const minNodeId = this.nodeInfos[0].nodeId;

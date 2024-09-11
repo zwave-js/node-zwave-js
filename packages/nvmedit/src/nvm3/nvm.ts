@@ -20,9 +20,9 @@ import {
 	type NVM3Object,
 	compressObjects,
 	fragmentLargeObject,
-	writeObject,
+	serializeObject,
 } from "./object";
-import { type NVM3Page, readPage, writePageHeader } from "./page";
+import { type NVM3Page, readPage, serializePageHeader } from "./page";
 import { dumpObject, dumpPage } from "./utils";
 
 function comparePages(p1: NVM3Page, p2: NVM3Page) {
@@ -151,7 +151,7 @@ export function encodeNVM(
 
 	const createEmptyPage = (): Buffer => {
 		const ret = Buffer.alloc(pageSize, 0xff);
-		writePageHeader({
+		serializePageHeader({
 			version: 0x01,
 			eraseCount: 0,
 			encrypted: false,
@@ -227,7 +227,7 @@ export function encodeNVM(
 			if (!fragments) fragments = [obj];
 
 			for (const fragment of fragments) {
-				const objBuffer = writeObject(fragment);
+				const objBuffer = serializeObject(fragment);
 				objBuffer.copy(currentPage, offsetInPage);
 				incrementOffset(objBuffer.length);
 
