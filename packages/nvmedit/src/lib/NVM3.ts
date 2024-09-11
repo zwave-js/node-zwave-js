@@ -40,10 +40,12 @@ import { validateBergerCode, validateBergerCodeMulti } from "../nvm3/utils";
 import { type NVM, NVMAccess, type NVMIO } from "./common/definitions";
 import { nvmReadBuffer, nvmReadUInt32LE, nvmWriteBuffer } from "./common/utils";
 
-// FIXME: Possible optimizations:
-// - During init() only read as many object headers as necessary
-// - During get(), read all object headers needed to find the requested object
-// - When reading, cache object data in memory (?)
+// TODO: Possible optimizations:
+// Investigate if there is a better way to determine whether the NVM
+// uses a shared FS or not. The current implementation scans all objects
+// to find the 800 series application version file.
+// Alternatively, we could simply check if each page starts with an object header.
+// If yes, read the objects lazily when needed. If not, remember that the page is empty.
 
 type PageMeta = NVM3PageHeader & {
 	objects: NVM3ObjectHeader[];
