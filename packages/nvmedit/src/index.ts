@@ -38,6 +38,7 @@ export type {
 	NodeNVMPropertyToDataType,
 } from "./lib/common/definitions";
 export { NVMAccess } from "./lib/common/definitions";
+export { BufferedNVMReader } from "./lib/io/BufferedNVMReader";
 export { NVMFileIO } from "./lib/io/NVMFileIO";
 export {
 	FragmentType,

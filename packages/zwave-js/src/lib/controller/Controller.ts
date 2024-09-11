@@ -100,6 +100,7 @@ import {
 	securityClassOrder,
 } from "@zwave-js/core";
 import {
+	BufferedNVMReader,
 	NVM3,
 	NVM3Adapter,
 	type NVMAdapter,
@@ -7042,7 +7043,7 @@ ${associatedNodes.join(", ")}`,
 	public get nvm(): NVMAdapter {
 		if (!this._nvm) {
 			if (this.sdkVersionGte("7.0")) {
-				const io = new SerialNVMIO700(this);
+				const io = new BufferedNVMReader(new SerialNVMIO700(this));
 				const nvm3 = new NVM3(io);
 				this._nvm = new NVM3Adapter(nvm3);
 			} else {
