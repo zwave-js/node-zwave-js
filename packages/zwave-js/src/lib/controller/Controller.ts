@@ -99,7 +99,12 @@ import {
 	securityClassIsS2,
 	securityClassOrder,
 } from "@zwave-js/core";
-import { migrateNVM } from "@zwave-js/nvmedit";
+import {
+	NVM3,
+	NVM3Adapter,
+	type NVMAdapter,
+	migrateNVM,
+} from "@zwave-js/nvmedit";
 import {
 	type BootloaderChunk,
 	BootloaderChunkType,
@@ -409,6 +414,7 @@ import {
 	SecurityBootstrapFailure,
 	type SmartStartProvisioningEntry,
 } from "./Inclusion";
+import { SerialNVMIO700 } from "./NVMIO";
 import { determineNIF } from "./NodeInformationFrame";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import {
@@ -7029,6 +7035,22 @@ ${associatedNodes.join(", ")}`,
 			);
 			return false;
 		}
+	}
+
+	private _nvm: NVMAdapter | undefined;
+	/** Provides access to the controller's non-volatile memory */
+	public get nvm(): NVMAdapter {
+		if (!this._nvm) {
+			if (this.sdkVersionGte("7.0")) {
+				const io = new SerialNVMIO700(this);
+				const nvm3 = new NVM3(io);
+				this._nvm = new NVM3Adapter(nvm3);
+			} else {
+				throw new Error("get nvm() not implemented for 500 series");
+			}
+		}
+
+		return this._nvm;
 	}
 
 	/**

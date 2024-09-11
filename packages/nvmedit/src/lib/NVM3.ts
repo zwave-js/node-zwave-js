@@ -277,11 +277,13 @@ export class NVM3 implements NVM<number, Buffer> {
 			objects: for (let j = page.objects.length - 1; j >= 0; j--) {
 				const object = page.objects[j];
 
-				const readObject = () =>
-					this._io.read(
+				const readObject = async () => {
+					const result = await this._io.read(
 						object.offset + object.headerSize,
 						object.fragmentSize,
 					);
+					return result.buffer;
+				};
 
 				if (object.key !== fileId) {
 					// Reset any fragmented objects when encountering a different key
@@ -510,7 +512,7 @@ async function readPageHeader(
 		);
 	}
 
-	const buffer = await io.read(offset, NVM3_PAGE_HEADER_SIZE);
+	const buffer = (await io.read(offset, NVM3_PAGE_HEADER_SIZE)).buffer;
 
 	const { version, eraseCount } = tryGetVersionAndEraseCount(buffer);
 
@@ -623,7 +625,7 @@ async function isValidPageHeaderAtOffset(
 		return false;
 	}
 
-	const buffer = await io.read(offset, NVM3_PAGE_HEADER_SIZE);
+	const { buffer } = await io.read(offset, NVM3_PAGE_HEADER_SIZE);
 
 	try {
 		tryGetVersionAndEraseCount(buffer);

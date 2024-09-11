@@ -24,7 +24,8 @@ export interface NVMIO {
 	 * Since different NVM implementations may or may not allow reading and writing at the same time,
 	 * the returned value indicates which access patterns are actually allowed.
 	 */
-	open(access: NVMAccess): Promise<NVMAccess>;
+	open(access: NVMAccess.Read | NVMAccess.Write): Promise<NVMAccess>;
+
 	/** Returns the size of the NVM, after it has been opened */
 	get size(): number;
 	/** Returns which access is currently allowed for this NVM implementation */
@@ -41,13 +42,19 @@ export interface NVMIO {
 	 * If the length is longer than the chunk size, or the end of the NVM is reached,
 	 * the returned buffer will be shorter than the requested length.
 	 */
-	read(offset: number, length: number): Promise<Buffer>;
+	read(
+		offset: number,
+		length: number,
+	): Promise<{ buffer: Buffer; endOfFile: boolean }>;
 
 	/**
 	 * Writes a chunk of data with the given length from the NVM.
 	 * The returned value indicates how many bytes were actually written.
 	 */
-	write(offset: number, data: Buffer): Promise<number>;
+	write(
+		offset: number,
+		data: Buffer,
+	): Promise<{ bytesWritten: number; endOfFile: boolean }>;
 
 	/** Closes the NVM */
 	close(): Promise<void>;
