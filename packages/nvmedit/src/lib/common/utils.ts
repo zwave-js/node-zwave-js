@@ -29,3 +29,23 @@ export async function nvmWriteBuffer(
 		offset += bytesWritten;
 	}
 }
+
+export async function nvmReadBuffer(
+	io: NVMIO,
+	position: number,
+	length: number,
+): Promise<Buffer> {
+	const ret = Buffer.allocUnsafe(length);
+	const chunkSize = await io.determineChunkSize();
+	let offset = 0;
+	while (offset < length) {
+		const { buffer, endOfFile } = await io.read(
+			position + offset,
+			Math.min(chunkSize, length - offset),
+		);
+		buffer.copy(ret, offset);
+		offset += buffer.length;
+		if (endOfFile) break;
+	}
+	return ret.subarray(0, offset);
+}

@@ -38,7 +38,7 @@ import {
 } from "../nvm3/page";
 import { validateBergerCode, validateBergerCodeMulti } from "../nvm3/utils";
 import { type NVM, NVMAccess, type NVMIO } from "./common/definitions";
-import { nvmReadUInt32LE, nvmWriteBuffer } from "./common/utils";
+import { nvmReadBuffer, nvmReadUInt32LE, nvmWriteBuffer } from "./common/utils";
 
 // FIXME: Possible optimizations:
 // - During init() only read as many object headers as necessary
@@ -272,18 +272,22 @@ export class NVM3 implements NVM<number, Buffer> {
 			const index = (section.currentPage - offset + pages.length)
 				% pages.length;
 			const page = pages[index];
+			console.debug(
+				`NVM3.get(${fileId}): scanning page ${index} at offset ${
+					num2hex(page.offset)
+				}`,
+			);
 			// Scan objects in this page, read backwards.
 			// The last non-deleted object wins
 			objects: for (let j = page.objects.length - 1; j >= 0; j--) {
 				const object = page.objects[j];
 
-				const readObject = async () => {
-					const result = await this._io.read(
+				const readObject = () =>
+					nvmReadBuffer(
+						this._io,
 						object.offset + object.headerSize,
 						object.fragmentSize,
 					);
-					return result.buffer;
-				};
 
 				if (object.key !== fileId) {
 					// Reset any fragmented objects when encountering a different key
