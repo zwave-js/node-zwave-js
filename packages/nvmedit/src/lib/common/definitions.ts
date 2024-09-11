@@ -72,37 +72,24 @@ export interface NVM<ID, Data> {
  * Provides an application-level abstraction over an NVM implementation
  */
 export interface NVMAdapter {
-	/** Reads a controller-related property from the NVM */
-	get<T extends ControllerNVMProperty>(
+	/** Reads a property from the NVM */
+	get<T extends NVMProperty>(
 		property: T,
-	): Promise<ControllerNVMPropertyToDataType<T> | undefined>;
-
-	/** Reads a node-related property from the NVM */
-	get<T extends NodeNVMProperty>(
-		property: T,
-	): Promise<NodeNVMPropertyToDataType<T> | undefined>;
+	): Promise<NVMPropertyToDataType<T> | undefined>;
 
 	/**
-	 * Changes a controller-related property to be written to the NVM later
+	 * Changes a property to be written to the NVM later
 	 */
-	set<T extends ControllerNVMProperty>(
+	set<T extends NVMProperty>(
 		property: T,
-		value: ControllerNVMPropertyToDataType<T>,
-	): Promise<void>;
-
-	/**
-	 * Changes a node-related property to be written to the NVM later
-	 */
-	set<T extends NodeNVMProperty>(
-		property: T,
-		value: NodeNVMPropertyToDataType<T>,
+		value: NVMPropertyToDataType<T>,
 	): Promise<void>;
 
 	/**
 	 * Marks a property for deletion from the NVM. In some implementations,
 	 * deleting one property may delete multiple properties that are stored together.
 	 */
-	delete(property: ControllerNVMProperty | NodeNVMProperty): Promise<void>;
+	delete(property: NVMProperty): Promise<void>;
 
 	/** Returns whether there are pending changes that weren't written to the NVM yet */
 	hasPendingChanges(): boolean;
@@ -184,6 +171,7 @@ export interface LRNodeNVMPropertyTypes {
 export type ControllerNVMProperty = {
 	domain: "controller";
 	type: keyof ControllerNVMPropertyTypes;
+	nodeId?: undefined;
 };
 
 export type ControllerNVMPropertyToDataType<P extends ControllerNVMProperty> =
@@ -210,3 +198,14 @@ export type LRNodeNVMPropertyToDataType<P extends LRNodeNVMProperty> =
 	P["type"] extends keyof LRNodeNVMPropertyTypes
 		? LRNodeNVMPropertyTypes[P["type"]]
 		: never;
+
+export type NVMProperty =
+	| ControllerNVMProperty
+	| NodeNVMProperty
+	| LRNodeNVMProperty;
+
+export type NVMPropertyToDataType<P extends NVMProperty> = P extends
+	ControllerNVMProperty ? ControllerNVMPropertyToDataType<P>
+	: P extends NodeNVMProperty ? NodeNVMPropertyToDataType<P>
+	: P extends LRNodeNVMProperty ? LRNodeNVMPropertyToDataType<P>
+	: never;

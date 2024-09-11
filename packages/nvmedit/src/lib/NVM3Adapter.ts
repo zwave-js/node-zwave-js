@@ -62,12 +62,11 @@ import {
 import { type NVM3 } from "./NVM3";
 import {
 	type ControllerNVMProperty,
-	type ControllerNVMPropertyToDataType,
 	type LRNodeNVMProperty,
-	type LRNodeNVMPropertyToDataType,
 	type NVMAdapter,
+	type NVMProperty,
+	type NVMPropertyToDataType,
 	type NodeNVMProperty,
-	type NodeNVMPropertyToDataType,
 } from "./common/definitions";
 
 const DEFAULT_FILE_VERSION = "7.0.0";
@@ -178,27 +177,15 @@ export class NVM3Adapter implements NVMAdapter {
 		return NVMFile.from(fileId, data, fileVersion) as T;
 	}
 
-	public get<T extends ControllerNVMProperty>(
+	public get<T extends NVMProperty>(
 		property: T,
-	): Promise<ControllerNVMPropertyToDataType<T> | undefined>;
-
-	public get<T extends LRNodeNVMProperty>(
-		property: T,
-	): Promise<LRNodeNVMPropertyToDataType<T> | undefined>;
-
-	public get<T extends NodeNVMProperty>(
-		property: T,
-	): Promise<NodeNVMPropertyToDataType<T> | undefined>;
-
-	public async get(
-		property: ControllerNVMProperty | LRNodeNVMProperty | NodeNVMProperty,
-	): Promise<unknown> {
+	): Promise<NVMPropertyToDataType<T> | undefined> {
 		if (property.domain === "controller") {
-			return this.getControllerNVMProperty(property);
+			return this.getControllerNVMProperty(property) as any;
 		} else if (property.domain === "lrnode") {
-			return this.getLRNodeNVMProperty(property);
+			return this.getLRNodeNVMProperty(property) as any;
 		} else {
-			return this.getNodeNVMProperty(property);
+			return this.getNodeNVMProperty(property) as any;
 		}
 	}
 
@@ -449,24 +436,9 @@ export class NVM3Adapter implements NVMAdapter {
 		}
 	}
 
-	public set<T extends ControllerNVMProperty>(
+	public set<T extends NVMProperty>(
 		property: T,
-		value: ControllerNVMPropertyToDataType<T>,
-	): Promise<void>;
-
-	public set<T extends LRNodeNVMProperty>(
-		property: T,
-		value: LRNodeNVMPropertyToDataType<T>,
-	): Promise<void>;
-
-	public set<T extends NodeNVMProperty>(
-		property: T,
-		value: NodeNVMPropertyToDataType<T>,
-	): Promise<void>;
-
-	public set(
-		property: ControllerNVMProperty | LRNodeNVMProperty | NodeNVMProperty,
-		value: unknown,
+		value: NVMPropertyToDataType<T>,
 	): Promise<void> {
 		if (property.domain === "controller") {
 			return this.setControllerNVMProperty(property, value);
@@ -952,7 +924,7 @@ export class NVM3Adapter implements NVMAdapter {
 	}
 
 	public async delete(
-		property: ControllerNVMProperty | LRNodeNVMProperty | NodeNVMProperty,
+		property: NVMProperty,
 	): Promise<void> {
 		if (property.domain === "controller") {
 			switch (property.type) {

@@ -24,7 +24,19 @@ export {
 export { NVMFile } from "./files/NVMFile";
 export { NVM3 } from "./lib/NVM3";
 export { NVM3Adapter } from "./lib/NVM3Adapter";
-export type { NVM, NVMAdapter, NVMIO } from "./lib/common/definitions";
+export type {
+	ControllerNVMProperty,
+	ControllerNVMPropertyToDataType,
+	LRNodeNVMProperty,
+	LRNodeNVMPropertyToDataType,
+	NVM,
+	NVMAdapter,
+	NVMIO,
+	NVMProperty,
+	NVMPropertyToDataType,
+	NodeNVMProperty,
+	NodeNVMPropertyToDataType,
+} from "./lib/common/definitions";
 export { NVMFileIO } from "./lib/io/NVMFileIO";
 export {
 	FragmentType,
