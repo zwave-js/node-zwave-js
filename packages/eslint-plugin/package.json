@@ -35,10 +35,10 @@
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
-    "@types/eslint": "^8.56.7",
+    "@types/eslint": "^9.6.1",
     "@typescript-eslint/utils": "^7.13.0",
     "@zwave-js/core": "workspace:*",
-    "eslint": "^8.57.0",
+    "eslint": "^9.10.0",
     "typescript": "5.5.3"
   }
 }
