@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.3.0 (2024-09-12)
 ### Features
 * Add support for EU Long Range (#6751)
 * Support learn mode to become a secondary controller (#7135)
