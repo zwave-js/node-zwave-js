@@ -77,6 +77,9 @@ import {
 	ApplicationNameFile,
 	ApplicationNameFileID,
 } from "./files/ApplicationNameFile";
+import { NVM3 } from "./lib/NVM3";
+import { NVM3Adapter } from "./lib/NVM3Adapter";
+import { NVMMemoryIO } from "./lib/io/NVMMemoryIO";
 import {
 	type NVM3Objects,
 	type NVM3Pages,
@@ -95,12 +98,15 @@ import {
 } from "./nvm500/NVMParser";
 
 export interface NVMJSON {
-	format: number;
+	format: number; // protocol file format
+	applicationFileFormat?: number;
 	meta?: NVMMeta;
 	controller: NVMJSONController;
 	nodes: Record<number, NVMJSONNode>;
 	lrNodes?: Record<number, NVMJSONLRNode>;
 }
+
+export type NVMJSONWithMeta = NVMJSON & { meta: NVMMeta };
 
 export interface NVMJSONController {
 	protocolVersion: string;
@@ -188,7 +194,7 @@ type ParsedNVM =
 	}
 	| {
 		type: 700;
-		json: Required<NVMJSON>;
+		json: NVMJSONWithMeta;
 	}
 	| {
 		type: "unknown";
@@ -571,7 +577,8 @@ export function nvmObjectsToJSON(
 			}
 			: {}),
 		sucUpdateEntries,
-		applicationData: applicationDataFile?.data.toString("hex") ?? null,
+		applicationData: applicationDataFile?.applicationData.toString("hex")
+			?? null,
 		applicationName: applicationNameFile?.name ?? null,
 	};
 
@@ -726,7 +733,7 @@ function serializeCommonApplicationObjects(nvm: NVMJSON): NVM3Object[] {
 	if (nvm.controller.applicationData) {
 		// TODO: ensure this is 512 bytes long
 		const applDataFile = new ApplicationDataFile({
-			data: Buffer.from(nvm.controller.applicationData, "hex"),
+			applicationData: Buffer.from(nvm.controller.applicationData, "hex"),
 			fileVersion: nvm.controller.applicationVersion,
 		});
 		ret.push(applDataFile.serialize());
@@ -1201,7 +1208,7 @@ export function jsonToNVMObjects_v7_11_0(
 }
 
 /** Reads an NVM buffer and returns its JSON representation */
-export function nvmToJSON(
+export function nvmToJSONOld(
 	buffer: Buffer,
 	debugLogs: boolean = false,
 ): Required<NVMJSON> {
@@ -1241,7 +1248,7 @@ export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON> {
 
 /** Takes a JSON represented NVM and converts it to binary */
 export function jsonToNVM(
-	json: Required<NVMJSON>,
+	json: NVMJSONWithMeta,
 	targetSDKVersion: string,
 ): Buffer {
 	const parsedVersion = semver.parse(targetSDKVersion);
@@ -1487,24 +1494,21 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 }
 
 /** Converts the given source NVM into a format that is compatible with the given target NVM */
-export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
+export async function migrateNVM(
+	sourceNVM: Buffer,
+	targetNVM: Buffer,
+): Promise<Buffer> {
 	let source: ParsedNVM;
 	let target: ParsedNVM;
-	let sourceObjects: Map<number, NVM3Object> | undefined;
 	let sourceProtocolFileFormat: number | undefined;
 	let targetProtocolFileFormat: number | undefined;
 
 	try {
-		const nvm = parseNVM(sourceNVM);
 		source = {
 			type: 700,
-			json: parsedNVMToJSON(nvm),
+			json: await nvmToJSON(sourceNVM),
 		};
 		sourceProtocolFileFormat = source.json.format;
-		sourceObjects = new Map([
-			...nvm.applicationObjects,
-			...nvm.protocolObjects,
-		]);
 	} catch (e) {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
 			// This is not a 700 series NVM, maybe it is a 500 series one?
@@ -1529,7 +1533,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 	try {
 		target = {
 			type: 700,
-			json: nvmToJSON(targetNVM),
+			json: await nvmToJSON(targetNVM),
 		};
 		targetProtocolFileFormat = target.json.format;
 	} catch (e) {
@@ -1597,7 +1601,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			&& semver.lt(sourceApplicationVersion, "255.0.0")
 			&& semver.lt(targetApplicationVersion, "255.0.0")
 			// and avoid restoring a backup with a shifted 800 series application version file
-			&& (!sourceObjects || !hasShiftedAppVersion800File(sourceObjects))
+			&& (!hasShiftedAppVersion800File(source.json))
 		) {
 			return sourceNVM;
 		}
@@ -1647,7 +1651,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 		return jsonToNVM500(json, target.json.controller.protocolVersion);
 	} else if (source.type === 500 && target.type === 700) {
 		// We need to upgrade the source to 700 series
-		const json: Required<NVMJSON> = {
+		const json: NVMJSONWithMeta = {
 			lrNodes: {},
 			...json500To700(source.json, true),
 			meta: target.json.meta,
@@ -1667,9 +1671,9 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 		return jsonToNVM500(json, target.json.controller.protocolVersion);
 	} else {
 		// Both are 700, so we just need to update the metadata to match the target
-		const json: Required<NVMJSON> = {
-			...(source.json as Required<NVMJSON>),
-			meta: (target.json as Required<NVMJSON>).meta,
+		const json: NVMJSONWithMeta = {
+			...(source.json as NVMJSONWithMeta),
+			meta: (target.json as NVMJSONWithMeta).meta,
 		};
 		// 700 series distinguishes the NVM format by the application version
 		return jsonToNVM(json, target.json.controller.applicationVersion);
@@ -1680,55 +1684,308 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
  * Detects whether the app version file on a 800 series controller is shifted by 1 byte
  */
 function hasShiftedAppVersion800File(
-	objects: Map<number, NVM3Object>,
+	json: NVMJSONWithMeta,
 ): boolean {
-	const getObject = (
-		id: number | ((id: number) => boolean),
-	): NVM3Object | undefined => {
-		if (typeof id === "number") {
-			return objects.get(id);
-		} else {
-			for (const [key, obj] of objects) {
-				if (id(key)) return obj;
-			}
-		}
-	};
+	// We can only detect this on 800 series controllers with the shared FS
+	if (!json.meta.sharedFileSystem) return false;
 
-	const getFile = <T extends NVMFile>(
-		id: number | ((id: number) => boolean),
-		fileVersion: string,
-	): T | undefined => {
-		const obj = getObject(id);
-		if (!obj || !obj.data) return undefined;
-		return NVMFile.from(obj.key, obj.data, fileVersion) as T;
-	};
+	const protocolVersion = semver.parse(json.controller.protocolVersion);
+	// Invalid protocol version, cannot fix anything
+	if (!protocolVersion) return false;
 
-	const protocolVersionFile = getFile<ProtocolVersionFile>(
-		ProtocolVersionFileID,
-		"7.0.0", // We don't know the version here yet
-	);
-	// File not found, cannot fix anything
-	if (!protocolVersionFile) return false;
-
-	const protocolVersion =
-		`${protocolVersionFile.major}.${protocolVersionFile.minor}.${protocolVersionFile.patch}`;
-
-	const applVersionFile800 = getFile<ApplicationVersionFile800>(
-		ApplicationVersionFile800ID,
-		protocolVersion,
-	);
-
-	// File not found, cannot fix anything
-	if (!applVersionFile800) return false;
+	const applicationVersion = semver.parse(json.controller.applicationVersion);
+	// Invalid application version, cannot fix anything
+	if (!applicationVersion) return false;
 
 	// We consider the version shifted if:
 	// - the app version format is the major protocol version
 	// - the app version major is the minor protocol version +/- 3
 
-	if (applVersionFile800.format !== protocolVersionFile.major) return false;
-	if (Math.abs(applVersionFile800.major - protocolVersionFile.minor) > 3) {
+	if (json.applicationFileFormat !== protocolVersion.major) return false;
+	if (Math.abs(applicationVersion.major - protocolVersion.minor) > 3) {
 		return false;
 	}
 
 	return true;
+}
+
+export async function nvmToJSON(
+	buffer: Buffer,
+	debugLogs: boolean = false,
+): Promise<NVMJSONWithMeta> {
+	const io = new NVMMemoryIO(buffer);
+	const nvm3 = new NVM3(io);
+	const info = await nvm3.init();
+
+	const adapter = new NVM3Adapter(nvm3);
+
+	if (debugLogs) {
+		// TODO: Dump all pages and all raw objects in each page
+
+		// TODO: Dump all objects in their final state
+	}
+
+	const firstPageHeader = info.isSharedFileSystem
+		? info.sections.all.pages[0]
+		: info.sections.protocol.pages[0];
+
+	const meta: NVMMeta = {
+		sharedFileSystem: info.isSharedFileSystem,
+		...pick(firstPageHeader, [
+			"pageSize",
+			"writeSize",
+			"memoryMapped",
+			"deviceFamily",
+		]),
+	};
+
+	const nodes = new Map<number, NVMJSONNode>();
+	const getNode = (id: number): NVMJSONNode => {
+		if (!nodes.has(id)) nodes.set(id, createEmptyPhysicalNode());
+		return nodes.get(id)!;
+	};
+
+	const lrNodes = new Map<number, NVMJSONLRNode>();
+	const getLRNode = (id: number): NVMJSONLRNode => {
+		if (!lrNodes.has(id)) lrNodes.set(id, createEmptyLRNode());
+		return lrNodes.get(id)!;
+	};
+
+	const protocolFileFormat = await adapter.get({
+		domain: "controller",
+		type: "protocolFileFormat",
+	}, true);
+
+	// Bail early if the NVM uses a protocol file format that's newer than we support
+	if (protocolFileFormat > MAX_PROTOCOL_FILE_FORMAT) {
+		throw new ZWaveError(
+			`Unsupported protocol file format: ${protocolFileFormat}`,
+			ZWaveErrorCodes.NVM_NotSupported,
+			{ protocolFileFormat },
+		);
+	}
+
+	const protocolVersion = await adapter.get({
+		domain: "controller",
+		type: "protocolVersion",
+	}, true);
+
+	// Read all flags for all nodes
+	const appRouteLock = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "appRouteLock",
+		}, true),
+	);
+	const routeSlaveSUC = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "routeSlaveSUC",
+		}, true),
+	);
+	const sucPendingUpdate = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "sucPendingUpdate",
+		}, true),
+	);
+	const virtualNodeIds = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "virtualNodeIds",
+		}, true),
+	);
+	const pendingDiscovery = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "pendingDiscovery",
+		}, true),
+	);
+
+	// Figure out which nodes exist
+	const nodeIds = await adapter.get({
+		domain: "controller",
+		type: "nodeIds",
+	}, true);
+
+	// And create each node entry, including virtual ones
+	for (const id of nodeIds) {
+		const node = getNode(id) as NVMJSONNodeWithInfo;
+
+		// Find node info
+		const nodeInfo = await adapter.get({
+			domain: "node",
+			nodeId: id,
+			type: "info",
+		}, true);
+
+		Object.assign(node, nodeInfo);
+
+		// Evaluate flags
+		node.isVirtual = virtualNodeIds.has(id);
+		node.appRouteLock = appRouteLock.has(id);
+		node.routeSlaveSUC = routeSlaveSUC.has(id);
+		node.sucPendingUpdate = sucPendingUpdate.has(id);
+		node.pendingDiscovery = pendingDiscovery.has(id);
+
+		const routes = await adapter.get({
+			domain: "node",
+			nodeId: id,
+			type: "routes",
+		});
+		if (routes) {
+			node.lwr = routes.lwr;
+			node.nlwr = routes.nlwr;
+		}
+
+		// @ts-expect-error Some fields include a nodeId, but we don't need it
+		delete node.nodeId;
+	}
+
+	// If they exist, read info about LR nodes
+	const lrNodeIds = await adapter.get({
+		domain: "controller",
+		type: "lrNodeIds",
+	});
+	if (lrNodeIds) {
+		for (const id of lrNodeIds) {
+			const node = getLRNode(id);
+
+			// Find node info
+			const nodeInfo = await adapter.get({
+				domain: "lrnode",
+				nodeId: id,
+				type: "info",
+			}, true);
+
+			Object.assign(node, nodeInfo);
+		}
+	}
+
+	// Read info about the controller
+	const sucUpdateEntries = await adapter.get({
+		domain: "controller",
+		type: "sucUpdateEntries",
+	}, true);
+
+	const applicationVersion = await adapter.get({
+		domain: "controller",
+		type: "applicationVersion",
+	}, true);
+
+	const applicationFileFormat = await adapter.get({
+		domain: "controller",
+		type: "applicationFileFormat",
+	}, true);
+
+	const applicationData = await adapter.get({
+		domain: "controller",
+		type: "applicationData",
+	});
+
+	const applicationName = await adapter.get({
+		domain: "controller",
+		type: "applicationName",
+	});
+
+	const preferredRepeaters = await adapter.get({
+		domain: "controller",
+		type: "preferredRepeaters",
+	});
+
+	// The following are a bit awkward to read one by one, so we just take the files
+	const controllerInfoFile = await adapter.getFile<ControllerInfoFile>(
+		ControllerInfoFileID,
+		true,
+	);
+	const rfConfigFile = await adapter.getFile<ApplicationRFConfigFile>(
+		ApplicationRFConfigFileID,
+	);
+	const applicationCCsFile = await adapter.getFile<ApplicationCCsFile>(
+		ApplicationCCsFileID,
+		true,
+	);
+	const applicationTypeFile = await adapter.getFile<ApplicationTypeFile>(
+		ApplicationTypeFileID,
+		true,
+	);
+
+	const controller: NVMJSONController = {
+		protocolVersion,
+		applicationVersion,
+		homeId: `0x${controllerInfoFile.homeId.toString("hex")}`,
+		...pick(controllerInfoFile, [
+			"nodeId",
+			"lastNodeId",
+			"staticControllerNodeId",
+			"sucLastIndex",
+			"controllerConfiguration",
+			"sucAwarenessPushNeeded",
+			"maxNodeId",
+			"reservedId",
+			"systemState",
+			"lastNodeIdLR",
+			"maxNodeIdLR",
+			"reservedIdLR",
+			"primaryLongRangeChannelId",
+			"dcdcConfig",
+		]),
+		...pick(applicationTypeFile, [
+			"isListening",
+			"optionalFunctionality",
+			"genericDeviceClass",
+			"specificDeviceClass",
+		]),
+		commandClasses: pick(applicationCCsFile, [
+			"includedInsecurely",
+			"includedSecurelyInsecureCCs",
+			"includedSecurelySecureCCs",
+		]),
+		preferredRepeaters,
+		...(rfConfigFile
+			? {
+				rfConfig: {
+					rfRegion: rfConfigFile.rfRegion,
+					txPower: rfConfigFile.txPower,
+					measured0dBm: rfConfigFile.measured0dBm,
+					enablePTI: rfConfigFile.enablePTI ?? null,
+					maxTXPower: rfConfigFile.maxTXPower ?? null,
+					nodeIdType: rfConfigFile.nodeIdType ?? null,
+				},
+			}
+			: {}),
+		sucUpdateEntries,
+		applicationData: applicationData?.toString("hex") ?? null,
+		applicationName: applicationName ?? null,
+	};
+
+	// Make sure all props are defined
+	const optionalControllerProps = [
+		"sucAwarenessPushNeeded",
+		"lastNodeIdLR",
+		"maxNodeIdLR",
+		"reservedIdLR",
+		"primaryLongRangeChannelId",
+		"dcdcConfig",
+		"rfConfig",
+		"preferredRepeaters",
+		"applicationData",
+	] as const;
+	for (const prop of optionalControllerProps) {
+		if (controller[prop] === undefined) controller[prop] = null;
+	}
+
+	const ret: NVMJSONWithMeta = {
+		format: protocolFileFormat,
+		controller,
+		nodes: mapToObject(nodes),
+		meta,
+	};
+	if (applicationFileFormat !== 0) {
+		ret.applicationFileFormat = applicationFileFormat;
+	}
+	if (lrNodes.size > 0) {
+		ret.lrNodes = mapToObject(lrNodes);
+	}
+	return ret;
 }

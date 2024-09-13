@@ -22,7 +22,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
 			const data = await fs.readFile(path.join(fixturesDir, file));
-			const json = nvmToJSON(data);
+			const json = await nvmToJSON(data);
 			t.snapshot(json);
 		});
 	}
@@ -43,7 +43,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 				jsonInput,
 				jsonInput.controller.applicationVersion,
 			);
-			const jsonOutput = nvmToJSON(nvm);
+			const jsonOutput = await nvmToJSON(nvm);
 			// @ts-expect-error
 			if (!("meta" in jsonInput)) delete jsonOutput.meta;
 
@@ -66,7 +66,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 			const nvmIn = await fs.readFile(path.join(fixturesDir, file));
 
 			const version = /_(\d+\.\d+\.\d+)[_.]/.exec(file)![1];
-			const json = nvmToJSON(nvmIn);
+			const json = await nvmToJSON(nvmIn);
 			const nvmOut = jsonToNVM(json, version);
 
 			t.deepEqual(nvmOut, nvmIn);
@@ -190,7 +190,7 @@ test("700 to 700 migration shortcut", async (t) => {
 	const nvmTarget = await fs.readFile(
 		path.join(fixturesDir, "ctrlr_backup_700_7.16_1.bin"),
 	);
-	const converted = migrateNVM(nvmSource, nvmTarget);
+	const converted = await migrateNVM(nvmSource, nvmTarget);
 
 	t.deepEqual(converted, nvmSource);
 });

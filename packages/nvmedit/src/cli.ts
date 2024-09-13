@@ -9,7 +9,7 @@ import {
 	jsonToNVM500,
 	migrateNVM,
 	nvm500ToJSON,
-	nvmToJSON,
+	nvmToJSONOld,
 } from "./convert";
 import "./index";
 
@@ -47,7 +47,7 @@ void yargs
 			const buffer = await fs.readFile(argv.in);
 			let json: any;
 			try {
-				json = nvmToJSON(buffer, argv.verbose);
+				json = nvmToJSONOld(buffer, argv.verbose);
 			} catch (e) {
 				try {
 					json = nvm500ToJSON(buffer);
@@ -217,7 +217,7 @@ Create a backup of the target stick, use the nvm2json command to convert it to J
 		async (argv) => {
 			const source = await fs.readFile(argv.source);
 			const target = await fs.readFile(argv.target);
-			const output = migrateNVM(source, target);
+			const output = await migrateNVM(source, target);
 			await fs.writeFile(argv.out, output);
 			console.error(`Converted NVM written to ${argv.out}`);
 

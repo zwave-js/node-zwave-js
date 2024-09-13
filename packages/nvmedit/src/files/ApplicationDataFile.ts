@@ -8,7 +8,7 @@ import {
 } from "./NVMFile";
 
 export interface ApplicationDataFileOptions extends NVMFileCreationOptions {
-	data: Buffer;
+	applicationData: Buffer;
 }
 
 export const ApplicationDataFileID = 200;
@@ -21,15 +21,15 @@ export class ApplicationDataFile extends NVMFile {
 	) {
 		super(options);
 		if (!gotDeserializationOptions(options)) {
-			this.payload = options.data;
+			this.payload = options.applicationData;
 		}
 	}
 
 	// Just binary data
-	public get data(): Buffer {
+	public get applicationData(): Buffer {
 		return this.payload;
 	}
-	public set data(value: Buffer) {
+	public set applicationData(value: Buffer) {
 		this.payload = value;
 	}
 }

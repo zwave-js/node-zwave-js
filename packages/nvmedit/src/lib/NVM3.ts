@@ -47,11 +47,12 @@ import { nvmReadBuffer, nvmReadUInt32LE, nvmWriteBuffer } from "./common/utils";
 // Alternatively, we could simply check if each page starts with an object header.
 // If yes, read the objects lazily when needed. If not, remember that the page is empty.
 
-type PageMeta = NVM3PageHeader & {
+export type NVM3PageInfo = NVM3PageHeader & {
 	objects: NVM3ObjectHeader[];
 };
-interface NVMSectionMeta {
-	pages: PageMeta[];
+
+export interface NVM3SectionInfo {
+	pages: NVM3PageInfo[];
 	/** The index of the current page */
 	currentPage: number;
 	/** The next byte to write in the current page */
@@ -59,12 +60,13 @@ interface NVMSectionMeta {
 	/** A map of file IDs and page indizes in which their last copy resides */
 	objectLocations: Map<number, number>;
 }
-type FileSystemMeta = {
+
+export type NVM3FileSystemInfo = {
 	isSharedFileSystem: true;
-	sections: Record<"all", NVMSectionMeta>;
+	sections: Record<"all", NVM3SectionInfo>;
 } | {
 	isSharedFileSystem: false;
-	sections: Record<NVMSection, NVMSectionMeta>;
+	sections: Record<NVMSection, NVM3SectionInfo>;
 };
 
 export class NVM3 implements NVM<number, Buffer> {
@@ -73,8 +75,12 @@ export class NVM3 implements NVM<number, Buffer> {
 	}
 
 	private _io: NVMIO;
-	private _info: FileSystemMeta | undefined;
 	private _access: NVMAccess = NVMAccess.None;
+
+	private _info: NVM3FileSystemInfo | undefined;
+	public get info(): NVM3FileSystemInfo | undefined {
+		return this._info;
+	}
 
 	private async ensureReadable(): Promise<void> {
 		if (
@@ -102,12 +108,12 @@ export class NVM3 implements NVM<number, Buffer> {
 		this._access = await this._io.open(NVMAccess.Write);
 	}
 
-	private async init(): Promise<FileSystemMeta> {
+	public async init(): Promise<NVM3FileSystemInfo> {
 		await this.ensureReadable();
 
 		let pageOffset = 0;
 		// Determine NVM size, scan pages
-		const pages: PageMeta[] = [];
+		const pages: NVM3PageInfo[] = [];
 		let isSharedFileSystem = false;
 		while (pageOffset < this._io.size) {
 			const header = await readPageHeader(this._io, pageOffset);
@@ -145,8 +151,8 @@ export class NVM3 implements NVM<number, Buffer> {
 		}
 
 		// By convention, we only use the applicationPages in that case
-		let applicationPages: PageMeta[];
-		let protocolPages: PageMeta[];
+		let applicationPages: NVM3PageInfo[];
+		let protocolPages: NVM3PageInfo[];
 
 		if (isSharedFileSystem) {
 			applicationPages = pages;
@@ -163,7 +169,9 @@ export class NVM3 implements NVM<number, Buffer> {
 		// NVM3 layouts pages in a ring buffer. Pages are written from front to back, then occupied pages
 		// are erased and overwritten. Pages at the start of the memory section may have an erase count that's 1 higher
 		// than the pages at the end.
-		const pageMetaToSectionMeta = (pages: PageMeta[]): NVMSectionMeta => {
+		const pageInfoToSectionInfo = (
+			pages: NVM3PageInfo[],
+		): NVM3SectionInfo => {
 			// Find the current page, which is either:
 			// - The last page with the high erase count that contains an object
 			const maxEraseCount = Math.max(...pages.map((p) => p.eraseCount));
@@ -219,15 +227,15 @@ export class NVM3 implements NVM<number, Buffer> {
 			this._info = {
 				isSharedFileSystem: true,
 				sections: {
-					all: pageMetaToSectionMeta(applicationPages),
+					all: pageInfoToSectionInfo(applicationPages),
 				},
 			};
 		} else {
 			this._info = {
 				isSharedFileSystem: false,
 				sections: {
-					application: pageMetaToSectionMeta(applicationPages),
-					protocol: pageMetaToSectionMeta(protocolPages),
+					application: pageInfoToSectionInfo(applicationPages),
+					protocol: pageInfoToSectionInfo(protocolPages),
 				},
 			};
 		}
@@ -235,7 +243,7 @@ export class NVM3 implements NVM<number, Buffer> {
 		return this._info;
 	}
 
-	private getNVMSectionForFile(fileId: number): NVMSectionMeta {
+	private getNVMSectionForFile(fileId: number): NVM3SectionInfo {
 		// Determine which ring buffer to read in
 		return this._info!.isSharedFileSystem
 			? this._info!.sections.all

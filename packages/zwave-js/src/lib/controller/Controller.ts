@@ -7694,7 +7694,7 @@ ${associatedNodes.join(", ")}`,
 			} else {
 				targetNVM = await this.backupNVMRaw500(convertProgress);
 			}
-			const convertedNVM = migrateNVM(nvmData, targetNVM);
+			const convertedNVM = await migrateNVM(nvmData, targetNVM);
 
 			this.driver.controllerLog.print("Restoring NVM backup...");
 			if (this.sdkVersionGte("7.0")) {

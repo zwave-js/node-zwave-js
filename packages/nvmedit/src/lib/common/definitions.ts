@@ -119,6 +119,7 @@ export type ControllerNVMPropertyTypes = Expand<
 		routeSlaveSUC: number[];
 		sucPendingUpdate: number[];
 		pendingDiscovery: number[];
+		virtualNodeIds: number[];
 		nodeIds: number[];
 		lrNodeIds: number[];
 	}

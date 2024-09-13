@@ -61,6 +61,7 @@ export class VersionFile extends NVMFile {
 export const ApplicationVersionFileID = 0x51000;
 
 @nvmFileID(ApplicationVersionFileID)
+@nvmSection("application")
 export class ApplicationVersionFile extends VersionFile {}
 
 // The 800 series has a shared application/protocol file system
@@ -68,6 +69,7 @@ export class ApplicationVersionFile extends VersionFile {}
 export const ApplicationVersionFile800ID = 0x41000;
 
 @nvmFileID(ApplicationVersionFile800ID)
+@nvmSection("application")
 export class ApplicationVersionFile800 extends VersionFile {}
 
 export const ProtocolVersionFileID = 0x50000;
