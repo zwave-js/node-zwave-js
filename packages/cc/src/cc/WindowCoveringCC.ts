@@ -6,8 +6,6 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
@@ -873,11 +871,23 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			const numEntries = this.payload[0] & 0b11111;
+
+			validatePayload(this.payload.length >= 1 + numEntries * 2);
+			this.targetValues = [];
+			for (let i = 0; i < numEntries; i++) {
+				const offset = 1 + i * 2;
+				this.targetValues.push({
+					parameter: this.payload[offset],
+					value: this.payload[offset + 1],
+				});
+			}
+			if (this.payload.length >= 2 + numEntries * 2) {
+				this.duration = Duration.parseSet(
+					this.payload[1 + numEntries * 2],
+				);
+			}
 		} else {
 			this.targetValues = options.targetValues;
 			this.duration = Duration.from(options.duration);
@@ -944,11 +954,13 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			const direction = (this.payload[0] & 0b0100_0000) >>> 6;
+			this.direction = direction ? "down" : "up";
+			this.parameter = this.payload[1];
+			if (this.payload.length >= 3) {
+				this.duration = Duration.parseSet(this.payload[2]);
+			}
 		} else {
 			this.parameter = options.parameter;
 			this.direction = options.direction;
@@ -1005,11 +1017,8 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.parameter = this.payload[0];
 		} else {
 			this.parameter = options.parameter;
 		}
