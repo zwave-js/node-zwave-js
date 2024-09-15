@@ -1,0 +1,73 @@
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PSK01",
+	"description": "Smart Keypad",
+	"devices": [
+		{
+			"productType": "0x000a",
+			"productId": "0x006f"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_options_nounit",
+			"label": "Set keypad mode",
+			"description": "1: Entry Control mode, 2: Central Scene mode.",
+			"defaultValue": 2,
+			"options": [
+			{
+				"label": "Entry Control Mode",
+				"value": 1
+			},
+			{
+				"label": "Central Scene Mode",
+				"value": 2
+			}
+		]
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Buzzer",
+			"description": "Enable or disable the buzzer.",
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Rand Mode",
+			"description": "When the Rand Mode is enabled, whenever the device wakes up from sleeping, no more than four digits of random keys will light on. Users have to press those random keys one by one, and the device will go to Entry Control mode."
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Touch Sleep",
+			"description": "If Touch Sleep is enabled the device will go to sleep a short time after the last touch.",
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"$import": "templates/philio_template.json#auto_report_tick",
+			"label": "Auto Report Time Unit",
+			"description": "Define the time scale for automatic report. This setting will affect configuration no. 6."
+		},
+		{
+			"#": "6",
+			"$import": "templates/philio_template.json#auto_report_interval",
+			"label": "Auto Report Battery Time",
+			"description": "The time interval upon which to report the battery level."
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Have Z-WaveTM Controller enter inclusion mode.\n2. Enter the Programming Code (PC) by pressing the correct number keys (default programming code is 0000) and then enter, then press 1 and 0 and enter.\n3. After successful addition, the device buzzer will beep twice.",
+		"exclusion": "1. Have Z-WaveTM Controller enter exclusion mode.\n2. Enter the Programming Code (PC) by pressing the correct number keys (default programming code is 0000) and then enter, then press 1 and 0 and enter.\n3. After successful removal, the device buzzer will beep twice.",
+		"reset": "Method 1. Enter the Programming Code (PC) by pressing the correct number keys (default programming code is 0000) and then enter, then press 9 and enter.\nMethod 2. Press tamper key 3 times in 1.5 seconds. 3 long beeps will occur after two seconds on successful reset.",
+		"manual": "https://www.zwavetaiwan.com.tw/s/PSK01_UserManual-A2-20240731.pdf"
+	}
+}
