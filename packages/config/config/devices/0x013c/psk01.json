@@ -17,19 +17,19 @@
 		{
 			"#": "1",
 			"$import": "~/templates/master_template.json#base_options_nounit",
-			"label": "Set keypad mode",
-			"description": "1: Entry Control mode, 2: Central Scene mode.",
+			"label": "Set Keypad Mode",
+			"description": "Change between Entry control mode and Central Scene mode.",
 			"defaultValue": 2,
 			"options": [
-			{
-				"label": "Entry Control Mode",
-				"value": 1
-			},
-			{
-				"label": "Central Scene Mode",
-				"value": 2
-			}
-		]
+				{
+					"label": "Entry control mode",
+					"value": 1
+				},
+				{
+					"label": "Central Scene mode",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "2",
