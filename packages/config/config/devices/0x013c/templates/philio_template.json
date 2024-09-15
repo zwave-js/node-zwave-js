@@ -58,11 +58,11 @@
 		"defaultValue": 30,
 		"unsigned": true,
 		"options": [
-				{
-					"label": "Disable all auto reports",
-					"value": 0
-				}
-			]
+			{
+				"label": "Disable all auto reports",
+				"value": 0
+			}
+		]
 	},
 	"battery_report_interval": {
 		"label": "Battery Report Interval",
