@@ -58,7 +58,7 @@
 		{
 			"#": "6",
 			"$import": "templates/philio_template.json#auto_report_interval",
-			"label": "Battery Report Interval",
+			"label": "Battery Report Interval"
 		}
 	],
 	"metadata": {
