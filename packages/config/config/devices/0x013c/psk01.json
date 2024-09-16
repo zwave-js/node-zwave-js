@@ -48,7 +48,7 @@
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Touch Sleep",
-			"description": "If Touch Sleep is enabled the device will go to sleep a short time after the last touch.",
+			"description": "If Touch Sleep is enabled the touch panel lights will turn off a short time after the last touch.",
 			"defaultValue": 1
 		},
 		{
