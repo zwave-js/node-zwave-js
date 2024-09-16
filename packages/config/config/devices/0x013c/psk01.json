@@ -18,7 +18,6 @@
 			"#": "1",
 			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "Set Keypad Mode",
-			"description": "Change between Entry control mode and Central Scene mode.",
 			"defaultValue": 2,
 			"options": [
 				{
@@ -35,7 +34,6 @@
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer",
-			"description": "Enable or disable the buzzer.",
 			"defaultValue": 1
 		},
 		{
@@ -60,8 +58,7 @@
 		{
 			"#": "6",
 			"$import": "templates/philio_template.json#auto_report_interval",
-			"label": "Auto Report Battery Time",
-			"description": "The time interval upon which to report the battery level."
+			"label": "Battery Report Interval",
 		}
 	],
 	"metadata": {
