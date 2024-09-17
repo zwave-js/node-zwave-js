@@ -7,9 +7,9 @@ function isSurroundedByWhitespace(str: string) {
 
 export const noSurroundingWhitespace: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Disallow surrounding whitespace
@@ -30,12 +30,13 @@ export const noSurroundingWhitespace: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-ignore
 		docs: {
 			description:
 				`Prevents strings in configuration files to be surrounded by whitespace`,
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"no-surrounding-whitespace":
 				"Leading and trailing whitespace is not allowed",

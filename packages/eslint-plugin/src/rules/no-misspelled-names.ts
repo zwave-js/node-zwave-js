@@ -25,9 +25,9 @@ function fixCommonErrors(str: string): string {
 
 export const noMisspelledNames: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Fix some common misspellings in labels and descriptions
@@ -54,12 +54,13 @@ export const noMisspelledNames: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-ignore
 		docs: {
 			description:
 				`Prevents some common misspellings in labels and descriptions`,
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"change-to-fixed": `Change to "{{fixed}}"`,
 		},

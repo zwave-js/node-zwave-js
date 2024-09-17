@@ -16,7 +16,6 @@ import {
 import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
-/* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
 	states: {
 		sending: {};
@@ -29,7 +28,6 @@ export interface SerialAPICommandStateSchema {
 		success: {};
 	};
 }
-/* eslint-enable @typescript-eslint/ban-types */
 
 export type SerialAPICommandError =
 	| "send failure"

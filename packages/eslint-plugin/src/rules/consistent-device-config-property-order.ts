@@ -4,9 +4,9 @@ import { type JSONCRule, paramInfoPropertyOrder } from "../utils.js";
 
 export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 		return {
 			// Ensure consistent ordering of properties in configuration parameters
 			"JSONProperty[key.value='paramInformation'] > JSONArrayExpression > JSONObjectExpression"(
@@ -29,9 +29,10 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 
 				if (isSomePropertyOutOfOrder) {
 					const propsWithComments = properties.map(([index, p]) => {
-						const comments = context.sourceCode.getComments(
-							p as any,
-						);
+						const comments = {
+							leading: context.sourceCode.getCommentsBefore(p),
+							trailing: context.sourceCode.getCommentsAfter(p),
+						};
 						return {
 							index,
 							property: p,
@@ -153,12 +154,13 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-ignore
 		docs: {
 			description:
 				"Ensures consistent ordering of properties in configuration parameter definitions",
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"parameter-ordering":
 				`For consistency, config param properties should follow the order ${

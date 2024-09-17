@@ -20,7 +20,7 @@ const integrationTestExportNames = new Set([
 	"integrationTest",
 ]);
 
-export const noDebugInTests: Rule = ESLintUtils.RuleCreator.withoutDocs({
+export const noDebugInTests = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		const integrationTestMethodNames = new Set<string>();
 

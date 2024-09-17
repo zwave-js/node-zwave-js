@@ -1,7 +1,7 @@
 import { getIntegerLimits, tryParseParamNumber } from "@zwave-js/core";
 import type { AST } from "jsonc-eslint-parser";
 import {
-	type JSONCRule,
+	JSONCRule,
 	getJSONBoolean,
 	getJSONNumber,
 	getJSONString,
@@ -13,9 +13,9 @@ import {
 
 export const autoUnsigned: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		function suggestUnsigned(
 			parent: AST.JSONObjectExpression,
@@ -256,13 +256,14 @@ export const autoUnsigned: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-ignore
 		docs: {
 			description:
 				`Ensures that "unsigned = true" is used when necessary and omitted when not.`,
 		},
 		fixable: "code",
 		hasSuggestions: true,
-		schema: [],
+		schema: false,
 		messages: {
 			"invalid-value-size": "Value size {{valueSize}} is invalid!",
 			"incompatible-size":

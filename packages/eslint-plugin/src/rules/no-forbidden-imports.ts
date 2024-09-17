@@ -186,7 +186,7 @@ function resolveSourceFileFromDefinition(
 
 const forbiddenImportsRegex = /^@forbiddenImports (?<forbidden>.*?)$/;
 
-export const noForbiddenImports: Rule = ESLintUtils.RuleCreator.withoutDocs({
+export const noForbiddenImports = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		// And only those with at least one /* @forbiddenImports ... */ comment
 		const comments = context.sourceCode.getAllComments()

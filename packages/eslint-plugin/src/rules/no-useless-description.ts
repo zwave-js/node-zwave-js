@@ -4,9 +4,9 @@ import { type JSONCRule, removeJSONProperty } from "../utils.js";
 
 export const noUselessDescription: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Disallow "empty" param descriptions
@@ -39,11 +39,12 @@ export const noUselessDescription: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-ignore
 		docs: {
 			description: `Disallows "empty" and useless descriptions`,
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"no-useless-description": "The description {{what}} is not allowed",
 		},

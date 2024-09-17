@@ -633,12 +633,12 @@ export function createLogMessagePrinter(shortTimestamps: boolean): Format;
 // Warning: (ae-missing-release-tag) "createReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createReflectionDecorator<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, valueFromArgs, constructorLookupKey, }: CreateReflectionDecoratorOptions<TBase, TArgs, TValue, TConstructor>): ReflectionDecorator<TBase, TArgs, TValue, TConstructor>;
+export function createReflectionDecorator<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, valueFromArgs, constructorLookupKey, }: CreateReflectionDecoratorOptions<TBase, TArgs, TValue, TConstructor>): ReflectionDecorator<TBase, TArgs, TValue, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface CreateReflectionDecoratorOptions<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface CreateReflectionDecoratorOptions<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
     constructorLookupKey?: false | ((target: TConstructor, ...args: TArgs) => string);
     name: string;
     valueFromArgs: (...args: TArgs) => TValue;
@@ -647,7 +647,7 @@ export interface CreateReflectionDecoratorOptions<TBase extends Object, TArgs ex
 // Warning: (ae-missing-release-tag) "createReflectionDecoratorPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createReflectionDecoratorPair<TBase extends Object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ superName, subName, }: CreateReflectionDecoratorPairOptions): ReflectionDecoratorPair<TBase, TSuperArgs, TSubArgs, TConstructor>;
+export function createReflectionDecoratorPair<TBase extends object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ superName, subName, }: CreateReflectionDecoratorPairOptions): ReflectionDecoratorPair<TBase, TSuperArgs, TSubArgs, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateReflectionDecoratorPairOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -660,7 +660,7 @@ export interface CreateReflectionDecoratorPairOptions {
 // Warning: (ae-missing-release-tag) "createSimpleReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createSimpleReflectionDecorator<TBase extends Object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, }: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<TBase, TArgs, TConstructor>;
+export function createSimpleReflectionDecorator<TBase extends object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>>({ name, }: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<TBase, TArgs, TConstructor>;
 
 // Warning: (ae-missing-release-tag) "CreateSimpleReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -672,7 +672,7 @@ export interface CreateSimpleReflectionDecoratorOptions {
 // Warning: (ae-missing-release-tag) "createValuelessReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function createValuelessReflectionDecorator<TBase extends Object>({ name, }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<TBase>;
+export function createValuelessReflectionDecorator<TBase extends object>({ name, }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<TBase>;
 
 // Warning: (ae-missing-release-tag) "CreateValuelessReflectionDecoratorOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -2822,7 +2822,7 @@ export type QRProvisioningInformation = {
 // Warning: (ae-missing-release-tag) "ReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ReflectionDecorator<TBase extends Object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface ReflectionDecorator<TBase extends object, TArgs extends any[], TValue, TConstructor extends Constructor<TBase> = Constructor<TBase>> {
     decorator: <TTarget extends TBase>(...args: TArgs) => TypedClassDecorator<TTarget>;
     lookupConstructorByKey: (key: string) => TConstructor | undefined;
     lookupConstructorByValue: (value: TValue) => TConstructor | undefined;
@@ -2833,7 +2833,7 @@ export interface ReflectionDecorator<TBase extends Object, TArgs extends any[], 
 // Warning: (ae-missing-release-tag) "ReflectionDecoratorPair" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ReflectionDecoratorPair<TBase extends Object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface ReflectionDecoratorPair<TBase extends object, TSuperArgs extends [any], TSubArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
     lookupSubConstructor: (...args: [...TSuperArgs, ...TSubArgs]) => TConstructor | undefined;
     lookupSubValue: (target: TBase) => TSubArgs[0] | undefined;
     lookupSubValueStatic: (constr: Function) => TSubArgs[0] | undefined;
@@ -3259,7 +3259,7 @@ export interface SetValueOptions {
 // Warning: (ae-missing-release-tag) "SimpleReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface SimpleReflectionDecorator<TBase extends Object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
+export interface SimpleReflectionDecorator<TBase extends object, TArgs extends [any], TConstructor extends Constructor<TBase> = Constructor<TBase>> {
     decorator: <TTarget extends TBase>(...args: TArgs) => TypedClassDecorator<TTarget>;
     lookupConstructor: (...args: TArgs) => TConstructor | undefined;
     lookupValue: (target: TBase) => TArgs[0] | undefined;
@@ -3654,7 +3654,7 @@ export function valueIdToString(valueID: ValueID): string;
 // Warning: (ae-missing-release-tag) "ValuelessReflectionDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export interface ValuelessReflectionDecorator<TBase extends Object> {
+export interface ValuelessReflectionDecorator<TBase extends object> {
     decorator: <TTarget extends TBase>() => TypedClassDecorator<TTarget>;
     isDecorated: (target: TBase) => boolean;
     isDecoratedStatic: (constr: Function) => boolean;

@@ -48,7 +48,6 @@ export type NodeInterviewFailedEventArgs =
 			attempt: number;
 			maxAttempts: number;
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-types
 		| {}
 	);
 

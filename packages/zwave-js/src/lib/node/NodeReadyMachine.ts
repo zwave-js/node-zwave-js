@@ -5,7 +5,6 @@ import {
 	assign,
 } from "xstate";
 
-/* eslint-disable @typescript-eslint/ban-types */
 export interface NodeReadyStateSchema {
 	states: {
 		notReady: {};
@@ -13,7 +12,6 @@ export interface NodeReadyStateSchema {
 		ready: {};
 	};
 }
-/* eslint-enable @typescript-eslint/ban-types */
 
 export interface NodeReadyContext {
 	isMaybeDead: boolean;

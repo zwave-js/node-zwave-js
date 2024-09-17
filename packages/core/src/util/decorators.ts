@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import type { TypedClassDecorator } from "@zwave-js/shared";
 import "reflect-metadata";
 
 type Constructor<T> = new (...args: any[]) => T;
 
 export interface ReflectionDecorator<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 	TArgs extends any[],
 	TValue,
 	TConstructor extends Constructor<TBase> = Constructor<TBase>,
@@ -17,7 +17,6 @@ export interface ReflectionDecorator<
 	/** Looks up the value which was assigned to the target class by the decorator, using a class instance */
 	lookupValue: (target: TBase) => TValue | undefined;
 	/** Looks up the value which was assigned to the target class by the decorator, using the class itself */
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	lookupValueStatic: (constr: Function) => TValue | undefined;
 	/** Looks up the class constructor for a given value. This can only be used if the value does not need to be transformed using `constructorLookupKey`. */
 	lookupConstructorByValue: (value: TValue) => TConstructor | undefined;
@@ -26,8 +25,7 @@ export interface ReflectionDecorator<
 }
 
 export interface CreateReflectionDecoratorOptions<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 	TArgs extends any[],
 	TValue,
 	TConstructor extends Constructor<TBase> = Constructor<TBase>,
@@ -47,8 +45,7 @@ export interface CreateReflectionDecoratorOptions<
 
 /** Creates a reflection decorator and corresponding methods for reverse lookup of values and constructors */
 export function createReflectionDecorator<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 	TArgs extends any[],
 	TValue,
 	TConstructor extends Constructor<TBase> = Constructor<TBase>,
@@ -147,8 +144,7 @@ export function createReflectionDecorator<
 }
 
 export interface SimpleReflectionDecorator<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 	TArgs extends [any],
 	TConstructor extends Constructor<TBase> = Constructor<TBase>,
 > {
@@ -161,7 +157,6 @@ export interface SimpleReflectionDecorator<
 	lookupValue: (target: TBase) => TArgs[0] | undefined;
 
 	/** Looks up the value which was assigned to the target class by the decorator, using the class itself */
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	lookupValueStatic: (constr: Function) => TArgs[0] | undefined;
 
 	/** Looks up the super class constructor for a given value. */
@@ -177,8 +172,7 @@ export interface CreateSimpleReflectionDecoratorOptions {
  * Like {@link createReflectionDecorator}, but for single-value decorators. This has the advantage that the returned functions can be reused easier with named args.
  */
 export function createSimpleReflectionDecorator<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 	TArgs extends [any],
 	TConstructor extends Constructor<TBase> = Constructor<TBase>,
 >({
@@ -209,8 +203,7 @@ export function createSimpleReflectionDecorator<
 }
 
 export interface ValuelessReflectionDecorator<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 > {
 	/** The decorator which is used to decorate the super class */
 	decorator: <TTarget extends TBase>() => TypedClassDecorator<TTarget>;
@@ -219,7 +212,6 @@ export interface ValuelessReflectionDecorator<
 	isDecorated: (target: TBase) => boolean;
 
 	/** Checks if the target class was decorated by this decorator, using the class itself */
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	isDecoratedStatic: (constr: Function) => boolean;
 }
 
@@ -232,8 +224,7 @@ export interface CreateValuelessReflectionDecoratorOptions {
  * Like {@link createReflectionDecorator}, but for valueless decorators.
  */
 export function createValuelessReflectionDecorator<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 >({
 	name,
 }: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<
@@ -247,7 +238,6 @@ export function createValuelessReflectionDecorator<
 	const ret: ValuelessReflectionDecorator<TBase> = {
 		decorator: decorator.decorator,
 		isDecorated: (target: TBase) => !!decorator.lookupValue(target),
-		// eslint-disable-next-line @typescript-eslint/ban-types
 		isDecoratedStatic: (constr: Function) =>
 			!!decorator.lookupValueStatic(constr),
 	};
@@ -256,8 +246,7 @@ export function createValuelessReflectionDecorator<
 }
 
 export interface ReflectionDecoratorPair<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 	TSuperArgs extends [any],
 	TSubArgs extends [any],
 	TConstructor extends Constructor<TBase> = Constructor<TBase>,
@@ -278,10 +267,8 @@ export interface ReflectionDecoratorPair<
 	lookupSubValue: (target: TBase) => TSubArgs[0] | undefined;
 
 	/** Looks up the value which was assigned to the target super class by the decorator, using the class itself */
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	lookupSuperValueStatic: (constr: Function) => TSuperArgs[0] | undefined;
 	/** Looks up the value which was assigned to the target sub class by the decorator, using the class itself */
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	lookupSubValueStatic: (constr: Function) => TSubArgs[0] | undefined;
 
 	/** Looks up the super class constructor for a given value. */
@@ -304,8 +291,7 @@ export interface CreateReflectionDecoratorPairOptions {
  * This pair is meant to decorate a super class and several of its subclasses
  */
 export function createReflectionDecoratorPair<
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	TBase extends Object,
+	TBase extends object,
 	TSuperArgs extends [any],
 	TSubArgs extends [any],
 	TConstructor extends Constructor<TBase> = Constructor<TBase>,
@@ -370,8 +356,7 @@ export function createReflectionDecoratorPair<
 }
 
 // export interface PropertyReflectionDecorator<
-// 	// eslint-disable-next-line @typescript-eslint/ban-types
-// 	TTarget extends Object,
+// // 	TTarget extends object,
 // 	TArgs extends any[],
 // 	TValue,
 // > {
@@ -393,8 +378,7 @@ export function createReflectionDecoratorPair<
 
 // /** Creates a reflection decorator for a class property and the corresponding method for reverse lookup of defined values */
 // export function createPropertyReflectionDecorator<
-// 	// eslint-disable-next-line @typescript-eslint/ban-types
-// 	TTarget extends Object,
+// // 	TTarget extends object,
 // 	TArgs extends any[],
 // 	TValue,
 // >({

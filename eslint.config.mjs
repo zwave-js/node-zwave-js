@@ -14,12 +14,15 @@
 
 // @ts-check
 
-import tseslint from "typescript-eslint";
-import deprecation from "eslint-plugin-deprecation";
-import unusedImports from "eslint-plugin-unused-imports";
-import unicorn from "eslint-plugin-unicorn";
 import zjs from "@zwave-js/eslint-plugin";
+import unicorn from "eslint-plugin-unicorn";
+import unusedImports from "eslint-plugin-unused-imports";
 import jsonc from "jsonc-eslint-parser";
+import tseslint from "typescript-eslint";
+
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default tseslint.config(
 	...tseslint.configs.recommended,
@@ -27,14 +30,14 @@ export default tseslint.config(
 	{
 		languageOptions: {
 			parserOptions: {
-				project: "./tsconfig.all.json",
+				project: "tsconfig.all.json",
+				tsconfigRootDir: __dirname,
 			},
 		},
 		linterOptions: {
 			reportUnusedDisableDirectives: true,
 		},
 		plugins: {
-			deprecation,
 			"unused-imports": unusedImports,
 			unicorn,
 			"@zwave-js": zjs,
@@ -123,6 +126,7 @@ export default tseslint.config(
 				{ allowArgumentsExplicitlyTypedAsAny: true },
 			],
 			"@typescript-eslint/no-this-alias": "off",
+			"@typescript-eslint/no-deprecated": "error",
 
 			// Prefer simple property access and declaration without quotes
 			"dot-notation": "off",
@@ -134,8 +138,7 @@ export default tseslint.config(
 				},
 			],
 			"quote-props": ["error", "as-needed"],
-			"deprecation/deprecation": "error",
-			"unused-imports/no-unused-imports-ts": "error",
+
 			"unused-imports/no-unused-imports": "error",
 
 			"unicorn/prefer-array-find": ["error", { checkFromLast: true }],
@@ -206,12 +209,23 @@ export default tseslint.config(
 	},
 	{
 		files: ["packages/config/config/devices/**/*.json"],
-		...zjs.configs.co
+		plugins: {
+			"@zwave-js": zjs,
+		},
 		languageOptions: {
 			parser: jsonc,
 		},
 		rules: {
-			"@zwave-js/consistent-device-configs": "error",
+			"@zwave-js/auto-unsigned": "error",
+			"@zwave-js/consistent-config-string-case": "error",
+			"@zwave-js/consistent-device-config-property-order": "error",
+			"@zwave-js/consistent-param-units": "error",
+			"@zwave-js/no-misspelled-names": "error",
+			"@zwave-js/no-surrounding-whitespace": "error",
+			"@zwave-js/no-unnecessary-min-max-value": "error",
+			"@zwave-js/no-useless-description": "error",
+			"@zwave-js/no-value-in-option-label": "error",
+			"@zwave-js/prefer-defaultvalue": "error",
 		},
-	}
+	},
 );

@@ -8,9 +8,9 @@ const isOnlyNumeric = /^\d+(\.\d+)?$/;
 
 export const noValueInOptionLabel: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Disallow options labels that start with their value
@@ -43,11 +43,12 @@ export const noValueInOptionLabel: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-ignore
 		docs: {
 			description: `Prevents option labels which start with their value`,
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"no-numeric-option":
 				"Option labels must not start with their value. Use the 'value' property instead.",

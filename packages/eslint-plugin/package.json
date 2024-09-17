@@ -5,6 +5,7 @@
   "private": true,
   "keywords": [],
   "type": "module",
+  "main": "build/index.js",
   "module": "build/index.js",
   "files": [
     "build/**/*.js"
@@ -32,14 +33,16 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "bootstrap": "yarn build",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
-    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix"
   },
   "devDependencies": {
-    "@types/eslint": "^8.56.10",
-    "@typescript-eslint/utils": "^7.13.0",
+    "@types/eslint": "^9.6.1",
+    "@typescript-eslint/utils": "^8.6.0",
     "@zwave-js/core": "workspace:*",
-    "eslint": "^8.57.0",
+    "eslint": "^9.10.0",
+    "eslint-compat-utils": "^0.5.1",
+    "eslint-plugin-jsonc": "^2.16.0",
     "typescript": "5.5.3"
   }
 }

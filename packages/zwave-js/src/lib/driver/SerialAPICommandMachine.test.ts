@@ -33,7 +33,6 @@ interface AvaTestContext {
 
 const test = ava as TestFn<AvaTestContext>;
 
-/* eslint-disable @typescript-eslint/ban-types */
 interface TestMachineStateSchema {
 	states: {
 		init: {};
@@ -48,7 +47,6 @@ interface TestMachineStateSchema {
 		failure: {};
 	};
 }
-/* eslint-enable @typescript-eslint/ban-types */
 
 interface TestMachineContext {
 	resp: boolean;

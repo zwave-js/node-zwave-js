@@ -8,7 +8,7 @@ import { type Rule } from "../utils.js";
 
 // const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
 
-export const noInternalCCTypes: Rule = ESLintUtils.RuleCreator.withoutDocs({
+export const noInternalCCTypes = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		const localTypeNodes = new Map<
 			string,

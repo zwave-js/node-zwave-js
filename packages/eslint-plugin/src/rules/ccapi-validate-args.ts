@@ -11,7 +11,7 @@ import {
 
 const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
 
-export const ccAPIValidateArgs: Rule = ESLintUtils.RuleCreator.withoutDocs({
+export const ccAPIValidateArgs = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		let currentAPIClassCCName: string | undefined;
 		let validateArgsImport: string | undefined;
