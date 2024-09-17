@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed the identification of the primary controller role on some older controllers (#7174)
+* Fixed an issue where passing a custom log transport to `updateOptions` would cause a call stack overflow (#7173)
+* Implement deserialization for more `WindowCoveringCC` commands to be used in mocks (#7159)
+
+### Config file changes
+* Add Philio Technology Smart Keypad (#7168, #7175)
+* Add LED indication parameter for Inovelli NZW31 dimmer (#7172)
+
+### Changes under the hood
+* Fixed a build issue on Windows systems
+* Make `mock-server.js` executable (#7160, #7161)
+
 ## 13.3.0 (2024-09-12)
 ### Features
 * Add support for EU Long Range (#6751)
