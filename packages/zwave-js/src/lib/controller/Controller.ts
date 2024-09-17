@@ -572,6 +572,10 @@ export class ZWaveController
 		}
 	}
 
+	// This seems odd, but isPrimary comes from the Serial API init data command,
+	// while isSecondary comes from the GetControllerCapabilities command. They don't really do what their name implies
+	// and sometimes contradict each other...
+	private _isPrimary: MaybeNotKnown<boolean>;
 	private _isSecondary: MaybeNotKnown<boolean>;
 
 	private _isUsingHomeIdFromOtherNetwork: MaybeNotKnown<boolean>;
@@ -888,6 +892,11 @@ export class ZWaveController
 	/** The role of the controller on the network */
 	public get role(): MaybeNotKnown<ControllerRole> {
 		if (this._wasRealPrimary) return ControllerRole.Primary;
+		// Ideally we'd rely on wasRealPrimary, but there are some older controllers out there where this flag isn't set.
+		if (this._isPrimary && this._isSIS && this._isSecondary === false) {
+			return ControllerRole.Primary;
+		}
+
 		switch (this._isSecondary) {
 			case true:
 				return ControllerRole.Secondary;
@@ -6939,7 +6948,7 @@ ${associatedNodes.join(", ")}`,
 		// and remember the new info
 		this._zwaveApiVersion = initData.zwaveApiVersion;
 		this._zwaveChipType = initData.zwaveChipType;
-		this._isSecondary = !initData.isPrimary;
+		this._isPrimary = initData.isPrimary;
 		this._isSIS = initData.isSIS;
 		this._nodeType = initData.nodeType;
 		this._supportsTimers = initData.supportsTimers;
