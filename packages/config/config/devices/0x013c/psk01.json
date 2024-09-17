@@ -52,12 +52,14 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/philio_template.json#battery_report_unit",
+			"$import": "templates/philio_template.json#auto_report_unit",
+			"label": "Battery Report Unit",
 			"description": "Define the time scale for automatic reports. This value will be multiplied with parameter 6 to set the time interval between reports."
 		},
 		{
 			"#": "6",
-			"$import": "templates/philio_template.json#battery_report_interval"
+			"$import": "templates/philio_template.json#auto_report_interval",
+			"label": "Battery Report Interval"
 		}
 	],
 	"metadata": {

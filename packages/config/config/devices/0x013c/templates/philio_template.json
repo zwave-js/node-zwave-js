@@ -51,8 +51,7 @@
 			}
 		]
 	},
-	"battery_report_interval": {
-		"label": "Battery Report Interval",
+	"auto_report_interval": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
@@ -65,8 +64,7 @@
 			}
 		]
 	},
-	"battery_report_unit": {
-		"label": "Battery Report Unit",
+	"auto_report_unit": {
 		"valueSize": 1,
 		"unit": "minutes",
 		"minValue": 0,
@@ -75,7 +73,7 @@
 		"unsigned": true,
 		"options": [
 			{
-				"label": "Disable battery reports",
+				"label": "Disable all auto reports",
 				"value": 0
 			}
 		]
