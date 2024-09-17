@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.3.1 (2024-09-17)
 ### Bugfixes
 * Fixed the identification of the primary controller role on some older controllers (#7174)
 * Fixed an issue where passing a custom log transport to `updateOptions` would cause a call stack overflow (#7173)
