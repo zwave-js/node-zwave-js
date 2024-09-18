@@ -1,12 +1,7 @@
-import { ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { ApplicationVersionFile800ID } from "../files";
-import {
-	type PageWriteSize,
-	ZWAVE_APPLICATION_NVM_SIZE,
-	ZWAVE_SHARED_NVM_SIZE,
-} from "./consts";
-import { type NVM3Object, compressObjects, serializeObject } from "./object";
+import { type PageWriteSize, ZWAVE_APPLICATION_NVM_SIZE } from "./consts";
+import { type NVM3Object, compressObjects } from "./object";
 import { type NVM3Page, readPage } from "./page";
 import { dumpObject, dumpPage } from "./utils";
 

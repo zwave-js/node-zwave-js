@@ -17,7 +17,7 @@ import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
-	ApplicationDataFile,
+	type ApplicationDataFile,
 	ApplicationDataFileID,
 	ApplicationRFConfigFile,
 	ApplicationRFConfigFileID,
@@ -31,38 +31,38 @@ import {
 	ControllerInfoFileID,
 	type ControllerInfoFileOptions,
 	type LRNodeInfo,
-	LRNodeInfoFileV5,
+	type LRNodeInfoFileV5,
 	NVMFile,
 	type NodeInfo,
-	NodeInfoFileV0,
-	NodeInfoFileV1,
-	ProtocolAppRouteLockNodeMaskFile,
+	type NodeInfoFileV0,
+	type NodeInfoFileV1,
+	type ProtocolAppRouteLockNodeMaskFile,
 	ProtocolAppRouteLockNodeMaskFileID,
-	ProtocolLRNodeListFile,
+	type ProtocolLRNodeListFile,
 	ProtocolLRNodeListFileID,
-	ProtocolNodeListFile,
+	type ProtocolNodeListFile,
 	ProtocolNodeListFileID,
-	ProtocolPendingDiscoveryNodeMaskFile,
+	type ProtocolPendingDiscoveryNodeMaskFile,
 	ProtocolPendingDiscoveryNodeMaskFileID,
-	ProtocolPreferredRepeatersFile,
+	type ProtocolPreferredRepeatersFile,
 	ProtocolPreferredRepeatersFileID,
 	ProtocolRouteCacheExistsNodeMaskFile,
 	ProtocolRouteCacheExistsNodeMaskFileID,
-	ProtocolRouteSlaveSUCNodeMaskFile,
+	type ProtocolRouteSlaveSUCNodeMaskFile,
 	ProtocolRouteSlaveSUCNodeMaskFileID,
-	ProtocolSUCPendingUpdateNodeMaskFile,
+	type ProtocolSUCPendingUpdateNodeMaskFile,
 	ProtocolSUCPendingUpdateNodeMaskFileID,
 	ProtocolVersionFile,
 	ProtocolVersionFileID,
-	ProtocolVirtualNodeMaskFile,
+	type ProtocolVirtualNodeMaskFile,
 	ProtocolVirtualNodeMaskFileID,
 	type Route,
 	type RouteCache,
-	RouteCacheFileV0,
-	RouteCacheFileV1,
+	type RouteCacheFileV0,
+	type RouteCacheFileV1,
 	SUCUpdateEntriesFileIDV0,
-	SUCUpdateEntriesFileV0,
-	SUCUpdateEntriesFileV5,
+	type SUCUpdateEntriesFileV0,
+	type SUCUpdateEntriesFileV5,
 	type SUCUpdateEntry,
 	SUC_UPDATES_PER_FILE_V5,
 	getEmptyRoute,
@@ -74,7 +74,7 @@ import {
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
 } from "./files";
 import {
-	ApplicationNameFile,
+	type ApplicationNameFile,
 	ApplicationNameFileID,
 } from "./files/ApplicationNameFile";
 import { NVM3 } from "./lib/NVM3";
@@ -693,167 +693,6 @@ function nvmJSONControllerToFileOptions(
 			),
 		);
 	}
-	return ret;
-}
-
-function serializeCommonApplicationObjects(nvm: NVMJSON): NVM3Object[] {
-	const ret: NVM3Object[] = [];
-	const applTypeFile = new ApplicationTypeFile({
-		...pick(nvm.controller, [
-			"isListening",
-			"optionalFunctionality",
-			"genericDeviceClass",
-			"specificDeviceClass",
-		]),
-		fileVersion: nvm.controller.applicationVersion,
-	});
-	ret.push(applTypeFile.serialize());
-
-	const applCCsFile = new ApplicationCCsFile({
-		...pick(nvm.controller.commandClasses, [
-			"includedInsecurely",
-			"includedSecurelyInsecureCCs",
-			"includedSecurelySecureCCs",
-		]),
-		fileVersion: nvm.controller.applicationVersion,
-	});
-	ret.push(applCCsFile.serialize());
-
-	if (nvm.controller.rfConfig) {
-		const applRFConfigFile = new ApplicationRFConfigFile({
-			...pick(nvm.controller.rfConfig, [
-				"rfRegion",
-				"txPower",
-				"measured0dBm",
-			]),
-			enablePTI: nvm.controller.rfConfig.enablePTI ?? undefined,
-			maxTXPower: nvm.controller.rfConfig.maxTXPower ?? undefined,
-			nodeIdType: nvm.controller.rfConfig.nodeIdType ?? undefined,
-			fileVersion: nvm.controller.applicationVersion,
-		});
-		ret.push(applRFConfigFile.serialize());
-	}
-
-	if (nvm.controller.applicationData) {
-		// TODO: ensure this is 512 bytes long
-		const applDataFile = new ApplicationDataFile({
-			applicationData: Buffer.from(nvm.controller.applicationData, "hex"),
-			fileVersion: nvm.controller.applicationVersion,
-		});
-		ret.push(applDataFile.serialize());
-	}
-
-	if (nvm.controller.applicationName && nvm.meta?.sharedFileSystem) {
-		// The application name only seems to be used with the shared file system
-		const applNameFile = new ApplicationNameFile({
-			name: nvm.controller.applicationName,
-			fileVersion: nvm.controller.applicationVersion,
-		});
-		ret.push(applNameFile.serialize());
-	}
-
-	return ret;
-}
-
-function serializeCommonProtocolObjects(nvm: NVMJSON): NVM3Object[] {
-	const ret: NVM3Object[] = [];
-
-	const appRouteLock = new Set<number>();
-	const routeSlaveSUC = new Set<number>();
-	const sucPendingUpdate = new Set<number>();
-	const isVirtual = new Set<number>();
-	const pendingDiscovery = new Set<number>();
-
-	for (const [id, node] of Object.entries(nvm.nodes)) {
-		const nodeId = parseInt(id);
-		if (!nodeHasInfo(node)) {
-			isVirtual.add(nodeId);
-			continue;
-		} else {
-			if (node.isVirtual) isVirtual.add(nodeId);
-			if (node.appRouteLock) appRouteLock.add(nodeId);
-			if (node.routeSlaveSUC) routeSlaveSUC.add(nodeId);
-			if (node.sucPendingUpdate) sucPendingUpdate.add(nodeId);
-			if (node.pendingDiscovery) pendingDiscovery.add(nodeId);
-		}
-	}
-
-	ret.push(
-		new ControllerInfoFile(
-			nvmJSONControllerToFileOptions(nvm.controller),
-		).serialize(),
-	);
-
-	ret.push(
-		new ProtocolAppRouteLockNodeMaskFile({
-			nodeIds: [...appRouteLock],
-			fileVersion: nvm.controller.protocolVersion,
-		}).serialize(),
-	);
-	ret.push(
-		new ProtocolRouteSlaveSUCNodeMaskFile({
-			nodeIds: [...routeSlaveSUC],
-			fileVersion: nvm.controller.protocolVersion,
-		}).serialize(),
-	);
-	ret.push(
-		new ProtocolSUCPendingUpdateNodeMaskFile({
-			nodeIds: [...sucPendingUpdate],
-			fileVersion: nvm.controller.protocolVersion,
-		}).serialize(),
-	);
-	ret.push(
-		new ProtocolVirtualNodeMaskFile({
-			nodeIds: [...isVirtual],
-			fileVersion: nvm.controller.protocolVersion,
-		}).serialize(),
-	);
-	ret.push(
-		new ProtocolPendingDiscoveryNodeMaskFile({
-			nodeIds: [...pendingDiscovery],
-			fileVersion: nvm.controller.protocolVersion,
-		}).serialize(),
-	);
-
-	// TODO: format >= 2: { .key = FILE_ID_LRANGE_NODE_EXIST, .size = FILE_SIZE_LRANGE_NODE_EXIST, .name = "LRANGE_NODE_EXIST"},
-
-	if (nvm.controller.preferredRepeaters?.length) {
-		ret.push(
-			new ProtocolPreferredRepeatersFile({
-				nodeIds: nvm.controller.preferredRepeaters,
-				fileVersion: nvm.controller.protocolVersion,
-			}).serialize(),
-		);
-	}
-
-	if (nvm.format < 5) {
-		ret.push(
-			new SUCUpdateEntriesFileV0({
-				updateEntries: nvm.controller.sucUpdateEntries,
-				fileVersion: nvm.controller.protocolVersion,
-			}).serialize(),
-		);
-	} else {
-		// V5 has split the SUC update entries into multiple files
-		for (
-			let index = 0;
-			index < SUC_MAX_UPDATES;
-			index += SUC_UPDATES_PER_FILE_V5
-		) {
-			const slice = nvm.controller.sucUpdateEntries.slice(
-				index,
-				index + SUC_UPDATES_PER_FILE_V5,
-			);
-			if (slice.length === 0) break;
-			const file = new SUCUpdateEntriesFileV5({
-				updateEntries: slice,
-				fileVersion: nvm.controller.protocolVersion,
-			});
-			file.fileId = sucUpdateIndexToSUCUpdateEntriesFileIDV5(index);
-			ret.push(file.serialize());
-		}
-	}
-
 	return ret;
 }
 

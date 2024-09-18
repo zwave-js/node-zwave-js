@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { buffer2hex, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { type NVMSection, getNVMSectionByFileID } from "../files";
 import { ApplicationVersionFile800ID } from "../files/VersionFiles";
 import {
