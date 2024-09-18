@@ -1,4 +1,4 @@
-import type { NVM3Object } from "../nvm3/object";
+import type { NVM3Object } from "../object";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,

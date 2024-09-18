@@ -12,7 +12,7 @@ import {
 	parseNodeProtocolInfo,
 } from "@zwave-js/core/safe";
 import { pick } from "@zwave-js/shared/safe";
-import type { NVM3Object } from "../nvm3/object";
+import type { NVM3Object } from "../object";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,

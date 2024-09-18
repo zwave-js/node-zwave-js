@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/core/safe";
 import { type AllOrNone, getEnumMemberName } from "@zwave-js/shared/safe";
 import semver from "semver";
-import type { NVM3Object } from "../nvm3/object";
+import type { NVM3Object } from "../object";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,

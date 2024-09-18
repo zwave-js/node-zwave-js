@@ -1,12 +1,24 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { assertNever } from "alcalzone-shared/helpers";
-import { SUC_MAX_UPDATES } from "../consts";
+import { SUC_MAX_UPDATES } from "../../consts";
+import { type NVM3 } from "../NVM3";
+import {
+	type ControllerNVMProperty,
+	type LRNodeNVMProperty,
+	type NVMAdapter,
+	type NVMProperty,
+	type NVMPropertyToDataType,
+	type NodeNVMProperty,
+} from "../common/definitions";
+import { type RouteCache } from "../common/routeCache";
 import {
 	type ApplicationCCsFile,
 	ApplicationCCsFileID,
 	ApplicationDataFile,
 	ApplicationDataFileID,
+	ApplicationNameFile,
+	ApplicationNameFileID,
 	type ApplicationRFConfigFile,
 	ApplicationRFConfigFileID,
 	type ApplicationTypeFile,
@@ -41,7 +53,6 @@ import {
 	ProtocolVersionFileID,
 	ProtocolVirtualNodeMaskFile,
 	ProtocolVirtualNodeMaskFileID,
-	type RouteCache,
 	RouteCacheFileV0,
 	RouteCacheFileV1,
 	SUCUpdateEntriesFileIDV0,
@@ -57,20 +68,7 @@ import {
 	nodeIdToRouteCacheFileIDV0,
 	nodeIdToRouteCacheFileIDV1,
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
-} from "../files";
-import {
-	ApplicationNameFile,
-	ApplicationNameFileID,
-} from "../files/ApplicationNameFile";
-import { type NVM3 } from "./NVM3";
-import {
-	type ControllerNVMProperty,
-	type LRNodeNVMProperty,
-	type NVMAdapter,
-	type NVMProperty,
-	type NVMPropertyToDataType,
-	type NodeNVMProperty,
-} from "./common/definitions";
+} from "./files";
 
 const DEFAULT_FILE_VERSION = "7.0.0";
 

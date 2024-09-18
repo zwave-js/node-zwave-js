@@ -4,7 +4,7 @@ import {
 	stripUndefined,
 } from "@zwave-js/core/safe";
 import { buffer2hex } from "@zwave-js/shared";
-import type { NVM3Object } from "../nvm3/object";
+import type { NVM3Object } from "../object";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,

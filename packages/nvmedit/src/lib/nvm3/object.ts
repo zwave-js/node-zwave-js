@@ -1,4 +1,3 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import {
 	FragmentType,
 	NVM3_CODE_LARGE_SHIFT,
@@ -15,11 +14,7 @@ import {
 	NVM3_WORD_SIZE,
 	ObjectType,
 } from "./consts";
-import {
-	computeBergerCode,
-	computeBergerCodeMulti,
-	validateBergerCodeMulti,
-} from "./utils";
+import { computeBergerCode, computeBergerCodeMulti } from "./utils";
 
 export interface NVM3ObjectHeader {
 	offset: number;
@@ -39,103 +34,6 @@ export interface NVM3Object {
 	fragmentType: FragmentType;
 	key: number;
 	data?: Buffer;
-}
-
-export function readObject(
-	buffer: Buffer,
-	offset: number,
-):
-	| {
-		object: NVM3Object;
-		bytesRead: number;
-	}
-	| undefined
-{
-	let headerSize = 4;
-	const hdr1 = buffer.readUInt32LE(offset);
-
-	// Skip over blank page areas
-	if (hdr1 === 0xffffffff) return;
-
-	const key = (hdr1 >> NVM3_OBJ_KEY_SHIFT) & NVM3_OBJ_KEY_MASK;
-	let objType: ObjectType = hdr1 & NVM3_OBJ_TYPE_MASK;
-	let fragmentLength = 0;
-	let hdr2: number | undefined;
-	const isLarge = objType === ObjectType.DataLarge
-		|| objType === ObjectType.CounterLarge;
-	if (isLarge) {
-		hdr2 = buffer.readUInt32LE(offset + 4);
-		headerSize += 4;
-		fragmentLength = hdr2 & NVM3_OBJ_LARGE_LEN_MASK;
-	} else if (objType > ObjectType.DataSmall) {
-		// In small objects with data, the length and object type are stored in the same value
-		fragmentLength = objType - ObjectType.DataSmall;
-		objType = ObjectType.DataSmall;
-	} else if (objType === ObjectType.CounterSmall) {
-		fragmentLength = NVM3_COUNTER_SIZE;
-	}
-
-	const fragmentType: FragmentType = isLarge
-		? (hdr1 >>> NVM3_OBJ_FRAGTYPE_SHIFT) & NVM3_OBJ_FRAGTYPE_MASK
-		: FragmentType.None;
-
-	if (isLarge) {
-		validateBergerCodeMulti([hdr1, hdr2!], 32 + NVM3_CODE_LARGE_SHIFT);
-	} else {
-		validateBergerCodeMulti([hdr1], NVM3_CODE_SMALL_SHIFT);
-	}
-
-	if (buffer.length < offset + headerSize + fragmentLength) {
-		throw new ZWaveError(
-			"Incomplete object in buffer!",
-			ZWaveErrorCodes.NVM_InvalidFormat,
-		);
-	}
-
-	let data: Buffer | undefined;
-	if (fragmentLength > 0) {
-		data = buffer.subarray(
-			offset + headerSize,
-			offset + headerSize + fragmentLength,
-		);
-	}
-
-	const alignedLength = (fragmentLength + NVM3_WORD_SIZE - 1)
-		& ~(NVM3_WORD_SIZE - 1);
-	const bytesRead = headerSize + alignedLength;
-
-	const obj: NVM3Object = {
-		type: objType,
-		fragmentType,
-		key,
-		data,
-	};
-	return {
-		object: obj,
-		bytesRead,
-	};
-}
-
-export function readObjects(buffer: Buffer): {
-	objects: NVM3Object[];
-	bytesRead: number;
-} {
-	let offset = 0;
-	const objects: NVM3Object[] = [];
-	while (offset < buffer.length) {
-		const result = readObject(buffer, offset);
-		if (!result) break;
-
-		const { object, bytesRead } = result;
-		objects.push(object);
-
-		offset += bytesRead;
-	}
-
-	return {
-		objects,
-		bytesRead: offset,
-	};
 }
 
 export function serializeObject(obj: NVM3Object): Buffer {
@@ -220,55 +118,6 @@ export function fragmentLargeObject(
 		offset += fragmentSize;
 	}
 
-	return ret;
-}
-
-/**
- * Takes the raw list of objects from the pages ring buffer and compresses
- * them so that each object is only stored once.
- */
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function compressObjects(objects: NVM3Object[]) {
-	const ret = new Map<number, NVM3Object>();
-	// Only insert valid objects. This means non-fragmented ones, non-deleted ones
-	// and fragmented ones in the correct and complete order
-	outer: for (let i = 0; i < objects.length; i++) {
-		const obj = objects[i];
-		if (obj.type === ObjectType.Deleted) {
-			ret.delete(obj.key);
-			continue;
-		} else if (obj.fragmentType === FragmentType.None) {
-			ret.set(obj.key, obj);
-			continue;
-		} else if (obj.fragmentType !== FragmentType.First || !obj.data) {
-			// This is the broken rest of an overwritten object, skip it
-			continue;
-		}
-
-		// We're looking at the first fragment of a fragmented object
-		const parts: Buffer[] = [obj.data];
-		for (let j = i + 1; j < objects.length; j++) {
-			// The next objects must have the same key and either be the
-			// next or the last fragment with data
-			const next = objects[j];
-			if (next.key !== obj.key || !next.data) {
-				// Invalid object, skipping
-				continue outer;
-			} else if (next.fragmentType === FragmentType.Next) {
-				parts.push(next.data);
-			} else if (next.fragmentType === FragmentType.Last) {
-				parts.push(next.data);
-				break;
-			}
-		}
-		// Combine all fragments into a single readable object
-		ret.set(obj.key, {
-			key: obj.key,
-			fragmentType: FragmentType.None,
-			type: obj.type,
-			data: Buffer.concat(parts),
-		});
-	}
 	return ret;
 }
 

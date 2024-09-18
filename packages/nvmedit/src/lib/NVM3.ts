@@ -1,7 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
-import { type NVMSection, getNVMSectionByFileID } from "../files";
-import { ApplicationVersionFile800ID } from "../files/VersionFiles";
+import { type NVM, NVMAccess, type NVMIO } from "./common/definitions";
+import { nvmReadBuffer, nvmReadUInt32LE, nvmWriteBuffer } from "./common/utils";
 import {
 	FLASH_MAX_PAGE_SIZE_700,
 	FLASH_MAX_PAGE_SIZE_800,
@@ -25,8 +25,12 @@ import {
 	PageStatus,
 	PageWriteSize,
 	ZWAVE_APPLICATION_NVM_SIZE,
-} from "../nvm3/consts";
-import { type NVMMeta } from "../nvm3/nvm";
+} from "./nvm3/consts";
+import {
+	ApplicationVersionFile800ID,
+	type NVMSection,
+	getNVMSectionByFileID,
+} from "./nvm3/files";
 import {
 	type NVM3Object,
 	type NVM3ObjectHeader,
@@ -35,15 +39,13 @@ import {
 	getObjectHeader,
 	getRequiredSpace,
 	serializeObject,
-} from "../nvm3/object";
+} from "./nvm3/object";
 import {
 	type NVM3PageHeader,
 	pageSizeFromBits,
 	serializePageHeader,
-} from "../nvm3/page";
-import { validateBergerCode, validateBergerCodeMulti } from "../nvm3/utils";
-import { type NVM, NVMAccess, type NVMIO } from "./common/definitions";
-import { nvmReadBuffer, nvmReadUInt32LE, nvmWriteBuffer } from "./common/utils";
+} from "./nvm3/page";
+import { validateBergerCode, validateBergerCodeMulti } from "./nvm3/utils";
 
 // TODO: Possible optimizations:
 // Investigate if there is a better way to determine whether the NVM
@@ -74,7 +76,15 @@ export type NVM3FileSystemInfo = {
 	sections: Record<NVMSection, NVM3SectionInfo>;
 };
 
-export type NVM3EraseOptions = Partial<NVMMeta>;
+export interface NVM3Meta {
+	sharedFileSystem: boolean;
+	pageSize: number;
+	deviceFamily: number;
+	writeSize: PageWriteSize;
+	memoryMapped: boolean;
+}
+
+export type NVM3EraseOptions = Partial<NVM3Meta>;
 
 export class NVM3 implements NVM<number, Buffer> {
 	public constructor(io: NVMIO) {

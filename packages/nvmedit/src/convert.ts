@@ -14,6 +14,20 @@ import { cloneDeep, num2hex, pick } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
 import semver from "semver";
 import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts";
+import { NVM3, type NVM3Meta } from "./lib/NVM3";
+import {
+	type Route,
+	type RouteCache,
+	getEmptyRoute,
+} from "./lib/common/routeCache";
+import { type SUCUpdateEntry } from "./lib/common/sucUpdateEntry";
+import { NVMMemoryIO } from "./lib/io/NVMMemoryIO";
+import { NVM3Adapter } from "./lib/nvm3/adapter";
+import {
+	ZWAVE_APPLICATION_NVM_SIZE,
+	ZWAVE_PROTOCOL_NVM_SIZE,
+	ZWAVE_SHARED_NVM_SIZE,
+} from "./lib/nvm3/consts";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
@@ -56,38 +70,25 @@ import {
 	ProtocolVersionFileID,
 	type ProtocolVirtualNodeMaskFile,
 	ProtocolVirtualNodeMaskFileID,
-	type Route,
-	type RouteCache,
 	type RouteCacheFileV0,
 	type RouteCacheFileV1,
 	SUCUpdateEntriesFileIDV0,
 	type SUCUpdateEntriesFileV0,
 	type SUCUpdateEntriesFileV5,
-	type SUCUpdateEntry,
 	SUC_UPDATES_PER_FILE_V5,
-	getEmptyRoute,
 	nodeIdToLRNodeInfoFileIDV5,
 	nodeIdToNodeInfoFileIDV0,
 	nodeIdToNodeInfoFileIDV1,
 	nodeIdToRouteCacheFileIDV0,
 	nodeIdToRouteCacheFileIDV1,
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
-} from "./files";
+} from "./lib/nvm3/files";
 import {
 	type ApplicationNameFile,
 	ApplicationNameFileID,
-} from "./files/ApplicationNameFile";
-import { NVM3 } from "./lib/NVM3";
-import { NVM3Adapter } from "./lib/NVM3Adapter";
-import { NVMMemoryIO } from "./lib/io/NVMMemoryIO";
-import {
-	ZWAVE_APPLICATION_NVM_SIZE,
-	ZWAVE_PROTOCOL_NVM_SIZE,
-	ZWAVE_SHARED_NVM_SIZE,
-} from "./nvm3/consts";
-import { type NVMMeta } from "./nvm3/nvm";
-import type { NVM3Object } from "./nvm3/object";
-import { dumpNVM, mapToObject } from "./nvm3/utils";
+} from "./lib/nvm3/files/ApplicationNameFile";
+import type { NVM3Object } from "./lib/nvm3/object";
+import { dumpNVM, mapToObject } from "./lib/nvm3/utils";
 import {
 	type NVM500JSON,
 	NVMSerializer,
@@ -98,13 +99,13 @@ import {
 export interface NVMJSON {
 	format: number; // protocol file format
 	applicationFileFormat?: number;
-	meta?: NVMMeta;
+	meta?: NVM3Meta;
 	controller: NVMJSONController;
 	nodes: Record<number, NVMJSONNode>;
 	lrNodes?: Record<number, NVMJSONLRNode>;
 }
 
-export type NVMJSONWithMeta = NVMJSON & { meta: NVMMeta };
+export type NVMJSONWithMeta = NVMJSON & { meta: NVM3Meta };
 
 export interface NVMJSONController {
 	protocolVersion: string;
@@ -710,7 +711,7 @@ export async function nvmToJSON(
 		? info.sections.all.pages[0]
 		: info.sections.protocol.pages[0];
 
-	const meta: NVMMeta = {
+	const meta: NVM3Meta = {
 		sharedFileSystem: info.isSharedFileSystem,
 		...pick(firstPageHeader, [
 			"pageSize",

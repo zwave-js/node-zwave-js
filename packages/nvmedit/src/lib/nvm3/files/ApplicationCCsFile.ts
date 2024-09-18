@@ -1,5 +1,5 @@
 import { CommandClasses } from "@zwave-js/core/safe";
-import type { NVM3Object } from "../nvm3/object";
+import type { NVM3Object } from "../object";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,

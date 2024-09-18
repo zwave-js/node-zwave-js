@@ -1,8 +1,8 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { num2hex } from "@zwave-js/shared";
-import { NVMFile } from "../files/NVMFile";
-import { type NVM3 } from "../lib/NVM3";
+import { type NVM3 } from "../NVM3";
 import { FragmentType, ObjectType, PageStatus } from "./consts";
+import { NVMFile } from "./files/NVMFile";
 import type { NVM3Object } from "./object";
 
 /** Counts the number of unset bits in the given word */

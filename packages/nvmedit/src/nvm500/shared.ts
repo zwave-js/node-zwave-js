@@ -1,6 +1,7 @@
 import { NUM_NODEMASK_BYTES } from "@zwave-js/core/safe";
 import { SUC_UPDATE_ENTRY_SIZE } from "../consts";
-import type { Route, SUCUpdateEntry } from "../files";
+import { type Route } from "../lib/common/routeCache";
+import { type SUCUpdateEntry } from "../lib/common/sucUpdateEntry";
 import type {
 	NVM500NodeInfo,
 	NVMDescriptor,

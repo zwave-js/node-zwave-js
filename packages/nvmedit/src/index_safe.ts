@@ -10,18 +10,18 @@ export type {
 	NVMJSONNodeWithInfo,
 	NVMJSONVirtualNode,
 } from "./convert";
+export type { NVM3Meta as NVMMeta } from "./lib/NVM3";
 export {
 	FragmentType,
 	ObjectType,
 	PageStatus,
 	PageWriteSize,
-} from "./nvm3/consts";
-export type { NVMMeta } from "./nvm3/nvm";
-export type { NVM3Object as NVMObject } from "./nvm3/object";
+} from "./lib/nvm3/consts";
+export type { NVM3Object as NVMObject } from "./lib/nvm3/object";
 export type {
 	NVM3Page as NVMPage,
 	NVM3PageHeader as PageHeader,
-} from "./nvm3/page";
+} from "./lib/nvm3/page";
 export type {
 	NVM500JSON,
 	NVM500JSONController,

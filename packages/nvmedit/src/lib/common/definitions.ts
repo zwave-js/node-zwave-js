@@ -6,9 +6,9 @@ import {
 	type ControllerInfoFile,
 	type LRNodeInfo,
 	type NodeInfo,
-	type Route,
-	type SUCUpdateEntry,
-} from "../../files";
+} from "../nvm3/files";
+import { type Route } from "./routeCache";
+import { type SUCUpdateEntry } from "./sucUpdateEntry";
 
 export enum NVMAccess {
 	None,

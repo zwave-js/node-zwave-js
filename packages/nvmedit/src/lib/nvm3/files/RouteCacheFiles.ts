@@ -1,11 +1,13 @@
+import { MAX_NODES, MAX_REPEATERS } from "@zwave-js/core/safe";
 import {
-	type FLiRS,
-	MAX_NODES,
-	MAX_REPEATERS,
-	RouteProtocolDataRate,
-	protocolDataRateMask,
-} from "@zwave-js/core/safe";
-import type { NVM3Object } from "../nvm3/object";
+	EMPTY_ROUTECACHE_FILL,
+	ROUTECACHE_SIZE,
+	type RouteCache,
+	emptyRouteCache,
+	encodeRoute,
+	parseRoute,
+} from "../../common/routeCache";
+import type { NVM3Object } from "../object";
 import {
 	NVMFile,
 	type NVMFileCreationOptions,
@@ -16,71 +18,6 @@ import {
 } from "./NVMFile";
 
 export const ROUTECACHES_PER_FILE_V1 = 8;
-const ROUTE_SIZE = MAX_REPEATERS + 1;
-const ROUTECACHE_SIZE = 2 * ROUTE_SIZE;
-const EMPTY_ROUTECACHE_FILL = 0xff;
-const emptyRouteCache = Buffer.alloc(ROUTECACHE_SIZE, EMPTY_ROUTECACHE_FILL);
-
-enum Beaming {
-	"1000ms" = 0x40,
-	"250ms" = 0x20,
-}
-
-export interface Route {
-	beaming: FLiRS;
-	protocolRate: RouteProtocolDataRate;
-	repeaterNodeIDs?: number[];
-}
-
-export interface RouteCache {
-	nodeId: number;
-	lwr: Route;
-	nlwr: Route;
-}
-
-export function parseRoute(buffer: Buffer, offset: number): Route {
-	const routeConf = buffer[offset + MAX_REPEATERS];
-	const ret: Route = {
-		beaming: (Beaming[routeConf & 0x60] ?? false) as FLiRS,
-		protocolRate: routeConf & protocolDataRateMask,
-		repeaterNodeIDs: [
-			...buffer.subarray(offset, offset + MAX_REPEATERS),
-		].filter((id) => id !== 0),
-	};
-	if (ret.repeaterNodeIDs![0] === 0xfe) delete ret.repeaterNodeIDs;
-	return ret;
-}
-
-export function encodeRoute(route: Route | undefined): Buffer {
-	const ret = Buffer.alloc(ROUTE_SIZE, 0);
-	if (route) {
-		if (route.repeaterNodeIDs) {
-			for (
-				let i = 0;
-				i < MAX_REPEATERS && i < route.repeaterNodeIDs.length;
-				i++
-			) {
-				ret[i] = route.repeaterNodeIDs[i];
-			}
-		} else {
-			ret[0] = 0xfe;
-		}
-		let routeConf = 0;
-		if (route.beaming) routeConf |= Beaming[route.beaming] ?? 0;
-		routeConf |= route.protocolRate & protocolDataRateMask;
-		ret[ROUTE_SIZE - 1] = routeConf;
-	}
-
-	return ret;
-}
-
-export function getEmptyRoute(): Route {
-	return {
-		beaming: false,
-		protocolRate: RouteProtocolDataRate.ZWave_40k,
-		repeaterNodeIDs: undefined,
-	};
-}
 
 export interface RouteCacheFileV0Options extends NVMFileCreationOptions {
 	routeCache: RouteCache;

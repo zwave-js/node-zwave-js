@@ -9,14 +9,12 @@ import {
 import { num2hex, pick, sum } from "@zwave-js/shared/safe";
 import { SUC_MAX_UPDATES } from "../consts";
 import { nodeHasInfo } from "../convert";
+import { type Route, encodeRoute, parseRoute } from "../lib/common/routeCache";
 import {
-	type Route,
 	type SUCUpdateEntry,
-	encodeRoute,
 	encodeSUCUpdateEntry,
-	parseRoute,
 	parseSUCUpdateEntry,
-} from "../files";
+} from "../lib/common/sucUpdateEntry";
 import {
 	type NVM500NodeInfo,
 	type NVMDescriptor,

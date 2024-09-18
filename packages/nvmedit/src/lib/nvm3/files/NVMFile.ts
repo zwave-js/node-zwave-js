@@ -1,12 +1,8 @@
 import { createSimpleReflectionDecorator } from "@zwave-js/core";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { type TypedClassDecorator, num2hex } from "@zwave-js/shared";
-import {
-	FragmentType,
-	NVM3_MAX_OBJ_SIZE_SMALL,
-	ObjectType,
-} from "../nvm3/consts";
-import type { NVM3Object } from "../nvm3/object";
+import { FragmentType, NVM3_MAX_OBJ_SIZE_SMALL, ObjectType } from "../consts";
+import type { NVM3Object } from "../object";
 
 export interface NVMFileBaseOptions {
 	fileId?: number;
