@@ -1,8 +1,9 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
+import { num2hex } from "@zwave-js/shared";
 import { NVMFile } from "../files/NVMFile";
+import { type NVM3 } from "../lib/NVM3";
 import { FragmentType, ObjectType, PageStatus } from "./consts";
 import type { NVM3Object } from "./object";
-import type { NVM3Page } from "./page";
 
 /** Counts the number of unset bits in the given word */
 export function computeBergerCode(word: number, numBits: number = 32): number {
@@ -81,29 +82,23 @@ export function mapToObject<T, TMap extends Map<string | number, T>>(
 	return obj;
 }
 
-export function dumpPage(page: NVM3Page, json: boolean = false): void {
-	console.log(` `);
-	console.log(`read page (offset 0x${page.header.offset.toString(16)}):`);
-	console.log(`  version: ${page.header.version}`);
-	console.log(`  eraseCount: ${page.header.eraseCount}`);
-	console.log(`  status: ${PageStatus[page.header.status]}`);
-	console.log(`  encrypted: ${page.header.encrypted}`);
-	console.log(`  pageSize: ${page.header.pageSize}`);
-	console.log(`  writeSize: ${page.header.writeSize}`);
-	console.log(`  memoryMapped: ${page.header.memoryMapped}`);
-	console.log(`  deviceFamily: ${page.header.deviceFamily}`);
-	console.log("");
-	console.log(`  objects:`);
-	for (const obj of page.objects) {
-		dumpObject(obj, json);
-	}
-}
-
-export function dumpObject(obj: NVM3Object, json: boolean = false): void {
+function dumpObject(
+	obj: NVM3Object & { offset: number },
+	json: boolean = false,
+): void {
 	try {
 		if (json) {
 			const file = NVMFile.from(obj.key, obj.data!, "7.0.0");
-			console.log(`${JSON.stringify(file.toJSON(), null, 2)}`);
+			console.log(`${
+				JSON.stringify(
+					{
+						offset: num2hex(obj.offset),
+						...file.toJSON(),
+					},
+					null,
+					2,
+				)
+			}`);
 			console.log();
 			return;
 		}
@@ -111,7 +106,8 @@ export function dumpObject(obj: NVM3Object, json: boolean = false): void {
 		// ignore
 	}
 	const prefix = json ? "" : "  ";
-	console.log(`${prefix}· key: 0x${obj.key.toString(16)}`);
+	console.log(`${prefix}· offset: ${num2hex(obj.offset)}`);
+	console.log(`${prefix}  key: 0x${obj.key.toString(16)}`);
 	console.log(`${prefix}  type: ${ObjectType[obj.type]}`);
 	console.log(`${prefix}  fragment type: ${FragmentType[obj.fragmentType]}`);
 	if (obj.data) {
@@ -122,4 +118,63 @@ export function dumpObject(obj: NVM3Object, json: boolean = false): void {
 		);
 	}
 	console.log();
+}
+
+export async function dumpNVM(nvm: NVM3): Promise<void> {
+	for (const [name, section] of Object.entries(nvm.info!.sections)) {
+		console.log(`NVM section: ${name}`);
+
+		for (const page of section.pages) {
+			console.log("");
+			console.log(`page (offset 0x${page.offset.toString(16)}):`);
+			console.log(`  version: ${page.version}`);
+			console.log(`  eraseCount: ${page.eraseCount}`);
+			console.log(`  status: ${PageStatus[page.status]}`);
+			console.log(`  encrypted: ${page.encrypted}`);
+			console.log(`  pageSize: ${page.pageSize}`);
+			console.log(`  writeSize: ${page.writeSize}`);
+			console.log(`  memoryMapped: ${page.memoryMapped}`);
+			console.log(`  deviceFamily: ${page.deviceFamily}`);
+			console.log("");
+			if (page.objects.length) {
+				console.log(`  raw objects:`);
+
+				for (const objectHeader of page.objects) {
+					const objectData = objectHeader.type !== ObjectType.Deleted
+						? await nvm.readObjectData(objectHeader)
+						: undefined;
+					dumpObject({
+						offset: objectHeader.offset,
+						key: objectHeader.key,
+						type: objectHeader.type,
+						fragmentType: objectHeader.fragmentType,
+						data: objectData,
+					}, false);
+				}
+			}
+		}
+
+		console.log();
+		console.log();
+	}
+
+	for (const [name, section] of Object.entries(nvm.info!.sections)) {
+		console.log(`${name} objects:`);
+		for (const [fileId, pageIndex] of section.objectLocations) {
+			const page = section.pages[pageIndex];
+			const objectHeader = page.objects.findLast((o) => o.key === fileId);
+			if (!objectHeader) continue;
+			const objectData = await nvm.get(fileId);
+
+			dumpObject({
+				offset: objectHeader.offset,
+				key: fileId,
+				type: objectHeader.type,
+				fragmentType: FragmentType.None,
+				data: objectData,
+			}, true);
+		}
+
+		console.log();
+	}
 }

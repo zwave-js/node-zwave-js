@@ -85,15 +85,9 @@ import {
 	ZWAVE_PROTOCOL_NVM_SIZE,
 	ZWAVE_SHARED_NVM_SIZE,
 } from "./nvm3/consts";
-import {
-	type NVM3Objects,
-	type NVM3Pages,
-	type NVMMeta,
-	getNVMMeta,
-	parseNVM,
-} from "./nvm3/nvm";
+import { type NVMMeta } from "./nvm3/nvm";
 import type { NVM3Object } from "./nvm3/object";
-import { mapToObject } from "./nvm3/utils";
+import { dumpNVM, mapToObject } from "./nvm3/utils";
 import {
 	type NVM500JSON,
 	NVMSerializer,
@@ -694,34 +688,6 @@ function nvmJSONControllerToFileOptions(
 		);
 	}
 	return ret;
-}
-
-/** Reads an NVM buffer and returns its JSON representation */
-// FIXME: Remove this
-export function nvmToJSONOld(
-	buffer: Buffer,
-	debugLogs: boolean = false,
-): Required<NVMJSON> {
-	const nvm = parseNVM(buffer, debugLogs);
-	return parsedNVMToJSON(nvm);
-}
-
-function parsedNVMToJSON(
-	nvm: NVM3Pages & NVM3Objects,
-): Required<NVMJSON> {
-	const objects = new Map([
-		...nvm.applicationObjects,
-		...nvm.protocolObjects,
-	]);
-	// 800 series doesn't distinguish between the storage for application and protocol objects
-	const sharedFileSystem = nvm.applicationObjects.size > 0
-		&& nvm.protocolObjects.size === 0;
-	const ret = nvmObjectsToJSON(objects);
-	const firstPage = sharedFileSystem
-		? nvm.applicationPages[0]
-		: nvm.protocolPages[0];
-	ret.meta = getNVMMeta(firstPage, sharedFileSystem);
-	return ret as Required<NVMJSON>;
 }
 
 /** Reads an NVM buffer of a 500-series stick and returns its JSON representation */
@@ -1474,9 +1440,8 @@ export async function nvmToJSON(
 	const adapter = new NVM3Adapter(nvm3);
 
 	if (debugLogs) {
-		// TODO: Dump all pages and all raw objects in each page
-
-		// TODO: Dump all objects in their final state
+		// Dump all pages, all raw objects in each page, and each object in its final state
+		await dumpNVM(nvm3);
 	}
 
 	const firstPageHeader = info.isSharedFileSystem

@@ -9,7 +9,7 @@ import {
 	jsonToNVM500,
 	migrateNVM,
 	nvm500ToJSON,
-	nvmToJSONOld,
+	nvmToJSON,
 } from "./convert";
 import "./index";
 
@@ -47,7 +47,7 @@ void yargs
 			const buffer = await fs.readFile(argv.in);
 			let json: any;
 			try {
-				json = nvmToJSONOld(buffer, argv.verbose);
+				json = await nvmToJSON(buffer, argv.verbose);
 			} catch (e) {
 				try {
 					json = nvm500ToJSON(buffer);

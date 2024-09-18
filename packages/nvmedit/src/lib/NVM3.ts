@@ -276,6 +276,14 @@ export class NVM3 implements NVM<number, Buffer> {
 		return section.objectLocations.has(fileId);
 	}
 
+	public readObjectData(object: NVM3ObjectHeader): Promise<Buffer> {
+		return nvmReadBuffer(
+			this._io,
+			object.offset + object.headerSize,
+			object.fragmentSize,
+		);
+	}
+
 	public async get(fileId: number): Promise<Buffer | undefined> {
 		this._info ??= await this.init();
 
@@ -312,12 +320,7 @@ export class NVM3 implements NVM<number, Buffer> {
 			objects: for (let j = page.objects.length - 1; j >= 0; j--) {
 				const object = page.objects[j];
 
-				const readObject = () =>
-					nvmReadBuffer(
-						this._io,
-						object.offset + object.headerSize,
-						object.fragmentSize,
-					);
+				const readObject = () => this.readObjectData(object);
 
 				if (object.key !== fileId) {
 					// Reset any fragmented objects when encountering a different key
