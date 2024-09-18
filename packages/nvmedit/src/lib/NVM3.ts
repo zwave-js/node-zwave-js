@@ -1,8 +1,10 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { type NVMSection, getNVMSectionByFileID } from "../files";
 import { ApplicationVersionFile800ID } from "../files/VersionFiles";
 import {
+	FLASH_MAX_PAGE_SIZE_700,
+	FLASH_MAX_PAGE_SIZE_800,
 	FragmentType,
 	NVM3_CODE_LARGE_SHIFT,
 	NVM3_CODE_SMALL_SHIFT,
@@ -20,8 +22,11 @@ import {
 	NVM3_PAGE_HEADER_SIZE,
 	NVM3_PAGE_MAGIC,
 	ObjectType,
+	PageStatus,
+	PageWriteSize,
 	ZWAVE_APPLICATION_NVM_SIZE,
 } from "../nvm3/consts";
+import { type NVMMeta } from "../nvm3/nvm";
 import {
 	type NVM3Object,
 	type NVM3ObjectHeader,
@@ -68,6 +73,8 @@ export type NVM3FileSystemInfo = {
 	isSharedFileSystem: false;
 	sections: Record<NVMSection, NVM3SectionInfo>;
 };
+
+export type NVM3EraseOptions = Partial<NVMMeta>;
 
 export class NVM3 implements NVM<number, Buffer> {
 	public constructor(io: NVMIO) {
@@ -116,6 +123,11 @@ export class NVM3 implements NVM<number, Buffer> {
 		const pages: NVM3PageInfo[] = [];
 		let isSharedFileSystem = false;
 		while (pageOffset < this._io.size) {
+			// console.debug(
+			// 	`NVM3 init() - reading page header at offset ${
+			// 		num2hex(pageOffset)
+			// 	}`,
+			// );
 			const header = await readPageHeader(this._io, pageOffset);
 			pages.push({
 				...header,
@@ -130,6 +142,11 @@ export class NVM3 implements NVM<number, Buffer> {
 			let objectOffset = page.offset + NVM3_PAGE_HEADER_SIZE;
 			const nextPageOffset = page.offset + page.pageSize;
 			while (objectOffset < nextPageOffset) {
+				// console.debug(
+				// 	`NVM3 init() - reading object header. page offset ${
+				// 		num2hex(page.offset)
+				// 	}, object offset ${num2hex(objectOffset)}`,
+				// );
 				const objectHeader = await readObjectHeader(
 					this._io,
 					objectOffset,
@@ -275,6 +292,9 @@ export class NVM3 implements NVM<number, Buffer> {
 		let complete = false;
 		let objType: ObjectType | undefined;
 		const resetFragments = () => {
+			// if (parts?.length) {
+			// 	console.debug("Resetting fragmented object");
+			// }
 			parts = undefined;
 			complete = false;
 		};
@@ -282,11 +302,11 @@ export class NVM3 implements NVM<number, Buffer> {
 			const index = (section.currentPage - offset + pages.length)
 				% pages.length;
 			const page = pages[index];
-			console.debug(
-				`NVM3.get(${fileId}): scanning page ${index} at offset ${
-					num2hex(page.offset)
-				}`,
-			);
+			// console.debug(
+			// 	`NVM3.get(${fileId}): scanning page ${index} at offset ${
+			// 		num2hex(page.offset)
+			// 	}`,
+			// );
 			// Scan objects in this page, read backwards.
 			// The last non-deleted object wins
 			objects: for (let j = page.objects.length - 1; j >= 0; j--) {
@@ -309,17 +329,38 @@ export class NVM3 implements NVM<number, Buffer> {
 					// Last action for this object was a deletion. There is no data.
 					return;
 				} else if (object.fragmentType === FragmentType.None) {
+					// console.debug(
+					// 	`NVM3.get(${fileId}): found complete object - header offset ${
+					// 		num2hex(object.offset)
+					// 	}, content offset ${
+					// 		num2hex(object.offset + object.headerSize)
+					// 	}, length ${object.fragmentSize}`,
+					// );
 					// This is a complete object
 					parts = [await readObject()];
 					objType = object.type;
 					complete = true;
 					break pages;
 				} else if (object.fragmentType === FragmentType.Last) {
+					// console.debug(
+					// 	`NVM3.get(${fileId}): found LAST fragment - header offset ${
+					// 		num2hex(object.offset)
+					// 	}, content offset ${
+					// 		num2hex(object.offset + object.headerSize)
+					// 	}, length ${object.fragmentSize}`,
+					// );
 					parts = [await readObject()];
 					objType = object.type;
 					complete = false;
 				} else if (object.fragmentType === FragmentType.Next) {
 					if (parts?.length && objType === object.type) {
+						// console.debug(
+						// 	`NVM3.get(${fileId}): found NEXT fragment - header offset ${
+						// 		num2hex(object.offset)
+						// 	}, content offset ${
+						// 		num2hex(object.offset + object.headerSize)
+						// 	}, length ${object.fragmentSize}`,
+						// );
 						parts.unshift(await readObject());
 					} else {
 						// This shouldn't be here
@@ -327,6 +368,13 @@ export class NVM3 implements NVM<number, Buffer> {
 					}
 				} else if (object.fragmentType === FragmentType.First) {
 					if (parts?.length && objType === object.type) {
+						// console.debug(
+						// 	`NVM3.get(${fileId}): found FIRST fragment - header offset ${
+						// 		num2hex(object.offset)
+						// 	}, content offset ${
+						// 		num2hex(object.offset + object.headerSize)
+						// 	}, length ${object.fragmentSize}`,
+						// );
 						parts.unshift(await readObject());
 						complete = true;
 						break pages;
@@ -440,7 +488,9 @@ export class NVM3 implements NVM<number, Buffer> {
 				const objBuffer = serializeObject(fragment);
 				const objOffset = page.offset + section.offsetInPage;
 				await this._io.write(objOffset, objBuffer);
-				section.offsetInPage += getRequiredSpace(fragment);
+				const requiredSpace = getRequiredSpace(fragment);
+				section.offsetInPage += requiredSpace;
+				remainingSpace -= requiredSpace;
 
 				// Remember which objects exist in this page
 				page.objects.push(getObjectHeader(object, objOffset));
@@ -483,24 +533,41 @@ export class NVM3 implements NVM<number, Buffer> {
 		if (!this._info) await this.init();
 		await this.ensureWritable();
 
-		await this.writeObjects(
-			values.map(([key, value]) => (value
-				? {
-					key,
-					type: value.length <= NVM3_MAX_OBJ_SIZE_SMALL
-						? ObjectType.DataSmall
-						: ObjectType.DataLarge,
-					// writeObject deals with fragmentation
-					fragmentType: FragmentType.None,
-					data: value,
-				}
-				: {
-					key,
-					type: ObjectType.Deleted,
-					fragmentType: FragmentType.None,
-				})
-			),
-		);
+		// Group objects by their NVM section
+		const objectsBySection = new Map<
+			number, /* offset */
+			[number, Buffer | null | undefined][]
+		>();
+		for (const [key, value] of values) {
+			const sectionOffset =
+				this.getNVMSectionForFile(key).pages[0].offset;
+			if (!objectsBySection.has(sectionOffset)) {
+				objectsBySection.set(sectionOffset, []);
+			}
+			objectsBySection.get(sectionOffset)!.push([key, value]);
+		}
+
+		// And call writeObjects for each group
+		for (const objectGroups of objectsBySection.values()) {
+			await this.writeObjects(
+				objectGroups.map(([key, value]) => (value
+					? {
+						key,
+						type: value.length <= NVM3_MAX_OBJ_SIZE_SMALL
+							? ObjectType.DataSmall
+							: ObjectType.DataLarge,
+						// writeObject deals with fragmentation
+						fragmentType: FragmentType.None,
+						data: value,
+					}
+					: {
+						key,
+						type: ObjectType.Deleted,
+						fragmentType: FragmentType.None,
+					})
+				),
+			);
+		}
 	}
 
 	public async delete(property: number): Promise<void> {
@@ -512,6 +579,110 @@ export class NVM3 implements NVM<number, Buffer> {
 			type: ObjectType.Deleted,
 			fragmentType: FragmentType.None,
 		}]);
+	}
+
+	public async erase(options?: NVM3EraseOptions): Promise<void> {
+		const {
+			deviceFamily = 2047,
+			writeSize = PageWriteSize.WRITE_SIZE_16,
+			memoryMapped = true,
+			sharedFileSystem = false,
+		} = options ?? {};
+		const maxPageSize = sharedFileSystem
+			? FLASH_MAX_PAGE_SIZE_800
+			: FLASH_MAX_PAGE_SIZE_700;
+		const pageSize = Math.min(
+			options?.pageSize ?? maxPageSize,
+			maxPageSize,
+		);
+
+		// Make sure we won't be writing incomplete pages
+		if (this._io.size % pageSize !== 0) {
+			throw new ZWaveError(
+				`Invalid page size. NVM size ${this._io.size} must be a multiple of the page size ${pageSize}.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			!sharedFileSystem && ZWAVE_APPLICATION_NVM_SIZE % pageSize !== 0
+		) {
+			throw new ZWaveError(
+				`Invalid page size. The application NVM size ${ZWAVE_APPLICATION_NVM_SIZE} must be a multiple of the page size ${pageSize}.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			!sharedFileSystem
+			&& (this._io.size - ZWAVE_APPLICATION_NVM_SIZE) % pageSize !== 0
+		) {
+			throw new ZWaveError(
+				`Invalid page size. The protocol NVM size ${
+					this._io.size
+					- ZWAVE_APPLICATION_NVM_SIZE
+				} must be a multiple of the page size ${pageSize}.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		await this.ensureWritable();
+
+		// Create empty pages, write them to the NVM
+		const applicationPages: NVM3PageInfo[] = [];
+		const protocolPages: NVM3PageInfo[] = [];
+
+		const numPages = this._io.size / pageSize;
+		for (let i = 0; i < numPages; i++) {
+			const offset = i * pageSize;
+			const pageBuffer = Buffer.alloc(pageSize, 0xff);
+			const pageHeader: NVM3PageHeader = {
+				offset,
+				version: 0x01,
+				eraseCount: 0,
+				encrypted: false,
+				deviceFamily,
+				memoryMapped,
+				pageSize,
+				status: PageStatus.OK,
+				writeSize,
+			};
+			serializePageHeader(pageHeader).copy(pageBuffer, 0);
+			await nvmWriteBuffer(this._io, offset, pageBuffer);
+
+			if (sharedFileSystem || offset < ZWAVE_APPLICATION_NVM_SIZE) {
+				applicationPages.push({ ...pageHeader, objects: [] });
+			} else {
+				protocolPages.push({ ...pageHeader, objects: [] });
+			}
+		}
+
+		// Remember the pages we just created for further use
+		this._info = sharedFileSystem
+			? {
+				isSharedFileSystem: true,
+				sections: {
+					all: {
+						currentPage: 0,
+						objectLocations: new Map(),
+						offsetInPage: NVM3_PAGE_HEADER_SIZE,
+						pages: applicationPages,
+					},
+				},
+			}
+			: {
+				isSharedFileSystem: false,
+				sections: {
+					application: {
+						currentPage: 0,
+						objectLocations: new Map(),
+						offsetInPage: NVM3_PAGE_HEADER_SIZE,
+						pages: applicationPages,
+					},
+					protocol: {
+						currentPage: 0,
+						objectLocations: new Map(),
+						offsetInPage: NVM3_PAGE_HEADER_SIZE,
+						pages: protocolPages,
+					},
+				},
+			};
 	}
 }
 

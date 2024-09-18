@@ -5,7 +5,7 @@ import { SUC_MAX_UPDATES } from "../consts";
 import {
 	type ApplicationCCsFile,
 	ApplicationCCsFileID,
-	type ApplicationDataFile,
+	ApplicationDataFile,
 	ApplicationDataFileID,
 	type ApplicationRFConfigFile,
 	ApplicationRFConfigFileID,
@@ -21,21 +21,21 @@ import {
 	NVMFile,
 	NodeInfoFileV0,
 	NodeInfoFileV1,
-	type ProtocolAppRouteLockNodeMaskFile,
+	ProtocolAppRouteLockNodeMaskFile,
 	ProtocolAppRouteLockNodeMaskFileID,
 	ProtocolLRNodeListFile,
 	ProtocolLRNodeListFileID,
 	ProtocolNodeListFile,
 	ProtocolNodeListFileID,
-	type ProtocolPendingDiscoveryNodeMaskFile,
+	ProtocolPendingDiscoveryNodeMaskFile,
 	ProtocolPendingDiscoveryNodeMaskFileID,
-	type ProtocolPreferredRepeatersFile,
+	ProtocolPreferredRepeatersFile,
 	ProtocolPreferredRepeatersFileID,
-	type ProtocolRouteCacheExistsNodeMaskFile,
+	ProtocolRouteCacheExistsNodeMaskFile,
 	ProtocolRouteCacheExistsNodeMaskFileID,
-	type ProtocolRouteSlaveSUCNodeMaskFile,
+	ProtocolRouteSlaveSUCNodeMaskFile,
 	ProtocolRouteSlaveSUCNodeMaskFileID,
-	type ProtocolSUCPendingUpdateNodeMaskFile,
+	ProtocolSUCPendingUpdateNodeMaskFile,
 	ProtocolSUCPendingUpdateNodeMaskFileID,
 	type ProtocolVersionFile,
 	ProtocolVersionFileID,
@@ -59,7 +59,7 @@ import {
 	sucUpdateIndexToSUCUpdateEntriesFileIDV5,
 } from "../files";
 import {
-	type ApplicationNameFile,
+	ApplicationNameFile,
 	ApplicationNameFileID,
 } from "../files/ApplicationNameFile";
 import { type NVM3 } from "./NVM3";
@@ -151,6 +151,12 @@ export class NVM3Adapter implements NVMAdapter {
 		}
 
 		this._initialized = true;
+	}
+
+	/** Adds a complete file to the list of pending changes */
+	public setFile(file: NVMFile): void {
+		const { key, data } = file.serialize();
+		this._pendingChanges.set(key, data);
 	}
 
 	public async hasFile(fileId: number): Promise<boolean> {
@@ -540,10 +546,12 @@ export class NVM3Adapter implements NVMAdapter {
 		}
 	}
 
-	public set<T extends NVMProperty>(
+	public async set<T extends NVMProperty>(
 		property: T,
 		value: NVMPropertyToDataType<T>,
 	): Promise<void> {
+		if (!this._initialized) await this.init();
+
 		if (property.domain === "controller") {
 			return this.setControllerNVMProperty(property, value);
 		} else if (property.domain === "lrnode") {
@@ -629,19 +637,20 @@ export class NVM3Adapter implements NVMAdapter {
 			}
 
 			case "applicationData": {
-				const file = await expectFile<ApplicationDataFile>(
-					ApplicationDataFileID,
-				);
+				const file = new ApplicationDataFile({
+					applicationData: value,
+					fileVersion: this.getFileVersion(ApplicationDataFileID),
+				});
 				file.applicationData = value;
 				changedFiles.push(file);
 				break;
 			}
 
 			case "applicationName": {
-				const file = await expectFile<ApplicationNameFile>(
-					ApplicationNameFileID,
-				);
-				file.name = value;
+				const file = new ApplicationNameFile({
+					name: value,
+					fileVersion: this.getFileVersion(ApplicationNameFileID),
+				});
 				changedFiles.push(file);
 				break;
 			}
@@ -745,51 +754,53 @@ export class NVM3Adapter implements NVMAdapter {
 			}
 
 			case "preferredRepeaters": {
-				const file = await expectFile<ProtocolPreferredRepeatersFile>(
-					ProtocolPreferredRepeatersFileID,
-				);
-				file.nodeIds = value;
+				const file = new ProtocolPreferredRepeatersFile({
+					nodeIds: value,
+					fileVersion: this.getFileVersion(
+						ProtocolPreferredRepeatersFileID,
+					),
+				});
 				changedFiles.push(file);
 				break;
 			}
 
 			case "appRouteLock": {
-				const file = await expectFile<
-					ProtocolAppRouteLockNodeMaskFile
-				>(
-					ProtocolAppRouteLockNodeMaskFileID,
-				);
-				file.nodeIds = value;
+				const file = new ProtocolAppRouteLockNodeMaskFile({
+					nodeIds: value,
+					fileVersion: this.getFileVersion(
+						ProtocolAppRouteLockNodeMaskFileID,
+					),
+				});
 				changedFiles.push(file);
 				break;
 			}
 			case "routeSlaveSUC": {
-				const file = await expectFile<
-					ProtocolRouteSlaveSUCNodeMaskFile
-				>(
-					ProtocolRouteSlaveSUCNodeMaskFileID,
-				);
-				file.nodeIds = value;
+				const file = new ProtocolRouteSlaveSUCNodeMaskFile({
+					nodeIds: value,
+					fileVersion: this.getFileVersion(
+						ProtocolRouteSlaveSUCNodeMaskFileID,
+					),
+				});
 				changedFiles.push(file);
 				break;
 			}
 			case "sucPendingUpdate": {
-				const file = await expectFile<
-					ProtocolSUCPendingUpdateNodeMaskFile
-				>(
-					ProtocolSUCPendingUpdateNodeMaskFileID,
-				);
-				file.nodeIds = value;
+				const file = new ProtocolSUCPendingUpdateNodeMaskFile({
+					nodeIds: value,
+					fileVersion: this.getFileVersion(
+						ProtocolSUCPendingUpdateNodeMaskFileID,
+					),
+				});
 				changedFiles.push(file);
 				break;
 			}
 			case "pendingDiscovery": {
-				const file = await expectFile<
-					ProtocolPendingDiscoveryNodeMaskFile
-				>(
-					ProtocolPendingDiscoveryNodeMaskFileID,
-				);
-				file.nodeIds = value;
+				const file = new ProtocolPendingDiscoveryNodeMaskFile({
+					nodeIds: value,
+					fileVersion: this.getFileVersion(
+						ProtocolPendingDiscoveryNodeMaskFileID,
+					),
+				});
 				changedFiles.push(file);
 				break;
 			}
@@ -1024,18 +1035,24 @@ export class NVM3Adapter implements NVMAdapter {
 				// The existence of routes is stored separately
 				const nodeMaskFile = await this._getFile<
 					ProtocolRouteCacheExistsNodeMaskFile
-				>(ProtocolRouteCacheExistsNodeMaskFileID);
-				if (nodeMaskFile) {
-					if (!value && nodeMaskFile.nodeIdSet.has(property.nodeId)) {
-						nodeMaskFile.nodeIdSet.delete(property.nodeId);
-						changedFiles.push(nodeMaskFile);
-					} else if (
-						value && !nodeMaskFile.nodeIdSet.has(property.nodeId)
-					) {
-						nodeMaskFile.nodeIdSet.add(property.nodeId);
-						changedFiles.push(nodeMaskFile);
-					}
+				>(ProtocolRouteCacheExistsNodeMaskFileID)
+					?? new ProtocolRouteCacheExistsNodeMaskFile({
+						nodeIds: [],
+						fileVersion: this.getFileVersion(
+							ProtocolRouteCacheExistsNodeMaskFileID,
+						),
+					});
+
+				if (!value && nodeMaskFile.nodeIdSet.has(property.nodeId)) {
+					nodeMaskFile.nodeIdSet.delete(property.nodeId);
+					changedFiles.push(nodeMaskFile);
+				} else if (
+					value && !nodeMaskFile.nodeIdSet.has(property.nodeId)
+				) {
+					nodeMaskFile.nodeIdSet.add(property.nodeId);
+					changedFiles.push(nodeMaskFile);
 				}
+
 				break;
 			}
 

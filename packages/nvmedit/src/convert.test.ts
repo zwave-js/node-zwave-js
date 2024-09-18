@@ -36,10 +36,10 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const jsonInput: Required<NVMJSON> = await fs.readJson(
+			const jsonInput: NVMJSON = await fs.readJson(
 				path.join(fixturesDir, file),
 			);
-			const nvm = jsonToNVM(
+			const nvm = await jsonToNVM(
 				jsonInput,
 				jsonInput.controller.applicationVersion,
 			);
@@ -67,7 +67,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 
 			const version = /_(\d+\.\d+\.\d+)[_.]/.exec(file)![1];
 			const json = await nvmToJSON(nvmIn);
-			const nvmOut = jsonToNVM(json, version);
+			const nvmOut = await jsonToNVM(json, version);
 
 			t.deepEqual(nvmOut, nvmIn);
 		});
