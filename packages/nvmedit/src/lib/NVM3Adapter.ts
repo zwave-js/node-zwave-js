@@ -465,8 +465,6 @@ export class NVM3Adapter implements NVMAdapter {
 		};
 
 		switch (property.type) {
-			// FIXME: isVirtual
-
 			case "info": {
 				if (this._protocolInfo!.format < 1) {
 					const file = await getFile<NodeInfoFileV0>(
@@ -530,8 +528,6 @@ export class NVM3Adapter implements NVMAdapter {
 		};
 
 		switch (property.type) {
-			// FIXME: isVirtual
-
 			case "info": {
 				const file = await getFile<LRNodeInfoFileV5>(
 					nodeIdToLRNodeInfoFileIDV5(property.nodeId),
@@ -866,8 +862,6 @@ export class NVM3Adapter implements NVMAdapter {
 		const deletedFiles: number[] = [];
 
 		switch (property.type) {
-			// FIXME: isVirtual
-
 			case "info": {
 				const fileId = nodeIdToLRNodeInfoFileIDV5(property.nodeId);
 				let file = await this._getFile<LRNodeInfoFileV5>(
@@ -927,8 +921,6 @@ export class NVM3Adapter implements NVMAdapter {
 		const deletedFiles: number[] = [];
 
 		switch (property.type) {
-			// FIXME: isVirtual
-
 			case "info": {
 				if (this._protocolInfo!.format < 1) {
 					// V0, single node info per file

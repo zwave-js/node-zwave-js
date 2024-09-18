@@ -89,7 +89,7 @@ function dumpObject(
 	try {
 		if (json) {
 			const file = NVMFile.from(obj.key, obj.data!, "7.0.0");
-			console.log(`${
+			console.log(
 				JSON.stringify(
 					{
 						offset: num2hex(obj.offset),
@@ -97,8 +97,8 @@ function dumpObject(
 					},
 					null,
 					2,
-				)
-			}`);
+				),
+			);
 			console.log();
 			return;
 		}

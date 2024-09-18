@@ -292,8 +292,7 @@ export class NVM3 implements NVM<number, Buffer> {
 
 		const pages = section.pages;
 
-		// FIXME: There should be no need for scanning, since we know the object locations
-		// after init().
+		// TODO: There should be no need for scanning, since we know the object locations after init().
 
 		// Start scanning backwards through the pages ring buffer, starting with the current page
 		let parts: Buffer[] | undefined;
@@ -395,7 +394,6 @@ export class NVM3 implements NVM<number, Buffer> {
 	}
 
 	private async writeObjects(objects: NVM3Object[]): Promise<void> {
-		// FIXME: Ensure all objects belong to the same NVM section
 		const section = this.getNVMSectionForFile(objects[0].key);
 
 		let page = section.pages[section.currentPage];
@@ -403,7 +401,7 @@ export class NVM3 implements NVM<number, Buffer> {
 			- NVM3_PAGE_HEADER_SIZE
 			- section.offsetInPage;
 
-		// FIXME: See if we can avoid double writes on a page change
+		// TODO: See if we can avoid double writes on a page change
 
 		/** Moves to the next page and erases it if necessary */
 		const nextPage = async () => {

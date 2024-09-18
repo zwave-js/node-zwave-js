@@ -917,7 +917,6 @@ export async function jsonToNVM(
 			await adapter.set(
 				{ domain: "node", nodeId, type: "routes" },
 				{
-					// FIXME: The file serialization should be dealing with the empty route
 					lwr: node.lwr ?? getEmptyRoute(),
 					nlwr: node.nlwr ?? getEmptyRoute(),
 				},

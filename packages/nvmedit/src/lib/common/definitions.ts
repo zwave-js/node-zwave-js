@@ -141,7 +141,6 @@ export type ControllerNVMPropertyTypes = Expand<
 		| "primaryLongRangeChannelId"
 		| "dcdcConfig"
 	>
-	// FIXME: This feels weird
 	& Pick<
 		ApplicationCCsFile,
 		| "includedInsecurely"
@@ -167,7 +166,6 @@ export type ControllerNVMPropertyTypes = Expand<
 >;
 
 export interface NodeNVMPropertyTypes {
-	// FIXME: isVirtual?
 	info: NodeInfo;
 	routes: { lwr: Route; nlwr: Route };
 }
