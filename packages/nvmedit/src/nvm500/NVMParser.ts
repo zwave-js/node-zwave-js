@@ -24,7 +24,7 @@ import {
 	CONFIGURATION_VALID_0,
 	CONFIGURATION_VALID_1,
 	MAGIC_VALUE,
-	type NVM500Details,
+	type NVM500Impl,
 	type NVMData,
 	type NVMEntryName,
 	NVMEntrySizes,
@@ -36,7 +36,7 @@ import {
 } from "../lib/nvm500/shared";
 
 export class NVMSerializer {
-	public constructor(private readonly impl: NVM500Details) {}
+	public constructor(private readonly impl: NVM500Impl) {}
 	public readonly entries = new Map<NVMEntryName, ParsedNVMEntry>();
 	private nvmSize: number = 0;
 
@@ -413,7 +413,7 @@ export interface NVM500Meta {
 	firmwareID: number;
 	productType: number;
 	productID: number;
-	library: NVM500Details["library"];
+	library: NVM500Impl["library"];
 }
 
 export interface NVM500JSONController {

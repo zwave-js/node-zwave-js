@@ -5,7 +5,7 @@ import { Static_6_6x } from "./Static_6_6x";
 import { Static_6_7x } from "./Static_6_7x";
 import { Static_6_8x } from "./Static_6_8x";
 
-export const nmvDetails500 = [
+export const nvm500Impls = [
 	Bridge_6_6x,
 	Bridge_6_7x,
 	Bridge_6_8x,

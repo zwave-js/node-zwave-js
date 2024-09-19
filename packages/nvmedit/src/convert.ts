@@ -92,7 +92,7 @@ import {
 import type { NVM3Object } from "./lib/nvm3/object";
 import { dumpNVM, mapToObject } from "./lib/nvm3/utils";
 import { NVM500Adapter } from "./lib/nvm500/adapter";
-import { nmvDetails500 } from "./lib/nvm500/parsers";
+import { nvm500Impls } from "./lib/nvm500/impls";
 import {
 	type NVM500JSON,
 	type NVM500JSONController,
@@ -1507,7 +1507,7 @@ export function jsonToNVM500(
 	protocolVersion: string,
 ): Buffer {
 	// Try to find a matching implementation
-	const impl = nmvDetails500.find(
+	const impl = nvm500Impls.find(
 		(p) =>
 			p.protocolVersions.includes(protocolVersion)
 			&& p.name.toLowerCase().startsWith(json.meta.library),

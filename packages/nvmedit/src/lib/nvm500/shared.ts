@@ -157,7 +157,7 @@ export const CONFIGURATION_VALID_1 = 0xa5;
 export const ROUTECACHE_VALID = 0x4a;
 export const MAGIC_VALUE = 0x42;
 
-export interface NVM500Details {
+export interface NVM500Impl {
 	name: string;
 	library: "static" | "bridge";
 	protocolVersions: string[];

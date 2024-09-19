@@ -10,12 +10,12 @@ import {
 	parseNVMDescriptor,
 	parseNVMModuleDescriptor,
 } from "./nvm500/EntryParsers";
-import { nmvDetails500 } from "./nvm500/parsers";
+import { nvm500Impls } from "./nvm500/impls";
 import {
 	CONFIGURATION_VALID_0,
 	CONFIGURATION_VALID_1,
 	MAGIC_VALUE,
-	type NVM500Details,
+	type NVM500Impl,
 	type NVMData,
 	type NVMEntryName,
 	NVMEntrySizes,
@@ -27,7 +27,7 @@ import {
 
 export interface NVM500Info {
 	layout: ResolvedNVMLayout;
-	library: "static" | "bridge";
+	library: NVM500Impl["library"];
 	moduleDescriptors: Map<NVMEntryName, NVMModuleDescriptor>;
 	nvmDescriptor: NVMDescriptor;
 }
@@ -75,7 +75,7 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 		await this.ensureReadable();
 
 		// Try the different known layouts to find one that works
-		for (const impl of nmvDetails500) {
+		for (const impl of nvm500Impls) {
 			try {
 				const info = await this.resolveLayout(impl);
 				if (await this.isLayoutValid(info, impl.protocolVersions)) {
@@ -97,7 +97,7 @@ export class NVM500 implements NVM<NVMEntryName, NVMData[]> {
 		return this._info;
 	}
 
-	private async resolveLayout(impl: NVM500Details): Promise<NVM500Info> {
+	private async resolveLayout(impl: NVM500Impl): Promise<NVM500Info> {
 		const resolvedLayout = new Map<NVMEntryName, ResolvedNVMEntry>();
 		let nvmDescriptor: NVMDescriptor | undefined;
 		const moduleDescriptors = new Map<NVMEntryName, NVMModuleDescriptor>();
