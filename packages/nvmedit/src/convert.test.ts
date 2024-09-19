@@ -83,7 +83,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
 			const data = await fs.readFile(path.join(fixturesDir, file));
-			const json = nvm500ToJSON(data);
+			const json = await nvm500ToJSON(data);
 			t.snapshot(json);
 		});
 	}
@@ -119,7 +119,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 			const nvmIn = await fs.readFile(path.join(fixturesDir, file));
 
 			// const lib = /_(static|bridge)_/.exec(file)![1];
-			const json = nvm500ToJSON(nvmIn);
+			const json = await nvm500ToJSON(nvmIn);
 			const nvmOut = jsonToNVM500(json, json.controller.protocolVersion);
 
 			t.deepEqual(nvmOut, nvmIn);

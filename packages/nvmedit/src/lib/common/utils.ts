@@ -16,6 +16,30 @@ export async function nvmReadUInt16LE(
 	return buffer.readUInt16LE(0);
 }
 
+export async function nvmReadUInt32BE(
+	io: NVMIO,
+	position: number,
+): Promise<number> {
+	const { buffer } = await io.read(position, 4);
+	return buffer.readUInt32BE(0);
+}
+
+export async function nvmReadUInt16BE(
+	io: NVMIO,
+	position: number,
+): Promise<number> {
+	const { buffer } = await io.read(position, 2);
+	return buffer.readUInt16BE(0);
+}
+
+export async function nvmReadUInt8(
+	io: NVMIO,
+	position: number,
+): Promise<number> {
+	const { buffer } = await io.read(position, 1);
+	return buffer.readUInt8(0);
+}
+
 export async function nvmWriteBuffer(
 	io: NVMIO,
 	position: number,

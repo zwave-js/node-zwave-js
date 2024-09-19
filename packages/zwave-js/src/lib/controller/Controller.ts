@@ -103,6 +103,8 @@ import {
 	BufferedNVMReader,
 	NVM3,
 	NVM3Adapter,
+	NVM500,
+	NVM500Adapter,
 	type NVMAdapter,
 	migrateNVM,
 } from "@zwave-js/nvmedit";
@@ -159,7 +161,6 @@ import {
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
-
 import {
 	ShutdownRequest,
 	type ShutdownResponse,
@@ -415,7 +416,7 @@ import {
 	SecurityBootstrapFailure,
 	type SmartStartProvisioningEntry,
 } from "./Inclusion";
-import { SerialNVMIO700 } from "./NVMIO";
+import { SerialNVMIO500, SerialNVMIO700 } from "./NVMIO";
 import { determineNIF } from "./NodeInformationFrame";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import {
@@ -7047,7 +7048,9 @@ ${associatedNodes.join(", ")}`,
 				const nvm3 = new NVM3(io);
 				this._nvm = new NVM3Adapter(nvm3);
 			} else {
-				throw new Error("get nvm() not implemented for 500 series");
+				const io = new BufferedNVMReader(new SerialNVMIO500(this));
+				const nvm = new NVM500(io);
+				this._nvm = new NVM500Adapter(nvm);
 			}
 		}
 

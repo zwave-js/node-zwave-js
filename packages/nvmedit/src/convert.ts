@@ -1,6 +1,7 @@
 import {
 	type CommandClasses,
 	ControllerCapabilityFlags,
+	MAX_NODES,
 	NodeIDType,
 	type NodeProtocolInfo,
 	NodeType,
@@ -15,6 +16,7 @@ import { isObject } from "alcalzone-shared/typeguards";
 import semver from "semver";
 import { MAX_PROTOCOL_FILE_FORMAT, SUC_MAX_UPDATES } from "./consts";
 import { NVM3, type NVM3Meta } from "./lib/NVM3";
+import { NVM500 } from "./lib/NVM500";
 import {
 	type Route,
 	type RouteCache,
@@ -89,11 +91,14 @@ import {
 } from "./lib/nvm3/files/ApplicationNameFile";
 import type { NVM3Object } from "./lib/nvm3/object";
 import { dumpNVM, mapToObject } from "./lib/nvm3/utils";
+import { NVM500Adapter } from "./lib/nvm500/adapter";
+import { nmvDetails500 } from "./lib/nvm500/parsers";
 import {
 	type NVM500JSON,
+	type NVM500JSONController,
+	type NVM500JSONNode,
+	type NVM500Meta,
 	NVMSerializer,
-	createParser as createNVM500Parser,
-	nmvDetails500,
 } from "./nvm500/NVMParser";
 
 export interface NVMJSON {
@@ -973,15 +978,232 @@ export async function nvmToJSON(
 }
 
 /** Reads an NVM buffer of a 500-series stick and returns its JSON representation */
-export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON> {
-	const parser = createNVM500Parser(buffer);
-	if (!parser) {
-		throw new ZWaveError(
-			"Did not find a matching NVM 500 parser implementation! Make sure that the NVM data belongs to a controller with Z-Wave SDK 6.61 or higher.",
-			ZWaveErrorCodes.NVM_NotSupported,
-		);
+export async function nvm500ToJSON(
+	buffer: Buffer,
+): Promise<Required<NVM500JSON>> {
+	const io = new NVMMemoryIO(buffer);
+	const nvm = new NVM500(io);
+
+	const info = await nvm.init();
+	const meta: NVM500Meta = {
+		library: info.library,
+		...pick(info.nvmDescriptor, [
+			"manufacturerID",
+			"firmwareID",
+			"productType",
+			"productID",
+		]),
+	};
+
+	const adapter = new NVM500Adapter(nvm);
+
+	// Read all flags for all nodes
+	const appRouteLock = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "appRouteLock",
+		}, true),
+	);
+	const routeSlaveSUC = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "routeSlaveSUC",
+		}, true),
+	);
+	const sucPendingUpdate = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "sucPendingUpdate",
+		}, true),
+	);
+	const virtualNodeIds = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "virtualNodeIds",
+		}) ?? [],
+	);
+	const pendingDiscovery = new Set(
+		await adapter.get({
+			domain: "controller",
+			type: "pendingDiscovery",
+		}, true),
+	);
+
+	// Figure out which nodes exist along with their info
+	const nodes: Record<number, NVM500JSONNode> = {};
+	for (let nodeId = 1; nodeId <= MAX_NODES; nodeId++) {
+		const nodeInfo = await adapter.get({
+			domain: "node",
+			nodeId,
+			type: "info",
+		});
+		const isVirtual = virtualNodeIds.has(nodeId);
+		if (!nodeInfo) {
+			if (isVirtual) {
+				nodes[nodeId] = { isVirtual: true };
+			}
+			continue;
+		}
+
+		const routes = await adapter.get({
+			domain: "node",
+			nodeId,
+			type: "routes",
+		});
+
+		// @ts-expect-error Some fields include a nodeId, but we don't need it
+		delete nodeInfo.nodeId;
+
+		nodes[nodeId] = {
+			...nodeInfo,
+			specificDeviceClass: nodeInfo.specificDeviceClass ?? null,
+			isVirtual,
+
+			appRouteLock: appRouteLock.has(nodeId),
+			routeSlaveSUC: routeSlaveSUC.has(nodeId),
+			sucPendingUpdate: sucPendingUpdate.has(nodeId),
+			pendingDiscovery: pendingDiscovery.has(nodeId),
+
+			lwr: routes?.lwr ?? null,
+			nlwr: routes?.nlwr ?? null,
+		};
 	}
-	return parser.toJSON();
+
+	// Read info about the controller
+	const ownNodeId = await adapter.get({
+		domain: "controller",
+		type: "nodeId",
+	}, true);
+
+	const ownHomeId = await adapter.get({
+		domain: "controller",
+		type: "homeId",
+	}, true);
+
+	let learnedHomeId = await adapter.get({
+		domain: "controller",
+		type: "learnedHomeId",
+	});
+	if (learnedHomeId?.equals(Buffer.alloc(4, 0))) {
+		learnedHomeId = undefined;
+	}
+
+	const lastNodeId = await adapter.get({
+		domain: "controller",
+		type: "lastNodeId",
+	}, true);
+
+	const maxNodeId = await adapter.get({
+		domain: "controller",
+		type: "maxNodeId",
+	}, true);
+
+	const reservedId = await adapter.get({
+		domain: "controller",
+		type: "reservedId",
+	}, true);
+
+	const staticControllerNodeId = await adapter.get({
+		domain: "controller",
+		type: "staticControllerNodeId",
+	}, true);
+
+	const sucLastIndex = await adapter.get({
+		domain: "controller",
+		type: "sucLastIndex",
+	}, true);
+
+	const controllerConfiguration = await adapter.get({
+		domain: "controller",
+		type: "controllerConfiguration",
+	}, true);
+
+	const commandClasses = await adapter.get({
+		domain: "controller",
+		type: "commandClasses",
+	}, true);
+
+	const sucUpdateEntries = await adapter.get({
+		domain: "controller",
+		type: "sucUpdateEntries",
+	}, true);
+
+	const applicationData = await adapter.get({
+		domain: "controller",
+		type: "applicationData",
+	});
+
+	const preferredRepeaters = await adapter.get({
+		domain: "controller",
+		type: "preferredRepeaters",
+	}, true);
+
+	const systemState = await adapter.get({
+		domain: "controller",
+		type: "systemState",
+	}, true);
+
+	const watchdogStarted = await adapter.get({
+		domain: "controller",
+		type: "watchdogStarted",
+	}, true);
+
+	const powerLevelNormal = await adapter.get({
+		domain: "controller",
+		type: "powerLevelNormal",
+	}, true);
+	const powerLevelLow = await adapter.get({
+		domain: "controller",
+		type: "powerLevelLow",
+	}, true);
+	const powerMode = await adapter.get({
+		domain: "controller",
+		type: "powerMode",
+	}, true);
+	const powerModeExtintEnable = await adapter.get({
+		domain: "controller",
+		type: "powerModeExtintEnable",
+	}, true);
+	const powerModeWutTimeout = await adapter.get({
+		domain: "controller",
+		type: "powerModeWutTimeout",
+	}, true);
+
+	const controller: NVM500JSONController = {
+		protocolVersion: info.nvmDescriptor.protocolVersion,
+		applicationVersion: info.nvmDescriptor.firmwareVersion,
+		ownHomeId: `0x${ownHomeId.toString("hex")}`,
+		learnedHomeId: learnedHomeId
+			? `0x${learnedHomeId.toString("hex")}`
+			: null,
+		nodeId: ownNodeId,
+		lastNodeId,
+		staticControllerNodeId,
+		sucLastIndex,
+		controllerConfiguration,
+		sucUpdateEntries,
+		maxNodeId,
+		reservedId,
+		systemState,
+		watchdogStarted,
+		rfConfig: {
+			powerLevelNormal,
+			powerLevelLow,
+			powerMode,
+			powerModeExtintEnable,
+			powerModeWutTimeout,
+		},
+		preferredRepeaters,
+		commandClasses,
+		applicationData: applicationData?.toString("hex") ?? null,
+	};
+
+	return {
+		format: 500,
+		meta,
+		controller,
+		nodes,
+	};
 }
 
 export async function jsonToNVM(
@@ -1515,7 +1737,7 @@ export async function migrateNVM(
 			// This is not a 700 series NVM, maybe it is a 500 series one?
 			source = {
 				type: 500,
-				json: nvm500ToJSON(sourceNVM),
+				json: await nvm500ToJSON(sourceNVM),
 			};
 		} else if (
 			isZWaveError(e)
@@ -1542,7 +1764,7 @@ export async function migrateNVM(
 			// This is not a 700 series NVM, maybe it is a 500 series one?
 			target = {
 				type: 500,
-				json: nvm500ToJSON(targetNVM),
+				json: await nvm500ToJSON(targetNVM),
 			};
 		} else if (
 			isZWaveError(e)

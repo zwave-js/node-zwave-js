@@ -1,6 +1,6 @@
 import { MAX_NODES, NUM_NODEMASK_BYTES } from "@zwave-js/core/safe";
-import { SUC_MAX_UPDATES } from "../../consts";
-import type { NVM500Details } from "../NVMParser";
+import { SUC_MAX_UPDATES } from "../../../consts";
+import type { NVM500Details } from "../shared";
 import {
 	APPL_NODEPARM_MAX,
 	NVMEntryType,

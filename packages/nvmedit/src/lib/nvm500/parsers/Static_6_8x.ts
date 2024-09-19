@@ -1,17 +1,18 @@
 import { MAX_NODES, NUM_NODEMASK_BYTES } from "@zwave-js/core/safe";
-import { SUC_MAX_UPDATES } from "../../consts";
-import type { NVM500Details } from "../NVMParser";
+import { SUC_MAX_UPDATES } from "../../../consts";
+import type { NVM500Details } from "../shared";
 import {
 	APPL_NODEPARM_MAX,
 	NVMEntryType,
 	type NVMLayout,
 	NVM_SERIALAPI_HOST_SIZE,
+	POWERLEVEL_CHANNELS,
 	RTC_TIMER_SIZE,
 	SUC_CONTROLLER_LIST_SIZE,
 	TOTAL_RTC_TIMER_MAX,
 } from "../shared";
 
-const NVM_Layout_Bridge_6_6x: NVMLayout = [
+const NVM_Layout_Static_6_8x: NVMLayout = [
 	{ name: "nvmTotalEnd", type: NVMEntryType.Word, count: 1 },
 	{ name: "nvmZWlibrarySize", type: NVMEntryType.NVMModuleSize, count: 1 },
 	{ name: "NVM_INTERNAL_RESERVED_1_far", type: NVMEntryType.Byte, count: 4 },
@@ -99,11 +100,6 @@ const NVM_Layout_Bridge_6_6x: NVMLayout = [
 		count: 1,
 	},
 	{
-		name: "EX_NVM_BRIDGE_NODEPOOL_START_far",
-		type: NVMEntryType.NodeMask,
-		count: 1,
-	},
-	{
 		name: "EX_NVM_CONTROLLER_CONFIGURATION_far",
 		type: NVMEntryType.Byte,
 		count: 1,
@@ -113,6 +109,7 @@ const NVM_Layout_Bridge_6_6x: NVMLayout = [
 	{
 		name: "EX_NVM_ROUTECACHE_START_far",
 		type: NVMEntryType.Route,
+		offset: 0x268e,
 		count: MAX_NODES,
 	},
 	{
@@ -127,6 +124,13 @@ const NVM_Layout_Bridge_6_6x: NVMLayout = [
 		count: 1,
 	},
 	{
+		name: "NVM_SECURITY0_KEY_far",
+		type: NVMEntryType.Buffer,
+		size: 16,
+		count: 1,
+	},
+	{ name: "NVM_SYSTEM_STATE", type: NVMEntryType.Byte, count: 1 },
+	{
 		name: "nvmZWlibraryDescriptor",
 		type: NVMEntryType.NVMModuleDescriptor,
 		count: 1,
@@ -136,7 +140,7 @@ const NVM_Layout_Bridge_6_6x: NVMLayout = [
 		type: NVMEntryType.NVMModuleSize,
 		// The Bridge API saves an additional node mask for the virtual nodes in the
 		// previous module, so we can use this offset to distinguish between the two.
-		offset: 0x2fde,
+		offset: 0x2fd2,
 		count: 1,
 	},
 	{ name: "EEOFFSET_MAGIC_far", type: NVMEntryType.Byte, count: 1 },
@@ -149,6 +153,31 @@ const NVM_Layout_Bridge_6_6x: NVMLayout = [
 	{
 		name: "EEOFFSET_WATCHDOG_STARTED_far",
 		type: NVMEntryType.Byte,
+		count: 1,
+	},
+	{
+		name: "EEOFFSET_POWERLEVEL_NORMAL_far",
+		type: NVMEntryType.Byte,
+		count: POWERLEVEL_CHANNELS,
+	},
+	{
+		name: "EEOFFSET_POWERLEVEL_LOW_far",
+		type: NVMEntryType.Byte,
+		count: POWERLEVEL_CHANNELS,
+	},
+	{
+		name: "EEOFFSET_MODULE_POWER_MODE_EXTINT_ENABLE_far",
+		type: NVMEntryType.Byte,
+		count: 1,
+	},
+	{
+		name: "EEOFFSET_MODULE_POWER_MODE_far",
+		type: NVMEntryType.Byte,
+		count: 1,
+	},
+	{
+		name: "EEOFFSET_MODULE_POWER_MODE_WUT_TIMEOUT_far",
+		type: NVMEntryType.DWord,
 		count: 1,
 	},
 	{
@@ -182,9 +211,20 @@ const NVM_Layout_Bridge_6_6x: NVMLayout = [
 	{ name: "nvmModuleSizeEndMarker", type: NVMEntryType.Word, count: 1 },
 ];
 
-export const Bridge_6_6x: NVM500Details = {
-	name: "Bridge 6.6x",
-	library: "bridge",
-	protocolVersions: ["4.33", "4.62"],
-	layout: NVM_Layout_Bridge_6_6x,
+export const Static_6_8x: NVM500Details = {
+	name: "Static 6.8x",
+	library: "static",
+	protocolVersions: [
+		"6.01",
+		"6.02",
+		"6.03",
+		"6.04",
+		"6.05",
+		"6.06",
+		"6.07",
+		"6.08",
+		"6.09",
+		"6.10",
+	],
+	layout: NVM_Layout_Static_6_8x,
 };

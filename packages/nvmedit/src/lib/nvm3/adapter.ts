@@ -445,6 +445,17 @@ export class NVM3Adapter implements NVMAdapter {
 				}
 			}
 
+			case "learnedHomeId":
+			case "commandClasses":
+			case "watchdogStarted":
+			case "powerLevelNormal":
+			case "powerLevelLow":
+			case "powerMode":
+			case "powerModeExtintEnable":
+			case "powerModeWutTimeout":
+				// 500 series only, not supported on 700+
+				return;
+
 			default:
 				assertNever(property.type);
 		}
@@ -493,19 +504,25 @@ export class NVM3Adapter implements NVMAdapter {
 				if (!nodeMaskFile) return;
 				if (!nodeMaskFile.nodeIdSet.has(property.nodeId)) return;
 
+				let routeCache: RouteCache | undefined;
 				if (this._protocolInfo!.format < 1) {
 					const file = await getFile<RouteCacheFileV0>(
 						nodeIdToRouteCacheFileIDV0(property.nodeId),
 					);
-					return file?.routeCache;
+					routeCache = file?.routeCache;
 				} else {
 					const file = await getFile<RouteCacheFileV1>(
 						nodeIdToRouteCacheFileIDV1(property.nodeId),
 					);
-					return file?.routeCaches.find((route) =>
+					routeCache = file?.routeCaches.find((route) =>
 						route.nodeId === property.nodeId
 					);
 				}
+				if (!routeCache) return;
+				return {
+					lwr: routeCache.lwr,
+					nlwr: routeCache.nlwr,
+				};
 			}
 
 			default:
@@ -838,6 +855,17 @@ export class NVM3Adapter implements NVMAdapter {
 				}
 				break;
 			}
+
+			case "learnedHomeId":
+			case "commandClasses":
+			case "watchdogStarted":
+			case "powerLevelNormal":
+			case "powerLevelLow":
+			case "powerMode":
+			case "powerModeExtintEnable":
+			case "powerModeWutTimeout":
+				// 500 series only, not supported on 700+
+				return;
 
 			default:
 				assertNever(property.type);
@@ -1221,6 +1249,17 @@ export class NVM3Adapter implements NVMAdapter {
 					}
 					return;
 				}
+
+				case "learnedHomeId":
+				case "commandClasses":
+				case "watchdogStarted":
+				case "powerLevelNormal":
+				case "powerLevelLow":
+				case "powerMode":
+				case "powerModeExtintEnable":
+				case "powerModeWutTimeout":
+					// 500 series only, not supported on 700+
+					return;
 
 				default:
 					assertNever(property);

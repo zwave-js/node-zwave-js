@@ -50,7 +50,7 @@ void yargs
 				json = await nvmToJSON(buffer, argv.verbose);
 			} catch (e) {
 				try {
-					json = nvm500ToJSON(buffer);
+					json = await nvm500ToJSON(buffer);
 				} catch (ee) {
 					console.error(e);
 					process.exit(1);

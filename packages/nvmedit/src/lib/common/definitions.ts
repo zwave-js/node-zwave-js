@@ -1,3 +1,4 @@
+import { type CommandClasses } from "@zwave-js/core";
 import { type Expand } from "@zwave-js/shared";
 import {
 	type ApplicationCCsFile,
@@ -80,9 +81,13 @@ export interface NVM<ID, Data> {
  */
 export interface NVMAdapter {
 	/** Reads a property from the NVM */
-	get<T extends NVMProperty>(
+	get<T extends NVMProperty, R extends boolean = boolean>(
 		property: T,
-	): Promise<NVMPropertyToDataType<T> | undefined>;
+		required?: R,
+	): Promise<
+		R extends true ? NVMPropertyToDataType<T>
+			: (NVMPropertyToDataType<T> | undefined)
+	>;
 
 	/**
 	 * Changes a property to be written to the NVM later
@@ -110,9 +115,7 @@ export type ControllerNVMPropertyTypes = Expand<
 		protocolVersion: string;
 		protocolFileFormat: number;
 		applicationVersion: string;
-		applicationFileFormat: number;
 		applicationData: Buffer;
-		applicationName: string;
 		preferredRepeaters?: number[];
 		sucUpdateEntries: SUCUpdateEntry[];
 		appRouteLock: number[];
@@ -121,8 +124,25 @@ export type ControllerNVMPropertyTypes = Expand<
 		pendingDiscovery: number[];
 		virtualNodeIds: number[];
 		nodeIds: number[];
-		lrNodeIds: number[];
 	}
+	// 700+ series only
+	& Partial<{
+		applicationFileFormat: number;
+		applicationName: string;
+		lrNodeIds: number[];
+	}>
+	// 500 series only
+	& Partial<{
+		learnedHomeId: Buffer;
+		commandClasses: CommandClasses[];
+		systemState: number;
+		watchdogStarted: number;
+		powerLevelNormal: number[];
+		powerLevelLow: number[];
+		powerMode: number;
+		powerModeExtintEnable: number;
+		powerModeWutTimeout: number;
+	}>
 	& Pick<
 		ControllerInfoFile,
 		| "homeId"
@@ -141,33 +161,42 @@ export type ControllerNVMPropertyTypes = Expand<
 		| "primaryLongRangeChannelId"
 		| "dcdcConfig"
 	>
-	& Pick<
-		ApplicationCCsFile,
-		| "includedInsecurely"
-		| "includedSecurelyInsecureCCs"
-		| "includedSecurelySecureCCs"
+	// 700+ series only
+	& Partial<
+		Pick<
+			ApplicationCCsFile,
+			| "includedInsecurely"
+			| "includedSecurelyInsecureCCs"
+			| "includedSecurelySecureCCs"
+		>
 	>
-	& Pick<
-		ApplicationRFConfigFile,
-		| "rfRegion"
-		| "txPower"
-		| "measured0dBm"
-		| "enablePTI"
-		| "maxTXPower"
-		| "nodeIdType"
+	// 700+ series only
+	& Partial<
+		Pick<
+			ApplicationRFConfigFile,
+			| "rfRegion"
+			| "txPower"
+			| "measured0dBm"
+			| "enablePTI"
+			| "maxTXPower"
+			| "nodeIdType"
+		>
 	>
-	& Pick<
-		ApplicationTypeFile,
-		| "isListening"
-		| "optionalFunctionality"
-		| "genericDeviceClass"
-		| "specificDeviceClass"
+	// 700+ series only
+	& Partial<
+		Pick<
+			ApplicationTypeFile,
+			| "isListening"
+			| "optionalFunctionality"
+			| "genericDeviceClass"
+			| "specificDeviceClass"
+		>
 	>
 >;
 
 export interface NodeNVMPropertyTypes {
 	info: NodeInfo;
-	routes: { lwr: Route; nlwr: Route };
+	routes: { lwr?: Route; nlwr?: Route };
 }
 
 export interface LRNodeNVMPropertyTypes {

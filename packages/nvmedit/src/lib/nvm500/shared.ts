@@ -1,7 +1,7 @@
 import { NUM_NODEMASK_BYTES } from "@zwave-js/core/safe";
-import { SUC_UPDATE_ENTRY_SIZE } from "../consts";
-import { type Route } from "../lib/common/routeCache";
-import { type SUCUpdateEntry } from "../lib/common/sucUpdateEntry";
+import { SUC_UPDATE_ENTRY_SIZE } from "../../consts";
+import { type Route } from "../common/routeCache";
+import { type SUCUpdateEntry } from "../common/sucUpdateEntry";
 import type {
 	NVM500NodeInfo,
 	NVMDescriptor,
@@ -92,6 +92,9 @@ export interface NVMEntry {
 	count: number;
 }
 
+/** The NVM entry as it appears in a valid layout, with all sizes and offsets resolved */
+export type ResolvedNVMEntry = Required<NVMEntry>;
+
 export type NVMData =
 	| Buffer
 	| number
@@ -107,7 +110,9 @@ export interface ParsedNVMEntry extends NVMEntry {
 	data: NVMData[];
 }
 
-export type NVMLayout = NVMEntry[];
+export type NVMLayout = readonly Readonly<NVMEntry>[];
+
+export type ResolvedNVMLayout = ReadonlyMap<NVMEntryName, ResolvedNVMEntry>;
 
 export const NVMEntrySizes: Record<NVMEntryType, number> = {
 	[NVMEntryType.NVMModuleSize]: 2, // Marks the start of an NVM module
@@ -151,3 +156,10 @@ export const CONFIGURATION_VALID_0 = 0x54;
 export const CONFIGURATION_VALID_1 = 0xa5;
 export const ROUTECACHE_VALID = 0x4a;
 export const MAGIC_VALUE = 0x42;
+
+export interface NVM500Details {
+	name: string;
+	library: "static" | "bridge";
+	protocolVersions: string[];
+	layout: NVMLayout;
+}

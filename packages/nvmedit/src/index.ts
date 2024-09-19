@@ -19,6 +19,7 @@ export type {
 } from "./convert";
 export { NVM3 } from "./lib/NVM3";
 export type { NVM3Meta as NVMMeta } from "./lib/NVM3";
+export { NVM500 } from "./lib/NVM500";
 export type {
 	ControllerNVMProperty,
 	ControllerNVMPropertyToDataType,
@@ -52,6 +53,7 @@ export type {
 	NVM3Page as NVMPage,
 	NVM3PageHeader as PageHeader,
 } from "./lib/nvm3/page";
+export { NVM500Adapter } from "./lib/nvm500/adapter";
 export type {
 	NVM500JSON,
 	NVM500JSONController,
