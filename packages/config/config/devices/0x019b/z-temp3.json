@@ -93,6 +93,7 @@
 			"minValue": 150,
 			"maxValue": 65535,
 			"defaultValue": 3600,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Only on change",
