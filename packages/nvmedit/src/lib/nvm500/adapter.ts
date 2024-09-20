@@ -193,10 +193,10 @@ export class NVM500Adapter implements NVMAdapter {
 			}
 
 			case "virtualNodeIds": {
-				return this.getOnly<number[]>(
+				const ret = await this.getOnly<number[]>(
 					"EX_NVM_BRIDGE_NODEPOOL_START_far",
-				)
-					?? [];
+				);
+				return ret ?? [];
 			}
 
 			case "sucUpdateEntries": {

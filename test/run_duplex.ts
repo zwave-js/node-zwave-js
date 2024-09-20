@@ -150,14 +150,14 @@ const driver_secondary = new Driver(port_secondary, {
 		lockDir: path.join(__dirname, "cache2/locks"),
 	},
 	allowBootloaderOnly: true,
-	joinNetworkUserCallbacks: {
-		showDSK(dsk) {
-			pin = dsk.split("-")[0];
-		},
-		done() {
-			pin = undefined;
-		},
-	},
+	// joinNetworkUserCallbacks: {
+	// 	showDSK(dsk) {
+	// 		pin = dsk.split("-")[0];
+	// 	},
+	// 	done() {
+	// 		pin = undefined;
+	// 	},
+	// },
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {

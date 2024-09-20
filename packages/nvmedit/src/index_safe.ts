@@ -10,18 +10,30 @@ export type {
 	NVMJSONNodeWithInfo,
 	NVMJSONVirtualNode,
 } from "./convert";
-export type { NVM3Meta as NVMMeta } from "./lib/NVM3";
+export type { NVM3EraseOptions, NVM3Meta } from "./lib/NVM3";
+export type { NVM500EraseOptions, NVM500Info } from "./lib/NVM500";
+export { NVMAccess } from "./lib/common/definitions";
+export type {
+	ControllerNVMProperty,
+	ControllerNVMPropertyToDataType,
+	LRNodeNVMProperty,
+	LRNodeNVMPropertyToDataType,
+	NVM,
+	NVMAdapter,
+	NVMIO,
+	NVMProperty,
+	NVMPropertyToDataType,
+	NodeNVMProperty,
+	NodeNVMPropertyToDataType,
+} from "./lib/common/definitions";
 export {
 	FragmentType,
 	ObjectType,
 	PageStatus,
 	PageWriteSize,
 } from "./lib/nvm3/consts";
-export type { NVM3Object as NVMObject } from "./lib/nvm3/object";
-export type {
-	NVM3Page as NVMPage,
-	NVM3PageHeader as PageHeader,
-} from "./lib/nvm3/page";
+export type { NVM3Object } from "./lib/nvm3/object";
+export type { NVM3Page, NVM3PageHeader } from "./lib/nvm3/page";
 export type {
 	NVM500JSON,
 	NVM500JSONController,

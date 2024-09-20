@@ -66,15 +66,6 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code goes here
-		driver.once("all nodes ready", async () => {
-			await wait(1000);
-
-			const ownNodeId = await driver.controller.nvm.get({
-				domain: "controller",
-				type: "nodeId",
-			});
-			debugger;
-		});
 	})
 	.once("bootloader ready", async () => {
 		// What to do when stuck in the bootloader
