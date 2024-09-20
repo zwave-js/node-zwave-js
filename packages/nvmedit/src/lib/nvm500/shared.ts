@@ -163,3 +163,30 @@ export interface NVM500Impl {
 	protocolVersions: string[];
 	layout: NVMLayout;
 }
+
+export type ResolvedNVM500Impl = Omit<NVM500Impl, "layout"> & {
+	layout: ResolvedNVMLayout;
+};
+
+export function resolveLayout(layout: NVMLayout): {
+	layout: ResolvedNVMLayout;
+	nvmSize: number;
+} {
+	const ret: Map<NVMEntryName, Required<NVMEntry>> = new Map();
+	let offset = 0;
+	for (const entry of layout) {
+		const size = entry.size ?? NVMEntrySizes[entry.type];
+		const resolvedEntry: ResolvedNVMEntry = {
+			...entry,
+			size,
+			offset: entry.offset ?? offset,
+		};
+		ret.set(resolvedEntry.name, resolvedEntry);
+		offset += size * entry.count;
+	}
+
+	const endMarker = ret.get("nvmModuleSizeEndMarker")!;
+	const nvmSize = endMarker.offset + endMarker.size;
+
+	return { layout: ret, nvmSize };
+}

@@ -120,7 +120,10 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 
 			// const lib = /_(static|bridge)_/.exec(file)![1];
 			const json = await nvm500ToJSON(nvmIn);
-			const nvmOut = jsonToNVM500(json, json.controller.protocolVersion);
+			const nvmOut = await jsonToNVM500(
+				json,
+				json.controller.protocolVersion,
+			);
 
 			t.deepEqual(nvmOut, nvmIn);
 		});

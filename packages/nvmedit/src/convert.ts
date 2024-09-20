@@ -93,12 +93,12 @@ import type { NVM3Object } from "./lib/nvm3/object";
 import { dumpNVM, mapToObject } from "./lib/nvm3/utils";
 import { NVM500Adapter } from "./lib/nvm500/adapter";
 import { nvm500Impls } from "./lib/nvm500/impls";
+import { resolveLayout } from "./lib/nvm500/shared";
 import {
 	type NVM500JSON,
 	type NVM500JSONController,
 	type NVM500JSONNode,
 	type NVM500Meta,
-	NVMSerializer,
 } from "./nvm500/NVMParser";
 
 export interface NVMJSON {
@@ -1502,10 +1502,10 @@ export async function jsonToNVM(
 }
 
 /** Takes a JSON represented 500 series NVM and converts it to binary */
-export function jsonToNVM500(
+export async function jsonToNVM500(
 	json: Required<NVM500JSON>,
 	protocolVersion: string,
-): Buffer {
+): Promise<Buffer> {
 	// Try to find a matching implementation
 	const impl = nvm500Impls.find(
 		(p) =>
@@ -1520,9 +1520,190 @@ export function jsonToNVM500(
 		);
 	}
 
-	const serializer = new NVMSerializer(impl);
-	serializer.parseJSON(json, protocolVersion);
-	return serializer.serialize();
+	const { layout, nvmSize } = resolveLayout(impl.layout);
+
+	// Erase the NVM and set some basic information
+	const ret = Buffer.allocUnsafe(nvmSize);
+	const io = new NVMMemoryIO(ret);
+	const nvm = new NVM500(io);
+	await nvm.erase({
+		layout,
+		nvmSize,
+		library: impl.library,
+		nvmDescriptor: {
+			...pick(json.meta, [
+				"manufacturerID",
+				"productType",
+				"productID",
+				"firmwareID",
+			]),
+			// Override the protocol version with the specified one
+			protocolVersion,
+			firmwareVersion: json.controller.applicationVersion,
+		},
+	});
+
+	const adapter = new NVM500Adapter(nvm);
+
+	// Set controller infos
+	const c = json.controller;
+
+	await adapter.set(
+		{ domain: "controller", type: "homeId" },
+		Buffer.from(c.ownHomeId.replace(/^0x/, ""), "hex"),
+	);
+	await adapter.set(
+		{ domain: "controller", type: "learnedHomeId" },
+		c.learnedHomeId
+			? Buffer.from(c.learnedHomeId.replace(/^0x/, ""), "hex")
+			: undefined,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "nodeId" },
+		c.nodeId,
+	);
+	await adapter.set(
+		{ domain: "controller", type: "lastNodeId" },
+		c.lastNodeId,
+	);
+	await adapter.set(
+		{ domain: "controller", type: "maxNodeId" },
+		c.maxNodeId,
+	);
+	await adapter.set(
+		{ domain: "controller", type: "reservedId" },
+		c.reservedId,
+	);
+	await adapter.set(
+		{ domain: "controller", type: "staticControllerNodeId" },
+		c.staticControllerNodeId,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "controllerConfiguration" },
+		c.controllerConfiguration,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "sucUpdateEntries" },
+		c.sucUpdateEntries,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "sucLastIndex" },
+		c.sucLastIndex,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "systemState" },
+		c.systemState,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "watchdogStarted" },
+		c.watchdogStarted,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "powerLevelNormal" },
+		c.rfConfig.powerLevelNormal,
+	);
+	await adapter.set(
+		{ domain: "controller", type: "powerLevelLow" },
+		c.rfConfig.powerLevelLow,
+	);
+	await adapter.set(
+		{ domain: "controller", type: "powerMode" },
+		c.rfConfig.powerMode,
+	);
+	await adapter.set(
+		{ domain: "controller", type: "powerModeExtintEnable" },
+		c.rfConfig.powerModeExtintEnable,
+	);
+	await adapter.set(
+		{ domain: "controller", type: "powerModeWutTimeout" },
+		c.rfConfig.powerModeWutTimeout,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "preferredRepeaters" },
+		c.preferredRepeaters,
+	);
+
+	await adapter.set(
+		{ domain: "controller", type: "commandClasses" },
+		c.commandClasses,
+	);
+
+	if (c.applicationData) {
+		await adapter.set(
+			{ domain: "controller", type: "applicationData" },
+			Buffer.from(c.applicationData, "hex"),
+		);
+	}
+
+	// Set node infos
+	const appRouteLock: number[] = [];
+	const routeSlaveSUC: number[] = [];
+	const pendingDiscovery: number[] = [];
+	const sucPendingUpdate: number[] = [];
+	const virtualNodeIds: number[] = [];
+
+	for (const [id, node] of Object.entries(json.nodes)) {
+		const nodeId = parseInt(id);
+		if (!nodeHasInfo(node)) {
+			virtualNodeIds.push(nodeId);
+			continue;
+		}
+		if (node.appRouteLock) appRouteLock.push(nodeId);
+		if (node.routeSlaveSUC) routeSlaveSUC.push(nodeId);
+		if (node.pendingDiscovery) pendingDiscovery.push(nodeId);
+		if (node.sucPendingUpdate) sucPendingUpdate.push(nodeId);
+
+		await adapter.set(
+			{ domain: "node", nodeId, type: "info" },
+			{
+				nodeId,
+				...node,
+			},
+		);
+
+		if (node.lwr || node.nlwr) {
+			await adapter.set(
+				{ domain: "node", nodeId, type: "routes" },
+				{
+					lwr: node.lwr ?? undefined,
+					nlwr: node.nlwr ?? undefined,
+				},
+			);
+		}
+	}
+
+	await adapter.set(
+		{ domain: "controller", type: "appRouteLock" },
+		[...appRouteLock],
+	);
+	await adapter.set(
+		{ domain: "controller", type: "routeSlaveSUC" },
+		[...routeSlaveSUC],
+	);
+	await adapter.set(
+		{ domain: "controller", type: "sucPendingUpdate" },
+		[...sucPendingUpdate],
+	);
+	await adapter.set(
+		{ domain: "controller", type: "virtualNodeIds" },
+		[...virtualNodeIds],
+	);
+	await adapter.set(
+		{ domain: "controller", type: "pendingDiscovery" },
+		[...pendingDiscovery],
+	);
+
+	await adapter.commit();
+	await io.close();
+	return ret;
 }
 
 export function json500To700(

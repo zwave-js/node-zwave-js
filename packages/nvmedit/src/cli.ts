@@ -118,7 +118,7 @@ Create a backup of the target stick, use the nvm2json command to convert it to J
 			}
 
 			const nvm = versionIs500
-				? jsonToNVM500(json, protocolVersion)
+				? await jsonToNVM500(json, protocolVersion)
 				: await jsonToNVM(json, protocolVersion);
 			await fs.writeFile(argv.out, nvm);
 			console.error(`NVM (binary) written to ${argv.out}`);
