@@ -88,10 +88,9 @@
 		{
 			"#": "6",
 			"label": "Update Interval",
+			"description": "Allowable range: 0, 150-2000",
 			"valueSize": 2,
 			"unit": "seconds",
-			"minValue": 150,
-			"maxValue": 65535,
 			"defaultValue": 3600,
 			"unsigned": true,
 			"options": [
