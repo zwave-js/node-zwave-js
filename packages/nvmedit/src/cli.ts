@@ -47,10 +47,10 @@ void yargs
 			const buffer = await fs.readFile(argv.in);
 			let json: any;
 			try {
-				json = nvmToJSON(buffer, argv.verbose);
+				json = await nvmToJSON(buffer, argv.verbose);
 			} catch (e) {
 				try {
-					json = nvm500ToJSON(buffer);
+					json = await nvm500ToJSON(buffer);
 				} catch (ee) {
 					console.error(e);
 					process.exit(1);
@@ -118,8 +118,8 @@ Create a backup of the target stick, use the nvm2json command to convert it to J
 			}
 
 			const nvm = versionIs500
-				? jsonToNVM500(json, protocolVersion)
-				: jsonToNVM(json, protocolVersion);
+				? await jsonToNVM500(json, protocolVersion)
+				: await jsonToNVM(json, protocolVersion);
 			await fs.writeFile(argv.out, nvm);
 			console.error(`NVM (binary) written to ${argv.out}`);
 
@@ -217,7 +217,7 @@ Create a backup of the target stick, use the nvm2json command to convert it to J
 		async (argv) => {
 			const source = await fs.readFile(argv.source);
 			const target = await fs.readFile(argv.target);
-			const output = migrateNVM(source, target);
+			const output = await migrateNVM(source, target);
 			await fs.writeFile(argv.out, output);
 			console.error(`Converted NVM written to ${argv.out}`);
 

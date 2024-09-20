@@ -22,7 +22,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
 			const data = await fs.readFile(path.join(fixturesDir, file));
-			const json = nvmToJSON(data);
+			const json = await nvmToJSON(data);
 			t.snapshot(json);
 		});
 	}
@@ -36,14 +36,14 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
-			const jsonInput: Required<NVMJSON> = await fs.readJson(
+			const jsonInput: NVMJSON = await fs.readJson(
 				path.join(fixturesDir, file),
 			);
-			const nvm = jsonToNVM(
+			const nvm = await jsonToNVM(
 				jsonInput,
 				jsonInput.controller.applicationVersion,
 			);
-			const jsonOutput = nvmToJSON(nvm);
+			const jsonOutput = await nvmToJSON(nvm);
 			// @ts-expect-error
 			if (!("meta" in jsonInput)) delete jsonOutput.meta;
 
@@ -66,8 +66,8 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 			const nvmIn = await fs.readFile(path.join(fixturesDir, file));
 
 			const version = /_(\d+\.\d+\.\d+)[_.]/.exec(file)![1];
-			const json = nvmToJSON(nvmIn);
-			const nvmOut = jsonToNVM(json, version);
+			const json = await nvmToJSON(nvmIn);
+			const nvmOut = await jsonToNVM(json, version);
 
 			t.deepEqual(nvmOut, nvmIn);
 		});
@@ -83,7 +83,7 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 	for (const file of files) {
 		test(`${suite} -> ${file}`, async (t) => {
 			const data = await fs.readFile(path.join(fixturesDir, file));
-			const json = nvm500ToJSON(data);
+			const json = await nvm500ToJSON(data);
 			t.snapshot(json);
 		});
 	}
@@ -119,8 +119,11 @@ import type { NVM500JSON } from "./nvm500/NVMParser";
 			const nvmIn = await fs.readFile(path.join(fixturesDir, file));
 
 			// const lib = /_(static|bridge)_/.exec(file)![1];
-			const json = nvm500ToJSON(nvmIn);
-			const nvmOut = jsonToNVM500(json, json.controller.protocolVersion);
+			const json = await nvm500ToJSON(nvmIn);
+			const nvmOut = await jsonToNVM500(
+				json,
+				json.controller.protocolVersion,
+			);
 
 			t.deepEqual(nvmOut, nvmIn);
 		});
@@ -190,7 +193,7 @@ test("700 to 700 migration shortcut", async (t) => {
 	const nvmTarget = await fs.readFile(
 		path.join(fixturesDir, "ctrlr_backup_700_7.16_1.bin"),
 	);
-	const converted = migrateNVM(nvmSource, nvmTarget);
+	const converted = await migrateNVM(nvmSource, nvmTarget);
 
 	t.deepEqual(converted, nvmSource);
 });
