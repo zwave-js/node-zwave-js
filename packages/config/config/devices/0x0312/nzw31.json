@@ -33,6 +33,10 @@
 			"defaultValue": 1
 		},
 		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#orientation"
 		},

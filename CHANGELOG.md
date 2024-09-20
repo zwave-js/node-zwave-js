@@ -4,6 +4,45 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 13.3.1 (2024-09-17)
+### Bugfixes
+* Fixed the identification of the primary controller role on some older controllers (#7174)
+* Fixed an issue where passing a custom log transport to `updateOptions` would cause a call stack overflow (#7173)
+* Implement deserialization for more `WindowCoveringCC` commands to be used in mocks (#7159)
+
+### Config file changes
+* Add Philio Technology Smart Keypad (#7168, #7175)
+* Add LED indication parameter for Inovelli NZW31 dimmer (#7172)
+
+### Changes under the hood
+* Fixed a build issue on Windows systems
+* Make `mock-server.js` executable (#7160, #7161)
+
+## 13.3.0 (2024-09-12)
+### Features
+* Add support for EU Long Range (#6751)
+* Support learn mode to become a secondary controller (#7135)
+* Add method to query supported RF regions and their info (#7118)
+* Support `Firmware Update Meta Data CC` v8 (#7079)
+* Implement 32-bit addressed NVM operations (#7114)
+* Add methods to reset SPAN of one or all nodes (#7105)
+
+### Bugfixes
+* Fix missing values in endpoint dump (#7101)
+
+### Config file changes
+* Add new fingerprint for TZ45 thermostat (#7127)
+* Add alarm mapping for Schlage lock CKPD FE599 (#7122)
+* Add fingerprint for Climax Technology SDCO-1 (#7102)
+* Add Shelly Wave Pro 3 and Wave Pro Shutter (#7103)
+* Remove endpoint workaround for Zooz ZEN30, FW 3.20+ (#7115)
+
+### Changes under the hood
+* Document soft-reset issue in VMs (#7119)
+* Update documentation for troubleshooting and Zniffer, clean up migration guides (#7107)
+* Update `FunctionType` definitions (#7106)
+* CI now checks that all device config files have a `.json` extension (#7099)
+
 ## 13.2.0 (2024-08-12)
 ### Features
 * Add method to enumerate all device classes (#7094)

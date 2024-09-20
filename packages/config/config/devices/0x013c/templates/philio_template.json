@@ -36,17 +36,44 @@
 			}
 		]
 	},
-	"battery_report_interval": {
+	"battery_report_interval_30m": {
 		"label": "Battery Report Interval",
 		"valueSize": 1,
-		"unit": "minutes",
+		"unit": "30 minutes",
 		"minValue": 0,
-		"maxValue": 12,
+		"maxValue": 127,
 		"defaultValue": 12,
 		"unsigned": true,
 		"options": [
 			{
 				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"auto_report_interval": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 12,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"auto_report_unit": {
+		"valueSize": 1,
+		"unit": "minutes",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 30,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable all auto reports",
 				"value": 0
 			}
 		]

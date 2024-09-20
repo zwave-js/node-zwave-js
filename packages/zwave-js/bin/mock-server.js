@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // @ts-check
 const { MockServer, createMockNodeOptionsFromDump } = require(
 	"../build/mockServer",

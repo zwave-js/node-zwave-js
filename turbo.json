@@ -36,9 +36,8 @@
 				"packages/*/tsconfig.build.json",
 				// All source files are input
 				"packages/*/src/**",
-				// TODO: Figure out how to exclude test files from inputs
-				// :!:**/*.test.ts doesn't work
-				":!:*/**/*.test.ts"
+				// Exclude test files from inputs
+				"!**/*.test.ts"
 			],
 			"outputs": ["packages/*/build/**", "packages/*/*.tsbuildinfo"]
 		},
