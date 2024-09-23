@@ -77,6 +77,19 @@ body:
         If you are using something non-standard, tell us here: ...
 
   - type: textarea
+    id: controller
+    attributes:
+      label: Z-Wave Controller (Stick/Dongle/...)
+      description: |
+        Some issues are known to be caused by the Z-Wave controller.
+        Please let us know which controller and firmware you are using:
+
+      value: |
+        Manufacturer: ...
+        Model name: ...
+        Firmware version: ...
+
+  - type: textarea
     id: devices
     attributes:
       label: Device information
