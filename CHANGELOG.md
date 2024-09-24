@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added `Controller.nvm` property to enable incremental modification of NVM contents on the fly (#7153)
+* When the `NODE_ENV` env variable is set to `development`, debugging information for S0 encryption is included in logs (#7181)
+* Add driver preset `NO_WATCHDOG` to disable watchdog (#7188)
+
+### Config file changes
+* Update Z-Wave SDK warnings to mention recommended versions (#7187)
+* Update Zooz devices (#7186)
+
 ## 13.3.1 (2024-09-17)
 ### Bugfixes
 * Fixed the identification of the primary controller role on some older controllers (#7174)
