@@ -11,14 +11,8 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "firmwareVersion >= 3.10 && firmwareVersion < 10.0",
-			"value": "ZEN72 800LR"
-		},
-		"ZEN72"
-	],
-	"description": "Dimmer Switch",
+	"label": "ZEN72",
+	"description": "Dimmer",
 	"devices": [
 		{
 			"productType": "0x7000",

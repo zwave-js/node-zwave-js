@@ -1,8 +1,9 @@
+// 800 series (LR) starting with firmware 2.0
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN14",
-	"description": "700 Series Outdoor Double Plug",
+	"description": "Outdoor Double Plug",
 	"devices": [
 		{
 			"productType": "0x7000",

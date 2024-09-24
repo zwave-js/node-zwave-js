@@ -1,8 +1,9 @@
+// 800 series (LR) starting with firmware 2.0
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN34",
-	"description": "Z-Wave Plus 700 Series Remote Switch",
+	"description": "Remote Switch",
 	"devices": [
 		{
 			"productType": "0x0004",
