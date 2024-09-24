@@ -452,6 +452,16 @@ export const driverPresets = Object.freeze(
 		},
 
 		/**
+		 * Prevents enabling the watchdog to be able to deal with controllers
+		 * which frequently get restarted for seemingly no reason.
+		 */
+		NO_WATCHDOG: {
+			features: {
+				watchdog: false,
+			},
+		},
+
+		/**
 		 * Sends battery powered nodes to sleep more quickly in order to save battery.
 		 */
 		BATTERY_SAVE: {
