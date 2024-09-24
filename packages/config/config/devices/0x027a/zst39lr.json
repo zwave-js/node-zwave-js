@@ -17,13 +17,10 @@
 		// 700/800 series firmware bugs that affect multiple controllers
 		"comments": [
 			// https://www.support.getzooz.com/kb/article/1352-zst39-800-long-range-z-wave-stick-change-log/
-			// These controllers started shipping with 7.18.1:
-			// 1.1 = 7.18.1
-			// (1.3 = 1.4 = 1.10) = 7.18.3
-			// 1.20 = 7.19.3
+			// 1.50 = SDK 7.22.1
 			{
-				"$if": "firmwareVersion === 1.20",
-				"$import": "~/templates/master_template.json#7xx_firmware_bug_7_19_3"
+				"$if": "firmwareVersion < 1.50",
+				"$import": "~/templates/master_template.json#8xx_firmware_bug_pre_7_22_1"
 			}
 		]
 	}

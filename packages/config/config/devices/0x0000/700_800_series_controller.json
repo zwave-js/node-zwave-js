@@ -22,12 +22,14 @@
 				"$import": "~/templates/master_template.json#7xx_firmware_bug_pre_7_17_2"
 			},
 			{
-				"$if": "firmwareVersion === 7.19.1",
-				"$import": "~/templates/master_template.json#7xx_firmware_bug_7_19_1"
+				// Not sure if this is a 700 or 800 series controller. Show the generic warning
+				"$if": "firmwareVersion >= 7.19.1 && firmwareVersion <= 7.21.3",
+				"$import": "~/templates/master_template.json#7xx_8xx_firmware_bug_7_19_to_7_21_3_or_7_22_1"
 			},
 			{
-				"$if": "firmwareVersion === 7.19.3",
-				"$import": "~/templates/master_template.json#7xx_firmware_bug_7_19_3"
+				// 7.22.x is limited to 800 series
+				"$if": "firmwareVersion === 7.22.0",
+				"$import": "~/templates/master_template.json#8xx_firmware_bug_pre_7_22_1"
 			}
 		]
 	}
