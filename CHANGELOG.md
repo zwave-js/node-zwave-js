@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.4.0 (2024-09-24)
 ### Features
 * Added `Controller.nvm` property to enable incremental modification of NVM contents on the fly (#7153)
 * When the `NODE_ENV` env variable is set to `development`, debugging information for S0 encryption is included in logs (#7181)
