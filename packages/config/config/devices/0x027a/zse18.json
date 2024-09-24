@@ -1,8 +1,9 @@
+// 800 series (LR) starting with firmware 2.0
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZSE18",
-	"description": "Motion and Vibration Sensor",
+	"description": "Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0301",

@@ -12,13 +12,7 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "firmwareVersion >= 2.10 && firmwareVersion < 10.0",
-			"value": "ZEN32 800LR"
-		},
-		"ZEN32"
-	],
+	"label": "ZEN32",
 	"description": "Scene Controller",
 	"devices": [
 		{

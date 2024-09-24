@@ -14,14 +14,8 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "firmwareVersion >= 4.10",
-			"value": "ZEN30 800LR"
-		},
-		"ZEN30"
-	],
-	"description": "Dimmer & Dry Contact Relay",
+	"label": "ZEN30",
+	"description": "Double Switch",
 	"devices": [
 		{
 			"productType": "0xa000",
@@ -316,7 +310,7 @@
 		{
 			// This device exposes a Multilevel Switch (Dimmer) on endpoint 0, and a Binary Switch (Relay) on endpoint 1
 			// Our heuristic currently detects endpoint 1 as unnecessary and hides it from the user.
-			// This problem is fixed in firmare 3.20 and higher
+			// This problem is fixed in firmware 3.20 and higher
 			"$if": "firmwareVersion < 3.20",
 			"preserveEndpoints": "*",
 			"preserveRootApplicationCCValueIDs": true
