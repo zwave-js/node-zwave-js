@@ -17,7 +17,6 @@
 import zjs from "@zwave-js/eslint-plugin";
 import unicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
-import jsonc from "jsonc-eslint-parser";
 import tseslint from "typescript-eslint";
 
 import { dirname } from "node:path";
@@ -205,27 +204,6 @@ export default tseslint.config(
 		files: ["packages/**/*.ts"],
 		rules: {
 			"@zwave-js/no-forbidden-imports": "error",
-		},
-	},
-	{
-		files: ["packages/config/config/devices/**/*.json"],
-		plugins: {
-			"@zwave-js": zjs,
-		},
-		languageOptions: {
-			parser: jsonc,
-		},
-		rules: {
-			"@zwave-js/auto-unsigned": "error",
-			"@zwave-js/consistent-config-string-case": "error",
-			"@zwave-js/consistent-device-config-property-order": "error",
-			"@zwave-js/consistent-param-units": "error",
-			"@zwave-js/no-misspelled-names": "error",
-			"@zwave-js/no-surrounding-whitespace": "error",
-			"@zwave-js/no-unnecessary-min-max-value": "error",
-			"@zwave-js/no-useless-description": "error",
-			"@zwave-js/no-value-in-option-label": "error",
-			"@zwave-js/prefer-defaultvalue": "error",
 		},
 	},
 );

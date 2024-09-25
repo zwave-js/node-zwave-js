@@ -48,7 +48,7 @@
     "build": "tsc -b tsconfig.build.json --pretty",
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "extract-api": "yarn api-extractor run",
-    "lint:zwave": "yarn ts maintenance/lintConfigFiles.ts && eslint --cache --cache-location .eslintcache/config --ext .json \"config/devices/**/*.json\"",
+    "lint:zwave": "yarn ts maintenance/lintConfigFiles.ts && eslint --cache --cache-location .eslintcache/config -c config/eslint.config.mjs",
     "ts": "node -r esbuild-register --conditions=@@dev",
     "lint:ts": "eslint --cache --cache-location .eslintcache/ts \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
