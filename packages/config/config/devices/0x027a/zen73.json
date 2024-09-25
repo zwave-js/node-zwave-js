@@ -1,8 +1,9 @@
+// 800 series (LR) starting with firmware 2.10
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN73",
-	"description": "700 Toggle Switch",
+	"description": "Toggle Switch",
 	"devices": [
 		{
 			"productType": "0x7000",

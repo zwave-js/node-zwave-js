@@ -99,7 +99,15 @@ import {
 	securityClassIsS2,
 	securityClassOrder,
 } from "@zwave-js/core";
-import { migrateNVM } from "@zwave-js/nvmedit";
+import {
+	BufferedNVMReader,
+	NVM3,
+	NVM3Adapter,
+	NVM500,
+	NVM500Adapter,
+	type NVMAdapter,
+	migrateNVM,
+} from "@zwave-js/nvmedit";
 import {
 	type BootloaderChunk,
 	BootloaderChunkType,
@@ -153,7 +161,6 @@ import {
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
 	ApplicationUpdateRequestSmartStartLongRangeHomeIDReceived,
 } from "../serialapi/application/ApplicationUpdateRequest";
-
 import {
 	ShutdownRequest,
 	type ShutdownResponse,
@@ -409,6 +416,7 @@ import {
 	SecurityBootstrapFailure,
 	type SmartStartProvisioningEntry,
 } from "./Inclusion";
+import { SerialNVMIO500, SerialNVMIO700 } from "./NVMIO";
 import { determineNIF } from "./NodeInformationFrame";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import {
@@ -7041,6 +7049,24 @@ ${associatedNodes.join(", ")}`,
 		}
 	}
 
+	private _nvm: NVMAdapter | undefined;
+	/** Provides access to the controller's non-volatile memory */
+	public get nvm(): NVMAdapter {
+		if (!this._nvm) {
+			if (this.sdkVersionGte("7.0")) {
+				const io = new BufferedNVMReader(new SerialNVMIO700(this));
+				const nvm3 = new NVM3(io);
+				this._nvm = new NVM3Adapter(nvm3);
+			} else {
+				const io = new BufferedNVMReader(new SerialNVMIO500(this));
+				const nvm = new NVM500(io);
+				this._nvm = new NVM500Adapter(nvm);
+			}
+		}
+
+		return this._nvm;
+	}
+
 	/**
 	 * **Z-Wave 500 series only**
 	 *
@@ -7681,7 +7707,7 @@ ${associatedNodes.join(", ")}`,
 			} else {
 				targetNVM = await this.backupNVMRaw500(convertProgress);
 			}
-			const convertedNVM = migrateNVM(nvmData, targetNVM);
+			const convertedNVM = await migrateNVM(nvmData, targetNVM);
 
 			this.driver.controllerLog.print("Restoring NVM backup...");
 			if (this.sdkVersionGte("7.0")) {

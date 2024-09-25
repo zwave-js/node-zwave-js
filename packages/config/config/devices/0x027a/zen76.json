@@ -8,14 +8,8 @@
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": [
-		{
-			"$if": "firmwareVersion >= 3.10 && firmwareVersion < 10.0",
-			"value": "ZEN76 800LR"
-		},
-		"ZEN76"
-	],
-	"description": "S2 ON/OFF Switch",
+	"label": "ZEN76",
+	"description": "S2 On/Off Switch",
 	"devices": [
 		{
 			"productType": "0x7000",
