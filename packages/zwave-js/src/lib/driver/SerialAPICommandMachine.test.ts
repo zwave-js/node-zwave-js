@@ -35,16 +35,16 @@ const test = ava as TestFn<AvaTestContext>;
 
 interface TestMachineStateSchema {
 	states: {
-		init: {};
-		sending: {};
-		waitForACK: {};
-		waitForResponse: {};
-		waitForCallback: {};
+		init: object;
+		sending: object;
+		waitForACK: object;
+		waitForResponse: object;
+		waitForCallback: object;
 		// FIXME: This is relevant for SendData, but we're not using SendData messages in this test
 		// waitForCallbackAfterTimeout: {};
-		unsolicited: {};
-		success: {};
-		failure: {};
+		unsolicited: object;
+		success: object;
+		failure: object;
 	};
 }
 

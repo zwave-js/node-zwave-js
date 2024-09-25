@@ -467,6 +467,7 @@ interface ControllerEventCallbacks
 
 export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ZWaveController extends ControllerStatisticsHost {}
 
 @Mixin([ControllerStatisticsHost])
@@ -5159,7 +5160,7 @@ ${associatedNodes.join(", ")}`,
 
 				// Remember that this route has been assigned
 				if (i !== priorityRouteIndex) assignedRoutes[i] = route;
-			} catch (e) {
+			} catch {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Assigning custom SUC return route #${i} failed`,
 					direction: "outbound",
@@ -5182,7 +5183,7 @@ ${associatedNodes.join(", ")}`,
 			);
 			try {
 				await this.driver.sendZWaveProtocolCC(cc);
-			} catch (e) {
+			} catch {
 				this.driver.controllerLog.logNode(nodeId, {
 					message:
 						`Marking custom SUC return route as priority failed`,
@@ -5464,7 +5465,7 @@ ${associatedNodes.join(", ")}`,
 
 				// Remember that this route has been assigned
 				if (i !== priorityRouteIndex) assignedRoutes[i] = route;
-			} catch (e) {
+			} catch {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Assigning custom return route #${i} failed`,
 					direction: "outbound",
@@ -5487,7 +5488,7 @@ ${associatedNodes.join(", ")}`,
 			);
 			try {
 				await this.driver.sendZWaveProtocolCC(cc);
-			} catch (e) {
+			} catch {
 				this.driver.controllerLog.logNode(nodeId, {
 					message: `Marking custom return route as priority failed`,
 					direction: "outbound",
@@ -8476,7 +8477,7 @@ ${associatedNodes.join(", ")}`,
 							(c) => c.type === BootloaderChunkType.FlowControl,
 							1000,
 						);
-					} catch (e) {
+					} catch {
 						this.driver.controllerLog.print(
 							"OTW update failed: The bootloader did not acknowledge the start of transfer.",
 							"error",
@@ -8587,7 +8588,7 @@ ${associatedNodes.join(", ")}`,
 							1000,
 						),
 					]);
-				} catch (e) {
+				} catch {
 					this.driver.controllerLog.print(
 						"OTW update failed: The bootloader did not acknowledge the end of transfer.",
 						"error",

@@ -103,7 +103,7 @@ export async function waitForNodeUpdate<T extends Message>(
 			timeoutMs,
 			(received) => maybePartialNodeUpdate(msg, received),
 		);
-	} catch (e) {
+	} catch {
 		throw new ZWaveError(
 			`Timed out while waiting for a response from the node`,
 			ZWaveErrorCodes.Controller_NodeTimeout,
@@ -136,17 +136,17 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 		if (isSendData(msg) && driver.exceedsMaxPayloadLength(msg)) {
 			// We use explorer frames by default, but this reduces the maximum payload length by 2 bytes compared to AUTO_ROUTE
 			// Try disabling explorer frames for this message and see if it fits now.
-			const fail = () => {
+			function fail(): never {
 				throw new ZWaveError(
 					"Cannot send this message because it would exceed the maximum payload length!",
 					ZWaveErrorCodes.Controller_MessageTooLarge,
 				);
-			};
+			}
 			if (msg.transmitOptions & TransmitOptions.Explore) {
 				msg.transmitOptions &= ~TransmitOptions.Explore;
 				if (driver.exceedsMaxPayloadLength(msg)) {
 					// Still too large
-					throw fail();
+					fail();
 				}
 				driver.controllerLog.logNode(msg.getNodeId()!, {
 					message:
@@ -154,7 +154,7 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 					level: "warn",
 				});
 			} else {
-				throw fail();
+				fail();
 			}
 		}
 
@@ -183,6 +183,7 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 		// We now need to throw because the callback was passed through so we could inspect it.
 		if (isTransmitReport(result) && !result.isOK()) {
 			// Throw the message in order to short-circuit all possible generators
+			// eslint-disable-next-line @typescript-eslint/only-throw-error
 			throw result;
 		}
 

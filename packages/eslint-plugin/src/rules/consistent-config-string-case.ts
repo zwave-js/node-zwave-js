@@ -1,7 +1,7 @@
 import { type AST } from "jsonc-eslint-parser";
 import { CONFIG_OPTION, CONFIG_PARAM, ROOT } from "../jsonSelectors.js";
 import {
-	JSONCRule,
+	type JSONCRule,
 	insertAfterJSONProperty,
 	insertBeforeJSONProperty,
 } from "../utils.js";
@@ -143,7 +143,7 @@ export const consistentConfigStringCase: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
-		// @ts-ignore
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				`Ensures that the casing of labels in configuration files follows the style guide`,

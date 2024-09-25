@@ -399,7 +399,7 @@ export const V = {
 		property: TProp,
 		is: PartialCCValuePredicate,
 		meta?: TMeta,
-		options?: TOptions | undefined,
+		options?: TOptions,
 	): {
 		[K in TName]: {
 			(...args: InferArgs<[TProp, TMeta]>): {
@@ -434,7 +434,7 @@ export const V = {
 		propertyKey: TKey,
 		is: PartialCCValuePredicate,
 		meta?: TMeta,
-		options?: TOptions | undefined,
+		options?: TOptions,
 	): {
 		[K in TName]: {
 			(...args: InferArgs<[TProp, TKey, TMeta]>): {

@@ -4,13 +4,13 @@ import { NodeStatus } from "./_Types";
 
 export interface NodeStatusStateSchema {
 	states: {
-		unknown: {};
+		unknown: object;
 		// non-sleeping nodes are either dead or alive
-		dead: {};
-		alive: {};
+		dead: object;
+		alive: object;
 		// sleeping nodes are asleep or awake
-		asleep: {};
-		awake: {};
+		asleep: object;
+		awake: object;
 	};
 }
 

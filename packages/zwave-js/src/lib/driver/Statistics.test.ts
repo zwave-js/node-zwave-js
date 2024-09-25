@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import { Mixin } from "@zwave-js/shared";
 import test from "ava";
 import EventEmitter from "node:events";

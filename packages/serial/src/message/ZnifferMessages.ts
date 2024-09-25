@@ -37,6 +37,7 @@ function gotDeserializationOptions(
 	return options != undefined && Buffer.isBuffer(options.data);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ZnifferMessageBaseOptions {
 	// Intentionally empty
 }
@@ -245,7 +246,7 @@ export class ZnifferDataMessage extends ZnifferMessage
 				this.checksumOK = true;
 				this.payload = Buffer.alloc(0);
 			} else {
-				throw validatePayload.fail(
+				validatePayload.fail(
 					`Unsupported frame type ${
 						getEnumMemberName(ZnifferFrameType, this.frameType)
 					}`,

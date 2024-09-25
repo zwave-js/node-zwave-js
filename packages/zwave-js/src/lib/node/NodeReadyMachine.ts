@@ -7,9 +7,9 @@ import {
 
 export interface NodeReadyStateSchema {
 	states: {
-		notReady: {};
-		readyIfNotDead: {};
-		ready: {};
+		notReady: object;
+		readyIfNotDead: object;
+		ready: object;
 	};
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { getCCConstructor } from "@zwave-js/cc";
 import {
 	CommandClasses,

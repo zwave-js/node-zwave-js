@@ -2440,7 +2440,7 @@ protocol version:      ${this.protocolVersion}`;
 			rootInterviewOrderAfterEndpoints = topologicalSort(
 				rootInterviewGraphAfterEndpoints,
 			);
-		} catch (e) {
+		} catch {
 			// This interview cannot be done
 			throw new ZWaveError(
 				"The CC interview cannot be completed because there are circular dependencies between CCs!",
@@ -2717,7 +2717,7 @@ protocol version:      ${this.protocolVersion}`;
 				endpointInterviewOrder = topologicalSort(
 					endpointInterviewGraph,
 				);
-			} catch (e) {
+			} catch {
 				// This interview cannot be done
 				throw new ZWaveError(
 					"The CC interview cannot be completed because there are circular dependencies between CCs!",
@@ -5537,7 +5537,7 @@ protocol version:      ${this.protocolVersion}`;
 						& ~EncapsulationFlags.Supervision,
 				});
 			await api.reportTimezone(timezone);
-		} catch (e) {
+		} catch {
 			// ignore
 		}
 	}
@@ -7801,7 +7801,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 				}
 				// That's everything
 				return response;
-			} catch (e) {}
+			} catch {}
 		}
 
 		if (
@@ -7820,7 +7820,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 						} satisfies DateAndTime,
 					);
 				}
-			} catch (e) {}
+			} catch {}
 		}
 
 		if (
@@ -7839,7 +7839,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 						} satisfies DateAndTime,
 					);
 				}
-			} catch (e) {}
+			} catch {}
 		}
 
 		if (
@@ -7858,7 +7858,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 						} satisfies DateAndTime,
 					);
 				}
-			} catch (e) {}
+			} catch {}
 		}
 
 		if (
@@ -7876,7 +7876,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 						} satisfies DateAndTime,
 					);
 				}
-			} catch (e) {}
+			} catch {}
 		}
 
 		if (
@@ -7896,7 +7896,7 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 						} satisfies DateAndTime,
 					);
 				}
-			} catch (e) {}
+			} catch {}
 		}
 
 		return response;

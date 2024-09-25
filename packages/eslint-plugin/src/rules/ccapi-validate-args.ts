@@ -4,7 +4,6 @@ import {
 	ESLintUtils,
 } from "@typescript-eslint/utils";
 import {
-	type Rule,
 	findDecoratorContainingCCId,
 	getCCNameFromDecorator,
 } from "../utils.js";

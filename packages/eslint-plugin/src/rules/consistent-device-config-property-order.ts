@@ -30,8 +30,12 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 				if (isSomePropertyOutOfOrder) {
 					const propsWithComments = properties.map(([index, p]) => {
 						const comments = {
-							leading: context.sourceCode.getCommentsBefore(p),
-							trailing: context.sourceCode.getCommentsAfter(p),
+							leading: context.sourceCode.getCommentsBefore(
+								p as any,
+							),
+							trailing: context.sourceCode.getCommentsAfter(
+								p as any,
+							),
 						};
 						return {
 							index,
@@ -154,7 +158,7 @@ export const consistentDeviceConfigPropertyOrder: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
-		// @ts-ignore
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				"Ensures consistent ordering of properties in configuration parameter definitions",

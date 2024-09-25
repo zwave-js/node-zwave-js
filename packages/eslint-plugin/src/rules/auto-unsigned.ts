@@ -1,7 +1,7 @@
 import { getIntegerLimits, tryParseParamNumber } from "@zwave-js/core";
 import type { AST } from "jsonc-eslint-parser";
 import {
-	JSONCRule,
+	type JSONCRule,
 	getJSONBoolean,
 	getJSONNumber,
 	getJSONString,
@@ -256,7 +256,7 @@ export const autoUnsigned: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
-		// @ts-ignore
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				`Ensures that "unsigned = true" is used when necessary and omitted when not.`,

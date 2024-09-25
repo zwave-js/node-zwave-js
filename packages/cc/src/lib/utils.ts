@@ -70,11 +70,11 @@ export function getAssociations(
 					// Eliminate potential duplicates
 					...assocs.filter(
 						(a1) =>
-							normalAssociations.findIndex(
+							!normalAssociations.some(
 								(a2) =>
 									a1.nodeId === a2.nodeId
 									&& a1.endpoint === a2.endpoint,
-							) === -1,
+							),
 					),
 				]);
 			} else {

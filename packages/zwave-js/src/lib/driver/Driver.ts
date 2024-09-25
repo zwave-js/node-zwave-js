@@ -253,7 +253,8 @@ import type {
 import { discoverRemoteSerialPorts } from "./mDNSDiscovery";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const packageJson = require(packageJsonPath);
 const libraryRootDir = path.dirname(packageJsonPath);
 export const libVersion: string = packageJson.version;
@@ -1218,7 +1219,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			try {
 				await this.openSerialport();
 			} catch (e) {
-				spOpenPromise.reject(e);
+				spOpenPromise.reject(e as Error);
 				void this.destroy();
 				return;
 			}
@@ -5543,7 +5544,7 @@ ${handlers.length} left`,
 				);
 				result.resolve(ret);
 			} catch (e) {
-				result.reject(e);
+				result.reject(e as Error);
 			} finally {
 				this._currentSerialAPICommandPromise = undefined;
 			}

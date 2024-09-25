@@ -12,12 +12,12 @@ import {
 
 export interface TransportServiceRXStateSchema {
 	states: {
-		waitingForSegment: {};
-		segmentTimeout: {};
-		waitingForRequestedSegment: {};
-		segmentsComplete: {};
-		success: {};
-		failure: {};
+		waitingForSegment: object;
+		segmentTimeout: object;
+		waitingForRequestedSegment: object;
+		segmentsComplete: object;
+		success: object;
+		failure: object;
 	};
 }
 

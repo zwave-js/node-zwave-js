@@ -76,7 +76,7 @@ test("generateNonce() -> should ensure that no collisions happen", (t) => {
 		.returns(buf2);
 	sinon.replace(crypto, "randomBytes", fakeRandomBytes);
 
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const SM: typeof SecurityManager = require("./Manager").SecurityManager;
 
 	const man = new SM(options);

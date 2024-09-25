@@ -30,7 +30,7 @@ export const noSurroundingWhitespace: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
-		// @ts-ignore
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				`Prevents strings in configuration files to be surrounded by whitespace`,

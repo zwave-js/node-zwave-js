@@ -232,7 +232,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 			if (ret.allowManualEntry === false && ret.options.length > 0) {
 				ret.minValue = Math.min(...ret.options.map((o) => o.value));
 			} else {
-				throw throwInvalidConfig(
+				throwInvalidConfig(
 					"devices",
 					`packages/config/config/devices/${this.parent.filename}:
 Parameter #${this.parameterNumber} is missing required property "minValue"!`,
@@ -243,7 +243,7 @@ Parameter #${this.parameterNumber} is missing required property "minValue"!`,
 			if (ret.allowManualEntry === false && ret.options.length > 0) {
 				ret.maxValue = Math.max(...ret.options.map((o) => o.value));
 			} else {
-				throw throwInvalidConfig(
+				throwInvalidConfig(
 					"devices",
 					`packages/config/config/devices/${this.parent.filename}:
 Parameter #${this.parameterNumber} is missing required property "maxValue"!`,

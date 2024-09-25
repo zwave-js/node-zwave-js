@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-exports */
 export * from "./ConfigManager";
 export * from "./Logger_safe";
 export * from "./Manufacturers";

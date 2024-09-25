@@ -18,14 +18,14 @@ import type { ZWaveOptions } from "./ZWaveOptions";
 
 export interface SerialAPICommandStateSchema {
 	states: {
-		sending: {};
-		waitForACK: {};
-		waitForResponse: {};
-		waitForCallback: {};
-		retry: {};
-		retryWait: {};
-		failure: {};
-		success: {};
+		sending: object;
+		waitForACK: object;
+		waitForResponse: object;
+		waitForCallback: object;
+		retry: object;
+		retryWait: object;
+		failure: object;
+		success: object;
 	};
 }
 

@@ -22,7 +22,7 @@ export class ZnifferCCParsingContext implements ZWaveHost {
 	getSafeCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
-		endpointIndex?: number | undefined,
+		endpointIndex?: number,
 	): number {
 		// We don't know any versions of the node. Try parsing with the highest version we support
 		return getImplementedVersion(cc);
@@ -31,7 +31,7 @@ export class ZnifferCCParsingContext implements ZWaveHost {
 	getSupportedCCVersion(
 		cc: CommandClasses,
 		nodeId: number,
-		endpointIndex?: number | undefined,
+		endpointIndex?: number,
 	): number {
 		// We don't know any versions of the node. Try parsing with the highest version we support
 		return getImplementedVersion(cc);
@@ -40,7 +40,7 @@ export class ZnifferCCParsingContext implements ZWaveHost {
 	isCCSecure(
 		cc: CommandClasses,
 		nodeId: number,
-		endpointIndex?: number | undefined,
+		endpointIndex?: number,
 	): boolean {
 		// Don't care when parsing
 		return false;

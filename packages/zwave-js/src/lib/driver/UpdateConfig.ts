@@ -24,7 +24,7 @@ export async function checkForConfigUpdates(
 		registry = await got
 			.get("https://registry.npmjs.org/@zwave-js/config")
 			.json();
-	} catch (e) {
+	} catch {
 		throw new ZWaveError(
 			`Could not check for config updates: Failed to download package information!`,
 			ZWaveErrorCodes.Config_Update_RegistryError,
@@ -177,7 +177,7 @@ export async function installConfigUpdateInDocker(
 				// do nothing
 			},
 		});
-	} catch (e) {
+	} catch {
 		throw new ZWaveError(
 			`Config update failed: Another installation is already in progress!`,
 			ZWaveErrorCodes.Config_Update_InstallFailed,
@@ -267,7 +267,7 @@ export async function installConfigUpdateInDocker(
 			await fs.remove(configModuleDir);
 			await fs.rename(extractedDir, configModuleDir);
 		}
-	} catch (e) {
+	} catch {
 		await freeLock();
 		throw new ZWaveError(
 			`Config update failed: Could not extract tarball`,

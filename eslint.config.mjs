@@ -160,7 +160,7 @@ export default tseslint.config(
 	},
 	// Disable unnecessarily strict rules for test files
 	{
-		files: ["*.test.ts", "*.test.ava.ts"],
+		files: ["**/*.test.ts"],
 		rules: {
 			"@typescript-eslint/explicit-function-return-type": "off",
 			"@typescript-eslint/no-empty-function": "off",
@@ -182,7 +182,7 @@ export default tseslint.config(
 	},
 	// Disable all TS-related rules for JS files
 	{
-		files: ["*.js"],
+		files: ["**/*.js"],
 		rules: {
 			"@typescript-eslint/*": "off",
 		},

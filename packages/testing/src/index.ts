@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-exports */
 export * from "./CCSpecificCapabilities";
 export * from "./MockController";
 export { getDefaultSupportedFunctionTypes } from "./MockControllerCapabilities";

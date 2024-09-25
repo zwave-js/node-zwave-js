@@ -43,13 +43,10 @@ export type NodeInterviewFailedEventArgs =
 		errorMessage: string;
 		isFinal: boolean;
 	}
-	& (
-		| {
-			attempt: number;
-			maxAttempts: number;
-		}
-		| {}
-	);
+	& AllOrNone<{
+		attempt: number;
+		maxAttempts: number;
+	}>;
 
 export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
 export type ZWaveNodeValueUpdatedArgs =

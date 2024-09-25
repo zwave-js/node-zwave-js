@@ -21,6 +21,7 @@ export function gotDeserializationOptions(
 	return "object" in options;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NVMFileCreationOptions extends NVMFileBaseOptions {}
 
 export type NVMFileOptions =
