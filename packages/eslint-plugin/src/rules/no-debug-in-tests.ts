@@ -1,6 +1,6 @@
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
 import path from "node:path";
-import { type Rule, repoRoot } from "../utils.js";
+import { repoRoot } from "../utils.js";
 
 const isFixMode = process.argv.some((arg) => arg.startsWith("--fix"));
 
@@ -20,7 +20,7 @@ const integrationTestExportNames = new Set([
 	"integrationTest",
 ]);
 
-export const noDebugInTests: Rule = ESLintUtils.RuleCreator.withoutDocs({
+export const noDebugInTests = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		const integrationTestMethodNames = new Set<string>();
 

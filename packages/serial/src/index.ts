@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-exports */
 export { SerialLogger } from "./Logger";
 export type { SerialLogContext } from "./Logger_safe";
 export * from "./MessageHeaders";

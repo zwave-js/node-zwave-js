@@ -2,7 +2,6 @@ import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { type Rule } from "../utils";
 
 // Whitelist some imports that are known not to import forbidden modules
 const whitelistedImports = [
@@ -186,7 +185,7 @@ function resolveSourceFileFromDefinition(
 
 const forbiddenImportsRegex = /^@forbiddenImports (?<forbidden>.*?)$/;
 
-export const noForbiddenImports: Rule = ESLintUtils.RuleCreator.withoutDocs({
+export const noForbiddenImports = ESLintUtils.RuleCreator.withoutDocs({
 	create(context) {
 		// And only those with at least one /* @forbiddenImports ... */ comment
 		const comments = context.sourceCode.getAllComments()

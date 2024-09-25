@@ -48,7 +48,7 @@ function validatePayloadInternal(
 }
 
 // Export and augment the validatePayload method with a reason
-export const validatePayload = validatePayloadInternal.bind(
+export const validatePayload: ValidatePayload = validatePayloadInternal.bind(
 	undefined,
 	undefined,
 ) as ValidatePayload;

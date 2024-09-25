@@ -43,14 +43,10 @@ export type NodeInterviewFailedEventArgs =
 		errorMessage: string;
 		isFinal: boolean;
 	}
-	& (
-		| {
-			attempt: number;
-			maxAttempts: number;
-		}
-		// eslint-disable-next-line @typescript-eslint/ban-types
-		| {}
-	);
+	& AllOrNone<{
+		attempt: number;
+		maxAttempts: number;
+	}>;
 
 export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
 export type ZWaveNodeValueUpdatedArgs =

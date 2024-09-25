@@ -1,12 +1,12 @@
 import { type AST } from "jsonc-eslint-parser";
-import { CONFIG_PARAM } from "../jsonSelectors";
-import { type JSONCRule, removeJSONProperty } from "../utils";
+import { CONFIG_PARAM } from "../jsonSelectors.js";
+import { type JSONCRule, removeJSONProperty } from "../utils.js";
 
 export const noUselessDescription: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Disallow "empty" param descriptions
@@ -39,11 +39,12 @@ export const noUselessDescription: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description: `Disallows "empty" and useless descriptions`,
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"no-useless-description": "The description {{what}} is not allowed",
 		},

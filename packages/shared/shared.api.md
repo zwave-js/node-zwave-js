@@ -319,7 +319,7 @@ export class TimedExpectation<TResult = void, TPredicate = never> implements Pro
 // Warning: (ae-missing-release-tag) "TypedClassDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type TypedClassDecorator<TTarget extends Object> = <T extends TTarget, TConstructor extends new (...args: any[]) => T>(apiClass: TConstructor) => TConstructor | void;
+export type TypedClassDecorator<TTarget extends object> = <T extends TTarget, TConstructor extends new (...args: any[]) => T>(apiClass: TConstructor) => TConstructor | void;
 
 // Warning: (ae-missing-release-tag) "TypedEventEmitter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 // Warning: (ae-missing-release-tag) "TypedEventEmitter" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -363,7 +363,7 @@ export class TypedEventEmitter<TEvents extends Record<keyof TEvents, EventHandle
 // Warning: (ae-missing-release-tag) "TypedPropertyDecorator" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type TypedPropertyDecorator<TTarget extends Object> = <T extends TTarget>(target: T, propertyKey: string | symbol) => void;
+export type TypedPropertyDecorator<TTarget extends object> = <T extends TTarget>(target: T, propertyKey: string | symbol) => void;
 
 // Warning: (ae-missing-release-tag) "UnionToIntersection" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

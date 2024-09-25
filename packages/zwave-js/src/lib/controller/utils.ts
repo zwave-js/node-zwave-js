@@ -17,18 +17,18 @@ import {
 export function assertProvisioningEntry(
 	arg: any,
 ): asserts arg is PlannedProvisioningEntry {
-	const fail = (why: string) => {
+	function fail(why: string): never {
 		throw new ZWaveError(
 			`Invalid provisioning entry: ${why}`,
 			ZWaveErrorCodes.Argument_Invalid,
 		);
-	};
+	}
 
-	if (!isObject(arg)) throw fail("not an object");
+	if (!isObject(arg)) fail("not an object");
 
-	if (typeof arg.dsk !== "string") throw fail("dsk must be a string");
+	if (typeof arg.dsk !== "string") fail("dsk must be a string");
 	else if (!isValidDSK(arg.dsk)) {
-		throw fail("dsk does not have the correct format");
+		fail("dsk does not have the correct format");
 	}
 
 	if (
@@ -36,29 +36,29 @@ export function assertProvisioningEntry(
 		&& (typeof arg.status !== "number"
 			|| !(arg.status in ProvisioningEntryStatus))
 	) {
-		throw fail("status is not a ProvisioningEntryStatus");
+		fail("status is not a ProvisioningEntryStatus");
 	}
 
 	if (!isArray(arg.securityClasses)) {
-		throw fail("securityClasses must be an array");
+		fail("securityClasses must be an array");
 	} else if (
 		!arg.securityClasses.every(
 			(sc: any) => typeof sc === "number" && sc in SecurityClass,
 		)
 	) {
-		throw fail("securityClasses contains invalid entries");
+		fail("securityClasses contains invalid entries");
 	}
 
 	if (arg.requestedSecurityClasses != undefined) {
 		if (!isArray(arg.requestedSecurityClasses)) {
-			throw fail("requestedSecurityClasses must be an array");
+			fail("requestedSecurityClasses must be an array");
 		} else if (
 			!arg.requestedSecurityClasses.every(
 				(sc: any) => typeof sc === "number" && sc in SecurityClass,
 			)
 		) {
 			{
-				throw fail("requestedSecurityClasses contains invalid entries");
+				fail("requestedSecurityClasses contains invalid entries");
 			}
 		}
 	}
@@ -67,18 +67,18 @@ export function assertProvisioningEntry(
 		arg.protocol != undefined
 		&& (typeof arg.protocol !== "number" || !(arg.protocol in Protocols))
 	) {
-		throw fail("protocol is not a valid");
+		fail("protocol is not a valid");
 	}
 
 	if (arg.supportedProtocols != undefined) {
 		if (!isArray(arg.supportedProtocols)) {
-			throw fail("supportedProtocols must be an array");
+			fail("supportedProtocols must be an array");
 		} else if (
 			!arg.supportedProtocols.every(
 				(p: any) => typeof p === "number" && p in Protocols,
 			)
 		) {
-			throw fail("supportedProtocols contains invalid entries");
+			fail("supportedProtocols contains invalid entries");
 		}
 	}
 }

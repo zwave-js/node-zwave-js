@@ -57,7 +57,7 @@ export class DeviceResetLocallyCCAPI extends CCAPI {
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 			});
-		} catch (e) {
+		} catch {
 			// Don't care
 		}
 	}

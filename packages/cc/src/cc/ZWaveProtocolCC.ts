@@ -207,7 +207,7 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 					this.wakeUpTime = parseWakeUpTime(rest[0]);
 					this.dataRate = rest[1] & 0b111;
 				} else {
-					throw validatePayload.fail("Invalid payload length");
+					validatePayload.fail("Invalid payload length");
 				}
 			} else if (rest.length >= 1) {
 				this.wakeUpTime = parseWakeUpTime(rest[0]);
@@ -1001,7 +1001,7 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
 				].indexOf(this.payload[0]);
 				if (this.powerDampening === -1) this.powerDampening = 0;
 			} else {
-				throw validatePayload.fail("Invalid payload length!");
+				validatePayload.fail("Invalid payload length!");
 			}
 		} else {
 			if (options.powerDampening < 0 || options.powerDampening > 14) {

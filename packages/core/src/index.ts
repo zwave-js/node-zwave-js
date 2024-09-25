@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-exports */
 export * from "./abstractions/ICommandClass";
 export * from "./abstractions/IZWaveEndpoint";
 export * from "./abstractions/IZWaveNode";

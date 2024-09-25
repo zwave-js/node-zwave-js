@@ -33,7 +33,7 @@
     "clean": "del-cli build/ \"*.tsbuildinfo\"",
     "bootstrap": "yarn build",
     "pretest": "del-cli \"test/fixtures/*.js\" && tsc -p tsconfig.test.json && cpy \"test/build/test/fixtures/*.js\" test/fixtures && del-cli test/build",
-    "lint:ts": "eslint --cache --ext .ts \"src/**/*.ts\"",
+    "lint:ts": "eslint --cache \"src/**/*.ts\"",
     "lint:ts:fix": "yarn run lint:ts --fix",
     "test:ts": "ava",
     "test:dirty": "node -r ../../maintenance/esbuild-register.js ../maintenance/src/resolveDirtyTests.ts --run"

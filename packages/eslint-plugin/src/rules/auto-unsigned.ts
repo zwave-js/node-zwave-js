@@ -9,13 +9,13 @@ import {
 	insertBeforeJSONProperty,
 	paramInfoPropertyOrder,
 	removeJSONProperty,
-} from "../utils";
+} from "../utils.js";
 
 export const autoUnsigned: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		function suggestUnsigned(
 			parent: AST.JSONObjectExpression,
@@ -256,13 +256,14 @@ export const autoUnsigned: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				`Ensures that "unsigned = true" is used when necessary and omitted when not.`,
 		},
 		fixable: "code",
 		hasSuggestions: true,
-		schema: [],
+		schema: false,
 		messages: {
 			"invalid-value-size": "Value size {{valueSize}} is invalid!",
 			"incompatible-size":

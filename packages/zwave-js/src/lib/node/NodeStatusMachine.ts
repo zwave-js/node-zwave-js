@@ -2,19 +2,17 @@ import { type InterpreterFrom, Machine, type StateMachine } from "xstate";
 import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./_Types";
 
-/* eslint-disable @typescript-eslint/ban-types */
 export interface NodeStatusStateSchema {
 	states: {
-		unknown: {};
+		unknown: object;
 		// non-sleeping nodes are either dead or alive
-		dead: {};
-		alive: {};
+		dead: object;
+		alive: object;
 		// sleeping nodes are asleep or awake
-		asleep: {};
-		awake: {};
+		asleep: object;
+		awake: object;
 	};
 }
-/* eslint-enable @typescript-eslint/ban-types */
 
 const statusDict = {
 	unknown: NodeStatus.Unknown,

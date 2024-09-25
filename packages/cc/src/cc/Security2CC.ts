@@ -1002,11 +1002,11 @@ function testCCResponseForMessageEncapsulation(
 }
 
 function failNoSPAN(): never {
-	throw validatePayload.fail(ZWaveErrorCodes.Security2CC_NoSPAN);
+	validatePayload.fail(ZWaveErrorCodes.Security2CC_NoSPAN);
 }
 
 function failNoMPAN(): never {
-	throw validatePayload.fail(ZWaveErrorCodes.Security2CC_NoMPAN);
+	validatePayload.fail(ZWaveErrorCodes.Security2CC_NoMPAN);
 }
 
 // @publicAPI
@@ -1134,7 +1134,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					|| options.frameType === "broadcast"
 				) {
 					if (multicastGroupId == undefined) {
-						throw validatePayload.fail(
+						validatePayload.fail(
 							"Multicast frames without MGRP extension",
 						);
 					}
@@ -1158,7 +1158,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				} else {
 					this.securityManager.nextNonce(sendingNodeId);
 				}
-				throw validatePayload.fail(
+				validatePayload.fail(
 					"Invalid S2 extension",
 				);
 			}
@@ -1217,7 +1217,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						ctx.groupId,
 						{ type: MPANState.OutOfSync },
 					);
-					throw failNoMPAN();
+					failNoMPAN();
 				}
 
 				decrypt = () =>
@@ -1236,11 +1236,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 				// If we are not able to establish an SPAN yet, fail the decryption
 				if (spanState.type === SPANState.None) {
-					throw failNoSPAN();
+					failNoSPAN();
 				} else if (spanState.type === SPANState.RemoteEI) {
 					// TODO: The specs are not clear how to handle this case
 					// For now, do the same as if we didn't have any EI
-					throw failNoSPAN();
+					failNoSPAN();
 				}
 
 				decrypt = () =>
@@ -1296,11 +1296,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						ctx.groupId,
 						{ type: MPANState.OutOfSync },
 					);
-					throw validatePayload.fail(
+					validatePayload.fail(
 						ZWaveErrorCodes.Security2CC_CannotDecodeMulticast,
 					);
 				} else {
-					throw validatePayload.fail(
+					validatePayload.fail(
 						ZWaveErrorCodes.Security2CC_CannotDecode,
 					);
 				}
@@ -1320,7 +1320,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// Before we can continue, check if the command must be discarded
 			if (mustDiscardCommand) {
-				throw validatePayload.fail("Invalid extension");
+				validatePayload.fail("Invalid extension");
 			}
 
 			// If the MPAN extension was received, store the MPAN
@@ -1782,7 +1782,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// We've sent the other our receiver's EI and received its sender's EI,
 			// meaning we can now establish an SPAN
 			const senderEI = this.getSenderEI();
-			if (!senderEI) throw failNoSPAN();
+			if (!senderEI) failNoSPAN();
 			const receiverEI = spanState.receiverEI;
 
 			// How we do this depends on whether we know the security class of the other node

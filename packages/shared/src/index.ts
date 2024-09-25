@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-exports */
 export * from "./AsyncQueue";
 export * from "./EventEmitter";
 export { ObjectKeyMap } from "./ObjectKeyMap";

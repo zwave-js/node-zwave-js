@@ -16,7 +16,7 @@ interface TestContext {
 
 const test = ava as TestFn<TestContext>;
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const ownVersion = require("../package.json").version;
 
 test.before(async (t) => {

@@ -19,6 +19,7 @@ export function gotDeserializationOptions(
 	return "data" in options && Buffer.isBuffer(options.data);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NVMFileCreationOptions extends NVMFileBaseOptions {}
 
 export type NVMFileOptions =

@@ -1,11 +1,11 @@
 import { type AST } from "jsonc-eslint-parser";
-import { type JSONCRule } from "../utils";
+import { type JSONCRule } from "../utils.js";
 
 export const preferDefaultValue: JSONCRule.RuleModule = {
 	create(context) {
-		if (!context.parserServices.isJSON) {
-			return {};
-		}
+		// if (!context.parserServices.isJSON) {
+		// 	return {};
+		// }
 
 		return {
 			// Disallow "(default)" in labels and descriptions
@@ -41,12 +41,13 @@ export const preferDefaultValue: JSONCRule.RuleModule = {
 		};
 	},
 	meta: {
+		// @ts-expect-error Something is off about the rule types
 		docs: {
 			description:
 				`Ensures that the defaultValue property is used instead of mentioning in text that an option/value is the default`,
 		},
 		fixable: "code",
-		schema: [],
+		schema: false,
 		messages: {
 			"no-default":
 				"Do not use '(default)' in labels or descriptions. Use the 'defaultValue' property instead.",

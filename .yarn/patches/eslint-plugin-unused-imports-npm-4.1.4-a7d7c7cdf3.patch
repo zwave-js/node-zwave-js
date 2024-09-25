@@ -1,0 +1,24 @@
+diff --git a/dist/index.js b/dist/index.js
+index 924f1d410edf7ad3a217b9542d0455ee0954846e..92113759cd21a17b937c6b18369644a01802a9ae 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -7,6 +7,7 @@ var commaFilter = { filter: (token) => token.value === "," };
+ var includeCommentsFilter = { includeComments: true };
+ function makePredicate(isImport, addFixer) {
+   return (problem, context) => {
++    if (!problem.node && !problem.loc) return false;
+     const sourceCode = context.sourceCode || context.getSourceCode();
+     const { parent } = _nullishCoalesce(problem.node, () => ( // typescript-eslint >= 7.8 sets a range instead of a node
+     sourceCode.getNodeByRangeIndex(sourceCode.getIndexFromLoc(problem.loc.start))));
+diff --git a/dist/index.mjs b/dist/index.mjs
+index c9d421a8620f17748b9eef51d1480c2ba4a1b541..0752516e7adce3de842127f1a5e06bb0314e73e7 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -3,6 +3,7 @@ var commaFilter = { filter: (token) => token.value === "," };
+ var includeCommentsFilter = { includeComments: true };
+ function makePredicate(isImport, addFixer) {
+   return (problem, context) => {
++    if (!problem.node && !problem.loc) return false;
+     const sourceCode = context.sourceCode || context.getSourceCode();
+     const { parent } = problem.node ?? // typescript-eslint >= 7.8 sets a range instead of a node
+     sourceCode.getNodeByRangeIndex(sourceCode.getIndexFromLoc(problem.loc.start));

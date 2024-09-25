@@ -524,7 +524,7 @@ const handleRequestNodeInfo: MockControllerBehavior = {
 						nodeId: nodeInfo.nodeId as number,
 					},
 				});
-			} catch (e) {
+			} catch {
 				cb = new ApplicationUpdateRequestNodeInfoRequestFailed(host);
 			}
 			controller.state.set(
