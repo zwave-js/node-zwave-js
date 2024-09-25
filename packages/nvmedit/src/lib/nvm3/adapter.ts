@@ -576,18 +576,18 @@ export class NVM3Adapter implements NVMAdapter {
 		property: ControllerNVMProperty,
 		value: any,
 	): Promise<void> {
-		const failFileMissing = (): never => {
+		function failFileMissing(): never {
 			throw new ZWaveError(
 				"Cannot set property in NVM for non-existing file",
 				ZWaveErrorCodes.NVM_ObjectNotFound,
 			);
-		};
+		}
 
 		const expectFile = async <T extends NVMFile>(
 			fileId: number,
 		): Promise<T> => {
 			const file = await this._getFile<T>(fileId);
-			if (!file) throw failFileMissing();
+			if (!file) failFileMissing();
 			return file;
 		};
 

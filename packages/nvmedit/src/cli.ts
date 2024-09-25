@@ -51,7 +51,7 @@ void yargs
 			} catch (e) {
 				try {
 					json = await nvm500ToJSON(buffer);
-				} catch (e) {
+				} catch {
 					console.error(e);
 					process.exit(1);
 				}
