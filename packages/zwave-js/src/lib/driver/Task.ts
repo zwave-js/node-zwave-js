@@ -1,4 +1,4 @@
-import { highResTimestamp } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes, highResTimestamp } from "@zwave-js/core";
 import { createWrappingCounter } from "@zwave-js/shared";
 import { type CompareResult } from "alcalzone-shared/comparable";
 import {
@@ -30,6 +30,7 @@ export interface Task<TReturn> {
 	/** The current state of the task */
 	get state(): TaskState;
 
+	readonly generator: ReturnType<TaskBuilder<TReturn>["task"]> | undefined;
 	readonly promise: Promise<TReturn>;
 }
 
@@ -133,6 +134,51 @@ export class TaskScheduler {
 		return task.promise;
 	}
 
+	public async removeTasks(
+		predicate: (task: Task<unknown>) => boolean,
+		reason?: ZWaveError,
+	): Promise<void> {
+		// Collect tasks that should be removed, but in reverse order,
+		// so that we handle the current task last.
+		const tasksToRemove: Task<unknown>[] = [];
+		let removeCurrentTask = false;
+		for (const task of this._tasks) {
+			if (predicate(task)) {
+				if (task === this._currentTask) {
+					removeCurrentTask = true;
+				} else {
+					tasksToRemove.push(task);
+				}
+			}
+		}
+
+		reason ??= new ZWaveError(
+			"Task was removed",
+			ZWaveErrorCodes.Driver_TaskRemoved,
+		);
+
+		for (const task of tasksToRemove) {
+			this._tasks.remove(task);
+			if (
+				task.state === TaskState.Active
+				|| task.state === TaskState.Waiting
+			) {
+				// The task is running, clean it up
+				await task.reset();
+			}
+			task.reject(reason);
+		}
+
+		if (removeCurrentTask && this._currentTask) {
+			this._tasks.remove(this._currentTask);
+			await this._currentTask.reset();
+			this._currentTask.reject(reason);
+			this._currentTask = undefined;
+		}
+
+		if (this._continueSignal) this._continueSignal.resolve();
+	}
+
 	/** Creates a task that can be executed */
 	private createTask<T>(builder: TaskBuilder<T>): Task<T> {
 		let state = TaskState.None;
@@ -159,8 +205,8 @@ export class TaskScheduler {
 
 				generator ??= builder.task();
 				state = TaskState.Active;
-				const { value, done } = await generator.next();
 
+				const { value, done } = await generator.next();
 				if (done) {
 					state = TaskState.Done;
 					return {
@@ -198,6 +244,9 @@ export class TaskScheduler {
 			},
 			get state() {
 				return state;
+			},
+			get generator() {
+				return generator;
 			},
 		};
 	}

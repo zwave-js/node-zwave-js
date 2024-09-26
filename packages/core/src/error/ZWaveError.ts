@@ -27,6 +27,9 @@ export enum ZWaveErrorCodes {
 	Driver_NoErrorHandler,
 	Driver_FeatureDisabled,
 
+	/** The task was removed from the task queue */
+	Driver_TaskRemoved,
+
 	/** There was a timeout while waiting for a message from the controller */
 	Controller_Timeout = 200,
 	/** There was a timeout while waiting for a response from a node */

@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
 import { wait } from "alcalzone-shared/async";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import test from "ava";
@@ -257,7 +258,7 @@ test("Higher priority tasks interrupt lower priority ones, part 2", async (t) =>
 		},
 	});
 
-	await Promise.all([task1, task2]);
+	await Promise.all([task1, task2, task3]);
 
 	t.deepEqual(order, ["1a", "2a", "2b", "2c", "3a", "3b", "3c", "1b", "1c"]);
 });
@@ -803,4 +804,271 @@ test("Failing tasks reject the corresponding Promise", async (t) => {
 
 	await t.throwsAsync(task1, { message: "Task 1 failed" });
 	t.is(await task2, 2);
+});
+
+test("Tasks can be removed if they haven't been started yet", async (t) => {
+	const scheduler = new TaskScheduler();
+	const order: string[] = [];
+	scheduler.start();
+
+	const longRunningThing = createDeferredPromise<void>();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+			await longRunningThing;
+			yield;
+			order.push("1b");
+			return;
+		},
+	});
+
+	await wait(1);
+
+	const task2 = scheduler.queueTask({
+		name: "task2",
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("2a");
+			yield;
+			order.push("2b");
+			return;
+		},
+	});
+
+	// Task 2 should not have started yet
+	await wait(1);
+	t.deepEqual(order, ["1a"]);
+
+	await scheduler.removeTasks((t) => t.name === "task2");
+
+	await assertZWaveError(t, () => task2, {
+		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
+	});
+
+	// Run to completion
+	longRunningThing.resolve();
+	await task1;
+	t.deepEqual(order, ["1a", "1b"]);
+});
+
+test("Tasks can be removed while paused", async (t) => {
+	const scheduler = new TaskScheduler();
+	const order: string[] = [];
+	scheduler.start();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+			yield () => wait(10);
+			order.push("1b");
+			return;
+		},
+		cleanup() {
+			order.push("1c");
+			return Promise.resolve();
+		},
+	});
+
+	await wait(1);
+	// The task should have run to the first yield
+	t.deepEqual(order, ["1a"]);
+
+	await scheduler.removeTasks((t) => true);
+
+	await assertZWaveError(t, () => task1, {
+		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
+	});
+
+	t.deepEqual(order, ["1a", "1c"]);
+});
+
+test("Tasks can be removed while paused, part 2", async (t) => {
+	const scheduler = new TaskScheduler();
+	const order: string[] = [];
+	scheduler.start();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+			yield () => wait(10);
+			order.push("1b");
+			return;
+		},
+		cleanup() {
+			order.push("1c");
+			return Promise.resolve();
+		},
+	});
+
+	const task2 = scheduler.queueTask({
+		name: "task2",
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("2a");
+			yield () => wait(10);
+			order.push("2b");
+			return;
+		},
+		cleanup() {
+			order.push("2c");
+			return Promise.resolve();
+		},
+	});
+
+	await wait(1);
+	// The tasks should have run to the first yield
+	t.deepEqual(order, ["1a", "2a"]);
+
+	await scheduler.removeTasks((t) => true);
+
+	await assertZWaveError(t, () => task1, {
+		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
+	});
+	await assertZWaveError(t, () => task2, {
+		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
+	});
+
+	// Current task "1" gets cleaned up last
+	t.deepEqual(order, ["1a", "2a", "2c", "1c"]);
+});
+
+test("Tasks can be removed while running", async (t) => {
+	const scheduler = new TaskScheduler();
+	const order: string[] = [];
+	scheduler.start();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+			await wait(10);
+			yield;
+			order.push("1b");
+		},
+		cleanup() {
+			order.push("1c");
+			return Promise.resolve();
+		},
+	});
+
+	const task2 = scheduler.queueTask({
+		name: "task2",
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("2a");
+			yield;
+			order.push("2b");
+		},
+		cleanup() {
+			order.push("2c");
+			return Promise.resolve();
+		},
+	});
+
+	await wait(1);
+	// Task 1 should have run to the first yield,
+	// Task 2 should not have started yet
+	t.deepEqual(order, ["1a"]);
+
+	await scheduler.removeTasks((t) => true);
+
+	await assertZWaveError(t, () => task1, {
+		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
+	});
+	await assertZWaveError(t, () => task2, {
+		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
+	});
+
+	// Only task 1 should have been cleaned up, since task 2 was not started
+	t.deepEqual(order, ["1a", "1c"]);
+});
+
+test("Tasks can be removed while running and paused", async (t) => {
+	const scheduler = new TaskScheduler();
+	const order: string[] = [];
+	scheduler.start();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+			yield () => wait(10);
+			order.push("1b");
+		},
+		cleanup() {
+			order.push("1c");
+			return Promise.resolve();
+		},
+	});
+
+	const task2 = scheduler.queueTask({
+		name: "task2",
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("2a");
+			await wait(10);
+			yield;
+			order.push("2b");
+		},
+		cleanup() {
+			order.push("2c");
+			return Promise.resolve();
+		},
+	});
+
+	await wait(1);
+	// Both tasks should have run to the first yield.
+	t.deepEqual(order, ["1a", "2a"]);
+
+	await scheduler.removeTasks((t) => true);
+
+	await assertZWaveError(t, () => task1, {
+		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
+	});
+	await assertZWaveError(t, () => task2, {
+		errorCode: ZWaveErrorCodes.Driver_TaskRemoved,
+	});
+
+	// Both tasks should be cleaned up, 1c before 2c,
+	// since task 2 was the current task and should be cleaned up last
+	t.deepEqual(order, ["1a", "2a", "1c", "2c"]);
+});
+
+test("The task rejection uses the given error, if any", async (t) => {
+	const scheduler = new TaskScheduler();
+	const order: string[] = [];
+	scheduler.start();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+			yield () => wait(10);
+			order.push("1b");
+			return;
+		},
+		cleanup() {
+			order.push("1c");
+			return Promise.resolve();
+		},
+	});
+
+	await wait(1);
+	// The task should have run to the first yield
+	t.deepEqual(order, ["1a"]);
+
+	await scheduler.removeTasks(
+		(t) => true,
+		new ZWaveError("Test error", ZWaveErrorCodes.Driver_Reset),
+	);
+
+	await assertZWaveError(t, () => task1, {
+		errorCode: ZWaveErrorCodes.Driver_Reset,
+	});
+
+	t.deepEqual(order, ["1a", "1c"]);
 });
