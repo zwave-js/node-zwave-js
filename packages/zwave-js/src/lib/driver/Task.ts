@@ -25,6 +25,8 @@ export interface Task<TReturn> {
 	reset(): Promise<void>;
 	/** Resolves the task's promise to notify the caller */
 	resolve(result: TReturn): void;
+	/** Rejects the task's promise to notify the caller */
+	reject(error: Error): void;
 	/** The current state of the task */
 	get state(): TaskState;
 
@@ -182,11 +184,17 @@ export class TaskScheduler {
 			},
 			async reset() {
 				if (state === TaskState.None) return;
-				await builder.cleanup?.();
+				state = TaskState.None;
+				waitFor = undefined;
 				generator = undefined;
+
+				await builder.cleanup?.();
 			},
 			resolve(result) {
 				promise.resolve(result);
+			},
+			reject(error) {
+				promise.reject(error);
 			},
 			get state() {
 				return state;
@@ -230,18 +238,33 @@ export class TaskScheduler {
 					this._currentTask = firstTask;
 				}
 
+				const cleanupCurrentTask = async () => {
+					if (this._currentTask) {
+						this._tasks.remove(this._currentTask);
+						await this._currentTask.reset();
+						this._currentTask = undefined;
+					}
+				};
+
 				// Execute the current task one step further
 				waitFor = undefined;
-				const stepResult = await this._currentTask.step();
+				let stepResult: TaskStepResult<unknown>;
+				try {
+					stepResult = await this._currentTask.step();
+				} catch (e) {
+					// The task threw an error, expose the result and clean up.
+					this._currentTask.reject(e as Error);
+					await cleanupCurrentTask();
+					// Then continue with the next iteration
+					continue;
+				}
+
 				if (stepResult.newState === TaskState.Done) {
 					// The task is done, clean up
 					this._currentTask.resolve(stepResult.result);
-					this._tasks.remove(this._currentTask);
-					await this._currentTask.reset();
-					this._currentTask = undefined;
-
-					// If there is still a task left, continue with the next iteration
-					if (this._tasks.length > 0) continue;
+					await cleanupCurrentTask();
+					// Then continue with the next iteration
+					continue;
 				} else if (stepResult.newState === TaskState.Waiting) {
 					// The task is waiting for something
 

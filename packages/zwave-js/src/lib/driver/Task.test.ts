@@ -780,3 +780,27 @@ test("Tasks can queue lower-priority tasks without waiting for them", async (t) 
 
 	t.deepEqual(order, ["outer", "inner"]);
 });
+
+test("Failing tasks reject the corresponding Promise", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			yield;
+			throw new Error("Task 1 failed");
+		},
+	});
+
+	const task2 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			yield;
+			return 2;
+		},
+	});
+
+	await t.throwsAsync(task1, { message: "Task 1 failed" });
+	t.is(await task2, 2);
+});
