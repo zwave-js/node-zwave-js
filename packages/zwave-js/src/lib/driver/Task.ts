@@ -56,12 +56,20 @@ export interface TaskBuilder<TReturn> {
 	cleanup?: () => Promise<void>;
 }
 
+/**
+ * The priority of a task.
+ *
+ * Higher priority tasks are executed first and interrupt lower priority tasks.
+ * The recommended priority for application-initiated communication is `Normal`.
+ * `Low` and `Lower` are recommended for internal long-running tasks that should not interfere with user-initiated tasks.
+ * `Idle` is recommended for tasks that should only run when no other tasks are pending.
+ */
 export enum TaskPriority {
-	/** The task gets proritized above other tasks and interrupts lower-priority tasks when scheduled */
+	Highest,
 	High,
-	/** The task gets executed normally */
 	Normal,
-	/** The task only gets executed when there's nothing to do */
+	Low,
+	Lower,
 	Idle,
 }
 
