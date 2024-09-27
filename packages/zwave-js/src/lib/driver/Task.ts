@@ -67,14 +67,16 @@ export interface TaskBuilder<TReturn, TInner = unknown> {
  * The recommended priority for application-initiated communication is `Normal`.
  * `Low` and `Lower` are recommended for internal long-running tasks that should not interfere with user-initiated tasks.
  * `Idle` is recommended for tasks that should only run when no other tasks are pending.
+ *
+ * When nesting multiple levels of tasks, the "inner" tasks should decrement the priority by 1.
  */
 export enum TaskPriority {
 	Highest,
-	High,
-	Normal,
-	Low,
-	Lower,
-	Idle,
+	High = 10,
+	Normal = 20,
+	Low = 30,
+	Lower = 40,
+	Idle = 50,
 }
 
 export enum TaskState {
@@ -138,6 +140,11 @@ export type TaskTag =
 	| {
 		// Rebuild routes for a single node
 		id: "rebuild-node-routes";
+		nodeId: number;
+	}
+	| {
+		// Rebuild routes for a single node -> wait for node to wake up
+		id: "rebuild-node-routes-wakeup";
 		nodeId: number;
 	};
 

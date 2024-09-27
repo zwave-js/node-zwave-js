@@ -143,6 +143,7 @@ import crypto from "node:crypto";
 import type { Driver } from "../driver/Driver";
 import { cacheKeyUtils, cacheKeys } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
+import { type TaskBuilder, TaskPriority } from "../driver/Task";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { VirtualNode } from "../node/VirtualNode";
@@ -432,6 +433,7 @@ import {
 } from "./_Types";
 import {
 	assertProvisioningEntry,
+	isRebuildRoutesTask,
 	sdkVersionGt,
 	sdkVersionGte,
 	sdkVersionLt,
@@ -933,10 +935,9 @@ export class ZWaveController
 	 */
 	public readonly indicatorValues = new Map<number, IndicatorObject[]>();
 
-	private _isRebuildingRoutes: boolean = false;
 	/** Returns whether the routes are currently being rebuilt for one or more nodes. */
 	public get isRebuildingRoutes(): boolean {
-		return this._isRebuildingRoutes;
+		return !!this.driver.scheduler.findTask(isRebuildRoutesTask);
 	}
 
 	/**
@@ -4558,7 +4559,7 @@ export class ZWaveController
 		>
 		| undefined
 	{
-		if (!this._isRebuildingRoutes) return undefined;
+		if (!this.isRebuildingRoutes) return undefined;
 		return new Map(this._rebuildRoutesProgress);
 	}
 
@@ -4572,8 +4573,10 @@ export class ZWaveController
 	 */
 	public beginRebuildingRoutes(options: RebuildRoutesOptions = {}): boolean {
 		// Don't start the process twice
-		if (this._isRebuildingRoutes) return false;
-		this._isRebuildingRoutes = true;
+		const existingTask = this.driver.scheduler.findTask(
+			(t) => t.tag?.id === "rebuild-routes",
+		);
+		if (existingTask) return false;
 
 		options.includeSleeping ??= true;
 
@@ -4609,9 +4612,7 @@ export class ZWaveController
 		}
 
 		// Rebuild routes in the background
-		void this.rebuildRoutes(options).catch(() => {
-			/* ignore errors */
-		});
+		void this.rebuildRoutesInternal(options).catch(noop);
 
 		// And update the progress once at the start
 		this.emit(
@@ -4622,7 +4623,17 @@ export class ZWaveController
 		return true;
 	}
 
-	private async rebuildRoutes(options: RebuildRoutesOptions): Promise<void> {
+	private rebuildRoutesInternal(
+		options: RebuildRoutesOptions,
+	): Promise<void> {
+		return this.driver.scheduler.queueTask(
+			this.getRebuildRoutesTask(options),
+		);
+	}
+
+	private getRebuildRoutesTask(
+		options: RebuildRoutesOptions,
+	): TaskBuilder<void> {
 		const pendingNodes = new Set(
 			[...this._rebuildRoutesProgress]
 				.filter(([, status]) => status === "pending")
@@ -4657,88 +4668,132 @@ export class ZWaveController
 			}
 		};
 
-		// We work our way outwards from the controller and start with non-sleeping nodes, one by one
-		try {
-			const neighbors = await this.getNodeNeighbors(this._ownNodeId!);
-			neighbors.forEach((id) => addTodo(id));
-		} catch {
-			// ignore
-		}
+		const self = this;
 
-		const doRebuildRoutes = async (nodeId: number) => {
-			// await the process for each node and convert errors to a non-successful result
-			const result = await this.rebuildNodeRoutesInternal(nodeId).catch(
-				() => false,
-			);
-			if (!this._isRebuildingRoutes) return;
+		return {
+			priority: TaskPriority.Lower,
+			tag: { id: "rebuild-routes" },
+			task: async function* rebuildRoutesTask() {
+				// We work our way outwards from the controller and start with non-sleeping nodes, one by one
+				try {
+					const neighbors = await self.getNodeNeighbors(
+						self._ownNodeId!,
+					);
+					neighbors.forEach((id) => addTodo(id));
+				} catch {
+					// ignore
+				}
 
-			// Track the success in a map
-			this._rebuildRoutesProgress.set(nodeId, result ? "done" : "failed");
-			// Notify listeners about the progress
-			this.emit(
-				"rebuild routes progress",
-				new Map(this._rebuildRoutesProgress),
-			);
+				yield; // Give the task scheduler time to do something else
 
-			// Figure out which nodes to do next
-			try {
-				const neighbors = await this.getNodeNeighbors(nodeId);
-				neighbors.forEach((id) => addTodo(id));
-			} catch {
-				// ignore
-			}
+				async function* doRebuildRoutes(nodeId: number) {
+					// Await the process for each node and convert errors to a non-successful result
+					const result: boolean = yield () =>
+						// Increase priority by 2, because this call can be nested two levels deep
+						self.rebuildNodeRoutesInternal(nodeId, 2)
+							.catch(() => false);
+
+					// Track the success in a map
+					self._rebuildRoutesProgress.set(
+						nodeId,
+						result ? "done" : "failed",
+					);
+					// Notify listeners about the progress
+					self.emit(
+						"rebuild routes progress",
+						new Map(self._rebuildRoutesProgress),
+					);
+
+					yield; // Give the task scheduler time to do something else
+
+					// Figure out which nodes to do next
+					try {
+						const neighbors = await self.getNodeNeighbors(nodeId);
+						neighbors.forEach((id) => addTodo(id));
+					} catch {
+						// ignore
+					}
+
+					yield; // Give the task scheduler time to do something else
+				}
+
+				// First try to rebuild routes for as many nodes as possible one by one
+				while (todoListening.length > 0) {
+					const nodeId = todoListening.shift()!;
+					yield* doRebuildRoutes(nodeId);
+				}
+
+				// We might end up with a few unconnected listening nodes, try to rebuild routes for them too
+				pendingNodes.forEach((nodeId) => addTodo(nodeId));
+				while (todoListening.length > 0) {
+					const nodeId = todoListening.shift()!;
+					yield* doRebuildRoutes(nodeId);
+				}
+
+				if (options.includeSleeping) {
+					// Now do all sleeping nodes at once
+					self.driver.controllerLog.print(
+						"Rebuilding routes for sleeping nodes when they wake up",
+					);
+
+					const tasks = todoSleeping.map((nodeId) =>
+						self.nodes.get(nodeId)
+					).filter((node) => node != undefined)
+						.map((node) => {
+							const sleepingNodeTask: TaskBuilder<void> = {
+								priority: TaskPriority.Lower - 1,
+								tag: {
+									id: "rebuild-node-routes-wakeup",
+									nodeId: node.id,
+								},
+								task:
+									async function* rebuildSleepingNodeRoutesTask() {
+										// Pause the task until the node wakes up
+										yield () => node.waitForWakeup();
+										yield* doRebuildRoutes(node.id);
+									},
+							};
+							return self.driver.scheduler.queueTask(
+								sleepingNodeTask,
+							);
+						});
+					// Pause until all sleeping nodes have been processed
+					yield () => Promise.all(tasks);
+				}
+
+				self.driver.controllerLog.print(
+					"rebuilding routes completed",
+				);
+
+				self.emit(
+					"rebuild routes done",
+					new Map(self._rebuildRoutesProgress),
+				);
+
+				// We're done!
+				self._rebuildRoutesProgress.clear();
+			},
 		};
-
-		// First try to rebuild routes for as many nodes as possible one by one
-		while (todoListening.length > 0) {
-			const nodeId = todoListening.shift()!;
-			await doRebuildRoutes(nodeId);
-			if (!this._isRebuildingRoutes) return;
-		}
-
-		// We might end up with a few unconnected listening nodes, try to rebuild routes for them too
-		pendingNodes.forEach((nodeId) => addTodo(nodeId));
-		while (todoListening.length > 0) {
-			const nodeId = todoListening.shift()!;
-			await doRebuildRoutes(nodeId);
-			if (!this._isRebuildingRoutes) return;
-		}
-
-		if (options.includeSleeping) {
-			// Now do all sleeping nodes at once
-			this.driver.controllerLog.print(
-				"Rebuilding routes for sleeping nodes when they wake up",
-			);
-
-			const tasks = todoSleeping.map((nodeId) => doRebuildRoutes(nodeId));
-			await Promise.all(tasks);
-		}
-
-		// Only emit the done event when the process wasn't stopped in the meantime
-		if (this._isRebuildingRoutes) {
-			this.driver.controllerLog.print("rebuilding routes completed");
-
-			this.emit(
-				"rebuild routes done",
-				new Map(this._rebuildRoutesProgress),
-			);
-		} else {
-			this.driver.controllerLog.print("rebuilding routes aborted");
-		}
-		// We're done!
-		this._isRebuildingRoutes = false;
-		this._rebuildRoutesProgress.clear();
 	}
 
 	/**
 	 * Stops the route rebuilding process. Resolves false if the process was not active, true otherwise.
 	 */
 	public stopRebuildingRoutes(): boolean {
+		const hasTasks = !!this.driver.scheduler.findTask(isRebuildRoutesTask);
+
 		// don't stop it twice
-		if (!this._isRebuildingRoutes) return false;
-		this._isRebuildingRoutes = false;
+		if (!hasTasks) return false;
 
 		this.driver.controllerLog.print(`stopping route rebuilding process...`);
+
+		// Stop all tasks that are part of the route rebuilding process
+		// FIXME: This should be an async function that waits for the task removal
+		void this.driver.scheduler.removeTasks(isRebuildRoutesTask).then(() => {
+			this.driver.controllerLog.print(
+				"rebuilding routes aborted",
+			);
+		});
 
 		// Cancel all transactions that were created by the route rebuilding process
 		this.driver.rejectTransactions(
@@ -4778,16 +4833,6 @@ export class ZWaveController
 			);
 		}
 
-		// Don't start the process twice
-		if (this._isRebuildingRoutes) {
-			this.driver.controllerLog.logNode(
-				nodeId,
-				`Cannot rebuild routes because another rebuilding process is in progress.`,
-			);
-			return false;
-		}
-		this._isRebuildingRoutes = true;
-
 		// Figure out if nodes are responsive before attempting to rebuild routes
 		if (
 			// The node is known to be dead
@@ -4806,173 +4851,215 @@ export class ZWaveController
 			}
 		}
 
-		try {
-			return await this.rebuildNodeRoutesInternal(nodeId);
-		} finally {
-			this._isRebuildingRoutes = false;
-		}
+		return this.rebuildNodeRoutesInternal(nodeId);
 	}
 
-	private async rebuildNodeRoutesInternal(nodeId: number): Promise<boolean> {
+	private rebuildNodeRoutesInternal(
+		nodeId: number,
+		priorityDelta: number = 0,
+	): Promise<boolean> {
+		// Don't start the process twice
+		const existingTask = this.driver.scheduler.findTask<boolean>((t) =>
+			t.tag?.id === "rebuild-node-routes" && t.tag.nodeId === nodeId
+		);
+		if (existingTask) return existingTask;
+
 		const node = this.nodes.getOrThrow(nodeId);
+		return this.driver.scheduler.queueTask(
+			this.getRebuildNodeRoutesTask(node, priorityDelta),
+		);
+	}
 
-		// Keep battery powered nodes awake during the process
-		// and make sure that the flag gets reset at the end
-		const keepAwake = node.keepAwake;
-		try {
-			node.keepAwake = true;
+	private getRebuildNodeRoutesTask(
+		node: ZWaveNode,
+		priorityDelta: number = 0,
+	): TaskBuilder<boolean> {
+		let keepAwake: boolean;
 
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `Rebuilding routes...`,
-				direction: "none",
-			});
+		const self = this;
 
-			// The process consists of four steps, each step is tried up to 5 times before i is considered failed
-			const maxAttempts = 5;
+		return {
+			priority: TaskPriority.Lower - priorityDelta,
+			tag: { id: "rebuild-node-routes", nodeId: node.id },
+			task: async function* rebuildNodeRoutesTask() {
+				// Keep battery powered nodes awake during the process
+				keepAwake = node.keepAwake;
+				node.keepAwake = true;
 
-			// 1. command the node to refresh its neighbor list
-			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-				// If the process was stopped in the meantime, cancel
-				if (!this._isRebuildingRoutes) return false;
-
-				this.driver.controllerLog.logNode(nodeId, {
-					message: `refreshing neighbor list (attempt ${attempt})...`,
-					direction: "outbound",
+				self.driver.controllerLog.logNode(node.id, {
+					message: `Rebuilding routes...`,
+					direction: "none",
 				});
 
-				try {
-					const result = await this.discoverNodeNeighbors(nodeId);
-					if (result) {
-						this.driver.controllerLog.logNode(nodeId, {
-							message: "neighbor list refreshed...",
-							direction: "inbound",
-						});
-						// this step was successful, continue with the next
-						break;
-					} else {
-						this.driver.controllerLog.logNode(nodeId, {
-							message: "refreshing neighbor list failed...",
-							direction: "inbound",
-							level: "warn",
-						});
-					}
-				} catch (e) {
-					this.driver.controllerLog.logNode(
-						nodeId,
-						`refreshing neighbor list failed: ${
-							getErrorMessage(
-								e,
-							)
-						}`,
-						"warn",
-					);
-				}
-				if (attempt === maxAttempts) {
-					this.driver.controllerLog.logNode(nodeId, {
+				// The process consists of four steps, each step is tried up to 5 times before it is considered failed
+				const maxAttempts = 5;
+
+				// 1. command the node to refresh its neighbor list
+				for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+					yield; // Give the task scheduler time to do something else
+
+					self.driver.controllerLog.logNode(node.id, {
 						message:
-							`rebuilding routes failed: could not update the neighbor list after ${maxAttempts} attempts`,
-						level: "warn",
-						direction: "none",
+							`refreshing neighbor list (attempt ${attempt})...`,
+						direction: "outbound",
 					});
-					return false;
-				}
-			}
 
-			// 2. re-create the SUC return route, just in case
-			node.hasSUCReturnRoute = await this.assignSUCReturnRoutes(nodeId);
-
-			// 3. delete all return routes to get rid of potential priority return routes
-			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-				this.driver.controllerLog.logNode(nodeId, {
-					message: `deleting return routes (attempt ${attempt})...`,
-					direction: "outbound",
-				});
-
-				if (await this.deleteReturnRoutes(nodeId)) {
-					break;
-				}
-
-				if (attempt === maxAttempts) {
-					this.driver.controllerLog.logNode(nodeId, {
-						message:
-							`rebuilding routes failed: failed to delete return routes after ${maxAttempts} attempts`,
-						level: "warn",
-						direction: "none",
-					});
-					return false;
-				}
-			}
-
-			// 4. Assign return routes to all association destinations...
-			let associatedNodes: number[] = [];
-			try {
-				associatedNodes = distinct(
-					flatMap<number, AssociationAddress[]>(
-						[...(this.getAssociations({ nodeId }).values() as any)],
-						(assocs: AssociationAddress[]) =>
-							assocs.map((a) => a.nodeId),
-					),
-				)
-					// ...except the controller itself, which was handled by step 2
-					.filter((id) => id !== this._ownNodeId!)
-					// ...and the node itself
-					.filter((id) => id !== nodeId)
-					.sort();
-			} catch {
-				/* ignore */
-			}
-
-			if (associatedNodes.length > 0) {
-				this.driver.controllerLog.logNode(nodeId, {
-					message: `assigning return routes to the following nodes:
-${associatedNodes.join(", ")}`,
-					direction: "outbound",
-				});
-				for (const destinationNodeId of associatedNodes) {
-					for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-						this.driver.controllerLog.logNode(nodeId, {
-							message:
-								`assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
-							direction: "outbound",
-						});
-
-						if (
-							await this.assignReturnRoutes(
-								nodeId,
-								destinationNodeId,
-							)
-						) {
-							// this step was successful, continue with the next
-							break;
-						}
-
-						if (attempt === maxAttempts) {
-							this.driver.controllerLog.logNode(nodeId, {
-								message:
-									`rebuilding routes failed: failed to assign return route after ${maxAttempts} attempts`,
-								level: "warn",
-								direction: "none",
+					try {
+						const result = await self.discoverNodeNeighbors(
+							node.id,
+						);
+						if (result) {
+							self.driver.controllerLog.logNode(node.id, {
+								message: "neighbor list refreshed...",
+								direction: "inbound",
 							});
-							return false;
+							// self step was successful, continue with the next
+							break;
+						} else {
+							self.driver.controllerLog.logNode(node.id, {
+								message: "refreshing neighbor list failed...",
+								direction: "inbound",
+								level: "warn",
+							});
+						}
+					} catch (e) {
+						self.driver.controllerLog.logNode(
+							node.id,
+							`refreshing neighbor list failed: ${
+								getErrorMessage(
+									e,
+								)
+							}`,
+							"warn",
+						);
+					}
+					if (attempt === maxAttempts) {
+						self.driver.controllerLog.logNode(node.id, {
+							message:
+								`rebuilding routes failed: could not update the neighbor list after ${maxAttempts} attempts`,
+							level: "warn",
+							direction: "none",
+						});
+						return false;
+					}
+				}
+
+				yield; // Give the task scheduler time to do something else
+
+				// 2. re-create the SUC return route, just in case
+				node.hasSUCReturnRoute = await self.assignSUCReturnRoutes(
+					node.id,
+				);
+
+				// 3. delete all return routes to get rid of potential priority return routes
+				for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+					yield; // Give the task scheduler time to do something else
+
+					self.driver.controllerLog.logNode(node.id, {
+						message:
+							`deleting return routes (attempt ${attempt})...`,
+						direction: "outbound",
+					});
+
+					if (await self.deleteReturnRoutes(node.id)) {
+						break;
+					}
+
+					if (attempt === maxAttempts) {
+						self.driver.controllerLog.logNode(node.id, {
+							message:
+								`rebuilding routes failed: failed to delete return routes after ${maxAttempts} attempts`,
+							level: "warn",
+							direction: "none",
+						});
+						return false;
+					}
+				}
+
+				// 4. Assign return routes to all association destinations...
+				let associatedNodes: number[] = [];
+				try {
+					associatedNodes = distinct(
+						flatMap<number, AssociationAddress[]>(
+							[
+								...(self.getAssociations({ nodeId: node.id })
+									.values() as any),
+							],
+							(assocs: AssociationAddress[]) =>
+								assocs.map((a) => a.nodeId),
+						),
+					)
+						// ...except the controller itself, which was handled by step 2
+						.filter((id) => id !== self._ownNodeId!)
+						// ...and the node itself
+						.filter((id) => id !== node.id)
+						.sort();
+				} catch {
+					// ignore
+				}
+
+				if (associatedNodes.length > 0) {
+					self.driver.controllerLog.logNode(node.id, {
+						message:
+							`assigning return routes to the following nodes:
+	${associatedNodes.join(", ")}`,
+						direction: "outbound",
+					});
+					for (const destinationNodeId of associatedNodes) {
+						for (
+							let attempt = 1;
+							attempt <= maxAttempts;
+							attempt++
+						) {
+							yield; // Give the task scheduler time to do something else
+
+							self.driver.controllerLog.logNode(node.id, {
+								message:
+									`assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
+								direction: "outbound",
+							});
+
+							if (
+								await self.assignReturnRoutes(
+									node.id,
+									destinationNodeId,
+								)
+							) {
+								// self step was successful, continue with the next
+								break;
+							}
+
+							if (attempt === maxAttempts) {
+								self.driver.controllerLog.logNode(node.id, {
+									message:
+										`rebuilding routes failed: failed to assign return route after ${maxAttempts} attempts`,
+									level: "warn",
+									direction: "none",
+								});
+								return false;
+							}
 						}
 					}
 				}
-			}
 
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `rebuilt routes successfully`,
-				direction: "none",
-			});
-
-			return true;
-		} finally {
-			node.keepAwake = keepAwake;
-			if (!keepAwake) {
-				setImmediate(() => {
-					this.driver.debounceSendNodeToSleep(node);
+				self.driver.controllerLog.logNode(node.id, {
+					message: `rebuilt routes successfully`,
+					direction: "none",
 				});
-			}
-		}
+
+				return true;
+			},
+			cleanup: () => {
+				// Make sure that the keepAwake flag gets reset at the end
+				node.keepAwake = keepAwake;
+				if (!keepAwake) {
+					setImmediate(() => {
+						this.driver.debounceSendNodeToSleep(node);
+					});
+				}
+				return Promise.resolve();
+			},
+		};
 	}
 
 	/** Configures the given Node to be SUC/SIS or not */
