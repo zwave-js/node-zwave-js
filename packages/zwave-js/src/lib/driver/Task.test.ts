@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
+import { noop } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import test from "ava";
@@ -1163,4 +1164,136 @@ test("The task rejection uses the given error, if any", async (t) => {
 	});
 
 	t.deepEqual(order, ["1a", "1c"]);
+});
+
+test("Canceling nested tasks works", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const order: string[] = [];
+	const yieldedPromise = createDeferredPromise<void>();
+
+	const innerBuilder: TaskBuilder<void> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			order.push("2a");
+			yield () => yieldedPromise;
+			order.push("2b");
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+			const inner = scheduler.queueTask(innerBuilder);
+			yield () => inner;
+			order.push("1b");
+		},
+	}).catch(noop);
+
+	// Wait long enough that the task is definitely waiting for the promise
+	await wait(50);
+	t.deepEqual(order, ["1a", "2a"]);
+
+	// Cancel all tasks
+	await scheduler.removeTasks(() => true);
+
+	t.deepEqual(order, ["1a", "2a"]);
+});
+
+test("Canceling nested tasks works, part 2", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const yieldedPromise = createDeferredPromise<void>();
+
+	const innerBuilder: TaskBuilder<void> = {
+		priority: TaskPriority.High,
+		name: "inner",
+		task: async function*() {
+			yield () => yieldedPromise;
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			const inner = scheduler.queueTask(innerBuilder);
+			try {
+				yield () => inner;
+			} catch (e) {
+				return "canceled";
+			}
+		},
+	});
+
+	// Wait long enough that the task is definitely waiting for the promise
+	await wait(10);
+
+	// Cancel all tasks
+	await scheduler.removeTasks((t) => t.name === "inner");
+
+	t.is(await outer, "canceled");
+});
+
+test("Splitting tasks into multiple generator functions works", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const order: string[] = [];
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+
+			async function* inner() {
+				order.push("1b");
+				yield;
+				order.push("1c");
+			}
+
+			yield* inner();
+			yield;
+			order.push("1d");
+		},
+	});
+
+	await task1;
+
+	t.deepEqual(order, ["1a", "1b", "1c", "1d"]);
+});
+
+test("Split tasks can be canceled", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const order: string[] = [];
+	const yieldedPromise = createDeferredPromise<void>();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+
+			async function* inner() {
+				order.push("1b");
+				yield () => yieldedPromise;
+				order.push("1c");
+			}
+
+			yield* inner();
+			yield;
+			order.push("1d");
+		},
+	}).catch(noop);
+
+	// Wait long enough that the task is definitely waiting for the promise
+	await wait(10);
+
+	// Cancel all tasks
+	await scheduler.removeTasks(() => true);
+
+	t.deepEqual(order, ["1a", "1b"]);
 });
