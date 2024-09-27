@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes, highResTimestamp } from "@zwave-js/core";
-import { createWrappingCounter } from "@zwave-js/shared";
+import { createWrappingCounter, noop } from "@zwave-js/shared";
 import { type CompareResult } from "alcalzone-shared/comparable";
 import {
 	type DeferredPromise,
@@ -15,6 +15,8 @@ export interface Task<TReturn> {
 
 	/** A name to identify the task */
 	readonly name?: string;
+	/** A tag to identify the task programmatically */
+	readonly tag?: TaskTag;
 	/** The task's priority */
 	readonly priority: TaskPriority;
 	/** How the task should behave when interrupted */
@@ -35,9 +37,11 @@ export interface Task<TReturn> {
 }
 
 /** Defines the necessary information for creating a task */
-export interface TaskBuilder<TReturn> {
+export interface TaskBuilder<TReturn, TInner = unknown> {
 	/** A name to identify the task */
 	name?: string;
+	/** A tag to identify the task programmatically */
+	tag?: TaskTag;
 	/** The task's priority */
 	priority: TaskPriority;
 	/** How the task should behave when interrupted */
@@ -48,9 +52,9 @@ export interface TaskBuilder<TReturn> {
 	 * When the task wants to wait for something, it must yield a function returning a Promise that resolves when it can continue.
 	 */
 	task: () => AsyncGenerator<
-		(() => Promise<unknown>) | undefined,
+		(() => Promise<TInner>) | undefined,
 		TReturn,
-		void
+		TInner
 	>;
 	/** A cleanup function that gets called when the task is dropped */
 	cleanup?: () => Promise<void>;
@@ -63,14 +67,16 @@ export interface TaskBuilder<TReturn> {
  * The recommended priority for application-initiated communication is `Normal`.
  * `Low` and `Lower` are recommended for internal long-running tasks that should not interfere with user-initiated tasks.
  * `Idle` is recommended for tasks that should only run when no other tasks are pending.
+ *
+ * When nesting multiple levels of tasks, the "inner" tasks should decrement the priority by 1.
  */
 export enum TaskPriority {
 	Highest,
-	High,
-	Normal,
-	Low,
-	Lower,
-	Idle,
+	High = 10,
+	Normal = 20,
+	Low = 30,
+	Lower = 40,
+	Idle = 50,
 }
 
 export enum TaskState {
@@ -126,6 +132,22 @@ function compareTasks<T1, T2>(a: Task<T1>, b: Task<T2>): CompareResult {
 	return Math.sign(b.id - a.id) as CompareResult;
 }
 
+export type TaskTag =
+	| {
+		// Rebuild routes for all nodes
+		id: "rebuild-routes";
+	}
+	| {
+		// Rebuild routes for a single node
+		id: "rebuild-node-routes";
+		nodeId: number;
+	}
+	| {
+		// Rebuild routes for a single node -> wait for node to wake up
+		id: "rebuild-node-routes-wakeup";
+		nodeId: number;
+	};
+
 export class TaskScheduler {
 	private _tasks = new SortedList<Task<unknown>>(undefined, compareTasks);
 	private _currentTask: Task<unknown> | undefined;
@@ -142,10 +164,11 @@ export class TaskScheduler {
 		return task.promise;
 	}
 
+	/** Removes/stops tasks matching the given predicate. Returns `true` when a task was removed, `false` otherwise. */
 	public async removeTasks(
 		predicate: (task: Task<unknown>) => boolean,
 		reason?: ZWaveError,
-	): Promise<void> {
+	): Promise<boolean> {
 		// Collect tasks that should be removed, but in reverse order,
 		// so that we handle the current task last.
 		const tasksToRemove: Task<unknown>[] = [];
@@ -172,19 +195,29 @@ export class TaskScheduler {
 				|| task.state === TaskState.Waiting
 			) {
 				// The task is running, clean it up
-				await task.reset();
+				await task.reset().catch(noop);
 			}
 			task.reject(reason);
 		}
 
 		if (removeCurrentTask && this._currentTask) {
 			this._tasks.remove(this._currentTask);
-			await this._currentTask.reset();
+			await this._currentTask.reset().catch(noop);
 			this._currentTask.reject(reason);
 			this._currentTask = undefined;
 		}
 
 		if (this._continueSignal) this._continueSignal.resolve();
+
+		return tasksToRemove.length > 0 || removeCurrentTask;
+	}
+
+	public findTask<T = unknown>(
+		predicate: (task: Task<T>) => boolean,
+	): Promise<T> | undefined {
+		return this._tasks.find((t: any) => predicate(t))?.promise as
+			| Promise<T>
+			| undefined;
 	}
 
 	/** Creates a task that can be executed */
@@ -194,11 +227,15 @@ export class TaskScheduler {
 		let waitFor: Promise<unknown> | undefined;
 		const promise = createDeferredPromise<T>();
 
+		let prevResult: unknown;
+		let waitError: unknown;
+
 		return {
 			id: this._idGenerator(),
 			timestamp: highResTimestamp(),
 			builder,
 			name: builder.name,
+			tag: builder.tag,
 			priority: builder.priority,
 			interrupt: builder.interrupt ?? TaskInterruptBehavior.Resume,
 			promise,
@@ -214,7 +251,11 @@ export class TaskScheduler {
 				generator ??= builder.task();
 				state = TaskState.Active;
 
-				const { value, done } = await generator.next();
+				const { value, done } = waitError
+					? await generator.throw(waitError)
+					: await generator.next(prevResult);
+				prevResult = undefined;
+				waitError = undefined;
 				if (done) {
 					state = TaskState.Done;
 					return {
@@ -223,7 +264,11 @@ export class TaskScheduler {
 					};
 				} else if (typeof value === "function") {
 					state = TaskState.Waiting;
-					waitFor = value().then(() => {
+					waitFor = value().then((result) => {
+						prevResult = result;
+					}).catch((e) => {
+						waitError = e;
+					}).finally(() => {
 						waitFor = undefined;
 						if (state === TaskState.Waiting) {
 							state = TaskState.Active;

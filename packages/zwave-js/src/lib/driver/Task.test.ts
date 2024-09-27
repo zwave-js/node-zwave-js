@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes, assertZWaveError } from "@zwave-js/core";
+import { noop } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import test from "ava";
@@ -752,6 +753,98 @@ test.failing("Tasks cannot yield-queue lower-priority tasks", async (t) => {
 	await outer;
 });
 
+test("Tasks receive the result of yielded tasks", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const innerBuilder: TaskBuilder<string> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			yield;
+			yield;
+			return "foo";
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			const inner = scheduler.queueTask(innerBuilder);
+			const result = (yield () => inner) as Awaited<typeof inner>;
+			return result;
+		},
+	});
+
+	t.is(await outer, "foo");
+});
+
+test("Tasks receive the result of yielded tasks, part 2", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const inner1Builder: TaskBuilder<string> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			yield;
+			yield;
+			return "foo";
+		},
+	};
+
+	const inner3Builder: TaskBuilder<string> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			yield;
+			yield;
+			return "bar";
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			const inner1 = scheduler.queueTask(inner1Builder);
+			const result1 = (yield () => inner1) as Awaited<typeof inner1>;
+			const result2 = (yield) as any;
+			const inner3 = scheduler.queueTask(inner3Builder);
+			const result3 = (yield () => inner3) as Awaited<typeof inner3>;
+			return result1 + (result2 ?? "") + result3;
+		},
+	});
+
+	t.is(await outer, "foobar");
+});
+
+test("Tasks receive the result of yielded tasks, part 3", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const innerBuilder: TaskBuilder<string> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			yield;
+			throw new Error("foo");
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			const inner = scheduler.queueTask(innerBuilder);
+			try {
+				const ret = (yield () => inner) as any;
+				return ret;
+			} catch (e) {
+				return e;
+			}
+		},
+	});
+
+	const result = await outer;
+	t.true(result instanceof Error);
+	t.is(result.message, "foo");
+});
+
 test("Tasks can queue lower-priority tasks without waiting for them", async (t) => {
 	const scheduler = new TaskScheduler();
 	scheduler.start();
@@ -1071,4 +1164,136 @@ test("The task rejection uses the given error, if any", async (t) => {
 	});
 
 	t.deepEqual(order, ["1a", "1c"]);
+});
+
+test("Canceling nested tasks works", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const order: string[] = [];
+	const yieldedPromise = createDeferredPromise<void>();
+
+	const innerBuilder: TaskBuilder<void> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			order.push("2a");
+			yield () => yieldedPromise;
+			order.push("2b");
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+			const inner = scheduler.queueTask(innerBuilder);
+			yield () => inner;
+			order.push("1b");
+		},
+	}).catch(noop);
+
+	// Wait long enough that the task is definitely waiting for the promise
+	await wait(50);
+	t.deepEqual(order, ["1a", "2a"]);
+
+	// Cancel all tasks
+	await scheduler.removeTasks(() => true);
+
+	t.deepEqual(order, ["1a", "2a"]);
+});
+
+test("Canceling nested tasks works, part 2", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const yieldedPromise = createDeferredPromise<void>();
+
+	const innerBuilder: TaskBuilder<void> = {
+		priority: TaskPriority.High,
+		name: "inner",
+		task: async function*() {
+			yield () => yieldedPromise;
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			const inner = scheduler.queueTask(innerBuilder);
+			try {
+				yield () => inner;
+			} catch (e) {
+				return "canceled";
+			}
+		},
+	});
+
+	// Wait long enough that the task is definitely waiting for the promise
+	await wait(10);
+
+	// Cancel all tasks
+	await scheduler.removeTasks((t) => t.name === "inner");
+
+	t.is(await outer, "canceled");
+});
+
+test("Splitting tasks into multiple generator functions works", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const order: string[] = [];
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+
+			async function* inner() {
+				order.push("1b");
+				yield;
+				order.push("1c");
+			}
+
+			yield* inner();
+			yield;
+			order.push("1d");
+		},
+	});
+
+	await task1;
+
+	t.deepEqual(order, ["1a", "1b", "1c", "1d"]);
+});
+
+test("Split tasks can be canceled", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const order: string[] = [];
+	const yieldedPromise = createDeferredPromise<void>();
+
+	const task1 = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("1a");
+
+			async function* inner() {
+				order.push("1b");
+				yield () => yieldedPromise;
+				order.push("1c");
+			}
+
+			yield* inner();
+			yield;
+			order.push("1d");
+		},
+	}).catch(noop);
+
+	// Wait long enough that the task is definitely waiting for the promise
+	await wait(10);
+
+	// Cancel all tasks
+	await scheduler.removeTasks(() => true);
+
+	t.deepEqual(order, ["1a", "1b"]);
 });

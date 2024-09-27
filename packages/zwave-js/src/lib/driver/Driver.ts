@@ -233,6 +233,7 @@ import {
 	createMessageDroppedUnexpectedError,
 	serialAPICommandErrorToZWaveError,
 } from "./StateMachineShared";
+import { TaskScheduler } from "./Task";
 import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
 import {
@@ -676,6 +677,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		});
 		this.serialAPIQueue = new AsyncQueue();
 		this._queueIdle = false;
+
+		this._scheduler = new TaskScheduler();
 	}
 
 	/** The serial port instance */
@@ -692,6 +695,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/** Gives access to the transaction queues, ordered by priority */
 	private get queues(): TransactionQueue[] {
 		return [this.immediateQueue, this.queue];
+	}
+
+	private _scheduler: TaskScheduler;
+	public get scheduler(): TaskScheduler {
+		return this._scheduler;
 	}
 
 	private queuePaused = false;
@@ -1235,6 +1243,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 			// Start the serial API queue
 			void this.drainSerialAPIQueue();
+
+			// Start the task scheduler
+			this._scheduler.start();
 
 			if (
 				typeof this._options.testingHooks?.onSerialPortOpen
@@ -3198,7 +3209,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		this.driverLog.print("destroying driver instance...");
 
-		// First stop all queues and close the serial port, so nothing happens anymore
+		// First stop the scheduler, all queues and close the serial port, so nothing happens anymore
+		await this._scheduler.stop();
+
 		this.serialAPIQueue.abort();
 		for (const queue of this.queues) {
 			queue.abort();
