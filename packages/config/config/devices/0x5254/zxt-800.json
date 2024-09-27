@@ -6,7 +6,11 @@
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x8492",
+			"productId": "0x8492"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x8493",
 			"zwaveAllianceId": 4788
 		}
 	],
