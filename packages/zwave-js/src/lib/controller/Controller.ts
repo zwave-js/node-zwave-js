@@ -4913,7 +4913,7 @@ export class ZWaveController
 								message: "neighbor list refreshed...",
 								direction: "inbound",
 							});
-							// self step was successful, continue with the next
+							// this step was successful, continue with the next
 							break;
 						} else {
 							self.driver.controllerLog.logNode(node.id, {
@@ -5025,7 +5025,7 @@ export class ZWaveController
 									destinationNodeId,
 								)
 							) {
-								// self step was successful, continue with the next
+								// this step was successful, continue with the next
 								break;
 							}
 
