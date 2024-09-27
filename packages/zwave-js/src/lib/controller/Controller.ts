@@ -4689,9 +4689,9 @@ export class ZWaveController
 				async function* doRebuildRoutes(nodeId: number) {
 					// Await the process for each node and convert errors to a non-successful result
 					const result: boolean = yield () =>
-						// Increase priority by 2, because this call can be nested two levels deep
-						self.rebuildNodeRoutesInternal(nodeId, 2)
-							.catch(() => false);
+						self.rebuildNodeRoutesInternal(nodeId).catch(() =>
+							false
+						);
 
 					// Track the success in a map
 					self._rebuildRoutesProgress.set(
@@ -4856,7 +4856,6 @@ export class ZWaveController
 
 	private rebuildNodeRoutesInternal(
 		nodeId: number,
-		priorityDelta: number = 0,
 	): Promise<boolean> {
 		// Don't start the process twice
 		const existingTask = this.driver.scheduler.findTask<boolean>((t) =>
@@ -4866,20 +4865,22 @@ export class ZWaveController
 
 		const node = this.nodes.getOrThrow(nodeId);
 		return this.driver.scheduler.queueTask(
-			this.getRebuildNodeRoutesTask(node, priorityDelta),
+			this.getRebuildNodeRoutesTask(node),
 		);
 	}
 
 	private getRebuildNodeRoutesTask(
 		node: ZWaveNode,
-		priorityDelta: number = 0,
 	): TaskBuilder<boolean> {
 		let keepAwake: boolean;
 
 		const self = this;
 
 		return {
-			priority: TaskPriority.Lower - priorityDelta,
+			// This task is executed by users and by the network-wide route rebuilding process.
+			// Since it can possibly be spawned by a "wait for wakeup" task aswell, we need to
+			// increment the priority by 2 here to avoid blocking.
+			priority: TaskPriority.Lower - 2,
 			tag: { id: "rebuild-node-routes", nodeId: node.id },
 			task: async function* rebuildNodeRoutesTask() {
 				// Keep battery powered nodes awake during the process
