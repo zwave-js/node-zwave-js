@@ -752,6 +752,98 @@ test.failing("Tasks cannot yield-queue lower-priority tasks", async (t) => {
 	await outer;
 });
 
+test("Tasks receive the result of yielded tasks", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const innerBuilder: TaskBuilder<string> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			yield;
+			yield;
+			return "foo";
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			const inner = scheduler.queueTask(innerBuilder);
+			const result = (yield () => inner) as Awaited<typeof inner>;
+			return result;
+		},
+	});
+
+	t.is(await outer, "foo");
+});
+
+test("Tasks receive the result of yielded tasks, part 2", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const inner1Builder: TaskBuilder<string> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			yield;
+			yield;
+			return "foo";
+		},
+	};
+
+	const inner3Builder: TaskBuilder<string> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			yield;
+			yield;
+			return "bar";
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			const inner1 = scheduler.queueTask(inner1Builder);
+			const result1 = (yield () => inner1) as Awaited<typeof inner1>;
+			const result2 = (yield) as any;
+			const inner3 = scheduler.queueTask(inner3Builder);
+			const result3 = (yield () => inner3) as Awaited<typeof inner3>;
+			return result1 + (result2 ?? "") + result3;
+		},
+	});
+
+	t.is(await outer, "foobar");
+});
+
+test("Tasks receive the result of yielded tasks, part 3", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const innerBuilder: TaskBuilder<string> = {
+		priority: TaskPriority.High,
+		task: async function*() {
+			yield;
+			throw new Error("foo");
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			const inner = scheduler.queueTask(innerBuilder);
+			try {
+				const ret = (yield () => inner) as any;
+				return ret;
+			} catch (e) {
+				return e;
+			}
+		},
+	});
+
+	const result = await outer;
+	t.true(result instanceof Error);
+	t.is(result.message, "foo");
+});
+
 test("Tasks can queue lower-priority tasks without waiting for them", async (t) => {
 	const scheduler = new TaskScheduler();
 	scheduler.start();
