@@ -177,7 +177,7 @@ export enum FunctionType {
 	GetProtocolStatus = 0xbf, // Request the current status of the protocol running on the Z-Wave module
 
 	FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 0xd0, // Set controller into promiscuous mode to listen to all messages
-	FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 0xd1,
+	FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 0xd1, // deprecated, replaced with a flag for the ApplicationCommandHandler
 
 	StartWatchdog = 0xd2, // Start Hardware Watchdog (700 series and newer)
 	StopWatchdog = 0xd3, // Stop Hardware Watchdog (700 series and newer)
