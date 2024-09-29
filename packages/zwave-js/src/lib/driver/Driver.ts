@@ -678,7 +678,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		this.serialAPIQueue = new AsyncQueue();
 		this._queueIdle = false;
 
-		this._scheduler = new TaskScheduler(true);
+		this._scheduler = new TaskScheduler();
 	}
 
 	/** The serial port instance */
