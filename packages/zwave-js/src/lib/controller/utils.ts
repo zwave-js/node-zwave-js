@@ -131,6 +131,5 @@ export function sdkVersionLte(
 /** Checks if a task belongs to a route rebuilding process */
 export function isRebuildRoutesTask(t: Task<unknown>): boolean {
 	return t.tag?.id === "rebuild-routes"
-		|| t.tag?.id === "rebuild-node-routes"
-		|| t.tag?.id === "rebuild-node-routes-wakeup";
+		|| t.tag?.id === "rebuild-node-routes";
 }

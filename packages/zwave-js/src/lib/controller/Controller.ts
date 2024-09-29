@@ -4688,10 +4688,14 @@ export class ZWaveController
 
 				async function* doRebuildRoutes(nodeId: number) {
 					// Await the process for each node and convert errors to a non-successful result
-					const result: boolean = yield () =>
-						self.rebuildNodeRoutesInternal(nodeId).catch(() =>
-							false
-						);
+					let result: boolean;
+					try {
+						const node = self.nodes.getOrThrow(nodeId);
+						result = yield () =>
+							self.getRebuildNodeRoutesTask(node);
+					} catch {
+						result = false;
+					}
 
 					// Track the success in a map
 					self._rebuildRoutesProgress.set(
@@ -4736,29 +4740,42 @@ export class ZWaveController
 						"Rebuilding routes for sleeping nodes when they wake up",
 					);
 
-					const tasks = todoSleeping.map((nodeId) =>
+					const sleepingNodes = todoSleeping.map((nodeId) =>
 						self.nodes.get(nodeId)
-					).filter((node) => node != undefined)
-						.map((node) => {
-							const sleepingNodeTask: TaskBuilder<void> = {
-								priority: TaskPriority.Lower - 1,
-								tag: {
-									id: "rebuild-node-routes-wakeup",
-									nodeId: node.id,
-								},
-								task:
-									async function* rebuildSleepingNodeRoutesTask() {
-										// Pause the task until the node wakes up
-										yield () => node.waitForWakeup();
-										yield* doRebuildRoutes(node.id);
-									},
-							};
-							return self.driver.scheduler.queueTask(
-								sleepingNodeTask,
+					).filter((node) => node != undefined);
+
+					const wakeupPromises = new Map(
+						sleepingNodes.map((node) =>
+							[
+								node.id,
+								node.waitForWakeup().then(() => node),
+							] as const
+						),
+					);
+
+					// As long as there are sleeping nodes that haven't had their routes rebuilt yet,
+					// wait for any of them to wake up
+					while (wakeupPromises.size > 0) {
+						const wakeUpPromise = Promise.race(
+							wakeupPromises.values(),
+						);
+						const wokenUpNode = (
+							yield () => wakeUpPromise
+						) as Awaited<typeof wakeUpPromise>;
+						if (wokenUpNode.status === NodeStatus.Asleep) {
+							// The node has gone to sleep again since the promise was resolved. Wait again
+							wakeupPromises.set(
+								wokenUpNode.id,
+								wokenUpNode.waitForWakeup().then(() =>
+									wokenUpNode
+								),
 							);
-						});
-					// Pause until all sleeping nodes have been processed
-					yield () => Promise.all(tasks);
+							continue;
+						}
+						// Once the node has woken up, remove it from the list and rebuild its routes
+						wakeupPromises.delete(wokenUpNode.id);
+						yield* doRebuildRoutes(wokenUpNode.id);
+					}
 				}
 
 				self.driver.controllerLog.print(
@@ -4857,35 +4874,39 @@ export class ZWaveController
 	private rebuildNodeRoutesInternal(
 		nodeId: number,
 	): Promise<boolean> {
-		// Don't start the process twice
-		const existingTask = this.driver.scheduler.findTask<boolean>((t) =>
-			t.tag?.id === "rebuild-node-routes" && t.tag.nodeId === nodeId
-		);
-		if (existingTask) return existingTask;
-
 		const node = this.nodes.getOrThrow(nodeId);
-		return this.driver.scheduler.queueTask(
-			this.getRebuildNodeRoutesTask(node),
-		);
+		const task = this.getRebuildNodeRoutesTask(node);
+		if (task instanceof Promise) return task;
+
+		return this.driver.scheduler.queueTask(task);
 	}
 
 	private getRebuildNodeRoutesTask(
 		node: ZWaveNode,
-	): TaskBuilder<boolean> {
-		let keepAwake: boolean;
+	): Promise<boolean> | TaskBuilder<boolean> {
+		// This task should only run once at a time
+		const existingTask = this.driver.scheduler.findTask<boolean>((t) =>
+			t.tag?.id === "rebuild-node-routes" && t.tag.nodeId === node.id
+		);
+		if (existingTask) return existingTask;
 
 		const self = this;
+		let keepAwake: boolean;
 
 		return {
 			// This task is executed by users and by the network-wide route rebuilding process.
-			// Since it can possibly be spawned by a "wait for wakeup" task aswell, we need to
-			// increment the priority by 2 here to avoid blocking.
-			priority: TaskPriority.Lower - 2,
+			priority: TaskPriority.Lower,
 			tag: { id: "rebuild-node-routes", nodeId: node.id },
 			task: async function* rebuildNodeRoutesTask() {
 				// Keep battery powered nodes awake during the process
 				keepAwake = node.keepAwake;
 				node.keepAwake = true;
+
+				if (
+					node.canSleep && node.supportsCC(CommandClasses["Wake Up"])
+				) {
+					yield () => node.waitForWakeup();
+				}
 
 				self.driver.controllerLog.logNode(node.id, {
 					message: `Rebuilding routes...`,

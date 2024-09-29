@@ -7,6 +7,7 @@ import {
 	type TaskBuilder,
 	TaskInterruptBehavior,
 	TaskPriority,
+	type TaskReturnType,
 	TaskScheduler,
 } from "./Task";
 
@@ -686,8 +687,7 @@ test("Tasks can yield-queue higher-priority tasks", async (t) => {
 	const outer = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
-			const inner = scheduler.queueTask(innerBuilder);
-			yield () => inner;
+			yield innerBuilder;
 			order.push("outer");
 		},
 	});
@@ -715,8 +715,7 @@ test("Tasks can yield-queue same-priority tasks", async (t) => {
 	const outer = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
-			const inner = scheduler.queueTask(innerBuilder);
-			yield () => inner;
+			yield innerBuilder;
 			order.push("outer");
 		},
 	});
@@ -744,13 +743,69 @@ test.failing("Tasks cannot yield-queue lower-priority tasks", async (t) => {
 	const outer = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
-			const inner = scheduler.queueTask(innerBuilder);
-			yield () => inner;
+			yield innerBuilder;
 			order.push("outer");
 		},
 	});
 
 	await outer;
+});
+
+test("Yielding tasks multiple levels deep works", async (t) => {
+	const scheduler = new TaskScheduler();
+	scheduler.start();
+
+	const order: string[] = [];
+	const yieldedPromise = createDeferredPromise<void>();
+
+	const innerinnerBuilder: TaskBuilder<void> = {
+		name: "innerinner",
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			yield;
+			order.push("innerinner1");
+			yield () => yieldedPromise;
+			order.push("innerinner2");
+		},
+	};
+
+	const innerBuilder: TaskBuilder<void> = {
+		name: "inner",
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			yield;
+			order.push("inner1");
+			yield innerinnerBuilder;
+			order.push("inner2");
+		},
+	};
+
+	const outer = scheduler.queueTask({
+		name: "outer",
+		priority: TaskPriority.Normal,
+		task: async function*() {
+			order.push("outer1");
+			yield innerBuilder;
+			order.push("outer2");
+		},
+	});
+
+	// Wait long enough that the task is definitely waiting for the promise
+	await wait(10);
+	t.deepEqual(order, ["outer1", "inner1", "innerinner1"]);
+
+	// Run to completion
+	yieldedPromise.resolve();
+	await outer;
+
+	t.deepEqual(order, [
+		"outer1",
+		"inner1",
+		"innerinner1",
+		"innerinner2",
+		"inner2",
+		"outer2",
+	]);
 });
 
 test("Tasks receive the result of yielded tasks", async (t) => {
@@ -769,8 +824,9 @@ test("Tasks receive the result of yielded tasks", async (t) => {
 	const outer = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
-			const inner = scheduler.queueTask(innerBuilder);
-			const result = (yield () => inner) as Awaited<typeof inner>;
+			const result = (yield innerBuilder) as TaskReturnType<
+				typeof innerBuilder
+			>;
 			return result;
 		},
 	});
@@ -803,11 +859,13 @@ test("Tasks receive the result of yielded tasks, part 2", async (t) => {
 	const outer = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
-			const inner1 = scheduler.queueTask(inner1Builder);
-			const result1 = (yield () => inner1) as Awaited<typeof inner1>;
+			const result1 = (yield inner1Builder) as TaskReturnType<
+				typeof inner1Builder
+			>;
 			const result2 = (yield) as any;
-			const inner3 = scheduler.queueTask(inner3Builder);
-			const result3 = (yield () => inner3) as Awaited<typeof inner3>;
+			const result3 = (yield inner3Builder) as TaskReturnType<
+				typeof inner3Builder
+			>;
 			return result1 + (result2 ?? "") + result3;
 		},
 	});
@@ -830,12 +888,11 @@ test("Tasks receive the result of yielded tasks, part 3", async (t) => {
 	const outer = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
-			const inner = scheduler.queueTask(innerBuilder);
 			try {
-				const ret = (yield () => inner) as any;
-				return ret;
+				yield innerBuilder;
+				throw new Error("This should not happen");
 			} catch (e) {
-				return e;
+				return e as Error;
 			}
 		},
 	});
@@ -1186,8 +1243,7 @@ test("Canceling nested tasks works", async (t) => {
 		priority: TaskPriority.Normal,
 		task: async function*() {
 			order.push("1a");
-			const inner = scheduler.queueTask(innerBuilder);
-			yield () => inner;
+			yield innerBuilder;
 			order.push("1b");
 		},
 	}).catch(noop);
@@ -1219,9 +1275,8 @@ test("Canceling nested tasks works, part 2", async (t) => {
 	const outer = scheduler.queueTask({
 		priority: TaskPriority.Normal,
 		task: async function*() {
-			const inner = scheduler.queueTask(innerBuilder);
 			try {
-				yield () => inner;
+				yield innerBuilder;
 			} catch (e) {
 				return "canceled";
 			}
@@ -1232,6 +1287,7 @@ test("Canceling nested tasks works, part 2", async (t) => {
 	await wait(10);
 
 	// Cancel all tasks
+	// FIXME: Restore parent tasks when removing nested tasks
 	await scheduler.removeTasks((t) => t.name === "inner");
 
 	t.is(await outer, "canceled");

@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes, highResTimestamp } from "@zwave-js/core";
-import { createWrappingCounter, noop } from "@zwave-js/shared";
+import { createWrappingCounter, evalOrStatic, noop } from "@zwave-js/shared";
 import { type CompareResult } from "alcalzone-shared/comparable";
 import {
 	type DeferredPromise,
@@ -12,6 +12,9 @@ export interface Task<TReturn> {
 	readonly id: number;
 	readonly timestamp: number;
 	readonly builder: TaskBuilder<TReturn>;
+
+	/** The parent task spawning this subtask, if any */
+	readonly parent?: Task<unknown>;
 
 	/** A name to identify the task */
 	readonly name?: string;
@@ -36,6 +39,12 @@ export interface Task<TReturn> {
 	readonly promise: Promise<TReturn>;
 }
 
+function getTaskName(task: Task<unknown>): string {
+	return `${
+		task.name ?? (task.tag && JSON.stringify(task.tag)) ?? "unnamed"
+	} (ID ${task.id})`;
+}
+
 /** Defines the necessary information for creating a task */
 export interface TaskBuilder<TReturn, TInner = unknown> {
 	/** A name to identify the task */
@@ -49,15 +58,37 @@ export interface TaskBuilder<TReturn, TInner = unknown> {
 	/**
 	 * The task's main generator function. This is called repeatedly until it's done.
 	 * The function must yield at points where it may be interrupted.
-	 * When the task wants to wait for something, it must yield a function returning a Promise that resolves when it can continue.
+	 *
+	 * At those points, the task can also wait for something to happen:
+	 * - Either a Promise, in which case it must yield a function that returns that Promise
+	 * - Or another task, in which case it must yield a TaskBuilder object or a function that returns one
+	 *
+	 * Yielded Promises should not spawn new tasks. If they do, the spawned tasks MUST have a higher priority than the parent task.
 	 */
 	task: () => AsyncGenerator<
-		(() => Promise<TInner>) | undefined,
+		| (() => Promise<TInner> | TaskBuilder<TInner>)
+		| (() => TaskBuilder<TInner>)
+		| TaskBuilder<TInner>
+		| undefined,
 		TReturn,
 		TInner
 	>;
 	/** A cleanup function that gets called when the task is dropped */
 	cleanup?: () => Promise<void>;
+}
+
+export type TaskReturnType<T extends TaskBuilder<unknown>> = T extends
+	TaskBuilder<infer R> ? R
+	: never;
+
+function isTaskBuilder<T>(
+	obj: any,
+): obj is TaskBuilder<T> {
+	return (
+		typeof obj === "object"
+		&& typeof obj.task === "function"
+		&& typeof obj.priority === "number"
+	);
 }
 
 /**
@@ -67,16 +98,14 @@ export interface TaskBuilder<TReturn, TInner = unknown> {
  * The recommended priority for application-initiated communication is `Normal`.
  * `Low` and `Lower` are recommended for internal long-running tasks that should not interfere with user-initiated tasks.
  * `Idle` is recommended for tasks that should only run when no other tasks are pending.
- *
- * When nesting multiple levels of tasks, the "inner" tasks should decrement the priority by 1.
  */
 export enum TaskPriority {
 	Highest,
-	High = 10,
-	Normal = 20,
-	Low = 30,
-	Lower = 40,
-	Idle = 50,
+	High = 1,
+	Normal = 2,
+	Low = 3,
+	Lower = 4,
+	Idle = 5,
 }
 
 export enum TaskState {
@@ -84,8 +113,10 @@ export enum TaskState {
 	None,
 	/** The task is being executed */
 	Active,
-	/** The task is waiting for something */
-	Waiting,
+	/** The task is waiting for a Promise to resolve */
+	AwaitingPromise,
+	/** The task is waiting for another task to finish */
+	AwaitingTask,
 	/** The task is finished */
 	Done,
 }
@@ -102,13 +133,14 @@ export enum TaskInterruptBehavior {
 export type TaskStepResult<T> = {
 	newState: TaskState.Done;
 	result: T;
-	waitFor?: undefined;
 } | {
 	newState: TaskState.Active;
-	waitFor?: undefined;
 } | {
-	newState: TaskState.Waiting;
-	waitFor: Promise<unknown>;
+	newState: TaskState.AwaitingPromise;
+	promise: Promise<unknown>;
+} | {
+	newState: TaskState.AwaitingTask;
+	task: Task<unknown>;
 };
 
 function compareTasks<T1, T2>(a: Task<T1>, b: Task<T2>): CompareResult {
@@ -117,12 +149,12 @@ function compareTasks<T1, T2>(a: Task<T1>, b: Task<T2>): CompareResult {
 	if (a.priority > b.priority) return -1;
 
 	// Deprioritize waiting tasks
-	if (a.state !== TaskState.Waiting && b.state === TaskState.Waiting) {
-		return 1;
-	}
-	if (a.state === TaskState.Waiting && b.state !== TaskState.Waiting) {
-		return -1;
-	}
+	const aWaiting = a.state === TaskState.AwaitingPromise
+		|| a.state === TaskState.AwaitingTask;
+	const bWaiting = b.state === TaskState.AwaitingPromise
+		|| b.state === TaskState.AwaitingTask;
+	if (!aWaiting && bWaiting) return 1;
+	if (aWaiting && !bWaiting) return -1;
 
 	// Sort equal priority by timestamp. Newer tasks go to the end of the list
 	if (a.timestamp < b.timestamp) return 1;
@@ -141,14 +173,12 @@ export type TaskTag =
 		// Rebuild routes for a single node
 		id: "rebuild-node-routes";
 		nodeId: number;
-	}
-	| {
-		// Rebuild routes for a single node -> wait for node to wake up
-		id: "rebuild-node-routes-wakeup";
-		nodeId: number;
 	};
 
 export class TaskScheduler {
+	public constructor(private verbose: boolean = false) {
+	}
+
 	private _tasks = new SortedList<Task<unknown>>(undefined, compareTasks);
 	private _currentTask: Task<unknown> | undefined;
 
@@ -160,6 +190,12 @@ export class TaskScheduler {
 	public queueTask<T>(builder: TaskBuilder<T>): Promise<T> {
 		const task = this.createTask(builder);
 		this._tasks.add(task);
+		if (this.verbose) {
+			console.log(
+				`Task queued: ${getTaskName(task)}`,
+			);
+		}
+
 		if (this._continueSignal) this._continueSignal.resolve();
 		return task.promise;
 	}
@@ -189,21 +225,52 @@ export class TaskScheduler {
 		);
 
 		for (const task of tasksToRemove) {
+			if (this.verbose) {
+				console.log(
+					`Removing task: ${getTaskName(task)}`,
+				);
+			}
 			this._tasks.remove(task);
 			if (
 				task.state === TaskState.Active
-				|| task.state === TaskState.Waiting
+				|| task.state === TaskState.AwaitingPromise
+				|| task.state === TaskState.AwaitingTask
 			) {
 				// The task is running, clean it up
 				await task.reset().catch(noop);
 			}
 			task.reject(reason);
+			// Re-add the parent task to the list if there is one
+			if (task.parent) {
+				if (this.verbose) {
+					console.log(
+						`Restoring parent task: ${getTaskName(task.parent)}`,
+					);
+				}
+				this._tasks.add(task.parent);
+			}
 		}
 
 		if (removeCurrentTask && this._currentTask) {
+			if (this.verbose) {
+				console.log(
+					`Removing task: ${getTaskName(this._currentTask)}`,
+				);
+			}
 			this._tasks.remove(this._currentTask);
 			await this._currentTask.reset().catch(noop);
 			this._currentTask.reject(reason);
+			// Re-add the parent task to the list if there is one
+			if (this._currentTask.parent) {
+				if (this.verbose) {
+					console.log(
+						`Restoring parent task: ${
+							getTaskName(this._currentTask.parent)
+						}`,
+					);
+				}
+				this._tasks.add(this._currentTask.parent);
+			}
 			this._currentTask = undefined;
 		}
 
@@ -221,31 +288,41 @@ export class TaskScheduler {
 	}
 
 	/** Creates a task that can be executed */
-	private createTask<T>(builder: TaskBuilder<T>): Task<T> {
+	private createTask<T>(
+		builder: TaskBuilder<T>,
+		parent?: Task<unknown>,
+	): Task<T> {
 		let state = TaskState.None;
 		let generator: ReturnType<TaskBuilder<T>["task"]> | undefined;
-		let waitFor: Promise<unknown> | undefined;
+		let waitForPromise: Promise<unknown> | undefined;
 		const promise = createDeferredPromise<T>();
 
 		let prevResult: unknown;
 		let waitError: unknown;
 
+		const self = this;
+
 		return {
 			id: this._idGenerator(),
 			timestamp: highResTimestamp(),
 			builder,
+			parent,
 			name: builder.name,
 			tag: builder.tag,
 			priority: builder.priority,
 			interrupt: builder.interrupt ?? TaskInterruptBehavior.Resume,
 			promise,
 			async step() {
-				// Do not proceed while still waiting for something
-				if (state === TaskState.Waiting && waitFor) {
+				// Do not proceed while still waiting for a Promise to resolve
+				if (state === TaskState.AwaitingPromise && waitForPromise) {
 					return {
 						newState: state,
-						waitFor,
+						promise: waitForPromise,
 					};
+				} else if (state === TaskState.AwaitingTask) {
+					throw new Error(
+						"Cannot step through a task that is waiting for another task",
+					);
 				}
 
 				generator ??= builder.task();
@@ -262,29 +339,56 @@ export class TaskScheduler {
 						newState: state,
 						result: value,
 					};
-				} else if (typeof value === "function") {
-					state = TaskState.Waiting;
-					waitFor = value().then((result) => {
-						prevResult = result;
-					}).catch((e) => {
-						waitError = e;
-					}).finally(() => {
-						waitFor = undefined;
-						if (state === TaskState.Waiting) {
-							state = TaskState.Active;
-						}
-					});
-					return {
-						newState: state,
-						waitFor,
-					};
+				} else if (value != undefined) {
+					const waitFor = evalOrStatic(value);
+					if (waitFor instanceof Promise) {
+						state = TaskState.AwaitingPromise;
+						waitForPromise = waitFor.then((result) => {
+							prevResult = result;
+						}).catch((e) => {
+							waitError = e;
+						}).finally(() => {
+							waitForPromise = undefined;
+							if (state === TaskState.AwaitingPromise) {
+								state = TaskState.Active;
+							}
+						});
+						return {
+							newState: state,
+							promise: waitForPromise,
+						};
+					} else if (isTaskBuilder(waitFor)) {
+						// Create a sub-task with a reference to this task
+						state = TaskState.AwaitingTask;
+						const subTask = self.createTask(waitFor, this);
+
+						subTask.promise.then((result) => {
+							prevResult = result;
+						}).catch((e) => {
+							waitError = e;
+						}).finally(() => {
+							if (state === TaskState.AwaitingTask) {
+								state = TaskState.Active;
+							}
+						});
+
+						return {
+							newState: state,
+							task: subTask,
+						};
+					} else {
+						throw new Error(
+							"Invalid value yielded by task",
+						);
+					}
+				} else {
+					return { newState: state };
 				}
-				return { newState: state };
 			},
 			async reset() {
 				if (state === TaskState.None) return;
 				state = TaskState.None;
-				waitFor = undefined;
+				waitForPromise = undefined;
 				generator = undefined;
 
 				await builder.cleanup?.();
@@ -340,10 +444,29 @@ export class TaskScheduler {
 					this._currentTask = firstTask;
 				}
 
+				if (this.verbose) {
+					console.log(
+						`Stepping through task: ${
+							getTaskName(this._currentTask)
+						}`,
+					);
+				}
+
 				const cleanupCurrentTask = async () => {
 					if (this._currentTask) {
 						this._tasks.remove(this._currentTask);
 						await this._currentTask.reset();
+						// Re-add the parent task to the list if there is one
+						if (this._currentTask.parent) {
+							if (this.verbose) {
+								console.log(
+									`Restoring parent task: ${
+										getTaskName(this._currentTask.parent)
+									}`,
+								);
+							}
+							this._tasks.add(this._currentTask.parent);
+						}
 						this._currentTask = undefined;
 					}
 				};
@@ -354,6 +477,12 @@ export class TaskScheduler {
 				try {
 					stepResult = await this._currentTask.step();
 				} catch (e) {
+					if (this.verbose) {
+						console.error(
+							`- Task threw an error:`,
+							e,
+						);
+					}
 					// The task threw an error, expose the result and clean up.
 					this._currentTask.reject(e as Error);
 					await cleanupCurrentTask();
@@ -362,13 +491,19 @@ export class TaskScheduler {
 				}
 
 				if (stepResult.newState === TaskState.Done) {
+					if (this.verbose) {
+						console.log(`- Task finished`);
+					}
 					// The task is done, clean up
 					this._currentTask.resolve(stepResult.result);
 					await cleanupCurrentTask();
 					// Then continue with the next iteration
 					continue;
-				} else if (stepResult.newState === TaskState.Waiting) {
+				} else if (stepResult.newState === TaskState.AwaitingPromise) {
 					// The task is waiting for something
+					if (this.verbose) {
+						console.log(`- Task waiting`);
+					}
 
 					// If the task may be interrupted, check if there are other same-priority tasks that should be executed instead
 					if (
@@ -380,13 +515,25 @@ export class TaskScheduler {
 						this._tasks.add(this._currentTask);
 
 						if (this._tasks.peekStart() !== this._currentTask) {
+							if (this.verbose) {
+								console.log(`-- Continuing with another task`);
+							}
 							// The task is no longer the first in the queue. Switch to the other one
 							continue;
 						}
 					}
 
 					// Otherwise, we got nothing to do right now than to wait
-					waitFor = stepResult.waitFor;
+					waitFor = stepResult.promise;
+				} else if (stepResult.newState === TaskState.AwaitingTask) {
+					// The task spawned a sub-task. Replace it with the sub-task and continue executing
+					if (this.verbose) {
+						console.log(`- Task spawned a sub-task`);
+					}
+					this._tasks.add(stepResult.task);
+					this._tasks.remove(this._currentTask);
+					// Continue with the next iteration
+					continue;
 				} else {
 					// The current task is not done, continue with the next iteration
 					continue;

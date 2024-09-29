@@ -5,6 +5,11 @@ import {
 	ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
+import {
+	type FnOrStatic,
+	type ReturnTypeOrStatic,
+	evalOrStatic,
+} from "@zwave-js/shared/safe";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ValueIDProperties } from "./API";
 
@@ -128,22 +133,12 @@ type ToDynamicCCValues<
 	}
 >;
 
-type FnOrStatic<TArgs extends any[], TReturn> =
-	| ((...args: TArgs) => TReturn)
-	| TReturn;
-
-type ReturnTypeOrStatic<T> = T extends (...args: any[]) => infer R ? R : T;
-
 type InferArgs<T extends FnOrStatic<any, any>[]> = T extends [
 	(...args: infer A) => any,
 	...any,
 ] ? A
 	: T extends [any, ...infer R] ? InferArgs<R>
 	: [];
-
-function evalOrStatic<T>(fnOrConst: T, ...args: any[]): ReturnTypeOrStatic<T> {
-	return typeof fnOrConst === "function" ? fnOrConst(...args) : fnOrConst;
-}
 
 /** Defines a single static CC values that belong to a CC */
 function defineStaticCCValue<
