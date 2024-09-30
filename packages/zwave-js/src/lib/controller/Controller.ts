@@ -240,6 +240,7 @@ import {
 	GetBackgroundRSSIRequest,
 	type GetBackgroundRSSIResponse,
 } from "../serialapi/misc/GetBackgroundRSSIMessages";
+import { SetPromiscuousModeRequest } from "../serialapi/misc/SetPromiscuousModeRequest";
 import {
 	SetRFReceiveModeRequest,
 	type SetRFReceiveModeResponse,
@@ -9794,5 +9795,32 @@ export class ZWaveController
 
 		// Notify applications that joining the network is complete
 		this.emit("network joined");
+	}
+
+	/**
+	 * Enables or disables promiscuous mode.
+	 * Returns whether the operation was successful.
+	 */
+	public async setPromiscuousMode(enabled: boolean): Promise<boolean> {
+		try {
+			this.driver.controllerLog.print(
+				`${enabled ? "Enabling" : "Disabling"} promiscuous mode...`,
+			);
+			await this.driver.sendMessage(
+				new SetPromiscuousModeRequest(this.driver, {
+					enabled,
+				}),
+			);
+
+			return true;
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`${enabled ? "Enabling" : "Disabling"} failed: ${
+					getErrorMessage(e)
+				}`,
+				"error",
+			);
+		}
+		return false;
 	}
 }
