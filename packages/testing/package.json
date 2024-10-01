@@ -59,7 +59,7 @@
     "@zwave-js/cc": "workspace:*",
     "del-cli": "^5.1.0",
     "esbuild": "0.21.5",
-    "esbuild-register": "^3.5.0",
+    "esbuild-register": "^3.6.0",
     "triple-beam": "*",
     "typescript": "5.5.3",
     "winston-transport": "^4.7.1"
