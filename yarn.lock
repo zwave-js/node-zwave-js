@@ -1873,7 +1873,7 @@ __metadata:
     alcalzone-shared: "npm:^4.0.8"
     ansi-colors: "npm:^4.1.3"
     ava: "npm:^6.1.3"
-    comment-json: "npm:^4.2.3"
+    comment-json: "npm:^4.2.5"
     del-cli: "npm:^5.1.0"
     esbuild: "npm:0.21.5"
     esbuild-register: "npm:^3.5.0"
@@ -2081,7 +2081,7 @@ __metadata:
     alcalzone-shared: "npm:^4.0.8"
     ansi-colors: "npm:^4.1.3"
     chokidar: "npm:^3.6.0"
-    comment-json: "npm:^4.2.3"
+    comment-json: "npm:^4.2.5"
     commitizen: "npm:^4.3.0"
     cz-conventional-changelog: "npm:^3.3.0"
     del-cli: "npm:^5.1.0"
@@ -3327,16 +3327,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"comment-json@npm:^4.2.3":
-  version: 4.2.3
-  resolution: "comment-json@npm:4.2.3"
+"comment-json@npm:^4.2.5":
+  version: 4.2.5
+  resolution: "comment-json@npm:4.2.5"
   dependencies:
     array-timsort: "npm:^1.0.3"
     core-util-is: "npm:^1.0.3"
     esprima: "npm:^4.0.1"
     has-own-prop: "npm:^2.0.0"
     repeat-string: "npm:^1.6.1"
-  checksum: 10/97eb6ff8231653864cea5c7721636e823194f0322cd7f0faa6154a1c5b5eb1cab2ca60526bc36d5b39e7c2bcf7eb175b57fd8e44b1c398f0c70ea8c9a114e834
+  checksum: 10/dc347621de15043a16846a1697a6248b427e913ddfb57f3427ca4eedf9c92131000d5e8efc8be9fe191a74dc36b615d73207fc3585bf29ca1b8d32e90d40c801
   languageName: node
   linkType: hard
 
