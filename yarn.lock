@@ -537,10 +537,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/formatter@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@dprint/formatter@npm:0.3.0"
-  checksum: 10/4f0aa1ef8404943a19a89e30dd1939bff74a9a694b3ee4370dd45f1e08eb9d88c62692ec97b9f139343a71205e943c57f226360cae260b069297600cda294e16
+"@dprint/formatter@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@dprint/formatter@npm:0.4.1"
+  checksum: 10/27498fc8e6ec01ee9401e2073331cb758f57cdb93545bdd9c3e5f0ce6ac9ee571b800c9df493fab922bd92e3c4fd660a91a2cf465fe0c05a3dca769930dd4b77
   languageName: node
   linkType: hard
 
@@ -579,17 +579,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dprint/markdown@npm:^0.17.2":
-  version: 0.17.2
-  resolution: "@dprint/markdown@npm:0.17.2"
-  checksum: 10/ee713583afc6de4af4cc507fc4eedb92d2e8781df5a35e8b928981e1845149fd1e24e7106851c69b6be2d7fba6f21bc4e21bab964d36b61baa9e94b0306c5e2f
+"@dprint/markdown@npm:^0.17.8":
+  version: 0.17.8
+  resolution: "@dprint/markdown@npm:0.17.8"
+  checksum: 10/df2b1962c5d0063c0809d7a7eee435f4fd95295da38706b56d67f145ee7d030a3dae761512f488025344fd88af2b596e910d1f6ba8ca7f79670f69bf7c6e592b
   languageName: node
   linkType: hard
 
-"@dprint/typescript@npm:^0.91.1":
-  version: 0.91.1
-  resolution: "@dprint/typescript@npm:0.91.1"
-  checksum: 10/88b1e6f2f6e8f40d7ace70ba7f0a0647e04316ef0f2af42afc81733bc3afa0ddd663996d286bf05ba6d593ef3c50b60bcae39867b690b2fa147bbfa26fdf4051
+"@dprint/typescript@npm:^0.93.0":
+  version: 0.93.0
+  resolution: "@dprint/typescript@npm:0.93.0"
+  checksum: 10/dbe3282979638954cb91983044cd7cac47870aa1399f975f907f2620c36325f6f63feddb45a8e85abd4f830b5751cdd81b9682291793604ce89dccdc835fb5a6
   languageName: node
   linkType: hard
 
@@ -1976,17 +1976,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/fmt@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@zwave-js/fmt@npm:1.0.1"
+"@zwave-js/fmt@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@zwave-js/fmt@npm:1.0.2"
   dependencies:
     json5: "npm:^2.2.3"
   peerDependencies:
-    "@dprint/formatter": ^0.3.0
+    "@dprint/formatter": ^0.4.1
     "@dprint/json": ^0.19.3
-    "@dprint/markdown": ^0.17.1
-    "@dprint/typescript": ^0.91.1
-  checksum: 10/e77bcfbcac61a083627f1ab810e7c9b0cca81705fb88b76a79daecbe641e48aa12447b1987356a648186a0b6f42d612d0ee7e1918d9cfd7aed283f44b23057bf
+    "@dprint/markdown": ^0.17.8
+    "@dprint/typescript": ^0.93.0
+  checksum: 10/024226eb41d7bf9759c22f7abad798082b0db4e43ad2ff530c273e84e14b77cdf5ea02b7e554ee8e3af365cf9ede5a9947b9e809b9289a56c6bbff24562c3204
   languageName: node
   linkType: hard
 
@@ -2009,16 +2009,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
-    "@dprint/formatter": "npm:^0.3.0"
+    "@dprint/formatter": "npm:^0.4.1"
     "@dprint/json": "npm:^0.19.3"
-    "@dprint/markdown": "npm:^0.17.2"
-    "@dprint/typescript": "npm:^0.91.1"
+    "@dprint/markdown": "npm:^0.17.8"
+    "@dprint/typescript": "npm:^0.93.0"
     "@types/fs-extra": "npm:^11.0.4"
     "@types/globrex": "npm:^0.1.4"
     "@types/node": "npm:^18.19.54"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
-    "@zwave-js/fmt": "npm:^1.0.1"
+    "@zwave-js/fmt": "npm:^1.0.2"
     "@zwave-js/shared": "workspace:*"
     ansi-colors: "npm:^4.1.3"
     cli-highlight: "npm:^2.1.11"
@@ -2076,10 +2076,10 @@ __metadata:
     "@alcalzone/release-script": "npm:~3.7.3"
     "@commitlint/cli": "npm:^19.5.0"
     "@commitlint/config-conventional": "npm:^19.1.0"
-    "@dprint/formatter": "npm:^0.3.0"
+    "@dprint/formatter": "npm:^0.4.1"
     "@dprint/json": "npm:^0.19.3"
-    "@dprint/markdown": "npm:^0.17.2"
-    "@dprint/typescript": "npm:^0.91.1"
+    "@dprint/markdown": "npm:^0.17.8"
+    "@dprint/typescript": "npm:^0.93.0"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@monorepo-utils/workspaces-to-typescript-project-references": "npm:^2.10.4"
     "@tsconfig/node18": "npm:^18.2.4"
@@ -2093,7 +2093,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/eslint-plugin": "workspace:*"
     "@zwave-js/flash": "workspace:*"
-    "@zwave-js/fmt": "npm:^1.0.1"
+    "@zwave-js/fmt": "npm:^1.0.2"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/nvmedit": "workspace:*"
