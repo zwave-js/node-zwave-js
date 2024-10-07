@@ -9,6 +9,7 @@ import {
 import { padVersion } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import semver from "semver";
+import { type Task } from "../driver/Task";
 import {
 	type PlannedProvisioningEntry,
 	ProvisioningEntryStatus,
@@ -125,4 +126,10 @@ export function sdkVersionLte(
 		return undefined;
 	}
 	return semver.lte(padVersion(sdkVersion), padVersion(compareVersion));
+}
+
+/** Checks if a task belongs to a route rebuilding process */
+export function isRebuildRoutesTask(t: Task<unknown>): boolean {
+	return t.tag?.id === "rebuild-routes"
+		|| t.tag?.id === "rebuild-node-routes";
 }

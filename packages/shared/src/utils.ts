@@ -235,3 +235,17 @@ export function sum(values: number[]): number {
 export function noop(): void {
 	// intentionally empty
 }
+
+export type FnOrStatic<TArgs extends any[], TReturn> =
+	| ((...args: TArgs) => TReturn)
+	| TReturn;
+
+export type ReturnTypeOrStatic<T> = T extends (...args: any[]) => infer R ? R
+	: T;
+
+export function evalOrStatic<T>(
+	fnOrConst: T,
+	...args: any[]
+): ReturnTypeOrStatic<T> {
+	return typeof fnOrConst === "function" ? fnOrConst(...args) : fnOrConst;
+}

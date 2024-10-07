@@ -227,17 +227,19 @@
 		"label": "SKU Number (First 4 Bytes)",
 		"valueSize": 4,
 		"minValue": 0,
-		"maxValue": 0,
+		"maxValue": 4294967295,
 		"defaultValue": 0,
-		"unsigned": true
+		"unsigned": true,
+		"readOnly": true
 	},
 	"dipswitch_sku_lastfour": {
 		"label": "SKU Number (Last 4 Bytes)",
 		"valueSize": 4,
 		"minValue": 0,
-		"maxValue": 0,
+		"maxValue": 4294967295,
 		"defaultValue": 0,
-		"unsigned": true
+		"unsigned": true,
+		"readOnly": true
 	},
 	"reset": {
 		"label": "Reset to Default",

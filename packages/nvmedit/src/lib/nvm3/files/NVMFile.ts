@@ -34,7 +34,7 @@ export class NVMFile {
 			this.fileId = options.fileId;
 			this.payload = options.data;
 		} else {
-			const fileId = getNVMFileID(this);
+			const fileId = options.fileId ?? getNVMFileID(this);
 			if (typeof fileId === "number") {
 				this.fileId = fileId;
 			}
