@@ -858,17 +858,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@homebridge/ciao@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@homebridge/ciao@npm:1.2.0"
+"@homebridge/ciao@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "@homebridge/ciao@npm:1.3.1"
   dependencies:
-    debug: "npm:^4.3.4"
+    debug: "npm:^4.3.6"
     fast-deep-equal: "npm:^3.1.3"
     source-map-support: "npm:^0.5.21"
-    tslib: "npm:^2.6.2"
+    tslib: "npm:^2.6.3"
   bin:
     ciao-bcs: lib/bonjour-conformance-testing.js
-  checksum: 10/ca56898a7e8fcb235f62fd447034498d6aae487c4267f249440b2407825a9a97e7a6dd4d9bc385498a7002d918c28e4c0e47261cb80b600890f82e647dc81232
+  checksum: 10/7962c484e14fb12945ad341b6c94c2beac8291de34e1ce0200614fc99917c4d5d410851e49465c1de5b1020920059f5b198e15f713c93dee6b8c204f1b860fbb
   languageName: node
   linkType: hard
 
@@ -3711,6 +3711,18 @@ __metadata:
     supports-color:
       optional: true
   checksum: 10/723a9570dcd15d146ea4992f0dca12467d1b00f534abb42473df166d36826fcae8bab045aef59ac2f407b47a23266110bc0e646df8ac82f7800c11384f82050e
+  languageName: node
+  linkType: hard
+
+"debug@npm:^4.3.6":
+  version: 4.3.7
+  resolution: "debug@npm:4.3.7"
+  dependencies:
+    ms: "npm:^2.1.3"
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: 10/71168908b9a78227ab29d5d25fe03c5867750e31ce24bf2c44a86efc5af041758bb56569b0a3d48a9b5344c00a24a777e6f4100ed6dfd9534a42c1dde285125a
   languageName: node
   linkType: hard
 
@@ -8811,10 +8823,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.6.2":
-  version: 2.6.3
-  resolution: "tslib@npm:2.6.3"
-  checksum: 10/52109bb681f8133a2e58142f11a50e05476de4f075ca906d13b596ae5f7f12d30c482feb0bff167ae01cfc84c5803e575a307d47938999246f5a49d174fc558c
+"tslib@npm:^2.6.3":
+  version: 2.7.0
+  resolution: "tslib@npm:2.7.0"
+  checksum: 10/9a5b47ddac65874fa011c20ff76db69f97cf90c78cff5934799ab8894a5342db2d17b4e7613a087046bc1d133d21547ddff87ac558abeec31ffa929c88b7fce6
   languageName: node
   linkType: hard
 
@@ -9474,7 +9486,7 @@ __metadata:
   dependencies:
     "@alcalzone/jsonl-db": "npm:^3.1.1"
     "@alcalzone/pak": "npm:^0.11.0"
-    "@homebridge/ciao": "npm:^1.2.0"
+    "@homebridge/ciao": "npm:^1.3.1"
     "@microsoft/api-extractor": "npm:^7.47.0"
     "@types/fs-extra": "npm:^11.0.4"
     "@types/node": "npm:^18.19.42"
