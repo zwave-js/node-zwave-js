@@ -845,6 +845,7 @@ export class NVM3Adapter implements NVMAdapter {
 						if (slice.length > 0) {
 							const file = new SUCUpdateEntriesFileV5({
 								updateEntries: slice,
+								fileId,
 								fileVersion,
 							});
 							changedFiles.push(file);
