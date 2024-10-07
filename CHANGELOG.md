@@ -4,6 +4,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+This release adds an internal task scheduler that will allow more control over longer running tasks like device interviews, route rebuilding, firmware updates, etc. These improvements include pausing/resuming tasks, better prioritization for user-initiated actions, queueing tasks without interrupting ongoing ones, and more. Migration of existing features to the new scheduler will be done incrementally, starting with route rebuilding.
+
+### Features
+* Reworked route rebuilding to use the task scheduler. This enables rebuilding routes for multiple individual nodes at once. (#7196, #7203)
+
+### Bugfixes
+* Fixed a regression from `13.4.0` that prevented restoring NVM backups on 700/800 series controllers (#7220)
+
+### Config file changes
+* Add fingerprint to Aeotec ZWA024 (#7191)
+* Correct max. value of SKU parameters for Kwikset locks (#7178)
+* Add fingerprint to Remotec ZXT-800 (#7195)
+
+### Changes under the hood
+* Implement task scheduler (#7193)
+* Upgrade to ESLint v9, typescript-eslint v8 (#6987)
+* Update FAQ on secondary controllers (#7190)
+
 ## 13.4.0 (2024-09-24)
 ### Features
 * Added `Controller.nvm` property to enable incremental modification of NVM contents on the fly (#7153)
