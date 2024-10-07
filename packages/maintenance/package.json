@@ -42,7 +42,7 @@
     "@dprint/typescript": "^0.91.1",
     "@types/fs-extra": "^11.0.4",
     "@types/globrex": "^0.1.4",
-    "@types/node": "^18.19.42",
+    "@types/node": "^18.19.54",
     "@types/yargs": "^17.0.33",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/fmt": "^1.0.1",
@@ -59,8 +59,8 @@
     "json5": "^2.2.3",
     "piscina": "^4.4.0",
     "reflect-metadata": "^0.2.2",
-    "ts-morph": "^23.0.0",
-    "typescript": "5.5.3",
+    "ts-morph": "^24.0.0",
+    "typescript": "5.6.2",
     "yargs": "^17.7.2"
   }
 }

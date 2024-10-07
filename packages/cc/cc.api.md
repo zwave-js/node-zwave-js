@@ -38,7 +38,6 @@ import { Duration as Duration_2 } from '@zwave-js/core';
 import { EncapsulationFlags } from '@zwave-js/core';
 import { EnergyProductionCCAPI } from '../cc/EnergyProductionCC';
 import { EntryControlCCAPI } from '../cc/EntryControlCC';
-import { ExpandRecursively } from '../lib/Values';
 import { FirmwareUpdateMetaDataCCAPI } from '../cc/FirmwareUpdateMetaDataCC';
 import { FLiRS } from '@zwave-js/core';
 import { FLiRS as FLiRS_2 } from '@zwave-js/core/safe';
@@ -92,7 +91,6 @@ import { PowerlevelCCAPI } from '../cc/PowerlevelCC';
 import { ProtectionCCAPI } from '../cc/ProtectionCC';
 import { ProtocolVersion } from '@zwave-js/core';
 import { ReadonlyObjectKeyMap } from '@zwave-js/shared/safe';
-import { S2SecurityClass } from '@zwave-js/core';
 import { Scale } from '@zwave-js/core/safe';
 import { SceneActivationCCAPI } from '../cc/SceneActivationCC';
 import { SceneActuatorConfigurationCCAPI } from '../cc/SceneActuatorConfigurationCC';
@@ -233,12 +231,12 @@ export const AlarmSensorCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Alarm Sensor"];
             property: "supportedSensorTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
-        readonly endpoint: number;
-        readonly property: "supportedSensorTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            readonly endpoint: number;
+            readonly property: "supportedSensorTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -253,36 +251,31 @@ export const AlarmSensorCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    duration: ((sensorType: AlarmSensorType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly unit: "s";
-    readonly label: `${string} duration`;
-    readonly description: "For how long the alarm should be active";
-    readonly ccSpecific: {
-    readonly sensorType: AlarmSensorType;
-    };
-    readonly writeable: false;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "duration";
-    propertyKey: AlarmSensorType;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "duration";
-    propertyKey: AlarmSensorType;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "duration";
-    propertyKey: AlarmSensorType;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    duration: ((sensorType: AlarmSensorType) => {
+        readonly meta: {
+            readonly unit: "s";
+            readonly label: `${string} duration`;
+            readonly description: "For how long the alarm should be active";
+            readonly ccSpecific: {
+                readonly sensorType: AlarmSensorType;
+            };
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "duration";
+            propertyKey: AlarmSensorType;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            readonly endpoint: number;
+            readonly property: "duration";
+            readonly propertyKey: AlarmSensorType;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -292,37 +285,32 @@ export const AlarmSensorCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    severity: ((sensorType: AlarmSensorType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly min: 1;
-    readonly max: 100;
-    readonly unit: "%";
-    readonly label: `${string} severity`;
-    readonly ccSpecific: {
-    readonly sensorType: AlarmSensorType;
-    };
-    readonly writeable: false;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "severity";
-    propertyKey: AlarmSensorType;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "severity";
-    propertyKey: AlarmSensorType;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "severity";
-    propertyKey: AlarmSensorType;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    severity: ((sensorType: AlarmSensorType) => {
+        readonly meta: {
+            readonly min: 1;
+            readonly max: 100;
+            readonly unit: "%";
+            readonly label: `${string} severity`;
+            readonly ccSpecific: {
+                readonly sensorType: AlarmSensorType;
+            };
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "severity";
+            propertyKey: AlarmSensorType;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            readonly endpoint: number;
+            readonly property: "severity";
+            readonly propertyKey: AlarmSensorType;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -332,35 +320,30 @@ export const AlarmSensorCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    state: ((sensorType: AlarmSensorType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string} state`;
-    readonly description: "Whether the alarm is active";
-    readonly ccSpecific: {
-    readonly sensorType: AlarmSensorType;
-    };
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "state";
-    propertyKey: AlarmSensorType;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "state";
-    propertyKey: AlarmSensorType;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Alarm Sensor"];
-    property: "state";
-    propertyKey: AlarmSensorType;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    state: ((sensorType: AlarmSensorType) => {
+        readonly meta: {
+            readonly label: `${string} state`;
+            readonly description: "Whether the alarm is active";
+            readonly ccSpecific: {
+                readonly sensorType: AlarmSensorType;
+            };
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            property: "state";
+            propertyKey: AlarmSensorType;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Alarm Sensor"];
+            readonly endpoint: number;
+            readonly property: "state";
+            readonly propertyKey: AlarmSensorType;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -635,30 +618,25 @@ export interface AssociationCCSupportedGroupingsReportOptions extends CCCommandO
 //
 // @public (undocumented)
 export const AssociationCCValues: Readonly<{
-    nodeIds: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Association;
-    property: "nodeIds";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Association;
-    property: "nodeIds";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Association;
-    property: "nodeIds";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    nodeIds: ((groupId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Association;
+            property: "nodeIds";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Association;
+            readonly endpoint: number;
+            readonly property: "nodeIds";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -668,30 +646,25 @@ export const AssociationCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    maxNodes: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Association;
-    property: "maxNodes";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Association;
-    property: "maxNodes";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Association;
-    property: "maxNodes";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    maxNodes: ((groupId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Association;
+            property: "maxNodes";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Association;
+            readonly endpoint: number;
+            readonly property: "maxNodes";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -706,12 +679,12 @@ export const AssociationCCValues: Readonly<{
             commandClass: CommandClasses.Association;
             property: "groupCount";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Association;
-        readonly endpoint: number;
-        readonly property: "groupCount";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Association;
+            readonly endpoint: number;
+            readonly property: "groupCount";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -731,12 +704,12 @@ export const AssociationCCValues: Readonly<{
             commandClass: CommandClasses.Association;
             property: "hasLifeline";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Association;
-        readonly endpoint: number;
-        readonly property: "hasLifeline";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Association;
+            readonly endpoint: number;
+            readonly property: "hasLifeline";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -983,30 +956,25 @@ export interface AssociationGroupInfoCCNameReportOptions extends CCCommandOption
 //
 // @public (undocumented)
 export const AssociationGroupInfoCCValues: Readonly<{
-    commands: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "issuedCommands";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "issuedCommands";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "issuedCommands";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    commands: ((groupId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Association Group Information"];
+            property: "issuedCommands";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Association Group Information"];
+            readonly endpoint: number;
+            readonly property: "issuedCommands";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -1016,30 +984,25 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    groupInfo: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "info";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "info";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "info";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    groupInfo: ((groupId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Association Group Information"];
+            property: "info";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Association Group Information"];
+            readonly endpoint: number;
+            readonly property: "info";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -1049,30 +1012,25 @@ export const AssociationGroupInfoCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    groupName: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "name";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "name";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Association Group Information"];
-    property: "name";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    groupName: ((groupId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Association Group Information"];
+            property: "name";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Association Group Information"];
+            readonly endpoint: number;
+            readonly property: "name";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -1087,12 +1045,12 @@ export const AssociationGroupInfoCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Association Group Information"];
             property: "hasDynamicInfo";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Association Group Information"];
-        readonly endpoint: number;
-        readonly property: "hasDynamicInfo";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Association Group Information"];
+            readonly endpoint: number;
+            readonly property: "hasDynamicInfo";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -1613,36 +1571,31 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 //
 // @public (undocumented)
 export const BarrierOperatorCCValues: Readonly<{
-    signalingState: ((subsystemType: SubsystemType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Signaling State (${string})`;
-    readonly states: {
-    [x: number]: string;
-    };
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Barrier Operator"];
-    property: "signalingState";
-    propertyKey: SubsystemType;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Barrier Operator"];
-    property: "signalingState";
-    propertyKey: SubsystemType;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Barrier Operator"];
-    property: "signalingState";
-    propertyKey: SubsystemType;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    signalingState: ((subsystemType: SubsystemType) => {
+        readonly meta: {
+            readonly label: `Signaling State (${string})`;
+            readonly states: {
+                [x: number]: string;
+            };
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Barrier Operator"];
+            property: "signalingState";
+            propertyKey: SubsystemType;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
+            readonly endpoint: number;
+            readonly property: "signalingState";
+            readonly propertyKey: SubsystemType;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -1657,12 +1610,12 @@ export const BarrierOperatorCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Barrier Operator"];
             property: "currentState";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
-        readonly endpoint: number;
-        readonly property: "currentState";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
+            readonly endpoint: number;
+            readonly property: "currentState";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current Barrier State";
             readonly states: {
@@ -1688,12 +1641,12 @@ export const BarrierOperatorCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Barrier Operator"];
             property: "targetState";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
-        readonly endpoint: number;
-        readonly property: "targetState";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
+            readonly endpoint: number;
+            readonly property: "targetState";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target Barrier State";
             readonly states: {
@@ -1719,12 +1672,12 @@ export const BarrierOperatorCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Barrier Operator"];
             property: "position";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
-        readonly endpoint: number;
-        readonly property: "position";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
+            readonly endpoint: number;
+            readonly property: "position";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Barrier Position";
             readonly unit: "%";
@@ -1748,12 +1701,12 @@ export const BarrierOperatorCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Barrier Operator"];
             property: "supportedSubsystemTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
-        readonly endpoint: number;
-        readonly property: "supportedSubsystemTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Barrier Operator"];
+            readonly endpoint: number;
+            readonly property: "supportedSubsystemTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -1887,12 +1840,12 @@ export const BasicCCValues: Readonly<{
             commandClass: CommandClasses.Basic;
             property: "event";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Basic;
-        readonly endpoint: number;
-        readonly property: "event";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Basic;
+            readonly endpoint: number;
+            readonly property: "event";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Event value";
             readonly writeable: false;
@@ -1915,12 +1868,12 @@ export const BasicCCValues: Readonly<{
             commandClass: CommandClasses.Basic;
             property: "restorePrevious";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Basic;
-        readonly endpoint: number;
-        readonly property: "restorePrevious";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Basic;
+            readonly endpoint: number;
+            readonly property: "restorePrevious";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Restore previous value";
             readonly states: {
@@ -1944,12 +1897,12 @@ export const BasicCCValues: Readonly<{
             commandClass: CommandClasses.Basic;
             property: "duration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Basic;
-        readonly endpoint: number;
-        readonly property: "duration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Basic;
+            readonly endpoint: number;
+            readonly property: "duration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining duration";
             readonly minVersion: number;
@@ -1971,12 +1924,12 @@ export const BasicCCValues: Readonly<{
             commandClass: CommandClasses.Basic;
             property: "targetValue";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Basic;
-        readonly endpoint: number;
-        readonly property: "targetValue";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Basic;
+            readonly endpoint: number;
+            readonly property: "targetValue";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target value";
             readonly forceCreation: boolean;
@@ -2000,12 +1953,12 @@ export const BasicCCValues: Readonly<{
             commandClass: CommandClasses.Basic;
             property: "currentValue";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Basic;
-        readonly endpoint: number;
-        readonly property: "currentValue";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Basic;
+            readonly endpoint: number;
+            readonly property: "currentValue";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current value";
             readonly writeable: false;
@@ -2141,12 +2094,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "lowTemperatureStatus";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "lowTemperatureStatus";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "lowTemperatureStatus";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Battery temperature is low";
             readonly writeable: false;
@@ -2167,12 +2120,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "disconnected";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "disconnected";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "disconnected";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Battery is disconnected";
             readonly writeable: false;
@@ -2193,12 +2146,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "rechargeOrReplace";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "rechargeOrReplace";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "rechargeOrReplace";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Recharge or replace";
             readonly states: {
@@ -2224,12 +2177,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "lowFluid";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "lowFluid";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "lowFluid";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Fluid is low";
             readonly writeable: false;
@@ -2250,12 +2203,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "overheating";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "overheating";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "overheating";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Overheating";
             readonly writeable: false;
@@ -2276,12 +2229,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "backup";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "backup";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "backup";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Used as backup";
             readonly writeable: false;
@@ -2302,12 +2255,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "rechargeable";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "rechargeable";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "rechargeable";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Rechargeable";
             readonly writeable: false;
@@ -2328,12 +2281,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "chargingStatus";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "chargingStatus";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "chargingStatus";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Charging status";
             readonly states: {
@@ -2359,12 +2312,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "temperature";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "temperature";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "temperature";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Temperature";
             readonly writeable: false;
@@ -2387,12 +2340,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "maximumCapacity";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "maximumCapacity";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "maximumCapacity";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly max: 100;
             readonly unit: "%";
@@ -2416,12 +2369,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "isLow";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "isLow";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "isLow";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Low battery level";
             readonly writeable: false;
@@ -2442,12 +2395,12 @@ export const BatteryCCValues: Readonly<{
             commandClass: CommandClasses.Battery;
             property: "level";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Battery;
-        readonly endpoint: number;
-        readonly property: "level";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Battery;
+            readonly endpoint: number;
+            readonly property: "level";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly max: 100;
             readonly unit: "%";
@@ -2600,31 +2553,27 @@ export interface BinarySensorCCSupportedReportOptions {
 //
 // @public (undocumented)
 export const BinarySensorCCValues: Readonly<{
-    state: ((sensorType: BinarySensorType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Sensor state (${string})`;
-    readonly ccSpecific: {
-    readonly sensorType: BinarySensorType;
-    };
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Binary Sensor"];
-    property: string;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Binary Sensor"];
-    property: string;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Binary Sensor"];
-    property: string;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    state: ((sensorType: BinarySensorType) => {
+        readonly meta: {
+            readonly label: `Sensor state (${string})`;
+            readonly ccSpecific: {
+                readonly sensorType: BinarySensorType;
+            };
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Binary Sensor"];
+            property: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Binary Sensor"];
+            readonly endpoint: number;
+            readonly property: string;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -2639,12 +2588,12 @@ export const BinarySensorCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Binary Sensor"];
             property: "supportedSensorTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Binary Sensor"];
-        readonly endpoint: number;
-        readonly property: "supportedSensorTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Binary Sensor"];
+            readonly endpoint: number;
+            readonly property: "supportedSensorTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -2799,12 +2748,12 @@ export const BinarySwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Binary Switch"];
             property: "duration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Binary Switch"];
-        readonly endpoint: number;
-        readonly property: "duration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Binary Switch"];
+            readonly endpoint: number;
+            readonly property: "duration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining duration";
             readonly writeable: false;
@@ -2825,12 +2774,12 @@ export const BinarySwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Binary Switch"];
             property: "targetValue";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Binary Switch"];
-        readonly endpoint: number;
-        readonly property: "targetValue";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Binary Switch"];
+            readonly endpoint: number;
+            readonly property: "targetValue";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target value";
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -2852,12 +2801,12 @@ export const BinarySwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Binary Switch"];
             property: "currentValue";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Binary Switch"];
-        readonly endpoint: number;
-        readonly property: "currentValue";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Binary Switch"];
+            readonly endpoint: number;
+            readonly property: "currentValue";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current value";
             readonly writeable: false;
@@ -3262,33 +3211,28 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 //
 // @public (undocumented)
 export const CentralSceneCCValues: Readonly<{
-    scene: ((sceneNumber: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Scene ${string}`;
-    readonly writeable: false;
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Central Scene"];
-    property: "scene";
-    propertyKey: string;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Central Scene"];
-    property: "scene";
-    propertyKey: string;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Central Scene"];
-    property: "scene";
-    propertyKey: string;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    scene: ((sceneNumber: number) => {
+        readonly meta: {
+            readonly label: `Scene ${string}`;
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Central Scene"];
+            property: "scene";
+            propertyKey: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Central Scene"];
+            readonly endpoint: number;
+            readonly property: "scene";
+            readonly propertyKey: string;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly secret: false;
             readonly internal: false;
@@ -3303,12 +3247,12 @@ export const CentralSceneCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Central Scene"];
             property: "slowRefresh";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Central Scene"];
-        readonly endpoint: number;
-        readonly property: "slowRefresh";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Central Scene"];
+            readonly endpoint: number;
+            readonly property: "slowRefresh";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Send held down notifications at a slow rate";
             readonly description: "When this is true, KeyHeldDown notifications are sent every 55s. When this is false, the notifications are sent every 200ms.";
@@ -3330,12 +3274,12 @@ export const CentralSceneCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Central Scene"];
             property: "supportedKeyAttributes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Central Scene"];
-        readonly endpoint: number;
-        readonly property: "supportedKeyAttributes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Central Scene"];
+            readonly endpoint: number;
+            readonly property: "supportedKeyAttributes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -3355,12 +3299,12 @@ export const CentralSceneCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Central Scene"];
             property: "supportsSlowRefresh";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Central Scene"];
-        readonly endpoint: number;
-        readonly property: "supportsSlowRefresh";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Central Scene"];
+            readonly endpoint: number;
+            readonly property: "supportsSlowRefresh";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -3380,12 +3324,12 @@ export const CentralSceneCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Central Scene"];
             property: "sceneCount";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Central Scene"];
-        readonly endpoint: number;
-        readonly property: "sceneCount";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Central Scene"];
+            readonly endpoint: number;
+            readonly property: "sceneCount";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -3577,31 +3521,26 @@ export interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export const ClimateControlScheduleCCValues: Readonly<{
-    schedule: ((weekday: Weekday) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Schedule (${string})`;
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Climate Control Schedule"];
-    property: "schedule";
-    propertyKey: Weekday;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Climate Control Schedule"];
-    property: "schedule";
-    propertyKey: Weekday;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Climate Control Schedule"];
-    property: "schedule";
-    propertyKey: Weekday;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    schedule: ((weekday: Weekday) => {
+        readonly meta: {
+            readonly label: `Schedule (${string})`;
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Climate Control Schedule"];
+            property: "schedule";
+            propertyKey: Weekday;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Climate Control Schedule"];
+            readonly endpoint: number;
+            readonly property: "schedule";
+            readonly propertyKey: Weekday;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -3616,12 +3555,12 @@ export const ClimateControlScheduleCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Climate Control Schedule"];
             property: "overrideState";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Climate Control Schedule"];
-        readonly endpoint: number;
-        readonly property: "overrideState";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Climate Control Schedule"];
+            readonly endpoint: number;
+            readonly property: "overrideState";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Override state";
             readonly min: -12.8;
@@ -3643,12 +3582,12 @@ export const ClimateControlScheduleCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Climate Control Schedule"];
             property: "overrideType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Climate Control Schedule"];
-        readonly endpoint: number;
-        readonly property: "overrideType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Climate Control Schedule"];
+            readonly endpoint: number;
+            readonly property: "overrideType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Override type";
             readonly states: {
@@ -3990,35 +3929,30 @@ export interface ColorSwitchCCSupportedReportOptions {
 //
 // @public (undocumented)
 export const ColorSwitchCCValues: Readonly<{
-    targetColorChannel: ((component: ColorComponent) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Target value (${string})`;
-    readonly description: `The target value of the ${string} channel.`;
-    readonly valueChangeOptions: readonly ["transitionDuration"];
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Color Switch"];
-    property: "targetColor";
-    propertyKey: ColorComponent;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Color Switch"];
-    property: "targetColor";
-    propertyKey: ColorComponent;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Color Switch"];
-    property: "targetColor";
-    propertyKey: ColorComponent;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    targetColorChannel: ((component: ColorComponent) => {
+        readonly meta: {
+            readonly label: `Target value (${string})`;
+            readonly description: `The target value of the ${string} channel.`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Color Switch"];
+            property: "targetColor";
+            propertyKey: ColorComponent;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
+            readonly endpoint: number;
+            readonly property: "targetColor";
+            readonly propertyKey: ColorComponent;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -4028,34 +3962,29 @@ export const ColorSwitchCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    currentColorChannel: ((component: ColorComponent) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Current value (${string})`;
-    readonly description: `The current value of the ${string} channel.`;
-    readonly writeable: false;
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Color Switch"];
-    property: "currentColor";
-    propertyKey: ColorComponent;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Color Switch"];
-    property: "currentColor";
-    propertyKey: ColorComponent;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Color Switch"];
-    property: "currentColor";
-    propertyKey: ColorComponent;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    currentColorChannel: ((component: ColorComponent) => {
+        readonly meta: {
+            readonly label: `Current value (${string})`;
+            readonly description: `The current value of the ${string} channel.`;
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Color Switch"];
+            property: "currentColor";
+            propertyKey: ColorComponent;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
+            readonly endpoint: number;
+            readonly property: "currentColor";
+            readonly propertyKey: ColorComponent;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -4070,12 +3999,12 @@ export const ColorSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Color Switch"];
             property: "hexColor";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
-        readonly endpoint: number;
-        readonly property: "hexColor";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
+            readonly endpoint: number;
+            readonly property: "hexColor";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly minLength: 6;
             readonly maxLength: 7;
@@ -4099,12 +4028,12 @@ export const ColorSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Color Switch"];
             property: "duration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
-        readonly endpoint: number;
-        readonly property: "duration";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
+            readonly endpoint: number;
+            readonly property: "duration";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Remaining duration";
             readonly writeable: false;
@@ -4125,12 +4054,12 @@ export const ColorSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Color Switch"];
             property: "targetColor";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
-        readonly endpoint: number;
-        readonly property: "targetColor";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
+            readonly endpoint: number;
+            readonly property: "targetColor";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Target color";
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -4152,12 +4081,12 @@ export const ColorSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Color Switch"];
             property: "currentColor";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
-        readonly endpoint: number;
-        readonly property: "currentColor";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
+            readonly endpoint: number;
+            readonly property: "currentColor";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Current color";
             readonly writeable: false;
@@ -4178,12 +4107,12 @@ export const ColorSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Color Switch"];
             property: "supportsHexColor";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
-        readonly endpoint: number;
-        readonly property: "supportsHexColor";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
+            readonly endpoint: number;
+            readonly property: "supportsHexColor";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4203,12 +4132,12 @@ export const ColorSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Color Switch"];
             property: "supportedColorComponents";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
-        readonly endpoint: number;
-        readonly property: "supportedColorComponents";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Color Switch"];
+            readonly endpoint: number;
+            readonly property: "supportedColorComponents";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -4789,30 +4718,25 @@ export type ConfigurationCCSetOptions = CCCommandOptions & ({
 //
 // @public (undocumented)
 export const ConfigurationCCValues: Readonly<{
-    paramInformation: ((parameter: number, bitMask?: number | undefined) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Configuration;
-    property: number;
-    propertyKey: number | undefined;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Configuration;
-    property: number;
-    propertyKey: number | undefined;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Configuration;
-    property: number;
-    propertyKey: number | undefined;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    paramInformation: ((parameter: number, bitMask?: number | undefined) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Configuration;
+            property: number;
+            propertyKey: number | undefined;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Configuration;
+            readonly endpoint: number;
+            readonly property: number;
+            readonly propertyKey: number | undefined;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -4827,12 +4751,12 @@ export const ConfigurationCCValues: Readonly<{
             commandClass: CommandClasses.Configuration;
             property: "isParamInformationFromConfig";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Configuration;
-        readonly endpoint: number;
-        readonly property: "isParamInformationFromConfig";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Configuration;
+            readonly endpoint: number;
+            readonly property: "isParamInformationFromConfig";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5201,12 +5125,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "doorStatus";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "doorStatus";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "doorStatus";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current status of the door";
             readonly writeable: false;
@@ -5219,7 +5143,7 @@ export const DoorLockCCValues: Readonly<{
             readonly internal: false;
             readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     doorSupported: {
@@ -5227,12 +5151,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "doorSupported";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "doorSupported";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "doorSupported";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5252,12 +5176,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "boltStatus";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "boltStatus";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "boltStatus";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current status of the bolt";
             readonly writeable: false;
@@ -5270,7 +5194,7 @@ export const DoorLockCCValues: Readonly<{
             readonly internal: false;
             readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     boltSupported: {
@@ -5278,12 +5202,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "boltSupported";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "boltSupported";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "boltSupported";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5303,12 +5227,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "latchStatus";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "latchStatus";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "latchStatus";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current status of the latch";
             readonly writeable: false;
@@ -5321,7 +5245,7 @@ export const DoorLockCCValues: Readonly<{
             readonly internal: false;
             readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     latchSupported: {
@@ -5329,12 +5253,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "latchSupported";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "latchSupported";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "latchSupported";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5354,12 +5278,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "blockToBlock";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "blockToBlock";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "blockToBlock";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Block-to-block functionality enabled";
             readonly type: "boolean";
@@ -5372,7 +5296,7 @@ export const DoorLockCCValues: Readonly<{
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly minVersion: 4;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     blockToBlockSupported: {
@@ -5380,12 +5304,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "blockToBlockSupported";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "blockToBlockSupported";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "blockToBlockSupported";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5405,12 +5329,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "twistAssist";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "twistAssist";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "twistAssist";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Twist Assist enabled";
             readonly type: "boolean";
@@ -5423,7 +5347,7 @@ export const DoorLockCCValues: Readonly<{
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly minVersion: 4;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     twistAssistSupported: {
@@ -5431,12 +5355,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "twistAssistSupported";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "twistAssistSupported";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "twistAssistSupported";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5456,12 +5380,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "holdAndReleaseTime";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "holdAndReleaseTime";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "holdAndReleaseTime";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Duration in seconds the latch stays retracted";
             readonly min: 0;
@@ -5476,7 +5400,7 @@ export const DoorLockCCValues: Readonly<{
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly minVersion: 4;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     holdAndReleaseSupported: {
@@ -5484,12 +5408,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "holdAndReleaseSupported";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "holdAndReleaseSupported";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "holdAndReleaseSupported";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5509,12 +5433,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "autoRelockTime";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "autoRelockTime";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "autoRelockTime";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Duration in seconds until lock returns to secure state";
             readonly min: 0;
@@ -5529,7 +5453,7 @@ export const DoorLockCCValues: Readonly<{
             readonly internal: false;
             readonly supportsEndpoints: true;
             readonly minVersion: 4;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     autoRelockSupported: {
@@ -5537,12 +5461,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "autoRelockSupported";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "autoRelockSupported";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "autoRelockSupported";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5562,12 +5486,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "lockTimeout";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "lockTimeout";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "lockTimeout";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Seconds until lock mode times out";
             readonly writeable: false;
@@ -5590,12 +5514,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "lockTimeoutConfiguration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "lockTimeoutConfiguration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "lockTimeoutConfiguration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Duration of timed mode in seconds";
             readonly min: 0;
@@ -5618,12 +5542,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "operationType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "operationType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "operationType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Lock operation type";
             readonly states: {
@@ -5649,12 +5573,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "insideHandlesCanOpenDoor";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "insideHandlesCanOpenDoor";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "insideHandlesCanOpenDoor";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Which inside handles can open the door (actual status)";
             readonly writeable: false;
@@ -5675,12 +5599,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "insideHandlesCanOpenDoorConfiguration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "insideHandlesCanOpenDoorConfiguration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "insideHandlesCanOpenDoorConfiguration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Which inside handles can open the door (configuration)";
             readonly type: "any";
@@ -5701,12 +5625,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "supportedInsideHandles";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "supportedInsideHandles";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "supportedInsideHandles";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5726,12 +5650,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "outsideHandlesCanOpenDoor";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "outsideHandlesCanOpenDoor";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "outsideHandlesCanOpenDoor";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Which outside handles can open the door (actual status)";
             readonly writeable: false;
@@ -5752,12 +5676,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "outsideHandlesCanOpenDoorConfiguration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "outsideHandlesCanOpenDoorConfiguration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "outsideHandlesCanOpenDoorConfiguration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Which outside handles can open the door (configuration)";
             readonly type: "any";
@@ -5778,12 +5702,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "supportedOutsideHandles";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "supportedOutsideHandles";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "supportedOutsideHandles";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -5803,12 +5727,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "duration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "duration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "duration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining duration until target lock mode";
             readonly writeable: false;
@@ -5829,12 +5753,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "currentMode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "currentMode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "currentMode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current lock mode";
             readonly states: {
@@ -5860,12 +5784,12 @@ export const DoorLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock"];
             property: "targetMode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock"];
-        readonly endpoint: number;
-        readonly property: "targetMode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock"];
+            readonly endpoint: number;
+            readonly property: "targetMode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target lock mode";
             readonly states: {
@@ -5982,12 +5906,12 @@ export const DoorLockLoggingCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Door Lock Logging"];
             property: "recordsCount";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Door Lock Logging"];
-        readonly endpoint: number;
-        readonly property: "recordsCount";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Door Lock Logging"];
+            readonly endpoint: number;
+            readonly property: "recordsCount";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6264,31 +6188,26 @@ export interface EnergyProductionCCReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export const EnergyProductionCCValues: Readonly<{
-    value: ((parameter: EnergyProductionParameter) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: string;
-    readonly writeable: false;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Energy Production"];
-    property: "value";
-    propertyKey: EnergyProductionParameter;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Energy Production"];
-    property: "value";
-    propertyKey: EnergyProductionParameter;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Energy Production"];
-    property: "value";
-    propertyKey: EnergyProductionParameter;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    value: ((parameter: EnergyProductionParameter) => {
+        readonly meta: {
+            readonly label: string;
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Energy Production"];
+            property: "value";
+            propertyKey: EnergyProductionParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Energy Production"];
+            readonly endpoint: number;
+            readonly property: "value";
+            readonly propertyKey: EnergyProductionParameter;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -6464,12 +6383,12 @@ export const EntryControlCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Entry Control"];
             property: "supportedKeys";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Entry Control"];
-        readonly endpoint: number;
-        readonly property: "supportedKeys";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Entry Control"];
+            readonly endpoint: number;
+            readonly property: "supportedKeys";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6489,12 +6408,12 @@ export const EntryControlCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Entry Control"];
             property: "supportedEventTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Entry Control"];
-        readonly endpoint: number;
-        readonly property: "supportedEventTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Entry Control"];
+            readonly endpoint: number;
+            readonly property: "supportedEventTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6514,12 +6433,12 @@ export const EntryControlCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Entry Control"];
             property: "supportedDataTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Entry Control"];
-        readonly endpoint: number;
-        readonly property: "supportedDataTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Entry Control"];
+            readonly endpoint: number;
+            readonly property: "supportedDataTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -6539,12 +6458,12 @@ export const EntryControlCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Entry Control"];
             property: "keyCacheTimeout";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Entry Control"];
-        readonly endpoint: number;
-        readonly property: "keyCacheTimeout";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Entry Control"];
+            readonly endpoint: number;
+            readonly property: "keyCacheTimeout";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Key cache timeout";
             readonly unit: "seconds";
@@ -6569,12 +6488,12 @@ export const EntryControlCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Entry Control"];
             property: "keyCacheSize";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Entry Control"];
-        readonly endpoint: number;
-        readonly property: "keyCacheSize";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Entry Control"];
+            readonly endpoint: number;
+            readonly property: "keyCacheSize";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Key cache size";
             readonly description: "Number of character that must be stored before sending";
@@ -6843,7 +6762,19 @@ export type FirmwareUpdateCapabilities = {
     readonly firmwareTargets: readonly number[];
     readonly continuesToFunction: MaybeNotKnown<boolean>;
     readonly supportsActivation: MaybeNotKnown<boolean>;
+    readonly supportsResuming: MaybeNotKnown<boolean>;
+    readonly supportsNonSecureTransfer: MaybeNotKnown<boolean>;
 };
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateInitResult" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateInitResult {
+    nonSecureTransfer?: boolean;
+    resume?: boolean;
+    // (undocumented)
+    status: FirmwareUpdateRequestStatus;
+}
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaData" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -6867,6 +6798,10 @@ export interface FirmwareUpdateMetaData {
     maxFragmentSize?: number;
     // (undocumented)
     supportsActivation: MaybeNotKnown<boolean>;
+    // (undocumented)
+    supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
+    // (undocumented)
+    supportsResuming?: MaybeNotKnown<boolean>;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -6984,6 +6919,10 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
     // (undocumented)
     readonly supportsActivation: MaybeNotKnown<boolean>;
     // (undocumented)
+    readonly supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
+    // (undocumented)
+    readonly supportsResuming?: MaybeNotKnown<boolean>;
+    // (undocumented)
     toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry_2;
 }
 
@@ -7009,6 +6948,10 @@ export interface FirmwareUpdateMetaDataCCMetaDataReportOptions {
     maxFragmentSize?: number;
     // (undocumented)
     supportsActivation?: MaybeNotKnown<boolean>;
+    // (undocumented)
+    supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
+    // (undocumented)
+    supportsResuming?: MaybeNotKnown<boolean>;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCPrepareGet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7110,6 +7053,10 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
     // (undocumented)
     manufacturerId: number;
     // (undocumented)
+    nonSecureTransfer?: boolean;
+    // (undocumented)
+    resume?: boolean;
+    // (undocumented)
     serialize(): Buffer;
     // (undocumented)
     toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry_2;
@@ -7127,6 +7074,8 @@ export type FirmwareUpdateMetaDataCCRequestGetOptions = {
     fragmentSize: number;
     activation?: boolean;
     hardwareVersion?: number;
+    resume?: boolean;
+    nonSecureTransfer?: boolean;
 }>;
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateMetaDataCCRequestReport" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7134,6 +7083,10 @@ export type FirmwareUpdateMetaDataCCRequestGetOptions = {
 // @public (undocumented)
 export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDataCC {
     constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // (undocumented)
+    nonSecureTransfer?: boolean;
+    // (undocumented)
+    resume?: boolean;
     // (undocumented)
     readonly status: FirmwareUpdateRequestStatus;
     // (undocumented)
@@ -7156,17 +7109,67 @@ export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaData
 //
 // @public (undocumented)
 export const FirmwareUpdateMetaDataCCValues: Readonly<{
+    supportsNonSecureTransfer: {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
+            property: "supportsNonSecureTransfer";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
+            readonly endpoint: number;
+            readonly property: "supportsNonSecureTransfer";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
+    supportsResuming: {
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
+            property: "supportsResuming";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
+            readonly endpoint: number;
+            readonly property: "supportsResuming";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly options: {
+            readonly stateful: true;
+            readonly secret: false;
+            readonly minVersion: 1;
+            readonly supportsEndpoints: true;
+            readonly autoCreate: true;
+            readonly internal: true;
+        };
+    };
     continuesToFunction: {
         readonly id: {
             commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
             property: "continuesToFunction";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
-        readonly endpoint: number;
-        readonly property: "continuesToFunction";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
+            readonly endpoint: number;
+            readonly property: "continuesToFunction";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -7186,12 +7189,12 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
             property: "additionalFirmwareIDs";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
-        readonly endpoint: number;
-        readonly property: "additionalFirmwareIDs";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
+            readonly endpoint: number;
+            readonly property: "additionalFirmwareIDs";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -7211,12 +7214,12 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
             property: "firmwareUpgradable";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
-        readonly endpoint: number;
-        readonly property: "firmwareUpgradable";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
+            readonly endpoint: number;
+            readonly property: "firmwareUpgradable";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -7236,12 +7239,12 @@ export const FirmwareUpdateMetaDataCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
             property: "supportsActivation";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
-        readonly endpoint: number;
-        readonly property: "supportsActivation";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Firmware Update Meta Data"];
+            readonly endpoint: number;
+            readonly property: "supportsActivation";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -7284,6 +7287,14 @@ export enum FirmwareUpdateMetaDataCommand {
     RequestReport = 4,
     // (undocumented)
     StatusReport = 7
+}
+
+// Warning: (ae-missing-release-tag) "FirmwareUpdateOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface FirmwareUpdateOptions {
+    nonSecureTransfer?: boolean;
+    resume?: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "FirmwareUpdateProgress" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -7647,12 +7658,12 @@ export const HumidityControlModeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Humidity Control Mode"];
             property: "supportedModes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Humidity Control Mode"];
-        readonly endpoint: number;
-        readonly property: "supportedModes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Humidity Control Mode"];
+            readonly endpoint: number;
+            readonly property: "supportedModes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -7672,12 +7683,12 @@ export const HumidityControlModeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Humidity Control Mode"];
             property: "mode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Humidity Control Mode"];
-        readonly endpoint: number;
-        readonly property: "mode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Humidity Control Mode"];
+            readonly endpoint: number;
+            readonly property: "mode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -7766,12 +7777,12 @@ export const HumidityControlOperatingStateCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Humidity Control Operating State"];
             property: "state";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Humidity Control Operating State"];
-        readonly endpoint: number;
-        readonly property: "state";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Humidity Control Operating State"];
+            readonly endpoint: number;
+            readonly property: "state";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -7994,33 +8005,28 @@ export class HumidityControlSetpointCCSupportedReport extends HumidityControlSet
 //
 // @public (undocumented)
 export const HumidityControlSetpointCCValues: Readonly<{
-    setpointScale: ((setpointType: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Setpoint scale (${string})`;
-    readonly writeable: false;
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-    property: "setpointScale";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-    property: "setpointScale";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-    property: "setpointScale";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    setpointScale: ((setpointType: number) => {
+        readonly meta: {
+            readonly label: `Setpoint scale (${string})`;
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            property: "setpointScale";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            readonly endpoint: number;
+            readonly property: "setpointScale";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8030,34 +8036,29 @@ export const HumidityControlSetpointCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    setpoint: ((setpointType: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Setpoint (${string})`;
-    readonly ccSpecific: {
-    readonly setpointType: number;
-    };
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-    property: "setpoint";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-    property: "setpoint";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-    property: "setpoint";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    setpoint: ((setpointType: number) => {
+        readonly meta: {
+            readonly label: `Setpoint (${string})`;
+            readonly ccSpecific: {
+                readonly setpointType: number;
+            };
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            property: "setpoint";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            readonly endpoint: number;
+            readonly property: "setpoint";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8072,12 +8073,12 @@ export const HumidityControlSetpointCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
             property: "supportedSetpointTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
-        readonly endpoint: number;
-        readonly property: "supportedSetpointTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Humidity Control Setpoint"];
+            readonly endpoint: number;
+            readonly property: "supportedSetpointTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -8271,6 +8272,12 @@ export const inclusionTimeouts: Readonly<{
     readonly TA5: 10000;
     readonly TAI1: 240000;
     readonly TAI2: 240000;
+    readonly TB1: 30000;
+    readonly TB2: 240000;
+    readonly TB3: 10000;
+    readonly TB4: 10000;
+    readonly TB5: 10000;
+    readonly TBI1: 240000;
 }>;
 
 // Warning: (ae-missing-release-tag) "IndicatorCC" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -8470,27 +8477,23 @@ export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export const IndicatorCCValues: Readonly<{
-    indicatorDescription: ((indicatorId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Indicator;
-    property: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Indicator;
-    property: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Indicator;
-    property: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    indicatorDescription: ((indicatorId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -8500,34 +8503,29 @@ export const IndicatorCCValues: Readonly<{
             readonly minVersion: 4;
         };
     };
-    valueV2: ((indicatorId: number, propertyId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly ccSpecific: {
-    indicatorId: number;
-    propertyId: number;
-    };
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Indicator;
-    property: number;
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Indicator;
-    property: number;
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Indicator;
-    property: number;
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    valueV2: ((indicatorId: number, propertyId: number) => {
+        readonly meta: {
+            readonly ccSpecific: {
+                indicatorId: number;
+                propertyId: number;
+            };
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: number;
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: number;
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -8537,30 +8535,25 @@ export const IndicatorCCValues: Readonly<{
             readonly minVersion: 2;
         };
     };
-    supportedPropertyIDs: ((indicatorId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Indicator;
-    property: "supportedPropertyIDs";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Indicator;
-    property: "supportedPropertyIDs";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Indicator;
-    property: "supportedPropertyIDs";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    supportedPropertyIDs: ((indicatorId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Indicator;
+            property: "supportedPropertyIDs";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: "supportedPropertyIDs";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -8575,12 +8568,12 @@ export const IndicatorCCValues: Readonly<{
             commandClass: CommandClasses.Indicator;
             property: "timeout";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Indicator;
-        readonly endpoint: number;
-        readonly property: "timeout";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: "timeout";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Timeout";
             readonly type: "string";
@@ -8601,12 +8594,12 @@ export const IndicatorCCValues: Readonly<{
             commandClass: CommandClasses.Indicator;
             property: "identify";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Indicator;
-        readonly endpoint: number;
-        readonly property: "identify";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: "identify";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Identify";
             readonly states: {
@@ -8630,12 +8623,12 @@ export const IndicatorCCValues: Readonly<{
             commandClass: CommandClasses.Indicator;
             property: "value";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Indicator;
-        readonly endpoint: number;
-        readonly property: "value";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: "value";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Indicator value";
             readonly ccSpecific: {
@@ -8661,12 +8654,12 @@ export const IndicatorCCValues: Readonly<{
             commandClass: CommandClasses.Indicator;
             property: "supportedIndicatorIds";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Indicator;
-        readonly endpoint: number;
-        readonly property: "supportedIndicatorIds";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Indicator;
+            readonly endpoint: number;
+            readonly property: "supportedIndicatorIds";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -8911,35 +8904,30 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 //
 // @public (undocumented)
 export const IrrigationCCValues: Readonly<{
-    valveRunStartStop: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Start/Stop`;
-    readonly states: {
-    readonly true: "Start";
-    readonly false: "Stop";
-    };
-    readonly type: "boolean";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "startStop";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "startStop";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "startStop";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    valveRunStartStop: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Start/Stop`;
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
+            readonly type: "boolean";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "startStop";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "startStop";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8949,34 +8937,29 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    valveRunDuration: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Run duration`;
-    readonly min: 1;
-    readonly unit: "s";
-    readonly max: 65535;
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "duration";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "duration";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "duration";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    valveRunDuration: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Run duration`;
+            readonly min: 1;
+            readonly unit: "s";
+            readonly max: 65535;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "duration";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "duration";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -8986,31 +8969,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    useMoistureSensor: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Use moisture sensor`;
-    readonly type: "boolean";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "useMoistureSensor";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "useMoistureSensor";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "useMoistureSensor";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    useMoistureSensor: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Use moisture sensor`;
+            readonly type: "boolean";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "useMoistureSensor";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "useMoistureSensor";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9020,31 +8998,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    useRainSensor: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Use rain sensor`;
-    readonly type: "boolean";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "useRainSensor";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "useRainSensor";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "useRainSensor";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    useRainSensor: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Use rain sensor`;
+            readonly type: "boolean";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "useRainSensor";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "useRainSensor";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9054,31 +9027,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    errorLowFlow: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Error - Flow below high threshold`;
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorLowFlow";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorLowFlow";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorLowFlow";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    errorLowFlow: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Error - Flow below high threshold`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorLowFlow";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "errorLowFlow";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9088,33 +9056,28 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    lowFlowThreshold: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Low flow threshold`;
-    readonly min: 0;
-    readonly unit: "l/h";
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "lowFlowThreshold";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "lowFlowThreshold";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "lowFlowThreshold";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    lowFlowThreshold: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Low flow threshold`;
+            readonly min: 0;
+            readonly unit: "l/h";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "lowFlowThreshold";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "lowFlowThreshold";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9124,31 +9087,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    errorHighFlow: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Error - Flow above high threshold`;
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorHighFlow";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorHighFlow";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorHighFlow";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    errorHighFlow: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Error - Flow above high threshold`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorHighFlow";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "errorHighFlow";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9158,33 +9116,28 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    highFlowThreshold: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: High flow threshold`;
-    readonly min: 0;
-    readonly unit: "l/h";
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "highFlowThreshold";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "highFlowThreshold";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "highFlowThreshold";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    highFlowThreshold: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: High flow threshold`;
+            readonly min: 0;
+            readonly unit: "l/h";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "highFlowThreshold";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "highFlowThreshold";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9194,31 +9147,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    errorMaximumFlow: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Error - Maximum flow detected`;
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorMaximumFlow";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorMaximumFlow";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorMaximumFlow";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    errorMaximumFlow: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Error - Maximum flow detected`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorMaximumFlow";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "errorMaximumFlow";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9228,33 +9176,28 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    maximumFlow: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Maximum flow`;
-    readonly min: 0;
-    readonly unit: "l/h";
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "maximumFlow";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "maximumFlow";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "maximumFlow";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    maximumFlow: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Maximum flow`;
+            readonly min: 0;
+            readonly unit: "l/h";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "maximumFlow";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "maximumFlow";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9264,31 +9207,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    errorLowCurrent: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Error - Current below low threshold`;
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorLowCurrent";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorLowCurrent";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorLowCurrent";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    errorLowCurrent: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Error - Current below low threshold`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorLowCurrent";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "errorLowCurrent";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9298,31 +9236,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    errorHighCurrent: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Error - Current above high threshold`;
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorHighCurrent";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorHighCurrent";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorHighCurrent";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    errorHighCurrent: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Error - Current above high threshold`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorHighCurrent";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "errorHighCurrent";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9332,31 +9265,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    errorShortCircuit: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Error - Short circuit detected`;
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorShortCircuit";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorShortCircuit";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "errorShortCircuit";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    errorShortCircuit: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Error - Short circuit detected`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "errorShortCircuit";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "errorShortCircuit";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9366,34 +9294,29 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    nominalCurrentLowThreshold: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Nominal current - low threshold`;
-    readonly min: 0;
-    readonly max: 2550;
-    readonly unit: "mA";
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrentLowThreshold";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrentLowThreshold";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrentLowThreshold";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    nominalCurrentLowThreshold: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Nominal current - low threshold`;
+            readonly min: 0;
+            readonly max: 2550;
+            readonly unit: "mA";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrentLowThreshold";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "nominalCurrentLowThreshold";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9403,34 +9326,29 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    nominalCurrentHighThreshold: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Nominal current - high threshold`;
-    readonly min: 0;
-    readonly max: 2550;
-    readonly unit: "mA";
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrentHighThreshold";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrentHighThreshold";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrentHighThreshold";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    nominalCurrentHighThreshold: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Nominal current - high threshold`;
+            readonly min: 0;
+            readonly max: 2550;
+            readonly unit: "mA";
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrentHighThreshold";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "nominalCurrentHighThreshold";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9440,32 +9358,27 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    nominalCurrent: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Nominal current`;
-    readonly unit: "mA";
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrent";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrent";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "nominalCurrent";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    nominalCurrent: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Nominal current`;
+            readonly unit: "mA";
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "nominalCurrent";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "nominalCurrent";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9475,31 +9388,26 @@ export const IrrigationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    valveConnected: ((valveId: ValveId) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Connected`;
-    readonly writeable: false;
-    readonly type: "boolean";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "valveConnected";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "valveConnected";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Irrigation;
-    property: ValveId;
-    propertyKey: "valveConnected";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    valveConnected: ((valveId: ValveId) => {
+        readonly meta: {
+            readonly label: `${string}: Connected`;
+            readonly writeable: false;
+            readonly type: "boolean";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Irrigation;
+            property: ValveId;
+            propertyKey: "valveConnected";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: ValveId;
+            readonly propertyKey: "valveConnected";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -9514,12 +9422,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "shutoff";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "shutoff";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "shutoff";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Shutoff system";
             readonly states: {
@@ -9543,12 +9451,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "firstOpenZoneId";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "firstOpenZoneId";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "firstOpenZoneId";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "First open zone valve ID";
             readonly writeable: false;
@@ -9569,12 +9477,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "masterValveOpen";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "masterValveOpen";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "masterValveOpen";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Master valve is open";
             readonly writeable: false;
@@ -9595,12 +9503,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "errorValve";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "errorValve";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "errorValve";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: valve reporting error";
             readonly writeable: false;
@@ -9621,12 +9529,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "lowPressureThreshold";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "lowPressureThreshold";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "lowPressureThreshold";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Low pressure threshold";
             readonly unit: "kPa";
@@ -9648,12 +9556,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "errorLowPressure";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "errorLowPressure";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "errorLowPressure";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: low pressure";
             readonly writeable: false;
@@ -9674,12 +9582,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "highPressureThreshold";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "highPressureThreshold";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "highPressureThreshold";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "High pressure threshold";
             readonly unit: "kPa";
@@ -9701,12 +9609,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "errorHighPressure";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "errorHighPressure";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "errorHighPressure";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: high pressure";
             readonly writeable: false;
@@ -9727,12 +9635,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "errorEmergencyShutdown";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "errorEmergencyShutdown";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "errorEmergencyShutdown";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: emergency shutdown";
             readonly writeable: false;
@@ -9753,12 +9661,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "errorNotProgrammed";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "errorNotProgrammed";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "errorNotProgrammed";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Error: device not programmed";
             readonly writeable: false;
@@ -9779,12 +9687,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "shutoffDuration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "shutoffDuration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "shutoffDuration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining shutoff duration";
             readonly unit: "hours";
@@ -9808,12 +9716,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "pressure";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "pressure";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "pressure";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Pressure";
             readonly unit: "kPa";
@@ -9835,12 +9743,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "flow";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "flow";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "flow";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Flow";
             readonly unit: "l/h";
@@ -9862,12 +9770,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "moistureSensorPolarity";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "moistureSensorPolarity";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "moistureSensorPolarity";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Moisture sensor polarity";
             readonly min: 0;
@@ -9893,12 +9801,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "moistureSensorActive";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "moistureSensorActive";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "moistureSensorActive";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Moisture sensor attached and active";
             readonly writeable: false;
@@ -9919,12 +9827,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "rainSensorPolarity";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "rainSensorPolarity";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "rainSensorPolarity";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Rain sensor polarity";
             readonly min: 0;
@@ -9950,12 +9858,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "rainSensorActive";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "rainSensorActive";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "rainSensorActive";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Rain sensor attached and active";
             readonly writeable: false;
@@ -9976,12 +9884,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "pressureSensorActive";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "pressureSensorActive";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "pressureSensorActive";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Pressure sensor active";
             readonly writeable: false;
@@ -10002,12 +9910,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "flowSensorActive";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "flowSensorActive";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "flowSensorActive";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Flow sensor active";
             readonly writeable: false;
@@ -10028,12 +9936,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "masterValveDelay";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "masterValveDelay";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "masterValveDelay";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Master valve delay";
             readonly description: "The delay between turning on the master valve and turning on any zone valve";
@@ -10058,12 +9966,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "systemVoltage";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "systemVoltage";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "systemVoltage";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "System voltage";
             readonly unit: "V";
@@ -10087,12 +9995,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "maxValveTableSize";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "maxValveTableSize";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "maxValveTableSize";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10112,12 +10020,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "supportsMasterValve";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "supportsMasterValve";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "supportsMasterValve";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10137,12 +10045,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "numValveTables";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "numValveTables";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "numValveTables";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10162,12 +10070,12 @@ export const IrrigationCCValues: Readonly<{
             commandClass: CommandClasses.Irrigation;
             property: "numValves";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Irrigation;
-        readonly endpoint: number;
-        readonly property: "numValves";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Irrigation;
+            readonly endpoint: number;
+            readonly property: "numValves";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -10618,12 +10526,12 @@ export const LanguageCCValues: Readonly<{
             commandClass: CommandClasses.Language;
             property: "country";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Language;
-        readonly endpoint: number;
-        readonly property: "country";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Language;
+            readonly endpoint: number;
+            readonly property: "country";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Country code";
             readonly writeable: false;
@@ -10644,12 +10552,12 @@ export const LanguageCCValues: Readonly<{
             commandClass: CommandClasses.Language;
             property: "language";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Language;
-        readonly endpoint: number;
-        readonly property: "language";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Language;
+            readonly endpoint: number;
+            readonly property: "language";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Language code";
             readonly writeable: false;
@@ -10760,12 +10668,12 @@ export const LockCCValues: Readonly<{
             commandClass: CommandClasses.Lock;
             property: "locked";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Lock;
-        readonly endpoint: number;
-        readonly property: "locked";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Lock;
+            readonly endpoint: number;
+            readonly property: "locked";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Locked";
             readonly description: "Whether the lock is locked";
@@ -10922,31 +10830,26 @@ export interface ManufacturerSpecificCCReportOptions {
 //
 // @public (undocumented)
 export const ManufacturerSpecificCCValues: Readonly<{
-    deviceId: ((type: DeviceIdType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: string;
-    readonly writeable: false;
-    readonly type: "string";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Manufacturer Specific"];
-    property: "deviceId";
-    propertyKey: string;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Manufacturer Specific"];
-    property: "deviceId";
-    propertyKey: string;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Manufacturer Specific"];
-    property: "deviceId";
-    propertyKey: string;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    deviceId: ((type: DeviceIdType) => {
+        readonly meta: {
+            readonly label: string;
+            readonly writeable: false;
+            readonly type: "string";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Manufacturer Specific"];
+            property: "deviceId";
+            propertyKey: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Manufacturer Specific"];
+            readonly endpoint: number;
+            readonly property: "deviceId";
+            readonly propertyKey: string;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -10961,12 +10864,12 @@ export const ManufacturerSpecificCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Manufacturer Specific"];
             property: "productId";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Manufacturer Specific"];
-        readonly endpoint: number;
-        readonly property: "productId";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Manufacturer Specific"];
+            readonly endpoint: number;
+            readonly property: "productId";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Product ID";
             readonly writeable: false;
@@ -10989,12 +10892,12 @@ export const ManufacturerSpecificCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Manufacturer Specific"];
             property: "productType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Manufacturer Specific"];
-        readonly endpoint: number;
-        readonly property: "productType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Manufacturer Specific"];
+            readonly endpoint: number;
+            readonly property: "productType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Product type";
             readonly writeable: false;
@@ -11017,12 +10920,12 @@ export const ManufacturerSpecificCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Manufacturer Specific"];
             property: "manufacturerId";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Manufacturer Specific"];
-        readonly endpoint: number;
-        readonly property: "manufacturerId";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Manufacturer Specific"];
+            readonly endpoint: number;
+            readonly property: "manufacturerId";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Manufacturer ID";
             readonly writeable: false;
@@ -11226,35 +11129,30 @@ export interface MeterCCSupportedReportOptions {
 //
 // @public (undocumented)
 export const MeterCCValues: Readonly<{
-    value: ((meterType: number, rateType: RateType, scale: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly ccSpecific: {
-    readonly meterType: number;
-    readonly rateType: RateType;
-    readonly scale: number;
-    };
-    readonly writeable: false;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Meter;
-    property: "value";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Meter;
-    property: "value";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Meter;
-    property: "value";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    value: ((meterType: number, rateType: RateType, scale: number) => {
+        readonly meta: {
+            readonly ccSpecific: {
+                readonly meterType: number;
+                readonly rateType: RateType;
+                readonly scale: number;
+            };
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Meter;
+            property: "value";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Meter;
+            readonly endpoint: number;
+            readonly property: "value";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11264,39 +11162,34 @@ export const MeterCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    resetSingle: ((meterType: number, rateType: RateType, scale: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Reset (${string})` | `Reset (Consumption, ${string})` | `Reset (Production, ${string})`;
-    readonly states: {
-    readonly true: "Reset";
-    };
-    readonly ccSpecific: {
-    readonly meterType: number;
-    readonly rateType: RateType;
-    readonly scale: number;
-    };
-    readonly readable: false;
-    readonly type: "boolean";
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Meter;
-    property: "reset";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Meter;
-    property: "reset";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Meter;
-    property: "reset";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    resetSingle: ((meterType: number, rateType: RateType, scale: number) => {
+        readonly meta: {
+            readonly label: `Reset (${string})` | `Reset (Consumption, ${string})` | `Reset (Production, ${string})`;
+            readonly states: {
+                readonly true: "Reset";
+            };
+            readonly ccSpecific: {
+                readonly meterType: number;
+                readonly rateType: RateType;
+                readonly scale: number;
+            };
+            readonly readable: false;
+            readonly type: "boolean";
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Meter;
+            property: "reset";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Meter;
+            readonly endpoint: number;
+            readonly property: "reset";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -11311,12 +11204,12 @@ export const MeterCCValues: Readonly<{
             commandClass: CommandClasses.Meter;
             property: "reset";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Meter;
-        readonly endpoint: number;
-        readonly property: "reset";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Meter;
+            readonly endpoint: number;
+            readonly property: "reset";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Reset accumulated values";
             readonly states: {
@@ -11340,12 +11233,12 @@ export const MeterCCValues: Readonly<{
             commandClass: CommandClasses.Meter;
             property: "supportedRateTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Meter;
-        readonly endpoint: number;
-        readonly property: "supportedRateTypes";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Meter;
+            readonly endpoint: number;
+            readonly property: "supportedRateTypes";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11365,12 +11258,12 @@ export const MeterCCValues: Readonly<{
             commandClass: CommandClasses.Meter;
             property: "supportedScales";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Meter;
-        readonly endpoint: number;
-        readonly property: "supportedScales";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Meter;
+            readonly endpoint: number;
+            readonly property: "supportedScales";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11390,12 +11283,12 @@ export const MeterCCValues: Readonly<{
             commandClass: CommandClasses.Meter;
             property: "supportsReset";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Meter;
-        readonly endpoint: number;
-        readonly property: "supportsReset";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Meter;
+            readonly endpoint: number;
+            readonly property: "supportsReset";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11415,12 +11308,12 @@ export const MeterCCValues: Readonly<{
             commandClass: CommandClasses.Meter;
             property: "type";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Meter;
-        readonly endpoint: number;
-        readonly property: "type";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Meter;
+            readonly endpoint: number;
+            readonly property: "type";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -11708,30 +11601,25 @@ export interface MultiChannelAssociationCCSupportedGroupingsReportOptions extend
 //
 // @public (undocumented)
 export const MultiChannelAssociationCCValues: Readonly<{
-    endpoints: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "endpoints";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "endpoints";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "endpoints";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    endpoints: ((groupId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            property: "endpoints";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            readonly endpoint: number;
+            readonly property: "endpoints";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -11741,30 +11629,25 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    nodeIds: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "nodeIds";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "nodeIds";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "nodeIds";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    nodeIds: ((groupId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            property: "nodeIds";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            readonly endpoint: number;
+            readonly property: "nodeIds";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -11774,30 +11657,25 @@ export const MultiChannelAssociationCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    maxNodes: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "maxNodes";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "maxNodes";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Multi Channel Association"];
-    property: "maxNodes";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    maxNodes: ((groupId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            property: "maxNodes";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            readonly endpoint: number;
+            readonly property: "maxNodes";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -11812,12 +11690,12 @@ export const MultiChannelAssociationCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multi Channel Association"];
             property: "groupCount";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multi Channel Association"];
-        readonly endpoint: number;
-        readonly property: "groupCount";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel Association"];
+            readonly endpoint: number;
+            readonly property: "groupCount";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12153,30 +12031,25 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 //
 // @public (undocumented)
 export const MultiChannelCCValues: Readonly<{
-    aggregatedEndpointMembers: ((endpointIndex: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Multi Channel"];
-    property: "members";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Multi Channel"];
-    property: "members";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Multi Channel"];
-    property: "members";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    aggregatedEndpointMembers: ((endpointIndex: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multi Channel"];
+            property: "members";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel"];
+            readonly endpoint: number;
+            readonly property: "members";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -12191,12 +12064,12 @@ export const MultiChannelCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "deviceClass";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multi Channel"];
-        readonly endpoint: number;
-        readonly property: "deviceClass";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel"];
+            readonly endpoint: number;
+            readonly property: "deviceClass";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12216,12 +12089,12 @@ export const MultiChannelCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "commandClasses";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multi Channel"];
-        readonly endpoint: number;
-        readonly property: "commandClasses";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel"];
+            readonly endpoint: number;
+            readonly property: "commandClasses";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12241,12 +12114,12 @@ export const MultiChannelCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "identicalCapabilities";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multi Channel"];
-        readonly endpoint: number;
-        readonly property: "identicalCapabilities";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel"];
+            readonly endpoint: number;
+            readonly property: "identicalCapabilities";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12266,12 +12139,12 @@ export const MultiChannelCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "countIsDynamic";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multi Channel"];
-        readonly endpoint: number;
-        readonly property: "countIsDynamic";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel"];
+            readonly endpoint: number;
+            readonly property: "countIsDynamic";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12291,12 +12164,12 @@ export const MultiChannelCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "aggregatedCount";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multi Channel"];
-        readonly endpoint: number;
-        readonly property: "aggregatedCount";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel"];
+            readonly endpoint: number;
+            readonly property: "aggregatedCount";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12316,12 +12189,12 @@ export const MultiChannelCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "individualCount";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multi Channel"];
-        readonly endpoint: number;
-        readonly property: "individualCount";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel"];
+            readonly endpoint: number;
+            readonly property: "individualCount";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12341,12 +12214,12 @@ export const MultiChannelCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multi Channel"];
             property: "endpointIndizes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multi Channel"];
-        readonly endpoint: number;
-        readonly property: "endpointIndizes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multi Channel"];
+            readonly endpoint: number;
+            readonly property: "endpointIndizes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12602,28 +12475,24 @@ export interface MultilevelSensorCCSupportedSensorReportOptions extends CCComman
 //
 // @public (undocumented)
 export const MultilevelSensorCCValues: Readonly<{
-    value: ((sensorTypeName: string) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: string;
-    readonly writeable: false;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-    property: string;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-    property: string;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-    property: string;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    value: ((sensorTypeName: string) => {
+        readonly meta: {
+            readonly label: string;
+            readonly writeable: false;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Sensor"];
+            property: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Sensor"];
+            readonly endpoint: number;
+            readonly property: string;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -12633,30 +12502,25 @@ export const MultilevelSensorCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    supportedScales: ((sensorType: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-    property: "supportedScales";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-    property: "supportedScales";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-    property: "supportedScales";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    supportedScales: ((sensorType: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Sensor"];
+            property: "supportedScales";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Sensor"];
+            readonly endpoint: number;
+            readonly property: "supportedScales";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -12671,12 +12535,12 @@ export const MultilevelSensorCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multilevel Sensor"];
             property: "supportedSensorTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multilevel Sensor"];
-        readonly endpoint: number;
-        readonly property: "supportedSensorTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Sensor"];
+            readonly endpoint: number;
+            readonly property: "supportedSensorTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12870,36 +12734,32 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 //
 // @public (undocumented)
 export const MultilevelSwitchCCValues: Readonly<{
-    levelChangeDown: ((switchType: SwitchType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Perform a level change (${string})`;
-    readonly valueChangeOptions: readonly ["transitionDuration"];
-    readonly states: {
-    readonly true: "Start";
-    readonly false: "Stop";
-    };
-    readonly ccSpecific: {
-    readonly switchType: SwitchType;
-    };
-    readonly readable: false;
-    readonly type: "boolean";
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Multilevel Switch"];
-    property: string;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Multilevel Switch"];
-    property: string;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Multilevel Switch"];
-    property: string;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    levelChangeDown: ((switchType: SwitchType) => {
+        readonly meta: {
+            readonly label: `Perform a level change (${string})`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
+            readonly ccSpecific: {
+                readonly switchType: SwitchType;
+            };
+            readonly readable: false;
+            readonly type: "boolean";
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            property: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: string;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -12909,36 +12769,32 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    levelChangeUp: ((switchType: SwitchType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Perform a level change (${string})`;
-    readonly valueChangeOptions: readonly ["transitionDuration"];
-    readonly states: {
-    readonly true: "Start";
-    readonly false: "Stop";
-    };
-    readonly ccSpecific: {
-    readonly switchType: SwitchType;
-    };
-    readonly readable: false;
-    readonly type: "boolean";
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Multilevel Switch"];
-    property: string;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Multilevel Switch"];
-    property: string;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Multilevel Switch"];
-    property: string;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    levelChangeUp: ((switchType: SwitchType) => {
+        readonly meta: {
+            readonly label: `Perform a level change (${string})`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
+            readonly ccSpecific: {
+                readonly switchType: SwitchType;
+            };
+            readonly readable: false;
+            readonly type: "boolean";
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            property: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: string;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -12953,12 +12809,12 @@ export const MultilevelSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multilevel Switch"];
             property: "superviseStartStopLevelChange";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-        readonly endpoint: number;
-        readonly property: "superviseStartStopLevelChange";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: "superviseStartStopLevelChange";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -12978,12 +12834,12 @@ export const MultilevelSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multilevel Switch"];
             property: "switchType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-        readonly endpoint: number;
-        readonly property: "switchType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: "switchType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -13003,12 +12859,12 @@ export const MultilevelSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multilevel Switch"];
             property: "event";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-        readonly endpoint: number;
-        readonly property: "event";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: "event";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Event value";
             readonly writeable: false;
@@ -13023,7 +12879,7 @@ export const MultilevelSwitchCCValues: Readonly<{
             readonly minVersion: 1;
             readonly supportsEndpoints: true;
             readonly stateful: false;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     restorePrevious: {
@@ -13031,12 +12887,12 @@ export const MultilevelSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multilevel Switch"];
             property: "restorePrevious";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-        readonly endpoint: number;
-        readonly property: "restorePrevious";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: "restorePrevious";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Restore previous value";
             readonly states: {
@@ -13060,12 +12916,12 @@ export const MultilevelSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multilevel Switch"];
             property: "duration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-        readonly endpoint: number;
-        readonly property: "duration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: "duration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Remaining duration";
             readonly writeable: false;
@@ -13086,12 +12942,12 @@ export const MultilevelSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multilevel Switch"];
             property: "targetValue";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-        readonly endpoint: number;
-        readonly property: "targetValue";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: "targetValue";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target value";
             readonly valueChangeOptions: readonly ["transitionDuration"];
@@ -13115,12 +12971,12 @@ export const MultilevelSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Multilevel Switch"];
             property: "currentValue";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
-        readonly endpoint: number;
-        readonly property: "currentValue";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Multilevel Switch"];
+            readonly endpoint: number;
+            readonly property: "currentValue";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Current value";
             readonly writeable: false;
@@ -13288,12 +13144,12 @@ export const NodeNamingAndLocationCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Node Naming and Location"];
             property: "location";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Node Naming and Location"];
-        readonly endpoint: number;
-        readonly property: "location";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Node Naming and Location"];
+            readonly endpoint: number;
+            readonly property: "location";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Node location";
             readonly type: "string";
@@ -13314,12 +13170,12 @@ export const NodeNamingAndLocationCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Node Naming and Location"];
             property: "name";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Node Naming and Location"];
-        readonly endpoint: number;
-        readonly property: "name";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Node Naming and Location"];
+            readonly endpoint: number;
+            readonly property: "name";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Node name";
             readonly type: "string";
@@ -13556,30 +13412,25 @@ export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export const NotificationCCValues: Readonly<{
-    notificationVariable: ((notificationName: string, variableName: string) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Notification;
-    property: string;
-    propertyKey: string;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Notification;
-    property: string;
-    propertyKey: string;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Notification;
-    property: string;
-    propertyKey: string;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    notificationVariable: ((notificationName: string, variableName: string) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+            propertyKey: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: string;
+            readonly propertyKey: string;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -13589,36 +13440,31 @@ export const NotificationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    unknownNotificationVariable: ((notificationType: number, notificationName: string) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string}: Unknown value`;
-    readonly ccSpecific: {
-    readonly notificationType: number;
-    };
-    readonly writeable: false;
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Notification;
-    property: string;
-    propertyKey: "unknown";
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Notification;
-    property: string;
-    propertyKey: "unknown";
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Notification;
-    property: string;
-    propertyKey: "unknown";
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    unknownNotificationVariable: ((notificationType: number, notificationName: string) => {
+        readonly meta: {
+            readonly label: `${string}: Unknown value`;
+            readonly ccSpecific: {
+                readonly notificationType: number;
+            };
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+            propertyKey: "unknown";
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: string;
+            readonly propertyKey: "unknown";
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -13628,33 +13474,29 @@ export const NotificationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    unknownNotificationType: ((notificationType: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Unknown notification (${string})`;
-    readonly ccSpecific: {
-    readonly notificationType: number;
-    };
-    readonly writeable: false;
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Notification;
-    property: string;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Notification;
-    property: string;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Notification;
-    property: string;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    unknownNotificationType: ((notificationType: number) => {
+        readonly meta: {
+            readonly label: `Unknown notification (${string})`;
+            readonly ccSpecific: {
+                readonly notificationType: number;
+            };
+            readonly writeable: false;
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: string;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: string;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -13664,30 +13506,25 @@ export const NotificationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    supportedNotificationEvents: ((notificationType: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Notification;
-    property: "supportedNotificationEvents";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Notification;
-    property: "supportedNotificationEvents";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Notification;
-    property: "supportedNotificationEvents";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    supportedNotificationEvents: ((notificationType: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Notification;
+            property: "supportedNotificationEvents";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "supportedNotificationEvents";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -13703,13 +13540,13 @@ export const NotificationCCValues: Readonly<{
             property: "Access Control";
             propertyKey: "Door tilt state";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Notification;
-        readonly endpoint: number;
-        readonly property: "Access Control";
-        readonly propertyKey: "Door tilt state";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "Access Control";
+            readonly propertyKey: "Door tilt state";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Door tilt state";
             readonly states: {
@@ -13740,13 +13577,13 @@ export const NotificationCCValues: Readonly<{
             property: "Access Control";
             propertyKey: "Door state (simple)";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Notification;
-        readonly endpoint: number;
-        readonly property: "Access Control";
-        readonly propertyKey: "Door state (simple)";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "Access Control";
+            readonly propertyKey: "Door state (simple)";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Door state (simple)";
             readonly states: {
@@ -13768,7 +13605,7 @@ export const NotificationCCValues: Readonly<{
             readonly internal: false;
             readonly minVersion: 1;
             readonly supportsEndpoints: true;
-            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => ExpandRecursively<boolean>;
+            readonly autoCreate: (applHost: ZWaveApplicationHost_2, endpoint: IZWaveEndpoint_2) => boolean;
         };
     };
     alarmLevel: {
@@ -13776,12 +13613,12 @@ export const NotificationCCValues: Readonly<{
             commandClass: CommandClasses.Notification;
             property: "alarmLevel";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Notification;
-        readonly endpoint: number;
-        readonly property: "alarmLevel";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "alarmLevel";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Alarm Level";
             readonly writeable: false;
@@ -13804,12 +13641,12 @@ export const NotificationCCValues: Readonly<{
             commandClass: CommandClasses.Notification;
             property: "alarmType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Notification;
-        readonly endpoint: number;
-        readonly property: "alarmType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "alarmType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Alarm Type";
             readonly writeable: false;
@@ -13832,12 +13669,12 @@ export const NotificationCCValues: Readonly<{
             commandClass: CommandClasses.Notification;
             property: "lastRefresh";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Notification;
-        readonly endpoint: number;
-        readonly property: "lastRefresh";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "lastRefresh";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -13857,12 +13694,12 @@ export const NotificationCCValues: Readonly<{
             commandClass: CommandClasses.Notification;
             property: "notificationMode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Notification;
-        readonly endpoint: number;
-        readonly property: "notificationMode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "notificationMode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -13882,12 +13719,12 @@ export const NotificationCCValues: Readonly<{
             commandClass: CommandClasses.Notification;
             property: "supportedNotificationTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Notification;
-        readonly endpoint: number;
-        readonly property: "supportedNotificationTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "supportedNotificationTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -13907,12 +13744,12 @@ export const NotificationCCValues: Readonly<{
             commandClass: CommandClasses.Notification;
             property: "supportsV1Alarm";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Notification;
-        readonly endpoint: number;
-        readonly property: "supportsV1Alarm";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Notification;
+            readonly endpoint: number;
+            readonly property: "supportsV1Alarm";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -14344,12 +14181,12 @@ export const ProtectionCCValues: Readonly<{
             commandClass: CommandClasses.Protection;
             property: "supportedRFStates";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Protection;
-        readonly endpoint: number;
-        readonly property: "supportedRFStates";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Protection;
+            readonly endpoint: number;
+            readonly property: "supportedRFStates";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -14369,12 +14206,12 @@ export const ProtectionCCValues: Readonly<{
             commandClass: CommandClasses.Protection;
             property: "supportedLocalStates";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Protection;
-        readonly endpoint: number;
-        readonly property: "supportedLocalStates";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Protection;
+            readonly endpoint: number;
+            readonly property: "supportedLocalStates";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -14394,12 +14231,12 @@ export const ProtectionCCValues: Readonly<{
             commandClass: CommandClasses.Protection;
             property: "supportsTimeout";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Protection;
-        readonly endpoint: number;
-        readonly property: "supportsTimeout";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Protection;
+            readonly endpoint: number;
+            readonly property: "supportsTimeout";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -14419,12 +14256,12 @@ export const ProtectionCCValues: Readonly<{
             commandClass: CommandClasses.Protection;
             property: "supportsExclusiveControl";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Protection;
-        readonly endpoint: number;
-        readonly property: "supportsExclusiveControl";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Protection;
+            readonly endpoint: number;
+            readonly property: "supportsExclusiveControl";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -14444,12 +14281,12 @@ export const ProtectionCCValues: Readonly<{
             commandClass: CommandClasses.Protection;
             property: "timeout";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Protection;
-        readonly endpoint: number;
-        readonly property: "timeout";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Protection;
+            readonly endpoint: number;
+            readonly property: "timeout";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "RF protection timeout";
             readonly min: 0;
@@ -14472,12 +14309,12 @@ export const ProtectionCCValues: Readonly<{
             commandClass: CommandClasses.Protection;
             property: "rf";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Protection;
-        readonly endpoint: number;
-        readonly property: "rf";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Protection;
+            readonly endpoint: number;
+            readonly property: "rf";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "RF protection state";
             readonly states: {
@@ -14501,12 +14338,12 @@ export const ProtectionCCValues: Readonly<{
             commandClass: CommandClasses.Protection;
             property: "local";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Protection;
-        readonly endpoint: number;
-        readonly property: "local";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Protection;
+            readonly endpoint: number;
+            readonly property: "local";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Local protection state";
             readonly states: {
@@ -14530,12 +14367,12 @@ export const ProtectionCCValues: Readonly<{
             commandClass: CommandClasses.Protection;
             property: "exclusiveControlNodeId";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Protection;
-        readonly endpoint: number;
-        readonly property: "exclusiveControlNodeId";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Protection;
+            readonly endpoint: number;
+            readonly property: "exclusiveControlNodeId";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 1;
             readonly max: 232;
@@ -14659,12 +14496,12 @@ export const SceneActivationCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Scene Activation"];
             property: "dimmingDuration";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Scene Activation"];
-        readonly endpoint: number;
-        readonly property: "dimmingDuration";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Scene Activation"];
+            readonly endpoint: number;
+            readonly property: "dimmingDuration";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Dimming duration";
             readonly type: "duration";
@@ -14685,12 +14522,12 @@ export const SceneActivationCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Scene Activation"];
             property: "sceneId";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Scene Activation"];
-        readonly endpoint: number;
-        readonly property: "sceneId";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Scene Activation"];
+            readonly endpoint: number;
+            readonly property: "sceneId";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 1;
             readonly label: "Scene ID";
@@ -14800,31 +14637,26 @@ export interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions
 //
 // @public (undocumented)
 export const SceneActuatorConfigurationCCValues: Readonly<{
-    dimmingDuration: ((sceneId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Dimming duration (${number})`;
-    readonly type: "duration";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-    property: "dimmingDuration";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-    property: "dimmingDuration";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-    property: "dimmingDuration";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    dimmingDuration: ((sceneId: number) => {
+        readonly meta: {
+            readonly label: `Dimming duration (${number})`;
+            readonly type: "duration";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
+            property: "dimmingDuration";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
+            readonly endpoint: number;
+            readonly property: "dimmingDuration";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -14834,34 +14666,29 @@ export const SceneActuatorConfigurationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    level: ((sceneId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Level (${number})`;
-    readonly valueChangeOptions: readonly ["transitionDuration"];
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-    property: "level";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-    property: "level";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
-    property: "level";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    level: ((sceneId: number) => {
+        readonly meta: {
+            readonly label: `Level (${number})`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
+            property: "level";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Scene Actuator Configuration"];
+            readonly endpoint: number;
+            readonly property: "level";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -14971,31 +14798,26 @@ export interface SceneControllerConfigurationCCSetOptions extends CCCommandOptio
 //
 // @public (undocumented)
 export const SceneControllerConfigurationCCValues: Readonly<{
-    dimmingDuration: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Dimming duration (${number})`;
-    readonly type: "duration";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-    property: "dimmingDuration";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-    property: "dimmingDuration";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-    property: "dimmingDuration";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    dimmingDuration: ((groupId: number) => {
+        readonly meta: {
+            readonly label: `Dimming duration (${number})`;
+            readonly type: "duration";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
+            property: "dimmingDuration";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
+            readonly endpoint: number;
+            readonly property: "dimmingDuration";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -15005,34 +14827,29 @@ export const SceneControllerConfigurationCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    sceneId: ((groupId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Associated Scene ID (${number})`;
-    readonly valueChangeOptions: readonly ["transitionDuration"];
-    readonly min: 0;
-    readonly max: 255;
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-    property: "sceneId";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-    property: "sceneId";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
-    property: "sceneId";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    sceneId: ((groupId: number) => {
+        readonly meta: {
+            readonly label: `Associated Scene ID (${number})`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly min: 0;
+            readonly max: 255;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
+            property: "sceneId";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Scene Controller Configuration"];
+            readonly endpoint: number;
+            readonly property: "sceneId";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -15309,30 +15126,25 @@ export interface ScheduleEntryLockCCTimeOffsetSetOptions extends CCCommandOption
 //
 // @public (undocumented)
 export const ScheduleEntryLockCCValues: Readonly<{
-    schedule: ((scheduleKind: ScheduleEntryLockScheduleKind, userId: number, slotId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "schedule";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "schedule";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "schedule";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    schedule: ((scheduleKind: ScheduleEntryLockScheduleKind, userId: number, slotId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "schedule";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "schedule";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -15342,30 +15154,25 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    scheduleKind: ((userId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "scheduleKind";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "scheduleKind";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "scheduleKind";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    scheduleKind: ((userId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "scheduleKind";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "scheduleKind";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -15375,30 +15182,25 @@ export const ScheduleEntryLockCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    userEnabled: ((userId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "userEnabled";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "userEnabled";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-    property: "userEnabled";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    userEnabled: ((userId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            property: "userEnabled";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "userEnabled";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -15413,12 +15215,12 @@ export const ScheduleEntryLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
             property: "numDailyRepeatingSlots";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-        readonly endpoint: number;
-        readonly property: "numDailyRepeatingSlots";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "numDailyRepeatingSlots";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15438,12 +15240,12 @@ export const ScheduleEntryLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
             property: "numYearDaySlots";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-        readonly endpoint: number;
-        readonly property: "numYearDaySlots";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "numYearDaySlots";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15463,12 +15265,12 @@ export const ScheduleEntryLockCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
             property: "numWeekDaySlots";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
-        readonly endpoint: number;
-        readonly property: "numWeekDaySlots";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Schedule Entry Lock"];
+            readonly endpoint: number;
+            readonly property: "numWeekDaySlots";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -15860,7 +15662,7 @@ export class Security2CC extends CommandClass {
     // (undocumented)
     ccCommand: Security2Command;
     static encapsulate(host: ZWaveHost_2, cc: CommandClass, options?: {
-        securityClass?: S2SecurityClass;
+        securityClass?: SecurityClass;
         multicastOutOfSync?: boolean;
         multicastGroupId?: number;
         verifyDelivery?: boolean;
@@ -15999,6 +15801,8 @@ export interface Security2CCKEXSetOptions {
     // (undocumented)
     permitCSA: boolean;
     // (undocumented)
+    _reserved?: number;
+    // (undocumented)
     selectedECDHProfile: ECDHProfiles;
     // (undocumented)
     selectedKEXScheme: KEXSchemes;
@@ -16041,7 +15845,7 @@ export interface Security2CCMessageEncapsulationOptions extends CCCommandOptions
     encapsulated?: CommandClass;
     // (undocumented)
     extensions?: Security2Extension[];
-    securityClass?: S2SecurityClass;
+    securityClass?: SecurityClass;
     // (undocumented)
     verifyDelivery?: boolean;
 }
@@ -16361,6 +16165,8 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
     networkKey: Buffer;
     // (undocumented)
     serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(applHost: ZWaveApplicationHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityCCNetworkKeySetOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16423,7 +16229,11 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 //
 // @public (undocumented)
 export class SecurityCCSchemeReport extends SecurityCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | CCCommandOptions);
+    // (undocumented)
+    serialize(): Buffer;
+    // (undocumented)
+    toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry;
 }
 
 // Warning: (ae-missing-release-tag) "SecurityCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -16773,12 +16583,12 @@ export const SoundSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Sound Switch"];
             property: "defaultToneId";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Sound Switch"];
-        readonly endpoint: number;
-        readonly property: "defaultToneId";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Sound Switch"];
+            readonly endpoint: number;
+            readonly property: "defaultToneId";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 0;
             readonly max: 254;
@@ -16801,12 +16611,12 @@ export const SoundSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Sound Switch"];
             property: "defaultVolume";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Sound Switch"];
-        readonly endpoint: number;
-        readonly property: "defaultVolume";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Sound Switch"];
+            readonly endpoint: number;
+            readonly property: "defaultVolume";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 0;
             readonly max: 100;
@@ -16830,12 +16640,12 @@ export const SoundSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Sound Switch"];
             property: "toneId";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Sound Switch"];
-        readonly endpoint: number;
-        readonly property: "toneId";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Sound Switch"];
+            readonly endpoint: number;
+            readonly property: "toneId";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Play Tone";
             readonly valueChangeOptions: readonly ["volume"];
@@ -16859,12 +16669,12 @@ export const SoundSwitchCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Sound Switch"];
             property: "volume";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Sound Switch"];
-        readonly endpoint: number;
-        readonly property: "volume";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Sound Switch"];
+            readonly endpoint: number;
+            readonly property: "volume";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: 0;
             readonly max: 100;
@@ -17037,30 +16847,25 @@ export type SupervisionCCReportOptions = {
 //
 // @public (undocumented)
 export const SupervisionCCValues: Readonly<{
-    ccSupported: ((ccId: CommandClasses) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: CommandClasses.Supervision;
-    property: "ccSupported";
-    propertyKey: CommandClasses;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: CommandClasses.Supervision;
-    property: "ccSupported";
-    propertyKey: CommandClasses;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: CommandClasses.Supervision;
-    property: "ccSupported";
-    propertyKey: CommandClasses;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    ccSupported: ((ccId: CommandClasses) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: CommandClasses.Supervision;
+            property: "ccSupported";
+            propertyKey: CommandClasses;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Supervision;
+            readonly endpoint: number;
+            readonly property: "ccSupported";
+            readonly propertyKey: CommandClasses;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -17233,12 +17038,12 @@ export const ThermostatFanModeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
             property: "supportedModes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
-        readonly endpoint: number;
-        readonly property: "supportedModes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
+            readonly endpoint: number;
+            readonly property: "supportedModes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -17258,12 +17063,12 @@ export const ThermostatFanModeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
             property: "mode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
-        readonly endpoint: number;
-        readonly property: "mode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
+            readonly endpoint: number;
+            readonly property: "mode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -17289,12 +17094,12 @@ export const ThermostatFanModeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
             property: "off";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
-        readonly endpoint: number;
-        readonly property: "off";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Fan Mode"];
+            readonly endpoint: number;
+            readonly property: "off";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Thermostat fan turned off";
             readonly type: "boolean";
@@ -17390,12 +17195,12 @@ export const ThermostatFanStateCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Fan State"];
             property: "state";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Fan State"];
-        readonly endpoint: number;
-        readonly property: "state";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Fan State"];
+            readonly endpoint: number;
+            readonly property: "state";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -17575,12 +17380,12 @@ export const ThermostatModeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Mode"];
             property: "supportedModes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Mode"];
-        readonly endpoint: number;
-        readonly property: "supportedModes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Mode"];
+            readonly endpoint: number;
+            readonly property: "supportedModes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -17600,12 +17405,12 @@ export const ThermostatModeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Mode"];
             property: "manufacturerData";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Mode"];
-        readonly endpoint: number;
-        readonly property: "manufacturerData";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Mode"];
+            readonly endpoint: number;
+            readonly property: "manufacturerData";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Manufacturer data";
             readonly writeable: false;
@@ -17626,12 +17431,12 @@ export const ThermostatModeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Mode"];
             property: "mode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Mode"];
-        readonly endpoint: number;
-        readonly property: "mode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Mode"];
+            readonly endpoint: number;
+            readonly property: "mode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly states: {
                 [x: number]: string;
@@ -17738,12 +17543,12 @@ export const ThermostatOperatingStateCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Operating State"];
             property: "state";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Operating State"];
-        readonly endpoint: number;
-        readonly property: "state";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Operating State"];
+            readonly endpoint: number;
+            readonly property: "state";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Operating state";
             readonly states: {
@@ -17840,12 +17645,12 @@ export const ThermostatSetbackCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Setback"];
             property: "setbackState";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Setback"];
-        readonly endpoint: number;
-        readonly property: "setbackState";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Setback"];
+            readonly endpoint: number;
+            readonly property: "setbackState";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly min: -12.8;
             readonly max: 12;
@@ -17868,12 +17673,12 @@ export const ThermostatSetbackCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Setback"];
             property: "setbackType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Setback"];
-        readonly endpoint: number;
-        readonly property: "setbackType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Setback"];
+            readonly endpoint: number;
+            readonly property: "setbackType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Setback type";
             readonly type: "any";
@@ -18103,30 +17908,25 @@ export interface ThermostatSetpointCCSupportedReportOptions extends CCCommandOpt
 //
 // @public (undocumented)
 export const ThermostatSetpointCCValues: Readonly<{
-    setpointScale: ((setpointType: ThermostatSetpointType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-    property: "setpointScale";
-    propertyKey: ThermostatSetpointType;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-    property: "setpointScale";
-    propertyKey: ThermostatSetpointType;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-    property: "setpointScale";
-    propertyKey: ThermostatSetpointType;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    setpointScale: ((setpointType: ThermostatSetpointType) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            property: "setpointScale";
+            propertyKey: ThermostatSetpointType;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            readonly endpoint: number;
+            readonly property: "setpointScale";
+            readonly propertyKey: ThermostatSetpointType;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly secret: false;
@@ -18136,34 +17936,29 @@ export const ThermostatSetpointCCValues: Readonly<{
             readonly internal: true;
         };
     };
-    setpoint: ((setpointType: ThermostatSetpointType) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Setpoint (${string})`;
-    readonly ccSpecific: {
-    readonly setpointType: ThermostatSetpointType;
-    };
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-    property: "setpoint";
-    propertyKey: ThermostatSetpointType;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-    property: "setpoint";
-    propertyKey: ThermostatSetpointType;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-    property: "setpoint";
-    propertyKey: ThermostatSetpointType;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    setpoint: ((setpointType: ThermostatSetpointType) => {
+        readonly meta: {
+            readonly label: `Setpoint (${string})`;
+            readonly ccSpecific: {
+                readonly setpointType: ThermostatSetpointType;
+            };
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            property: "setpoint";
+            propertyKey: ThermostatSetpointType;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            readonly endpoint: number;
+            readonly property: "setpoint";
+            readonly propertyKey: ThermostatSetpointType;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -18178,12 +17973,12 @@ export const ThermostatSetpointCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
             property: "setpointTypesInterpretation";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-        readonly endpoint: number;
-        readonly property: "setpointTypesInterpretation";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            readonly endpoint: number;
+            readonly property: "setpointTypesInterpretation";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -18203,12 +17998,12 @@ export const ThermostatSetpointCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
             property: "supportedSetpointTypes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
-        readonly endpoint: number;
-        readonly property: "supportedSetpointTypes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Thermostat Setpoint"];
+            readonly endpoint: number;
+            readonly property: "supportedSetpointTypes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -18549,12 +18344,12 @@ export const TimeParametersCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Time Parameters"];
             property: "dateAndTime";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Time Parameters"];
-        readonly endpoint: number;
-        readonly property: "dateAndTime";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Time Parameters"];
+            readonly endpoint: number;
+            readonly property: "dateAndTime";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly label: "Date and Time";
             readonly type: "any";
@@ -19191,30 +18986,25 @@ export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
 //
 // @public (undocumented)
 export const UserCodeCCValues: Readonly<{
-    userCode: ((userId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly type: "any";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["User Code"];
-    property: "userCode";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["User Code"];
-    property: "userCode";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["User Code"];
-    property: "userCode";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    userCode: ((userId: number) => {
+        readonly meta: {
+            readonly type: "any";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["User Code"];
+            property: "userCode";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "userCode";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly stateful: true;
             readonly internal: false;
@@ -19224,31 +19014,26 @@ export const UserCodeCCValues: Readonly<{
             readonly secret: true;
         };
     };
-    userIdStatus: ((userId: number) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `User ID status (${number})`;
-    readonly type: "number";
-    readonly readable: true;
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses)["User Code"];
-    property: "userIdStatus";
-    propertyKey: number;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses)["User Code"];
-    property: "userIdStatus";
-    propertyKey: number;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses)["User Code"];
-    property: "userIdStatus";
-    propertyKey: number;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+    userIdStatus: ((userId: number) => {
+        readonly meta: {
+            readonly label: `User ID status (${number})`;
+            readonly type: "number";
+            readonly readable: true;
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses)["User Code"];
+            property: "userIdStatus";
+            propertyKey: number;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "userIdStatus";
+            readonly propertyKey: number;
+        };
+    }) & {
+        is: (valueId: ValueID_2) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -19263,12 +19048,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "adminCode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "adminCode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "adminCode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Admin Code";
             readonly minLength: 4;
@@ -19291,12 +19076,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "keypadMode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "keypadMode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "keypadMode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Keypad Mode";
             readonly writeable: false;
@@ -19317,12 +19102,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "userCodeChecksum";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "userCodeChecksum";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "userCodeChecksum";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19342,12 +19127,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportedASCIIChars";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportedASCIIChars";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportedASCIIChars";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19367,12 +19152,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportedKeypadModes";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportedKeypadModes";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportedKeypadModes";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19392,12 +19177,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportedUserIDStatuses";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportedUserIDStatuses";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportedUserIDStatuses";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19417,12 +19202,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsMultipleUserCodeSet";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportsMultipleUserCodeSet";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportsMultipleUserCodeSet";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19442,12 +19227,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsMultipleUserCodeReport";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportsMultipleUserCodeReport";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportsMultipleUserCodeReport";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19467,12 +19252,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsUserCodeChecksum";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportsUserCodeChecksum";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportsUserCodeChecksum";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19492,12 +19277,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsMasterCodeDeactivation";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportsMasterCodeDeactivation";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportsMasterCodeDeactivation";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19517,12 +19302,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsMasterCode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportsMasterCode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportsMasterCode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19542,12 +19327,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsAdminCodeDeactivation";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportsAdminCodeDeactivation";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportsAdminCodeDeactivation";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19567,12 +19352,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportsAdminCode";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportsAdminCode";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportsAdminCode";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19592,12 +19377,12 @@ export const UserCodeCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["User Code"];
             property: "supportedUsers";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["User Code"];
-        readonly endpoint: number;
-        readonly property: "supportedUsers";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["User Code"];
+            readonly endpoint: number;
+            readonly property: "supportedUsers";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -19860,12 +19645,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "applicationBuildNumber";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "applicationBuildNumber";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "applicationBuildNumber";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Application build number";
             readonly writeable: false;
@@ -19886,12 +19671,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "applicationVersion";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "applicationVersion";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "applicationVersion";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Application version";
             readonly writeable: false;
@@ -19912,12 +19697,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "zWaveProtocolBuildNumber";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "zWaveProtocolBuildNumber";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "zWaveProtocolBuildNumber";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave protocol build number";
             readonly writeable: false;
@@ -19938,12 +19723,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "zWaveProtocolVersion";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "zWaveProtocolVersion";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "zWaveProtocolVersion";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave protocol version";
             readonly writeable: false;
@@ -19964,12 +19749,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "hostInterfaceBuildNumber";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "hostInterfaceBuildNumber";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "hostInterfaceBuildNumber";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Serial API build number";
             readonly writeable: false;
@@ -19990,12 +19775,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "hostInterfaceVersion";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "hostInterfaceVersion";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "hostInterfaceVersion";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Serial API version";
             readonly writeable: false;
@@ -20016,12 +19801,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "applicationFrameworkBuildNumber";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "applicationFrameworkBuildNumber";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "applicationFrameworkBuildNumber";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave application framework API build number";
             readonly writeable: false;
@@ -20042,12 +19827,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "applicationFrameworkAPIVersion";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "applicationFrameworkAPIVersion";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "applicationFrameworkAPIVersion";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave application framework API version";
             readonly writeable: false;
@@ -20068,12 +19853,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "sdkVersion";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "sdkVersion";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "sdkVersion";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "SDK version";
             readonly writeable: false;
@@ -20094,12 +19879,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "supportsZWaveSoftwareGet";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "supportsZWaveSoftwareGet";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "supportsZWaveSoftwareGet";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -20119,12 +19904,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "hardwareVersion";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "hardwareVersion";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "hardwareVersion";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave chip hardware version";
             readonly writeable: false;
@@ -20145,12 +19930,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "protocolVersion";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "protocolVersion";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "protocolVersion";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Z-Wave protocol version";
             readonly writeable: false;
@@ -20171,12 +19956,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "libraryType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "libraryType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "libraryType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Library type";
             readonly states: {
@@ -20200,12 +19985,12 @@ export const VersionCCValues: Readonly<{
             commandClass: CommandClasses.Version;
             property: "firmwareVersions";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: CommandClasses.Version;
-        readonly endpoint: number;
-        readonly property: "firmwareVersions";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: CommandClasses.Version;
+            readonly endpoint: number;
+            readonly property: "firmwareVersions";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "string[]";
             readonly label: "Z-Wave chip firmware versions";
@@ -20374,12 +20159,12 @@ export const WakeUpCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Wake Up"];
             property: "wakeUpOnDemandSupported";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Wake Up"];
-        readonly endpoint: number;
-        readonly property: "wakeUpOnDemandSupported";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Wake Up"];
+            readonly endpoint: number;
+            readonly property: "wakeUpOnDemandSupported";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -20399,12 +20184,12 @@ export const WakeUpCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Wake Up"];
             property: "wakeUpInterval";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Wake Up"];
-        readonly endpoint: number;
-        readonly property: "wakeUpInterval";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Wake Up"];
+            readonly endpoint: number;
+            readonly property: "wakeUpInterval";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Wake Up interval";
             readonly min: 0;
@@ -20427,12 +20212,12 @@ export const WakeUpCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Wake Up"];
             property: "controllerNodeId";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Wake Up"];
-        readonly endpoint: number;
-        readonly property: "controllerNodeId";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Wake Up"];
+            readonly endpoint: number;
+            readonly property: "controllerNodeId";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Node ID of the controller";
             readonly writeable: false;
@@ -20677,39 +20462,34 @@ export interface WindowCoveringCCSupportedReportOptions extends CCCommandOptions
 //
 // @public (undocumented)
 export const WindowCoveringCCValues: Readonly<{
-    levelChangeDown: ((parameter: WindowCoveringParameter) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string} - ${string}`;
-    readonly valueChangeOptions: readonly ["transitionDuration"];
-    readonly states: {
-    readonly true: "Start";
-    readonly false: "Stop";
-    };
-    readonly ccSpecific: {
-    readonly parameter: WindowCoveringParameter;
-    };
-    readonly readable: false;
-    readonly type: "boolean";
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "levelChangeDown";
-    propertyKey: WindowCoveringParameter;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "levelChangeDown";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "levelChangeDown";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    levelChangeDown: ((parameter: WindowCoveringParameter) => {
+        readonly meta: {
+            readonly label: `${string} - ${string}`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
+            readonly ccSpecific: {
+                readonly parameter: WindowCoveringParameter;
+            };
+            readonly readable: false;
+            readonly type: "boolean";
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "levelChangeDown";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "levelChangeDown";
+            readonly propertyKey: WindowCoveringParameter;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -20719,39 +20499,34 @@ export const WindowCoveringCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    levelChangeUp: ((parameter: WindowCoveringParameter) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `${string} - ${string}`;
-    readonly valueChangeOptions: readonly ["transitionDuration"];
-    readonly states: {
-    readonly true: "Start";
-    readonly false: "Stop";
-    };
-    readonly ccSpecific: {
-    readonly parameter: WindowCoveringParameter;
-    };
-    readonly readable: false;
-    readonly type: "boolean";
-    readonly writeable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "levelChangeUp";
-    propertyKey: WindowCoveringParameter;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "levelChangeUp";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "levelChangeUp";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    levelChangeUp: ((parameter: WindowCoveringParameter) => {
+        readonly meta: {
+            readonly label: `${string} - ${string}`;
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly states: {
+                readonly true: "Start";
+                readonly false: "Stop";
+            };
+            readonly ccSpecific: {
+                readonly parameter: WindowCoveringParameter;
+            };
+            readonly readable: false;
+            readonly type: "boolean";
+            readonly writeable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "levelChangeUp";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "levelChangeUp";
+            readonly propertyKey: WindowCoveringParameter;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -20761,34 +20536,29 @@ export const WindowCoveringCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    duration: ((parameter: WindowCoveringParameter) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Remaining duration - ${string}`;
-    readonly ccSpecific: {
-    readonly parameter: WindowCoveringParameter;
-    };
-    readonly writeable: false;
-    readonly type: "duration";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "duration";
-    propertyKey: WindowCoveringParameter;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "duration";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "duration";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    duration: ((parameter: WindowCoveringParameter) => {
+        readonly meta: {
+            readonly label: `Remaining duration - ${string}`;
+            readonly ccSpecific: {
+                readonly parameter: WindowCoveringParameter;
+            };
+            readonly writeable: false;
+            readonly type: "duration";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "duration";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "duration";
+            readonly propertyKey: WindowCoveringParameter;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -20798,41 +20568,36 @@ export const WindowCoveringCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    targetValue: ((parameter: WindowCoveringParameter) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Target value - ${string}`;
-    readonly writeable: boolean;
-    readonly states: {
-    [x: number]: string;
-    };
-    readonly allowManualEntry: boolean;
-    readonly ccSpecific: {
-    readonly parameter: WindowCoveringParameter;
-    };
-    readonly valueChangeOptions: readonly ["transitionDuration"];
-    readonly max: 99;
-    readonly min: 0;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "targetValue";
-    propertyKey: WindowCoveringParameter;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "targetValue";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "targetValue";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    targetValue: ((parameter: WindowCoveringParameter) => {
+        readonly meta: {
+            readonly label: `Target value - ${string}`;
+            readonly writeable: boolean;
+            readonly states: {
+                [x: number]: string;
+            };
+            readonly allowManualEntry: boolean;
+            readonly ccSpecific: {
+                readonly parameter: WindowCoveringParameter;
+            };
+            readonly valueChangeOptions: readonly ["transitionDuration"];
+            readonly max: 99;
+            readonly min: 0;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "targetValue";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "targetValue";
+            readonly propertyKey: WindowCoveringParameter;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -20842,39 +20607,34 @@ export const WindowCoveringCCValues: Readonly<{
             readonly autoCreate: true;
         };
     };
-    currentValue: ((parameter: WindowCoveringParameter) => ExpandRecursively<    {
-    readonly meta: {
-    readonly label: `Current value - ${string}`;
-    readonly states: {
-    [x: number]: string;
-    };
-    readonly ccSpecific: {
-    readonly parameter: WindowCoveringParameter;
-    };
-    readonly writeable: false;
-    readonly max: 99;
-    readonly min: 0;
-    readonly type: "number";
-    readonly readable: true;
-    };
-    readonly id: {
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "currentValue";
-    propertyKey: WindowCoveringParameter;
-    };
-    readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<Readonly<Pick<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "currentValue";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass"> & {
-    endpoint: number;
-    } & Omit<{
-    commandClass: (typeof CommandClasses_2)["Window Covering"];
-    property: "currentValue";
-    propertyKey: WindowCoveringParameter;
-    }, "commandClass">>>;
-    }>) & {
-        is: (valueId: ValueID) => ExpandRecursively<boolean>;
+    currentValue: ((parameter: WindowCoveringParameter) => {
+        readonly meta: {
+            readonly label: `Current value - ${string}`;
+            readonly states: {
+                [x: number]: string;
+            };
+            readonly ccSpecific: {
+                readonly parameter: WindowCoveringParameter;
+            };
+            readonly writeable: false;
+            readonly max: 99;
+            readonly min: 0;
+            readonly type: "number";
+            readonly readable: true;
+        };
+        readonly id: {
+            commandClass: (typeof CommandClasses_2)["Window Covering"];
+            property: "currentValue";
+            propertyKey: WindowCoveringParameter;
+        };
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "currentValue";
+            readonly propertyKey: WindowCoveringParameter;
+        };
+    }) & {
+        is: (valueId: ValueID) => boolean;
         readonly options: {
             readonly internal: false;
             readonly minVersion: 1;
@@ -20889,12 +20649,12 @@ export const WindowCoveringCCValues: Readonly<{
             commandClass: (typeof CommandClasses_2)["Window Covering"];
             property: "supportedParameters";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
-        readonly endpoint: number;
-        readonly property: "supportedParameters";
-        }>;
-        readonly is: (valueId: ValueID) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses_2)["Window Covering"];
+            readonly endpoint: number;
+            readonly property: "supportedParameters";
+        };
+        readonly is: (valueId: ValueID) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -21075,12 +20835,12 @@ export const ZWavePlusCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
             property: "installerIcon";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
-        readonly endpoint: number;
-        readonly property: "installerIcon";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
+            readonly endpoint: number;
+            readonly property: "installerIcon";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -21100,12 +20860,12 @@ export const ZWavePlusCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
             property: "userIcon";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
-        readonly endpoint: number;
-        readonly property: "userIcon";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
+            readonly endpoint: number;
+            readonly property: "userIcon";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -21125,12 +20885,12 @@ export const ZWavePlusCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
             property: "roleType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
-        readonly endpoint: number;
-        readonly property: "roleType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
+            readonly endpoint: number;
+            readonly property: "roleType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -21150,12 +20910,12 @@ export const ZWavePlusCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
             property: "nodeType";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
-        readonly endpoint: number;
-        readonly property: "nodeType";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
+            readonly endpoint: number;
+            readonly property: "nodeType";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;
@@ -21175,12 +20935,12 @@ export const ZWavePlusCCValues: Readonly<{
             commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
             property: "zwavePlusVersion";
         };
-        readonly endpoint: (endpoint?: number | undefined) => ExpandRecursively<    {
-        readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
-        readonly endpoint: number;
-        readonly property: "zwavePlusVersion";
-        }>;
-        readonly is: (valueId: ValueID_2) => ExpandRecursively<boolean>;
+        readonly endpoint: (endpoint?: number | undefined) => {
+            readonly commandClass: (typeof CommandClasses)["Z-Wave Plus Info"];
+            readonly endpoint: number;
+            readonly property: "zwavePlusVersion";
+        };
+        readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly type: "any";
             readonly readable: true;

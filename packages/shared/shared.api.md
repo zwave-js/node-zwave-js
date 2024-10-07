@@ -56,7 +56,7 @@ export function compareStrings(a: string, b: string): number;
 // Warning: (ae-missing-release-tag) "Constructor" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
-export type Constructor<T = {}> = new (...args: any[]) => T;
+export type Constructor<T = object> = new (...args: any[]) => T;
 
 // Warning: (ae-missing-release-tag) "cpp2js" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -98,6 +98,11 @@ export function discreteLinearSearch(rangeMin: number, rangeMax: number, executo
 // @public (undocumented)
 export function enumFilesRecursive(rootDir: string, predicate?: (filename: string) => boolean): Promise<string[]>;
 
+// Warning: (ae-missing-release-tag) "evalOrStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function evalOrStatic<T>(fnOrConst: T, ...args: any[]): ReturnTypeOrStatic<T>;
+
 // Warning: (ae-missing-release-tag) "EventHandler" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -114,6 +119,11 @@ export type Expand<T> = T extends object ? T extends infer O ? {
 //
 // @public
 export function flatMap<U, T extends any[]>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[];
+
+// Warning: (ae-missing-release-tag) "FnOrStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type FnOrStatic<TArgs extends any[], TReturn> = ((...args: TArgs) => TReturn) | TReturn;
 
 // Warning: (ae-missing-release-tag) "formatDate" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -177,7 +187,7 @@ export type JSONObject = Record<string, any>;
 // Warning: (ae-missing-release-tag) "keysOf" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function keysOf<T extends {}>(obj: T): (keyof T)[];
+export function keysOf<T extends object>(obj: T): (keyof T)[];
 
 // Warning: (ae-missing-release-tag) "mergeDeep" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
@@ -269,6 +279,11 @@ export type ReadonlyObjectKeyMap<TKey extends Record<string | number, any>, TVal
 export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
     getOrThrow(key: K): V;
 };
+
+// Warning: (ae-missing-release-tag) "ReturnTypeOrStatic" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export type ReturnTypeOrStatic<T> = T extends (...args: any[]) => infer R ? R : T;
 
 // Warning: (ae-missing-release-tag) "skipBytes" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
