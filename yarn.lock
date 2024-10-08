@@ -254,13 +254,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@colors/colors@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@colors/colors@npm:1.5.0"
-  checksum: 10/9d226461c1e91e95f067be2bdc5e6f99cfe55a721f45afb44122e23e4b8602eeac4ff7325af6b5a369f36396ee1514d3809af3f57769066d80d83790d8e53339
-  languageName: node
-  linkType: hard
-
 "@colors/colors@npm:1.6.0, @colors/colors@npm:^1.6.0":
   version: 1.6.0
   resolution: "@colors/colors@npm:1.6.0"
@@ -1916,7 +1909,7 @@ __metadata:
     sinon: "npm:^17.0.1"
     ts-pegjs: "npm:^0.3.1"
     typescript: "npm:5.6.2"
-    winston: "npm:^3.13.0"
+    winston: "npm:^3.15.0"
     xml2js: "npm:^0.6.2"
     yargs: "npm:^17.7.2"
   languageName: unknown
@@ -1939,15 +1932,15 @@ __metadata:
     del-cli: "npm:^5.1.0"
     esbuild: "npm:0.24.0"
     esbuild-register: "npm:^3.6.0"
-    logform: "npm:^2.6.0"
+    logform: "npm:^2.6.1"
     nrf-intel-hex: "npm:^1.4.0"
     reflect-metadata: "npm:^0.2.2"
     sinon: "npm:^17.0.1"
     triple-beam: "npm:*"
     typescript: "npm:5.6.2"
-    winston: "npm:^3.13.0"
+    winston: "npm:^3.15.0"
     winston-daily-rotate-file: "npm:^5.0.0"
-    winston-transport: "npm:^4.7.1"
+    winston-transport: "npm:^4.8.0"
   languageName: unknown
   linkType: soft
 
@@ -2161,7 +2154,7 @@ __metadata:
     serialport: "npm:^12.0.0"
     sinon: "npm:^17.0.1"
     typescript: "npm:5.6.2"
-    winston: "npm:^3.13.0"
+    winston: "npm:^3.15.0"
   languageName: unknown
   linkType: soft
 
@@ -2203,7 +2196,7 @@ __metadata:
     esbuild-register: "npm:^3.6.0"
     triple-beam: "npm:*"
     typescript: "npm:5.6.2"
-    winston-transport: "npm:^4.7.1"
+    winston-transport: "npm:^4.8.0"
   languageName: unknown
   linkType: soft
 
@@ -2238,6 +2231,15 @@ __metadata:
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
   checksum: 10/2d882941183c66aa665118bafdab82b7a177e9add5eb2776c33e960a4f3c89cff88a1b38aba13a456de01d0dd9d66a8bea7c903268b21ea91dd1097e1e2e8243
+  languageName: node
+  linkType: hard
+
+"abort-controller@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "abort-controller@npm:3.0.0"
+  dependencies:
+    event-target-shim: "npm:^5.0.0"
+  checksum: 10/ed84af329f1828327798229578b4fe03a4dd2596ba304083ebd2252666bdc1d7647d66d0b18704477e1f8aa315f055944aa6e859afebd341f12d0a53c37b4b40
   languageName: node
   linkType: hard
 
@@ -2862,6 +2864,16 @@ __metadata:
     base64-js: "npm:^1.3.1"
     ieee754: "npm:^1.1.13"
   checksum: 10/997434d3c6e3b39e0be479a80288875f71cd1c07d75a3855e6f08ef848a3c966023f79534e22e415ff3a5112708ce06127277ab20e527146d55c84566405c7c6
+  languageName: node
+  linkType: hard
+
+"buffer@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "buffer@npm:6.0.3"
+  dependencies:
+    base64-js: "npm:^1.3.1"
+    ieee754: "npm:^1.2.1"
+  checksum: 10/b6bc68237ebf29bdacae48ce60e5e28fc53ae886301f2ad9496618efac49427ed79096750033e7eab1897a4f26ae374ace49106a5758f38fb70c78c9fda2c3b1
   languageName: node
   linkType: hard
 
@@ -4432,10 +4444,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"event-target-shim@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "event-target-shim@npm:5.0.1"
+  checksum: 10/49ff46c3a7facbad3decb31f597063e761785d7fdb3920d4989d7b08c97a61c2f51183e2f3a03130c9088df88d4b489b1b79ab632219901f184f85158508f4c8
+  languageName: node
+  linkType: hard
+
 "eventemitter3@npm:^5.0.1":
   version: 5.0.1
   resolution: "eventemitter3@npm:5.0.1"
   checksum: 10/ac6423ec31124629c84c7077eed1e6987f6d66c31cf43c6fcbf6c87791d56317ce808d9ead483652436df171b526fc7220eccdc9f3225df334e81582c3cf7dd5
+  languageName: node
+  linkType: hard
+
+"events@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "events@npm:3.3.0"
+  checksum: 10/a3d47e285e28d324d7180f1e493961a2bbb4cad6412090e4dec114f4db1f5b560c7696ee8e758f55e23913ede856e3689cd3aa9ae13c56b5d8314cd3b3ddd1be
   languageName: node
   linkType: hard
 
@@ -5389,7 +5415,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ieee754@npm:^1.1.13":
+"ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
   checksum: 10/d9f2557a59036f16c282aaeb107832dc957a93d73397d89bbad4eb1130560560eb695060145e8e6b3b498b15ab95510226649a0b8f52ae06583575419fe10fc4
@@ -6272,19 +6298,6 @@ __metadata:
     safe-stable-stringify: "npm:^1.1.0"
     triple-beam: "npm:^1.3.0"
   checksum: 10/6526ccfed43c11448a8407d6d10ce142497e9a4c2ef0874bc1588ace8618a5f2a19563acfa625508adbe6cc704fc1fb55c176da6da84fbc3d60015337dc3f232
-  languageName: node
-  linkType: hard
-
-"logform@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "logform@npm:2.4.0"
-  dependencies:
-    "@colors/colors": "npm:1.5.0"
-    fecha: "npm:^4.2.0"
-    ms: "npm:^2.1.1"
-    safe-stable-stringify: "npm:^2.3.1"
-    triple-beam: "npm:^1.3.0"
-  checksum: 10/6f24e316b00e05cc90e4f5641345edb2f1c566805ff5bed0ec4a61fb1f4240e983a6c21d7d6d8ca604a33193b89a321154e8ceec86dc43fa48a988765e5ca453
   languageName: node
   linkType: hard
 
@@ -7497,6 +7510,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"process@npm:^0.11.10":
+  version: 0.11.10
+  resolution: "process@npm:0.11.10"
+  checksum: 10/dbaa7e8d1d5cf375c36963ff43116772a989ef2bb47c9bdee20f38fd8fc061119cf38140631cf90c781aca4d3f0f0d2c834711952b728953f04fd7d238f59f5b
+  languageName: node
+  linkType: hard
+
 "promise-inflight@npm:^1.0.1":
   version: 1.0.1
   resolution: "promise-inflight@npm:1.0.1"
@@ -7643,14 +7663,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.6.2":
-  version: 3.6.2
-  resolution: "readable-stream@npm:3.6.2"
+"readable-stream@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "readable-stream@npm:4.5.2"
   dependencies:
-    inherits: "npm:^2.0.3"
-    string_decoder: "npm:^1.1.1"
-    util-deprecate: "npm:^1.0.1"
-  checksum: 10/d9e3e53193adcdb79d8f10f2a1f6989bd4389f5936c6f8b870e77570853561c362bee69feca2bbb7b32368ce96a85504aa4cedf7cf80f36e6a9de30d64244048
+    abort-controller: "npm:^3.0.0"
+    buffer: "npm:^6.0.3"
+    events: "npm:^3.3.0"
+    process: "npm:^0.11.10"
+    string_decoder: "npm:^1.3.0"
+  checksum: 10/01b128a559c5fd76a898495f858cf0a8839f135e6a69e3409f986e88460134791657eb46a2ff16826f331682a3c4d0c5a75cef5e52ef259711021ba52b1c2e82
   languageName: node
   linkType: hard
 
@@ -8469,7 +8491,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string_decoder@npm:^1.1.1":
+"string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0":
   version: 1.3.0
   resolution: "string_decoder@npm:1.3.0"
   dependencies:
@@ -9292,33 +9314,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston-transport@npm:^4.7.1":
-  version: 4.7.1
-  resolution: "winston-transport@npm:4.7.1"
+"winston-transport@npm:^4.8.0":
+  version: 4.8.0
+  resolution: "winston-transport@npm:4.8.0"
   dependencies:
     logform: "npm:^2.6.1"
-    readable-stream: "npm:^3.6.2"
+    readable-stream: "npm:^4.5.2"
     triple-beam: "npm:^1.3.0"
-  checksum: 10/bc48c921ec9b4a71c1445bf274aa6b00c01089a6c26fc0b19534f8a32fa2710c6766c9e6db53a23492c20772934025d312dd9fb08df157ccb6579ad6b9dae9a7
+  checksum: 10/930bdc0ec689d5c4f07a262721da80440336f64739d0ce33db801c7142b4fca5be8ef71b725b670bac609de8b6bce405e5c5f84d355f5176a611209b476cee18
   languageName: node
   linkType: hard
 
-"winston@npm:^3.13.0":
-  version: 3.13.0
-  resolution: "winston@npm:3.13.0"
+"winston@npm:^3.15.0":
+  version: 3.15.0
+  resolution: "winston@npm:3.15.0"
   dependencies:
     "@colors/colors": "npm:^1.6.0"
     "@dabh/diagnostics": "npm:^2.0.2"
     async: "npm:^3.2.3"
     is-stream: "npm:^2.0.0"
-    logform: "npm:^2.4.0"
+    logform: "npm:^2.6.0"
     one-time: "npm:^1.0.0"
     readable-stream: "npm:^3.4.0"
     safe-stable-stringify: "npm:^2.3.1"
     stack-trace: "npm:0.0.x"
     triple-beam: "npm:^1.3.0"
     winston-transport: "npm:^4.7.0"
-  checksum: 10/436675598359af27e4eabde2ce578cf77da893ffd57d0479f037fef939e8eb721031f0102b14399eee93b3412b545946c431d1fff23db3beeac2ffa395537f7b
+  checksum: 10/60e55eb3621e4de1a764a4e43ee1d242c71957d3e0eb359cb8f16fe2b9d9543fd4c31a8d3baf96fa7e43ef5df383c43c1a98aff4bd714ea0082303504b0e3cdc
   languageName: node
   linkType: hard
 
@@ -9578,7 +9600,7 @@ __metadata:
     sinon: "npm:^17.0.1"
     source-map-support: "npm:^0.5.21"
     typescript: "npm:5.6.2"
-    winston: "npm:^3.13.0"
+    winston: "npm:^3.15.0"
     xstate: "npm:4.38.3"
   bin:
     mock-server: bin/mock-server.js
