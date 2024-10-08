@@ -3150,6 +3150,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			cacheKeys.controller.privateKey,
 		);
 
+		// Drop all scheduled tasks - they don't make sense after a hard reset
+		await this.scheduler.removeTasks(
+			() => true,
+			new ZWaveError(
+				"The controller is being hard-reset",
+				ZWaveErrorCodes.Driver_TaskRemoved,
+			),
+		);
+
 		// Update the controller NIF prior to hard resetting
 		await this.controller.setControllerNIF();
 		await this.controller.hardReset();
@@ -7066,6 +7075,14 @@ ${handlers.length} left`,
 		try {
 			// await this.controller.toggleRF(false);
 			// Avoid re-transmissions etc. communicating with the bootloader
+			await this.scheduler.removeTasks(
+				() => true,
+				new ZWaveError(
+					"The controller is entering bootloader mode.",
+					ZWaveErrorCodes.Driver_TaskRemoved,
+				),
+			);
+
 			this.rejectTransactions(
 				(_t) => true,
 				"The controller is entering bootloader mode.",
