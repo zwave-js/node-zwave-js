@@ -428,7 +428,7 @@ async rebuildNodeRoutes(nodeId: number): Promise<boolean>
 
 Rebuilds routes for a single alive node in the network, updating the neighbor list and assigning fresh routes to association targets. The returned promise resolves to `true` if the process was completed, or `false` if it was unsuccessful.
 
-> [!ATTENTION] Rebuilding routes for a single node will delete existing priority routes and priority return routes. It is recommended to first check if priority return routes are known to exist using `getPriorityReturnRoutesCached` and `getPrioritySUCReturnRouteCached` and asking for confirmation before proceeding.
+> [!ATTENTION] Rebuilding routes for a single node will delete existing priority return routes to end nodes and the SUC. It is recommended to first check if priority return routes are known to exist using `getPriorityReturnRoutesCached` and `getPrioritySUCReturnRouteCached` and asking for confirmation before proceeding.
 
 #### `beginRebuildingRoutes`
 
@@ -451,8 +451,8 @@ The `options` argument can be used to skip sleeping nodes:
 interface RebuildRoutesOptions {
 	/** Whether the routes of sleeping nodes should be rebuilt too at the end of the process. Default: true */
 	includeSleeping?: boolean;
-	/** Whether nodes with priority routes should be included, as that deletes the priority routes. Default: false */
-	overwritePriorityRoutes?: boolean;
+	/** Whether nodes with priority return routes should be included, as those will be deleted. Default: false */
+	deletePriorityReturnRoutes?: boolean;
 }
 ```
 

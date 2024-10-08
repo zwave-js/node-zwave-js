@@ -4579,7 +4579,7 @@ export class ZWaveController
 		if (existingTask) return false;
 
 		options.includeSleeping ??= true;
-		options.overwritePriorityRoutes ??= false;
+		options.deletePriorityReturnRoutes ??= false;
 
 		this.driver.controllerLog.print(
 			`rebuilding routes${
@@ -4612,7 +4612,7 @@ export class ZWaveController
 				);
 				this._rebuildRoutesProgress.set(id, "skipped");
 			} else if (
-				!options.overwritePriorityRoutes
+				!options.deletePriorityReturnRoutes
 				&& (this.getPrioritySUCReturnRouteCached(id)
 					|| Object.keys(this.getPriorityReturnRoutesCached(id))
 							.length > 0)
