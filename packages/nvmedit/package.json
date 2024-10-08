@@ -50,7 +50,7 @@
     "alcalzone-shared": "^4.0.8",
     "fs-extra": "^11.2.0",
     "reflect-metadata": "^0.2.2",
-    "semver": "^7.6.2",
+    "semver": "^7.6.3",
     "yargs": "^17.7.2"
   },
   "scripts": {
