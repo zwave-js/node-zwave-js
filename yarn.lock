@@ -1581,12 +1581,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.19.54":
-  version: 18.19.54
-  resolution: "@types/node@npm:18.19.54"
+"@types/node@npm:^18.19.55":
+  version: 18.19.55
+  resolution: "@types/node@npm:18.19.55"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10/99cbad8b8d7493c8c9b1df77229f5684dc1477383db8bd7692792700df1a059bc66cd49625bde29d8da072da6a553ed08cf914866a6989a66300355571db124e
+  checksum: 10/7ba2b7203338f855fd7e90d09de3196e0d534c361ee0fbd7e3f24d416b867a017530d5721c4186f2c5402184e824a1fe65d2b5f9291751b9d8a7d2f9824f9a73
   languageName: node
   linkType: hard
 
@@ -1863,7 +1863,7 @@ __metadata:
   dependencies:
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/fs-extra": "npm:^11.0.4"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
@@ -1888,7 +1888,7 @@ __metadata:
     "@types/fs-extra": "npm:^11.0.4"
     "@types/js-levenshtein": "npm:^1.1.3"
     "@types/json-logic-js": "npm:^2.0.7"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/semver": "npm:^7.5.8"
     "@types/sinon": "npm:^17.0.3"
     "@types/xml2js": "npm:^0.4.14"
@@ -1925,7 +1925,7 @@ __metadata:
   dependencies:
     "@alcalzone/jsonl-db": "npm:^3.1.1"
     "@microsoft/api-extractor": "npm:^7.47.9"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/sinon": "npm:^17.0.3"
     "@types/triple-beam": "npm:^1.3.5"
     "@zwave-js/shared": "workspace:*"
@@ -1967,7 +1967,7 @@ __metadata:
   resolution: "@zwave-js/flash@workspace:packages/flash"
   dependencies:
     "@types/fs-extra": "npm:^11.0.4"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
     del-cli: "npm:^5.1.0"
@@ -1999,7 +1999,7 @@ __metadata:
   resolution: "@zwave-js/host@workspace:packages/host"
   dependencies:
     "@microsoft/api-extractor": "npm:^7.47.9"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -2019,7 +2019,7 @@ __metadata:
     "@dprint/typescript": "npm:^0.93.0"
     "@types/fs-extra": "npm:^11.0.4"
     "@types/globrex": "npm:^0.1.4"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/fmt": "npm:^1.0.2"
@@ -2048,7 +2048,7 @@ __metadata:
   dependencies:
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/fs-extra": "npm:^11.0.4"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/semver": "npm:^7.5.8"
     "@types/yargs": "npm:^17.0.33"
     "@zwave-js/core": "workspace:*"
@@ -2088,7 +2088,7 @@ __metadata:
     "@monorepo-utils/workspaces-to-typescript-project-references": "npm:^2.10.4"
     "@tsconfig/node18": "npm:^18.2.4"
     "@types/fs-extra": "npm:^11.0.4"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/semver": "npm:^7.5.8"
     "@types/source-map-support": "npm:^0.5.10"
     "@types/xml2js": "npm:^0.4.14"
@@ -2144,7 +2144,7 @@ __metadata:
     "@serialport/binding-mock": "npm:^10.2.2"
     "@serialport/bindings-interface": "npm:*"
     "@serialport/stream": "npm:^12.0.0"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/sinon": "npm:^17.0.3"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
@@ -2168,7 +2168,7 @@ __metadata:
   dependencies:
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/fs-extra": "npm:^11.0.4"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/sinon": "npm:^17.0.3"
     alcalzone-shared: "npm:^4.0.8"
     ava: "npm:^6.1.3"
@@ -2186,7 +2186,7 @@ __metadata:
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
     "@microsoft/api-extractor": "npm:^7.47.9"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/triple-beam": "npm:^1.3.5"
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/core": "workspace:*"
@@ -9620,7 +9620,7 @@ __metadata:
     "@homebridge/ciao": "npm:^1.3.1"
     "@microsoft/api-extractor": "npm:^7.47.9"
     "@types/fs-extra": "npm:^11.0.4"
-    "@types/node": "npm:^18.19.54"
+    "@types/node": "npm:^18.19.55"
     "@types/proper-lockfile": "npm:^4.1.4"
     "@types/proxyquire": "npm:^1.3.31"
     "@types/semver": "npm:^7.5.8"
