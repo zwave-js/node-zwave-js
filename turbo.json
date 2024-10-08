@@ -37,7 +37,7 @@
 				// All source files are input
 				"packages/*/src/**",
 				// Exclude test files from inputs
-				"!**/*.test.ts"
+				"!*/**/*.test.ts"
 			],
 			"outputs": ["packages/*/build/**", "packages/*/*.tsbuildinfo"]
 		},
