@@ -428,6 +428,8 @@ async rebuildNodeRoutes(nodeId: number): Promise<boolean>
 
 Rebuilds routes for a single alive node in the network, updating the neighbor list and assigning fresh routes to association targets. The returned promise resolves to `true` if the process was completed, or `false` if it was unsuccessful.
 
+> [!ATTENTION] Rebuilding routes for a single node will delete existing priority return routes to end nodes and the SUC. It is recommended to first check if priority return routes are known to exist using `getPriorityReturnRoutesCached` and `getPrioritySUCReturnRouteCached` and asking for confirmation before proceeding.
+
 #### `beginRebuildingRoutes`
 
 ```ts
@@ -449,6 +451,8 @@ The `options` argument can be used to skip sleeping nodes:
 interface RebuildRoutesOptions {
 	/** Whether the routes of sleeping nodes should be rebuilt too at the end of the process. Default: true */
 	includeSleeping?: boolean;
+	/** Whether nodes with priority return routes should be included, as those will be deleted. Default: false */
+	deletePriorityReturnRoutes?: boolean;
 }
 ```
 
@@ -628,10 +632,12 @@ As mentioned before, there is unfortunately no way to query return routes from a
 
 ```ts
 getPriorityReturnRouteCached(nodeId: number, destinationNodeId: number): MaybeUnknown<Route> | undefined;
+getPriorityReturnRoutesCached(nodeId: number): Record<number, Route>;
 getPrioritySUCReturnRouteCached(nodeId: number): MaybeUnknown<Route> | undefined;
 ```
 
 - `getPriorityReturnRouteCached` returns a priority return route that was set using `assignPriorityReturnRoute`. If a non-priority return route has been set since assigning the priority route, this will return `UNKNOWN_STATE` (`null`).
+- `getPriorityReturnRoutesCached` returns an object containing the IDs of all known end node destinations a node has priority return routes for and their respective routes.
 - `getPrioritySUCReturnRouteCached` does the same for a route set through `assignPrioritySUCReturnRoute`.
 
 The return type `Route` has the following shape:
