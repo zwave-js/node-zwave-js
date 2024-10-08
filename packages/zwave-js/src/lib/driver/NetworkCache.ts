@@ -51,6 +51,7 @@ export const cacheKeys = {
 		return {
 			_baseKey: nodeBaseKey,
 			_securityClassBaseKey: `${nodeBaseKey}securityClasses`,
+			_priorityReturnRouteBaseKey: `${nodeBaseKey}priorityReturnRoute`,
 			interviewStage: `${nodeBaseKey}interviewStage`,
 			deviceClass: `${nodeBaseKey}deviceClass`,
 			isListening: `${nodeBaseKey}isListening`,
@@ -115,6 +116,14 @@ export const cacheKeyUtils = {
 		const match = /endpoints\.(?<index>\d+)$/.exec(key);
 		if (match) {
 			return parseInt(match.groups!.index, 10);
+		}
+	},
+	destinationFromPriorityReturnRouteKey: (
+		key: string,
+	): number | undefined => {
+		const match = /\.priorityReturnRoute\.(?<nodeId>\d+)$/.exec(key);
+		if (match) {
+			return parseInt(match.groups!.nodeId, 10);
 		}
 	},
 } as const;

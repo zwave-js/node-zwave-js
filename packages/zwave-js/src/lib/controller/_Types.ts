@@ -7,6 +7,8 @@ export type RebuildRoutesStatus = "pending" | "done" | "failed" | "skipped";
 export interface RebuildRoutesOptions {
 	/** Whether the routes of sleeping nodes should be rebuilt too at the end of the process. Default: true */
 	includeSleeping?: boolean;
+	/** Whether nodes with priority routes should be included, as that deletes the priority routes. Default: false */
+	overwritePriorityRoutes?: boolean;
 }
 
 export type SDKVersion =

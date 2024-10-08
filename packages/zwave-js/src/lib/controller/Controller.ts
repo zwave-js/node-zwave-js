@@ -4579,6 +4579,7 @@ export class ZWaveController
 		if (existingTask) return false;
 
 		options.includeSleeping ??= true;
+		options.overwritePriorityRoutes ??= false;
 
 		this.driver.controllerLog.print(
 			`rebuilding routes${
@@ -4605,6 +4606,21 @@ export class ZWaveController
 				);
 				this._rebuildRoutesProgress.set(id, "skipped");
 			} else if (!options.includeSleeping && node.canSleep) {
+				this.driver.controllerLog.logNode(
+					id,
+					`Skipping route rebuild because the node is sleeping.`,
+				);
+				this._rebuildRoutesProgress.set(id, "skipped");
+			} else if (
+				!options.overwritePriorityRoutes
+				&& (this.getPrioritySUCReturnRouteCached(id)
+					|| Object.keys(this.getPriorityReturnRoutesCached(id))
+							.length > 0)
+			) {
+				this.driver.controllerLog.logNode(
+					id,
+					`Skipping route rebuild because the node has priority return routes.`,
+				);
 				this._rebuildRoutesProgress.set(id, "skipped");
 			} else {
 				this._rebuildRoutesProgress.set(id, "pending");
@@ -5802,6 +5818,29 @@ export class ZWaveController
 		return this.driver.cacheGet(
 			cacheKeys.node(nodeId).priorityReturnRoute(destinationNodeId),
 		);
+	}
+
+	/**
+	 * For the given node, returns all end node destinations and the priority routes to them.
+	 *
+	 * **Note:** This is using cached information, since there's no way to query priority routes from a node.
+	 * If another controller has assigned routes in the meantime, this information may be out of date.
+	 */
+	public getPriorityReturnRoutesCached(
+		nodeId: number,
+	): Record<number, Route> {
+		const ret: Record<number, Route> = {};
+
+		const routes = this.driver.cacheList<Route>(
+			cacheKeys.node(nodeId)._priorityReturnRouteBaseKey,
+		);
+		for (const [key, route] of Object.entries(routes)) {
+			const destination = cacheKeyUtils
+				.destinationFromPriorityReturnRouteKey(key);
+			if (destination !== undefined) ret[destination] = route;
+		}
+
+		return ret;
 	}
 
 	/**

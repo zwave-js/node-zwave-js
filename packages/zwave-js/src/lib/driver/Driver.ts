@@ -6731,6 +6731,35 @@ ${handlers.length} left`,
 		}
 	}
 
+	/**
+	 * @internal
+	 * Helper function to find multiple existing values from the network cache
+	 */
+	public cacheList<T>(
+		prefix: string,
+		options?: {
+			reviver?: (value: any) => T;
+		},
+	): Record<string, T> {
+		const ret: Record<string, T> = {};
+		for (const entry of this.networkCache.entries()) {
+			const key = entry[0];
+			if (!key.startsWith(prefix)) continue;
+			let value = entry[1];
+			if (value === undefined) continue;
+			if (typeof options?.reviver === "function") {
+				try {
+					value = options.reviver(value);
+				} catch {
+					// invalid entry
+					continue;
+				}
+			}
+			ret[key] = value;
+		}
+		return ret;
+	}
+
 	private cachePurge(prefix: string): void {
 		for (const key of this.networkCache.keys()) {
 			if (key.startsWith(prefix)) {
