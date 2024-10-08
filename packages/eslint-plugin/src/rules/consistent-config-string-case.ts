@@ -153,7 +153,8 @@ export const consistentConfigStringCase: JSONCRule.RuleModule = {
 		schema: false,
 		messages: {
 			"must-be-title-case": "{{what}} must be in Title Case",
-			"must-be-sentence-case": "{{what}} must be in Sentence case",
+			"must-be-sentence-case":
+				"{{what}} must be in Sentence case, except for Command Class names",
 			"change-to-fixed": `Change to "{{fixed}}"`,
 			"disable-for-all-options":
 				`Disable for all options of this parameter`,
