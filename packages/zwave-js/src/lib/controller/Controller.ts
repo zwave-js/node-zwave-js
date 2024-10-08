@@ -2621,6 +2621,8 @@ export class ZWaveController
 				// Resolve active pings that would fail otherwise
 				this.driver.resolvePendingPings(node.id);
 
+				node.emit("node info received", node);
+
 				if (
 					node.canSleep
 					&& node.supportsCC(CommandClasses["Wake Up"])
