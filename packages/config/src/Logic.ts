@@ -39,7 +39,8 @@ add_operation(
 
 export function parseLogic(logic: string): RulesLogic {
 	try {
-		return parse(logic);
+		// The generated types for the version comparisons are not compatible with the RulesLogic type
+		return parse(logic) as unknown as RulesLogic;
 	} catch (e: any) {
 		throw new Error(`Invalid logic: ${logic}\n${e.message}`);
 	}
