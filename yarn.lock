@@ -1906,7 +1906,7 @@ __metadata:
     fs-extra: "npm:^11.2.0"
     got: "npm:^13.0.0"
     js-levenshtein: "npm:^1.1.6"
-    json-logic-js: "npm:^2.0.2"
+    json-logic-js: "npm:^2.0.5"
     json5: "npm:^2.2.3"
     peggy: "npm:^3.0.2"
     semver: "npm:^7.6.2"
@@ -5961,10 +5961,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-logic-js@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "json-logic-js@npm:2.0.2"
-  checksum: 10/2a25d0b951b90bfbccf4f638fbf17cc733518d54c029d7e38e71544d1f4c53efc7c445e888a6c804374e177b384d77b59762cb02bcf6d85b102598a9d8443345
+"json-logic-js@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "json-logic-js@npm:2.0.5"
+  checksum: 10/5d3c49e331027df2307aa8ab5c27fbadb930ffa083ad9b2876b20844a71cbe441c17702ab6a378cb79604c03c326124dfe3d7b75ec8bb4630075e8bdf16fe59a
   languageName: node
   linkType: hard
 
