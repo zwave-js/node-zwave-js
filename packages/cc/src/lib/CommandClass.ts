@@ -807,7 +807,10 @@ export class CommandClass implements ICommandClass {
 			|| (typeof value.options.autoCreate === "function"
 				&& value.options.autoCreate(
 					applHost,
-					this.getEndpoint(applHost)!,
+					{
+						nodeId: this.nodeId as number,
+						index: this.endpointIndex,
+					},
 				))
 		);
 	}
