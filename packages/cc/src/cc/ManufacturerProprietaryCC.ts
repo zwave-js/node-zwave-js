@@ -1,7 +1,5 @@
 import {
 	CommandClasses,
-	type IVirtualEndpoint,
-	type IZWaveEndpoint,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
@@ -9,7 +7,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI } from "../lib/API";
+import { CCAPI, type CCAPIEndpoint } from "../lib/API";
 import {
 	type CCCommandOptions,
 	CommandClass,
@@ -41,7 +39,7 @@ export type ManufacturerProprietaryCCConstructor<
 export class ManufacturerProprietaryCCAPI extends CCAPI {
 	public constructor(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint | IVirtualEndpoint,
+		endpoint: CCAPIEndpoint,
 	) {
 		super(applHost, endpoint);
 

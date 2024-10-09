@@ -4,6 +4,7 @@ import {
 	type CCAPIs,
 	type CCNameOrId,
 	PhysicalCCAPI,
+	type VirtualCCAPIEndpoint,
 	getAPI,
 	normalizeCCNameOrId,
 } from "@zwave-js/cc";
@@ -91,7 +92,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 	 */
 	public createAPI(ccId: CommandClasses): CCAPI {
 		const createCCAPI = (
-			endpoint: IVirtualEndpoint,
+			endpoint: VirtualCCAPIEndpoint,
 			secClass: SecurityClass,
 		) => {
 			if (

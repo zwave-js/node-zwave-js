@@ -808,6 +808,7 @@ export class CommandClass implements ICommandClass {
 				&& value.options.autoCreate(
 					applHost,
 					{
+						virtual: false,
 						nodeId: this.nodeId as number,
 						index: this.endpointIndex,
 					},

@@ -1,6 +1,5 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
@@ -8,7 +7,12 @@ import {
 	formatDate,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import {
+	type ControlsCC,
+	type EndpointId,
+	type MaybeNotKnown,
+	type SupportsCC,
+} from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -60,8 +64,7 @@ export const TimeParametersCCValues = Object.freeze({
  */
 function shouldUseLocalTime(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId & SupportsCC & ControlsCC,
 ): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
 	// so they need to interpret the set time as local time instead of UTC.

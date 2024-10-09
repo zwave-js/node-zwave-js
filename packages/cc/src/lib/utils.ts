@@ -6,7 +6,9 @@ import {
 	type IZWaveNode,
 	type MaybeNotKnown,
 	NOT_KNOWN,
+	type NodeId,
 	SecurityClass,
+	type SupportsCC,
 	ZWaveError,
 	ZWaveErrorCodes,
 	actuatorCCs,
@@ -36,8 +38,7 @@ import {
 
 export function getAssociations(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId & SupportsCC,
 ): ReadonlyMap<number, readonly AssociationAddress[]> {
 	const ret = new Map<number, readonly AssociationAddress[]>();
 
@@ -242,8 +243,7 @@ export function checkAssociation(
 
 export function getAssociationGroups(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId & SupportsCC,
 ): ReadonlyMap<number, AssociationGroup> {
 	// Check whether we have multi channel support or not
 	let assocInstance: typeof AssociationCC;
@@ -640,8 +640,7 @@ export async function removeAssociations(
 
 export function getLifelineGroupIds(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId & SupportsCC,
 ): number[] {
 	// For now only support this for the root endpoint - i.e. node
 	if (endpoint.index > 0) return [];
@@ -1243,8 +1242,7 @@ export async function assignLifelineIssueingCommand(
 
 export function doesAnyLifelineSendActuatorOrSensorReports(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	node: IZWaveNode,
+	node: NodeId & SupportsCC,
 ): MaybeNotKnown<boolean> {
 	// No association support means no unsolicited reports
 	if (

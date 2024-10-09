@@ -3,8 +3,6 @@ import {
 	CommandClasses,
 	ConfigValueFormat,
 	type ConfigurationMetadata,
-	type IVirtualEndpoint,
-	type IZWaveEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -38,6 +36,7 @@ import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import {
 	CCAPI,
+	type CCAPIEndpoint,
 	POLL_VALUE,
 	type PollValueImplementation,
 	SET_VALUE,
@@ -145,8 +144,7 @@ type NormalizedConfigurationCCAPISetOptions =
 
 function createConfigurationCCInstance(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and index should be enough
-	endpoint: IZWaveEndpoint | IVirtualEndpoint,
+	endpoint: CCAPIEndpoint,
 ): ConfigurationCC {
 	return CommandClass.createInstanceUnchecked(
 		applHost,
@@ -157,8 +155,7 @@ function createConfigurationCCInstance(
 
 function normalizeConfigurationCCAPISetOptions(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and index should be enough
-	endpoint: IZWaveEndpoint | IVirtualEndpoint,
+	endpoint: CCAPIEndpoint,
 	options: ConfigurationCCAPISetOptions,
 ): NormalizedConfigurationCCAPISetOptions {
 	if ("bitMask" in options && options.bitMask) {
@@ -215,8 +212,7 @@ function normalizeConfigurationCCAPISetOptions(
 
 function bulkMergePartialParamValues(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and index should be enough
-	endpoint: IZWaveEndpoint | IVirtualEndpoint,
+	endpoint: CCAPIEndpoint,
 	options: NormalizedConfigurationCCAPISetOptions[],
 ): (NormalizedConfigurationCCAPISetOptions & { bitMask?: undefined })[] {
 	// Merge partial parameters before doing anything else. Therefore, take the non-partials, ...

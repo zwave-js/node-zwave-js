@@ -1,11 +1,11 @@
 import {
 	CommandClasses,
 	type EndpointId,
-	type IZWaveEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type SupportsCC,
 	encodeCCId,
 	getCCName,
 	parseCCId,
@@ -302,8 +302,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public static findGroupsForIssuedCommand(
 		applHost: ZWaveApplicationHost,
-		// FIXME: GH#7261 ID and endpoint capabilities would be enough
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId & SupportsCC,
 		ccId: CommandClasses,
 		command: number,
 	): number[] {
@@ -333,8 +332,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	private static getAssociationGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		// FIXME: GH#7261 ID and endpoint capabilities would be enough
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId & SupportsCC,
 	): number {
 		// The association group count is either determined by the
 		// Association CC or the Multi Channel Association CC
