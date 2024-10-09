@@ -2,7 +2,6 @@ import {
 	type ApplicationNodeInformation,
 	CommandClasses,
 	type GenericDeviceClass,
-	type IZWaveNode,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -130,7 +129,7 @@ export const MultiChannelCCValues = Object.freeze({
  */
 function areEndpointsUnnecessary(
 	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	nodeId: number,
 	endpointIndizes: number[],
 ): boolean {
 	// Gather all device classes
@@ -144,7 +143,7 @@ function areEndpointsUnnecessary(
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId = MultiChannelCCValues.endpointDeviceClass
 			.endpoint(endpoint);
-		const deviceClass = applHost.getValueDB(node.id).getValue<{
+		const deviceClass = applHost.getValueDB(nodeId).getValue<{
 			generic: number;
 			specific: number;
 		}>(devClassValueId);
@@ -674,7 +673,7 @@ supported CCs:`;
 		// But first figure out if they seem unnecessary and if they do, which ones should be preserved
 		if (
 			!multiResponse.identicalCapabilities
-			&& areEndpointsUnnecessary(applHost, node, allEndpoints)
+			&& areEndpointsUnnecessary(applHost, node.id, allEndpoints)
 		) {
 			const preserve = applHost.getDeviceConfig?.(node.id)?.compat
 				?.preserveEndpoints;

@@ -177,6 +177,7 @@ export function setMultiChannelInterviewComplete(
 
 export function getAllEndpoints(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	node: IZWaveNode,
 ): IZWaveEndpoint[] {
 	const ret: IZWaveEndpoint[] = [node];
@@ -303,6 +304,7 @@ export function filterRootApplicationCCValueIDs<T extends ValueID>(
 /** Returns a list of all value names that are defined on all endpoints of this node */
 export function getDefinedValueIDs(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	node: IZWaveNode,
 ): TranslatedValueID[] {
 	return getDefinedValueIDsInternal(applHost, node, false);
@@ -314,6 +316,7 @@ export function getDefinedValueIDs(
  */
 export function getDefinedValueIDsInternal(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	node: IZWaveNode,
 	includeInternal: boolean = false,
 ): TranslatedValueID[] {

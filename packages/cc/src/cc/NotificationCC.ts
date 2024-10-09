@@ -13,7 +13,6 @@ import {
 	CommandClasses,
 	Duration,
 	type IZWaveEndpoint,
-	type IZWaveNode,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -552,7 +551,8 @@ export class NotificationCC extends CommandClass {
 	/** Whether the node implements push or pull notifications */
 	public static getNotificationMode(
 		applHost: ZWaveApplicationHost,
-		node: IZWaveNode,
+		// FIXME: GH#7261 Change to nodeId
+		node: { id: number },
 	): MaybeNotKnown<"push" | "pull"> {
 		return applHost
 			.getValueDB(node.id)

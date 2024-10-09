@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	type EndpointId,
 	type IZWaveEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -271,7 +272,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the association profile for an association group */
 	public static getGroupProfileCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<AssociationGroupInfoProfile> {
 		return applHost.getValueDB(endpoint.nodeId).getValue<{

@@ -88,6 +88,7 @@ export function getAssociations(
 
 export function getAllAssociations(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	node: IZWaveNode,
 ): ReadonlyObjectKeyMap<
 	AssociationAddress,
@@ -339,6 +340,7 @@ export function getAssociationGroups(
 
 export function getAllAssociationGroups(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	node: IZWaveNode,
 ): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>> {
 	const ret = new Map<number, ReadonlyMap<number, AssociationGroup>>();
@@ -636,7 +638,6 @@ export function getLifelineGroupIds(
 ): number[] {
 	// For now only support this for the root endpoint - i.e. node
 	if (endpoint.index > 0) return [];
-	const node = endpoint as IZWaveNode;
 
 	// Some nodes define multiple lifeline groups, so we need to assign us to
 	// all of them
@@ -649,7 +650,7 @@ export function getLifelineGroupIds(
 
 	// We have a device config file that tells us which (additional) association to assign
 	let associations: ReadonlyMap<number, AssociationConfig> | undefined;
-	const deviceConfig = applHost.getDeviceConfig?.(node.id);
+	const deviceConfig = applHost.getDeviceConfig?.(endpoint.nodeId);
 	if (endpoint.index === 0) {
 		// The root endpoint's associations may be configured separately or as part of "endpoints"
 		associations = deviceConfig?.associations
@@ -1234,6 +1235,7 @@ export async function assignLifelineIssueingCommand(
 
 export function doesAnyLifelineSendActuatorOrSensorReports(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	node: IZWaveNode,
 ): MaybeNotKnown<boolean> {
 	// No association support means no unsolicited reports
