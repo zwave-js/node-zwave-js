@@ -2630,6 +2630,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			} catch {
 				// ignore
 			}
+
+			// No need to keep the node awake longer than necessary
+			node.keepAwake = false;
+			this.debounceSendNodeToSleep(node);
 		}
 	}
 
@@ -4144,7 +4148,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					"Attempting to recover controller again...",
 					"warn",
 				);
-				void this.softReset().catch(() => {
+				void this.softResetInternal(true).catch(() => {
 					this.driverLog.print(
 						"Automatic controller recovery failed. Returning to normal operation and hoping for the best.",
 						"warn",
@@ -4173,7 +4177,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				);
 
 				// Execute the soft-reset asynchronously
-				void this.softReset().then(() => {
+				void this.softResetInternal(true).then(() => {
 					// The controller responded. It is no longer unresponsive.
 
 					// Re-queue the transaction, so it can get handled next.

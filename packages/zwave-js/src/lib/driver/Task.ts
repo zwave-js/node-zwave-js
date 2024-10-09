@@ -173,6 +173,11 @@ export type TaskTag =
 		// Rebuild routes for a single node
 		id: "rebuild-node-routes";
 		nodeId: number;
+	}
+	| {
+		// Perform an OTA firmware update for a node
+		id: "firmware-update-ota";
+		nodeId: number;
 	};
 
 export class TaskScheduler {
