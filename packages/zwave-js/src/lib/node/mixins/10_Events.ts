@@ -3,7 +3,7 @@ import { type StatisticsEventCallbacksWithSelf } from "../../driver/Statistics";
 import { type ZWaveNode } from "../Node";
 import { type NodeStatistics } from "../NodeStatistics";
 import { type ZWaveNodeEventCallbacks } from "../_Types";
-import { NetworkRoleMixin } from "./01_NetworkRole";
+import { NodeSecurityMixin } from "./05_Security";
 
 // This mixin is a slightly ugly workaround to allow other mixins to
 // interact with events which would normally take an instance of ZWaveNode
@@ -24,7 +24,7 @@ type AbstractNodeEvents<TThis> = EventsToAbstract<
 	& StatisticsEventCallbacksWithSelf<ZWaveNode, NodeStatistics>
 >;
 
-export abstract class NodeEventsMixin extends NetworkRoleMixin {
+export abstract class NodeEventsMixin extends NodeSecurityMixin {
 	protected abstract _emit<TEvent extends keyof AbstractNodeEvents<this>>(
 		event: TEvent,
 		...args: Parameters<AbstractNodeEvents<this>[TEvent]>

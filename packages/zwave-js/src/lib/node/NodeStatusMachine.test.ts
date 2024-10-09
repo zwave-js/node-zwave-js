@@ -8,6 +8,9 @@ import {
 	createNodeStatusMachine,
 } from "./NodeStatusMachine";
 
+const testNodeNonSleeping = { canSleep: false } as any;
+const testNodeSleeping = { canSleep: true } as any;
+
 function startMachine(
 	t: ExecutionContext,
 	machine: NodeStatusMachine,
@@ -18,14 +21,18 @@ function startMachine(
 }
 
 test(`The node should start in the unknown state if it maybe cannot sleep`, (t) => {
-	const testMachine = createNodeStatusMachine(false);
+	const testMachine = createNodeStatusMachine({
+		canSleep: false,
+	} as any);
 
 	const service = startMachine(t, testMachine);
 	t.is(service.getSnapshot().value, "unknown");
 });
 
 test(`The node should start in the unknown state if it can definitely sleep`, (t) => {
-	const testMachine = createNodeStatusMachine(true);
+	const testMachine = createNodeStatusMachine({
+		canSleep: true,
+	} as any);
 
 	const service = startMachine(t, testMachine);
 	t.is(service.getSnapshot().value, "unknown");
@@ -164,15 +171,15 @@ for (const testCase of transitions) {
 
 	test(name, (t) => {
 		// For these tests, assume that the node does or does not support Wakeup, whatever fits
-		const canSleep = testCase.canSleep == undefined
+		const testNode = testCase.canSleep == undefined
 			? testCase.event === "ASLEEP" || testCase.event === "AWAKE"
-				? true
-				: false
+				? testNodeSleeping
+				: testNodeNonSleeping
 			: testCase.canSleep
-			? true
-			: false;
+			? testNodeSleeping
+			: testNodeNonSleeping;
 
-		const testMachine = createNodeStatusMachine(canSleep);
+		const testMachine = createNodeStatusMachine(testNode);
 		testMachine.initial = testCase.start;
 
 		const service = startMachine(t, testMachine);
@@ -182,7 +189,7 @@ for (const testCase of transitions) {
 }
 
 test("A transition from unknown to awake should not happen if the node cannot sleep", (t) => {
-	const testMachine = createNodeStatusMachine(false);
+	const testMachine = createNodeStatusMachine(testNodeNonSleeping);
 
 	const service = startMachine(t, testMachine);
 	service.send("AWAKE");
@@ -190,7 +197,7 @@ test("A transition from unknown to awake should not happen if the node cannot sl
 });
 
 test("A transition from unknown to asleep should not happen if the node cannot sleep", (t) => {
-	const testMachine = createNodeStatusMachine(false);
+	const testMachine = createNodeStatusMachine(testNodeNonSleeping);
 
 	const service = startMachine(t, testMachine);
 	service.send("ASLEEP");

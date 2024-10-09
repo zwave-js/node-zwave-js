@@ -141,7 +141,6 @@ import {
 import { type DeviceConfig, embeddedDevicesDir } from "@zwave-js/config";
 import {
 	BasicDeviceClass,
-	CacheBackedMap,
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
@@ -308,20 +307,6 @@ export class ZWaveNode extends ZWaveNodeMixins
 			valueDB,
 		);
 
-		this.securityClasses = new CacheBackedMap(this.driver.networkCache, {
-			prefix: cacheKeys.node(this.id)._securityClassBaseKey + ".",
-			suffixSerializer: (value: SecurityClass) =>
-				getEnumMemberName(SecurityClass, value),
-			suffixDeserializer: (key: string) => {
-				if (
-					key in SecurityClass
-					&& typeof (SecurityClass as any)[key] === "number"
-				) {
-					return (SecurityClass as any)[key];
-				}
-			},
-		});
-
 		// Add optional controlled CCs - endpoints don't have this
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 	}
@@ -351,10 +336,6 @@ export class ZWaveNode extends ZWaveNodeMixins
 		this.cancelAllScheduledPolls();
 	}
 
-	/** @internal */
-	// This a CacheBackedMap that's assigned in the constructor
-	public readonly securityClasses: Map<SecurityClass, boolean>;
-
 	/**
 	 * The device specific key (DSK) of this node in binary format.
 	 * This is only set if included with Security S2.
@@ -366,41 +347,6 @@ export class ZWaveNode extends ZWaveNodeMixins
 	public set dsk(value: Buffer | undefined) {
 		const cacheKey = cacheKeys.node(this.id).dsk;
 		this.driver.cacheSet(cacheKey, value);
-	}
-
-	/** Whether the node was granted at least one security class */
-	public get isSecure(): MaybeNotKnown<boolean> {
-		const securityClass = this.getHighestSecurityClass();
-		if (securityClass == undefined) return NOT_KNOWN;
-		if (securityClass === SecurityClass.None) return false;
-		return true;
-	}
-
-	public hasSecurityClass(
-		securityClass: SecurityClass,
-	): MaybeNotKnown<boolean> {
-		return this.securityClasses.get(securityClass);
-	}
-
-	public setSecurityClass(
-		securityClass: SecurityClass,
-		granted: boolean,
-	): void {
-		this.securityClasses.set(securityClass, granted);
-	}
-
-	/** Returns the highest security class this node was granted or `undefined` if that information isn't known yet */
-	public getHighestSecurityClass(): MaybeNotKnown<SecurityClass> {
-		if (this.securityClasses.size === 0) return undefined;
-		let missingSome = false;
-		for (const secClass of securityClassOrder) {
-			if (this.securityClasses.get(secClass) === true) return secClass;
-			if (!this.securityClasses.has(secClass)) {
-				missingSome = true;
-			}
-		}
-		// If we don't have the info for every security class, we don't know the highest one yet
-		return missingSome ? NOT_KNOWN : SecurityClass.None;
 	}
 
 	public get manufacturerId(): MaybeNotKnown<number> {
@@ -911,20 +857,6 @@ export class ZWaveNode extends ZWaveNodeMixins
 			property: valueId.property,
 			propertyKey: valueId.propertyKey,
 		});
-	}
-
-	/**
-	 * This tells us which interview stage was last completed
-	 */
-
-	public get interviewStage(): InterviewStage {
-		return (
-			this.driver.cacheGet(cacheKeys.node(this.id).interviewStage)
-				?? InterviewStage.None
-		);
-	}
-	public set interviewStage(value: InterviewStage) {
-		this.driver.cacheSet(cacheKeys.node(this.id).interviewStage, value);
 	}
 
 	private _interviewAttempts: number = 0;

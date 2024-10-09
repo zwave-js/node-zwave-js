@@ -1,5 +1,6 @@
-import { type CommandClasses } from "@zwave-js/core";
+import { type CommandClasses, InterviewStage } from "@zwave-js/core";
 import { type Driver } from "../../driver/Driver";
+import { cacheKeys } from "../../driver/NetworkCache";
 import { type Extended, interpretEx } from "../../driver/StateMachineShared";
 import { type DeviceClass } from "../DeviceClass";
 import {
@@ -48,6 +49,11 @@ export interface NodeWithStatus {
 	 * Marks this node as awake (if applicable)
 	 */
 	markAsAwake(): void;
+
+	/**
+	 * Which interview stage was last completed
+	 */
+	interviewStage: InterviewStage;
 }
 
 export abstract class NodeStatusMixin extends NodeEventsMixin
@@ -176,5 +182,15 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 	}
 	protected set ready(ready: boolean) {
 		this._ready = ready;
+	}
+
+	public get interviewStage(): InterviewStage {
+		return (
+			this.driver.cacheGet(cacheKeys.node(this.id).interviewStage)
+				?? InterviewStage.None
+		);
+	}
+	public set interviewStage(value: InterviewStage) {
+		this.driver.cacheSet(cacheKeys.node(this.id).interviewStage, value);
 	}
 }
