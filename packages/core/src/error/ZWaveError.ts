@@ -207,7 +207,7 @@ export enum ZWaveErrorCodes {
 	/** An firmware file with an unsupported format was provided */
 	Unsupported_Firmware_Format,
 
-	/** @deprecated A firmware update is already in progress on the network preventing this action from proceeding */
+	/** A firmware update is already in progress on the network preventing this action from proceeding */
 	FirmwareUpdateCC_NetworkBusy,
 
 	/** Unsupported target node for a powerlevel test */
