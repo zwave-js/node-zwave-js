@@ -2630,6 +2630,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			} catch {
 				// ignore
 			}
+
+			// No need to keep the node awake longer than necessary
+			node.keepAwake = false;
+			this.debounceSendNodeToSleep(node);
 		}
 	}
 

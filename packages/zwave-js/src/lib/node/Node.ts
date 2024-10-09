@@ -6037,6 +6037,10 @@ protocol version:      ${this.protocolVersion}`;
 					reInterview: true,
 				};
 
+				// After a successful firmware update, we want to interview sleeping nodes immediately,
+				// so don't send them to sleep when they wake up
+				keepAwake = true;
+
 				self.emit("firmware update finished", self, result);
 
 				return result;
@@ -6500,8 +6504,12 @@ protocol version:      ${this.protocolVersion}`;
 
 		if (abortContext.abort) {
 			abortContext.abortPromise.resolve(
+				// The error should be Error_TransmissionFailed, but some devices
+				// use the Error_Checksum error code instead
 				statusReport?.status
-					=== FirmwareUpdateStatus.Error_TransmissionFailed,
+						=== FirmwareUpdateStatus.Error_TransmissionFailed
+					|| statusReport?.status
+						=== FirmwareUpdateStatus.Error_Checksum,
 			);
 		}
 
