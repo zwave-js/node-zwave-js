@@ -1,9 +1,17 @@
 import { type CCAPI } from "@zwave-js/cc";
-import { normalizeValueID } from "@zwave-js/core";
-import { MessagePriority, type ValueID } from "@zwave-js/core/safe";
+import { type ValueDB, normalizeValueID } from "@zwave-js/core";
+import {
+	type CommandClasses,
+	MessagePriority,
+	type ValueID,
+	type ValueRemovedArgs,
+	type ValueUpdatedArgs,
+} from "@zwave-js/core/safe";
 import { type NodeSchedulePollOptions } from "@zwave-js/host";
 import { ObjectKeyMap } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
+import { type Driver } from "../../driver/Driver";
+import { type DeviceClass } from "../DeviceClass";
 import { EndpointsMixin } from "./50_Endpoints";
 
 export interface ScheduledPoll {
@@ -51,6 +59,48 @@ export interface SchedulePoll {
 export abstract class SchedulePollMixin extends EndpointsMixin
 	implements SchedulePoll
 {
+	public constructor(
+		nodeId: number,
+		driver: Driver,
+		endpointIndex: number,
+		deviceClass?: DeviceClass,
+		supportedCCs?: CommandClasses[],
+		valueDB?: ValueDB,
+	) {
+		super(
+			nodeId,
+			driver,
+			endpointIndex,
+			deviceClass,
+			supportedCCs,
+			valueDB,
+		);
+
+		// Avoid verifying a value change for which we recently received an update
+		for (const event of ["value updated", "value removed"] as const) {
+			this.valueDB.on(
+				event,
+				(args: ValueUpdatedArgs | ValueRemovedArgs) => {
+					// Value updates caused by the driver should never cancel a scheduled poll
+					if ("source" in args && args.source === "driver") return;
+
+					if (
+						this.cancelScheduledPoll(
+							args,
+							(args as ValueUpdatedArgs).newValue,
+						)
+					) {
+						this.driver.controllerLog.logNode(
+							this.id,
+							"Scheduled poll canceled because expected value was received",
+							"verbose",
+						);
+					}
+				},
+			);
+		}
+	}
+
 	/**
 	 * All polls that are currently scheduled for this node
 	 */

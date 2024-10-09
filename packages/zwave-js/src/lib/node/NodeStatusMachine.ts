@@ -1,5 +1,6 @@
 import { type InterpreterFrom, Machine, type StateMachine } from "xstate";
 import { NodeStatus } from "./_Types";
+import { type NodeNetworkRole } from "./mixins/01_NetworkRole";
 
 export interface NodeStatusStateSchema {
 	states: {
@@ -43,7 +44,9 @@ export type NodeStatusMachine = StateMachine<
 >;
 export type NodeStatusInterpreter = InterpreterFrom<NodeStatusMachine>;
 
-export function createNodeStatusMachine(canSleep: boolean): NodeStatusMachine {
+export function createNodeStatusMachine(
+	node: NodeNetworkRole,
+): NodeStatusMachine {
 	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
 		{
 			id: "nodeStatus",
@@ -103,8 +106,8 @@ export function createNodeStatusMachine(canSleep: boolean): NodeStatusMachine {
 		},
 		{
 			guards: {
-				canSleep: () => !!canSleep,
-				cannotSleep: () => !canSleep,
+				canSleep: () => !!node.canSleep,
+				cannotSleep: () => !node.canSleep,
 			},
 		},
 	);

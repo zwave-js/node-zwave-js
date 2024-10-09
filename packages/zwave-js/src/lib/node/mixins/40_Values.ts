@@ -63,6 +63,19 @@ export abstract class NodeValuesMixin extends NodeWakeupMixin
 		super(nodeId, driver, endpointIndex, deviceClass, supportedCCs);
 		this._valueDB = valueDB
 			?? new ValueDB(nodeId, driver.valueDB!, driver.metadataDB!);
+
+		// Pass value events to our listeners
+		for (
+			const event of [
+				"value added",
+				"value updated",
+				"value removed",
+				"value notification",
+				"metadata updated",
+			] as const
+		) {
+			this._valueDB.on(event, this.translateValueEvent.bind(this, event));
+		}
 	}
 
 	protected _valueDB: ValueDB;

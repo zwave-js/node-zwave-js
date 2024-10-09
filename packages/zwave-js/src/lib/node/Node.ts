@@ -166,12 +166,10 @@ import {
 	type TXReport,
 	type TranslatedValueID,
 	TransmitOptions,
-	ValueDB,
+	type ValueDB,
 	type ValueID,
 	type ValueMetadata,
 	type ValueMetadataNumeric,
-	type ValueRemovedArgs,
-	type ValueUpdatedArgs,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLibraryTypes,
@@ -292,27 +290,6 @@ export interface ZWaveNode
 export class ZWaveNode extends ZWaveNodeMixins
 	implements SecurityClassOwner, IZWaveNode
 {
-	protected _emit<TEvent extends keyof AllNodeEvents>(
-		event: TEvent,
-		...args: Parameters<AllNodeEvents[TEvent]>
-	): boolean {
-		return this.emit(event, ...args);
-	}
-
-	protected _on<TEvent extends keyof AllNodeEvents>(
-		event: TEvent,
-		callback: AllNodeEvents[TEvent],
-	): this {
-		return this.on(event, callback);
-	}
-
-	protected _once<TEvent extends keyof AllNodeEvents>(
-		event: TEvent,
-		callback: AllNodeEvents[TEvent],
-	): this {
-		return this.once(event, callback);
-	}
-
 	public constructor(
 		id: number,
 		driver: Driver,
@@ -325,49 +302,11 @@ export class ZWaveNode extends ZWaveNodeMixins
 			id,
 			driver,
 			// Define this node's intrinsic endpoint as the root device (0)
-
 			0,
 			deviceClass,
 			supportedCCs,
-			valueDB
-				?? new ValueDB(id, driver.valueDB!, driver.metadataDB!),
+			valueDB,
 		);
-		// Pass value events to our listeners
-		for (
-			const event of [
-				"value added",
-				"value updated",
-				"value removed",
-				"value notification",
-				"metadata updated",
-			] as const
-		) {
-			this._valueDB.on(event, this.translateValueEvent.bind(this, event));
-		}
-
-		// Also avoid verifying a value change for which we recently received an update
-		for (const event of ["value updated", "value removed"] as const) {
-			this._valueDB.on(
-				event,
-				(args: ValueUpdatedArgs | ValueRemovedArgs) => {
-					// Value updates caused by the driver should never cancel a scheduled poll
-					if ("source" in args && args.source === "driver") return;
-
-					if (
-						this.cancelScheduledPoll(
-							args,
-							(args as ValueUpdatedArgs).newValue,
-						)
-					) {
-						this.driver.controllerLog.logNode(
-							this.id,
-							"Scheduled poll canceled because expected value was received",
-							"verbose",
-						);
-					}
-				},
-			);
-		}
 
 		this.securityClasses = new CacheBackedMap(this.driver.networkCache, {
 			prefix: cacheKeys.node(this.id)._securityClassBaseKey + ".",
@@ -6557,5 +6496,26 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		}
 
 		return ret;
+	}
+
+	protected _emit<TEvent extends keyof AllNodeEvents>(
+		event: TEvent,
+		...args: Parameters<AllNodeEvents[TEvent]>
+	): boolean {
+		return this.emit(event, ...args);
+	}
+
+	protected _on<TEvent extends keyof AllNodeEvents>(
+		event: TEvent,
+		callback: AllNodeEvents[TEvent],
+	): this {
+		return this.on(event, callback);
+	}
+
+	protected _once<TEvent extends keyof AllNodeEvents>(
+		event: TEvent,
+		callback: AllNodeEvents[TEvent],
+	): this {
+		return this.once(event, callback);
 	}
 }

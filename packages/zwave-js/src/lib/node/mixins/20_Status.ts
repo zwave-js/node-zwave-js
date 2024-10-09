@@ -64,7 +64,7 @@ export abstract class NodeStatusMixin extends NodeEventsMixin
 
 		// Create and hook up the status machine
 		this.statusMachine = interpretEx(
-			createNodeStatusMachine(this.canSleep ?? false),
+			createNodeStatusMachine(this),
 		);
 		this.statusMachine.onTransition((state) => {
 			if (state.changed) {
