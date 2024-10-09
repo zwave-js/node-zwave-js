@@ -343,9 +343,13 @@ export function createTestNode(
 
 	// If the number of endpoints are given, use them as the individual endpoint count
 	if (options.numEndpoints != undefined) {
-		nodeUtils.setIndividualEndpointCount(host, ret, options.numEndpoints);
-		nodeUtils.setAggregatedEndpointCount(host, ret, 0);
-		nodeUtils.setMultiChannelInterviewComplete(host, ret, true);
+		nodeUtils.setIndividualEndpointCount(
+			host,
+			ret.id,
+			options.numEndpoints,
+		);
+		nodeUtils.setAggregatedEndpointCount(host, ret.id, 0);
+		nodeUtils.setMultiChannelInterviewComplete(host, ret.id, true);
 	}
 
 	return ret;
