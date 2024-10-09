@@ -1,5 +1,4 @@
 import { type InterpreterFrom, Machine, type StateMachine } from "xstate";
-import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./_Types";
 
 export interface NodeStatusStateSchema {
@@ -44,7 +43,7 @@ export type NodeStatusMachine = StateMachine<
 >;
 export type NodeStatusInterpreter = InterpreterFrom<NodeStatusMachine>;
 
-export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
+export function createNodeStatusMachine(canSleep: boolean): NodeStatusMachine {
 	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
 		{
 			id: "nodeStatus",
@@ -104,8 +103,8 @@ export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 		},
 		{
 			guards: {
-				canSleep: () => !!node.canSleep,
-				cannotSleep: () => !node.canSleep,
+				canSleep: () => !!canSleep,
+				cannotSleep: () => !canSleep,
 			},
 		},
 	);

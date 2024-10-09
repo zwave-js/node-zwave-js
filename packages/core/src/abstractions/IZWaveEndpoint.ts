@@ -5,10 +5,14 @@ import type {
 import type { MulticastDestination } from "../consts";
 import type { IVirtualNode, IZWaveNode } from "./IZWaveNode";
 
-/** A basic abstraction of a Z-Wave endpoint providing access to the relevant functionality */
-export interface IZWaveEndpoint {
+/** Identifies an endpoint */
+export interface EndpointId {
 	readonly nodeId: number;
 	readonly index: number;
+}
+
+/** A basic abstraction of a Z-Wave endpoint providing access to the relevant functionality */
+export interface IZWaveEndpoint extends EndpointId {
 	readonly virtual: false;
 	getCCVersion(cc: CommandClasses): number;
 	addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void;

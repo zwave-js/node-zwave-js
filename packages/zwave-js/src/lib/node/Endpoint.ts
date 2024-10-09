@@ -10,7 +10,7 @@ import {
 	normalizeCCNameOrId,
 } from "@zwave-js/cc";
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
-import type { IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
+import type { EndpointId, IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
 import {
 	BasicDeviceClass,
 	CacheBackedMap,
@@ -36,7 +36,7 @@ import type { ZWaveNode } from "./Node";
  *
  * Each endpoint may have different capabilities (device class/supported CCs)
  */
-export class Endpoint implements IZWaveEndpoint {
+export class Endpoint implements EndpointId, IZWaveEndpoint {
 	public constructor(
 		/** The id of the node this endpoint belongs to */
 		public readonly nodeId: number,

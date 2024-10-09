@@ -167,7 +167,7 @@ import { ZWaveController } from "../controller/Controller";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion";
 import { DriverLogger } from "../log/Driver";
 import type { Endpoint } from "../node/Endpoint";
-import type { ZWaveNode } from "../node/Node";
+import type { ZWaveNode, ZWaveNodeBase } from "../node/Node";
 import {
 	InterviewStage,
 	NodeStatus,
@@ -203,6 +203,9 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 
+import { type NodeWakeup } from "../node/mixins/30_Wakeup";
+import { type NodeValues } from "../node/mixins/40_Values";
+import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll";
 import {
 	SendTestFrameRequest,
 	SendTestFrameTransmitReport,
@@ -2687,7 +2690,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	};
 
 	/** Checks if there are any pending messages for the given node */
-	private hasPendingMessages(node: ZWaveNode): boolean {
+	private hasPendingMessages(node: ZWaveNodeBase & SchedulePoll): boolean {
 		// First check if there are messages in the queue
 		if (
 			this.hasPendingTransactions(
@@ -2698,7 +2701,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		// Then check if there are scheduled polls
-		return node.scheduledPolls.size > 0;
+		return node.hasScheduledPolls();
 	}
 
 	/** Checks if there are any pending transactions that match the given predicate */
@@ -6830,7 +6833,9 @@ ${handlers.length} left`,
 	 * @internal
 	 * Marks a node for a later sleep command. Every call refreshes the period until the node actually goes to sleep
 	 */
-	public debounceSendNodeToSleep(node: ZWaveNode): void {
+	public debounceSendNodeToSleep(
+		node: ZWaveNodeBase & SchedulePoll & NodeValues & NodeWakeup,
+	): void {
 		// TODO: This should be a single command to the send thread
 		// Delete old timers if any exist
 		if (this.sendNodeToSleepTimers.has(node.id)) {
@@ -6838,7 +6843,9 @@ ${handlers.length} left`,
 		}
 
 		// Sends a node to sleep if it has no more messages.
-		const sendNodeToSleep = (node: ZWaveNode): void => {
+		const sendNodeToSleep = (
+			node: ZWaveNodeBase & SchedulePoll & NodeWakeup,
+		): void => {
 			this.sendNodeToSleepTimers.delete(node.id);
 			if (!this.hasPendingMessages(node)) {
 				void node.sendNoMoreInformation().catch(() => {

@@ -2,6 +2,7 @@ import {
 	type BroadcastCC,
 	CommandClasses,
 	EncapsulationFlags,
+	type EndpointId,
 	type FrameType,
 	type ICommandClass,
 	type IZWaveEndpoint,
@@ -449,7 +450,7 @@ export class CommandClass implements ICommandClass {
 	 */
 	public static createInstanceUnchecked<T extends CommandClass>(
 		host: ZWaveHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		cc: CommandClasses | CCConstructor<T>,
 	): T | undefined {
 		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
