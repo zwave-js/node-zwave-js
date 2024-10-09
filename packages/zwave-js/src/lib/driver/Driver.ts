@@ -167,7 +167,7 @@ import { ZWaveController } from "../controller/Controller";
 import { InclusionState, RemoveNodeReason } from "../controller/Inclusion";
 import { DriverLogger } from "../log/Driver";
 import type { Endpoint } from "../node/Endpoint";
-import type { ZWaveNode, ZWaveNodeBase } from "../node/Node";
+import type { ZWaveNode } from "../node/Node";
 import {
 	InterviewStage,
 	NodeStatus,
@@ -203,6 +203,7 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 
+import { type ZWaveNodeBase } from "../node/mixins/00_Base";
 import { type NodeWakeup } from "../node/mixins/30_Wakeup";
 import { type NodeValues } from "../node/mixins/40_Values";
 import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll";

@@ -3,7 +3,7 @@ import { type StatisticsEventCallbacksWithSelf } from "../../driver/Statistics";
 import { type ZWaveNode } from "../Node";
 import { type NodeStatistics } from "../NodeStatistics";
 import { type ZWaveNodeEventCallbacks } from "../_Types";
-import { NetworkRoleMixin } from "./00_NetworkRole";
+import { NetworkRoleMixin } from "./01_NetworkRole";
 
 // This mixin is a slightly ugly workaround to allow other mixins to
 // interact with events which would normally take an instance of ZWaveNode
