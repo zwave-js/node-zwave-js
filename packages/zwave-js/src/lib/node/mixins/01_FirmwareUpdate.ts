@@ -33,11 +33,10 @@ import {
 } from "alcalzone-shared/deferred-promise";
 import { roundTo } from "alcalzone-shared/math";
 import { randomBytes } from "node:crypto";
-import { type Driver } from "../driver/Driver";
-import { type TaskBuilder, TaskPriority } from "../driver/Task";
-import { type Transaction } from "../driver/Transaction";
-import { type ZWaveNode } from "./Node";
-import * as nodeUtils from "./utils";
+import { type TaskBuilder, TaskPriority } from "../../driver/Task";
+import { type Transaction } from "../../driver/Transaction";
+import * as nodeUtils from "../utils";
+import { NodeEventsMixin } from "./00_Events";
 
 interface AbortFirmwareUpdateContext {
 	abort: boolean;
@@ -49,15 +48,29 @@ type PartialFirmwareUpdateResult =
 	& Pick<FirmwareUpdateResult, "status" | "waitTime">
 	& { success: boolean };
 
-export class FirmwareUpdateMixin {
-	get #node(): ZWaveNode & FirmwareUpdateMixin {
-		return this as any;
-	}
+// export interface FirmwareUpdateInstance extends Endpoint {
+// 	abortFirmwareUpdate(): Promise<void>;
+// 	updateFirmware(
+// 		updates: Firmware[],
+// 		options: FirmwareUpdateOptions,
+// 	): Promise<FirmwareUpdateResult>;
+// 	isFirmwareUpdateInProgress(): boolean;
+// }
 
-	get #driver(): Driver {
-		return this.#node["driver"];
-	}
-
+// export function FirmwareUpdateMixin<
+// 	TBase extends Constructor<Endpoint & KeepAwakeInstance>,
+// >(
+// 	base: TBase,
+// ): new (
+// 	...args: ConstructorParameters<TBase>
+// ) => InstanceType<TBase> & FirmwareUpdateInstance {
+// 	return class FirmwareUpdateMixin extends base
+// 		implements FirmwareUpdateInstance
+// 	{
+// 		get #driver(): Driver {
+// 			return (this as any).driver;
+// 		}
+export abstract class FirmwareUpdateMixin extends NodeEventsMixin {
 	private _abortFirmwareUpdate: (() => Promise<void>) | undefined;
 	/**
 	 * Aborts an active firmware update process
@@ -118,7 +131,7 @@ export class FirmwareUpdateMixin {
 		}
 
 		// Don't start the process twice
-		if (this.#driver.controller.isFirmwareUpdateInProgress()) {
+		if (this.driver.controller.isFirmwareUpdateInProgress()) {
 			throw new ZWaveError(
 				`Failed to start the update: An OTW upgrade of the controller is in progress!`,
 				ZWaveErrorCodes.FirmwareUpdateCC_Busy,
@@ -135,14 +148,14 @@ export class FirmwareUpdateMixin {
 		}
 
 		// Queue the task
-		return this.#driver.scheduler.queueTask(task);
+		return this.driver.scheduler.queueTask(task);
 	}
 
 	/**
 	 * Returns whether a firmware update is in progress for this node.
 	 */
 	public isFirmwareUpdateInProgress(): boolean {
-		return !!this.#driver.scheduler.findTask(
+		return !!this.driver.scheduler.findTask(
 			nodeUtils.isFirmwareUpdateOTATask,
 		);
 	}
@@ -151,14 +164,14 @@ export class FirmwareUpdateMixin {
 		updates: Firmware[],
 		options: FirmwareUpdateOptions = {},
 	): Promise<FirmwareUpdateResult> | TaskBuilder<FirmwareUpdateResult> {
-		const self = this.#node;
-		const driver = this.#driver;
+		const self = this;
 
 		// This task should only run once at a time
-		const existingTask = driver.scheduler.findTask<
+		const existingTask = this.driver.scheduler.findTask<
 			FirmwareUpdateResult
 		>((t) =>
-			t.tag?.id === "firmware-update-ota" && t.tag.nodeId === self.id
+			t.tag?.id === "firmware-update-ota"
+			&& t.tag.nodeId === self.id
 		);
 		if (existingTask) return existingTask;
 
@@ -188,7 +201,7 @@ export class FirmwareUpdateMixin {
 						);
 					}
 
-					driver.controllerLog.logNode(self.id, {
+					self.driver.controllerLog.logNode(self.id, {
 						message: `Aborting firmware update...`,
 						direction: "outbound",
 					});
@@ -202,7 +215,7 @@ export class FirmwareUpdateMixin {
 							ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
 						);
 					}
-					driver.controllerLog.logNode(self.id, {
+					self.driver.controllerLog.logNode(self.id, {
 						message: `Firmware update aborted`,
 						direction: "inbound",
 					});
@@ -223,17 +236,24 @@ export class FirmwareUpdateMixin {
 					if (abortContext.abort) {
 						const result: FirmwareUpdateResult = {
 							success: false,
-							status:
-								FirmwareUpdateStatus.Error_TransmissionFailed,
+							status: FirmwareUpdateStatus
+								.Error_TransmissionFailed,
 							reInterview: false,
 						};
-						self.emit("firmware update finished", self, result);
+						self.emitEvent(
+							"firmware update finished",
+							self,
+							result,
+						);
 						return result;
 					}
 
 					// If the firmware update was not aborted, prepareResult is definitely defined
-					({ fragmentSizeSecure, fragmentSizeNonSecure, ...meta } =
-						prepareResult!);
+					({
+						fragmentSizeSecure,
+						fragmentSizeNonSecure,
+						...meta
+					} = prepareResult!);
 				} catch {
 					// Not sure what the error is, but we'll label it "transmission failed"
 					const result: FirmwareUpdateResult = {
@@ -264,7 +284,11 @@ export class FirmwareUpdateMixin {
 				// Throttle the progress emitter so applications can handle the load of events
 				const notifyProgress = throttle(
 					(progress) =>
-						self.emit("firmware update progress", self, progress),
+						self.emitEvent(
+							"firmware update progress",
+							self,
+							progress,
+						),
 					250,
 					true,
 				);
@@ -300,7 +324,7 @@ export class FirmwareUpdateMixin {
 
 					if (i < skipFinishedFiles) {
 						// If we are resuming, skip this file since it was already done before
-						driver.controllerLog.logNode(
+						self.driver.controllerLog.logNode(
 							self.id,
 							`Skipping already completed firmware update (part ${
 								i + 1
@@ -310,7 +334,7 @@ export class FirmwareUpdateMixin {
 						continue;
 					}
 
-					driver.controllerLog.logNode(
+					self.driver.controllerLog.logNode(
 						self.id,
 						`Updating firmware (part ${
 							i + 1
@@ -344,7 +368,7 @@ export class FirmwareUpdateMixin {
 					self._previousFirmwareCRC = checksum;
 
 					if (shouldResume) {
-						driver.controllerLog.logNode(
+						self.driver.controllerLog.logNode(
 							self.id,
 							`Node ${
 								resume ? "accepted" : "did not accept"
@@ -352,7 +376,7 @@ export class FirmwareUpdateMixin {
 						);
 					}
 					if (nonSecureTransfer) {
-						driver.controllerLog.logNode(
+						self.driver.controllerLog.logNode(
 							self.id,
 							`Firmware will be transferred without encryption...`,
 						);
@@ -394,13 +418,13 @@ export class FirmwareUpdateMixin {
 					);
 
 					// If we wait, wait a bit longer than the device told us, so it is actually ready to use
-					conservativeWaitTime = driver
+					conservativeWaitTime = self.driver
 						.getConservativeWaitTimeAfterFirmwareUpdate(
 							updateResult.waitTime,
 						);
 
 					if (!updateResult.success) {
-						driver.controllerLog.logNode(self.id, {
+						self.driver.controllerLog.logNode(self.id, {
 							message: `Firmware update (part ${
 								i + 1
 							} / ${updatesWithChecksum.length}) failed with status ${
@@ -417,13 +441,17 @@ export class FirmwareUpdateMixin {
 							waitTime: undefined,
 							reInterview: false,
 						};
-						self.emit("firmware update finished", self, result);
+						self.emitEvent(
+							"firmware update finished",
+							self,
+							result,
+						);
 
 						return result;
 					} else if (i < updatesWithChecksum.length - 1) {
 						// Update succeeded, but we're not done yet
 
-						driver.controllerLog.logNode(self.id, {
+						self.driver.controllerLog.logNode(self.id, {
 							message: `Firmware update (part ${
 								i + 1
 							} / ${updatesWithChecksum.length}) succeeded with status ${
@@ -435,7 +463,7 @@ export class FirmwareUpdateMixin {
 							direction: "inbound",
 						});
 
-						driver.controllerLog.logNode(
+						self.driver.controllerLog.logNode(
 							self.id,
 							`Continuing with next part in ${conservativeWaitTime} seconds...`,
 						);
@@ -456,7 +484,7 @@ export class FirmwareUpdateMixin {
 					reInterview: true,
 				};
 
-				self.emit("firmware update finished", self, result);
+				self.emitEvent("firmware update finished", self, result);
 
 				return result;
 			},
@@ -468,7 +496,7 @@ export class FirmwareUpdateMixin {
 				self.keepAwake = keepAwake;
 				if (!keepAwake) {
 					setImmediate(() => {
-						driver.debounceSendNodeToSleep(self);
+						self.driver.debounceSendNodeToSleep(self);
 					});
 				}
 
@@ -488,7 +516,7 @@ export class FirmwareUpdateMixin {
 			fragmentSizeNonSecure: number;
 		})
 	> {
-		const api = this.#node.commandClasses["Firmware Update Meta Data"];
+		const api = this.commandClasses["Firmware Update Meta Data"];
 
 		// ================================
 		// STEP 1:
@@ -529,13 +557,14 @@ export class FirmwareUpdateMixin {
 		// ================================
 		// STEP 2:
 		// Determine the fragment size
-		const fcc = new FirmwareUpdateMetaDataCC(this.#driver, {
-			nodeId: this.#node.id,
+		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
+			nodeId: this.id,
 		});
-		const maxGrossPayloadSizeSecure = this.#driver.computeNetCCPayloadSize(
-			fcc,
-		);
-		const maxGrossPayloadSizeNonSecure = this.#driver
+		const maxGrossPayloadSizeSecure = this.driver
+			.computeNetCCPayloadSize(
+				fcc,
+			);
+		const maxGrossPayloadSizeNonSecure = this.driver
 			.computeNetCCPayloadSize(fcc, true);
 
 		const maxNetPayloadSizeSecure = maxGrossPayloadSizeSecure
@@ -578,17 +607,17 @@ export class FirmwareUpdateMixin {
 		}
 
 		// 2. No firmware update is in progress -> abort
-		this.#driver.controllerLog.logNode(this.#node.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message:
 				`Received Firmware Update Get, but no firmware update is in progress. Forcing the node to abort...`,
 			direction: "inbound",
 		});
 
 		// Since no update is in progress, we need to determine the fragment size again
-		const fcc = new FirmwareUpdateMetaDataCC(this.#driver, {
-			nodeId: this.#node.id,
+		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
+			nodeId: this.id,
 		});
-		const fragmentSize = this.#driver.computeNetCCPayloadSize(fcc)
+		const fragmentSize = this.driver.computeNetCCPayloadSize(fcc)
 			- 2 // report number
 			- (fcc.version >= 2 ? 2 : 0); // checksum
 		const fragment = randomBytes(fragmentSize);
@@ -612,12 +641,12 @@ export class FirmwareUpdateMixin {
 		resume: boolean | undefined,
 		nonSecureTransfer: boolean | undefined,
 	) {
-		const api = this.#node.commandClasses["Firmware Update Meta Data"];
+		const api = this.commandClasses["Firmware Update Meta Data"];
 
 		// ================================
 		// STEP 3:
 		// Start the update
-		this.#driver.controllerLog.logNode(this.#node.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `Starting firmware update...`,
 			direction: "outbound",
 		});
@@ -648,7 +677,8 @@ export class FirmwareUpdateMixin {
 					`Failed to start the update: The battery level is too low!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
-			case FirmwareUpdateRequestStatus.Error_FirmwareUpgradeInProgress:
+			case FirmwareUpdateRequestStatus
+				.Error_FirmwareUpgradeInProgress:
 				throw new ZWaveError(
 					`Failed to start the update: A firmware upgrade is already in progress!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_Busy,
@@ -677,7 +707,7 @@ export class FirmwareUpdateMixin {
 			case FirmwareUpdateRequestStatus.OK:
 				// All good, we have started!
 				// Keep the node awake until the update is done.
-				this.#node.keepAwake = true;
+				this.keepAwake = true;
 		}
 
 		return {
@@ -689,8 +719,8 @@ export class FirmwareUpdateMixin {
 	protected async handleFirmwareUpdateMetaDataGet(
 		command: FirmwareUpdateMetaDataCCMetaDataGet,
 	): Promise<void> {
-		const endpoint = this.#node.getEndpoint(command.endpointIndex)
-			?? this.#node;
+		const endpoint = this.getEndpoint(command.endpointIndex)
+			?? this;
 
 		// We are being queried, so the device may actually not support the CC, just control it.
 		// Using the commandClasses property would throw in that case
@@ -705,10 +735,11 @@ export class FirmwareUpdateMixin {
 
 		// We do not support the firmware to be upgraded.
 		await api.reportMetaData({
-			manufacturerId: this.#driver.options.vendor?.manufacturerId
+			manufacturerId: this.driver.options.vendor?.manufacturerId
 				?? 0xffff,
 			firmwareUpgradable: false,
-			hardwareVersion: this.#driver.options.vendor?.hardwareVersion ?? 0,
+			hardwareVersion: this.driver.options.vendor?.hardwareVersion
+				?? 0,
 		});
 	}
 
@@ -718,7 +749,7 @@ export class FirmwareUpdateMixin {
 		nonSecureTransfer: boolean = false,
 	): Promise<void> {
 		try {
-			await this.#node.commandClasses["Firmware Update Meta Data"]
+			await this.commandClasses["Firmware Update Meta Data"]
 				.withOptions({
 					// Only encapsulate if the transfer is secure
 					autoEncapsulate: !nonSecureTransfer,
@@ -729,15 +760,19 @@ export class FirmwareUpdateMixin {
 		}
 	}
 
-	private hasPendingFirmwareUpdateFragment(fragmentNumber: number): boolean {
+	private hasPendingFirmwareUpdateFragment(
+		fragmentNumber: number,
+	): boolean {
 		// Avoid queuing duplicate fragments
 		const isCurrentFirmwareFragment = (t: Transaction) =>
-			t.message.getNodeId() === this.#node.id
+			t.message.getNodeId() === this.id
 			&& isCommandClassContainer(t.message)
 			&& t.message.command instanceof FirmwareUpdateMetaDataCCReport
 			&& t.message.command.reportNumber === fragmentNumber;
 
-		return this.#driver.hasPendingTransactions(isCurrentFirmwareFragment);
+		return this.driver.hasPendingTransactions(
+			isCurrentFirmwareFragment,
+		);
 	}
 
 	private async *doFirmwareUpdateInternal(
@@ -771,10 +806,10 @@ export class FirmwareUpdateMixin {
 			} else {
 				try {
 					fragmentRequest = yield () =>
-						this.#driver
+						this.driver
 							.waitForCommand<FirmwareUpdateMetaDataCCGet>(
 								(cc) =>
-									cc.nodeId === this.#node.id
+									cc.nodeId === this.id
 									&& cc
 										instanceof FirmwareUpdateMetaDataCCGet,
 								// Wait up to 2 minutes for each fragment request.
@@ -784,7 +819,7 @@ export class FirmwareUpdateMixin {
 				} catch {
 					// In some cases it can happen that the device stops requesting update frames
 					// We need to timeout the update in this case so it can be restarted
-					this.#driver.controllerLog.logNode(this.#node.id, {
+					this.driver.controllerLog.logNode(this.id, {
 						message: `Firmware update timed out`,
 						direction: "none",
 						level: "warn",
@@ -798,10 +833,10 @@ export class FirmwareUpdateMixin {
 			}
 
 			// When a node requests a firmware update fragment, it must be awake
-			this.#node.markAsAwake();
+			this.markAsAwake();
 
 			if (fragmentRequest.reportNumber > numFragments) {
-				this.#driver.controllerLog.logNode(this.#node.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message:
 						`Received Firmware Update Get for an out-of-bounds fragment. Forcing the node to abort...`,
 					direction: "inbound",
@@ -845,14 +880,14 @@ export class FirmwareUpdateMixin {
 				} else {
 					// Avoid queuing duplicate fragments
 					if (this.hasPendingFirmwareUpdateFragment(num)) {
-						this.#driver.controllerLog.logNode(this.#node.id, {
+						this.driver.controllerLog.logNode(this.id, {
 							message: `Firmware fragment ${num} already queued`,
 							level: "warn",
 						});
 						continue request;
 					}
 
-					this.#driver.controllerLog.logNode(this.#node.id, {
+					this.driver.controllerLog.logNode(this.id, {
 						message:
 							`Sending firmware fragment ${num} / ${numFragments}`,
 						direction: "outbound",
@@ -860,7 +895,7 @@ export class FirmwareUpdateMixin {
 					const isLast = num === numFragments;
 
 					try {
-						await this.#node
+						await this
 							.commandClasses["Firmware Update Meta Data"]
 							.withOptions({
 								// Only encapsulate if the transfer is secure
@@ -877,7 +912,7 @@ export class FirmwareUpdateMixin {
 						}
 					} catch {
 						// When transmitting fails, simply stop responding to this request and wait for the node to re-request the fragment
-						this.#driver.controllerLog.logNode(this.#node.id, {
+						this.driver.controllerLog.logNode(this.id, {
 							message:
 								`Failed to send firmware fragment ${num} / ${numFragments}`,
 							direction: "outbound",
@@ -895,12 +930,13 @@ export class FirmwareUpdateMixin {
 		// STEP 5:
 		// Finalize the update process
 
-		const statusReport: FirmwareUpdateMetaDataCCStatusReport | undefined =
-			yield () =>
-				this.#driver
+		const statusReport:
+			| FirmwareUpdateMetaDataCCStatusReport
+			| undefined = yield () =>
+				this.driver
 					.waitForCommand(
 						(cc) =>
-							cc.nodeId === this.#node.id
+							cc.nodeId === this.id
 							&& cc
 								instanceof FirmwareUpdateMetaDataCCStatusReport,
 						// Wait up to 5 minutes. It should never take that long, but the specs
@@ -917,8 +953,8 @@ export class FirmwareUpdateMixin {
 		}
 
 		if (!statusReport) {
-			this.#driver.controllerLog.logNode(
-				this.#node.id,
+			this.driver.controllerLog.logNode(
+				this.id,
 				`The node did not acknowledge the completed update`,
 				"warn",
 			);

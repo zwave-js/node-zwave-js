@@ -68,3 +68,31 @@ export function staticExtends<T extends new (...args: any[]) => any>(
 	}
 	return false;
 }
+
+type MixinFn<T extends Constructor, U> = (
+	superclass: T,
+) => new (...args: ConstructorParameters<T>) => InstanceType<T> & U;
+type Mixins<T extends Constructor, U extends any[]> = U extends [infer A]
+	? [MixinFn<T, A>]
+	: U extends [infer A, ...infer R]
+		? [MixinFn<T, A>, ...Mixins<ReturnType<MixinFn<T, A>>, R>]
+	: {
+		[K in keyof U]: MixinFn<T, U[K]>;
+	};
+
+export function mix<T extends Constructor>(superclass: T): MixinBuilder<T> {
+	return new MixinBuilder<T>(superclass);
+}
+
+class MixinBuilder<T extends Constructor> {
+	constructor(private superclass: T) {}
+
+	with<U extends any[]>(
+		...mixins: Mixins<T, U>
+	): new (
+		...args: ConstructorParameters<T>
+	) => InstanceType<T> & UnionToIntersection<U[number]> {
+		// @ts-expect-error
+		return mixins.reduce((c, mixin) => mixin(c), this.superclass);
+	}
+}

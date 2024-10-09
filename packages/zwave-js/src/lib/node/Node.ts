@@ -259,7 +259,6 @@ import {
 import { DeviceClass } from "./DeviceClass";
 import { type NodeDump, type ValueDump } from "./Dump";
 import { Endpoint } from "./Endpoint";
-import { FirmwareUpdateMixin } from "./FirmwareUpdateMixin";
 import {
 	formatLifelineHealthCheckSummary,
 	formatRouteHealthCheckSummary,
@@ -294,6 +293,7 @@ import {
 	type ZWaveNodeValueEventCallbacks,
 } from "./_Types";
 import { InterviewStage, NodeStatus } from "./_Types";
+import { ZWaveNodeMixins } from "./mixins";
 import * as nodeUtils from "./utils";
 
 interface ScheduledPoll {
@@ -303,25 +303,43 @@ interface ScheduledPoll {
 
 const MAX_ASSOCIATIONS = 1;
 
-export interface ZWaveNode extends
-	TypedEventEmitter<
-		& ZWaveNodeEventCallbacks
-		& StatisticsEventCallbacksWithSelf<ZWaveNode, NodeStatistics>
-	>,
-	NodeStatisticsHost,
-	FirmwareUpdateMixin
+export abstract class ZWaveNodeBase extends Endpoint {
+	/**
+	 * Whether the node should be kept awake when there are no pending messages.
+	 */
+	public keepAwake: boolean = false;
+
+	/** The ID of this node */
+	public get id(): number {
+		return this.nodeId;
+	}
+}
+
+type AllNodeEvents =
+	& ZWaveNodeEventCallbacks
+	& StatisticsEventCallbacksWithSelf<ZWaveNode, NodeStatistics>;
+
+export interface ZWaveNode
+	extends TypedEventEmitter<AllNodeEvents>, NodeStatisticsHost
 {}
 
 /**
  * A ZWaveNode represents a node in a Z-Wave network. It is also an instance
  * of its root endpoint (index 0)
  */
-@Mixin([EventEmitter, NodeStatisticsHost, FirmwareUpdateMixin])
-export class ZWaveNode extends Endpoint
+@Mixin([EventEmitter, NodeStatisticsHost])
+export class ZWaveNode extends ZWaveNodeMixins
 	implements SecurityClassOwner, IZWaveNode
 {
+	protected emitEvent<TEvent extends keyof AllNodeEvents>(
+		event: TEvent,
+		...args: Parameters<AllNodeEvents[TEvent]>
+	): boolean {
+		return this.emit(event, ...args);
+	}
+
 	public constructor(
-		public readonly id: number,
+		id: number,
 		driver: Driver,
 		deviceClass?: DeviceClass,
 		supportedCCs: CommandClasses[] = [],
@@ -5655,11 +5673,6 @@ protocol version:      ${this.protocolVersion}`;
 			this.readyMachine.send("RESTART_FROM_CACHE");
 		}
 	}
-
-	/**
-	 * Whether the node should be kept awake when there are no pending messages.
-	 */
-	public keepAwake: boolean = false;
 
 	private isSendingNoMoreInformation: boolean = false;
 	/**
