@@ -1,7 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -254,7 +254,7 @@ export const DoorLockCCValues = Object.freeze({
 
 function shouldAutoCreateLatchStatusValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
@@ -265,7 +265,7 @@ function shouldAutoCreateLatchStatusValue(
 
 function shouldAutoCreateBoltStatusValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
@@ -276,7 +276,7 @@ function shouldAutoCreateBoltStatusValue(
 
 function shouldAutoCreateDoorStatusValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
@@ -287,7 +287,7 @@ function shouldAutoCreateDoorStatusValue(
 
 function shouldAutoCreateTwistAssistConfigValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
@@ -298,7 +298,7 @@ function shouldAutoCreateTwistAssistConfigValue(
 
 function shouldAutoCreateBlockToBlockConfigValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
@@ -309,7 +309,7 @@ function shouldAutoCreateBlockToBlockConfigValue(
 
 function shouldAutoCreateAutoRelockConfigValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
@@ -320,7 +320,7 @@ function shouldAutoCreateAutoRelockConfigValue(
 
 function shouldAutoCreateHoldAndReleaseConfigValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;

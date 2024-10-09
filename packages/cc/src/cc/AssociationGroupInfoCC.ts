@@ -257,7 +257,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the name of an association group */
 	public static getGroupNameCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<string> {
 		return applHost
@@ -288,7 +288,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the dictionary of all commands issued by the given association group */
 	public static getIssuedCommandsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<ReadonlyMap<CommandClasses, readonly number[]>> {
 		return applHost
@@ -302,6 +302,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public static findGroupsForIssuedCommand(
 		applHost: ZWaveApplicationHost,
+		// FIXME: GH#7261 ID and endpoint capabilities would be enough
 		endpoint: IZWaveEndpoint,
 		ccId: CommandClasses,
 		command: number,
@@ -332,6 +333,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	private static getAssociationGroupCountCached(
 		applHost: ZWaveApplicationHost,
+		// FIXME: GH#7261 ID and endpoint capabilities would be enough
 		endpoint: IZWaveEndpoint,
 	): number {
 		// The association group count is either determined by the

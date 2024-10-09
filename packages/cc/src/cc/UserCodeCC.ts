@@ -1,6 +1,6 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -1052,7 +1052,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedUsersCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1065,7 +1065,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedKeypadModesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<KeypadMode[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1080,7 +1080,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedUserIDStatusesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<UserIDStatus[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1097,7 +1097,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedASCIICharsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<string> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1112,7 +1112,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static supportsAdminCodeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): boolean {
 		const valueDB = applHost
 			.getValueDB(endpoint.nodeId);
@@ -1133,7 +1133,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static supportsAdminCodeDeactivationCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): boolean {
 		const valueDB = applHost
 			.getValueDB(endpoint.nodeId);
@@ -1155,7 +1155,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static supportsMultipleUserCodeSetCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): boolean {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)
@@ -1172,7 +1172,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getUserIdStatusCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<UserIDStatus> {
 		return applHost
@@ -1188,7 +1188,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getUserCodeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<string | Buffer> {
 		return applHost

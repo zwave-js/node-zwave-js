@@ -1,6 +1,5 @@
 import {
 	type FloatParameters,
-	type IZWaveEndpoint,
 	type MaybeUnknown,
 	encodeBitMask,
 	encodeFloatWithScale,
@@ -13,6 +12,7 @@ import {
 } from "@zwave-js/core";
 import {
 	CommandClasses,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -782,7 +782,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	 */
 	public static getMeterTypeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -795,7 +795,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	 */
 	public static getSupportedScalesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -808,7 +808,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	 */
 	public static supportsResetCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<boolean> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -821,7 +821,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	 */
 	public static getSupportedRateTypesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<RateType[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)

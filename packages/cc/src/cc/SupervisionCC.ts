@@ -2,7 +2,7 @@ import {
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -196,7 +196,7 @@ export class SupervisionCC extends CommandClass {
 	 */
 	public static getCCSupportedWithSupervision(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		ccId: CommandClasses,
 	): boolean {
 		// By default assume supervision is supported for all CCs, unless we've remembered one not to be
@@ -216,7 +216,7 @@ export class SupervisionCC extends CommandClass {
 	 */
 	public static setCCSupportedWithSupervision(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		ccId: CommandClasses,
 		supported: boolean,
 	): void {

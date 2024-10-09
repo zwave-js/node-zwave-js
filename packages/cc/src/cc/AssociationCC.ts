@@ -1,5 +1,5 @@
 import type {
-	IZWaveEndpoint,
+	EndpointId,
 	MaybeNotKnown,
 	MessageRecord,
 	SupervisionResult,
@@ -307,7 +307,7 @@ export class AssociationCC extends CommandClass {
 	 */
 	public static getGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -324,7 +324,7 @@ export class AssociationCC extends CommandClass {
 	 */
 	public static getMaxNodesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): number {
 		return (
@@ -351,7 +351,7 @@ export class AssociationCC extends CommandClass {
 	 */
 	public static getAllDestinationsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached(applHost, endpoint);

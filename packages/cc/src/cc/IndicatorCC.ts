@@ -1,7 +1,7 @@
 import type { ConfigManager } from "@zwave-js/config";
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	Indicator,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -850,7 +850,7 @@ export class IndicatorCC extends CommandClass {
 
 	public static getSupportedPropertyIDsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		indicatorId: number,
 	): MaybeNotKnown<number[]> {
 		return applHost

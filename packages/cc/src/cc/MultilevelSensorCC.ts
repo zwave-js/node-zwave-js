@@ -7,7 +7,7 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import type {
-	IZWaveEndpoint,
+	EndpointId,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	Scale,
@@ -568,7 +568,7 @@ value:       ${mlsResponse.value}${
 	 */
 	public static getSupportedSensorTypesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -585,7 +585,7 @@ value:       ${mlsResponse.value}${
 	 */
 	public static getSupportedScalesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		sensorType: number,
 	): MaybeNotKnown<number[]> {
 		return applHost

@@ -12,7 +12,7 @@ import {
 import {
 	CommandClasses,
 	Duration,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -213,7 +213,7 @@ export const NotificationCCValues = Object.freeze({
 
 function shouldAutoCreateSimpleDoorSensorValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;

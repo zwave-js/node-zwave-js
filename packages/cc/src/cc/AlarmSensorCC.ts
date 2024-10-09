@@ -1,6 +1,6 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -289,7 +289,7 @@ duration: ${currentValue.duration}`;
 	 */
 	public static getSupportedSensorTypesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<AlarmSensorType[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)

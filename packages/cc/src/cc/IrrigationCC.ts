@@ -1,6 +1,6 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -1119,7 +1119,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static getMaxValveTableSizeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1134,7 +1134,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static getNumValvesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1147,7 +1147,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static supportsMasterValveCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): boolean {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)

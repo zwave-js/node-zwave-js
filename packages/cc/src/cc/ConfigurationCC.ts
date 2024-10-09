@@ -145,6 +145,7 @@ type NormalizedConfigurationCCAPISetOptions =
 
 function createConfigurationCCInstance(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and index should be enough
 	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 ): ConfigurationCC {
 	return CommandClass.createInstanceUnchecked(
@@ -156,6 +157,7 @@ function createConfigurationCCInstance(
 
 function normalizeConfigurationCCAPISetOptions(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and index should be enough
 	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 	options: ConfigurationCCAPISetOptions,
 ): NormalizedConfigurationCCAPISetOptions {
@@ -213,6 +215,7 @@ function normalizeConfigurationCCAPISetOptions(
 
 function bulkMergePartialParamValues(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and index should be enough
 	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 	options: NormalizedConfigurationCCAPISetOptions[],
 ): (NormalizedConfigurationCCAPISetOptions & { bitMask?: undefined })[] {

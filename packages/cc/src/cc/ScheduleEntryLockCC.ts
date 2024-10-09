@@ -1,6 +1,5 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
@@ -13,7 +12,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import { type EndpointId, type MaybeNotKnown } from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -143,7 +142,7 @@ function persistSchedule(
 /** Updates the schedule kind assumed to be active for user in the cache */
 function setUserCodeScheduleKindCached(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 	userId: number,
 	scheduleKind: ScheduleEntryLockScheduleKind,
 ): void {
@@ -160,7 +159,7 @@ function setUserCodeScheduleKindCached(
 /** Updates whether scheduling is active for one or all user(s) in the cache */
 function setUserCodeScheduleEnabledCached(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 	userId: number | undefined,
 	enabled: boolean,
 ): void {
@@ -766,7 +765,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getNumWeekDaySlotsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -785,7 +784,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getNumYearDaySlotsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -804,7 +803,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getNumDailyRepeatingSlotsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -827,7 +826,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getUserCodeScheduleEnabledCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		userId: number,
 	): boolean {
 		return !!applHost
@@ -849,7 +848,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getUserCodeScheduleKindCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<ScheduleEntryLockScheduleKind> {
 		return applHost
@@ -863,7 +862,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.WeekDay,
 		userId: number,
 		slotId: number,
@@ -871,7 +870,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.YearDay,
 		userId: number,
 		slotId: number,
@@ -879,7 +878,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating,
 		userId: number,
 		slotId: number,
@@ -888,7 +887,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	// Catch-all overload for applications which haven't narrowed `scheduleKind`
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind,
 		userId: number,
 		slotId: number,
@@ -909,7 +908,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind,
 		userId: number,
 		slotId: number,

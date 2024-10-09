@@ -1,6 +1,7 @@
 import type { AssociationConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
+	type EndpointId,
 	type IZWaveEndpoint,
 	type IZWaveNode,
 	type MaybeNotKnown,
@@ -35,6 +36,7 @@ import {
 
 export function getAssociations(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	endpoint: IZWaveEndpoint,
 ): ReadonlyMap<number, readonly AssociationAddress[]> {
 	const ret = new Map<number, readonly AssociationAddress[]>();
@@ -112,6 +114,7 @@ export function getAllAssociations(
 
 export function checkAssociation(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	endpoint: IZWaveEndpoint,
 	group: number,
 	destination: AssociationAddress,
@@ -239,6 +242,7 @@ export function checkAssociation(
 
 export function getAssociationGroups(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	endpoint: IZWaveEndpoint,
 ): ReadonlyMap<number, AssociationGroup> {
 	// Check whether we have multi channel support or not
@@ -354,6 +358,7 @@ export function getAllAssociationGroups(
 
 export async function addAssociations(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	endpoint: IZWaveEndpoint,
 	group: number,
 	destinations: AssociationAddress[],
@@ -524,6 +529,7 @@ export async function addAssociations(
 
 export async function removeAssociations(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	endpoint: IZWaveEndpoint,
 	group: number,
 	destinations: AssociationAddress[],
@@ -634,6 +640,7 @@ export async function removeAssociations(
 
 export function getLifelineGroupIds(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	endpoint: IZWaveEndpoint,
 ): number[] {
 	// For now only support this for the root endpoint - i.e. node
@@ -808,7 +815,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 
 		// Figure out which associations exist and may need to be removed
 		const isAssignedAsNodeAssociation = (
-			endpoint: IZWaveEndpoint,
+			endpoint: EndpointId,
 		): boolean => {
 			if (groupSupportsMultiChannelAssociation && mcInstance) {
 				if (
@@ -845,7 +852,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 		};
 
 		const isAssignedAsEndpointAssociation = (
-			endpoint: IZWaveEndpoint,
+			endpoint: EndpointId,
 		): boolean => {
 			if (mcInstance) {
 				if (
@@ -1188,6 +1195,7 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 
 export async function assignLifelineIssueingCommand(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and node+endpoint capabilities would be enough
 	endpoint: IZWaveEndpoint,
 	ccId: CommandClasses,
 	ccCommand: number,

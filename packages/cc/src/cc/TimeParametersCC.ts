@@ -60,6 +60,7 @@ export const TimeParametersCCValues = Object.freeze({
  */
 function shouldUseLocalTime(
 	applHost: ZWaveApplicationHost,
+	// FIXME: GH#7261 ID and endpoint capabilities would be enough
 	endpoint: IZWaveEndpoint,
 ): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,

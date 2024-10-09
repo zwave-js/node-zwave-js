@@ -1,5 +1,5 @@
 import type {
-	IZWaveEndpoint,
+	EndpointId,
 	MessageRecord,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -371,7 +371,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 */
 	public static getGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -390,7 +390,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 */
 	public static getMaxNodesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): number {
 		return (
@@ -410,7 +410,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 */
 	public static getAllDestinationsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached(applHost, endpoint);

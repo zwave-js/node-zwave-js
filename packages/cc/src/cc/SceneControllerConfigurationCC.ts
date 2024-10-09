@@ -1,7 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -465,7 +465,7 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 */
 	public static getGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat

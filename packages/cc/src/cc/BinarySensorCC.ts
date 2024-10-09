@@ -1,6 +1,6 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -308,7 +308,7 @@ export class BinarySensorCC extends CommandClass {
 	 */
 	public static getSupportedSensorTypesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<BinarySensorType[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
