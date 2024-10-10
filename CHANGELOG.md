@@ -4,6 +4,25 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Skip rebuilding routes for nodes with priority return routes (#7252)
+* Add `node info received` event (#7253)
+* OTA firmware updates now use the task scheduler. This allows running multiple OTA updates at once. (#7256)
+* Implement Multilevel Switch mocks, add default state for Binary Switch mocks (#7270)
+
+### Bugfixes
+* Use configured network keys on secondary controller if learned keys are absent (#7226)
+* Pending tasks are removed when hard-resetting or entering bootloader (#7255)
+
+### Config file changes
+* Add incompatibility warning to UZB1 (#7225)
+* Override Central Scene CC version for Springs Window Fashions VCZ1 (#7263)
+
+### Changes under the hood
+* Dependency updates
+* Fix bootstrap command in devcontainer (#7254)
+
 ## 13.5.0 (2024-10-07)
 This release adds an internal task scheduler that will allow more control over longer running tasks like device interviews, route rebuilding, firmware updates, etc. These improvements include pausing/resuming tasks, better prioritization for user-initiated actions, queueing tasks without interrupting ongoing ones, and more. Migration of existing features to the new scheduler will be done incrementally, starting with route rebuilding.
 
