@@ -38,9 +38,11 @@ const respondToMultilevelSwitchGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const currentValue = (self.state.get(StateKeys.currentValue)
-				?? capabilities.defaultValue
-				?? UNKNOWN_STATE) as MaybeUnknown<number>;
+			const currentValue = (
+				self.state.get(StateKeys.currentValue)
+					?? capabilities.defaultValue
+					?? UNKNOWN_STATE
+			) as MaybeUnknown<number>;
 			const cc = new MultilevelSwitchCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
 				currentValue,

@@ -3,7 +3,11 @@ import {
 	BinarySwitchCCReport,
 	BinarySwitchCCSet,
 } from "@zwave-js/cc/BinarySwitchCC";
-import { CommandClasses, type MaybeUnknown } from "@zwave-js/core";
+import {
+	CommandClasses,
+	type MaybeUnknown,
+	UNKNOWN_STATE,
+} from "@zwave-js/core";
 import {
 	type BinarySwitchCCCapabilities,
 	type MockNodeBehavior,
@@ -30,8 +34,11 @@ const respondToBinarySwitchGet: MockNodeBehavior = {
 			};
 			const cc = new BinarySwitchCCReport(self.host, {
 				nodeId: controller.host.ownNodeId,
-				currentValue: (self.state.get(StateKeys.currentValue)
-					?? capabilities.defaultValue) as MaybeUnknown<boolean>,
+				currentValue: (
+					self.state.get(StateKeys.currentValue)
+						?? capabilities.defaultValue
+						?? UNKNOWN_STATE
+				) as MaybeUnknown<boolean>,
 			});
 			return { action: "sendCC", cc };
 		}
