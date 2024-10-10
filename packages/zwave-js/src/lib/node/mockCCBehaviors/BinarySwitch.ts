@@ -3,13 +3,9 @@ import {
 	BinarySwitchCCReport,
 	BinarySwitchCCSet,
 } from "@zwave-js/cc/BinarySwitchCC";
+import { CommandClasses, type MaybeUnknown } from "@zwave-js/core";
 import {
-	CommandClasses,
-	type MaybeUnknown,
-	UNKNOWN_STATE,
-} from "@zwave-js/core";
-import {
-	BinarySwitchCCCapabilities,
+	type BinarySwitchCCCapabilities,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
 

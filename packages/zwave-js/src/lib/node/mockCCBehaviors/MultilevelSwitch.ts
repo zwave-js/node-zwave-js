@@ -15,7 +15,7 @@ import {
 } from "@zwave-js/core";
 import {
 	type MockNodeBehavior,
-	MultilevelSwitchCCCapabilities,
+	type MultilevelSwitchCCCapabilities,
 } from "@zwave-js/testing";
 
 const defaultCapabilities: MultilevelSwitchCCCapabilities = {
@@ -83,14 +83,6 @@ const respondToMultilevelSwitchSupportedGet: MockNodeBehavior = {
 const respondToMultilevelSwitchStartLevelChange: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof MultilevelSwitchCCStartLevelChange) {
-			const capabilities = {
-				...defaultCapabilities,
-				...self.getCCCapabilities(
-					CommandClasses["Color Switch"],
-					receivedCC.endpointIndex,
-				),
-			};
-
 			// TODO: A proper simulation should gradually transition the value. We just set it to the target value.
 			self.state.set(
 				StateKeys.currentValue,
@@ -105,14 +97,6 @@ const respondToMultilevelSwitchStartLevelChange: MockNodeBehavior = {
 const respondToMultilevelSwitchStopLevelChange: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof MultilevelSwitchCCStopLevelChange) {
-			const capabilities = {
-				...defaultCapabilities,
-				...self.getCCCapabilities(
-					CommandClasses["Color Switch"],
-					receivedCC.endpointIndex,
-				),
-			};
-
 			return { action: "ok" };
 		}
 	},
