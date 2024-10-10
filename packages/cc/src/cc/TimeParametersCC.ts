@@ -1,6 +1,5 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
@@ -8,7 +7,12 @@ import {
 	formatDate,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import {
+	type ControlsCC,
+	type EndpointId,
+	type MaybeNotKnown,
+	type SupportsCC,
+} from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -26,6 +30,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -60,7 +65,7 @@ export const TimeParametersCCValues = Object.freeze({
  */
 function shouldUseLocalTime(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId & SupportsCC & ControlsCC,
 ): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
 	// so they need to interpret the set time as local time instead of UTC.
@@ -217,7 +222,9 @@ export class TimeParametersCCAPI extends CCAPI {
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -270,7 +277,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		// If necessary, fix the date and time before persisting it
 		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
 		if (local) {
@@ -349,7 +356,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		// We do not actually persist anything here, but we need access to the node
 		// in order to interpret the date segments correctly
 

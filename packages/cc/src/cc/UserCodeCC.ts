@@ -1,6 +1,6 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -42,6 +42,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -881,7 +882,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -944,7 +947,9 @@ export class UserCodeCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -1052,7 +1057,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedUsersCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1065,7 +1070,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedKeypadModesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<KeypadMode[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1080,7 +1085,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedUserIDStatusesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<UserIDStatus[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1097,7 +1102,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedASCIICharsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<string> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1112,7 +1117,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static supportsAdminCodeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): boolean {
 		const valueDB = applHost
 			.getValueDB(endpoint.nodeId);
@@ -1133,7 +1138,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static supportsAdminCodeDeactivationCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): boolean {
 		const valueDB = applHost
 			.getValueDB(endpoint.nodeId);
@@ -1155,7 +1160,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static supportsMultipleUserCodeSetCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): boolean {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)
@@ -1172,7 +1177,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getUserIdStatusCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<UserIDStatus> {
 		return applHost
@@ -1188,7 +1193,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getUserCodeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<string | Buffer> {
 		return applHost
@@ -1369,7 +1374,7 @@ export class UserCodeCCReport extends UserCodeCC
 	public readonly userIdStatus: UserIDStatus;
 	public readonly userCode: string | Buffer;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		persistUserCode.call(
@@ -1745,7 +1750,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Update the keypad modes metadata
@@ -2025,7 +2030,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		this.nextUserId = this.payload.readUInt16BE(offset);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {

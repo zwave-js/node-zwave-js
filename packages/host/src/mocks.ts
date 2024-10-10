@@ -8,12 +8,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import {
-	type ThrowingMap,
-	createThrowingMap,
-	createWrappingCounter,
-} from "@zwave-js/shared";
-import type { Overwrite } from "alcalzone-shared/types";
+import { createThrowingMap, createWrappingCounter } from "@zwave-js/shared";
 import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
 
 export interface CreateTestingHostOptions {
@@ -23,9 +18,9 @@ export interface CreateTestingHostOptions {
 	getSupportedCCVersion?: ZWaveHost["getSupportedCCVersion"];
 }
 
-export type TestingHost = Overwrite<
-	Omit<ZWaveApplicationHost, "__internalIsMockNode">,
-	{ nodes: ThrowingMap<number, IZWaveNode> }
+export type TestingHost = Omit<
+	ZWaveApplicationHost<IZWaveNode>,
+	"__internalIsMockNode"
 >;
 
 /** Creates a {@link ZWaveApplicationHost} that can be used for testing */
@@ -36,6 +31,12 @@ export function createTestingHost(
 	const metadataStorage = new Map();
 	const valueDBCache = new Map<number, ValueDB>();
 	const supervisionSessionIDs = new Map<number, () => number>();
+	const nodes = createThrowingMap<number, IZWaveNode>((nodeId) => {
+		throw new ZWaveError(
+			`Node ${nodeId} was not found!`,
+			ZWaveErrorCodes.Controller_NodeNotFound,
+		);
+	});
 
 	const ret: TestingHost = {
 		homeId: options.homeId ?? 0x7e570001,
@@ -66,12 +67,15 @@ export function createTestingHost(
 				refreshValueAfterTransition: 1000,
 			},
 		},
-		nodes: createThrowingMap((nodeId) => {
-			throw new ZWaveError(
-				`Node ${nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}),
+		getNode(nodeId: number) {
+			return nodes.get(nodeId);
+		},
+		getNodeOrThrow(nodeId: number) {
+			return nodes.getOrThrow(nodeId);
+		},
+		getAllNodes() {
+			return [...nodes.values()];
+		},
 		getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
 		getSupportedCCVersion: options.getSupportedCCVersion
 			?? options.getSafeCCVersion
@@ -103,7 +107,7 @@ export function createTestingHost(
 			return ret.getValueDB(nodeId);
 		},
 		isCCSecure: (ccId, nodeId, endpointIndex = 0) => {
-			const node = ret.nodes.get(nodeId);
+			const node = nodes.get(nodeId);
 			const endpoint = node?.getEndpoint(endpointIndex);
 			return (
 				node?.isSecure !== false
@@ -112,15 +116,15 @@ export function createTestingHost(
 			);
 		},
 		getHighestSecurityClass: (nodeId) => {
-			const node = ret.nodes.getOrThrow(nodeId);
+			const node = nodes.getOrThrow(nodeId);
 			return node.getHighestSecurityClass();
 		},
 		hasSecurityClass: (nodeId, securityClass) => {
-			const node = ret.nodes.getOrThrow(nodeId);
+			const node = nodes.getOrThrow(nodeId);
 			return node.hasSecurityClass(securityClass);
 		},
 		setSecurityClass: (nodeId, securityClass, granted) => {
-			const node = ret.nodes.getOrThrow(nodeId);
+			const node = nodes.getOrThrow(nodeId);
 			node.setSecurityClass(securityClass, granted);
 		},
 		sendCommand: async (_command, _options) => {

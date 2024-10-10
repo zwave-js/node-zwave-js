@@ -1,6 +1,5 @@
 import {
 	type FloatParameters,
-	type IZWaveEndpoint,
 	type MaybeUnknown,
 	encodeBitMask,
 	encodeFloatWithScale,
@@ -13,6 +12,7 @@ import {
 } from "@zwave-js/core";
 import {
 	CommandClasses,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -53,6 +53,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -628,7 +629,9 @@ export class MeterCCAPI extends PhysicalCCAPI {
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -696,7 +699,9 @@ supports reset:       ${suppResp.supportsReset}`;
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -756,7 +761,7 @@ supports reset:       ${suppResp.supportsReset}`;
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCNode>,
 	): boolean {
 		// Poll the device when all of the supported values were last updated longer than 6 hours ago.
 		// This may lead to some values not being updated, but the user may have disabled some unnecessary
@@ -782,7 +787,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	 */
 	public static getMeterTypeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -795,7 +800,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	 */
 	public static getSupportedScalesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -808,7 +813,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	 */
 	public static supportsResetCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<boolean> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -821,7 +826,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	 */
 	public static getSupportedRateTypesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<RateType[]> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -925,7 +930,7 @@ export class MeterCCReport extends MeterCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		const meter = getMeter(this.type);
@@ -1246,7 +1251,7 @@ export class MeterCCSupportedReport extends MeterCC {
 	@ccValue(MeterCCValues.supportedRateTypes)
 	public readonly supportedRateTypes: readonly RateType[];
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 		if (!this.supportsReset) return true;
 

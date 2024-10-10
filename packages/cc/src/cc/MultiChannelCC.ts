@@ -2,7 +2,6 @@ import {
 	type ApplicationNodeInformation,
 	CommandClasses,
 	type GenericDeviceClass,
-	type IZWaveNode,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -29,6 +28,7 @@ import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -130,7 +130,7 @@ export const MultiChannelCCValues = Object.freeze({
  */
 function areEndpointsUnnecessary(
 	applHost: ZWaveApplicationHost,
-	node: IZWaveNode,
+	nodeId: number,
 	endpointIndizes: number[],
 ): boolean {
 	// Gather all device classes
@@ -144,7 +144,7 @@ function areEndpointsUnnecessary(
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId = MultiChannelCCValues.endpointDeviceClass
 			.endpoint(endpoint);
-		const deviceClass = applHost.getValueDB(node.id).getValue<{
+		const deviceClass = applHost.getValueDB(nodeId).getValue<{
 			generic: number;
 			specific: number;
 		}>(devClassValueId);
@@ -442,7 +442,9 @@ export class MultiChannelCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		const removeEndpoints = applHost.getDeviceConfig?.(node.id)?.compat
@@ -674,7 +676,7 @@ supported CCs:`;
 		// But first figure out if they seem unnecessary and if they do, which ones should be preserved
 		if (
 			!multiResponse.identicalCapabilities
-			&& areEndpointsUnnecessary(applHost, node, allEndpoints)
+			&& areEndpointsUnnecessary(applHost, node.id, allEndpoints)
 		) {
 			const preserve = applHost.getDeviceConfig?.(node.id)?.compat
 				?.preserveEndpoints;
@@ -713,7 +715,9 @@ supported CCs:`;
 		this.setInterviewComplete(applHost, true);
 	}
 
-	private async interviewV1(applHost: ZWaveApplicationHost): Promise<void> {
+	private async interviewV1(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -935,7 +939,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		const deviceClassValue = MultiChannelCCValues.endpointDeviceClass;

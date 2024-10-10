@@ -2,14 +2,17 @@ import {
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
-	type IZWaveEndpoint,
+	type EndpointId,
+	type GetEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type NodeId,
 	type SinglecastCC,
 	type SupervisionResult,
 	SupervisionStatus,
+	type SupportsCC,
 	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -196,7 +199,7 @@ export class SupervisionCC extends CommandClass {
 	 */
 	public static getCCSupportedWithSupervision(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		ccId: CommandClasses,
 	): boolean {
 		// By default assume supervision is supported for all CCs, unless we've remembered one not to be
@@ -216,7 +219,7 @@ export class SupervisionCC extends CommandClass {
 	 */
 	public static setCCSupportedWithSupervision(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		ccId: CommandClasses,
 		supported: boolean,
 	): void {
@@ -230,7 +233,9 @@ export class SupervisionCC extends CommandClass {
 
 	/** Returns whether this is a valid command to send supervised */
 	public static mayUseSupervision<T extends CommandClass>(
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<
+			NodeId & SupportsCC & GetEndpoint<EndpointId>
+		>,
 		command: T,
 	): command is SinglecastCC<T> {
 		// Supervision may only be used for singlecast CCs that expect no response

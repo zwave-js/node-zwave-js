@@ -23,6 +23,7 @@ import {
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,

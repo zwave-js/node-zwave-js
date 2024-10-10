@@ -1,15 +1,17 @@
 import {
 	type BasicDeviceClass,
 	type CommandClasses,
+	type ListenBehavior,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type NodeId,
 	NodeType,
 	Protocols,
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type { GetAllNodes, ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
@@ -68,10 +70,10 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 }
 
 export function computeNeighborDiscoveryTimeout(
-	host: ZWaveApplicationHost,
+	host: GetAllNodes<NodeId & ListenBehavior>,
 	nodeType: NodeType,
 ): number {
-	const allNodes = [...host.nodes.values()];
+	const allNodes = [...host.getAllNodes()];
 	const numListeningNodes = allNodes.filter((n) => n.isListening).length;
 	const numFlirsNodes = allNodes.filter((n) => n.isFrequentListening).length;
 	const numNodes = allNodes.length;

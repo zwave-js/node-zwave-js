@@ -20,6 +20,7 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -111,7 +112,9 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 export class HumidityControlOperatingStateCC extends CommandClass {
 	declare ccCommand: HumidityControlOperatingStateCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		applHost.controllerLog.logNode(node.id, {
@@ -126,7 +129,9 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(

@@ -1,10 +1,11 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type SupportsCC,
 	encodeCCId,
 	getCCName,
 	parseCCId,
@@ -20,6 +21,7 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -256,7 +258,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the name of an association group */
 	public static getGroupNameCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<string> {
 		return applHost
@@ -271,7 +273,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the association profile for an association group */
 	public static getGroupProfileCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<AssociationGroupInfoProfile> {
 		return applHost.getValueDB(endpoint.nodeId).getValue<{
@@ -287,7 +289,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the dictionary of all commands issued by the given association group */
 	public static getIssuedCommandsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<ReadonlyMap<CommandClasses, readonly number[]>> {
 		return applHost
@@ -301,7 +303,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public static findGroupsForIssuedCommand(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId & SupportsCC,
 		ccId: CommandClasses,
 		command: number,
 	): number[] {
@@ -331,7 +333,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	private static getAssociationGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId & SupportsCC,
 	): number {
 		// The association group count is either determined by the
 		// Association CC or the Multi Channel Association CC
@@ -351,7 +353,9 @@ export class AssociationGroupInfoCC extends CommandClass {
 		);
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -408,7 +412,9 @@ export class AssociationGroupInfoCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -493,7 +499,7 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public readonly groupId: number;
 	public readonly name: string;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 
@@ -625,7 +631,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 	public readonly groups: readonly AssociationGroupInfo[];
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		for (const group of this.groups) {

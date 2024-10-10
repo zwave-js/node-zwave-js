@@ -4,6 +4,7 @@ import {
 	type CCAPIs,
 	type CCNameOrId,
 	PhysicalCCAPI,
+	type VirtualCCAPIEndpoint,
 	getAPI,
 	normalizeCCNameOrId,
 } from "@zwave-js/cc";
@@ -12,6 +13,8 @@ import {
 	type IVirtualEndpoint,
 	type MulticastDestination,
 	type SecurityClass,
+	type SupportsCC,
+	type VirtualEndpointId,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getCCName,
@@ -29,7 +32,9 @@ import { VirtualNode } from "./VirtualNode";
  *
  * The endpoint's capabilities are determined by the capabilities of the individual nodes' endpoints.
  */
-export class VirtualEndpoint implements IVirtualEndpoint {
+export class VirtualEndpoint
+	implements VirtualEndpointId, SupportsCC, IVirtualEndpoint
+{
 	public constructor(
 		/** The virtual node this endpoint belongs to (or undefined if it set later) */
 		node: VirtualNode | undefined,
@@ -91,7 +96,7 @@ export class VirtualEndpoint implements IVirtualEndpoint {
 	 */
 	public createAPI(ccId: CommandClasses): CCAPI {
 		const createCCAPI = (
-			endpoint: IVirtualEndpoint,
+			endpoint: VirtualCCAPIEndpoint,
 			secClass: SecurityClass,
 		) => {
 			if (

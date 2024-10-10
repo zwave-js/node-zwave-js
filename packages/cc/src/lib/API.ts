@@ -1,24 +1,31 @@
 import { type CompatOverrideQueries } from "@zwave-js/config";
 import {
 	CommandClasses,
+	type ControlsCC,
 	type Duration,
+	type EndpointId,
+	type GetEndpoint,
 	type IVirtualEndpoint,
 	type IZWaveEndpoint,
-	type IZWaveNode,
+	type ListenBehavior,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
 	NOT_KNOWN,
+	type NodeId,
+	type PhysicalNodes,
+	type QueryNodeStatus,
 	type SendCommandOptions,
 	type SupervisionResult,
+	type SupportsCC,
 	type TXReport,
 	type ValueChangeOptions,
 	type ValueDB,
 	type ValueID,
+	type VirtualEndpointId,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getCCName,
-	isZWaveError,
 	stripUndefined,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
@@ -148,22 +155,51 @@ export interface SchedulePollOptions {
 	transition?: "fast" | "slow";
 }
 
+// Defines the necessary traits a node passed to a CC API must have
+export type CCAPINode = NodeId & ListenBehavior & QueryNodeStatus;
+
+// Defines the necessary traits an endpoint passed to a CC API must have
+export type CCAPIEndpoint =
+	& (
+		| (
+			// Physical endpoints must let us query their controlled CCs
+			EndpointId & ControlsCC
+		)
+		| (
+			// Virtual endpoints must let us query their physical nodes,
+			// the CCs those nodes implement, and access the endpoints of those
+			// physical nodes
+			VirtualEndpointId & {
+				node: PhysicalNodes<
+					& NodeId
+					& SupportsCC
+					& ControlsCC
+					& GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+				>;
+			}
+		)
+	)
+	& SupportsCC;
+
+export type PhysicalCCAPIEndpoint = CCAPIEndpoint & EndpointId;
+export type VirtualCCAPIEndpoint = CCAPIEndpoint & VirtualEndpointId;
+
 /**
  * The base class for all CC APIs exposed via `Node.commandClasses.<CCName>`
  * @publicAPI
  */
 export class CCAPI {
 	public constructor(
-		protected readonly applHost: ZWaveApplicationHost,
-		protected readonly endpoint: IZWaveEndpoint | IVirtualEndpoint,
+		protected readonly applHost: ZWaveApplicationHost<CCAPINode>,
+		protected readonly endpoint: CCAPIEndpoint,
 	) {
 		this.ccId = getCommandClass(this);
 	}
 
 	public static create<T extends CommandClasses>(
 		ccId: T,
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint | IVirtualEndpoint,
+		applHost: ZWaveApplicationHost<CCAPINode>,
+		endpoint: CCAPIEndpoint,
 		requireSupport?: boolean,
 	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
 		const APIConstructor = getAPI(ccId);
@@ -312,7 +348,7 @@ export class CCAPI {
 		const timeoutMs = durationMs + additionalDelay;
 
 		if (this.isSinglecast()) {
-			const node = this.endpoint.getNodeUnsafe();
+			const node = this.applHost.getNode(this.endpoint.nodeId);
 			if (!node) return false;
 
 			return this.applHost.schedulePoll(
@@ -416,8 +452,8 @@ export class CCAPI {
 	}
 
 	protected assertPhysicalEndpoint(
-		endpoint: IZWaveEndpoint | IVirtualEndpoint,
-	): asserts endpoint is IZWaveEndpoint {
+		endpoint: EndpointId | VirtualEndpointId,
+	): asserts endpoint is EndpointId {
 		if (endpoint.virtual) {
 			throw new ZWaveError(
 				`This method is not supported for virtual nodes!`,
@@ -545,32 +581,6 @@ export class CCAPI {
 		);
 	}
 
-	/**
-	 * Returns the node this CC API is linked to. Throws if the controller is not yet ready.
-	 */
-	public getNode(): IZWaveNode | undefined {
-		if (this.isSinglecast()) {
-			return this.applHost.nodes.get(this.endpoint.nodeId);
-		}
-	}
-
-	/**
-	 * @internal
-	 * Returns the node this CC API is linked to (or undefined if the node doesn't exist)
-	 */
-	public getNodeUnsafe(): IZWaveNode | undefined {
-		try {
-			return this.getNode();
-		} catch (e) {
-			// This was expected
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
-				return undefined;
-			}
-			// Something else happened
-			throw e;
-		}
-	}
-
 	/** Returns the value DB for this CC API's node (if it can be safely accessed) */
 	protected tryGetValueDB(): ValueDB | undefined {
 		if (!this.isSinglecast()) return;
@@ -602,7 +612,7 @@ export class CCAPI {
 
 function overrideQueriesWrapper(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: PhysicalCCAPIEndpoint,
 	ccId: CommandClasses,
 	method: string,
 	overrides: CompatOverrideQueries,
@@ -741,19 +751,19 @@ function overrideQueriesWrapper(
 /** A CC API that is only available for physical endpoints */
 export class PhysicalCCAPI extends CCAPI {
 	public constructor(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint | IVirtualEndpoint,
+		applHost: ZWaveApplicationHost<CCAPINode>,
+		endpoint: CCAPIEndpoint,
 	) {
 		super(applHost, endpoint);
 		this.assertPhysicalEndpoint(endpoint);
 	}
 
-	declare protected readonly endpoint: IZWaveEndpoint;
+	declare protected readonly endpoint: PhysicalCCAPIEndpoint;
 }
 
 export type APIConstructor<T extends CCAPI = CCAPI> = new (
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint | IVirtualEndpoint,
+	applHost: ZWaveApplicationHost<CCAPINode>,
+	endpoint: CCAPIEndpoint,
 ) => T;
 
 // This type is auto-generated by maintenance/generateCCAPIInterface.ts

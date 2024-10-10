@@ -1,5 +1,5 @@
 import type {
-	IZWaveEndpoint,
+	EndpointId,
 	MessageRecord,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -25,6 +25,7 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -371,7 +372,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 */
 	public static getGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -390,7 +391,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 */
 	public static getMaxNodesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		groupId: number,
 	): number {
 		return (
@@ -410,7 +411,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 */
 	public static getAllDestinationsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached(applHost, endpoint);
@@ -462,7 +463,9 @@ export class MultiChannelAssociationCC extends CommandClass {
 		return ret;
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const mcAPI = CCAPI.create(
@@ -511,7 +514,9 @@ export class MultiChannelAssociationCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const mcAPI = CCAPI.create(

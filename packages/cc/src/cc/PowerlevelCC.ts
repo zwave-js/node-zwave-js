@@ -126,7 +126,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
-		const testNode = this.applHost.nodes.getOrThrow(testNodeId);
+		const testNode = this.applHost.getNodeOrThrow(testNodeId);
 		if (testNode.isFrequentListening) {
 			throw new ZWaveError(
 				`Node ${testNodeId} is FLiRS and therefore cannot be used for a powerlevel test.`,

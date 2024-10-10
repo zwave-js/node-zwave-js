@@ -1,6 +1,5 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
@@ -13,7 +12,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import { type EndpointId, type MaybeNotKnown } from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -30,6 +29,7 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -143,7 +143,7 @@ function persistSchedule(
 /** Updates the schedule kind assumed to be active for user in the cache */
 function setUserCodeScheduleKindCached(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 	userId: number,
 	scheduleKind: ScheduleEntryLockScheduleKind,
 ): void {
@@ -160,7 +160,7 @@ function setUserCodeScheduleKindCached(
 /** Updates whether scheduling is active for one or all user(s) in the cache */
 function setUserCodeScheduleEnabledCached(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 	userId: number | undefined,
 	enabled: boolean,
 ): void {
@@ -702,7 +702,9 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 export class ScheduleEntryLockCC extends CommandClass {
 	declare ccCommand: ScheduleEntryLockCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -766,7 +768,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getNumWeekDaySlotsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -785,7 +787,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getNumYearDaySlotsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -804,7 +806,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getNumDailyRepeatingSlotsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): number {
 		return (
 			applHost
@@ -827,7 +829,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getUserCodeScheduleEnabledCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		userId: number,
 	): boolean {
 		return !!applHost
@@ -849,7 +851,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getUserCodeScheduleKindCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<ScheduleEntryLockScheduleKind> {
 		return applHost
@@ -863,7 +865,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.WeekDay,
 		userId: number,
 		slotId: number,
@@ -871,7 +873,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.YearDay,
 		userId: number,
 		slotId: number,
@@ -879,7 +881,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating,
 		userId: number,
 		slotId: number,
@@ -888,7 +890,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	// Catch-all overload for applications which haven't narrowed `scheduleKind`
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind,
 		userId: number,
 		slotId: number,
@@ -909,7 +911,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 */
 	public static getScheduleCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind,
 		userId: number,
 		slotId: number,
@@ -1259,7 +1261,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		persistSchedule.call(
@@ -1592,7 +1594,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		persistSchedule.call(
@@ -2003,7 +2005,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 	public durationHour?: number;
 	public durationMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		persistSchedule.call(

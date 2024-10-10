@@ -1,6 +1,6 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -36,6 +36,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -1119,7 +1120,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static getMaxValveTableSizeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1134,7 +1135,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static getNumValvesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1147,7 +1148,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static supportsMasterValveCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		endpoint: EndpointId,
 	): boolean {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)
@@ -1156,7 +1157,9 @@ export class IrrigationCC extends CommandClass {
 			);
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -1220,7 +1223,9 @@ max. valve table size: ${systemInfo.maxValveTableSize}`;
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -1726,7 +1731,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public readonly errorHighFlow?: boolean;
 	public readonly errorLowFlow?: boolean;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// connected
@@ -2014,7 +2019,7 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		this.useMoistureSensor = !!(this.payload[offset] & 0b10);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// nominalCurrentHighThreshold

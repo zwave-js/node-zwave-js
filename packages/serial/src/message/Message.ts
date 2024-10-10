@@ -1,7 +1,7 @@
 import {
-	type IZWaveNode,
 	type MessageOrCCLogEntry,
 	type MessagePriority,
+	type NodeId,
 	ZWaveError,
 	ZWaveErrorCodes,
 	createReflectionDecorator,
@@ -410,11 +410,11 @@ export class Message {
 	/**
 	 * Returns the node this message is linked to or undefined
 	 */
-	public getNodeUnsafe(
-		applHost: ZWaveApplicationHost,
-	): IZWaveNode | undefined {
+	public getNodeUnsafe<T extends NodeId>(
+		applHost: ZWaveApplicationHost<T>,
+	): T | undefined {
 		const nodeId = this.getNodeId();
-		if (nodeId != undefined) return applHost.nodes.get(nodeId);
+		if (nodeId != undefined) return applHost.getNode(nodeId);
 	}
 
 	private _transmissionTimestamp: number | undefined;

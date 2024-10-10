@@ -1,6 +1,6 @@
 import {
 	type CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
@@ -49,7 +49,7 @@ export interface CCValueOptions {
 		| boolean
 		| ((
 			applHost: ZWaveApplicationHost,
-			endpoint: IZWaveEndpoint,
+			endpoint: EndpointId,
 		) => boolean);
 }
 

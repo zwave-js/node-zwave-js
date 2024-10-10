@@ -31,6 +31,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -297,7 +298,9 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	declare ccCommand: SceneActuatorConfigurationCommand;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		applHost.controllerLog.logNode(node.id, {
@@ -323,7 +326,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	// `refreshValues()` would create 255 `Get` commands to be issued to the node
 	// Therefore, I think we should not implement it. Here is how it would be implemented
 	//
-	// public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	// public async refreshValues(applHost: ZWaveApplicationHost<CCNode>): Promise<void> {
 	// 	const node = this.getNode(applHost)!;
 	// 	const endpoint = this.getEndpoint(applHost)!;
 	// 	const api = endpoint.commandClasses[
@@ -434,7 +437,7 @@ export class SceneActuatorConfigurationCCReport
 	public readonly level?: number;
 	public readonly dimmingDuration?: Duration;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Do not persist values for an inactive scene

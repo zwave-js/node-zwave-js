@@ -134,7 +134,6 @@ import {
 } from "@zwave-js/serial";
 import {
 	AsyncQueue,
-	type ReadonlyThrowingMap,
 	type ThrowingMap,
 	TypedEventEmitter,
 	buffer2hex,
@@ -203,6 +202,10 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 
+import { type ZWaveNodeBase } from "../node/mixins/00_Base";
+import { type NodeWakeup } from "../node/mixins/30_Wakeup";
+import { type NodeValues } from "../node/mixins/40_Values";
+import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll";
 import {
 	SendTestFrameRequest,
 	SendTestFrameTransmitReport,
@@ -589,7 +592,7 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * instance or its associated nodes.
  */
 export class Driver extends TypedEventEmitter<DriverEventCallbacks>
-	implements ZWaveApplicationHost
+	implements ZWaveApplicationHost</* TNode = */ ZWaveNode>
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
@@ -924,14 +927,19 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this._controller?.nodeIdType ?? NodeIDType.Short;
 	}
 
-	/**
-	 * **!!! INTERNAL !!!**
-	 *
-	 * Not intended to be used by applications. Use `controller.nodes` instead!
-	 */
-	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
-		// This is needed for the ZWaveHost interface
-		return this.controller.nodes;
+	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	public getNode(nodeId: number): ZWaveNode | undefined {
+		return this.controller.nodes.get(nodeId);
+	}
+
+	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	public getNodeOrThrow(nodeId: number): ZWaveNode {
+		return this.controller.nodes.getOrThrow(nodeId);
+	}
+
+	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	public getAllNodes(): ZWaveNode[] {
+		return [...this.controller.nodes.values()];
 	}
 
 	public getNodeUnsafe(msg: Message): ZWaveNode | undefined {
@@ -2687,7 +2695,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	};
 
 	/** Checks if there are any pending messages for the given node */
-	private hasPendingMessages(node: ZWaveNode): boolean {
+	private hasPendingMessages(node: ZWaveNodeBase & SchedulePoll): boolean {
 		// First check if there are messages in the queue
 		if (
 			this.hasPendingTransactions(
@@ -2698,7 +2706,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		// Then check if there are scheduled polls
-		return node.scheduledPolls.size > 0;
+		return node.hasScheduledPolls();
 	}
 
 	/** Checks if there are any pending transactions that match the given predicate */
@@ -6830,7 +6838,9 @@ ${handlers.length} left`,
 	 * @internal
 	 * Marks a node for a later sleep command. Every call refreshes the period until the node actually goes to sleep
 	 */
-	public debounceSendNodeToSleep(node: ZWaveNode): void {
+	public debounceSendNodeToSleep(
+		node: ZWaveNodeBase & SchedulePoll & NodeValues & NodeWakeup,
+	): void {
 		// TODO: This should be a single command to the send thread
 		// Delete old timers if any exist
 		if (this.sendNodeToSleepTimers.has(node.id)) {
@@ -6838,7 +6848,9 @@ ${handlers.length} left`,
 		}
 
 		// Sends a node to sleep if it has no more messages.
-		const sendNodeToSleep = (node: ZWaveNode): void => {
+		const sendNodeToSleep = (
+			node: ZWaveNodeBase & SchedulePoll & NodeWakeup,
+		): void => {
 			this.sendNodeToSleepTimers.delete(node.id);
 			if (!this.hasPendingMessages(node)) {
 				void node.sendNoMoreInformation().catch(() => {

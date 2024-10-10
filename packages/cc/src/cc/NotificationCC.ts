@@ -12,12 +12,12 @@ import {
 import {
 	CommandClasses,
 	Duration,
-	type IZWaveEndpoint,
-	type IZWaveNode,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type NodeId,
 	type SinglecastCC,
 	type SupervisionResult,
 	type ValueID,
@@ -48,6 +48,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	InvalidCC,
@@ -214,7 +215,7 @@ export const NotificationCCValues = Object.freeze({
 
 function shouldAutoCreateSimpleDoorSensorValue(
 	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	endpoint: EndpointId,
 ): boolean {
 	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
@@ -490,7 +491,7 @@ export class NotificationCC extends CommandClass {
 	}
 
 	private async determineNotificationMode(
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCNode>,
 		api: NotificationCCAPI,
 		supportedNotificationEvents: ReadonlyMap<number, readonly number[]>,
 	): Promise<"push" | "pull"> {
@@ -552,14 +553,16 @@ export class NotificationCC extends CommandClass {
 	/** Whether the node implements push or pull notifications */
 	public static getNotificationMode(
 		applHost: ZWaveApplicationHost,
-		node: IZWaveNode,
+		node: NodeId,
 	): MaybeNotKnown<"push" | "pull"> {
 		return applHost
 			.getValueDB(node.id)
 			.getValue(NotificationCCValues.notificationMode.id);
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -825,7 +828,9 @@ export class NotificationCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		// Refreshing values only works on pull nodes
 		if (NotificationCC.getNotificationMode(applHost, node) === "pull") {
@@ -879,7 +884,7 @@ export class NotificationCC extends CommandClass {
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCNode>,
 	): boolean {
 		// Pull-mode nodes must be polled regularly
 
@@ -1023,7 +1028,7 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Check if we need to re-interpret the alarm values somehow
@@ -1633,7 +1638,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Store which events this notification supports
