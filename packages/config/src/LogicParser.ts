@@ -86,13 +86,14 @@ const peggyParser: { parse: any; SyntaxError: any; DefaultTracer?: any } = // Ge
 				// @ts-ignore
 				var s = this.location.start;
 				// @ts-ignore
-				var offset_s = (this.location.source
-						&& (typeof this.location.source.offset
-							=== "function"))
-					// @ts-ignore
-					? this.location.source.offset(s)
-					// @ts-ignore
-					: s;
+				var offset_s =
+					(this.location.source
+							&& (typeof this.location.source.offset
+								=== "function"))
+						// @ts-ignore
+						? this.location.source.offset(s)
+						// @ts-ignore
+						: s;
 				// @ts-ignore
 				var loc = this.location.source
 					+ ":"
@@ -116,19 +117,11 @@ const peggyParser: { parse: any; SyntaxError: any; DefaultTracer?: any } = // Ge
 					// @ts-ignore
 					var hatLen = (last - s.column) || 1;
 					// @ts-ignore
-					str += "\n --> "
-						+ loc
-						+ "\n" // @ts-ignore
-						+ filler
-						+ " |\n" // @ts-ignore
-						+ offset_s.line
-						+ " | "
-						+ line
-						+ "\n" // @ts-ignore
-						+ filler
-						+ " | "
-						+ peg$padEnd("", s.column - 1, " ") // @ts-ignore
-						+ peg$padEnd("", hatLen, "^");
+					str += "\n --> " + loc + "\n" // @ts-ignore
+					+ filler + " |\n" // @ts-ignore
+					+ offset_s.line + " | " + line + "\n" // @ts-ignore
+					+ filler + " | " + peg$padEnd("", s.column - 1, " ") // @ts-ignore
+					+ peg$padEnd("", hatLen, "^");
 					// @ts-ignore
 				} else {
 					// @ts-ignore

@@ -12639,11 +12639,11 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 // @public (undocumented)
 export interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
     // (undocumented)
-    currentValue: number;
+    currentValue: MaybeUnknown<number>;
     // (undocumented)
     duration?: Duration | string;
     // (undocumented)
-    targetValue: number;
+    targetValue: MaybeUnknown<number>;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -12721,13 +12721,23 @@ export class MultilevelSwitchCCSupportedGet extends MultilevelSwitchCC {
 //
 // @public (undocumented)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & MultilevelSwitchCCSupportedReportOptions));
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost_2): boolean;
+    // (undocumented)
+    serialize(): Buffer;
     // (undocumented)
     readonly switchType: SwitchType;
     // (undocumented)
     toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "MultilevelSwitchCCSupportedReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSwitchCCSupportedReportOptions {
+    // (undocumented)
+    switchType: SwitchType;
 }
 
 // Warning: (ae-missing-release-tag) "MultilevelSwitchCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17603,13 +17613,24 @@ export class ThermostatSetbackCCGet extends ThermostatSetbackCC {
 //
 // @public (undocumented)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | (CCCommandOptions & ThermostatSetbackCCReportOptions));
     // (undocumented)
+    serialize(): Buffer;
     readonly setbackState: SetbackState;
     // (undocumented)
     readonly setbackType: SetbackType;
     // (undocumented)
     toLogEntry(host?: ZWaveValueHost_2): MessageOrCCLogEntry_2;
+}
+
+// Warning: (ae-missing-release-tag) "ThermostatSetbackCCReportOptions" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ThermostatSetbackCCReportOptions {
+    // (undocumented)
+    setbackState: SetbackState;
+    // (undocumented)
+    setbackType: SetbackType;
 }
 
 // Warning: (ae-missing-release-tag) "ThermostatSetbackCCSet" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -17635,66 +17656,6 @@ export interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
     // (undocumented)
     setbackType: SetbackType;
 }
-
-// Warning: (ae-missing-release-tag) "ThermostatSetbackCCValues" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-//
-// @public (undocumented)
-export const ThermostatSetbackCCValues: Readonly<{
-    setbackState: {
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Thermostat Setback"];
-            property: "setbackState";
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses)["Thermostat Setback"];
-            readonly endpoint: number;
-            readonly property: "setbackState";
-        };
-        readonly is: (valueId: ValueID_2) => boolean;
-        readonly meta: {
-            readonly min: -12.8;
-            readonly max: 12;
-            readonly label: "Setback state";
-            readonly type: "number";
-            readonly readable: true;
-            readonly writeable: true;
-        };
-        readonly options: {
-            readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
-            readonly stateful: true;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-        };
-    };
-    setbackType: {
-        readonly id: {
-            commandClass: (typeof CommandClasses)["Thermostat Setback"];
-            property: "setbackType";
-        };
-        readonly endpoint: (endpoint?: number | undefined) => {
-            readonly commandClass: (typeof CommandClasses)["Thermostat Setback"];
-            readonly endpoint: number;
-            readonly property: "setbackType";
-        };
-        readonly is: (valueId: ValueID_2) => boolean;
-        readonly meta: {
-            readonly label: "Setback type";
-            readonly type: "any";
-            readonly readable: true;
-            readonly writeable: true;
-        };
-        readonly options: {
-            readonly internal: false;
-            readonly minVersion: 1;
-            readonly secret: false;
-            readonly stateful: true;
-            readonly supportsEndpoints: true;
-            readonly autoCreate: true;
-        };
-    };
-}>;
 
 // Warning: (ae-missing-release-tag) "ThermostatSetbackCommand" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
