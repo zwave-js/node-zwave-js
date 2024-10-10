@@ -107,7 +107,7 @@
     "@zwave-js/testing": "workspace:*",
     "alcalzone-shared": "^4.0.8",
     "ansi-colors": "^4.1.3",
-    "execa": "^5.1.1",
+    "execa": "^9.4.0",
     "fs-extra": "^11.2.0",
     "got": "^13.0.0",
     "mdns-server": "^1.0.11",
