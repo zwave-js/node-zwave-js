@@ -30,6 +30,7 @@ import {
 	MultiChannelCCHooks,
 } from "./mockCCBehaviors/MultiChannel";
 import { MultilevelSensorCCBehaviors } from "./mockCCBehaviors/MultilevelSensor";
+import { MultilevelSwitchCCBehaviors } from "./mockCCBehaviors/MultilevelSwitch";
 import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
 import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
@@ -186,6 +187,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		...ManufacturerSpecificCCBehaviors,
 		...MeterCCBehaviors,
 		...MultilevelSensorCCBehaviors,
+		...MultilevelSwitchCCBehaviors,
 		...NotificationCCBehaviors,
 		...ScheduleEntryLockCCBehaviors,
 		...SoundSwitchCCBehaviors,
