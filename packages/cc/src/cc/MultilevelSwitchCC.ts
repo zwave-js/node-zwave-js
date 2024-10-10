@@ -844,6 +844,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 @useSupervision()
 export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {}
 
+// @publicAPI
 export interface MultilevelSwitchCCSupportedReportOptions {
 	switchType: SwitchType;
 }
