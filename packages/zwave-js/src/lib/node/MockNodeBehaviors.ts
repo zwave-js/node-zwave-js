@@ -35,6 +35,7 @@ import { NotificationCCBehaviors } from "./mockCCBehaviors/Notification";
 import { ScheduleEntryLockCCBehaviors } from "./mockCCBehaviors/ScheduleEntryLock";
 import { SoundSwitchCCBehaviors } from "./mockCCBehaviors/SoundSwitch";
 import { ThermostatModeCCBehaviors } from "./mockCCBehaviors/ThermostatMode";
+import { ThermostatSetbackCCBehaviors } from "./mockCCBehaviors/ThermostatSetback";
 import { ThermostatSetpointCCBehaviors } from "./mockCCBehaviors/ThermostatSetpoint";
 import { UserCodeCCBehaviors } from "./mockCCBehaviors/UserCode";
 import { WindowCoveringCCBehaviors } from "./mockCCBehaviors/WindowCovering";
@@ -193,6 +194,7 @@ export function createDefaultBehaviors(): MockNodeBehavior[] {
 		...SoundSwitchCCBehaviors,
 		...ThermostatModeCCBehaviors,
 		...ThermostatSetpointCCBehaviors,
+		...ThermostatSetbackCCBehaviors,
 		...UserCodeCCBehaviors,
 		...WindowCoveringCCBehaviors,
 	];

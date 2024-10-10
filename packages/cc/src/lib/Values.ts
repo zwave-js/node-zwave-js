@@ -643,8 +643,6 @@ export interface CCValues {
 		typeof import("../cc/ThermostatModeCC").ThermostatModeCCValues;
 	"Thermostat Operating State":
 		typeof import("../cc/ThermostatOperatingStateCC").ThermostatOperatingStateCCValues;
-	"Thermostat Setback":
-		typeof import("../cc/ThermostatSetbackCC").ThermostatSetbackCCValues;
 	"Thermostat Setpoint":
 		typeof import("../cc/ThermostatSetpointCC").ThermostatSetpointCCValues;
 	"Time Parameters":
