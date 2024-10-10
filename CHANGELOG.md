@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.6.0 (2024-10-10)
 ### Features
 * Skip rebuilding routes for nodes with priority return routes (#7252)
 * Add `node info received` event (#7253)
