@@ -1,6 +1,7 @@
+import { type NodeId } from "@zwave-js/core/safe";
 import { Endpoint } from "../Endpoint";
 
-export abstract class ZWaveNodeBase extends Endpoint {
+export abstract class ZWaveNodeBase extends Endpoint implements NodeId {
 	/**
 	 * Whether the node should be kept awake when there are no pending messages.
 	 */

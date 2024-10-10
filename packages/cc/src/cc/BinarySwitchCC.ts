@@ -34,6 +34,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -239,7 +240,9 @@ export class BinarySwitchCCAPI extends CCAPI {
 export class BinarySwitchCC extends CommandClass {
 	declare ccCommand: BinarySwitchCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		applHost.controllerLog.logNode(node.id, {
@@ -254,7 +257,9 @@ export class BinarySwitchCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(

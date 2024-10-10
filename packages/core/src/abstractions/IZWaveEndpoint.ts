@@ -28,6 +28,11 @@ export interface IsCCSecure {
 	isCCSecure(cc: CommandClasses): boolean;
 }
 
+/** Allows querying all implemented CCs and their information */
+export interface GetCCs {
+	getCCs(): Iterable<[ccId: CommandClasses, info: CommandClassInfo]>;
+}
+
 /** Allows modifying the list of supported/controlled CCs */
 export interface ModifyCCs {
 	addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void;
@@ -36,9 +41,8 @@ export interface ModifyCCs {
 
 /** A basic abstraction of a Z-Wave endpoint providing access to the relevant functionality */
 export interface IZWaveEndpoint
-	extends EndpointId, SupportsCC, ControlsCC, IsCCSecure, ModifyCCs
+	extends EndpointId, SupportsCC, ControlsCC, IsCCSecure, ModifyCCs, GetCCs
 {
-	getCCs(): Iterable<[ccId: CommandClasses, info: CommandClassInfo]>;
 	getNodeUnsafe(): IZWaveNode | undefined;
 }
 
@@ -53,10 +57,3 @@ export interface VirtualEndpointId {
 export interface IVirtualEndpoint extends VirtualEndpointId, SupportsCC {
 	readonly node: IVirtualNode;
 }
-
-// TODO: Use cases in CCAPI implementations:
-// - EndpointId or VirtualEndpointId
-// - SupportsCC
-// - VirtualEndpoint:
-//     - physical nodes -> NodeId
-//     - physical nodes -> Endpoint -> SupportsCC,ControlsCC

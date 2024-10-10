@@ -1,19 +1,28 @@
 import {
 	type BroadcastCC,
 	CommandClasses,
+	type ControlsCC,
 	EncapsulationFlags,
 	type EndpointId,
 	type FrameType,
+	type GetAllEndpoints,
+	type GetCCs,
+	type GetEndpoint,
 	type ICommandClass,
-	type IZWaveEndpoint,
-	type IZWaveNode,
+	type ListenBehavior,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
+	type ModifyCCs,
 	type MulticastCC,
 	type MulticastDestination,
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
+	type NodeId,
+	type QueryNodeStatus,
+	type QuerySecurityClasses,
+	type SetSecurityClass,
 	type SinglecastCC,
+	type SupportsCC,
 	type ValueDB,
 	type ValueID,
 	type ValueMetadata,
@@ -109,6 +118,27 @@ function gotCCCommandOptions(options: any): options is CCCommandOptions {
 export type CommandClassOptions =
 	| CommandClassCreationOptions
 	| CommandClassDeserializationOptions;
+
+// Defines the necessary traits an endpoint passed to a CC instance must have
+export type CCEndpoint =
+	& EndpointId
+	& SupportsCC
+	& ControlsCC
+	& GetCCs
+	& ModifyCCs;
+
+// Defines the necessary traits a node passed to a CC instance must have
+export type CCNode =
+	& NodeId
+	& SupportsCC
+	& ControlsCC
+	& GetCCs
+	& GetEndpoint<CCEndpoint>
+	& GetAllEndpoints<CCEndpoint>
+	& QuerySecurityClasses
+	& SetSecurityClass
+	& ListenBehavior
+	& QueryNodeStatus;
 
 // @publicAPI
 export class CommandClass implements ICommandClass {
@@ -606,9 +636,11 @@ export class CommandClass implements ICommandClass {
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
-	public getNode(applHost: ZWaveApplicationHost): IZWaveNode | undefined {
+	public getNode<T extends NodeId>(
+		applHost: ZWaveApplicationHost<T>,
+	): T | undefined {
 		if (this.isSinglecast()) {
-			return applHost.nodes.get(this.nodeId);
+			return applHost.getNode(this.nodeId);
 		}
 	}
 
@@ -616,9 +648,9 @@ export class CommandClass implements ICommandClass {
 	 * @internal
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe(
-		applHost: ZWaveApplicationHost,
-	): IZWaveNode | undefined {
+	public getNodeUnsafe<T extends NodeId>(
+		applHost: ZWaveApplicationHost<T>,
+	): T | undefined {
 		try {
 			return this.getNode(applHost);
 		} catch (e) {
@@ -631,9 +663,9 @@ export class CommandClass implements ICommandClass {
 		}
 	}
 
-	public getEndpoint(
-		applHost: ZWaveApplicationHost,
-	): IZWaveEndpoint | undefined {
+	public getEndpoint<T extends EndpointId>(
+		applHost: ZWaveApplicationHost<NodeId & GetEndpoint<T>>,
+	): T | undefined {
 		return this.getNode(applHost)?.getEndpoint(this.endpointIndex);
 	}
 
@@ -913,7 +945,7 @@ export class CommandClass implements ICommandClass {
 	 * Persists all values for this CC instance into the value DB which are annotated with @ccValue.
 	 * Returns `true` if the process succeeded, `false` if the value DB cannot be accessed.
 	 */
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		let valueDB: ValueDB;
 		try {
 			valueDB = this.getValueDB(applHost);

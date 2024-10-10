@@ -3,9 +3,9 @@ import type {
 	CommandClasses,
 	ControllerLogger,
 	ICommandClass,
-	IZWaveNode,
 	MaybeNotKnown,
 	NodeIDType,
+	NodeId,
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
@@ -14,7 +14,6 @@ import type {
 	ValueDB,
 	ValueID,
 } from "@zwave-js/core";
-import type { ReadonlyThrowingMap } from "@zwave-js/shared";
 import type { ZWaveHostOptions } from "./ZWaveHostOptions";
 
 /** Host application abstractions to be used in Serial API and CC implementations */
@@ -102,8 +101,21 @@ export interface ZWaveValueHost {
 	tryGetValueDB(nodeId: number): ValueDB | undefined;
 }
 
+/** Allows accessing a specific node */
+export interface GetNode<T extends NodeId> {
+	getNode(nodeId: number): T | undefined;
+	getNodeOrThrow(nodeId: number): T;
+}
+
+/** Allows accessing all nodes */
+export interface GetAllNodes<T extends NodeId> {
+	getAllNodes(): T[];
+}
+
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
-export interface ZWaveApplicationHost extends ZWaveValueHost, ZWaveHost {
+export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
+	extends ZWaveValueHost, ZWaveHost, GetNode<TNode>, GetAllNodes<TNode>
+{
 	/** Gives access to the configuration files */
 	configManager: ConfigManager;
 
@@ -111,9 +123,6 @@ export interface ZWaveApplicationHost extends ZWaveValueHost, ZWaveHost {
 
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;
-
-	/** Readonly access to all node instances known to the host */
-	nodes: ReadonlyThrowingMap<number, IZWaveNode>;
 
 	/** Whether the node with the given ID is the controller */
 	isControllerNode(nodeId: number): boolean;

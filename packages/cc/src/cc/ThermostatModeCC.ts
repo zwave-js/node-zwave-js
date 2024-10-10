@@ -32,6 +32,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -218,7 +219,9 @@ export class ThermostatModeCCAPI extends CCAPI {
 export class ThermostatModeCC extends CommandClass {
 	declare ccCommand: ThermostatModeCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -272,7 +275,9 @@ export class ThermostatModeCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -431,7 +436,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Update the supported modes if a mode is used that wasn't previously
@@ -533,7 +538,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Use this information to create the metadata for the mode property

@@ -29,6 +29,7 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -701,7 +702,9 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 export class ScheduleEntryLockCC extends CommandClass {
 	declare ccCommand: ScheduleEntryLockCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -1258,7 +1261,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		persistSchedule.call(
@@ -1591,7 +1594,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		persistSchedule.call(
@@ -2002,7 +2005,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 	public durationHour?: number;
 	public durationMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		persistSchedule.call(

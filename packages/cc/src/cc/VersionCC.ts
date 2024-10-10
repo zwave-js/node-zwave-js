@@ -25,6 +25,7 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -420,7 +421,9 @@ export class VersionCC extends CommandClass {
 		return [CommandClasses["Manufacturer Specific"]];
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		// SDS13782: In a Multi Channel device, the Version Command Class MUST be supported by the Root Device, while

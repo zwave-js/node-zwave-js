@@ -33,6 +33,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -251,7 +252,9 @@ export class BasicCCAPI extends CCAPI {
 export class BasicCC extends CommandClass {
 	declare ccCommand: BasicCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 
@@ -288,7 +291,9 @@ export class BasicCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -324,7 +329,7 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 	}
 
 	public override getDefinedValueIDs(
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCNode>,
 	): ValueID[] {
 		const ret: ValueID[] = [];
 		const endpoint = this.getEndpoint(applHost)!;
@@ -437,7 +442,7 @@ export class BasicCCReport extends BasicCC {
 	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		// Basic CC Report persists its values itself, since there are some
 		// specific rules when which value may be persisted.
 		// These rules are essentially encoded in the getDefinedValueIDs overload,

@@ -47,6 +47,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -1039,7 +1040,9 @@ export class ConfigurationCCAPI extends CCAPI {
 export class ConfigurationCC extends CommandClass {
 	declare ccCommand: ConfigurationCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -1197,7 +1200,9 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -1633,7 +1638,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	public valueSize: number;
 	private valueFormat?: ConfigValueFormat; // only used for serialization
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// This parameter may be a partial param in the following cases:
@@ -2148,7 +2153,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Store every received parameter
@@ -2329,7 +2334,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	public name: string;
 	public readonly reportsToFollow: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Bitfield parameters that are not documented in a config file
@@ -2476,7 +2481,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public info: string;
 	public readonly reportsToFollow: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Bitfield parameters that are not documented in a config file
@@ -2715,7 +2720,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// If we actually received parameter info, store it

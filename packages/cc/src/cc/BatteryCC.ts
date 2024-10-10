@@ -28,6 +28,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -276,7 +277,9 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 export class BatteryCC extends CommandClass {
 	declare ccCommand: BatteryCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		applHost.controllerLog.logNode(node.id, {
@@ -292,7 +295,9 @@ export class BatteryCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -361,7 +366,7 @@ temperature:   ${batteryHealth.temperature} °C`;
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCNode>,
 	): boolean {
 		// Check when the battery state was last updated
 		const valueDB = applHost.tryGetValueDB(this.nodeId);
@@ -454,7 +459,7 @@ export class BatteryCCReport extends BatteryCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Naïve heuristic for a full battery
@@ -615,7 +620,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 		this.temperatureScale = scale;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Update the temperature unit in the value DB

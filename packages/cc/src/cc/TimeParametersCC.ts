@@ -30,6 +30,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -221,7 +222,9 @@ export class TimeParametersCCAPI extends CCAPI {
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -274,7 +277,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		// If necessary, fix the date and time before persisting it
 		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
 		if (local) {
@@ -353,7 +356,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		// We do not actually persist anything here, but we need access to the node
 		// in order to interpret the date segments correctly
 

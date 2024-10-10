@@ -35,6 +35,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -350,7 +351,9 @@ export class HumidityControlSetpointCC extends CommandClass {
 		}
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -465,7 +468,9 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -591,7 +596,7 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		this.scale = scale;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		const scale = getScale(this.scale);
@@ -861,7 +866,7 @@ export class HumidityControlSetpointCCCapabilitiesReport
 			parseFloatWithScale(this.payload.subarray(1 + bytesRead)));
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Predefine the metadata

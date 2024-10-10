@@ -28,6 +28,7 @@ import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -441,7 +442,9 @@ export class MultiChannelCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		const removeEndpoints = applHost.getDeviceConfig?.(node.id)?.compat
@@ -712,7 +715,9 @@ supported CCs:`;
 		this.setInterviewComplete(applHost, true);
 	}
 
-	private async interviewV1(applHost: ZWaveApplicationHost): Promise<void> {
+	private async interviewV1(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -934,7 +939,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		const deviceClassValue = MultiChannelCCValues.endpointDeviceClass;

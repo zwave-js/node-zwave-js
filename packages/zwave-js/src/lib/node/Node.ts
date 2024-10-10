@@ -154,10 +154,10 @@ import {
 	type NotificationState,
 	ProtocolVersion,
 	Protocols,
+	type QuerySecurityClasses,
 	type RSSI,
 	RssiError,
 	SecurityClass,
-	type SecurityClassOwner,
 	type SendCommandOptions,
 	type SetValueOptions,
 	type SinglecastCC,
@@ -287,7 +287,7 @@ export interface ZWaveNode
  */
 @Mixin([EventEmitter, NodeStatisticsHost])
 export class ZWaveNode extends ZWaveNodeMixins
-	implements SecurityClassOwner, IZWaveNode
+	implements QuerySecurityClasses, IZWaveNode
 {
 	public constructor(
 		id: number,

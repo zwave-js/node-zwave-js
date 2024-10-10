@@ -2,11 +2,13 @@ import { CommandClass } from "@zwave-js/cc";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
 	CommandClasses,
+	type ControlsCC,
 	type EndpointId,
-	type IZWaveEndpoint,
-	type IZWaveNode,
+	type GetEndpoint,
 	type MaybeNotKnown,
+	type NodeId,
 	type SetValueOptions,
+	type SupportsCC,
 	type TranslatedValueID,
 	type ValueID,
 	ZWaveError,
@@ -175,16 +177,15 @@ export function setMultiChannelInterviewComplete(
 	);
 }
 
-export function getAllEndpoints(
+export function getAllEndpoints<T extends EndpointId>(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	node: IZWaveNode,
-): IZWaveEndpoint[] {
-	const ret: IZWaveEndpoint[] = [node];
+	node: T & GetEndpoint<EndpointId & T>,
+): T[] {
+	const ret: T[] = [node];
 	// Check if the Multi Channel CC interview for this node is completed,
 	// because we don't have all the endpoint information before that
-	if (isMultiChannelInterviewComplete(applHost, node.id)) {
-		for (const i of getEndpointIndizes(applHost, node.id)) {
+	if (isMultiChannelInterviewComplete(applHost, node.nodeId)) {
+		for (const i of getEndpointIndizes(applHost, node.nodeId)) {
 			const endpoint = node.getEndpoint(i);
 			if (endpoint) ret.push(endpoint);
 		}
@@ -304,8 +305,11 @@ export function filterRootApplicationCCValueIDs<T extends ValueID>(
 /** Returns a list of all value names that are defined on all endpoints of this node */
 export function getDefinedValueIDs(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	node: IZWaveNode,
+	node:
+		& NodeId
+		& SupportsCC
+		& ControlsCC
+		& GetEndpoint<EndpointId & SupportsCC & ControlsCC>,
 ): TranslatedValueID[] {
 	return getDefinedValueIDsInternal(applHost, node, false);
 }
@@ -316,8 +320,11 @@ export function getDefinedValueIDs(
  */
 export function getDefinedValueIDsInternal(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	node: IZWaveNode,
+	node:
+		& NodeId
+		& SupportsCC
+		& ControlsCC
+		& GetEndpoint<EndpointId & SupportsCC & ControlsCC>,
 	includeInternal: boolean = false,
 ): TranslatedValueID[] {
 	// The controller has no values. Even if some ended up in the cache somehow, do not return any.
@@ -327,7 +334,12 @@ export function getDefinedValueIDsInternal(
 	const allowControlled: CommandClasses[] = [
 		CommandClasses["Scene Activation"],
 	];
-	for (const endpoint of getAllEndpoints(applHost, node)) {
+	for (
+		const endpoint of getAllEndpoints<EndpointId & SupportsCC & ControlsCC>(
+			applHost,
+			node,
+		)
+	) {
 		for (const cc of allCCs) {
 			if (
 				// Create values only for supported CCs

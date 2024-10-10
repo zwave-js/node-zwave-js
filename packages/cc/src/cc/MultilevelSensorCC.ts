@@ -41,6 +41,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	type CCResponsePredicate,
 	CommandClass,
 	type CommandClassDeserializationOptions,
@@ -382,7 +383,9 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 export class MultilevelSensorCC extends CommandClass {
 	declare ccCommand: MultilevelSensorCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -472,7 +475,9 @@ export class MultilevelSensorCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -542,7 +547,7 @@ value:       ${mlsResponse.value}${
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCNode>,
 	): boolean {
 		// Poll the device when all of the supported values were last updated longer than 6 hours ago.
 		// This may lead to some values not being updated, but the user may have disabled some unnecessary
@@ -647,7 +652,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		const sensor = getSensor(this.type);

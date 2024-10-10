@@ -30,6 +30,7 @@ import {
 } from "../../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
 } from "../../lib/CommandClass";
@@ -87,6 +88,20 @@ export function getFibaroVenetianBlindTiltMetadata(): ValueMetadata {
 		...ValueMetadata.Level,
 		label: "Venetian blinds tilt",
 	};
+}
+
+function getSupportedFibaroCCIDs(
+	applHost: ZWaveApplicationHost,
+	nodeId: number,
+): FibaroCCIDs[] {
+	const proprietaryConfig = applHost.getDeviceConfig?.(
+		nodeId,
+	)?.proprietary;
+	if (proprietaryConfig && isArray(proprietaryConfig.fibaroCCs)) {
+		return proprietaryConfig.fibaroCCs as FibaroCCIDs[];
+	}
+
+	return [];
 }
 
 export enum FibaroCCIDs {
@@ -231,26 +246,13 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 	public fibaroCCId?: number;
 	public fibaroCCCommand?: number;
 
-	private getSupportedFibaroCCIDs(
-		applHost: ZWaveApplicationHost,
-	): FibaroCCIDs[] {
-		const node = this.getNode(applHost)!;
-
-		const proprietaryConfig = applHost.getDeviceConfig?.(
-			node.id,
-		)?.proprietary;
-		if (proprietaryConfig && isArray(proprietaryConfig.fibaroCCs)) {
-			return proprietaryConfig.fibaroCCs as FibaroCCIDs[];
-		}
-
-		return [];
-	}
-
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		// Iterate through all supported Fibaro CCs and interview them
-		const supportedFibaroCCIDs = this.getSupportedFibaroCCIDs(applHost);
+		const supportedFibaroCCIDs = getSupportedFibaroCCIDs(applHost, node.id);
 		for (const ccId of supportedFibaroCCIDs) {
 			const SubConstructor = getFibaroCCConstructor(ccId);
 			if (SubConstructor) {
@@ -262,11 +264,13 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		}
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		// Iterate through all supported Fibaro CCs and let them refresh their values
-		const supportedFibaroCCIDs = this.getSupportedFibaroCCIDs(applHost);
+		const supportedFibaroCCIDs = getSupportedFibaroCCIDs(applHost, node.id);
 		for (const ccId of supportedFibaroCCIDs) {
 			const SubConstructor = getFibaroCCConstructor(ccId);
 			if (SubConstructor) {
@@ -326,7 +330,9 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 		}
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		applHost.controllerLog.logNode(node.id, {
@@ -339,7 +345,9 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 		await this.refreshValues(applHost);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		applHost.controllerLog.logNode(node.id, {
@@ -453,7 +461,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 

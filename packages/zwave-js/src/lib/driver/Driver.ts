@@ -134,7 +134,6 @@ import {
 } from "@zwave-js/serial";
 import {
 	AsyncQueue,
-	type ReadonlyThrowingMap,
 	type ThrowingMap,
 	TypedEventEmitter,
 	buffer2hex,
@@ -593,7 +592,7 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * instance or its associated nodes.
  */
 export class Driver extends TypedEventEmitter<DriverEventCallbacks>
-	implements ZWaveApplicationHost
+	implements ZWaveApplicationHost</* TNode = */ ZWaveNode>
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
@@ -928,14 +927,19 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this._controller?.nodeIdType ?? NodeIDType.Short;
 	}
 
-	/**
-	 * **!!! INTERNAL !!!**
-	 *
-	 * Not intended to be used by applications. Use `controller.nodes` instead!
-	 */
-	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
-		// This is needed for the ZWaveHost interface
-		return this.controller.nodes;
+	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	public getNode(nodeId: number): ZWaveNode | undefined {
+		return this.controller.nodes.get(nodeId);
+	}
+
+	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	public getNodeOrThrow(nodeId: number): ZWaveNode {
+		return this.controller.nodes.getOrThrow(nodeId);
+	}
+
+	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	public getAllNodes(): ZWaveNode[] {
+		return [...this.controller.nodes.values()];
 	}
 
 	public getNodeUnsafe(msg: Message): ZWaveNode | undefined {

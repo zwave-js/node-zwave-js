@@ -10,6 +10,7 @@ import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,

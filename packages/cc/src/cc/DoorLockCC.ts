@@ -35,6 +35,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -594,7 +595,9 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 export class DoorLockCC extends CommandClass {
 	declare ccCommand: DoorLockCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -719,7 +722,9 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 		if (!hadCriticalTimeout) this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -903,7 +908,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Only store the door/bolt/latch status if the lock supports it
@@ -1065,7 +1070,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 	public readonly twistAssist?: boolean;
 	public readonly blockToBlock?: boolean;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		// Only store the autoRelockTime etc. params if the lock supports it

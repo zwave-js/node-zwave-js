@@ -3,7 +3,9 @@ import {
 	type CommandClasses,
 	type MaybeNotKnown,
 	NOT_KNOWN,
+	type QuerySecurityClasses,
 	SecurityClass,
+	type SetSecurityClass,
 	securityClassOrder,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
@@ -12,20 +14,8 @@ import { cacheKeys } from "../../driver/NetworkCache";
 import { type DeviceClass } from "../DeviceClass";
 import { NetworkRoleMixin } from "./01_NetworkRole";
 
-export interface NodeSecurity {
-	/** Whether the node was granted at least one security class */
-	readonly isSecure: MaybeNotKnown<boolean>;
-
-	hasSecurityClass(securityClass: SecurityClass): MaybeNotKnown<boolean>;
-
-	setSecurityClass(securityClass: SecurityClass, granted: boolean): void;
-
-	/** Returns the highest security class this node was granted or `undefined` if that information isn't known yet */
-	getHighestSecurityClass(): MaybeNotKnown<SecurityClass>;
-}
-
 export abstract class NodeSecurityMixin extends NetworkRoleMixin
-	implements NodeSecurity
+	implements QuerySecurityClasses, SetSecurityClass
 {
 	public constructor(
 		nodeId: number,

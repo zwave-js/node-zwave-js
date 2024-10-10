@@ -23,6 +23,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -132,7 +133,9 @@ export class EnergyProductionCCAPI extends CCAPI {
 export class EnergyProductionCC extends CommandClass {
 	declare ccCommand: EnergyProductionCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		applHost.controllerLog.logNode(node.id, {
@@ -148,7 +151,9 @@ export class EnergyProductionCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -218,7 +223,7 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 	public readonly scale: EnergyProductionScale;
 	public readonly value: number;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
 		const valueValue = EnergyProductionCCValues.value(this.parameter);

@@ -1,12 +1,16 @@
 import type { AssociationConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
+	type ControlsCC,
 	type EndpointId,
-	type IZWaveEndpoint,
-	type IZWaveNode,
+	type GetAllEndpoints,
+	type GetEndpoint,
+	type ListenBehavior,
 	type MaybeNotKnown,
 	NOT_KNOWN,
 	type NodeId,
+	type QueryNodeStatus,
+	type QuerySecurityClasses,
 	SecurityClass,
 	type SupportsCC,
 	ZWaveError,
@@ -28,6 +32,7 @@ import { AssociationCC, AssociationCCValues } from "../cc/AssociationCC";
 import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC";
 import { MultiChannelAssociationCC } from "../cc/MultiChannelAssociationCC";
 import { CCAPI } from "./API";
+import { type CCNode } from "./CommandClass";
 import {
 	type AssociationAddress,
 	AssociationCheckResult,
@@ -91,8 +96,7 @@ export function getAssociations(
 
 export function getAllAssociations(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	node: IZWaveNode,
+	node: NodeId & GetAllEndpoints<EndpointId & SupportsCC>,
 ): ReadonlyObjectKeyMap<
 	AssociationAddress,
 	ReadonlyMap<number, readonly AssociationAddress[]>
@@ -114,14 +118,18 @@ export function getAllAssociations(
 }
 
 export function checkAssociation(
-	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	endpoint: IZWaveEndpoint,
+	applHost: ZWaveApplicationHost<
+		& NodeId
+		& SupportsCC
+		& GetEndpoint<EndpointId & SupportsCC>
+		& QuerySecurityClasses
+	>,
+	endpoint: EndpointId & SupportsCC & ControlsCC,
 	group: number,
 	destination: AssociationAddress,
 ): AssociationCheckResult {
 	// Check that the target endpoint exists except when adding an association to the controller
-	const targetNode = applHost.nodes.getOrThrow(destination.nodeId);
+	const targetNode = applHost.getNodeOrThrow(destination.nodeId);
 	const targetEndpoint = destination.nodeId === applHost.ownNodeId
 		? targetNode
 		: targetNode.getEndpointOrThrow(destination.endpoint ?? 0);
@@ -165,7 +173,7 @@ export function checkAssociation(
 	// A controlling node MUST NOT associate Node A to a Node B destination
 	// if Node A was not granted Node B’s highest Security Class.
 
-	const sourceNode = endpoint.getNodeUnsafe()!;
+	const sourceNode = applHost.getNode(endpoint.nodeId)!;
 	let securityClassMustMatch: boolean;
 	if (destination.endpoint == undefined) {
 		// "normal" association
@@ -344,8 +352,7 @@ export function getAssociationGroups(
 
 export function getAllAssociationGroups(
 	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	node: IZWaveNode,
+	node: NodeId & GetAllEndpoints<EndpointId & SupportsCC>,
 ): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>> {
 	const ret = new Map<number, ReadonlyMap<number, AssociationGroup>>();
 	for (const endpoint of node.getAllEndpoints()) {
@@ -357,9 +364,8 @@ export function getAllAssociationGroups(
 }
 
 export async function addAssociations(
-	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	endpoint: IZWaveEndpoint,
+	applHost: ZWaveApplicationHost<CCNode>,
+	endpoint: EndpointId & SupportsCC & ControlsCC,
 	group: number,
 	destinations: AssociationAddress[],
 ): Promise<void> {
@@ -528,9 +534,8 @@ export async function addAssociations(
 }
 
 export async function removeAssociations(
-	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and endpoint capabilities would be enough
-	endpoint: IZWaveEndpoint,
+	applHost: ZWaveApplicationHost<CCNode>,
+	endpoint: EndpointId & SupportsCC & ControlsCC,
 	group: number,
 	destinations: AssociationAddress[],
 ): Promise<void> {
@@ -680,12 +685,19 @@ export function getLifelineGroupIds(
 }
 
 export async function configureLifelineAssociations(
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	applHost: ZWaveApplicationHost<
+		& NodeId
+		& SupportsCC
+		& ControlsCC
+		& ListenBehavior
+		& QueryNodeStatus
+		& GetAllEndpoints<EndpointId & SupportsCC>
+	>,
+	endpoint: EndpointId & SupportsCC & ControlsCC,
 ): Promise<void> {
 	// Assign the controller to all lifeline groups
 	const ownNodeId = applHost.ownNodeId;
-	const node = endpoint.getNodeUnsafe()!;
+	const node = applHost.getNodeOrThrow(endpoint.nodeId);
 	const valueDB = applHost.getValueDB(node.id);
 	const deviceConfig = applHost.getDeviceConfig?.(node.id);
 
@@ -1193,13 +1205,12 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 }
 
 export async function assignLifelineIssueingCommand(
-	applHost: ZWaveApplicationHost,
-	// FIXME: GH#7261 ID and node+endpoint capabilities would be enough
-	endpoint: IZWaveEndpoint,
+	applHost: ZWaveApplicationHost<CCNode>,
+	endpoint: EndpointId,
 	ccId: CommandClasses,
 	ccCommand: number,
 ): Promise<void> {
-	const node = endpoint.getNodeUnsafe()!;
+	const node = applHost.getNodeOrThrow(endpoint.nodeId);
 	if (
 		node.supportsCC(CommandClasses["Association Group Information"])
 		&& (node.supportsCC(CommandClasses.Association)

@@ -7,9 +7,10 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, type CCAPIEndpoint } from "../lib/API";
+import { CCAPI, type CCAPIEndpoint, type CCAPINode } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -38,7 +39,7 @@ export type ManufacturerProprietaryCCConstructor<
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
 	public constructor(
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCAPINode>,
 		endpoint: CCAPIEndpoint,
 	) {
 		super(applHost, endpoint);
@@ -221,7 +222,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		}
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		// Read the manufacturer ID from Manufacturer Specific CC
@@ -244,7 +247,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
 		if (this.manufacturerId == undefined) {

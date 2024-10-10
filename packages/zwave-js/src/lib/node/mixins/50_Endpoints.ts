@@ -1,6 +1,8 @@
 import { MultiChannelCCValues } from "@zwave-js/cc";
 import {
 	type CommandClasses,
+	type GetAllEndpoints,
+	type GetEndpoint,
 	type IZWaveNode,
 	type MaybeNotKnown,
 	ZWaveError,
@@ -40,7 +42,11 @@ export interface Endpoints {
 }
 
 export abstract class EndpointsMixin extends NodeValuesMixin
-	implements Endpoints, IZWaveNode
+	implements
+		Endpoints,
+		GetEndpoint<Endpoint>,
+		GetAllEndpoints<Endpoint>,
+		IZWaveNode
 {
 	public get endpointCountIsDynamic(): MaybeNotKnown<boolean> {
 		return nodeUtils.endpointCountIsDynamic(this.driver, this.id);
@@ -177,6 +183,6 @@ export abstract class EndpointsMixin extends NodeValuesMixin
 	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
 	public getAllEndpoints(): Endpoint[] {
 		// FIXME: GH#7261 we should not need to cast here
-		return nodeUtils.getAllEndpoints(this.driver, this) as Endpoint[];
+		return nodeUtils.getAllEndpoints(this.driver, this);
 	}
 }

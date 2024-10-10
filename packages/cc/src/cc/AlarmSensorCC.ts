@@ -21,6 +21,7 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -168,7 +169,9 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 
@@ -234,7 +237,9 @@ export class AlarmSensorCC extends CommandClass {
 		this.setInterviewComplete(applHost, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(
+		applHost: ZWaveApplicationHost<CCNode>,
+	): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -362,7 +367,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		};
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 		// Create metadata if it does not exist
 		this.createMetadataForSensorType(applHost, this.sensorType);
@@ -456,7 +461,7 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return this._supportedSensorTypes;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 		// Create metadata for each sensor type
 		for (const type of this._supportedSensorTypes) {

@@ -7,12 +7,14 @@ import {
 	type GetEndpoint,
 	type IVirtualEndpoint,
 	type IZWaveEndpoint,
-	type IZWaveNode,
+	type ListenBehavior,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
 	NOT_KNOWN,
+	type NodeId,
 	type PhysicalNodes,
+	type QueryNodeStatus,
 	type SendCommandOptions,
 	type SupervisionResult,
 	type SupportsCC,
@@ -24,7 +26,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	getCCName,
-	isZWaveError,
 	stripUndefined,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
@@ -154,6 +155,9 @@ export interface SchedulePollOptions {
 	transition?: "fast" | "slow";
 }
 
+// Defines the necessary traits a node passed to a CC API must have
+export type CCAPINode = NodeId & ListenBehavior & QueryNodeStatus;
+
 // Defines the necessary traits an endpoint passed to a CC API must have
 export type CCAPIEndpoint =
 	& (
@@ -167,6 +171,7 @@ export type CCAPIEndpoint =
 			// physical nodes
 			VirtualEndpointId & {
 				node: PhysicalNodes<
+					& NodeId
 					& SupportsCC
 					& ControlsCC
 					& GetEndpoint<EndpointId & SupportsCC & ControlsCC>
@@ -185,7 +190,7 @@ export type VirtualCCAPIEndpoint = CCAPIEndpoint & VirtualEndpointId;
  */
 export class CCAPI {
 	public constructor(
-		protected readonly applHost: ZWaveApplicationHost,
+		protected readonly applHost: ZWaveApplicationHost<CCAPINode>,
 		protected readonly endpoint: CCAPIEndpoint,
 	) {
 		this.ccId = getCommandClass(this);
@@ -193,7 +198,7 @@ export class CCAPI {
 
 	public static create<T extends CommandClasses>(
 		ccId: T,
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCAPINode>,
 		endpoint: CCAPIEndpoint,
 		requireSupport?: boolean,
 	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
@@ -343,7 +348,7 @@ export class CCAPI {
 		const timeoutMs = durationMs + additionalDelay;
 
 		if (this.isSinglecast()) {
-			const node = this.getNodeUnsafe();
+			const node = this.applHost.getNode(this.endpoint.nodeId);
 			if (!node) return false;
 
 			return this.applHost.schedulePoll(
@@ -576,32 +581,6 @@ export class CCAPI {
 		);
 	}
 
-	/**
-	 * Returns the node this CC API is linked to. Throws if the controller is not yet ready.
-	 */
-	public getNode(): IZWaveNode | undefined {
-		if (this.isSinglecast()) {
-			return this.applHost.nodes.get(this.endpoint.nodeId);
-		}
-	}
-
-	/**
-	 * @internal
-	 * Returns the node this CC API is linked to (or undefined if the node doesn't exist)
-	 */
-	public getNodeUnsafe(): IZWaveNode | undefined {
-		try {
-			return this.getNode();
-		} catch (e) {
-			// This was expected
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
-				return undefined;
-			}
-			// Something else happened
-			throw e;
-		}
-	}
-
 	/** Returns the value DB for this CC API's node (if it can be safely accessed) */
 	protected tryGetValueDB(): ValueDB | undefined {
 		if (!this.isSinglecast()) return;
@@ -772,7 +751,7 @@ function overrideQueriesWrapper(
 /** A CC API that is only available for physical endpoints */
 export class PhysicalCCAPI extends CCAPI {
 	public constructor(
-		applHost: ZWaveApplicationHost,
+		applHost: ZWaveApplicationHost<CCAPINode>,
 		endpoint: CCAPIEndpoint,
 	) {
 		super(applHost, endpoint);
@@ -783,7 +762,7 @@ export class PhysicalCCAPI extends CCAPI {
 }
 
 export type APIConstructor<T extends CCAPI = CCAPI> = new (
-	applHost: ZWaveApplicationHost,
+	applHost: ZWaveApplicationHost<CCAPINode>,
 	endpoint: CCAPIEndpoint,
 ) => T;
 
