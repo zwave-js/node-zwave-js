@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Thermostat Setback CC: Fix encoding of the setback state, add mocks, remove non-functional CC values (#7271)
+
 ## 13.6.0 (2024-10-10)
 ### Features
 * Skip rebuilding routes for nodes with priority return routes (#7252)
