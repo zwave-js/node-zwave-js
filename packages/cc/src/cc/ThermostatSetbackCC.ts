@@ -6,9 +6,6 @@ import {
 	CommandClasses,
 	type MaybeNotKnown,
 	MessagePriority,
-	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
@@ -33,43 +30,17 @@ import {
 import {
 	API,
 	CCCommand,
-	ccValue,
-	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 	useSupervision,
 } from "../lib/CommandClassDecorators";
-import { V } from "../lib/Values";
 import {
 	type SetbackState,
 	SetbackType,
 	ThermostatSetbackCommand,
 } from "../lib/_Types";
 import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
-
-export const ThermostatSetbackCCValues = Object.freeze({
-	...V.defineStaticCCValues(CommandClasses["Thermostat Setback"], {
-		...V.staticProperty(
-			"setbackType",
-			{
-				// TODO: This should be a value list
-				...ValueMetadata.Any,
-				label: "Setback type",
-			} as const,
-		),
-
-		...V.staticProperty(
-			"setbackState",
-			{
-				...ValueMetadata.Int8,
-				min: -12.8,
-				max: 12,
-				label: "Setback state",
-			} as const,
-		),
-	}),
-});
 
 // @noSetValueAPI
 // The setback state consist of two values that must be set together
@@ -145,7 +116,6 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Thermostat Setback"])
 @implementedVersion(1)
-@ccValues(ThermostatSetbackCCValues)
 export class ThermostatSetbackCC extends CommandClass {
 	declare ccCommand: ThermostatSetbackCommand;
 
@@ -212,11 +182,12 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.setbackType = this.payload[0] & 0b11;
+			// If we receive an unknown setback state, return the raw value
+			const rawSetbackState = this.payload.readInt8(1);
+			this.setbackState = decodeSetbackState(rawSetbackState)
+				|| rawSetbackState;
 		} else {
 			this.setbackType = options.setbackType;
 			this.setbackState = options.setbackState;
@@ -243,33 +214,54 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 					SetbackType,
 					this.setbackType,
 				),
-				"setback state": this.setbackState,
+				"setback state": typeof this.setbackState === "number"
+					? `${this.setbackState} K`
+					: this.setbackState,
 			},
 		};
 	}
+}
+
+// @publicAPI
+export interface ThermostatSetbackCCReportOptions {
+	setbackType: SetbackType;
+	setbackState: SetbackState;
 }
 
 @CCCommand(ThermostatSetbackCommand.Report)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & ThermostatSetbackCCReportOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 2);
-		this.setbackType = this.payload[0] & 0b11;
-		// If we receive an unknown setback state, return the raw value
-		this.setbackState = decodeSetbackState(this.payload[1])
-			|| this.payload[1];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.setbackType = this.payload[0] & 0b11;
+			// If we receive an unknown setback state, return the raw value
+			const rawSetbackState = this.payload.readInt8(1);
+			this.setbackState = decodeSetbackState(rawSetbackState)
+				|| rawSetbackState;
+		} else {
+			this.setbackType = options.setbackType;
+			this.setbackState = options.setbackState;
+		}
 	}
 
-	@ccValue(ThermostatSetbackCCValues.setbackType)
 	public readonly setbackType: SetbackType;
-
-	@ccValue(ThermostatSetbackCCValues.setbackState)
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	public readonly setbackState: SetbackState;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.setbackType & 0b11,
+			encodeSetbackState(this.setbackState),
+		]);
+		return super.serialize();
+	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
 		return {
@@ -279,7 +271,9 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 					SetbackType,
 					this.setbackType,
 				),
-				"setback state": this.setbackState,
+				"setback state": typeof this.setbackState === "number"
+					? `${this.setbackState} K`
+					: this.setbackState,
 			},
 		};
 	}
