@@ -5,6 +5,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageOrigin,
 	MessageType,
@@ -37,9 +38,9 @@ export class HardResetRequestBase extends Message {
 
 @expectedCallback(FunctionType.HardReset)
 export class HardResetRequest extends HardResetRequestBase {
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.callbackId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

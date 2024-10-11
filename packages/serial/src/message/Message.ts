@@ -1,7 +1,9 @@
 import {
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessagePriority,
 	type NodeId,
+	type SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
 	createReflectionDecorator,
@@ -31,6 +33,21 @@ export enum MessageOrigin {
 	Host,
 }
 
+export interface MessageParsingContext {
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
+
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): MaybeNotKnown<boolean>;
+
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
+}
+
 export interface MessageDeserializationOptions {
 	data: Buffer;
 	origin?: MessageOrigin;
@@ -40,6 +57,8 @@ export interface MessageDeserializationOptions {
 	sdkVersion?: string;
 	/** Optional context used during deserialization */
 	context?: unknown;
+	// FIXME: This is a terrible property name when context already exists
+	ctx: MessageParsingContext;
 }
 
 /**
@@ -66,6 +85,21 @@ export interface MessageCreationOptions extends MessageBaseOptions {
 export type MessageOptions =
 	| MessageCreationOptions
 	| MessageDeserializationOptions;
+
+export interface MessageEncodingContext {
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
+
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): MaybeNotKnown<boolean>;
+
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
+}
 
 /**
  * Represents a Z-Wave message for communication with the serial interface
@@ -209,7 +243,8 @@ export class Message {
 	}
 
 	/** Serializes this message into a Buffer */
-	public serialize(): Buffer {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const ret = Buffer.allocUnsafe(this.payload.length + 5);
 		ret[0] = MessageHeaders.SOF;
 		// length of the following data, including the checksum

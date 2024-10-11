@@ -6,6 +6,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -45,14 +46,14 @@ export class GetControllerIdResponse extends Message {
 	public homeId: number;
 	public ownNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.ownNodeId, this.host.nodeIdType);
 		const homeId = Buffer.allocUnsafe(4);
 		homeId.writeUInt32BE(this.homeId, 0);
 
 		this.payload = Buffer.concat([homeId, nodeId]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

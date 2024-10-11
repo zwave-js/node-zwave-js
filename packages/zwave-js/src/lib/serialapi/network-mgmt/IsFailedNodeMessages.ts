@@ -5,6 +5,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	messageTypes,
@@ -28,9 +29,9 @@ export class IsFailedNodeRequest extends Message {
 	// This must not be called nodeId or rejectAllTransactions may reject the request
 	public failedNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeID(this.failedNodeId, this.host.nodeIdType);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 

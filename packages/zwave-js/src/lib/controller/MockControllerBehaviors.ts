@@ -14,7 +14,7 @@ import {
 	isZWaveError,
 } from "@zwave-js/core";
 import { type ZWaveHost } from "@zwave-js/host";
-import { MessageOrigin } from "@zwave-js/serial";
+import { type MessageEncodingContext, MessageOrigin } from "@zwave-js/serial";
 import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	type MockController,
@@ -23,7 +23,6 @@ import {
 	MockZWaveFrameType,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	type ApplicationUpdateRequest,
@@ -91,13 +90,18 @@ function createLazySendDataPayload(
 	controller: MockController,
 	node: MockNode,
 	msg: SendDataRequest | SendDataMulticastRequest,
-): () => CommandClass {
-	return () => {
+): (ctx: MessageEncodingContext) => CommandClass {
+	return (ctx: MessageEncodingContext) => {
 		try {
 			const cmd = CommandClass.from(node.host, {
 				nodeId: controller.host.ownNodeId,
 				data: msg.payload,
 				origin: MessageOrigin.Host,
+				context: {
+					ownNodeId: controller.host.ownNodeId,
+					sourceNodeId: node.id,
+					...ctx,
+				},
 			});
 			// Store the command because assertReceivedHostMessage needs it
 			// @ts-expect-error
@@ -144,7 +148,7 @@ const respondToGetControllerId: MockControllerBehavior = {
 				homeId: host.homeId,
 				ownNodeId: host.ownNodeId,
 			});
-			await controller.sendToHost(ret.serialize());
+			await controller.sendMessageToHost(ret);
 			return true;
 		}
 	},
@@ -156,7 +160,7 @@ const respondToGetSerialApiCapabilities: MockControllerBehavior = {
 			const ret = new GetSerialApiCapabilitiesResponse(host, {
 				...controller.capabilities,
 			});
-			await controller.sendToHost(ret.serialize());
+			await controller.sendMessageToHost(ret);
 			return true;
 		}
 	},
@@ -168,7 +172,7 @@ const respondToGetControllerVersion: MockControllerBehavior = {
 			const ret = new GetControllerVersionResponse(host, {
 				...controller.capabilities,
 			});
-			await controller.sendToHost(ret.serialize());
+			await controller.sendMessageToHost(ret);
 			return true;
 		}
 	},
@@ -180,7 +184,7 @@ const respondToGetControllerCapabilities: MockControllerBehavior = {
 			const ret = new GetControllerCapabilitiesResponse(host, {
 				...controller.capabilities,
 			});
-			await controller.sendToHost(ret.serialize());
+			await controller.sendMessageToHost(ret);
 			return true;
 		}
 	},
@@ -195,7 +199,7 @@ const respondToGetSUCNodeId: MockControllerBehavior = {
 			const ret = new GetSUCNodeIdResponse(host, {
 				sucNodeId,
 			});
-			await controller.sendToHost(ret.serialize());
+			await controller.sendMessageToHost(ret);
 			return true;
 		}
 	},
@@ -217,7 +221,7 @@ const respondToGetSerialApiInitData: MockControllerBehavior = {
 				nodeIds: [...nodeIds],
 				zwaveChipType: controller.capabilities.zwaveChipType,
 			});
-			await controller.sendToHost(ret.serialize());
+			await controller.sendMessageToHost(ret);
 			return true;
 		}
 	},
@@ -234,7 +238,7 @@ const respondToSoftReset: MockControllerBehavior = {
 				supportsLongRange: controller.capabilities.supportsLongRange,
 			});
 			setImmediate(async () => {
-				await controller.sendToHost(ret.serialize());
+				await controller.sendMessageToHost(ret);
 			});
 			return true;
 		}
@@ -257,7 +261,7 @@ const respondToGetNodeProtocolInfo: MockControllerBehavior = {
 					optionalFunctionality: true,
 					protocolVersion: 3,
 				});
-				await controller.sendToHost(ret.serialize());
+				await controller.sendMessageToHost(ret);
 				return true;
 			} else if (controller.nodes.has(msg.requestedNodeId)) {
 				const nodeCaps = controller.nodes.get(
@@ -266,7 +270,7 @@ const respondToGetNodeProtocolInfo: MockControllerBehavior = {
 				const ret = new GetNodeProtocolInfoResponse(host, {
 					...nodeCaps,
 				});
-				await controller.sendToHost(ret.serialize());
+				await controller.sendMessageToHost(ret);
 				return true;
 			}
 		}
@@ -297,7 +301,7 @@ const handleSendData: MockControllerBehavior = {
 			const res = new SendDataResponse(host, {
 				wasSent: true,
 			});
-			await controller.sendToHost(res.serialize());
+			await controller.sendMessageToHost(res);
 
 			// We deferred parsing of the CC because it requires the node's host to do so.
 			// Now we can do that. Also set the CC node ID to the controller's own node ID,
@@ -352,7 +356,7 @@ const handleSendData: MockControllerBehavior = {
 						: TransmitStatus.NoAck,
 				});
 
-				await controller.sendToHost(cb.serialize());
+				await controller.sendMessageToHost(cb);
 			} else {
 				// No callback was requested, we're done
 				controller.state.set(
@@ -391,7 +395,7 @@ const handleSendDataMulticast: MockControllerBehavior = {
 			const res = new SendDataMulticastResponse(host, {
 				wasSent: true,
 			});
-			await controller.sendToHost(res.serialize());
+			await controller.sendMessageToHost(res);
 
 			// We deferred parsing of the CC because it requires the node's host to do so.
 			// Now we can do that. Also set the CC node ID to the controller's own node ID,
@@ -451,7 +455,7 @@ const handleSendDataMulticast: MockControllerBehavior = {
 						: TransmitStatus.NoAck,
 				});
 
-				await controller.sendToHost(cb.serialize());
+				await controller.sendMessageToHost(cb);
 			} else {
 				// No callback was requested, we're done
 				controller.state.set(
@@ -506,7 +510,7 @@ const handleRequestNodeInfo: MockControllerBehavior = {
 			const res = new RequestNodeInfoResponse(host, {
 				wasSent: true,
 			});
-			await controller.sendToHost(res.serialize());
+			await controller.sendMessageToHost(res);
 
 			// Put the controller into waiting state
 			controller.state.set(
@@ -532,7 +536,7 @@ const handleRequestNodeInfo: MockControllerBehavior = {
 				MockControllerCommunicationState.Idle,
 			);
 
-			await controller.sendToHost(cb.serialize());
+			await controller.sendMessageToHost(cb);
 			return true;
 		}
 	},
@@ -581,7 +585,7 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 			const res = new AssignSUCReturnRouteResponse(host, {
 				wasExecuted: true,
 			});
-			await controller.sendToHost(res.serialize());
+			await controller.sendMessageToHost(res);
 
 			let ack = false;
 			if (expectCallback) {
@@ -612,7 +616,7 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 						: TransmitStatus.NoAck,
 				});
 
-				await controller.sendToHost(cb.serialize());
+				await controller.sendMessageToHost(cb);
 			}
 			return true;
 		}
@@ -632,11 +636,8 @@ const forwardCommandClassesToHost: MockControllerBehavior = {
 			});
 			// Nodes send commands TO the controller, so we need to fix the node ID before forwarding
 			msg.getNodeId = () => node.id;
-			// Simulate a serialized frame being transmitted via radio
-			const data = msg.serialize();
-			await wait(node.capabilities.txDelay);
-			// Then receive it
-			await controller.sendToHost(data);
+			// Simulate a serialized frame being transmitted via radio before receiving it
+			await controller.sendMessageToHost(msg, node.capabilities.txDelay);
 			return true;
 		}
 	},
@@ -657,11 +658,11 @@ const forwardUnsolicitedNIF: MockControllerBehavior = {
 					},
 				},
 			);
-			// Simulate a serialized frame being transmitted via radio
-			const data = updateRequest.serialize();
-			await wait(node.capabilities.txDelay);
-			// Then receive it
-			await controller.sendToHost(data);
+			// Simulate a serialized frame being transmitted via radio before receiving it
+			await controller.sendMessageToHost(
+				updateRequest,
+				node.capabilities.txDelay,
+			);
 			return true;
 		}
 	},

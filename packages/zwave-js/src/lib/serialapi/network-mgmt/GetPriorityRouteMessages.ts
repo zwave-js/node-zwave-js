@@ -16,6 +16,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -49,13 +50,13 @@ export class GetPriorityRouteRequest extends Message {
 
 	public destinationNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeID(
 			this.destinationNodeId,
 			this.host.nodeIdType,
 		);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

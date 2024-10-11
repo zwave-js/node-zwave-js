@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	type MulticastCC,
 	type MulticastDestination,
+	NODE_ID_BROADCAST,
 	type SerializableTXReport,
 	type SinglecastCC,
 	type TXReport,
@@ -21,6 +22,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageOrigin,
 	MessageType,
@@ -107,6 +109,11 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 					nodeId,
 					data: this.payload,
 					origin: options.origin,
+					context: {
+						ownNodeId: host.ownNodeId,
+						sourceNodeId: nodeId,
+						...options.ctx,
+					},
 				}) as SinglecastCC<CCType>;
 			} else {
 				// Little hack for testing with a network mock. This will be parsed in the next step.
@@ -155,9 +162,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	// Cache the serialized CC, so we can check if it needs to be fragmented
 	private _serializedCC: Buffer | undefined;
 	/** @internal */
-	public serializeCC(): Buffer {
+	public serializeCC(ctx: MessageEncodingContext): Buffer {
 		if (!this._serializedCC) {
-			this._serializedCC = this.command.serialize();
+			this._serializedCC = this.command.serialize(ctx);
 		}
 		return this._serializedCC;
 	}
@@ -168,9 +175,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.callbackId = undefined;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.command.nodeId, this.host.nodeIdType);
-		const serializedCC = this.serializeCC();
+		const serializedCC = this.serializeCC(ctx);
 		this.payload = Buffer.concat([
 			nodeId,
 			Buffer.from([serializedCC.length]),
@@ -178,7 +185,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			Buffer.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -245,7 +252,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	private _txReport: SerializableTXReport | undefined;
 	public txReport: TXReport | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.callbackId,
 			this.transmitStatus,
@@ -257,7 +264,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 			]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public isOK(): boolean {
@@ -302,9 +309,9 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 
 	public wasSent: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasSent ? 1 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	isOK(): boolean {
@@ -399,6 +406,11 @@ export class SendDataMulticastRequest<
 					nodeId: this._nodeIds[0],
 					data: this.payload,
 					origin: options.origin,
+					context: {
+						ownNodeId: host.ownNodeId,
+						sourceNodeId: NODE_ID_BROADCAST, // FIXME: Unknown?
+						...options.ctx,
+					},
 				}) as MulticastCC<CCType>;
 				this.command.nodeId = this._nodeIds;
 			} else {
@@ -457,9 +469,9 @@ export class SendDataMulticastRequest<
 	// Cache the serialized CC, so we can check if it needs to be fragmented
 	private _serializedCC: Buffer | undefined;
 	/** @internal */
-	public serializeCC(): Buffer {
+	public serializeCC(ctx: MessageEncodingContext): Buffer {
 		if (!this._serializedCC) {
-			this._serializedCC = this.command.serialize();
+			this._serializedCC = this.command.serialize(ctx);
 		}
 		return this._serializedCC;
 	}
@@ -470,8 +482,8 @@ export class SendDataMulticastRequest<
 		this.callbackId = undefined;
 	}
 
-	public serialize(): Buffer {
-		const serializedCC = this.serializeCC();
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		const serializedCC = this.serializeCC(ctx);
 		const destinationNodeIDs = this.command.nodeId.map((id) =>
 			encodeNodeID(id, this.host.nodeIdType)
 		);
@@ -485,7 +497,7 @@ export class SendDataMulticastRequest<
 			Buffer.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -534,9 +546,9 @@ export class SendDataMulticastRequestTransmitReport
 		return this._transmitStatus;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.callbackId, this._transmitStatus]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public isOK(): boolean {
@@ -581,9 +593,9 @@ export class SendDataMulticastResponse extends Message
 
 	public wasSent: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasSent ? 1 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public isOK(): boolean {

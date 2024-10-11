@@ -26,7 +26,7 @@ const groupCountValueId = AssociationCCValues.groupCount.id;
 function prepareTest(): { host: TestingHost; node2: IZWaveNode } {
 	const host = createTestingHost();
 	const node2 = createTestNode(host, { id: 2 });
-	host.nodes.set(2, node2);
+	host.setNode(2, node2);
 	host.getValueDB(2).setValue(groupCountValueId, fakeGroupCount);
 
 	return { host, node2 };

@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -515,9 +516,9 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 
 	public slowRefresh: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.slowRefresh ? 0b1000_0000 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -7,6 +7,7 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import type {
+	CCEncodingContext,
 	EndpointId,
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -726,12 +727,12 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public scale: number;
 	public value: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.type]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -794,7 +795,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public sensorType: number | undefined;
 	public scale: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (
 			this.sensorType != undefined
 			&& this.scale != undefined
@@ -804,7 +805,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 				(this.scale & 0b11) << 3,
 			]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -861,9 +862,9 @@ export class MultilevelSensorCCSupportedSensorReport
 	@ccValue(MultilevelSensorCCValues.supportedSensorTypes)
 	public supportedSensorTypes: readonly number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeBitMask(this.supportedSensorTypes);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -922,12 +923,12 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	)
 	public readonly supportedScales: readonly number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.sensorType]),
 			encodeBitMask(this.supportedScales, 4, 0),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -976,9 +977,9 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 
 	public sensorType: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.sensorType]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -5,6 +5,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	messageTypes,
@@ -32,12 +33,12 @@ export class SetSerialApiTimeoutsRequest extends Message {
 	public ackTimeout: number;
 	public byteTimeout: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			Math.round(this.ackTimeout / 10),
 			Math.round(this.byteTimeout / 10),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 

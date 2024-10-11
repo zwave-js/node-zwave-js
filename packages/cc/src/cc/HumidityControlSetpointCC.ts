@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -549,12 +550,12 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	public value: number;
 	public scale: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -693,9 +694,9 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 
 	public setpointType: HumidityControlSetpointType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.setpointType & 0b1111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -825,9 +826,9 @@ export class HumidityControlSetpointCCScaleSupportedGet
 
 	public setpointType: HumidityControlSetpointType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.setpointType & 0b1111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -958,9 +959,9 @@ export class HumidityControlSetpointCCCapabilitiesGet
 
 	public setpointType: HumidityControlSetpointType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.setpointType & 0b1111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

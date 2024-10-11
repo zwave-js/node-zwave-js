@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type EndpointId,
 	type MaybeNotKnown,
@@ -513,12 +514,12 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.groupId, this.name.length]),
 			Buffer.from(this.name, "utf8"),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -557,9 +558,9 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 
 	public groupId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.groupId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -649,7 +650,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.alloc(1 + this.groups.length * 7, 0);
 
 		this.payload[0] = (this.isListMode ? 0b1000_0000 : 0)
@@ -663,7 +664,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			// The remaining bytes are zero
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -732,7 +733,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public listMode?: boolean;
 	public groupId?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const isListMode = this.listMode === true;
 		const optionByte = (this.refreshCache ? 0b1000_0000 : 0)
 			| (isListMode ? 0b0100_0000 : 0);
@@ -740,7 +741,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 			optionByte,
 			isListMode ? 0 : this.groupId!,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -812,7 +813,7 @@ export class AssociationGroupInfoCCCommandListReport
 	)
 	public readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// To make it easier to encode possible extended CCs, we first
 		// allocate as much space as we may need, then trim it again
 		this.payload = Buffer.allocUnsafe(2 + this.commands.size * 3);
@@ -827,7 +828,7 @@ export class AssociationGroupInfoCCCommandListReport
 		}
 		this.payload[1] = offset - 2; // list length
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -884,12 +885,12 @@ export class AssociationGroupInfoCCCommandListGet
 	public allowCache: boolean;
 	public groupId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.allowCache ? 0b1000_0000 : 0,
 			this.groupId,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

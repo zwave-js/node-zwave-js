@@ -12,6 +12,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageType,
 	type SuccessIndicator,
@@ -71,7 +72,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 	public testNodeId: number;
 	public powerlevel: Powerlevel;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.testNodeId, this.host.nodeIdType);
 		this.payload = Buffer.concat([
 			nodeId,
@@ -81,7 +82,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 			]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

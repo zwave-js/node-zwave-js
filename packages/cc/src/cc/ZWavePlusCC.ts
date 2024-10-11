@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -216,7 +217,7 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 	@ccValue(ZWavePlusCCValues.userIcon)
 	public userIcon: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.zwavePlusVersion,
 			this.roleType,
@@ -229,7 +230,7 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		]);
 		this.payload.writeUInt16BE(this.installerIcon, 3);
 		this.payload.writeUInt16BE(this.userIcon, 5);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

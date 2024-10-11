@@ -12,7 +12,11 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
-import { type EndpointId, type MaybeNotKnown } from "@zwave-js/core/safe";
+import {
+	type CCEncodingContext,
+	type EndpointId,
+	type MaybeNotKnown,
+} from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -962,9 +966,9 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 	public userId: number;
 	public enabled: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.userId, this.enabled ? 0x01 : 0x00]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1005,9 +1009,9 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 
 	public enabled: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.enabled ? 0x01 : 0x00]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1059,13 +1063,13 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 	@ccValue(ScheduleEntryLockCCValues.numDailyRepeatingSlots)
 	public numDailyRepeatingSlots: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.numWeekDaySlots,
 			this.numYearDaySlots,
 			this.numDailyRepeatingSlots ?? 0,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1153,7 +1157,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.action,
 			this.userId,
@@ -1167,7 +1171,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 			this.stopHour ?? 0xff,
 			this.stopMinute ?? 0xff,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1284,7 +1288,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.userId,
 			this.slotId,
@@ -1294,7 +1298,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 			this.stopHour ?? 0xff,
 			this.stopMinute ?? 0xff,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1358,9 +1362,9 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 	public userId: number;
 	public slotId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.userId, this.slotId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1454,7 +1458,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.action,
 			this.userId,
@@ -1473,7 +1477,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 			this.stopHour ?? 0xff,
 			this.stopMinute ?? 0xff,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1622,7 +1626,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.userId,
 			this.slotId,
@@ -1637,7 +1641,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 			this.stopHour ?? 0xff,
 			this.stopMinute ?? 0xff,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1704,9 +1708,9 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 	public userId: number;
 	public slotId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.userId, this.slotId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1751,12 +1755,12 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 	public standardOffset: number;
 	public dstOffset: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeTimezone({
 			standardOffset: this.standardOffset,
 			dstOffset: this.dstOffset,
 		});
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1800,12 +1804,12 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 	public standardOffset: number;
 	public dstOffset: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeTimezone({
 			standardOffset: this.standardOffset,
 			dstOffset: this.dstOffset,
 		});
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1893,7 +1897,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 	public durationHour?: number;
 	public durationMinute?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.action, this.userId, this.slotId]);
 		if (this.action === ScheduleEntryLockSetAction.Set) {
 			this.payload = Buffer.concat([
@@ -1915,7 +1919,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 			this.payload = Buffer.concat([this.payload, Buffer.alloc(5, 0xff)]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2028,7 +2032,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.userId, this.slotId]);
 		if (this.weekdays) {
 			this.payload = Buffer.concat([
@@ -2050,7 +2054,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 			this.payload = Buffer.concat([this.payload, Buffer.alloc(5, 0)]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2116,9 +2120,9 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 	public userId: number;
 	public slotId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.userId, this.slotId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

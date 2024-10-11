@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -251,9 +252,9 @@ export class PowerlevelCCSet extends PowerlevelCC {
 	public powerlevel: Powerlevel;
 	public timeout?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.powerlevel, this.timeout ?? 0x00]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -303,9 +304,9 @@ export class PowerlevelCCReport extends PowerlevelCC {
 	public readonly powerlevel: Powerlevel;
 	public readonly timeout?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.powerlevel, this.timeout ?? 0x00]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -359,10 +360,10 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public powerlevel: Powerlevel;
 	public testFrameCount: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.testNodeId, this.powerlevel, 0, 0]);
 		this.payload.writeUInt16BE(this.testFrameCount, 2);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -410,7 +411,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public status: PowerlevelTestStatus;
 	public acknowledgedFrames: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.testNodeId,
 			this.status,
@@ -419,7 +420,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 			0,
 		]);
 		this.payload.writeUInt16BE(this.acknowledgedFrames, 2);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -1,5 +1,6 @@
 import { timespan } from "@zwave-js/core";
 import type {
+	CCEncodingContext,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SinglecastCC,
@@ -527,7 +528,7 @@ export class BatteryCCReport extends BatteryCC {
 	@ccValue(BatteryCCValues.lowTemperatureStatus)
 	public readonly lowTemperatureStatus: boolean | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.isLow ? 0xff : this.level]);
 		if (this.chargingStatus != undefined) {
 			this.payload = Buffer.concat([
@@ -549,7 +550,7 @@ export class BatteryCCReport extends BatteryCC {
 				]),
 			]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

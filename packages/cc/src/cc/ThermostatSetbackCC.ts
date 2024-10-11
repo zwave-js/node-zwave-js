@@ -1,11 +1,10 @@
-import type {
-	MessageOrCCLogEntry,
-	SupervisionResult,
-} from "@zwave-js/core/safe";
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	MessagePriority,
+	type SupervisionResult,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -232,12 +231,12 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	public setbackState: SetbackState;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.setbackType & 0b11,
 			encodeSetbackState(this.setbackState),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

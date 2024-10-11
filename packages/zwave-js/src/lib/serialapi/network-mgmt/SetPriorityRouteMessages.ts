@@ -16,6 +16,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	type SuccessIndicator,
 	expectedResponse,
@@ -79,7 +80,7 @@ export class SetPriorityRouteRequest extends Message {
 	public repeaters: number[] | undefined;
 	public routeSpeed: ZWaveDataRate | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(
 			this.destinationNodeId,
 			this.host.nodeIdType,
@@ -101,7 +102,7 @@ export class SetPriorityRouteRequest extends Message {
 			]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

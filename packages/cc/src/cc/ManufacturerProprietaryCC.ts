@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -191,7 +192,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		return this.manufacturerId;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const manufacturerId = this.getManufacturerIdOrThrow();
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
@@ -204,7 +205,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			]),
 			this.payload,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public createSpecificInstance(): ManufacturerProprietaryCC | undefined {

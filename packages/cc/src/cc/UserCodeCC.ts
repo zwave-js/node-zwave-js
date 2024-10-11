@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type EndpointId,
 	type MaybeNotKnown,
@@ -1288,14 +1289,14 @@ export class UserCodeCCSet extends UserCodeCC {
 	public userIdStatus: UserIDStatus;
 	public userCode: string | Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.userId, this.userIdStatus]),
 			typeof this.userCode === "string"
 				? Buffer.from(this.userCode, "ascii")
 				: this.userCode,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1387,7 +1388,7 @@ export class UserCodeCCReport extends UserCodeCC
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		let userCodeBuffer: Buffer;
 		if (typeof this.userCode === "string") {
 			userCodeBuffer = Buffer.from(this.userCode, "ascii");
@@ -1399,7 +1400,7 @@ export class UserCodeCCReport extends UserCodeCC
 			Buffer.from([this.userId, this.userIdStatus]),
 			userCodeBuffer,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1442,9 +1443,9 @@ export class UserCodeCCGet extends UserCodeCC {
 
 	public userId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.userId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1487,12 +1488,12 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.supportedUsers)
 	public readonly supportedUsers: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(3);
 		// If the node implements more than 255 users, this field MUST be set to 255
 		this.payload[0] = Math.min(255, this.supportedUsers);
 		this.payload.writeUInt16BE(this.supportedUsers, 1);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1622,7 +1623,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.supportedASCIIChars)
 	public readonly supportedASCIIChars: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const supportedStatusesBitmask = encodeBitMask(
 			this.supportedUserIDStatuses,
 			undefined,
@@ -1656,7 +1657,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 			Buffer.from([controlByte3]),
 			supportedKeysBitmask,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1715,9 +1716,9 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 
 	public keypadMode: KeypadMode;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.keypadMode]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1774,9 +1775,9 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.keypadMode)
 	public readonly keypadMode: KeypadMode;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.keypadMode]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1822,12 +1823,12 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 
 	public adminCode: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.adminCode.length & 0b1111]),
 			Buffer.from(this.adminCode, "ascii"),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1867,12 +1868,12 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.adminCode)
 	public readonly adminCode: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.adminCode.length & 0b1111]),
 			Buffer.from(this.adminCode, "ascii"),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1914,10 +1915,10 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	@ccValue(UserCodeCCValues.userCodeChecksum)
 	public readonly userCodeChecksum: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
 		this.payload.writeUInt16BE(this.userCodeChecksum, 0);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1966,7 +1967,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 
 	public userCodes: UserCodeCCSetOptions[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const userCodeBuffers = this.userCodes.map((code) => {
 			const ret = Buffer.concat([
 				Buffer.from([
@@ -1986,7 +1987,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 			Buffer.from([this.userCodes.length]),
 			...userCodeBuffers,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2096,10 +2097,10 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public userId: number;
 	public reportMore: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([0, 0, this.reportMore ? 1 : 0]);
 		this.payload.writeUInt16BE(this.userId, 0);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -1,5 +1,6 @@
 import type { ConfigManager } from "@zwave-js/config";
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type EndpointId,
 	Indicator,
@@ -943,7 +944,7 @@ export class IndicatorCCSet extends IndicatorCC {
 	public indicator0Value: number | undefined;
 	public values: IndicatorObject[] | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (this.values != undefined) {
 			// V2+
 			this.payload = Buffer.alloc(2 + 3 * this.values.length, 0);
@@ -965,7 +966,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			// V1
 			this.payload = Buffer.from([this.indicator0Value ?? 0]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1157,7 +1158,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		this.setValue(applHost, valueV2, value.value);
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (this.values != undefined) {
 			// V2+
 			this.payload = Buffer.alloc(2 + 3 * this.values.length, 0);
@@ -1179,7 +1180,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			// V1
 			this.payload = Buffer.from([this.indicator0Value ?? 0]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1230,11 +1231,11 @@ export class IndicatorCCGet extends IndicatorCC {
 
 	public indicatorId: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (this.indicatorId != undefined) {
 			this.payload = Buffer.from([this.indicatorId]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1304,7 +1305,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly nextIndicatorId: number;
 	public readonly supportedProperties: readonly number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const bitmask = this.supportedProperties.length > 0
 			? encodeBitMask(this.supportedProperties, undefined, 0)
 			: Buffer.from([]);
@@ -1317,7 +1318,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			bitmask,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1375,9 +1376,9 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 
 	public indicatorId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.indicatorId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1437,13 +1438,13 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const description = Buffer.from(this.description, "utf8");
 		this.payload = Buffer.concat([
 			Buffer.from([this.indicatorId, description.length]),
 			description,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1498,9 +1499,9 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 
 	public indicatorId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.indicatorId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

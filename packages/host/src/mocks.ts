@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
 import {
-	type IZWaveNode,
-	MAX_SUPERVISION_SESSION_ID,
+	type EndpointId,
+	type GetEndpoint,
+	type IsCCSecure,
 	NodeIDType,
+	type NodeId,
+	type QuerySecurityClasses,
+	type SetSecurityClass,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -18,27 +22,41 @@ export interface CreateTestingHostOptions {
 	getSupportedCCVersion?: ZWaveHost["getSupportedCCVersion"];
 }
 
-export type TestingHost = Omit<
-	ZWaveApplicationHost<IZWaveNode>,
-	"__internalIsMockNode"
->;
+export type BaseTestNode =
+	& NodeId
+	& QuerySecurityClasses
+	& SetSecurityClass
+	& IsCCSecure
+	& GetEndpoint<EndpointId & IsCCSecure>;
+
+export type TestingHost<
+	TNode extends BaseTestNode,
+> =
+	& Omit<
+		ZWaveApplicationHost<TNode>,
+		"__internalIsMockNode"
+	>
+	& {
+		setNode(nodeId: number, node: TNode): void;
+	};
 
 /** Creates a {@link ZWaveApplicationHost} that can be used for testing */
-export function createTestingHost(
+export function createTestingHost<
+	TNode extends BaseTestNode,
+>(
 	options: Partial<CreateTestingHostOptions> = {},
-): TestingHost {
+): TestingHost<TNode> {
 	const valuesStorage = new Map();
 	const metadataStorage = new Map();
 	const valueDBCache = new Map<number, ValueDB>();
-	const supervisionSessionIDs = new Map<number, () => number>();
-	const nodes = createThrowingMap<number, IZWaveNode>((nodeId) => {
+	const nodes = createThrowingMap<number, TNode>((nodeId) => {
 		throw new ZWaveError(
 			`Node ${nodeId} was not found!`,
 			ZWaveErrorCodes.Controller_NodeNotFound,
 		);
 	});
 
-	const ret: TestingHost = {
+	const ret: TestingHost<TNode> = {
 		homeId: options.homeId ?? 0x7e570001,
 		ownNodeId: options.ownNodeId ?? 1,
 		nodeIdType: NodeIDType.Short,
@@ -67,29 +85,23 @@ export function createTestingHost(
 				refreshValueAfterTransition: 1000,
 			},
 		},
-		getNode(nodeId: number) {
+		getNode(nodeId) {
 			return nodes.get(nodeId);
 		},
-		getNodeOrThrow(nodeId: number) {
+		getNodeOrThrow(nodeId) {
 			return nodes.getOrThrow(nodeId);
 		},
 		getAllNodes() {
 			return [...nodes.values()];
+		},
+		setNode(nodeId, node) {
+			nodes.set(nodeId, node);
 		},
 		getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
 		getSupportedCCVersion: options.getSupportedCCVersion
 			?? options.getSafeCCVersion
 			?? (() => 100),
 		getNextCallbackId: createWrappingCounter(0xff),
-		getNextSupervisionSessionId: (nodeId) => {
-			if (!supervisionSessionIDs.has(nodeId)) {
-				supervisionSessionIDs.set(
-					nodeId,
-					createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
-				);
-			}
-			return supervisionSessionIDs.get(nodeId)!();
-		},
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
 				valueDBCache.set(
@@ -115,18 +127,18 @@ export function createTestingHost(
 				&& !!(ret.securityManager || ret.securityManager2)
 			);
 		},
-		getHighestSecurityClass: (nodeId) => {
-			const node = nodes.getOrThrow(nodeId);
-			return node.getHighestSecurityClass();
-		},
-		hasSecurityClass: (nodeId, securityClass) => {
-			const node = nodes.getOrThrow(nodeId);
-			return node.hasSecurityClass(securityClass);
-		},
-		setSecurityClass: (nodeId, securityClass, granted) => {
-			const node = nodes.getOrThrow(nodeId);
-			node.setSecurityClass(securityClass, granted);
-		},
+		// getHighestSecurityClass: (nodeId) => {
+		// 	const node = nodes.getOrThrow(nodeId);
+		// 	return node.getHighestSecurityClass();
+		// },
+		// hasSecurityClass: (nodeId, securityClass) => {
+		// 	const node = nodes.getOrThrow(nodeId);
+		// 	return node.hasSecurityClass(securityClass);
+		// },
+		// setSecurityClass: (nodeId, securityClass, granted) => {
+		// 	const node = nodes.getOrThrow(nodeId);
+		// 	node.setSecurityClass(securityClass, granted);
+		// },
 		sendCommand: async (_command, _options) => {
 			return undefined as any;
 		},

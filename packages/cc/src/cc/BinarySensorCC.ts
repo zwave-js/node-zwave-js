@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type EndpointId,
 	type MaybeNotKnown,
@@ -391,9 +392,9 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	public type: BinarySensorType;
 	public value: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.value ? 0xff : 0x00, this.type]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -445,9 +446,9 @@ export class BinarySensorCCGet extends BinarySensorCC {
 
 	public sensorType: BinarySensorType | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.sensorType ?? BinarySensorType.Any]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -493,13 +494,13 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	@ccValue(BinarySensorCCValues.supportedSensorTypes)
 	public supportedSensorTypes: BinarySensorType[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeBitMask(
 			this.supportedSensorTypes.filter((t) => t !== BinarySensorType.Any),
 			undefined,
 			0,
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

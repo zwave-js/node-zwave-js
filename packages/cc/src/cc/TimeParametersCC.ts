@@ -8,6 +8,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import {
+	type CCEncodingContext,
 	type ControlsCC,
 	type EndpointId,
 	type MaybeNotKnown,
@@ -373,7 +374,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 	public dateAndTime: Date;
 	private useLocalTime?: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const dateSegments = dateToSegments(
 			this.dateAndTime,
 			!!this.useLocalTime,
@@ -389,7 +390,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 			dateSegments.second,
 		]);
 		this.payload.writeUInt16BE(dateSegments.year, 0);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

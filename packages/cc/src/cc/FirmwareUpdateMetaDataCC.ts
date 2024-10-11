@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CRC16_CCITT,
 	CommandClasses,
 	type MaybeNotKnown,
@@ -436,7 +437,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	@ccValue(FirmwareUpdateMetaDataCCValues.supportsNonSecureTransfer)
 	public readonly supportsNonSecureTransfer?: MaybeNotKnown<boolean>;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.alloc(
 			12 + 2 * this.additionalFirmwareIDs.length,
 		);
@@ -457,7 +458,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 			| (this.supportsNonSecureTransfer ? 0b100 : 0)
 			| (this.supportsResuming ? 0b1000 : 0);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -610,7 +611,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	public resume?: boolean;
 	public nonSecureTransfer?: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const isV3 = this.version >= 3
 			&& this.firmwareTarget != undefined
 			&& this.fragmentSize != undefined;
@@ -636,7 +637,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 		if (isV5) {
 			this.payload[10] = this.hardwareVersion!;
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -733,7 +734,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	public reportNumber: number;
 	public firmwareData: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const commandBuffer = Buffer.concat([
 			Buffer.allocUnsafe(2), // placeholder for report number
 			this.firmwareData,
@@ -757,7 +758,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 			this.payload = commandBuffer;
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -896,7 +897,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	public firmwareTarget: number;
 	public hardwareVersion?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const isV5 = this.version >= 5 && this.hardwareVersion != undefined;
 		this.payload = Buffer.allocUnsafe(7 + (isV5 ? 1 : 0));
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
@@ -906,7 +907,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 		if (isV5) {
 			this.payload[7] = this.hardwareVersion!;
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -998,14 +999,14 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	public fragmentSize: number;
 	public hardwareVersion: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(8);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload[4] = this.firmwareTarget;
 		this.payload.writeUInt16BE(this.fragmentSize, 5);
 		this.payload[7] = this.hardwareVersion;
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

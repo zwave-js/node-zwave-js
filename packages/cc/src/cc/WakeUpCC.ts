@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -382,7 +383,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 	public wakeUpInterval: number;
 	public controllerNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			0,
 			0,
@@ -390,7 +391,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 			this.controllerNodeId,
 		]);
 		this.payload.writeUIntBE(this.wakeUpInterval, 0, 3);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

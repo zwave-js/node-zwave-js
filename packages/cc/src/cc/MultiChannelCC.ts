@@ -1,5 +1,6 @@
 import {
 	type ApplicationNodeInformation,
+	type CCEncodingContext,
 	CommandClasses,
 	type GenericDeviceClass,
 	type MaybeNotKnown,
@@ -856,14 +857,14 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	@ccValue(MultiChannelCCValues.aggregatedEndpointCount)
 	public aggregatedCount: MaybeNotKnown<number>;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			(this.countIsDynamic ? 0b10000000 : 0)
 			| (this.identicalCapabilities ? 0b01000000 : 0),
 			this.individualCount & 0b01111111,
 			this.aggregatedCount ?? 0,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -965,7 +966,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 	public readonly isDynamic: boolean;
 	public readonly wasRemoved: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
 				(this.endpointIndex & 0b01111111)
@@ -973,7 +974,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 			]),
 			encodeApplicationNodeInformation(this),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1032,9 +1033,9 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 
 	public requestedEndpoint: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.requestedEndpoint & 0b01111111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1089,7 +1090,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public foundEndpoints: number[];
 	public reportsToFollow: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
 				this.reportsToFollow,
@@ -1098,7 +1099,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			]),
 			Buffer.from(this.foundEndpoints.map((e) => e & 0b01111111)),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
@@ -1170,9 +1171,9 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public genericClass: number;
 	public specificClass: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.genericClass, this.specificClass]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1256,9 +1257,9 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 
 	public requestedEndpoint: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.requestedEndpoint & 0b0111_1111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1357,7 +1358,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
-				frameType: options.frameType,
+				context: options.context,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
@@ -1380,7 +1381,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	/** The destination end point (0-127) or an array of destination end points (1-7) */
 	public destination: MultiChannelCCDestination;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const destination = typeof this.destination === "number"
 			// The destination is a single number
 			? this.destination & 0b0111_1111
@@ -1388,9 +1389,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			: encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Buffer.concat([
 			Buffer.from([this.endpointIndex & 0b0111_1111, destination]),
-			this.encapsulated.serialize(),
+			this.encapsulated.serialize(ctx),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1473,9 +1474,9 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 
 	public requestedCC: CommandClasses;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.requestedCC]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1539,7 +1540,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
-				frameType: options.frameType,
+				context: options.context,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
@@ -1550,12 +1551,12 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 
 	public encapsulated!: CommandClass;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.endpointIndex]),
-			this.encapsulated.serialize(),
+			this.encapsulated.serialize(ctx),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {

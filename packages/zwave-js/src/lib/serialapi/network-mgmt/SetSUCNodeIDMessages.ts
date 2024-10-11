@@ -7,7 +7,10 @@ import {
 	encodeNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -75,7 +78,7 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public enableSIS: boolean;
 	public transmitOptions: TransmitOptions;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.sucNodeId, this.host.nodeIdType);
 		this.payload = Buffer.concat([
 			nodeId,
@@ -87,7 +90,7 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 			]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public expectsCallback(): boolean {

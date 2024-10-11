@@ -1,5 +1,7 @@
 import {
 	type BroadcastCC,
+	type CCEncodingContext,
+	type CCParsingContext,
 	CommandClasses,
 	type ControlsCC,
 	EncapsulationFlags,
@@ -79,8 +81,7 @@ export type CommandClassDeserializationOptions =
 	& {
 		data: Buffer;
 		origin?: MessageOrigin;
-		/** If known, the frame type of the containing message */
-		frameType?: FrameType;
+		context: CCParsingContext;
 	}
 	& (
 		| {
@@ -185,7 +186,7 @@ export class CommandClass implements ICommandClass {
 				this.nodeId = options.nodeId;
 			}
 
-			this.frameType = options.frameType;
+			this.frameType = options.context.frameType;
 
 			({
 				ccId: this.ccId,
@@ -358,7 +359,8 @@ export class CommandClass implements ICommandClass {
 	/**
 	 * Serializes this CommandClass to be embedded in a message payload or another CC
 	 */
-	public serialize(): Buffer {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// NoOp CCs have no command and no payload
 		if (this.ccId === CommandClasses["No Operation"]) {
 			return Buffer.from([this.ccId]);
@@ -1011,10 +1013,10 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/** Include previously received partial responses into a final CC */
-	/* istanbul ignore next */
 	public mergePartialCCs(
 		_applHost: ZWaveApplicationHost,
 		_partials: CommandClass[],
+		_ctx: CCParsingContext,
 	): void {
 		// This is highly CC dependent
 		// Overwrite this in derived classes, by default do nothing

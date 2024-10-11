@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -356,7 +357,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	public mode: ThermostatMode;
 	public manufacturerData?: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const manufacturerData =
 			this.mode === ThermostatMode["Manufacturer specific"]
 				&& this.manufacturerData
@@ -369,7 +370,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 			]),
 			manufacturerData,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -475,7 +476,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 	@ccValue(ThermostatModeCCValues.manufacturerData)
 	public readonly manufacturerData: Buffer | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const manufacturerDataLength =
 			this.mode === ThermostatMode["Manufacturer specific"]
 				&& this.manufacturerData
@@ -491,7 +492,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 				manufacturerDataLength,
 			);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -557,13 +558,13 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	@ccValue(ThermostatModeCCValues.supportedModes)
 	public readonly supportedModes: ThermostatMode[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeBitMask(
 			this.supportedModes,
 			ThermostatMode["Manufacturer specific"],
 			ThermostatMode.Off,
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	Duration,
 	type MaybeNotKnown,
@@ -388,14 +389,14 @@ export class SceneActuatorConfigurationCCSet
 	public dimmingDuration: Duration;
 	public level?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.sceneId,
 			this.dimmingDuration.serializeSet(),
 			this.level != undefined ? 0b1000_0000 : 0,
 			this.level ?? 0xff,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -526,9 +527,9 @@ export class SceneActuatorConfigurationCCGet
 
 	public sceneId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.sceneId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

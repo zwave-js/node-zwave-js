@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -496,9 +497,9 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 
 	public toneCount: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.toneCount]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -549,13 +550,13 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public readonly duration: number;
 	public readonly name: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.toneId, 0, 0, this.name.length]),
 			Buffer.from(this.name, "utf8"),
 		]);
 		this.payload.writeUInt16BE(this.duration, 1);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -605,9 +606,9 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 
 	public toneId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.toneId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -649,9 +650,9 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public defaultVolume: number;
 	public defaultToneId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -698,9 +699,9 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	@ccValue(SoundSwitchCCValues.defaultToneId)
 	public defaultToneId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -750,9 +751,9 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public toneId: ToneId | number;
 	public volume?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.toneId, this.volume ?? 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

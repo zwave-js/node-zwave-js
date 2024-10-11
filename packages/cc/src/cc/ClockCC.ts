@@ -1,4 +1,5 @@
 import type {
+	CCEncodingContext,
 	MessageOrCCLogEntry,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
@@ -174,12 +175,12 @@ export class ClockCCSet extends ClockCC {
 	public hour: number;
 	public minute: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			((this.weekday & 0b111) << 5) | (this.hour & 0b11111),
 			this.minute,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

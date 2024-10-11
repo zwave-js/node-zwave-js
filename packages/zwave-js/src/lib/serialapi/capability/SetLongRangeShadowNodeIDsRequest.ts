@@ -5,6 +5,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	gotDeserializationOptions,
 	messageTypes,
@@ -44,7 +45,7 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 
 	public shadowNodeIds: number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(1);
 		this.payload = encodeBitMask(
 			this.shadowNodeIds,
@@ -54,6 +55,6 @@ export class SetLongRangeShadowNodeIDsRequest extends Message {
 			LONG_RANGE_SHADOW_NODE_IDS_START,
 		);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

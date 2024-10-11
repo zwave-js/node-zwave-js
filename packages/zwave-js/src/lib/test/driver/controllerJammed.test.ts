@@ -72,7 +72,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 					const res = new SendDataResponse(host, {
 						wasSent: true,
 					});
-					await controller.sendToHost(res.serialize());
+					await controller.sendMessageToHost(res);
 
 					await wait(100);
 
@@ -91,7 +91,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 							ackRSSI: 0,
 						},
 					});
-					await controller.sendToHost(cb.serialize());
+					await controller.sendMessageToHost(cb);
 
 					return true;
 				} else if (msg instanceof SendDataAbort) {
@@ -195,7 +195,7 @@ integrationTest(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						await wait(100);
 
@@ -214,7 +214,7 @@ integrationTest(
 								ackRSSI: 0,
 							},
 						});
-						await controller.sendToHost(cb.serialize());
+						await controller.sendMessageToHost(cb);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -336,7 +336,7 @@ integrationTestMulti(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						await wait(100);
 
@@ -355,7 +355,7 @@ integrationTestMulti(
 								ackRSSI: 0,
 							},
 						});
-						await controller.sendToHost(cb.serialize());
+						await controller.sendMessageToHost(cb);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {

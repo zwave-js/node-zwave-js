@@ -13,6 +13,7 @@ import {
 import type { ZWaveHost } from "@zwave-js/host";
 import type {
 	DeserializingMessageConstructor,
+	MessageEncodingContext,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
@@ -100,13 +101,13 @@ export class SerialAPISetupRequest extends Message {
 
 	public command: SerialAPISetupCommand;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.command]),
 			this.payload,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -286,10 +287,10 @@ export class SerialAPISetup_SetTXStatusReportRequest
 
 	public enabled: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.enabled ? 0xff : 0x00]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -360,10 +361,10 @@ export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
 
 	public nodeIdType: NodeIDType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.nodeIdType]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -464,9 +465,9 @@ export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 
 	public region: RFRegion;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.region]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -594,13 +595,13 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 	public powerlevel: number;
 	public measured0dBm: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
 		// The values are in 0.1 dBm
 		this.payload.writeInt8(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt8(Math.round(this.measured0dBm * 10), 1);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -736,13 +737,13 @@ export class SerialAPISetup_SetPowerlevel16BitRequest
 	public powerlevel: number;
 	public measured0dBm: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(4);
 		// The values are in 0.1 dBm
 		this.payload.writeInt16BE(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt16BE(Math.round(this.measured0dBm * 10), 2);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -868,12 +869,12 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest
 	/** The maximum LR TX power in dBm */
 	public limit: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
 		// The values are in 0.1 dBm, signed
 		this.payload.writeInt16BE(Math.round(this.limit * 10), 0);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -1049,9 +1050,9 @@ export class SerialAPISetup_GetRegionInfoRequest extends SerialAPISetupRequest {
 
 	public region: RFRegion;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.region]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

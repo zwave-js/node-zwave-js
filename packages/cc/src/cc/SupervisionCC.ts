@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
@@ -145,6 +146,7 @@ export class SupervisionCC extends CommandClass {
 	public static encapsulate(
 		host: ZWaveHost,
 		cc: CommandClass,
+		sessionId: number,
 		requestStatusUpdates: boolean = true,
 	): SupervisionCCGet {
 		if (!cc.isSinglecast()) {
@@ -159,6 +161,7 @@ export class SupervisionCC extends CommandClass {
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
 			endpoint: cc.endpointIndex,
 			encapsulated: cc,
+			sessionId,
 			requestStatusUpdates,
 		});
 
@@ -321,7 +324,7 @@ export class SupervisionCCReport extends SupervisionCC {
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
 				(this.moreUpdatesFollow ? 0b1_0_000000 : 0)
@@ -337,7 +340,7 @@ export class SupervisionCCReport extends SupervisionCC {
 				Buffer.from([this.duration.serializeReport()]),
 			]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -373,6 +376,7 @@ export class SupervisionCCReport extends SupervisionCC {
 export interface SupervisionCCGetOptions extends CCCommandOptions {
 	requestStatusUpdates: boolean;
 	encapsulated: CommandClass;
+	sessionId: number;
 }
 
 function testResponseForSupervisionCCGet(
@@ -400,9 +404,10 @@ export class SupervisionCCGet extends SupervisionCC {
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
+				context: options.context,
 			});
 		} else {
-			this.sessionId = host.getNextSupervisionSessionId(this.nodeId);
+			this.sessionId = options.sessionId;
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
@@ -413,8 +418,8 @@ export class SupervisionCCGet extends SupervisionCC {
 	public sessionId: number;
 	public encapsulated: CommandClass;
 
-	public serialize(): Buffer {
-		const encapCC = this.encapsulated.serialize();
+	public serialize(ctx: CCEncodingContext): Buffer {
+		const encapCC = this.encapsulated.serialize(ctx);
 		this.payload = Buffer.concat([
 			Buffer.from([
 				(this.requestStatusUpdates ? 0b10_000000 : 0)
@@ -423,7 +428,7 @@ export class SupervisionCCGet extends SupervisionCC {
 			]),
 			encapCC,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {

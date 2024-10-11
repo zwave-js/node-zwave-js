@@ -5,6 +5,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -67,7 +68,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 	public productId: number;
 	public supportedFunctionTypes: FunctionType[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(8 + NUM_FUNCTION_BYTES);
 
 		const firmwareBytes = this.firmwareVersion
@@ -86,6 +87,6 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		);
 		functionBitMask.copy(this.payload, 8);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

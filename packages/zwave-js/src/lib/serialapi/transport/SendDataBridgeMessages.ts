@@ -1,5 +1,6 @@
 import type { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
+	type CCEncodingContext,
 	MAX_NODES,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -13,7 +14,10 @@ import {
 	encodeNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -110,9 +114,9 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	// Cache the serialized CC, so we can check if it needs to be fragmented
 	private _serializedCC: Buffer | undefined;
 	/** @internal */
-	public serializeCC(): Buffer {
+	public serializeCC(ctx: CCEncodingContext): Buffer {
 		if (!this._serializedCC) {
-			this._serializedCC = this.command.serialize();
+			this._serializedCC = this.command.serialize(ctx);
 		}
 		return this._serializedCC;
 	}
@@ -123,7 +127,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		this.callbackId = undefined;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
 			this.host.nodeIdType,
@@ -132,7 +136,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			this.command.nodeId,
 			this.host.nodeIdType,
 		);
-		const serializedCC = this.serializeCC();
+		const serializedCC = this.serializeCC(ctx);
 
 		this.payload = Buffer.concat([
 			sourceNodeId,
@@ -142,7 +146,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			Buffer.from([this.transmitOptions, 0, 0, 0, 0, this.callbackId]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -350,9 +354,9 @@ export class SendDataMulticastBridgeRequest<
 	// Cache the serialized CC, so we can check if it needs to be fragmented
 	private _serializedCC: Buffer | undefined;
 	/** @internal */
-	public serializeCC(): Buffer {
+	public serializeCC(ctx: CCEncodingContext): Buffer {
 		if (!this._serializedCC) {
-			this._serializedCC = this.command.serialize();
+			this._serializedCC = this.command.serialize(ctx);
 		}
 		return this._serializedCC;
 	}
@@ -363,8 +367,8 @@ export class SendDataMulticastBridgeRequest<
 		this.callbackId = undefined;
 	}
 
-	public serialize(): Buffer {
-		const serializedCC = this.serializeCC();
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		const serializedCC = this.serializeCC(ctx);
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
 			this.host.nodeIdType,
@@ -384,7 +388,7 @@ export class SendDataMulticastBridgeRequest<
 			Buffer.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

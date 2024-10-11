@@ -11,6 +11,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	type SuccessIndicator,
 	expectedCallback,
@@ -50,9 +51,9 @@ export class RequestNodeInfoResponse extends Message
 		return this.wasSent;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasSent ? 0x01 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -106,9 +107,9 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 		return false;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeID(this.nodeId, this.host.nodeIdType);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

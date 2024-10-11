@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -649,7 +650,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public value: number;
 	public scale: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// If a config file overwrites how the float should be encoded, use that information
 		const override = this.host.getDeviceConfig?.(this.nodeId as number)
 			?.compat?.overrideFloatEncoding;
@@ -657,7 +658,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 			Buffer.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale, override),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -748,12 +749,12 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public scale: number;
 	public value: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.type & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -807,9 +808,9 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 
 	public setpointType: ThermostatSetpointType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.setpointType & 0b1111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -891,11 +892,11 @@ export class ThermostatSetpointCCCapabilitiesReport
 	public minValueScale: number;
 	public maxValueScale: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const min = encodeFloatWithScale(this.minValue, this.minValueScale);
 		const max = encodeFloatWithScale(this.maxValue, this.maxValueScale);
 		this.payload = Buffer.concat([Buffer.from([this.type]), min, max]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -942,9 +943,9 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 
 	public setpointType: ThermostatSetpointType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.setpointType & 0b1111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1018,7 +1019,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	@ccValue(ThermostatSetpointCCValues.supportedSetpointTypes)
 	public readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeBitMask(
 			// Encode as interpretation A
 			this.supportedSetpointTypes
@@ -1027,7 +1028,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 			undefined,
 			ThermostatSetpointType["N/A"],
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

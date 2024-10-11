@@ -76,7 +76,11 @@ export class BridgeApplicationCommandRequest extends Message
 			data: this.payload.subarray(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 			origin: options.origin,
-			frameType: this.frameType,
+			context: {
+				ownNodeId: this.host.ownNodeId,
+				sourceNodeId,
+				...options.ctx,
+			},
 		}) as SinglecastCC<CommandClass>;
 		offset += commandLength;
 

@@ -1,4 +1,6 @@
 import {
+	type CCEncodingContext,
+	type CCParsingContext,
 	CRC16_CCITT,
 	CommandClasses,
 	type MessageOrCCLogEntry,
@@ -171,7 +173,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	public partialDatagram: Buffer;
 	public encapsulated!: CommandClass;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
 		this.ccCommand = (this.ccCommand & 0b11111_000)
 			| ((this.datagramSize >>> 8) & 0b111);
@@ -202,7 +204,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public expectMoreMessages(): boolean {
@@ -352,6 +354,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			TransportServiceCCFirstSegment,
 			...TransportServiceCCSubsequentSegment[],
 		],
+		ctx: CCParsingContext,
 	): void {
 		// Concat the CC buffers
 		const datagram = Buffer.allocUnsafe(this.datagramSize);
@@ -374,10 +377,11 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 			data: datagram,
 			fromEncapsulation: true,
 			encapCC: this,
+			context: ctx,
 		});
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
 		this.ccCommand = (this.ccCommand & 0b11111_000)
 			| ((this.datagramSize >>> 8) & 0b111);
@@ -411,7 +415,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -487,13 +491,13 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public sessionId: number;
 	public datagramOffset: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			((this.sessionId & 0b1111) << 4)
 			| ((this.datagramOffset >>> 8) & 0b111),
 			this.datagramOffset & 0xff,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -533,9 +537,9 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 
 	public sessionId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([(this.sessionId & 0b1111) << 4]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -570,9 +574,9 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 
 	public pendingSegments: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.pendingSegments]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

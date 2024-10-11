@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CRC16_CCITT,
 	CommandClasses,
 	EncapsulationFlags,
@@ -10,7 +11,6 @@ import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -132,7 +132,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 				fromEncapsulation: true,
 				encapCC: this,
 				origin: options.origin,
-				frameType: options.frameType,
+				context: options.context,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
@@ -143,8 +143,8 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public encapsulated: CommandClass;
 	private readonly headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 
-	public serialize(): Buffer {
-		const commandBuffer = this.encapsulated.serialize();
+	public serialize(ctx: CCEncodingContext): Buffer {
+		const commandBuffer = this.encapsulated.serialize(ctx);
 		// Reserve 2 bytes for the CRC
 		this.payload = Buffer.concat([commandBuffer, Buffer.allocUnsafe(2)]);
 
@@ -154,7 +154,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		crc = CRC16_CCITT(commandBuffer, crc);
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {

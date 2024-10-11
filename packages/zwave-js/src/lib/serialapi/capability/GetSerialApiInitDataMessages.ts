@@ -18,6 +18,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -117,7 +118,7 @@ export class GetSerialApiInitDataResponse extends Message {
 
 	public zwaveChipType?: string | UnknownZWaveChipType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		let chipType: UnknownZWaveChipType | undefined;
 		if (typeof this.zwaveChipType === "string") {
 			chipType = getChipTypeAndVersion(this.zwaveChipType);
@@ -152,7 +153,7 @@ export class GetSerialApiInitDataResponse extends Message {
 			this.payload[3 + NUM_NODEMASK_BYTES + 1] = chipType.version;
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	// public toLogEntry(): MessageOrCCLogEntry {

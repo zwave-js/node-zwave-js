@@ -1,4 +1,7 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type {
+	CCEncodingContext,
+	MessageOrCCLogEntry,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
@@ -265,12 +268,12 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	@ccValue(ManufacturerSpecificCCValues.productId)
 	public readonly productId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(6);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.productType, 2);
 		this.payload.writeUInt16BE(this.productId, 4);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -362,9 +365,9 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 
 	public deviceIdType: DeviceIdType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

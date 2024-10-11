@@ -1,6 +1,9 @@
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -74,10 +77,10 @@ export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	/** The node that should be removed */
 	public failedNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.failedNodeId, this.host.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 

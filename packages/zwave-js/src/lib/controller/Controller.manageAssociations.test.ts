@@ -43,7 +43,7 @@ test("associations between insecure nodes are allowed", (t) => {
 			return false;
 		},
 	});
-	host.nodes.set(node2.id, node2);
+	host.setNode(node2.id, node2);
 
 	node2.setSecurityClass(SecurityClass.S0_Legacy, false);
 	node2.setSecurityClass(SecurityClass.S2_AccessControl, false);
@@ -64,7 +64,7 @@ test("associations between insecure nodes are allowed", (t) => {
 			return false;
 		},
 	});
-	host.nodes.set(node3.id, node3);
+	host.setNode(node3.id, node3);
 
 	node3.setSecurityClass(SecurityClass.S0_Legacy, false);
 	node3.setSecurityClass(SecurityClass.S2_AccessControl, false);

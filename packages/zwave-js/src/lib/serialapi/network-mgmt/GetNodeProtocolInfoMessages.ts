@@ -18,6 +18,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -53,9 +54,9 @@ export class GetNodeProtocolInfoRequest extends Message {
 	// but this is a message to the controller
 	public requestedNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeID(this.requestedNodeId, this.host.nodeIdType);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -143,7 +144,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const protocolInfo = encodeNodeProtocolInfo({
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,
@@ -165,6 +166,6 @@ export class GetNodeProtocolInfoResponse extends Message {
 			]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

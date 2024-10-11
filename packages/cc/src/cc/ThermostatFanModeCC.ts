@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -364,12 +365,12 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	public mode: ThermostatFanMode;
 	public off: boolean | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			(this.off ? 0b1000_0000 : 0)
 			| (this.mode & 0b1111),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

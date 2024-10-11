@@ -7,7 +7,10 @@ import {
 	parseFloatWithScale,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import {
+	type CCEncodingContext,
+	type MaybeNotKnown,
+} from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -240,12 +243,12 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.parameter]),
 			encodeFloatWithScale(this.value, this.scale.key),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -298,9 +301,9 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 
 	public parameter: EnergyProductionParameter;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.parameter]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

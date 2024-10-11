@@ -7,7 +7,10 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -45,13 +48,13 @@ export class ExtendedNVMOperationsRequest extends Message {
 	// This must be set in subclasses
 	public command!: ExtendedNVMOperationsCommand;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.command]),
 			this.payload,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -138,12 +141,12 @@ export class ExtendedNVMOperationsReadRequest
 	public length: number;
 	public offset: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(5);
 		this.payload[0] = this.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -207,12 +210,12 @@ export class ExtendedNVMOperationsWriteRequest
 	public offset: number;
 	public buffer: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(1 + 4 + this.buffer.length);
 		this.payload[0] = this.buffer.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 		this.buffer.copy(this.payload, 5);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

@@ -89,7 +89,7 @@ integrationTest(
 						const res = new AssignSUCReturnRouteResponse(host, {
 							wasExecuted: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						let ack = false;
 						if (expectCallback) {
@@ -124,7 +124,7 @@ integrationTest(
 									},
 								);
 
-							await controller.sendToHost(cb.serialize());
+							await controller.sendMessageToHost(cb);
 						}
 						return true;
 					}
@@ -179,7 +179,7 @@ integrationTest(
 						const res = new DeleteSUCReturnRouteResponse(host, {
 							wasExecuted: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						let ack = false;
 						if (expectCallback) {
@@ -216,7 +216,7 @@ integrationTest(
 							// @ts-expect-error 0 is not a valid function type
 							cb.functionType = 0;
 
-							await controller.sendToHost(cb.serialize());
+							await controller.sendMessageToHost(cb);
 						}
 						return true;
 					}

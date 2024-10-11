@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -730,7 +731,7 @@ export class VersionCCReport extends VersionCC {
 	@ccValue(VersionCCValues.hardwareVersion)
 	public readonly hardwareVersion: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.libraryType,
 			...this.protocolVersion
@@ -759,7 +760,7 @@ export class VersionCCReport extends VersionCC {
 			this.payload = Buffer.concat([this.payload, firmwaresBuffer]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -813,9 +814,9 @@ export class VersionCCCommandClassReport extends VersionCC {
 	public ccVersion: number;
 	public requestedCC: CommandClasses;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.requestedCC, this.ccVersion]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -865,9 +866,9 @@ export class VersionCCCommandClassGet extends VersionCC {
 
 	public requestedCC: CommandClasses;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.requestedCC]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -905,11 +906,11 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 	@ccValue(VersionCCValues.supportsZWaveSoftwareGet)
 	public supportsZWaveSoftwareGet: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			(this.supportsZWaveSoftwareGet ? 0b100 : 0) | 0b11,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

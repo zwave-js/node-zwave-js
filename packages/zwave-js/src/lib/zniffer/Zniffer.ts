@@ -9,6 +9,7 @@ import {
 	CommandClasses,
 	type LogConfig,
 	MPDUHeaderType,
+	type MaybeNotKnown,
 	type RSSI,
 	SPANState,
 	SecurityClass,
@@ -25,6 +26,7 @@ import {
 	securityClassIsS2,
 } from "@zwave-js/core";
 import {
+	type MessageParsingContext,
 	type ZWaveSerialPortImplementation,
 	type ZnifferDataMessage,
 	ZnifferFrameType,
@@ -202,12 +204,37 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 		this._options = options;
 
 		this._active = false;
+
+		this.parsingContext = {
+			getHighestSecurityClass(
+				_nodeId: number,
+			): MaybeNotKnown<SecurityClass> {
+				return SecurityClass.S2_AccessControl;
+			},
+
+			hasSecurityClass(
+				_nodeId: number,
+				_securityClass: SecurityClass,
+			): MaybeNotKnown<boolean> {
+				// We don't actually know. Attempt parsing with all security classes
+				return true;
+			},
+
+			setSecurityClass(
+				_nodeId: number,
+				_securityClass: SecurityClass,
+				_granted: boolean,
+			): void {
+				// Do nothing
+			},
+		};
 	}
 
 	private _options: ZnifferOptions;
 
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
+	private parsingContext: MessageParsingContext;
 
 	private _destroyPromise: DeferredPromise<void> | undefined;
 	private get wasDestroyed(): boolean {
@@ -519,6 +546,11 @@ supported frequencies: ${
 						data: mpdu.payload,
 						fromEncapsulation: false,
 						nodeId: mpdu.sourceNodeId,
+						context: {
+							ownNodeId: destNodeId,
+							sourceNodeId: mpdu.sourceNodeId,
+							...this.parsingContext,
+						},
 					});
 				} catch (e: any) {
 					// Ignore

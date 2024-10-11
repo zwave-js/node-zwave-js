@@ -1,12 +1,5 @@
 import type { CommandClass } from "@zwave-js/cc";
-import {
-	type CommandClassInfo,
-	type CommandClasses,
-	type MaybeNotKnown,
-	NOT_KNOWN,
-	SecurityClass,
-	securityClassOrder,
-} from "@zwave-js/core";
+import { type CommandClassInfo, type CommandClasses } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
@@ -112,46 +105,45 @@ export class MockNode {
 		this.controller = options.controller;
 
 		// A node's host is a bit more specialized than the controller's host.
-		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
+		// const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 		this.host = {
 			...this.controller.host,
 			ownNodeId: this.id,
 			__internalIsMockNode: true,
-
-			// Mimic the behavior of ZWaveNode, but for arbitrary node IDs
-			hasSecurityClass(
-				nodeId: number,
-				securityClass: SecurityClass,
-			): MaybeNotKnown<boolean> {
-				return (
-					securityClasses.get(nodeId)?.get(securityClass) ?? NOT_KNOWN
-				);
-			},
-			setSecurityClass(
-				nodeId: number,
-				securityClass: SecurityClass,
-				granted: boolean,
-			): void {
-				if (!securityClasses.has(nodeId)) {
-					securityClasses.set(nodeId, new Map());
-				}
-				securityClasses.get(nodeId)!.set(securityClass, granted);
-			},
-			getHighestSecurityClass(
-				nodeId: number,
-			): MaybeNotKnown<SecurityClass> {
-				const map = securityClasses.get(nodeId);
-				if (!map?.size) return undefined;
-				let missingSome = false;
-				for (const secClass of securityClassOrder) {
-					if (map.get(secClass) === true) return secClass;
-					if (!map.has(secClass)) {
-						missingSome = true;
-					}
-				}
-				// If we don't have the info for every security class, we don't know the highest one yet
-				return missingSome ? undefined : SecurityClass.None;
-			},
+			// // Mimic the behavior of ZWaveNode, but for arbitrary node IDs
+			// hasSecurityClass(
+			// 	nodeId: number,
+			// 	securityClass: SecurityClass,
+			// ): MaybeNotKnown<boolean> {
+			// 	return (
+			// 		securityClasses.get(nodeId)?.get(securityClass) ?? NOT_KNOWN
+			// 	);
+			// },
+			// setSecurityClass(
+			// 	nodeId: number,
+			// 	securityClass: SecurityClass,
+			// 	granted: boolean,
+			// ): void {
+			// 	if (!securityClasses.has(nodeId)) {
+			// 		securityClasses.set(nodeId, new Map());
+			// 	}
+			// 	securityClasses.get(nodeId)!.set(securityClass, granted);
+			// },
+			// getHighestSecurityClass(
+			// 	nodeId: number,
+			// ): MaybeNotKnown<SecurityClass> {
+			// 	const map = securityClasses.get(nodeId);
+			// 	if (!map?.size) return undefined;
+			// 	let missingSome = false;
+			// 	for (const secClass of securityClassOrder) {
+			// 		if (map.get(secClass) === true) return secClass;
+			// 		if (!map.has(secClass)) {
+			// 			missingSome = true;
+			// 		}
+			// 	}
+			// 	// If we don't have the info for every security class, we don't know the highest one yet
+			// 	return missingSome ? undefined : SecurityClass.None;
+			// },
 		};
 
 		const {

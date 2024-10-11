@@ -11,6 +11,7 @@ import type { ZWaveHost } from "@zwave-js/host";
 import type {
 	DeserializingMessageConstructor,
 	MessageBaseOptions,
+	MessageEncodingContext,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
@@ -84,13 +85,13 @@ export class FirmwareUpdateNVMRequest extends Message {
 
 	public command: FirmwareUpdateNVMCommand;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.command]),
 			this.payload,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -201,10 +202,10 @@ export class FirmwareUpdateNVM_SetNewImageRequest
 
 	public newImage: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.newImage ? 1 : 0]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -313,13 +314,13 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 		return 30000;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(7);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.blockLength, 3);
 		this.payload.writeUInt16BE(this.crcSeed, 5);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -427,12 +428,12 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 	public offset: number;
 	public buffer: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([Buffer.allocUnsafe(5), this.buffer]);
 		this.payload.writeUintBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

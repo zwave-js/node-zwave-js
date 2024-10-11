@@ -17,7 +17,7 @@ import {
 	ZWaveErrorCodes,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type { TestingHost } from "@zwave-js/host";
+import type { BaseTestNode, TestingHost } from "@zwave-js/host";
 import {
 	type FunctionType,
 	Message,
@@ -219,18 +219,18 @@ export interface CreateTestNodeOptions {
 	getCCVersion?: (cc: CommandClasses) => number;
 }
 
-export interface TestNode extends IZWaveNode {
+export type TestNode<T extends BaseTestNode> = T & {
 	setEndpoint(endpoint: CreateTestEndpointOptions): void;
-}
+};
 
-export function createTestNode(
-	host: TestingHost,
+export function createTestNode<T extends BaseTestNode>(
+	host: TestingHost<T>,
 	options: CreateTestNodeOptions,
-): TestNode {
+): TestNode<T> {
 	const endpointCache = new Map<number, IZWaveEndpoint>();
 	const securityClasses = new Map<SecurityClass, boolean>();
 
-	const ret: TestNode = {
+	const ret: TestNode<T> = {
 		id: options.id,
 		...createTestEndpoint(host, {
 			nodeId: options.id,

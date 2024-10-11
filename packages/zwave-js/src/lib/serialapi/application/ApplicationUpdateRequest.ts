@@ -18,6 +18,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageType,
 	type SuccessIndicator,
@@ -78,12 +79,12 @@ export class ApplicationUpdateRequest extends Message {
 
 	public readonly updateType: ApplicationUpdateTypes;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.updateType]),
 			this.payload,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -119,12 +120,12 @@ export class ApplicationUpdateRequestWithNodeInfo
 	public nodeId: number;
 	public nodeInformation: NodeUpdatePayload;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeUpdatePayload(
 			this.nodeInformation,
 			this.host.nodeIdType,
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 

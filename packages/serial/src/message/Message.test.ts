@@ -51,7 +51,7 @@ test("should serialize correctly when the payload is null", (t) => {
 	const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
 	const message = new Message(host, {
 		type: MessageType.Request,
-		functionType: 0xff,
+		functionType: 0xff as any,
 	});
 	t.deepEqual(message.serialize(), expected);
 });
@@ -309,12 +309,16 @@ test("getConstructor() should return `Message` for an unknown packet type", (t) 
 
 test(`the constructor should throw when no message type is specified`, (t) => {
 	const host = createTestingHost();
-	assertZWaveError(t, () => new Message(host, { functionType: 0xff }), {
-		errorCode: ZWaveErrorCodes.Argument_Invalid,
-		messageMatches: /message type/i,
-	});
+	assertZWaveError(
+		t,
+		() => new Message(host, { functionType: 0xff as any }),
+		{
+			errorCode: ZWaveErrorCodes.Argument_Invalid,
+			messageMatches: /message type/i,
+		},
+	);
 
-	@messageTypes(undefined as any, 0xff)
+	@messageTypes(undefined as any, 0xff as any)
 	class FakeMessageWithoutMessageType extends Message {}
 
 	assertZWaveError(t, () => new FakeMessageWithoutMessageType(host), {
@@ -347,7 +351,7 @@ test("getNodeUnsafe() returns undefined when the controller is not initialized y
 	const host = createTestingHost();
 	const msg = new Message(host, {
 		type: MessageType.Request,
-		functionType: 0xff,
+		functionType: 0xff as any,
 	});
 	t.is(msg.getNodeUnsafe(host), undefined);
 });
@@ -356,23 +360,23 @@ test("getNodeUnsafe() returns undefined when the message is no node query", (t) 
 	const host = createTestingHost();
 	const msg = new Message(host, {
 		type: MessageType.Request,
-		functionType: 0xff,
+		functionType: 0xff as any,
 	});
 	t.is(msg.getNodeUnsafe(host), undefined);
 });
 
 test("getNodeUnsafe() returns the associated node otherwise", (t) => {
 	const host = createTestingHost();
-	host.nodes.set(1, {} as any);
+	host.setNode(1, {} as any);
 
 	const msg = new Message(host, {
 		type: MessageType.Request,
-		functionType: 0xff,
+		functionType: 0xff as any,
 	});
 
 	// This node exists
 	(msg as any as INodeQuery).nodeId = 1;
-	t.is(msg.getNodeUnsafe(host), host.nodes.get(1));
+	t.is(msg.getNodeUnsafe(host), host.getNode(1));
 
 	// This one does
 	(msg as any as INodeQuery).nodeId = 2;

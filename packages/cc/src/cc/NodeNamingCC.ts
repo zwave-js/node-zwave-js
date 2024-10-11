@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -296,7 +297,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 
 	public name: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const encoding = isASCII(this.name) ? "ascii" : "utf16le";
 		this.payload = Buffer.allocUnsafe(
 			1 + this.name.length * (encoding === "ascii" ? 1 : 2),
@@ -314,7 +315,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 			0,
 			Math.min(16, nameAsBuffer.length),
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -389,7 +390,7 @@ export class NodeNamingAndLocationCCLocationSet
 
 	public location: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const encoding = isASCII(this.location) ? "ascii" : "utf16le";
 		this.payload = Buffer.allocUnsafe(
 			1 + this.location.length * (encoding === "ascii" ? 1 : 2),
@@ -407,7 +408,7 @@ export class NodeNamingAndLocationCCLocationSet
 			0,
 			Math.min(16, locationAsBuffer.length),
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -15,7 +15,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown, encodeBitMask } from "@zwave-js/core/safe";
+import {
+	type CCEncodingContext,
+	type MaybeNotKnown,
+	encodeBitMask,
+} from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -708,13 +712,13 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	@ccValue(ColorSwitchCCValues.supportedColorComponents)
 	public readonly supportedColorComponents: readonly ColorComponent[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeBitMask(
 			this.supportedColorComponents,
 			15, // fixed 2 bytes
 			ColorComponent["Warm White"],
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -849,7 +853,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	@ccValue(ColorSwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.colorComponent,
 			this.currentValue,
@@ -863,7 +867,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 				]),
 			]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -929,9 +933,9 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		this._colorComponent = value;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this._colorComponent]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1005,7 +1009,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	public colorTable: ColorTable;
 	public duration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const populatedColorCount = Object.keys(this.colorTable).length;
 		this.payload = Buffer.allocUnsafe(
 			1 + populatedColorCount * 2 + 1,
@@ -1031,7 +1035,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload = this.payload.subarray(0, -1);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1111,7 +1115,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public direction: keyof typeof LevelChangeDirection;
 	public colorComponent: ColorComponent;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const controlByte = (LevelChangeDirection[this.direction] << 6)
 			| (this.ignoreStartLevel ? 0b0010_0000 : 0);
 		this.payload = Buffer.from([
@@ -1130,7 +1134,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			this.payload = this.payload.subarray(0, -1);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1179,9 +1183,9 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 
 	public readonly colorComponent: ColorComponent;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.colorComponent]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

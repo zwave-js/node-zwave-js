@@ -29,6 +29,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import {
+	type CCEncodingContext,
+	type CCParsingContext,
 	EncapsulationFlags,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
@@ -1048,7 +1050,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const sendingNodeId = this.nodeId as number;
 
 			// Ensure the node has a security class
-			const securityClass = this.host.getHighestSecurityClass(
+			const securityClass = options.context.getHighestSecurityClass(
 				sendingNodeId,
 			);
 			validatePayload.withReason("No security class granted")(
@@ -1133,8 +1135,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const ctx = ((): MulticastContext => {
 				const multicastGroupId = this.getMulticastGroupId();
 				if (
-					options.frameType === "multicast"
-					|| options.frameType === "broadcast"
+					options.context.frameType === "multicast"
+					|| options.context.frameType === "broadcast"
 				) {
 					if (multicastGroupId == undefined) {
 						validatePayload.fail(
@@ -1248,6 +1250,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 				decrypt = () =>
 					this.decryptSinglecast(
+						options.context,
 						sendingNodeId,
 						prevSequenceNumber!,
 						ciphertext,
@@ -1351,7 +1354,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					data: decryptedCCBytes,
 					fromEncapsulation: true,
 					encapCC: this,
-					frameType: options.frameType,
+					context: options.context,
 				});
 			}
 			this.plaintext = decryptedCCBytes;
@@ -1484,7 +1487,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		return spanExtension?.senderEI;
 	}
 
-	private maybeAddSPANExtension(): void {
+	private maybeAddSPANExtension(ctx: CCEncodingContext): void {
 		if (!this.isSinglecast()) return;
 
 		const receiverNodeId: number = this.nodeId;
@@ -1521,7 +1524,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				);
 			} else {
 				const securityClass = this.securityClass
-					?? this.host.getHighestSecurityClass(receiverNodeId);
+					?? ctx.getHighestSecurityClass(receiverNodeId);
 
 				if (securityClass == undefined) {
 					throw new ZWaveError(
@@ -1550,9 +1553,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// Include Sender EI in the command if we only have the receiver's EI
-		this.maybeAddSPANExtension();
+		this.maybeAddSPANExtension(ctx);
 
 		const unencryptedExtensions = this.extensions.filter(
 			(e) => !e.isEncrypted(),
@@ -1571,7 +1574,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				e.serialize(index < unencryptedExtensions.length - 1)
 			),
 		]);
-		const serializedCC = this.encapsulated?.serialize() ?? Buffer.from([]);
+		const serializedCC = this.encapsulated?.serialize(ctx)
+			?? Buffer.from([]);
 		const plaintextPayload = Buffer.concat([
 			...encryptedExtensions.map((e, index) =>
 				e.serialize(index < encryptedExtensions.length - 1)
@@ -1636,7 +1640,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			ciphertextPayload,
 			authTag,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -1717,6 +1721,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 
 	private decryptSinglecast(
+		ctx: CCParsingContext,
 		sendingNodeId: number,
 		prevSequenceNumber: number,
 		ciphertext: Buffer,
@@ -1827,10 +1832,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// Try all security classes where we do not definitely know that it was not granted
 			// While bootstrapping a node, we consider the key that is being exchanged (including S0) to be the highest. No need to look at others
 			const possibleSecurityClasses = isBootstrappingNode
-				? [this.host.getHighestSecurityClass(sendingNodeId)!]
+				? [ctx.getHighestSecurityClass(sendingNodeId)!]
 				: securityClassOrder.filter(
 					(s) =>
-						this.host.hasSecurityClass(sendingNodeId, s)
+						ctx.hasSecurityClass(sendingNodeId, s)
 							!== false,
 				);
 
@@ -1857,14 +1862,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				if (ret.authOK) {
 					// Also if we weren't sure before, we now know that the security class is granted
 					if (
-						this.host.hasSecurityClass(sendingNodeId, secClass)
+						ctx.hasSecurityClass(sendingNodeId, secClass)
 							=== undefined
 					) {
-						this.host.setSecurityClass(
-							sendingNodeId,
-							secClass,
-							true,
-						);
+						ctx.setSecurityClass(sendingNodeId, secClass, true);
 					}
 					return {
 						...ret,
@@ -1990,7 +1991,7 @@ export class Security2CCNonceReport extends Security2CC {
 	public readonly MOS: boolean;
 	public readonly receiverEI?: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.sequenceNumber,
 			(this.MOS ? 0b10 : 0) + (this.SOS ? 0b1 : 0),
@@ -1998,7 +1999,7 @@ export class Security2CCNonceReport extends Security2CC {
 		if (this.SOS) {
 			this.payload = Buffer.concat([this.payload, this.receiverEI!]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2058,9 +2059,9 @@ export class Security2CCNonceGet extends Security2CC {
 		return this._sequenceNumber;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.sequenceNumber]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2126,7 +2127,7 @@ export class Security2CCKEXReport extends Security2CC {
 	public readonly supportedECDHProfiles: readonly ECDHProfiles[];
 	public readonly requestedKeys: readonly SecurityClass[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
 				this._reserved
@@ -2146,7 +2147,7 @@ export class Security2CCKEXReport extends Security2CC {
 				SecurityClass.S2_Unauthenticated,
 			),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2256,7 +2257,7 @@ export class Security2CCKEXSet extends Security2CC {
 	public selectedECDHProfile: ECDHProfiles;
 	public grantedKeys: SecurityClass[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([
 				this._reserved
@@ -2276,7 +2277,7 @@ export class Security2CCKEXSet extends Security2CC {
 				SecurityClass.S2_Unauthenticated,
 			),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2323,9 +2324,9 @@ export class Security2CCKEXFail extends Security2CC {
 
 	public failType: KEXFailType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.failType]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2364,12 +2365,12 @@ export class Security2CCPublicKeyReport extends Security2CC {
 	public includingNode: boolean;
 	public publicKey: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.includingNode ? 1 : 0]),
 			this.publicKey,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2411,12 +2412,12 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 	public grantedKey: SecurityClass;
 	public networkKey: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			securityClassToBitMask(this.grantedKey),
 			this.networkKey,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2460,9 +2461,9 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 
 	public requestedKey: SecurityClass;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = securityClassToBitMask(this.requestedKey);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2509,11 +2510,11 @@ export class Security2CCTransferEnd extends Security2CC {
 	public keyVerified: boolean;
 	public keyRequestComplete: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			(this.keyVerified ? 0b10 : 0) + (this.keyRequestComplete ? 0b1 : 0),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2557,9 +2558,9 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 
 	public readonly supportedCCs: CommandClasses[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeCCList(this.supportedCCs, []);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

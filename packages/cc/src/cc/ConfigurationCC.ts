@@ -1,5 +1,6 @@
 import type { ParamInfoMap } from "@zwave-js/config";
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	ConfigValueFormat,
 	type ConfigurationMetadata,
@@ -1731,7 +1732,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.parameter, this.valueSize & 0b111]),
 			Buffer.allocUnsafe(this.valueSize),
@@ -1744,7 +1745,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			this.value,
 		);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1801,9 +1802,9 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	public parameter: number;
 	public allowUnexpectedResponse: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.parameter]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1887,7 +1888,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 	public valueFormat: ConfigValueFormat | undefined;
 	public value: ConfigValue | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const valueSize = this.resetToDefault ? 1 : this.valueSize!;
 		const payloadLength = 2 + valueSize;
 		this.payload = Buffer.alloc(payloadLength, 0);
@@ -1927,7 +1928,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 				);
 			}
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2047,7 +2048,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		return this._handshake;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const valueSize = this._resetToDefault ? 1 : this.valueSize;
 		const payloadLength = 4 + valueSize * this.parameters.length;
 		this.payload = Buffer.alloc(payloadLength, 0);
@@ -2091,7 +2092,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				}
 			}
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2281,11 +2282,11 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		return this._parameters;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(3);
 		this.payload.writeUInt16BE(this.parameters[0], 0);
 		this.payload[2] = this.parameters.length;
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2370,14 +2371,14 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const nameBuffer = Buffer.from(this.name, "utf8");
 		this.payload = Buffer.allocUnsafe(3 + nameBuffer.length);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		this.payload[2] = this.reportsToFollow;
 		nameBuffer.copy(this.payload, 3);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
@@ -2429,10 +2430,10 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2530,14 +2531,14 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const infoBuffer = Buffer.from(this.info, "utf8");
 		this.payload = Buffer.allocUnsafe(3 + infoBuffer.length);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		this.payload[2] = this.reportsToFollow;
 		infoBuffer.copy(this.payload, 3);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
@@ -2589,10 +2590,10 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2811,7 +2812,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public isAdvanced: MaybeNotKnown<boolean>;
 	public noBulkSupport: MaybeNotKnown<boolean>;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(
 			3 // preamble
 				+ 3 * this.valueSize // min, max, default value
@@ -2859,7 +2860,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			| (this.noBulkSupport ? 0b10 : 0);
 		this.payload[offset] = options2;
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -2918,10 +2919,10 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 
 	public parameter: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -10,6 +10,7 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	Duration,
 	type EndpointId,
@@ -932,12 +933,12 @@ export class NotificationCCSet extends NotificationCC {
 	public notificationType: number;
 	public notificationStatus: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.notificationType,
 			this.notificationStatus ? 0xff : 0x00,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1290,6 +1291,8 @@ export class NotificationCCReport extends NotificationCC {
 						data: this.eventParameters,
 						fromEncapsulation: true,
 						encapCC: this,
+						// FIXME: persistValues needs access to the CCParsingContext
+						context: {} as any,
 					});
 					validatePayload(!(cc instanceof InvalidCC));
 
@@ -1376,7 +1379,7 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (this.version === 1) {
 			if (this.alarmLevel == undefined || this.alarmType == undefined) {
 				throw new ZWaveError(
@@ -1428,7 +1431,7 @@ export class NotificationCCReport extends NotificationCC {
 				]);
 			}
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -1478,7 +1481,7 @@ export class NotificationCCGet extends NotificationCC {
 	public notificationType: number | undefined;
 	public notificationEvent: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const payload: number[] = [this.alarmType || 0];
 		if (this.version >= 2 && this.notificationType != undefined) {
 			payload.push(this.notificationType);
@@ -1491,7 +1494,7 @@ export class NotificationCCGet extends NotificationCC {
 			}
 		}
 		this.payload = Buffer.from(payload);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1563,7 +1566,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	@ccValue(NotificationCCValues.supportedNotificationTypes)
 	public supportedNotificationTypes: number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const bitMask = encodeBitMask(
 			this.supportedNotificationTypes,
 			Math.max(...this.supportedNotificationTypes),
@@ -1575,7 +1578,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 			]),
 			bitMask,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1696,7 +1699,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	public notificationType: number;
 	public supportedEvents: number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.notificationType, 0]);
 		if (this.supportedEvents.length > 0) {
 			const bitMask = encodeBitMask(
@@ -1708,7 +1711,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			this.payload = Buffer.concat([this.payload, bitMask]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1759,9 +1762,9 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 
 	public notificationType: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.notificationType]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -10,7 +10,10 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import {
+	type CCEncodingContext,
+	type MaybeNotKnown,
+} from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -715,7 +718,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 	@ccValue(WindowCoveringCCValues.supportedParameters)
 	public readonly supportedParameters: readonly WindowCoveringParameter[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const bitmask = encodeBitMask(
 			this.supportedParameters,
 			undefined,
@@ -728,7 +731,7 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 			bitmask.subarray(0, numBitmaskBytes),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -836,9 +839,9 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 
 	public parameter: WindowCoveringParameter;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.parameter]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -903,7 +906,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 	}[];
 	public duration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const numEntries = this.targetValues.length & 0b11111;
 		this.payload = Buffer.allocUnsafe(2 + numEntries * 2);
 
@@ -918,7 +921,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 			this.duration ?? Duration.default()
 		).serializeSet();
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -975,13 +978,13 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public direction: keyof typeof LevelChangeDirection;
 	public duration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.direction === "up" ? 0b0100_0000 : 0b0000_0000,
 			this.parameter,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1029,9 +1032,9 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 
 	public parameter: WindowCoveringParameter;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.parameter]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

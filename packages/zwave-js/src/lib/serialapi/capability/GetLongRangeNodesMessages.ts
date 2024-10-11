@@ -11,6 +11,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -43,9 +44,9 @@ export class GetLongRangeNodesRequest extends Message {
 
 	public segmentNumber: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.segmentNumber]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -95,7 +96,7 @@ export class GetLongRangeNodesResponse extends Message {
 	public segmentNumber: number;
 	public nodeIds: readonly number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(
 			3 + NUM_LR_NODEMASK_SEGMENT_BYTES,
 		);
@@ -110,7 +111,7 @@ export class GetLongRangeNodesResponse extends Message {
 		);
 		nodeBitMask.copy(this.payload, 3);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	private listStartNode(): number {

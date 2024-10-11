@@ -1,4 +1,5 @@
 import type {
+	CCEncodingContext,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
@@ -220,11 +221,11 @@ export class LanguageCCSet extends LanguageCC {
 		this._country = value;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(!!this._country ? 5 : 3);
 		this.payload.write(this._language, 0, "ascii");
 		if (!!this._country) this.payload.write(this._country, 3, "ascii");
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

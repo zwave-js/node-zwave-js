@@ -12,7 +12,10 @@ import {
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import type { GetAllNodes, ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -149,14 +152,14 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	/** Whether to include network wide */
 	public networkWide: boolean = false;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		let data: number = this.addNodeType || AddNodeType.Any;
 		if (this.highPower) data |= AddNodeFlags.HighPower;
 		if (this.networkWide) data |= AddNodeFlags.NetworkWide;
 
 		this.payload = Buffer.from([data, this.callbackId]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -185,14 +188,14 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 }
 
 export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const control: number = AddNodeType.SmartStartListen
 			| AddNodeFlags.NetworkWide;
 		// The Serial API does not send a callback, so disable waiting for one
 		this.callbackId = 0;
 
 		this.payload = Buffer.from([control, this.callbackId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -229,7 +232,7 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	/** Whether to include as long-range or not */
 	public protocol: Protocols;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		let control: number = AddNodeType.SmartStartDSK;
 		if (this.highPower) control |= AddNodeFlags.HighPower;
 		if (this.networkWide) control |= AddNodeFlags.NetworkWide;
@@ -243,7 +246,7 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 			this.authHomeId,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

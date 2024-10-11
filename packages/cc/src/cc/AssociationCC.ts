@@ -5,6 +5,7 @@ import type {
 	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	MAX_NODES,
 	type MessageOrCCLogEntry,
@@ -520,9 +521,9 @@ export class AssociationCCSet extends AssociationCC {
 	public groupId: number;
 	public nodeIds: number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.groupId, ...this.nodeIds]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -590,12 +591,12 @@ export class AssociationCCRemove extends AssociationCC {
 	public groupId?: number;
 	public nodeIds?: number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.groupId || 0,
 			...(this.nodeIds || []),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -679,14 +680,14 @@ export class AssociationCCReport extends AssociationCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.groupId,
 			this.maxNodes,
 			this.reportsToFollow,
 			...this.nodeIds,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -731,9 +732,9 @@ export class AssociationCCGet extends AssociationCC {
 
 	public groupId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.groupId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -772,9 +773,9 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	@ccValue(AssociationCCValues.groupCount)
 	public groupCount: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.groupCount]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -814,9 +815,9 @@ export class AssociationCCSpecificGroupReport extends AssociationCC {
 
 	public group: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.group]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

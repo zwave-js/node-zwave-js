@@ -3,10 +3,8 @@ import type {
 	CommandClasses,
 	ControllerLogger,
 	ICommandClass,
-	MaybeNotKnown,
 	NodeIDType,
 	NodeId,
-	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
 	SendCommandOptions,
@@ -16,22 +14,40 @@ import type {
 } from "@zwave-js/core";
 import type { ZWaveHostOptions } from "./ZWaveHostOptions";
 
-/** Host application abstractions to be used in Serial API and CC implementations */
-export interface ZWaveHost {
+/** Allows querying the home ID and node ID of the host */
+export interface HostIDs {
 	/** The ID of this node in the current network */
 	ownNodeId: number;
 	/** The Home ID of the current network */
 	homeId: number;
+}
 
+/** Allows accessing the security manager instances */
+export interface SecurityManagers {
+	/** Management of Security S0 keys and nonces */
+	readonly securityManager: SecurityManager | undefined;
+	/** Management of Security S2 keys and nonces (Z-Wave Classic) */
+	readonly securityManager2: SecurityManager2 | undefined;
+	/** Management of Security S2 keys and nonces (Z-Wave Long Range) */
+	readonly securityManagerLR: SecurityManager2 | undefined;
+}
+
+// FIXME: This should not be needed. Instead have the driver set callback IDs during sendMessage
+/** Allows generating a new callback ID */
+export interface GetNextCallbackId {
+	/**
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
+	 * to the controller/nodes with its response
+	 */
+	getNextCallbackId(): number;
+}
+
+/** Host application abstractions to be used in Serial API and CC implementations */
+export interface ZWaveHost
+	extends HostIDs, SecurityManagers, GetNextCallbackId
+{
 	/** How many bytes a node ID occupies in serial API commands */
 	readonly nodeIdType?: NodeIDType;
-
-	/** Management of Security S0 keys and nonces */
-	securityManager: SecurityManager | undefined;
-	/** Management of Security S2 keys and nonces (Z-Wave Classic) */
-	securityManager2: SecurityManager2 | undefined;
-	/** Management of Security S2 keys and nonces (Z-Wave Long Range) */
-	securityManagerLR: SecurityManager2 | undefined;
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
@@ -62,30 +78,6 @@ export interface ZWaveHost {
 		nodeId: number,
 		endpointIndex?: number,
 	): boolean;
-
-	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
-
-	hasSecurityClass(
-		nodeId: number,
-		securityClass: SecurityClass,
-	): MaybeNotKnown<boolean>;
-
-	setSecurityClass(
-		nodeId: number,
-		securityClass: SecurityClass,
-		granted: boolean,
-	): void;
-
-	/**
-	 * Returns the next callback ID. Callback IDs are used to correlate requests
-	 * to the controller/nodes with its response
-	 */
-	getNextCallbackId(): number;
-
-	/**
-	 * Returns the next session ID for supervised communication
-	 */
-	getNextSupervisionSessionId(nodeId: number): number;
 
 	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
 

@@ -4,7 +4,10 @@ import {
 	parseNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -111,14 +114,14 @@ export class RemoveNodeFromNetworkRequest
 	/** Whether to exclude network wide */
 	public networkWide: boolean = false;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		let data: number = this.removeNodeType || RemoveNodeType.Any;
 		if (this.highPower) data |= RemoveNodeFlags.HighPower;
 		if (this.networkWide) data |= RemoveNodeFlags.NetworkWide;
 
 		this.payload = Buffer.from([data, this.callbackId]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 

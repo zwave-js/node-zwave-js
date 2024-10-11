@@ -20,7 +20,11 @@ import {
 	parseCCList,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import {
+	type CCEncodingContext,
+	type CCParsingContext,
+	type MaybeNotKnown,
+} from "@zwave-js/core/safe";
 import type {
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -546,9 +550,9 @@ export class SecurityCCNonceReport extends SecurityCC {
 
 	public nonce: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = this.nonce;
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -723,6 +727,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public mergePartialCCs(
 		applHost: ZWaveApplicationHost,
 		partials: SecurityCCCommandEncapsulation[],
+		ctx: CCParsingContext,
 	): void {
 		// Concat the CC buffers
 		this.decryptedCCBytes = Buffer.concat(
@@ -735,16 +740,17 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			data: this.decryptedCCBytes,
 			fromEncapsulation: true,
 			encapCC: this,
+			context: ctx,
 		});
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (!this.nonce) throwNoNonce();
 		if (this.nonce.length !== HALF_NONCE_SIZE) {
 			throwNoNonce("Invalid nonce size");
 		}
 
-		const serializedCC = this.encapsulated.serialize();
+		const serializedCC = this.encapsulated.serialize(ctx);
 		const plaintext = Buffer.concat([
 			Buffer.from([0]), // TODO: frame control
 			serializedCC,
@@ -776,7 +782,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			Buffer.from([this.nonceId!]),
 			authCode,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	protected computeEncapsulationOverhead(): number {
@@ -846,10 +852,10 @@ export class SecurityCCSchemeReport extends SecurityCC {
 		}
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Buffer.from([0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -872,10 +878,10 @@ export class SecurityCCSchemeGet extends SecurityCC {
 		// Don't care, we won't get sent this and we have no options
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Buffer.from([0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -898,10 +904,10 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 		// Don't care, we won't get sent this and we have no options
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Buffer.from([0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -947,9 +953,9 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 
 	public networkKey: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = this.networkKey;
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -993,12 +999,12 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 
 	public readonly reportsToFollow: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.reportsToFollow]),
 			encodeCCList(this.supportedCCs, this.controlledCCs),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {

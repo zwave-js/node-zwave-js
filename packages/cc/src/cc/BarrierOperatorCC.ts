@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MaybeUnknown,
@@ -569,9 +570,9 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 
 	public targetState: BarrierState.Open | BarrierState.Closed;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.targetState]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -712,9 +713,9 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	public subsystemType: SubsystemType;
 	public subsystemState: SubsystemState;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.subsystemType, this.subsystemState]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -810,9 +811,9 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 
 	public subsystemType: SubsystemType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.subsystemType]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

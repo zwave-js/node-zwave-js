@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	MAX_NODES,
 	type MaybeNotKnown,
@@ -525,7 +526,7 @@ export class ProtectionCCSet extends ProtectionCC {
 	public local: LocalProtectionState;
 	public rf?: RFProtectionState;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.local & 0b1111,
 			(this.rf ?? RFProtectionState.Unprotected) & 0b1111,
@@ -540,7 +541,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			this.payload = this.payload.subarray(0, 1);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -736,9 +737,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 
 	public exclusiveControlNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.exclusiveControlNodeId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -806,9 +807,9 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 
 	public timeout: Timeout;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.timeout.serialize()]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

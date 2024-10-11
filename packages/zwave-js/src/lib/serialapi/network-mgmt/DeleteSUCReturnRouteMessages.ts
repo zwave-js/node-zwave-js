@@ -5,7 +5,11 @@ import {
 	encodeNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
+import type {
+	INodeQuery,
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -91,11 +95,11 @@ export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 
 	public nodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -127,9 +131,9 @@ export class DeleteSUCReturnRouteResponse extends Message
 
 	public readonly wasExecuted: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasExecuted ? 0x01 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -177,9 +181,9 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 
 	public readonly transmitStatus: TransmitStatus;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.callbackId, this.transmitStatus]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

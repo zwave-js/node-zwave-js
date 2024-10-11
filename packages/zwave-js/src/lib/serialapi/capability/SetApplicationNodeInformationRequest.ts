@@ -10,6 +10,7 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	type MessageEncodingContext,
 	MessageType,
 	messageTypes,
 	priority,
@@ -47,7 +48,7 @@ export class SetApplicationNodeInformationRequest extends Message {
 	public supportedCCs: CommandClasses[];
 	public controlledCCs: CommandClasses[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const ccListLength = Math.min(ccList.length, 35);
 		this.payload = Buffer.from([
@@ -58,7 +59,7 @@ export class SetApplicationNodeInformationRequest extends Message {
 			...ccList.subarray(0, ccListLength),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

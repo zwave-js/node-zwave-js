@@ -5,6 +5,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -76,7 +77,7 @@ export class GetControllerCapabilitiesResponse extends Message {
 	public isStaticUpdateController: boolean;
 	public noNodesIncluded: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			(this.isSecondary ? ControllerCapabilityFlags.Secondary : 0)
 			| (this.isUsingHomeIdFromOtherNetwork
@@ -93,6 +94,6 @@ export class GetControllerCapabilitiesResponse extends Message {
 				? ControllerCapabilityFlags.NoNodesIncluded
 				: 0),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

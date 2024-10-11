@@ -82,7 +82,7 @@ integrationTest(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -183,7 +183,7 @@ integrationTest(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -281,7 +281,7 @@ integrationTest(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -360,7 +360,7 @@ integrationTest(
 						const res = new RequestNodeInfoResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						// And never send a callback
 						return true;
@@ -437,7 +437,7 @@ integrationTest(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -548,7 +548,7 @@ integrationTest(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -656,7 +656,7 @@ integrationTestMulti(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -768,7 +768,7 @@ integrationTest(
 						const res = new SendDataResponse(host, {
 							wasSent: true,
 						});
-						await controller.sendToHost(res.serialize());
+						await controller.sendMessageToHost(res);
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {

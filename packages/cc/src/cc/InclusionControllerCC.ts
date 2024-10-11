@@ -3,13 +3,15 @@ import {
 	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import {
+	type CCEncodingContext,
+	type MaybeNotKnown,
+} from "@zwave-js/core/safe";
 import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -118,9 +120,9 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public step: InclusionControllerStep;
 	public status: InclusionControllerStatus;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.step, this.status]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -168,9 +170,9 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public includedNodeId: number;
 	public step: InclusionControllerStep;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.includedNodeId, this.step]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

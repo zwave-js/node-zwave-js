@@ -1,4 +1,5 @@
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type MaybeUnknown,
 	type MessageOrCCLogEntry,
@@ -282,7 +283,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		}
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (this.fibaroCCId == undefined) {
 			throw new ZWaveError(
 				"Cannot serialize a Fibaro CC without a Fibaro CC ID",
@@ -298,7 +299,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 			Buffer.from([this.fibaroCCId, this.fibaroCCCommand]),
 			this.payload,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -414,7 +415,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public position: number | undefined;
 	public tilt: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const controlByte = (this.position != undefined ? 0b10 : 0)
 			| (this.tilt != undefined ? 0b01 : 0);
 		this.payload = Buffer.from([
@@ -422,7 +423,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 			this.position ?? 0,
 			this.tilt ?? 0,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

@@ -16,6 +16,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	gotDeserializationOptions,
 	messageTypes,
@@ -95,7 +96,11 @@ export class ApplicationCommandRequest extends Message
 				data: this.payload.subarray(offset, offset + commandLength),
 				nodeId,
 				origin: options.origin,
-				frameType: this.frameType,
+				context: {
+					ownNodeId: this.host.ownNodeId,
+					sourceNodeId: nodeId,
+					...options.ctx,
+				},
 			}) as SinglecastCC<CommandClass>;
 		} else {
 			// TODO: This logic is unsound
@@ -131,7 +136,7 @@ export class ApplicationCommandRequest extends Message
 		return super.getNodeId();
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const statusByte = (this.frameType === "broadcast"
 			? ApplicationCommandStatusFlags.TypeBroad
 			: this.frameType === "multicast"
@@ -139,7 +144,7 @@ export class ApplicationCommandRequest extends Message
 			: 0)
 			| (this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
 
-		const serializedCC = this.command.serialize();
+		const serializedCC = this.command.serialize(ctx);
 		const nodeId = encodeNodeID(
 			this.getNodeId() ?? this.host.ownNodeId,
 			this.host.nodeIdType,
@@ -151,7 +156,7 @@ export class ApplicationCommandRequest extends Message
 			serializedCC,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

@@ -11,6 +11,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	messageTypes,
@@ -38,7 +39,7 @@ export class GetRoutingInfoRequest extends Message {
 	public removeNonRepeaters: boolean;
 	public removeBadLinks: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.sourceNodeId, this.host.nodeIdType);
 		const optionsByte = (this.removeBadLinks ? 0b1000_0000 : 0)
 			| (this.removeNonRepeaters ? 0b0100_0000 : 0);
@@ -49,7 +50,7 @@ export class GetRoutingInfoRequest extends Message {
 				0, // callbackId - this must be 0 as per the docs
 			]),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

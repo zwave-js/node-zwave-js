@@ -11,6 +11,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageOrigin,
 	MessageType,
@@ -92,11 +93,11 @@ export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 
 	public nodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -128,9 +129,9 @@ export class AssignSUCReturnRouteResponse extends Message
 
 	public wasExecuted: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasExecuted ? 0x01 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -178,9 +179,9 @@ export class AssignSUCReturnRouteRequestTransmitReport
 
 	public transmitStatus: TransmitStatus;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.callbackId, this.transmitStatus]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

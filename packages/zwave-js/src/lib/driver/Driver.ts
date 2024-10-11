@@ -118,7 +118,9 @@ import {
 	FunctionType,
 	type INodeQuery,
 	Message,
+	type MessageEncodingContext,
 	MessageHeaders,
+	type MessageParsingContext,
 	MessageType,
 	type SuccessIndicator,
 	XModemMessageHeaders,
@@ -653,6 +655,23 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this._options.storage.deviceConfigPriorityDir,
 		});
 
+		this.messageParsingContext = {
+			getHighestSecurityClass: (nodeId) =>
+				this.getHighestSecurityClass(nodeId),
+			hasSecurityClass: (nodeId, securityClass) =>
+				this.hasSecurityClass(nodeId, securityClass),
+			setSecurityClass: (nodeId, securityClass, granted) =>
+				this.setSecurityClass(nodeId, securityClass, granted),
+		};
+		this.messageEncodingContext = {
+			getHighestSecurityClass: (nodeId) =>
+				this.getHighestSecurityClass(nodeId),
+			hasSecurityClass: (nodeId, securityClass) =>
+				this.hasSecurityClass(nodeId, securityClass),
+			setSecurityClass: (nodeId, securityClass, granted) =>
+				this.setSecurityClass(nodeId, securityClass, granted),
+		};
+
 		this.immediateQueue = new TransactionQueue({
 			name: "immediate",
 			mayStartNextTransaction: (t) => {
@@ -686,6 +705,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
+
+	private messageParsingContext: MessageParsingContext;
+	private messageEncodingContext: MessageEncodingContext;
 
 	// We have multiple queues to achieve multiple "layers" of communication priority:
 	// The default queue for most messages
@@ -3422,6 +3444,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			msg = Message.from(this, {
 				data,
 				sdkVersion: this._controller?.sdkVersion,
+				ctx: this.messageParsingContext,
 			}, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
@@ -4384,7 +4407,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					// this is the final one, merge the previous responses
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
-						command.mergePartialCCs(this, session);
+						command.mergePartialCCs(this, session, {
+							ownNodeId: this.ownNodeId,
+							sourceNodeId: msg.command.nodeId as number,
+							...this.messageParsingContext,
+						});
 						// Ensure there are no errors
 						assertValidCCs(msg);
 					} catch (e) {
@@ -5186,7 +5213,11 @@ ${handlers.length} left`,
 
 		// 3.
 		if (SupervisionCC.requiresEncapsulation(cmd)) {
-			cmd = SupervisionCC.encapsulate(this, cmd);
+			cmd = SupervisionCC.encapsulate(
+				this,
+				cmd,
+				this.getNextSupervisionSessionId(cmd.nodeId as number),
+			);
 		}
 
 		// 4.
@@ -5707,6 +5738,7 @@ ${handlers.length} left`,
 	): Promise<Message | undefined> {
 		const machine = createSerialAPICommandMachine(
 			msg,
+			msg.serialize(this.messageEncodingContext),
 			{
 				sendData: (data) => this.writeSerial(data),
 				sendDataAbort: () => this.abortSendData(),
@@ -5905,6 +5937,7 @@ ${handlers.length} left`,
 		// Create the transaction
 		const { generator, resultPromise } = createMessageGenerator(
 			this,
+			this.messageEncodingContext,
 			msg,
 			(msg, _result) => {
 				this.handleSerialAPICommandResult(msg, options, _result);
@@ -6147,9 +6180,11 @@ ${handlers.length} left`,
 		},
 	): Promise<SupervisionResult | undefined> {
 		// Create the encapsulating CC so we have a session ID
+		const sessionId = this.getNextSupervisionSessionId(command.nodeId);
 		command = SupervisionCC.encapsulate(
 			this,
 			command,
+			sessionId,
 			options.requestStatusUpdates,
 		);
 
@@ -6259,7 +6294,9 @@ ${handlers.length} left`,
 	private async abortSendData(): Promise<void> {
 		try {
 			const abort = new SendDataAbort(this);
-			await this.writeSerial(abort.serialize());
+			await this.writeSerial(
+				abort.serialize(this.messageEncodingContext),
+			);
 			this.driverLog.logMessage(abort, {
 				direction: "outbound",
 			});
@@ -6947,7 +6984,8 @@ ${handlers.length} left`,
 	}
 
 	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
-		return msg.serializeCC().length > this.getMaxPayloadLength(msg);
+		return msg.serializeCC(this.messageEncodingContext).length
+			> this.getMaxPayloadLength(msg);
 	}
 
 	/** Determines time in milliseconds to wait for a report from a node */

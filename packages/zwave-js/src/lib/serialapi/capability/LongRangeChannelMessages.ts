@@ -11,6 +11,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	type SuccessIndicator,
 	expectedResponse,
@@ -80,9 +81,9 @@ export class SetLongRangeChannelRequest extends Message {
 
 	public channel: LongRangeChannel;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.channel]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

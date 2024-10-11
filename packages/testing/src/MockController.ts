@@ -1,14 +1,16 @@
-import { type ICommandClass, MAX_SUPERVISION_SESSION_ID } from "@zwave-js/core";
+import { type ICommandClass } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
+	type MessageEncodingContext,
 	MessageHeaders,
 	MessageOrigin,
+	type MessageParsingContext,
 	SerialAPIParser,
 } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { AsyncQueue } from "@zwave-js/shared";
-import { TimedExpectation, createWrappingCounter } from "@zwave-js/shared/safe";
+import { TimedExpectation } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
 import { randomInt } from "node:crypto";
 import {
@@ -49,7 +51,7 @@ export class MockController {
 		// const valuesStorage = new Map();
 		// const metadataStorage = new Map();
 		// const valueDBCache = new Map<number, ValueDB>();
-		const supervisionSessionIDs = new Map<number, () => number>();
+		// const supervisionSessionIDs = new Map<number, () => number>();
 
 		this.host = {
 			ownNodeId: options.ownNodeId ?? 1,
@@ -59,15 +61,15 @@ export class MockController {
 			securityManagerLR: undefined,
 			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
-			getNextSupervisionSessionId: (nodeId) => {
-				if (!supervisionSessionIDs.has(nodeId)) {
-					supervisionSessionIDs.set(
-						nodeId,
-						createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
-					);
-				}
-				return supervisionSessionIDs.get(nodeId)!();
-			},
+			// getNextSupervisionSessionId: (nodeId) => {
+			// 	if (!supervisionSessionIDs.has(nodeId)) {
+			// 		supervisionSessionIDs.set(
+			// 			nodeId,
+			// 			createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
+			// 		);
+			// 	}
+			// 	return supervisionSessionIDs.get(nodeId)!();
+			// },
 			getSafeCCVersion: () => 100,
 			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
@@ -78,11 +80,6 @@ export class MockController {
 				return (endpoint ?? node).implementedCCs.get(cc)?.version ?? 0;
 			},
 			isCCSecure: () => false,
-			// TODO: We don't care about security classes on the controller
-			// This is handled by the nodes hosts
-			getHighestSecurityClass: () => undefined,
-			hasSecurityClass: () => false,
-			setSecurityClass: () => {},
 			// getValueDB: (nodeId) => {
 			// 	if (!valueDBCache.has(nodeId)) {
 			// 		valueDBCache.set(
@@ -103,8 +100,24 @@ export class MockController {
 			...options.capabilities,
 		};
 
+		this.parsingContext = {
+			// We don't care about security classes on the mock controller
+			getHighestSecurityClass: () => undefined,
+			hasSecurityClass: () => false,
+			setSecurityClass: () => {},
+		};
+		this.encodingContext = {
+			// We don't care about security classes on the mock controller
+			getHighestSecurityClass: () => undefined,
+			hasSecurityClass: () => false,
+			setSecurityClass: () => {},
+		};
+
 		void this.execute();
 	}
+
+	private parsingContext: MessageParsingContext;
+	private encodingContext: MessageEncodingContext;
 
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
@@ -193,6 +206,7 @@ export class MockController {
 				data,
 				origin: MessageOrigin.Host,
 				parseCCs: false,
+				ctx: this.parsingContext,
 			});
 			this._receivedHostMessages.push(msg);
 			if (this.autoAckHostMessages) {
@@ -339,6 +353,18 @@ export class MockController {
 	}
 
 	/** Sends a raw buffer to the host/driver and expect an ACK */
+	public async sendMessageToHost(
+		msg: Message,
+		delayMs?: number,
+	): Promise<void> {
+		const data = msg.serialize(this.encodingContext);
+		if (delayMs) await wait(delayMs);
+		this.serial.emitData(data);
+		// TODO: make the timeout match the configured ACK timeout
+		await this.expectHostACK(1000);
+	}
+
+	/** Sends a raw buffer to the host/driver and expect an ACK */
 	public async sendToHost(data: Buffer): Promise<void> {
 		this.serial.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
@@ -459,7 +485,10 @@ export class MockController {
 
 				await wait(node.capabilities.txDelay);
 
-				const unlazy = unlazyMockZWaveFrame(frame);
+				const unlazy = unlazyMockZWaveFrame(
+					frame,
+					this.encodingContext,
+				);
 				onTransmit?.(unlazy);
 				node.onControllerFrame(unlazy).catch((e) => {
 					console.error(e);
@@ -471,7 +500,10 @@ export class MockController {
 
 				await wait(node.capabilities.txDelay);
 
-				const unlazy = unlazyMockZWaveFrame(frame);
+				const unlazy = unlazyMockZWaveFrame(
+					frame,
+					this.encodingContext,
+				);
 				onTransmit?.(unlazy);
 				this.onNodeFrame(node, unlazy).catch((e) => {
 					console.error(e);

@@ -1,8 +1,9 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	EncapsulationFlags,
 	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
@@ -10,7 +11,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	gotDeserializationOptions,
@@ -130,7 +130,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 						fromEncapsulation: true,
 						encapCC: this,
 						origin: options.origin,
-						frameType: options.frameType,
+						context: options.context,
 					}),
 				);
 				offset += 1 + cmdLength;
@@ -145,16 +145,16 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 
 	public encapsulated: CommandClass[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const buffers: Buffer[] = [];
 		buffers.push(Buffer.from([this.encapsulated.length]));
 		for (const cmd of this.encapsulated) {
-			const cmdBuffer = cmd.serialize();
+			const cmdBuffer = cmd.serialize(ctx);
 			buffers.push(Buffer.from([cmdBuffer.length]));
 			buffers.push(cmdBuffer);
 		}
 		this.payload = Buffer.concat(buffers);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

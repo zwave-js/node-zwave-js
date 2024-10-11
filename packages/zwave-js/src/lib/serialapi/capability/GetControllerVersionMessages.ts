@@ -5,6 +5,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -49,12 +50,12 @@ export class GetControllerVersionResponse extends Message {
 	public controllerType: ZWaveLibraryTypes;
 	public libraryVersion: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from(`${this.libraryVersion}\0`, "ascii"),
 			Buffer.from([this.controllerType]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

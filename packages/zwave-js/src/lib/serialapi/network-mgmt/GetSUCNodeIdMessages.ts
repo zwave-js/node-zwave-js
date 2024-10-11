@@ -5,6 +5,7 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -43,8 +44,8 @@ export class GetSUCNodeIdResponse extends Message {
 	/** The node id of the SUC or 0 if none is present */
 	public sucNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeID(this.sucNodeId, this.host.nodeIdType);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

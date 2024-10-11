@@ -7,7 +7,11 @@ import {
 	encodeNodeID,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
+import type {
+	INodeQuery,
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -74,7 +78,7 @@ export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
 	public nodeId: number;
 	public destinationNodeId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
 		const destinationNodeId = encodeNodeID(
 			this.destinationNodeId,
@@ -87,7 +91,7 @@ export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
 			Buffer.from([this.callbackId]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 

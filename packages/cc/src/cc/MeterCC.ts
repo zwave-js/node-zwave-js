@@ -11,6 +11,7 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import {
+	type CCEncodingContext,
 	CommandClasses,
 	type EndpointId,
 	type MaybeNotKnown,
@@ -1016,7 +1017,7 @@ export class MeterCCReport extends MeterCC {
 	public rateType: RateType;
 	public deltaTime: MaybeUnknown<number>;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const { data: typeAndValue, floatParams, scale2 } =
 			encodeMeterValueAndInfo(
 				this.type,
@@ -1055,7 +1056,7 @@ export class MeterCCReport extends MeterCC {
 			]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1124,7 +1125,7 @@ export class MeterCCGet extends MeterCC {
 	public rateType: RateType | undefined;
 	public scale: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		let scale1: number;
 		let scale2: number | undefined;
 		let bufferLength = 0;
@@ -1155,7 +1156,7 @@ export class MeterCCGet extends MeterCC {
 		this.payload[0] = (rateTypeFlags << 6) | (scale1 << 3);
 		if (scale2) this.payload[1] = scale2;
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1285,7 +1286,7 @@ export class MeterCCSupportedReport extends MeterCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const typeByte = (this.type & 0b0_00_11111)
 			| (this.supportedRateTypes.includes(RateType.Consumed)
 				? 0b0_01_00000
@@ -1317,7 +1318,7 @@ export class MeterCCSupportedReport extends MeterCC {
 			]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
@@ -1392,7 +1393,7 @@ export class MeterCCReset extends MeterCC {
 	public rateType: RateType | undefined;
 	public targetValue: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (
 			this.type != undefined
 			&& this.scale != undefined
@@ -1415,7 +1416,7 @@ export class MeterCCReset extends MeterCC {
 				]);
 			}
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {

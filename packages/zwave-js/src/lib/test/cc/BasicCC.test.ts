@@ -120,7 +120,7 @@ test("getDefinedValueIDs() should include the target value for all endpoints exc
 			return 0;
 		},
 	});
-	host.nodes.set(node2.id, node2);
+	host.setNode(node2.id, node2);
 
 	const valueIDs = nodeUtils
 		.getDefinedValueIDs(host as any, node2)

@@ -1,4 +1,5 @@
 import { type CommandClass } from "@zwave-js/cc";
+import { type MessageEncodingContext } from "@zwave-js/serial";
 
 /**
  * Is used to simulate communication between a {@link MockController} and a {@link MockNode}.
@@ -25,7 +26,7 @@ export interface LazyMockZWaveRequestFrame {
 	/** Whether an ACK is requested from the destination */
 	ackRequested: boolean;
 	/** The Command Class contained in the frame */
-	payload: CommandClass | (() => CommandClass);
+	payload: CommandClass | ((ctx: MessageEncodingContext) => CommandClass);
 }
 
 export interface MockZWaveAckFrame {
@@ -44,7 +45,7 @@ export enum MockZWaveFrameType {
 }
 
 export function createMockZWaveRequestFrame(
-	payload: CommandClass | (() => CommandClass),
+	payload: CommandClass | ((ctx: MessageEncodingContext) => CommandClass),
 	options: Partial<Omit<MockZWaveRequestFrame, "direction" | "payload">> = {},
 ): LazyMockZWaveRequestFrame {
 	const { repeaters = [], ackRequested = true } = options;
@@ -70,11 +71,12 @@ export function createMockZWaveAckFrame(
 
 export function unlazyMockZWaveFrame(
 	frame: LazyMockZWaveFrame,
+	ctx: MessageEncodingContext,
 ): MockZWaveFrame {
 	if (frame.type === MockZWaveFrameType.ACK) return frame;
 	let payload = frame.payload;
 	if (typeof payload === "function") {
-		payload = payload();
+		payload = payload(ctx);
 	}
 	return {
 		...frame,
