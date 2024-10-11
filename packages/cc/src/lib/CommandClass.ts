@@ -1,7 +1,5 @@
 import {
 	type BroadcastCC,
-	type CCEncodingContext,
-	type CCParsingContext,
 	CommandClasses,
 	type ControlsCC,
 	EncapsulationFlags,
@@ -36,6 +34,8 @@ import {
 	valueIdToString,
 } from "@zwave-js/core";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

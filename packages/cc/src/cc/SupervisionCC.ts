@@ -1,5 +1,4 @@
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
@@ -21,6 +20,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

@@ -5,7 +5,6 @@ import "zwave-js";
 import { isCommandClassContainer } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
-	CCParsingContext,
 	NodeIDType,
 	SPANState,
 	SecurityClass,

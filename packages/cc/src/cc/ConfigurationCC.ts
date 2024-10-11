@@ -1,7 +1,5 @@
 import type { ParamInfoMap } from "@zwave-js/config";
 import {
-	type CCEncodingContext,
-	type CCParsingContext,
 	CommandClasses,
 	ConfigValueFormat,
 	type ConfigurationMetadata,
@@ -27,6 +25,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

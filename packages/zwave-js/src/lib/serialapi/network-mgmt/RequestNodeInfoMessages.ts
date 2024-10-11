@@ -4,7 +4,7 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext, ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	type INodeQuery,

@@ -7,7 +7,7 @@ import {
 	createSimpleReflectionDecorator,
 	validatePayload,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext, ZWaveHost } from "@zwave-js/host";
 import type {
 	DeserializingMessageConstructor,
 	MessageBaseOptions,

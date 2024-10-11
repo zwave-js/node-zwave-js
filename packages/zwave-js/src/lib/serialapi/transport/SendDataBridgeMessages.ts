@@ -1,6 +1,5 @@
 import type { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
-	type CCEncodingContext,
 	MAX_NODES,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -13,7 +12,7 @@ import {
 	ZWaveErrorCodes,
 	encodeNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext, ZWaveHost } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
 	SuccessIndicator,

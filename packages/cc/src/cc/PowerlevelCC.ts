@@ -1,5 +1,4 @@
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -10,7 +9,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";

@@ -29,8 +29,6 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import {
-	type CCEncodingContext,
-	type CCParsingContext,
 	EncapsulationFlags,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
@@ -39,6 +37,8 @@ import {
 	encodeCCList,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

@@ -1,12 +1,10 @@
 import type {
-	CCParsingContext,
 	EndpointId,
 	MaybeNotKnown,
 	MessageRecord,
 	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	MAX_NODES,
 	type MessageOrCCLogEntry,
@@ -16,6 +14,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

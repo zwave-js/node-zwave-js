@@ -1,5 +1,4 @@
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -15,6 +14,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
@@ -416,7 +417,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 			// But as always - manufacturers don't care and send ASCII data with 0 bytes...
 
 			// We also need to disable the strict validation for some devices to make them work
-			const noStrictValidation = !!this.host.getDeviceConfig?.(
+			const noStrictValidation = !!options.context.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.disableStrictEntryControlDataValidation;
 

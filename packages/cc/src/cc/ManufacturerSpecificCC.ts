@@ -1,7 +1,4 @@
-import type {
-	CCEncodingContext,
-	MessageOrCCLogEntry,
-} from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
@@ -12,6 +9,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

@@ -11,7 +11,6 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	type EndpointId,
 	type MaybeNotKnown,
@@ -27,6 +26,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
@@ -939,7 +940,7 @@ export class MeterCCReport extends MeterCC {
 			?? getUnknownMeterScale(this.scale);
 
 		// Filter out unknown meter types and scales, unless the strict validation is disabled
-		const measurementValidation = !this.host.getDeviceConfig?.(
+		const measurementValidation = !applHost.getDeviceConfig?.(
 			this.nodeId as number,
 		)?.compat?.disableStrictMeasurementValidation;
 

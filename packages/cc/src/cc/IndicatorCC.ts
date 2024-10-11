@@ -1,6 +1,5 @@
 import type { ConfigManager } from "@zwave-js/config";
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	type EndpointId,
 	Indicator,
@@ -18,6 +17,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

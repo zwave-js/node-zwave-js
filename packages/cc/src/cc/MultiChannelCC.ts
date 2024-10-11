@@ -1,7 +1,5 @@
 import {
 	type ApplicationNodeInformation,
-	type CCEncodingContext,
-	type CCParsingContext,
 	CommandClasses,
 	type GenericDeviceClass,
 	type MaybeNotKnown,
@@ -21,6 +19,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
@@ -1335,7 +1335,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			if (
-				this.host.getDeviceConfig?.(this.nodeId as number)?.compat
+				options.context.getDeviceConfig?.(this.nodeId as number)?.compat
 					?.treatDestinationEndpointAsSource
 			) {
 				// This device incorrectly uses the destination field to indicate the source endpoint
@@ -1366,16 +1366,6 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
 			this.destination = options.destination;
-
-			if (
-				this.host.getDeviceConfig?.(this.nodeId as number)?.compat
-					?.treatDestinationEndpointAsSource
-			) {
-				// This device incorrectly responds from the endpoint we've passed as our source endpoint
-				if (typeof this.destination === "number") {
-					this.endpointIndex = this.destination;
-				}
-			}
 		}
 	}
 
@@ -1384,6 +1374,16 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public destination: MultiChannelCCDestination;
 
 	public serialize(ctx: CCEncodingContext): Buffer {
+		if (
+			ctx.getDeviceConfig?.(this.nodeId as number)?.compat
+				?.treatDestinationEndpointAsSource
+		) {
+			// This device incorrectly responds from the endpoint we've passed as our source endpoint
+			if (typeof this.destination === "number") {
+				this.endpointIndex = this.destination;
+			}
+		}
+
 		const destination = typeof this.destination === "number"
 			// The destination is a single number
 			? this.destination & 0b0111_1111

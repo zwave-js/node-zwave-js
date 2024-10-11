@@ -1,5 +1,4 @@
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	Duration,
 	type MaybeNotKnown,
@@ -16,6 +15,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
@@ -340,7 +341,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 		]);
 
 		if (
-			this.version < 2 && this.host.getDeviceConfig?.(
+			this.version < 2 && ctx.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.encodeCCsUsingTargetVersion
 		) {

@@ -11,7 +11,11 @@ import {
 	getNodeTag,
 	highResTimestamp,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type {
+	GetDeviceConfig,
+	ZWaveApplicationHost,
+	ZWaveHost,
+} from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { MessageHeaders } from "../MessageHeaders";
@@ -34,7 +38,7 @@ export enum MessageOrigin {
 	Host,
 }
 
-export interface MessageParsingContext {
+export interface MessageParsingContext extends GetDeviceConfig {
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(

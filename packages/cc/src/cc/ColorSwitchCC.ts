@@ -15,12 +15,10 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core";
-import {
-	type CCEncodingContext,
-	type MaybeNotKnown,
-	encodeBitMask,
-} from "@zwave-js/core/safe";
+import { type MaybeNotKnown, encodeBitMask } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
@@ -1027,7 +1025,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		).serializeSet();
 
 		if (
-			this.version < 2 && this.host.getDeviceConfig?.(
+			this.version < 2 && ctx.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.encodeCCsUsingTargetVersion
 		) {
@@ -1126,7 +1124,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 		]);
 
 		if (
-			this.version < 3 && this.host.getDeviceConfig?.(
+			this.version < 3 && ctx.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.encodeCCsUsingTargetVersion
 		) {

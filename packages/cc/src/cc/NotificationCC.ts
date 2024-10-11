@@ -10,7 +10,6 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	Duration,
 	type EndpointId,
@@ -33,6 +32,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
@@ -1073,7 +1074,7 @@ export class NotificationCCReport extends NotificationCC {
 				}
 			} else {
 				// V1 Alarm, check if there is a compat option to map this V1 report to a V2+ report
-				const mapping = this.host.getDeviceConfig?.(
+				const mapping = applHost.getDeviceConfig?.(
 					this.nodeId as number,
 				)?.compat?.alarmMapping;
 				const match = mapping?.find(

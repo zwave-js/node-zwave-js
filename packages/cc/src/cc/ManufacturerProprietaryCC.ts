@@ -1,11 +1,14 @@
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	ZWaveApplicationHost,
+	ZWaveHost,
+} from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, type CCAPIEndpoint, type CCAPINode } from "../lib/API";

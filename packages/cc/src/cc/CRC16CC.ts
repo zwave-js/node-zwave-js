@@ -1,5 +1,4 @@
 import {
-	type CCEncodingContext,
 	CRC16_CCITT,
 	CommandClasses,
 	EncapsulationFlags,
@@ -7,7 +6,11 @@ import {
 	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,

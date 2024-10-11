@@ -5166,9 +5166,17 @@ export class ZWaveController
 		await this.deleteSUCReturnRoutes(nodeId);
 
 		try {
+			// Some controllers have a bug where they incorrectly respond
+			// to an AssignSUCReturnRouteRequest with DeleteSUCReturnRoute
+			const disableCallbackFunctionTypeCheck = !!this.driver
+				.getDeviceConfig?.(this.ownNodeId!)
+				?.compat
+				?.disableCallbackFunctionTypeCheck
+				?.includes(FunctionType.AssignSUCReturnRoute);
 			const result = await this.driver.sendMessage(
 				new AssignSUCReturnRouteRequest(this.driver, {
 					nodeId,
+					disableCallbackFunctionTypeCheck,
 				}),
 			);
 
@@ -5366,9 +5374,17 @@ export class ZWaveController
 		});
 
 		try {
+			// Some controllers have a bug where they incorrectly respond
+			// to an DeleteSUCReturnRouteRequest with a different function type
+			const disableCallbackFunctionTypeCheck = !!this.driver
+				.getDeviceConfig?.(this.ownNodeId!)
+				?.compat
+				?.disableCallbackFunctionTypeCheck
+				?.includes(FunctionType.DeleteSUCReturnRoute);
 			const result = await this.driver.sendMessage(
 				new DeleteSUCReturnRouteRequest(this.driver, {
 					nodeId,
+					disableCallbackFunctionTypeCheck,
 				}),
 			);
 

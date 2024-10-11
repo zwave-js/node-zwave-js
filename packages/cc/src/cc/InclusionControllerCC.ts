@@ -3,11 +3,12 @@ import {
 	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core";
-import {
-	type CCEncodingContext,
-	type MaybeNotKnown,
-} from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import type {
+	CCEncodingContext,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {

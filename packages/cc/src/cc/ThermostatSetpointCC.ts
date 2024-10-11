@@ -1,5 +1,4 @@
 import {
-	type CCEncodingContext,
 	CommandClasses,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -20,6 +19,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
@@ -652,7 +653,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 
 	public serialize(ctx: CCEncodingContext): Buffer {
 		// If a config file overwrites how the float should be encoded, use that information
-		const override = this.host.getDeviceConfig?.(this.nodeId as number)
+		const override = ctx.getDeviceConfig?.(this.nodeId as number)
 			?.compat?.overrideFloatEncoding;
 		this.payload = Buffer.concat([
 			Buffer.from([this.setpointType & 0b1111]),

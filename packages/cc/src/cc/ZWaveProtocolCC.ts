@@ -1,6 +1,5 @@
 import {
 	type BasicDeviceClass,
-	type CCEncodingContext,
 	CommandClasses,
 	type DataRate,
 	type FLiRS,
@@ -21,7 +20,7 @@ import {
 	parseNodeProtocolInfoAndDeviceClass,
 	validatePayload,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext, ZWaveHost } from "@zwave-js/host";
 import {
 	type CCCommandOptions,
 	CommandClass,

@@ -2,9 +2,12 @@ import type { ConfigManager, DeviceConfig } from "@zwave-js/config";
 import type {
 	CommandClasses,
 	ControllerLogger,
+	FrameType,
 	ICommandClass,
+	MaybeNotKnown,
 	NodeIDType,
 	NodeId,
+	SecurityClass,
 	SecurityManagers,
 	SendCommandOptions,
 	SendCommandReturnType,
@@ -29,6 +32,54 @@ export interface GetNextCallbackId {
 	 * to the controller/nodes with its response
 	 */
 	getNextCallbackId(): number;
+}
+
+/** Allows querying device configuration for a node */
+export interface GetDeviceConfig {
+	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
+}
+
+/** Additional context needed for deserializing CCs */
+export interface CCParsingContext
+	extends Readonly<SecurityManagers>, GetDeviceConfig
+{
+	sourceNodeId: number;
+	ownNodeId: number;
+
+	/** If known, the frame type of the containing message */
+	frameType?: FrameType;
+
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
+
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): MaybeNotKnown<boolean>;
+
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
+}
+
+/** Additional context needed for serializing CCs */
+// FIXME: Lot of duplication between the CC and message contexts
+export interface CCEncodingContext
+	extends Readonly<SecurityManagers>, GetDeviceConfig
+{
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
+
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): MaybeNotKnown<boolean>;
+
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
 }
 
 /** Host application abstractions to be used in Serial API and CC implementations */
@@ -66,8 +117,6 @@ export interface ZWaveHost extends HostIDs, GetNextCallbackId {
 		endpointIndex?: number,
 	): boolean;
 
-	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
-
 	__internalIsMockNode?: boolean;
 }
 
@@ -98,7 +147,8 @@ export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 		ZWaveHost,
 		GetNode<TNode>,
 		GetAllNodes<TNode>,
-		SecurityManagers
+		SecurityManagers,
+		GetDeviceConfig
 {
 	/** Gives access to the configuration files */
 	configManager: ConfigManager;

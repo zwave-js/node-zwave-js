@@ -10,11 +10,10 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
-import {
-	type CCEncodingContext,
-	type MaybeNotKnown,
-} from "@zwave-js/core/safe";
+import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

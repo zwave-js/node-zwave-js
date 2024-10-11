@@ -20,54 +20,11 @@ export interface SecurityManagers {
 	securityManagerLR?: SecurityManager2;
 }
 
-/** Additional context needed for deserializing CCs */
-export interface CCParsingContext extends Readonly<SecurityManagers> {
-	sourceNodeId: number;
-	ownNodeId: number;
-
-	/** If known, the frame type of the containing message */
-	frameType?: FrameType;
-
-	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
-
-	hasSecurityClass(
-		nodeId: number,
-		securityClass: SecurityClass,
-	): MaybeNotKnown<boolean>;
-
-	setSecurityClass(
-		nodeId: number,
-		securityClass: SecurityClass,
-		granted: boolean,
-	): void;
-}
-
-/** Additional context needed for serializing CCs */
-// FIXME: Lot of duplication between the CC and message contexts
-export interface CCEncodingContext extends Readonly<SecurityManagers> {
-	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
-
-	hasSecurityClass(
-		nodeId: number,
-		securityClass: SecurityClass,
-	): MaybeNotKnown<boolean>;
-
-	setSecurityClass(
-		nodeId: number,
-		securityClass: SecurityClass,
-		granted: boolean,
-	): void;
-}
-
 /** A basic abstraction of a Z-Wave Command Class providing access to the relevant functionality */
 export interface ICommandClass {
+	nodeId: number | MulticastDestination;
 	ccId: CommandClasses;
 	ccCommand?: number;
-
-	serialize(ctx: CCEncodingContext): Buffer;
-	nodeId: number | MulticastDestination;
-	expectsCCResponse(): boolean;
-	isExpectedCCResponse(received: ICommandClass): boolean;
 }
 
 export type SinglecastCC<T extends ICommandClass = ICommandClass> = T & {

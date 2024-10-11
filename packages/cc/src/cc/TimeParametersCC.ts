@@ -8,13 +8,14 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import {
-	type CCEncodingContext,
 	type ControlsCC,
 	type EndpointId,
 	type MaybeNotKnown,
 	type SupportsCC,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,

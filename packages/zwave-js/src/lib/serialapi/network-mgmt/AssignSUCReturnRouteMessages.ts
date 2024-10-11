@@ -4,7 +4,7 @@ import {
 	TransmitStatus,
 	encodeNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext, ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	type INodeQuery,
@@ -52,6 +52,7 @@ export class AssignSUCReturnRouteRequestBase extends Message {
 
 export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
+	disableCallbackFunctionTypeCheck?: boolean;
 }
 
 function testAssignSUCReturnRouteCallback(
@@ -59,13 +60,7 @@ function testAssignSUCReturnRouteCallback(
 	callback: Message,
 ): boolean {
 	// Some controllers have a bug where they incorrectly respond with DeleteSUCReturnRoute
-	if (
-		callback.host
-			.getDeviceConfig?.(callback.host.ownNodeId)
-			?.compat
-			?.disableCallbackFunctionTypeCheck
-			?.includes(FunctionType.AssignSUCReturnRoute)
-	) {
+	if (sent.disableCallbackFunctionTypeCheck) {
 		return true;
 	}
 	return callback.functionType === FunctionType.AssignSUCReturnRoute;
@@ -88,10 +83,13 @@ export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 			this.callbackId = this.payload[1];
 		} else {
 			this.nodeId = options.nodeId;
+			this.disableCallbackFunctionTypeCheck =
+				options.disableCallbackFunctionTypeCheck;
 		}
 	}
 
 	public nodeId: number;
+	public readonly disableCallbackFunctionTypeCheck?: boolean;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);

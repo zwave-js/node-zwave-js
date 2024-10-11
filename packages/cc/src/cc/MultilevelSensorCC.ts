@@ -7,7 +7,6 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import type {
-	CCEncodingContext,
 	EndpointId,
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -27,6 +26,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
+	CCEncodingContext,
+	CCParsingContext,
 	ZWaveApplicationHost,
 	ZWaveHost,
 	ZWaveValueHost,
@@ -663,7 +664,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		) ?? getUnknownScale(this.scale);
 
 		// Filter out unknown sensor types and scales, unless the strict validation is disabled
-		const measurementValidation = !this.host.getDeviceConfig?.(
+		const measurementValidation = !applHost.getDeviceConfig?.(
 			this.nodeId as number,
 		)?.compat?.disableStrictMeasurementValidation;
 

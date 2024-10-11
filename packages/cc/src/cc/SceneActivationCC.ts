@@ -1,5 +1,4 @@
 import type {
-	CCEncodingContext,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
@@ -11,7 +10,11 @@ import {
 	ValueMetadata,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	ZWaveHost,
+	ZWaveValueHost,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
