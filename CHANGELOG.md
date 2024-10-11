@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Support playing tones on mocked sirens, improve support for node dumps of switches/dimmers (#7272)
+
 ## 13.7.0 (2024-10-10)
 ### Features
 * Thermostat Setback CC: Fix encoding of the setback state, add mocks, remove non-functional CC values (#7271)
