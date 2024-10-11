@@ -1,5 +1,5 @@
 import {
-	type ICommandClass,
+	type CCId,
 	type MaybeNotKnown,
 	NOT_KNOWN,
 	SecurityClass,
@@ -348,10 +348,10 @@ export class MockController {
 	 *
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 */
-	public async expectNodeCC<T extends ICommandClass = ICommandClass>(
+	public async expectNodeCC<T extends CCId = CCId>(
 		node: MockNode,
 		timeout: number,
-		predicate: (cc: ICommandClass) => cc is T,
+		predicate: (cc: CCId) => cc is T,
 	): Promise<T> {
 		const ret = await this.expectNodeFrame(
 			node,

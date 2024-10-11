@@ -49,13 +49,13 @@ import {
 	externalConfigDir,
 } from "@zwave-js/config";
 import {
+	type CCId,
 	CommandClasses,
 	ControllerLogger,
 	ControllerRole,
 	ControllerStatus,
 	Duration,
 	EncapsulationFlags,
-	type ICommandClass,
 	type KeyPair,
 	type LogConfig,
 	MAX_SUPERVISION_SESSION_ID,
@@ -544,7 +544,7 @@ interface AwaitedThing<T> {
 
 type AwaitedMessageHeader = AwaitedThing<MessageHeaders>;
 type AwaitedMessageEntry = AwaitedThing<Message>;
-type AwaitedCommandEntry = AwaitedThing<ICommandClass>;
+type AwaitedCommandEntry = AwaitedThing<CCId>;
 export type AwaitedBootloaderChunkEntry = AwaitedThing<BootloaderChunk>;
 
 interface TransportServiceSession {
@@ -6158,7 +6158,7 @@ ${handlers.length} left`,
 	 * @param options (optional) Options regarding the message transmission
 	 */
 	private async sendCommandInternal<
-		TResponse extends ICommandClass = ICommandClass,
+		TResponse extends CCId = CCId,
 	>(
 		command: CommandClass,
 		options: Omit<
@@ -6242,7 +6242,7 @@ ${handlers.length} left`,
 	 * @param options (optional) Options regarding the message transmission
 	 */
 	public async sendCommand<
-		TResponse extends ICommandClass | undefined = undefined,
+		TResponse extends CCId | undefined = undefined,
 	>(
 		command: CommandClass,
 		options?: SendCommandOptions,
@@ -6441,12 +6441,12 @@ ${handlers.length} left`,
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming command classes
 	 */
-	public waitForCommand<T extends ICommandClass>(
-		predicate: (cc: ICommandClass) => boolean,
+	public waitForCommand<T extends CCId>(
+		predicate: (cc: CCId) => boolean,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
-			const promise = createDeferredPromise<ICommandClass>();
+			const promise = createDeferredPromise<CCId>();
 			const entry: AwaitedCommandEntry = {
 				predicate,
 				handler: (cc) => promise.resolve(cc),
@@ -6480,8 +6480,8 @@ ${handlers.length} left`,
 	 * Calls the given handler function every time a CommandClass is received that matches the given predicate.
 	 * @param predicate A predicate function to test all incoming command classes
 	 */
-	public registerCommandHandler<T extends ICommandClass>(
-		predicate: (cc: ICommandClass) => boolean,
+	public registerCommandHandler<T extends CCId>(
+		predicate: (cc: CCId) => boolean,
 		handler: (cc: T) => void,
 	): {
 		unregister: () => void;

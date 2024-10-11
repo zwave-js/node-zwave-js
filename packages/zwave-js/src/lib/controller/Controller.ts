@@ -42,13 +42,13 @@ import {
 import { type IndicatorObject } from "@zwave-js/cc/IndicatorCC";
 import {
 	BasicDeviceClass,
+	type CCId,
 	CommandClasses,
 	type ControllerCapabilities,
 	ControllerRole,
 	ControllerStatus,
 	EMPTY_ROUTE,
 	type Firmware,
-	type ICommandClass,
 	LongRangeChannel,
 	MAX_NODES,
 	type MaybeNotKnown,
@@ -9691,7 +9691,7 @@ export class ZWaveController
 		const supportsS2 = supportedCCs.includes(CommandClasses["Security 2"]);
 
 		let initTimeout: number;
-		let initPredicate: (cc: ICommandClass) => boolean;
+		let initPredicate: (cc: CCId) => boolean;
 
 		// KEX Get must be received:
 		// - no later than 10..30 seconds after the inclusion if S0 is supported

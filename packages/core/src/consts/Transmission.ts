@@ -1,6 +1,6 @@
 import { num2hex } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
-import type { ICommandClass } from "../abstractions/ICommandClass";
+import type { CCId } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
 import { type SecurityClass } from "../security/SecurityClass";
 import { Duration } from "../values/Duration";
@@ -297,7 +297,7 @@ export type SendCommandOptions =
 		reportTimeoutMs?: number;
 	};
 
-export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
+export type SendCommandReturnType<TResponse extends CCId | undefined> =
 	undefined extends TResponse ? SupervisionResult | undefined
 		: TResponse | undefined;
 

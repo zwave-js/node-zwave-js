@@ -1,5 +1,6 @@
 import {
 	type BroadcastCC,
+	type CCId,
 	CommandClasses,
 	type ControlsCC,
 	EncapsulationFlags,
@@ -8,7 +9,6 @@ import {
 	type GetAllEndpoints,
 	type GetCCs,
 	type GetEndpoint,
-	type ICommandClass,
 	type ListenBehavior,
 	type MessageOrCCLogEntry,
 	type MessageRecord,
@@ -142,7 +142,7 @@ export type CCNode =
 	& QueryNodeStatus;
 
 // @publicAPI
-export class CommandClass implements ICommandClass {
+export class CommandClass implements CCId {
 	// empty constructor to parse messages
 	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		this.host = host;

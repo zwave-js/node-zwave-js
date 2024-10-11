@@ -1,9 +1,9 @@
 import type { ConfigManager, DeviceConfig } from "@zwave-js/config";
 import type {
+	CCId,
 	CommandClasses,
 	ControllerLogger,
 	FrameType,
-	ICommandClass,
 	MaybeNotKnown,
 	NodeIDType,
 	NodeId,
@@ -161,13 +161,13 @@ export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 	/** Whether the node with the given ID is the controller */
 	isControllerNode(nodeId: number): boolean;
 
-	sendCommand<TResponse extends ICommandClass | undefined = undefined>(
-		command: ICommandClass,
+	sendCommand<TResponse extends CCId | undefined = undefined>(
+		command: CCId,
 		options?: SendCommandOptions,
 	): Promise<SendCommandReturnType<TResponse>>;
 
-	waitForCommand<T extends ICommandClass>(
-		predicate: (cc: ICommandClass) => boolean,
+	waitForCommand<T extends CCId>(
+		predicate: (cc: CCId) => boolean,
 		timeout: number,
 	): Promise<T>;
 
