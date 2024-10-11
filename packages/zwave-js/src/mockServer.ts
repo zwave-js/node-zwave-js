@@ -4,11 +4,19 @@ import {
 	type Responder as MdnsResponder,
 	getResponder as getMdnsResponder,
 } from "@homebridge/ciao";
-import { NotificationCCValues } from "@zwave-js/cc";
+import {
+	BinarySwitchCCValues,
+	MultilevelSwitchCCValues,
+	NotificationCCValues,
+	SoundSwitchCCValues,
+	SwitchType,
+} from "@zwave-js/cc";
 import {
 	CommandClasses,
 	type ConfigurationMetadata,
 	type ValueID,
+	type ValueMetadata,
+	type ValueMetadataNumeric,
 } from "@zwave-js/core";
 import type { ZWaveSerialPort } from "@zwave-js/serial";
 import {
@@ -17,6 +25,7 @@ import {
 } from "@zwave-js/serial/mock";
 import { getErrorMessage } from "@zwave-js/shared";
 import {
+	type BinarySwitchCCCapabilities,
 	type ConfigurationCCCapabilities,
 	MockController,
 	type MockControllerBehavior,
@@ -24,8 +33,10 @@ import {
 	MockNode,
 	type MockNodeBehavior,
 	type MockNodeOptions,
+	type MultilevelSwitchCCCapabilities,
 	type NotificationCCCapabilities,
 	type PartialCCCapabilities,
+	type SoundSwitchCCCapabilities,
 	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
 } from "@zwave-js/testing";
@@ -294,6 +305,14 @@ export function createMockNodeOptionsFromDump(
 		) {
 			continue;
 		}
+		// FIXME: Supervision encapsulation is not supported yet in mocks
+		if (ccId === CommandClasses.Supervision) {
+			continue;
+		}
+		// FIXME: Transport Service encapsulation is not supported yet in mocks
+		if (ccId === CommandClasses["Transport Service"]) {
+			continue;
+		}
 
 		ret.capabilities.commandClasses ??= [];
 		ret.capabilities.commandClasses.push(
@@ -368,6 +387,12 @@ function createCCCapabilitiesFromDump(
 		Object.assign(ret, createConfigurationCCCapabilitiesFromDump(dump));
 	} else if (ccId === CommandClasses.Notification) {
 		Object.assign(ret, createNotificationCCCapabilitiesFromDump(dump));
+	} else if (ccId === CommandClasses["Binary Switch"]) {
+		Object.assign(ret, createBinarySwitchCCCapabilitiesFromDump(dump));
+	} else if (ccId === CommandClasses["Multilevel Switch"]) {
+		Object.assign(ret, createMultilevelSwitchCCCapabilitiesFromDump(dump));
+	} else if (ccId === CommandClasses["Sound Switch"]) {
+		Object.assign(ret, createSoundSwitchCCCapabilitiesFromDump(dump));
 	}
 
 	return ret;
@@ -439,14 +464,120 @@ function createNotificationCCCapabilitiesFromDump(
 	return ret;
 }
 
+function createBinarySwitchCCCapabilitiesFromDump(
+	dump: CommandClassDump,
+): BinarySwitchCCCapabilities {
+	const defaultValue = findDumpedValue(
+		dump,
+		CommandClasses["Binary Switch"],
+		BinarySwitchCCValues.currentValue.id,
+		undefined,
+	);
+	return {
+		defaultValue,
+	};
+}
+
+function createMultilevelSwitchCCCapabilitiesFromDump(
+	dump: CommandClassDump,
+): MultilevelSwitchCCCapabilities {
+	const defaultValue = findDumpedValue(
+		dump,
+		CommandClasses["Multilevel Switch"],
+		MultilevelSwitchCCValues.currentValue.id,
+		undefined,
+	);
+
+	const switchType = findDumpedValue(
+		dump,
+		CommandClasses["Multilevel Switch"],
+		MultilevelSwitchCCValues.switchType.id,
+		SwitchType["Down/Up"],
+	);
+
+	return {
+		defaultValue,
+		primarySwitchType: switchType,
+	};
+}
+
+function createSoundSwitchCCCapabilitiesFromDump(
+	dump: CommandClassDump,
+): SoundSwitchCCCapabilities {
+	const defaultToneId = findDumpedValue(
+		dump,
+		CommandClasses["Sound Switch"],
+		SoundSwitchCCValues.defaultToneId.id,
+		1,
+	);
+	const defaultVolume = findDumpedValue(
+		dump,
+		CommandClasses["Sound Switch"],
+		SoundSwitchCCValues.defaultVolume.id,
+		50,
+	);
+
+	const ret: SoundSwitchCCCapabilities = {
+		defaultToneId,
+		defaultVolume,
+		tones: [],
+	};
+
+	const tonesMetadata = findDumpedMetadata<ValueMetadataNumeric>(
+		dump,
+		CommandClasses["Sound Switch"],
+		SoundSwitchCCValues.toneId.id,
+	);
+
+	if (tonesMetadata?.states) {
+		for (
+			const [toneIdStr, nameAndDuration] of Object.entries(
+				tonesMetadata.states,
+			)
+		) {
+			const toneId = parseInt(toneIdStr);
+			if (Number.isNaN(toneId) || toneId < 1 || toneId > 0xfe) continue;
+
+			const durationIndex = nameAndDuration.lastIndexOf("(");
+			if (durationIndex === -1) continue;
+
+			const name = nameAndDuration.slice(0, durationIndex).trim();
+			const duration = parseInt(
+				nameAndDuration.slice(durationIndex + 1, -1),
+				10,
+			);
+			if (Number.isNaN(duration)) continue;
+
+			ret.tones.push({ name, duration });
+		}
+	}
+
+	return ret;
+}
+
 function findDumpedValue<T>(
 	dump: CommandClassDump,
 	commandClass: CommandClasses,
 	valueId: ValueID,
 	defaultValue: T,
 ): T {
-	return (dump.values.find((id) =>
-		id.property === valueId.property
-		&& id.propertyKey === valueId.propertyKey
-	)?.value) as (T | undefined) ?? defaultValue;
+	return (
+		dump.values.find((id) =>
+			id.property === valueId.property
+			&& id.propertyKey === valueId.propertyKey
+		)?.value
+	) as (T | undefined) ?? defaultValue;
+}
+
+function findDumpedMetadata<T extends ValueMetadata>(
+	dump: CommandClassDump,
+	commandClass: CommandClasses,
+	valueId: ValueID,
+): T | undefined {
+	return (
+		dump.values.find((id) =>
+			id.property === valueId.property
+			&& id.propertyKey === valueId.propertyKey
+		)?.metadata as (T | undefined)
+	);
 }

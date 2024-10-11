@@ -673,6 +673,7 @@ export type {
 	SoundSwitchCCConfigurationSetOptions,
 	SoundSwitchCCToneInfoGetOptions,
 	SoundSwitchCCToneInfoReportOptions,
+	SoundSwitchCCTonePlayReportOptions,
 	SoundSwitchCCTonePlaySetOptions,
 	SoundSwitchCCTonesNumberReportOptions,
 } from "./SoundSwitchCC";
