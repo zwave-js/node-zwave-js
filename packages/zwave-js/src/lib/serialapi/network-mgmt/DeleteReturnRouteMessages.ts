@@ -70,7 +70,7 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 	public nodeId: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 
 		return super.serialize(ctx);

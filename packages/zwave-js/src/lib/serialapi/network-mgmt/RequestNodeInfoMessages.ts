@@ -92,7 +92,7 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 		if (gotDeserializationOptions(options)) {
 			this.nodeId = parseNodeID(
 				this.payload,
-				this.host.nodeIdType,
+				options.ctx.nodeIdType,
 				0,
 			).nodeId;
 		} else {
@@ -108,7 +108,7 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = encodeNodeID(this.nodeId, this.host.nodeIdType);
+		this.payload = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		return super.serialize(ctx);
 	}
 

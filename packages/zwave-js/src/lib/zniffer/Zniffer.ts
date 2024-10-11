@@ -25,6 +25,7 @@ import {
 	isLongRangeNodeId,
 	securityClassIsS2,
 } from "@zwave-js/core";
+import { CCParsingContext } from "@zwave-js/host";
 import {
 	type MessageParsingContext,
 	type ZWaveSerialPortImplementation,
@@ -234,7 +235,10 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 
 	/** The serial port instance */
 	private serial: ZnifferSerialPortBase | undefined;
-	private parsingContext: MessageParsingContext;
+	private parsingContext: Omit<
+		CCParsingContext,
+		"ownNodeId" | "sourceNodeId"
+	>;
 
 	private _destroyPromise: DeferredPromise<void> | undefined;
 	private get wasDestroyed(): boolean {

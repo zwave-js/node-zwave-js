@@ -108,7 +108,7 @@ export class ApplicationUpdateRequestWithNodeInfo
 		if (gotDeserializationOptions(options)) {
 			this.nodeInformation = parseNodeUpdatePayload(
 				this.payload,
-				this.host.nodeIdType,
+				options.ctx.nodeIdType,
 			);
 			this.nodeId = this.nodeInformation.nodeId;
 		} else {
@@ -123,7 +123,7 @@ export class ApplicationUpdateRequestWithNodeInfo
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeUpdatePayload(
 			this.nodeInformation,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 		return super.serialize(ctx);
 	}
@@ -159,7 +159,7 @@ export class ApplicationUpdateRequestNodeRemoved
 	) {
 		super(host, options);
 
-		const { nodeId } = parseNodeID(this.payload, host.nodeIdType, 0);
+		const { nodeId } = parseNodeID(this.payload, options.ctx.nodeIdType, 0);
 		this.nodeId = nodeId;
 		// byte 1/2 is 0, meaning unknown
 	}
@@ -178,7 +178,7 @@ class ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 		let offset = 0;
 		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 			this.payload,
-			host.nodeIdType,
+			options.ctx.nodeIdType,
 			offset,
 		);
 		offset += nodeIdBytes;
@@ -251,7 +251,7 @@ export class ApplicationUpdateRequestSUCIdChanged
 	) {
 		super(host, options);
 
-		const { nodeId } = parseNodeID(this.payload, host.nodeIdType, 0);
+		const { nodeId } = parseNodeID(this.payload, options.ctx.nodeIdType, 0);
 		this.sucNodeID = nodeId;
 		// byte 1/2 is 0, meaning unknown
 	}

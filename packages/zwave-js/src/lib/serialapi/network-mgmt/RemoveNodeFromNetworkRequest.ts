@@ -153,7 +153,7 @@ export class RemoveNodeFromNetworkRequestStatusReport
 				// the payload contains the node ID
 				const { nodeId } = parseNodeID(
 					this.payload.subarray(2),
-					this.host.nodeIdType,
+					options.ctx.nodeIdType,
 				);
 				this.statusContext = { nodeId };
 				break;

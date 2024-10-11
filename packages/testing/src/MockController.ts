@@ -2,6 +2,7 @@ import {
 	type CCId,
 	type MaybeNotKnown,
 	NOT_KNOWN,
+	NodeIDType,
 	SecurityClass,
 	type SecurityManagers,
 	securityClassOrder,
@@ -106,6 +107,8 @@ export class MockController {
 
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 		this.encodingContext = {
+			// TODO: LR is not supported in mocks
+			nodeIdType: NodeIDType.Short,
 			hasSecurityClass(
 				nodeId: number,
 				securityClass: SecurityClass,

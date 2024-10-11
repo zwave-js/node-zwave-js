@@ -2,6 +2,7 @@ import {
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessagePriority,
+	NodeIDType,
 	type NodeId,
 	type SecurityClass,
 	type SecurityManagers,
@@ -39,6 +40,9 @@ export enum MessageOrigin {
 }
 
 export interface MessageParsingContext extends GetDeviceConfig {
+	/** How many bytes a node ID occupies in serial API commands */
+	nodeIdType: NodeIDType;
+
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(
@@ -92,6 +96,9 @@ export type MessageOptions =
 	| MessageDeserializationOptions;
 
 export interface MessageEncodingContext extends Readonly<SecurityManagers> {
+	/** How many bytes a node ID occupies in serial API commands */
+	nodeIdType: NodeIDType;
+
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(

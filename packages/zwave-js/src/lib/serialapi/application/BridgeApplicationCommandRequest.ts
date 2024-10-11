@@ -62,11 +62,11 @@ export class BridgeApplicationCommandRequest extends Message
 
 		let offset = 1;
 		const { nodeId: destinationNodeId, bytesRead: dstNodeIdBytes } =
-			parseNodeID(this.payload, host.nodeIdType, offset);
+			parseNodeID(this.payload, options.ctx.nodeIdType, offset);
 		offset += dstNodeIdBytes;
 		const { nodeId: sourceNodeId, bytesRead: srcNodeIdBytes } = parseNodeID(
 			this.payload,
-			host.nodeIdType,
+			options.ctx.nodeIdType,
 			offset,
 		);
 		offset += srcNodeIdBytes;

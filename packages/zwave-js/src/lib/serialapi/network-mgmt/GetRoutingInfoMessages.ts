@@ -40,7 +40,7 @@ export class GetRoutingInfoRequest extends Message {
 	public removeBadLinks: boolean;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		const nodeId = encodeNodeID(this.sourceNodeId, this.host.nodeIdType);
+		const nodeId = encodeNodeID(this.sourceNodeId, ctx.nodeIdType);
 		const optionsByte = (this.removeBadLinks ? 0b1000_0000 : 0)
 			| (this.removeNonRepeaters ? 0b0100_0000 : 0);
 		this.payload = Buffer.concat([

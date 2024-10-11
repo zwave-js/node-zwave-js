@@ -292,7 +292,7 @@ export class AddNodeToNetworkRequestStatusReport
 			case AddNodeStatus.Done: {
 				const { nodeId } = parseNodeID(
 					this.payload,
-					host.nodeIdType,
+					options.ctx.nodeIdType,
 					2,
 				);
 				this.statusContext = { nodeId };
@@ -304,7 +304,7 @@ export class AddNodeToNetworkRequestStatusReport
 				// the payload contains a node information frame
 				this.statusContext = parseNodeUpdatePayload(
 					this.payload.subarray(2),
-					host.nodeIdType,
+					options.ctx.nodeIdType,
 				);
 				break;
 			}

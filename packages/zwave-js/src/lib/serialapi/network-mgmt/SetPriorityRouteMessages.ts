@@ -83,7 +83,7 @@ export class SetPriorityRouteRequest extends Message {
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(
 			this.destinationNodeId,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 		if (this.repeaters == undefined || this.routeSpeed == undefined) {
 			// Remove the priority route
@@ -140,7 +140,7 @@ export class SetPriorityRouteResponse extends Message
 		// Byte(s) 0/1 are the node ID - this is missing from the Host API specs
 		const { /* nodeId, */ bytesRead } = parseNodeID(
 			this.payload,
-			this.host.nodeIdType,
+			options.ctx.nodeIdType,
 			0,
 		);
 

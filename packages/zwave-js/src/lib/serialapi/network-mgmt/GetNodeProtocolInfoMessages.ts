@@ -44,7 +44,7 @@ export class GetNodeProtocolInfoRequest extends Message {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			this.requestedNodeId =
-				parseNodeID(this.payload, this.host.nodeIdType, 0).nodeId;
+				parseNodeID(this.payload, options.ctx.nodeIdType, 0).nodeId;
 		} else {
 			this.requestedNodeId = options.requestedNodeId;
 		}
@@ -55,7 +55,7 @@ export class GetNodeProtocolInfoRequest extends Message {
 	public requestedNodeId: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = encodeNodeID(this.requestedNodeId, this.host.nodeIdType);
+		this.payload = encodeNodeID(this.requestedNodeId, ctx.nodeIdType);
 		return super.serialize(ctx);
 	}
 }

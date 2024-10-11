@@ -84,9 +84,6 @@ export interface CCEncodingContext
 
 /** Host application abstractions to be used in Serial API and CC implementations */
 export interface ZWaveHost extends HostIDs, GetNextCallbackId {
-	/** How many bytes a node ID occupies in serial API commands */
-	readonly nodeIdType?: NodeIDType;
-
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
 	 * Returns 1 if the node claims that it does not support a CC.
@@ -154,6 +151,8 @@ export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 	configManager: ConfigManager;
 
 	options: ZWaveHostOptions;
+
+	readonly nodeIdType?: NodeIDType;
 
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;

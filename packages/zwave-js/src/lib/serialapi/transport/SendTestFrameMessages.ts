@@ -55,7 +55,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 			let offset = 0;
 			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 				this.payload,
-				host.nodeIdType,
+				options.ctx.nodeIdType,
 				offset,
 			);
 			offset += nodeIdBytes;
@@ -73,7 +73,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 	public powerlevel: Powerlevel;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		const nodeId = encodeNodeID(this.testNodeId, this.host.nodeIdType);
+		const nodeId = encodeNodeID(this.testNodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([
 			nodeId,
 			Buffer.from([

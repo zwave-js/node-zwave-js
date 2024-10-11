@@ -656,6 +656,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		});
 
 		this.messageParsingContext = {
+			get nodeIdType() {
+				return this.nodeIdType;
+			},
 			getHighestSecurityClass: (nodeId) =>
 				this.getHighestSecurityClass(nodeId),
 			hasSecurityClass: (nodeId, securityClass) =>
@@ -664,6 +667,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this.setSecurityClass(nodeId, securityClass, granted),
 		};
 		this.messageEncodingContext = {
+			get nodeIdType() {
+				return this.nodeIdType;
+			},
 			getHighestSecurityClass: (nodeId) =>
 				this.getHighestSecurityClass(nodeId),
 			hasSecurityClass: (nodeId, securityClass) =>

@@ -33,7 +33,7 @@ export class GetSUCNodeIdResponse extends Message {
 		if (gotDeserializationOptions(options)) {
 			this.sucNodeId = parseNodeID(
 				this.payload,
-				this.host.nodeIdType,
+				options.ctx.nodeIdType,
 				0,
 			).nodeId;
 		} else {
@@ -45,7 +45,7 @@ export class GetSUCNodeIdResponse extends Message {
 	public sucNodeId: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = encodeNodeID(this.sucNodeId, this.host.nodeIdType);
+		this.payload = encodeNodeID(this.sucNodeId, ctx.nodeIdType);
 		return super.serialize(ctx);
 	}
 }

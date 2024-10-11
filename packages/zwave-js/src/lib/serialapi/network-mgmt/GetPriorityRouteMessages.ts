@@ -53,7 +53,7 @@ export class GetPriorityRouteRequest extends Message {
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeID(
 			this.destinationNodeId,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 
 		return super.serialize(ctx);
@@ -79,7 +79,7 @@ export class GetPriorityRouteResponse extends Message {
 		let offset = 0;
 		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 			this.payload,
-			host.nodeIdType,
+			options.ctx.nodeIdType,
 			offset,
 		);
 		offset += nodeIdBytes;

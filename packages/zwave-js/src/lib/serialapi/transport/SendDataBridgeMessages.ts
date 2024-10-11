@@ -129,11 +129,11 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 		const destinationNodeId = encodeNodeID(
 			this.command.nodeId,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 		const serializedCC = this.serializeCC(ctx);
 
@@ -370,10 +370,10 @@ export class SendDataMulticastBridgeRequest<
 		const serializedCC = this.serializeCC(ctx);
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 		const destinationNodeIDs = this.command.nodeId.map((id) =>
-			encodeNodeID(id, this.host.nodeIdType)
+			encodeNodeID(id, ctx.nodeIdType)
 		);
 
 		this.payload = Buffer.concat([

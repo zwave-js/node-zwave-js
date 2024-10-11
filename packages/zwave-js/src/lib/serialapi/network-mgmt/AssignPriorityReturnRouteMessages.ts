@@ -101,10 +101,10 @@ export class AssignPriorityReturnRouteRequest
 	public routeSpeed: ZWaveDataRate;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		const destinationNodeId = encodeNodeID(
 			this.destinationNodeId,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 		this.payload = Buffer.concat([
 			nodeId,

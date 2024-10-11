@@ -90,7 +90,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			let offset = 0;
 			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 				this.payload,
-				host.nodeIdType,
+				options.ctx.nodeIdType,
 				offset,
 			);
 			offset += nodeIdBytes;
@@ -162,7 +162,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	// Cache the serialized CC, so we can check if it needs to be fragmented
 	private _serializedCC: Buffer | undefined;
 	/** @internal */
-	public serializeCC(ctx: MessageEncodingContext): Buffer {
+	public serializeCC(ctx: CCEncodingContext): Buffer {
 		if (!this._serializedCC) {
 			this._serializedCC = this.command.serialize(ctx);
 		}
@@ -176,7 +176,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		const nodeId = encodeNodeID(this.command.nodeId, this.host.nodeIdType);
+		const nodeId = encodeNodeID(this.command.nodeId, ctx.nodeIdType);
 		const serializedCC = this.serializeCC(ctx);
 		this.payload = Buffer.concat([
 			nodeId,
@@ -380,7 +380,7 @@ export class SendDataMulticastRequest<
 			for (let i = 0; i < numNodeIDs; i++) {
 				const { nodeId, bytesRead } = parseNodeID(
 					this.payload,
-					host.nodeIdType,
+					options.ctx.nodeIdType,
 					offset,
 				);
 				nodeIds.push(nodeId);
@@ -469,7 +469,7 @@ export class SendDataMulticastRequest<
 	// Cache the serialized CC, so we can check if it needs to be fragmented
 	private _serializedCC: Buffer | undefined;
 	/** @internal */
-	public serializeCC(ctx: MessageEncodingContext): Buffer {
+	public serializeCC(ctx: CCEncodingContext): Buffer {
 		if (!this._serializedCC) {
 			this._serializedCC = this.command.serialize(ctx);
 		}
@@ -485,7 +485,7 @@ export class SendDataMulticastRequest<
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		const serializedCC = this.serializeCC(ctx);
 		const destinationNodeIDs = this.command.nodeId.map((id) =>
-			encodeNodeID(id, this.host.nodeIdType)
+			encodeNodeID(id, ctx.nodeIdType)
 		);
 		this.payload = Buffer.concat([
 			// # of target nodes, not # of bytes

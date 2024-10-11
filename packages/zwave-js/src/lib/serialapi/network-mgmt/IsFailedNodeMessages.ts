@@ -30,7 +30,7 @@ export class IsFailedNodeRequest extends Message {
 	public failedNodeId: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
-		this.payload = encodeNodeID(this.failedNodeId, this.host.nodeIdType);
+		this.payload = encodeNodeID(this.failedNodeId, ctx.nodeIdType);
 		return super.serialize(ctx);
 	}
 }

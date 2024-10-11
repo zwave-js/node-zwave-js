@@ -86,7 +86,7 @@ export class ApplicationCommandRequest extends Message
 			let offset = 1;
 			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 				this.payload,
-				host.nodeIdType,
+				options.ctx.nodeIdType,
 				offset,
 			);
 			offset += nodeIdBytes;
@@ -147,7 +147,7 @@ export class ApplicationCommandRequest extends Message
 		const serializedCC = this.command.serialize(ctx);
 		const nodeId = encodeNodeID(
 			this.getNodeId() ?? this.host.ownNodeId,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 		this.payload = Buffer.concat([
 			Buffer.from([statusByte]),
