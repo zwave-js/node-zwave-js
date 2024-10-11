@@ -85,7 +85,7 @@ export interface MultilevelSensorCCCapabilities {
 }
 
 export interface MultilevelSwitchCCCapabilities {
-	defaultValue: MaybeUnknown<number>;
+	defaultValue?: MaybeUnknown<number>;
 	primarySwitchType: SwitchType;
 }
 
