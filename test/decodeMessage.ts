@@ -95,7 +95,7 @@ import { Message } from "@zwave-js/serial";
 	const msg = Message.from(host, { data });
 
 	if (isCommandClassContainer(msg)) {
-		msg.command.mergePartialCCs(host, []);
+		msg.command.mergePartialCCs(host, [], {} as any);
 	}
 	msg;
 	debugger;

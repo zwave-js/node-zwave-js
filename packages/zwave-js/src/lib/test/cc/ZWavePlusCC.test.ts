@@ -23,7 +23,7 @@ test("The Get command should serialize correctly", (t) => {
 			ZWavePlusCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 // describe.skip(`interview()`, () => {

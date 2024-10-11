@@ -49,8 +49,8 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			SecurityClass.S2_Unauthenticated,
 			driver.options.securityKeys!.S2_Unauthenticated!,
 		);
-		mockNode.host.securityManager2 = sm2Node;
-		mockNode.host.getHighestSecurityClass = () =>
+		mockNode.securityManagers.securityManager2 = sm2Node;
+		mockNode.encodingContext.getHighestSecurityClass = () =>
 			SecurityClass.S2_Unauthenticated;
 
 		const sm0Node = new SecurityManager({
@@ -58,7 +58,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			nonceTimeout: 100000,
 		});
-		mockNode.host.securityManager = sm0Node;
+		mockNode.securityManagers.securityManager = sm0Node;
 
 		// Create a security manager for the controller
 		const smCtrlr = new SecurityManager2();
@@ -75,16 +75,17 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			SecurityClass.S2_Unauthenticated,
 			driver.options.securityKeys!.S2_Unauthenticated!,
 		);
-		controller.host.securityManager2 = smCtrlr;
-		controller.host.getHighestSecurityClass = () =>
-			SecurityClass.S2_Unauthenticated;
+		controller.securityManagers.securityManager2 = smCtrlr;
+		controller.parsingContext.getHighestSecurityClass =
+			controller.encodingContext.getHighestSecurityClass =
+				() => SecurityClass.S2_Unauthenticated;
 
 		const sm0Ctrlr = new SecurityManager({
 			ownNodeId: controller.host.ownNodeId,
 			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			nonceTimeout: 100000,
 		});
-		controller.host.securityManager = sm0Ctrlr;
+		controller.securityManagers.securityManager = sm0Ctrlr;
 
 		// Respond to S0 Nonce Get
 		const respondToS0NonceGet: MockNodeBehavior = {
@@ -109,7 +110,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs(undefined as any, []);
+					receivedCC.mergePartialCCs(undefined as any, [], {} as any);
 				}
 				return undefined;
 			},
@@ -125,6 +126,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 					);
 					const cc = new Security2CCNonceReport(self.host, {
 						nodeId: controller.host.ownNodeId,
+						securityManagers: self.securityManagers,
 						SOS: true,
 						MOS: false,
 						receiverEI: nonce,
@@ -150,6 +152,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 						);
 						const cc = new Security2CCNonceReport(self.host, {
 							nodeId: controller.host.ownNodeId,
+							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -174,7 +177,11 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 						moreUpdatesFollow: false,
 						status: SupervisionStatus.Success,
 					});
-					cc = Security2CC.encapsulate(self.host, cc);
+					cc = Security2CC.encapsulate(
+						self.host,
+						cc,
+						self.securityManagers,
+					);
 					return { action: "sendCC", cc };
 				}
 			},

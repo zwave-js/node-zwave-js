@@ -30,7 +30,7 @@ test("the Get command should serialize correctly (no sensor type)", (t) => {
 			BinarySensorType.Any, // sensor type
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Get command should serialize correctly", (t) => {
@@ -41,7 +41,7 @@ test("the Get command should serialize correctly", (t) => {
 	const expected = buildCCBuffer(
 		Buffer.from([BinarySensorCommand.Get, BinarySensorType.CO]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -54,6 +54,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	const cc = new BinarySensorCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.value, true);
@@ -70,6 +71,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	const cc = new BinarySensorCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.value, false);
@@ -83,7 +85,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			BinarySensorCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
@@ -97,6 +99,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	const cc = new BinarySensorCCSupportedReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedSensorTypes, [
@@ -115,6 +118,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new BinarySensorCC(host, {
 		nodeId: 1,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, BinarySensorCC);
 });

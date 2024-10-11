@@ -19,12 +19,14 @@ test("the CC should serialize correctly", (t) => {
 	const expected = buildCCBuffer(
 		Buffer.from([]), // No command!
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CC should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
 		Buffer.from([]), // No command!
 	);
-	t.notThrows(() => new NoOperationCC(host, { nodeId: 2, data: ccData }));
+	t.notThrows(() =>
+		new NoOperationCC(host, { nodeId: 2, data: ccData, context: {} as any })
+	);
 });

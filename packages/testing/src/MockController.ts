@@ -1,4 +1,11 @@
-import { type ICommandClass } from "@zwave-js/core";
+import {
+	type ICommandClass,
+	type MaybeNotKnown,
+	NOT_KNOWN,
+	SecurityClass,
+	type SecurityManagers,
+	securityClassOrder,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
@@ -56,9 +63,6 @@ export class MockController {
 		this.host = {
 			ownNodeId: options.ownNodeId ?? 1,
 			homeId: options.homeId ?? 0x7e571000,
-			securityManager: undefined,
-			securityManager2: undefined,
-			securityManagerLR: undefined,
 			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
 			// getNextSupervisionSessionId: (nodeId) => {
@@ -100,24 +104,53 @@ export class MockController {
 			...options.capabilities,
 		};
 
-		this.parsingContext = {
-			// We don't care about security classes on the mock controller
-			getHighestSecurityClass: () => undefined,
-			hasSecurityClass: () => false,
-			setSecurityClass: () => {},
-		};
+		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 		this.encodingContext = {
-			// We don't care about security classes on the mock controller
-			getHighestSecurityClass: () => undefined,
-			hasSecurityClass: () => false,
-			setSecurityClass: () => {},
+			hasSecurityClass(
+				nodeId: number,
+				securityClass: SecurityClass,
+			): MaybeNotKnown<boolean> {
+				return (
+					securityClasses.get(nodeId)?.get(securityClass) ?? NOT_KNOWN
+				);
+			},
+			setSecurityClass(
+				nodeId: number,
+				securityClass: SecurityClass,
+				granted: boolean,
+			): void {
+				if (!securityClasses.has(nodeId)) {
+					securityClasses.set(nodeId, new Map());
+				}
+				securityClasses.get(nodeId)!.set(securityClass, granted);
+			},
+			getHighestSecurityClass(
+				nodeId: number,
+			): MaybeNotKnown<SecurityClass> {
+				const map = securityClasses.get(nodeId);
+				if (!map?.size) return undefined;
+				let missingSome = false;
+				for (const secClass of securityClassOrder) {
+					if (map.get(secClass) === true) return secClass;
+					if (!map.has(secClass)) {
+						missingSome = true;
+					}
+				}
+				// If we don't have the info for every security class, we don't know the highest one yet
+				return missingSome ? undefined : SecurityClass.None;
+			},
+		};
+		this.parsingContext = {
+			...this.encodingContext,
 		};
 
 		void this.execute();
 	}
 
-	private parsingContext: MessageParsingContext;
-	private encodingContext: MessageEncodingContext;
+	public securityManagers: SecurityManagers = {};
+
+	public encodingContext: MessageEncodingContext;
+	public parsingContext: MessageParsingContext;
 
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
@@ -485,10 +518,7 @@ export class MockController {
 
 				await wait(node.capabilities.txDelay);
 
-				const unlazy = unlazyMockZWaveFrame(
-					frame,
-					this.encodingContext,
-				);
+				const unlazy = unlazyMockZWaveFrame(frame);
 				onTransmit?.(unlazy);
 				node.onControllerFrame(unlazy).catch((e) => {
 					console.error(e);
@@ -500,10 +530,7 @@ export class MockController {
 
 				await wait(node.capabilities.txDelay);
 
-				const unlazy = unlazyMockZWaveFrame(
-					frame,
-					this.encodingContext,
-				);
+				const unlazy = unlazyMockZWaveFrame(frame);
 				onTransmit?.(unlazy);
 				this.onNodeFrame(node, unlazy).catch((e) => {
 					console.error(e);

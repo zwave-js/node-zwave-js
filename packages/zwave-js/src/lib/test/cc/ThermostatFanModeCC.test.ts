@@ -27,7 +27,7 @@ test("the Get command should serialize correctly", (t) => {
 			ThermostatFanModeCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (off = false)", (t) => {
@@ -42,7 +42,7 @@ test("the Set command should serialize correctly (off = false)", (t) => {
 			0x04, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (off = true)", (t) => {
@@ -57,7 +57,7 @@ test("the Set command should serialize correctly (off = true)", (t) => {
 			0b1000_0100, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1-v2) should be deserialized correctly", (t) => {
@@ -75,6 +75,7 @@ test("the Report command (v1-v2) should be deserialized correctly", (t) => {
 		{
 			nodeId: 1,
 			data: ccData,
+			context: {} as any,
 		},
 	);
 
@@ -92,6 +93,7 @@ test("the Report command (v3-v5) should be deserialized correctly", (t) => {
 	const cc = new ThermostatFanModeCCReport(host, {
 		nodeId: 5,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.mode, ThermostatFanMode["Auto high"]);

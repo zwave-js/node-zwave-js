@@ -48,6 +48,7 @@ test("the Notification command should deserialize correctly", (t) => {
 	const cc = new EntryControlCCNotification(host, {
 		nodeId: 1,
 		data,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.sequenceNumber, 1);
@@ -65,7 +66,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 			EntryControlCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationSet command should serialize correctly", (t) => {
@@ -81,7 +82,7 @@ test("the ConfigurationSet command should serialize correctly", (t) => {
 			0x2,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationReport command should be deserialize correctly", (t) => {
@@ -96,6 +97,7 @@ test("the ConfigurationReport command should be deserialize correctly", (t) => {
 	const cc = new EntryControlCCConfigurationReport(host, {
 		nodeId: 1,
 		data,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.keyCacheSize, 1);
@@ -111,7 +113,7 @@ test("the EventSupportedGet command should serialize correctly", (t) => {
 			EntryControlCommand.EventSupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the EventSupportedReport command should be deserialize correctly", (t) => {
@@ -135,6 +137,7 @@ test("the EventSupportedReport command should be deserialize correctly", (t) => 
 	const cc = new EntryControlCCEventSupportedReport(host, {
 		nodeId: 1,
 		data,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedDataTypes, [EntryControlDataTypes.ASCII]);
@@ -157,7 +160,7 @@ test("the KeySupportedGet command should serialize correctly", (t) => {
 			EntryControlCommand.KeySupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the KeySupportedReport command should be deserialize correctly", (t) => {
@@ -172,6 +175,7 @@ test("the KeySupportedReport command should be deserialize correctly", (t) => {
 	const cc = new EntryControlCCKeySupportedReport(host, {
 		nodeId: 1,
 		data,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedKeys, [1, 3, 4, 6]);

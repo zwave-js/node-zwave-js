@@ -30,7 +30,7 @@ test("the Set command (without Duration) should serialize correctly", (t) => {
 			0xff, // default duration
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command (with Duration) should serialize correctly", (t) => {
@@ -46,7 +46,7 @@ test("the Set command (with Duration) should serialize correctly", (t) => {
 			0x80, // 1 minute
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should be deserialized correctly", (t) => {
@@ -60,6 +60,7 @@ test("the Set command should be deserialized correctly", (t) => {
 	const cc = new SceneActivationCCSet(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.sceneId, 15);
@@ -73,6 +74,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new SceneActivationCC(host, {
 		nodeId: 2,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, SceneActivationCC);
 });

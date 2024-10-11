@@ -606,6 +606,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			const cc = new Security2CCNonceGet(driver, {
 				nodeId: nodeId,
 				endpoint: msg.command.endpointIndex,
+				securityManagers: driver,
 			});
 			const nonceResp = yield* sendCommandGenerator<
 				Security2CCNonceReport
@@ -834,6 +835,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 					if (innerMPANState) {
 						const cc = new Security2CCMessageEncapsulation(driver, {
 							nodeId,
+							securityManagers: driver,
 							extensions: [
 								new MPANExtension({
 									groupId,

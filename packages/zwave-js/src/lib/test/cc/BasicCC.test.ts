@@ -31,7 +31,7 @@ test("the Get command should serialize correctly", (t) => {
 			BasicCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(basicCC.serialize(), expected);
+	t.deepEqual(basicCC.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
@@ -45,7 +45,7 @@ test("the Set command should serialize correctly", (t) => {
 			55, // target value
 		]),
 	);
-	t.deepEqual(basicCC.serialize(), expected);
+	t.deepEqual(basicCC.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -58,6 +58,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	const basicCC = new BasicCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(basicCC.currentValue, 55);
@@ -77,6 +78,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	const basicCC = new BasicCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(basicCC.currentValue, 55);
@@ -92,6 +94,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const basicCC: any = new BasicCC(host, {
 		nodeId: 2,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(basicCC.constructor, BasicCC);
 });

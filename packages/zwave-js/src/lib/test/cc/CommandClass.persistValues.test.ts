@@ -100,6 +100,7 @@ test(`persistValues() should not store values marked as "events" (non-stateful)`
 			CentralSceneKeys.KeyPressed,
 			1, // scene number
 		]),
+		context: {} as any,
 	});
 
 	// Central Scene should use the value notification event instead of added/updated

@@ -25,7 +25,7 @@ test("the Get command should serialize correctly", (t) => {
 			ManufacturerSpecificCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -43,6 +43,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	const cc = new ManufacturerSpecificCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.manufacturerId, 0x0102);

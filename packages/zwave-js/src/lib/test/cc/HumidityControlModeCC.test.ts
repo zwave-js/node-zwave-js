@@ -33,7 +33,7 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlModeCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
@@ -47,7 +47,7 @@ test("the Set command should serialize correctly", (t) => {
 			0x03, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -60,6 +60,7 @@ test("the Report command should be deserialized correctly", (t) => {
 	const cc = new HumidityControlModeCCReport(host, {
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.mode, HumidityControlMode.Auto);
@@ -75,6 +76,7 @@ test("the Report command should set the correct value", (t) => {
 	const report = new HumidityControlModeCCReport(host, {
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	report.persistValues(host);
 
@@ -95,6 +97,7 @@ test("the Report command should set the correct metadata", (t) => {
 	const cc = new HumidityControlModeCCReport(host, {
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	cc.persistValues(host);
 
@@ -117,7 +120,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			HumidityControlModeCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
@@ -130,6 +133,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	const cc = new HumidityControlModeCCSupportedReport(host, {
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedModes, [
@@ -148,6 +152,7 @@ test("the SupportedReport command should set the correct metadata", (t) => {
 	const cc = new HumidityControlModeCCSupportedReport(host, {
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	cc.persistValues(host);
 

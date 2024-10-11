@@ -30,7 +30,7 @@ test("the RecordsCountGet command should serialize correctly", (t) => {
 			DoorLockLoggingCommand.RecordsSupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the RecordsCountReport command should be deserialized correctly", (t) => {
@@ -43,6 +43,7 @@ test("the RecordsCountReport command should be deserialized correctly", (t) => {
 	const cc = new DoorLockLoggingCCRecordsSupportedReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.recordsCount, 20);
@@ -59,7 +60,7 @@ test("the RecordGet command should serialize correctly", (t) => {
 			1, // Record Number
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the RecordReport command should be deserialized correctly", (t) => {
@@ -84,6 +85,7 @@ test("the RecordReport command should be deserialized correctly", (t) => {
 	const cc = new DoorLockLoggingCCRecordReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.recordNumber, 7);

@@ -28,7 +28,7 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlOperatingStateCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -41,6 +41,7 @@ test("the Report command should be deserialized correctly", (t) => {
 	const cc = new HumidityControlOperatingStateCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.state, HumidityControlOperatingState.Humidifying);

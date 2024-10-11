@@ -5,11 +5,23 @@ import type {
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
 } from "../consts";
+import { type SecurityManager } from "../security/Manager";
+import { type SecurityManager2 } from "../security/Manager2";
 import { type SecurityClass } from "../security/SecurityClass";
 import { type MaybeNotKnown } from "../values/Primitive";
 
+/** Allows accessing the security manager instances */
+export interface SecurityManagers {
+	/** Management of Security S0 keys and nonces */
+	securityManager?: SecurityManager;
+	/** Management of Security S2 keys and nonces (Z-Wave Classic) */
+	securityManager2?: SecurityManager2;
+	/** Management of Security S2 keys and nonces (Z-Wave Long Range) */
+	securityManagerLR?: SecurityManager2;
+}
+
 /** Additional context needed for deserializing CCs */
-export interface CCParsingContext {
+export interface CCParsingContext extends Readonly<SecurityManagers> {
 	sourceNodeId: number;
 	ownNodeId: number;
 
@@ -32,7 +44,7 @@ export interface CCParsingContext {
 
 /** Additional context needed for serializing CCs */
 // FIXME: Lot of duplication between the CC and message contexts
-export interface CCEncodingContext {
+export interface CCEncodingContext extends Readonly<SecurityManagers> {
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(

@@ -28,7 +28,7 @@ test("the Get command should serialize correctly", (t) => {
 			PowerlevelCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set NormalPower command should serialize correctly", (t) => {
@@ -43,7 +43,7 @@ test("the Set NormalPower command should serialize correctly", (t) => {
 			0, // timeout (ignored)
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set NormalPower command with timeout should serialize correctly", (t) => {
@@ -59,7 +59,7 @@ test("the Set NormalPower command with timeout should serialize correctly", (t) 
 			0x00, // timeout ignored
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set Custom power command should serialize correctly", (t) => {
@@ -75,7 +75,7 @@ test("the Set Custom power command should serialize correctly", (t) => {
 			50, // timeout
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly (NormalPower)", (t) => {
@@ -89,6 +89,7 @@ test("the Report command should be deserialized correctly (NormalPower)", (t) =>
 	const cc = new PowerlevelCCReport(host, {
 		nodeId: 5,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.powerlevel, Powerlevel["Normal Power"]);
@@ -106,6 +107,7 @@ test("the Report command should be deserialized correctly (custom power)", (t) =
 	const cc = new PowerlevelCCReport(host, {
 		nodeId: 5,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.powerlevel, Powerlevel["-3 dBm"]);
@@ -119,6 +121,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new PowerlevelCC(host, {
 		nodeId: 1,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, PowerlevelCC);
 });

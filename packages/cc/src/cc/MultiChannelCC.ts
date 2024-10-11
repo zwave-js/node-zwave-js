@@ -1,6 +1,7 @@
 import {
 	type ApplicationNodeInformation,
 	type CCEncodingContext,
+	type CCParsingContext,
 	CommandClasses,
 	type GenericDeviceClass,
 	type MaybeNotKnown,
@@ -1117,6 +1118,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public mergePartialCCs(
 		applHost: ZWaveApplicationHost,
 		partials: MultiChannelCCEndPointFindReport[],
+		_ctx: CCParsingContext,
 	): void {
 		// Concat the list of end points
 		this.foundEndpoints = [...partials, this]

@@ -44,7 +44,7 @@ test("the Get command should serialize correctly", (t) => {
 			0b0000_0001,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test.skip("the Get command should throw if GroupId > groupCount", (t) => {
@@ -74,7 +74,7 @@ test("the Set command should serialize correctly", (t) => {
 			0x05, // dimming duration
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly with undefined duration", (t) => {
@@ -93,7 +93,7 @@ test("the Set command should serialize correctly with undefined duration", (t) =
 			0xff, // dimming duration
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test.skip("the Set command should throw if GroupId > groupCount", (t) => {
@@ -123,6 +123,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	const cc = new SceneControllerConfigurationCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.groupId, 3);
@@ -138,6 +139,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new SceneControllerConfigurationCC(host, {
 		nodeId: 1,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, SceneControllerConfigurationCC);
 });

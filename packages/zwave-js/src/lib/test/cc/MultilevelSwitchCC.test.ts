@@ -30,7 +30,7 @@ test("the Get command should serialize correctly", (t) => {
 			MultilevelSwitchCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (no duration)", (t) => {
@@ -46,7 +46,7 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 			0xff, // default duration
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command (V2) should serialize correctly", (t) => {
@@ -63,7 +63,7 @@ test("the Set command (V2) should serialize correctly", (t) => {
 			0x81, // 2 minutes
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (V1) should be deserialized correctly", (t) => {
@@ -76,6 +76,7 @@ test("the Report command (V1) should be deserialized correctly", (t) => {
 	const cc = new MultilevelSwitchCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.currentValue, 55);
@@ -95,6 +96,7 @@ test("the Report command (v4) should be deserialized correctly", (t) => {
 	const cc = new MultilevelSwitchCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.currentValue, 55);
@@ -112,7 +114,7 @@ test("the StopLevelChange command should serialize correctly", (t) => {
 			MultilevelSwitchCommand.StopLevelChange, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the StartLevelChange command (V2) should serialize correctly (down, ignore start level, with duration)", (t) => {
@@ -132,7 +134,7 @@ test("the StartLevelChange command (V2) should serialize correctly (down, ignore
 			3, // 3 sec
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
@@ -144,7 +146,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			MultilevelSwitchCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("deserializing an unsupported command should return an unspecified version of MultilevelSwitchCC", (t) => {
@@ -154,6 +156,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new MultilevelSwitchCC(host, {
 		nodeId: 2,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, MultilevelSwitchCC);
 });

@@ -49,8 +49,8 @@ test("should compare priority, then the timestamp", (t) => {
 		controller: {
 			nodes: new Map<number, MockNode>(),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},
@@ -147,8 +147,8 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 				],
 			]),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},
@@ -260,8 +260,8 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 				],
 			]),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},
@@ -356,8 +356,8 @@ test("Controller message should be preferred over messages for sleeping nodes", 
 				],
 			]),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},
@@ -401,8 +401,8 @@ test("should capture a stack trace where it was created", (t) => {
 		controller: {
 			nodes: new Map<number, MockNode>(),
 		},
-		get nodes() {
-			return driverMock.controller.nodes;
+		getNode(nodeId: number) {
+			return driverMock.controller.nodes.get(nodeId);
 		},
 		getSafeCCVersion() {},
 		getSupportedCCVersion() {},

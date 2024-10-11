@@ -35,6 +35,7 @@ import {
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
+	type SecurityManagers,
 	encodeCCList,
 } from "@zwave-js/core/safe";
 import type {
@@ -52,7 +53,6 @@ import {
 	type CCResponseRole,
 	CommandClass,
 	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -122,55 +122,39 @@ function getAuthenticationData(
 	unencryptedPayload.copy(ret, offset, 0);
 	return ret;
 }
-
 function getSecurityManager(
-	host: ZWaveHost,
+	ownNodeId: number,
+	securityManagers: SecurityManagers,
 	destination: MulticastDestination | number,
 ): SecurityManager2 | undefined {
-	const longRange = isLongRangeNodeId(host.ownNodeId)
+	const longRange = isLongRangeNodeId(ownNodeId)
 		|| isLongRangeNodeId(
 			isArray(destination) ? destination[0] : destination,
 		);
 	return longRange
-		? host.securityManagerLR
-		: host.securityManager2;
+		? securityManagers.securityManagerLR
+		: securityManagers.securityManager2;
 }
 
 /** Validates that a sequence number is not a duplicate and updates the SPAN table if it is accepted. Returns the previous sequence number if there is one. */
 function validateSequenceNumber(
 	this: Security2CC,
+	securityManager: SecurityManager2,
 	sequenceNumber: number,
 ): number | undefined {
-	const securityManager = getSecurityManager(this.host, this.nodeId);
-
 	validatePayload.withReason(
 		`Duplicate command (sequence number ${sequenceNumber})`,
 	)(
-		!securityManager!.isDuplicateSinglecast(
+		!securityManager.isDuplicateSinglecast(
 			this.nodeId as number,
 			sequenceNumber,
 		),
 	);
 	// Not a duplicate, store it
-	return securityManager!.storeSequenceNumber(
+	return securityManager.storeSequenceNumber(
 		this.nodeId as number,
 		sequenceNumber,
 	);
-}
-
-function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
-	const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
-	if (!this.host.ownNodeId) {
-		throw new ZWaveError(
-			`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	} else if (!getSecurityManager(this.host, this.nodeId)) {
-		throw new ZWaveError(
-			`Secure commands (S2) can only be ${verb} when the network keys are configured!`,
-			ZWaveErrorCodes.Driver_NoSecurity,
-		);
-	}
 }
 
 const MAX_DECRYPT_ATTEMPTS_SINGLECAST = 5;
@@ -210,6 +194,7 @@ export class Security2CCAPI extends CCAPI {
 		this.assertPhysicalEndpoint(this.endpoint);
 
 		const securityManager = getSecurityManager(
+			this.applHost.ownNodeId,
 			this.applHost,
 			this.endpoint.nodeId,
 		);
@@ -228,6 +213,7 @@ export class Security2CCAPI extends CCAPI {
 		const cc = new Security2CCNonceReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
+			securityManagers: this.applHost,
 			SOS: true,
 			MOS: false,
 			receiverEI,
@@ -274,6 +260,7 @@ export class Security2CCAPI extends CCAPI {
 		const cc = new Security2CCNonceReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
+			securityManagers: this.applHost,
 			SOS: false,
 			MOS: true,
 		});
@@ -317,6 +304,7 @@ export class Security2CCAPI extends CCAPI {
 		const cc = new Security2CCMessageEncapsulation(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
+			securityManagers: this.applHost,
 			extensions: [
 				new MPANExtension({
 					groupId,
@@ -377,7 +365,12 @@ export class Security2CCAPI extends CCAPI {
 		if (MultiChannelCC.requiresEncapsulation(cc)) {
 			cc = MultiChannelCC.encapsulate(this.applHost, cc);
 		}
-		cc = Security2CC.encapsulate(this.applHost, cc, { securityClass });
+		cc = Security2CC.encapsulate(
+			this.applHost,
+			cc,
+			this.applHost,
+			{ securityClass },
+		);
 
 		const response = await this.applHost.sendCommand<
 			Security2CCCommandsSupportedReport
@@ -617,9 +610,53 @@ export class Security2CCAPI extends CCAPI {
 export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
 
+	protected assertSecurity(
+		options:
+			| (CCCommandOptions & { securityManagers: SecurityManagers })
+			| CommandClassDeserializationOptions,
+	): SecurityManager2 {
+		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
+		if (!this.host.ownNodeId) {
+			throw new ZWaveError(
+				`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+
+		let ret: SecurityManager2 | undefined;
+		if (gotDeserializationOptions(options)) {
+			ret = getSecurityManager(
+				this.host.ownNodeId,
+				options.context,
+				this.nodeId,
+			)!;
+		} else {
+			ret = getSecurityManager(
+				this.host.ownNodeId,
+				options.securityManagers,
+				this.nodeId,
+			)!;
+		}
+
+		if (!ret) {
+			throw new ZWaveError(
+				`Secure commands (S2) can only be ${verb} when the security manager is set up!`,
+				ZWaveErrorCodes.Driver_NoSecurity,
+			);
+		}
+
+		return ret;
+	}
+
 	public async interview(
 		applHost: ZWaveApplicationHost<CCNode>,
 	): Promise<void> {
+		const securityManager = getSecurityManager(
+			applHost.ownNodeId,
+			applHost,
+			this.nodeId,
+		);
+
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 		const api = CCAPI.create(
@@ -629,8 +666,6 @@ export class Security2CC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const securityManager = getSecurityManager(applHost, node.id);
-
 		// Only on the highest security class the response includes the supported commands
 		const secClass = node.getHighestSecurityClass();
 		let hasReceivedSecureCommands = false;
@@ -907,6 +942,7 @@ export class Security2CC extends CommandClass {
 	public static encapsulate(
 		host: ZWaveHost,
 		cc: CommandClass,
+		securityManagers: SecurityManagers,
 		options?: {
 			securityClass?: SecurityClass;
 			multicastOutOfSync?: boolean;
@@ -941,6 +977,7 @@ export class Security2CC extends CommandClass {
 		const ret = new Security2CCMessageEncapsulation(host, {
 			nodeId,
 			encapsulated: cc,
+			securityManagers,
 			securityClass: options?.securityClass,
 			extensions,
 			verifyDelivery: options?.verifyDelivery,
@@ -959,6 +996,7 @@ export class Security2CC extends CommandClass {
 export interface Security2CCMessageEncapsulationOptions
 	extends CCCommandOptions
 {
+	securityManagers: Readonly<SecurityManagers>;
 	/** Can be used to override the default security class for the command */
 	securityClass?: SecurityClass;
 	extensions?: Security2Extension[];
@@ -1040,8 +1078,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		super(host, options);
 
 		// Make sure that we can send/receive secure commands
-		assertSecurity.call(this, options);
-		this.securityManager = getSecurityManager(host, this.nodeId)!;
+		this.securityManager = this.assertSecurity(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -1181,6 +1218,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				// Don't accept duplicate Singlecast commands
 				prevSequenceNumber = validateSequenceNumber.call(
 					this,
+					this.securityManager,
 					this._sequenceNumber,
 				);
 
@@ -1915,16 +1953,19 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 // @publicAPI
 export type Security2CCNonceReportOptions =
-	| {
-		MOS: boolean;
-		SOS: true;
-		receiverEI: Buffer;
-	}
-	| {
-		MOS: true;
-		SOS: false;
-		receiverEI?: undefined;
-	};
+	& { securityManagers: SecurityManagers }
+	& (
+		| {
+			MOS: boolean;
+			SOS: true;
+			receiverEI: Buffer;
+		}
+		| {
+			MOS: true;
+			SOS: false;
+			receiverEI?: undefined;
+		}
+	);
 
 @CCCommand(Security2Command.NonceReport)
 export class Security2CCNonceReport extends Security2CC {
@@ -1937,14 +1978,17 @@ export class Security2CCNonceReport extends Security2CC {
 		super(host, options);
 
 		// Make sure that we can send/receive secure commands
-		assertSecurity.call(this, options);
-		this.securityManager = getSecurityManager(host, this.nodeId)!;
+		this.securityManager = this.assertSecurity(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this._sequenceNumber = this.payload[0];
 			// Don't accept duplicate commands
-			validateSequenceNumber.call(this, this._sequenceNumber);
+			validateSequenceNumber.call(
+				this,
+				this.securityManager,
+				this._sequenceNumber,
+			);
 
 			this.MOS = !!(this.payload[1] & 0b10);
 			this.SOS = !!(this.payload[1] & 0b1);
@@ -1969,7 +2013,7 @@ export class Security2CCNonceReport extends Security2CC {
 		}
 	}
 
-	private securityManager: SecurityManager2;
+	private securityManager!: SecurityManager2;
 	private _sequenceNumber: number | undefined;
 	/**
 	 * Return the sequence number of this command.
@@ -2018,30 +2062,43 @@ export class Security2CCNonceReport extends Security2CC {
 	}
 }
 
+// @publicAPI
+export interface Security2CCNonceGetOptions {
+	securityManagers: Readonly<SecurityManagers>;
+}
+
 @CCCommand(Security2Command.NonceGet)
 @expectedCCResponse(Security2CCNonceReport)
 export class Security2CCNonceGet extends Security2CC {
 	// TODO: A node sending this command MUST accept a delay up to <Previous Round-trip-time to peer node> +
 	// 250 ms before receiving the Security 2 Nonce Report Command.
 
-	public constructor(host: ZWaveHost, options: CCCommandOptions) {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & Security2CCNonceGetOptions),
+	) {
 		super(host, options);
 
 		// Make sure that we can send/receive secure commands
-		assertSecurity.call(this, options);
-		this.securityManager = getSecurityManager(host, this.nodeId)!;
+		this.securityManager = this.assertSecurity(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this._sequenceNumber = this.payload[0];
 			// Don't accept duplicate commands
-			validateSequenceNumber.call(this, this._sequenceNumber);
+			validateSequenceNumber.call(
+				this,
+				this.securityManager,
+				this._sequenceNumber,
+			);
 		} else {
 			// No options here
 		}
 	}
 
-	private securityManager: SecurityManager2;
+	private securityManager!: SecurityManager2;
 	private _sequenceNumber: number | undefined;
 	/**
 	 * Return the sequence number of this command.

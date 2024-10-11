@@ -4,6 +4,7 @@ import {
 	type MessagePriority,
 	type NodeId,
 	type SecurityClass,
+	type SecurityManagers,
 	ZWaveError,
 	ZWaveErrorCodes,
 	createReflectionDecorator,
@@ -86,7 +87,7 @@ export type MessageOptions =
 	| MessageCreationOptions
 	| MessageDeserializationOptions;
 
-export interface MessageEncodingContext {
+export interface MessageEncodingContext extends Readonly<SecurityManagers> {
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(

@@ -73,6 +73,7 @@ test.serial(
 					BinarySwitchCommand.Report,
 					0xff,
 				]),
+				context: {} as any,
 			},
 		);
 		await node.handleCommand(command);
@@ -124,6 +125,7 @@ test.serial(
 			{
 				nodeId: node.id,
 				data: buf,
+				context: {} as any,
 			},
 		);
 

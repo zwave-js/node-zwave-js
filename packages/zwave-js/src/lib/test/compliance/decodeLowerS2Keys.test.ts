@@ -47,10 +47,30 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = sm2Node;
+			mockNode.securityManagers.securityManager2 = sm2Node;
 			// The fixtures define Access Control as granted, but we want the node to send commands using Unauthenticated
-			mockNode.host.getHighestSecurityClass = () =>
+			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
+
+			// Create a security manager for the controller
+			const smCtrlr = new SecurityManager2();
+			// Copy keys from the driver
+			smCtrlr.setKey(
+				SecurityClass.S2_AccessControl,
+				driver.options.securityKeys!.S2_AccessControl!,
+			);
+			smCtrlr.setKey(
+				SecurityClass.S2_Authenticated,
+				driver.options.securityKeys!.S2_Authenticated!,
+			);
+			smCtrlr.setKey(
+				SecurityClass.S2_Unauthenticated,
+				driver.options.securityKeys!.S2_Unauthenticated!,
+			);
+			controller.securityManagers.securityManager2 = smCtrlr;
+			controller.parsingContext.getHighestSecurityClass =
+				controller.encodingContext.getHighestSecurityClass =
+					() => SecurityClass.S2_Unauthenticated;
 
 			// Respond to S2 Nonce Get
 			const respondToS2NonceGet: MockNodeBehavior = {
@@ -61,6 +81,7 @@ integrationTest(
 						);
 						const cc = new Security2CCNonceReport(self.host, {
 							nodeId: controller.host.ownNodeId,
+							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -79,7 +100,7 @@ integrationTest(
 				type: SPANState.LocalEI,
 				receiverEI: controllerEI,
 			});
-			mockNode.host.securityManager2!.setSPANState(
+			mockNode.securityManagers.securityManager2!.setSPANState(
 				mockController.host.ownNodeId,
 				{
 					type: SPANState.RemoteEI,
@@ -94,6 +115,7 @@ integrationTest(
 			let cc = new Security2CCMessageEncapsulation(mockNode.host, {
 				nodeId: mockController.host.ownNodeId,
 				encapsulated: innerCC,
+				securityManagers: mockNode.securityManagers,
 			});
 
 			await mockNode.sendToController(
@@ -136,6 +158,7 @@ integrationTest(
 			cc = new Security2CCMessageEncapsulation(mockNode.host, {
 				nodeId: mockController.host.ownNodeId,
 				encapsulated: innerCC,
+				securityManagers: mockNode.securityManagers,
 			});
 
 			await mockNode.sendToController(

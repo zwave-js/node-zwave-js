@@ -27,7 +27,7 @@ test("the Get command should serialize correctly", (t) => {
 			BinarySwitchCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (no duration)", (t) => {
@@ -43,7 +43,7 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 			0xff, // default duration
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
@@ -61,7 +61,7 @@ test("the Set command should serialize correctly", (t) => {
 			duration.serializeSet(),
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -74,6 +74,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	const cc = new BinarySwitchCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.currentValue, true);
@@ -93,6 +94,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	const cc = new BinarySwitchCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.currentValue, true);
@@ -108,6 +110,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new BinarySwitchCC(host, {
 		nodeId: 2,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, BinarySwitchCC);
 });

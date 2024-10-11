@@ -119,6 +119,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				: SecurityCCCommandEncapsulation
 		)(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			securityManager: this.applHost.securityManager!,
 			encapsulated,
 		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
@@ -238,6 +239,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			cc = new SecurityCCCommandEncapsulation(this.applHost, {
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
+				securityManager: this.applHost.securityManager!,
 				encapsulated: cc,
 			});
 		}
@@ -272,6 +274,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		const cc = new SecurityCCCommandEncapsulation(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
+			securityManager: this.applHost.securityManager!,
 			encapsulated: keySet,
 			alternativeNetworkKey: Buffer.alloc(16, 0),
 		});
@@ -338,10 +341,36 @@ export class SecurityCC extends CommandClass {
 	declare ccCommand: SecurityCommand;
 	// Force singlecast for the Security CC
 	declare nodeId: number;
-	// Define the securityManager as existing
-	declare host: ZWaveHost & {
-		securityManager: SecurityManager;
-	};
+
+	protected assertSecurity(
+		options:
+			| (CCCommandOptions & { securityManager: SecurityManager })
+			| CommandClassDeserializationOptions,
+	): SecurityManager {
+		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
+		if (!this.host.ownNodeId) {
+			throw new ZWaveError(
+				`Secure commands (S0) can only be ${verb} when the controller's node id is known!`,
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+
+		let ret: SecurityManager | undefined;
+		if (gotDeserializationOptions(options)) {
+			ret = options.context.securityManager;
+		} else {
+			ret = options.securityManager;
+		}
+
+		if (!ret) {
+			throw new ZWaveError(
+				`Secure commands (S0) can only be ${verb} when the security manager is set up!`,
+				ZWaveErrorCodes.Driver_NoSecurity,
+			);
+		}
+
+		return ret;
+	}
 
 	public async interview(
 		applHost: ZWaveApplicationHost<CCNode>,
@@ -502,11 +531,13 @@ export class SecurityCC extends CommandClass {
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
 		host: ZWaveHost,
+		securityManager: SecurityManager,
 		cc: CommandClass,
 	): SecurityCCCommandEncapsulation {
 		// TODO: When to return a SecurityCCCommandEncapsulationNonceGet?
 		const ret = new SecurityCCCommandEncapsulation(host, {
 			nodeId: cc.nodeId,
+			securityManager,
 			encapsulated: cc,
 		});
 
@@ -571,6 +602,7 @@ export class SecurityCCNonceGet extends SecurityCC {}
 export interface SecurityCCCommandEncapsulationOptions
 	extends CCCommandOptions
 {
+	securityManager: SecurityManager;
 	encapsulated: CommandClass;
 	alternativeNetworkKey?: Buffer;
 }
@@ -597,18 +629,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	) {
 		super(host, options);
 
-		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
-		if (!(this.host.ownNodeId as unknown)) {
-			throw new ZWaveError(
-				`Secure commands (S0) can only be ${verb} when the controller's node id is known!`,
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		} else if (!(this.host.securityManager as unknown)) {
-			throw new ZWaveError(
-				`Secure commands (S0) can only be ${verb} when the network key for the applHost is set`,
-				ZWaveErrorCodes.Driver_NoSecurity,
-			);
-		}
+		this.securityManager = this.assertSecurity(options);
 
 		if (gotDeserializationOptions(options)) {
 			// HALF_NONCE_SIZE bytes iv, 1 byte frame control, at least 1 CC byte, 1 byte nonce id, 8 bytes auth code
@@ -621,7 +642,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			const authCode = this.payload.subarray(-8);
 
 			// Retrieve the used nonce from the nonce store
-			const nonce = this.host.securityManager.getNonce(nonceId);
+			const nonce = this.securityManager.getNonce(nonceId);
 			// Only accept the message if the nonce hasn't expired
 			validatePayload.withReason(
 				`Nonce ${
@@ -631,10 +652,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				} expired, cannot decode security encapsulated command.`,
 			)(!!nonce);
 			// and mark the nonce as used
-			this.host.securityManager.deleteNonce(nonceId);
+			this.securityManager.deleteNonce(nonceId);
 
-			this.authKey = this.host.securityManager.authKey;
-			this.encryptionKey = this.host.securityManager.encryptionKey;
+			this.authKey = this.securityManager.authKey;
+			this.encryptionKey = this.securityManager.encryptionKey;
 
 			// Validate the encrypted data
 			const authData = getAuthenticationData(
@@ -677,11 +698,13 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 					options.alternativeNetworkKey,
 				);
 			} else {
-				this.authKey = this.host.securityManager.authKey;
-				this.encryptionKey = this.host.securityManager.encryptionKey;
+				this.authKey = this.securityManager.authKey;
+				this.encryptionKey = this.securityManager.encryptionKey;
 			}
 		}
 	}
+
+	private securityManager: SecurityManager;
 
 	private sequenced: boolean | undefined;
 	private secondFrame: boolean | undefined;
@@ -695,7 +718,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 
 	public get nonceId(): number | undefined {
 		if (!this.nonce) return undefined;
-		return this.host.securityManager.getNonceId(this.nonce);
+		return this.securityManager.getNonceId(this.nonce);
 	}
 	public nonce: Buffer | undefined;
 

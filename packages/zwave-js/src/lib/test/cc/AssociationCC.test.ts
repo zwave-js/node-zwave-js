@@ -31,7 +31,7 @@ test("the SupportedGroupingsGet command should serialize correctly", (t) => {
 			AssociationCommand.SupportedGroupingsGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedGroupingsReport command should be deserialized correctly", (t) => {
@@ -44,6 +44,7 @@ test("the SupportedGroupingsReport command should be deserialized correctly", (t
 	const cc = new AssociationCCSupportedGroupingsReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.groupCount, 7);
@@ -65,7 +66,7 @@ test("the Set command should serialize correctly", (t) => {
 			5,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 test("the Get command should serialize correctly", (t) => {
 	const cc = new AssociationCCGet(host, {
@@ -78,7 +79,7 @@ test("the Get command should serialize correctly", (t) => {
 			9, // group ID
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -97,6 +98,7 @@ test("the Report command should be deserialized correctly", (t) => {
 	const cc = new AssociationCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.groupId, 5);
@@ -121,7 +123,7 @@ test("the Remove command should serialize correctly", (t) => {
 			5,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Remove command should serialize correctly (empty node list)", (t) => {
@@ -135,7 +137,7 @@ test("the Remove command should serialize correctly (empty node list)", (t) => {
 			5, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 // test("deserializing an unsupported command should return an unspecified version of AssociationCC", (t) => {

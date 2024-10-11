@@ -31,7 +31,7 @@ test("the SupportedGroupingsGet command should serialize correctly", (t) => {
 			MultiChannelAssociationCommand.SupportedGroupingsGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedGroupingsReport command should be deserialized correctly", (t) => {
@@ -44,6 +44,7 @@ test("the SupportedGroupingsReport command should be deserialized correctly", (t
 	const cc = new MultiChannelAssociationCCSupportedGroupingsReport(host, {
 		nodeId: 4,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.groupCount, 7);
@@ -65,7 +66,7 @@ test("the Set command should serialize correctly (node IDs only)", (t) => {
 			5,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (endpoint addresses only)", (t) => {
@@ -96,7 +97,7 @@ test("the Set command should serialize correctly (endpoint addresses only)", (t)
 			0b11010111,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (both options)", (t) => {
@@ -132,7 +133,7 @@ test("the Set command should serialize correctly (both options)", (t) => {
 			0b11010111,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Get command should serialize correctly", (t) => {
@@ -146,7 +147,7 @@ test("the Get command should serialize correctly", (t) => {
 			9, // group ID
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly (node IDs only)", (t) => {
@@ -165,6 +166,7 @@ test("the Report command should be deserialized correctly (node IDs only)", (t) 
 	const cc = new MultiChannelAssociationCCReport(host, {
 		nodeId: 4,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.groupId, 5);
@@ -193,6 +195,7 @@ test("the Report command should be deserialized correctly (endpoint addresses on
 	const cc = new MultiChannelAssociationCCReport(host, {
 		nodeId: 4,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.nodeIds, []);
@@ -230,6 +233,7 @@ test("the Report command should be deserialized correctly (both options)", (t) =
 	const cc = new MultiChannelAssociationCCReport(host, {
 		nodeId: 4,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.nodeIds, [1, 5, 9]);
@@ -261,7 +265,7 @@ test("the Remove command should serialize correctly (node IDs only)", (t) => {
 			5,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Remove command should serialize correctly (endpoint addresses only)", (t) => {
@@ -292,7 +296,7 @@ test("the Remove command should serialize correctly (endpoint addresses only)", 
 			0b11010111,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Remove command should serialize correctly (both options)", (t) => {
@@ -328,7 +332,7 @@ test("the Remove command should serialize correctly (both options)", (t) => {
 			0b11010111,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Remove command should serialize correctly (both empty)", (t) => {
@@ -342,7 +346,7 @@ test("the Remove command should serialize correctly (both empty)", (t) => {
 			5, // group id
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 // test("deserializing an unsupported command should return an unspecified version of MultiChannelAssociationCC", (t) => {

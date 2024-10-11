@@ -31,7 +31,7 @@ test("the Get command should serialize correctly", (t) => {
 			1,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly with level", (t) => {
@@ -50,7 +50,7 @@ test("the Set command should serialize correctly with level", (t) => {
 			0x00, // level
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly with undefined level", (t) => {
@@ -69,7 +69,7 @@ test("the Set command should serialize correctly with undefined level", (t) => {
 			0xff, // level
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -84,6 +84,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	const cc = new SceneActuatorConfigurationCCReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.sceneId, 55);
@@ -98,6 +99,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new SceneActuatorConfigurationCC(host, {
 		nodeId: 2,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, SceneActuatorConfigurationCC);
 });

@@ -38,7 +38,7 @@ test("the Set Tilt command should serialize correctly", (t) => {
 			0x63, // Tilt
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -53,6 +53,7 @@ test("the Report command should be deserialized correctly", (t) => {
 	const cc = CommandClass.from(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 	t.true(cc instanceof FibaroVenetianBlindCCReport);
 	t.is((cc as FibaroVenetianBlindCCReport).position, 0);
@@ -89,6 +90,7 @@ test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", (t)
 				0x07, // Tilt
 			]),
 		),
+		context: {} as any,
 	});
 
 	t.false(ccRequest.isExpectedCCResponse(ccResponse));
@@ -108,6 +110,7 @@ test("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = expected", (t) =
 				0x07, // Tilt
 			]),
 		),
+		context: {} as any,
 	});
 
 	t.true(ccRequest.isExpectedCCResponse(ccResponse));

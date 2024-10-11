@@ -28,7 +28,7 @@ test("the TimeGet command should serialize correctly", (t) => {
 			TimeCommand.TimeGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the TimeReport command should be deserialized correctly", (t) => {
@@ -43,6 +43,7 @@ test("the TimeReport command should be deserialized correctly", (t) => {
 	const cc = new TimeCCTimeReport(host, {
 		nodeId: 8,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.hour, 14);
@@ -57,7 +58,7 @@ test("the DateGet command should serialize correctly", (t) => {
 			TimeCommand.DateGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the DateReport command should be deserialized correctly", (t) => {
@@ -73,6 +74,7 @@ test("the DateReport command should be deserialized correctly", (t) => {
 	const cc = new TimeCCDateReport(host, {
 		nodeId: 8,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.year, 1989);
@@ -87,6 +89,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new TimeCC(host, {
 		nodeId: 8,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, TimeCC);
 });

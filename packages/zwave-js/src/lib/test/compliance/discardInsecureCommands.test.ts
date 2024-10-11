@@ -44,8 +44,8 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = smNode;
-			mockNode.host.getHighestSecurityClass = () =>
+			mockNode.securityManagers.securityManager2 = smNode;
+			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
@@ -63,9 +63,10 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.host.securityManager2 = smCtrlr;
-			controller.host.getHighestSecurityClass = () =>
-				SecurityClass.S2_Unauthenticated;
+			controller.securityManagers.securityManager2 = smCtrlr;
+			controller.parsingContext.getHighestSecurityClass =
+				controller.encodingContext.getHighestSecurityClass =
+					() => SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
@@ -76,6 +77,7 @@ integrationTest(
 						);
 						const cc = new Security2CCNonceReport(self.host, {
 							nodeId: controller.host.ownNodeId,
+							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -101,6 +103,7 @@ integrationTest(
 							);
 							const cc = new Security2CCNonceReport(self.host, {
 								nodeId: controller.host.ownNodeId,
+								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -128,6 +131,7 @@ integrationTest(
 					nodeId: mockController.host.ownNodeId,
 					currentValue: 99,
 				}),
+				mockNode.securityManagers,
 			);
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(nodeToHost, {

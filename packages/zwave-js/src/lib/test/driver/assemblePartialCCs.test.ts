@@ -73,6 +73,7 @@ test.serial(
 				2,
 				3,
 			]),
+			context: {} as any,
 		});
 		const msg = new ApplicationCommandRequest(driver, {
 			command: cc,
@@ -97,6 +98,7 @@ test.serial(
 				2,
 				3,
 			]),
+			context: {} as any,
 		});
 		const msg = new ApplicationCommandRequest(driver, {
 			command: cc,
@@ -121,6 +123,7 @@ test.serial(
 				2,
 				3,
 			]),
+			context: {} as any,
 		});
 		const cc2 = new AssociationCCReport(driver, {
 			nodeId: 2,
@@ -134,6 +137,7 @@ test.serial(
 				5,
 				6,
 			]),
+			context: {} as any,
 		});
 		const msg1 = new ApplicationCommandRequest(driver, {
 			command: cc1,
@@ -171,10 +175,11 @@ test.serial("supports nested partial/non-partial CCs", (t) => {
 	const cc1 = new BasicCCSet(driver, { nodeId: 2, targetValue: 25 });
 	const cc = new SecurityCCCommandEncapsulation(driver, {
 		nodeId: 2,
+		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
-	cc["decryptedCCBytes"] = cc1.serialize();
+	cc["decryptedCCBytes"] = cc1.serialize({} as any);
 	const msg = new ApplicationCommandRequest(driver, {
 		command: cc,
 	});
@@ -185,6 +190,7 @@ test.serial("supports nested partial/partial CCs (part 1)", (t) => {
 	const { driver } = t.context;
 	const cc = new SecurityCCCommandEncapsulation(driver, {
 		nodeId: 2,
+		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
@@ -208,6 +214,7 @@ test.serial("supports nested partial/partial CCs (part 2)", (t) => {
 	const { driver } = t.context;
 	const cc = new SecurityCCCommandEncapsulation(driver, {
 		nodeId: 2,
+		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
@@ -243,6 +250,7 @@ test.serial(
 				2,
 				3,
 			]),
+			context: {} as any,
 		});
 		cc.mergePartialCCs = () => {
 			throw new ZWaveError(
@@ -273,6 +281,7 @@ test.serial(
 				2,
 				3,
 			]),
+			context: {} as any,
 		});
 		cc.mergePartialCCs = () => {
 			throw new ZWaveError(
@@ -303,6 +312,7 @@ test.serial(
 				2,
 				3,
 			]),
+			context: {} as any,
 		});
 		cc.mergePartialCCs = () => {
 			throw new ZWaveError(
@@ -331,6 +341,7 @@ test.serial("passes other errors during merging through", (t) => {
 			2,
 			3,
 		]),
+		context: {} as any,
 	});
 	cc.mergePartialCCs = () => {
 		throw new ZWaveError("invalid", ZWaveErrorCodes.Argument_Invalid);

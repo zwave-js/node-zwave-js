@@ -1,6 +1,7 @@
 import type { ParamInfoMap } from "@zwave-js/config";
 import {
 	type CCEncodingContext,
+	type CCParsingContext,
 	CommandClasses,
 	ConfigValueFormat,
 	type ConfigurationMetadata,
@@ -2393,6 +2394,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	public mergePartialCCs(
 		applHost: ZWaveApplicationHost,
 		partials: ConfigurationCCNameReport[],
+		_ctx: CCParsingContext,
 	): void {
 		// Concat the name
 		this.name = [...partials, this]
@@ -2553,6 +2555,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public mergePartialCCs(
 		applHost: ZWaveApplicationHost,
 		partials: ConfigurationCCInfoReport[],
+		_ctx: CCParsingContext,
 	): void {
 		// Concat the info
 		this.info = [...partials, this]

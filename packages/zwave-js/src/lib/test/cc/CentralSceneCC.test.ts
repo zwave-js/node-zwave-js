@@ -33,7 +33,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 			CentralSceneCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationSet command should serialize correctly (flags set)", (t) => {
@@ -47,7 +47,7 @@ test("the ConfigurationSet command should serialize correctly (flags set)", (t) 
 			0b1000_0000,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationSet command should serialize correctly (flags not set)", (t) => {
@@ -61,7 +61,7 @@ test("the ConfigurationSet command should serialize correctly (flags not set)", 
 			0,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationReport command should be deserialized correctly", (t) => {
@@ -74,6 +74,7 @@ test("the ConfigurationReport command should be deserialized correctly", (t) => 
 	const cc = new CentralSceneCCConfigurationReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.slowRefresh, true);
@@ -88,7 +89,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			CentralSceneCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
@@ -106,6 +107,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	const cc = new CentralSceneCCSupportedReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.sceneCount, 2);
@@ -128,6 +130,7 @@ test("the Notification command should be deserialized correctly", (t) => {
 	const cc = new CentralSceneCCNotification(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.sequenceNumber, 7);
@@ -149,6 +152,7 @@ test("the Notification command should be deserialized correctly (KeyHeldDown)", 
 	const cc = new CentralSceneCCNotification(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.sequenceNumber, 7);
@@ -164,6 +168,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new CentralSceneCC(host, {
 		nodeId: 1,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, CentralSceneCC);
 });

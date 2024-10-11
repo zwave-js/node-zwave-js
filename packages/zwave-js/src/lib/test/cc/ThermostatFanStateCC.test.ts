@@ -27,7 +27,7 @@ test("the Get command should serialize correctly", (t) => {
 			ThermostatFanStateCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1 - v2) should be deserialized correctly", (t) => {
@@ -40,6 +40,7 @@ test("the Report command (v1 - v2) should be deserialized correctly", (t) => {
 	const cc = new ThermostatFanStateCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.state, ThermostatFanState["Idle / off"]);
@@ -52,6 +53,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new ThermostatFanStateCC(host, {
 		nodeId: 1,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, ThermostatFanStateCC);
 });

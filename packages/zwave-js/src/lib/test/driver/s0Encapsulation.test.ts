@@ -31,7 +31,7 @@ integrationTest("Communication via Security S0 works", {
 			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			nonceTimeout: 100000,
 		});
-		mockNode.host.securityManager = sm0Node;
+		mockNode.securityManagers.securityManager = sm0Node;
 
 		// Create a security manager for the controller
 		const sm0Ctrlr = new SecurityManager({
@@ -39,7 +39,7 @@ integrationTest("Communication via Security S0 works", {
 			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			nonceTimeout: 100000,
 		});
-		controller.host.securityManager = sm0Ctrlr;
+		controller.securityManagers.securityManager = sm0Ctrlr;
 
 		// Respond to S0 Nonce Get
 		const respondToS0NonceGet: MockNodeBehavior = {
@@ -96,7 +96,11 @@ integrationTest("Communication via Security S0 works", {
 							controlledCCs: [],
 						},
 					);
-					const cc = SecurityCC.encapsulate(self.host, response);
+					const cc = SecurityCC.encapsulate(
+						self.host,
+						self.securityManagers.securityManager!,
+						response,
+					);
 					cc.nonce = receiverNonce;
 
 					await self.sendToController(
@@ -144,7 +148,11 @@ integrationTest("Communication via Security S0 works", {
 						nodeId: controller.host.ownNodeId,
 						currentValue: ++queryCount,
 					});
-					const cc = SecurityCC.encapsulate(self.host, response);
+					const cc = SecurityCC.encapsulate(
+						self.host,
+						self.securityManagers.securityManager!,
+						response,
+					);
 					cc.nonce = receiverNonce;
 
 					await self.sendToController(
@@ -164,7 +172,7 @@ integrationTest("Communication via Security S0 works", {
 			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs(undefined as any, []);
+					receivedCC.mergePartialCCs(undefined as any, [], {} as any);
 				}
 				// This just decodes - we need to call further handlers
 				return undefined;

@@ -5,8 +5,7 @@ import type {
 	ICommandClass,
 	NodeIDType,
 	NodeId,
-	SecurityManager,
-	SecurityManager2,
+	SecurityManagers,
 	SendCommandOptions,
 	SendCommandReturnType,
 	ValueDB,
@@ -22,16 +21,6 @@ export interface HostIDs {
 	homeId: number;
 }
 
-/** Allows accessing the security manager instances */
-export interface SecurityManagers {
-	/** Management of Security S0 keys and nonces */
-	readonly securityManager: SecurityManager | undefined;
-	/** Management of Security S2 keys and nonces (Z-Wave Classic) */
-	readonly securityManager2: SecurityManager2 | undefined;
-	/** Management of Security S2 keys and nonces (Z-Wave Long Range) */
-	readonly securityManagerLR: SecurityManager2 | undefined;
-}
-
 // FIXME: This should not be needed. Instead have the driver set callback IDs during sendMessage
 /** Allows generating a new callback ID */
 export interface GetNextCallbackId {
@@ -43,9 +32,7 @@ export interface GetNextCallbackId {
 }
 
 /** Host application abstractions to be used in Serial API and CC implementations */
-export interface ZWaveHost
-	extends HostIDs, SecurityManagers, GetNextCallbackId
-{
+export interface ZWaveHost extends HostIDs, GetNextCallbackId {
 	/** How many bytes a node ID occupies in serial API commands */
 	readonly nodeIdType?: NodeIDType;
 
@@ -106,7 +93,12 @@ export interface GetAllNodes<T extends NodeId> {
 
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
 export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
-	extends ZWaveValueHost, ZWaveHost, GetNode<TNode>, GetAllNodes<TNode>
+	extends
+		ZWaveValueHost,
+		ZWaveHost,
+		GetNode<TNode>,
+		GetAllNodes<TNode>,
+		SecurityManagers
 {
 	/** Gives access to the configuration files */
 	configManager: ConfigManager;

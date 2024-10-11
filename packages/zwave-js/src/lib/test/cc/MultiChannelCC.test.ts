@@ -46,7 +46,7 @@ test("the EndPointGet command should serialize correctly", (t) => {
 			MultiChannelCommand.EndPointGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CapabilityGet command should serialize correctly", (t) => {
@@ -60,7 +60,7 @@ test("the CapabilityGet command should serialize correctly", (t) => {
 			7, // EndPoint
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the EndPointFind command should serialize correctly", (t) => {
@@ -76,7 +76,7 @@ test("the EndPointFind command should serialize correctly", (t) => {
 			0x02, // specificClass
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CommandEncapsulation command should serialize correctly", (t) => {
@@ -96,7 +96,7 @@ test("the CommandEncapsulation command should serialize correctly", (t) => {
 			5, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the AggregatedMembersGet command should serialize correctly", (t) => {
@@ -110,7 +110,7 @@ test("the AggregatedMembersGet command should serialize correctly", (t) => {
 			6, // EndPoint
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CommandEncapsulation command should also accept V1CommandEncapsulation as a response", (t) => {
@@ -156,6 +156,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new MultiChannelCC(host, {
 		nodeId: 1,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, MultiChannelCC);
 });

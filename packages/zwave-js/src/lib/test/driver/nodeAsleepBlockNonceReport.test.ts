@@ -31,7 +31,7 @@ integrationTest(
 				networkKey: driver.options.securityKeys!.S0_Legacy!,
 				nonceTimeout: 100000,
 			});
-			mockNode.host.securityManager = sm0Node;
+			mockNode.securityManagers.securityManager = sm0Node;
 
 			// Create a security manager for the controller
 			const sm0Ctrlr = new SecurityManager({
@@ -39,7 +39,7 @@ integrationTest(
 				networkKey: driver.options.securityKeys!.S0_Legacy!,
 				nonceTimeout: 100000,
 			});
-			controller.host.securityManager = sm0Ctrlr;
+			controller.securityManagers.securityManager = sm0Ctrlr;
 
 			// Respond to S0 Nonce Get
 			const respondToS0NonceGet: MockNodeBehavior = {
@@ -67,7 +67,11 @@ integrationTest(
 						receivedCC
 							instanceof SecurityCCCommandEncapsulation
 					) {
-						receivedCC.mergePartialCCs(undefined as any, []);
+						receivedCC.mergePartialCCs(
+							undefined as any,
+							[],
+							{} as any,
+						);
 					}
 					// This just decodes - we need to call further handlers
 					return undefined;

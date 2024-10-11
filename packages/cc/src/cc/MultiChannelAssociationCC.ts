@@ -1,5 +1,6 @@
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	EndpointId,
 	MessageRecord,
 	SupervisionResult,
@@ -843,6 +844,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public mergePartialCCs(
 		applHost: ZWaveApplicationHost,
 		partials: MultiChannelAssociationCCReport[],
+		_ctx: CCParsingContext,
 	): void {
 		// Concat the list of nodes
 		this.nodeIds = [...partials, this]

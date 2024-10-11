@@ -1,4 +1,5 @@
 import type {
+	CCParsingContext,
 	EndpointId,
 	MaybeNotKnown,
 	MessageRecord,
@@ -673,6 +674,7 @@ export class AssociationCCReport extends AssociationCC {
 	public mergePartialCCs(
 		applHost: ZWaveApplicationHost,
 		partials: AssociationCCReport[],
+		_ctx: CCParsingContext,
 	): void {
 		// Concat the list of nodes
 		this.nodeIds = [...partials, this]

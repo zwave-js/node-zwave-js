@@ -30,7 +30,7 @@ test("the Get command (V1) should serialize correctly", (t) => {
 			IndicatorCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Get command (V2) should serialize correctly", (t) => {
@@ -44,7 +44,7 @@ test("the Get command (V2) should serialize correctly", (t) => {
 			5,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command (v1) should serialize correctly", (t) => {
@@ -58,7 +58,7 @@ test("the Set command (v1) should serialize correctly", (t) => {
 			23, // value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command (v2) should serialize correctly", (t) => {
@@ -90,7 +90,7 @@ test("the Set command (v2) should serialize correctly", (t) => {
 			1, // value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -103,6 +103,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 	const cc = new IndicatorCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.indicator0Value, 55);
@@ -126,6 +127,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	const cc = new IndicatorCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 	// Boolean indicators are only interpreted during persistValues
 	cc.persistValues(host);
@@ -152,6 +154,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const cc: any = new IndicatorCC(host, {
 		nodeId: 1,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, IndicatorCC);
 });

@@ -38,7 +38,7 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Humidifier, // type
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
@@ -57,7 +57,7 @@ test("the Set command should serialize correctly", (t) => {
 			encodeFloatWithScale(57, 1),
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -73,6 +73,7 @@ test("the Report command should be deserialized correctly", (t) => {
 	const cc = new HumidityControlSetpointCCReport(host, {
 		nodeId: nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.type, HumidityControlSetpointType.Humidifier);
@@ -98,6 +99,7 @@ test("the Report command should set the correct value", (t) => {
 	const report = new HumidityControlSetpointCCReport(host, {
 		nodeId: nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	report.persistValues(host);
 
@@ -129,6 +131,7 @@ test("the Report command should set the correct metadata", (t) => {
 	const report = new HumidityControlSetpointCCReport(host, {
 		nodeId: nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	report.persistValues(host);
 
@@ -154,7 +157,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			HumidityControlSetpointCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
@@ -168,6 +171,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 	const cc = new HumidityControlSetpointCCSupportedReport(host, {
 		nodeId: nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedSetpointTypes, [
@@ -187,6 +191,7 @@ test("the SupportedReport command should set the correct value", (t) => {
 	const report = new HumidityControlSetpointCCSupportedReport(host, {
 		nodeId: nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	report.persistValues(host);
 
@@ -211,7 +216,7 @@ test("the ScaleSupportedGet command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ScaleSupportedReport command should be deserialized correctly", (t) => {
@@ -224,6 +229,7 @@ test("the ScaleSupportedReport command should be deserialized correctly", (t) =>
 	const cc = new HumidityControlSetpointCCScaleSupportedReport(host, {
 		nodeId: nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedScales, [0, 1]);
@@ -249,7 +255,7 @@ test("the CapabilitiesGet command should serialize correctly", (t) => {
 			HumidityControlSetpointType.Auto, // type
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CapabilitiesReport command should be deserialized correctly", (t) => {
@@ -266,6 +272,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 	const cc = new HumidityControlSetpointCCCapabilitiesReport(host, {
 		nodeId: nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.type, HumidityControlSetpointType.Humidifier);
@@ -289,6 +296,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 	const report = new HumidityControlSetpointCCCapabilitiesReport(host, {
 		nodeId: nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	report.persistValues(host);
 

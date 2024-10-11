@@ -46,7 +46,7 @@ test("the OperationGet command should serialize correctly", (t) => {
 			DoorLockCommand.OperationGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the OperationSet command should serialize correctly", (t) => {
@@ -60,7 +60,7 @@ test("the OperationSet command should serialize correctly", (t) => {
 			0x20, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the OperationReport command (v1-v3) should be deserialized correctly", (t) => {
@@ -77,6 +77,7 @@ test("the OperationReport command (v1-v3) should be deserialized correctly", (t)
 	const cc = new DoorLockCCOperationReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.currentMode, DoorLockMode.InsideUnsecuredWithTimeout);
@@ -106,6 +107,7 @@ test("the OperationReport command (v4) should be deserialized correctly", (t) =>
 	const cc = new DoorLockCCOperationReport(host, {
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 	cc.persistValues(host);
 
@@ -134,7 +136,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 			DoorLockCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationReport command (v1-v3) should be deserialized correctly", (t) => {
@@ -150,6 +152,7 @@ test("the ConfigurationReport command (v1-v3) should be deserialized correctly",
 	const cc = new DoorLockCCConfigurationReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.operationType, DoorLockOperationType.Timed);
@@ -185,6 +188,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (constant)", 
 	const cc = new DoorLockCCConfigurationReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
@@ -203,6 +207,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid minu
 	const cc = new DoorLockCCConfigurationReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
@@ -221,6 +226,7 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid seco
 	const cc = new DoorLockCCConfigurationReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
@@ -245,6 +251,7 @@ test("the ConfigurationReport command (v4) should be deserialized correctly", (t
 	const cc = new DoorLockCCConfigurationReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.autoRelockTime, 0xff01);
@@ -279,7 +286,7 @@ test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
 			0b1,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CapabilitiesGet command should serialize correctly", (t) => {
@@ -289,7 +296,7 @@ test("the CapabilitiesGet command should serialize correctly", (t) => {
 			DoorLockCommand.CapabilitiesGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CapabilitiesReport command should be deserialized correctly", (t) => {
@@ -310,6 +317,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 	const cc = new DoorLockCCCapabilitiesReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedOperationTypes, [

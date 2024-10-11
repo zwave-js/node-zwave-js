@@ -39,7 +39,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			ColorSwitchCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedReport command should deserialize correctly", (t) => {
@@ -53,6 +53,7 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 	const cc = new ColorSwitchCCSupportedReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedColorComponents, [
@@ -81,7 +82,7 @@ test("the Get command should serialize correctly", (t) => {
 			2, // Color Component
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should deserialize correctly (version 1)", (t) => {
@@ -95,6 +96,7 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 	const cc = new ColorSwitchCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.colorComponent, ColorComponent.Red);
@@ -116,6 +118,7 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 	const cc = new ColorSwitchCCReport(host, {
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.colorComponent, ColorComponent.Red);
@@ -144,7 +147,7 @@ test("the Set command should serialize correctly (without duration)", (t) => {
 			0xff, // duration: default
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (version 2)", (t) => {
@@ -167,7 +170,7 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the StartLevelChange command should serialize correctly", (t) => {
@@ -190,7 +193,7 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the StopLevelChange command should serialize correctly", (t) => {
@@ -205,7 +208,7 @@ test("the StopLevelChange command should serialize correctly", (t) => {
 			0b0000_0010, // color: red
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the setValue API verifies that targetColor isn't set with non-numeric keys", async (t) => {

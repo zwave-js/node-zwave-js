@@ -709,6 +709,28 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	private messageParsingContext: MessageParsingContext;
 	private messageEncodingContext: MessageEncodingContext;
 
+	private getCCEncodingContext() {
+		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
+		// but not for messages, yet those implicitly encode CCs
+		return {
+			...this.messageEncodingContext,
+			securityManager: this.securityManager,
+			securityManager2: this.securityManager2,
+			securityManagerLR: this.securityManagerLR,
+		};
+	}
+
+	private getCCParsingContext() {
+		// FIXME: The type system isn't helping here. We need the security managers to decode CCs
+		// but not for messages, yet those implicitly decode CCs
+		return {
+			...this.messageParsingContext,
+			securityManager: this.securityManager,
+			securityManager2: this.securityManager2,
+			securityManagerLR: this.securityManagerLR,
+		};
+	}
+
 	// We have multiple queues to achieve multiple "layers" of communication priority:
 	// The default queue for most messages
 	private queue: TransactionQueue;
@@ -3444,7 +3466,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			msg = Message.from(this, {
 				data,
 				sdkVersion: this._controller?.sdkVersion,
-				ctx: this.messageParsingContext,
+				ctx: this.getCCParsingContext(),
 			}, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
@@ -4410,7 +4432,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 						command.mergePartialCCs(this, session, {
 							ownNodeId: this.ownNodeId,
 							sourceNodeId: msg.command.nodeId as number,
-							...this.messageParsingContext,
+							...this.getCCParsingContext(),
 						});
 						// Ensure there are no errors
 						assertValidCCs(msg);
@@ -5243,17 +5265,22 @@ ${handlers.length} left`,
 				maybeS2 = true;
 			}
 			if (maybeS2 && Security2CC.requiresEncapsulation(cmd)) {
-				cmd = Security2CC.encapsulate(this, cmd, {
-					securityClass: options.s2OverrideSecurityClass,
-					multicastOutOfSync: !!options.s2MulticastOutOfSync,
-					multicastGroupId: options.s2MulticastGroupId,
-					verifyDelivery: options.s2VerifyDelivery,
-				});
+				cmd = Security2CC.encapsulate(
+					this,
+					cmd,
+					this,
+					{
+						securityClass: options.s2OverrideSecurityClass,
+						multicastOutOfSync: !!options.s2MulticastOutOfSync,
+						multicastGroupId: options.s2MulticastGroupId,
+						verifyDelivery: options.s2VerifyDelivery,
+					},
+				);
 			}
 
 			// This check will return false for S2-encapsulated commands
 			if (SecurityCC.requiresEncapsulation(cmd)) {
-				cmd = SecurityCC.encapsulate(this, cmd);
+				cmd = SecurityCC.encapsulate(this, this.securityManager!, cmd);
 			}
 		}
 		return cmd;
@@ -5738,7 +5765,7 @@ ${handlers.length} left`,
 	): Promise<Message | undefined> {
 		const machine = createSerialAPICommandMachine(
 			msg,
-			msg.serialize(this.messageEncodingContext),
+			msg.serialize(this.getCCEncodingContext()),
 			{
 				sendData: (data) => this.writeSerial(data),
 				sendDataAbort: () => this.abortSendData(),
@@ -5937,7 +5964,7 @@ ${handlers.length} left`,
 		// Create the transaction
 		const { generator, resultPromise } = createMessageGenerator(
 			this,
-			this.messageEncodingContext,
+			this.getCCEncodingContext(),
 			msg,
 			(msg, _result) => {
 				this.handleSerialAPICommandResult(msg, options, _result);
@@ -6295,7 +6322,7 @@ ${handlers.length} left`,
 		try {
 			const abort = new SendDataAbort(this);
 			await this.writeSerial(
-				abort.serialize(this.messageEncodingContext),
+				abort.serialize(this.getCCEncodingContext()),
 			);
 			this.driverLog.logMessage(abort, {
 				direction: "outbound",
@@ -6984,7 +7011,7 @@ ${handlers.length} left`,
 	}
 
 	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
-		return msg.serializeCC(this.messageEncodingContext).length
+		return msg.serializeCC(this.getCCEncodingContext()).length
 			> this.getMaxPayloadLength(msg);
 	}
 

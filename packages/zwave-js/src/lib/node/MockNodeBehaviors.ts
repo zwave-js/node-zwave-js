@@ -133,7 +133,11 @@ const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
 				installerIcon: 0x0000,
 				userIcon: 0x0000,
 			});
-			cc = SecurityCC.encapsulate(self.host, cc);
+			cc = SecurityCC.encapsulate(
+				self.host,
+				self.securityManagers.securityManager!,
+				cc,
+			);
 			return { action: "sendCC", cc, ackRequested: true };
 		}
 	},
@@ -157,7 +161,7 @@ const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
 				installerIcon: 0x0000,
 				userIcon: 0x0000,
 			});
-			cc = Security2CC.encapsulate(self.host, cc);
+			cc = Security2CC.encapsulate(self.host, cc, self.securityManagers);
 			return { action: "sendCC", cc };
 		}
 	},

@@ -14,7 +14,7 @@ import {
 	isZWaveError,
 } from "@zwave-js/core";
 import { type ZWaveHost } from "@zwave-js/host";
-import { type MessageEncodingContext, MessageOrigin } from "@zwave-js/serial";
+import { MessageOrigin } from "@zwave-js/serial";
 import {
 	MOCK_FRAME_ACK_TIMEOUT,
 	type MockController,
@@ -90,8 +90,8 @@ function createLazySendDataPayload(
 	controller: MockController,
 	node: MockNode,
 	msg: SendDataRequest | SendDataMulticastRequest,
-): (ctx: MessageEncodingContext) => CommandClass {
-	return (ctx: MessageEncodingContext) => {
+): () => CommandClass {
+	return () => {
 		try {
 			const cmd = CommandClass.from(node.host, {
 				nodeId: controller.host.ownNodeId,
@@ -100,7 +100,8 @@ function createLazySendDataPayload(
 				context: {
 					ownNodeId: controller.host.ownNodeId,
 					sourceNodeId: node.id,
-					...ctx,
+					...node.encodingContext,
+					...node.securityManagers,
 				},
 			});
 			// Store the command because assertReceivedHostMessage needs it
