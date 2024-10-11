@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.8.0 (2024-10-11)
 ### Features
 * Support playing tones on mocked sirens, improve support for node dumps of switches/dimmers (#7272)
 
