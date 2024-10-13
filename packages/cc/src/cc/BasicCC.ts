@@ -16,9 +16,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { type AllOrNone, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -383,7 +383,7 @@ export class BasicCCSet extends BasicCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "target value": this.targetValue },
@@ -506,7 +506,7 @@ export class BasicCCReport extends BasicCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};

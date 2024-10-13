@@ -14,9 +14,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -503,7 +503,7 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "# of tones": this.toneCount },
@@ -560,7 +560,7 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -612,7 +612,7 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "tone id": this.toneId },
@@ -656,7 +656,7 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -705,7 +705,7 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -757,7 +757,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -791,7 +791,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	@ccValue(SoundSwitchCCValues.volume)
 	public volume?: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};

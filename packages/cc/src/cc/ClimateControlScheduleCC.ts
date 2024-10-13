@@ -11,8 +11,8 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetValueDB,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -264,7 +264,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -315,7 +315,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	)
 	public readonly schedule: readonly Switchpoint[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -371,7 +371,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { weekday: getEnumMemberName(Weekday, this.weekday) },
@@ -395,7 +395,7 @@ export class ClimateControlScheduleCCChangedReport
 
 	public readonly changeCounter: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "change counter": this.changeCounter },
@@ -431,7 +431,7 @@ export class ClimateControlScheduleCCOverrideReport
 	@ccValue(ClimateControlScheduleCCValues.overrideState)
 	public readonly overrideState: SetbackState;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -493,7 +493,7 @@ export class ClimateControlScheduleCCOverrideSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

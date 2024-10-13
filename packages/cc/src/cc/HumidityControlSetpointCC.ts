@@ -20,9 +20,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -559,7 +559,7 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
 			...super.toLogEntry(host),
@@ -641,7 +641,7 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		return this._value;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
 			...super.toLogEntry(host),
@@ -700,7 +700,7 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -734,7 +734,7 @@ export class HumidityControlSetpointCCSupportedReport
 	public readonly supportedSetpointTypes:
 		readonly HumidityControlSetpointType[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -780,7 +780,7 @@ export class HumidityControlSetpointCCScaleSupportedReport
 
 	public readonly supportedScales: readonly number[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const supportedScales = this.supportedScales.map((scale) =>
 			getScale(scale)
 		);
@@ -832,7 +832,7 @@ export class HumidityControlSetpointCCScaleSupportedGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -911,7 +911,7 @@ export class HumidityControlSetpointCCCapabilitiesReport
 		return this._maxValueScale;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const minValueScale = getScale(this.minValueScale);
 		const maxValueScale = getScale(this.maxValueScale);
 		return {
@@ -965,7 +965,7 @@ export class HumidityControlSetpointCCCapabilitiesGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

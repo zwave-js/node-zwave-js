@@ -28,9 +28,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -736,7 +736,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -809,7 +809,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (
 			this.sensorType != undefined
@@ -868,7 +868,7 @@ export class MultilevelSensorCCSupportedSensorReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -932,7 +932,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -983,7 +983,7 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

@@ -12,9 +12,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -319,7 +319,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { name: this.name },
@@ -347,7 +347,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	@ccValue(NodeNamingAndLocationCCValues.name)
 	public readonly name: string;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { name: this.name },
@@ -412,7 +412,7 @@ export class NodeNamingAndLocationCCLocationSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { location: this.location },
@@ -442,7 +442,7 @@ export class NodeNamingAndLocationCCLocationReport
 	@ccValue(NodeNamingAndLocationCCValues.location)
 	public readonly location: string;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { location: this.location },

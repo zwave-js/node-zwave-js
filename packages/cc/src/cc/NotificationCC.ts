@@ -34,9 +34,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -942,7 +942,7 @@ export class NotificationCCSet extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1144,7 +1144,7 @@ export class NotificationCCReport extends NotificationCC {
 
 	public sequenceNumber: number | undefined;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (this.alarmType) {
 			message = {
@@ -1498,7 +1498,7 @@ export class NotificationCCGet extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.alarmType != undefined) {
 			message["V1 alarm type"] = this.alarmType;
@@ -1582,7 +1582,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1715,7 +1715,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1768,7 +1768,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

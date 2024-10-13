@@ -11,9 +11,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -275,7 +275,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -322,7 +322,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 	)
 	public readonly deviceId: string;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -369,7 +369,7 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

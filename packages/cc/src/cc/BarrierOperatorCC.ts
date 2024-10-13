@@ -17,9 +17,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
@@ -576,7 +576,7 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "target state": this.targetState },
@@ -628,7 +628,7 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	@ccValue(BarrierOperatorCCValues.position)
 	public readonly position: MaybeUnknown<number>;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -664,7 +664,7 @@ export class BarrierOperatorCCSignalingCapabilitiesReport
 	@ccValue(BarrierOperatorCCValues.supportedSubsystemTypes)
 	public readonly supportedSubsystemTypes: readonly SubsystemType[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -719,7 +719,7 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -765,7 +765,7 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public readonly subsystemType: SubsystemType;
 	public readonly subsystemState: SubsystemState;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -817,7 +817,7 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

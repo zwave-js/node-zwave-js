@@ -7,8 +7,8 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetValueDB,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
@@ -160,7 +160,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			// Hide the default payload line

@@ -16,9 +16,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -668,7 +668,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -735,7 +735,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};
@@ -830,7 +830,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			startLevel: `${this.startLevel}${
 				this.ignoreStartLevel ? " (ignored)" : ""
@@ -874,7 +874,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		return true;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

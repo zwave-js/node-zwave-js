@@ -18,9 +18,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -860,7 +860,7 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -973,7 +973,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.lockTimeout)
 	public readonly lockTimeout?: number; // in seconds
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current mode": getEnumMemberName(DoorLockMode, this.currentMode),
 			"active outside handles": this.outsideHandlesCanOpenDoor.join(", "),
@@ -1124,7 +1124,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 		return true;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"operation type": getEnumMemberName(
 				DoorLockOperationType,
@@ -1279,7 +1279,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const insideHandles = isArray(
 				this.insideHandlesCanOpenDoorConfiguration,
 			)
@@ -1403,7 +1403,7 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.blockToBlockSupported)
 	public readonly blockToBlockSupported: boolean;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

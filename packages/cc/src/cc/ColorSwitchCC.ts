@@ -19,9 +19,9 @@ import { type MaybeNotKnown, encodeBitMask } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
@@ -719,7 +719,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -868,7 +868,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
 				ColorComponent,
@@ -936,7 +936,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1036,7 +1036,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const [key, value] of Object.entries(this.colorTable)) {
 			const realKey: string = key in ColorComponentMap
@@ -1135,7 +1135,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
 				ColorComponent,
@@ -1186,7 +1186,7 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

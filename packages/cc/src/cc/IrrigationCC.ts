@@ -18,9 +18,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -1374,7 +1374,7 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.maxValveTableSize)
 	public readonly maxValveTableSize: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1481,7 +1481,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.firstOpenZoneId)
 	public firstOpenZoneId?: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"system voltage": `${this.systemVoltage} V`,
 			"active sensors": [
@@ -1592,7 +1592,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"master valve delay": `${this.masterValveDelay} s`,
 			"high pressure threshold": `${this.highPressureThreshold} kPa`,
@@ -1667,7 +1667,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.moistureSensorPolarity)
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"master valve delay": `${this.masterValveDelay} s`,
 			"high pressure threshold": `${this.highPressureThreshold} kPa`,
@@ -1802,7 +1802,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 		return true;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"valve ID": this.valveId,
 			connected: this.connected,
@@ -1876,7 +1876,7 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1956,7 +1956,7 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -2089,7 +2089,7 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public useRainSensor: boolean;
 	public useMoistureSensor: boolean;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -2147,7 +2147,7 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -2199,7 +2199,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"valve ID": this.valveId,
 		};
@@ -2258,7 +2258,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"table ID": this.tableId,
 		};
@@ -2299,7 +2299,7 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 	public readonly tableId: number;
 	public readonly entries: ValveTableEntry[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"table ID": this.tableId,
 		};
@@ -2362,7 +2362,7 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -2411,7 +2411,7 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -2460,7 +2460,7 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

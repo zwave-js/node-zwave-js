@@ -27,9 +27,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -1749,7 +1749,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1808,7 +1808,7 @@ export class ConfigurationCCGet extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "parameter #": this.parameter },
@@ -1932,7 +1932,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this.parameter,
 			"reset to default": this.resetToDefault,
@@ -2096,7 +2096,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			handshake: this.handshake,
 			"reset to default": this.resetToDefault,
@@ -2224,7 +2224,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		return this._values;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"handshake response": this._isHandshakeResponse,
 			"default values": this._defaultValues,
@@ -2290,7 +2290,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { parameters: this.parameters.join(", ") },
@@ -2402,7 +2402,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 			.reduce((prev, cur) => prev + cur, "");
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -2438,7 +2438,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "parameter #": this.parameter },
@@ -2563,7 +2563,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 			.reduce((prev, cur) => prev + cur, "");
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -2599,7 +2599,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "parameter #": this.parameter },
@@ -2866,7 +2866,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this.parameter,
 			"next param #": this.nextParameter,
@@ -2928,7 +2928,7 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "parameter #": this.parameter },

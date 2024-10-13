@@ -16,9 +16,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -527,7 +527,7 @@ export class AssociationCCSet extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds.length
@@ -600,7 +600,7 @@ export class AssociationCCRemove extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds && this.nodeIds.length
@@ -692,7 +692,7 @@ export class AssociationCCReport extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -739,7 +739,7 @@ export class AssociationCCGet extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "group id": this.groupId },
@@ -780,7 +780,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "group count": this.groupCount },
@@ -822,7 +822,7 @@ export class AssociationCCSpecificGroupReport extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { group: this.group },

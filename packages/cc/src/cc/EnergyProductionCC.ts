@@ -11,9 +11,9 @@ import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -250,7 +250,7 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -305,7 +305,7 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

@@ -16,9 +16,9 @@ import { type EndpointId, type MaybeNotKnown } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host";
 import {
 	type AllOrNone,
@@ -969,7 +969,7 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1012,7 +1012,7 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1070,7 +1070,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"no. of weekday schedule slots": this.numWeekDaySlots,
 			"no. of day-of-year schedule slots": this.numYearDaySlots,
@@ -1172,7 +1172,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -1299,7 +1299,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.weekday == undefined) {
 			message = {
@@ -1365,7 +1365,7 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1478,7 +1478,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -1642,7 +1642,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.startYear !== undefined) {
 			message = {
@@ -1711,7 +1711,7 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1761,7 +1761,7 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1810,7 +1810,7 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1920,7 +1920,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -2055,7 +2055,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (!this.weekdays) {
 			message = {
@@ -2123,7 +2123,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

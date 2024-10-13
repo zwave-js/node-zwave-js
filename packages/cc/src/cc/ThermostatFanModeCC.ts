@@ -16,9 +16,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -374,7 +374,7 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatFanMode, this.mode),
 		};
@@ -407,7 +407,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	@ccValue(ThermostatFanModeCCValues.turnedOff)
 	public readonly off: boolean | undefined;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatFanMode, this.mode),
 		};
@@ -457,7 +457,7 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 	@ccValue(ThermostatFanModeCCValues.supportedFanModes)
 	public readonly supportedModes: ThermostatFanMode[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

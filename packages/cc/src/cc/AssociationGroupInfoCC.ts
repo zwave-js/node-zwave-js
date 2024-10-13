@@ -14,9 +14,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -523,7 +523,7 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -564,7 +564,7 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "group id": this.groupId },
@@ -668,7 +668,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -745,7 +745,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.groupId != undefined) {
 			message["group id"] = this.groupId;
@@ -832,7 +832,7 @@ export class AssociationGroupInfoCCCommandListReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -894,7 +894,7 @@ export class AssociationGroupInfoCCCommandListGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

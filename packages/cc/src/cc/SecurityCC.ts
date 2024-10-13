@@ -24,9 +24,9 @@ import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -584,7 +584,7 @@ export class SecurityCCNonceReport extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { nonce: buffer2hex(this.nonce) },
@@ -811,7 +811,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		return super.computeEncapsulationOverhead() + 18;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.nonceId != undefined) {
 			message["nonce id"] = this.nonceId;
@@ -879,7 +879,7 @@ export class SecurityCCSchemeReport extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			// Hide the default payload line
@@ -905,7 +905,7 @@ export class SecurityCCSchemeGet extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			// Hide the default payload line
@@ -931,7 +931,7 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			// Hide the default payload line
@@ -1053,7 +1053,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

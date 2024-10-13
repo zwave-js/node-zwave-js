@@ -11,9 +11,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
@@ -169,7 +169,7 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	@ccValue(ThermostatFanStateCCValues.fanState)
 	public readonly state: ThermostatFanState;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			state: getEnumMemberName(ThermostatFanState, this.state),
 		};

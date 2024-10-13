@@ -28,9 +28,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
@@ -1060,7 +1060,7 @@ export class MeterCCReport extends MeterCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getMeterScale(this.type, this.scale)
 			?? getUnknownMeterScale(this.scale);
 
@@ -1160,7 +1160,7 @@ export class MeterCCGet extends MeterCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.rateType != undefined) {
 			message["rate type"] = getEnumMemberName(RateType, this.rateType);
@@ -1322,7 +1322,7 @@ export class MeterCCSupportedReport extends MeterCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"meter type": getMeterName(this.type),
 			"supports reset": this.supportsReset,
@@ -1420,7 +1420,7 @@ export class MeterCCReset extends MeterCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
 			message.type = getMeterName(this.type);

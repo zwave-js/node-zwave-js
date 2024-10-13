@@ -15,9 +15,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -229,7 +229,7 @@ export class LanguageCCSet extends LanguageCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this._country != undefined) {
 			message.country = this._country;
@@ -263,7 +263,7 @@ export class LanguageCCReport extends LanguageCC {
 	@ccValue(LanguageCCValues.country)
 	public readonly country: MaybeNotKnown<string>;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this.country != undefined) {
 			message.country = this.country;

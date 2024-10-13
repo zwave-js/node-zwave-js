@@ -4,11 +4,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host";
+import type { CCEncodingContext, GetValueDB, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
@@ -126,7 +122,7 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -176,7 +172,7 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

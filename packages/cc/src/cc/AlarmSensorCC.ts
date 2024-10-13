@@ -14,9 +14,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -352,7 +352,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	public readonly severity: number | undefined;
 	public readonly duration: number | undefined;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sensor type": getEnumMemberName(AlarmSensorType, this.sensorType),
 			"alarm state": this.state,
@@ -428,7 +428,7 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -472,7 +472,7 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return true;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

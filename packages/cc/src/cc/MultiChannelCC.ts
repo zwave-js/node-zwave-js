@@ -21,9 +21,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -868,7 +868,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"endpoint count (individual)": this.individualCount,
 			"count is dynamic": this.countIsDynamic,
@@ -978,7 +978,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1039,7 +1039,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { endpoint: this.requestedEndpoint },
@@ -1126,7 +1126,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1178,7 +1178,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1218,7 +1218,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	)
 	public readonly members: readonly number[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1264,7 +1264,7 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { endpoint: this.requestedEndpoint },
@@ -1396,7 +1396,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1430,7 +1430,7 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	public readonly requestedCC: CommandClasses;
 	public readonly endpointCount: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1481,7 +1481,7 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { CC: getCCName(this.requestedCC) },
@@ -1566,7 +1566,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		return super.computeEncapsulationOverhead() + 1;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { source: this.endpointIndex },

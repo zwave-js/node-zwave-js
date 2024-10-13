@@ -17,9 +17,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import type { AllOrNone } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -352,7 +352,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -427,7 +427,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};

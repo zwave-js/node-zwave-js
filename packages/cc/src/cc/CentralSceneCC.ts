@@ -17,9 +17,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -342,7 +342,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 	public readonly sceneNumber: number;
 	public readonly slowRefresh: boolean | undefined;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"key attribute": getEnumMemberName(
@@ -438,7 +438,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return this._supportedKeyAttributes;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"scene count": this.sceneCount,
 			"supports slow refresh": maybeUnknownToString(
@@ -476,7 +476,7 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	@ccValue(CentralSceneCCValues.slowRefresh)
 	public readonly slowRefresh: boolean;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "slow refresh": this.slowRefresh },
@@ -522,7 +522,7 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "slow refresh": this.slowRefresh },

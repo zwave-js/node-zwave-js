@@ -36,9 +36,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
@@ -310,7 +310,7 @@ export class CommandClass implements CCId {
 	}
 
 	/** Whether the interview for this CC was previously completed */
-	public isInterviewComplete(host: ZWaveValueHost): boolean {
+	public isInterviewComplete(host: GetValueDB): boolean {
 		return !!this.getValueDB(host).getValue<boolean>({
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -320,7 +320,7 @@ export class CommandClass implements CCId {
 
 	/** Marks the interview for this CC as complete or not */
 	public setInterviewComplete(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		complete: boolean,
 	): void {
 		this.getValueDB(host).setValue(
@@ -495,7 +495,7 @@ export class CommandClass implements CCId {
 	}
 
 	/** Generates a representation of this CC for the log */
-	public toLogEntry(_host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(_host?: GetValueDB): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
 		const message: MessageRecord = {};
 		if (this.constructor === CommandClass) {
@@ -672,7 +672,7 @@ export class CommandClass implements CCId {
 	}
 
 	/** Returns the value DB for this CC's node */
-	protected getValueDB(host: ZWaveValueHost): ValueDB {
+	protected getValueDB(host: GetValueDB): ValueDB {
 		if (this.isSinglecast()) {
 			try {
 				return host.getValueDB(this.nodeId);
@@ -695,7 +695,7 @@ export class CommandClass implements CCId {
 	 * @param meta Will be used in place of the predefined metadata when given
 	 */
 	protected ensureMetadata(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		ccValue: CCValue,
 		meta?: ValueMetadata,
 	): void {
@@ -711,7 +711,7 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected removeMetadata(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		ccValue: CCValue,
 	): void {
 		const valueDB = this.getValueDB(host);
@@ -725,7 +725,7 @@ export class CommandClass implements CCId {
 	 * @param meta Will be used in place of the predefined metadata when given
 	 */
 	protected setMetadata(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		ccValue: CCValue,
 		meta?: ValueMetadata,
 	): void {
@@ -739,7 +739,7 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getMetadata<T extends ValueMetadata>(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		ccValue: CCValue,
 	): T | undefined {
 		const valueDB = this.getValueDB(host);
@@ -752,7 +752,7 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected setValue(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		ccValue: CCValue,
 		value: unknown,
 	): void {
@@ -766,7 +766,7 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected removeValue(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		ccValue: CCValue,
 	): void {
 		const valueDB = this.getValueDB(host);
@@ -779,7 +779,7 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getValue<T>(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		ccValue: CCValue,
 	): T | undefined {
 		const valueDB = this.getValueDB(host);
@@ -792,7 +792,7 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getValueTimestamp(
-		host: ZWaveValueHost,
+		host: GetValueDB,
 		ccValue: CCValue,
 	): number | undefined {
 		const valueDB = this.getValueDB(host);
@@ -1221,7 +1221,7 @@ export class InvalidCC extends CommandClass {
 	}
 	public readonly reason?: string | ZWaveErrorCodes;
 
-	public toLogEntry(_host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(_host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			tags: [this.ccName, "INVALID"],
 			message: this.reason != undefined

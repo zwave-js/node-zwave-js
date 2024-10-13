@@ -118,7 +118,7 @@ export interface ZWaveHost extends HostIDs, GetNextCallbackId {
 }
 
 /** Host application abstractions that provide support for reading and writing values to a database */
-export interface ZWaveValueHost {
+export interface GetValueDB {
 	/** Returns the value DB which belongs to the node with the given ID, or throws if the Value DB cannot be accessed */
 	getValueDB(nodeId: number): ValueDB;
 
@@ -140,7 +140,7 @@ export interface GetAllNodes<T extends NodeId> {
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
 export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 	extends
-		ZWaveValueHost,
+		GetValueDB,
 		ZWaveHost,
 		GetNode<TNode>,
 		GetAllNodes<TNode>,

@@ -22,9 +22,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
@@ -344,7 +344,7 @@ export class SupervisionCCReport extends SupervisionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"session id": this.sessionId,
 			"more updates follow": this.moreUpdatesFollow,
@@ -437,7 +437,7 @@ export class SupervisionCCGet extends SupervisionCC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

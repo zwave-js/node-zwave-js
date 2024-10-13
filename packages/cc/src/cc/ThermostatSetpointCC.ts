@@ -21,9 +21,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -662,7 +662,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
 			...super.toLogEntry(host),
@@ -758,7 +758,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
 			...super.toLogEntry(host),
@@ -814,7 +814,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -900,7 +900,7 @@ export class ThermostatSetpointCCCapabilitiesReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const minValueScale = getScale(this.minValueScale);
 		const maxValueScale = getScale(this.maxValueScale);
 		return {
@@ -949,7 +949,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1032,7 +1032,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

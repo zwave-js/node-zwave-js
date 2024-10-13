@@ -11,8 +11,8 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetValueDB,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -260,7 +260,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
@@ -312,7 +312,7 @@ export class PowerlevelCCReport extends PowerlevelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
@@ -369,7 +369,7 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -426,7 +426,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

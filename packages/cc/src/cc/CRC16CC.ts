@@ -8,8 +8,8 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetValueDB,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
@@ -165,7 +165,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			// Hide the default payload line

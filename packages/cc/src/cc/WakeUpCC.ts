@@ -12,9 +12,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -395,7 +395,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -425,7 +425,7 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 	@ccValue(WakeUpCCValues.controllerNodeId)
 	public readonly controllerNodeId: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -501,7 +501,7 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	@ccValue(WakeUpCCValues.wakeUpOnDemandSupported)
 	public readonly wakeUpOnDemandSupported: boolean;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

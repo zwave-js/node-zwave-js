@@ -16,9 +16,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { type AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {
@@ -554,7 +554,7 @@ export class BatteryCCReport extends BatteryCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			level: this.level,
 			"is low": this.isLow,
@@ -643,7 +643,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 
 	private readonly temperatureScale: number | undefined;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

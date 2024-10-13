@@ -13,9 +13,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -427,7 +427,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.position != undefined) {
 			message.position = this.position;
@@ -501,7 +501,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		return this._tilt;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.position != undefined) {
 			message.position = this.position;

@@ -15,9 +15,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -311,7 +311,7 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -336,7 +336,7 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	@ccValue(HumidityControlModeCCValues.mode)
 	public readonly mode: HumidityControlMode;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -393,7 +393,7 @@ export class HumidityControlModeCCSupportedReport
 		return this._supportedModes;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

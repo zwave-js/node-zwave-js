@@ -18,9 +18,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
@@ -1300,7 +1300,7 @@ export class UserCodeCCSet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1404,7 +1404,7 @@ export class UserCodeCCReport extends UserCodeCC
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1449,7 +1449,7 @@ export class UserCodeCCGet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "user id": this.userId },
@@ -1497,7 +1497,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "supported users": this.supportedUsers },
@@ -1661,7 +1661,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1722,7 +1722,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { mode: getEnumMemberName(KeypadMode, this.keypadMode) },
@@ -1781,7 +1781,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -1832,7 +1832,7 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "admin code": userCodeToLogString(this.adminCode) },
@@ -1877,7 +1877,7 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "admin code": userCodeToLogString(this.adminCode) },
@@ -1922,7 +1922,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "user code checksum": num2hex(this.userCodeChecksum) },
@@ -1991,7 +1991,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${
@@ -2050,7 +2050,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public readonly userCodes: readonly UserCode[];
 	public readonly nextUserId: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${
@@ -2104,7 +2104,7 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {

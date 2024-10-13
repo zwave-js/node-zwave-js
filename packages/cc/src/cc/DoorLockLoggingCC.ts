@@ -11,9 +11,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -246,7 +246,7 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	@ccValue(DoorLockLoggingCCValues.recordsCount)
 	public readonly recordsCount: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -322,7 +322,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public readonly recordNumber: number;
 	public readonly record?: DoorLockLoggingRecord;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 
 		if (!this.record) {
@@ -396,7 +396,7 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { "record number": this.recordNumber },

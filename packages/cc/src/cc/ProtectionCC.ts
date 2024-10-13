@@ -17,9 +17,9 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
-	ZWaveValueHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -545,7 +545,7 @@ export class ProtectionCCSet extends ProtectionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -579,7 +579,7 @@ export class ProtectionCCReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.rfProtectionState)
 	public readonly rf?: RFProtectionState;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -654,7 +654,7 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.supportedRFStates)
 	public readonly supportedRFStates: RFProtectionState[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -693,7 +693,7 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
 	public readonly exclusiveControlNodeId: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -743,7 +743,7 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: {
@@ -767,7 +767,7 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.timeout)
 	public readonly timeout: Timeout;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { timeout: this.timeout.toString() },
@@ -813,7 +813,7 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(host),
 			message: { timeout: this.timeout.toString() },
