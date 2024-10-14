@@ -39,6 +39,7 @@ export class HardResetRequestBase extends Message {
 @expectedCallback(FunctionType.HardReset)
 export class HardResetRequest extends HardResetRequestBase {
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		this.payload = Buffer.from([this.callbackId]);
 		return super.serialize(ctx);
 	}
@@ -47,7 +48,7 @@ export class HardResetRequest extends HardResetRequestBase {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -66,7 +67,7 @@ export class HardResetCallback extends HardResetRequestBase {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}

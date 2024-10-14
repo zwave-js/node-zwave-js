@@ -127,6 +127,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
 			ctx.nodeIdType,
@@ -154,7 +155,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			message: {
 				"source node id": this.sourceNodeId,
 				"transmit options": num2hex(this.transmitOptions),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -221,7 +222,7 @@ export class SendDataBridgeRequestTransmitReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status":
 					getEnumMemberName(TransmitStatus, this.transmitStatus)
 					+ (this.txReport
@@ -367,6 +368,7 @@ export class SendDataMulticastBridgeRequest<
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const serializedCC = this.serializeCC(ctx);
 		const sourceNodeId = encodeNodeID(
 			this.sourceNodeId,
@@ -397,7 +399,7 @@ export class SendDataMulticastBridgeRequest<
 				"source node id": this.sourceNodeId,
 				"target nodes": this.command.nodeId.join(", "),
 				"transmit options": num2hex(this.transmitOptions),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -444,7 +446,7 @@ export class SendDataMulticastBridgeRequestTransmitReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,

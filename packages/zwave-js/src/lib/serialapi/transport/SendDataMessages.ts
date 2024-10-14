@@ -175,6 +175,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.command.nodeId, ctx.nodeIdType);
 		const serializedCC = this.serializeCC(ctx);
 		this.payload = Buffer.concat([
@@ -192,7 +193,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			...super.toLogEntry(),
 			message: {
 				"transmit options": num2hex(this.transmitOptions),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -252,6 +253,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	public txReport: TXReport | undefined;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		this.payload = Buffer.from([
 			this.callbackId,
 			this.transmitStatus,
@@ -274,7 +276,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status":
 					getEnumMemberName(TransmitStatus, this.transmitStatus)
 					+ (this.txReport
@@ -481,6 +483,7 @@ export class SendDataMulticastRequest<
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const serializedCC = this.serializeCC(ctx);
 		const destinationNodeIDs = this.command.nodeId.map((id) =>
 			encodeNodeID(id, ctx.nodeIdType)
@@ -504,7 +507,7 @@ export class SendDataMulticastRequest<
 			message: {
 				"target nodes": this.command.nodeId.join(", "),
 				"transmit options": num2hex(this.transmitOptions),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -545,6 +548,7 @@ export class SendDataMulticastRequestTransmitReport
 	}
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		this.payload = Buffer.from([this.callbackId, this._transmitStatus]);
 		return super.serialize(ctx);
 	}
@@ -557,7 +561,7 @@ export class SendDataMulticastRequestTransmitReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,

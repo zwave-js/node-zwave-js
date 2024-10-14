@@ -82,7 +82,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 					);
 
 					const cb = new SendDataRequestTransmitReport(host, {
-						callbackId: msg.callbackId,
+						callbackId: msg.callbackId!,
 						transmitStatus: TransmitStatus.Fail,
 						txReport: {
 							txTicks: 0,
@@ -205,7 +205,7 @@ integrationTest(
 						);
 
 						const cb = new SendDataRequestTransmitReport(host, {
-							callbackId: msg.callbackId,
+							callbackId: msg.callbackId!,
 							transmitStatus: TransmitStatus.Fail,
 							txReport: {
 								txTicks: 0,
@@ -346,7 +346,7 @@ integrationTestMulti(
 						);
 
 						const cb = new SendDataRequestTransmitReport(host, {
-							callbackId: msg.callbackId,
+							callbackId: msg.callbackId!,
 							transmitStatus: TransmitStatus.Fail,
 							txReport: {
 								txTicks: 0,

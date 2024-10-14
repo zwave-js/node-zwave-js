@@ -70,6 +70,7 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 	public nodeId: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 
@@ -130,7 +131,7 @@ export class DeleteReturnRouteRequestTransmitReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,

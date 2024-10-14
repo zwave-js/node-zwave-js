@@ -5773,6 +5773,11 @@ ${handlers.length} left`,
 		msg: Message,
 		transactionSource?: string,
 	): Promise<Message | undefined> {
+		// Give the command a callback ID if it needs one
+		if (msg.needsCallbackId() && !msg.hasCallbackId()) {
+			msg.callbackId = this.getNextCallbackId();
+		}
+
 		const machine = createSerialAPICommandMachine(
 			msg,
 			msg.serialize(this.getCCEncodingContext()),

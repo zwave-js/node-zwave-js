@@ -153,6 +153,7 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public networkWide: boolean = false;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		let data: number = this.addNodeType || AddNodeType.Any;
 		if (this.highPower) data |= AddNodeFlags.HighPower;
 		if (this.networkWide) data |= AddNodeFlags.NetworkWide;
@@ -233,6 +234,7 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public protocol: Protocols;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		let control: number = AddNodeType.SmartStartDSK;
 		if (this.highPower) control |= AddNodeFlags.HighPower;
 		if (this.networkWide) control |= AddNodeFlags.NetworkWide;
@@ -325,7 +327,7 @@ export class AddNodeToNetworkRequestStatusReport
 			...super.toLogEntry(),
 			message: {
 				status: getEnumMemberName(AddNodeStatus, this.status),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}

@@ -79,6 +79,7 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public transmitOptions: TransmitOptions;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.sucNodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([
 			nodeId,

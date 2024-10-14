@@ -55,7 +55,7 @@ integrationTest(
 							);
 						}
 
-						lastCallbackId = msg.callbackId;
+						lastCallbackId = msg.callbackId!;
 
 						return true;
 					} else if (msg instanceof SendDataAbort) {
@@ -66,7 +66,7 @@ integrationTest(
 						});
 
 						setTimeout(() => {
-							controller.sendToHost(cb.serialize());
+							controller.sendMessageToHost(cb);
 						}, 100);
 
 						// Put the controller into idle state
@@ -149,7 +149,7 @@ integrationTest(
 							);
 						}
 
-						lastCallbackId = msg.callbackId;
+						lastCallbackId = msg.callbackId!;
 
 						// Don't send the response or the callback
 

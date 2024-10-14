@@ -115,6 +115,7 @@ export class RemoveNodeFromNetworkRequest
 	public networkWide: boolean = false;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		let data: number = this.removeNodeType || RemoveNodeType.Any;
 		if (this.highPower) data |= RemoveNodeFlags.HighPower;
 		if (this.networkWide) data |= RemoveNodeFlags.NetworkWide;

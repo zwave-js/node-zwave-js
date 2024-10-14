@@ -65,7 +65,7 @@ integrationTest(
 							MockControllerCommunicationState.Sending,
 						);
 
-						const expectCallback = msg.callbackId !== 0;
+						const expectCallback = !!msg.callbackId;
 
 						// Send the command to the node
 						const node = controller.nodes.get(msg.getNodeId()!)!;
@@ -117,7 +117,7 @@ integrationTest(
 								new DeleteSUCReturnRouteRequestTransmitReport(
 									host,
 									{
-										callbackId: msg.callbackId,
+										callbackId: msg.callbackId!,
 										transmitStatus: ack
 											? TransmitStatus.OK
 											: TransmitStatus.NoAck,
@@ -155,7 +155,7 @@ integrationTest(
 							MockControllerCommunicationState.Sending,
 						);
 
-						const expectCallback = msg.callbackId !== 0;
+						const expectCallback = !!msg.callbackId;
 
 						// Send the command to the node
 						const node = controller.nodes.get(msg.getNodeId()!)!;
@@ -207,7 +207,7 @@ integrationTest(
 								new DeleteSUCReturnRouteRequestTransmitReport(
 									host,
 									{
-										callbackId: msg.callbackId,
+										callbackId: msg.callbackId!,
 										transmitStatus: ack
 											? TransmitStatus.OK
 											: TransmitStatus.NoAck,

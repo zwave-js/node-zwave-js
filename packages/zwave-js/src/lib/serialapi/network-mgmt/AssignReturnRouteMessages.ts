@@ -79,6 +79,7 @@ export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
 	public destinationNodeId: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		const destinationNodeId = encodeNodeID(
 			this.destinationNodeId,
@@ -148,7 +149,7 @@ export class AssignReturnRouteRequestTransmitReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,

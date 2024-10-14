@@ -84,6 +84,7 @@ export class SetLearnModeRequest extends SetLearnModeRequestBase {
 	public intent: LearnModeIntent;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		this.payload = Buffer.from([
 			this.intent,
 			this.callbackId,
@@ -96,7 +97,7 @@ export class SetLearnModeRequest extends SetLearnModeRequestBase {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				intent: getEnumMemberName(LearnModeIntent, this.intent),
 			},
 		};
@@ -155,7 +156,7 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"callback id": this.callbackId,
+			"callback id": this.callbackId ?? "(not set)",
 			status: getEnumMemberName(LearnModeStatus, this.status),
 		};
 		if (

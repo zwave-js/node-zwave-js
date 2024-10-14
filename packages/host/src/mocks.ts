@@ -101,7 +101,6 @@ export function createTestingHost<
 		getSupportedCCVersion: options.getSupportedCCVersion
 			?? options.getSafeCCVersion
 			?? (() => 100),
-		getNextCallbackId: createWrappingCounter(0xff),
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
 				valueDBCache.set(

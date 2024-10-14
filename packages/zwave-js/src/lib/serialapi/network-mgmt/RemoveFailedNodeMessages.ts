@@ -79,6 +79,7 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	public failedNodeId: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.failedNodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 		return super.serialize(ctx);

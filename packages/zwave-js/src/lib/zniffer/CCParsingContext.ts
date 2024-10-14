@@ -66,14 +66,6 @@ export class ZnifferCCParsingContext implements ZWaveHost {
 		// Do nothing
 	}
 
-	getNextCallbackId(): number {
-		throw new Error("Method not implemented.");
-	}
-
-	getNextSupervisionSessionId(nodeId: number): number {
-		throw new Error("Method not implemented.");
-	}
-
 	getDeviceConfig(nodeId: number): DeviceConfig | undefined {
 		// Disable strict validation while parsing certain CCs
 		// Most of this stuff isn't actually needed, only the compat flags...

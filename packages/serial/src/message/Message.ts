@@ -194,7 +194,7 @@ export class Message {
 			this.expectedCallback = options.expectedCallback
 				?? getExpectedCallback(this);
 
-			this._callbackId = options.callbackId;
+			this.callbackId = options.callbackId;
 
 			this.payload = options.payload || Buffer.allocUnsafe(0);
 		}
@@ -214,28 +214,23 @@ export class Message {
 		| undefined;
 	public payload: Buffer; // TODO: Length limit 255
 
-	private _callbackId: number | undefined;
-	/**
-	 * Used to map requests to responses.
-	 *
-	 * WARNING: Accessing this property will generate a new callback ID if this message had none.
-	 * If you want to compare the callback ID, use `hasCallbackId()` beforehand to check if the callback ID is already defined.
-	 */
-	public get callbackId(): number {
-		if (this._callbackId == undefined) {
-			this._callbackId = this.host.getNextCallbackId();
+	/** Used to map requests to callbacks */
+	public callbackId: number | undefined;
+
+	protected assertCallbackId(): asserts this is this & {
+		callbackId: number;
+	} {
+		if (this.callbackId == undefined) {
+			throw new ZWaveError(
+				"Callback ID required but not set",
+				ZWaveErrorCodes.PacketFormat_Invalid,
+			);
 		}
-		return this._callbackId;
-	}
-	public set callbackId(v: number | undefined) {
-		this._callbackId = v;
 	}
 
-	/**
-	 * Tests whether this message's callback ID is defined
-	 */
-	public hasCallbackId(): boolean {
-		return this._callbackId != undefined;
+	/** Returns whether the callback ID is set */
+	public hasCallbackId(): this is this & { callbackId: number } {
+		return this.callbackId != undefined;
 	}
 
 	/**
@@ -429,11 +424,7 @@ export class Message {
 		// To prevent this from triggering the unresponsive controller detection we need to forward these messages as if they were correct
 		if (msg.functionType !== 0 as any) {
 			// If a received request included a callback id, enforce that the response contains the same
-			if (
-				this.hasCallbackId()
-				&& (!msg.hasCallbackId()
-					|| this._callbackId !== msg._callbackId)
-			) {
+			if (this.callbackId !== msg.callbackId) {
 				return false;
 			}
 		}

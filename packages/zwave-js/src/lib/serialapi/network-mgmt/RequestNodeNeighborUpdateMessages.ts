@@ -65,6 +65,7 @@ export class RequestNodeNeighborUpdateRequest
 	public discoveryTimeout: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 		return super.serialize(ctx);
@@ -77,7 +78,9 @@ export class RequestNodeNeighborUpdateRequest
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "callback id": this.callbackId },
+			message: {
+				"callback id": this.callbackId ?? "(not set)",
+			},
 		};
 	}
 }
@@ -113,7 +116,7 @@ export class RequestNodeNeighborUpdateReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"update status": getEnumMemberName(
 					NodeNeighborUpdateStatus,
 					this._updateStatus,

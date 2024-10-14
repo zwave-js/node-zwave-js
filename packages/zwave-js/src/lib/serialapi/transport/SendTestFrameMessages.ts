@@ -73,6 +73,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 	public powerlevel: Powerlevel;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.testNodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([
 			nodeId,
@@ -91,7 +92,7 @@ export class SendTestFrameRequest extends SendTestFrameRequestBase {
 			message: {
 				"test node id": this.testNodeId,
 				powerlevel: getEnumMemberName(Powerlevel, this.powerlevel),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -140,7 +141,7 @@ export class SendTestFrameTransmitReport extends SendTestFrameRequestBase
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,

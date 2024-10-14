@@ -92,6 +92,7 @@ export class AssignPrioritySUCReturnRouteRequest
 	public routeSpeed: ZWaveDataRate;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([
 			nodeId,
@@ -120,7 +121,7 @@ export class AssignPrioritySUCReturnRouteRequest
 					ZWaveDataRate,
 					this.routeSpeed,
 				),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -179,7 +180,7 @@ export class AssignPrioritySUCReturnRouteRequestTransmitReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,

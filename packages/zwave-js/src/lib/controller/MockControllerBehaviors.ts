@@ -350,7 +350,7 @@ const handleSendData: MockControllerBehavior = {
 				);
 
 				const cb = new SendDataRequestTransmitReport(host, {
-					callbackId: msg.callbackId,
+					callbackId: msg.callbackId!,
 					transmitStatus: ack
 						? TransmitStatus.OK
 						: TransmitStatus.NoAck,
@@ -449,7 +449,7 @@ const handleSendDataMulticast: MockControllerBehavior = {
 				);
 
 				const cb = new SendDataMulticastRequestTransmitReport(host, {
-					callbackId: msg.callbackId,
+					callbackId: msg.callbackId!,
 					transmitStatus: ack
 						? TransmitStatus.OK
 						: TransmitStatus.NoAck,
@@ -610,7 +610,7 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 
 			if (expectCallback) {
 				const cb = new AssignSUCReturnRouteRequestTransmitReport(host, {
-					callbackId: msg.callbackId,
+					callbackId: msg.callbackId!,
 					transmitStatus: ack
 						? TransmitStatus.OK
 						: TransmitStatus.NoAck,

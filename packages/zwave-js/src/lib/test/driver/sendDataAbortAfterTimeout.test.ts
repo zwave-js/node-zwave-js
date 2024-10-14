@@ -62,7 +62,7 @@ integrationTest(
 							MockControllerCommunicationState.Sending,
 						);
 
-						lastCallbackId = msg.callbackId;
+						lastCallbackId = msg.callbackId!;
 
 						// Notify the host that the message was sent
 						const res = new SendDataResponse(host, {
@@ -79,7 +79,7 @@ integrationTest(
 						});
 
 						setTimeout(() => {
-							controller.sendToHost(cb.serialize());
+							controller.sendMessageToHost(cb);
 						}, 1000);
 
 						// Put the controller into idle state

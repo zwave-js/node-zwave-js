@@ -65,16 +65,6 @@ export class MockController {
 			ownNodeId: options.ownNodeId ?? 1,
 			homeId: options.homeId ?? 0x7e571000,
 			// nodes: this.nodes as any,
-			getNextCallbackId: () => 1,
-			// getNextSupervisionSessionId: (nodeId) => {
-			// 	if (!supervisionSessionIDs.has(nodeId)) {
-			// 		supervisionSessionIDs.set(
-			// 			nodeId,
-			// 			createWrappingCounter(MAX_SUPERVISION_SESSION_ID, true),
-			// 		);
-			// 	}
-			// 	return supervisionSessionIDs.get(nodeId)!();
-			// },
 			getSafeCCVersion: () => 100,
 			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
