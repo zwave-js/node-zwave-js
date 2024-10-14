@@ -619,7 +619,7 @@ export class Security2CC extends CommandClass {
 		const ownNodeId = gotDeserializationOptions(options)
 			? options.context.ownNodeId
 			: this.host.ownNodeId;
-		if (ownNodeId) {
+		if (!ownNodeId) {
 			throw new ZWaveError(
 				`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
 				ZWaveErrorCodes.Driver_NotReady,
