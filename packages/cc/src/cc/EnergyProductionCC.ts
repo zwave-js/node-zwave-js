@@ -10,7 +10,6 @@ import {
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
-	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,

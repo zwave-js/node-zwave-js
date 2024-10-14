@@ -4,14 +4,10 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
-	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
-	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,

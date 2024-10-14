@@ -2,7 +2,7 @@ import {
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessagePriority,
-	NodeIDType,
+	type NodeIDType,
 	type NodeId,
 	type SecurityClass,
 	type SecurityManagers,

@@ -25,9 +25,8 @@ import {
 	isLongRangeNodeId,
 	securityClassIsS2,
 } from "@zwave-js/core";
-import { CCParsingContext, HostIDs } from "@zwave-js/host";
+import { type CCParsingContext, type HostIDs } from "@zwave-js/host";
 import {
-	type MessageParsingContext,
 	type ZWaveSerialPortImplementation,
 	type ZnifferDataMessage,
 	ZnifferFrameType,

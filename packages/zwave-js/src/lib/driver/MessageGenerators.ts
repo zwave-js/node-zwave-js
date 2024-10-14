@@ -42,7 +42,7 @@ import {
 	ZWaveErrorCodes,
 	mergeSupervisionResults,
 } from "@zwave-js/core";
-import { CCEncodingContext } from "@zwave-js/host";
+import { type CCEncodingContext } from "@zwave-js/host";
 import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";

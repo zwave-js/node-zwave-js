@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { createThrowingMap, createWrappingCounter } from "@zwave-js/shared";
+import { createThrowingMap } from "@zwave-js/shared";
 import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
 
 export interface CreateTestingHostOptions {
