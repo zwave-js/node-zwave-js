@@ -113,6 +113,20 @@ Captured frames can also be returned as a `Buffer` in the `.zlf` format using th
 await zniffer.getCaptureAsZLFBuffer();
 ```
 
+When saving the capture to a file or buffer, an optional predicate function can be passed to filter frames first, for example:
+
+```ts
+await zniffer.saveCaptureToFile("/path/to/file.zlf", (frame) => {
+	// Limit frames to a specific home ID
+	return "homeId" in f.parsedFrame && f.parsedFrame.homeId === 0xdeadbeef;
+});
+await zniffer.getCaptureAsZLFBuffer((frame) => {
+	// Only include ZWLR frames
+	return "protocol" in f.parsedFrame
+		&& f.parsedFrame.protocol === Protocols.ZWaveLongRange;
+});
+```
+
 ## Frequency selection
 
 The configured frequency of the Zniffer has to match the frequency of the Z-Wave network it is capturing. Zniffers based on 700/800 series firmware support frequencies that match the `ZnifferRegion` enum:
