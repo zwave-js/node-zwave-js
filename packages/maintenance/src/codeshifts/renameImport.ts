@@ -7,7 +7,13 @@
 
 // examples: https://github.com/wingy3181/jscodeshift-examples/tree/master/src/examples
 
-import { API, FileInfo, JSCodeshift, Options, Transform } from "jscodeshift";
+import {
+	type API,
+	type FileInfo,
+	type JSCodeshift,
+	type Options,
+	type Transform,
+} from "jscodeshift";
 
 const transform: Transform = (
 	file: FileInfo,
@@ -25,7 +31,7 @@ const transform: Transform = (
 	const j: JSCodeshift = api.jscodeshift;
 	const root = j(file.source);
 
-	let imp = root
+	const imp = root
 		.find(
 			j.ImportDeclaration,
 			{ importKind: typeOnly ? "type" : undefined },
