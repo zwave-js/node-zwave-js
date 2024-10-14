@@ -258,7 +258,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		for (const ccId of supportedFibaroCCIDs) {
 			const SubConstructor = getFibaroCCConstructor(ccId);
 			if (SubConstructor) {
-				const instance = new SubConstructor(this.host, {
+				const instance = new SubConstructor(applHost, {
 					nodeId: node.id,
 				});
 				await instance.interview(applHost);
@@ -276,7 +276,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		for (const ccId of supportedFibaroCCIDs) {
 			const SubConstructor = getFibaroCCConstructor(ccId);
 			if (SubConstructor) {
-				const instance = new SubConstructor(this.host, {
+				const instance = new SubConstructor(applHost, {
 					nodeId: node.id,
 				});
 				await instance.refreshValues(applHost);
@@ -357,7 +357,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 			direction: "outbound",
 		});
 		const resp = await applHost.sendCommand<FibaroVenetianBlindCCReport>(
-			new FibaroVenetianBlindCCGet(this.host, {
+			new FibaroVenetianBlindCCGet(applHost, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
 			}),
