@@ -79,7 +79,7 @@ integrationTest(
 					},
 				},
 			);
-			await mockController.sendToHost(nif.serialize());
+			await mockController.sendMessageToHost(nif);
 
 			await wait(100);
 

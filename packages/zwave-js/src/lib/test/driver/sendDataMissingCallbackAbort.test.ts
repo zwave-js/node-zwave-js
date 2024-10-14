@@ -811,7 +811,7 @@ integrationTest(
 				supportsLongRange: true,
 			});
 			setImmediate(async () => {
-				await mockController.sendToHost(ret.serialize());
+				await mockController.sendMessageToHost(ret);
 			});
 
 			// And the ping should eventually succeed
