@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Zniffer: allow filtering frames when saving the capture (#7279)
+
+### Bugfixes
+* Fixed an issue where the `StartLevelChange` command for `Window Covering CC` was sent with an inverted direction flag (#7278)
+
+### Config file changes
+* Add manual and reset metadata for Danfoss LC-13 (#7274)
+
 ## 13.8.0 (2024-10-11)
 ### Features
 * Support playing tones on mocked sirens, improve support for node dumps of switches/dimmers (#7272)
