@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.9.0 (2024-10-14)
 ### Features
 * Zniffer: allow filtering frames when saving the capture (#7279)
 
