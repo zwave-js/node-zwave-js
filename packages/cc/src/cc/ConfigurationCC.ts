@@ -816,6 +816,17 @@ export class ConfigurationCCAPI extends CCAPI {
 			return this.resetBulk([parameter]);
 		}
 
+		// According to SDS14223 this flag SHOULD NOT be set
+		// Because we don't want to test the behavior, we enforce that it MUST not be set
+		// on legacy nodes
+		if (this.version <= 3) {
+			throw new ZWaveError(
+				`Resetting configuration parameters to default MUST not be done on nodes implementing ConfigurationCC V3 or below!`,
+				ZWaveErrorCodes
+					.ConfigurationCC_NoResetToDefaultOnLegacyDevices,
+			);
+		}
+
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -1862,16 +1873,6 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			);
 		} else {
 			this.parameter = options.parameter;
-			// According to SDS14223 this flag SHOULD NOT be set
-			// Because we don't want to test the behavior, we enforce that it MUST not be set
-			// on legacy nodes
-			if (options.resetToDefault && this.version <= 3) {
-				throw new ZWaveError(
-					`The resetToDefault flag MUST not be used on nodes implementing ConfigurationCC V3 or less!`,
-					ZWaveErrorCodes
-						.ConfigurationCC_NoResetToDefaultOnLegacyDevices,
-				);
-			}
 			this.resetToDefault = !!options.resetToDefault;
 			if (!options.resetToDefault) {
 				// TODO: Default to the stored value size
@@ -2672,18 +2673,13 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 					this.valueFormat,
 				);
 			}
-			if (this.version < 4) {
-				// Read the last 2 bytes to work around nodes not omitting min/max value when their size is 0
-				this.nextParameter = this.payload.readUInt16BE(
-					this.payload.length - 2,
-				);
-			} else {
-				this.nextParameter = this.payload.readUInt16BE(
-					nextParameterOffset,
-				);
 
-				// Ensure the payload contains a byte for the 2nd option flags
-				validatePayload(this.payload.length >= nextParameterOffset + 3);
+			this.nextParameter = this.payload.readUInt16BE(
+				nextParameterOffset,
+			);
+
+			if (this.payload.length >= nextParameterOffset + 3) {
+				// V4 adds an options byte after the next parameter and two bits in byte 2
 				const options1 = this.payload[2];
 				const options2 = this.payload[3 + 3 * this.valueSize + 2];
 				this.altersCapabilities = !!(options1 & 0b1000_0000);

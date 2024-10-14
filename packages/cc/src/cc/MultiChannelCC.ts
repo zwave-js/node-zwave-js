@@ -835,7 +835,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 			this.countIsDynamic = !!(this.payload[0] & 0b10000000);
 			this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
 			this.individualCount = this.payload[1] & 0b01111111;
-			if (this.version >= 4 && this.payload.length >= 3) {
+			if (this.payload.length >= 3) {
 				this.aggregatedCount = this.payload[2] & 0b01111111;
 			}
 		} else {

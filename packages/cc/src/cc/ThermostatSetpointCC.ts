@@ -88,10 +88,6 @@ export const ThermostatSetpointCCValues = Object.freeze({
 		...V.staticProperty("supportedSetpointTypes", undefined, {
 			internal: true,
 		}),
-
-		...V.staticProperty("setpointTypesInterpretation", undefined, {
-			internal: true,
-		}),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses["Thermostat Setpoint"], {
@@ -365,62 +361,25 @@ export class ThermostatSetpointCC extends CommandClass {
 		});
 
 		if (this.version <= 2) {
-			let setpointTypes: ThermostatSetpointType[];
-			let interpretation: "A" | "B" | undefined;
-			// Whether our tests changed the assumed bitmask interpretation
-			let interpretationChanged = false;
-
-			// Query the supported setpoint types
-			applHost.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "retrieving supported setpoint types...",
-				direction: "outbound",
-			});
-			const resp = await api.getSupportedSetpointTypes();
-			if (!resp) {
-				applHost.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying supported setpoint types timed out, skipping interview...",
-					level: "warn",
-				});
-				return;
-			}
-			setpointTypes = [...resp];
-			interpretation = undefined; // we don't know yet which interpretation the device uses
-
-			// If necessary, test which interpretation the device follows
-
-			// Assume interpretation B
-			// --> If setpoints 3,4,5 or 6 are supported, the assumption is wrong ==> A
-			function switchToInterpretationA(): void {
-				setpointTypes = setpointTypes.map(
-					(i) => thermostatSetpointTypeMap[i],
-				);
-				interpretation = "A";
-				interpretationChanged = true;
-			}
-
-			if ([3, 4, 5, 6].some((type) => setpointTypes.includes(type))) {
-				applHost.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "uses Thermostat Setpoint bitmap interpretation A",
-					direction: "none",
-				});
-				switchToInterpretationA();
-			} else {
-				applHost.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Thermostat Setpoint bitmap interpretation is unknown, assuming B for now",
-					direction: "none",
-				});
-			}
+			// It has been found that early implementations of this Command Class applied two non-interoperable
+			// interpretations of the bit mask advertising the support for specific Setpoint Types in the Thermostat
+			// Setpoint Supported Report Command.
+			// A controlling node SHOULD determine the supported Setpoint Types of a version 1 and version 2
+			// supporting node by sending one Thermostat Setpoint Get Command at a time while incrementing
+			// the requested Setpoint Type.
+			// If the same Setpoint Type is advertised in the returned Thermostat Setpoint Report Command, the
+			// controlling node MUST conclude that the actual Setpoint Type is supported.
+			// If the Setpoint Type 0x00 (type N/A) is advertised in the returned Thermostat Setpoint Report
+			// Command, the controlling node MUST conclude that the actual Setpoint Type is not supported.
 
 			// Now scan all endpoints. Each type we received a value for gets marked as supported
 			const supportedSetpointTypes: ThermostatSetpointType[] = [];
-			for (let i = 0; i < setpointTypes.length; i++) {
-				const type = setpointTypes[i];
+			for (
+				let type: ThermostatSetpointType =
+					ThermostatSetpointType.Heating;
+				type <= ThermostatSetpointType["Full Power"];
+				type++
+			) {
 				const setpointName = getEnumMemberName(
 					ThermostatSetpointType,
 					type,
@@ -444,21 +403,9 @@ export class ThermostatSetpointCC extends CommandClass {
 						`received current value of setpoint ${setpointName}: ${setpoint.value} ${
 							setpoint.scale.unit ?? ""
 						}`;
-				} else if (!interpretation) {
-					// The setpoint type is not supported, switch to interpretation A
-					applHost.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							`the setpoint type ${type} is unsupported, switching to interpretation A`,
-						direction: "none",
-					});
-					switchToInterpretationA();
-					// retry the current type and scan the remaining types as A
-					i--;
-					continue;
 				} else {
 					// We're sure about the interpretation - this should not happen
-					logMessage = `Setpoint ${setpointName} is not supported`;
+					logMessage = `setpoint ${setpointName} is not supported`;
 				}
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -467,30 +414,12 @@ export class ThermostatSetpointCC extends CommandClass {
 				});
 			}
 
-			// If we made an assumption and did not switch to interpretation A,
-			// the device adheres to interpretation B
-			if (!interpretation && !interpretationChanged) {
-				// our assumption about interpretation B was correct
-				interpretation = "B";
-				interpretationChanged = true;
-			}
-
-			// Remember which setpoint types are actually supported, so we don't
-			// need to do this guesswork again
+			// Remember which setpoint types are actually supported
 			this.setValue(
 				applHost,
 				ThermostatSetpointCCValues.supportedSetpointTypes,
 				supportedSetpointTypes,
 			);
-
-			// Also save the bitmap interpretation if we know it now
-			if (interpretationChanged) {
-				this.setValue(
-					applHost,
-					ThermostatSetpointCCValues.setpointTypesInterpretation,
-					interpretation,
-				);
-			}
 		} else {
 			// Versions >= 3 adhere to bitmap interpretation A, so we can rely on getSupportedSetpointTypes
 
@@ -985,26 +914,11 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 				bitMask,
 				ThermostatSetpointType["N/A"],
 			);
-			if (this.version >= 3) {
-				// Interpretation A
-				this.supportedSetpointTypes = supported.map(
-					(i) => thermostatSetpointTypeMap[i],
-				);
-			} else {
-				// It is unknown which interpretation the device complies to.
-				// This must be tested during the interview
-				this.supportedSetpointTypes = supported;
-			}
-			// TODO:
-			// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
-			// Devices with V3+ must comply with Interpretation A
-			// It is RECOMMENDED that a controlling node determines supported Setpoint Types
-			// by sending one Thermostat Setpoint Get Command at a time while incrementing
-			// the requested Setpoint Type. If the same Setpoint Type is advertised in the
-			// resulting Thermostat Setpoint Report Command, the controlling node MAY conclude
-			// that the actual Setpoint Type is supported. If the Setpoint Type 0x00 (type N/A)
-			// is advertised in the resulting Thermostat Setpoint Report Command, the controlling
-			// node MUST conclude that the actual Setpoint Type is not supported.
+			// We use this command only when we are sure that bitmask interpretation A is used
+			// FIXME: Figure out if we can do this without the CC version
+			this.supportedSetpointTypes = supported.map(
+				(i) => thermostatSetpointTypeMap[i],
+			);
 		} else {
 			if (options.supportedSetpointTypes.length === 0) {
 				throw new ZWaveError(

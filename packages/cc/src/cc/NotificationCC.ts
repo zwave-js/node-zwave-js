@@ -329,7 +329,6 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 				"notificationStatus",
 				"notificationEvent",
 				"alarmLevel",
-				"zensorNetSourceNodeId",
 				"eventParameters",
 				"sequenceNumber",
 			]);
@@ -980,13 +979,8 @@ export class NotificationCCReport extends NotificationCC {
 			validatePayload(this.payload.length >= 2);
 			this.alarmType = this.payload[0];
 			this.alarmLevel = this.payload[1];
-			// V2..V3, reserved in V4+
-			if (
-				(this.version === 2 || this.version === 3)
-				&& this.payload.length >= 3
-			) {
-				this.zensorNetSourceNodeId = this.payload[2];
-			}
+			// Byte 2 used to be zensorNetSourceNodeId in V2 and V3, but we don't care about that
+
 			// V2+ requires the alarm bytes to be zero. Manufacturers don't care though, so we don't enforce that.
 			// Don't use the version to decide because we might discard notifications
 			// before the interview is complete
@@ -1017,8 +1011,6 @@ export class NotificationCCReport extends NotificationCC {
 			if ("alarmType" in options) {
 				this.alarmType = options.alarmType;
 				this.alarmLevel = options.alarmLevel;
-				// Send a V1 command
-				this.version = 1;
 			} else {
 				this.notificationType = options.notificationType;
 				this.notificationStatus = true;
@@ -1133,7 +1125,6 @@ export class NotificationCCReport extends NotificationCC {
 	public notificationStatus: boolean | number | undefined;
 	public notificationEvent: number | undefined;
 
-	public readonly zensorNetSourceNodeId: number | undefined;
 	public eventParameters:
 		| Buffer
 		| Duration
@@ -1186,9 +1177,6 @@ export class NotificationCCReport extends NotificationCC {
 					"notification event": num2hex(this.notificationEvent),
 				};
 			}
-		}
-		if (this.zensorNetSourceNodeId) {
-			message["zensor net source node id"] = this.zensorNetSourceNodeId;
 		}
 		if (this.sequenceNumber != undefined) {
 			message["sequence number"] = this.sequenceNumber;
@@ -1380,21 +1368,12 @@ export class NotificationCCReport extends NotificationCC {
 	}
 
 	public serialize(ctx: CCEncodingContext): Buffer {
-		if (this.version === 1) {
-			if (this.alarmLevel == undefined || this.alarmType == undefined) {
-				throw new ZWaveError(
-					`Notification CC V1 (Alarm CC) reports requires the alarm type and level to be set!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.payload = Buffer.from([this.alarmType, this.alarmLevel]);
-		} else {
+		if (this.notificationType != undefined) {
 			if (
-				this.notificationType == undefined
-				|| this.notificationEvent == undefined
+				this.notificationEvent == undefined
 			) {
 				throw new ZWaveError(
-					`Notification CC reports requires the notification type and event to be set!`,
+					`Notification CC reports requires the notification event to be set!`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (
@@ -1406,6 +1385,7 @@ export class NotificationCCReport extends NotificationCC {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
+
 			const controlByte =
 				(this.sequenceNumber != undefined ? 0b1000_0000 : 0)
 				| ((this.eventParameters?.length ?? 0) & 0b11111);
@@ -1430,7 +1410,13 @@ export class NotificationCCReport extends NotificationCC {
 					Buffer.from([this.sequenceNumber]),
 				]);
 			}
+		} else {
+			this.payload = Buffer.from([
+				this.alarmType ?? 0x00,
+				this.alarmLevel ?? 0x00,
+			]);
 		}
+
 		return super.serialize(ctx);
 	}
 }
@@ -1482,18 +1468,14 @@ export class NotificationCCGet extends NotificationCC {
 	public notificationEvent: number | undefined;
 
 	public serialize(ctx: CCEncodingContext): Buffer {
-		const payload: number[] = [this.alarmType || 0];
-		if (this.version >= 2 && this.notificationType != undefined) {
-			payload.push(this.notificationType);
-			if (this.version >= 3) {
-				payload.push(
-					this.notificationType === 0xff
-						? 0x00
-						: this.notificationEvent || 0,
-				);
-			}
-		}
-		this.payload = Buffer.from(payload);
+		const notificationEvent = this.notificationEvent === 0xff
+			? 0x00
+			: this.notificationEvent;
+		this.payload = Buffer.from([
+			this.alarmType ?? 0x00,
+			this.notificationType ?? 0xff,
+			notificationEvent ?? 0x00,
+		]);
 		return super.serialize(ctx);
 	}
 

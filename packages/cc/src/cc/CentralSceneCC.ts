@@ -312,10 +312,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		this.sequenceNumber = this.payload[0];
 		this.keyAttribute = this.payload[1] & 0b111;
 		this.sceneNumber = this.payload[2];
-		if (
-			this.keyAttribute === CentralSceneKeys.KeyHeldDown
-			&& this.version >= 3
-		) {
+		if (this.keyAttribute === CentralSceneKeys.KeyHeldDown) {
 			// A receiving node MUST ignore this field if the command is not
 			// carrying the Key Held Down key attribute.
 			this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
@@ -370,9 +367,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 2);
 		this.sceneCount = this.payload[0];
-		if (this.version >= 3) {
-			this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
-		}
+		this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
 		const numEntries = identicalKeyAttributes ? 1 : this.sceneCount;

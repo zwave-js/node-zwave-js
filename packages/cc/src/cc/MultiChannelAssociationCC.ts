@@ -339,6 +339,11 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 				// TODO: evaluate intermediate supervision results
 				await this.applHost.sendCommand(cc, this.commandOptions);
 			}
+		} else if (options.groupId && options.groupId < 0) {
+			throw new ZWaveError(
+				"The group id must not be negative!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		} else {
 			const cc = new MultiChannelAssociationCCRemove(this.applHost, {
 				nodeId: this.endpoint.nodeId,
@@ -717,22 +722,6 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 					this.payload.subarray(1),
 				));
 		} else {
-			// Validate options
-			if (!options.groupId) {
-				if (this.version === 1) {
-					throw new ZWaveError(
-						`Node ${this
-							.nodeId as number} only supports MultiChannelAssociationCC V1 which requires the group Id to be set`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-			} else if (options.groupId < 0) {
-				throw new ZWaveError(
-					"The group id must be positive!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
 			// When removing associations, we allow invalid node IDs.
 			// See GH#3606 - it is possible that those exist.
 			this.groupId = options.groupId;

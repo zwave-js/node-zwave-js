@@ -903,7 +903,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			this.lockTimeout = lockTimeoutSeconds + lockTimeoutMinutes * 60;
 		}
 
-		if (this.version >= 3 && this.payload.length >= 7) {
+		if (this.payload.length >= 7) {
 			this.targetMode = this.payload[5];
 			this.duration = Duration.parseReport(this.payload[6]);
 		}
@@ -1042,7 +1042,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 					+ lockTimeoutMinutes * 60;
 			}
 		}
-		if (this.version >= 4 && this.payload.length >= 5) {
+		if (this.payload.length >= 5) {
 			this.autoRelockTime = this.payload.readUInt16BE(4);
 			this.holdAndReleaseTime = this.payload.readUInt16BE(6);
 

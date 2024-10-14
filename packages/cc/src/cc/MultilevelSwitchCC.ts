@@ -705,7 +705,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 				this.payload[0] === 0xff
 					? 99
 					: parseMaybeNumber(this.payload[0]);
-			if (this.version >= 4 && this.payload.length >= 3) {
+			if (this.payload.length >= 3) {
 				this.targetValue = parseMaybeNumber(this.payload[1]);
 				this.duration = Duration.parseReport(this.payload[2]);
 			}

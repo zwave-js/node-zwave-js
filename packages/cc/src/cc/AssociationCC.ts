@@ -207,6 +207,21 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			AssociationCommand.Remove,
 		);
 
+		// Validate options
+		if (!options.groupId) {
+			if (this.version === 1) {
+				throw new ZWaveError(
+					`Node ${this.endpoint.nodeId} only supports AssociationCC V1 which requires the group Id to be set`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		} else if (options.groupId < 0) {
+			throw new ZWaveError(
+				"The group id must be positive!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const cc = new AssociationCCRemove(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -566,22 +581,6 @@ export class AssociationCCRemove extends AssociationCC {
 			}
 			this.nodeIds = [...this.payload.subarray(1)];
 		} else {
-			// Validate options
-			if (!options.groupId) {
-				if (this.version === 1) {
-					throw new ZWaveError(
-						`Node ${this
-							.nodeId as number} only supports AssociationCC V1 which requires the group Id to be set`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-			} else if (options.groupId < 0) {
-				throw new ZWaveError(
-					"The group id must be positive!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
 			// When removing associations, we allow invalid node IDs.
 			// See GH#3606 - it is possible that those exist.
 			this.groupId = options.groupId;

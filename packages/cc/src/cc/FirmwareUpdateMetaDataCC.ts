@@ -367,7 +367,8 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 			this.firmwareUpgradable = this.payload[6] === 0xff
 				|| this.payload[6] == undefined;
 
-			if (this.version >= 3 && this.payload.length >= 10) {
+			if (this.payload.length >= 10) {
+				// V3+
 				this.maxFragmentSize = this.payload.readUInt16BE(8);
 				// Read variable length list of additional firmwares
 				const numAdditionalFirmwares = this.payload[7];
@@ -383,24 +384,22 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 				this.additionalFirmwareIDs = additionalFirmwareIDs;
 				// Read hardware version (if it exists)
 				let offset = 10 + 2 * numAdditionalFirmwares;
-				if (this.version >= 5 && this.payload.length >= offset + 1) {
+				if (this.payload.length >= offset + 1) {
+					// V5+
 					this.hardwareVersion = this.payload[offset];
 					offset++;
-					if (
-						this.version >= 6 && this.payload.length >= offset + 1
-					) {
+					if (this.payload.length >= offset + 1) {
+						// V6+
 						const capabilities = this.payload[offset];
 						offset++;
 
 						this.continuesToFunction = !!(capabilities & 0b1);
-						if (this.version >= 7) {
-							this.supportsActivation = !!(capabilities & 0b10);
-						}
-						if (this.version >= 8) {
-							this.supportsResuming = !!(capabilities & 0b1000);
-							this.supportsNonSecureTransfer =
-								!!(capabilities & 0b100);
-						}
+						// V7+
+						this.supportsActivation = !!(capabilities & 0b10);
+						// V8+
+						this.supportsResuming = !!(capabilities & 0b1000);
+						this.supportsNonSecureTransfer =
+							!!(capabilities & 0b100);
 					}
 				}
 			}
@@ -612,31 +611,19 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	public nonSecureTransfer?: boolean;
 
 	public serialize(ctx: CCEncodingContext): Buffer {
-		const isV3 = this.version >= 3
-			&& this.firmwareTarget != undefined
-			&& this.fragmentSize != undefined;
-		const isV4 = isV3 && this.version >= 4;
-		const isV5 = isV4
-			&& this.version >= 5
-			&& this.hardwareVersion != undefined;
-		this.payload = Buffer.allocUnsafe(
-			6 + (isV3 ? 3 : 0) + (isV4 ? 1 : 0) + (isV5 ? 1 : 0),
-		);
+		this.payload = Buffer.alloc(11, 0);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
-		if (isV3) {
-			this.payload[6] = this.firmwareTarget!;
-			this.payload.writeUInt16BE(this.fragmentSize!, 7);
-		}
-		if (isV4) {
-			this.payload[9] = (this.activation ? 0b1 : 0)
-				| (this.nonSecureTransfer ? 0b10 : 0)
-				| (this.resume ? 0b100 : 0);
-		}
-		if (isV5) {
-			this.payload[10] = this.hardwareVersion!;
-		}
+		this.payload[6] = this.firmwareTarget ?? 0;
+		// 32 seems like a reasonable default fragment size,
+		// but it should be specified anyways
+		this.payload.writeUInt16BE(this.fragmentSize ?? 32, 7);
+		this.payload[9] = (this.activation ? 0b1 : 0)
+			| (this.nonSecureTransfer ? 0b10 : 0)
+			| (this.resume ? 0b100 : 0);
+		this.payload[10] = this.hardwareVersion ?? 0x00;
+
 		return super.serialize(ctx);
 	}
 
@@ -821,7 +808,8 @@ export class FirmwareUpdateMetaDataCCActivationReport
 		this.checksum = this.payload.readUInt16BE(4);
 		this.firmwareTarget = this.payload[6];
 		this.activationStatus = this.payload[7];
-		if (this.version >= 5 && this.payload.length >= 9) {
+		if (this.payload.length >= 9) {
+			// V5+
 			this.hardwareVersion = this.payload[8];
 		}
 	}

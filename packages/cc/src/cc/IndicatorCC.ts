@@ -379,6 +379,23 @@ export class IndicatorCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Set);
 
+		if (this.version === 1 && typeof value !== "number") {
+			throw new ZWaveError(
+				`Node ${this.endpoint
+					.nodeId as number} only supports IndicatorCC V1 which requires a single value to be set`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			this.version >= 2
+			&& isArray(value)
+			&& value.length > MAX_INDICATOR_OBJECTS
+		) {
+			throw new ZWaveError(
+				`Only ${MAX_INDICATOR_OBJECTS} indicator values can be set at a time!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const cc = new IndicatorCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -913,27 +930,10 @@ export class IndicatorCCSet extends IndicatorCC {
 				}
 			}
 		} else {
-			if (this.version === 1) {
-				if (!("value" in options)) {
-					throw new ZWaveError(
-						`Node ${this
-							.nodeId as number} only supports IndicatorCC V1 which requires a single value to be set`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
+			if ("value" in options) {
 				this.indicator0Value = options.value;
 			} else {
-				if ("value" in options) {
-					this.indicator0Value = options.value;
-				} else {
-					if (options.values.length > MAX_INDICATOR_OBJECTS) {
-						throw new ZWaveError(
-							`Only ${MAX_INDICATOR_OBJECTS} indicator values can be set at a time!`,
-							ZWaveErrorCodes.Argument_Invalid,
-						);
-					}
-					this.values = options.values;
-				}
+				this.values = options.values;
 			}
 		}
 	}

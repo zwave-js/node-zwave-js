@@ -459,8 +459,8 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		this.defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
 		this.wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
 
-		// Get 'Wake Up on Demand Support' if node supports V3 and sends 13th byte
-		if (this.version >= 3 && this.payload.length >= 13) {
+		if (this.payload.length >= 13) {
+			// V3+
 			this.wakeUpOnDemandSupported = !!(this.payload[12] & 0b1);
 		} else {
 			this.wakeUpOnDemandSupported = false;

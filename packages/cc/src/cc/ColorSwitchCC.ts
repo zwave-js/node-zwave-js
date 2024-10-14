@@ -760,7 +760,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			this.colorComponent = this.payload[0];
 			this.currentValue = this.payload[1];
 
-			if (this.version >= 3 && this.payload.length >= 4) {
+			if (this.payload.length >= 4) {
 				this.targetValue = this.payload[2];
 				this.duration = Duration.parseReport(this.payload[3]);
 			}

@@ -395,9 +395,8 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		validatePayload(this.payload.length >= 1);
 		this.mode = this.payload[0] & 0b1111;
 
-		if (this.version >= 3) {
-			this.off = !!(this.payload[0] & 0b1000_0000);
-		}
+		// V3+
+		this.off = !!(this.payload[0] & 0b1000_0000);
 	}
 
 	@ccValue(ThermostatFanModeCCValues.fanMode)

@@ -1354,10 +1354,7 @@ export class UserCodeCCReport extends UserCodeCC
 				const userCodeString = userCodeBuffer.toString("utf8");
 				if (isPrintableASCII(userCodeString)) {
 					this.userCode = userCodeString;
-				} else if (
-					this.version === 1
-					&& isPrintableASCIIWithWhitespace(userCodeString)
-				) {
+				} else if (isPrintableASCIIWithWhitespace(userCodeString)) {
 					// Ignore leading and trailing whitespace in V1 reports if the rest is ASCII
 					this.userCode = userCodeString.trim();
 				} else {

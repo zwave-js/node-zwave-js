@@ -418,18 +418,16 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			validatePayload(this.payload.length >= 1);
 			this.mode = this.payload[0] & 0b11111;
 
-			if (this.version >= 3) {
-				const manufacturerDataLength = this.payload[0] >>> 5;
-
+			// V3+
+			const manufacturerDataLength = this.payload[0] >>> 5;
+			if (manufacturerDataLength > 0) {
 				validatePayload(
 					this.payload.length >= 1 + manufacturerDataLength,
 				);
-				if (manufacturerDataLength) {
-					this.manufacturerData = this.payload.subarray(
-						1,
-						1 + manufacturerDataLength,
-					);
-				}
+				this.manufacturerData = this.payload.subarray(
+					1,
+					1 + manufacturerDataLength,
+				);
 			}
 		} else {
 			this.mode = options.mode;

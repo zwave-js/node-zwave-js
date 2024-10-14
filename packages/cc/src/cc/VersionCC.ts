@@ -678,7 +678,8 @@ export class VersionCCReport extends VersionCC {
 			this.libraryType = this.payload[0];
 			this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
 			this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
-			if (this.version >= 2 && this.payload.length >= 7) {
+			if (this.payload.length >= 7) {
+				// V2+
 				this.hardwareVersion = this.payload[5];
 				const additionalFirmwares = this.payload[6];
 				validatePayload(
