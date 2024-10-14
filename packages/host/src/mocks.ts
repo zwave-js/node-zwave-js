@@ -30,10 +30,7 @@ export type BaseTestNode =
 export type TestingHost<
 	TNode extends BaseTestNode,
 > =
-	& Omit<
-		ZWaveApplicationHost<TNode>,
-		"__internalIsMockNode"
-	>
+	& ZWaveApplicationHost<TNode>
 	& {
 		setNode(nodeId: number, node: TNode): void;
 	};

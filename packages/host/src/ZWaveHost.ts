@@ -44,6 +44,7 @@ export interface CCParsingContext
 	extends Readonly<SecurityManagers>, GetDeviceConfig, HostIDs
 {
 	sourceNodeId: number;
+	__internalIsMockNode?: boolean;
 
 	/** If known, the frame type of the containing message */
 	frameType?: FrameType;
@@ -112,8 +113,6 @@ export interface ZWaveHost {
 		nodeId: number,
 		endpointIndex?: number,
 	): boolean;
-
-	__internalIsMockNode?: boolean;
 }
 
 /** Host application abstractions that provide support for reading and writing values to a database */

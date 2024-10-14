@@ -115,7 +115,6 @@ export class MockNode {
 		// A node's host is a bit more specialized than the controller's host.
 		this.host = {
 			...this.controller.host,
-			__internalIsMockNode: true,
 			// // Mimic the behavior of ZWaveNode, but for arbitrary node IDs
 		};
 

@@ -99,6 +99,7 @@ function createLazySendDataPayload(
 				origin: MessageOrigin.Host,
 				context: {
 					sourceNodeId: node.id,
+					__internalIsMockNode: true,
 					...node.encodingContext,
 					...node.securityManagers,
 				},

@@ -1813,7 +1813,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				&& prevSequenceNumber != undefined
 				&& this["_sequenceNumber"] === ((prevSequenceNumber + 1) & 0xff)
 				// And in case of a mock-based test, do this only on the controller
-				&& !this.host.__internalIsMockNode
+				&& !ctx.__internalIsMockNode
 			) {
 				const nonce = spanState.currentSPAN.nonce;
 				spanState.currentSPAN = undefined;
