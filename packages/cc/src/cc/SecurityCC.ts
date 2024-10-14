@@ -117,6 +117,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				: SecurityCCCommandEncapsulation
 		)(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			ownNodeId: this.applHost.ownNodeId,
 			securityManager: this.applHost.securityManager!,
 			encapsulated,
 		});
@@ -237,6 +238,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			cc = new SecurityCCCommandEncapsulation(this.applHost, {
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
+				ownNodeId: this.applHost.ownNodeId,
 				securityManager: this.applHost.securityManager!,
 				encapsulated: cc,
 			});
@@ -272,6 +274,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		const cc = new SecurityCCCommandEncapsulation(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
+			ownNodeId: this.applHost.ownNodeId,
 			securityManager: this.applHost.securityManager!,
 			encapsulated: keySet,
 			alternativeNetworkKey: Buffer.alloc(16, 0),
@@ -342,11 +345,17 @@ export class SecurityCC extends CommandClass {
 
 	protected assertSecurity(
 		options:
-			| (CCCommandOptions & { securityManager: SecurityManager })
+			| (CCCommandOptions & {
+				ownNodeId: number;
+				securityManager: SecurityManager;
+			})
 			| CommandClassDeserializationOptions,
 	): SecurityManager {
 		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
-		if (!this.host.ownNodeId) {
+		const ownNodeId = gotDeserializationOptions(options)
+			? options.context.ownNodeId
+			: options.ownNodeId;
+		if (!ownNodeId) {
 			throw new ZWaveError(
 				`Secure commands (S0) can only be ${verb} when the controller's node id is known!`,
 				ZWaveErrorCodes.Driver_NotReady,
@@ -529,12 +538,14 @@ export class SecurityCC extends CommandClass {
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
 		host: ZWaveHost,
+		ownNodeId: number,
 		securityManager: SecurityManager,
 		cc: CommandClass,
 	): SecurityCCCommandEncapsulation {
 		// TODO: When to return a SecurityCCCommandEncapsulationNonceGet?
 		const ret = new SecurityCCCommandEncapsulation(host, {
 			nodeId: cc.nodeId,
+			ownNodeId,
 			securityManager,
 			encapsulated: cc,
 		});
@@ -600,6 +611,7 @@ export class SecurityCCNonceGet extends SecurityCC {}
 export interface SecurityCCCommandEncapsulationOptions
 	extends CCCommandOptions
 {
+	ownNodeId: number;
 	securityManager: SecurityManager;
 	encapsulated: CommandClass;
 	alternativeNetworkKey?: Buffer;

@@ -48,7 +48,7 @@ const respondToSoundSwitchConfigurationGet: MockNodeBehavior = {
 				),
 			};
 			const cc = new SoundSwitchCCConfigurationReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				defaultToneId:
 					(self.state.get(StateKeys.defaultToneId) as number)
 						?? capabilities.defaultToneId,
@@ -88,7 +88,7 @@ const respondToSoundSwitchToneNumberGet: MockNodeBehavior = {
 				),
 			};
 			const cc = new SoundSwitchCCTonesNumberReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				toneCount: capabilities.tones.length,
 			});
 			return { action: "sendCC", cc };
@@ -109,7 +109,7 @@ const respondToSoundSwitchToneInfoGet: MockNodeBehavior = {
 			const tone = capabilities.tones[receivedCC.toneId - 1];
 			if (tone) {
 				const cc = new SoundSwitchCCToneInfoReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+					nodeId: controller.ownNodeId,
 					toneId: receivedCC.toneId,
 					...tone,
 				});
@@ -179,7 +179,7 @@ const respondToSoundSwitchTonePlaySet: MockNodeBehavior = {
 						const cc = new SoundSwitchCCTonePlayReport(
 							self.host,
 							{
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								toneId: 0,
 								volume: 0,
 							},
@@ -210,7 +210,7 @@ const respondToSoundSwitchTonePlayGet: MockNodeBehavior = {
 			const cc = new SoundSwitchCCTonePlayReport(
 				self.host,
 				{
-					nodeId: controller.host.ownNodeId,
+					nodeId: controller.ownNodeId,
 					toneId: currentState?.toneId ?? 0,
 					volume: currentState?.volume ?? 0,
 				},

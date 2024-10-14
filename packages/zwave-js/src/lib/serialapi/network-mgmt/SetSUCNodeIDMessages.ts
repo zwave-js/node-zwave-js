@@ -31,7 +31,8 @@ export enum SetSUCNodeIdStatus {
 }
 
 export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
-	sucNodeId?: number;
+	ownNodeId: number;
+	sucNodeId: number;
 	enableSUC: boolean;
 	enableSIS: boolean;
 	transmitOptions?: TransmitOptions;
@@ -65,11 +66,12 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.sucNodeId = options.sucNodeId ?? host.ownNodeId;
+			this.sucNodeId = options.sucNodeId;
 			this.enableSUC = options.enableSUC;
 			this.enableSIS = options.enableSIS;
 			this.transmitOptions = options.transmitOptions
 				?? TransmitOptions.DEFAULT;
+			this._ownNodeId = options.ownNodeId;
 		}
 	}
 
@@ -77,6 +79,8 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public enableSUC: boolean;
 	public enableSIS: boolean;
 	public transmitOptions: TransmitOptions;
+
+	private _ownNodeId: number;
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.assertCallbackId();
@@ -95,7 +99,7 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	}
 
 	public expectsCallback(): boolean {
-		if (this.sucNodeId === this.host.ownNodeId) return false;
+		if (this.sucNodeId === this._ownNodeId) return false;
 		return super.expectsCallback();
 	}
 }

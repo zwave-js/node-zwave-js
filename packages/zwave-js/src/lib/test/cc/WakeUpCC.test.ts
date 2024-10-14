@@ -43,6 +43,7 @@ test("SecurityCC/WakeUpCCNoMoreInformation should expect NO response", (t) => {
 
 	const ccRequest = SecurityCC.encapsulate(
 		host,
+		host.ownNodeId,
 		securityManager as any,
 		new WakeUpCCNoMoreInformation(host, {
 			nodeId: 2,

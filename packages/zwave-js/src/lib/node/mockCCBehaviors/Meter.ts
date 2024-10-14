@@ -30,7 +30,7 @@ const respondToMeterSupportedGet: MockNodeBehavior = {
 				),
 			};
 			const cc = new MeterCCSupportedReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				type: capabilities.meterType,
 				supportedScales: capabilities.supportedScales,
 				supportedRateTypes: capabilities.supportedRateTypes,
@@ -69,7 +69,7 @@ const respondToMeterGet: MockNodeBehavior = {
 				: value;
 
 			const cc = new MeterCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				type: capabilities.meterType,
 				scale,
 				rateType,

@@ -5112,6 +5112,7 @@ export class ZWaveController
 			Message & SuccessIndicator
 		>(
 			new SetSUCNodeIdRequest(this.driver, {
+				ownNodeId: this.ownNodeId!,
 				sucNodeId: nodeId,
 				enableSUC,
 				enableSIS,

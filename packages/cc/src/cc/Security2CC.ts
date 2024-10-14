@@ -212,6 +212,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNonceReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			ownNodeId: this.applHost.ownNodeId,
 			endpoint: this.endpoint.index,
 			securityManagers: this.applHost,
 			SOS: true,
@@ -259,6 +260,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNonceReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			ownNodeId: this.applHost.ownNodeId,
 			endpoint: this.endpoint.index,
 			securityManagers: this.applHost,
 			SOS: false,
@@ -303,6 +305,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCMessageEncapsulation(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			ownNodeId: this.applHost.ownNodeId,
 			endpoint: this.endpoint.index,
 			securityManagers: this.applHost,
 			extensions: [
@@ -368,6 +371,7 @@ export class Security2CCAPI extends CCAPI {
 		cc = Security2CC.encapsulate(
 			this.applHost,
 			cc,
+			this.applHost.ownNodeId,
 			this.applHost,
 			{ securityClass },
 		);
@@ -612,13 +616,16 @@ export class Security2CC extends CommandClass {
 
 	protected assertSecurity(
 		options:
-			| (CCCommandOptions & { securityManagers: SecurityManagers })
+			| (CCCommandOptions & {
+				ownNodeId: number;
+				securityManagers: SecurityManagers;
+			})
 			| CommandClassDeserializationOptions,
 	): SecurityManager2 {
 		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
 		const ownNodeId = gotDeserializationOptions(options)
 			? options.context.ownNodeId
-			: this.host.ownNodeId;
+			: options.ownNodeId;
 		if (!ownNodeId) {
 			throw new ZWaveError(
 				`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
@@ -945,6 +952,7 @@ export class Security2CC extends CommandClass {
 	public static encapsulate(
 		host: ZWaveHost,
 		cc: CommandClass,
+		ownNodeId: number,
 		securityManagers: SecurityManagers,
 		options?: {
 			securityClass?: SecurityClass;
@@ -979,6 +987,7 @@ export class Security2CC extends CommandClass {
 
 		const ret = new Security2CCMessageEncapsulation(host, {
 			nodeId,
+			ownNodeId,
 			encapsulated: cc,
 			securityManagers,
 			securityClass: options?.securityClass,
@@ -999,6 +1008,7 @@ export class Security2CC extends CommandClass {
 export interface Security2CCMessageEncapsulationOptions
 	extends CCCommandOptions
 {
+	ownNodeId: number;
 	securityManagers: Readonly<SecurityManagers>;
 	/** Can be used to override the default security class for the command */
 	securityClass?: SecurityClass;
@@ -1247,8 +1257,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			const authData = getAuthenticationData(
 				sendingNodeId,
-				this.getDestinationIDRX(),
-				this.host.homeId,
+				this.getDestinationIDRX(options.context.ownNodeId),
+				options.context.homeId,
 				messageLength,
 				unencryptedPayload,
 			);
@@ -1486,8 +1496,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		return ret;
 	}
 
-	private getDestinationIDRX(): number {
-		if (this.isSinglecast()) return this.host.ownNodeId;
+	private getDestinationIDRX(ownNodeId: number): number {
+		if (this.isSinglecast()) return ownNodeId;
 
 		const ret = this.getMulticastGroupId();
 		if (ret == undefined) {
@@ -1956,7 +1966,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 // @publicAPI
 export type Security2CCNonceReportOptions =
-	& { securityManagers: SecurityManagers }
+	& {
+		ownNodeId: number;
+		securityManagers: SecurityManagers;
+	}
 	& (
 		| {
 			MOS: boolean;
@@ -2067,6 +2080,7 @@ export class Security2CCNonceReport extends Security2CC {
 
 // @publicAPI
 export interface Security2CCNonceGetOptions {
+	ownNodeId: number;
 	securityManagers: Readonly<SecurityManagers>;
 }
 

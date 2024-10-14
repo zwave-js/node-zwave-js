@@ -13,11 +13,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { createThrowingMap } from "@zwave-js/shared";
-import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
+import type { HostIDs, ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
 
-export interface CreateTestingHostOptions {
-	homeId: ZWaveHost["homeId"];
-	ownNodeId: ZWaveHost["ownNodeId"];
+export interface CreateTestingHostOptions extends HostIDs {
 	getSafeCCVersion: ZWaveHost["getSafeCCVersion"];
 	getSupportedCCVersion?: ZWaveHost["getSupportedCCVersion"];
 }

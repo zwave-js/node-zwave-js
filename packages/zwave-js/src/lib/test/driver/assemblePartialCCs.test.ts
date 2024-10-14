@@ -175,6 +175,7 @@ test.serial("supports nested partial/non-partial CCs", (t) => {
 	const cc1 = new BasicCCSet(driver, { nodeId: 2, targetValue: 25 });
 	const cc = new SecurityCCCommandEncapsulation(driver, {
 		nodeId: 2,
+		ownNodeId: driver.ownNodeId,
 		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});
@@ -190,6 +191,7 @@ test.serial("supports nested partial/partial CCs (part 1)", (t) => {
 	const { driver } = t.context;
 	const cc = new SecurityCCCommandEncapsulation(driver, {
 		nodeId: 2,
+		ownNodeId: driver.ownNodeId,
 		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});
@@ -214,6 +216,7 @@ test.serial("supports nested partial/partial CCs (part 2)", (t) => {
 	const { driver } = t.context;
 	const cc = new SecurityCCCommandEncapsulation(driver, {
 		nodeId: 2,
+		ownNodeId: driver.ownNodeId,
 		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});

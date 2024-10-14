@@ -75,10 +75,11 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
@@ -101,10 +102,11 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
 							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
@@ -131,7 +133,7 @@ integrationTest(
 							new Security2CCCommandsSupportedReport(
 								self.host,
 								{
-									nodeId: controller.host.ownNodeId,
+									nodeId: controller.ownNodeId,
 									supportedCCs: [
 										// The node supports Version CC securely
 										CommandClasses.Version,
@@ -141,6 +143,7 @@ integrationTest(
 						cc = Security2CC.encapsulate(
 							self.host,
 							cc,
+							self.id,
 							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
@@ -162,7 +165,7 @@ integrationTest(
 						let cc: CommandClass = new VersionCCCommandClassReport(
 							self.host,
 							{
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								requestedCC:
 									receivedCC.encapsulated.requestedCC,
 								ccVersion: 0,
@@ -171,6 +174,7 @@ integrationTest(
 						cc = Security2CC.encapsulate(
 							self.host,
 							cc,
+							self.id,
 							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
@@ -209,7 +213,7 @@ integrationTest(
 
 			// Create a security manager for the controller
 			const sm0Ctrlr = new SecurityManager({
-				ownNodeId: controller.host.ownNodeId,
+				ownNodeId: controller.ownNodeId,
 				networkKey: driver.options.securityKeys!.S0_Legacy!,
 				nonceTimeout: 100000,
 			});
@@ -220,11 +224,11 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof SecurityCCNonceGet) {
 						const nonce = sm0Node.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 							8,
 						);
 						const cc = new SecurityCCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							nonce,
 						});
 						return { action: "sendCC", cc };
@@ -241,7 +245,7 @@ integrationTest(
 							instanceof SecurityCCCommandsSupportedGet
 					) {
 						const nonceGet = new SecurityCCNonceGet(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 						});
 						await self.sendToController(
 							createMockZWaveRequestFrame(nonceGet, {
@@ -266,7 +270,7 @@ integrationTest(
 							new SecurityCCCommandsSupportedReport(
 								self.host,
 								{
-									nodeId: controller.host.ownNodeId,
+									nodeId: controller.ownNodeId,
 									supportedCCs: [
 										// The node supports Version CC securely
 										CommandClasses.Version,
@@ -276,6 +280,7 @@ integrationTest(
 							);
 						const cc = SecurityCC.encapsulate(
 							self.host,
+							self.id,
 							self.securityManagers.securityManager!,
 							response,
 						);
@@ -304,7 +309,7 @@ integrationTest(
 					) {
 						await wait(100);
 						const nonceGet = new SecurityCCNonceGet(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 						});
 						await self.sendToController(
 							createMockZWaveRequestFrame(nonceGet, {
@@ -329,7 +334,7 @@ integrationTest(
 							new VersionCCCommandClassReport(
 								self.host,
 								{
-									nodeId: controller.host.ownNodeId,
+									nodeId: controller.ownNodeId,
 									requestedCC:
 										receivedCC.encapsulated.requestedCC,
 									ccVersion: 0,
@@ -338,6 +343,7 @@ integrationTest(
 
 						const cc = SecurityCC.encapsulate(
 							self.host,
+							self.id,
 							self.securityManagers.securityManager!,
 							response,
 						);

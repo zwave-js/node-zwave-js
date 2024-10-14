@@ -26,7 +26,7 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 
 			// Send a WakeUpNotification to the node to trigger the interview
 			const cc = new WakeUpCCWakeUpNotification(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(cc, {
@@ -48,7 +48,7 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 		});
 
 		const cc = new WakeUpCCWakeUpNotification(mockNode.host, {
-			nodeId: mockController.host.ownNodeId,
+			nodeId: mockController.ownNodeId,
 		});
 		await mockNode.sendToController(
 			createMockZWaveRequestFrame(cc, {

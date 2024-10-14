@@ -46,6 +46,7 @@ test("should compute the correct net payload sizes", (t) => {
 	const testMsg1 = new SendDataRequest(driver, {
 		command: new SecurityCCCommandEncapsulation(driver, {
 			nodeId: 2,
+			ownNodeId: driver.ownNodeId,
 			securityManager: driver.securityManager!,
 			encapsulated: {} as any,
 		}),
@@ -62,6 +63,7 @@ test("should compute the correct net payload sizes", (t) => {
 	const testMsg2 = new SendDataRequest(driver, {
 		command: new SecurityCCCommandEncapsulation(driver, {
 			nodeId: 2,
+			ownNodeId: driver.ownNodeId,
 			securityManager: driver.securityManager!,
 			encapsulated: multiChannelCC,
 		}),

@@ -33,7 +33,7 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof SupervisionCCGet) {
 						const cc = new SupervisionCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Fail,
@@ -48,7 +48,7 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof BinarySwitchCCGet) {
 						const cc = new BinarySwitchCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							currentValue: false,
 						});
 						return { action: "sendCC", cc };

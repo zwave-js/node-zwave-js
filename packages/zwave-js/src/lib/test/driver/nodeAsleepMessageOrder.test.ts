@@ -174,7 +174,7 @@ integrationTest(
 			const cc: CommandClass = new WakeUpCCWakeUpNotification(
 				mockNode10.host,
 				{
-					nodeId: mockController.host.ownNodeId,
+					nodeId: mockController.ownNodeId,
 				},
 			);
 			mockNode10.sendToController(createMockZWaveRequestFrame(cc, {
@@ -309,7 +309,7 @@ integrationTest(
 			const cc: CommandClass = new WakeUpCCWakeUpNotification(
 				mockNode10.host,
 				{
-					nodeId: mockController.host.ownNodeId,
+					nodeId: mockController.ownNodeId,
 				},
 			);
 			mockNode10.sendToController(createMockZWaveRequestFrame(cc, {

@@ -73,10 +73,11 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
@@ -99,10 +100,11 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
 							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
@@ -128,9 +130,10 @@ integrationTest(
 			let nodeToHost: CommandClass = Security2CC.encapsulate(
 				mockNode.host,
 				new BasicCCReport(mockNode.host, {
-					nodeId: mockController.host.ownNodeId,
+					nodeId: mockController.ownNodeId,
 					currentValue: 99,
 				}),
+				mockNode.id,
 				mockNode.securityManagers,
 			);
 			await mockNode.sendToController(
@@ -147,7 +150,7 @@ integrationTest(
 
 			// Then send an unencypted one that should be discarded
 			nodeToHost = new BasicCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				currentValue: 1,
 			});
 

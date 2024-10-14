@@ -33,7 +33,7 @@ const respondToBinarySwitchGet: MockNodeBehavior = {
 				),
 			};
 			const cc = new BinarySwitchCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				currentValue: (
 					self.state.get(StateKeys.currentValue)
 						?? capabilities.defaultValue

@@ -73,7 +73,7 @@ integrationTest(
 							host,
 							{
 								nodeId: node.id,
-								destinationNodeId: controller.host.ownNodeId,
+								destinationNodeId: controller.ownNodeId,
 								repeaters: [], // don't care
 								routeIndex: 0, // don't care
 								destinationSpeed: ZWaveDataRate["100k"],
@@ -163,7 +163,7 @@ integrationTest(
 							host,
 							{
 								nodeId: node.id,
-								destinationNodeId: controller.host.ownNodeId,
+								destinationNodeId: controller.ownNodeId,
 								repeaters: [], // don't care
 								routeIndex: 0, // don't care
 								destinationSpeed: ZWaveDataRate["100k"],

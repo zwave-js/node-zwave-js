@@ -38,7 +38,7 @@ integrationTest(
 					if (receivedCC instanceof ConfigurationCCNameGet) {
 						await wait(700);
 						let cc = new ConfigurationCCNameReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							parameter: receivedCC.parameter,
 							name: "Test para",
 							reportsToFollow: 1,
@@ -52,7 +52,7 @@ integrationTest(
 						await wait(700);
 
 						cc = new ConfigurationCCNameReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							parameter: receivedCC.parameter,
 							name: "meter",
 							reportsToFollow: 0,
@@ -103,7 +103,7 @@ integrationTest(
 						const configCC = new ConfigurationCCNameReport(
 							self.host,
 							{
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								parameter: receivedCC.parameter,
 								name:
 									"Veeeeeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooong parameter name",
@@ -122,7 +122,7 @@ integrationTest(
 						const tsFS = new TransportServiceCCFirstSegment(
 							self.host,
 							{
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								sessionId,
 								datagramSize: serialized.length,
 								partialDatagram: segment1,
@@ -131,7 +131,7 @@ integrationTest(
 						const tsSS = new TransportServiceCCSubsequentSegment(
 							self.host,
 							{
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								sessionId,
 								datagramSize: serialized.length,
 								datagramOffset: segment1.length,
@@ -186,7 +186,7 @@ integrationTest("GET requests DO time out if there's no matching response", {
 				if (receivedCC instanceof ConfigurationCCNameGet) {
 					// This is not the response you're looking for
 					const cc = new BasicCCReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
 						currentValue: 1,
 					});
 					return { action: "sendCC", cc };

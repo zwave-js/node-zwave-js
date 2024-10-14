@@ -25,7 +25,7 @@ integrationTest(
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			// Unsupported report from root endpoint
 			let cc: CommandClass = new MultilevelSensorCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				type: 0x01, // Temperature
 				scale: 0x00, // Celsius
 				value: 1.001,
@@ -38,13 +38,13 @@ integrationTest(
 
 			// Report from endpoint 1, unsupported on root
 			cc = new MultilevelSensorCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				type: 0x01, // Temperature
 				scale: 0x00, // Celsius
 				value: 25.12,
 			});
 			cc = new MultiChannelCCCommandEncapsulation(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				endpoint: 1,
 				destination: 0,
 				encapsulated: cc,
@@ -57,13 +57,13 @@ integrationTest(
 
 			// Unsupported Report from endpoint 1, supported on root
 			cc = new MeterCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				type: 0x01, // Electric
 				scale: 0x00, // kWh
 				value: 1.234,
 			});
 			cc = new MultiChannelCCCommandEncapsulation(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				endpoint: 1,
 				destination: 0,
 				encapsulated: cc,
@@ -76,7 +76,7 @@ integrationTest(
 
 			// Supported report from root endpoint
 			cc = new MeterCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				type: 0x01, // Electric
 				scale: 0x00, // kWh
 				value: 2.34,

@@ -60,7 +60,7 @@ const respondToMultiChannelCCEndPointGet: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof MultiChannelCCEndPointGet) {
 			const cc = new MultiChannelCCEndPointReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				countIsDynamic: false,
 				identicalCapabilities: false,
 				individualCount: self.endpoints.size,
@@ -75,7 +75,7 @@ const respondToMultiChannelCCEndPointFind: MockNodeBehavior = {
 		if (receivedCC instanceof MultiChannelCCEndPointFind) {
 			const request = receivedCC;
 			const cc = new MultiChannelCCEndPointFindReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				genericClass: request.genericClass,
 				specificClass: request.specificClass,
 				foundEndpoints: [...self.endpoints.keys()],
@@ -93,7 +93,7 @@ const respondToMultiChannelCCCapabilityGet: MockNodeBehavior = {
 				receivedCC.requestedEndpoint,
 			)!;
 			const cc = new MultiChannelCCCapabilityReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				endpointIndex: endpoint.index,
 				genericDeviceClass: endpoint?.capabilities.genericDeviceClass
 					?? self.capabilities.genericDeviceClass,

@@ -47,11 +47,11 @@ integrationTest(
 						}
 
 						let cc: CommandClass = new BasicCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							currentValue: Math.round(Math.random() * 99),
 						});
 						cc = new MultiChannelCCCommandEncapsulation(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							destination: receivedCC.endpointIndex,
 							endpoint: receivedCC.destination as number,
 							encapsulated: cc,

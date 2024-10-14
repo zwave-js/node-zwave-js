@@ -82,7 +82,7 @@ export interface CCEncodingContext
 }
 
 /** Host application abstractions to be used in Serial API and CC implementations */
-export interface ZWaveHost extends HostIDs {
+export interface ZWaveHost {
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
 	 * Returns 1 if the node claims that it does not support a CC.

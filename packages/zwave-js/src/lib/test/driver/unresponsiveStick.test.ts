@@ -50,7 +50,7 @@ integrationTest(
 				{ supportCheck: false },
 			);
 
-			t.is(ids.ownNodeId, mockController.host.ownNodeId);
+			t.is(ids.ownNodeId, mockController.ownNodeId);
 		},
 	},
 );

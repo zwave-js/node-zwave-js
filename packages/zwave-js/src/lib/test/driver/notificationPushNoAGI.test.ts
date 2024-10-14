@@ -36,7 +36,7 @@ integrationTest(
 						const notificationType = receivedCC.notificationType
 							|| 0x06;
 						const cc = new NotificationCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							notificationType,
 							notificationEvent: notificationType === 0x06
 								? 0x06 /* Keypad unlock */

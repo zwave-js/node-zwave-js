@@ -5280,6 +5280,7 @@ ${handlers.length} left`,
 				cmd = Security2CC.encapsulate(
 					this,
 					cmd,
+					this.ownNodeId,
 					this,
 					{
 						securityClass: options.s2OverrideSecurityClass,
@@ -5292,7 +5293,12 @@ ${handlers.length} left`,
 
 			// This check will return false for S2-encapsulated commands
 			if (SecurityCC.requiresEncapsulation(cmd)) {
-				cmd = SecurityCC.encapsulate(this, this.securityManager!, cmd);
+				cmd = SecurityCC.encapsulate(
+					this,
+					this.ownNodeId,
+					this.securityManager!,
+					cmd,
+				);
 			}
 		}
 		return cmd;
@@ -6115,6 +6121,7 @@ ${handlers.length} left`,
 			) {
 				// Prioritize Bridge commands when they are supported
 				msg = new SendDataBridgeRequest(this, {
+					sourceNodeId: this.ownNodeId,
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
@@ -6132,6 +6139,7 @@ ${handlers.length} left`,
 			) {
 				// Prioritize Bridge commands when they are supported
 				msg = new SendDataMulticastBridgeRequest(this, {
+					sourceNodeId: this.ownNodeId,
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
@@ -6974,7 +6982,10 @@ ${handlers.length} left`,
 			msg = commandOrMsg;
 		} else {
 			const SendDataConstructor = this.getSendDataSinglecastConstructor();
-			msg = new SendDataConstructor(this, { command: commandOrMsg });
+			msg = new SendDataConstructor(this, {
+				sourceNodeId: this.ownNodeId,
+				command: commandOrMsg,
+			});
 		}
 		if (!ignoreEncapsulation) {
 			msg.command = this.encapsulateCommands(

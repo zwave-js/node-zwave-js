@@ -124,10 +124,11 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
@@ -150,10 +151,11 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
 							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
@@ -183,7 +185,7 @@ integrationTest(
 						const cc = Security2CC.encapsulate(
 							self.host,
 							new Security2CCCommandsSupportedReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								supportedCCs: isHighestGranted
 									? [...mockNode.implementedCCs.entries()]
 										.filter(
@@ -197,6 +199,7 @@ integrationTest(
 										.map(([ccId]) => ccId)
 									: [],
 							}),
+							self.id,
 							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
@@ -216,11 +219,12 @@ integrationTest(
 						const cc = Security2CC.encapsulate(
 							self.host,
 							new MultiChannelCCEndPointReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								countIsDynamic: false,
 								identicalCapabilities: false,
 								individualCount: self.endpoints.size,
 							}),
+							self.id,
 							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
@@ -241,12 +245,13 @@ integrationTest(
 						const cc = Security2CC.encapsulate(
 							self.host,
 							new MultiChannelCCEndPointFindReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								genericClass: request.genericClass,
 								specificClass: request.specificClass,
 								foundEndpoints: [...self.endpoints.keys()],
 								reportsToFollow: 0,
 							}),
+							self.id,
 							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
@@ -269,7 +274,7 @@ integrationTest(
 						const cc = Security2CC.encapsulate(
 							self.host,
 							new MultiChannelCCCapabilityReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								endpointIndex: endpoint.index,
 								genericDeviceClass:
 									endpoint?.capabilities.genericDeviceClass
@@ -283,6 +288,7 @@ integrationTest(
 									...endpoint.implementedCCs.keys(),
 								],
 							}),
+							self.id,
 							self.securityManagers,
 						);
 						return { action: "sendCC", cc };

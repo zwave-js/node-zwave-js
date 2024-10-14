@@ -24,7 +24,7 @@ const respondToNotificationSupportedGet: MockNodeBehavior = {
 				),
 			};
 			const cc = new NotificationCCSupportedReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				supportsV1Alarm: capabilities.supportsV1Alarm,
 				supportedNotificationTypes: Object.keys(
 					capabilities.notificationTypesAndEvents,
@@ -50,7 +50,7 @@ const respondToNotificationEventSupportedGet: MockNodeBehavior = {
 					in capabilities.notificationTypesAndEvents
 			) {
 				const cc = new NotificationCCEventSupportedReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+					nodeId: controller.ownNodeId,
 					notificationType: receivedCC.notificationType,
 					supportedEvents: capabilities.notificationTypesAndEvents[
 						receivedCC.notificationType

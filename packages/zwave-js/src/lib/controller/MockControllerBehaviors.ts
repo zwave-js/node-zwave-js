@@ -94,7 +94,7 @@ function createLazySendDataPayload(
 	return () => {
 		try {
 			const cmd = CommandClass.from(node.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				data: msg.payload,
 				origin: MessageOrigin.Host,
 				context: {
@@ -113,7 +113,7 @@ function createLazySendDataPayload(
 					// The whole CC is not implemented yet. If this happens in tests, it is because we sent a raw CC.
 					try {
 						const cmd = new CommandClass(host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							ccId: msg.payload[0],
 							ccCommand: msg.payload[1],
 							payload: msg.payload.subarray(2),
@@ -145,8 +145,8 @@ const respondToGetControllerId: MockControllerBehavior = {
 	async onHostMessage(host, controller, msg) {
 		if (msg instanceof GetControllerIdRequest) {
 			const ret = new GetControllerIdResponse(host, {
-				homeId: host.homeId,
-				ownNodeId: host.ownNodeId,
+				homeId: controller.homeId,
+				ownNodeId: controller.ownNodeId,
 			});
 			await controller.sendMessageToHost(ret);
 			return true;
@@ -194,7 +194,7 @@ const respondToGetSUCNodeId: MockControllerBehavior = {
 	async onHostMessage(host, controller, msg) {
 		if (msg instanceof GetSUCNodeIdRequest) {
 			const sucNodeId = controller.capabilities.isStaticUpdateController
-				? host.ownNodeId
+				? controller.ownNodeId
 				: controller.capabilities.sucNodeId;
 			const ret = new GetSUCNodeIdResponse(host, {
 				sucNodeId,
@@ -209,7 +209,7 @@ const respondToGetSerialApiInitData: MockControllerBehavior = {
 	async onHostMessage(host, controller, msg) {
 		if (msg instanceof GetSerialApiInitDataRequest) {
 			const nodeIds = new Set(controller.nodes.keys());
-			nodeIds.add(host.ownNodeId);
+			nodeIds.add(controller.ownNodeId);
 
 			const ret = new GetSerialApiInitDataResponse(host, {
 				zwaveApiVersion: controller.capabilities.zwaveApiVersion,
@@ -248,7 +248,7 @@ const respondToSoftReset: MockControllerBehavior = {
 const respondToGetNodeProtocolInfo: MockControllerBehavior = {
 	async onHostMessage(host, controller, msg) {
 		if (msg instanceof GetNodeProtocolInfoRequest) {
-			if (msg.requestedNodeId === host.ownNodeId) {
+			if (msg.requestedNodeId === controller.ownNodeId) {
 				const ret = new GetNodeProtocolInfoResponse(host, {
 					...determineNIF(),
 					nodeType: NodeType.Controller,
@@ -494,7 +494,7 @@ const handleRequestNodeInfo: MockControllerBehavior = {
 			const node = controller.nodes.get(msg.getNodeId()!)!;
 			const command = new ZWaveProtocolCCRequestNodeInformationFrame(
 				node.host,
-				{ nodeId: controller.host.ownNodeId },
+				{ nodeId: controller.ownNodeId },
 			);
 			const frame = createMockZWaveRequestFrame(command, {
 				ackRequested: false,
@@ -570,7 +570,7 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 			const node = controller.nodes.get(msg.getNodeId()!)!;
 			const command = new ZWaveProtocolCCAssignSUCReturnRoute(host, {
 				nodeId: node.id,
-				destinationNodeId: controller.host.ownNodeId,
+				destinationNodeId: controller.ownNodeId,
 				repeaters: [], // don't care
 				routeIndex: 0, // don't care
 				destinationSpeed: ZWaveDataRate["100k"],

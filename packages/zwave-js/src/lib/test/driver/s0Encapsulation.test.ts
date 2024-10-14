@@ -35,7 +35,7 @@ integrationTest("Communication via Security S0 works", {
 
 		// Create a security manager for the controller
 		const sm0Ctrlr = new SecurityManager({
-			ownNodeId: controller.host.ownNodeId,
+			ownNodeId: controller.ownNodeId,
 			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			nonceTimeout: 100000,
 		});
@@ -46,11 +46,11 @@ integrationTest("Communication via Security S0 works", {
 			handleCC(controller, self, receivedCC) {
 				if (receivedCC instanceof SecurityCCNonceGet) {
 					const nonce = sm0Node.generateNonce(
-						controller.host.ownNodeId,
+						controller.ownNodeId,
 						8,
 					);
 					const cc = new SecurityCCNonceReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
 						nonce,
 					});
 					return { action: "sendCC", cc };
@@ -68,7 +68,7 @@ integrationTest("Communication via Security S0 works", {
 						instanceof SecurityCCCommandsSupportedGet
 				) {
 					const nonceGet = new SecurityCCNonceGet(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
 					});
 					await self.sendToController(
 						createMockZWaveRequestFrame(nonceGet, {
@@ -91,13 +91,14 @@ integrationTest("Communication via Security S0 works", {
 					const response = new SecurityCCCommandsSupportedReport(
 						self.host,
 						{
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							supportedCCs: [CommandClasses.Basic],
 							controlledCCs: [],
 						},
 					);
 					const cc = SecurityCC.encapsulate(
 						self.host,
+						self.id,
 						self.securityManagers.securityManager!,
 						response,
 					);
@@ -124,7 +125,7 @@ integrationTest("Communication via Security S0 works", {
 					&& receivedCC.encapsulated instanceof BasicCCGet
 				) {
 					const nonceGet = new SecurityCCNonceGet(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
 					});
 					await self.sendToController(
 						createMockZWaveRequestFrame(nonceGet, {
@@ -145,11 +146,12 @@ integrationTest("Communication via Security S0 works", {
 					const receiverNonce = nonceReport.payload.nonce;
 
 					const response = new BasicCCReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
 						currentValue: ++queryCount,
 					});
 					const cc = SecurityCC.encapsulate(
 						self.host,
+						self.id,
 						self.securityManagers.securityManager!,
 						response,
 					);

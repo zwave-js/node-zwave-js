@@ -23,7 +23,7 @@ const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
 				),
 			};
 			const cc = new WindowCoveringCCSupportedReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				supportedParameters: capabilities.supportedParameters,
 			});
 			return { action: "sendCC", cc };

@@ -61,10 +61,10 @@ export class MockController {
 		// const valueDBCache = new Map<number, ValueDB>();
 		// const supervisionSessionIDs = new Map<number, () => number>();
 
+		this.ownNodeId = options.ownNodeId ?? 1;
+		this.homeId = options.homeId ?? 0x7e571000;
+
 		this.host = {
-			ownNodeId: options.ownNodeId ?? 1,
-			homeId: options.homeId ?? 0x7e571000,
-			// nodes: this.nodes as any,
 			getSafeCCVersion: () => 100,
 			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
 				if (!this.nodes.has(nodeId)) {
@@ -75,19 +75,6 @@ export class MockController {
 				return (endpoint ?? node).implementedCCs.get(cc)?.version ?? 0;
 			},
 			isCCSecure: () => false,
-			// getValueDB: (nodeId) => {
-			// 	if (!valueDBCache.has(nodeId)) {
-			// 		valueDBCache.set(
-			// 			nodeId,
-			// 			new ValueDB(
-			// 				nodeId,
-			// 				valuesStorage as any,
-			// 				metadataStorage as any,
-			// 			),
-			// 		);
-			// 	}
-			// 	return valueDBCache.get(nodeId)!;
-			// },
 		};
 
 		this.capabilities = {
@@ -97,8 +84,8 @@ export class MockController {
 
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 		this.encodingContext = {
-			homeId: this.host.homeId,
-			ownNodeId: this.host.ownNodeId,
+			homeId: this.homeId,
+			ownNodeId: this.ownNodeId,
 			// TODO: LR is not supported in mocks
 			nodeIdType: NodeIDType.Short,
 			hasSecurityClass(
@@ -141,6 +128,9 @@ export class MockController {
 
 		void this.execute();
 	}
+
+	public homeId: number;
+	public ownNodeId: number;
 
 	public securityManagers: SecurityManagers = {};
 

@@ -55,7 +55,7 @@ interface SendDataBridgeRequestOptions<
 	CCType extends CommandClass = CommandClass,
 > extends MessageBaseOptions {
 	command: CCType;
-	sourceNodeId?: number;
+	sourceNodeId: number;
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
 }
@@ -79,7 +79,7 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			);
 		}
 
-		this.sourceNodeId = options.sourceNodeId ?? host.ownNodeId;
+		this.sourceNodeId = options.sourceNodeId;
 
 		this.command = options.command;
 		this.transmitOptions = options.transmitOptions
@@ -287,7 +287,7 @@ interface SendDataMulticastBridgeRequestOptions<CCType extends CommandClass>
 	extends MessageBaseOptions
 {
 	command: CCType;
-	sourceNodeId?: number;
+	sourceNodeId: number;
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
 }
@@ -320,7 +320,7 @@ export class SendDataMulticastBridgeRequest<
 			);
 		}
 
-		this.sourceNodeId = options.sourceNodeId ?? host.ownNodeId;
+		this.sourceNodeId = options.sourceNodeId;
 		this.command = options.command;
 		this.transmitOptions = options.transmitOptions
 			?? TransmitOptions.DEFAULT;

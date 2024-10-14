@@ -85,10 +85,11 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
@@ -111,10 +112,11 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
 							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
@@ -139,7 +141,7 @@ integrationTest(
 						let cc: CommandClass = new SupervisionCCReport(
 							self.host,
 							{
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								sessionId: receivedCC.encapsulated.sessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Success,
@@ -148,6 +150,7 @@ integrationTest(
 						cc = Security2CC.encapsulate(
 							self.host,
 							cc,
+							self.id,
 							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
@@ -171,9 +174,10 @@ integrationTest(
 			const nodeToHost = Security2CC.encapsulate(
 				mockNode.host,
 				new BinarySwitchCCReport(mockNode.host, {
-					nodeId: mockController.host.ownNodeId,
+					nodeId: mockController.ownNodeId,
 					currentValue: true,
 				}),
+				mockNode.id,
 				mockNode.securityManagers,
 			);
 			const p1 = mockNode.sendToController(
@@ -258,10 +262,11 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
@@ -284,10 +289,11 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
 							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
@@ -315,9 +321,10 @@ integrationTest(
 			const nodeToHost = Security2CC.encapsulate(
 				mockNode.host,
 				new BasicCCReport(mockNode.host, {
-					nodeId: mockController.host.ownNodeId,
+					nodeId: mockController.ownNodeId,
 					currentValue: 99,
 				}),
+				mockNode.id,
 				mockNode.securityManagers,
 			);
 			const p1 = mockNode.sendToController(
@@ -395,10 +402,11 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
@@ -421,10 +429,11 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
 							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
@@ -449,7 +458,7 @@ integrationTest(
 						let cc: CommandClass = new SupervisionCCReport(
 							self.host,
 							{
-								nodeId: controller.host.ownNodeId,
+								nodeId: controller.ownNodeId,
 								sessionId: receivedCC.encapsulated.sessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Success,
@@ -458,6 +467,7 @@ integrationTest(
 						cc = Security2CC.encapsulate(
 							self.host,
 							cc,
+							self.id,
 							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
@@ -486,7 +496,7 @@ integrationTest(
 			let nodeToHost: CommandClass = new BinarySwitchCCReport(
 				mockNode.host,
 				{
-					nodeId: mockController.host.ownNodeId,
+					nodeId: mockController.ownNodeId,
 					currentValue: true,
 				},
 			);
@@ -494,13 +504,14 @@ integrationTest(
 				mockNode.host,
 				nodeToHost,
 				driver.getNextSupervisionSessionId(
-					mockController.host.ownNodeId,
+					mockController.ownNodeId,
 				),
 				false,
 			);
 			nodeToHost = Security2CC.encapsulate(
 				mockNode.host,
 				nodeToHost,
+				mockNode.id,
 				mockNode.securityManagers,
 			);
 
@@ -530,7 +541,7 @@ integrationTest(
 			// const nodeToHost = Security2CC.encapsulate(
 			// 	mockNode.host,
 			// 	new BasicCCReport(mockNode.host, {
-			// 		nodeId: mockController.host.ownNodeId,
+			// 		nodeId: mockController.ownNodeId,
 			// 		currentValue: 99,
 			// 	}),
 			// );

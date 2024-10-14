@@ -115,7 +115,6 @@ export class MockNode {
 		// A node's host is a bit more specialized than the controller's host.
 		this.host = {
 			...this.controller.host,
-			ownNodeId: this.id,
 			__internalIsMockNode: true,
 			// // Mimic the behavior of ZWaveNode, but for arbitrary node IDs
 		};
@@ -123,7 +122,7 @@ export class MockNode {
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 
 		this.encodingContext = {
-			homeId: this.controller.host.homeId,
+			homeId: this.controller.homeId,
 			ownNodeId: this.id,
 			hasSecurityClass(
 				nodeId: number,

@@ -37,6 +37,8 @@ export class BridgeApplicationCommandRequest extends Message
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
+		this._ownNodeId = options.ctx.ownNodeId;
+
 		// if (gotDeserializationOptions(options)) {
 		// first byte is a status flag
 		const status = this.payload[0];
@@ -110,6 +112,8 @@ export class BridgeApplicationCommandRequest extends Message
 	public readonly fromForeignHomeId: boolean;
 	public readonly rssi?: RSSI;
 
+	private _ownNodeId: number;
+
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
 	public command: SinglecastCC<CommandClass>; // TODO: why is this a SinglecastCC?
 
@@ -125,7 +129,7 @@ export class BridgeApplicationCommandRequest extends Message
 		if (this.frameType !== "singlecast") {
 			message.type = this.frameType;
 		}
-		if (this.targetNodeId !== this.host.ownNodeId) {
+		if (this.targetNodeId !== this._ownNodeId) {
 			if (typeof this.targetNodeId === "number") {
 				message["target node"] = this.targetNodeId;
 			} else if (this.targetNodeId.length === 1) {

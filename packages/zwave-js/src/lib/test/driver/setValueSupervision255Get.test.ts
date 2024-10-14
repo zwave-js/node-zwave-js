@@ -33,7 +33,7 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof SupervisionCCGet) {
 						const cc = new SupervisionCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Success,
@@ -55,7 +55,7 @@ integrationTest(
 							?.toMilliseconds()
 					) {
 						const cc1 = new SupervisionCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: true,
 							status: SupervisionStatus.Working,
@@ -63,7 +63,7 @@ integrationTest(
 						});
 
 						const cc2 = new SupervisionCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: false,
 							status: SupervisionStatus.Success,
@@ -119,7 +119,7 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof MultilevelSwitchCCGet) {
 						const cc = new MultilevelSwitchCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							targetValue: 88,
 							currentValue: 88,
 						});

@@ -53,7 +53,7 @@ const respondToEnergyProductionGet: MockNodeBehavior = {
 			];
 
 			const cc = new EnergyProductionCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				parameter: receivedCC.parameter,
 				value: result?.value ?? 0,
 				scale: getEnergyProductionScale(

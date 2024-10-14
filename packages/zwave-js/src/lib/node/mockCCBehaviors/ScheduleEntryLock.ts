@@ -59,7 +59,7 @@ const respondToScheduleEntryLockSupportedGet: MockNodeBehavior = {
 				),
 			};
 			const cc = new ScheduleEntryLockCCSupportedReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				...capabilities,
 			});
 			return { action: "sendCC", cc };
@@ -84,7 +84,7 @@ const respondToScheduleEntryLockTimeOffsetGet: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof ScheduleEntryLockCCTimeOffsetGet) {
 			const cc = new ScheduleEntryLockCCTimeOffsetReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				standardOffset: (self.state.get(StateKeys.standardOffset)
 					?? 0) as number,
 				dstOffset: (self.state.get(StateKeys.dstOffset) ?? 0) as number,
@@ -196,7 +196,7 @@ const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
 			) ?? {}) as AllOrNone<ScheduleEntryLockWeekDaySchedule>;
 
 			const cc = new ScheduleEntryLockCCWeekDayScheduleReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				userId,
 				slotId,
 				...schedule,
@@ -295,7 +295,7 @@ const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
 			) ?? {}) as AllOrNone<ScheduleEntryLockYearDaySchedule>;
 
 			const cc = new ScheduleEntryLockCCYearDayScheduleReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				userId,
 				slotId,
 				...schedule,
@@ -397,7 +397,7 @@ const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
 			const cc = new ScheduleEntryLockCCDailyRepeatingScheduleReport(
 				self.host,
 				{
-					nodeId: controller.host.ownNodeId,
+					nodeId: controller.ownNodeId,
 					userId,
 					slotId,
 					...schedule,

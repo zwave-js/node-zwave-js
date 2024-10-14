@@ -81,7 +81,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 				() => SecurityClass.S2_Unauthenticated;
 
 		const sm0Ctrlr = new SecurityManager({
-			ownNodeId: controller.host.ownNodeId,
+			ownNodeId: controller.ownNodeId,
 			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			nonceTimeout: 100000,
 		});
@@ -92,11 +92,11 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			handleCC(controller, self, receivedCC) {
 				if (receivedCC instanceof SecurityCCNonceGet) {
 					const nonce = sm0Node.generateNonce(
-						controller.host.ownNodeId,
+						controller.ownNodeId,
 						8,
 					);
 					const cc = new SecurityCCNonceReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
 						nonce,
 					});
 					return { action: "sendCC", cc };
@@ -122,10 +122,11 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			handleCC(controller, self, receivedCC) {
 				if (receivedCC instanceof Security2CCNonceGet) {
 					const nonce = sm2Node.generateNonce(
-						controller.host.ownNodeId,
+						controller.ownNodeId,
 					);
 					const cc = new Security2CCNonceReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
+						ownNodeId: self.id,
 						securityManagers: self.securityManagers,
 						SOS: true,
 						MOS: false,
@@ -148,10 +149,11 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 							=== ZWaveErrorCodes.Security2CC_NoSPAN
 					) {
 						const nonce = sm2Node.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
 						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
@@ -172,7 +174,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 					&& receivedCC.encapsulated instanceof SupervisionCCGet
 				) {
 					let cc: CommandClass = new SupervisionCCReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
 						sessionId: receivedCC.encapsulated.sessionId,
 						moreUpdatesFollow: false,
 						status: SupervisionStatus.Success,
@@ -180,6 +182,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 					cc = Security2CC.encapsulate(
 						self.host,
 						cc,
+						self.id,
 						self.securityManagers,
 					);
 					return { action: "sendCC", cc };

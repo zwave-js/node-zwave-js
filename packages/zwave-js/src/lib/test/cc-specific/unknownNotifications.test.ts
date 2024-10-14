@@ -19,7 +19,7 @@ integrationTest(
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			const cc = new NotificationCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				notificationType: 0x06, // Access Control,
 				notificationEvent: 0xfd, // Manual Lock Operation
 			});

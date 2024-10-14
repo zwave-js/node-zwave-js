@@ -35,7 +35,7 @@ integrationTest(
 
 			// Create a security manager for the controller
 			const sm0Ctrlr = new SecurityManager({
-				ownNodeId: controller.host.ownNodeId,
+				ownNodeId: controller.ownNodeId,
 				networkKey: driver.options.securityKeys!.S0_Legacy!,
 				nonceTimeout: 100000,
 			});
@@ -46,11 +46,11 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof SecurityCCNonceGet) {
 						const nonce = sm0Node.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 							8,
 						);
 						const cc = new SecurityCCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							nonce,
 						});
 						return { action: "sendCC", cc };
@@ -86,7 +86,7 @@ integrationTest(
 			mockNode.autoAckControllerFrames = false;
 
 			let nonceRequest = new SecurityCCNonceGet(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(nonceRequest, {
@@ -124,7 +124,7 @@ integrationTest(
 
 			// And subsequent requests must be answered
 			nonceRequest = new SecurityCCNonceGet(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(nonceRequest, {

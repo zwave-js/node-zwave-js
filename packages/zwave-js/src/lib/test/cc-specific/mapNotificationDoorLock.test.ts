@@ -19,7 +19,7 @@ integrationTest(
 			const valueId = DoorLockCCValues.currentMode.id;
 
 			let cc = new NotificationCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				notificationType: 0x06, // Access Control,
 				notificationEvent: 0x01, // Manual Lock Operation
 			});
@@ -34,7 +34,7 @@ integrationTest(
 			t.is(node.getValue(valueId), DoorLockMode.Secured);
 
 			cc = new NotificationCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				notificationType: 0x06, // Access Control,
 				notificationEvent: 0x06, // Keypad Unlock Operation
 			});

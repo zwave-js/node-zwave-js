@@ -16,7 +16,7 @@ const respondToBasicGet: MockNodeBehavior = {
 			}
 
 			const cc = new BasicCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: controller.ownNodeId,
 				currentValue: (self.state.get(StateKeys.currentValue)
 					?? 0) as number,
 			});

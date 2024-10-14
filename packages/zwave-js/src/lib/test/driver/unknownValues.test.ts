@@ -45,7 +45,7 @@ integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {
 			handleCC(controller, self, receivedCC) {
 				if (receivedCC instanceof BasicCCGet) {
 					const cc = new BasicCCReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+						nodeId: controller.ownNodeId,
 						currentValue: 0,
 						targetValue: 0,
 						duration: new Duration(0, "seconds"),
@@ -67,7 +67,7 @@ integrationTest(`Basic Reports with the UNKNOWN state are correctly handled`, {
 
 		// Send an update with UNKNOWN state
 		const cc = new BasicCCReport(mockNode.host, {
-			nodeId: mockController.host.ownNodeId,
+			nodeId: mockController.ownNodeId,
 			currentValue: 254,
 			targetValue: 254,
 			duration: Duration.default(),
@@ -114,7 +114,7 @@ integrationTest(
 
 			// Send an initial state
 			let cc = new MultilevelSwitchCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				currentValue: 0,
 				targetValue: 0,
 			});
@@ -132,7 +132,7 @@ integrationTest(
 
 			// Send an update with UNKNOWN state
 			cc = new MultilevelSwitchCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				currentValue: 254,
 				targetValue: 254,
 			});
@@ -186,7 +186,7 @@ integrationTest(
 
 			// Send an initial state
 			let cc = new BinarySwitchCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				currentValue: false,
 				targetValue: false,
 				duration: new Duration(0, "seconds"),
@@ -205,7 +205,7 @@ integrationTest(
 
 			// Send an update with UNKNOWN state
 			cc = new BinarySwitchCCReport(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+				nodeId: mockController.ownNodeId,
 				currentValue: UNKNOWN_STATE,
 				targetValue: UNKNOWN_STATE,
 				duration: Duration.default(),

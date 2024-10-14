@@ -38,7 +38,7 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof BinarySwitchCCGet) {
 						const cc = new BinarySwitchCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							currentValue: true,
 						});
 						return { action: "sendCC", cc };
@@ -74,7 +74,7 @@ integrationTest(
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof BinarySwitchCCGet) {
 						const cc = new BinarySwitchCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+							nodeId: controller.ownNodeId,
 							currentValue: true,
 						});
 						return { action: "sendCC", cc };
