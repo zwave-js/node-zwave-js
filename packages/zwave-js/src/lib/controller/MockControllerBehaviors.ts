@@ -637,7 +637,7 @@ const forwardCommandClassesToHost: MockControllerBehavior = {
 			// Nodes send commands TO the controller, so we need to fix the node ID before forwarding
 			msg.getNodeId = () => node.id;
 			// Simulate a serialized frame being transmitted via radio before receiving it
-			await controller.sendMessageToHost(msg, node.capabilities.txDelay);
+			await controller.sendMessageToHost(msg, node);
 			return true;
 		}
 	},
@@ -661,7 +661,7 @@ const forwardUnsolicitedNIF: MockControllerBehavior = {
 			// Simulate a serialized frame being transmitted via radio before receiving it
 			await controller.sendMessageToHost(
 				updateRequest,
-				node.capabilities.txDelay,
+				node,
 			);
 			return true;
 		}

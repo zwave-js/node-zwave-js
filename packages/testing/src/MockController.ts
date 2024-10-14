@@ -383,10 +383,19 @@ export class MockController {
 	/** Sends a raw buffer to the host/driver and expect an ACK */
 	public async sendMessageToHost(
 		msg: Message,
-		delayMs?: number,
+		fromNode?: MockNode,
 	): Promise<void> {
-		const data = msg.serialize(this.encodingContext);
-		if (delayMs) await wait(delayMs);
+		let data: Buffer;
+		if (fromNode) {
+			data = msg.serialize({
+				nodeIdType: this.encodingContext.nodeIdType,
+				...fromNode.encodingContext,
+			});
+			// Simulate the frame being transmitted via radio
+			await wait(fromNode.capabilities.txDelay);
+		} else {
+			data = msg.serialize(this.encodingContext);
+		}
 		this.serial.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
 		await this.expectHostACK(1000);
