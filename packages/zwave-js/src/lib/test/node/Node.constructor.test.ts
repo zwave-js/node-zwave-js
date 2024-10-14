@@ -66,9 +66,10 @@ test.serial("stores the given device class", (t) => {
 	const nodeUndef = makeNode(undefined as any);
 	t.is(nodeUndef.deviceClass, undefined);
 
-	const devCls = new DeviceClass(driver.configManager, 0x02, 0x01, 0x03);
+	const devCls = new DeviceClass(0x02, 0x01, 0x03);
 	const nodeWithClass = makeNode(devCls);
 	t.is(nodeWithClass.deviceClass, devCls);
+	t.is(nodeWithClass.deviceClass?.specific.key, 0x03);
 
 	nodeUndef.destroy();
 	nodeWithClass.destroy();

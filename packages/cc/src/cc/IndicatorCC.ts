@@ -1,4 +1,3 @@
-import type { ConfigManager } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type EndpointId,
@@ -204,7 +203,6 @@ export const IndicatorCCValues = Object.freeze({
  * Looks up the configured metadata for the given indicator and property
  */
 function getIndicatorMetadata(
-	configManager: ConfigManager,
 	indicatorId: Indicator,
 	propertyId: number,
 	overrideIndicatorLabel?: string,
@@ -308,7 +306,6 @@ export class IndicatorCCAPI extends CCAPI {
 				const indicatorId = property;
 				const propertyId = propertyKey;
 				const expectedType = getIndicatorMetadata(
-					this.applHost.configManager,
 					indicatorId,
 					propertyId,
 				).type as "number" | "boolean";
@@ -1139,7 +1136,6 @@ export class IndicatorCCReport extends IndicatorCC {
 			: undefined;
 
 		const metadata = getIndicatorMetadata(
-			applHost.configManager,
 			value.indicatorId,
 			value.propertyId,
 			overrideIndicatorLabel,
