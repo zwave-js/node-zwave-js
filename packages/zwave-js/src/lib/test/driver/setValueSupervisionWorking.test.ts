@@ -3,9 +3,15 @@ import {
 	SupervisionCCGet,
 	SupervisionCCReport,
 } from "@zwave-js/cc";
-import { CommandClasses, Duration, SupervisionStatus } from "@zwave-js/core";
+import {
+	CommandClasses,
+	Duration,
+	SupervisionStatus,
+	UNKNOWN_STATE,
+} from "@zwave-js/core";
 import {
 	type MockNodeBehavior,
+	ccCaps,
 	createMockZWaveRequestFrame,
 } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
@@ -22,7 +28,12 @@ integrationTest(
 
 		nodeCapabilities: {
 			commandClasses: [
-				CommandClasses["Multilevel Switch"],
+				ccCaps({
+					ccId: CommandClasses["Multilevel Switch"],
+					isSupported: true,
+					version: 4,
+					defaultValue: UNKNOWN_STATE,
+				}),
 				CommandClasses.Supervision,
 			],
 		},
@@ -65,22 +76,23 @@ integrationTest(
 			};
 			mockNode.defineBehavior(respondToSupervisionGet);
 		},
+
 		testBody: async (t, driver, node, _mockController, _mockNode) => {
 			const targetValueId = MultilevelSwitchCCValues.targetValue.id;
 			const currentValueId = MultilevelSwitchCCValues.currentValue.id;
 
-			t.is(node.getValue(targetValueId), undefined);
-			t.is(node.getValue(currentValueId), undefined);
+			t.is(node.getValue(targetValueId), UNKNOWN_STATE);
+			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
 
 			await node.setValue(targetValueId, 55);
 
 			t.is(node.getValue(targetValueId), 55);
-			t.is(node.getValue(currentValueId), undefined);
+			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
 
 			// Unchanged after 0.5s
 			await wait(500);
 			t.is(node.getValue(targetValueId), 55);
-			t.is(node.getValue(currentValueId), undefined);
+			t.is(node.getValue(currentValueId), UNKNOWN_STATE);
 
 			// Updated after 2.5s
 			await wait(2000);

@@ -472,6 +472,7 @@ export type {
 	MultilevelSwitchCCReportOptions,
 	MultilevelSwitchCCSetOptions,
 	MultilevelSwitchCCStartLevelChangeOptions,
+	MultilevelSwitchCCSupportedReportOptions,
 } from "./MultilevelSwitchCC";
 export {
 	MultilevelSwitchCC,
@@ -672,6 +673,7 @@ export type {
 	SoundSwitchCCConfigurationSetOptions,
 	SoundSwitchCCToneInfoGetOptions,
 	SoundSwitchCCToneInfoReportOptions,
+	SoundSwitchCCTonePlayReportOptions,
 	SoundSwitchCCTonePlaySetOptions,
 	SoundSwitchCCTonesNumberReportOptions,
 } from "./SoundSwitchCC";
@@ -735,13 +737,15 @@ export {
 	ThermostatOperatingStateCCReport,
 	ThermostatOperatingStateCCValues,
 } from "./ThermostatOperatingStateCC";
-export type { ThermostatSetbackCCSetOptions } from "./ThermostatSetbackCC";
+export type {
+	ThermostatSetbackCCReportOptions,
+	ThermostatSetbackCCSetOptions,
+} from "./ThermostatSetbackCC";
 export {
 	ThermostatSetbackCC,
 	ThermostatSetbackCCGet,
 	ThermostatSetbackCCReport,
 	ThermostatSetbackCCSet,
-	ThermostatSetbackCCValues,
 } from "./ThermostatSetbackCC";
 export type {
 	ThermostatSetpointCCCapabilitiesGetOptions,

@@ -684,8 +684,8 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 
 // @publicAPI
 export interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
-	currentValue: number;
-	targetValue: number;
+	currentValue: MaybeUnknown<number>;
+	targetValue: MaybeUnknown<number>;
 	duration?: Duration | string;
 }
 
@@ -851,17 +851,28 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 @useSupervision()
 export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {}
 
+// @publicAPI
+export interface MultilevelSwitchCCSupportedReportOptions {
+	switchType: SwitchType;
+}
+
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & MultilevelSwitchCCSupportedReportOptions),
 	) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this.switchType = this.payload[0] & 0b11111;
-		// We do not support the deprecated secondary switch type
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.switchType = this.payload[0] & 0b11111;
+			// We do not support the deprecated secondary switch type
+		} else {
+			this.switchType = options.switchType;
+		}
 	}
 
 	// This is the primary switch type. We're not supporting secondary switch types
@@ -872,6 +883,11 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		if (!super.persistValues(applHost)) return false;
 		this.createMetadataForLevelChangeActions(applHost, this.switchType);
 		return true;
+	}
+
+	public serialize(ctx: CCEncodingContext): Buffer {
+		this.payload = Buffer.from([this.switchType & 0b11111]);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {

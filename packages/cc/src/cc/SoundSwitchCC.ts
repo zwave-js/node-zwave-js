@@ -92,7 +92,7 @@ export const SoundSwitchCCValues = Object.freeze({
 			"defaultToneId",
 			{
 				...ValueMetadata.Number,
-				min: 0,
+				min: 1,
 				max: 254,
 				label: "Default tone ID",
 			} as const,
@@ -637,11 +637,9 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 2);
+			this.defaultVolume = this.payload[0];
+			this.defaultToneId = this.payload[1];
 		} else {
 			this.defaultVolume = options.defaultVolume;
 			this.defaultToneId = options.defaultToneId;
@@ -668,9 +666,7 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 }
 
 // @publicAPI
-export interface SoundSwitchCCConfigurationReportOptions
-	extends CCCommandOptions
-{
+export interface SoundSwitchCCConfigurationReportOptions {
 	defaultVolume: number;
 	defaultToneId: number;
 }
@@ -681,7 +677,7 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
-			| SoundSwitchCCConfigurationReportOptions,
+			| (CCCommandOptions & SoundSwitchCCConfigurationReportOptions),
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
@@ -721,7 +717,7 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 export class SoundSwitchCCConfigurationGet extends SoundSwitchCC {}
 
 // @publicAPI
-export interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
+export interface SoundSwitchCCTonePlaySetOptions {
 	toneId: ToneId | number;
 	// V2+
 	volume?: number;
@@ -734,15 +730,15 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
-			| SoundSwitchCCTonePlaySetOptions,
+			| (CCCommandOptions & SoundSwitchCCTonePlaySetOptions),
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.toneId = this.payload[0];
+			if (this.toneId !== 0 && this.payload.length >= 2) {
+				this.volume = this.payload[1];
+			}
 		} else {
 			this.toneId = options.toneId;
 			this.volume = options.volume;
@@ -771,17 +767,31 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	}
 }
 
+// @publicAPI
+export interface SoundSwitchCCTonePlayReportOptions {
+	toneId: ToneId | number;
+	// V2+
+	volume?: number;
+}
+
 @CCCommand(SoundSwitchCommand.TonePlayReport)
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & SoundSwitchCCTonePlayReportOptions),
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 1);
-		this.toneId = this.payload[0];
-		if (this.toneId !== 0 && this.payload.length >= 2) {
-			this.volume = this.payload[1];
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.toneId = this.payload[0];
+			if (this.toneId !== 0 && this.payload.length >= 2) {
+				this.volume = this.payload[1];
+			}
+		} else {
+			this.toneId = options.toneId;
+			this.volume = options.volume;
 		}
 	}
 
@@ -790,6 +800,11 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 
 	@ccValue(SoundSwitchCCValues.volume)
 	public volume?: number;
+
+	public serialize(ctx: CCEncodingContext): Buffer {
+		this.payload = Buffer.from([this.toneId, this.volume ?? 0]);
+		return super.serialize(ctx);
+	}
 
 	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {

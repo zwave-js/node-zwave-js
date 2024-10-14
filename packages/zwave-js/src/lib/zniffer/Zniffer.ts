@@ -908,21 +908,45 @@ supported frequencies: ${
 		this._capturedFrames = [];
 	}
 
-	/** Get the captured frames in the official Zniffer application format. */
-	public getCaptureAsZLFBuffer(): Buffer {
+	/**
+	 * Get the captured frames in the official Zniffer application format.
+	 * @param frameFilter Optional predicate function to filter the frames included in the capture
+	 */
+	public getCaptureAsZLFBuffer(
+		frameFilter?: (frame: CapturedFrame) => boolean,
+	): Buffer {
 		// Mimics the current Zniffer software, without using features like sessions and comments
 		const header = Buffer.alloc(2048, 0);
 		header[0] = 0x68; // zniffer version
 		header.writeUInt16BE(0x2312, 0x07fe); // checksum
+		let filteredFrames = this._capturedFrames;
+		if (frameFilter) {
+			filteredFrames = filteredFrames.filter((f) =>
+				// Always include Zniffer-protocol frames
+				f.parsedFrame == undefined
+				// Apply the filter to all other frames
+				|| frameFilter({
+					frameData: f.frameData,
+					parsedFrame: f.parsedFrame,
+					timestamp: f.timestamp,
+				})
+			);
+		}
 		return Buffer.concat([
 			header,
-			...this._capturedFrames.map(captureToZLFEntry),
+			...filteredFrames.map(captureToZLFEntry),
 		]);
 	}
 
-	/** Saves the captured frames in a `.zlf` file that can be read by the official Zniffer application. */
-	public async saveCaptureToFile(filePath: string): Promise<void> {
-		await fs.writeFile(filePath, this.getCaptureAsZLFBuffer());
+	/**
+	 * Saves the captured frames in a `.zlf` file that can be read by the official Zniffer application.
+	 * @param frameFilter Optional predicate function to filter the frames included in the capture
+	 */
+	public async saveCaptureToFile(
+		filePath: string,
+		frameFilter?: (frame: CapturedFrame) => boolean,
+	): Promise<void> {
+		await fs.writeFile(filePath, this.getCaptureAsZLFBuffer(frameFilter));
 	}
 
 	/**

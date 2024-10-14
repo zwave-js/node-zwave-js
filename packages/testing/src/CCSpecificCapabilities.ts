@@ -1,6 +1,7 @@
 import type {
 	ColorComponent,
 	KeypadMode,
+	SwitchType,
 	ThermostatMode,
 	ThermostatSetpointType,
 	UserIDStatus,
@@ -10,11 +11,16 @@ import type {
 	CommandClasses,
 	ConfigValue,
 	ConfigValueFormat,
+	MaybeUnknown,
 } from "@zwave-js/core";
 
 export interface BinarySensorCCCapabilities {
 	supportedSensorTypes: number[];
 	getValue?: (sensorType: number | undefined) => boolean | undefined;
+}
+
+export interface BinarySwitchCCCapabilities {
+	defaultValue?: MaybeUnknown<boolean>;
 }
 
 export interface ConfigurationCCCapabilities {
@@ -76,6 +82,11 @@ export interface MultilevelSensorCCCapabilities {
 		sensorType: number | undefined,
 		scale: number | undefined,
 	) => number | undefined;
+}
+
+export interface MultilevelSwitchCCCapabilities {
+	defaultValue?: MaybeUnknown<number>;
+	primarySwitchType: SwitchType;
 }
 
 export interface SoundSwitchCCCapabilities {
@@ -153,7 +164,9 @@ export type CCSpecificCapabilities = {
 	[CommandClasses.Configuration]: ConfigurationCCCapabilities;
 	[CommandClasses.Notification]: NotificationCCCapabilities;
 	[48 /* Binary Sensor */]: BinarySensorCCCapabilities;
+	[0x25 /* Binary Switch */]: BinarySwitchCCCapabilities;
 	[49 /* Multilevel Sensor */]: MultilevelSensorCCCapabilities;
+	[0x26 /* Multilevel Switch */]: MultilevelSwitchCCCapabilities;
 	[51 /* Color Switch */]: ColorSwitchCCCapabilities;
 	[121 /* Sound Switch */]: SoundSwitchCCCapabilities;
 	[106 /* Window Covering */]: WindowCoveringCCCapabilities;

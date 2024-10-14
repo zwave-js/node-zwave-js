@@ -4,6 +4,43 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 13.9.0 (2024-10-14)
+### Features
+* Zniffer: allow filtering frames when saving the capture (#7279)
+
+### Bugfixes
+* Fixed an issue where the `StartLevelChange` command for `Window Covering CC` was sent with an inverted direction flag (#7278)
+
+### Config file changes
+* Add manual and reset metadata for Danfoss LC-13 (#7274)
+
+## 13.8.0 (2024-10-11)
+### Features
+* Support playing tones on mocked sirens, improve support for node dumps of switches/dimmers (#7272)
+
+## 13.7.0 (2024-10-10)
+### Features
+* Thermostat Setback CC: Fix encoding of the setback state, add mocks, remove non-functional CC values (#7271)
+
+## 13.6.0 (2024-10-10)
+### Features
+* Skip rebuilding routes for nodes with priority return routes (#7252)
+* Add `node info received` event (#7253)
+* OTA firmware updates now use the task scheduler. This allows running multiple OTA updates at once. (#7256)
+* Implement Multilevel Switch mocks, add default state for Binary Switch mocks (#7270)
+
+### Bugfixes
+* Use configured network keys on secondary controller if learned keys are absent (#7226)
+* Pending tasks are removed when hard-resetting or entering bootloader (#7255)
+
+### Config file changes
+* Add incompatibility warning to UZB1 (#7225)
+* Override Central Scene CC version for Springs Window Fashions VCZ1 (#7263)
+
+### Changes under the hood
+* Dependency updates
+* Fix bootstrap command in devcontainer (#7254)
+
 ## 13.5.0 (2024-10-07)
 This release adds an internal task scheduler that will allow more control over longer running tasks like device interviews, route rebuilding, firmware updates, etc. These improvements include pausing/resuming tasks, better prioritization for user-initiated actions, queueing tasks without interrupting ongoing ones, and more. Migration of existing features to the new scheduler will be done incrementally, starting with route rebuilding.
 

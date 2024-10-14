@@ -960,8 +960,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
-			const direction = (this.payload[0] & 0b0100_0000) >>> 6;
-			this.direction = direction ? "down" : "up";
+			this.direction = !!(this.payload[0] & 0b0100_0000) ? "down" : "up";
 			this.parameter = this.payload[1];
 			if (this.payload.length >= 3) {
 				this.duration = Duration.parseSet(this.payload[2]);
@@ -979,7 +978,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 
 	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
-			this.direction === "up" ? 0b0100_0000 : 0b0000_0000,
+			this.direction === "down" ? 0b0100_0000 : 0b0000_0000,
 			this.parameter,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);

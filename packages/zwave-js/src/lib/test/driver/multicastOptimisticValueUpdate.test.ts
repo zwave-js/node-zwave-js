@@ -1,6 +1,6 @@
 import { BinarySwitchCCSet, BinarySwitchCCValues } from "@zwave-js/cc";
 import { CommandClasses, NOT_KNOWN, UNKNOWN_STATE } from "@zwave-js/core";
-import { MockZWaveFrameType } from "@zwave-js/testing";
+import { MockZWaveFrameType, ccCaps } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuiteMulti";
 
@@ -17,13 +17,25 @@ integrationTest("multicast setValue: do optimistic value update after ACK", {
 		{
 			id: 2,
 			capabilities: {
-				commandClasses: [CommandClasses["Binary Switch"]],
+				commandClasses: [
+					ccCaps({
+						ccId: CommandClasses["Binary Switch"],
+						isSupported: true,
+						defaultValue: NOT_KNOWN,
+					}),
+				],
 			},
 		},
 		{
 			id: 3,
 			capabilities: {
-				commandClasses: [CommandClasses["Binary Switch"]],
+				commandClasses: [
+					ccCaps({
+						ccId: CommandClasses["Binary Switch"],
+						isSupported: true,
+						defaultValue: NOT_KNOWN,
+					}),
+				],
 			},
 		},
 	],
