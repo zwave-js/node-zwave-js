@@ -43,7 +43,7 @@ test.serial(
 				wakeUpInterval: 5,
 			}),
 		});
-		controller.serial.emitData(req.serialize());
+		controller.serial.emitData(req.serialize(driver));
 		await controller.expectHostACK(1000);
 		t.pass();
 	},
