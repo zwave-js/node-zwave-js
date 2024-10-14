@@ -218,12 +218,6 @@ export class CommandClass implements CCId {
 					this.nodeId,
 					this.endpointIndex,
 				);
-				// But remember which version the node supports
-				this._knownVersion = this.host.getSupportedCCVersion(
-					this.ccId,
-					this.nodeId,
-					this.endpointIndex,
-				);
 			} catch (e) {
 				if (
 					isZWaveError(e)
@@ -231,7 +225,6 @@ export class CommandClass implements CCId {
 				) {
 					// Someone tried to create a CC that is not implemented. Just set all versions to 0.
 					this.version = 0;
-					this._knownVersion = 0;
 				} else {
 					throw e;
 				}
@@ -250,7 +243,6 @@ export class CommandClass implements CCId {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
-			this._knownVersion = this.version;
 		}
 	}
 
@@ -272,9 +264,6 @@ export class CommandClass implements CCId {
 	/** The version of the command class used */
 	// Work around https://github.com/Microsoft/TypeScript/issues/27555
 	public version!: number;
-
-	/** The version of the CC the node has reported support for */
-	private _knownVersion!: number;
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpointIndex: number;
@@ -880,6 +869,20 @@ export class CommandClass implements CCId {
 			...valueDB.getAllMetadata(this.ccId),
 		];
 
+		// To determine which value IDs to expose, we need to know the CC version
+		// that we're doing this for
+		const supportedVersion = typeof this.nodeId === "number"
+				&& this.nodeId !== NODE_ID_BROADCAST
+				&& this.nodeId !== NODE_ID_BROADCAST_LR
+			// On singlecast CCs, use the version the node reported support for,
+			? applHost.getSupportedCCVersion(
+				this.ccId,
+				this.nodeId,
+				this.endpointIndex,
+			)
+			// on multicast/broadcast, use the highest version we implement
+			: getImplementedVersion(this.ccId);
+
 		// ...or which are statically defined using @ccValues(...)
 		for (const value of Object.values(getCCValues(this) ?? {})) {
 			// Skip dynamic CC values - they need a specific subclass instance to be evaluated
@@ -888,7 +891,7 @@ export class CommandClass implements CCId {
 			// Skip those values that are only supported in higher versions of the CC
 			if (
 				value.options.minVersion != undefined
-				&& value.options.minVersion > this._knownVersion
+				&& value.options.minVersion > supportedVersion
 			) {
 				continue;
 			}
@@ -955,6 +958,15 @@ export class CommandClass implements CCId {
 			return false;
 		}
 
+		// To determine which value IDs to expose, we need to know the CC version
+		// that we're doing this for
+		const supportedVersion = applHost.getSupportedCCVersion(
+			this.ccId,
+			// Values are only persisted for singlecast, so we know nodeId is a number
+			this.nodeId as number,
+			this.endpointIndex,
+		);
+
 		// Get all properties of this CC which are annotated with a @ccValue decorator and store them.
 		for (const [prop, _value] of getCCValueProperties(this)) {
 			// Evaluate dynamic CC values first
@@ -963,7 +975,7 @@ export class CommandClass implements CCId {
 			// Skip those values that are only supported in higher versions of the CC
 			if (
 				value.options.minVersion != undefined
-				&& value.options.minVersion > this.version
+				&& value.options.minVersion > supportedVersion
 			) {
 				continue;
 			}
@@ -977,7 +989,7 @@ export class CommandClass implements CCId {
 				&& (sourceValue != undefined
 					// ... or if we know which CC version the node supports
 					// and the value may be automatically created
-					|| (this._knownVersion >= value.options.minVersion
+					|| (supportedVersion >= value.options.minVersion
 						&& this.shouldAutoCreateValue(applHost, value)));
 
 			if (createMetadata && !valueDB.hasMetadata(valueId)) {
