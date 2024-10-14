@@ -657,9 +657,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		});
 
 		this.messageParsingContext = {
-			get nodeIdType() {
-				return this.nodeIdType;
-			},
 			getHighestSecurityClass: (nodeId) =>
 				this.getHighestSecurityClass(nodeId),
 			hasSecurityClass: (nodeId, securityClass) =>
@@ -668,9 +665,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this.setSecurityClass(nodeId, securityClass, granted),
 		};
 		this.messageEncodingContext = {
-			get nodeIdType() {
-				return this.nodeIdType;
-			},
 			getHighestSecurityClass: (nodeId) =>
 				this.getHighestSecurityClass(nodeId),
 			hasSecurityClass: (nodeId, securityClass) =>
@@ -713,8 +707,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 
-	private messageParsingContext: Omit<MessageParsingContext, keyof HostIDs>;
-	private messageEncodingContext: Omit<MessageEncodingContext, keyof HostIDs>;
+	private messageParsingContext: Omit<
+		MessageParsingContext,
+		keyof HostIDs | "nodeIdType"
+	>;
+	private messageEncodingContext: Omit<
+		MessageEncodingContext,
+		keyof HostIDs | "nodeIdType"
+	>;
 
 	private getCCEncodingContext() {
 		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
@@ -723,6 +723,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			...this.messageEncodingContext,
 			ownNodeId: this.controller.ownNodeId!,
 			homeId: this.controller.homeId!,
+			nodeIdType: this.nodeIdType,
 			securityManager: this.securityManager,
 			securityManager2: this.securityManager2,
 			securityManagerLR: this.securityManagerLR,
@@ -736,6 +737,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			...this.messageParsingContext,
 			ownNodeId: this.controller.ownNodeId!,
 			homeId: this.controller.homeId!,
+			nodeIdType: this.nodeIdType,
 			securityManager: this.securityManager,
 			securityManager2: this.securityManager2,
 			securityManagerLR: this.securityManagerLR,
