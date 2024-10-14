@@ -123,6 +123,8 @@ export class MockNode {
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 
 		this.encodingContext = {
+			homeId: this.controller.host.homeId,
+			ownNodeId: this.id,
 			hasSecurityClass(
 				nodeId: number,
 				securityClass: SecurityClass,

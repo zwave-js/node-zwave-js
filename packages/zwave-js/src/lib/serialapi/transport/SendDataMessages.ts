@@ -110,7 +110,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 					data: this.payload,
 					origin: options.origin,
 					context: {
-						ownNodeId: host.ownNodeId,
 						sourceNodeId: nodeId,
 						...options.ctx,
 					},
@@ -407,7 +406,6 @@ export class SendDataMulticastRequest<
 					data: this.payload,
 					origin: options.origin,
 					context: {
-						ownNodeId: host.ownNodeId,
 						sourceNodeId: NODE_ID_BROADCAST, // FIXME: Unknown?
 						...options.ctx,
 					},

@@ -14,6 +14,7 @@ import {
 } from "@zwave-js/core";
 import type {
 	GetDeviceConfig,
+	HostIDs,
 	ZWaveApplicationHost,
 	ZWaveHost,
 } from "@zwave-js/host";
@@ -39,7 +40,7 @@ export enum MessageOrigin {
 	Host,
 }
 
-export interface MessageParsingContext extends GetDeviceConfig {
+export interface MessageParsingContext extends GetDeviceConfig, HostIDs {
 	/** How many bytes a node ID occupies in serial API commands */
 	nodeIdType: NodeIDType;
 
@@ -95,7 +96,9 @@ export type MessageOptions =
 	| MessageCreationOptions
 	| MessageDeserializationOptions;
 
-export interface MessageEncodingContext extends Readonly<SecurityManagers> {
+export interface MessageEncodingContext
+	extends Readonly<SecurityManagers>, HostIDs
+{
 	/** How many bytes a node ID occupies in serial API commands */
 	nodeIdType: NodeIDType;
 

@@ -107,6 +107,8 @@ export class MockController {
 
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 		this.encodingContext = {
+			homeId: this.host.homeId,
+			ownNodeId: this.host.ownNodeId,
 			// TODO: LR is not supported in mocks
 			nodeIdType: NodeIDType.Short,
 			hasSecurityClass(

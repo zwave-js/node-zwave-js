@@ -98,7 +98,6 @@ function createLazySendDataPayload(
 				data: msg.payload,
 				origin: MessageOrigin.Host,
 				context: {
-					ownNodeId: controller.host.ownNodeId,
 					sourceNodeId: node.id,
 					...node.encodingContext,
 					...node.securityManagers,

@@ -77,7 +77,6 @@ export class BridgeApplicationCommandRequest extends Message
 			nodeId: sourceNodeId,
 			origin: options.origin,
 			context: {
-				ownNodeId: this.host.ownNodeId,
 				sourceNodeId,
 				...options.ctx,
 			},

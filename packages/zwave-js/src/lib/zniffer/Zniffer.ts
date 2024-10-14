@@ -25,7 +25,7 @@ import {
 	isLongRangeNodeId,
 	securityClassIsS2,
 } from "@zwave-js/core";
-import { CCParsingContext } from "@zwave-js/host";
+import { CCParsingContext, HostIDs } from "@zwave-js/host";
 import {
 	type MessageParsingContext,
 	type ZWaveSerialPortImplementation,
@@ -237,7 +237,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private serial: ZnifferSerialPortBase | undefined;
 	private parsingContext: Omit<
 		CCParsingContext,
-		"ownNodeId" | "sourceNodeId"
+		keyof HostIDs | "sourceNodeId"
 	>;
 
 	private _destroyPromise: DeferredPromise<void> | undefined;
@@ -551,6 +551,7 @@ supported frequencies: ${
 						fromEncapsulation: false,
 						nodeId: mpdu.sourceNodeId,
 						context: {
+							homeId: mpdu.homeId,
 							ownNodeId: destNodeId,
 							sourceNodeId: mpdu.sourceNodeId,
 							...this.parsingContext,

@@ -41,10 +41,9 @@ export interface GetDeviceConfig {
 
 /** Additional context needed for deserializing CCs */
 export interface CCParsingContext
-	extends Readonly<SecurityManagers>, GetDeviceConfig
+	extends Readonly<SecurityManagers>, GetDeviceConfig, HostIDs
 {
 	sourceNodeId: number;
-	ownNodeId: number;
 
 	/** If known, the frame type of the containing message */
 	frameType?: FrameType;
@@ -66,7 +65,7 @@ export interface CCParsingContext
 /** Additional context needed for serializing CCs */
 // FIXME: Lot of duplication between the CC and message contexts
 export interface CCEncodingContext
-	extends Readonly<SecurityManagers>, GetDeviceConfig
+	extends Readonly<SecurityManagers>, GetDeviceConfig, HostIDs
 {
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
@@ -141,6 +140,8 @@ export interface GetAllNodes<T extends NodeId> {
 export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 	extends
 		GetValueDB,
+		HostIDs,
+		GetNextCallbackId,
 		ZWaveHost,
 		GetNode<TNode>,
 		GetAllNodes<TNode>,

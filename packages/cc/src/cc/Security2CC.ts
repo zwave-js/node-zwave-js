@@ -616,7 +616,10 @@ export class Security2CC extends CommandClass {
 			| CommandClassDeserializationOptions,
 	): SecurityManager2 {
 		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
-		if (!this.host.ownNodeId) {
+		const ownNodeId = gotDeserializationOptions(options)
+			? options.context.ownNodeId
+			: this.host.ownNodeId;
+		if (ownNodeId) {
 			throw new ZWaveError(
 				`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
 				ZWaveErrorCodes.Driver_NotReady,
@@ -626,13 +629,13 @@ export class Security2CC extends CommandClass {
 		let ret: SecurityManager2 | undefined;
 		if (gotDeserializationOptions(options)) {
 			ret = getSecurityManager(
-				this.host.ownNodeId,
+				ownNodeId,
 				options.context,
 				this.nodeId,
 			)!;
 		} else {
 			ret = getSecurityManager(
-				this.host.ownNodeId,
+				ownNodeId,
 				options.securityManagers,
 				this.nodeId,
 			)!;
@@ -1626,9 +1629,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		const messageLength = this.computeEncapsulationOverhead()
 			+ serializedCC.length;
 		const authData = getAuthenticationData(
-			this.host.ownNodeId,
+			ctx.ownNodeId,
 			destinationTag,
-			this.host.homeId,
+			ctx.homeId,
 			messageLength,
 			unencryptedPayload,
 		);

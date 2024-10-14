@@ -97,7 +97,6 @@ export class ApplicationCommandRequest extends Message
 				nodeId,
 				origin: options.origin,
 				context: {
-					ownNodeId: this.host.ownNodeId,
 					sourceNodeId: nodeId,
 					...options.ctx,
 				},
@@ -146,7 +145,7 @@ export class ApplicationCommandRequest extends Message
 
 		const serializedCC = this.command.serialize(ctx);
 		const nodeId = encodeNodeID(
-			this.getNodeId() ?? this.host.ownNodeId,
+			this.getNodeId() ?? ctx.ownNodeId,
 			ctx.nodeIdType,
 		);
 		this.payload = Buffer.concat([

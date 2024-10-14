@@ -661,7 +661,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				nonce!,
 				this.ccCommand,
 				this.nodeId,
-				this.host.ownNodeId,
+				options.context.ownNodeId,
 				encryptedPayload,
 			);
 			const expectedAuthCode = computeMAC(authData, this.authKey);
@@ -785,7 +785,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			senderNonce,
 			this.nonce,
 			this.ccCommand,
-			this.host.ownNodeId,
+			ctx.ownNodeId,
 			this.nodeId,
 			ciphertext,
 		);

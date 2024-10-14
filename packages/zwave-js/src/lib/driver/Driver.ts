@@ -109,6 +109,7 @@ import {
 	wasControllerReset,
 } from "@zwave-js/core";
 import type {
+	HostIDs,
 	NodeSchedulePollOptions,
 	ZWaveApplicationHost,
 } from "@zwave-js/host";
@@ -712,14 +713,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 
-	private messageParsingContext: MessageParsingContext;
-	private messageEncodingContext: MessageEncodingContext;
+	private messageParsingContext: Omit<MessageParsingContext, keyof HostIDs>;
+	private messageEncodingContext: Omit<MessageEncodingContext, keyof HostIDs>;
 
 	private getCCEncodingContext() {
 		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
 		// but not for messages, yet those implicitly encode CCs
 		return {
 			...this.messageEncodingContext,
+			ownNodeId: this.controller.ownNodeId!,
+			homeId: this.controller.homeId!,
 			securityManager: this.securityManager,
 			securityManager2: this.securityManager2,
 			securityManagerLR: this.securityManagerLR,
@@ -731,6 +734,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// but not for messages, yet those implicitly decode CCs
 		return {
 			...this.messageParsingContext,
+			ownNodeId: this.controller.ownNodeId!,
+			homeId: this.controller.homeId!,
 			securityManager: this.securityManager,
 			securityManager2: this.securityManager2,
 			securityManagerLR: this.securityManagerLR,
@@ -4436,7 +4441,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
 						command.mergePartialCCs(this, session, {
-							ownNodeId: this.ownNodeId,
 							sourceNodeId: msg.command.nodeId as number,
 							...this.getCCParsingContext(),
 						});
