@@ -259,15 +259,4 @@ export class VirtualEndpoint
 		}
 		return apiMethod.apply(CCAPI, args);
 	}
-
-	/**
-	 * @internal
-	 * DO NOT CALL THIS!
-	 */
-	public getNodeUnsafe(): never {
-		throw new ZWaveError(
-			`The node of a virtual endpoint cannot be accessed this way!`,
-			ZWaveErrorCodes.CC_NoNodeID,
-		);
-	}
 }

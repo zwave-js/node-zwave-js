@@ -3,7 +3,7 @@ import type {
 	CommandClasses,
 } from "../capabilities/CommandClasses";
 import type { MulticastDestination } from "../consts";
-import type { IVirtualNode, IZWaveNode } from "./IZWaveNode";
+import type { IVirtualNode, NodeId } from "./IZWaveNode";
 
 /** Identifies an endpoint */
 export interface EndpointId {
@@ -39,12 +39,22 @@ export interface ModifyCCs {
 	removeCC(cc: CommandClasses): void;
 }
 
+/** Allows accessing the parent node of the endpoint, if it exists */
+export interface GetEndpointNode<T extends NodeId> {
+	tryGetNode(): T | undefined;
+}
+
 /** A basic abstraction of a Z-Wave endpoint providing access to the relevant functionality */
 export interface IZWaveEndpoint
-	extends EndpointId, SupportsCC, ControlsCC, IsCCSecure, ModifyCCs, GetCCs
-{
-	getNodeUnsafe(): IZWaveNode | undefined;
-}
+	extends
+		EndpointId,
+		SupportsCC,
+		ControlsCC,
+		IsCCSecure,
+		ModifyCCs,
+		GetCCs,
+		GetEndpointNode<NodeId>
+{}
 
 /** Identifies a virtual endpoint */
 export interface VirtualEndpointId {

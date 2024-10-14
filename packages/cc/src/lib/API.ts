@@ -5,8 +5,6 @@ import {
 	type Duration,
 	type EndpointId,
 	type GetEndpoint,
-	type IVirtualEndpoint,
-	type IZWaveEndpoint,
 	type ListenBehavior,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
@@ -552,7 +550,9 @@ export class CCAPI {
 		}) as any;
 	}
 
-	protected isSinglecast(): this is this & { endpoint: IZWaveEndpoint } {
+	protected isSinglecast(): this is this & {
+		endpoint: PhysicalCCAPIEndpoint;
+	} {
 		return (
 			!this.endpoint.virtual
 			&& typeof this.endpoint.nodeId === "number"
@@ -562,7 +562,7 @@ export class CCAPI {
 	}
 
 	protected isMulticast(): this is this & {
-		endpoint: IVirtualEndpoint & {
+		endpoint: VirtualCCAPIEndpoint & {
 			nodeId: number[];
 		};
 	} {
@@ -570,7 +570,7 @@ export class CCAPI {
 	}
 
 	protected isBroadcast(): this is this & {
-		endpoint: IVirtualEndpoint & {
+		endpoint: VirtualCCAPIEndpoint & {
 			nodeId: typeof NODE_ID_BROADCAST | typeof NODE_ID_BROADCAST_LR;
 		};
 	} {

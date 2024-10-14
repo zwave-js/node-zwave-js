@@ -5350,7 +5350,7 @@ ${handlers.length} left`,
 
 		// Do not persist values for a node or endpoint that does not exist
 		const endpoint = this.tryGetEndpoint(cc);
-		const node = endpoint?.getNodeUnsafe();
+		const node = endpoint?.tryGetNode();
 		if (!node) return false;
 
 		// Do not persist values for a CC that was force-removed via config

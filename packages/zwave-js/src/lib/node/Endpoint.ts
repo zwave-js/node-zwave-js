@@ -14,6 +14,7 @@ import type {
 	ControlsCC,
 	EndpointId,
 	GetCCs,
+	GetEndpointNode,
 	IZWaveEndpoint,
 	IsCCSecure,
 	MaybeNotKnown,
@@ -53,6 +54,7 @@ export class Endpoint
 		IsCCSecure,
 		ModifyCCs,
 		GetCCs,
+		GetEndpointNode<ZWaveNode>,
 		IZWaveEndpoint
 {
 	public constructor(
@@ -120,7 +122,7 @@ export class Endpoint
 
 	/** Can be used to distinguish multiple endpoints of a node */
 	public get endpointLabel(): string | undefined {
-		return this.getNodeUnsafe()?.deviceConfig?.endpoints?.get(this.index)
+		return this.tryGetNode()?.deviceConfig?.endpoints?.get(this.index)
 			?.label;
 	}
 
@@ -214,7 +216,7 @@ export class Endpoint
 	public wasCCRemovedViaConfig(cc: CommandClasses): boolean {
 		if (this.supportsCC(cc)) return false;
 
-		const compatConfig = this.getNodeUnsafe()?.deviceConfig?.compat;
+		const compatConfig = this.tryGetNode()?.deviceConfig?.compat;
 		if (!compatConfig) return false;
 
 		const removedEndpoints = compatConfig.removeCCs?.get(cc);
@@ -248,7 +250,7 @@ export class Endpoint
 		// an unnecessary Version CC interview for each endpoint or an incorrect V1 for endpoints
 
 		if (ret === 0 && this.index > 0) {
-			return this.getNodeUnsafe()!.getCCVersion(cc);
+			return this.tryGetNode()!.getCCVersion(cc);
 		}
 		return ret;
 	}
@@ -452,20 +454,20 @@ export class Endpoint
 	/**
 	 * Returns the node this endpoint belongs to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe(): ZWaveNode | undefined {
+	public tryGetNode(): ZWaveNode | undefined {
 		return this.driver.controller.nodes.get(this.nodeId);
 	}
 
 	/** Z-Wave+ Icon (for management) */
 	public get installerIcon(): MaybeNotKnown<number> {
-		return this.getNodeUnsafe()?.getValue(
+		return this.tryGetNode()?.getValue(
 			ZWavePlusCCValues.installerIcon.endpoint(this.index),
 		);
 	}
 
 	/** Z-Wave+ Icon (for end users) */
 	public get userIcon(): MaybeNotKnown<number> {
-		return this.getNodeUnsafe()?.getValue(
+		return this.tryGetNode()?.getValue(
 			ZWavePlusCCValues.userIcon.endpoint(this.index),
 		);
 	}
