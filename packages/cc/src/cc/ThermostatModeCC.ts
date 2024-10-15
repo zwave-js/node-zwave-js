@@ -18,7 +18,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -133,7 +132,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 			ThermostatModeCommand.Get,
 		);
 
-		const cc = new ThermostatModeCCGet(this.applHost, {
+		const cc = new ThermostatModeCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -183,7 +182,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 			manufacturerData = Buffer.from(manufacturerData, "hex");
 		}
 
-		const cc = new ThermostatModeCCSet(this.applHost, {
+		const cc = new ThermostatModeCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			mode,
@@ -200,7 +199,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 			ThermostatModeCommand.SupportedGet,
 		);
 
-		const cc = new ThermostatModeCCSupportedGet(this.applHost, {
+		const cc = new ThermostatModeCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -327,12 +326,11 @@ export type ThermostatModeCCSetOptions =
 @useSupervision()
 export class ThermostatModeCCSet extends ThermostatModeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatModeCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const manufacturerDataLength = (this.payload[0] >>> 5) & 0b111;
@@ -407,12 +405,11 @@ export type ThermostatModeCCReportOptions =
 @CCCommand(ThermostatModeCommand.Report)
 export class ThermostatModeCCReport extends ThermostatModeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatModeCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -521,12 +518,11 @@ export interface ThermostatModeCCSupportedReportOptions
 @CCCommand(ThermostatModeCommand.SupportedReport)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatModeCCSupportedReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.supportedModes = parseBitMask(
 				this.payload,

@@ -18,7 +18,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
@@ -148,7 +147,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			BarrierOperatorCommand.Get,
 		);
 
-		const cc = new BarrierOperatorCCGet(this.applHost, {
+		const cc = new BarrierOperatorCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -172,7 +171,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			BarrierOperatorCommand.Set,
 		);
 
-		const cc = new BarrierOperatorCCSet(this.applHost, {
+		const cc = new BarrierOperatorCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetState,
@@ -189,13 +188,10 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			BarrierOperatorCommand.SignalingCapabilitiesGet,
 		);
 
-		const cc = new BarrierOperatorCCSignalingCapabilitiesGet(
-			this.applHost,
-			{
-				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
-			},
-		);
+		const cc = new BarrierOperatorCCSignalingCapabilitiesGet({
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
 		const response = await this.applHost.sendCommand<
 			BarrierOperatorCCSignalingCapabilitiesReport
 		>(
@@ -214,7 +210,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			BarrierOperatorCommand.EventSignalingGet,
 		);
 
-		const cc = new BarrierOperatorCCEventSignalingGet(this.applHost, {
+		const cc = new BarrierOperatorCCEventSignalingGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			subsystemType,
@@ -238,7 +234,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			BarrierOperatorCommand.EventSignalingSet,
 		);
 
-		const cc = new BarrierOperatorCCEventSignalingSet(this.applHost, {
+		const cc = new BarrierOperatorCCEventSignalingSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			subsystemType,
@@ -552,12 +548,11 @@ export interface BarrierOperatorCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -586,10 +581,9 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 @CCCommand(BarrierOperatorCommand.Report)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 
@@ -649,10 +643,9 @@ export class BarrierOperatorCCSignalingCapabilitiesReport
 	extends BarrierOperatorCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.supportedSubsystemTypes = parseBitMask(
 			this.payload,
@@ -693,12 +686,11 @@ export interface BarrierOperatorCCEventSignalingSetOptions
 @useSupervision()
 export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCEventSignalingSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -738,10 +730,9 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 @CCCommand(BarrierOperatorCommand.EventSignalingReport)
 export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 		this.subsystemType = this.payload[0];
@@ -792,12 +783,11 @@ export interface BarrierOperatorCCEventSignalingGetOptions
 @expectedCCResponse(BarrierOperatorCCEventSignalingReport)
 export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCEventSignalingGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

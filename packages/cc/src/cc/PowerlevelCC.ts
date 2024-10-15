@@ -9,11 +9,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";
@@ -57,7 +53,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	public async setNormalPowerlevel(): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Set);
 
-		const cc = new PowerlevelCCSet(this.applHost, {
+		const cc = new PowerlevelCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			powerlevel: Powerlevel["Normal Power"],
@@ -72,7 +68,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Set);
 
-		const cc = new PowerlevelCCSet(this.applHost, {
+		const cc = new PowerlevelCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			powerlevel,
@@ -86,7 +82,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Get);
 
-		const cc = new PowerlevelCCGet(this.applHost, {
+		const cc = new PowerlevelCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -105,7 +101,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	): Promise<void> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Report);
 
-		const cc = new PowerlevelCCReport(this.applHost, {
+		const cc = new PowerlevelCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -144,7 +140,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new PowerlevelCCTestNodeSet(this.applHost, {
+		const cc = new PowerlevelCCTestNodeSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			testNodeId,
@@ -167,7 +163,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			PowerlevelCommand.TestNodeGet,
 		);
 
-		const cc = new PowerlevelCCTestNodeGet(this.applHost, {
+		const cc = new PowerlevelCCTestNodeGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -195,7 +191,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			PowerlevelCommand.TestNodeReport,
 		);
 
-		const cc = new PowerlevelCCTestNodeReport(this.applHost, {
+		const cc = new PowerlevelCCTestNodeReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -228,10 +224,9 @@ export type PowerlevelCCSetOptions =
 @useSupervision()
 export class PowerlevelCCSet extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | PowerlevelCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.powerlevel = this.payload[0];
@@ -286,12 +281,11 @@ export type PowerlevelCCReportOptions = {
 @CCCommand(PowerlevelCommand.Report)
 export class PowerlevelCCReport extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (PowerlevelCCReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.powerlevel = this.payload[0];
@@ -341,12 +335,11 @@ export interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
 @useSupervision()
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| PowerlevelCCTestNodeSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.testNodeId = this.payload[0];
@@ -391,12 +384,11 @@ export interface PowerlevelCCTestNodeReportOptions {
 @CCCommand(PowerlevelCommand.TestNodeReport)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (PowerlevelCCTestNodeReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);

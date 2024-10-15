@@ -18,7 +18,7 @@ integrationTest(
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			const valueId = DoorLockCCValues.currentMode.id;
 
-			let cc = new NotificationCCReport(mockNode.host, {
+			let cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06, // Access Control,
 				notificationEvent: 0x01, // Manual Lock Operation
@@ -33,7 +33,7 @@ integrationTest(
 
 			t.is(node.getValue(valueId), DoorLockMode.Secured);
 
-			cc = new NotificationCCReport(mockNode.host, {
+			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06, // Access Control,
 				notificationEvent: 0x06, // Keypad Unlock Operation

@@ -1,5 +1,4 @@
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -21,8 +20,8 @@ export interface IsFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.IsFailedNode)
 @priority(MessagePriority.Controller)
 export class IsFailedNodeRequest extends Message {
-	public constructor(host: ZWaveHost, options: IsFailedNodeRequestOptions) {
-		super(host, options);
+	public constructor(options: IsFailedNodeRequestOptions) {
+		super(options);
 		this.failedNodeId = options.failedNodeId;
 	}
 
@@ -38,10 +37,9 @@ export class IsFailedNodeRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.IsFailedNode)
 export class IsFailedNodeResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.result = !!this.payload[0];
 	}
 

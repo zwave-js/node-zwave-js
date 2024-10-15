@@ -5,7 +5,6 @@ import {
 	encodeLongRangeNodeBitMask,
 	parseLongRangeNodeBitMask,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -28,12 +27,11 @@ export interface GetLongRangeNodesRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetLongRangeNodesRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetLongRangeNodesRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.segmentNumber = this.payload[0];
@@ -59,12 +57,11 @@ export interface GetLongRangeNodesResponseOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.GetLongRangeNodes)
 export class GetLongRangeNodesResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetLongRangeNodesResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.moreNodes = this.payload[0] != 0;

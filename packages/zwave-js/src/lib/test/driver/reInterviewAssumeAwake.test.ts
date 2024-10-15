@@ -25,7 +25,7 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 			await wait(100);
 
 			// Send a WakeUpNotification to the node to trigger the interview
-			const cc = new WakeUpCCWakeUpNotification(mockNode.host, {
+			const cc = new WakeUpCCWakeUpNotification({
 				nodeId: mockController.ownNodeId,
 			});
 			await mockNode.sendToController(
@@ -47,7 +47,7 @@ integrationTest("Assume a node to be awake at the start of a re-interview", {
 			waitForWakeup: true,
 		});
 
-		const cc = new WakeUpCCWakeUpNotification(mockNode.host, {
+		const cc = new WakeUpCCWakeUpNotification({
 			nodeId: mockController.ownNodeId,
 		});
 		await mockNode.sendToController(

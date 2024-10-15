@@ -1,5 +1,4 @@
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
 	SuccessIndicator,
@@ -47,14 +46,14 @@ export enum ReplaceFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.ReplaceFailedNode)
 @priority(MessagePriority.Controller)
 export class ReplaceFailedNodeRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== ReplaceFailedNodeRequestStatusReport
 		) {
-			return new ReplaceFailedNodeRequestStatusReport(host, options);
+			return new ReplaceFailedNodeRequestStatusReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -66,10 +65,9 @@ interface ReplaceFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.ReplaceFailedNode)
 export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: ReplaceFailedNodeRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.failedNodeId = options.failedNodeId;
 	}
 
@@ -90,10 +88,9 @@ export class ReplaceFailedNodeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this._replaceStatus = this.payload[0];
 	}
 
@@ -112,10 +109,9 @@ export class ReplaceFailedNodeRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.callbackId = this.payload[0];
 		this._replaceStatus = this.payload[1];

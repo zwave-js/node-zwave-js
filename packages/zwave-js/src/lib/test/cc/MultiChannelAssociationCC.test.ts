@@ -23,7 +23,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the SupportedGroupingsGet command should serialize correctly", (t) => {
-	const cc = new MultiChannelAssociationCCSupportedGroupingsGet(host, {
+	const cc = new MultiChannelAssociationCCSupportedGroupingsGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -41,7 +41,7 @@ test("the SupportedGroupingsReport command should be deserialized correctly", (t
 			7, // # of groups
 		]),
 	);
-	const cc = new MultiChannelAssociationCCSupportedGroupingsReport(host, {
+	const cc = new MultiChannelAssociationCCSupportedGroupingsReport({
 		nodeId: 4,
 		data: ccData,
 		context: {} as any,
@@ -51,7 +51,7 @@ test("the SupportedGroupingsReport command should be deserialized correctly", (t
 });
 
 test("the Set command should serialize correctly (node IDs only)", (t) => {
-	const cc = new MultiChannelAssociationCCSet(host, {
+	const cc = new MultiChannelAssociationCCSet({
 		nodeId: 2,
 		groupId: 5,
 		nodeIds: [1, 2, 5],
@@ -70,7 +70,7 @@ test("the Set command should serialize correctly (node IDs only)", (t) => {
 });
 
 test("the Set command should serialize correctly (endpoint addresses only)", (t) => {
-	const cc = new MultiChannelAssociationCCSet(host, {
+	const cc = new MultiChannelAssociationCCSet({
 		nodeId: 2,
 		groupId: 5,
 		endpoints: [
@@ -101,7 +101,7 @@ test("the Set command should serialize correctly (endpoint addresses only)", (t)
 });
 
 test("the Set command should serialize correctly (both options)", (t) => {
-	const cc = new MultiChannelAssociationCCSet(host, {
+	const cc = new MultiChannelAssociationCCSet({
 		nodeId: 2,
 		groupId: 5,
 		nodeIds: [1, 2, 3],
@@ -137,7 +137,7 @@ test("the Set command should serialize correctly (both options)", (t) => {
 });
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new MultiChannelAssociationCCGet(host, {
+	const cc = new MultiChannelAssociationCCGet({
 		nodeId: 1,
 		groupId: 9,
 	});
@@ -163,7 +163,7 @@ test("the Report command should be deserialized correctly (node IDs only)", (t) 
 			5,
 		]),
 	);
-	const cc = new MultiChannelAssociationCCReport(host, {
+	const cc = new MultiChannelAssociationCCReport({
 		nodeId: 4,
 		data: ccData,
 		context: {} as any,
@@ -192,7 +192,7 @@ test("the Report command should be deserialized correctly (endpoint addresses on
 			0b11010111,
 		]),
 	);
-	const cc = new MultiChannelAssociationCCReport(host, {
+	const cc = new MultiChannelAssociationCCReport({
 		nodeId: 4,
 		data: ccData,
 		context: {} as any,
@@ -230,7 +230,7 @@ test("the Report command should be deserialized correctly (both options)", (t) =
 			0b11010111,
 		]),
 	);
-	const cc = new MultiChannelAssociationCCReport(host, {
+	const cc = new MultiChannelAssociationCCReport({
 		nodeId: 4,
 		data: ccData,
 		context: {} as any,
@@ -250,7 +250,7 @@ test("the Report command should be deserialized correctly (both options)", (t) =
 });
 
 test("the Remove command should serialize correctly (node IDs only)", (t) => {
-	const cc = new MultiChannelAssociationCCRemove(host, {
+	const cc = new MultiChannelAssociationCCRemove({
 		nodeId: 2,
 		groupId: 5,
 		nodeIds: [1, 2, 5],
@@ -269,7 +269,7 @@ test("the Remove command should serialize correctly (node IDs only)", (t) => {
 });
 
 test("the Remove command should serialize correctly (endpoint addresses only)", (t) => {
-	const cc = new MultiChannelAssociationCCRemove(host, {
+	const cc = new MultiChannelAssociationCCRemove({
 		nodeId: 2,
 		groupId: 5,
 		endpoints: [
@@ -300,7 +300,7 @@ test("the Remove command should serialize correctly (endpoint addresses only)", 
 });
 
 test("the Remove command should serialize correctly (both options)", (t) => {
-	const cc = new MultiChannelAssociationCCRemove(host, {
+	const cc = new MultiChannelAssociationCCRemove({
 		nodeId: 2,
 		groupId: 5,
 		nodeIds: [1, 2, 3],
@@ -336,7 +336,7 @@ test("the Remove command should serialize correctly (both options)", (t) => {
 });
 
 test("the Remove command should serialize correctly (both empty)", (t) => {
-	const cc = new MultiChannelAssociationCCRemove(host, {
+	const cc = new MultiChannelAssociationCCRemove({
 		nodeId: 2,
 		groupId: 5,
 	});
@@ -354,7 +354,7 @@ test("the Remove command should serialize correctly (both empty)", (t) => {
 // 		1,
 // 		Buffer.from([255]), // not a valid command
 // 	);
-// 	const cc: any = new MultiChannelAssociationCC(host, {
+// 	const cc: any = new MultiChannelAssociationCC({
 // 		data: serializedCC,
 // 	});
 // 	t.is(cc.constructor, MultiChannelAssociationCC);

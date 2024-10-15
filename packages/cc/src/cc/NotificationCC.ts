@@ -35,7 +35,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -293,7 +292,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			NotificationCommand.Get,
 		);
 
-		const cc = new NotificationCCGet(this.applHost, {
+		const cc = new NotificationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -313,7 +312,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			NotificationCommand.Report,
 		);
 
-		const cc = new NotificationCCReport(this.applHost, {
+		const cc = new NotificationCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -346,7 +345,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			NotificationCommand.Set,
 		);
 
-		const cc = new NotificationCCSet(this.applHost, {
+		const cc = new NotificationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			notificationType,
@@ -362,7 +361,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			NotificationCommand.SupportedGet,
 		);
 
-		const cc = new NotificationCCSupportedGet(this.applHost, {
+		const cc = new NotificationCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -389,7 +388,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			NotificationCommand.EventSupportedGet,
 		);
 
-		const cc = new NotificationCCEventSupportedGet(this.applHost, {
+		const cc = new NotificationCCEventSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			notificationType,
@@ -917,10 +916,9 @@ export interface NotificationCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | NotificationCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.notificationType = this.payload[0];
@@ -969,12 +967,11 @@ export type NotificationCCReportOptions =
 @useSupervision()
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (NotificationCCReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -1278,7 +1275,7 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to parse the event parameters - if this fails, we should still handle the notification report
 				try {
 					// Convert CommandClass instances to a standardized object representation
-					const cc = CommandClass.from(this.host, {
+					const cc = CommandClass.from({
 						data: this.eventParameters,
 						fromEncapsulation: true,
 						encapCC: this,
@@ -1441,10 +1438,9 @@ export type NotificationCCGetOptions =
 @expectedCCResponse(NotificationCCReport)
 export class NotificationCCGet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.alarmType = this.payload[0] || undefined;
@@ -1514,12 +1510,11 @@ export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
 @CCCommand(NotificationCommand.SupportedReport)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| NotificationCCSupportedReportOptions
 			| CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -1596,12 +1591,11 @@ export interface NotificationCCEventSupportedReportOptions
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NotificationCCEventSupportedReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -1731,12 +1725,11 @@ export interface NotificationCCEventSupportedGetOptions
 @expectedCCResponse(NotificationCCEventSupportedReport)
 export class NotificationCCEventSupportedGet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NotificationCCEventSupportedGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.notificationType = this.payload[0];

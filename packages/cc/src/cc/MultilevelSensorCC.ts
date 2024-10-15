@@ -29,7 +29,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -278,7 +277,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new MultilevelSensorCCGet(this.applHost, {
+		const cc = new MultilevelSensorCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sensorType,
@@ -321,7 +320,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			MultilevelSensorCommand.GetSupportedSensor,
 		);
 
-		const cc = new MultilevelSensorCCGetSupportedSensor(this.applHost, {
+		const cc = new MultilevelSensorCCGetSupportedSensor({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -343,7 +342,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			MultilevelSensorCommand.GetSupportedScale,
 		);
 
-		const cc = new MultilevelSensorCCGetSupportedScale(this.applHost, {
+		const cc = new MultilevelSensorCCGetSupportedScale({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sensorType,
@@ -368,7 +367,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			MultilevelSensorCommand.Report,
 		);
 
-		const cc = new MultilevelSensorCCReport(this.applHost, {
+		const cc = new MultilevelSensorCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			type: sensorType,
@@ -629,12 +628,11 @@ export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
 @useSupervision()
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -776,12 +774,11 @@ export type MultilevelSensorCCGetOptions =
 )
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			if (this.payload.length >= 2) {
 				this.sensorType = this.payload[0];
@@ -846,12 +843,11 @@ export class MultilevelSensorCCSupportedSensorReport
 	extends MultilevelSensorCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCSupportedSensorReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -897,12 +893,11 @@ export interface MultilevelSensorCCSupportedScaleReportOptions
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCSupportedScaleReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -964,12 +959,11 @@ export interface MultilevelSensorCCGetSupportedScaleOptions
 @expectedCCResponse(MultilevelSensorCCSupportedScaleReport)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetSupportedScaleOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.sensorType = this.payload[0];

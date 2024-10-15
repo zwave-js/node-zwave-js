@@ -35,7 +35,7 @@ integrationTest(
 					if (receivedCC instanceof NotificationCCGet) {
 						const notificationType = receivedCC.notificationType
 							|| 0x06;
-						const cc = new NotificationCCReport(self.host, {
+						const cc = new NotificationCCReport({
 							nodeId: controller.ownNodeId,
 							notificationType,
 							notificationEvent: notificationType === 0x06

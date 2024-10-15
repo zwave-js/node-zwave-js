@@ -555,9 +555,11 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 		// ================================
 		// STEP 2:
 		// Determine the fragment size
-		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
-			nodeId: this.id,
-		});
+		const fcc = new FirmwareUpdateMetaDataCC({ nodeId: this.id });
+		fcc.toggleEncapsulationFlag(
+			EncapsulationFlags.Security,
+			this.driver.isCCSecure(fcc.ccId, this.id),
+		);
 		const maxGrossPayloadSizeSecure = this.driver
 			.computeNetCCPayloadSize(
 				fcc,
@@ -613,9 +615,11 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 		});
 
 		// Since no update is in progress, we need to determine the fragment size again
-		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
-			nodeId: this.id,
-		});
+		const fcc = new FirmwareUpdateMetaDataCC({ nodeId: this.id });
+		fcc.toggleEncapsulationFlag(
+			EncapsulationFlags.Security,
+			!!(command.encapsulationFlags & EncapsulationFlags.Security),
+		);
 		const ccVersion = getEffectiveCCVersion(this.driver, fcc);
 		const fragmentSize = this.driver.computeNetCCPayloadSize(fcc)
 			- 2 // report number

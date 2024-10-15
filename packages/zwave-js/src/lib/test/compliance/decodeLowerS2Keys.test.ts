@@ -79,7 +79,7 @@ integrationTest(
 						const nonce = sm2Node.generateNonce(
 							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
+						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
 							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
@@ -110,10 +110,10 @@ integrationTest(
 			);
 
 			// The node sends an S2-encapsulated command, but with a lower security class than expected
-			let innerCC: CommandClass = new TimeCCTimeGet(mockNode.host, {
+			let innerCC: CommandClass = new TimeCCTimeGet({
 				nodeId: mockController.ownNodeId,
 			});
-			let cc = new Security2CCMessageEncapsulation(mockNode.host, {
+			let cc = new Security2CCMessageEncapsulation({
 				nodeId: mockController.ownNodeId,
 				ownNodeId: mockNode.id,
 				encapsulated: innerCC,
@@ -153,11 +153,11 @@ integrationTest(
 			mockNode.clearReceivedControllerFrames();
 
 			// Now the node queries our securely supported commands
-			innerCC = new Security2CCCommandsSupportedGet(mockNode.host, {
+			innerCC = new Security2CCCommandsSupportedGet({
 				nodeId: mockController.ownNodeId,
 			});
 
-			cc = new Security2CCMessageEncapsulation(mockNode.host, {
+			cc = new Security2CCMessageEncapsulation({
 				nodeId: mockController.ownNodeId,
 				ownNodeId: mockNode.id,
 				encapsulated: innerCC,

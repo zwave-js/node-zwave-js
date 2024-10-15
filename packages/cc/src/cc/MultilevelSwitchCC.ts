@@ -17,7 +17,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -231,7 +230,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			MultilevelSwitchCommand.Get,
 		);
 
-		const cc = new MultilevelSwitchCCGet(this.applHost, {
+		const cc = new MultilevelSwitchCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -262,7 +261,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			MultilevelSwitchCommand.Set,
 		);
 
-		const cc = new MultilevelSwitchCCSet(this.applHost, {
+		const cc = new MultilevelSwitchCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
@@ -280,7 +279,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			MultilevelSwitchCommand.StartLevelChange,
 		);
 
-		const cc = new MultilevelSwitchCCStartLevelChange(this.applHost, {
+		const cc = new MultilevelSwitchCCStartLevelChange({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -295,7 +294,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			MultilevelSwitchCommand.StopLevelChange,
 		);
 
-		const cc = new MultilevelSwitchCCStopLevelChange(this.applHost, {
+		const cc = new MultilevelSwitchCCStopLevelChange({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -309,7 +308,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			MultilevelSwitchCommand.SupportedGet,
 		);
 
-		const cc = new MultilevelSwitchCCSupportedGet(this.applHost, {
+		const cc = new MultilevelSwitchCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -628,12 +627,11 @@ export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSwitchCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.targetValue = this.payload[0];
@@ -693,12 +691,11 @@ export interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSwitchCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -779,12 +776,11 @@ export type MultilevelSwitchCCStartLevelChangeOptions =
 @useSupervision()
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			const ignoreStartLevel = (this.payload[0] & 0b0_0_1_00000) >>> 5;
@@ -861,12 +857,11 @@ export interface MultilevelSwitchCCSupportedReportOptions {
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & MultilevelSwitchCCSupportedReportOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);

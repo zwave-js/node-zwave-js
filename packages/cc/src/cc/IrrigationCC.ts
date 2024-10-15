@@ -19,7 +19,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -604,7 +603,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemInfoGet,
 		);
 
-		const cc = new IrrigationCCSystemInfoGet(this.applHost, {
+		const cc = new IrrigationCCSystemInfoGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -631,7 +630,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemStatusGet,
 		);
 
-		const cc = new IrrigationCCSystemStatusGet(this.applHost, {
+		const cc = new IrrigationCCSystemStatusGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -669,7 +668,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemConfigGet,
 		);
 
-		const cc = new IrrigationCCSystemConfigGet(this.applHost, {
+		const cc = new IrrigationCCSystemConfigGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -699,7 +698,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemConfigSet,
 		);
 
-		const cc = new IrrigationCCSystemConfigSet(this.applHost, {
+		const cc = new IrrigationCCSystemConfigSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...config,
@@ -716,7 +715,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveInfoGet,
 		);
 
-		const cc = new IrrigationCCValveInfoGet(this.applHost, {
+		const cc = new IrrigationCCValveInfoGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			valveId,
@@ -750,7 +749,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveConfigSet,
 		);
 
-		const cc = new IrrigationCCValveConfigSet(this.applHost, {
+		const cc = new IrrigationCCValveConfigSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -767,7 +766,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveConfigGet,
 		);
 
-		const cc = new IrrigationCCValveConfigGet(this.applHost, {
+		const cc = new IrrigationCCValveConfigGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			valveId,
@@ -801,7 +800,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveRun,
 		);
 
-		const cc = new IrrigationCCValveRun(this.applHost, {
+		const cc = new IrrigationCCValveRun({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			valveId,
@@ -844,7 +843,7 @@ export class IrrigationCCAPI extends CCAPI {
 			}
 		}
 
-		const cc = new IrrigationCCValveTableSet(this.applHost, {
+		const cc = new IrrigationCCValveTableSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			tableId,
@@ -863,7 +862,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveTableGet,
 		);
 
-		const cc = new IrrigationCCValveTableGet(this.applHost, {
+		const cc = new IrrigationCCValveTableGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			tableId,
@@ -888,7 +887,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveTableRun,
 		);
 
-		const cc = new IrrigationCCValveTableRun(this.applHost, {
+		const cc = new IrrigationCCValveTableRun({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			tableIDs,
@@ -910,7 +909,7 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.SystemShutoff,
 		);
 
-		const cc = new IrrigationCCSystemShutoff(this.applHost, {
+		const cc = new IrrigationCCSystemShutoff({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			duration,
@@ -1350,10 +1349,9 @@ moisture sensor polarity: ${
 @CCCommand(IrrigationCommand.SystemInfoReport)
 export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 4);
 		this.supportsMasterValve = !!(this.payload[0] & 0x01);
 		this.numValves = this.payload[1];
@@ -1393,10 +1391,9 @@ export class IrrigationCCSystemInfoGet extends IrrigationCC {}
 @CCCommand(IrrigationCommand.SystemStatusReport)
 export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 2);
 		this.systemVoltage = this.payload[0];
 		this.flowSensorActive = !!(this.payload[1] & 0x01);
@@ -1544,12 +1541,11 @@ export type IrrigationCCSystemConfigSetOptions = {
 @useSupervision()
 export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IrrigationCCSystemConfigSetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1619,10 +1615,9 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 @CCCommand(IrrigationCommand.SystemConfigReport)
 export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 2);
 		this.masterValveDelay = this.payload[0];
 		let offset = 1;
@@ -1698,10 +1693,9 @@ export class IrrigationCCSystemConfigGet extends IrrigationCC {}
 @CCCommand(IrrigationCommand.ValveInfoReport)
 export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 4);
 		if ((this.payload[0] & 0b1) === ValveType.MasterValve) {
 			this.valveId = "master";
@@ -1848,12 +1842,11 @@ function testResponseForIrrigationCommandWithValveId(
 )
 export class IrrigationCCValveInfoGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveInfoGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1901,12 +1894,11 @@ export type IrrigationCCValveConfigSetOptions = {
 @useSupervision()
 export class IrrigationCCValveConfigSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IrrigationCCValveConfigSetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1977,10 +1969,9 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 @CCCommand(IrrigationCommand.ValveConfigReport)
 export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 4);
 		if ((this.payload[0] & 0b1) === ValveType.MasterValve) {
 			this.valveId = "master";
@@ -2119,12 +2110,11 @@ export interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
 )
 export class IrrigationCCValveConfigGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveConfigGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2166,12 +2156,11 @@ export interface IrrigationCCValveRunOptions extends CCCommandOptions {
 @useSupervision()
 export class IrrigationCCValveRun extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveRunOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2224,12 +2213,11 @@ export interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
 @useSupervision()
 export class IrrigationCCValveTableSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveTableSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2280,10 +2268,9 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 @CCCommand(IrrigationCommand.ValveTableReport)
 export class IrrigationCCValveTableReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload((this.payload.length - 1) % 3 === 0);
 		this.tableId = this.payload[0];
 		this.entries = [];
@@ -2337,12 +2324,11 @@ function testResponseForIrrigationValveTableGet(
 )
 export class IrrigationCCValveTableGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveTableGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2380,12 +2366,11 @@ export interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
 @useSupervision()
 export class IrrigationCCValveTableRun extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveTableRunOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2435,12 +2420,11 @@ export interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
 @useSupervision()
 export class IrrigationCCSystemShutoff extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCSystemShutoffOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

@@ -26,7 +26,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the NameGet command should serialize correctly", (t) => {
-	const cc = new AssociationGroupInfoCCNameGet(host, {
+	const cc = new AssociationGroupInfoCCNameGet({
 		nodeId: 1,
 		groupId: 7,
 	});
@@ -54,7 +54,7 @@ test("the NameReport command should be deserialized correctly", (t) => {
 			0x72,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCNameReport(host, {
+	const cc = new AssociationGroupInfoCCNameReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -65,7 +65,7 @@ test("the NameReport command should be deserialized correctly", (t) => {
 });
 
 test("the InfoGet command should serialize correctly (no flag set)", (t) => {
-	const cc = new AssociationGroupInfoCCInfoGet(host, {
+	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
 		listMode: false,
@@ -82,7 +82,7 @@ test("the InfoGet command should serialize correctly (no flag set)", (t) => {
 });
 
 test("the InfoGet command should serialize correctly (refresh cache flag set)", (t) => {
-	const cc = new AssociationGroupInfoCCInfoGet(host, {
+	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
 		listMode: false,
@@ -99,7 +99,7 @@ test("the InfoGet command should serialize correctly (refresh cache flag set)", 
 });
 
 test("the InfoGet command should serialize correctly (list mode flag set)", (t) => {
-	const cc = new AssociationGroupInfoCCInfoGet(host, {
+	const cc = new AssociationGroupInfoCCInfoGet({
 		nodeId: 1,
 		groupId: 7,
 		listMode: true,
@@ -141,7 +141,7 @@ test("the Info Report command should be deserialized correctly", (t) => {
 			0,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCInfoReport(host, {
+	const cc = new AssociationGroupInfoCCInfoReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -158,7 +158,7 @@ test("the Info Report command should be deserialized correctly", (t) => {
 });
 
 test("the CommandListGet command should serialize correctly", (t) => {
-	const cc = new AssociationGroupInfoCCCommandListGet(host, {
+	const cc = new AssociationGroupInfoCCCommandListGet({
 		nodeId: 1,
 		groupId: 6,
 		allowCache: true,
@@ -187,7 +187,7 @@ test("the CommandListReport command should be deserialized correctly", (t) => {
 			0x05,
 		]),
 	);
-	const cc = new AssociationGroupInfoCCCommandListReport(host, {
+	const cc = new AssociationGroupInfoCCCommandListReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -206,7 +206,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new AssociationGroupInfoCC(host, {
+	const cc: any = new AssociationGroupInfoCC({
 		nodeId: 1,
 		data: serializedCC,
 		context: {} as any,

@@ -23,7 +23,7 @@ integrationTest(
 
 			t.is(node2.status, NodeStatus.Awake);
 
-			const command1 = new BasicCCSet(driver, {
+			const command1 = new BasicCCSet({
 				nodeId: 2,
 				targetValue: 99,
 			});
@@ -31,7 +31,7 @@ integrationTest(
 				maxSendAttempts: 1,
 			});
 
-			const command2 = new BasicCCGet(driver, {
+			const command2 = new BasicCCGet({
 				nodeId: 2,
 			});
 			driver.sendCommand(command2, {

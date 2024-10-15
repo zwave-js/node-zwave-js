@@ -25,7 +25,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const basicCC = new BasicCCGet(host, { nodeId: 1 });
+	const basicCC = new BasicCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BasicCommand.Get, // CC Command
@@ -35,7 +35,7 @@ test("the Get command should serialize correctly", (t) => {
 });
 
 test("the Set command should serialize correctly", (t) => {
-	const basicCC = new BasicCCSet(host, {
+	const basicCC = new BasicCCSet({
 		nodeId: 2,
 		targetValue: 55,
 	});
@@ -55,7 +55,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			55, // current value
 		]),
 	);
-	const basicCC = new BasicCCReport(host, {
+	const basicCC = new BasicCCReport({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,
@@ -75,7 +75,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			1, // duration
 		]),
 	);
-	const basicCC = new BasicCCReport(host, {
+	const basicCC = new BasicCCReport({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,
@@ -91,7 +91,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const basicCC: any = new BasicCC(host, {
+	const basicCC: any = new BasicCC({
 		nodeId: 2,
 		data: serializedCC,
 		context: {} as any,
@@ -137,7 +137,7 @@ test("getDefinedValueIDs() should include the target value for all endpoints exc
 });
 
 test("BasicCCSet should expect no response", (t) => {
-	const cc = new BasicCCSet(host, {
+	const cc = new BasicCCSet({
 		nodeId: 2,
 		endpoint: 2,
 		targetValue: 7,
@@ -146,12 +146,12 @@ test("BasicCCSet should expect no response", (t) => {
 });
 
 test("BasicCCSet => BasicCCReport = unexpected", (t) => {
-	const ccRequest = new BasicCCSet(host, {
+	const ccRequest = new BasicCCSet({
 		nodeId: 2,
 		endpoint: 2,
 		targetValue: 7,
 	});
-	const ccResponse = new BasicCCReport(host, {
+	const ccResponse = new BasicCCReport({
 		nodeId: ccRequest.nodeId,
 		currentValue: 7,
 	});
@@ -160,17 +160,17 @@ test("BasicCCSet => BasicCCReport = unexpected", (t) => {
 });
 
 test("BasicCCGet should expect a response", (t) => {
-	const cc = new BasicCCGet(host, {
+	const cc = new BasicCCGet({
 		nodeId: 2,
 	});
 	t.true(cc.expectsCCResponse());
 });
 
 test("BasicCCGet => BasicCCReport = expected", (t) => {
-	const ccRequest = new BasicCCGet(host, {
+	const ccRequest = new BasicCCGet({
 		nodeId: 2,
 	});
-	const ccResponse = new BasicCCReport(host, {
+	const ccResponse = new BasicCCReport({
 		nodeId: ccRequest.nodeId,
 		currentValue: 7,
 	});
@@ -179,10 +179,10 @@ test("BasicCCGet => BasicCCReport = expected", (t) => {
 });
 
 test("BasicCCGet => BasicCCReport (wrong node) = unexpected", (t) => {
-	const ccRequest = new BasicCCGet(host, {
+	const ccRequest = new BasicCCGet({
 		nodeId: 2,
 	});
-	const ccResponse = new BasicCCReport(host, {
+	const ccResponse = new BasicCCReport({
 		nodeId: (ccRequest.nodeId as number) + 1,
 		currentValue: 7,
 	});
@@ -191,10 +191,10 @@ test("BasicCCGet => BasicCCReport (wrong node) = unexpected", (t) => {
 });
 
 test("BasicCCGet => BasicCCSet = unexpected", (t) => {
-	const ccRequest = new BasicCCGet(host, {
+	const ccRequest = new BasicCCGet({
 		nodeId: 2,
 	});
-	const ccResponse = new BasicCCSet(host, {
+	const ccResponse = new BasicCCSet({
 		nodeId: ccRequest.nodeId,
 		targetValue: 7,
 	});
@@ -203,7 +203,7 @@ test("BasicCCGet => BasicCCSet = unexpected", (t) => {
 });
 
 test("Looking up CC values for a CC instance should work", (t) => {
-	const cc = new BasicCCGet(host, {
+	const cc = new BasicCCGet({
 		nodeId: 2,
 	});
 	const values = getCCValues(cc) as typeof BasicCCValues;

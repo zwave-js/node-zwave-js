@@ -23,7 +23,7 @@ const respondToBinarySensorSupportedGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new BinarySensorCCSupportedReport(self.host, {
+			const cc = new BinarySensorCCSupportedReport({
 				nodeId: controller.ownNodeId,
 				supportedSensorTypes: capabilities.supportedSensorTypes,
 			});
@@ -56,7 +56,7 @@ const respondToBinarySensorGet: MockNodeBehavior = {
 
 			if (sensorType != undefined) {
 				const value = capabilities.getValue?.(sensorType) ?? false;
-				const cc = new BinarySensorCCReport(self.host, {
+				const cc = new BinarySensorCCReport({
 					nodeId: controller.ownNodeId,
 					type: sensorType,
 					value,

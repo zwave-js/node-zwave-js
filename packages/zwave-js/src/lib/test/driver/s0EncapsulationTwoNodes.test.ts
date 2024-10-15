@@ -70,7 +70,7 @@ integrationTest(
 								controller.ownNodeId,
 								8,
 							);
-							const cc = new SecurityCCNonceReport(self.host, {
+							const cc = new SecurityCCNonceReport({
 								nodeId: controller.ownNodeId,
 								nonce,
 							});
@@ -88,7 +88,7 @@ integrationTest(
 							&& receivedCC.encapsulated
 								instanceof SecurityCCCommandsSupportedGet
 						) {
-							const nonceGet = new SecurityCCNonceGet(self.host, {
+							const nonceGet = new SecurityCCNonceGet({
 								nodeId: controller.ownNodeId,
 							});
 							await self.sendToController(
@@ -113,14 +113,11 @@ integrationTest(
 							const receiverNonce = nonceReport.payload.nonce;
 
 							const response =
-								new SecurityCCCommandsSupportedReport(
-									self.host,
-									{
-										nodeId: controller.ownNodeId,
-										supportedCCs: [CommandClasses.Basic],
-										controlledCCs: [],
-									},
-								);
+								new SecurityCCCommandsSupportedReport({
+									nodeId: controller.ownNodeId,
+									supportedCCs: [CommandClasses.Basic],
+									controlledCCs: [],
+								});
 							const cc = SecurityCC.encapsulate(
 								self.host,
 								self.id,
@@ -156,7 +153,7 @@ integrationTest(
 								await wait(750);
 							}
 
-							const nonceGet = new SecurityCCNonceGet(self.host, {
+							const nonceGet = new SecurityCCNonceGet({
 								nodeId: controller.ownNodeId,
 							});
 							await self.sendToController(
@@ -180,7 +177,7 @@ integrationTest(
 								);
 							const receiverNonce = nonceReport.payload.nonce;
 
-							const response = new BasicCCReport(self.host, {
+							const response = new BasicCCReport({
 								nodeId: controller.ownNodeId,
 								currentValue: queryCount,
 							});

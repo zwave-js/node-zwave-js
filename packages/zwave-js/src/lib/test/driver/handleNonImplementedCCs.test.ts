@@ -22,7 +22,7 @@ integrationTest(
 				1000,
 			);
 
-			const cc = new CommandClass(mockNode.host, {
+			const cc = new CommandClass({
 				nodeId: mockController.ownNodeId,
 				ccId: CommandClasses["Anti-Theft"],
 				ccCommand: 0x02, // Get

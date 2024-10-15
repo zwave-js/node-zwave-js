@@ -25,7 +25,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the ConfigurationGet command should serialize correctly", (t) => {
-	const cc = new CentralSceneCCConfigurationGet(host, {
+	const cc = new CentralSceneCCConfigurationGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -37,7 +37,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 });
 
 test("the ConfigurationSet command should serialize correctly (flags set)", (t) => {
-	const cc = new CentralSceneCCConfigurationSet(host, {
+	const cc = new CentralSceneCCConfigurationSet({
 		nodeId: 2,
 		slowRefresh: true,
 	});
@@ -51,7 +51,7 @@ test("the ConfigurationSet command should serialize correctly (flags set)", (t) 
 });
 
 test("the ConfigurationSet command should serialize correctly (flags not set)", (t) => {
-	const cc = new CentralSceneCCConfigurationSet(host, {
+	const cc = new CentralSceneCCConfigurationSet({
 		nodeId: 2,
 		slowRefresh: false,
 	});
@@ -71,7 +71,7 @@ test("the ConfigurationReport command should be deserialized correctly", (t) => 
 			0b1000_0000,
 		]),
 	);
-	const cc = new CentralSceneCCConfigurationReport(host, {
+	const cc = new CentralSceneCCConfigurationReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -81,7 +81,7 @@ test("the ConfigurationReport command should be deserialized correctly", (t) => 
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
-	const cc = new CentralSceneCCSupportedGet(host, {
+	const cc = new CentralSceneCCSupportedGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -104,7 +104,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			0,
 		]),
 	);
-	const cc = new CentralSceneCCSupportedReport(host, {
+	const cc = new CentralSceneCCSupportedReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -127,7 +127,7 @@ test("the Notification command should be deserialized correctly", (t) => {
 			8, // scene number
 		]),
 	);
-	const cc = new CentralSceneCCNotification(host, {
+	const cc = new CentralSceneCCNotification({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -149,7 +149,7 @@ test("the Notification command should be deserialized correctly (KeyHeldDown)", 
 			8, // scene number
 		]),
 	);
-	const cc = new CentralSceneCCNotification(host, {
+	const cc = new CentralSceneCCNotification({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -165,7 +165,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new CentralSceneCC(host, {
+	const cc: any = new CentralSceneCC({
 		nodeId: 1,
 		data: serializedCC,
 		context: {} as any,

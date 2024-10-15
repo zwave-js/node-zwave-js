@@ -7,11 +7,7 @@ import {
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	GetValueDB,
-	ZWaveApplicationHost,
-	ZWaveHost,
-} from "@zwave-js/host/safe";
+import type { GetValueDB, ZWaveApplicationHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -90,7 +86,7 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 			HumidityControlOperatingStateCommand.Get,
 		);
 
-		const cc = new HumidityControlOperatingStateCCGet(this.applHost, {
+		const cc = new HumidityControlOperatingStateCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -168,10 +164,9 @@ export class HumidityControlOperatingStateCCReport
 	extends HumidityControlOperatingStateCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this.state = this.payload[0] & 0b1111;

@@ -16,7 +16,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -79,7 +78,7 @@ export class LanguageCCAPI extends CCAPI {
 	public async get() {
 		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Get);
 
-		const cc = new LanguageCCGet(this.applHost, {
+		const cc = new LanguageCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -99,7 +98,7 @@ export class LanguageCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Set);
 
-		const cc = new LanguageCCSet(this.applHost, {
+		const cc = new LanguageCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			language,
@@ -173,10 +172,9 @@ export interface LanguageCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class LanguageCCSet extends LanguageCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | LanguageCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -243,10 +241,9 @@ export class LanguageCCSet extends LanguageCC {
 @CCCommand(LanguageCommand.Report)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		// if (gotDeserializationOptions(options)) {
 		validatePayload(this.payload.length >= 3);
 		this.language = this.payload.toString("ascii", 0, 3);

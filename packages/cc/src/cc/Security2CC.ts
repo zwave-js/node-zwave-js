@@ -41,7 +41,6 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -210,7 +209,7 @@ export class Security2CCAPI extends CCAPI {
 			this.endpoint.nodeId,
 		);
 
-		const cc = new Security2CCNonceReport(this.applHost, {
+		const cc = new Security2CCNonceReport({
 			nodeId: this.endpoint.nodeId,
 			ownNodeId: this.applHost.ownNodeId,
 			endpoint: this.endpoint.index,
@@ -258,7 +257,7 @@ export class Security2CCAPI extends CCAPI {
 
 		this.assertPhysicalEndpoint(this.endpoint);
 
-		const cc = new Security2CCNonceReport(this.applHost, {
+		const cc = new Security2CCNonceReport({
 			nodeId: this.endpoint.nodeId,
 			ownNodeId: this.applHost.ownNodeId,
 			endpoint: this.endpoint.index,
@@ -303,7 +302,7 @@ export class Security2CCAPI extends CCAPI {
 
 		this.assertPhysicalEndpoint(this.endpoint);
 
-		const cc = new Security2CCMessageEncapsulation(this.applHost, {
+		const cc = new Security2CCMessageEncapsulation({
 			nodeId: this.endpoint.nodeId,
 			ownNodeId: this.applHost.ownNodeId,
 			endpoint: this.endpoint.index,
@@ -355,13 +354,10 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.CommandsSupportedGet,
 		);
 
-		let cc: CommandClass = new Security2CCCommandsSupportedGet(
-			this.applHost,
-			{
-				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
-			},
-		);
+		let cc: CommandClass = new Security2CCCommandsSupportedGet({
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
 		// Security2CCCommandsSupportedGet is special because we cannot reply on the applHost to do the automatic
 		// encapsulation because it would use a different security class. Therefore the entire possible stack
 		// of encapsulation needs to be done here
@@ -372,11 +368,10 @@ export class Security2CCAPI extends CCAPI {
 			);
 
 			cc = multiChannelCCVersion === 1
-				? MultiChannelCC.encapsulateV1(this.applHost, cc)
-				: MultiChannelCC.encapsulate(this.applHost, cc);
+				? MultiChannelCC.encapsulateV1(cc)
+				: MultiChannelCC.encapsulate(cc);
 		}
 		cc = Security2CC.encapsulate(
-			this.applHost,
 			cc,
 			this.applHost.ownNodeId,
 			this.applHost,
@@ -403,7 +398,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.CommandsSupportedReport,
 		);
 
-		const cc = new Security2CCCommandsSupportedReport(this.applHost, {
+		const cc = new Security2CCCommandsSupportedReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			supportedCCs,
@@ -415,7 +410,7 @@ export class Security2CCAPI extends CCAPI {
 	public async getKeyExchangeParameters() {
 		this.assertSupportsCommand(Security2Command, Security2Command.KEXGet);
 
-		const cc = new Security2CCKEXGet(this.applHost, {
+		const cc = new Security2CCKEXGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -444,7 +439,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.KEXReport,
 		);
 
-		const cc = new Security2CCKEXReport(this.applHost, {
+		const cc = new Security2CCKEXReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...params,
@@ -459,7 +454,7 @@ export class Security2CCAPI extends CCAPI {
 	): Promise<void> {
 		this.assertSupportsCommand(Security2Command, Security2Command.KEXSet);
 
-		const cc = new Security2CCKEXSet(this.applHost, {
+		const cc = new Security2CCKEXSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...params,
@@ -477,7 +472,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.KEXReport,
 		);
 
-		const cc = new Security2CCKEXReport(this.applHost, {
+		const cc = new Security2CCKEXReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...params,
@@ -495,7 +490,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.KEXSet,
 		);
 
-		const cc = new Security2CCKEXSet(this.applHost, {
+		const cc = new Security2CCKEXSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...params,
@@ -508,7 +503,7 @@ export class Security2CCAPI extends CCAPI {
 	public async abortKeyExchange(failType: KEXFailType): Promise<void> {
 		this.assertSupportsCommand(Security2Command, Security2Command.KEXFail);
 
-		const cc = new Security2CCKEXFail(this.applHost, {
+		const cc = new Security2CCKEXFail({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			failType,
@@ -525,7 +520,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.PublicKeyReport,
 		);
 
-		const cc = new Security2CCPublicKeyReport(this.applHost, {
+		const cc = new Security2CCPublicKeyReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			includingNode,
@@ -542,7 +537,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.NetworkKeyGet,
 		);
 
-		const cc = new Security2CCNetworkKeyGet(this.applHost, {
+		const cc = new Security2CCNetworkKeyGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedKey: securityClass,
@@ -559,7 +554,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.NetworkKeyReport,
 		);
 
-		const cc = new Security2CCNetworkKeyReport(this.applHost, {
+		const cc = new Security2CCNetworkKeyReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			grantedKey: securityClass,
@@ -574,7 +569,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.NetworkKeyVerify,
 		);
 
-		const cc = new Security2CCNetworkKeyVerify(this.applHost, {
+		const cc = new Security2CCNetworkKeyVerify({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -587,7 +582,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.TransferEnd,
 		);
 
-		const cc = new Security2CCTransferEnd(this.applHost, {
+		const cc = new Security2CCTransferEnd({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			keyVerified: true,
@@ -606,7 +601,7 @@ export class Security2CCAPI extends CCAPI {
 			Security2Command.TransferEnd,
 		);
 
-		const cc = new Security2CCTransferEnd(this.applHost, {
+		const cc = new Security2CCTransferEnd({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			keyVerified: false,
@@ -957,7 +952,6 @@ export class Security2CC extends CommandClass {
 
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
-		host: ZWaveHost,
 		cc: CommandClass,
 		ownNodeId: number,
 		securityManagers: SecurityManagers,
@@ -992,7 +986,7 @@ export class Security2CC extends CommandClass {
 			nodeId = cc.nodeId as number;
 		}
 
-		const ret = new Security2CCMessageEncapsulation(host, {
+		const ret = new Security2CCMessageEncapsulation({
 			nodeId,
 			ownNodeId,
 			encapsulated: cc,
@@ -1090,12 +1084,11 @@ export type MulticastContext =
 )
 export class Security2CCMessageEncapsulation extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCMessageEncapsulationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		// Make sure that we can send/receive secure commands
 		this.securityManager = this.assertSecurity(options);
@@ -1408,7 +1401,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				// make sure this contains a complete CC command that's worth splitting
 				validatePayload(decryptedCCBytes.length >= 2);
 				// and deserialize the CC
-				this.encapsulated = CommandClass.from(this.host, {
+				this.encapsulated = CommandClass.from({
 					data: decryptedCCBytes,
 					fromEncapsulation: true,
 					encapCC: this,
@@ -1993,12 +1986,11 @@ export type Security2CCNonceReportOptions =
 @CCCommand(Security2Command.NonceReport)
 export class Security2CCNonceReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCNonceReportOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		// Make sure that we can send/receive secure commands
 		this.securityManager = this.assertSecurity(options);
@@ -2098,12 +2090,11 @@ export class Security2CCNonceGet extends Security2CC {
 	// 250 ms before receiving the Security 2 Nonce Report Command.
 
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCNonceGetOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		// Make sure that we can send/receive secure commands
 		this.securityManager = this.assertSecurity(options);
@@ -2166,12 +2157,11 @@ export interface Security2CCKEXReportOptions {
 @CCCommand(Security2Command.KEXReport)
 export class Security2CCKEXReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCKEXReportOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.requestCSA = !!(this.payload[0] & 0b10);
@@ -2291,12 +2281,11 @@ function testExpectedResponseForKEXSet(
 @expectedCCResponse(getExpectedResponseForKEXSet, testExpectedResponseForKEXSet)
 export class Security2CCKEXSet extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCKEXSetOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this._reserved = this.payload[0] & 0b1111_1100;
@@ -2391,10 +2380,9 @@ export interface Security2CCKEXFailOptions extends CCCommandOptions {
 @CCCommand(Security2Command.KEXFail)
 export class Security2CCKEXFail extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | Security2CCKEXFailOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.failType = this.payload[0];
@@ -2427,12 +2415,11 @@ export interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.PublicKeyReport)
 export class Security2CCPublicKeyReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCPublicKeyReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 17);
 			this.includingNode = !!(this.payload[0] & 0b1);
@@ -2474,12 +2461,11 @@ export interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.NetworkKeyReport)
 export class Security2CCNetworkKeyReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCNetworkKeyReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 17);
 			this.grantedKey = bitMaskToSecurityClass(this.payload, 0);
@@ -2526,12 +2512,11 @@ export interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
 // FIXME: maybe use the dynamic @expectedCCResponse instead?
 export class Security2CCNetworkKeyGet extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCNetworkKeyGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.requestedKey = bitMaskToSecurityClass(this.payload, 0);
@@ -2572,12 +2557,11 @@ export interface Security2CCTransferEndOptions extends CCCommandOptions {
 @CCCommand(Security2Command.TransferEnd)
 export class Security2CCTransferEnd extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCTransferEndOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.keyVerified = !!(this.payload[0] & 0b10);
@@ -2619,12 +2603,11 @@ export interface Security2CCCommandsSupportedReportOptions
 @CCCommand(Security2Command.CommandsSupportedReport)
 export class Security2CCCommandsSupportedReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCCommandsSupportedReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			const CCs = parseCCList(this.payload);
 			// SDS13783: A sending node MAY terminate the list of supported command classes with the

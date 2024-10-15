@@ -23,7 +23,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
@@ -92,7 +91,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			lowPriority = false,
 			...cmdOptions
 		} = options;
-		const cc = new SupervisionCCReport(this.applHost, {
+		const cc = new SupervisionCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...cmdOptions,
@@ -144,7 +143,6 @@ export class SupervisionCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		host: ZWaveHost,
 		cc: CommandClass,
 		sessionId: number,
 		requestStatusUpdates: boolean = true,
@@ -156,7 +154,7 @@ export class SupervisionCC extends CommandClass {
 			);
 		}
 
-		const ret = new SupervisionCCGet(host, {
+		const ret = new SupervisionCCGet({
 			nodeId: cc.nodeId,
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
 			endpoint: cc.endpointIndex,
@@ -291,12 +289,11 @@ export type SupervisionCCReportOptions =
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SupervisionCCReportOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -390,16 +387,15 @@ function testResponseForSupervisionCCGet(
 @expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | SupervisionCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.requestStatusUpdates = !!(this.payload[0] & 0b1_0_000000);
 			this.sessionId = this.payload[0] & 0b111111;
 
-			this.encapsulated = CommandClass.from(this.host, {
+			this.encapsulated = CommandClass.from({
 				data: this.payload.subarray(2),
 				fromEncapsulation: true,
 				encapCC: this,

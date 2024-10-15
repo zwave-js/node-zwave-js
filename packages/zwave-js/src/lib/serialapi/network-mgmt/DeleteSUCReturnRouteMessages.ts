@@ -4,7 +4,6 @@ import {
 	TransmitStatus,
 	encodeNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import type {
 	INodeQuery,
 	MessageEncodingContext,
@@ -29,26 +28,23 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class DeleteSUCReturnRouteRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
 				options.origin === MessageOrigin.Host
 				&& (new.target as any) !== DeleteSUCReturnRouteRequest
 			) {
-				return new DeleteSUCReturnRouteRequest(host, options);
+				return new DeleteSUCReturnRouteRequest(options);
 			} else if (
 				options.origin !== MessageOrigin.Host
 				&& (new.target as any)
 					!== DeleteSUCReturnRouteRequestTransmitReport
 			) {
-				return new DeleteSUCReturnRouteRequestTransmitReport(
-					host,
-					options,
-				);
+				return new DeleteSUCReturnRouteRequestTransmitReport(options);
 			}
 		}
 
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -74,12 +70,11 @@ export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| DeleteSUCReturnRouteRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.nodeId = this.payload[0];
 			this.callbackId = this.payload[1];
@@ -111,12 +106,11 @@ export class DeleteSUCReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| DeleteSUCReturnRouteResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.wasExecuted = this.payload[0] !== 0;
 		} else {
@@ -155,12 +149,11 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| DeleteSUCReturnRouteRequestTransmitReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];

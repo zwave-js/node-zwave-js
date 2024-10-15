@@ -21,7 +21,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -208,7 +207,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			HumidityControlSetpointCommand.Get,
 		);
 
-		const cc = new HumidityControlSetpointCCGet(this.applHost, {
+		const cc = new HumidityControlSetpointCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			setpointType,
@@ -241,7 +240,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			HumidityControlSetpointCommand.Set,
 		);
 
-		const cc = new HumidityControlSetpointCCSet(this.applHost, {
+		const cc = new HumidityControlSetpointCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			setpointType,
@@ -260,7 +259,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			HumidityControlSetpointCommand.CapabilitiesGet,
 		);
 
-		const cc = new HumidityControlSetpointCCCapabilitiesGet(this.applHost, {
+		const cc = new HumidityControlSetpointCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			setpointType,
@@ -289,7 +288,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			HumidityControlSetpointCommand.SupportedGet,
 		);
 
-		const cc = new HumidityControlSetpointCCSupportedGet(this.applHost, {
+		const cc = new HumidityControlSetpointCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -311,14 +310,11 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			HumidityControlSetpointCommand.SupportedGet,
 		);
 
-		const cc = new HumidityControlSetpointCCScaleSupportedGet(
-			this.applHost,
-			{
-				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
-				setpointType,
-			},
-		);
+		const cc = new HumidityControlSetpointCCScaleSupportedGet({
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			setpointType,
+		});
 		const response = await this.applHost.sendCommand<
 			HumidityControlSetpointCCScaleSupportedReport
 		>(
@@ -527,12 +523,11 @@ export interface HumidityControlSetpointCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -576,10 +571,9 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 @CCCommand(HumidityControlSetpointCommand.Report)
 export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this._type = this.payload[0] & 0b1111;
@@ -675,12 +669,11 @@ export interface HumidityControlSetpointCCGetOptions extends CCCommandOptions {
 )
 export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -717,10 +710,9 @@ export class HumidityControlSetpointCCSupportedReport
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this.supportedSetpointTypes = parseBitMask(
@@ -764,10 +756,9 @@ export class HumidityControlSetpointCCScaleSupportedReport
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 
@@ -807,12 +798,11 @@ export class HumidityControlSetpointCCScaleSupportedGet
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCScaleSupportedGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -849,10 +839,9 @@ export class HumidityControlSetpointCCCapabilitiesReport
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this._type = this.payload[0] & 0b1111;
@@ -940,12 +929,11 @@ export class HumidityControlSetpointCCCapabilitiesGet
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCCapabilitiesGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

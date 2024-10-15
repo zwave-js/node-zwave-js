@@ -1,5 +1,4 @@
 import { MessagePriority, encodeBitMask, parseBitMask } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -25,12 +24,11 @@ const NUM_LONG_RANGE_SHADOW_NODE_IDS = 4;
 @priority(MessagePriority.Controller)
 export class SetLongRangeShadowNodeIDsRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| LongRangeShadowNodeIDsRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.shadowNodeIds = parseBitMask(

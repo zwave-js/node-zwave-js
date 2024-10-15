@@ -4,7 +4,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -31,12 +30,11 @@ export interface ExtNVMWriteLongBufferRequestOptions
 @expectedResponse(FunctionType.ExtNVMWriteLongBuffer)
 export class ExtNVMWriteLongBufferRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ExtNVMWriteLongBufferRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -87,10 +85,9 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.ExtNVMWriteLongBuffer)
 export class ExtNVMWriteLongBufferResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 

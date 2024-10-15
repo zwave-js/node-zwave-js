@@ -98,39 +98,6 @@ export interface CCEncodingContext
 	): void;
 }
 
-/** Host application abstractions to be used in Serial API and CC implementations */
-export interface ZWaveHost {
-	/**
-	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
-	 * Returns 1 if the node claims that it does not support a CC.
-	 * Returns `undefined` for CCs that are not implemented in this library yet.
-	 */
-	getSafeCCVersion(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
-	): number | undefined;
-
-	/**
-	 * Retrieves the maximum version of a command class the given node/endpoint has reported support for.
-	 * Returns 0 when the CC is not supported or that information is not known yet.
-	 */
-	getSupportedCCVersion(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
-	): number;
-
-	/**
-	 * Determines whether a CC must be secure for a given node and endpoint.
-	 */
-	isCCSecure(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
-	): boolean;
-}
-
 /** Host application abstractions that provide support for reading and writing values to a database */
 export interface GetValueDB {
 	/** Returns the value DB which belongs to the node with the given ID, or throws if the Value DB cannot be accessed */
@@ -151,12 +118,10 @@ export interface GetAllNodes<T extends NodeId> {
 	getAllNodes(): T[];
 }
 
-/** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
 export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 	extends
 		GetValueDB,
 		HostIDs,
-		ZWaveHost,
 		GetNode<TNode>,
 		GetAllNodes<TNode>,
 		SecurityManagers,
@@ -189,6 +154,36 @@ export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 		nodeId: number,
 		valueId: ValueID,
 		options: NodeSchedulePollOptions,
+	): boolean;
+
+	/**
+	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
+	 * Returns 1 if the node claims that it does not support a CC.
+	 * Returns `undefined` for CCs that are not implemented in this library yet.
+	 */
+	getSafeCCVersion(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
+	): number | undefined;
+
+	/**
+	 * Retrieves the maximum version of a command class the given node/endpoint has reported support for.
+	 * Returns 0 when the CC is not supported or that information is not known yet.
+	 */
+	getSupportedCCVersion(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
+	): number;
+
+	/**
+	 * Determines whether a CC must be secure for a given node and endpoint.
+	 */
+	isCCSecure(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
 	): boolean;
 }
 

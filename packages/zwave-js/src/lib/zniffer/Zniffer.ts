@@ -5,6 +5,7 @@ import {
 	Security2CCNonceReport,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc";
+import { DeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
 	type LogConfig,
@@ -67,7 +68,6 @@ import fs from "node:fs/promises";
 import { sdkVersionGte } from "../controller/utils";
 import { type ZWaveOptions } from "../driver/ZWaveOptions";
 import { ZnifferLogger } from "../log/Zniffer";
-import { ZnifferCCParsingContext } from "./CCParsingContext";
 import {
 	type CorruptedFrame,
 	type Frame,
@@ -226,6 +226,34 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 				_granted: boolean,
 			): void {
 				// Do nothing
+			},
+
+			getDeviceConfig(_nodeId: number): DeviceConfig | undefined {
+				// Disable strict validation while parsing certain CCs
+				// Most of this stuff isn't actually needed, only the compat flags...
+				return new DeviceConfig(
+					"unknown.json",
+					false,
+					"UNKNOWN_MANUFACTURER",
+					0x0000,
+					"UNKNOWN_PRODUCT",
+					"UNKNOWN_DESCRIPTION",
+					[],
+					{
+						min: "0.0",
+						max: "255.255",
+					},
+					true,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					// ...down here:
+					{
+						disableStrictEntryControlDataValidation: true,
+						disableStrictMeasurementValidation: true,
+					},
+				);
 			},
 		};
 	}
@@ -536,16 +564,8 @@ supported frequencies: ${
 				}
 
 				// TODO: Support parsing multicast S2 frames
-
-				const ctx = new ZnifferCCParsingContext(
-					destNodeId,
-					mpdu.homeId,
-					destSecurityManager,
-					destSecurityManager2,
-					destSecurityManagerLR,
-				);
 				try {
-					cc = CommandClass.from(ctx, {
+					cc = CommandClass.from({
 						data: mpdu.payload,
 						fromEncapsulation: false,
 						nodeId: mpdu.sourceNodeId,
@@ -553,6 +573,9 @@ supported frequencies: ${
 							homeId: mpdu.homeId,
 							ownNodeId: destNodeId,
 							sourceNodeId: mpdu.sourceNodeId,
+							securityManager: destSecurityManager,
+							securityManager2: destSecurityManager2,
+							securityManagerLR: destSecurityManagerLR,
 							...this.parsingContext,
 						},
 					});

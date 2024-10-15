@@ -10,7 +10,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -79,7 +78,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			ThermostatSetbackCommand.Get,
 		);
 
-		const cc = new ThermostatSetbackCCGet(this.applHost, {
+		const cc = new ThermostatSetbackCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -104,7 +103,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			ThermostatSetbackCommand.Get,
 		);
 
-		const cc = new ThermostatSetbackCCSet(this.applHost, {
+		const cc = new ThermostatSetbackCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			setbackType,
@@ -179,12 +178,11 @@ export interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetbackCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.setbackType = this.payload[0] & 0b11;
@@ -235,12 +233,11 @@ export interface ThermostatSetbackCCReportOptions {
 @CCCommand(ThermostatSetbackCommand.Report)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & ThermostatSetbackCCReportOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);

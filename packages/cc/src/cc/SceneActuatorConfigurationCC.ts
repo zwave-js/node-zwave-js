@@ -15,7 +15,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -209,7 +208,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		// Undefined `dimmingDuration` defaults to 0 seconds to simplify the call
 		// for actuators that don't support non-instant `dimmingDuration`
 		// Undefined `level` uses the actuator's current value (override = 0).
-		const cc = new SceneActuatorConfigurationCCSet(this.applHost, {
+		const cc = new SceneActuatorConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
@@ -234,7 +233,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			SceneActuatorConfigurationCommand.Get,
 		);
 
-		const cc = new SceneActuatorConfigurationCCGet(this.applHost, {
+		const cc = new SceneActuatorConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId: 0,
@@ -274,7 +273,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new SceneActuatorConfigurationCCGet(this.applHost, {
+		const cc = new SceneActuatorConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId: sceneId,
@@ -360,12 +359,11 @@ export class SceneActuatorConfigurationCCSet
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActuatorConfigurationCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -420,10 +418,9 @@ export class SceneActuatorConfigurationCCReport
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 3);
 		this.sceneId = this.payload[0];
 
@@ -508,12 +505,11 @@ export class SceneActuatorConfigurationCCGet
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActuatorConfigurationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

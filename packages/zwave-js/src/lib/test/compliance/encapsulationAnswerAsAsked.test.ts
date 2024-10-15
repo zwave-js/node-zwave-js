@@ -41,10 +41,10 @@ integrationTest(
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			// We know that the driver must respond to Z-Wave Plus Info Get
 			// so we can use that to test
-			const zwpRequest = new ZWavePlusCCGet(mockNode.host, {
+			const zwpRequest = new ZWavePlusCCGet({
 				nodeId: mockController.ownNodeId,
 			});
-			const cc = CRC16CC.encapsulate(mockNode.host, zwpRequest);
+			const cc = CRC16CC.encapsulate(zwpRequest);
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
 			const { payload: response } = await mockNode.expectControllerFrame(
@@ -88,10 +88,10 @@ integrationTest(
 		testBody: async (t, driver, node, mockController, mockNode) => {
 			// We know that the driver must respond to Z-Wave Plus Info Get
 			// so we can use that to test
-			const zwpRequest = new ZWavePlusCCGet(mockNode.host, {
+			const zwpRequest = new ZWavePlusCCGet({
 				nodeId: mockController.ownNodeId,
 			});
-			const cc = MultiChannelCC.encapsulate(mockNode.host, zwpRequest);
+			const cc = MultiChannelCC.encapsulate(zwpRequest);
 			cc.endpointIndex = 2;
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
@@ -138,12 +138,11 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			const basicReport = new BasicCCReport(mockNode.host, {
+			const basicReport = new BasicCCReport({
 				nodeId: mockController.ownNodeId,
 				currentValue: 0,
 			});
 			const cc = SupervisionCC.encapsulate(
-				mockNode.host,
 				basicReport,
 				driver.getNextSupervisionSessionId(mockNode.id),
 			);
@@ -193,16 +192,15 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			const basicReport = new BasicCCReport(mockNode.host, {
+			const basicReport = new BasicCCReport({
 				nodeId: mockController.ownNodeId,
 				currentValue: 0,
 			});
 			const supervised = SupervisionCC.encapsulate(
-				mockNode.host,
 				basicReport,
 				driver.getNextSupervisionSessionId(mockNode.id),
 			);
-			const cc = MultiChannelCC.encapsulate(mockNode.host, supervised);
+			const cc = MultiChannelCC.encapsulate(supervised);
 			cc.endpointIndex = 2;
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));

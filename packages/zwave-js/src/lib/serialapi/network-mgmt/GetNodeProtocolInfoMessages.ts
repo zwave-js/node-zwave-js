@@ -12,7 +12,6 @@ import {
 	parseNodeID,
 	parseNodeProtocolInfo,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -36,12 +35,11 @@ interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetNodeProtocolInfoRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetNodeProtocolInfoRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.requestedNodeId =
 				parseNodeID(this.payload, options.ctx.nodeIdType, 0).nodeId;
@@ -67,12 +65,11 @@ interface GetNodeProtocolInfoResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetNodeProtocolInfoResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// The context should contain the node ID the protocol info was requested for.

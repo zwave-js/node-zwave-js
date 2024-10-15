@@ -5,7 +5,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -48,14 +47,14 @@ export enum LearnModeStatus {
 @messageTypes(MessageType.Request, FunctionType.SetLearnMode)
 @priority(MessagePriority.Controller)
 export class SetLearnModeRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== SetLearnModeCallback
 		) {
-			return new SetLearnModeCallback(host, options);
+			return new SetLearnModeCallback(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -67,10 +66,9 @@ export interface SetLearnModeRequestOptions extends MessageBaseOptions {
 // The callback may come much (30+ seconds), so we wait for it outside of the queue
 export class SetLearnModeRequest extends SetLearnModeRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SetLearnModeRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -107,10 +105,9 @@ export class SetLearnModeRequest extends SetLearnModeRequestBase {
 @messageTypes(MessageType.Response, FunctionType.SetLearnMode)
 export class SetLearnModeResponse extends Message implements SuccessIndicator {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -132,10 +129,9 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.callbackId = this.payload[0];
 		this.status = this.payload[1];

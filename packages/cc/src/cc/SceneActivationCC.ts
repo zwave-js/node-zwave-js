@@ -10,11 +10,7 @@ import {
 	ValueMetadata,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -112,7 +108,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			SceneActivationCommand.Set,
 		);
 
-		const cc = new SceneActivationCCSet(this.applHost, {
+		const cc = new SceneActivationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
@@ -139,12 +135,11 @@ export interface SceneActivationCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActivationCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.sceneId = this.payload[0];

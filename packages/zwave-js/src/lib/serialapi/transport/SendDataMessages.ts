@@ -16,7 +16,7 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { CCEncodingContext, ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -48,21 +48,21 @@ export const MAX_SEND_ATTEMPTS = 5;
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
 				options.origin === MessageOrigin.Host
 				&& (new.target as any) !== SendDataRequest
 			) {
-				return new SendDataRequest(host, options);
+				return new SendDataRequest(options);
 			} else if (
 				options.origin !== MessageOrigin.Host
 				&& (new.target as any) !== SendDataRequestTransmitReport
 			) {
-				return new SendDataRequestTransmitReport(host, options);
+				return new SendDataRequestTransmitReport(options);
 			}
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -81,10 +81,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SendDataRequestOptions<CCType>,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			let offset = 0;
@@ -105,7 +104,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			);
 
 			if (options.parseCCs !== false) {
-				this.command = CommandClass.from(host, {
+				this.command = CommandClass.from({
 					nodeId,
 					data: this.payload,
 					origin: options.origin,
@@ -226,12 +225,11 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataRequestTransmitReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -297,10 +295,9 @@ export interface SendDataResponseOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message implements SuccessIndicator {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SendDataResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.wasSent = this.payload[0] !== 0;
 		} else {
@@ -330,26 +327,23 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticast)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
 				options.origin === MessageOrigin.Host
 				&& (new.target as any) !== SendDataMulticastRequest
 			) {
-				return new SendDataMulticastRequest(host, options);
+				return new SendDataMulticastRequest(options);
 			} else if (
 				options.origin !== MessageOrigin.Host
 				&& (new.target as any)
 					!== SendDataMulticastRequestTransmitReport
 			) {
-				return new SendDataMulticastRequestTransmitReport(
-					host,
-					options,
-				);
+				return new SendDataMulticastRequestTransmitReport(options);
 			}
 		}
 
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -367,12 +361,11 @@ export class SendDataMulticastRequest<
 	CCType extends CommandClass = CommandClass,
 > extends SendDataMulticastRequestBase implements ICommandClassContainer {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastRequestOptions<CCType>,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			const numNodeIDs = this.payload[0];
@@ -403,7 +396,7 @@ export class SendDataMulticastRequest<
 			this.payload = serializedCC;
 
 			if (options.parseCCs !== false) {
-				this.command = CommandClass.from(host, {
+				this.command = CommandClass.from({
 					nodeId: this._nodeIds[0],
 					data: this.payload,
 					origin: options.origin,
@@ -525,12 +518,11 @@ export class SendDataMulticastRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastRequestTransmitReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -580,12 +572,11 @@ export class SendDataMulticastResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.wasSent = this.payload[0] !== 0;
 		} else {

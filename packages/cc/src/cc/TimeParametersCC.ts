@@ -17,7 +17,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -177,7 +176,7 @@ export class TimeParametersCCAPI extends CCAPI {
 			TimeParametersCommand.Get,
 		);
 
-		const cc = new TimeParametersCCGet(this.applHost, {
+		const cc = new TimeParametersCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -207,7 +206,7 @@ export class TimeParametersCCAPI extends CCAPI {
 
 		const useLocalTime = shouldUseLocalTime(this.applHost, endpointToCheck);
 
-		const cc = new TimeParametersCCSet(this.applHost, {
+		const cc = new TimeParametersCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			dateAndTime,
@@ -258,10 +257,9 @@ export class TimeParametersCC extends CommandClass {
 @CCCommand(TimeParametersCommand.Report)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 7);
 		const dateSegments = {
 			year: this.payload.readUInt16BE(0),
@@ -323,12 +321,11 @@ export interface TimeParametersCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeParametersCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 7);
 			const dateSegments = {

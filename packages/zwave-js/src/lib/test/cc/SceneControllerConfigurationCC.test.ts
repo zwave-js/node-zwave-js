@@ -34,7 +34,7 @@ function prepareTest(): { host: TestingHost; node2: IZWaveNode } {
 
 test("the Get command should serialize correctly", (t) => {
 	const { host } = prepareTest();
-	const cc = new SceneControllerConfigurationCCGet(host, {
+	const cc = new SceneControllerConfigurationCCGet({
 		nodeId: 2,
 		groupId: 1,
 	});
@@ -51,7 +51,7 @@ test.skip("the Get command should throw if GroupId > groupCount", (t) => {
 	const { host } = prepareTest();
 	// TODO: This check now lives on the CC API
 	t.notThrows(() => {
-		new SceneControllerConfigurationCCGet(host, {
+		new SceneControllerConfigurationCCGet({
 			nodeId: 2,
 			groupId: fakeGroupCount + 1,
 		});
@@ -60,7 +60,7 @@ test.skip("the Get command should throw if GroupId > groupCount", (t) => {
 
 test("the Set command should serialize correctly", (t) => {
 	const { host } = prepareTest();
-	const cc = new SceneControllerConfigurationCCSet(host, {
+	const cc = new SceneControllerConfigurationCCSet({
 		nodeId: 2,
 		groupId: 3,
 		sceneId: 240,
@@ -79,7 +79,7 @@ test("the Set command should serialize correctly", (t) => {
 
 test("the Set command should serialize correctly with undefined duration", (t) => {
 	const { host } = prepareTest();
-	const cc = new SceneControllerConfigurationCCSet(host, {
+	const cc = new SceneControllerConfigurationCCSet({
 		nodeId: 2,
 		groupId: 3,
 		sceneId: 240,
@@ -101,7 +101,7 @@ test.skip("the Set command should throw if GroupId > groupCount", (t) => {
 	// TODO: This check now lives on the CC API
 	t.notThrows(
 		() =>
-			new SceneControllerConfigurationCCSet(host, {
+			new SceneControllerConfigurationCCSet({
 				nodeId: 2,
 				groupId: fakeGroupCount + 1,
 				sceneId: 240,
@@ -120,7 +120,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x05, // dimming duration
 		]),
 	);
-	const cc = new SceneControllerConfigurationCCReport(host, {
+	const cc = new SceneControllerConfigurationCCReport({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,
@@ -136,7 +136,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new SceneControllerConfigurationCC(host, {
+	const cc: any = new SceneControllerConfigurationCC({
 		nodeId: 1,
 		data: serializedCC,
 		context: {} as any,

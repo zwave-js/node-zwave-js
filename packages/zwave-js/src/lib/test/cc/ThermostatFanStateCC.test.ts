@@ -21,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new ThermostatFanStateCCGet(host, { nodeId: 1 });
+	const cc = new ThermostatFanStateCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			ThermostatFanStateCommand.Get, // CC Command
@@ -37,7 +37,7 @@ test("the Report command (v1 - v2) should be deserialized correctly", (t) => {
 			ThermostatFanState["Idle / off"], // state
 		]),
 	);
-	const cc = new ThermostatFanStateCCReport(host, {
+	const cc = new ThermostatFanStateCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -50,7 +50,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new ThermostatFanStateCC(host, {
+	const cc: any = new ThermostatFanStateCC({
 		nodeId: 1,
 		data: serializedCC,
 		context: {} as any,

@@ -19,7 +19,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
@@ -449,7 +448,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserCodeCommand.UsersNumberGet,
 		);
 
-		const cc = new UserCodeCCUsersNumberGet(this.applHost, {
+		const cc = new UserCodeCCUsersNumberGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -482,7 +481,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				UserCodeCommand.ExtendedUserCodeGet,
 			);
 
-			const cc = new UserCodeCCExtendedUserCodeGet(this.applHost, {
+			const cc = new UserCodeCCExtendedUserCodeGet({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 				userId,
@@ -507,7 +506,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		} else {
 			this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Get);
 
-			const cc = new UserCodeCCGet(this.applHost, {
+			const cc = new UserCodeCCGet({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 				userId,
@@ -547,7 +546,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new UserCodeCCSet(this.applHost, {
+		const cc = new UserCodeCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			userId,
@@ -658,7 +657,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				}
 			}
 		}
-		const cc = new UserCodeCCExtendedUserCodeSet(this.applHost, {
+		const cc = new UserCodeCCExtendedUserCodeSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			userCodes: codes,
@@ -692,7 +691,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				);
 			}
 
-			const cc = new UserCodeCCSet(this.applHost, {
+			const cc = new UserCodeCCSet({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 				userId,
@@ -709,7 +708,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserCodeCommand.CapabilitiesGet,
 		);
 
-		const cc = new UserCodeCCCapabilitiesGet(this.applHost, {
+		const cc = new UserCodeCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -739,7 +738,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserCodeCommand.KeypadModeGet,
 		);
 
-		const cc = new UserCodeCCKeypadModeGet(this.applHost, {
+		const cc = new UserCodeCCKeypadModeGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -783,7 +782,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new UserCodeCCKeypadModeSet(this.applHost, {
+		const cc = new UserCodeCCKeypadModeSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			keypadMode,
@@ -798,7 +797,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserCodeCommand.AdminCodeGet,
 		);
 
-		const cc = new UserCodeCCAdminCodeGet(this.applHost, {
+		const cc = new UserCodeCCAdminCodeGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -851,7 +850,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new UserCodeCCAdminCodeSet(this.applHost, {
+		const cc = new UserCodeCCAdminCodeSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			adminCode,
@@ -866,7 +865,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserCodeCommand.UserCodeChecksumGet,
 		);
 
-		const cc = new UserCodeCCUserCodeChecksumGet(this.applHost, {
+		const cc = new UserCodeCCUserCodeChecksumGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -1233,12 +1232,11 @@ export type UserCodeCCSetOptions =
 @useSupervision()
 export class UserCodeCCSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & UserCodeCCSetOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.userId = this.payload[0];
@@ -1326,10 +1324,9 @@ export class UserCodeCCReport extends UserCodeCC
 	implements NotificationEventPayload
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | UserCodeCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -1429,10 +1426,9 @@ export interface UserCodeCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(UserCodeCCReport)
 export class UserCodeCCGet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | UserCodeCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.userId = this.payload[0];
@@ -1464,12 +1460,11 @@ export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.UsersNumberReport)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCUsersNumberReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -1523,12 +1518,11 @@ export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.CapabilitiesReport)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCCapabilitiesReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			let offset = 0;
@@ -1700,12 +1694,11 @@ export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 @useSupervision()
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCKeypadModeSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.keypadMode = this.payload[0];
@@ -1737,12 +1730,11 @@ export interface UserCodeCCKeypadModeReportOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.KeypadModeReport)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCKeypadModeReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.keypadMode = this.payload[0];
@@ -1803,12 +1795,11 @@ export interface UserCodeCCAdminCodeSetOptions extends CCCommandOptions {
 @useSupervision()
 export class UserCodeCCAdminCodeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCAdminCodeSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const codeLength = this.payload[0] & 0b1111;
@@ -1847,12 +1838,11 @@ export interface UserCodeCCAdminCodeReportOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.AdminCodeReport)
 export class UserCodeCCAdminCodeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCAdminCodeReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const codeLength = this.payload[0] & 0b1111;
@@ -1898,12 +1888,11 @@ export interface UserCodeCCUserCodeChecksumReportOptions
 @CCCommand(UserCodeCommand.UserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCUserCodeChecksumReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.userCodeChecksum = this.payload.readUInt16BE(0);
@@ -1948,12 +1937,11 @@ export interface UserCode {
 @useSupervision()
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCExtendedUserCodeSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2009,10 +1997,9 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 @CCCommand(UserCodeCommand.ExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		const numCodes = this.payload[0];
 		let offset = 1;
@@ -2076,12 +2063,11 @@ export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
 @expectedCCResponse(UserCodeCCExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCExtendedUserCodeGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

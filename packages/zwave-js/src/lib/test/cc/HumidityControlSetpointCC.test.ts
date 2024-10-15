@@ -28,7 +28,7 @@ const host = createTestingHost();
 const nodeId = 2;
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCGet(host, {
+	const cc = new HumidityControlSetpointCCGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Humidifier,
 	});
@@ -42,7 +42,7 @@ test("the Get command should serialize correctly", (t) => {
 });
 
 test("the Set command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCSet(host, {
+	const cc = new HumidityControlSetpointCCSet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Humidifier,
 		value: 57,
@@ -70,7 +70,7 @@ test("the Report command should be deserialized correctly", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const cc = new HumidityControlSetpointCCReport(host, {
+	const cc = new HumidityControlSetpointCCReport({
 		nodeId: nodeId,
 		data: ccData,
 		context: {} as any,
@@ -96,7 +96,7 @@ test("the Report command should set the correct value", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const report = new HumidityControlSetpointCCReport(host, {
+	const report = new HumidityControlSetpointCCReport({
 		nodeId: nodeId,
 		data: ccData,
 		context: {} as any,
@@ -128,7 +128,7 @@ test("the Report command should set the correct metadata", (t) => {
 			encodeFloatWithScale(12, 1),
 		]),
 	);
-	const report = new HumidityControlSetpointCCReport(host, {
+	const report = new HumidityControlSetpointCCReport({
 		nodeId: nodeId,
 		data: ccData,
 		context: {} as any,
@@ -149,7 +149,7 @@ test("the Report command should set the correct metadata", (t) => {
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCSupportedGet(host, {
+	const cc = new HumidityControlSetpointCCSupportedGet({
 		nodeId: nodeId,
 	});
 	const expected = buildCCBuffer(
@@ -168,7 +168,7 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
-	const cc = new HumidityControlSetpointCCSupportedReport(host, {
+	const cc = new HumidityControlSetpointCCSupportedReport({
 		nodeId: nodeId,
 		data: ccData,
 		context: {} as any,
@@ -188,7 +188,7 @@ test("the SupportedReport command should set the correct value", (t) => {
 			| (1 << HumidityControlSetpointType.Auto),
 		]),
 	);
-	const report = new HumidityControlSetpointCCSupportedReport(host, {
+	const report = new HumidityControlSetpointCCSupportedReport({
 		nodeId: nodeId,
 		data: ccData,
 		context: {} as any,
@@ -206,7 +206,7 @@ test("the SupportedReport command should set the correct value", (t) => {
 });
 
 test("the ScaleSupportedGet command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCScaleSupportedGet(host, {
+	const cc = new HumidityControlSetpointCCScaleSupportedGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Auto,
 	});
@@ -226,7 +226,7 @@ test("the ScaleSupportedReport command should be deserialized correctly", (t) =>
 			0b11, // percent + absolute
 		]),
 	);
-	const cc = new HumidityControlSetpointCCScaleSupportedReport(host, {
+	const cc = new HumidityControlSetpointCCScaleSupportedReport({
 		nodeId: nodeId,
 		data: ccData,
 		context: {} as any,
@@ -245,7 +245,7 @@ test("the ScaleSupportedReport command should be deserialized correctly", (t) =>
 });
 
 test("the CapabilitiesGet command should serialize correctly", (t) => {
-	const cc = new HumidityControlSetpointCCCapabilitiesGet(host, {
+	const cc = new HumidityControlSetpointCCCapabilitiesGet({
 		nodeId: nodeId,
 		setpointType: HumidityControlSetpointType.Auto,
 	});
@@ -269,7 +269,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 			encodeFloatWithScale(90, 1),
 		]),
 	);
-	const cc = new HumidityControlSetpointCCCapabilitiesReport(host, {
+	const cc = new HumidityControlSetpointCCCapabilitiesReport({
 		nodeId: nodeId,
 		data: ccData,
 		context: {} as any,
@@ -293,7 +293,7 @@ test("the CapabilitiesReport command should set the correct metadata", (t) => {
 			encodeFloatWithScale(90, 1),
 		]),
 	);
-	const report = new HumidityControlSetpointCCCapabilitiesReport(host, {
+	const report = new HumidityControlSetpointCCCapabilitiesReport({
 		nodeId: nodeId,
 		data: ccData,
 		context: {} as any,

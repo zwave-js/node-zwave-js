@@ -22,7 +22,7 @@ integrationTest(
 				"Lock state",
 			).id;
 
-			let cc = new NotificationCCReport(mockNode.host, {
+			let cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06, // Access Control,
 				notificationEvent: 0x0b, // Lock jammed
@@ -37,7 +37,7 @@ integrationTest(
 
 			t.is(node.getValue(lockStateValueId), 0x0b /* Lock jammed */);
 
-			cc = new NotificationCCReport(mockNode.host, {
+			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06, // Access Control,
 				notificationEvent: 0x06, // Keypad Unlock Operation

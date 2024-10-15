@@ -14,7 +14,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -55,7 +54,7 @@ export class ClockCCAPI extends CCAPI {
 	public async get() {
 		this.assertSupportsCommand(ClockCommand, ClockCommand.Get);
 
-		const cc = new ClockCCGet(this.applHost, {
+		const cc = new ClockCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -76,7 +75,7 @@ export class ClockCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(ClockCommand, ClockCommand.Set);
 
-		const cc = new ClockCCSet(this.applHost, {
+		const cc = new ClockCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			hour,
@@ -154,10 +153,9 @@ export interface ClockCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ClockCCSet extends ClockCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ClockCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -207,10 +205,9 @@ export class ClockCCSet extends ClockCC {
 @CCCommand(ClockCommand.Report)
 export class ClockCCReport extends ClockCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 2);
 
 		this.weekday = this.payload[0] >>> 5;

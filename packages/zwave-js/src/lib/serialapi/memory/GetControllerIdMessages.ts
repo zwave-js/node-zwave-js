@@ -1,6 +1,5 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
 import { MessagePriority, encodeNodeID, parseNodeID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -28,10 +27,9 @@ export interface GetControllerIdResponseOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.GetControllerId)
 export class GetControllerIdResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | GetControllerIdResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// The payload is 4 bytes home id, followed by the controller node id
 			this.homeId = this.payload.readUInt32BE(0);

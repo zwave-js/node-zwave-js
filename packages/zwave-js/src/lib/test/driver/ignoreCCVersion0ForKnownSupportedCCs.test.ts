@@ -77,7 +77,7 @@ integrationTest(
 						const nonce = smNode.generateNonce(
 							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
+						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
 							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
@@ -104,7 +104,7 @@ integrationTest(
 							const nonce = smNode.generateNonce(
 								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
+							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
 								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
@@ -130,18 +130,14 @@ integrationTest(
 							instanceof Security2CCCommandsSupportedGet
 					) {
 						let cc: CommandClass =
-							new Security2CCCommandsSupportedReport(
-								self.host,
-								{
-									nodeId: controller.ownNodeId,
-									supportedCCs: [
-										// The node supports Version CC securely
-										CommandClasses.Version,
-									],
-								},
-							);
+							new Security2CCCommandsSupportedReport({
+								nodeId: controller.ownNodeId,
+								supportedCCs: [
+									// The node supports Version CC securely
+									CommandClasses.Version,
+								],
+							});
 						cc = Security2CC.encapsulate(
-							self.host,
 							cc,
 							self.id,
 							self.securityManagers,
@@ -162,17 +158,12 @@ integrationTest(
 						&& receivedCC.encapsulated.requestedCC
 							=== CommandClasses["Security 2"]
 					) {
-						let cc: CommandClass = new VersionCCCommandClassReport(
-							self.host,
-							{
-								nodeId: controller.ownNodeId,
-								requestedCC:
-									receivedCC.encapsulated.requestedCC,
-								ccVersion: 0,
-							},
-						);
+						let cc: CommandClass = new VersionCCCommandClassReport({
+							nodeId: controller.ownNodeId,
+							requestedCC: receivedCC.encapsulated.requestedCC,
+							ccVersion: 0,
+						});
 						cc = Security2CC.encapsulate(
-							self.host,
 							cc,
 							self.id,
 							self.securityManagers,
@@ -227,7 +218,7 @@ integrationTest(
 							controller.ownNodeId,
 							8,
 						);
-						const cc = new SecurityCCNonceReport(self.host, {
+						const cc = new SecurityCCNonceReport({
 							nodeId: controller.ownNodeId,
 							nonce,
 						});
@@ -244,7 +235,7 @@ integrationTest(
 						&& receivedCC.encapsulated
 							instanceof SecurityCCCommandsSupportedGet
 					) {
-						const nonceGet = new SecurityCCNonceGet(self.host, {
+						const nonceGet = new SecurityCCNonceGet({
 							nodeId: controller.ownNodeId,
 						});
 						await self.sendToController(
@@ -267,19 +258,15 @@ integrationTest(
 						const receiverNonce = nonceReport.payload.nonce;
 
 						const response: CommandClass =
-							new SecurityCCCommandsSupportedReport(
-								self.host,
-								{
-									nodeId: controller.ownNodeId,
-									supportedCCs: [
-										// The node supports Version CC securely
-										CommandClasses.Version,
-									],
-									controlledCCs: [],
-								},
-							);
+							new SecurityCCCommandsSupportedReport({
+								nodeId: controller.ownNodeId,
+								supportedCCs: [
+									// The node supports Version CC securely
+									CommandClasses.Version,
+								],
+								controlledCCs: [],
+							});
 						const cc = SecurityCC.encapsulate(
-							self.host,
 							self.id,
 							self.securityManagers.securityManager!,
 							response,
@@ -308,7 +295,7 @@ integrationTest(
 							=== CommandClasses.Security
 					) {
 						await wait(100);
-						const nonceGet = new SecurityCCNonceGet(self.host, {
+						const nonceGet = new SecurityCCNonceGet({
 							nodeId: controller.ownNodeId,
 						});
 						await self.sendToController(
@@ -331,18 +318,14 @@ integrationTest(
 						const receiverNonce = nonceReport.payload.nonce;
 
 						const response: CommandClass =
-							new VersionCCCommandClassReport(
-								self.host,
-								{
-									nodeId: controller.ownNodeId,
-									requestedCC:
-										receivedCC.encapsulated.requestedCC,
-									ccVersion: 0,
-								},
-							);
+							new VersionCCCommandClassReport({
+								nodeId: controller.ownNodeId,
+								requestedCC:
+									receivedCC.encapsulated.requestedCC,
+								ccVersion: 0,
+							});
 
 						const cc = SecurityCC.encapsulate(
-							self.host,
 							self.id,
 							self.securityManagers.securityManager!,
 							response,

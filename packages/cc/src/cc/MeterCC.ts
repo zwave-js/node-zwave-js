@@ -29,7 +29,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
@@ -356,7 +355,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	): Promise<MeterReading | undefined> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Get);
 
-		const cc = new MeterCCGet(this.applHost, {
+		const cc = new MeterCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -386,7 +385,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Report);
 
-		const cc = new MeterCCReport(this.applHost, {
+		const cc = new MeterCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -447,7 +446,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	public async getSupported() {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.SupportedGet);
 
-		const cc = new MeterCCSupportedGet(this.applHost, {
+		const cc = new MeterCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -473,7 +472,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	): Promise<void> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.SupportedReport);
 
-		const cc = new MeterCCSupportedReport(this.applHost, {
+		const cc = new MeterCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -487,7 +486,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Reset);
 
-		const cc = new MeterCCReset(this.applHost, {
+		const cc = new MeterCCReset({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -879,12 +878,11 @@ export interface MeterCCReportOptions {
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			const { type, rateType, scale1, value, bytesRead } =
@@ -1104,12 +1102,11 @@ export interface MeterCCGetOptions {
 @expectedCCResponse(MeterCCReport, testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCGetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			if (this.payload.length >= 1) {
 				this.rateType = (this.payload[0] & 0b11_000_000) >>> 6;
@@ -1198,12 +1195,11 @@ export interface MeterCCSupportedReportOptions {
 @CCCommand(MeterCommand.SupportedReport)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCSupportedReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -1366,12 +1362,11 @@ export type MeterCCResetOptions = AllOrNone<{
 @useSupervision()
 export class MeterCCReset extends MeterCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCResetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			if (this.payload.length > 0) {
 				const {

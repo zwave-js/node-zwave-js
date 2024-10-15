@@ -19,7 +19,7 @@ integrationTest("CC values are created using the known CC version", {
 	),
 
 	testBody: async (t, driver, node, mockController, mockNode) => {
-		const batteryReport = new BatteryCCReport(mockNode.host, {
+		const batteryReport = new BatteryCCReport({
 			nodeId: mockController.ownNodeId,
 			isLow: true,
 		});

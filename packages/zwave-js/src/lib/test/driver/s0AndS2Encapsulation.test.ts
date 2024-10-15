@@ -95,7 +95,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 						controller.ownNodeId,
 						8,
 					);
-					const cc = new SecurityCCNonceReport(self.host, {
+					const cc = new SecurityCCNonceReport({
 						nodeId: controller.ownNodeId,
 						nonce,
 					});
@@ -124,7 +124,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 					const nonce = sm2Node.generateNonce(
 						controller.ownNodeId,
 					);
-					const cc = new Security2CCNonceReport(self.host, {
+					const cc = new Security2CCNonceReport({
 						nodeId: controller.ownNodeId,
 						ownNodeId: self.id,
 						securityManagers: self.securityManagers,
@@ -151,7 +151,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 						const nonce = sm2Node.generateNonce(
 							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
+						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
 							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
@@ -173,14 +173,13 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 					receivedCC instanceof Security2CCMessageEncapsulation
 					&& receivedCC.encapsulated instanceof SupervisionCCGet
 				) {
-					let cc: CommandClass = new SupervisionCCReport(self.host, {
+					let cc: CommandClass = new SupervisionCCReport({
 						nodeId: controller.ownNodeId,
 						sessionId: receivedCC.encapsulated.sessionId,
 						moreUpdatesFollow: false,
 						status: SupervisionStatus.Success,
 					});
 					cc = Security2CC.encapsulate(
-						self.host,
 						cc,
 						self.id,
 						self.securityManagers,

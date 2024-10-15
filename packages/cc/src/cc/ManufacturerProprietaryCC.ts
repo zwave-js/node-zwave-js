@@ -7,7 +7,6 @@ import {
 import type {
 	CCEncodingContext,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -37,7 +36,7 @@ export type ManufacturerProprietaryCCConstructor<
 		typeof ManufacturerProprietaryCC,
 > = T & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
-	new (host: ZWaveHost, options: any): InstanceType<T>;
+	new (options: any): InstanceType<T>;
 };
 
 @API(CommandClasses["Manufacturer Proprietary"])
@@ -71,7 +70,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		manufacturerId: number,
 		data?: Buffer,
 	): Promise<void> {
-		const cc = new ManufacturerProprietaryCC(this.applHost, {
+		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			manufacturerId,
@@ -84,7 +83,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async sendAndReceiveData(manufacturerId: number, data?: Buffer) {
-		const cc = new ManufacturerProprietaryCC(this.applHost, {
+		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			manufacturerId,
@@ -137,12 +136,11 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
 
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ManufacturerProprietaryCCOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -159,7 +157,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				&& new.target !== PCConstructor
 				&& !staticExtends(new.target, PCConstructor)
 			) {
-				return new PCConstructor(host, options);
+				return new PCConstructor(options);
 			}
 
 			// If the constructor is correct, update the payload for subclass deserialization
@@ -218,7 +216,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				this.manufacturerId,
 			);
 			if (PCConstructor) {
-				return new PCConstructor(this.host, {
+				return new PCConstructor({
 					nodeId: this.nodeId,
 					endpoint: this.endpointIndex,
 				});

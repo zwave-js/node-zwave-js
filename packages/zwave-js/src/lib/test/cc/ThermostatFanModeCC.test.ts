@@ -21,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new ThermostatFanModeCCGet(host, { nodeId: 5 });
+	const cc = new ThermostatFanModeCCGet({ nodeId: 5 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			ThermostatFanModeCommand.Get, // CC Command
@@ -31,7 +31,7 @@ test("the Get command should serialize correctly", (t) => {
 });
 
 test("the Set command should serialize correctly (off = false)", (t) => {
-	const cc = new ThermostatFanModeCCSet(host, {
+	const cc = new ThermostatFanModeCCSet({
 		nodeId: 5,
 		mode: ThermostatFanMode["Auto medium"],
 		off: false,
@@ -46,7 +46,7 @@ test("the Set command should serialize correctly (off = false)", (t) => {
 });
 
 test("the Set command should serialize correctly (off = true)", (t) => {
-	const cc = new ThermostatFanModeCCSet(host, {
+	const cc = new ThermostatFanModeCCSet({
 		nodeId: 5,
 		mode: ThermostatFanMode["Auto medium"],
 		off: true,
@@ -67,7 +67,7 @@ test("the Report command should be deserialized correctly", (t) => {
 			0b1000_0010, // Off bit set to 1 and Auto high mode
 		]),
 	);
-	const cc = new ThermostatFanModeCCReport(host, {
+	const cc = new ThermostatFanModeCCReport({
 		nodeId: 5,
 		data: ccData,
 		context: {} as any,

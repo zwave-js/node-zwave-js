@@ -12,7 +12,6 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
 import {
@@ -82,10 +81,7 @@ export class TransportServiceCC extends CommandClass
 	}
 
 	/** Encapsulates a command that should be sent in multiple segments */
-	public static encapsulate(
-		_host: ZWaveHost,
-		_cc: CommandClass,
-	): TransportServiceCC {
+	public static encapsulate(_cc: CommandClass): TransportServiceCC {
 		throw new Error("not implemented");
 	}
 }
@@ -118,12 +114,11 @@ export function isTransportServiceEncapsulation(
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCFirstSegmentOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// Deserialization has already split the datagram size from the ccCommand.
 			// Therefore we have one more payload byte
@@ -251,12 +246,11 @@ export interface TransportServiceCCSubsequentSegmentOptions
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSubsequentSegmentOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// Deserialization has already split the datagram size from the ccCommand.
 			// Therefore we have one more payload byte
@@ -373,7 +367,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		}
 
 		// and deserialize the CC
-		this._encapsulated = CommandClass.from(this.host, {
+		this._encapsulated = CommandClass.from({
 			data: datagram,
 			fromEncapsulation: true,
 			encapCC: this,
@@ -471,12 +465,11 @@ function testResponseForSegmentRequest(
 @expectedCCResponse(TransportServiceCC, testResponseForSegmentRequest)
 export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.sessionId = this.payload[1] >>> 4;
@@ -521,12 +514,11 @@ export interface TransportServiceCCSegmentCompleteOptions
 @CCCommand(TransportServiceCommand.SegmentComplete)
 export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentCompleteOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.sessionId = this.payload[1] >>> 4;
@@ -558,12 +550,11 @@ export interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
 @CCCommand(TransportServiceCommand.SegmentWait)
 export class TransportServiceCCSegmentWait extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentWaitOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.pendingSegments = this.payload[1];

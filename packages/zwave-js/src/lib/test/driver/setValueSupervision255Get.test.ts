@@ -32,7 +32,7 @@ integrationTest(
 			const respondToSupervisionGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof SupervisionCCGet) {
-						const cc = new SupervisionCCReport(self.host, {
+						const cc = new SupervisionCCReport({
 							nodeId: controller.ownNodeId,
 							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: false,
@@ -54,7 +54,7 @@ integrationTest(
 						&& !!receivedCC.encapsulated.duration
 							?.toMilliseconds()
 					) {
-						const cc1 = new SupervisionCCReport(self.host, {
+						const cc1 = new SupervisionCCReport({
 							nodeId: controller.ownNodeId,
 							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: true,
@@ -62,7 +62,7 @@ integrationTest(
 							duration: receivedCC.encapsulated.duration,
 						});
 
-						const cc2 = new SupervisionCCReport(self.host, {
+						const cc2 = new SupervisionCCReport({
 							nodeId: controller.ownNodeId,
 							sessionId: receivedCC.sessionId,
 							moreUpdatesFollow: false,
@@ -118,7 +118,7 @@ integrationTest(
 			const respondToMultilevelSwitchGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof MultilevelSwitchCCGet) {
-						const cc = new MultilevelSwitchCCReport(self.host, {
+						const cc = new MultilevelSwitchCCReport({
 							nodeId: controller.ownNodeId,
 							targetValue: 88,
 							currentValue: 88,

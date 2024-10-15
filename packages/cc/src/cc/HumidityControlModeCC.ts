@@ -16,7 +16,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -127,7 +126,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			HumidityControlModeCommand.Get,
 		);
 
-		const cc = new HumidityControlModeCCGet(this.applHost, {
+		const cc = new HumidityControlModeCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -151,7 +150,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			HumidityControlModeCommand.Set,
 		);
 
-		const cc = new HumidityControlModeCCSet(this.applHost, {
+		const cc = new HumidityControlModeCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			mode,
@@ -167,7 +166,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			HumidityControlModeCommand.SupportedGet,
 		);
 
-		const cc = new HumidityControlModeCCSupportedGet(this.applHost, {
+		const cc = new HumidityControlModeCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -286,12 +285,11 @@ export interface HumidityControlModeCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlModeCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -323,10 +321,9 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 @CCCommand(HumidityControlModeCommand.Report)
 export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this.mode = this.payload[0] & 0b1111;
@@ -354,10 +351,9 @@ export class HumidityControlModeCCSupportedReport
 	extends HumidityControlModeCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this._supportedModes = parseBitMask(

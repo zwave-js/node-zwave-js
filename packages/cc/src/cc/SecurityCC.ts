@@ -26,7 +26,6 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -115,7 +114,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			requestNextNonce
 				? SecurityCCCommandEncapsulationNonceGet
 				: SecurityCCCommandEncapsulation
-		)(this.applHost, {
+		)({
 			nodeId: this.endpoint.nodeId,
 			ownNodeId: this.applHost.ownNodeId,
 			securityManager: this.applHost.securityManager!,
@@ -130,7 +129,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 	public async getNonce(): Promise<Buffer | undefined> {
 		this.assertSupportsCommand(SecurityCommand, SecurityCommand.NonceGet);
 
-		const cc = new SecurityCCNonceGet(this.applHost, {
+		const cc = new SecurityCCNonceGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -180,7 +179,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		);
 		const nonceId = this.applHost.securityManager.getNonceId(nonce);
 
-		const cc = new SecurityCCNonceReport(this.applHost, {
+		const cc = new SecurityCCNonceReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			nonce,
@@ -215,7 +214,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 	public async getSecurityScheme(): Promise<[0]> {
 		this.assertSupportsCommand(SecurityCommand, SecurityCommand.SchemeGet);
 
-		const cc = new SecurityCCSchemeGet(this.applHost, {
+		const cc = new SecurityCCSchemeGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -230,12 +229,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			SecurityCommand.SchemeReport,
 		);
 
-		let cc: CommandClass = new SecurityCCSchemeReport(this.applHost, {
+		let cc: CommandClass = new SecurityCCSchemeReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
 		if (encapsulated) {
-			cc = new SecurityCCCommandEncapsulation(this.applHost, {
+			cc = new SecurityCCCommandEncapsulation({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 				ownNodeId: this.applHost.ownNodeId,
@@ -252,7 +251,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			SecurityCommand.SchemeInherit,
 		);
 
-		const cc = new SecurityCCSchemeInherit(this.applHost, {
+		const cc = new SecurityCCSchemeInherit({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -266,12 +265,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			SecurityCommand.NetworkKeySet,
 		);
 
-		const keySet = new SecurityCCNetworkKeySet(this.applHost, {
+		const keySet = new SecurityCCNetworkKeySet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			networkKey,
 		});
-		const cc = new SecurityCCCommandEncapsulation(this.applHost, {
+		const cc = new SecurityCCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			ownNodeId: this.applHost.ownNodeId,
@@ -288,7 +287,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			SecurityCommand.NetworkKeyVerify,
 		);
 
-		const cc = new SecurityCCNetworkKeyVerify(this.applHost, {
+		const cc = new SecurityCCNetworkKeyVerify({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -302,7 +301,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			SecurityCommand.CommandsSupportedGet,
 		);
 
-		const cc = new SecurityCCCommandsSupportedGet(this.applHost, {
+		const cc = new SecurityCCCommandsSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -326,7 +325,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			SecurityCommand.CommandsSupportedReport,
 		);
 
-		const cc = new SecurityCCCommandsSupportedReport(this.applHost, {
+		const cc = new SecurityCCCommandsSupportedReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			supportedCCs,
@@ -537,13 +536,12 @@ export class SecurityCC extends CommandClass {
 
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
-		host: ZWaveHost,
 		ownNodeId: number,
 		securityManager: SecurityManager,
 		cc: CommandClass,
 	): SecurityCCCommandEncapsulation {
 		// TODO: When to return a SecurityCCCommandEncapsulationNonceGet?
-		const ret = new SecurityCCCommandEncapsulation(host, {
+		const ret = new SecurityCCCommandEncapsulation({
 			nodeId: cc.nodeId,
 			ownNodeId,
 			securityManager,
@@ -566,12 +564,11 @@ interface SecurityCCNonceReportOptions extends CCCommandOptions {
 @CCCommand(SecurityCommand.NonceReport)
 export class SecurityCCNonceReport extends SecurityCC {
 	constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCNonceReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload.withReason("Invalid nonce length")(
 				this.payload.length === HALF_NONCE_SIZE,
@@ -632,12 +629,11 @@ function getCCResponseForCommandEncapsulation(
 )
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCCommandEncapsulationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.securityManager = this.assertSecurity(options);
 
@@ -769,7 +765,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// make sure this contains a complete CC command that's worth splitting
 		validatePayload(this.decryptedCCBytes.length >= 2);
 		// and deserialize the CC
-		this.encapsulated = CommandClass.from(this.host, {
+		this.encapsulated = CommandClass.from({
 			data: this.decryptedCCBytes,
 			fromEncapsulation: true,
 			encapCC: this,
@@ -875,10 +871,9 @@ export class SecurityCCCommandEncapsulationNonceGet
 @CCCommand(SecurityCommand.SchemeReport)
 export class SecurityCCSchemeReport extends SecurityCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			// The including controller MUST NOT perform any validation of the Supported Security Schemes byte
@@ -904,10 +899,9 @@ export class SecurityCCSchemeReport extends SecurityCC {
 @expectedCCResponse(SecurityCCSchemeReport)
 export class SecurityCCSchemeGet extends SecurityCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		// Don't care, we won't get sent this and we have no options
 	}
 
@@ -930,10 +924,9 @@ export class SecurityCCSchemeGet extends SecurityCC {
 @expectedCCResponse(SecurityCCSchemeReport)
 export class SecurityCCSchemeInherit extends SecurityCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		// Don't care, we won't get sent this and we have no options
 	}
 
@@ -964,12 +957,11 @@ export interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
 @expectedCCResponse(SecurityCCNetworkKeyVerify)
 export class SecurityCCNetworkKeySet extends SecurityCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCNetworkKeySetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 16);
 			this.networkKey = this.payload.subarray(0, 16);
@@ -1009,12 +1001,11 @@ export interface SecurityCCCommandsSupportedReportOptions
 @CCCommand(SecurityCommand.CommandsSupportedReport)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCCommandsSupportedReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);

@@ -5,7 +5,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { LongRangeChannel } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -30,10 +29,9 @@ export class GetLongRangeChannelRequest extends Message {}
 @priority(MessagePriority.Controller)
 export class GetLongRangeChannelResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.channel = this.payload[0];
 
 		if (this.payload.length >= 2) {
@@ -63,12 +61,11 @@ export interface SetLongRangeChannelRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.SetLongRangeChannel)
 export class SetLongRangeChannelRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SetLongRangeChannelRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -101,10 +98,9 @@ export class SetLongRangeChannelResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 

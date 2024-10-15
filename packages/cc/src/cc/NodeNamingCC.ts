@@ -13,7 +13,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -135,7 +134,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			NodeNamingAndLocationCommand.NameGet,
 		);
 
-		const cc = new NodeNamingAndLocationCCNameGet(this.applHost, {
+		const cc = new NodeNamingAndLocationCCNameGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -155,7 +154,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			NodeNamingAndLocationCommand.NameSet,
 		);
 
-		const cc = new NodeNamingAndLocationCCNameSet(this.applHost, {
+		const cc = new NodeNamingAndLocationCCNameSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			name,
@@ -169,7 +168,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			NodeNamingAndLocationCommand.LocationGet,
 		);
 
-		const cc = new NodeNamingAndLocationCCLocationGet(this.applHost, {
+		const cc = new NodeNamingAndLocationCCLocationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -191,7 +190,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			NodeNamingAndLocationCommand.LocationSet,
 		);
 
-		const cc = new NodeNamingAndLocationCCLocationSet(this.applHost, {
+		const cc = new NodeNamingAndLocationCCLocationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			location,
@@ -278,12 +277,11 @@ export interface NodeNamingAndLocationCCNameSetOptions
 @useSupervision()
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCNameSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -329,10 +327,9 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
 		let nameBuffer = this.payload.subarray(1);
 		if (encoding === "utf16le") {
@@ -371,12 +368,11 @@ export class NodeNamingAndLocationCCLocationSet
 	extends NodeNamingAndLocationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCLocationSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -424,10 +420,9 @@ export class NodeNamingAndLocationCCLocationReport
 	extends NodeNamingAndLocationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
 		let locationBuffer = this.payload.subarray(1);
 		if (encoding === "utf16le") {

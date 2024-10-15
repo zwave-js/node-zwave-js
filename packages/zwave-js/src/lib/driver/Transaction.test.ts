@@ -165,7 +165,7 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 		const driver = driverMock as any as Driver;
 		const msg = nodeId != undefined
 			? new SendDataRequest(driver, {
-				command: new NoOperationCC(driver, {
+				command: new NoOperationCC({
 					nodeId,
 				}),
 			})
@@ -274,7 +274,7 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 	function createTransaction(nodeId: number, priority: MessagePriority) {
 		const driver = driverMock as any as Driver;
 		const msg = new SendDataRequest(driver, {
-			command: new NoOperationCC(driver, { nodeId }),
+			command: new NoOperationCC({ nodeId }),
 		});
 		const ret = createDummyTransaction(driverMock, {
 			priority,

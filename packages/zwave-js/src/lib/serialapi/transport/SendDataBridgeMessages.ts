@@ -12,7 +12,7 @@ import {
 	ZWaveErrorCodes,
 	encodeNodeID,
 } from "@zwave-js/core";
-import type { CCEncodingContext, ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
 	SuccessIndicator,
@@ -40,14 +40,14 @@ import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
 export class SendDataBridgeRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== SendDataBridgeRequestTransmitReport
 		) {
-			return new SendDataBridgeRequestTransmitReport(host, options);
+			return new SendDataBridgeRequestTransmitReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -67,10 +67,9 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
 		options: SendDataBridgeRequestOptions<CCType>,
 	) {
-		super(host, options);
+		super(options);
 
 		if (!options.command.isSinglecast() && !options.command.isBroadcast()) {
 			throw new ZWaveError(
@@ -190,12 +189,11 @@ export class SendDataBridgeRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataBridgeRequestTransmitReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -241,10 +239,9 @@ export class SendDataBridgeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this._wasSent = this.payload[0] !== 0;
 	}
 
@@ -268,18 +265,15 @@ export class SendDataBridgeResponse extends Message
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticastBridge)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastBridgeRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any)
 				!== SendDataMulticastBridgeRequestTransmitReport
 		) {
-			return new SendDataMulticastBridgeRequestTransmitReport(
-				host,
-				options,
-			);
+			return new SendDataMulticastBridgeRequestTransmitReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -298,10 +292,9 @@ export class SendDataMulticastBridgeRequest<
 	CCType extends CommandClass = CommandClass,
 > extends SendDataMulticastBridgeRequestBase implements ICommandClassContainer {
 	public constructor(
-		host: ZWaveHost,
 		options: SendDataMulticastBridgeRequestOptions<CCType>,
 	) {
-		super(host, options);
+		super(options);
 
 		if (!options.command.isMulticast()) {
 			throw new ZWaveError(
@@ -417,12 +410,11 @@ export class SendDataMulticastBridgeRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastBridgeRequestTransmitReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -461,10 +453,9 @@ export class SendDataMulticastBridgeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this._wasSent = this.payload[0] !== 0;
 	}
 

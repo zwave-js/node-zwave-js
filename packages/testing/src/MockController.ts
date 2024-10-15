@@ -7,7 +7,6 @@ import {
 	type SecurityManagers,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
 	type MessageEncodingContext,
@@ -63,19 +62,6 @@ export class MockController {
 
 		this.ownNodeId = options.ownNodeId ?? 1;
 		this.homeId = options.homeId ?? 0x7e571000;
-
-		this.host = {
-			getSafeCCVersion: () => 100,
-			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
-				if (!this.nodes.has(nodeId)) {
-					return 0;
-				}
-				const node = this.nodes.get(nodeId)!;
-				const endpoint = node.endpoints.get(endpointIndex);
-				return (endpoint ?? node).implementedCCs.get(cc)?.version ?? 0;
-			},
-			isCCSecure: () => false,
-		};
 
 		this.capabilities = {
 			...getDefaultMockControllerCapabilities(),
@@ -184,8 +170,6 @@ export class MockController {
 		this._nodes.delete(node.id);
 	}
 
-	public readonly host: ZWaveHost;
-
 	public readonly capabilities: MockControllerCapabilities;
 
 	/** Can be used by behaviors to store controller related state */
@@ -228,7 +212,7 @@ export class MockController {
 
 		let msg: Message;
 		try {
-			msg = Message.from(this.host, {
+			msg = Message.from({
 				data,
 				origin: MessageOrigin.Host,
 				parseCCs: false,
@@ -253,7 +237,7 @@ export class MockController {
 			handler.resolve(msg);
 		} else {
 			for (const behavior of this.behaviors) {
-				if (await behavior.onHostMessage?.(this.host, this, msg)) {
+				if (await behavior.onHostMessage?.(this, msg)) {
 					return;
 				}
 			}
@@ -443,7 +427,7 @@ export class MockController {
 			// Then apply generic predefined behavior
 			for (const behavior of this.behaviors) {
 				if (
-					await behavior.onNodeFrame?.(this.host, this, node, frame)
+					await behavior.onNodeFrame?.(this, node, frame)
 				) {
 					return;
 				}
@@ -549,13 +533,11 @@ export class MockController {
 export interface MockControllerBehavior {
 	/** Gets called when a message from the host is received. Return `true` to indicate that the message has been handled. */
 	onHostMessage?: (
-		host: ZWaveHost,
 		controller: MockController,
 		msg: Message,
 	) => Promise<boolean | undefined> | boolean | undefined;
 	/** Gets called when a message from a node is received. Return `true` to indicate that the message has been handled. */
 	onNodeFrame?: (
-		host: ZWaveHost,
 		controller: MockController,
 		node: MockNode,
 		frame: MockZWaveFrame,

@@ -49,7 +49,7 @@ integrationTest(
 							controller.ownNodeId,
 							8,
 						);
-						const cc = new SecurityCCNonceReport(self.host, {
+						const cc = new SecurityCCNonceReport({
 							nodeId: controller.ownNodeId,
 							nonce,
 						});
@@ -85,7 +85,7 @@ integrationTest(
 			node.markAsAsleep();
 			mockNode.autoAckControllerFrames = false;
 
-			let nonceRequest = new SecurityCCNonceGet(mockNode.host, {
+			let nonceRequest = new SecurityCCNonceGet({
 				nodeId: mockController.ownNodeId,
 			});
 			await mockNode.sendToController(
@@ -123,7 +123,7 @@ integrationTest(
 			mockNode.autoAckControllerFrames = true;
 
 			// And subsequent requests must be answered
-			nonceRequest = new SecurityCCNonceGet(mockNode.host, {
+			nonceRequest = new SecurityCCNonceGet({
 				nodeId: mockController.ownNodeId,
 			});
 			await mockNode.sendToController(

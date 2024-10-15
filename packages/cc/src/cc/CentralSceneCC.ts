@@ -18,7 +18,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -115,7 +114,7 @@ export class CentralSceneCCAPI extends CCAPI {
 			CentralSceneCommand.SupportedGet,
 		);
 
-		const cc = new CentralSceneCCSupportedGet(this.applHost, {
+		const cc = new CentralSceneCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -141,7 +140,7 @@ export class CentralSceneCCAPI extends CCAPI {
 			CentralSceneCommand.ConfigurationGet,
 		);
 
-		const cc = new CentralSceneCCConfigurationGet(this.applHost, {
+		const cc = new CentralSceneCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -165,7 +164,7 @@ export class CentralSceneCCAPI extends CCAPI {
 			CentralSceneCommand.ConfigurationSet,
 		);
 
-		const cc = new CentralSceneCCConfigurationSet(this.applHost, {
+		const cc = new CentralSceneCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			slowRefresh,
@@ -303,10 +302,9 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 @CCCommand(CentralSceneCommand.Notification)
 export class CentralSceneCCNotification extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 3);
 		this.sequenceNumber = this.payload[0];
@@ -360,10 +358,9 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 @CCCommand(CentralSceneCommand.SupportedReport)
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 		this.sceneCount = this.payload[0];
@@ -458,10 +455,9 @@ export class CentralSceneCCSupportedGet extends CentralSceneCC {}
 @CCCommand(CentralSceneCommand.ConfigurationReport)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this.slowRefresh = !!(this.payload[0] & 0b1000_0000);
@@ -493,12 +489,11 @@ export interface CentralSceneCCConfigurationSetOptions
 @useSupervision()
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| CentralSceneCCConfigurationSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,

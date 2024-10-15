@@ -12,7 +12,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -128,7 +127,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			DoorLockLoggingCommand.RecordsSupportedGet,
 		);
 
-		const cc = new DoorLockLoggingCCRecordsSupportedGet(this.applHost, {
+		const cc = new DoorLockLoggingCCRecordsSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -151,7 +150,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			DoorLockLoggingCommand.RecordGet,
 		);
 
-		const cc = new DoorLockLoggingCCRecordGet(this.applHost, {
+		const cc = new DoorLockLoggingCCRecordGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			recordNumber,
@@ -233,10 +232,9 @@ export class DoorLockLoggingCC extends CommandClass {
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
 export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 
 		this.recordsCount = this.payload[0];
@@ -269,10 +267,9 @@ export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {}
 @CCCommand(DoorLockLoggingCommand.RecordReport)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 11);
 
 		this.recordNumber = this.payload[0];
@@ -372,12 +369,11 @@ function testResponseForDoorLockLoggingRecordGet(
 )
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| DoorLockLoggingCCRecordGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,

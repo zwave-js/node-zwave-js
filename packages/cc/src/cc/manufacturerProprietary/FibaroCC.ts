@@ -14,7 +14,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -113,7 +112,7 @@ export enum FibaroCCIDs {
 export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async fibaroVenetianBlindsGet() {
-		const cc = new FibaroVenetianBlindCCGet(this.applHost, {
+		const cc = new FibaroVenetianBlindCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -130,7 +129,7 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 
 	@validateArgs()
 	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
-		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
+		const cc = new FibaroVenetianBlindCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			position: value,
@@ -140,7 +139,7 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 
 	@validateArgs()
 	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
-		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
+		const cc = new FibaroVenetianBlindCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			tilt: value,
@@ -217,10 +216,9 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 @manufacturerId(MANUFACTURERID_FIBARO)
 export class FibaroCC extends ManufacturerProprietaryCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.fibaroCCId = this.payload[0];
@@ -234,7 +232,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 				FibaroConstructor
 				&& (new.target as any) !== FibaroConstructor
 			) {
-				return new FibaroConstructor(host, options);
+				return new FibaroConstructor(options);
 			}
 
 			this.payload = this.payload.subarray(2);
@@ -257,9 +255,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		for (const ccId of supportedFibaroCCIDs) {
 			const SubConstructor = getFibaroCCConstructor(ccId);
 			if (SubConstructor) {
-				const instance = new SubConstructor(applHost, {
-					nodeId: node.id,
-				});
+				const instance = new SubConstructor({ nodeId: node.id });
 				await instance.interview(applHost);
 			}
 		}
@@ -275,9 +271,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		for (const ccId of supportedFibaroCCIDs) {
 			const SubConstructor = getFibaroCCConstructor(ccId);
 			if (SubConstructor) {
-				const instance = new SubConstructor(applHost, {
-					nodeId: node.id,
-				});
+				const instance = new SubConstructor({ nodeId: node.id });
 				await instance.refreshValues(applHost);
 			}
 		}
@@ -315,10 +309,9 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	declare fibaroCCCommand: FibaroVenetianBlindCCCommand;
 
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.fibaroCCId = FibaroCCIDs.VenetianBlind;
 
 		if (gotDeserializationOptions(options)) {
@@ -326,7 +319,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 				this.fibaroCCCommand === FibaroVenetianBlindCCCommand.Report
 				&& (new.target as any) !== FibaroVenetianBlindCCReport
 			) {
-				return new FibaroVenetianBlindCCReport(host, options);
+				return new FibaroVenetianBlindCCReport(options);
 			}
 		}
 	}
@@ -356,7 +349,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 			direction: "outbound",
 		});
 		const resp = await applHost.sendCommand<FibaroVenetianBlindCCReport>(
-			new FibaroVenetianBlindCCGet(applHost, {
+			new FibaroVenetianBlindCCGet({
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
 			}),
@@ -392,12 +385,11 @@ export type FibaroVenetianBlindCCSetOptions =
 @fibaroCCCommand(FibaroVenetianBlindCCCommand.Set)
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| FibaroVenetianBlindCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Set;
 
 		if (Buffer.isBuffer(options)) {
@@ -444,10 +436,9 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 @fibaroCCCommand(FibaroVenetianBlindCCCommand.Report)
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Report;
 
 		validatePayload(this.payload.length >= 3);
@@ -519,10 +510,9 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 @expectedCCResponse(FibaroVenetianBlindCCReport)
 export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Get;
 	}
 }

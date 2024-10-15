@@ -31,7 +31,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("is an encapsulating CommandClass", (t) => {
-	let cc: CommandClass = new BasicCCSet(host, {
+	let cc: CommandClass = new BasicCCSet({
 		nodeId: 1,
 		targetValue: 50,
 	});
@@ -40,7 +40,7 @@ test("is an encapsulating CommandClass", (t) => {
 });
 
 test("the EndPointGet command should serialize correctly", (t) => {
-	const cc = new MultiChannelCCEndPointGet(host, { nodeId: 1 });
+	const cc = new MultiChannelCCEndPointGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultiChannelCommand.EndPointGet, // CC Command
@@ -50,7 +50,7 @@ test("the EndPointGet command should serialize correctly", (t) => {
 });
 
 test("the CapabilityGet command should serialize correctly", (t) => {
-	const cc = new MultiChannelCCCapabilityGet(host, {
+	const cc = new MultiChannelCCCapabilityGet({
 		nodeId: 2,
 		requestedEndpoint: 7,
 	});
@@ -64,7 +64,7 @@ test("the CapabilityGet command should serialize correctly", (t) => {
 });
 
 test("the EndPointFind command should serialize correctly", (t) => {
-	const cc = new MultiChannelCCEndPointFind(host, {
+	const cc = new MultiChannelCCEndPointFind({
 		nodeId: 2,
 		genericClass: 0x01,
 		specificClass: 0x02,
@@ -80,7 +80,7 @@ test("the EndPointFind command should serialize correctly", (t) => {
 });
 
 test("the CommandEncapsulation command should serialize correctly", (t) => {
-	let cc: CommandClass = new BasicCCSet(host, {
+	let cc: CommandClass = new BasicCCSet({
 		nodeId: 2,
 		targetValue: 5,
 		endpoint: 7,
@@ -100,7 +100,7 @@ test("the CommandEncapsulation command should serialize correctly", (t) => {
 });
 
 test("the AggregatedMembersGet command should serialize correctly", (t) => {
-	const cc = new MultiChannelCCAggregatedMembersGet(host, {
+	const cc = new MultiChannelCCAggregatedMembersGet({
 		nodeId: 2,
 		requestedEndpoint: 6,
 	});
@@ -115,14 +115,14 @@ test("the AggregatedMembersGet command should serialize correctly", (t) => {
 
 test("the CommandEncapsulation command should also accept V1CommandEncapsulation as a response", (t) => {
 	// GH#938
-	const sent = new MultiChannelCCCommandEncapsulation(host, {
+	const sent = new MultiChannelCCCommandEncapsulation({
 		nodeId: 2,
 		destination: 2,
-		encapsulated: new BasicCCGet(host, { nodeId: 2 }),
+		encapsulated: new BasicCCGet({ nodeId: 2 }),
 	});
-	const received = new MultiChannelCCV1CommandEncapsulation(host, {
+	const received = new MultiChannelCCV1CommandEncapsulation({
 		nodeId: 2,
-		encapsulated: new BasicCCReport(host, {
+		encapsulated: new BasicCCReport({
 			nodeId: 2,
 			currentValue: 50,
 		}),
@@ -141,7 +141,7 @@ test("the CommandEncapsulation command should also accept V1CommandEncapsulation
 // 			1, // duration
 // 		]),
 // 	);
-// 	const cc = new MultiChannelCCReport(host, { data: ccData });
+// 	const cc = new MultiChannelCCReport({ data: ccData });
 
 // 	t.is(cc.currentValue, 55);
 // 	t.is(cc.targetValue, 66);
@@ -153,7 +153,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new MultiChannelCC(host, {
+	const cc: any = new MultiChannelCC({
 		nodeId: 1,
 		data: serializedCC,
 		context: {} as any,
@@ -190,7 +190,7 @@ test("deserializing an unsupported command should return an unspecified version 
 test("MultiChannelCC/BasicCCGet should expect a response", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		host,
-		new BasicCCGet(host, {
+		new BasicCCGet({
 			nodeId: 2,
 			endpoint: 2,
 		}),
@@ -201,7 +201,7 @@ test("MultiChannelCC/BasicCCGet should expect a response", (t) => {
 test("MultiChannelCC/BasicCCGet (multicast) should expect NO response", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		host,
-		new BasicCCGet(host, {
+		new BasicCCGet({
 			nodeId: 2,
 			endpoint: 2,
 		}),
@@ -214,7 +214,7 @@ test("MultiChannelCC/BasicCCGet (multicast) should expect NO response", (t) => {
 test("MultiChannelCC/BasicCCSet should expect NO response", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		host,
-		new BasicCCSet(host, {
+		new BasicCCSet({
 			nodeId: 2,
 			endpoint: 2,
 			targetValue: 7,
@@ -226,14 +226,14 @@ test("MultiChannelCC/BasicCCSet should expect NO response", (t) => {
 test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = expected", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		host,
-		new BasicCCGet(host, {
+		new BasicCCGet({
 			nodeId: 2,
 			endpoint: 2,
 		}),
 	);
 	const ccResponse = MultiChannelCC.encapsulate(
 		host,
-		new BasicCCReport(host, {
+		new BasicCCReport({
 			nodeId: ccRequest.nodeId,
 			currentValue: 7,
 		}),
@@ -246,14 +246,14 @@ test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = expected", (t)
 test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCGet = unexpected", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		host,
-		new BasicCCGet(host, {
+		new BasicCCGet({
 			nodeId: 2,
 			endpoint: 2,
 		}),
 	);
 	const ccResponse = MultiChannelCC.encapsulate(
 		host,
-		new BasicCCGet(host, {
+		new BasicCCGet({
 			nodeId: ccRequest.nodeId,
 			endpoint: 2,
 		}),
@@ -266,13 +266,13 @@ test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCGet = unexpected", (t) 
 test("MultiChannelCC/BasicCCGet => MultiCommandCC/BasicCCReport = unexpected", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		host,
-		new BasicCCGet(host, {
+		new BasicCCGet({
 			nodeId: 2,
 			endpoint: 2,
 		}),
 	);
 	const ccResponse = MultiCommandCC.encapsulate(host, [
-		new BasicCCReport(host, {
+		new BasicCCReport({
 			nodeId: ccRequest.nodeId,
 			currentValue: 7,
 		}),

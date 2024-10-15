@@ -13,7 +13,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -136,7 +135,7 @@ export class WakeUpCCAPI extends CCAPI {
 	public async getInterval() {
 		this.assertSupportsCommand(WakeUpCommand, WakeUpCommand.IntervalGet);
 
-		const cc = new WakeUpCCIntervalGet(this.applHost, {
+		const cc = new WakeUpCCIntervalGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -158,7 +157,7 @@ export class WakeUpCCAPI extends CCAPI {
 			WakeUpCommand.IntervalCapabilitiesGet,
 		);
 
-		const cc = new WakeUpCCIntervalCapabilitiesGet(this.applHost, {
+		const cc = new WakeUpCCIntervalCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -186,7 +185,7 @@ export class WakeUpCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(WakeUpCommand, WakeUpCommand.IntervalSet);
 
-		const cc = new WakeUpCCIntervalSet(this.applHost, {
+		const cc = new WakeUpCCIntervalSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			wakeUpInterval,
@@ -201,7 +200,7 @@ export class WakeUpCCAPI extends CCAPI {
 			WakeUpCommand.NoMoreInformation,
 		);
 
-		const cc = new WakeUpCCNoMoreInformation(this.applHost, {
+		const cc = new WakeUpCCNoMoreInformation({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -364,12 +363,11 @@ export interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
 @useSupervision()
 export class WakeUpCCIntervalSet extends WakeUpCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| WakeUpCCIntervalSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.wakeUpInterval = this.payload.readUIntBE(0, 3);
@@ -408,10 +406,9 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 @CCCommand(WakeUpCommand.IntervalReport)
 export class WakeUpCCIntervalReport extends WakeUpCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 4);
 		this.wakeUpInterval = this.payload.readUIntBE(0, 3);
@@ -448,10 +445,9 @@ export class WakeUpCCNoMoreInformation extends WakeUpCC {}
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 12);
 		this.minWakeUpInterval = this.payload.readUIntBE(0, 3);

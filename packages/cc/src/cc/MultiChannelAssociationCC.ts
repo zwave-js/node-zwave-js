@@ -20,7 +20,6 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -205,13 +204,10 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			MultiChannelAssociationCommand.SupportedGroupingsGet,
 		);
 
-		const cc = new MultiChannelAssociationCCSupportedGroupingsGet(
-			this.applHost,
-			{
-				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
-			},
-		);
+		const cc = new MultiChannelAssociationCCSupportedGroupingsGet({
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
 		const response = await this.applHost.sendCommand<
 			MultiChannelAssociationCCSupportedGroupingsReport
 		>(
@@ -228,14 +224,11 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			MultiChannelAssociationCommand.SupportedGroupingsReport,
 		);
 
-		const cc = new MultiChannelAssociationCCSupportedGroupingsReport(
-			this.applHost,
-			{
-				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
-				groupCount,
-			},
-		);
+		const cc = new MultiChannelAssociationCCSupportedGroupingsReport({
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			groupCount,
+		});
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
@@ -250,7 +243,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			MultiChannelAssociationCommand.Get,
 		);
 
-		const cc = new MultiChannelAssociationCCGet(this.applHost, {
+		const cc = new MultiChannelAssociationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -275,7 +268,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			MultiChannelAssociationCommand.Report,
 		);
 
-		const cc = new MultiChannelAssociationCCReport(this.applHost, {
+		const cc = new MultiChannelAssociationCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -295,7 +288,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			MultiChannelAssociationCommand.Set,
 		);
 
-		const cc = new MultiChannelAssociationCCSet(this.applHost, {
+		const cc = new MultiChannelAssociationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -324,7 +317,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 					this.endpoint,
 				);
 			for (const [group, destinations] of currentDestinations) {
-				const cc = new MultiChannelAssociationCCRemove(this.applHost, {
+				const cc = new MultiChannelAssociationCCRemove({
 					nodeId: this.endpoint.nodeId,
 					endpoint: this.endpoint.index,
 					groupId: group,
@@ -345,7 +338,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		} else {
-			const cc = new MultiChannelAssociationCCRemove(this.applHost, {
+			const cc = new MultiChannelAssociationCCRemove({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 				...options,
@@ -634,12 +627,11 @@ export type MultiChannelAssociationCCSetOptions =
 @useSupervision()
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCSetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.groupId = this.payload[0];
@@ -708,12 +700,11 @@ export interface MultiChannelAssociationCCRemoveOptions {
 @useSupervision()
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCRemoveOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.groupId = this.payload[0];
@@ -774,12 +765,11 @@ export interface MultiChannelAssociationCCReportOptions {
 @CCCommand(MultiChannelAssociationCommand.Report)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -883,12 +873,11 @@ export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelAssociationCCReport)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelAssociationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.groupId = this.payload[0];
@@ -930,12 +919,11 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 	extends MultiChannelAssociationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelAssociationCCSupportedGroupingsReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);

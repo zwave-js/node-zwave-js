@@ -1,5 +1,4 @@
 import { MessagePriority } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -22,10 +21,9 @@ interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: SetSerialApiTimeoutsRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.ackTimeout = options.ackTimeout;
 		this.byteTimeout = options.byteTimeout;
 	}
@@ -45,10 +43,9 @@ export class SetSerialApiTimeoutsRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.SetSerialApiTimeouts)
 export class SetSerialApiTimeoutsResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this._oldAckTimeout = this.payload[0] * 10;
 		this._oldByteTimeout = this.payload[1] * 10;
 	}

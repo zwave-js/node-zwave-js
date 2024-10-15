@@ -1,5 +1,4 @@
 import { ControllerCapabilityFlags, MessagePriority } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -32,12 +31,11 @@ export interface GetControllerCapabilitiesResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetControllerCapabilitiesResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			const capabilityFlags = this.payload[0];

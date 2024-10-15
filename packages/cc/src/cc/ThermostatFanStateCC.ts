@@ -8,11 +8,7 @@ import {
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	GetValueDB,
-	ZWaveApplicationHost,
-	ZWaveHost,
-} from "@zwave-js/host/safe";
+import type { GetValueDB, ZWaveApplicationHost } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -82,7 +78,7 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 			ThermostatFanStateCommand.Get,
 		);
 
-		const cc = new ThermostatFanStateCCGet(this.applHost, {
+		const cc = new ThermostatFanStateCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -155,10 +151,9 @@ export class ThermostatFanStateCC extends CommandClass {
 @CCCommand(ThermostatFanStateCommand.Report)
 export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length == 1);
 		this.state = this.payload[0] & 0b1111;

@@ -15,7 +15,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -64,7 +63,7 @@ export class TimeCCAPI extends CCAPI {
 	public async getTime() {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeGet);
 
-		const cc = new TimeCCTimeGet(this.applHost, {
+		const cc = new TimeCCTimeGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -85,7 +84,7 @@ export class TimeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeReport);
 
-		const cc = new TimeCCTimeReport(this.applHost, {
+		const cc = new TimeCCTimeReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			hour,
@@ -99,7 +98,7 @@ export class TimeCCAPI extends CCAPI {
 	public async getDate() {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.DateGet);
 
-		const cc = new TimeCCDateGet(this.applHost, {
+		const cc = new TimeCCDateGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -120,7 +119,7 @@ export class TimeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.DateReport);
 
-		const cc = new TimeCCDateReport(this.applHost, {
+		const cc = new TimeCCDateReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			year,
@@ -136,7 +135,7 @@ export class TimeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetSet);
 
-		const cc = new TimeCCTimeOffsetSet(this.applHost, {
+		const cc = new TimeCCTimeOffsetSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			standardOffset: timezone.standardOffset,
@@ -150,7 +149,7 @@ export class TimeCCAPI extends CCAPI {
 	public async getTimezone(): Promise<MaybeNotKnown<DSTInfo>> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetGet);
 
-		const cc = new TimeCCTimeOffsetGet(this.applHost, {
+		const cc = new TimeCCTimeOffsetGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -176,7 +175,7 @@ export class TimeCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetReport);
 
-		const cc = new TimeCCTimeOffsetReport(this.applHost, {
+		const cc = new TimeCCTimeOffsetReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			standardOffset: timezone.standardOffset,
@@ -239,10 +238,9 @@ export interface TimeCCTimeReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeReport)
 export class TimeCCTimeReport extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | TimeCCTimeReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.hour = this.payload[0] & 0b11111;
@@ -301,10 +299,9 @@ export interface TimeCCDateReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.DateReport)
 export class TimeCCDateReport extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | TimeCCDateReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.year = this.payload.readUInt16BE(0);
@@ -365,12 +362,11 @@ export interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 @useSupervision()
 export class TimeCCTimeOffsetSet extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeCCTimeOffsetSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -432,12 +428,11 @@ export interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeOffsetReport)
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeCCTimeOffsetReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 9);
 			const { standardOffset, dstOffset } = parseTimezone(this.payload);

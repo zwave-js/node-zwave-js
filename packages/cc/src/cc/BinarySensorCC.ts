@@ -14,7 +14,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -113,7 +112,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			BinarySensorCommand.Get,
 		);
 
-		const cc = new BinarySensorCCGet(this.applHost, {
+		const cc = new BinarySensorCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sensorType,
@@ -136,7 +135,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			BinarySensorCommand.Report,
 		);
 
-		const cc = new BinarySensorCCReport(this.applHost, {
+		const cc = new BinarySensorCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			value,
@@ -153,7 +152,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			BinarySensorCommand.SupportedGet,
 		);
 
-		const cc = new BinarySensorCCSupportedGet(this.applHost, {
+		const cc = new BinarySensorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -176,7 +175,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			BinarySensorCommand.SupportedReport,
 		);
 
-		const cc = new BinarySensorCCSupportedReport(this.applHost, {
+		const cc = new BinarySensorCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			supportedSensorTypes: supported,
@@ -347,12 +346,11 @@ export interface BinarySensorCCReportOptions extends CCCommandOptions {
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| BinarySensorCCReportOptions
 			| CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -431,10 +429,9 @@ export interface BinarySensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(BinarySensorCCReport, testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BinarySensorCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			if (this.payload.length >= 1) {
 				this.sensorType = this.payload[0];
@@ -472,12 +469,11 @@ export interface BinarySensorCCSupportedReportOptions {
 @CCCommand(BinarySensorCommand.SupportedReport)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (BinarySensorCCSupportedReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);

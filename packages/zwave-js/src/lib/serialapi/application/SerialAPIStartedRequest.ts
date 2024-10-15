@@ -5,7 +5,6 @@ import {
 	encodeCCList,
 	parseCCList,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -60,10 +59,9 @@ export interface SerialAPIStartedRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Normal)
 export class SerialAPIStartedRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SerialAPIStartedRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.wakeUpReason = this.payload[0];

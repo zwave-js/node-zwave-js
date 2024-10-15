@@ -21,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new BinarySwitchCCGet(host, { nodeId: 1 });
+	const cc = new BinarySwitchCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BinarySwitchCommand.Get, // CC Command
@@ -31,7 +31,7 @@ test("the Get command should serialize correctly", (t) => {
 });
 
 test("the Set command should serialize correctly (no duration)", (t) => {
-	const cc = new BinarySwitchCCSet(host, {
+	const cc = new BinarySwitchCCSet({
 		nodeId: 2,
 		targetValue: false,
 	});
@@ -53,7 +53,7 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 
 test("the Set command should serialize correctly", (t) => {
 	const duration = new Duration(2, "minutes");
-	const cc = new BinarySwitchCCSet(host, {
+	const cc = new BinarySwitchCCSet({
 		nodeId: 2,
 		targetValue: true,
 		duration,
@@ -81,7 +81,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0xff, // current value
 		]),
 	);
-	const cc = new BinarySwitchCCReport(host, {
+	const cc = new BinarySwitchCCReport({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,
@@ -101,7 +101,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			1, // duration
 		]),
 	);
-	const cc = new BinarySwitchCCReport(host, {
+	const cc = new BinarySwitchCCReport({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,
@@ -117,7 +117,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new BinarySwitchCC(host, {
+	const cc: any = new BinarySwitchCC({
 		nodeId: 2,
 		data: serializedCC,
 		context: {} as any,

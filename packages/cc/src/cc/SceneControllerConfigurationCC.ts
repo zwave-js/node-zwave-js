@@ -16,7 +16,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -267,7 +266,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new SceneControllerConfigurationCCSet(this.applHost, {
+		const cc = new SceneControllerConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -291,7 +290,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			SceneControllerConfigurationCommand.Get,
 		);
 
-		const cc = new SceneControllerConfigurationCCGet(this.applHost, {
+		const cc = new SceneControllerConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId: 0,
@@ -339,7 +338,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new SceneControllerConfigurationCCGet(this.applHost, {
+		const cc = new SceneControllerConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -497,12 +496,11 @@ export class SceneControllerConfigurationCCSet
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneControllerConfigurationCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -548,10 +546,9 @@ export class SceneControllerConfigurationCCReport
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 3);
 		this.groupId = this.payload[0];
 		this.sceneId = this.payload[1];
@@ -620,12 +617,11 @@ export class SceneControllerConfigurationCCGet
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneControllerConfigurationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

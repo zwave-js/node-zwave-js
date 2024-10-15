@@ -340,14 +340,14 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 					);
 					let cc: TransportServiceCC;
 					if (segment === 0) {
-						cc = new TransportServiceCCFirstSegment(driver, {
+						cc = new TransportServiceCCFirstSegment({
 							nodeId,
 							sessionId,
 							datagramSize: payload.length,
 							partialDatagram: chunk,
 						});
 					} else {
-						cc = new TransportServiceCCSubsequentSegment(driver, {
+						cc = new TransportServiceCCSubsequentSegment({
 							nodeId,
 							sessionId,
 							datagramSize: payload.length,
@@ -524,7 +524,7 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 		let nonce: Buffer | undefined = secMan.getFreeNonce(nodeId);
 		if (!nonce) {
 			// No free nonce, request a new one
-			const cc = new SecurityCCNonceGet(driver, {
+			const cc = new SecurityCCNonceGet({
 				nodeId: nodeId,
 				endpoint: msg.command.endpointIndex,
 			});
@@ -603,7 +603,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			// Request a new nonce
 
 			// No free nonce, request a new one
-			const cc = new Security2CCNonceGet(driver, {
+			const cc = new Security2CCNonceGet({
 				nodeId: nodeId,
 				ownNodeId: driver.ownNodeId,
 				endpoint: msg.command.endpointIndex,
@@ -834,7 +834,7 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 					const innerMPANState = secMan.getInnerMPANState(groupId);
 					// This should always be defined, but better not throw unnecessarily here
 					if (innerMPANState) {
-						const cc = new Security2CCMessageEncapsulation(driver, {
+						const cc = new Security2CCMessageEncapsulation({
 							nodeId,
 							ownNodeId: driver.ownNodeId,
 							securityManagers: driver,
@@ -896,19 +896,16 @@ export const secureMessageGeneratorS2Multicast: MessageGeneratorImplementation =
 		if (finalSupervisionResult) {
 			// We can return return information about the success of this multicast - so we should
 			// TODO: Not sure if we need to "wrap" the response for something. For now, try faking it
-			const cc = new SupervisionCCReport(driver, {
+			const cc = new SupervisionCCReport({
 				nodeId: NODE_ID_BROADCAST,
 				sessionId: 0, // fake
 				moreUpdatesFollow: false, // fake
 				...(finalSupervisionResult as any),
 			});
-			const ret = new (driver.getSendDataSinglecastConstructor())(
-				driver,
-				{
-					sourceNodeId: driver.ownNodeId,
-					command: cc,
-				},
-			);
+			const ret = new (driver.getSendDataSinglecastConstructor())({
+				sourceNodeId: driver.ownNodeId,
+				command: cc,
+			});
 			return ret;
 		} else {
 			return response;

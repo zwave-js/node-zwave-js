@@ -1,6 +1,5 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
 	MultiStageCallback,
@@ -37,14 +36,14 @@ export interface RequestNodeNeighborUpdateRequestOptions
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
 @priority(MessagePriority.Controller)
 export class RequestNodeNeighborUpdateRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== RequestNodeNeighborUpdateReport
 		) {
-			return new RequestNodeNeighborUpdateReport(host, options);
+			return new RequestNodeNeighborUpdateReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -53,10 +52,9 @@ export class RequestNodeNeighborUpdateRequest
 	extends RequestNodeNeighborUpdateRequestBase
 {
 	public constructor(
-		host: ZWaveHost,
 		options: RequestNodeNeighborUpdateRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.nodeId = options.nodeId;
 		this.discoveryTimeout = options.discoveryTimeout;
 	}
@@ -90,10 +88,9 @@ export class RequestNodeNeighborUpdateReport
 	implements SuccessIndicator, MultiStageCallback
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.callbackId = this.payload[0];
 		this._updateStatus = this.payload[1];

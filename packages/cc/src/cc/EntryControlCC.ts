@@ -17,7 +17,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -115,7 +114,7 @@ export class EntryControlCCAPI extends CCAPI {
 			EntryControlCommand.KeySupportedGet,
 		);
 
-		const cc = new EntryControlCCKeySupportedGet(this.applHost, {
+		const cc = new EntryControlCCKeySupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -135,7 +134,7 @@ export class EntryControlCCAPI extends CCAPI {
 			EntryControlCommand.EventSupportedGet,
 		);
 
-		const cc = new EntryControlCCEventSupportedGet(this.applHost, {
+		const cc = new EntryControlCCEventSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -164,7 +163,7 @@ export class EntryControlCCAPI extends CCAPI {
 			EntryControlCommand.ConfigurationGet,
 		);
 
-		const cc = new EntryControlCCConfigurationGet(this.applHost, {
+		const cc = new EntryControlCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -189,7 +188,7 @@ export class EntryControlCCAPI extends CCAPI {
 			EntryControlCommand.ConfigurationGet,
 		);
 
-		const cc = new EntryControlCCConfigurationSet(this.applHost, {
+		const cc = new EntryControlCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			keyCacheSize,
@@ -397,10 +396,9 @@ key cache timeout: ${conf.keyCacheTimeout} seconds`,
 @CCCommand(EntryControlCommand.Notification)
 export class EntryControlCCNotification extends EntryControlCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 4);
 		this.sequenceNumber = this.payload[0];
@@ -499,10 +497,9 @@ export class EntryControlCCNotification extends EntryControlCC {
 @CCCommand(EntryControlCommand.KeySupportedReport)
 export class EntryControlCCKeySupportedReport extends EntryControlCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		const length = this.payload[0];
@@ -531,10 +528,9 @@ export class EntryControlCCKeySupportedGet extends EntryControlCC {}
 @CCCommand(EntryControlCommand.EventSupportedReport)
 export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		const dataTypeLength = this.payload[0] & 0b11;
@@ -630,10 +626,9 @@ export class EntryControlCCEventSupportedGet extends EntryControlCC {}
 @CCCommand(EntryControlCommand.ConfigurationReport)
 export class EntryControlCCConfigurationReport extends EntryControlCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 
@@ -675,12 +670,11 @@ export interface EntryControlCCConfigurationSetOptions
 @useSupervision()
 export class EntryControlCCConfigurationSet extends EntryControlCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| EntryControlCCConfigurationSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

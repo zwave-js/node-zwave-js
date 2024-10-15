@@ -29,7 +29,6 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -147,11 +146,9 @@ type NormalizedConfigurationCCAPISetOptions =
 	);
 
 function createConfigurationCCInstance(
-	applHost: ZWaveApplicationHost,
 	endpoint: CCAPIEndpoint,
 ): ConfigurationCC {
 	return CommandClass.createInstanceUnchecked(
-		applHost,
 		endpoint.virtual ? endpoint.node.physicalNodes[0] : endpoint,
 		ConfigurationCC,
 	)!;
@@ -164,7 +161,7 @@ function normalizeConfigurationCCAPISetOptions(
 ): NormalizedConfigurationCCAPISetOptions {
 	if ("bitMask" in options && options.bitMask) {
 		// Variant 3: Partial param, look it up in the device config
-		const ccc = createConfigurationCCInstance(applHost, endpoint);
+		const ccc = createConfigurationCCInstance(endpoint);
 		const paramInfo = ccc.getParamInformation(
 			applHost,
 			options.parameter,
@@ -193,7 +190,7 @@ function normalizeConfigurationCCAPISetOptions(
 		]);
 	} else {
 		// Variant 1: Normal parameter, defined in a config file
-		const ccc = createConfigurationCCInstance(applHost, endpoint);
+		const ccc = createConfigurationCCInstance(endpoint);
 		const paramInfo = ccc.getParamInformation(
 			applHost,
 			options.parameter,
@@ -234,7 +231,7 @@ function bulkMergePartialParamValues(
 	}
 	// and push the merged result into the array we'll be working with
 	if (unmergedPartials.size) {
-		const ccc = createConfigurationCCInstance(applHost, endpoint);
+		const ccc = createConfigurationCCInstance(endpoint);
 		for (const [parameter, partials] of unmergedPartials) {
 			allParams.push({
 				parameter,
@@ -344,10 +341,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			const applHost = this.applHost;
 
 			if (this.isSinglecast()) {
-				ccInstance = createConfigurationCCInstance(
-					this.applHost,
-					this.endpoint,
-				);
+				ccInstance = createConfigurationCCInstance(this.endpoint);
 			} else if (this.isMulticast()) {
 				// Multicast is only possible if the parameter definition is the same on all target nodes
 				const nodes = this.endpoint.node.physicalNodes;
@@ -367,7 +361,6 @@ export class ConfigurationCCAPI extends CCAPI {
 				const paramInfos = this.endpoint.node.physicalNodes.map(
 					(node) =>
 						createConfigurationCCInstance(
-							this.applHost,
 							node.getEndpoint(this.endpoint.index)!,
 						).getParamInformation(
 							this.applHost,
@@ -391,10 +384,7 @@ export class ConfigurationCCAPI extends CCAPI {
 					);
 				}
 				// If it is, just use the first node to create the CC instance
-				ccInstance = createConfigurationCCInstance(
-					this.applHost,
-					this.endpoint,
-				);
+				ccInstance = createConfigurationCCInstance(this.endpoint);
 			} else {
 				throw new ZWaveError(
 					`The setValue API for Configuration CC is not supported via broadcast!`,
@@ -533,7 +523,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const { valueBitMask, allowUnexpectedResponse } = options ?? {};
 
-		const cc = new ConfigurationCCGet(this.applHost, {
+		const cc = new ConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -602,7 +592,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			this.supportsCommand(ConfigurationCommand.BulkGet)
 			&& isConsecutiveArray(distinctParameters)
 		) {
-			const cc = new ConfigurationCCBulkGet(this.applHost, {
+			const cc = new ConfigurationCCBulkGet({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 				parameters: distinctParameters,
@@ -622,7 +612,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 			const _values = new Map<number, ConfigValue>();
 			for (const parameter of distinctParameters) {
-				const cc = new ConfigurationCCGet(this.applHost, {
+				const cc = new ConfigurationCCGet({
 					nodeId: this.endpoint.nodeId,
 					endpoint: this.endpoint.index,
 					parameter,
@@ -641,7 +631,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 
 		// Combine the returned values with the requested ones
-		const cc = createConfigurationCCInstance(this.applHost, this.endpoint);
+		const cc = createConfigurationCCInstance(this.endpoint);
 		return options.map((o) => {
 			let value = values?.get(o.parameter);
 			if (typeof value === "number" && o.bitMask) {
@@ -684,10 +674,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		);
 		let value = normalized.value;
 		if (normalized.bitMask) {
-			const ccc = createConfigurationCCInstance(
-				this.applHost,
-				this.endpoint,
-			);
+			const ccc = createConfigurationCCInstance(this.endpoint);
 			value = ccc.composePartialParamValue(
 				this.applHost,
 				normalized.parameter,
@@ -695,7 +682,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				normalized.value,
 			);
 		}
-		const cc = new ConfigurationCCSet(this.applHost, {
+		const cc = new ConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			resetToDefault: false,
@@ -739,7 +726,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			&& new Set(allParams.map((v) => v.valueSize)).size === 1;
 
 		if (canUseBulkSet) {
-			const cc = new ConfigurationCCBulkSet(this.applHost, {
+			const cc = new ConfigurationCCBulkSet({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 				parameters: allParams.map((v) => v.parameter),
@@ -787,7 +774,7 @@ export class ConfigurationCCAPI extends CCAPI {
 					valueFormat,
 				} of allParams
 			) {
-				const cc = new ConfigurationCCSet(this.applHost, {
+				const cc = new ConfigurationCCSet({
 					nodeId: this.endpoint.nodeId,
 					endpoint: this.endpoint.index,
 					parameter,
@@ -833,7 +820,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			ConfigurationCommand.Set,
 		);
 
-		const cc = new ConfigurationCCSet(this.applHost, {
+		const cc = new ConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -855,7 +842,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			isConsecutiveArray(parameters)
 			&& this.supportsCommand(ConfigurationCommand.BulkSet)
 		) {
-			const cc = new ConfigurationCCBulkSet(this.applHost, {
+			const cc = new ConfigurationCCBulkSet({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 				parameters,
@@ -869,7 +856,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			);
 			const CCs = distinct(parameters).map(
 				(parameter) =>
-					new ConfigurationCCSet(this.applHost, {
+					new ConfigurationCCSet({
 						nodeId: this.endpoint.nodeId,
 						endpoint: this.endpoint.index,
 						parameter,
@@ -892,7 +879,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			ConfigurationCommand.DefaultReset,
 		);
 
-		const cc = new ConfigurationCCDefaultReset(this.applHost, {
+		const cc = new ConfigurationCCDefaultReset({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -905,7 +892,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
-		const cc = new ConfigurationCCPropertiesGet(this.applHost, {
+		const cc = new ConfigurationCCPropertiesGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -938,7 +925,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
-		const cc = new ConfigurationCCNameGet(this.applHost, {
+		const cc = new ConfigurationCCNameGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -958,7 +945,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
 
-		const cc = new ConfigurationCCInfoGet(this.applHost, {
+		const cc = new ConfigurationCCInfoGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -999,10 +986,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			message: `Scanning available parameters...`,
 		});
-		const ccInstance = createConfigurationCCInstance(
-			this.applHost,
-			this.endpoint,
-		);
+		const ccInstance = createConfigurationCCInstance(this.endpoint);
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
@@ -1614,12 +1598,11 @@ export interface ConfigurationCCReportOptions extends CCCommandOptions {
 @CCCommand(ConfigurationCommand.Report)
 export class ConfigurationCCReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// All fields must be present
@@ -1799,10 +1782,9 @@ export interface ConfigurationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCReport, testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.parameter = this.payload[0];
@@ -1852,10 +1834,9 @@ export type ConfigurationCCSetOptions =
 @useSupervision()
 export class ConfigurationCCSet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.parameter = this.payload[0];
@@ -1988,12 +1969,11 @@ function getResponseForBulkSet(cc: ConfigurationCCBulkSet) {
 @useSupervision()
 export class ConfigurationCCBulkSet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCBulkSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2128,10 +2108,9 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.BulkReport)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		// Ensure we received enough bytes for the preamble
 		validatePayload(this.payload.length >= 5);
@@ -2259,12 +2238,11 @@ export interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCBulkReport)
 export class ConfigurationCCBulkGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCBulkGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2312,12 +2290,11 @@ export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
 @CCCommand(ConfigurationCommand.NameReport)
 export class ConfigurationCCNameReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCNameReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// Parameter and # of reports must be present
@@ -2422,10 +2399,9 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCNameReport)
 export class ConfigurationCCNameGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.parameter = this.payload.readUInt16BE(0);
@@ -2460,12 +2436,11 @@ export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
 @CCCommand(ConfigurationCommand.InfoReport)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCInfoReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// Parameter and # of reports must be present
@@ -2583,10 +2558,9 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCInfoReport)
 export class ConfigurationCCInfoGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.parameter = this.payload.readUInt16BE(0);
@@ -2631,12 +2605,11 @@ export interface ConfigurationCCPropertiesReportOptions
 @CCCommand(ConfigurationCommand.PropertiesReport)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCPropertiesReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -2907,10 +2880,9 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCPropertiesReport)
 export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.parameter = this.payload.readUInt16BE(0);

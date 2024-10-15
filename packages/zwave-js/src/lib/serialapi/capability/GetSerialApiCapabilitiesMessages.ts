@@ -1,5 +1,4 @@
 import { MessagePriority, encodeBitMask, parseBitMask } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -34,12 +33,11 @@ export interface GetSerialApiCapabilitiesResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetSerialApiCapabilitiesResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// The first 8 bytes are the api version, manufacturer id, product type and product id

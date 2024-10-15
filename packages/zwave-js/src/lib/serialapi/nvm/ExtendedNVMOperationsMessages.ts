@@ -6,7 +6,6 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
 	SuccessIndicator,
@@ -76,8 +75,8 @@ export class ExtendedNVMOperationsRequest extends Message {
 export class ExtendedNVMOperationsOpenRequest
 	extends ExtendedNVMOperationsRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = ExtendedNVMOperationsCommand.Open;
 	}
 }
@@ -87,8 +86,8 @@ export class ExtendedNVMOperationsOpenRequest
 export class ExtendedNVMOperationsCloseRequest
 	extends ExtendedNVMOperationsRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = ExtendedNVMOperationsCommand.Close;
 	}
 }
@@ -106,12 +105,11 @@ export class ExtendedNVMOperationsReadRequest
 	extends ExtendedNVMOperationsRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ExtendedNVMOperationsReadRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = ExtendedNVMOperationsCommand.Read;
 
 		if (gotDeserializationOptions(options)) {
@@ -175,12 +173,11 @@ export class ExtendedNVMOperationsWriteRequest
 	extends ExtendedNVMOperationsRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ExtendedNVMOperationsWriteRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = ExtendedNVMOperationsCommand.Write;
 
 		if (gotDeserializationOptions(options)) {
@@ -240,10 +237,9 @@ export class ExtendedNVMOperationsResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 		this.status = this.payload[0];

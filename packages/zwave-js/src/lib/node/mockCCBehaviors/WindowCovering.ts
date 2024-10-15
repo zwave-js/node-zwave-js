@@ -22,7 +22,7 @@ const respondToWindowCoveringSupportedGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new WindowCoveringCCSupportedReport(self.host, {
+			const cc = new WindowCoveringCCSupportedReport({
 				nodeId: controller.ownNodeId,
 				supportedParameters: capabilities.supportedParameters,
 			});

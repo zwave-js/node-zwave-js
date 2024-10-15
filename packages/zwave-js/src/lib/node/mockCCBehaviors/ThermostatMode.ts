@@ -45,7 +45,7 @@ const respondToThermostatModeGet: MockNodeBehavior = {
 					? self.state.get(StateKeys.manufacturerData)
 					: undefined;
 
-			const cc = new ThermostatModeCCReport(self.host, {
+			const cc = new ThermostatModeCCReport({
 				nodeId: controller.ownNodeId,
 				mode,
 				// @ts-expect-error I know...
@@ -67,7 +67,7 @@ const respondToThermostatModeSupportedGet: MockNodeBehavior = {
 				),
 			};
 
-			const cc = new ThermostatModeCCSupportedReport(self.host, {
+			const cc = new ThermostatModeCCSupportedReport({
 				nodeId: controller.ownNodeId,
 				supportedModes: capabilities.supportedModes,
 			});

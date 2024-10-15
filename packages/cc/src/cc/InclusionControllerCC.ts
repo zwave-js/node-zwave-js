@@ -4,7 +4,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB, ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
@@ -57,7 +57,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 			InclusionControllerCommand.Initiate,
 		);
 
-		const cc = new InclusionControllerCCInitiate(this.applHost, {
+		const cc = new InclusionControllerCCInitiate({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			includedNodeId: nodeId,
@@ -76,7 +76,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 			InclusionControllerCommand.Complete,
 		);
 
-		const cc = new InclusionControllerCCComplete(this.applHost, {
+		const cc = new InclusionControllerCCComplete({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			step,
@@ -95,12 +95,11 @@ export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
 @CCCommand(InclusionControllerCommand.Complete)
 export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| InclusionControllerCCCompleteOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.step = this.payload[0];
@@ -145,12 +144,11 @@ export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
 @CCCommand(InclusionControllerCommand.Initiate)
 export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| InclusionControllerCCInitiateOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.includedNodeId = this.payload[0];

@@ -1140,7 +1140,7 @@ export class ZWaveNode extends ZWaveNodeMixins
 			nodeId: this.id,
 		});
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
-			new GetNodeProtocolInfoRequest(this.driver, {
+			new GetNodeProtocolInfoRequest({
 				requestedNodeId: this.id,
 			}),
 		);
@@ -1300,7 +1300,7 @@ protocol version:      ${this.protocolVersion}`;
 	public async requestNodeInfo(): Promise<NodeUpdatePayload> {
 		const resp = await this.driver.sendMessage<
 			RequestNodeInfoResponse | ApplicationUpdateRequest
-		>(new RequestNodeInfoRequest(this.driver, { nodeId: this.id }));
+		>(new RequestNodeInfoRequest({ nodeId: this.id }));
 		if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
 			// TODO: handle this in SendThreadMachine
 			throw new ZWaveError(
@@ -1393,7 +1393,6 @@ protocol version:      ${this.protocolVersion}`;
 			try {
 				if (force) {
 					instance = CommandClass.createInstanceUnchecked(
-						this.driver,
 						endpoint,
 						cc,
 					)!;
@@ -6368,7 +6367,6 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 					: undefined;
 
 				const ccInstance = CommandClass.createInstanceUnchecked(
-					this.driver,
 					this,
 					valueId.commandClass,
 				);

@@ -17,7 +17,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { type AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {
@@ -230,7 +229,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 	public async get() {
 		this.assertSupportsCommand(BatteryCommand, BatteryCommand.Get);
 
-		const cc = new BatteryCCGet(this.applHost, {
+		const cc = new BatteryCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -258,7 +257,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 	public async getHealth() {
 		this.assertSupportsCommand(BatteryCommand, BatteryCommand.HealthGet);
 
-		const cc = new BatteryCCHealthGet(this.applHost, {
+		const cc = new BatteryCCHealthGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -416,10 +415,9 @@ export type BatteryCCReportOptions =
 @CCCommand(BatteryCommand.Report)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BatteryCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -602,10 +600,9 @@ export class BatteryCCGet extends BatteryCC {}
 @CCCommand(BatteryCommand.HealthReport)
 export class BatteryCCHealthReport extends BatteryCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 

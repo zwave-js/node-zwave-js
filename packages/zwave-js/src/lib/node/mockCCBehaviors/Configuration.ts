@@ -50,7 +50,7 @@ const respondToConfigurationGet: MockNodeBehavior = {
 				?? paramInfo.defaultValue
 				?? 0;
 
-			const cc = new ConfigurationCCReport(self.host, {
+			const cc = new ConfigurationCCReport({
 				nodeId: controller.ownNodeId,
 				parameter,
 				value,
@@ -137,7 +137,7 @@ const respondToConfigurationNameGet: MockNodeBehavior = {
 			// Do nothing if the parameter is not supported
 			if (!paramInfo) return { action: "fail" };
 
-			const cc = new ConfigurationCCNameReport(self.host, {
+			const cc = new ConfigurationCCNameReport({
 				nodeId: controller.ownNodeId,
 				parameter,
 				name: paramInfo.name ?? "",
@@ -165,7 +165,7 @@ const respondToConfigurationInfoGet: MockNodeBehavior = {
 			// Do nothing if the parameter is not supported
 			if (!paramInfo) return { action: "fail" };
 
-			const cc = new ConfigurationCCInfoReport(self.host, {
+			const cc = new ConfigurationCCInfoReport({
 				nodeId: controller.ownNodeId,
 				parameter,
 				info: paramInfo.info ?? "",
@@ -197,7 +197,7 @@ const respondToConfigurationPropertiesGet: MockNodeBehavior = {
 
 			// If the parameter is not supported, respond with the first supported parameter
 			if (!paramInfo) {
-				cc = new ConfigurationCCPropertiesReport(self.host, {
+				cc = new ConfigurationCCPropertiesReport({
 					nodeId: controller.ownNodeId,
 					parameter,
 					valueFormat: 0,
@@ -205,7 +205,7 @@ const respondToConfigurationPropertiesGet: MockNodeBehavior = {
 					nextParameter: nextParameter?.["#"] ?? 0,
 				});
 			} else {
-				cc = new ConfigurationCCPropertiesReport(self.host, {
+				cc = new ConfigurationCCPropertiesReport({
 					nodeId: controller.ownNodeId,
 					parameter,
 					valueSize: paramInfo.valueSize,

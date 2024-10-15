@@ -13,7 +13,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
@@ -116,7 +115,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.MetaDataGet,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCMetaDataGet(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCMetaDataGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -152,7 +151,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.Report,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCMetaDataReport(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCMetaDataReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -173,7 +172,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.RequestGet,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCRequestGet(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCRequestGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -217,7 +216,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.Report,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCReport(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			reportNumber: fragmentNumber,
@@ -241,7 +240,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			FirmwareUpdateMetaDataCommand.ActivationSet,
 		);
 
-		const cc = new FirmwareUpdateMetaDataCCActivationSet(this.applHost, {
+		const cc = new FirmwareUpdateMetaDataCCActivationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -349,7 +348,6 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	implements FirmwareUpdateMetaData
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (
@@ -357,7 +355,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 				& CCCommandOptions
 			),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 6);
@@ -511,10 +509,9 @@ export class FirmwareUpdateMetaDataCCRequestReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		this.status = this.payload[0];
 		if (this.payload.length >= 2) {
@@ -574,12 +571,11 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (FirmwareUpdateMetaDataCCRequestGetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -663,10 +659,9 @@ export class FirmwareUpdateMetaDataCCRequestGet
 // This is sent to us from the node, so we expect no response
 export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 3);
 		this.numReports = this.payload[0];
 		this.reportNumber = this.payload.readUInt16BE(1) & 0x7fff;
@@ -699,12 +694,11 @@ export interface FirmwareUpdateMetaDataCCReportOptions
 // We send this in reply to the Get command and expect no response
 export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| FirmwareUpdateMetaDataCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -768,10 +762,9 @@ export class FirmwareUpdateMetaDataCCStatusReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		this.status = this.payload[0];
 		if (this.payload.length >= 3) {
@@ -802,10 +795,9 @@ export class FirmwareUpdateMetaDataCCActivationReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 8);
 		this.manufacturerId = this.payload.readUInt16BE(0);
 		this.firmwareId = this.payload.readUInt16BE(2);
@@ -862,12 +854,11 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (FirmwareUpdateMetaDataCCActivationSetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -921,10 +912,9 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 3);
 		this.status = this.payload[0];
 		this.checksum = this.payload.readUInt16BE(1);
@@ -961,12 +951,11 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| FirmwareUpdateMetaDataCCPrepareGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

@@ -21,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new SceneActuatorConfigurationCCGet(host, {
+	const cc = new SceneActuatorConfigurationCCGet({
 		nodeId: 2,
 		sceneId: 1,
 	});
@@ -35,7 +35,7 @@ test("the Get command should serialize correctly", (t) => {
 });
 
 test("the Set command should serialize correctly with level", (t) => {
-	const cc = new SceneActuatorConfigurationCCSet(host, {
+	const cc = new SceneActuatorConfigurationCCSet({
 		nodeId: 2,
 		sceneId: 2,
 		level: 0x00,
@@ -54,7 +54,7 @@ test("the Set command should serialize correctly with level", (t) => {
 });
 
 test("the Set command should serialize correctly with undefined level", (t) => {
-	const cc = new SceneActuatorConfigurationCCSet(host, {
+	const cc = new SceneActuatorConfigurationCCSet({
 		nodeId: 2,
 		sceneId: 2,
 		// level: undefined,
@@ -81,7 +81,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x05, // dimmingDuration
 		]),
 	);
-	const cc = new SceneActuatorConfigurationCCReport(host, {
+	const cc = new SceneActuatorConfigurationCCReport({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,
@@ -96,7 +96,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new SceneActuatorConfigurationCC(host, {
+	const cc: any = new SceneActuatorConfigurationCC({
 		nodeId: 2,
 		data: serializedCC,
 		context: {} as any,

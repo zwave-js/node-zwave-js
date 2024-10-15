@@ -15,7 +15,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -131,7 +130,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 	public async get(sensorType?: AlarmSensorType) {
 		this.assertSupportsCommand(AlarmSensorCommand, AlarmSensorCommand.Get);
 
-		const cc = new AlarmSensorCCGet(this.applHost, {
+		const cc = new AlarmSensorCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sensorType,
@@ -150,7 +149,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 			AlarmSensorCommand.SupportedGet,
 		);
 
-		const cc = new AlarmSensorCCSupportedGet(this.applHost, {
+		const cc = new AlarmSensorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -324,10 +323,9 @@ duration: ${currentValue.duration}`;
 @CCCommand(AlarmSensorCommand.Report)
 export class AlarmSensorCCReport extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 5, this.payload[1] !== 0xff);
 		// Alarm Sensor reports may be forwarded by a different node, in this case
 		// (and only then!) the payload contains the original node ID
@@ -405,10 +403,9 @@ export interface AlarmSensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AlarmSensorCCReport, testResponseForAlarmSensorGet)
 export class AlarmSensorCCGet extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AlarmSensorCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -443,10 +440,9 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 @CCCommand(AlarmSensorCommand.SupportedReport)
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		const bitMaskLength = this.payload[0];
 		validatePayload(this.payload.length >= 1 + bitMaskLength);

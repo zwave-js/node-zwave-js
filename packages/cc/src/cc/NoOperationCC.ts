@@ -16,7 +16,7 @@ import { isCommandClassContainer } from "../lib/ICommandClassContainer";
 export class NoOperationCCAPI extends PhysicalCCAPI {
 	public async send(): Promise<void> {
 		await this.applHost.sendCommand(
-			new NoOperationCC(this.applHost, {
+			new NoOperationCC({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 			}),

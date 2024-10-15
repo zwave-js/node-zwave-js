@@ -10,7 +10,6 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -34,10 +33,9 @@ export interface GetPriorityRouteRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.GetPriorityRoute)
 export class GetPriorityRouteRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | GetPriorityRouteRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -72,10 +70,9 @@ export class GetPriorityRouteRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.GetPriorityRoute)
 export class GetPriorityRouteResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		let offset = 0;
 		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 			this.payload,

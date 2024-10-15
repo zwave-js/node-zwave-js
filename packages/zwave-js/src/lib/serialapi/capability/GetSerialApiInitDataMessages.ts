@@ -12,7 +12,6 @@ import {
 	getChipTypeAndVersion,
 	getZWaveChipType,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -39,12 +38,11 @@ export interface GetSerialApiInitDataResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetSerialApiInitDataResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			const apiVersion = this.payload[0];

@@ -126,7 +126,7 @@ integrationTest(
 						const nonce = smNode.generateNonce(
 							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
+						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
 							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
@@ -153,7 +153,7 @@ integrationTest(
 							const nonce = smNode.generateNonce(
 								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
+							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
 								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
@@ -183,8 +183,7 @@ integrationTest(
 							);
 
 						const cc = Security2CC.encapsulate(
-							self.host,
-							new Security2CCCommandsSupportedReport(self.host, {
+							new Security2CCCommandsSupportedReport({
 								nodeId: controller.ownNodeId,
 								supportedCCs: isHighestGranted
 									? [...mockNode.implementedCCs.entries()]
@@ -217,8 +216,7 @@ integrationTest(
 							instanceof MultiChannelCCEndPointGet
 					) {
 						const cc = Security2CC.encapsulate(
-							self.host,
-							new MultiChannelCCEndPointReport(self.host, {
+							new MultiChannelCCEndPointReport({
 								nodeId: controller.ownNodeId,
 								countIsDynamic: false,
 								identicalCapabilities: false,
@@ -243,8 +241,7 @@ integrationTest(
 					) {
 						const request = receivedCC.encapsulated;
 						const cc = Security2CC.encapsulate(
-							self.host,
-							new MultiChannelCCEndPointFindReport(self.host, {
+							new MultiChannelCCEndPointFindReport({
 								nodeId: controller.ownNodeId,
 								genericClass: request.genericClass,
 								specificClass: request.specificClass,
@@ -272,8 +269,7 @@ integrationTest(
 							receivedCC.encapsulated.requestedEndpoint,
 						)!;
 						const cc = Security2CC.encapsulate(
-							self.host,
-							new MultiChannelCCCapabilityReport(self.host, {
+							new MultiChannelCCCapabilityReport({
 								nodeId: controller.ownNodeId,
 								endpointIndex: endpoint.index,
 								genericDeviceClass:

@@ -19,7 +19,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -359,7 +358,7 @@ export class IndicatorCCAPI extends CCAPI {
 	): Promise<MaybeNotKnown<number | IndicatorObject[]>> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Get);
 
-		const cc = new IndicatorCCGet(this.applHost, {
+		const cc = new IndicatorCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
@@ -396,7 +395,7 @@ export class IndicatorCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new IndicatorCCSet(this.applHost, {
+		const cc = new IndicatorCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...(typeof value === "number" ? { value } : { values: value }),
@@ -413,7 +412,7 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.Report,
 		);
 
-		const cc = new IndicatorCCReport(this.applHost, {
+		const cc = new IndicatorCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -436,7 +435,7 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.SupportedGet,
 		);
 
-		const cc = new IndicatorCCSupportedGet(this.applHost, {
+		const cc = new IndicatorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
@@ -470,7 +469,7 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.SupportedReport,
 		);
 
-		const cc = new IndicatorCCSupportedReport(this.applHost, {
+		const cc = new IndicatorCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
@@ -491,7 +490,7 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.DescriptionReport,
 		);
 
-		const cc = new IndicatorCCDescriptionReport(this.applHost, {
+		const cc = new IndicatorCCDescriptionReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
@@ -671,7 +670,7 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.DescriptionGet,
 		);
 
-		const cc = new IndicatorCCDescriptionGet(this.applHost, {
+		const cc = new IndicatorCCDescriptionGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
@@ -902,12 +901,11 @@ export type IndicatorCCSetOptions =
 @useSupervision()
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCSetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 
@@ -1002,12 +1000,11 @@ export type IndicatorCCReportSpecificOptions =
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCReportSpecificOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -1212,10 +1209,9 @@ export interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			if (this.payload.length > 0) {
 				this.indicatorId = this.payload[0];
@@ -1254,12 +1250,11 @@ export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -1356,12 +1351,11 @@ function testResponseForIndicatorSupportedGet(
 )
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.indicatorId = this.payload[0];
@@ -1396,12 +1390,11 @@ export interface IndicatorCCDescriptionReportOptions {
 @CCCommand(IndicatorCommand.DescriptionReport)
 export class IndicatorCCDescriptionReport extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCDescriptionReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -1473,12 +1466,11 @@ function testResponseForIndicatorDescriptionGet(
 )
 export class IndicatorCCDescriptionGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCDescriptionGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.indicatorId = this.payload[0];

@@ -40,7 +40,7 @@ test("should deserialize and serialize correctly", (t) => {
 		]),
 	];
 	for (const original of okayMessages) {
-		const parsed = new Message(host, { data: original });
+		const parsed = new Message({ data: original });
 		t.deepEqual(parsed.serialize(), original);
 	}
 });
@@ -49,7 +49,7 @@ test("should serialize correctly when the payload is null", (t) => {
 	const host = createTestingHost();
 	// synthetic message
 	const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
-	const message = new Message(host, {
+	const message = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
@@ -92,7 +92,7 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 		],
 	];
 	for (const [message, msg, code] of brokenMessages) {
-		assertZWaveError(t, () => new Message(host, { data: message }), {
+		assertZWaveError(t, () => new Message({ data: message }), {
 			messageMatches: msg,
 			errorCode: code,
 		});
@@ -249,7 +249,7 @@ test("isComplete() should work correctly", (t) => {
 
 test("toJSON() should return a semi-readable JSON representation", (t) => {
 	const host = createTestingHost();
-	const msg1 = new Message(host, {
+	const msg1 = new Message({
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
 	});
@@ -259,7 +259,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 		functionType: "GetControllerVersion",
 		payload: "",
 	};
-	const msg2 = new Message(host, {
+	const msg2 = new Message({
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
 		payload: Buffer.from("aabbcc", "hex"),
@@ -270,7 +270,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 		functionType: "GetControllerVersion",
 		payload: "aabbcc",
 	};
-	const msg3 = new Message(host, {
+	const msg3 = new Message({
 		type: MessageType.Response,
 		functionType: FunctionType.GetControllerVersion,
 		expectedResponse: FunctionType.GetControllerVersion,
@@ -282,7 +282,7 @@ test("toJSON() should return a semi-readable JSON representation", (t) => {
 		expectedResponse: "GetControllerVersion",
 		payload: "",
 	};
-	const msg4 = new Message(host, {
+	const msg4 = new Message({
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
 		expectedResponse: FunctionType.GetControllerVersion,
@@ -311,7 +311,7 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 	const host = createTestingHost();
 	assertZWaveError(
 		t,
-		() => new Message(host, { functionType: 0xff as any }),
+		() => new Message({ functionType: 0xff as any }),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
 			messageMatches: /message type/i,
@@ -331,7 +331,7 @@ test(`the constructor should throw when no function type is specified`, (t) => {
 	const host = createTestingHost();
 	assertZWaveError(
 		t,
-		() => new Message(host, { type: MessageType.Request }),
+		() => new Message({ type: MessageType.Request }),
 		{
 			errorCode: ZWaveErrorCodes.Argument_Invalid,
 			messageMatches: /function type/i,
@@ -349,7 +349,7 @@ test(`the constructor should throw when no function type is specified`, (t) => {
 
 test("getNodeUnsafe() returns undefined when the controller is not initialized yet", (t) => {
 	const host = createTestingHost();
-	const msg = new Message(host, {
+	const msg = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
@@ -358,7 +358,7 @@ test("getNodeUnsafe() returns undefined when the controller is not initialized y
 
 test("getNodeUnsafe() returns undefined when the message is no node query", (t) => {
 	const host = createTestingHost();
-	const msg = new Message(host, {
+	const msg = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
@@ -369,7 +369,7 @@ test("getNodeUnsafe() returns the associated node otherwise", (t) => {
 	const host = createTestingHost();
 	host.setNode(1, {} as any);
 
-	const msg = new Message(host, {
+	const msg = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});

@@ -51,7 +51,7 @@ integrationTest(
 			const respondToMultilevelSwitchGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof MultilevelSwitchCCGet) {
-						const cc = new MultilevelSwitchCCReport(self.host, {
+						const cc = new MultilevelSwitchCCReport({
 							nodeId: controller.ownNodeId,
 							targetValue: 88,
 							currentValue: 88,

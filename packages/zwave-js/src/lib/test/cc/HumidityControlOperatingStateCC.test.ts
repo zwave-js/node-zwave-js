@@ -20,7 +20,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new HumidityControlOperatingStateCCGet(host, {
+	const cc = new HumidityControlOperatingStateCCGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -38,7 +38,7 @@ test("the Report command should be deserialized correctly", (t) => {
 			HumidityControlOperatingState.Humidifying, // state
 		]),
 	);
-	const cc = new HumidityControlOperatingStateCCReport(host, {
+	const cc = new HumidityControlOperatingStateCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,

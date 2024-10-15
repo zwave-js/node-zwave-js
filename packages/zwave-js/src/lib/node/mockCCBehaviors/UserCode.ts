@@ -55,7 +55,7 @@ const respondToUsersNumberGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new UserCodeCCUsersNumberReport(self.host, {
+			const cc = new UserCodeCCUsersNumberReport({
 				nodeId: controller.ownNodeId,
 				supportedUsers: capabilities.numUsers ?? 1,
 			});
@@ -77,7 +77,7 @@ const respondToUserGet: MockNodeBehavior = {
 			const userId = receivedCC.userId;
 			let cc: UserCodeCCReport;
 			if (capabilities.numUsers >= userId) {
-				cc = new UserCodeCCReport(self.host, {
+				cc = new UserCodeCCReport({
 					nodeId: controller.ownNodeId,
 					userId,
 					userIdStatus: (self.state.get(
@@ -88,7 +88,7 @@ const respondToUserGet: MockNodeBehavior = {
 					) as string,
 				});
 			} else {
-				cc = new UserCodeCCReport(self.host, {
+				cc = new UserCodeCCReport({
 					nodeId: controller.ownNodeId,
 					userId,
 					userIdStatus: UserIDStatus.StatusNotAvailable,
@@ -137,7 +137,7 @@ const respondToUserCodeCapabilitiesGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new UserCodeCCCapabilitiesReport(self.host, {
+			const cc = new UserCodeCCCapabilitiesReport({
 				nodeId: controller.ownNodeId,
 				supportsAdminCode: capabilities.supportsAdminCode!,
 				supportsAdminCodeDeactivation: capabilities
@@ -165,7 +165,7 @@ const respondToUserCodeKeypadModeGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new UserCodeCCKeypadModeReport(self.host, {
+			const cc = new UserCodeCCKeypadModeReport({
 				nodeId: controller.ownNodeId,
 				keypadMode: (self.state.get(StateKeys.keypadMode)
 					?? capabilities.supportedKeypadModes?.[0]
@@ -242,7 +242,7 @@ const respondToUserCodeAdminCodeGet: MockNodeBehavior = {
 				adminCode = self.state.get(StateKeys.adminCode) as string;
 			}
 
-			const cc = new UserCodeCCAdminCodeReport(self.host, {
+			const cc = new UserCodeCCAdminCodeReport({
 				nodeId: controller.ownNodeId,
 				adminCode: adminCode ?? "",
 			});
@@ -289,7 +289,7 @@ const respondToUserCodeUserCodeChecksumGet: MockNodeBehavior = {
 
 				const checksum = data.length > 0 ? CRC16_CCITT(data) : 0x0000;
 
-				const cc = new UserCodeCCUserCodeChecksumReport(self.host, {
+				const cc = new UserCodeCCUserCodeChecksumReport({
 					nodeId: controller.ownNodeId,
 					userCodeChecksum: checksum,
 				});

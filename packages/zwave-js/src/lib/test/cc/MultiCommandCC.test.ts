@@ -10,7 +10,7 @@ import test from "ava";
 const host = createTestingHost();
 
 test("is a multi-encapsulating CommandClass", (t) => {
-	let cc: CommandClass = new BasicCCSet(host, {
+	let cc: CommandClass = new BasicCCSet({
 		nodeId: 1,
 		targetValue: 50,
 	});

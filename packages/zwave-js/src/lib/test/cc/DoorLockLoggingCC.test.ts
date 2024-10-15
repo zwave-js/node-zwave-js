@@ -22,7 +22,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the RecordsCountGet command should serialize correctly", (t) => {
-	const cc = new DoorLockLoggingCCRecordsSupportedGet(host, {
+	const cc = new DoorLockLoggingCCRecordsSupportedGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -40,7 +40,7 @@ test("the RecordsCountReport command should be deserialized correctly", (t) => {
 			0x14, // max records supported (20)
 		]),
 	);
-	const cc = new DoorLockLoggingCCRecordsSupportedReport(host, {
+	const cc = new DoorLockLoggingCCRecordsSupportedReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -50,7 +50,7 @@ test("the RecordsCountReport command should be deserialized correctly", (t) => {
 });
 
 test("the RecordGet command should serialize correctly", (t) => {
-	const cc = new DoorLockLoggingCCRecordGet(host, {
+	const cc = new DoorLockLoggingCCRecordGet({
 		nodeId: 1,
 		recordNumber: 1,
 	});
@@ -82,7 +82,7 @@ test("the RecordReport command should be deserialized correctly", (t) => {
 		]),
 	);
 
-	const cc = new DoorLockLoggingCCRecordReport(host, {
+	const cc = new DoorLockLoggingCCRecordReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,

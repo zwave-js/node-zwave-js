@@ -9,7 +9,6 @@ import {
 	ZWaveErrorCodes,
 	encodeNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -30,18 +29,15 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.AssignPriorityReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignPriorityReturnRouteRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any)
 				!== AssignPriorityReturnRouteRequestTransmitReport
 		) {
-			return new AssignPriorityReturnRouteRequestTransmitReport(
-				host,
-				options,
-			);
+			return new AssignPriorityReturnRouteRequestTransmitReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -60,12 +56,11 @@ export class AssignPriorityReturnRouteRequest
 	extends AssignPriorityReturnRouteRequestBase
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| AssignPriorityReturnRouteRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -147,10 +142,9 @@ export class AssignPriorityReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.hasStarted = this.payload[0] !== 0;
 	}
 
@@ -173,10 +167,9 @@ export class AssignPriorityReturnRouteRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.callbackId = this.payload[0];
 		this.transmitStatus = this.payload[1];

@@ -87,7 +87,7 @@ integrationTest(
 						const nonce = smNode.generateNonce(
 							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
+						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
 							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
@@ -114,7 +114,7 @@ integrationTest(
 							const nonce = smNode.generateNonce(
 								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
+							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
 								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
@@ -138,17 +138,13 @@ integrationTest(
 						&& receivedCC.encapsulated
 							instanceof SupervisionCCGet
 					) {
-						let cc: CommandClass = new SupervisionCCReport(
-							self.host,
-							{
-								nodeId: controller.ownNodeId,
-								sessionId: receivedCC.encapsulated.sessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Success,
-							},
-						);
+						let cc: CommandClass = new SupervisionCCReport({
+							nodeId: controller.ownNodeId,
+							sessionId: receivedCC.encapsulated.sessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Success,
+						});
 						cc = Security2CC.encapsulate(
-							self.host,
 							cc,
 							self.id,
 							self.securityManagers,
@@ -172,8 +168,7 @@ integrationTest(
 
 			// Now create a collision by having both parties send at the same time
 			const nodeToHost = Security2CC.encapsulate(
-				mockNode.host,
-				new BinarySwitchCCReport(mockNode.host, {
+				new BinarySwitchCCReport({
 					nodeId: mockController.ownNodeId,
 					currentValue: true,
 				}),
@@ -264,7 +259,7 @@ integrationTest(
 						const nonce = smNode.generateNonce(
 							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
+						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
 							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
@@ -291,7 +286,7 @@ integrationTest(
 							const nonce = smNode.generateNonce(
 								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
+							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
 								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
@@ -319,8 +314,7 @@ integrationTest(
 
 			// Now create a collision by having both parties send at the same time
 			const nodeToHost = Security2CC.encapsulate(
-				mockNode.host,
-				new BasicCCReport(mockNode.host, {
+				new BasicCCReport({
 					nodeId: mockController.ownNodeId,
 					currentValue: 99,
 				}),
@@ -404,7 +398,7 @@ integrationTest(
 						const nonce = smNode.generateNonce(
 							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
+						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
 							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
@@ -431,7 +425,7 @@ integrationTest(
 							const nonce = smNode.generateNonce(
 								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
+							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
 								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
@@ -455,17 +449,13 @@ integrationTest(
 						&& receivedCC.encapsulated
 							instanceof SupervisionCCGet
 					) {
-						let cc: CommandClass = new SupervisionCCReport(
-							self.host,
-							{
-								nodeId: controller.ownNodeId,
-								sessionId: receivedCC.encapsulated.sessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Success,
-							},
-						);
+						let cc: CommandClass = new SupervisionCCReport({
+							nodeId: controller.ownNodeId,
+							sessionId: receivedCC.encapsulated.sessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Success,
+						});
 						cc = Security2CC.encapsulate(
-							self.host,
 							cc,
 							self.id,
 							self.securityManagers,
@@ -493,15 +483,11 @@ integrationTest(
 			const turnOff = node.commandClasses["Binary Switch"].set(false);
 
 			// Node sends supervised Binary Switch report at the same time
-			let nodeToHost: CommandClass = new BinarySwitchCCReport(
-				mockNode.host,
-				{
-					nodeId: mockController.ownNodeId,
-					currentValue: true,
-				},
-			);
+			let nodeToHost: CommandClass = new BinarySwitchCCReport({
+				nodeId: mockController.ownNodeId,
+				currentValue: true,
+			});
 			nodeToHost = SupervisionCC.encapsulate(
-				mockNode.host,
 				nodeToHost,
 				driver.getNextSupervisionSessionId(
 					mockController.ownNodeId,
@@ -509,7 +495,6 @@ integrationTest(
 				false,
 			);
 			nodeToHost = Security2CC.encapsulate(
-				mockNode.host,
 				nodeToHost,
 				mockNode.id,
 				mockNode.securityManagers,
@@ -539,8 +524,7 @@ integrationTest(
 
 			// // Now create a collision by having both parties send at the same time
 			// const nodeToHost = Security2CC.encapsulate(
-			// 	mockNode.host,
-			// 	new BasicCCReport(mockNode.host, {
+			// 	new BasicCCReport({
 			// 		nodeId: mockController.ownNodeId,
 			// 		currentValue: 99,
 			// 	}),

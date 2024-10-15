@@ -23,7 +23,6 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -217,7 +216,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			MultiChannelCommand.EndPointGet,
 		);
 
-		const cc = new MultiChannelCCEndPointGet(this.applHost, {
+		const cc = new MultiChannelCCEndPointGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -246,7 +245,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			MultiChannelCommand.CapabilityGet,
 		);
 
-		const cc = new MultiChannelCCCapabilityGet(this.applHost, {
+		const cc = new MultiChannelCCCapabilityGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
@@ -285,7 +284,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			MultiChannelCommand.EndPointFind,
 		);
 
-		const cc = new MultiChannelCCEndPointFind(this.applHost, {
+		const cc = new MultiChannelCCEndPointFind({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			genericClass,
@@ -309,7 +308,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			MultiChannelCommand.AggregatedMembersGet,
 		);
 
-		const cc = new MultiChannelCCAggregatedMembersGet(this.applHost, {
+		const cc = new MultiChannelCCAggregatedMembersGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
@@ -337,7 +336,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			MultiChannelCommand.CommandEncapsulation,
 		);
 
-		const cc = new MultiChannelCCCommandEncapsulation(this.applHost, {
+		const cc = new MultiChannelCCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
 			...options,
 		});
@@ -353,7 +352,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			MultiChannelCommand.GetV1,
 		);
 
-		const cc = new MultiChannelCCV1Get(this.applHost, {
+		const cc = new MultiChannelCCV1Get({
 			nodeId: this.endpoint.nodeId,
 			requestedCC: ccId,
 		});
@@ -375,7 +374,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			MultiChannelCommand.CommandEncapsulationV1,
 		);
 
-		const cc = new MultiChannelCCV1CommandEncapsulation(this.applHost, {
+		const cc = new MultiChannelCCV1CommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
 			encapsulated,
 		});
@@ -408,10 +407,9 @@ export class MultiChannelCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint, with version 2+ of the Multi Channel CC */
 	public static encapsulate(
-		host: ZWaveHost,
 		cc: CommandClass,
 	): MultiChannelCCCommandEncapsulation {
-		const ret = new MultiChannelCCCommandEncapsulation(host, {
+		const ret = new MultiChannelCCCommandEncapsulation({
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 			destination: cc.endpointIndex,
@@ -425,10 +423,9 @@ export class MultiChannelCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint, with version 1 of the Multi Channel CC */
 	public static encapsulateV1(
-		host: ZWaveHost,
 		cc: CommandClass,
 	): MultiChannelCCV1CommandEncapsulation {
-		const ret = new MultiChannelCCV1CommandEncapsulation(host, {
+		const ret = new MultiChannelCCV1CommandEncapsulation({
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 		});
@@ -740,7 +737,6 @@ supported CCs:`;
 			.filter(
 				(cc) =>
 					!CommandClass.createInstanceUnchecked(
-						applHost,
 						node,
 						cc,
 					)?.skipEndpointInterview(),
@@ -824,12 +820,11 @@ export interface MultiChannelCCEndPointReportOptions extends CCCommandOptions {
 @CCCommand(MultiChannelCommand.EndPointReport)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCEndPointReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -907,12 +902,11 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 	implements ApplicationNodeInformation
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCapabilityReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// Only validate the bytes we expect to see here
@@ -1019,12 +1013,11 @@ function testResponseForMultiChannelCapabilityGet(
 )
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCapabilityGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.requestedEndpoint = this.payload[0] & 0b01111111;
@@ -1061,12 +1054,11 @@ export interface MultiChannelCCEndPointFindReportOptions
 @CCCommand(MultiChannelCommand.EndPointFindReport)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCEndPointFindReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -1155,12 +1147,11 @@ export interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCEndPointFindReport)
 export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCEndPointFindOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.genericClass = this.payload[0];
@@ -1197,10 +1188,9 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.AggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 		this.aggregatedEndpointIndex = this.payload[0] & 0b0111_1111;
@@ -1241,12 +1231,11 @@ export interface MultiChannelCCAggregatedMembersGetOptions
 @expectedCCResponse(MultiChannelCCAggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCAggregatedMembersGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1327,12 +1316,11 @@ function testResponseForCommandEncapsulation(
 )
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCommandEncapsulationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			if (
@@ -1356,7 +1344,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				}
 			}
 			// No need to validate further, each CC does it for itself
-			this.encapsulated = CommandClass.from(this.host, {
+			this.encapsulated = CommandClass.from({
 				data: this.payload.subarray(2),
 				fromEncapsulation: true,
 				encapCC: this,
@@ -1418,10 +1406,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.ReportV1)
 export class MultiChannelCCV1Report extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		// V1 won't be extended in the future, so do an exact check
 		validatePayload(this.payload.length === 2);
 		this.requestedCC = this.payload[0];
@@ -1458,12 +1445,11 @@ export interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCV1Report, testResponseForMultiChannelV1Get)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCV1GetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1522,12 +1508,11 @@ export interface MultiChannelCCV1CommandEncapsulationOptions
 )
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCV1CommandEncapsulationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.endpointIndex = this.payload[0];
@@ -1538,7 +1523,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 				&& this.payload[1] === 0x00;
 
 			// No need to validate further, each CC does it for itself
-			this.encapsulated = CommandClass.from(this.host, {
+			this.encapsulated = CommandClass.from({
 				data: this.payload.subarray(isV2withV1Header ? 2 : 1),
 				fromEncapsulation: true,
 				encapCC: this,

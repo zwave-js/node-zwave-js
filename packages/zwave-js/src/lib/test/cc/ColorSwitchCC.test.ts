@@ -31,7 +31,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the SupportedGet command should serialize correctly", (t) => {
-	const cc = new ColorSwitchCCSupportedGet(host, {
+	const cc = new ColorSwitchCCSupportedGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -50,7 +50,7 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 			0b0000_0001,
 		]),
 	);
-	const cc = new ColorSwitchCCSupportedReport(host, {
+	const cc = new ColorSwitchCCSupportedReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -72,7 +72,7 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 });
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new ColorSwitchCCGet(host, {
+	const cc = new ColorSwitchCCGet({
 		nodeId: 1,
 		colorComponent: ColorComponent.Red,
 	});
@@ -93,7 +93,7 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 			0b1111_1111, // value: 255
 		]),
 	);
-	const cc = new ColorSwitchCCReport(host, {
+	const cc = new ColorSwitchCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -115,7 +115,7 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	const cc = new ColorSwitchCCReport(host, {
+	const cc = new ColorSwitchCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -129,7 +129,7 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 });
 
 test("the Set command should serialize correctly (without duration)", (t) => {
-	const cc = new ColorSwitchCCSet(host, {
+	const cc = new ColorSwitchCCSet({
 		nodeId: 1,
 		red: 128,
 		green: 255,
@@ -158,7 +158,7 @@ test("the Set command should serialize correctly (without duration)", (t) => {
 });
 
 test("the Set command should serialize correctly (version 2)", (t) => {
-	const cc = new ColorSwitchCCSet(host, {
+	const cc = new ColorSwitchCCSet({
 		nodeId: 1,
 		red: 128,
 		green: 255,
@@ -187,7 +187,7 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 });
 
 test("the StartLevelChange command should serialize correctly", (t) => {
-	const cc = new ColorSwitchCCStartLevelChange(host, {
+	const cc = new ColorSwitchCCStartLevelChange({
 		nodeId: 1,
 		startLevel: 5,
 		ignoreStartLevel: true,
@@ -214,7 +214,7 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 });
 
 test("the StopLevelChange command should serialize correctly", (t) => {
-	const cc = new ColorSwitchCCStopLevelChange(host, {
+	const cc = new ColorSwitchCCStopLevelChange({
 		nodeId: 1,
 		colorComponent: ColorComponent.Red,
 	});

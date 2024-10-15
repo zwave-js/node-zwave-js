@@ -19,7 +19,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -245,7 +244,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 	public async get() {
 		this.assertSupportsCommand(VersionCommand, VersionCommand.Get);
 
-		const cc = new VersionCCGet(this.applHost, {
+		const cc = new VersionCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -267,7 +266,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 	public async sendReport(options: VersionCCReportOptions): Promise<void> {
 		this.assertSupportsCommand(VersionCommand, VersionCommand.Report);
 
-		const cc = new VersionCCReport(this.applHost, {
+		const cc = new VersionCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -284,7 +283,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CommandClassGet,
 		);
 
-		const cc = new VersionCCCommandClassGet(this.applHost, {
+		const cc = new VersionCCCommandClassGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedCC,
@@ -325,7 +324,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 				break;
 		}
 
-		const cc = new VersionCCCommandClassReport(this.applHost, {
+		const cc = new VersionCCCommandClassReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedCC,
@@ -341,7 +340,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CapabilitiesGet,
 		);
 
-		const cc = new VersionCCCapabilitiesGet(this.applHost, {
+		const cc = new VersionCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -362,7 +361,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CapabilitiesReport,
 		);
 
-		const cc = new VersionCCCapabilitiesReport(this.applHost, {
+		const cc = new VersionCCCapabilitiesReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			// At this time, we do not support responding to Z-Wave Software Get
@@ -378,7 +377,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.ZWaveSoftwareGet,
 		);
 
-		const cc = new VersionCCZWaveSoftwareGet(this.applHost, {
+		const cc = new VersionCCZWaveSoftwareGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -653,12 +652,11 @@ export interface VersionCCReportOptions {
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (VersionCCReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 5);
@@ -783,12 +781,11 @@ export interface VersionCCCommandClassReportOptions extends CCCommandOptions {
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| VersionCCCommandClassReportOptions
 			| CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.requestedCC = this.payload[0];
@@ -838,12 +835,11 @@ function testResponseForVersionCommandClassGet(
 )
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| VersionCCCommandClassGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.requestedCC = this.payload[0];
@@ -875,12 +871,11 @@ export interface VersionCCCapabilitiesReportOptions {
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (VersionCCCapabilitiesReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -919,10 +914,9 @@ export class VersionCCCapabilitiesGet extends VersionCC {}
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 23);
 		this.sdkVersion = parseVersion(this.payload);

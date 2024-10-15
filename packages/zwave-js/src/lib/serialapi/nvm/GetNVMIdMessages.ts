@@ -1,5 +1,4 @@
 import { type MessageOrCCLogEntry, MessagePriority } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -74,10 +73,9 @@ export class GetNVMIdRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.GetNVMId)
 export class GetNVMIdResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.nvmManufacturerId = this.payload[1];
 		this.memoryType = this.payload[2];
 		this.memorySize = this.payload[3];

@@ -17,7 +17,6 @@ import type {
 	GetSupportedCCVersion,
 	HostIDs,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
@@ -26,12 +25,10 @@ import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
 
 export type MessageConstructor<T extends Message> = new (
-	host: ZWaveHost,
 	options?: MessageOptions,
 ) => T;
 
 export type DeserializingMessageConstructor<T extends Message> = new (
-	host: ZWaveHost,
 	options: MessageDeserializationOptions,
 ) => T;
 
@@ -122,8 +119,7 @@ export interface MessageEncodingContext
  */
 export class Message {
 	public constructor(
-		public readonly host: ZWaveHost,
-		options: MessageOptions = {},
+		public readonly options: MessageOptions = {},
 	) {
 		// decide which implementation we follow
 		if (gotDeserializationOptions(options)) {
@@ -297,7 +293,6 @@ export class Message {
 
 	/** Creates an instance of the message that is serialized in the given buffer */
 	public static from(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 		contextStore?: Map<FunctionType, Record<string, unknown>>,
 	): Message {
@@ -312,7 +307,7 @@ export class Message {
 			}
 		}
 
-		const ret = new Constructor(host, options);
+		const ret = new Constructor(options);
 		return ret;
 	}
 

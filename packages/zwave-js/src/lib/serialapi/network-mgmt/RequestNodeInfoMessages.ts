@@ -4,7 +4,6 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	type INodeQuery,
@@ -34,10 +33,9 @@ export class RequestNodeInfoResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | RequestNodeInfoResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.wasSent = this.payload[0] !== 0;
 		} else {
@@ -85,10 +83,9 @@ function testCallbackForRequestNodeInfoRequest(
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	public constructor(
-		host: ZWaveHost,
 		options: RequestNodeInfoRequestOptions | MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.nodeId = parseNodeID(
 				this.payload,

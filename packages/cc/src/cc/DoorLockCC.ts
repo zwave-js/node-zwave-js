@@ -19,7 +19,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -465,7 +464,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			DoorLockCommand.CapabilitiesGet,
 		);
 
-		const cc = new DoorLockCCCapabilitiesGet(this.applHost, {
+		const cc = new DoorLockCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -499,7 +498,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			DoorLockCommand.OperationGet,
 		);
 
-		const cc = new DoorLockCCOperationGet(this.applHost, {
+		const cc = new DoorLockCCOperationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -533,7 +532,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			DoorLockCommand.OperationSet,
 		);
 
-		const cc = new DoorLockCCOperationSet(this.applHost, {
+		const cc = new DoorLockCCOperationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			mode,
@@ -550,7 +549,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			DoorLockCommand.ConfigurationSet,
 		);
 
-		const cc = new DoorLockCCConfigurationSet(this.applHost, {
+		const cc = new DoorLockCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...configuration,
@@ -565,7 +564,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			DoorLockCommand.ConfigurationGet,
 		);
 
-		const cc = new DoorLockCCConfigurationGet(this.applHost, {
+		const cc = new DoorLockCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -829,12 +828,11 @@ export interface DoorLockCCOperationSetOptions extends CCCommandOptions {
 @useSupervision()
 export class DoorLockCCOperationSet extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| DoorLockCCOperationSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -872,10 +870,9 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 @CCCommand(DoorLockCommand.OperationReport)
 export class DoorLockCCOperationReport extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 5);
 
 		this.currentMode = this.payload[0];
@@ -1015,10 +1012,9 @@ export class DoorLockCCOperationGet extends DoorLockCC {}
 @CCCommand(DoorLockCommand.ConfigurationReport)
 export class DoorLockCCConfigurationReport extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 4);
 
 		this.operationType = this.payload[0];
@@ -1190,12 +1186,11 @@ export type DoorLockCCConfigurationSetOptions =
 @useSupervision()
 export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & DoorLockCCConfigurationSetOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1326,10 +1321,9 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 @CCCommand(DoorLockCommand.CapabilitiesReport)
 export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		// parse variable length operation type bit mask
 		validatePayload(this.payload.length >= 1);

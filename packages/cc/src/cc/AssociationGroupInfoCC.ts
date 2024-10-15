@@ -15,7 +15,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -112,7 +111,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.NameGet,
 		);
 
-		const cc = new AssociationGroupInfoCCNameGet(this.applHost, {
+		const cc = new AssociationGroupInfoCCNameGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -133,7 +132,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.NameReport,
 		);
 
-		const cc = new AssociationGroupInfoCCNameReport(this.applHost, {
+		const cc = new AssociationGroupInfoCCNameReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -151,7 +150,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.InfoGet,
 		);
 
-		const cc = new AssociationGroupInfoCCInfoGet(this.applHost, {
+		const cc = new AssociationGroupInfoCCInfoGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -184,7 +183,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.InfoReport,
 		);
 
-		const cc = new AssociationGroupInfoCCInfoReport(this.applHost, {
+		const cc = new AssociationGroupInfoCCInfoReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -205,7 +204,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.CommandListGet,
 		);
 
-		const cc = new AssociationGroupInfoCCCommandListGet(this.applHost, {
+		const cc = new AssociationGroupInfoCCCommandListGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -230,7 +229,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.CommandListReport,
 		);
 
-		const cc = new AssociationGroupInfoCCCommandListReport(this.applHost, {
+		const cc = new AssociationGroupInfoCCCommandListReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -474,12 +473,11 @@ export interface AssociationGroupInfoCCNameReportOptions
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -542,12 +540,11 @@ export interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCNameReport)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.groupId = this.payload[0];
@@ -588,7 +585,6 @@ export interface AssociationGroupInfoCCInfoReportSpecificOptions {
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (
@@ -596,7 +592,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 				& CCCommandOptions
 			),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -708,12 +704,11 @@ export type AssociationGroupInfoCCInfoGetOptions =
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCInfoGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			const optionByte = this.payload[0];
@@ -773,12 +768,11 @@ export class AssociationGroupInfoCCCommandListReport
 	extends AssociationGroupInfoCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -866,12 +860,11 @@ export class AssociationGroupInfoCCCommandListGet
 	extends AssociationGroupInfoCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.allowCache = !!(this.payload[0] & 0b1000_0000);

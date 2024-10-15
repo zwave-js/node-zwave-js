@@ -10,7 +10,6 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -51,12 +50,11 @@ export class ApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ApplicationCommandRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// first byte is a status flag
 			const status = this.payload[0];
@@ -92,7 +90,7 @@ export class ApplicationCommandRequest extends Message
 			offset += nodeIdBytes;
 			// and a command class
 			const commandLength = this.payload[offset++];
-			this.command = CommandClass.from(this.host, {
+			this.command = CommandClass.from({
 				data: this.payload.subarray(offset, offset + commandLength),
 				nodeId,
 				origin: options.origin,

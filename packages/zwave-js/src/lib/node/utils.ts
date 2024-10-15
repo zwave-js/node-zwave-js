@@ -235,7 +235,6 @@ export function translateValueID<T extends ValueID>(
 		...valueId,
 	};
 	const ccInstance = CommandClass.createInstanceUnchecked(
-		applHost,
 		endpoint,
 		valueId.commandClass,
 	);
@@ -351,7 +350,6 @@ export function getDefinedValueIDsInternal(
 				|| cc === CommandClasses.Basic
 			) {
 				const ccInstance = CommandClass.createInstanceUnchecked(
-					applHost,
 					endpoint,
 					cc,
 				);

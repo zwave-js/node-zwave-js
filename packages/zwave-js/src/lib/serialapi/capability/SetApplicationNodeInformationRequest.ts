@@ -5,7 +5,6 @@ import {
 	encodeCCList,
 	getCCName,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -31,10 +30,9 @@ export interface SetApplicationNodeInformationRequestOptions
 @priority(MessagePriority.Controller)
 export class SetApplicationNodeInformationRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: SetApplicationNodeInformationRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.isListening = options.isListening;
 		this.genericDeviceClass = options.genericDeviceClass;
 		this.specificDeviceClass = options.specificDeviceClass;

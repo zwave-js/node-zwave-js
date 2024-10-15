@@ -1,5 +1,4 @@
 import { MessagePriority } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -30,12 +29,11 @@ export interface GetControllerVersionResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetControllerVersionResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// The payload consists of a zero-terminated string and a uint8 for the controller type

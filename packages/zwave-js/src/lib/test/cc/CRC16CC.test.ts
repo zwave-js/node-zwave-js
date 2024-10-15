@@ -13,7 +13,7 @@ import test from "ava";
 const host = createTestingHost();
 
 test("should be detected as an encapsulating CC", (t) => {
-	const basicCCSet = new BasicCCSet(host, {
+	const basicCCSet = new BasicCCSet({
 		nodeId: 3,
 		targetValue: 89,
 	});
@@ -23,7 +23,7 @@ test("should be detected as an encapsulating CC", (t) => {
 
 test("should match the specs", (t) => {
 	// SDS13783 contains the following sample encapsulated command:
-	const basicCCGet = new BasicCCGet(host, { nodeId: 1 });
+	const basicCCGet = new BasicCCGet({ nodeId: 1 });
 	const crc16 = CRC16CC.encapsulate(host, basicCCGet);
 	const serialized = crc16.serialize({} as any);
 	const expected = Buffer.from("560120024d26", "hex");
@@ -31,7 +31,7 @@ test("should match the specs", (t) => {
 });
 
 test("serialization and deserialization should be compatible", (t) => {
-	const basicCCSet = new BasicCCSet(host, {
+	const basicCCSet = new BasicCCSet({
 		nodeId: 3,
 		targetValue: 89,
 	});
@@ -40,7 +40,7 @@ test("serialization and deserialization should be compatible", (t) => {
 	t.is(crc16.encapsulated, basicCCSet);
 	const serialized = crc16.serialize({} as any);
 
-	const deserialized = CommandClass.from(host, {
+	const deserialized = CommandClass.from({
 		nodeId: basicCCSet.nodeId as number,
 		data: serialized,
 		context: {} as any,
@@ -54,7 +54,7 @@ test("serialization and deserialization should be compatible", (t) => {
 });
 
 test("deserializing a CC with a wrong checksum should result in an invalid CC", (t) => {
-	const basicCCSet = new BasicCCSet(host, {
+	const basicCCSet = new BasicCCSet({
 		nodeId: 3,
 		targetValue: 89,
 	});
@@ -64,7 +64,7 @@ test("deserializing a CC with a wrong checksum should result in an invalid CC", 
 	const serialized = crc16.serialize({} as any);
 	serialized[serialized.length - 1] ^= 0xff;
 
-	const decoded = CommandClass.from(host, {
+	const decoded = CommandClass.from({
 		nodeId: basicCCSet.nodeId as number,
 		data: serialized,
 		context: {} as any,

@@ -19,7 +19,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new ManufacturerSpecificCCGet(host, { nodeId: 1 });
+	const cc = new ManufacturerSpecificCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			ManufacturerSpecificCommand.Get, // CC Command
@@ -40,7 +40,7 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x06,
 		]),
 	);
-	const cc = new ManufacturerSpecificCCReport(host, {
+	const cc = new ManufacturerSpecificCCReport({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,

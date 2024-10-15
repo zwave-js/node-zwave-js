@@ -22,7 +22,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -221,7 +220,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			ThermostatSetpointCommand.Get,
 		);
 
-		const cc = new ThermostatSetpointCCGet(this.applHost, {
+		const cc = new ThermostatSetpointCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			setpointType,
@@ -254,7 +253,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			ThermostatSetpointCommand.Set,
 		);
 
-		const cc = new ThermostatSetpointCCSet(this.applHost, {
+		const cc = new ThermostatSetpointCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			setpointType,
@@ -272,7 +271,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			ThermostatSetpointCommand.CapabilitiesGet,
 		);
 
-		const cc = new ThermostatSetpointCCCapabilitiesGet(this.applHost, {
+		const cc = new ThermostatSetpointCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			setpointType,
@@ -306,7 +305,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			ThermostatSetpointCommand.SupportedGet,
 		);
 
-		const cc = new ThermostatSetpointCCSupportedGet(this.applHost, {
+		const cc = new ThermostatSetpointCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -553,12 +552,11 @@ export interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.setpointType = this.payload[0] & 0b1111;
@@ -615,12 +613,11 @@ export interface ThermostatSetpointCCReportOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -721,12 +718,11 @@ export interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 )
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.setpointType = this.payload[0] & 0b1111;
@@ -771,12 +767,11 @@ export class ThermostatSetpointCCCapabilitiesReport
 	extends ThermostatSetpointCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCCapabilitiesReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -856,12 +851,11 @@ export interface ThermostatSetpointCCCapabilitiesGetOptions
 @expectedCCResponse(ThermostatSetpointCCCapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCCapabilitiesGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.setpointType = this.payload[0] & 0b1111;
@@ -900,12 +894,11 @@ export interface ThermostatSetpointCCSupportedReportOptions
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCSupportedReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);

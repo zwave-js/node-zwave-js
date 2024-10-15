@@ -46,7 +46,7 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 			receivedCC
 				instanceof ZWaveProtocolCCRequestNodeInformationFrame
 		) {
-			const cc = new ZWaveProtocolCCNodeInformationFrame(self.host, {
+			const cc = new ZWaveProtocolCCNodeInformationFrame({
 				nodeId: self.id,
 				...self.capabilities,
 				supportedCCs: [...self.implementedCCs]
@@ -85,7 +85,7 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 				version = 1;
 			}
 
-			const cc = new VersionCCCommandClassReport(self.host, {
+			const cc = new VersionCCCommandClassReport({
 				nodeId: self.id,
 				endpoint: "index" in endpoint ? endpoint.index : undefined,
 				requestedCC: receivedCC.requestedCC,
@@ -99,7 +99,7 @@ const respondToVersionCCCommandClassGet: MockNodeBehavior = {
 const respondToZWavePlusCCGet: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof ZWavePlusCCGet) {
-			const cc = new ZWavePlusCCReport(self.host, {
+			const cc = new ZWavePlusCCReport({
 				nodeId: controller.ownNodeId,
 				zwavePlusVersion: 2,
 				nodeType: ZWavePlusNodeType.Node,
@@ -123,7 +123,7 @@ const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
 			receivedCC instanceof SecurityCCCommandEncapsulation
 			&& receivedCC.encapsulated instanceof ZWavePlusCCGet
 		) {
-			let cc: CommandClass = new ZWavePlusCCReport(self.host, {
+			let cc: CommandClass = new ZWavePlusCCReport({
 				nodeId: controller.ownNodeId,
 				zwavePlusVersion: 2,
 				nodeType: ZWavePlusNodeType.Node,
@@ -136,7 +136,6 @@ const respondToS0ZWavePlusCCGet: MockNodeBehavior = {
 				userIcon: 0x0000,
 			});
 			cc = SecurityCC.encapsulate(
-				self.host,
 				self.id,
 				self.securityManagers.securityManager!,
 				cc,
@@ -152,7 +151,7 @@ const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
 			receivedCC instanceof Security2CCMessageEncapsulation
 			&& receivedCC.encapsulated instanceof ZWavePlusCCGet
 		) {
-			let cc: CommandClass = new ZWavePlusCCReport(self.host, {
+			let cc: CommandClass = new ZWavePlusCCReport({
 				nodeId: controller.ownNodeId,
 				zwavePlusVersion: 2,
 				nodeType: ZWavePlusNodeType.Node,
@@ -165,7 +164,6 @@ const respondToS2ZWavePlusCCGet: MockNodeBehavior = {
 				userIcon: 0x0000,
 			});
 			cc = Security2CC.encapsulate(
-				self.host,
 				cc,
 				self.id,
 				self.securityManagers,

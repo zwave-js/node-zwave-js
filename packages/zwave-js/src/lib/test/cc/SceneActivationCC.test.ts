@@ -19,7 +19,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Set command (without Duration) should serialize correctly", (t) => {
-	const cc = new SceneActivationCCSet(host, {
+	const cc = new SceneActivationCCSet({
 		nodeId: 2,
 		sceneId: 55,
 	});
@@ -34,7 +34,7 @@ test("the Set command (without Duration) should serialize correctly", (t) => {
 });
 
 test("the Set command (with Duration) should serialize correctly", (t) => {
-	const cc = new SceneActivationCCSet(host, {
+	const cc = new SceneActivationCCSet({
 		nodeId: 2,
 		sceneId: 56,
 		dimmingDuration: new Duration(1, "minutes"),
@@ -57,7 +57,7 @@ test("the Set command should be deserialized correctly", (t) => {
 			0x00, // 0 seconds
 		]),
 	);
-	const cc = new SceneActivationCCSet(host, {
+	const cc = new SceneActivationCCSet({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,
@@ -71,7 +71,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new SceneActivationCC(host, {
+	const cc: any = new SceneActivationCC({
 		nodeId: 2,
 		data: serializedCC,
 		context: {} as any,

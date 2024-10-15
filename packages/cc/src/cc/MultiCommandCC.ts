@@ -5,11 +5,7 @@ import {
 	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
@@ -49,7 +45,7 @@ export class MultiCommandCCAPI extends CCAPI {
 		);
 
 		// FIXME: This should not be on the API but rather on the applHost level
-		const cc = new MultiCommandCCCommandEncapsulation(this.applHost, {
+		const cc = new MultiCommandCCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
 			encapsulated: commands,
 		});
@@ -72,10 +68,9 @@ export class MultiCommandCC extends CommandClass {
 	}
 
 	public static encapsulate(
-		host: ZWaveHost,
 		CCs: CommandClass[],
 	): MultiCommandCCCommandEncapsulation {
-		const ret = new MultiCommandCCCommandEncapsulation(host, {
+		const ret = new MultiCommandCCCommandEncapsulation({
 			nodeId: CCs[0].nodeId,
 			encapsulated: CCs,
 		});
@@ -109,12 +104,11 @@ export interface MultiCommandCCCommandEncapsulationOptions
 // When sending commands encapsulated in this CC, responses to GET-type commands likely won't be encapsulated
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiCommandCCCommandEncapsulationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const numCommands = this.payload[0];
@@ -125,7 +119,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 				const cmdLength = this.payload[offset];
 				validatePayload(this.payload.length >= offset + 1 + cmdLength);
 				this.encapsulated.push(
-					CommandClass.from(this.host, {
+					CommandClass.from({
 						data: this.payload.subarray(
 							offset + 1,
 							offset + 1 + cmdLength,

@@ -13,7 +13,6 @@ import {
 	parseNodeBitMask,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -33,10 +32,9 @@ export class BridgeApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this._ownNodeId = options.ctx.ownNodeId;
 
 		// if (gotDeserializationOptions(options)) {
@@ -74,7 +72,7 @@ export class BridgeApplicationCommandRequest extends Message
 		offset += srcNodeIdBytes;
 		// Parse the CC
 		const commandLength = this.payload[offset++];
-		this.command = CommandClass.from(this.host, {
+		this.command = CommandClass.from({
 			data: this.payload.subarray(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 			origin: options.origin,

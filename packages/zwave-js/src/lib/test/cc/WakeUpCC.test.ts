@@ -11,7 +11,7 @@ import { randomBytes } from "node:crypto";
 const host = createTestingHost();
 
 test("WakeUpCCNoMoreInformation should expect no response", (t) => {
-	const cc = new WakeUpCCNoMoreInformation(host, {
+	const cc = new WakeUpCCNoMoreInformation({
 		nodeId: 2,
 		endpoint: 2,
 	});
@@ -21,7 +21,7 @@ test("WakeUpCCNoMoreInformation should expect no response", (t) => {
 test("MultiChannelCC/WakeUpCCNoMoreInformation should expect NO response", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		host,
-		new WakeUpCCNoMoreInformation(host, {
+		new WakeUpCCNoMoreInformation({
 			nodeId: 2,
 			endpoint: 2,
 		}),
@@ -45,7 +45,7 @@ test("SecurityCC/WakeUpCCNoMoreInformation should expect NO response", (t) => {
 		host,
 		host.ownNodeId,
 		securityManager as any,
-		new WakeUpCCNoMoreInformation(host, {
+		new WakeUpCCNoMoreInformation({
 			nodeId: 2,
 			endpoint: 2,
 		}),

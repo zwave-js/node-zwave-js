@@ -18,7 +18,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -223,7 +222,7 @@ export class ProtectionCCAPI extends CCAPI {
 	public async get() {
 		this.assertSupportsCommand(ProtectionCommand, ProtectionCommand.Get);
 
-		const cc = new ProtectionCCGet(this.applHost, {
+		const cc = new ProtectionCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -243,7 +242,7 @@ export class ProtectionCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(ProtectionCommand, ProtectionCommand.Set);
 
-		const cc = new ProtectionCCSet(this.applHost, {
+		const cc = new ProtectionCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			local,
@@ -259,7 +258,7 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.SupportedGet,
 		);
 
-		const cc = new ProtectionCCSupportedGet(this.applHost, {
+		const cc = new ProtectionCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -285,7 +284,7 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.ExclusiveControlGet,
 		);
 
-		const cc = new ProtectionCCExclusiveControlGet(this.applHost, {
+		const cc = new ProtectionCCExclusiveControlGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -307,7 +306,7 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.ExclusiveControlSet,
 		);
 
-		const cc = new ProtectionCCExclusiveControlSet(this.applHost, {
+		const cc = new ProtectionCCExclusiveControlSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			exclusiveControlNodeId: nodeId,
@@ -321,7 +320,7 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.TimeoutGet,
 		);
 
-		const cc = new ProtectionCCTimeoutGet(this.applHost, {
+		const cc = new ProtectionCCTimeoutGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -343,7 +342,7 @@ export class ProtectionCCAPI extends CCAPI {
 			ProtectionCommand.TimeoutSet,
 		);
 
-		const cc = new ProtectionCCTimeoutSet(this.applHost, {
+		const cc = new ProtectionCCTimeoutSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			timeout,
@@ -508,10 +507,9 @@ export interface ProtectionCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ProtectionCCSet extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ProtectionCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -563,10 +561,9 @@ export class ProtectionCCSet extends ProtectionCC {
 @CCCommand(ProtectionCommand.Report)
 export class ProtectionCCReport extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		this.local = this.payload[0] & 0b1111;
 		if (this.payload.length >= 2) {
@@ -601,10 +598,9 @@ export class ProtectionCCGet extends ProtectionCC {}
 @CCCommand(ProtectionCommand.SupportedReport)
 export class ProtectionCCSupportedReport extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 5);
 		this.supportsTimeout = !!(this.payload[0] & 0b1);
 		this.supportsExclusiveControl = !!(this.payload[0] & 0b10);
@@ -683,10 +679,9 @@ export class ProtectionCCSupportedGet extends ProtectionCC {}
 @CCCommand(ProtectionCommand.ExclusiveControlReport)
 export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		this.exclusiveControlNodeId = this.payload[0];
 	}
@@ -720,12 +715,11 @@ export interface ProtectionCCExclusiveControlSetOptions
 @useSupervision()
 export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ProtectionCCExclusiveControlSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -757,10 +751,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 @CCCommand(ProtectionCommand.TimeoutReport)
 export class ProtectionCCTimeoutReport extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		this.timeout = Timeout.parse(this.payload[0]);
 	}
@@ -790,12 +783,11 @@ export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ProtectionCCTimeoutSet extends ProtectionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ProtectionCCTimeoutSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

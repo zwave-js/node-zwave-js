@@ -37,7 +37,7 @@ test.serial(
 	async (t) => {
 		const { driver, controller } = t.context;
 		const req = new ApplicationCommandRequest(driver, {
-			command: new WakeUpCCIntervalSet(driver, {
+			command: new WakeUpCCIntervalSet({
 				nodeId: 1,
 				controllerNodeId: 2,
 				wakeUpInterval: 5,

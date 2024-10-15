@@ -1,5 +1,4 @@
 import { MessagePriority, encodeNodeID, parseNodeID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -25,10 +24,9 @@ export interface GetSUCNodeIdResponseOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.GetSUCNodeId)
 export class GetSUCNodeIdResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | GetSUCNodeIdResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.sucNodeId = parseNodeID(

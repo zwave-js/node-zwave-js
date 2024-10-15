@@ -15,7 +15,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the CC should serialize correctly", (t) => {
-	const cc = new NoOperationCC(host, { nodeId: 1 });
+	const cc = new NoOperationCC({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([]), // No command!
 	);
@@ -27,6 +27,6 @@ test("the CC should be deserialized correctly", (t) => {
 		Buffer.from([]), // No command!
 	);
 	t.notThrows(() =>
-		new NoOperationCC(host, { nodeId: 2, data: ccData, context: {} as any })
+		new NoOperationCC({ nodeId: 2, data: ccData, context: {} as any })
 	);
 });

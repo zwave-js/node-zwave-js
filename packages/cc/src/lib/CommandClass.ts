@@ -39,7 +39,6 @@ import type {
 	GetSupportedCCVersion,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
@@ -160,8 +159,7 @@ export function getEffectiveCCVersion(
 // @publicAPI
 export class CommandClass implements CCId {
 	// empty constructor to parse messages
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		this.host = host;
+	public constructor(options: CommandClassOptions) {
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;
@@ -187,7 +185,7 @@ export class CommandClass implements CCId {
 					CommandConstructor
 					&& (new.target as any) !== CommandConstructor
 				) {
-					return new CommandConstructor(host, options);
+					return new CommandConstructor(options);
 				}
 			}
 
@@ -225,23 +223,7 @@ export class CommandClass implements CCId {
 			this.ccCommand = ccCommand;
 			this.payload = payload;
 		}
-
-		if (this instanceof InvalidCC) return;
-
-		if (options.origin !== MessageOrigin.Host && this.isSinglecast()) {
-			// Send secure commands if necessary
-			this.toggleEncapsulationFlag(
-				EncapsulationFlags.Security,
-				this.host.isCCSecure(
-					this.ccId,
-					this.nodeId,
-					this.endpointIndex,
-				),
-			);
-		}
 	}
-
-	protected host: ZWaveHost;
 
 	/** This CC's identifier */
 	public ccId!: CommandClasses;
@@ -401,7 +383,6 @@ export class CommandClass implements CCId {
 	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
 	public static from(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
@@ -409,7 +390,7 @@ export class CommandClass implements CCId {
 		const Constructor = getCCConstructor(ccId) ?? CommandClass;
 
 		try {
-			return new Constructor(host, options);
+			return new Constructor(options);
 		} catch (e) {
 			// Indicate invalid payloads with a special CC type
 			if (
@@ -439,7 +420,7 @@ export class CommandClass implements CCId {
 					reason = e.context;
 				}
 
-				const ret = new InvalidCC(host, {
+				const ret = new InvalidCC({
 					nodeId,
 					ccId,
 					ccName,
@@ -463,13 +444,12 @@ export class CommandClass implements CCId {
 	 * **INTERNAL:** Applications should not use this directly.
 	 */
 	public static createInstanceUnchecked<T extends CommandClass>(
-		host: ZWaveHost,
 		endpoint: EndpointId,
 		cc: CommandClasses | CCConstructor<T>,
 	): T | undefined {
 		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
 		if (Constructor) {
-			return new Constructor(host, {
+			return new Constructor({
 				nodeId: endpoint.nodeId,
 				endpoint: endpoint.index,
 			}) as T;
@@ -1213,8 +1193,8 @@ export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 }
 
 export class InvalidCC extends CommandClass {
-	public constructor(host: ZWaveHost, options: InvalidCCCreationOptions) {
-		super(host, options);
+	public constructor(options: InvalidCCCreationOptions) {
+		super(options);
 		this._ccName = options.ccName;
 		// Numeric reasons are used internally to communicate problems with a CC
 		// without ignoring them entirely
@@ -1266,7 +1246,7 @@ export function assertValidCCs(container: ICommandClassContainer): void {
 
 export type CCConstructor<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
-	new (host: ZWaveHost, options: any): T;
+	new (options: any): T;
 };
 
 /**

@@ -45,7 +45,7 @@ test("the Notification command should deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCNotification(host, {
+	const cc = new EntryControlCCNotification({
 		nodeId: 1,
 		data,
 		context: {} as any,
@@ -58,7 +58,7 @@ test("the Notification command should deserialize correctly", (t) => {
 });
 
 test("the ConfigurationGet command should serialize correctly", (t) => {
-	const cc = new EntryControlCCConfigurationGet(host, {
+	const cc = new EntryControlCCConfigurationGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -70,7 +70,7 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 });
 
 test("the ConfigurationSet command should serialize correctly", (t) => {
-	const cc = new EntryControlCCConfigurationSet(host, {
+	const cc = new EntryControlCCConfigurationSet({
 		nodeId: 1,
 		keyCacheSize: 1,
 		keyCacheTimeout: 2,
@@ -94,7 +94,7 @@ test("the ConfigurationReport command should be deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCConfigurationReport(host, {
+	const cc = new EntryControlCCConfigurationReport({
 		nodeId: 1,
 		data,
 		context: {} as any,
@@ -105,7 +105,7 @@ test("the ConfigurationReport command should be deserialize correctly", (t) => {
 });
 
 test("the EventSupportedGet command should serialize correctly", (t) => {
-	const cc = new EntryControlCCEventSupportedGet(host, {
+	const cc = new EntryControlCCEventSupportedGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -134,7 +134,7 @@ test("the EventSupportedReport command should be deserialize correctly", (t) => 
 		]),
 	);
 
-	const cc = new EntryControlCCEventSupportedReport(host, {
+	const cc = new EntryControlCCEventSupportedReport({
 		nodeId: 1,
 		data,
 		context: {} as any,
@@ -154,7 +154,7 @@ test("the EventSupportedReport command should be deserialize correctly", (t) => 
 });
 
 test("the KeySupportedGet command should serialize correctly", (t) => {
-	const cc = new EntryControlCCKeySupportedGet(host, { nodeId: 1 });
+	const cc = new EntryControlCCKeySupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			EntryControlCommand.KeySupportedGet, // CC Command
@@ -172,7 +172,7 @@ test("the KeySupportedReport command should be deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCKeySupportedReport(host, {
+	const cc = new EntryControlCCKeySupportedReport({
 		nodeId: 1,
 		data,
 		context: {} as any,

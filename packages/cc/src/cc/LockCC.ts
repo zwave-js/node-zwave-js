@@ -14,7 +14,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -74,7 +73,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	public async get(): Promise<MaybeNotKnown<boolean>> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Get);
 
-		const cc = new LockCCGet(this.applHost, {
+		const cc = new LockCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -93,7 +92,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	public async set(locked: boolean): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Set);
 
-		const cc = new LockCCSet(this.applHost, {
+		const cc = new LockCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			locked,
@@ -191,10 +190,9 @@ export interface LockCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class LockCCSet extends LockCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | LockCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -224,10 +222,9 @@ export class LockCCSet extends LockCC {
 @CCCommand(LockCommand.Report)
 export class LockCCReport extends LockCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		this.locked = this.payload[0] === 1;
 	}

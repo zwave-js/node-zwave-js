@@ -18,7 +18,7 @@ integrationTest(
 			const targetValueValueID = BinarySwitchCCValues.targetValue.id;
 			node.valueDB.setValue(targetValueValueID, false);
 
-			const cc = new BinarySwitchCCReport(mockNode.host, {
+			const cc = new BinarySwitchCCReport({
 				nodeId: mockController.ownNodeId,
 				currentValue: true,
 			});

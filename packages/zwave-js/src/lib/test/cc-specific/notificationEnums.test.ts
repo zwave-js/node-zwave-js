@@ -49,7 +49,7 @@ integrationTest(
 			});
 
 			// Send notifications to the node
-			let cc = new NotificationCCReport(mockNode.host, {
+			let cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x0f,
 				notificationEvent: 0x01,
@@ -66,7 +66,7 @@ integrationTest(
 			let value = node.getValue(valveOperationStatusId);
 			t.is(value, 0x00);
 
-			cc = new NotificationCCReport(mockNode.host, {
+			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x0f,
 				notificationEvent: 0x01,
@@ -124,7 +124,7 @@ integrationTest(
 			});
 
 			// Send notifications to the node
-			let cc = new NotificationCCReport(mockNode.host, {
+			let cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06,
 				notificationEvent: 0x16,
@@ -141,7 +141,7 @@ integrationTest(
 			let value = node.getValue(doorStateValueId);
 			t.is(value, 0x1600);
 
-			cc = new NotificationCCReport(mockNode.host, {
+			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06,
 				notificationEvent: 0x16,
@@ -157,7 +157,7 @@ integrationTest(
 			value = node.getValue(doorStateValueId);
 			t.is(value, 0x1601);
 
-			cc = new NotificationCCReport(mockNode.host, {
+			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06,
 				notificationEvent: 0x16, // open
@@ -172,7 +172,7 @@ integrationTest(
 			value = node.getValue(doorStateValueId);
 			t.is(value, 0x16);
 
-			cc = new NotificationCCReport(mockNode.host, {
+			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x06,
 				notificationEvent: 0x17, // closed
@@ -240,7 +240,7 @@ integrationTest("The 'simple' Door state value works correctly", {
 		);
 		const valueSimple = NotificationCCValues.doorStateSimple;
 
-		let cc = new NotificationCCReport(mockNode.host, {
+		let cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -259,7 +259,7 @@ integrationTest("The 'simple' Door state value works correctly", {
 
 		// ===
 
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -278,7 +278,7 @@ integrationTest("The 'simple' Door state value works correctly", {
 
 		// ===
 
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -296,7 +296,7 @@ integrationTest("The 'simple' Door state value works correctly", {
 
 		// ===
 
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x17, // Window/door is closed
@@ -346,7 +346,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 		t.false(hasTiltVID());
 
 		// Send a notification to the node where the window is not tilted
-		let cc = new NotificationCCReport(mockNode.host, {
+		let cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -366,7 +366,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 		// ===
 
 		// Again with tilt
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -387,7 +387,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 		// ===
 
 		// Again without tilt
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -406,7 +406,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 		// ===
 
 		// Again with tilt to be able to detect changes
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -425,7 +425,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 		// ===
 
 		// And now without the enum
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x17, // Window/door is closed
@@ -443,7 +443,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 		// ===
 
 		// Again with tilt to be able to detect changes
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -462,7 +462,7 @@ integrationTest("The synthetic 'Door tilt state' value works correctly", {
 		// ===
 
 		// And again without the enum
-		cc = new NotificationCCReport(mockNode.host, {
+		cc = new NotificationCCReport({
 			nodeId: mockController.ownNodeId,
 			notificationType: 0x06,
 			notificationEvent: 0x16, // Window/door is open
@@ -520,7 +520,7 @@ integrationTest(
 			});
 
 			// Send notifications to the node
-			let cc = new NotificationCCReport(mockNode.host, {
+			let cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x05,
 				notificationEvent: 0x07,
@@ -538,7 +538,7 @@ integrationTest(
 			t.is(value, 0x02);
 
 			// Now send one without an event parameter
-			cc = new NotificationCCReport(mockNode.host, {
+			cc = new NotificationCCReport({
 				nodeId: mockController.ownNodeId,
 				notificationType: 0x05,
 				notificationEvent: 0x07,
@@ -553,7 +553,7 @@ integrationTest(
 			value = node.getValue(waterPressureAlarmValueId);
 			t.is(value, 0x01);
 
-			// cc = new NotificationCCReport(mockNode.host, {
+			// cc = new NotificationCCReport({
 			// 	nodeId: mockController.ownNodeId,
 			// 	notificationType: 0x06,
 			// 	notificationEvent: 0x16, // open
@@ -568,7 +568,7 @@ integrationTest(
 			// value = node.getValue(waterPressureAlarmValueId);
 			// t.is(value, 0x16);
 
-			// cc = new NotificationCCReport(mockNode.host, {
+			// cc = new NotificationCCReport({
 			// 	nodeId: mockController.ownNodeId,
 			// 	notificationType: 0x06,
 			// 	notificationEvent: 0x17, // closed

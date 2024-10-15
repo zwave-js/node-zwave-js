@@ -12,7 +12,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -111,7 +110,7 @@ export class EnergyProductionCCAPI extends CCAPI {
 			EnergyProductionCommand.Get,
 		);
 
-		const cc = new EnergyProductionCCGet(this.applHost, {
+		const cc = new EnergyProductionCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -199,12 +198,11 @@ export interface EnergyProductionCCReportOptions extends CCCommandOptions {
 @CCCommand(EnergyProductionCommand.Report)
 export class EnergyProductionCCReport extends EnergyProductionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| EnergyProductionCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.parameter = this.payload[0];
@@ -283,12 +281,11 @@ function testResponseForEnergyProductionGet(
 )
 export class EnergyProductionCCGet extends EnergyProductionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| EnergyProductionCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.parameter = this.payload[0];

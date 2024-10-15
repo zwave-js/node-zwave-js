@@ -22,7 +22,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the TimeGet command should serialize correctly", (t) => {
-	const cc = new TimeCCTimeGet(host, { nodeId: 1 });
+	const cc = new TimeCCTimeGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			TimeCommand.TimeGet, // CC Command
@@ -40,7 +40,7 @@ test("the TimeReport command should be deserialized correctly", (t) => {
 			59,
 		]),
 	);
-	const cc = new TimeCCTimeReport(host, {
+	const cc = new TimeCCTimeReport({
 		nodeId: 8,
 		data: ccData,
 		context: {} as any,
@@ -52,7 +52,7 @@ test("the TimeReport command should be deserialized correctly", (t) => {
 });
 
 test("the DateGet command should serialize correctly", (t) => {
-	const cc = new TimeCCDateGet(host, { nodeId: 1 });
+	const cc = new TimeCCDateGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			TimeCommand.DateGet, // CC Command
@@ -71,7 +71,7 @@ test("the DateReport command should be deserialized correctly", (t) => {
 			17,
 		]),
 	);
-	const cc = new TimeCCDateReport(host, {
+	const cc = new TimeCCDateReport({
 		nodeId: 8,
 		data: ccData,
 		context: {} as any,
@@ -86,7 +86,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new TimeCC(host, {
+	const cc: any = new TimeCC({
 		nodeId: 8,
 		data: serializedCC,
 		context: {} as any,

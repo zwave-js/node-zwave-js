@@ -11,7 +11,7 @@ import {
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
-import type { GetAllNodes, ZWaveHost } from "@zwave-js/host";
+import type { GetAllNodes } from "@zwave-js/host";
 import type {
 	MessageEncodingContext,
 	SuccessIndicator,
@@ -94,14 +94,14 @@ export function computeNeighborDiscoveryTimeout(
 // no expected response, the controller will respond with multiple AddNodeToNetworkRequests
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== AddNodeToNetworkRequestStatusReport
 		) {
-			return new AddNodeToNetworkRequestStatusReport(host, options);
+			return new AddNodeToNetworkRequestStatusReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -135,10 +135,9 @@ function testCallbackForAddNodeRequest(
 @expectedCallback(testCallbackForAddNodeRequest)
 export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: AddNodeToNetworkRequestOptions = {},
 	) {
-		super(host, options);
+		super(options);
 
 		this.addNodeType = options.addNodeType;
 		this.highPower = !!options.highPower;
@@ -211,10 +210,9 @@ export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 
 export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: AddNodeDSKToNetworkRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.nwiHomeId = options.nwiHomeId;
 		this.authHomeId = options.authHomeId;
@@ -277,10 +275,9 @@ export class AddNodeToNetworkRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.callbackId = this.payload[0];
 		this.status = this.payload[1];
 		switch (this.status) {

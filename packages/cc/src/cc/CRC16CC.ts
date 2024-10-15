@@ -6,11 +6,7 @@ import {
 	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
@@ -50,7 +46,7 @@ export class CRC16CCAPI extends CCAPI {
 			CRC16Command.CommandEncapsulation,
 		);
 
-		const cc = new CRC16CCCommandEncapsulation(this.applHost, {
+		const cc = new CRC16CCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			encapsulated: encapsulatedCC,
@@ -74,10 +70,9 @@ export class CRC16CC extends CommandClass {
 
 	/** Encapsulates a command in a CRC-16 CC */
 	public static encapsulate(
-		host: ZWaveHost,
 		cc: CommandClass,
 	): CRC16CCCommandEncapsulation {
-		const ret = new CRC16CCCommandEncapsulation(host, {
+		const ret = new CRC16CCCommandEncapsulation({
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 		});
@@ -111,12 +106,11 @@ function getCCResponseForCommandEncapsulation(
 )
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| CRC16CCCommandEncapsulationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 
@@ -130,7 +124,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 			);
 			validatePayload(expectedCRC === actualCRC);
 
-			this.encapsulated = CommandClass.from(this.host, {
+			this.encapsulated = CommandClass.from({
 				data: ccBuffer,
 				fromEncapsulation: true,
 				encapCC: this,

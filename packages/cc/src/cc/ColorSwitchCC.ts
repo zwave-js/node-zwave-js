@@ -20,7 +20,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
@@ -210,7 +209,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			ColorSwitchCommand.SupportedGet,
 		);
 
-		const cc = new ColorSwitchCCSupportedGet(this.applHost, {
+		const cc = new ColorSwitchCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -228,7 +227,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 	public async get(component: ColorComponent) {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
 
-		const cc = new ColorSwitchCCGet(this.applHost, {
+		const cc = new ColorSwitchCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			colorComponent: component,
@@ -248,7 +247,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Set);
 
-		const cc = new ColorSwitchCCSet(this.applHost, {
+		const cc = new ColorSwitchCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -366,7 +365,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			ColorSwitchCommand.StartLevelChange,
 		);
 
-		const cc = new ColorSwitchCCStartLevelChange(this.applHost, {
+		const cc = new ColorSwitchCCStartLevelChange({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -384,7 +383,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			ColorSwitchCommand.StopLevelChange,
 		);
 
-		const cc = new ColorSwitchCCStopLevelChange(this.applHost, {
+		const cc = new ColorSwitchCCStopLevelChange({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			colorComponent,
@@ -687,12 +686,11 @@ export interface ColorSwitchCCSupportedReportOptions {
 @CCCommand(ColorSwitchCommand.SupportedReport)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (ColorSwitchCCSupportedReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// Docs say 'variable length', but the table shows 2 bytes.
@@ -749,12 +747,11 @@ export type ColorSwitchCCReportOptions =
 @CCCommand(ColorSwitchCommand.Report)
 export class ColorSwitchCCReport extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (ColorSwitchCCReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -905,10 +902,9 @@ function testResponseForColorSwitchGet(
 @expectedCCResponse(ColorSwitchCCReport, testResponseForColorSwitchGet)
 export class ColorSwitchCCGet extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ColorSwitchCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this._colorComponent = this.payload[0];
@@ -958,12 +954,11 @@ export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 @useSupervision()
 export class ColorSwitchCCSet extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & ColorSwitchCCSetOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const populatedColorCount = this.payload[0] & 0b11111;
@@ -1080,12 +1075,11 @@ export type ColorSwitchCCStartLevelChangeOptions =
 @useSupervision()
 export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & ColorSwitchCCStartLevelChangeOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			const ignoreStartLevel = (this.payload[0] & 0b0_0_1_00000) >>> 5;
@@ -1167,12 +1161,11 @@ export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
 @useSupervision()
 export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ColorSwitchCCStopLevelChangeOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.colorComponent = this.payload[0];

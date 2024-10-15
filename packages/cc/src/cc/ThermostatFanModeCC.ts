@@ -17,7 +17,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -177,7 +176,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			ThermostatFanModeCommand.Get,
 		);
 
-		const cc = new ThermostatFanModeCCGet(this.applHost, {
+		const cc = new ThermostatFanModeCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -202,7 +201,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			ThermostatFanModeCommand.Set,
 		);
 
-		const cc = new ThermostatFanModeCCSet(this.applHost, {
+		const cc = new ThermostatFanModeCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			mode,
@@ -219,7 +218,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			ThermostatFanModeCommand.SupportedGet,
 		);
 
-		const cc = new ThermostatFanModeCCSupportedGet(this.applHost, {
+		const cc = new ThermostatFanModeCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -344,12 +343,11 @@ export type ThermostatFanModeCCSetOptions = CCCommandOptions & {
 @useSupervision()
 export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatFanModeCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -387,10 +385,9 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 @CCCommand(ThermostatFanModeCommand.Report)
 export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this.mode = this.payload[0] & 0b1111;
@@ -426,10 +423,9 @@ export class ThermostatFanModeCCGet extends ThermostatFanModeCC {}
 @CCCommand(ThermostatFanModeCommand.SupportedReport)
 export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.supportedModes = parseBitMask(
 			this.payload,
 			ThermostatFanMode["Auto low"],

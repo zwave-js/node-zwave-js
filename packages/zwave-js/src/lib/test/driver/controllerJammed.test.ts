@@ -42,7 +42,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 	customSetup: async (driver, controller, mockNode) => {
 		// Return a TX status of Fail when desired
 		const handleSendData: MockControllerBehavior = {
-			async onHostMessage(host, controller, msg) {
+			async onHostMessage(controller, msg) {
 				if (msg instanceof SendDataRequest) {
 					if (!shouldFail) {
 						// Defer to the default behavior
@@ -69,7 +69,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 					);
 
 					// Notify the host that the message was sent
-					const res = new SendDataResponse(host, {
+					const res = new SendDataResponse({
 						wasSent: true,
 					});
 					await controller.sendMessageToHost(res);
@@ -81,7 +81,7 @@ integrationTest("update the controller status and wait if TX status is Fail", {
 						MockControllerCommunicationState.Idle,
 					);
 
-					const cb = new SendDataRequestTransmitReport(host, {
+					const cb = new SendDataRequestTransmitReport({
 						callbackId: msg.callbackId!,
 						transmitStatus: TransmitStatus.Fail,
 						txReport: {
@@ -159,7 +159,7 @@ integrationTest(
 		customSetup: async (driver, controller, mockNode) => {
 			// Return a TX status of Fail when desired
 			const handleSendData: MockControllerBehavior = {
-				async onHostMessage(host, controller, msg) {
+				async onHostMessage(controller, msg) {
 					// Soft reset should restore normal operation
 					if (msg instanceof SoftResetRequest) {
 						shouldFail = false;
@@ -192,7 +192,7 @@ integrationTest(
 						);
 
 						// Notify the host that the message was sent
-						const res = new SendDataResponse(host, {
+						const res = new SendDataResponse({
 							wasSent: true,
 						});
 						await controller.sendMessageToHost(res);
@@ -204,7 +204,7 @@ integrationTest(
 							MockControllerCommunicationState.Idle,
 						);
 
-						const cb = new SendDataRequestTransmitReport(host, {
+						const cb = new SendDataRequestTransmitReport({
 							callbackId: msg.callbackId!,
 							transmitStatus: TransmitStatus.Fail,
 							txReport: {
@@ -305,7 +305,7 @@ integrationTestMulti(
 		customSetup: async (driver, controller, mockNodes) => {
 			// Return a TX status of Fail when desired
 			const handleSendData: MockControllerBehavior = {
-				async onHostMessage(host, controller, msg) {
+				async onHostMessage(controller, msg) {
 					if (msg instanceof SendDataRequest) {
 						// Commands to node 3 work normally
 						if (msg.getNodeId() === 3) {
@@ -333,7 +333,7 @@ integrationTestMulti(
 						);
 
 						// Notify the host that the message was sent
-						const res = new SendDataResponse(host, {
+						const res = new SendDataResponse({
 							wasSent: true,
 						});
 						await controller.sendMessageToHost(res);
@@ -345,7 +345,7 @@ integrationTestMulti(
 							MockControllerCommunicationState.Idle,
 						);
 
-						const cb = new SendDataRequestTransmitReport(host, {
+						const cb = new SendDataRequestTransmitReport({
 							callbackId: msg.callbackId!,
 							transmitStatus: TransmitStatus.Fail,
 							txReport: {

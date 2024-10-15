@@ -3007,7 +3007,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		try {
 			this.isSoftResetting = true;
-			await this.sendMessage(new SoftResetRequest(this), {
+			await this.sendMessage(new SoftResetRequest(), {
 				supportCheck: false,
 				pauseSendThread: true,
 			});
@@ -3067,7 +3067,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		try {
 			this.isSoftResetting = true;
-			await this.sendMessage(new SoftResetRequest(this), {
+			await this.sendMessage(new SoftResetRequest(), {
 				supportCheck: false,
 				pauseSendThread: true,
 			});
@@ -3159,7 +3159,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			try {
 				// And resume sending - this requires us to unpause the send thread
 				this.unpauseSendQueue();
-				await this.sendMessage(new GetControllerVersionRequest(this), {
+				await this.sendMessage(new GetControllerVersionRequest(), {
 					supportCheck: false,
 					priority: MessagePriority.ControllerImmediate,
 				});
@@ -3468,7 +3468,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.from(this, {
+			msg = Message.from({
 				data,
 				sdkVersion: this._controller?.sdkVersion,
 				ctx: this.getCCParsingContext(),
@@ -4526,7 +4526,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 							level: "debug",
 							direction: "outbound",
 						});
-						const cc = new TransportServiceCCSegmentRequest(this, {
+						const cc = new TransportServiceCCSegmentRequest({
 							nodeId: command.nodeId,
 							sessionId: command.sessionId,
 							datagramOffset: offset,
@@ -4543,7 +4543,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 							level: "debug",
 							direction: "outbound",
 						});
-						const cc = new TransportServiceCCSegmentComplete(this, {
+						const cc = new TransportServiceCCSegmentComplete({
 							nodeId: command.nodeId,
 							sessionId: command.sessionId,
 						});
@@ -4591,7 +4591,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				});
 			} else {
 				// This belongs to a session we don't know... tell the sending node to try again
-				const cc = new TransportServiceCCSegmentWait(this, {
+				const cc = new TransportServiceCCSegmentWait({
 					nodeId: command.nodeId,
 					pendingSegments: 0,
 				});
@@ -5240,7 +5240,6 @@ ${handlers.length} left`,
 		// 3.
 		if (SupervisionCC.requiresEncapsulation(cmd)) {
 			cmd = SupervisionCC.encapsulate(
-				this,
 				cmd,
 				this.getNextSupervisionSessionId(cmd.nodeId as number),
 			);
@@ -5254,13 +5253,13 @@ ${handlers.length} left`,
 			);
 
 			cmd = multiChannelCCVersion === 1
-				? MultiChannelCC.encapsulateV1(this, cmd)
-				: MultiChannelCC.encapsulate(this, cmd);
+				? MultiChannelCC.encapsulateV1(cmd)
+				: MultiChannelCC.encapsulate(cmd);
 		}
 
 		// 5.
 		if (CRC16CC.requiresEncapsulation(cmd)) {
-			cmd = CRC16CC.encapsulate(this, cmd);
+			cmd = CRC16CC.encapsulate(cmd);
 		} else {
 			// The command must be S2-encapsulated, if ...
 			let maybeS2 = false;
@@ -5277,7 +5276,6 @@ ${handlers.length} left`,
 			}
 			if (maybeS2 && Security2CC.requiresEncapsulation(cmd)) {
 				cmd = Security2CC.encapsulate(
-					this,
 					cmd,
 					this.ownNodeId,
 					this,
@@ -5293,7 +5291,6 @@ ${handlers.length} left`,
 			// This check will return false for S2-encapsulated commands
 			if (SecurityCC.requiresEncapsulation(cmd)) {
 				cmd = SecurityCC.encapsulate(
-					this,
 					this.ownNodeId,
 					this.securityManager!,
 					cmd,
@@ -6119,13 +6116,13 @@ ${handlers.length} left`,
 				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
 			) {
 				// Prioritize Bridge commands when they are supported
-				msg = new SendDataBridgeRequest(this, {
+				msg = new SendDataBridgeRequest({
 					sourceNodeId: this.ownNodeId,
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
 			} else {
-				msg = new SendDataRequest(this, {
+				msg = new SendDataRequest({
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
@@ -6137,13 +6134,13 @@ ${handlers.length} left`,
 				)
 			) {
 				// Prioritize Bridge commands when they are supported
-				msg = new SendDataMulticastBridgeRequest(this, {
+				msg = new SendDataMulticastBridgeRequest({
 					sourceNodeId: this.ownNodeId,
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
 			} else {
-				msg = new SendDataMulticastRequest(this, {
+				msg = new SendDataMulticastRequest({
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
@@ -6233,7 +6230,6 @@ ${handlers.length} left`,
 		// Create the encapsulating CC so we have a session ID
 		const sessionId = this.getNextSupervisionSessionId(command.nodeId);
 		command = SupervisionCC.encapsulate(
-			this,
 			command,
 			sessionId,
 			options.requestStatusUpdates,
@@ -6275,8 +6271,15 @@ ${handlers.length} left`,
 			command.encapsulationFlags = options.encapsulationFlags;
 		}
 
-		// For S2 multicast, the Security encapsulation flag does not get set automatically by the CC constructor
-		if (options?.s2MulticastGroupId != undefined) {
+		// Use security encapsulation for CCs that are only supported securely, and multicast commands
+		if (
+			this.isCCSecure(
+				command.ccId,
+				command.nodeId as number,
+				command.endpointIndex,
+			)
+			|| options?.s2MulticastGroupId != undefined
+		) {
 			command.toggleEncapsulationFlag(EncapsulationFlags.Security, true);
 		}
 
@@ -6344,7 +6347,7 @@ ${handlers.length} left`,
 
 	private async abortSendData(): Promise<void> {
 		try {
-			const abort = new SendDataAbort(this);
+			const abort = new SendDataAbort();
 			await this.writeSerial(
 				abort.serialize(this.getCCEncodingContext()),
 			);
@@ -6981,7 +6984,7 @@ ${handlers.length} left`,
 			msg = commandOrMsg;
 		} else {
 			const SendDataConstructor = this.getSendDataSinglecastConstructor();
-			msg = new SendDataConstructor(this, {
+			msg = new SendDataConstructor({
 				sourceNodeId: this.ownNodeId,
 				command: commandOrMsg,
 			});
@@ -7456,7 +7459,7 @@ ${handlers.length} left`,
 		const result = await this.sendMessage<
 			Message & SuccessIndicator
 		>(
-			new SendTestFrameRequest(this, {
+			new SendTestFrameRequest({
 				testNodeId: nodeId,
 				powerlevel,
 			}),

@@ -17,7 +17,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { type AllOrNone, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -216,7 +215,7 @@ export class BasicCCAPI extends CCAPI {
 	public async get() {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Get);
 
-		const cc = new BasicCCGet(this.applHost, {
+		const cc = new BasicCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -239,7 +238,7 @@ export class BasicCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
 
-		const cc = new BasicCCSet(this.applHost, {
+		const cc = new BasicCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
@@ -364,10 +363,9 @@ export interface BasicCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class BasicCCSet extends BasicCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BasicCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.targetValue = this.payload[0];
@@ -406,10 +404,9 @@ export type BasicCCReportOptions =
 export class BasicCCReport extends BasicCC {
 	// @noCCValues See comment in the constructor
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BasicCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);

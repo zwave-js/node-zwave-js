@@ -18,7 +18,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import type { AllOrNone } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -103,7 +102,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			BinarySwitchCommand.Get,
 		);
 
-		const cc = new BinarySwitchCCGet(this.applHost, {
+		const cc = new BinarySwitchCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -136,7 +135,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			BinarySwitchCommand.Set,
 		);
 
-		const cc = new BinarySwitchCCSet(this.applHost, {
+		const cc = new BinarySwitchCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
@@ -315,10 +314,9 @@ export interface BinarySwitchCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.targetValue = !!this.payload[0];
@@ -381,12 +379,11 @@ export type BinarySwitchCCReportOptions =
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BinarySwitchCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);

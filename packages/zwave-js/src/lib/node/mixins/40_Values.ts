@@ -139,7 +139,6 @@ export abstract class NodeValuesMixin extends NodeWakeupMixin
 		}
 
 		const ccInstance = CommandClass.createInstanceUnchecked(
-			this.driver,
 			this,
 			arg.commandClass,
 		);

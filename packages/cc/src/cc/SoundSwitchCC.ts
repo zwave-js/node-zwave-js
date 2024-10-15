@@ -15,7 +15,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -121,7 +120,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.TonesNumberGet,
 		);
 
-		const cc = new SoundSwitchCCTonesNumberGet(this.applHost, {
+		const cc = new SoundSwitchCCTonesNumberGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -142,7 +141,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.ToneInfoGet,
 		);
 
-		const cc = new SoundSwitchCCToneInfoGet(this.applHost, {
+		const cc = new SoundSwitchCCToneInfoGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			toneId,
@@ -166,7 +165,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.ConfigurationSet,
 		);
 
-		const cc = new SoundSwitchCCConfigurationSet(this.applHost, {
+		const cc = new SoundSwitchCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			defaultToneId,
@@ -182,7 +181,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.ConfigurationGet,
 		);
 
-		const cc = new SoundSwitchCCConfigurationGet(this.applHost, {
+		const cc = new SoundSwitchCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -214,7 +213,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new SoundSwitchCCTonePlaySet(this.applHost, {
+		const cc = new SoundSwitchCCTonePlaySet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			toneId,
@@ -229,7 +228,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.TonePlaySet,
 		);
 
-		const cc = new SoundSwitchCCTonePlaySet(this.applHost, {
+		const cc = new SoundSwitchCCTonePlaySet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			toneId: 0x00,
@@ -245,7 +244,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.TonePlayGet,
 		);
 
-		const cc = new SoundSwitchCCTonePlayGet(this.applHost, {
+		const cc = new SoundSwitchCCTonePlayGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -481,12 +480,11 @@ export interface SoundSwitchCCTonesNumberReportOptions
 @CCCommand(SoundSwitchCommand.TonesNumberReport)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCTonesNumberReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.toneCount = this.payload[0];
@@ -524,12 +522,11 @@ export interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
 @CCCommand(SoundSwitchCommand.ToneInfoReport)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCToneInfoReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.toneId = this.payload[0];
@@ -590,12 +587,11 @@ export interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 )
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCToneInfoGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.toneId = this.payload[0];
@@ -629,12 +625,11 @@ export interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
 @useSupervision()
 export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCConfigurationSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.defaultVolume = this.payload[0];
@@ -673,12 +668,11 @@ export interface SoundSwitchCCConfigurationReportOptions {
 @CCCommand(SoundSwitchCommand.ConfigurationReport)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SoundSwitchCCConfigurationReportOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.defaultVolume = clamp(this.payload[0], 0, 100);
@@ -726,12 +720,11 @@ export interface SoundSwitchCCTonePlaySetOptions {
 @useSupervision()
 export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SoundSwitchCCTonePlaySetOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.toneId = this.payload[0];
@@ -776,12 +769,11 @@ export interface SoundSwitchCCTonePlayReportOptions {
 @CCCommand(SoundSwitchCommand.TonePlayReport)
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SoundSwitchCCTonePlayReportOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.toneId = this.payload[0];

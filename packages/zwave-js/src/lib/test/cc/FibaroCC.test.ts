@@ -26,7 +26,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Set Tilt command should serialize correctly", (t) => {
-	const cc = new FibaroVenetianBlindCCSet(host, {
+	const cc = new FibaroVenetianBlindCCSet({
 		nodeId: 2,
 		tilt: 99,
 	});
@@ -50,7 +50,7 @@ test("the Report command should be deserialized correctly", (t) => {
 			0x00, // Tilt
 		]),
 	);
-	const cc = CommandClass.from(host, {
+	const cc = CommandClass.from({
 		nodeId: 2,
 		data: ccData,
 		context: {} as any,
@@ -61,7 +61,7 @@ test("the Report command should be deserialized correctly", (t) => {
 });
 
 test("FibaroVenetianBlindCCSet should expect no response", (t) => {
-	const cc = new FibaroVenetianBlindCCSet(host, {
+	const cc = new FibaroVenetianBlindCCSet({
 		nodeId: 2,
 		tilt: 7,
 	});
@@ -69,18 +69,18 @@ test("FibaroVenetianBlindCCSet should expect no response", (t) => {
 });
 
 test("FibaroVenetianBlindCCGet should expect a response", (t) => {
-	const cc = new FibaroVenetianBlindCCGet(host, {
+	const cc = new FibaroVenetianBlindCCGet({
 		nodeId: 2,
 	});
 	t.true(cc.expectsCCResponse());
 });
 
 test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", (t) => {
-	const ccRequest = new FibaroVenetianBlindCCSet(host, {
+	const ccRequest = new FibaroVenetianBlindCCSet({
 		nodeId: 2,
 		tilt: 7,
 	});
-	const ccResponse = new FibaroVenetianBlindCCReport(host, {
+	const ccResponse = new FibaroVenetianBlindCCReport({
 		nodeId: 2,
 		data: buildCCBuffer(
 			Buffer.from([
@@ -97,10 +97,10 @@ test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", (t)
 });
 
 test("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = expected", (t) => {
-	const ccRequest = new FibaroVenetianBlindCCGet(host, {
+	const ccRequest = new FibaroVenetianBlindCCGet({
 		nodeId: 2,
 	});
-	const ccResponse = new FibaroVenetianBlindCCReport(host, {
+	const ccResponse = new FibaroVenetianBlindCCReport({
 		nodeId: 2,
 		data: buildCCBuffer(
 			Buffer.from([

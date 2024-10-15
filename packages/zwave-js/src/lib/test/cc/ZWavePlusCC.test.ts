@@ -15,7 +15,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("The Get command should serialize correctly", (t) => {
-	const cc = new ZWavePlusCCGet(host, {
+	const cc = new ZWavePlusCCGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(

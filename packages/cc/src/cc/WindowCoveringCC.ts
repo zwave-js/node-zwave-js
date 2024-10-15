@@ -15,7 +15,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -475,7 +474,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			WindowCoveringCommand.SupportedGet,
 		);
 
-		const cc = new WindowCoveringCCSupportedGet(this.applHost, {
+		const cc = new WindowCoveringCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -496,7 +495,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			WindowCoveringCommand.Get,
 		);
 
-		const cc = new WindowCoveringCCGet(this.applHost, {
+		const cc = new WindowCoveringCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -525,7 +524,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			WindowCoveringCommand.StartLevelChange,
 		);
 
-		const cc = new WindowCoveringCCSet(this.applHost, {
+		const cc = new WindowCoveringCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValues,
@@ -546,7 +545,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			WindowCoveringCommand.StartLevelChange,
 		);
 
-		const cc = new WindowCoveringCCStartLevelChange(this.applHost, {
+		const cc = new WindowCoveringCCStartLevelChange({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -566,7 +565,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			WindowCoveringCommand.StopLevelChange,
 		);
 
-		const cc = new WindowCoveringCCStopLevelChange(this.applHost, {
+		const cc = new WindowCoveringCCStopLevelChange({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			parameter,
@@ -691,12 +690,11 @@ export interface WindowCoveringCCSupportedReportOptions
 @CCCommand(WindowCoveringCommand.SupportedReport)
 export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| WindowCoveringCCSupportedReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 
@@ -759,10 +757,9 @@ export class WindowCoveringCCSupportedGet extends WindowCoveringCC {}
 @CCCommand(WindowCoveringCommand.Report)
 export class WindowCoveringCCReport extends WindowCoveringCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 4);
 		this.parameter = this.payload[0];
 		this.currentValue = this.payload[1];
@@ -821,12 +818,11 @@ function testResponseForWindowCoveringGet(
 @expectedCCResponse(WindowCoveringCCReport, testResponseForWindowCoveringGet)
 export class WindowCoveringCCGet extends WindowCoveringCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| WindowCoveringCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.parameter = this.payload[0];
@@ -868,12 +864,11 @@ export interface WindowCoveringCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class WindowCoveringCCSet extends WindowCoveringCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| WindowCoveringCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const numEntries = this.payload[0] & 0b11111;
@@ -951,12 +946,11 @@ export interface WindowCoveringCCStartLevelChangeOptions
 @useSupervision()
 export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| WindowCoveringCCStartLevelChangeOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.direction = !!(this.payload[0] & 0b0100_0000) ? "down" : "up";
@@ -1013,12 +1007,11 @@ export interface WindowCoveringCCStopLevelChangeOptions
 @useSupervision()
 export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| WindowCoveringCCStopLevelChangeOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.parameter = this.payload[0];

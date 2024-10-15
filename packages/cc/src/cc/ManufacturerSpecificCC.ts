@@ -12,7 +12,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -109,7 +108,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			ManufacturerSpecificCommand.Get,
 		);
 
-		const cc = new ManufacturerSpecificCCGet(this.applHost, {
+		const cc = new ManufacturerSpecificCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -137,7 +136,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			ManufacturerSpecificCommand.DeviceSpecificGet,
 		);
 
-		const cc = new ManufacturerSpecificCCDeviceSpecificGet(this.applHost, {
+		const cc = new ManufacturerSpecificCCDeviceSpecificGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			deviceIdType,
@@ -160,7 +159,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			ManufacturerSpecificCommand.Report,
 		);
 
-		const cc = new ManufacturerSpecificCCReport(this.applHost, {
+		const cc = new ManufacturerSpecificCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -238,12 +237,11 @@ export interface ManufacturerSpecificCCReportOptions {
 @CCCommand(ManufacturerSpecificCommand.Report)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| (ManufacturerSpecificCCReportOptions & CCCommandOptions)
 			| CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 6);
@@ -295,10 +293,9 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 	extends ManufacturerSpecificCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 		this.type = this.payload[0] & 0b111;
@@ -345,12 +342,11 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 	extends ManufacturerSpecificCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ManufacturerSpecificCCDeviceSpecificGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,

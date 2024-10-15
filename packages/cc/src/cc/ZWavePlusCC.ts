@@ -9,7 +9,6 @@ import type {
 	CCEncodingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -85,7 +84,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 	public async get() {
 		this.assertSupportsCommand(ZWavePlusCommand, ZWavePlusCommand.Get);
 
-		const cc = new ZWavePlusCCGet(this.applHost, {
+		const cc = new ZWavePlusCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -108,7 +107,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 	public async sendReport(options: ZWavePlusCCReportOptions): Promise<void> {
 		this.assertSupportsCommand(ZWavePlusCommand, ZWavePlusCommand.Report);
 
-		const cc = new ZWavePlusCCReport(this.applHost, {
+		const cc = new ZWavePlusCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -180,12 +179,11 @@ export interface ZWavePlusCCReportOptions {
 @CCCommand(ZWavePlusCommand.Report)
 export class ZWavePlusCCReport extends ZWavePlusCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & ZWavePlusCCReportOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 7);
 			this.zwavePlusVersion = this.payload[0];

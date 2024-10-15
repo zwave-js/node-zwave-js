@@ -18,7 +18,6 @@ import type {
 	CCParsingContext,
 	GetValueDB,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -106,7 +105,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			AssociationCommand.SupportedGroupingsGet,
 		);
 
-		const cc = new AssociationCCSupportedGroupingsGet(this.applHost, {
+		const cc = new AssociationCCSupportedGroupingsGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -126,7 +125,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			AssociationCommand.SupportedGroupingsReport,
 		);
 
-		const cc = new AssociationCCSupportedGroupingsReport(this.applHost, {
+		const cc = new AssociationCCSupportedGroupingsReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupCount,
@@ -142,7 +141,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Get);
 
-		const cc = new AssociationCCGet(this.applHost, {
+		const cc = new AssociationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -168,7 +167,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			AssociationCommand.Report,
 		);
 
-		const cc = new AssociationCCReport(this.applHost, {
+		const cc = new AssociationCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -186,7 +185,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Set);
 
-		const cc = new AssociationCCSet(this.applHost, {
+		const cc = new AssociationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
@@ -222,7 +221,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new AssociationCCRemove(this.applHost, {
+		const cc = new AssociationCCRemove({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
@@ -269,7 +268,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			AssociationCommand.SpecificGroupGet,
 		);
 
-		const cc = new AssociationCCSpecificGroupGet(this.applHost, {
+		const cc = new AssociationCCSpecificGroupGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -294,7 +293,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			AssociationCommand.SpecificGroupReport,
 		);
 
-		const cc = new AssociationCCSpecificGroupReport(this.applHost, {
+		const cc = new AssociationCCSpecificGroupReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			group,
@@ -508,10 +507,9 @@ export interface AssociationCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AssociationCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.groupId = this.payload[0];
@@ -568,12 +566,11 @@ export interface AssociationCCRemoveOptions {
 @useSupervision()
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (AssociationCCRemoveOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			if (this.payload[0] !== 0) {
@@ -624,12 +621,11 @@ export interface AssociationCCReportSpecificOptions {
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (AssociationCCReportSpecificOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -713,10 +709,9 @@ export interface AssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationCCReport)
 export class AssociationCCGet extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AssociationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.groupId = this.payload[0];
@@ -756,12 +751,11 @@ export interface AssociationCCSupportedGroupingsReportOptions
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationCCSupportedGroupingsReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -799,12 +793,11 @@ export interface AssociationCCSpecificGroupReportOptions {
 @CCCommand(AssociationCommand.SpecificGroupReport)
 export class AssociationCCSpecificGroupReport extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (AssociationCCSpecificGroupReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);

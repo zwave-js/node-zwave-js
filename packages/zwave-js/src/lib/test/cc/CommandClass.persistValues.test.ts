@@ -71,7 +71,7 @@ test(`persistValues() should not update "interviewComplete" in the value DB`, (t
 	const { node2, driver } = t.context;
 
 	// Repro for #383
-	const cc = new BasicCCSet(driver, {
+	const cc = new BasicCCSet({
 		nodeId: node2.id,
 		targetValue: 55,
 	});
@@ -91,7 +91,7 @@ test(`persistValues() should not update "interviewComplete" in the value DB`, (t
 test(`persistValues() should not store values marked as "events" (non-stateful)`, async (t) => {
 	const { node2, driver } = t.context;
 
-	const cc = new CentralSceneCCNotification(driver, {
+	const cc = new CentralSceneCCNotification({
 		nodeId: node2.id,
 		data: Buffer.from([
 			CommandClasses["Central Scene"],

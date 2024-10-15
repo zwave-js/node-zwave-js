@@ -8,7 +8,7 @@ import {
 	type SecurityManagers,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type { CCEncodingContext, ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext } from "@zwave-js/host";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "node:util";
 import type { CCIdToCapabilities } from "./CCSpecificCapabilities";
@@ -112,12 +112,6 @@ export class MockNode {
 		this.id = options.id;
 		this.controller = options.controller;
 
-		// A node's host is a bit more specialized than the controller's host.
-		this.host = {
-			...this.controller.host,
-			// // Mimic the behavior of ZWaveNode, but for arbitrary node IDs
-		};
-
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 
 		const {
@@ -196,7 +190,6 @@ export class MockNode {
 		};
 	}
 
-	public readonly host: ZWaveHost;
 	public readonly id: number;
 	public readonly controller: MockController;
 	public readonly capabilities: MockNodeCapabilities;

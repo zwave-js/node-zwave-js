@@ -58,7 +58,7 @@ const respondToScheduleEntryLockSupportedGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new ScheduleEntryLockCCSupportedReport(self.host, {
+			const cc = new ScheduleEntryLockCCSupportedReport({
 				nodeId: controller.ownNodeId,
 				...capabilities,
 			});
@@ -83,7 +83,7 @@ const respondToScheduleEntryLockTimeOffsetSet: MockNodeBehavior = {
 const respondToScheduleEntryLockTimeOffsetGet: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof ScheduleEntryLockCCTimeOffsetGet) {
-			const cc = new ScheduleEntryLockCCTimeOffsetReport(self.host, {
+			const cc = new ScheduleEntryLockCCTimeOffsetReport({
 				nodeId: controller.ownNodeId,
 				standardOffset: (self.state.get(StateKeys.standardOffset)
 					?? 0) as number,
@@ -195,7 +195,7 @@ const respondToScheduleEntryLockWeekDayScheduleGet: MockNodeBehavior = {
 				StateKeys.schedule(userId, slotId, kind),
 			) ?? {}) as AllOrNone<ScheduleEntryLockWeekDaySchedule>;
 
-			const cc = new ScheduleEntryLockCCWeekDayScheduleReport(self.host, {
+			const cc = new ScheduleEntryLockCCWeekDayScheduleReport({
 				nodeId: controller.ownNodeId,
 				userId,
 				slotId,
@@ -294,7 +294,7 @@ const respondToScheduleEntryLockYearDayScheduleGet: MockNodeBehavior = {
 				StateKeys.schedule(userId, slotId, kind),
 			) ?? {}) as AllOrNone<ScheduleEntryLockYearDaySchedule>;
 
-			const cc = new ScheduleEntryLockCCYearDayScheduleReport(self.host, {
+			const cc = new ScheduleEntryLockCCYearDayScheduleReport({
 				nodeId: controller.ownNodeId,
 				userId,
 				slotId,
@@ -394,15 +394,12 @@ const respondToScheduleEntryLockDailyRepeatingScheduleGet: MockNodeBehavior = {
 				StateKeys.schedule(userId, slotId, kind),
 			) ?? {}) as AllOrNone<ScheduleEntryLockDailyRepeatingSchedule>;
 
-			const cc = new ScheduleEntryLockCCDailyRepeatingScheduleReport(
-				self.host,
-				{
-					nodeId: controller.ownNodeId,
-					userId,
-					slotId,
-					...schedule,
-				},
-			);
+			const cc = new ScheduleEntryLockCCDailyRepeatingScheduleReport({
+				nodeId: controller.ownNodeId,
+				userId,
+				slotId,
+				...schedule,
+			});
 			return { action: "sendCC", cc };
 		}
 	},

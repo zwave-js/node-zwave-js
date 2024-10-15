@@ -50,7 +50,7 @@ test.afterEach.always(async (t) => {
 
 test.serial("returns true when a non-partial CC is received", (t) => {
 	const { driver } = t.context;
-	const cc = new BasicCCSet(driver, { nodeId: 2, targetValue: 50 });
+	const cc = new BasicCCSet({ nodeId: 2, targetValue: 50 });
 	const msg = new ApplicationCommandRequest(driver, {
 		command: cc,
 	});
@@ -61,7 +61,7 @@ test.serial(
 	"returns true when a partial CC is received that expects no more reports",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport(driver, {
+		const cc = new AssociationCCReport({
 			nodeId: 2,
 			data: Buffer.from([
 				CommandClasses.Association,
@@ -86,7 +86,7 @@ test.serial(
 	"returns false when a partial CC is received that expects more reports",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport(driver, {
+		const cc = new AssociationCCReport({
 			nodeId: 2,
 			data: Buffer.from([
 				CommandClasses.Association,
@@ -111,7 +111,7 @@ test.serial(
 	"returns true when the final partial CC is received and merges its data",
 	(t) => {
 		const { driver } = t.context;
-		const cc1 = new AssociationCCReport(driver, {
+		const cc1 = new AssociationCCReport({
 			nodeId: 2,
 			data: Buffer.from([
 				CommandClasses.Association,
@@ -125,7 +125,7 @@ test.serial(
 			]),
 			context: {} as any,
 		});
-		const cc2 = new AssociationCCReport(driver, {
+		const cc2 = new AssociationCCReport({
 			nodeId: 2,
 			data: Buffer.from([
 				CommandClasses.Association,
@@ -158,9 +158,9 @@ test.serial(
 
 test.serial("does not crash when receiving a Multi Command CC", (t) => {
 	const { driver } = t.context;
-	const cc1 = new BasicCCSet(driver, { nodeId: 2, targetValue: 25 });
-	const cc2 = new BasicCCSet(driver, { nodeId: 2, targetValue: 50 });
-	const cc = new MultiCommandCCCommandEncapsulation(driver, {
+	const cc1 = new BasicCCSet({ nodeId: 2, targetValue: 25 });
+	const cc2 = new BasicCCSet({ nodeId: 2, targetValue: 50 });
+	const cc = new MultiCommandCCCommandEncapsulation({
 		nodeId: 2,
 		encapsulated: [cc1, cc2],
 	});
@@ -172,8 +172,8 @@ test.serial("does not crash when receiving a Multi Command CC", (t) => {
 
 test.serial("supports nested partial/non-partial CCs", (t) => {
 	const { driver } = t.context;
-	const cc1 = new BasicCCSet(driver, { nodeId: 2, targetValue: 25 });
-	const cc = new SecurityCCCommandEncapsulation(driver, {
+	const cc1 = new BasicCCSet({ nodeId: 2, targetValue: 25 });
+	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
 		ownNodeId: driver.ownNodeId,
 		securityManager: driver.securityManager!,
@@ -189,7 +189,7 @@ test.serial("supports nested partial/non-partial CCs", (t) => {
 
 test.serial("supports nested partial/partial CCs (part 1)", (t) => {
 	const { driver } = t.context;
-	const cc = new SecurityCCCommandEncapsulation(driver, {
+	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
 		ownNodeId: driver.ownNodeId,
 		securityManager: driver.securityManager!,
@@ -214,7 +214,7 @@ test.serial("supports nested partial/partial CCs (part 1)", (t) => {
 
 test.serial("supports nested partial/partial CCs (part 2)", (t) => {
 	const { driver } = t.context;
-	const cc = new SecurityCCCommandEncapsulation(driver, {
+	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
 		ownNodeId: driver.ownNodeId,
 		securityManager: driver.securityManager!,
@@ -241,7 +241,7 @@ test.serial(
 	"returns false when a partial CC throws Deserialization_NotImplemented during merging",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport(driver, {
+		const cc = new AssociationCCReport({
 			nodeId: 2,
 			data: Buffer.from([
 				CommandClasses.Association,
@@ -272,7 +272,7 @@ test.serial(
 	"returns false when a partial CC throws CC_NotImplemented during merging",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport(driver, {
+		const cc = new AssociationCCReport({
 			nodeId: 2,
 			data: Buffer.from([
 				CommandClasses.Association,
@@ -303,7 +303,7 @@ test.serial(
 	"returns false when a partial CC throws PacketFormat_InvalidPayload during merging",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport(driver, {
+		const cc = new AssociationCCReport({
 			nodeId: 2,
 			data: Buffer.from([
 				CommandClasses.Association,
@@ -332,7 +332,7 @@ test.serial(
 
 test.serial("passes other errors during merging through", (t) => {
 	const { driver } = t.context;
-	const cc = new AssociationCCReport(driver, {
+	const cc = new AssociationCCReport({
 		nodeId: 2,
 		data: Buffer.from([
 			CommandClasses.Association,

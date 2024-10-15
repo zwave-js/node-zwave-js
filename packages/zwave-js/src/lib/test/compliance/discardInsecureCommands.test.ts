@@ -75,7 +75,7 @@ integrationTest(
 						const nonce = smNode.generateNonce(
 							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
+						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
 							ownNodeId: self.id,
 							securityManagers: self.securityManagers,
@@ -102,7 +102,7 @@ integrationTest(
 							const nonce = smNode.generateNonce(
 								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
+							const cc = new Security2CCNonceReport({
 								nodeId: controller.ownNodeId,
 								ownNodeId: self.id,
 								securityManagers: self.securityManagers,
@@ -128,8 +128,7 @@ integrationTest(
 
 			// Send a secure command that should be handled
 			let nodeToHost: CommandClass = Security2CC.encapsulate(
-				mockNode.host,
-				new BasicCCReport(mockNode.host, {
+				new BasicCCReport({
 					nodeId: mockController.ownNodeId,
 					currentValue: 99,
 				}),
@@ -149,7 +148,7 @@ integrationTest(
 			t.is(currentValue, 99);
 
 			// Then send an unencypted one that should be discarded
-			nodeToHost = new BasicCCReport(mockNode.host, {
+			nodeToHost = new BasicCCReport({
 				nodeId: mockController.ownNodeId,
 				currentValue: 1,
 			});

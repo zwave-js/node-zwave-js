@@ -44,7 +44,7 @@ test.afterEach.always(async (t) => {
 test("should compute the correct net payload sizes", (t) => {
 	const { driver } = t.context;
 	const testMsg1 = new SendDataRequest(driver, {
-		command: new SecurityCCCommandEncapsulation(driver, {
+		command: new SecurityCCCommandEncapsulation({
 			nodeId: 2,
 			ownNodeId: driver.ownNodeId,
 			securityManager: driver.securityManager!,
@@ -55,13 +55,13 @@ test("should compute the correct net payload sizes", (t) => {
 	testMsg1.command.encapsulated = undefined as any;
 	t.is(driver.computeNetCCPayloadSize(testMsg1), 26);
 
-	const multiChannelCC = new MultiChannelCCCommandEncapsulation(driver, {
+	const multiChannelCC = new MultiChannelCCCommandEncapsulation({
 		nodeId: 2,
 		destination: 1,
 		encapsulated: {} as any,
 	});
 	const testMsg2 = new SendDataRequest(driver, {
-		command: new SecurityCCCommandEncapsulation(driver, {
+		command: new SecurityCCCommandEncapsulation({
 			nodeId: 2,
 			ownNodeId: driver.ownNodeId,
 			securityManager: driver.securityManager!,
@@ -72,7 +72,7 @@ test("should compute the correct net payload sizes", (t) => {
 	multiChannelCC.encapsulated = undefined as any;
 	t.is(driver.computeNetCCPayloadSize(testMsg2), 54 - 20 - 4);
 
-	const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
+	const testMsg3 = new FirmwareUpdateMetaDataCC({
 		nodeId: 2,
 	});
 	testMsg3.toggleEncapsulationFlag(EncapsulationFlags.Security, true);

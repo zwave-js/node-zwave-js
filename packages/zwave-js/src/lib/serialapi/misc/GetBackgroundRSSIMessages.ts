@@ -5,7 +5,6 @@ import {
 	type RSSI,
 	rssiToString,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -25,10 +24,9 @@ export class GetBackgroundRSSIRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.GetBackgroundRSSI)
 export class GetBackgroundRSSIResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.rssiChannel0 = parseRSSI(this.payload, 0);
 		this.rssiChannel1 = parseRSSI(this.payload, 1);
 		this.rssiChannel2 = tryParseRSSI(this.payload, 2);

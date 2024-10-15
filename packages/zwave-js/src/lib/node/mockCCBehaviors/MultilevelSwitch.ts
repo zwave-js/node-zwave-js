@@ -43,7 +43,7 @@ const respondToMultilevelSwitchGet: MockNodeBehavior = {
 					?? capabilities.defaultValue
 					?? UNKNOWN_STATE
 			) as MaybeUnknown<number>;
-			const cc = new MultilevelSwitchCCReport(self.host, {
+			const cc = new MultilevelSwitchCCReport({
 				nodeId: controller.ownNodeId,
 				currentValue,
 				// We don't support transitioning yet
@@ -73,7 +73,7 @@ const respondToMultilevelSwitchSupportedGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new MultilevelSwitchCCSupportedReport(self.host, {
+			const cc = new MultilevelSwitchCCSupportedReport({
 				nodeId: controller.ownNodeId,
 				switchType: capabilities.primarySwitchType,
 			});

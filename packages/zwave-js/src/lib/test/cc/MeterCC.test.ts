@@ -31,7 +31,7 @@ const host = createTestingHost();
 const node2 = createTestNode(host, { id: 2 });
 
 test("the Get command (V1) should serialize correctly", (t) => {
-	const cc = new MeterCCGet(host, { nodeId: 1 });
+	const cc = new MeterCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Get, // CC Command
@@ -47,7 +47,7 @@ test("the Get command (V1) should serialize correctly", (t) => {
 });
 
 test("the Get command (V2) should serialize correctly", (t) => {
-	const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x03 });
+	const cc = new MeterCCGet({ nodeId: 1, scale: 0x03 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Get, // CC Command
@@ -64,7 +64,7 @@ test("the Get command (V2) should serialize correctly", (t) => {
 });
 
 test("the Get command (V3) should serialize correctly", (t) => {
-	const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x06 });
+	const cc = new MeterCCGet({ nodeId: 1, scale: 0x06 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Get, // CC Command
@@ -81,7 +81,7 @@ test("the Get command (V3) should serialize correctly", (t) => {
 });
 
 test("the Get command (V4) should serialize correctly", (t) => {
-	const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x0f });
+	const cc = new MeterCCGet({ nodeId: 1, scale: 0x0f });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Get, // CC Command
@@ -99,7 +99,7 @@ test("the Get command (V4) should serialize correctly", (t) => {
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
-	const cc = new MeterCCSupportedGet(host, { nodeId: 1 });
+	const cc = new MeterCCSupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.SupportedGet, // CC Command
@@ -109,7 +109,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 });
 
 test("the Reset command (V2) should serialize correctly", (t) => {
-	const cc = new MeterCCReset(host, { nodeId: 1 });
+	const cc = new MeterCCReset({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MeterCommand.Reset, // CC Command
@@ -119,7 +119,7 @@ test("the Reset command (V2) should serialize correctly", (t) => {
 });
 
 test("the Reset command (V6) should serialize correctly", (t) => {
-	const cc = new MeterCCReset(host, {
+	const cc = new MeterCCReset({
 		nodeId: 1,
 		type: 7,
 		scale: 3,
@@ -146,7 +146,7 @@ test("the Report command (V1) should be deserialized correctly", (t) => {
 			55, // value
 		]),
 	);
-	const cc = new MeterCCReport(host, {
+	const cc = new MeterCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -171,7 +171,7 @@ test("the Report command (V2) should be deserialized correctly (no time delta)",
 			0,
 		]),
 	);
-	const cc = new MeterCCReport(host, {
+	const cc = new MeterCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -197,7 +197,7 @@ test("the Report command (V2) should be deserialized correctly (with time delta)
 			54, // previous value
 		]),
 	);
-	const cc = new MeterCCReport(host, {
+	const cc = new MeterCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -223,7 +223,7 @@ test("the Report command (V3) should be deserialized correctly", (t) => {
 			54, // previous value
 		]),
 	);
-	const cc = new MeterCCReport(host, {
+	const cc = new MeterCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -245,7 +245,7 @@ test("the Report command (V4) should be deserialized correctly", (t) => {
 			0b01, // Scale2
 		]),
 	);
-	const cc = new MeterCCReport(host, {
+	const cc = new MeterCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -268,7 +268,7 @@ test("the Report command should validate that a known meter type is given", (t) 
 		]),
 	);
 
-	const report = new MeterCCReport(host, {
+	const report = new MeterCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -294,7 +294,7 @@ test("the Report command should validate that a known meter scale is given", (t)
 		]),
 	);
 
-	const report = new MeterCCReport(host, {
+	const report = new MeterCCReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -327,7 +327,7 @@ test("the SupportedReport command (V2/V3) should be deserialized correctly", (t)
 			0b01101110, // supported scales
 		]),
 	);
-	const cc = new MeterCCSupportedReport(host, {
+	const cc = new MeterCCSupportedReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -350,7 +350,7 @@ test("the SupportedReport command (V4/V5) should be deserialized correctly", (t)
 			1,
 		]),
 	);
-	const cc = new MeterCCSupportedReport(host, {
+	const cc = new MeterCCSupportedReport({
 		nodeId: 1,
 		data: ccData,
 		context: {} as any,
@@ -373,7 +373,7 @@ test("the SupportedReport command (V4/V5) should be deserialized correctly", (t)
 // 			1,
 // 		]),
 // 	);
-// 	const cc = new MeterCCSupportedReport(host, {
+// 	const cc = new MeterCCSupportedReport({
 // 		nodeId: 1,
 // 		data: ccData,
 // 	});
@@ -388,7 +388,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new MeterCC(host, {
+	const cc: any = new MeterCC({
 		nodeId: 1,
 		data: serializedCC,
 		context: {} as any,

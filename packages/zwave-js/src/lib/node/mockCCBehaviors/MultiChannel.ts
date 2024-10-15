@@ -44,7 +44,7 @@ const encapsulateMultiChannelCC: MockNodeBehavior = {
 				(multiChannelEncap as MultiChannelCCCommandEncapsulation)
 					.destination as number;
 
-			response.cc = new MultiChannelCCCommandEncapsulation(self.host, {
+			response.cc = new MultiChannelCCCommandEncapsulation({
 				nodeId: response.cc.nodeId,
 				encapsulated: response.cc,
 				endpoint: source,
@@ -59,7 +59,7 @@ const encapsulateMultiChannelCC: MockNodeBehavior = {
 const respondToMultiChannelCCEndPointGet: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof MultiChannelCCEndPointGet) {
-			const cc = new MultiChannelCCEndPointReport(self.host, {
+			const cc = new MultiChannelCCEndPointReport({
 				nodeId: controller.ownNodeId,
 				countIsDynamic: false,
 				identicalCapabilities: false,
@@ -74,7 +74,7 @@ const respondToMultiChannelCCEndPointFind: MockNodeBehavior = {
 	handleCC(controller, self, receivedCC) {
 		if (receivedCC instanceof MultiChannelCCEndPointFind) {
 			const request = receivedCC;
-			const cc = new MultiChannelCCEndPointFindReport(self.host, {
+			const cc = new MultiChannelCCEndPointFindReport({
 				nodeId: controller.ownNodeId,
 				genericClass: request.genericClass,
 				specificClass: request.specificClass,
@@ -92,7 +92,7 @@ const respondToMultiChannelCCCapabilityGet: MockNodeBehavior = {
 			const endpoint = self.endpoints.get(
 				receivedCC.requestedEndpoint,
 			)!;
-			const cc = new MultiChannelCCCapabilityReport(self.host, {
+			const cc = new MultiChannelCCCapabilityReport({
 				nodeId: controller.ownNodeId,
 				endpointIndex: endpoint.index,
 				genericDeviceClass: endpoint?.capabilities.genericDeviceClass
