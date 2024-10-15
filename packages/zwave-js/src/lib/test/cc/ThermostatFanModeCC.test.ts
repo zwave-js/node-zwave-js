@@ -60,30 +60,7 @@ test("the Set command should serialize correctly (off = true)", (t) => {
 	t.deepEqual(cc.serialize({} as any), expected);
 });
 
-test("the Report command (v1-v2) should be deserialized correctly", (t) => {
-	const ccData = buildCCBuffer(
-		Buffer.from([
-			ThermostatFanModeCommand.Report, // CC Command
-			ThermostatFanMode["Auto low"], // current value
-		]),
-	);
-	const cc = new ThermostatFanModeCCReport(
-		{
-			...host,
-			getSafeCCVersion: () => 1,
-		},
-		{
-			nodeId: 1,
-			data: ccData,
-			context: {} as any,
-		},
-	);
-
-	t.is(cc.mode, ThermostatFanMode["Auto low"]);
-	t.is(cc.off, undefined);
-});
-
-test("the Report command (v3-v5) should be deserialized correctly", (t) => {
+test("the Report command should be deserialized correctly", (t) => {
 	const ccData = buildCCBuffer(
 		Buffer.from([
 			ThermostatFanModeCommand.Report, // CC Command

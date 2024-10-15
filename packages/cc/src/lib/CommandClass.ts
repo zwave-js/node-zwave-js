@@ -965,7 +965,8 @@ export class CommandClass implements CCId {
 			// Values are only persisted for singlecast, so we know nodeId is a number
 			this.nodeId as number,
 			this.endpointIndex,
-		);
+			// If the version isn't known yet, limit the created values to V1
+		) || 1;
 
 		// Get all properties of this CC which are annotated with a @ccValue decorator and store them.
 		for (const [prop, _value] of getCCValueProperties(this)) {
