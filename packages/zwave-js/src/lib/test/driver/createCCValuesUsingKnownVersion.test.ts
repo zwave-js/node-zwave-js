@@ -11,7 +11,7 @@ import { integrationTest } from "../integrationTestSuite";
 // values, which includes some the device does not actually support
 
 integrationTest("CC values are created using the known CC version", {
-	debug: true,
+	// debug: true,
 
 	provisioningDirectory: path.join(
 		__dirname,
