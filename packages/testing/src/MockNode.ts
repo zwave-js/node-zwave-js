@@ -120,6 +120,38 @@ export class MockNode {
 
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
 
+		const {
+			commandClasses = [],
+			endpoints = [],
+			...capabilities
+		} = options.capabilities ?? {};
+		this.capabilities = {
+			...getDefaultMockNodeCapabilities(),
+			...capabilities,
+		};
+
+		for (const cc of commandClasses) {
+			if (typeof cc === "number") {
+				this.addCC(cc, {});
+			} else {
+				const { ccId, ...ccInfo } = cc;
+				this.addCC(ccId, ccInfo);
+			}
+		}
+
+		let index = 0;
+		for (const endpoint of endpoints) {
+			index++;
+			this.endpoints.set(
+				index,
+				new MockEndpoint({
+					index,
+					node: this,
+					capabilities: endpoint,
+				}),
+			);
+		}
+
 		this.encodingContext = {
 			homeId: this.controller.homeId,
 			ownNodeId: this.id,
@@ -156,39 +188,12 @@ export class MockNode {
 				// If we don't have the info for every security class, we don't know the highest one yet
 				return missingSome ? undefined : SecurityClass.None;
 			},
+			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
+				// Mock endpoints only care about the version they implement
+				const endpoint = this.endpoints.get(endpointIndex);
+				return (endpoint ?? this).implementedCCs.get(cc)?.version ?? 0;
+			},
 		};
-
-		const {
-			commandClasses = [],
-			endpoints = [],
-			...capabilities
-		} = options.capabilities ?? {};
-		this.capabilities = {
-			...getDefaultMockNodeCapabilities(),
-			...capabilities,
-		};
-
-		for (const cc of commandClasses) {
-			if (typeof cc === "number") {
-				this.addCC(cc, {});
-			} else {
-				const { ccId, ...ccInfo } = cc;
-				this.addCC(ccId, ccInfo);
-			}
-		}
-
-		let index = 0;
-		for (const endpoint of endpoints) {
-			index++;
-			this.endpoints.set(
-				index,
-				new MockEndpoint({
-					index,
-					node: this,
-					capabilities: endpoint,
-				}),
-			);
-		}
 	}
 
 	public readonly host: ZWaveHost;

@@ -109,6 +109,7 @@ import {
 	wasControllerReset,
 } from "@zwave-js/core";
 import type {
+	CCEncodingContext,
 	HostIDs,
 	NodeSchedulePollOptions,
 	ZWaveApplicationHost,
@@ -671,6 +672,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this.hasSecurityClass(nodeId, securityClass),
 			setSecurityClass: (nodeId, securityClass, granted) =>
 				this.setSecurityClass(nodeId, securityClass, granted),
+			getSupportedCCVersion: (cc, nodeId, endpointIndex) =>
+				this.getSupportedCCVersion(cc, nodeId, endpointIndex),
 		};
 
 		this.immediateQueue = new TransactionQueue({
@@ -716,7 +719,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		keyof HostIDs | "nodeIdType"
 	>;
 
-	private getCCEncodingContext() {
+	private getCCEncodingContext(): MessageEncodingContext & CCEncodingContext {
 		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
 		// but not for messages, yet those implicitly encode CCs
 		return {
@@ -2806,7 +2809,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
 	 * Returns the highest implemented version if the node's CC version is unknown.
-	 * Throws if the CC is not implemented in this library yet.
+	 * Returns `undefined` for CCs that are not implemented in this library yet.
 	 *
 	 * @param cc The command class whose version should be retrieved
 	 * @param nodeId The node for which the CC version should be retrieved
@@ -2816,7 +2819,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex: number = 0,
-	): number {
+	): number | undefined {
+		const implementedVersion = getImplementedVersion(cc);
+		if (
+			implementedVersion === 0
+			|| implementedVersion === Number.POSITIVE_INFINITY
+		) {
+			return undefined;
+		}
 		const supportedVersion = this.getSupportedCCVersion(
 			cc,
 			nodeId,
@@ -2824,28 +2834,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		);
 		if (supportedVersion === 0) {
 			// Unknown, use the highest implemented version
-			const implementedVersion = getImplementedVersion(cc);
-			if (
-				implementedVersion !== 0
-				&& implementedVersion !== Number.POSITIVE_INFINITY
-			) {
-				return implementedVersion;
-			}
-		} else {
-			// For supported versions find the maximum version supported by both the
-			// node and this library
-			const implementedVersion = getImplementedVersion(cc);
-			if (
-				implementedVersion !== 0
-				&& implementedVersion !== Number.POSITIVE_INFINITY
-			) {
-				return Math.min(supportedVersion, implementedVersion);
-			}
+			return implementedVersion;
 		}
-		throw new ZWaveError(
-			"Cannot retrieve the version of a CC that is not implemented",
-			ZWaveErrorCodes.CC_NotImplemented,
-		);
+
+		return Math.min(supportedVersion, implementedVersion);
 	}
 
 	/**
@@ -5256,7 +5248,14 @@ ${handlers.length} left`,
 
 		// 4.
 		if (MultiChannelCC.requiresEncapsulation(cmd)) {
-			cmd = MultiChannelCC.encapsulate(this, cmd);
+			const multiChannelCCVersion = this.getSupportedCCVersion(
+				CommandClasses["Multi Channel"],
+				cmd.nodeId as number,
+			);
+
+			cmd = multiChannelCCVersion === 1
+				? MultiChannelCC.encapsulateV1(this, cmd)
+				: MultiChannelCC.encapsulate(this, cmd);
 		}
 
 		// 5.

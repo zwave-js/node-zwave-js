@@ -92,7 +92,7 @@ integrationTest(
 				nodeId: mockController.ownNodeId,
 			});
 			const cc = MultiChannelCC.encapsulate(mockNode.host, zwpRequest);
-			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 2;
+			cc.endpointIndex = 2;
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
@@ -142,7 +142,11 @@ integrationTest(
 				nodeId: mockController.ownNodeId,
 				currentValue: 0,
 			});
-			const cc = SupervisionCC.encapsulate(mockNode.host, basicReport);
+			const cc = SupervisionCC.encapsulate(
+				mockNode.host,
+				basicReport,
+				driver.getNextSupervisionSessionId(mockNode.id),
+			);
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
@@ -196,9 +200,10 @@ integrationTest(
 			const supervised = SupervisionCC.encapsulate(
 				mockNode.host,
 				basicReport,
+				driver.getNextSupervisionSessionId(mockNode.id),
 			);
 			const cc = MultiChannelCC.encapsulate(mockNode.host, supervised);
-			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 2;
+			cc.endpointIndex = 2;
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 

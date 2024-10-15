@@ -33,6 +33,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -405,33 +406,32 @@ export class MultiChannelCC extends CommandClass {
 		);
 	}
 
-	/** Encapsulates a command that targets a specific endpoint */
+	/** Encapsulates a command that targets a specific endpoint, with version 2+ of the Multi Channel CC */
 	public static encapsulate(
 		host: ZWaveHost,
 		cc: CommandClass,
-	):
-		| MultiChannelCCCommandEncapsulation
-		| MultiChannelCCV1CommandEncapsulation
-	{
-		const ccVersion = host.getSafeCCVersion(
-			CommandClasses["Multi Channel"],
-			cc.nodeId as number,
-		);
-		let ret:
-			| MultiChannelCCCommandEncapsulation
-			| MultiChannelCCV1CommandEncapsulation;
-		if (ccVersion === 1) {
-			ret = new MultiChannelCCV1CommandEncapsulation(host, {
-				nodeId: cc.nodeId,
-				encapsulated: cc,
-			});
-		} else {
-			ret = new MultiChannelCCCommandEncapsulation(host, {
-				nodeId: cc.nodeId,
-				encapsulated: cc,
-				destination: cc.endpointIndex,
-			});
-		}
+	): MultiChannelCCCommandEncapsulation {
+		const ret = new MultiChannelCCCommandEncapsulation(host, {
+			nodeId: cc.nodeId,
+			encapsulated: cc,
+			destination: cc.endpointIndex,
+		});
+
+		// Copy the encapsulation flags from the encapsulated command
+		ret.encapsulationFlags = cc.encapsulationFlags;
+
+		return ret;
+	}
+
+	/** Encapsulates a command that targets a specific endpoint, with version 1 of the Multi Channel CC */
+	public static encapsulateV1(
+		host: ZWaveHost,
+		cc: CommandClass,
+	): MultiChannelCCV1CommandEncapsulation {
+		const ret = new MultiChannelCCV1CommandEncapsulation(host, {
+			nodeId: cc.nodeId,
+			encapsulated: cc,
+		});
 
 		// Copy the encapsulation flags from the encapsulated command
 		ret.encapsulationFlags = cc.encapsulationFlags;
@@ -468,7 +468,8 @@ export class MultiChannelCC extends CommandClass {
 		});
 
 		// Special interview procedure for legacy nodes
-		if (this.version === 1) return this.interviewV1(applHost);
+		const ccVersion = getEffectiveCCVersion(applHost, this);
+		if (ccVersion === 1) return this.interviewV1(applHost);
 
 		const endpoint = node.getEndpoint(this.endpointIndex)!;
 		const api = CCAPI.create(
@@ -586,7 +587,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		for (const endpoint of allEndpoints) {
 			if (
 				endpoint > multiResponse.individualEndpointCount
-				&& this.version >= 4
+				&& ccVersion >= 4
 			) {
 				// Find members of aggregated end point
 				applHost.controllerLog.logNode(node.id, {

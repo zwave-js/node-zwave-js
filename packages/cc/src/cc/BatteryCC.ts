@@ -321,7 +321,7 @@ export class BatteryCC extends CommandClass {
 level:                           ${batteryStatus.level}${
 				batteryStatus.isLow ? " (low)" : ""
 			}`;
-			if (this.version >= 2) {
+			if (api.version >= 2) {
 				logMessage += `
 status:                          ${
 					BatteryChargingStatus[batteryStatus.chargingStatus!]
@@ -343,7 +343,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 			});
 		}
 
-		if (this.version >= 2) {
+		if (api.version >= 2) {
 			// always query the health
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,

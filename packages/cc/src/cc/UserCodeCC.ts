@@ -46,6 +46,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -193,9 +194,11 @@ function setUserCodeMetadata(
 	const statusValue = UserCodeCCValues.userIdStatus(userId);
 	const codeValue = UserCodeCCValues.userCode(userId);
 
+	const ccVersion = getEffectiveCCVersion(applHost, this);
+
 	const supportedUserIDStatuses: UserIDStatus[] =
 		this.getValue(applHost, UserCodeCCValues.supportedUserIDStatuses)
-			?? (this.version === 1
+			?? (ccVersion === 1
 				? [
 					UserIDStatus.Available,
 					UserIDStatus.Enabled,
@@ -903,7 +906,7 @@ export class UserCodeCC extends CommandClass {
 		});
 
 		// Query capabilities first to determine what needs to be done when refreshing
-		if (this.version >= 2) {
+		if (api.version >= 2) {
 			applHost.controllerLog.logNode(node.id, {
 				message: "querying capabilities...",
 				direction: "outbound",
@@ -980,7 +983,7 @@ export class UserCodeCC extends CommandClass {
 		);
 
 		// Check for changed values and codes
-		if (this.version >= 2) {
+		if (api.version >= 2) {
 			if (supportsAdminCode) {
 				applHost.controllerLog.logNode(node.id, {
 					message: "querying admin code...",

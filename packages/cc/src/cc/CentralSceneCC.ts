@@ -286,7 +286,7 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 		}
 
 		// The slow refresh capability should be enabled whenever possible
-		if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
+		if (api.version >= 3 && ccSupported?.supportsSlowRefresh) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Enabling slow refresh capability...",

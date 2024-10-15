@@ -93,9 +93,11 @@ export function createTestingHost<
 			nodes.set(nodeId, node);
 		},
 		getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
-		getSupportedCCVersion: options.getSupportedCCVersion
-			?? options.getSafeCCVersion
-			?? (() => 100),
+		getSupportedCCVersion: (cc, nodeId, endpoint) => {
+			return options.getSupportedCCVersion?.(cc, nodeId, endpoint)
+				?? options.getSafeCCVersion?.(cc, nodeId, endpoint)
+				?? 100;
+		},
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
 				valueDBCache.set(

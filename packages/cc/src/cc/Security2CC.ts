@@ -366,7 +366,14 @@ export class Security2CCAPI extends CCAPI {
 		// encapsulation because it would use a different security class. Therefore the entire possible stack
 		// of encapsulation needs to be done here
 		if (MultiChannelCC.requiresEncapsulation(cc)) {
-			cc = MultiChannelCC.encapsulate(this.applHost, cc);
+			const multiChannelCCVersion = this.applHost.getSupportedCCVersion(
+				CommandClasses["Multi Channel"],
+				this.endpoint.nodeId as number,
+			);
+
+			cc = multiChannelCCVersion === 1
+				? MultiChannelCC.encapsulateV1(this.applHost, cc)
+				: MultiChannelCC.encapsulate(this.applHost, cc);
 		}
 		cc = Security2CC.encapsulate(
 			this.applHost,

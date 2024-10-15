@@ -37,6 +37,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -539,7 +540,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			direction: "none",
 		});
 
-		if (this.version >= 3) {
+		if (api.version >= 3) {
 			// Find out which kind of switch this is
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -655,8 +656,9 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
 
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 		if (
-			this.version < 2 && ctx.getDeviceConfig?.(
+			ccVersion < 2 && ctx.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.encodeCCsUsingTargetVersion
 		) {
@@ -817,8 +819,9 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
 
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 		if (
-			this.version < 2 && ctx.getDeviceConfig?.(
+			ccVersion < 2 && ctx.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.encodeCCsUsingTargetVersion
 		) {

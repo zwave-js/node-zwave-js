@@ -360,7 +360,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			direction: "none",
 		});
 
-		if (this.version <= 2) {
+		if (api.version <= 2) {
 			// It has been found that early implementations of this Command Class applied two non-interoperable
 			// interpretations of the bit mask advertising the support for specific Setpoint Types in the Thermostat
 			// Setpoint Supported Report Command.

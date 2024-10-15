@@ -37,6 +37,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -381,7 +382,7 @@ export class ProtectionCC extends CommandClass {
 		let hadCriticalTimeout = false;
 
 		// First find out what the device supports
-		if (this.version >= 2) {
+		if (api.version >= 2) {
 			applHost.controllerLog.logNode(node.id, {
 				message: "querying protection capabilities...",
 				direction: "outbound",
@@ -532,8 +533,9 @@ export class ProtectionCCSet extends ProtectionCC {
 			(this.rf ?? RFProtectionState.Unprotected) & 0b1111,
 		]);
 
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 		if (
-			this.version < 2 && ctx.getDeviceConfig?.(
+			ccVersion < 2 && ctx.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.encodeCCsUsingTargetVersion
 		) {

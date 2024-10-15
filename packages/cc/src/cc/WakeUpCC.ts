@@ -260,7 +260,7 @@ export class WakeUpCC extends CommandClass {
 			let maxInterval: number | undefined;
 
 			// Retrieve the allowed wake up intervals and wake on demand support if possible
-			if (this.version >= 2) {
+			if (api.version >= 2) {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:

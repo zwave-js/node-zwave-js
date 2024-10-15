@@ -396,7 +396,7 @@ export class CCAPI {
 				this.ccId,
 				this.endpoint.nodeId,
 				this.endpoint.index,
-			);
+			) ?? 0;
 		} else {
 			return getImplementedVersion(this.ccId);
 		}

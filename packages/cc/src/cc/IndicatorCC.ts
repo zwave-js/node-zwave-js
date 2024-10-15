@@ -711,7 +711,7 @@ export class IndicatorCC extends CommandClass {
 			direction: "none",
 		});
 
-		if (this.version > 1) {
+		if (api.version > 1) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "scanning supported indicator IDs...",
@@ -755,7 +755,7 @@ export class IndicatorCC extends CommandClass {
 				direction: "inbound",
 			});
 
-			if (this.version >= 4) {
+			if (api.version >= 4) {
 				const manufacturerDefinedIndicatorIds = supportedIndicatorIds
 					.filter((id) => isManufacturerDefinedIndicator(id));
 				if (manufacturerDefinedIndicatorIds.length > 0) {
@@ -793,7 +793,7 @@ export class IndicatorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		if (this.version === 1) {
+		if (api.version === 1) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting current indicator value...",

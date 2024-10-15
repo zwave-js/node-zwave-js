@@ -121,6 +121,14 @@ export class MockController {
 				// If we don't have the info for every security class, we don't know the highest one yet
 				return missingSome ? undefined : SecurityClass.None;
 			},
+			getSupportedCCVersion: (cc, nodeId, endpointIndex = 0) => {
+				if (!this.nodes.has(nodeId)) {
+					return 0;
+				}
+				const node = this.nodes.get(nodeId)!;
+				const endpoint = node.endpoints.get(endpointIndex);
+				return (endpoint ?? node).implementedCCs.get(cc)?.version ?? 0;
+			},
 		};
 		this.parsingContext = {
 			...this.encodingContext,

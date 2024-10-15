@@ -53,6 +53,7 @@ import {
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	InvalidCC,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -601,7 +602,7 @@ export class NotificationCC extends CommandClass {
 		}
 
 		let supportsV1Alarm = false;
-		if (this.version >= 2) {
+		if (api.version >= 2) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported notification types...",
@@ -640,7 +641,7 @@ export class NotificationCC extends CommandClass {
 				direction: "inbound",
 			});
 
-			if (this.version >= 3) {
+			if (api.version >= 3) {
 				// Query each notification for its supported events
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
@@ -746,7 +747,7 @@ export class NotificationCC extends CommandClass {
 		}
 
 		// Only create metadata for V1 values if necessary
-		if (this.version === 1 || supportsV1Alarm) {
+		if (api.version === 1 || supportsV1Alarm) {
 			this.ensureMetadata(applHost, NotificationCCValues.alarmType);
 			this.ensureMetadata(applHost, NotificationCCValues.alarmLevel);
 		}
@@ -1024,13 +1025,15 @@ export class NotificationCCReport extends NotificationCC {
 	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
+		const ccVersion = getEffectiveCCVersion(applHost, this);
+
 		// Check if we need to re-interpret the alarm values somehow
 		if (
 			this.alarmType != undefined
 			&& this.alarmLevel != undefined
 			&& this.alarmType !== 0
 		) {
-			if (this.version >= 2) {
+			if (ccVersion >= 2) {
 				// Check if the device actually supports Notification CC, but chooses
 				// to send Alarm frames instead (GH#1034)
 				const supportedNotificationTypes = this.getValue<

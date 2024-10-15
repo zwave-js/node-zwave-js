@@ -205,7 +205,7 @@ test("MultiChannelCC/BasicCCGet (multicast) should expect NO response", (t) => {
 			nodeId: 2,
 			endpoint: 2,
 		}),
-	) as MultiChannelCCCommandEncapsulation;
+	);
 	// A multicast request never expects a response
 	ccRequest.destination = [1, 2, 3];
 	t.false(ccRequest.expectsCCResponse());

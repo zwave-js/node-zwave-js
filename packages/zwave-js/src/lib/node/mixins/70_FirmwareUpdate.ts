@@ -11,6 +11,7 @@ import {
 	FirmwareUpdateRequestStatus,
 	type FirmwareUpdateResult,
 	FirmwareUpdateStatus,
+	getEffectiveCCVersion,
 	isCommandClassContainer,
 } from "@zwave-js/cc";
 import {
@@ -564,12 +565,13 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 		const maxGrossPayloadSizeNonSecure = this.driver
 			.computeNetCCPayloadSize(fcc, true);
 
+		const ccVersion = getEffectiveCCVersion(this.driver, fcc);
 		const maxNetPayloadSizeSecure = maxGrossPayloadSizeSecure
 			- 2 // report number
-			- (fcc.version >= 2 ? 2 : 0); // checksum
+			- (ccVersion >= 2 ? 2 : 0); // checksum
 		const maxNetPayloadSizeNonSecure = maxGrossPayloadSizeNonSecure
 			- 2 // report number
-			- (fcc.version >= 2 ? 2 : 0); // checksum
+			- (ccVersion >= 2 ? 2 : 0); // checksum
 
 		// Use the smallest allowed payload
 		const fragmentSizeSecure = Math.min(
@@ -614,9 +616,10 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
 			nodeId: this.id,
 		});
+		const ccVersion = getEffectiveCCVersion(this.driver, fcc);
 		const fragmentSize = this.driver.computeNetCCPayloadSize(fcc)
 			- 2 // report number
-			- (fcc.version >= 2 ? 2 : 0); // checksum
+			- (ccVersion >= 2 ? 2 : 0); // checksum
 		const fragment = randomBytes(fragmentSize);
 		try {
 			await this.sendCorruptedFirmwareUpdateReport(

@@ -28,6 +28,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -731,7 +732,10 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 			0,
 		);
 
-		if (this.version >= 2) {
+		// V1 devices would consider the checksum to be part of the firmware data
+		// so it must not be included for those
+		const ccVersion = getEffectiveCCVersion(ctx, this);
+		if (ccVersion >= 2) {
 			// Compute and save the CRC16 in the payload
 			// The CC header is included in the CRC computation
 			let crc = CRC16_CCITT(Buffer.from([this.ccId, this.ccCommand]));
@@ -886,15 +890,12 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	public hardwareVersion?: number;
 
 	public serialize(ctx: CCEncodingContext): Buffer {
-		const isV5 = this.version >= 5 && this.hardwareVersion != undefined;
-		this.payload = Buffer.allocUnsafe(7 + (isV5 ? 1 : 0));
+		this.payload = Buffer.allocUnsafe(8);
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
 		this.payload[6] = this.firmwareTarget;
-		if (isV5) {
-			this.payload[7] = this.hardwareVersion!;
-		}
+		this.payload[7] = this.hardwareVersion ?? 0x00;
 		return super.serialize(ctx);
 	}
 

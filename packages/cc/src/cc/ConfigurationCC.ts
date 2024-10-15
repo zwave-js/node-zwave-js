@@ -52,6 +52,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -1091,7 +1092,7 @@ export class ConfigurationCC extends CommandClass {
 			Array.from(paramInfo?.keys() ?? []).map((k) => k.parameter),
 		);
 
-		if (this.version >= 3) {
+		if (api.version >= 3) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "finding first configuration parameter...",
@@ -1226,7 +1227,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			priority: MessagePriority.NodeQuery,
 		});
 
-		if (this.version < 3) {
+		if (api.version < 3) {
 			// V1/V2: Query all values defined in the config file
 			const paramInfo = getParamInformationFromConfigFile(
 				applHost,
@@ -1654,6 +1655,8 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
+		const ccVersion = getEffectiveCCVersion(applHost, this);
+
 		// This parameter may be a partial param in the following cases:
 		// * a config file defines it as such
 		// * it was reported by the device as a bit field
@@ -1681,7 +1684,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				valueSize: this.valueSize,
 			});
 			if (
-				this.version < 3
+				ccVersion < 3
 				&& !this.paramExistsInConfigFile(applHost, this.parameter)
 				&& oldParamInformation.min == undefined
 				&& oldParamInformation.max == undefined

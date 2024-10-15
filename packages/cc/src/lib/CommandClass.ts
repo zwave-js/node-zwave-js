@@ -36,6 +36,7 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetSupportedCCVersion,
 	GetValueDB,
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -141,6 +142,21 @@ export type CCNode =
 	& ListenBehavior
 	& QueryNodeStatus;
 
+export function getEffectiveCCVersion(
+	ctx: GetSupportedCCVersion,
+	cc: CommandClass,
+	defaultVersion?: number,
+): number {
+	// For multicast and broadcast CCs, just use the highest implemented version to serialize
+	// Older nodes will ignore the additional fields
+	if (!cc.isSinglecast()) {
+		return getImplementedVersion(cc.ccId);
+	}
+	// For singlecast CCs, set the CC version as high as possible
+	return ctx.getSupportedCCVersion(cc.ccId, cc.nodeId, cc.endpointIndex)
+		|| (defaultVersion ?? getImplementedVersion(cc.ccId));
+}
+
 // @publicAPI
 export class CommandClass implements CCId {
 	// empty constructor to parse messages
@@ -150,8 +166,10 @@ export class CommandClass implements CCId {
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;
 
-		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
-		// this.registerValue("interviewComplete", { internal: true });
+		this.origin = options.origin
+			?? (gotDeserializationOptions(options)
+				? MessageOrigin.Controller
+				: MessageOrigin.Host);
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
@@ -211,25 +229,6 @@ export class CommandClass implements CCId {
 		if (this instanceof InvalidCC) return;
 
 		if (options.origin !== MessageOrigin.Host && this.isSinglecast()) {
-			try {
-				// For singlecast CCs, set the CC version as high as possible
-				this.version = this.host.getSafeCCVersion(
-					this.ccId,
-					this.nodeId,
-					this.endpointIndex,
-				);
-			} catch (e) {
-				if (
-					isZWaveError(e)
-					&& e.code === ZWaveErrorCodes.CC_NotImplemented
-				) {
-					// Someone tried to create a CC that is not implemented. Just set all versions to 0.
-					this.version = 0;
-				} else {
-					throw e;
-				}
-			}
-
 			// Send secure commands if necessary
 			this.toggleEncapsulationFlag(
 				EncapsulationFlags.Security,
@@ -239,10 +238,6 @@ export class CommandClass implements CCId {
 					this.endpointIndex,
 				),
 			);
-		} else {
-			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
-			// Older nodes will ignore the additional fields
-			this.version = getImplementedVersion(this.ccId);
 		}
 	}
 
@@ -261,12 +256,10 @@ export class CommandClass implements CCId {
 	// Work around https://github.com/Microsoft/TypeScript/issues/27555
 	public payload!: Buffer;
 
-	/** The version of the command class used */
-	// Work around https://github.com/Microsoft/TypeScript/issues/27555
-	public version!: number;
-
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpointIndex: number;
+
+	public origin: MessageOrigin;
 
 	/**
 	 * Which encapsulation CCs this CC is/was/should be encapsulated with.

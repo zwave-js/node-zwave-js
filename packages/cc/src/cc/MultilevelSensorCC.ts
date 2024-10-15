@@ -46,6 +46,7 @@ import {
 	type CCResponsePredicate,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -403,7 +404,7 @@ export class MultilevelSensorCC extends CommandClass {
 			direction: "none",
 		});
 
-		if (this.version >= 5) {
+		if (api.version >= 5) {
 			// Query the supported sensor types
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -490,7 +491,7 @@ export class MultilevelSensorCC extends CommandClass {
 		});
 		const valueDB = this.getValueDB(applHost);
 
-		if (this.version <= 4) {
+		if (api.version <= 4) {
 			// Sensors up to V4 only support a single value
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -667,9 +668,11 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			this.nodeId as number,
 		)?.compat?.disableStrictMeasurementValidation;
 
+		const ccVersion = getEffectiveCCVersion(applHost, this);
+
 		if (measurementValidation) {
 			// Filter out unsupported sensor types and scales if possible
-			if (this.version >= 5) {
+			if (ccVersion >= 5) {
 				const supportedSensorTypes = this.getValue<number[]>(
 					applHost,
 					MultilevelSensorCCValues.supportedSensorTypes,

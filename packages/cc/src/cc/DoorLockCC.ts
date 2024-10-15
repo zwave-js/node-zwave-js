@@ -624,7 +624,7 @@ export class DoorLockCC extends CommandClass {
 		let boltSupported = true;
 		let latchSupported = true;
 
-		if (this.version >= 4) {
+		if (api.version >= 4) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting lock capabilities...",
@@ -766,7 +766,7 @@ inside handles can open door:  ${
 					.map(String)
 					.join(", ")
 			}`;
-			if (this.version >= 4) {
+			if (api.version >= 4) {
 				logMessage += `
 auto-relock time               ${config.autoRelockTime ?? "-"} seconds
 hold-and-release time          ${config.holdAndReleaseTime ?? "-"} seconds

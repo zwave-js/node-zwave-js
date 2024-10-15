@@ -57,6 +57,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -649,7 +650,7 @@ export class MeterCC extends CommandClass {
 			direction: "none",
 		});
 
-		if (this.version >= 2) {
+		if (api.version >= 2) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying meter support...",
@@ -713,7 +714,7 @@ supports reset:       ${suppResp.supportsReset}`;
 			priority: MessagePriority.NodeQuery,
 		});
 
-		if (this.version === 1) {
+		if (api.version === 1) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying default meter value...`,
@@ -934,6 +935,8 @@ export class MeterCCReport extends MeterCC {
 	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
 		if (!super.persistValues(applHost)) return false;
 
+		const ccVersion = getEffectiveCCVersion(applHost, this);
+
 		const meter = getMeter(this.type);
 		const scale = getMeterScale(this.type, this.scale)
 			?? getUnknownMeterScale(this.scale);
@@ -952,7 +955,7 @@ export class MeterCCReport extends MeterCC {
 			)(scale.label !== getUnknownMeterScale(this.scale).label);
 
 			// Filter out unsupported meter types, scales and rate types if possible
-			if (this.version >= 2) {
+			if (ccVersion >= 2) {
 				const expectedType = this.getValue<number>(
 					applHost,
 					MeterCCValues.type,
@@ -1130,16 +1133,17 @@ export class MeterCCGet extends MeterCC {
 		let scale2: number | undefined;
 		let bufferLength = 0;
 
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 		if (this.scale == undefined) {
 			scale1 = 0;
-		} else if (this.version >= 4 && this.scale >= 7) {
+		} else if (ccVersion >= 4 && this.scale >= 7) {
 			scale1 = 7;
 			scale2 = this.scale >>> 3;
 			bufferLength = 2;
-		} else if (this.version >= 3) {
+		} else if (ccVersion >= 3) {
 			scale1 = this.scale & 0b111;
 			bufferLength = 1;
-		} else if (this.version >= 2) {
+		} else if (ccVersion >= 2) {
 			scale1 = this.scale & 0b11;
 			bufferLength = 1;
 		} else {
@@ -1147,7 +1151,7 @@ export class MeterCCGet extends MeterCC {
 		}
 
 		let rateTypeFlags = 0;
-		if (this.version >= 4 && this.rateType != undefined) {
+		if (ccVersion >= 4 && this.rateType != undefined) {
 			rateTypeFlags = this.rateType & 0b11;
 			bufferLength = Math.max(bufferLength, 1);
 		}
@@ -1256,8 +1260,10 @@ export class MeterCCSupportedReport extends MeterCC {
 		if (!super.persistValues(applHost)) return false;
 		if (!this.supportsReset) return true;
 
+		const ccVersion = getEffectiveCCVersion(applHost, this);
+
 		// Create reset values
-		if (this.version < 6) {
+		if (ccVersion < 6) {
 			this.ensureMetadata(applHost, MeterCCValues.resetAll);
 		} else {
 			for (const scale of this.supportedScales) {

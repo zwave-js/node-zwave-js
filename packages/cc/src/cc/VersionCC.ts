@@ -228,15 +228,8 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			case VersionCommand.CapabilitiesGet:
 			case VersionCommand.CapabilitiesReport:
 			case VersionCommand.ZWaveSoftwareReport:
-				// The API might have been created before the versions were determined,
-				// so `this.version` may contains a wrong value
-				return (
-					this.applHost.getSafeCCVersion(
-						this.ccId,
-						this.endpoint.nodeId,
-						this.endpoint.index,
-					) >= 3
-				);
+				return this.version >= 3;
+
 			case VersionCommand.ZWaveSoftwareGet: {
 				return this.getValueDB().getValue<boolean>(
 					VersionCCValues.supportsZWaveSoftwareGet.endpoint(
@@ -557,12 +550,6 @@ export class VersionCC extends CommandClass {
 		if (this.endpointIndex === 0) {
 			// Step 1: Query Version CC version
 			await queryCCVersion(CommandClasses.Version);
-			// The CC instance was created before the versions were determined, so `this.version` contains a wrong value
-			this.version = applHost.getSafeCCVersion(
-				CommandClasses.Version,
-				node.id,
-				this.endpointIndex,
-			);
 
 			// Step 2: Query node versions
 			applHost.controllerLog.logNode(node.id, {
@@ -615,7 +602,7 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Step 4: Query VersionCC capabilities (root device only)
-		if (this.endpointIndex === 0 && this.version >= 3) {
+		if (this.endpointIndex === 0 && api.version >= 3) {
 			// Step 4a: Support for SoftwareGet
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,

@@ -14,6 +14,7 @@ import {
 } from "@zwave-js/core";
 import type {
 	GetDeviceConfig,
+	GetSupportedCCVersion,
 	HostIDs,
 	ZWaveApplicationHost,
 	ZWaveHost,
@@ -97,7 +98,7 @@ export type MessageOptions =
 	| MessageDeserializationOptions;
 
 export interface MessageEncodingContext
-	extends Readonly<SecurityManagers>, HostIDs
+	extends Readonly<SecurityManagers>, HostIDs, GetSupportedCCVersion
 {
 	/** How many bytes a node ID occupies in serial API commands */
 	nodeIdType: NodeIDType;

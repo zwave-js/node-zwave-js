@@ -211,7 +211,7 @@ export class BinarySensorCC extends CommandClass {
 		});
 
 		// Find out which sensor types this sensor supports
-		if (this.version >= 2) {
+		if (api.version >= 2) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported sensor types...",
@@ -263,7 +263,7 @@ export class BinarySensorCC extends CommandClass {
 		});
 
 		// Query (all of) the sensor's current value(s)
-		if (this.version === 1) {
+		if (api.version === 1) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current value...",

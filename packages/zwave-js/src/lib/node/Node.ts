@@ -37,6 +37,7 @@ import {
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 	entryControlEventTypeLabels,
+	getEffectiveCCVersion,
 	getImplementedVersion,
 	isCommandClassContainer,
 	utils as ccUtils,
@@ -4334,6 +4335,8 @@ protocol version:      ${this.protocolVersion}`;
 			return;
 		}
 
+		const ccVersion = getEffectiveCCVersion(this.driver, command);
+
 		// Look up the received notification in the config
 		const notification = getNotification(command.notificationType);
 
@@ -4486,7 +4489,7 @@ protocol version:      ${this.protocolVersion}`;
 					);
 				valueId = unknownValue.endpoint(command.endpointIndex);
 
-				if (command.version >= 2) {
+				if (ccVersion >= 2) {
 					if (!this.valueDB.hasMetadata(valueId)) {
 						this.valueDB.setMetadata(valueId, unknownValue.meta);
 					}
@@ -4539,7 +4542,7 @@ protocol version:      ${this.protocolVersion}`;
 			const valueId = unknownValue.endpoint(command.endpointIndex);
 
 			// Make sure the metdata exists
-			if (command.version >= 2) {
+			if (ccVersion >= 2) {
 				if (!this.valueDB.hasMetadata(valueId)) {
 					this.valueDB.setMetadata(valueId, unknownValue.meta);
 				}
