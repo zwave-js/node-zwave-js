@@ -16,7 +16,7 @@ import {
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
+import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
 import test from "ava";
 
 const host = createTestingHost();
@@ -147,7 +147,14 @@ test("the Set command should serialize correctly (without duration)", (t) => {
 			0xff, // duration: default
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 0; // Default to implemented version
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Set command should serialize correctly (version 2)", (t) => {
@@ -170,7 +177,13 @@ test("the Set command should serialize correctly (version 2)", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 2;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the StartLevelChange command should serialize correctly", (t) => {
@@ -182,8 +195,6 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 		colorComponent: ColorComponent.Red,
 		duration: new Duration(1, "seconds"),
 	});
-	cc.version = 3;
-
 	const expected = buildCCBuffer(
 		Buffer.from([
 			ColorSwitchCommand.StartLevelChange,
@@ -193,7 +204,13 @@ test("the StartLevelChange command should serialize correctly", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 3;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the StopLevelChange command should serialize correctly", (t) => {

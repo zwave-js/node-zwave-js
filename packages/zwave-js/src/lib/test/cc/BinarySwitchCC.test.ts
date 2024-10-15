@@ -6,7 +6,7 @@ import {
 	BinarySwitchCommand,
 } from "@zwave-js/cc";
 import { CommandClasses, Duration } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
+import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
 import test from "ava";
 
 const host = createTestingHost();
@@ -35,7 +35,6 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 		nodeId: 2,
 		targetValue: false,
 	});
-	cc.version = 1;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BinarySwitchCommand.Set, // CC Command
@@ -43,7 +42,13 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 			0xff, // default duration
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 1;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
@@ -53,7 +58,6 @@ test("the Set command should serialize correctly", (t) => {
 		targetValue: true,
 		duration,
 	});
-	cc.version = 2;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			BinarySwitchCommand.Set, // CC Command
@@ -61,7 +65,13 @@ test("the Set command should serialize correctly", (t) => {
 			duration.serializeSet(),
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 2;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {

@@ -13,7 +13,7 @@ import {
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
+import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import * as nodeUtils from "../../node/utils";
 import { createTestNode } from "../mocks";
@@ -37,7 +37,13 @@ test("the Get command (V1) should serialize correctly", (t) => {
 			MeterCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 1;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Get command (V2) should serialize correctly", (t) => {
@@ -48,7 +54,13 @@ test("the Get command (V2) should serialize correctly", (t) => {
 			0b11_000, // Scale
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 2;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Get command (V3) should serialize correctly", (t) => {
@@ -59,7 +71,13 @@ test("the Get command (V3) should serialize correctly", (t) => {
 			0b110_000, // Scale
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 3;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Get command (V4) should serialize correctly", (t) => {
@@ -71,7 +89,13 @@ test("the Get command (V4) should serialize correctly", (t) => {
 			0x1, // Scale 2
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 4;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {

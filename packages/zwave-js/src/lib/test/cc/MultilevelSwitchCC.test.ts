@@ -9,7 +9,7 @@ import {
 	MultilevelSwitchCommand,
 } from "@zwave-js/cc";
 import { CommandClasses, Duration } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
+import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
 import test from "ava";
 
 const host = createTestingHost();
@@ -38,7 +38,6 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 		nodeId: 2,
 		targetValue: 55,
 	});
-	cc.version = 1;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultilevelSwitchCommand.Set, // CC Command
@@ -46,7 +45,13 @@ test("the Set command should serialize correctly (no duration)", (t) => {
 			0xff, // default duration
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 1;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Set command (V2) should serialize correctly", (t) => {
@@ -55,7 +60,6 @@ test("the Set command (V2) should serialize correctly", (t) => {
 		targetValue: 55,
 		duration: new Duration(2, "minutes"),
 	});
-	cc.version = 2;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultilevelSwitchCommand.Set, // CC Command
@@ -63,7 +67,13 @@ test("the Set command (V2) should serialize correctly", (t) => {
 			0x81, // 2 minutes
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 2;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the Report command (V1) should be deserialized correctly", (t) => {
@@ -125,7 +135,6 @@ test("the StartLevelChange command (V2) should serialize correctly (down, ignore
 		startLevel: 50,
 		duration: new Duration(3, "seconds"),
 	});
-	cc.version = 2;
 	const expected = buildCCBuffer(
 		Buffer.from([
 			MultilevelSwitchCommand.StartLevelChange, // CC Command
@@ -134,7 +143,13 @@ test("the StartLevelChange command (V2) should serialize correctly (down, ignore
 			3, // 3 sec
 		]),
 	);
-	t.deepEqual(cc.serialize({} as any), expected);
+	const ctx = {
+		getSupportedCCVersion(cc, nodeId, endpointIndex) {
+			return 2;
+		},
+	} satisfies GetSupportedCCVersion as any;
+
+	t.deepEqual(cc.serialize(ctx), expected);
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
