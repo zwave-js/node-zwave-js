@@ -64,21 +64,17 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			const nif = new ApplicationUpdateRequestNodeInfoReceived(
-				mockController.host,
-				{
-					nodeInformation: {
-						nodeId: node.id,
-						basicDeviceClass:
-							mockNode.capabilities.basicDeviceClass,
-						genericDeviceClass:
-							mockNode.capabilities.genericDeviceClass,
-						specificDeviceClass:
-							mockNode.capabilities.specificDeviceClass,
-						supportedCCs: [...mockNode.implementedCCs.keys()],
-					},
+			const nif = new ApplicationUpdateRequestNodeInfoReceived({
+				nodeInformation: {
+					nodeId: node.id,
+					basicDeviceClass: mockNode.capabilities.basicDeviceClass,
+					genericDeviceClass:
+						mockNode.capabilities.genericDeviceClass,
+					specificDeviceClass:
+						mockNode.capabilities.specificDeviceClass,
+					supportedCCs: [...mockNode.implementedCCs.keys()],
 				},
-			);
+			});
 			await mockController.sendMessageToHost(nif);
 
 			await wait(100);

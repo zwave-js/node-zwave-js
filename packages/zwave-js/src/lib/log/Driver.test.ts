@@ -88,7 +88,7 @@ function createMessage(
 	driver: Driver,
 	options: Partial<CreateTransactionOptions>,
 ) {
-	return new Message(driver, {
+	return new Message({
 		type: options.type || MessageType.Request,
 		functionType: options.functionType || (0x00 as any),
 	});

@@ -51,7 +51,7 @@ test.afterEach.always(async (t) => {
 test.serial("returns true when a non-partial CC is received", (t) => {
 	const { driver } = t.context;
 	const cc = new BasicCCSet({ nodeId: 2, targetValue: 50 });
-	const msg = new ApplicationCommandRequest(driver, {
+	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
 	t.true(driver["assemblePartialCCs"](msg));
@@ -75,7 +75,7 @@ test.serial(
 			]),
 			context: {} as any,
 		});
-		const msg = new ApplicationCommandRequest(driver, {
+		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
 		t.true(driver["assemblePartialCCs"](msg));
@@ -100,7 +100,7 @@ test.serial(
 			]),
 			context: {} as any,
 		});
-		const msg = new ApplicationCommandRequest(driver, {
+		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
 		t.false(driver["assemblePartialCCs"](msg));
@@ -139,12 +139,12 @@ test.serial(
 			]),
 			context: {} as any,
 		});
-		const msg1 = new ApplicationCommandRequest(driver, {
+		const msg1 = new ApplicationCommandRequest({
 			command: cc1,
 		});
 		t.false(driver["assemblePartialCCs"](msg1));
 
-		const msg2 = new ApplicationCommandRequest(driver, {
+		const msg2 = new ApplicationCommandRequest({
 			command: cc2,
 		});
 		t.true(driver["assemblePartialCCs"](msg2));
@@ -164,7 +164,7 @@ test.serial("does not crash when receiving a Multi Command CC", (t) => {
 		nodeId: 2,
 		encapsulated: [cc1, cc2],
 	});
-	const msg = new ApplicationCommandRequest(driver, {
+	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
 	t.true(driver["assemblePartialCCs"](msg));
@@ -181,7 +181,7 @@ test.serial("supports nested partial/non-partial CCs", (t) => {
 	});
 	cc.encapsulated = undefined as any;
 	cc["decryptedCCBytes"] = cc1.serialize({} as any);
-	const msg = new ApplicationCommandRequest(driver, {
+	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
 	t.true(driver["assemblePartialCCs"](msg));
@@ -206,7 +206,7 @@ test.serial("supports nested partial/partial CCs (part 1)", (t) => {
 		2,
 		3,
 	]);
-	const msg = new ApplicationCommandRequest(driver, {
+	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
 	t.false(driver["assemblePartialCCs"](msg));
@@ -231,7 +231,7 @@ test.serial("supports nested partial/partial CCs (part 2)", (t) => {
 		2,
 		3,
 	]);
-	const msg = new ApplicationCommandRequest(driver, {
+	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
 	t.true(driver["assemblePartialCCs"](msg));
@@ -261,7 +261,7 @@ test.serial(
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		};
-		const msg = new ApplicationCommandRequest(driver, {
+		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
 		t.false(driver["assemblePartialCCs"](msg));
@@ -292,7 +292,7 @@ test.serial(
 				ZWaveErrorCodes.CC_NotImplemented,
 			);
 		};
-		const msg = new ApplicationCommandRequest(driver, {
+		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
 		t.false(driver["assemblePartialCCs"](msg));
@@ -323,7 +323,7 @@ test.serial(
 				ZWaveErrorCodes.PacketFormat_InvalidPayload,
 			);
 		};
-		const msg = new ApplicationCommandRequest(driver, {
+		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
 		t.false(driver["assemblePartialCCs"](msg));
@@ -349,7 +349,7 @@ test.serial("passes other errors during merging through", (t) => {
 	cc.mergePartialCCs = () => {
 		throw new ZWaveError("invalid", ZWaveErrorCodes.Argument_Invalid);
 	};
-	const msg = new ApplicationCommandRequest(driver, {
+	const msg = new ApplicationCommandRequest({
 		command: cc,
 	});
 	t.throws(() => driver["assemblePartialCCs"](msg), { message: /invalid/ });

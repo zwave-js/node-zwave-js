@@ -64,18 +64,15 @@ test.serial(
 		} as any;
 
 		// Handle a command for the root endpoint
-		const command = new BinarySwitchCCReport(
-			fakeDriver as unknown as Driver,
-			{
-				nodeId: 2,
-				data: Buffer.from([
-					CommandClasses["Binary Switch"],
-					BinarySwitchCommand.Report,
-					0xff,
-				]),
-				context: {} as any,
-			},
-		);
+		const command = new BinarySwitchCCReport({
+			nodeId: 2,
+			data: Buffer.from([
+				CommandClasses["Binary Switch"],
+				BinarySwitchCommand.Report,
+				0xff,
+			]),
+			context: {} as any,
+		});
 		await node.handleCommand(command);
 
 		t.true(
@@ -120,14 +117,11 @@ test.serial(
 			Buffer.alloc(12, 0xff),
 		]);
 
-		const command = new EntryControlCCNotification(
-			fakeDriver as unknown as Driver,
-			{
-				nodeId: node.id,
-				data: buf,
-				context: {} as any,
-			},
-		);
+		const command = new EntryControlCCNotification({
+			nodeId: node.id,
+			data: buf,
+			context: {} as any,
+		});
 
 		await node.handleCommand(command);
 

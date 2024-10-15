@@ -803,7 +803,7 @@ integrationTest(
 				MockControllerCommunicationState.Idle,
 			);
 
-			const ret = new SerialAPIStartedRequest(mockController.host, {
+			const ret = new SerialAPIStartedRequest({
 				wakeUpReason: SerialAPIWakeUpReason.WatchdogReset,
 				watchdogEnabled: true,
 				isListening: true,

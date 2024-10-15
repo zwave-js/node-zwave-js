@@ -171,12 +171,9 @@ integrationTest(
 
 			// Node 10 wakes up
 			mockNode10.autoAckControllerFrames = true;
-			const cc: CommandClass = new WakeUpCCWakeUpNotification(
-				mockNode10.host,
-				{
-					nodeId: mockController.ownNodeId,
-				},
-			);
+			const cc: CommandClass = new WakeUpCCWakeUpNotification({
+				nodeId: mockController.ownNodeId,
+			});
 			mockNode10.sendToController(createMockZWaveRequestFrame(cc, {
 				ackRequested: false,
 			}));
@@ -306,12 +303,9 @@ integrationTest(
 
 			// Node 10 wakes up
 			mockNode10.autoAckControllerFrames = true;
-			const cc: CommandClass = new WakeUpCCWakeUpNotification(
-				mockNode10.host,
-				{
-					nodeId: mockController.ownNodeId,
-				},
-			);
+			const cc: CommandClass = new WakeUpCCWakeUpNotification({
+				nodeId: mockController.ownNodeId,
+			});
 			mockNode10.sendToController(createMockZWaveRequestFrame(cc, {
 				ackRequested: false,
 			}));

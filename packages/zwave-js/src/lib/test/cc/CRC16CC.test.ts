@@ -17,14 +17,14 @@ test("should be detected as an encapsulating CC", (t) => {
 		nodeId: 3,
 		targetValue: 89,
 	});
-	const crc16 = CRC16CC.encapsulate(host, basicCCSet);
+	const crc16 = CRC16CC.encapsulate(basicCCSet);
 	t.true(isEncapsulatingCommandClass(crc16));
 });
 
 test("should match the specs", (t) => {
 	// SDS13783 contains the following sample encapsulated command:
 	const basicCCGet = new BasicCCGet({ nodeId: 1 });
-	const crc16 = CRC16CC.encapsulate(host, basicCCGet);
+	const crc16 = CRC16CC.encapsulate(basicCCGet);
 	const serialized = crc16.serialize({} as any);
 	const expected = Buffer.from("560120024d26", "hex");
 	t.deepEqual(serialized, expected);
@@ -35,7 +35,7 @@ test("serialization and deserialization should be compatible", (t) => {
 		nodeId: 3,
 		targetValue: 89,
 	});
-	const crc16 = CRC16CC.encapsulate(host, basicCCSet);
+	const crc16 = CRC16CC.encapsulate(basicCCSet);
 	t.is(crc16.nodeId, basicCCSet.nodeId);
 	t.is(crc16.encapsulated, basicCCSet);
 	const serialized = crc16.serialize({} as any);
@@ -58,7 +58,7 @@ test("deserializing a CC with a wrong checksum should result in an invalid CC", 
 		nodeId: 3,
 		targetValue: 89,
 	});
-	const crc16 = CRC16CC.encapsulate(host, basicCCSet);
+	const crc16 = CRC16CC.encapsulate(basicCCSet);
 	t.is(crc16.nodeId, basicCCSet.nodeId);
 	t.is(crc16.encapsulated, basicCCSet);
 	const serialized = crc16.serialize({} as any);

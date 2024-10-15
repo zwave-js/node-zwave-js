@@ -164,12 +164,12 @@ test("NodeQuery comparisons should prioritize listening nodes", (t) => {
 	) {
 		const driver = driverMock as any as Driver;
 		const msg = nodeId != undefined
-			? new SendDataRequest(driver, {
+			? new SendDataRequest({
 				command: new NoOperationCC({
 					nodeId,
 				}),
 			})
-			: new GetControllerVersionRequest(driver);
+			: new GetControllerVersionRequest();
 		const ret = createDummyTransaction(driverMock, {
 			priority,
 			message: msg,
@@ -273,7 +273,7 @@ test("Messages in the wakeup queue should be preferred over lesser priorities on
 
 	function createTransaction(nodeId: number, priority: MessagePriority) {
 		const driver = driverMock as any as Driver;
-		const msg = new SendDataRequest(driver, {
+		const msg = new SendDataRequest({
 			command: new NoOperationCC({ nodeId }),
 		});
 		const ret = createDummyTransaction(driverMock, {
@@ -380,14 +380,14 @@ test("Controller message should be preferred over messages for sleeping nodes", 
 		return ret;
 	}
 
-	const msgForSleepingNode = new SendDataRequest(driverMock, {
-		command: new NoOperationCC(driverMock, { nodeId: 2 }),
+	const msgForSleepingNode = new SendDataRequest({
+		command: new NoOperationCC({ nodeId: 2 }),
 	});
 	const tSleepingNode = createTransaction(
 		msgForSleepingNode,
 		MessagePriority.WakeUp,
 	);
-	const msgForController = new RemoveFailedNodeRequest(driverMock, {
+	const msgForController = new RemoveFailedNodeRequest({
 		failedNodeId: 3,
 	});
 	const tController = createTransaction(msgForController);

@@ -11,7 +11,7 @@ test("GetSupportedCommandsResponse with extended bitmask parses correctly (pre-7
 		"hex",
 	);
 
-	const msg = Message.from(host, {
+	const msg = Message.from({
 		data,
 		sdkVersion: "7.19.0",
 		ctx: {} as any,
@@ -32,7 +32,7 @@ test("GetSupportedCommandsResponse with extended bitmask parses correctly (post-
 		"hex",
 	);
 
-	const msg = Message.from(host, {
+	const msg = Message.from({
 		data,
 		sdkVersion: "7.19.1",
 		ctx: {} as any,

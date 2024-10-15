@@ -7,7 +7,6 @@ const host = createTestingHost();
 
 test("SupervisionCCGet should expect a response", (t) => {
 	const ccRequest = SupervisionCC.encapsulate(
-		host,
 		new BasicCCSet({
 			nodeId: 2,
 			targetValue: 5,
@@ -18,7 +17,6 @@ test("SupervisionCCGet should expect a response", (t) => {
 
 test("SupervisionCC/BasicCCSet => SupervisionCCReport (correct session ID) = expected", (t) => {
 	const ccRequest = SupervisionCC.encapsulate(
-		host,
 		new BasicCCSet({
 			nodeId: 2,
 			targetValue: 5,
@@ -36,7 +34,6 @@ test("SupervisionCC/BasicCCSet => SupervisionCCReport (correct session ID) = exp
 
 test("SupervisionCC/BasicCCSet => SupervisionCCReport (wrong session ID) = unexpected", (t) => {
 	const ccRequest = SupervisionCC.encapsulate(
-		host,
 		new BasicCCSet({
 			nodeId: 2,
 			targetValue: 5,

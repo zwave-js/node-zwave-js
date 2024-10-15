@@ -27,7 +27,6 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import sinon from "sinon";
-import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "../node/Node";
 import * as nodeUtils from "../node/utils";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
@@ -171,9 +170,7 @@ export function createEmptyMockDriver() {
 		},
 	};
 	ret.sendCommand.callsFake(async (command, options) => {
-		const msg = new SendDataRequest(ret as unknown as Driver, {
-			command,
-		});
+		const msg = new SendDataRequest({ command });
 		const resp = await ret.sendMessage(msg, options);
 		return resp?.command;
 	});

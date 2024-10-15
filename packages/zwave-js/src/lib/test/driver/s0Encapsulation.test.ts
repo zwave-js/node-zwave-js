@@ -94,7 +94,6 @@ integrationTest("Communication via Security S0 works", {
 						controlledCCs: [],
 					});
 					const cc = SecurityCC.encapsulate(
-						self.host,
 						self.id,
 						self.securityManagers.securityManager!,
 						response,
@@ -147,7 +146,6 @@ integrationTest("Communication via Security S0 works", {
 						currentValue: ++queryCount,
 					});
 					const cc = SecurityCC.encapsulate(
-						self.host,
 						self.id,
 						self.securityManagers.securityManager!,
 						response,

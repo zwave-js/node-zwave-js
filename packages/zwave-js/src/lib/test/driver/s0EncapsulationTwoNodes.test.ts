@@ -119,7 +119,6 @@ integrationTest(
 									controlledCCs: [],
 								});
 							const cc = SecurityCC.encapsulate(
-								self.host,
 								self.id,
 								self.securityManagers.securityManager!,
 								response,
@@ -182,7 +181,6 @@ integrationTest(
 								currentValue: queryCount,
 							});
 							const cc = SecurityCC.encapsulate(
-								self.host,
 								self.id,
 								self.securityManagers.securityManager!,
 								response,
@@ -234,7 +232,7 @@ integrationTest(
 			await wait(150);
 
 			// Now send a Nonce Get from node 3, which must be answered immediately
-			const nonceGet = new SecurityCCNonceGet(mockNode3.host, {
+			const nonceGet = new SecurityCCNonceGet({
 				nodeId: mockController.ownNodeId,
 			});
 			await mockNode3.sendToController(

@@ -43,7 +43,7 @@ test.afterEach.always(async (t) => {
 
 test("should compute the correct net payload sizes", (t) => {
 	const { driver } = t.context;
-	const testMsg1 = new SendDataRequest(driver, {
+	const testMsg1 = new SendDataRequest({
 		command: new SecurityCCCommandEncapsulation({
 			nodeId: 2,
 			ownNodeId: driver.ownNodeId,
@@ -60,7 +60,7 @@ test("should compute the correct net payload sizes", (t) => {
 		destination: 1,
 		encapsulated: {} as any,
 	});
-	const testMsg2 = new SendDataRequest(driver, {
+	const testMsg2 = new SendDataRequest({
 		command: new SecurityCCCommandEncapsulation({
 			nodeId: 2,
 			ownNodeId: driver.ownNodeId,

@@ -14,6 +14,6 @@ test("is a multi-encapsulating CommandClass", (t) => {
 		nodeId: 1,
 		targetValue: 50,
 	});
-	cc = MultiCommandCC.encapsulate(host, [cc]);
+	cc = MultiCommandCC.encapsulate([cc]);
 	t.true(isMultiEncapsulatingCommandClass(cc));
 });
