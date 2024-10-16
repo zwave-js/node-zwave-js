@@ -659,6 +659,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this._options.storage.deviceConfigPriorityDir,
 		});
 
+		const self = this;
 		this.messageParsingContext = {
 			getHighestSecurityClass: (nodeId) =>
 				this.getHighestSecurityClass(nodeId),
@@ -667,17 +668,20 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			setSecurityClass: (nodeId, securityClass, granted) =>
 				this.setSecurityClass(nodeId, securityClass, granted),
 			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
+			get securityManager() {
+				return self.securityManager;
+			},
+			get securityManager2() {
+				return self.securityManager2;
+			},
+			get securityManagerLR() {
+				return self.securityManagerLR;
+			},
 		};
 		this.messageEncodingContext = {
-			getHighestSecurityClass: (nodeId) =>
-				this.getHighestSecurityClass(nodeId),
-			hasSecurityClass: (nodeId, securityClass) =>
-				this.hasSecurityClass(nodeId, securityClass),
-			setSecurityClass: (nodeId, securityClass, granted) =>
-				this.setSecurityClass(nodeId, securityClass, granted),
+			...this.messageParsingContext,
 			getSupportedCCVersion: (cc, nodeId, endpointIndex) =>
 				this.getSupportedCCVersion(cc, nodeId, endpointIndex),
-			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
 		};
 
 		this.immediateQueue = new TransactionQueue({
@@ -731,9 +735,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			ownNodeId: this.controller.ownNodeId!,
 			homeId: this.controller.homeId!,
 			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
-			securityManager: this.securityManager,
-			securityManager2: this.securityManager2,
-			securityManagerLR: this.securityManagerLR,
 		};
 	}
 
@@ -745,9 +746,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			ownNodeId: this.controller.ownNodeId!,
 			homeId: this.controller.homeId!,
 			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
-			securityManager: this.securityManager,
-			securityManager2: this.securityManager2,
-			securityManagerLR: this.securityManagerLR,
 		};
 	}
 

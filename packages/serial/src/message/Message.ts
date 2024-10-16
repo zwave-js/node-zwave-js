@@ -38,7 +38,9 @@ export enum MessageOrigin {
 	Host,
 }
 
-export interface MessageParsingContext extends GetDeviceConfig, HostIDs {
+export interface MessageParsingContext
+	extends Readonly<SecurityManagers>, HostIDs, GetDeviceConfig
+{
 	/** How many bytes a node ID occupies in serial API commands */
 	nodeIdType: NodeIDType;
 

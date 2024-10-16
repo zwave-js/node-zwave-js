@@ -16,6 +16,7 @@ import {
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
+	type SecurityManagers,
 	type UnknownZWaveChipType,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -264,7 +265,7 @@ export class Zniffer extends TypedEventEmitter<ZnifferEventCallbacks> {
 	private serial: ZnifferSerialPortBase | undefined;
 	private parsingContext: Omit<
 		CCParsingContext,
-		keyof HostIDs | "sourceNodeId"
+		keyof HostIDs | "sourceNodeId" | keyof SecurityManagers
 	>;
 
 	private _destroyPromise: DeferredPromise<void> | undefined;

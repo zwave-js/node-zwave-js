@@ -302,20 +302,20 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	public static findGroupsForIssuedCommand(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId & SupportsCC,
 		ccId: CommandClasses,
 		command: number,
 	): number[] {
 		const ret: number[] = [];
 		const associationGroupCount = this.getAssociationGroupCountCached(
-			applHost,
+			ctx,
 			endpoint,
 		);
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Scan the issued commands of all groups if there's a match
 			const issuedCommands = this.getIssuedCommandsCached(
-				applHost,
+				ctx,
 				endpoint,
 				groupId,
 			);

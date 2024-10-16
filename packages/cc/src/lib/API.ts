@@ -167,9 +167,9 @@ export interface SchedulePollOptions {
 }
 
 // Defines the necessary traits the host passed to a CC API must have
-export type CCAPIHost =
+export type CCAPIHost<TNode extends CCAPINode = CCAPINode> =
 	& HostIDs
-	& GetNode<CCAPINode>
+	& GetNode<TNode>
 	& GetValueDB
 	& GetSupportedCCVersion
 	& GetSafeCCVersion

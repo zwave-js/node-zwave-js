@@ -146,6 +146,7 @@ export class MockNode {
 			);
 		}
 
+		const self = this;
 		this.encodingContext = {
 			homeId: this.controller.homeId,
 			ownNodeId: this.id,
@@ -189,6 +190,15 @@ export class MockNode {
 			},
 			// Mock nodes don't care about device configuration files
 			getDeviceConfig: () => undefined,
+			get securityManager() {
+				return self.securityManagers.securityManager;
+			},
+			get securityManager2() {
+				return self.securityManagers.securityManager2;
+			},
+			get securityManagerLR() {
+				return self.securityManagers.securityManagerLR;
+			},
 		};
 	}
 
@@ -196,7 +206,11 @@ export class MockNode {
 	public readonly controller: MockController;
 	public readonly capabilities: MockNodeCapabilities;
 
-	public securityManagers: SecurityManagers = {};
+	public securityManagers: SecurityManagers = {
+		securityManager: undefined,
+		securityManager2: undefined,
+		securityManagerLR: undefined,
+	};
 
 	public encodingContext: CCEncodingContext;
 
