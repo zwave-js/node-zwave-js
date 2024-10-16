@@ -326,7 +326,7 @@ export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -336,7 +336,7 @@ export class ThermostatSetpointCC extends CommandClass {
 				propertyKey as any,
 			);
 		} else {
-			return super.translatePropertyKey(applHost, property, propertyKey);
+			return super.translatePropertyKey(ctx, property, propertyKey);
 		}
 	}
 

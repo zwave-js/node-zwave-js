@@ -663,7 +663,7 @@ export class ColorSwitchCC extends CommandClass {
 	}
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -674,7 +674,7 @@ export class ColorSwitchCC extends CommandClass {
 			const translated = ColorComponent[propertyKey];
 			if (translated) return translated;
 		}
-		return super.translatePropertyKey(applHost, property, propertyKey);
+		return super.translatePropertyKey(ctx, property, propertyKey);
 	}
 }
 

@@ -820,7 +820,7 @@ export class IndicatorCC extends CommandClass {
 	}
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -835,11 +835,11 @@ export class IndicatorCC extends CommandClass {
 			const prop = getIndicatorProperty(propertyKey);
 			if (prop) return prop.label;
 		}
-		return super.translatePropertyKey(applHost, property, propertyKey);
+		return super.translatePropertyKey(ctx, property, propertyKey);
 	}
 
 	public translateProperty(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
@@ -847,7 +847,7 @@ export class IndicatorCC extends CommandClass {
 			// The indicator corresponds to our property
 			if (property in Indicator) return Indicator[property];
 		}
-		return super.translateProperty(applHost, property, propertyKey);
+		return super.translateProperty(ctx, property, propertyKey);
 	}
 
 	protected supportsV2Indicators(applHost: ZWaveApplicationHost): boolean {

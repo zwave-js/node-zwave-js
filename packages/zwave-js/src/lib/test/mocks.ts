@@ -1,23 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getImplementedVersion } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
-	type CommandClassInfo,
 	type CommandClasses,
 	type FLiRS,
-	type IZWaveEndpoint,
-	type IZWaveNode,
-	InterviewStage,
+	type InterviewStage,
 	type MaybeNotKnown,
 	MessagePriority,
 	NOT_KNOWN,
-	NodeStatus,
+	type NodeStatus,
 	SecurityClass,
 	ZWaveError,
 	ZWaveErrorCodes,
 	securityClassOrder,
 } from "@zwave-js/core";
-import type { BaseTestNode, TestingHost } from "@zwave-js/host";
+import type {
+	BaseTestEndpoint,
+	BaseTestNode,
+	GetSafeCCVersion,
+	GetValueDB,
+} from "@zwave-js/host";
 import {
 	type FunctionType,
 	Message,
@@ -220,14 +221,14 @@ export type TestNode<T extends BaseTestNode> = T & {
 	setEndpoint(endpoint: CreateTestEndpointOptions): void;
 };
 
-export function createTestNode<T extends BaseTestNode>(
-	host: TestingHost<T>,
+export function createTestNode(
+	host: GetValueDB & GetSafeCCVersion,
 	options: CreateTestNodeOptions,
-): TestNode<T> {
-	const endpointCache = new Map<number, IZWaveEndpoint>();
+): TestNode<BaseTestNode> {
+	const endpointCache = new Map<number, BaseTestEndpoint>();
 	const securityClasses = new Map<SecurityClass, boolean>();
 
-	const ret: TestNode<T> = {
+	const ret: TestNode<BaseTestNode> = {
 		id: options.id,
 		...createTestEndpoint(host, {
 			nodeId: options.id,
@@ -246,9 +247,9 @@ export function createTestNode<T extends BaseTestNode>(
 			return !ret.isListening && !ret.isFrequentListening;
 		},
 
-		status: options.status
-			?? (options.isListening ? NodeStatus.Alive : NodeStatus.Asleep),
-		interviewStage: options.interviewStage ?? InterviewStage.Complete,
+		// status: options.status
+		// 	?? (options.isListening ? NodeStatus.Alive : NodeStatus.Asleep),
+		// interviewStage: options.interviewStage ?? InterviewStage.Complete,
 
 		setEndpoint: (endpoint) => {
 			endpointCache.set(
@@ -286,7 +287,7 @@ export function createTestNode<T extends BaseTestNode>(
 				);
 			}
 			return endpointCache.get(index);
-		}) as IZWaveNode["getEndpoint"],
+		}) as BaseTestNode["getEndpoint"],
 
 		getEndpointOrThrow(index) {
 			const ep = ret.getEndpoint(index);
@@ -299,15 +300,15 @@ export function createTestNode<T extends BaseTestNode>(
 			return ep;
 		},
 
-		getAllEndpoints() {
-			if (!options.numEndpoints) return [...endpointCache.values()];
-			const eps: IZWaveEndpoint[] = [];
-			for (let i = 0; i <= options.numEndpoints; i++) {
-				const ep = ret.getEndpoint(i);
-				if (ep) eps.push(ep);
-			}
-			return eps;
-		},
+		// getAllEndpoints() {
+		// 	if (!options.numEndpoints) return [...endpointCache.values()];
+		// 	const eps: IZWaveEndpoint[] = [];
+		// 	for (let i = 0; i <= options.numEndpoints; i++) {
+		// 		const ep = ret.getEndpoint(i);
+		// 		if (ep) eps.push(ep);
+		// 	}
+		// 	return eps;
+		// },
 
 		// These are copied from Node.ts
 		getHighestSecurityClass(): SecurityClass | undefined {
@@ -362,36 +363,23 @@ export interface CreateTestEndpointOptions {
 }
 
 export function createTestEndpoint(
-	host: TestingHost,
+	host: GetSafeCCVersion,
 	options: CreateTestEndpointOptions,
-): IZWaveEndpoint {
-	const ret: IZWaveEndpoint = {
+): BaseTestEndpoint {
+	const ret: BaseTestEndpoint = {
+		virtual: false,
 		nodeId: options.nodeId,
 		index: options.index,
 		supportsCC: options.supportsCC ?? (() => true),
 		controlsCC: options.controlsCC ?? (() => false),
 		isCCSecure: options.isCCSecure ?? (() => false),
-		getCCVersion: options.getCCVersion
-			?? ((cc) =>
-				host.getSafeCCVersion(cc, options.nodeId, options.index)),
-		virtual: false,
-		addCC: function(
-			cc: CommandClasses,
-			info: Partial<CommandClassInfo>,
-		): void {
-			throw new Error("Function not implemented.");
-		},
-		removeCC: function(cc: CommandClasses): void {
-			throw new Error("Function not implemented.");
-		},
-		getCCs: function(): Iterable<
-			[ccId: CommandClasses, info: CommandClassInfo]
-		> {
-			throw new Error("Function not implemented.");
-		},
-		tryGetNode: function(): IZWaveNode | undefined {
-			return host.nodes.get(options.nodeId);
-		},
+		getCCVersion: (cc) =>
+			options.getCCVersion?.(cc)
+				?? host.getSafeCCVersion(cc, options.nodeId, options.index)
+				?? 0,
+		// tryGetNode: function(): IZWaveNode | undefined {
+		// 	return host.nodes.get(options.nodeId);
+		// },
 	};
 
 	return ret;

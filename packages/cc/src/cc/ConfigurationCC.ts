@@ -1547,7 +1547,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey?: string | number,
 	): string | undefined {
@@ -1559,11 +1559,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			// so no name for the property key is required
 			return undefined;
 		}
-		return super.translateProperty(applHost, property, propertyKey);
+		return super.translateProperty(ctx, property, propertyKey);
 	}
 
 	public translateProperty(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
@@ -1573,7 +1573,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			&& (propertyKey == undefined || typeof propertyKey === "number")
 		) {
 			const paramInfo = this.getParamInformation(
-				applHost,
+				ctx,
 				property,
 				propertyKey,
 			);
@@ -1585,7 +1585,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			}
 			return ret;
 		}
-		return super.translateProperty(applHost, property, propertyKey);
+		return super.translateProperty(ctx, property, propertyKey);
 	}
 }
 

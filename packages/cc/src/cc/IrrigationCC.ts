@@ -1333,7 +1333,7 @@ moisture sensor polarity: ${
 	}
 
 	public translateProperty(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
@@ -1342,7 +1342,7 @@ moisture sensor polarity: ${
 		} else if (typeof property === "number") {
 			return `Valve ${padStart(property.toString(), 3, "0")}`;
 		}
-		return super.translateProperty(applHost, property, propertyKey);
+		return super.translateProperty(ctx, property, propertyKey);
 	}
 }
 

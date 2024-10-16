@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/require-await */
 import {
+	type ControlsCC,
 	type EndpointId,
 	type GetEndpoint,
 	type IsCCSecure,
+	type ListenBehavior,
 	type NodeId,
 	type QuerySecurityClasses,
 	type SetSecurityClass,
+	type SupportsCC,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -18,12 +21,22 @@ export interface CreateTestingHostOptions extends HostIDs {
 	getSupportedCCVersion?: ZWaveApplicationHost["getSupportedCCVersion"];
 }
 
+export type BaseTestEndpoint =
+	& EndpointId
+	& SupportsCC
+	& ControlsCC
+	& IsCCSecure;
+
 export type BaseTestNode =
+	& BaseTestEndpoint
 	& NodeId
+	& ListenBehavior
 	& QuerySecurityClasses
 	& SetSecurityClass
+	& SupportsCC
+	& ControlsCC
 	& IsCCSecure
-	& GetEndpoint<EndpointId & IsCCSecure>;
+	& GetEndpoint<BaseTestEndpoint>;
 
 export type TestingHost<
 	TNode extends BaseTestNode,

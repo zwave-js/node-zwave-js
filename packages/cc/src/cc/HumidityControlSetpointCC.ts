@@ -334,7 +334,7 @@ export class HumidityControlSetpointCC extends CommandClass {
 	declare ccCommand: HumidityControlSetpointCommand;
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -344,7 +344,7 @@ export class HumidityControlSetpointCC extends CommandClass {
 				propertyKey as any,
 			);
 		} else {
-			return super.translatePropertyKey(applHost, property, propertyKey);
+			return super.translatePropertyKey(ctx, property, propertyKey);
 		}
 	}
 

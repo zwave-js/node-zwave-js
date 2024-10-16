@@ -837,7 +837,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	}
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -861,7 +861,7 @@ supports reset:       ${suppResp.supportsReset}`;
 		} else if (property === "reset" && typeof propertyKey === "number") {
 			return getMeterName(propertyKey);
 		}
-		return super.translatePropertyKey(applHost, property, propertyKey);
+		return super.translatePropertyKey(ctx, property, propertyKey);
 	}
 }
 

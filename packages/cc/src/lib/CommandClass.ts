@@ -1094,7 +1094,7 @@ export class CommandClass implements CCId {
 	 * @param _propertyKey The (optional) property key the translated name may depend on
 	 */
 	public translateProperty(
-		_applHost: ZWaveApplicationHost,
+		_ctx: GetValueDB,
 		property: string | number,
 		_propertyKey?: string | number,
 	): string {
@@ -1108,7 +1108,7 @@ export class CommandClass implements CCId {
 	 * @param propertyKey The property key for which the speaking name should be retrieved
 	 */
 	public translatePropertyKey(
-		_applHost: ZWaveApplicationHost,
+		_ctx: GetValueDB,
 		_property: string | number,
 		propertyKey: string | number,
 	): string | undefined {

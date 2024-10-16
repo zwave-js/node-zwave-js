@@ -628,6 +628,7 @@ export type {
 	Security2CCMessageEncapsulationOptions,
 	Security2CCNetworkKeyGetOptions,
 	Security2CCNetworkKeyReportOptions,
+	Security2CCNonceGetOptions,
 	Security2CCNonceReportOptions,
 	Security2CCPublicKeyReportOptions,
 	Security2CCTransferEndOptions,

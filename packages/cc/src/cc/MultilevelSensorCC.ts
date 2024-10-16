@@ -607,7 +607,7 @@ value:       ${mlsResponse.value}${
 	}
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -616,7 +616,7 @@ value:       ${mlsResponse.value}${
 			const sensor = getSensor(propertyKey);
 			if (sensor) return sensor.label;
 		}
-		return super.translatePropertyKey(applHost, property, propertyKey);
+		return super.translatePropertyKey(ctx, property, propertyKey);
 	}
 }
 
