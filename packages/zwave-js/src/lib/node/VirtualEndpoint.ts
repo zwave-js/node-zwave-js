@@ -10,7 +10,6 @@ import {
 } from "@zwave-js/cc";
 import {
 	type CommandClasses,
-	type IVirtualEndpoint,
 	type MulticastDestination,
 	type SecurityClass,
 	type SupportsCC,
@@ -32,11 +31,9 @@ import { VirtualNode } from "./VirtualNode";
  *
  * The endpoint's capabilities are determined by the capabilities of the individual nodes' endpoints.
  */
-export class VirtualEndpoint
-	implements VirtualEndpointId, SupportsCC, IVirtualEndpoint
-{
+export class VirtualEndpoint implements VirtualEndpointId, SupportsCC {
 	public constructor(
-		/** The virtual node this endpoint belongs to (or undefined if it set later) */
+		/** The virtual node this endpoint belongs to */
 		node: VirtualNode | undefined,
 		/** The driver instance this endpoint belongs to */
 		protected readonly driver: Driver,
@@ -54,7 +51,6 @@ export class VirtualEndpoint
 	public get node(): VirtualNode {
 		return this._node;
 	}
-	/** @internal */
 	protected setNode(node: VirtualNode): void {
 		this._node = node;
 	}

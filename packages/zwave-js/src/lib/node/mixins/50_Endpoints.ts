@@ -3,7 +3,6 @@ import {
 	type CommandClasses,
 	type GetAllEndpoints,
 	type GetEndpoint,
-	type IZWaveNode,
 	type MaybeNotKnown,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -42,11 +41,7 @@ export interface Endpoints {
 }
 
 export abstract class EndpointsMixin extends NodeValuesMixin
-	implements
-		Endpoints,
-		GetEndpoint<Endpoint>,
-		GetAllEndpoints<Endpoint>,
-		IZWaveNode
+	implements Endpoints, GetEndpoint<Endpoint>, GetAllEndpoints<Endpoint>
 {
 	public get endpointCountIsDynamic(): MaybeNotKnown<boolean> {
 		return nodeUtils.endpointCountIsDynamic(this.driver, this.id);

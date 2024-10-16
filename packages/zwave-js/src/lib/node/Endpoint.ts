@@ -15,7 +15,6 @@ import type {
 	EndpointId,
 	GetCCs,
 	GetEndpointNode,
-	IZWaveEndpoint,
 	IsCCSecure,
 	MaybeNotKnown,
 	ModifyCCs,
@@ -54,8 +53,7 @@ export class Endpoint
 		IsCCSecure,
 		ModifyCCs,
 		GetCCs,
-		GetEndpointNode<ZWaveNode>,
-		IZWaveEndpoint
+		GetEndpointNode<ZWaveNode>
 {
 	public constructor(
 		/** The id of the node this endpoint belongs to */

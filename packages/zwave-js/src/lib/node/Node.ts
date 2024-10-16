@@ -145,7 +145,6 @@ import {
 	CommandClasses,
 	Duration,
 	EncapsulationFlags,
-	type IZWaveNode,
 	type MaybeNotKnown,
 	MessagePriority,
 	NOT_KNOWN,
@@ -287,9 +286,7 @@ export interface ZWaveNode
  * of its root endpoint (index 0)
  */
 @Mixin([EventEmitter, NodeStatisticsHost])
-export class ZWaveNode extends ZWaveNodeMixins
-	implements QuerySecurityClasses, IZWaveNode
-{
+export class ZWaveNode extends ZWaveNodeMixins implements QuerySecurityClasses {
 	public constructor(
 		id: number,
 		driver: Driver,

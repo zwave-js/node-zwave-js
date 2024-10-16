@@ -1,8 +1,8 @@
 import { num2hex } from "@zwave-js/shared/safe";
 import { isObject } from "alcalzone-shared/typeguards";
-import type { CCId } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
 import { type SecurityClass } from "../security/SecurityClass";
+import type { CCId } from "../traits/CommandClasses";
 import { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
