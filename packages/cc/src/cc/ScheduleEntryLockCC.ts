@@ -238,7 +238,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				enabled,
 			});
 
-			result = await this.applHost.sendCommand(cc, this.commandOptions);
+			result = await this.host.sendCommand(cc, this.commandOptions);
 		} else {
 			this.assertSupportsCommand(
 				ScheduleEntryLockCommand,
@@ -251,13 +251,13 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				enabled,
 			});
 
-			result = await this.applHost.sendCommand(cc, this.commandOptions);
+			result = await this.host.sendCommand(cc, this.commandOptions);
 		}
 
 		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
 			// Remember the new state in the cache
 			setUserCodeScheduleEnabledCached(
-				this.applHost,
+				this.host,
 				this.endpoint,
 				userId,
 				enabled,
@@ -279,7 +279,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 
-		const result = await this.applHost.sendCommand<
+		const result = await this.host.sendCommand<
 			ScheduleEntryLockCCSupportedReport
 		>(
 			cc,
@@ -307,7 +307,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		if (this.isSinglecast()) {
 			const numSlots = ScheduleEntryLockCC.getNumWeekDaySlotsCached(
-				this.applHost,
+				this.host,
 				this.endpoint,
 			);
 
@@ -346,20 +346,20 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				}),
 		});
 
-		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.host.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
 			// Editing (but not erasing) a schedule will enable scheduling for that user
 			// and switch it to the current scheduling kind
 			if (!!schedule) {
 				setUserCodeScheduleEnabledCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 					slot.userId,
 					true,
 				);
 				setUserCodeScheduleKindCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 					slot.userId,
 					ScheduleEntryLockScheduleKind.WeekDay,
@@ -369,7 +369,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			// And cache the schedule
 			persistSchedule.call(
 				cc,
-				this.applHost,
+				this.host,
 				ScheduleEntryLockScheduleKind.WeekDay,
 				slot.userId,
 				slot.slotId,
@@ -394,7 +394,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...slot,
 		});
-		const result = await this.applHost.sendCommand<
+		const result = await this.host.sendCommand<
 			ScheduleEntryLockCCWeekDayScheduleReport
 		>(
 			cc,
@@ -424,7 +424,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		if (this.isSinglecast()) {
 			const numSlots = ScheduleEntryLockCC.getNumYearDaySlotsCached(
-				this.applHost,
+				this.host,
 				this.endpoint,
 			);
 
@@ -473,20 +473,20 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				}),
 		});
 
-		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.host.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
 			// Editing (but not erasing) a schedule will enable scheduling for that user
 			// and switch it to the current scheduling kind
 			if (!!schedule) {
 				setUserCodeScheduleEnabledCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 					slot.userId,
 					true,
 				);
 				setUserCodeScheduleKindCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 					slot.userId,
 					ScheduleEntryLockScheduleKind.YearDay,
@@ -496,7 +496,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			// And cache the schedule
 			persistSchedule.call(
 				cc,
-				this.applHost,
+				this.host,
 				ScheduleEntryLockScheduleKind.YearDay,
 				slot.userId,
 				slot.slotId,
@@ -521,7 +521,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...slot,
 		});
-		const result = await this.applHost.sendCommand<
+		const result = await this.host.sendCommand<
 			ScheduleEntryLockCCYearDayScheduleReport
 		>(
 			cc,
@@ -557,7 +557,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 		if (this.isSinglecast()) {
 			const numSlots = ScheduleEntryLockCC
 				.getNumDailyRepeatingSlotsCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 				);
 
@@ -583,20 +583,20 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				}),
 		});
 
-		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.host.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast() && isUnsupervisedOrSucceeded(result)) {
 			// Editing (but not erasing) a schedule will enable scheduling for that user
 			// and switch it to the current scheduling kind
 			if (!!schedule) {
 				setUserCodeScheduleEnabledCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 					slot.userId,
 					true,
 				);
 				setUserCodeScheduleKindCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 					slot.userId,
 					ScheduleEntryLockScheduleKind.DailyRepeating,
@@ -606,7 +606,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			// And cache the schedule
 			persistSchedule.call(
 				cc,
-				this.applHost,
+				this.host,
 				ScheduleEntryLockScheduleKind.DailyRepeating,
 				slot.userId,
 				slot.slotId,
@@ -631,7 +631,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...slot,
 		});
-		const result = await this.applHost.sendCommand<
+		const result = await this.host.sendCommand<
 			ScheduleEntryLockCCDailyRepeatingScheduleReport
 		>(
 			cc,
@@ -659,7 +659,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const result = await this.applHost.sendCommand<
+		const result = await this.host.sendCommand<
 			ScheduleEntryLockCCTimeOffsetReport
 		>(
 			cc,
@@ -686,7 +686,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 			...timezone,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

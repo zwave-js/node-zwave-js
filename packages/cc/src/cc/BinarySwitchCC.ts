@@ -106,7 +106,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<BinarySwitchCCReport>(
+		const response = await this.host.sendCommand<BinarySwitchCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -141,7 +141,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
@@ -196,7 +196,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 							);
 						// and optimistically update the currentValue
 						for (const node of affectedNodes) {
-							this.applHost
+							this.host
 								.tryGetValueDB(node.id)
 								?.setValue(currentValueValueId, value);
 						}

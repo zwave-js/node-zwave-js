@@ -124,7 +124,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SoundSwitchCCTonesNumberReport
 		>(
 			cc,
@@ -146,7 +146,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			toneId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SoundSwitchCCToneInfoReport
 		>(
 			cc,
@@ -171,7 +171,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			defaultToneId,
 			defaultVolume,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -185,7 +185,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SoundSwitchCCConfigurationReport
 		>(
 			cc,
@@ -219,7 +219,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			toneId,
 			volume,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async stopPlaying(): Promise<SupervisionResult | undefined> {
@@ -234,7 +234,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			toneId: 0x00,
 			volume: 0x00,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -248,7 +248,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SoundSwitchCCTonePlayReport
 		>(
 			cc,

@@ -110,7 +110,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AssociationCCSupportedGroupingsReport
 		>(
 			cc,
@@ -131,7 +131,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupCount,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -147,7 +147,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = await this.applHost.sendCommand<AssociationCCReport>(
+		const response = await this.host.sendCommand<AssociationCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -173,7 +173,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -192,7 +192,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			groupId,
 			nodeIds,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -227,7 +227,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -273,7 +273,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AssociationCCSpecificGroupReport
 		>(
 			cc,
@@ -299,7 +299,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			group,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

@@ -248,7 +248,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<VersionCCReport>(
+		const response = await this.host.sendCommand<VersionCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -271,7 +271,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -288,7 +288,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			requestedCC,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			VersionCCCommandClassReport
 		>(
 			cc,
@@ -330,7 +330,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			requestedCC,
 			ccVersion,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -344,7 +344,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			VersionCCCapabilitiesReport
 		>(
 			cc,
@@ -367,7 +367,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			// At this time, we do not support responding to Z-Wave Software Get
 			supportsZWaveSoftwareGet: false,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -381,7 +381,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			VersionCCZWaveSoftwareReport
 		>(
 			cc,

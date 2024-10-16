@@ -297,7 +297,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		return this.applHost.sendCommand<NotificationCCReport>(
+		return this.host.sendCommand<NotificationCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -317,7 +317,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -351,7 +351,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			notificationType,
 			notificationStatus,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -365,7 +365,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			NotificationCCSupportedReport
 		>(
 			cc,
@@ -393,7 +393,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			notificationType,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			NotificationCCEventSupportedReport
 		>(
 			cc,

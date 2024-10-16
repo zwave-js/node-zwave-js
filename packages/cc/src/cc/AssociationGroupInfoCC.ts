@@ -116,7 +116,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AssociationGroupInfoCCNameReport
 		>(
 			cc,
@@ -139,7 +139,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			name,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -156,7 +156,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			groupId,
 			refreshCache,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AssociationGroupInfoCCInfoReport
 		>(
 			cc,
@@ -189,7 +189,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			...options,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -210,7 +210,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			groupId,
 			allowCache,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AssociationGroupInfoCCCommandListReport
 		>(
 			cc,
@@ -236,7 +236,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			commands,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

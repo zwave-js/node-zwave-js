@@ -226,7 +226,7 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<ProtectionCCReport>(
+		const response = await this.host.sendCommand<ProtectionCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -248,7 +248,7 @@ export class ProtectionCCAPI extends CCAPI {
 			local,
 			rf,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -262,7 +262,7 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ProtectionCCSupportedReport
 		>(
 			cc,
@@ -288,7 +288,7 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ProtectionCCExclusiveControlReport
 		>(
 			cc,
@@ -311,7 +311,7 @@ export class ProtectionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			exclusiveControlNodeId: nodeId,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getTimeout(): Promise<MaybeNotKnown<Timeout>> {
@@ -324,7 +324,7 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ProtectionCCTimeoutReport
 		>(
 			cc,
@@ -347,7 +347,7 @@ export class ProtectionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			timeout,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

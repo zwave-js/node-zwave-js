@@ -77,7 +77,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<LockCCReport>(
+		const response = await this.host.sendCommand<LockCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -97,7 +97,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			locked,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {

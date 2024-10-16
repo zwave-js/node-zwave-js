@@ -101,7 +101,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 		cc.encapsulationFlags = encapsulationFlags;
 
 		try {
-			await this.applHost.sendCommand(cc, {
+			await this.host.sendCommand(cc, {
 				...this.commandOptions,
 				// Supervision Reports must be prioritized over normal messages
 				priority: lowPriority

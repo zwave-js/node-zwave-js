@@ -112,7 +112,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ManufacturerSpecificCCReport
 		>(
 			cc,
@@ -141,7 +141,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			deviceIdType,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ManufacturerSpecificCCDeviceSpecificReport
 		>(
 			cc,
@@ -164,7 +164,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

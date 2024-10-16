@@ -208,7 +208,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			MultiChannelAssociationCCSupportedGroupingsReport
 		>(
 			cc,
@@ -229,7 +229,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupCount,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -248,7 +248,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			MultiChannelAssociationCCReport
 		>(
 			cc,
@@ -273,7 +273,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -293,7 +293,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -313,7 +313,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			// We don't want to do too much work, so find out which groups the destination is in
 			const currentDestinations = MultiChannelAssociationCC
 				.getAllDestinationsCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 				);
 			for (const [group, destinations] of currentDestinations) {
@@ -330,7 +330,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 					),
 				});
 				// TODO: evaluate intermediate supervision results
-				await this.applHost.sendCommand(cc, this.commandOptions);
+				await this.host.sendCommand(cc, this.commandOptions);
 			}
 		} else if (options.groupId && options.groupId < 0) {
 			throw new ZWaveError(
@@ -343,7 +343,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 				endpoint: this.endpoint.index,
 				...options,
 			});
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			return this.host.sendCommand(cc, this.commandOptions);
 		}
 	}
 }

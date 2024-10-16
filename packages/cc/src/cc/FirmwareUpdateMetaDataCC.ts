@@ -118,7 +118,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			FirmwareUpdateMetaDataCCMetaDataReport
 		>(
 			cc,
@@ -155,7 +155,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -177,7 +177,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			...options,
 		});
 
-		await this.applHost.sendCommand(cc, {
+		await this.host.sendCommand(cc, {
 			...this.commandOptions,
 			// Do not wait for Nonce Reports
 			s2VerifyDelivery: false,
@@ -205,7 +205,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			isLast: isLastFragment,
 			firmwareData: data,
 		});
-		await this.applHost.sendCommand(cc, {
+		await this.host.sendCommand(cc, {
 			...this.commandOptions,
 			// Do not wait for Nonce Reports
 			s2VerifyDelivery: false,
@@ -227,7 +227,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			FirmwareUpdateMetaDataCCActivationReport
 		>(
 			cc,

@@ -233,7 +233,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<BatteryCCReport>(
+		const response = await this.host.sendCommand<BatteryCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -261,7 +261,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<BatteryCCHealthReport>(
+		const response = await this.host.sendCommand<BatteryCCHealthReport>(
 			cc,
 			this.commandOptions,
 		);

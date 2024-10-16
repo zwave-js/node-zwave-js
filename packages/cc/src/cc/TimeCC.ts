@@ -67,7 +67,7 @@ export class TimeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<TimeCCTimeReport>(
+		const response = await this.host.sendCommand<TimeCCTimeReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -91,7 +91,7 @@ export class TimeCCAPI extends CCAPI {
 			minute,
 			second,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -102,7 +102,7 @@ export class TimeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<TimeCCDateReport>(
+		const response = await this.host.sendCommand<TimeCCDateReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -126,7 +126,7 @@ export class TimeCCAPI extends CCAPI {
 			month,
 			day,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -143,7 +143,7 @@ export class TimeCCAPI extends CCAPI {
 			dstStart: timezone.startDate,
 			dstEnd: timezone.endDate,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getTimezone(): Promise<MaybeNotKnown<DSTInfo>> {
@@ -153,7 +153,7 @@ export class TimeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			TimeCCTimeOffsetReport
 		>(
 			cc,
@@ -183,7 +183,7 @@ export class TimeCCAPI extends CCAPI {
 			dstStart: timezone.startDate,
 			dstEnd: timezone.endDate,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

@@ -607,10 +607,10 @@ export class CommandClass implements CCId {
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
 	public getNode<T extends NodeId>(
-		applHost: GetNode<T>,
+		ctx: GetNode<T>,
 	): T | undefined {
 		if (this.isSinglecast()) {
-			return applHost.getNode(this.nodeId);
+			return ctx.getNode(this.nodeId);
 		}
 	}
 
@@ -619,10 +619,10 @@ export class CommandClass implements CCId {
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
 	public getNodeUnsafe<T extends NodeId>(
-		applHost: GetNode<T>,
+		ctx: GetNode<T>,
 	): T | undefined {
 		try {
-			return this.getNode(applHost);
+			return this.getNode(ctx);
 		} catch (e) {
 			// This was expected
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
@@ -634,9 +634,9 @@ export class CommandClass implements CCId {
 	}
 
 	public getEndpoint<T extends EndpointId>(
-		applHost: GetNode<NodeId & GetEndpoint<T>>,
+		ctx: GetNode<NodeId & GetEndpoint<T>>,
 	): T | undefined {
-		return this.getNode(applHost)?.getEndpoint(this.endpointIndex);
+		return this.getNode(ctx)?.getEndpoint(this.endpointIndex);
 	}
 
 	/** Returns the value DB for this CC's node */

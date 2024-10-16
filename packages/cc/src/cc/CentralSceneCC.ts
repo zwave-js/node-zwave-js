@@ -118,7 +118,7 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			CentralSceneCCSupportedReport
 		>(
 			cc,
@@ -144,7 +144,7 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			CentralSceneCCConfigurationReport
 		>(
 			cc,
@@ -169,7 +169,7 @@ export class CentralSceneCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			slowRefresh,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {

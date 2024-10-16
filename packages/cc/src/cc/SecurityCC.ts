@@ -116,11 +116,11 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				: SecurityCCCommandEncapsulation
 		)({
 			nodeId: this.endpoint.nodeId,
-			ownNodeId: this.applHost.ownNodeId,
-			securityManager: this.applHost.securityManager!,
+			ownNodeId: this.host.ownNodeId,
+			securityManager: this.host.securityManager!,
 			encapsulated,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -133,7 +133,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<SecurityCCNonceReport>(
+		const response = await this.host.sendCommand<SecurityCCNonceReport>(
 			cc,
 			{
 				...this.commandOptions,
@@ -144,13 +144,13 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		if (!response) return;
 
 		const nonce = response.nonce;
-		const secMan = this.applHost.securityManager!;
+		const secMan = this.host.securityManager!;
 		secMan.setNonce(
 			{
 				issuer: this.endpoint.nodeId,
 				nonceId: secMan.getNonceId(nonce),
 			},
-			{ nonce, receiver: this.applHost.ownNodeId },
+			{ nonce, receiver: this.host.ownNodeId },
 			{ free: true },
 		);
 		return nonce;
@@ -166,18 +166,18 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			SecurityCommand.NonceReport,
 		);
 
-		if (!this.applHost.securityManager) {
+		if (!this.host.securityManager) {
 			throw new ZWaveError(
 				`Nonces can only be sent if secure communication is set up!`,
 				ZWaveErrorCodes.Driver_NoSecurity,
 			);
 		}
 
-		const nonce = this.applHost.securityManager.generateNonce(
+		const nonce = this.host.securityManager.generateNonce(
 			this.endpoint.nodeId,
 			HALF_NONCE_SIZE,
 		);
-		const nonceId = this.applHost.securityManager.getNonceId(nonce);
+		const nonceId = this.host.securityManager.getNonceId(nonce);
 
 		const cc = new SecurityCCNonceReport({
 			nodeId: this.endpoint.nodeId,
@@ -186,7 +186,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		});
 
 		try {
-			await this.applHost.sendCommand(cc, {
+			await this.host.sendCommand(cc, {
 				...this.commandOptions,
 				// Seems we need these options or some nodes won't accept the nonce
 				transmitOptions: TransmitOptions.ACK
@@ -201,7 +201,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		} catch (e) {
 			if (isTransmissionError(e)) {
 				// The nonce could not be sent, invalidate it
-				this.applHost.securityManager.deleteNonce(nonceId);
+				this.host.securityManager.deleteNonce(nonceId);
 				return false;
 			} else {
 				// Pass other errors through
@@ -218,7 +218,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 		// There is only one scheme, so we hardcode it
 		return [0];
 	}
@@ -237,12 +237,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			cc = new SecurityCCCommandEncapsulation({
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
-				ownNodeId: this.applHost.ownNodeId,
-				securityManager: this.applHost.securityManager!,
+				ownNodeId: this.host.ownNodeId,
+				securityManager: this.host.securityManager!,
 				encapsulated: cc,
 			});
 		}
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async inheritSecurityScheme(): Promise<void> {
@@ -255,7 +255,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 		// There is only one scheme, so we don't return anything here
 	}
 
@@ -273,12 +273,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		const cc = new SecurityCCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			ownNodeId: this.applHost.ownNodeId,
-			securityManager: this.applHost.securityManager!,
+			ownNodeId: this.host.ownNodeId,
+			securityManager: this.host.securityManager!,
 			encapsulated: keySet,
 			alternativeNetworkKey: Buffer.alloc(16, 0),
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async verifyNetworkKey(): Promise<void> {
@@ -291,7 +291,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -305,7 +305,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SecurityCCCommandsSupportedReport
 		>(
 			cc,
@@ -331,7 +331,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			supportedCCs,
 			controlledCCs,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

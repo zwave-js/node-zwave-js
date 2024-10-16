@@ -138,7 +138,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			NodeNamingAndLocationCCNameReport
 		>(
 			cc,
@@ -159,7 +159,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			name,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getLocation(): Promise<MaybeNotKnown<string>> {
@@ -172,7 +172,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			NodeNamingAndLocationCCLocationReport
 		>(
 			cc,
@@ -195,7 +195,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			location,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

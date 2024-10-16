@@ -193,8 +193,8 @@ export class Security2CCAPI extends CCAPI {
 		this.assertPhysicalEndpoint(this.endpoint);
 
 		const securityManager = getSecurityManager(
-			this.applHost.ownNodeId,
-			this.applHost,
+			this.host.ownNodeId,
+			this.host,
 			this.endpoint.nodeId,
 		);
 
@@ -211,16 +211,16 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNonceReport({
 			nodeId: this.endpoint.nodeId,
-			ownNodeId: this.applHost.ownNodeId,
+			ownNodeId: this.host.ownNodeId,
 			endpoint: this.endpoint.index,
-			securityManagers: this.applHost,
+			securityManagers: this.host,
 			SOS: true,
 			MOS: false,
 			receiverEI,
 		});
 
 		try {
-			await this.applHost.sendCommand(cc, {
+			await this.host.sendCommand(cc, {
 				...this.commandOptions,
 				// Seems we need these options or some nodes won't accept the nonce
 				transmitOptions: TransmitOptions.ACK
@@ -259,15 +259,15 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNonceReport({
 			nodeId: this.endpoint.nodeId,
-			ownNodeId: this.applHost.ownNodeId,
+			ownNodeId: this.host.ownNodeId,
 			endpoint: this.endpoint.index,
-			securityManagers: this.applHost,
+			securityManagers: this.host,
 			SOS: false,
 			MOS: true,
 		});
 
 		try {
-			await this.applHost.sendCommand(cc, {
+			await this.host.sendCommand(cc, {
 				...this.commandOptions,
 				// Seems we need these options or some nodes won't accept the nonce
 				transmitOptions: TransmitOptions.ACK
@@ -304,9 +304,9 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCMessageEncapsulation({
 			nodeId: this.endpoint.nodeId,
-			ownNodeId: this.applHost.ownNodeId,
+			ownNodeId: this.host.ownNodeId,
 			endpoint: this.endpoint.index,
-			securityManagers: this.applHost,
+			securityManagers: this.host,
 			extensions: [
 				new MPANExtension({
 					groupId,
@@ -316,7 +316,7 @@ export class Security2CCAPI extends CCAPI {
 		});
 
 		try {
-			await this.applHost.sendCommand(cc, {
+			await this.host.sendCommand(cc, {
 				...this.commandOptions,
 				// Seems we need these options or some nodes won't accept the nonce
 				transmitOptions: TransmitOptions.ACK
@@ -362,7 +362,7 @@ export class Security2CCAPI extends CCAPI {
 		// encapsulation because it would use a different security class. Therefore the entire possible stack
 		// of encapsulation needs to be done here
 		if (MultiChannelCC.requiresEncapsulation(cc)) {
-			const multiChannelCCVersion = this.applHost.getSupportedCCVersion(
+			const multiChannelCCVersion = this.host.getSupportedCCVersion(
 				CommandClasses["Multi Channel"],
 				this.endpoint.nodeId as number,
 			);
@@ -373,12 +373,12 @@ export class Security2CCAPI extends CCAPI {
 		}
 		cc = Security2CC.encapsulate(
 			cc,
-			this.applHost.ownNodeId,
-			this.applHost,
+			this.host.ownNodeId,
+			this.host,
 			{ securityClass },
 		);
 
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			Security2CCCommandsSupportedReport
 		>(
 			cc,
@@ -403,7 +403,7 @@ export class Security2CCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			supportedCCs,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -414,7 +414,7 @@ export class Security2CCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<Security2CCKEXReport>(
+		const response = await this.host.sendCommand<Security2CCKEXReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -445,7 +445,7 @@ export class Security2CCAPI extends CCAPI {
 			...params,
 			echo: false,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Grants the joining node the given keys */
@@ -460,7 +460,7 @@ export class Security2CCAPI extends CCAPI {
 			...params,
 			echo: false,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Confirms the keys that were requested by a node */
@@ -478,7 +478,7 @@ export class Security2CCAPI extends CCAPI {
 			...params,
 			echo: true,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Confirms the keys that were granted by the including node */
@@ -496,7 +496,7 @@ export class Security2CCAPI extends CCAPI {
 			...params,
 			echo: true,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Notifies the other node that the ongoing key exchange was aborted */
@@ -508,7 +508,7 @@ export class Security2CCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			failType,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async sendPublicKey(
@@ -526,7 +526,7 @@ export class Security2CCAPI extends CCAPI {
 			includingNode,
 			publicKey,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async requestNetworkKey(
@@ -542,7 +542,7 @@ export class Security2CCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedKey: securityClass,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async sendNetworkKey(
@@ -560,7 +560,7 @@ export class Security2CCAPI extends CCAPI {
 			grantedKey: securityClass,
 			networkKey,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async verifyNetworkKey(): Promise<void> {
@@ -573,7 +573,7 @@ export class Security2CCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async confirmKeyVerification(): Promise<void> {
@@ -588,7 +588,7 @@ export class Security2CCAPI extends CCAPI {
 			keyVerified: true,
 			keyRequestComplete: false,
 		});
-		await this.applHost.sendCommand(cc, {
+		await this.host.sendCommand(cc, {
 			...this.commandOptions,
 			// Don't wait for an ACK from the node
 			transmitOptions: TransmitOptions.DEFAULT & ~TransmitOptions.ACK,
@@ -607,7 +607,7 @@ export class Security2CCAPI extends CCAPI {
 			keyVerified: false,
 			keyRequestComplete: true,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

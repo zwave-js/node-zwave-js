@@ -77,7 +77,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		});
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -91,7 +91,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		});
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ManufacturerProprietaryCC
 		>(
 			cc,

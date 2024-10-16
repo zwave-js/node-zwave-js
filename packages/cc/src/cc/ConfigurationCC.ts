@@ -340,7 +340,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			}
 
 			let ccInstance: ConfigurationCC;
-			const applHost = this.applHost;
+			const applHost = this.host;
 
 			if (this.isSinglecast()) {
 				ccInstance = createConfigurationCCInstance(this.endpoint);
@@ -365,7 +365,7 @@ export class ConfigurationCCAPI extends CCAPI {
 						createConfigurationCCInstance(
 							node.getEndpoint(this.endpoint.index)!,
 						).getParamInformation(
-							this.applHost,
+							this.host,
 							property,
 							propertyKey,
 						),
@@ -531,7 +531,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			parameter,
 			allowUnexpectedResponse,
 		});
-		const response = await this.applHost.sendCommand<ConfigurationCCReport>(
+		const response = await this.host.sendCommand<ConfigurationCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -542,7 +542,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			if (!valueBitMask) return response.value;
 			// If a partial parameter was requested, extract that value
 			const paramInfo = cc.getParamInformation(
-				this.applHost,
+				this.host,
 				response.parameter,
 				valueBitMask,
 			);
@@ -552,7 +552,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				isSignedPartial(valueBitMask, paramInfo.format),
 			);
 		}
-		this.applHost.logNode(this.endpoint.nodeId, {
+		this.host.logNode(this.endpoint.nodeId, {
 			endpoint: this.endpoint.index,
 			message:
 				`Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value.toString()})`,
@@ -599,7 +599,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				endpoint: this.endpoint.index,
 				parameters: distinctParameters,
 			});
-			const response = await this.applHost.sendCommand<
+			const response = await this.host.sendCommand<
 				ConfigurationCCBulkReport
 			>(
 				cc,
@@ -619,7 +619,7 @@ export class ConfigurationCCAPI extends CCAPI {
 					endpoint: this.endpoint.index,
 					parameter,
 				});
-				const response = await this.applHost.sendCommand<
+				const response = await this.host.sendCommand<
 					ConfigurationCCReport
 				>(
 					cc,
@@ -638,7 +638,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			let value = values?.get(o.parameter);
 			if (typeof value === "number" && o.bitMask) {
 				const paramInfo = cc.getParamInformation(
-					this.applHost,
+					this.host,
 					o.parameter,
 					o.bitMask,
 				);
@@ -670,7 +670,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		);
 
 		const normalized = normalizeConfigurationCCAPISetOptions(
-			this.applHost,
+			this.host,
 			this.endpoint,
 			options,
 		);
@@ -678,7 +678,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		if (normalized.bitMask) {
 			const ccc = createConfigurationCCInstance(this.endpoint);
 			value = ccc.composePartialParamValue(
-				this.applHost,
+				this.host,
 				normalized.parameter,
 				normalized.bitMask,
 				normalized.value,
@@ -694,7 +694,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			valueFormat: normalized.valueFormat,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -707,14 +707,14 @@ export class ConfigurationCCAPI extends CCAPI {
 		// Normalize the values so we can better work with them
 		const normalized = values.map((v) =>
 			normalizeConfigurationCCAPISetOptions(
-				this.applHost,
+				this.host,
 				this.endpoint,
 				v,
 			)
 		);
 		// And merge multiple partials that belong the same "full" value
 		const allParams = bulkMergePartialParamValues(
-			this.applHost,
+			this.host,
 			this.endpoint,
 			normalized,
 		);
@@ -738,7 +738,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				handshake: true,
 			});
 			// The handshake flag is set, so we expect a BulkReport in response
-			const result = await this.applHost.sendCommand<
+			const result = await this.host.sendCommand<
 				ConfigurationCCBulkReport
 			>(
 				cc,
@@ -785,7 +785,7 @@ export class ConfigurationCCAPI extends CCAPI {
 					valueFormat,
 				});
 				supervisionResults.push(
-					await this.applHost.sendCommand(cc, this.commandOptions),
+					await this.host.sendCommand(cc, this.commandOptions),
 				);
 			}
 			return mergeSupervisionResults(supervisionResults);
@@ -828,7 +828,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			parameter,
 			resetToDefault: true,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -850,7 +850,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				parameters,
 				resetToDefault: true,
 			});
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			return this.host.sendCommand(cc, this.commandOptions);
 		} else {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
@@ -866,7 +866,7 @@ export class ConfigurationCCAPI extends CCAPI {
 					}),
 			);
 			for (const cc of CCs) {
-				await this.applHost.sendCommand(cc, this.commandOptions);
+				await this.host.sendCommand(cc, this.commandOptions);
 			}
 		}
 	}
@@ -885,7 +885,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -899,7 +899,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			parameter,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ConfigurationCCPropertiesReport
 		>(
 			cc,
@@ -932,7 +932,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			parameter,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ConfigurationCCNameReport
 		>(
 			cc,
@@ -952,7 +952,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			parameter,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ConfigurationCCInfoReport
 		>(
 			cc,
@@ -984,7 +984,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		this.assertPhysicalEndpoint(this.endpoint);
 
 		// TODO: Reduce the priority of the messages
-		this.applHost.logNode(this.endpoint.nodeId, {
+		this.host.logNode(this.endpoint.nodeId, {
 			endpoint: this.endpoint.index,
 			message: `Scanning available parameters...`,
 		});
@@ -992,7 +992,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
-			this.applHost.logNode(this.endpoint.nodeId, {
+			this.host.logNode(this.endpoint.nodeId, {
 				endpoint: this.endpoint.index,
 				message: `  trying param ${param}...`,
 				direction: "outbound",
@@ -1008,11 +1008,11 @@ export class ConfigurationCCAPI extends CCAPI {
 					const logMessage = `  Param ${param}:
     readable  = true
     valueSize = ${
-						ccInstance.getParamInformation(this.applHost, param)
+						ccInstance.getParamInformation(this.host, param)
 							.valueSize
 					}
     value     = ${originalValue.toString()}`;
-					this.applHost.logNode(this.endpoint.nodeId, {
+					this.host.logNode(this.endpoint.nodeId, {
 						endpoint: this.endpoint.index,
 						message: logMessage,
 						direction: "inbound",

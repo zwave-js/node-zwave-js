@@ -58,7 +58,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			powerlevel: Powerlevel["Normal Power"],
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -74,7 +74,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			powerlevel,
 			timeout,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getPowerlevel(): Promise<
@@ -86,7 +86,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<PowerlevelCCReport>(
+		const response = await this.host.sendCommand<PowerlevelCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -106,7 +106,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -126,7 +126,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
-		const testNode = this.applHost.getNodeOrThrow(testNodeId);
+		const testNode = this.host.getNodeOrThrow(testNodeId);
 		if (testNode.isFrequentListening) {
 			throw new ZWaveError(
 				`Node ${testNodeId} is FLiRS and therefore cannot be used for a powerlevel test.`,
@@ -147,7 +147,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			powerlevel,
 			testFrameCount,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getNodeTestStatus(): Promise<
@@ -167,7 +167,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			PowerlevelCCTestNodeReport
 		>(
 			cc,
@@ -196,7 +196,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

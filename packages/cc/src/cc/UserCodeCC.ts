@@ -452,7 +452,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			UserCodeCCUsersNumberReport
 		>(
 			cc,
@@ -487,7 +487,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userId,
 				reportMore: multiple,
 			});
-			const response = await this.applHost.sendCommand<
+			const response = await this.host.sendCommand<
 				UserCodeCCExtendedUserCodeReport
 			>(
 				cc,
@@ -511,7 +511,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				endpoint: this.endpoint.index,
 				userId,
 			});
-			const response = await this.applHost.sendCommand<UserCodeCCReport>(
+			const response = await this.host.sendCommand<UserCodeCCReport>(
 				cc,
 				this.commandOptions,
 			);
@@ -536,7 +536,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Set);
 
 		const numUsers = UserCodeCC.getSupportedUsersCached(
-			this.applHost,
+			this.host,
 			this.endpoint,
 		);
 		if (numUsers != undefined && userId > numUsers) {
@@ -554,7 +554,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			userCode,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Configures multiple user codes */
@@ -568,20 +568,20 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		);
 
 		const numUsers = UserCodeCC.getSupportedUsersCached(
-			this.applHost,
+			this.host,
 			this.endpoint,
 		);
 		const supportedStatuses = UserCodeCC.getSupportedUserIDStatusesCached(
-			this.applHost,
+			this.host,
 			this.endpoint,
 		);
 		const supportedASCIIChars = UserCodeCC.getSupportedASCIICharsCached(
-			this.applHost,
+			this.host,
 			this.endpoint,
 		);
 		const supportsMultipleUserCodeSet =
 			UserCodeCC.supportsMultipleUserCodeSetCached(
-				this.applHost,
+				this.host,
 				this.endpoint,
 			) ?? false;
 
@@ -662,7 +662,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			userCodes: codes,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -681,7 +681,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Set);
 
 			const numUsers = UserCodeCC.getSupportedUsersCached(
-				this.applHost,
+				this.host,
 				this.endpoint,
 			);
 			if (numUsers != undefined && userId > numUsers) {
@@ -697,7 +697,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userId,
 				userIdStatus: UserIDStatus.Available,
 			});
-			return this.applHost.sendCommand(cc, this.commandOptions);
+			return this.host.sendCommand(cc, this.commandOptions);
 		}
 	}
 
@@ -712,7 +712,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			UserCodeCCCapabilitiesReport
 		>(
 			cc,
@@ -742,7 +742,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			UserCodeCCKeypadModeReport
 		>(
 			cc,
@@ -761,7 +761,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		);
 
 		const supportedModes = UserCodeCC.getSupportedKeypadModesCached(
-			this.applHost,
+			this.host,
 			this.endpoint,
 		);
 
@@ -788,7 +788,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			keypadMode,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getAdminCode(): Promise<MaybeNotKnown<string>> {
@@ -801,7 +801,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			UserCodeCCAdminCodeReport
 		>(
 			cc,
@@ -820,7 +820,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		);
 
 		const supportedASCIIChars = UserCodeCC.getSupportedASCIICharsCached(
-			this.applHost,
+			this.host,
 			this.endpoint,
 		);
 		if (!supportedASCIIChars) {
@@ -834,7 +834,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		if (!adminCode) {
 			const supportsDeactivation = UserCodeCC
 				.supportsAdminCodeDeactivationCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 				);
 			if (!supportsDeactivation) {
@@ -856,7 +856,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			adminCode,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getUserCodeChecksum(): Promise<MaybeNotKnown<number>> {
@@ -869,7 +869,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			UserCodeCCUserCodeChecksumReport
 		>(
 			cc,

@@ -58,7 +58,7 @@ export class ClockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<ClockCCReport>(
+		const response = await this.host.sendCommand<ClockCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -82,7 +82,7 @@ export class ClockCCAPI extends CCAPI {
 			minute,
 			weekday: weekday ?? Weekday.Unknown,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

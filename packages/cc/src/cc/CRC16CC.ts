@@ -51,7 +51,7 @@ export class CRC16CCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			encapsulated: encapsulatedCC,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

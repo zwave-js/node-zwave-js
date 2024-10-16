@@ -363,7 +363,7 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = await this.applHost.sendCommand<IndicatorCCReport>(
+		const response = await this.host.sendCommand<IndicatorCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -400,7 +400,7 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...(typeof value === "number" ? { value } : { values: value }),
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -418,7 +418,7 @@ export class IndicatorCCAPI extends CCAPI {
 			...options,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -440,7 +440,7 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IndicatorCCSupportedReport
 		>(
 			cc,
@@ -477,7 +477,7 @@ export class IndicatorCCAPI extends CCAPI {
 			nextIndicatorId,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -497,7 +497,7 @@ export class IndicatorCCAPI extends CCAPI {
 			description,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -566,7 +566,7 @@ export class IndicatorCCAPI extends CCAPI {
 		}
 
 		const supportedPropertyIDs = IndicatorCC.getSupportedPropertyIDsCached(
-			this.applHost,
+			this.host,
 			this.endpoint,
 			indicatorId,
 		);
@@ -675,7 +675,7 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IndicatorCCDescriptionReport
 		>(
 			cc,

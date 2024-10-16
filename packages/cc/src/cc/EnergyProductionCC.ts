@@ -115,7 +115,7 @@ export class EnergyProductionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			parameter,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			EnergyProductionCCReport
 		>(
 			cc,

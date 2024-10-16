@@ -131,7 +131,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			DoorLockLoggingCCRecordsSupportedReport
 		>(
 			cc,
@@ -155,7 +155,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			recordNumber,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			DoorLockLoggingCCRecordReport
 		>(
 			cc,

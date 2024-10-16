@@ -130,7 +130,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			HumidityControlModeCCReport
 		>(
 			cc,
@@ -155,7 +155,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			mode,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getSupportedModes(): Promise<
@@ -170,7 +170,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			HumidityControlModeCCSupportedReport
 		>(
 			cc,

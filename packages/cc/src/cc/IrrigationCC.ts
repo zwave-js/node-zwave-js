@@ -607,7 +607,7 @@ export class IrrigationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCSystemInfoReport
 		>(
 			cc,
@@ -634,7 +634,7 @@ export class IrrigationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCSystemStatusReport
 		>(
 			cc,
@@ -672,7 +672,7 @@ export class IrrigationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCSystemConfigReport
 		>(
 			cc,
@@ -704,7 +704,7 @@ export class IrrigationCCAPI extends CCAPI {
 			...config,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -720,7 +720,7 @@ export class IrrigationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			valveId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCValveInfoReport
 		>(
 			cc,
@@ -755,7 +755,7 @@ export class IrrigationCCAPI extends CCAPI {
 			...options,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -771,7 +771,7 @@ export class IrrigationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			valveId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCValveConfigReport
 		>(
 			cc,
@@ -807,7 +807,7 @@ export class IrrigationCCAPI extends CCAPI {
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -829,7 +829,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		if (!this.endpoint.virtual) {
 			const maxValveTableSize = IrrigationCC.getMaxValveTableSizeCached(
-				this.applHost,
+				this.host,
 				this.endpoint,
 			);
 			if (
@@ -850,7 +850,7 @@ export class IrrigationCCAPI extends CCAPI {
 			entries,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -867,7 +867,7 @@ export class IrrigationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			tableId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IrrigationCCValveTableReport
 		>(
 			cc,
@@ -893,7 +893,7 @@ export class IrrigationCCAPI extends CCAPI {
 			tableIDs,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -915,7 +915,7 @@ export class IrrigationCCAPI extends CCAPI {
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Shuts off the entire system permanently and prevents schedules from running */

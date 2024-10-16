@@ -108,7 +108,7 @@ export class WakeUpCCAPI extends CCAPI {
 			}
 			const result = await this.setInterval(
 				value,
-				this.applHost.ownNodeId ?? 1,
+				this.host.ownNodeId ?? 1,
 			);
 
 			// Verify the change after a short delay, unless the command was supervised and successful
@@ -139,7 +139,7 @@ export class WakeUpCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			WakeUpCCIntervalReport
 		>(
 			cc,
@@ -161,7 +161,7 @@ export class WakeUpCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			WakeUpCCIntervalCapabilitiesReport
 		>(
 			cc,
@@ -191,7 +191,7 @@ export class WakeUpCCAPI extends CCAPI {
 			wakeUpInterval,
 			controllerNodeId,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {
@@ -204,7 +204,7 @@ export class WakeUpCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.applHost.sendCommand(cc, {
+		await this.host.sendCommand(cc, {
 			...this.commandOptions,
 			// This command must be sent as part of the wake up queue
 			priority: MessagePriority.WakeUp,

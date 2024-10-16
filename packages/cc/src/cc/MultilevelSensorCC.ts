@@ -272,7 +272,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 				}) ?? [];
 
 			preferredScale = getPreferredSensorScale(
-				this.applHost,
+				this.host,
 				this.endpoint.nodeId,
 				this.endpoint.index,
 				sensorType,
@@ -286,7 +286,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			sensorType,
 			scale: scale ?? preferredScale,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			MultilevelSensorCCReport
 		>(
 			cc,
@@ -327,7 +327,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			MultilevelSensorCCSupportedSensorReport
 		>(
 			cc,
@@ -350,7 +350,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			MultilevelSensorCCSupportedScaleReport
 		>(
 			cc,
@@ -377,7 +377,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			scale,
 			value,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

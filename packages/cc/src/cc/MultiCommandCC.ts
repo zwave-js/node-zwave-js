@@ -50,7 +50,7 @@ export class MultiCommandCCAPI extends CCAPI {
 			encapsulated: commands,
 		});
 		cc.endpointIndex = this.endpoint.index;
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

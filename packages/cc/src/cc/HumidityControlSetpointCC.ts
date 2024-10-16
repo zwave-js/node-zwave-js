@@ -212,7 +212,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			HumidityControlSetpointCCReport
 		>(
 			cc,
@@ -247,7 +247,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			value,
 			scale,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -264,7 +264,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			HumidityControlSetpointCCCapabilitiesReport
 		>(
 			cc,
@@ -292,7 +292,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			HumidityControlSetpointCCSupportedReport
 		>(
 			cc,
@@ -315,7 +315,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			HumidityControlSetpointCCScaleSupportedReport
 		>(
 			cc,

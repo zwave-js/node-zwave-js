@@ -213,7 +213,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ColorSwitchCCSupportedReport
 		>(
 			cc,
@@ -232,7 +232,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			colorComponent: component,
 		});
-		const response = await this.applHost.sendCommand<ColorSwitchCCReport>(
+		const response = await this.host.sendCommand<ColorSwitchCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -253,7 +253,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		const result = await this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.host.sendCommand(cc, this.commandOptions);
 
 		if (isUnsupervisedOrSucceeded(result)) {
 			// If the command did not fail, assume that it succeeded and update the values accordingly
@@ -272,7 +272,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 				);
 				// and optimistically update the currentColor
 				for (const node of affectedNodes) {
-					const valueDB = this.applHost.tryGetValueDB(node.id);
+					const valueDB = this.host.tryGetValueDB(node.id);
 					if (valueDB) {
 						this.updateCurrentColor(valueDB, cc.colorTable);
 					}
@@ -371,7 +371,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -389,7 +389,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			colorComponent,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {

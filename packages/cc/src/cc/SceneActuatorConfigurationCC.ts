@@ -217,7 +217,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			level,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getActive(): Promise<
@@ -238,7 +238,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			sceneId: 0,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SceneActuatorConfigurationCCReport
 		>(
 			cc,
@@ -278,7 +278,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			sceneId: sceneId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SceneActuatorConfigurationCCReport
 		>(
 			cc,

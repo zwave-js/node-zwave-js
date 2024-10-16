@@ -63,7 +63,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 			includedNodeId: nodeId,
 			step,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Indicate to the other node that the given inclusion step has been completed */
@@ -82,7 +82,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 			step,
 			status,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

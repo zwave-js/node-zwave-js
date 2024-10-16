@@ -46,7 +46,7 @@ export class DeviceResetLocallyCCAPI extends CCAPI {
 		try {
 			// This command is sent immediately before a hard reset of the controller.
 			// If we don't wait for a callback (ack), the controller locks up when hard-resetting.
-			await this.applHost.sendCommand(cc, {
+			await this.host.sendCommand(cc, {
 				...this.commandOptions,
 				// Do not fall back to explorer frames
 				transmitOptions: TransmitOptions.ACK

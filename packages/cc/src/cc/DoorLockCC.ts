@@ -468,7 +468,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			DoorLockCCCapabilitiesReport
 		>(
 			cc,
@@ -502,7 +502,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			DoorLockCCOperationReport
 		>(
 			cc,
@@ -537,7 +537,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			mode,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -554,7 +554,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...configuration,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -568,7 +568,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			DoorLockCCConfigurationReport
 		>(
 			cc,

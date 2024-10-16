@@ -114,7 +114,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			sceneId,
 			dimmingDuration,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

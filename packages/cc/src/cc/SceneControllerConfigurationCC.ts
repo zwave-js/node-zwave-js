@@ -247,7 +247,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		if (!this.endpoint.virtual) {
 			const groupCount = SceneControllerConfigurationCC
 				.getGroupCountCached(
-					this.applHost,
+					this.host,
 					this.endpoint,
 				);
 
@@ -275,7 +275,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			dimmingDuration,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getLastActivated(): Promise<
@@ -296,7 +296,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			groupId: 0,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SceneControllerConfigurationCCReport
 		>(
 			cc,
@@ -344,7 +344,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SceneControllerConfigurationCCReport
 		>(
 			cc,

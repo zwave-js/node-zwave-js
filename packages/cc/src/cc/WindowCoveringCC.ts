@@ -419,7 +419,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 								);
 							// and optimistically update the currentValue
 							for (const node of affectedNodes) {
-								this.applHost
+								this.host
 									.tryGetValueDB(node.id)
 									?.setValue(currentValueValueId, value);
 							}
@@ -478,7 +478,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			WindowCoveringCCSupportedReport
 		>(
 			cc,
@@ -500,7 +500,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			parameter,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			WindowCoveringCCReport
 		>(
 			cc,
@@ -531,7 +531,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -553,7 +553,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			duration,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -571,7 +571,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 			parameter,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

@@ -181,7 +181,7 @@ export class TimeParametersCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			TimeParametersCCReport
 		>(
 			cc,
@@ -205,7 +205,7 @@ export class TimeParametersCCAPI extends CCAPI {
 			)!
 			: this.endpoint;
 
-		const useLocalTime = shouldUseLocalTime(this.applHost, endpointToCheck);
+		const useLocalTime = shouldUseLocalTime(this.host, endpointToCheck);
 
 		const cc = new TimeParametersCCSet({
 			nodeId: this.endpoint.nodeId,
@@ -213,7 +213,7 @@ export class TimeParametersCCAPI extends CCAPI {
 			dateAndTime,
 			useLocalTime,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

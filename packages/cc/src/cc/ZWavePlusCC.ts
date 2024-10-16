@@ -88,7 +88,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<ZWavePlusCCReport>(
+		const response = await this.host.sendCommand<ZWavePlusCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -112,7 +112,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

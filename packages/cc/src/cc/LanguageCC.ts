@@ -82,7 +82,7 @@ export class LanguageCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<LanguageCCReport>(
+		const response = await this.host.sendCommand<LanguageCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -104,7 +104,7 @@ export class LanguageCCAPI extends CCAPI {
 			language,
 			country,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

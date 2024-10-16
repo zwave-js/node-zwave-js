@@ -135,7 +135,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = await this.applHost.sendCommand<AlarmSensorCCReport>(
+		const response = await this.host.sendCommand<AlarmSensorCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -153,7 +153,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AlarmSensorCCSupportedReport
 		>(
 			cc,

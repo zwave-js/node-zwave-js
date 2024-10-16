@@ -82,7 +82,7 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ThermostatFanStateCCReport
 		>(
 			cc,

@@ -117,7 +117,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = await this.applHost.sendCommand<BinarySensorCCReport>(
+		const response = await this.host.sendCommand<BinarySensorCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -141,7 +141,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			value,
 			type: sensorType,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getSupportedSensorTypes(): Promise<
@@ -156,7 +156,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			BinarySensorCCSupportedReport
 		>(
 			cc,
@@ -180,7 +180,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			supportedSensorTypes: supported,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

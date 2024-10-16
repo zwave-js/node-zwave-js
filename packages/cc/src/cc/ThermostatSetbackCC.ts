@@ -82,7 +82,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ThermostatSetbackCCReport
 		>(
 			cc,
@@ -109,7 +109,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			setbackType,
 			setbackState,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 

@@ -116,7 +116,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			weekday,
 			switchPoints,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -133,7 +133,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			weekday,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ClimateControlScheduleCCReport
 		>(
 			cc,
@@ -152,7 +152,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ClimateControlScheduleCCChangedReport
 		>(
 			cc,
@@ -172,7 +172,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ClimateControlScheduleCCOverrideReport
 		>(
 			cc,
@@ -202,7 +202,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			overrideType: type,
 			overrideState: state,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
