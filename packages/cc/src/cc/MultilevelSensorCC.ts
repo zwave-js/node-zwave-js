@@ -739,9 +739,9 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"sensor type": getSensorName(this.type),
 				scale: (getSensorScale(this.type, this.scale)
@@ -811,7 +811,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (
 			this.sensorType != undefined
@@ -828,7 +828,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 			};
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -869,9 +869,9 @@ export class MultilevelSensorCCSupportedSensorReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported sensor types": this.supportedSensorTypes
 					.map((t) => `\n· ${getSensorName(t)}`)
@@ -932,9 +932,9 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"sensor type": getSensorName(this.sensorType),
 				"supported scales": this.supportedScales
@@ -982,9 +982,9 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"sensor type": getSensorName(this.sensorType),
 			},

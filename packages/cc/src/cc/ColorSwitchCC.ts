@@ -717,9 +717,9 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported color components": this.supportedColorComponents
 					.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
@@ -865,7 +865,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
 				ColorComponent,
@@ -880,7 +880,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -932,9 +932,9 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"color component": getEnumMemberName(
 					ColorComponent,
@@ -1032,7 +1032,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const [key, value] of Object.entries(this.colorTable)) {
 			const realKey: string = key in ColorComponentMap
@@ -1044,7 +1044,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1131,7 +1131,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
 				ColorComponent,
@@ -1146,7 +1146,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1181,9 +1181,9 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"color component": getEnumMemberName(
 					ColorComponent,

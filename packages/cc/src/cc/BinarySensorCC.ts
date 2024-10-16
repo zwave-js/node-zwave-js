@@ -395,9 +395,9 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				type: getEnumMemberName(BinarySensorType, this.type),
 				value: this.value,
@@ -448,9 +448,9 @@ export class BinarySensorCCGet extends BinarySensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				type: getEnumMemberName(
 					BinarySensorType,
@@ -499,9 +499,9 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported types": this.supportedSensorTypes
 					.map((type) => getEnumMemberName(BinarySensorType, type))

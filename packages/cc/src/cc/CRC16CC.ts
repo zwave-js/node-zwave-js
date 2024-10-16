@@ -159,9 +159,9 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			// Hide the default payload line
 			message: undefined,
 		};

@@ -964,7 +964,7 @@ export class IndicatorCCSet extends IndicatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
 			message["indicator 0 value"] = this.indicator0Value;
@@ -982,7 +982,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			}`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1176,7 +1176,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
 			message["indicator 0 value"] = this.indicator0Value;
@@ -1194,7 +1194,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			}`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1230,9 +1230,9 @@ export class IndicatorCCGet extends IndicatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				indicator: getIndicatorName(this.indicatorId),
 			},
@@ -1312,9 +1312,9 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				indicator: getIndicatorName(this.indicatorId),
 				"supported properties": `${
@@ -1371,9 +1371,9 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				indicator: getIndicatorName(this.indicatorId),
 			},
@@ -1436,9 +1436,9 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"indicator ID": this.indicatorId,
 				description: this.description || "(none)",
@@ -1492,9 +1492,9 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"indicator ID": this.indicatorId,
 			},

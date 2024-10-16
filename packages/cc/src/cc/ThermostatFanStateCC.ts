@@ -162,12 +162,12 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	@ccValue(ThermostatFanStateCCValues.fanState)
 	public readonly state: ThermostatFanState;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			state: getEnumMemberName(ThermostatFanState, this.state),
 		};
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

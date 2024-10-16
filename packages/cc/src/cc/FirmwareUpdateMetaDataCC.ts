@@ -441,7 +441,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": this.manufacturerId,
 			"firmware id": this.firmwareId,
@@ -474,7 +474,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -506,7 +506,7 @@ export class FirmwareUpdateMetaDataCCRequestReport
 	public resume?: boolean;
 	public nonSecureTransfer?: boolean;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			status: getEnumMemberName(
 				FirmwareUpdateRequestStatus,
@@ -520,7 +520,7 @@ export class FirmwareUpdateMetaDataCCRequestReport
 			message["non-secure transfer"] = this.nonSecureTransfer;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -606,7 +606,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -631,7 +631,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -652,9 +652,9 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	public readonly numReports: number;
 	public readonly reportNumber: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"total # of reports": this.numReports,
 				"report number": this.reportNumber,
@@ -728,9 +728,9 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"report #": this.reportNumber,
 				"is last": this.isLast,
@@ -758,7 +758,7 @@ export class FirmwareUpdateMetaDataCCStatusReport
 	/** The wait time in seconds before the node becomes available for communication after the update */
 	public readonly waitTime?: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			status: getEnumMemberName(FirmwareUpdateStatus, this.status),
 		};
@@ -766,7 +766,7 @@ export class FirmwareUpdateMetaDataCCStatusReport
 			message["wait time"] = `${this.waitTime} seconds`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -799,7 +799,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 	public readonly activationStatus: FirmwareUpdateActivationStatus;
 	public readonly hardwareVersion?: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -814,7 +814,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 			message.hardwareVersion = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -872,7 +872,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"manufacturer id": num2hex(this.manufacturerId),
 			"firmware id": num2hex(this.firmwareId),
@@ -883,7 +883,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -905,9 +905,9 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 	public readonly status: FirmwareDownloadStatus;
 	public readonly checksum: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				status: getEnumMemberName(FirmwareDownloadStatus, this.status),
 				checksum: num2hex(this.checksum),
@@ -969,9 +969,9 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"manufacturer id": num2hex(this.manufacturerId),
 				"firmware id": num2hex(this.firmwareId),

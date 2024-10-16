@@ -592,9 +592,9 @@ export class SecurityCCNonceReport extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { nonce: buffer2hex(this.nonce) },
 		};
 	}
@@ -819,7 +819,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		return super.computeEncapsulationOverhead() + 18;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.nonceId != undefined) {
 			message["nonce id"] = this.nonceId;
@@ -856,7 +856,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -886,9 +886,9 @@ export class SecurityCCSchemeReport extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			// Hide the default payload line
 			message: undefined,
 		};
@@ -911,9 +911,9 @@ export class SecurityCCSchemeGet extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			// Hide the default payload line
 			message: undefined,
 		};
@@ -936,9 +936,9 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			// Hide the default payload line
 			message: undefined,
 		};
@@ -983,9 +983,9 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		// The network key shouldn't be logged, so users can safely post their logs online
-		const { message, ...log } = super.toLogEntry(applHost);
+		const { message, ...log } = super.toLogEntry(ctx);
 		return log;
 	}
 }
@@ -1056,9 +1056,9 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				reportsToFollow: this.reportsToFollow,
 				supportedCCs: this.supportedCCs

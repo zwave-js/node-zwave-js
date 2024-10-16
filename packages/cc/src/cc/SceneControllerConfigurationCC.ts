@@ -528,9 +528,9 @@ export class SceneControllerConfigurationCCSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"scene id": this.sceneId,
@@ -579,9 +579,9 @@ export class SceneControllerConfigurationCCReport
 		return true;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"scene id": this.sceneId,
@@ -639,9 +639,9 @@ export class SceneControllerConfigurationCCGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "group id": this.groupId },
 		};
 	}

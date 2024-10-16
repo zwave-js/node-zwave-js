@@ -371,7 +371,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatMode, this.mode),
 		};
@@ -379,7 +379,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 			message["manufacturer data"] = buffer2hex(this.manufacturerData);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -490,7 +490,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatMode, this.mode),
 		};
@@ -498,7 +498,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			message["manufacturer data"] = buffer2hex(this.manufacturerData);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -561,9 +561,9 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

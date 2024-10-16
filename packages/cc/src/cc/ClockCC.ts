@@ -181,9 +181,9 @@ export class ClockCCSet extends ClockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"clock setting": `${
 					getEnumMemberName(
@@ -224,9 +224,9 @@ export class ClockCCReport extends ClockCC {
 	public readonly hour: number;
 	public readonly minute: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"clock setting": `${
 					getEnumMemberName(

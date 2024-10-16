@@ -1300,9 +1300,9 @@ export class UserCodeCCSet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1400,9 +1400,9 @@ export class UserCodeCCReport extends UserCodeCC
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1444,9 +1444,9 @@ export class UserCodeCCGet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "user id": this.userId },
 		};
 	}
@@ -1491,9 +1491,9 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "supported users": this.supportedUsers },
 		};
 	}
@@ -1654,9 +1654,9 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supports admin code": this.supportsAdminCode,
 				"supports admin code deactivation":
@@ -1714,9 +1714,9 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { mode: getEnumMemberName(KeypadMode, this.keypadMode) },
 		};
 	}
@@ -1772,9 +1772,9 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				keypadMode: getEnumMemberName(KeypadMode, this.keypadMode),
 			},
@@ -1822,9 +1822,9 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "admin code": userCodeToLogString(this.adminCode) },
 		};
 	}
@@ -1866,9 +1866,9 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "admin code": userCodeToLogString(this.adminCode) },
 		};
 	}
@@ -1910,9 +1910,9 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "user code checksum": num2hex(this.userCodeChecksum) },
 		};
 	}
@@ -1978,7 +1978,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${
@@ -1988,7 +1988,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 			} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2036,7 +2036,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public readonly userCodes: readonly UserCode[];
 	public readonly nextUserId: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${
@@ -2047,7 +2047,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		}
 		message["next user id"] = this.nextUserId;
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2089,9 +2089,9 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"user id": this.userId,
 				"report more": this.reportMore,

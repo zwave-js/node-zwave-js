@@ -243,9 +243,9 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	@ccValue(DoorLockLoggingCCValues.recordsCount)
 	public readonly recordsCount: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported no. of records": this.recordsCount,
 			},
@@ -318,7 +318,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public readonly recordNumber: number;
 	public readonly record?: DoorLockLoggingRecord;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 
 		if (!this.record) {
@@ -341,7 +341,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -391,9 +391,9 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "record number": this.recordNumber },
 		};
 	}

@@ -173,9 +173,9 @@ export class ThermostatOperatingStateCCReport
 	@ccValue(ThermostatOperatingStateCCValues.operatingState)
 	public readonly state: ThermostatOperatingState;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				state: getEnumMemberName(ThermostatOperatingState, this.state),
 			},

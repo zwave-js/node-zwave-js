@@ -222,9 +222,9 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"session ID": this.sessionId,
 				"datagram size": this.datagramSize,
@@ -423,9 +423,9 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"session ID": this.sessionId,
 				"datagram size": this.datagramSize,
@@ -493,9 +493,9 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"session ID": this.sessionId,
 				offset: this.datagramOffset,
@@ -534,9 +534,9 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "session ID": this.sessionId },
 		};
 	}
@@ -570,9 +570,9 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "pending segments": this.pendingSegments },
 		};
 	}

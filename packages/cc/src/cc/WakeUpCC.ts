@@ -392,9 +392,9 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
 				"controller node id": this.controllerNodeId,
@@ -421,9 +421,9 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 	@ccValue(WakeUpCCValues.controllerNodeId)
 	public readonly controllerNodeId: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
 				"controller node id": this.controllerNodeId,
@@ -496,9 +496,9 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	@ccValue(WakeUpCCValues.wakeUpOnDemandSupported)
 	public readonly wakeUpOnDemandSupported: boolean;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"default interval": `${this.defaultWakeUpInterval} seconds`,
 				"minimum interval": `${this.minWakeUpInterval} seconds`,

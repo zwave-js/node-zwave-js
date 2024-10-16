@@ -954,9 +954,9 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"user ID": this.userId,
 				action: this.enabled ? "enable" : "disable",
@@ -996,9 +996,9 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				action: this.enabled ? "enable all" : "disable all",
 			},
@@ -1053,7 +1053,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"no. of weekday schedule slots": this.numWeekDaySlots,
 			"no. of day-of-year schedule slots": this.numYearDaySlots,
@@ -1063,7 +1063,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 				this.numDailyRepeatingSlots;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1154,7 +1154,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -1182,7 +1182,7 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 			};
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1280,7 +1280,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.weekday == undefined) {
 			message = {
@@ -1307,7 +1307,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 			};
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1345,9 +1345,9 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"user ID": this.userId,
 				"slot #": this.slotId,
@@ -1457,7 +1457,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -1487,7 +1487,7 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 			};
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1620,7 +1620,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.startYear !== undefined) {
 			message = {
@@ -1650,7 +1650,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 			};
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1688,9 +1688,9 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"user ID": this.userId,
 				"slot #": this.slotId,
@@ -1737,9 +1737,9 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -1785,9 +1785,9 @@ export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -1894,7 +1894,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.action === ScheduleEntryLockSetAction.Erase) {
 			message = {
@@ -1921,7 +1921,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 			};
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2028,7 +2028,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (!this.weekdays) {
 			message = {
@@ -2055,7 +2055,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 			};
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2095,9 +2095,9 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"user ID": this.userId,
 				"slot #": this.slotId,

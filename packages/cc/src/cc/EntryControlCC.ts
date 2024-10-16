@@ -467,7 +467,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 	public readonly eventType: EntryControlEventTypes;
 	public readonly eventData?: Buffer | string;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"data type": this.dataType,
@@ -488,7 +488,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -513,9 +513,9 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 	@ccValue(EntryControlCCValues.supportedKeys)
 	public readonly supportedKeys: readonly number[];
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "supported keys": this.supportedKeys.toString() },
 		};
 	}
@@ -600,9 +600,9 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	public readonly minKeyCacheTimeout: number;
 	public readonly maxKeyCacheTimeout: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported data types": this.supportedDataTypes
 					.map((dt) => EntryControlDataTypes[dt])
@@ -643,9 +643,9 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 	@ccValue(EntryControlCCValues.keyCacheTimeout)
 	public readonly keyCacheTimeout: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"key cache size": this.keyCacheSize,
 				"key cache timeout": this.keyCacheTimeout,
@@ -695,9 +695,9 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"key cache size": this.keyCacheSize,
 				"key cache timeout": this.keyCacheTimeout,

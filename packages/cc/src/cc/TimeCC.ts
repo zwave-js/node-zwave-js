@@ -269,9 +269,9 @@ export class TimeCCTimeReport extends TimeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				time: `${padStart(this.hour.toString(), 2, "0")}:${
 					padStart(
@@ -330,9 +330,9 @@ export class TimeCCDateReport extends TimeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				date: `${padStart(this.year.toString(), 4, "0")}-${
 					padStart(
@@ -404,9 +404,9 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -487,9 +487,9 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,

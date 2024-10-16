@@ -1371,9 +1371,9 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.maxValveTableSize)
 	public readonly maxValveTableSize: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supports master valve": this.supportsMasterValve,
 				"no. of valves": this.numValves,
@@ -1477,7 +1477,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.firstOpenZoneId)
 	public firstOpenZoneId?: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"system voltage": `${this.systemVoltage} V`,
 			"active sensors": [
@@ -1518,7 +1518,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1587,7 +1587,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"master valve delay": `${this.masterValveDelay} s`,
 			"high pressure threshold": `${this.highPressureThreshold} kPa`,
@@ -1606,7 +1606,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 			);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1661,7 +1661,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	@ccValue(IrrigationCCValues.moistureSensorPolarity)
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"master valve delay": `${this.masterValveDelay} s`,
 			"high pressure threshold": `${this.highPressureThreshold} kPa`,
@@ -1680,7 +1680,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 			);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1795,7 +1795,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 		return true;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"valve ID": this.valveId,
 			connected: this.connected,
@@ -1813,7 +1813,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 			message.errors = errors.map((e) => `\n· ${e}`).join("");
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1868,9 +1868,9 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"valve ID": this.valveId,
 			},
@@ -1947,9 +1947,9 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"valve ID": this.valveId,
 				"nominal current high threshold":
@@ -2079,9 +2079,9 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public useRainSensor: boolean;
 	public useMoistureSensor: boolean;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"valve ID": this.valveId,
 				"nominal current high threshold":
@@ -2136,9 +2136,9 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"valve ID": this.valveId,
 			},
@@ -2187,7 +2187,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"valve ID": this.valveId,
 		};
@@ -2197,7 +2197,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
 			message.action = "turn off";
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2245,7 +2245,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"table ID": this.tableId,
 		};
@@ -2259,7 +2259,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2285,7 +2285,7 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 	public readonly tableId: number;
 	public readonly entries: ValveTableEntry[];
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"table ID": this.tableId,
 		};
@@ -2299,7 +2299,7 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2347,9 +2347,9 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"table ID": this.tableId,
 			},
@@ -2395,9 +2395,9 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"table IDs": this.tableIDs
 					.map((id) => padStart(id.toString(), 3, "0"))
@@ -2443,9 +2443,9 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				duration: this.duration === 0
 					? "temporarily"

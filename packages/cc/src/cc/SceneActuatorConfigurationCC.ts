@@ -397,7 +397,7 @@ export class SceneActuatorConfigurationCCSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			sceneId: this.sceneId,
 			dimmingDuration: this.dimmingDuration.toString(),
@@ -407,7 +407,7 @@ export class SceneActuatorConfigurationCCSet
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -462,7 +462,7 @@ export class SceneActuatorConfigurationCCReport
 		return true;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			sceneId: this.sceneId,
 		};
@@ -474,7 +474,7 @@ export class SceneActuatorConfigurationCCReport
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -528,9 +528,9 @@ export class SceneActuatorConfigurationCCGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "scene id": this.sceneId },
 		};
 	}

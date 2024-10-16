@@ -208,9 +208,9 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setback type": getEnumMemberName(
 					SetbackType,
@@ -264,9 +264,9 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setback type": getEnumMemberName(
 					SetbackType,

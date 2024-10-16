@@ -749,7 +749,7 @@ export class VersionCCReport extends VersionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"library type": getEnumMemberName(
 				ZWaveLibraryTypes,
@@ -762,7 +762,7 @@ export class VersionCCReport extends VersionCC {
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -804,9 +804,9 @@ export class VersionCCCommandClassReport extends VersionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				CC: getCCName(this.requestedCC),
 				version: this.ccVersion,
@@ -855,9 +855,9 @@ export class VersionCCCommandClassGet extends VersionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -896,9 +896,9 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supports Z-Wave Software Get command":
 					this.supportsZWaveSoftwareGet,
@@ -975,7 +975,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 	@ccValue(VersionCCValues.applicationBuildNumber)
 	public readonly applicationBuildNumber: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"SDK version": this.sdkVersion,
 		};
@@ -1000,7 +1000,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			message["application build number"] = this.applicationBuildNumber;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

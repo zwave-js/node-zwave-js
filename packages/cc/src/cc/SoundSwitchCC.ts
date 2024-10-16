@@ -500,9 +500,9 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "# of tones": this.toneCount },
 		};
 	}
@@ -556,9 +556,9 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"tone id": this.toneId,
 				duration: `${this.duration} seconds`,
@@ -607,9 +607,9 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "tone id": this.toneId },
 		};
 	}
@@ -648,9 +648,9 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"default volume": `${this.defaultVolume} %`,
 				"default tone id": this.defaultToneId,
@@ -694,9 +694,9 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"default volume": `${this.defaultVolume} %`,
 				"default tone id": this.defaultToneId,
@@ -745,7 +745,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -753,7 +753,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -797,7 +797,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -805,7 +805,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

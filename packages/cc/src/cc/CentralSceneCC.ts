@@ -336,7 +336,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 	public readonly sceneNumber: number;
 	public readonly slowRefresh: boolean | undefined;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"key attribute": getEnumMemberName(
@@ -349,7 +349,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 			message["slow refresh"] = this.slowRefresh;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -429,7 +429,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return this._supportedKeyAttributes;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"scene count": this.sceneCount,
 			"supports slow refresh": maybeUnknownToString(
@@ -442,7 +442,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -466,9 +466,9 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	@ccValue(CentralSceneCCValues.slowRefresh)
 	public readonly slowRefresh: boolean;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "slow refresh": this.slowRefresh },
 		};
 	}
@@ -511,9 +511,9 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "slow refresh": this.slowRefresh },
 		};
 	}

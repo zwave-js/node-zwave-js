@@ -553,10 +553,10 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -634,10 +634,10 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		return this._value;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -692,9 +692,9 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -725,9 +725,9 @@ export class HumidityControlSetpointCCSupportedReport
 	public readonly supportedSetpointTypes:
 		readonly HumidityControlSetpointType[];
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported setpoint types": this.supportedSetpointTypes
 					.map(
@@ -770,12 +770,12 @@ export class HumidityControlSetpointCCScaleSupportedReport
 
 	public readonly supportedScales: readonly number[];
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const supportedScales = this.supportedScales.map((scale) =>
 			getScale(scale)
 		);
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"scale supported": supportedScales
 					.map((t) => `\n· ${t.key} ${t.unit} - ${t.label}`)
@@ -821,9 +821,9 @@ export class HumidityControlSetpointCCScaleSupportedGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -899,11 +899,11 @@ export class HumidityControlSetpointCCCapabilitiesReport
 		return this._maxValueScale;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const minValueScale = getScale(this.minValueScale);
 		const maxValueScale = getScale(this.maxValueScale);
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -952,9 +952,9 @@ export class HumidityControlSetpointCCCapabilitiesGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,

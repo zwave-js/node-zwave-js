@@ -351,7 +351,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -359,7 +359,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -425,7 +425,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};
@@ -436,7 +436,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

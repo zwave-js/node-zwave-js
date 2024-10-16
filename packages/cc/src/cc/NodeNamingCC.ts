@@ -316,9 +316,9 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { name: this.name },
 		};
 	}
@@ -343,9 +343,9 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	@ccValue(NodeNamingAndLocationCCValues.name)
 	public readonly name: string;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { name: this.name },
 		};
 	}
@@ -407,9 +407,9 @@ export class NodeNamingAndLocationCCLocationSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { location: this.location },
 		};
 	}
@@ -436,9 +436,9 @@ export class NodeNamingAndLocationCCLocationReport
 	@ccValue(NodeNamingAndLocationCCValues.location)
 	public readonly location: string;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { location: this.location },
 		};
 	}

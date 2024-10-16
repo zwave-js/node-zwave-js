@@ -551,7 +551,7 @@ export class BatteryCCReport extends BatteryCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			level: this.level,
 			"is low": this.isLow,
@@ -587,7 +587,7 @@ export class BatteryCCReport extends BatteryCC {
 			message.disconnected = this.disconnected;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -639,9 +639,9 @@ export class BatteryCCHealthReport extends BatteryCC {
 
 	private readonly temperatureScale: number | undefined;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				temperature: this.temperature != undefined
 					? this.temperature

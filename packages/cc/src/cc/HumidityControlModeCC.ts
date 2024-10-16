@@ -308,9 +308,9 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				mode: getEnumMemberName(HumidityControlMode, this.mode),
 			},
@@ -332,9 +332,9 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	@ccValue(HumidityControlModeCCValues.mode)
 	public readonly mode: HumidityControlMode;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				mode: getEnumMemberName(HumidityControlMode, this.mode),
 			},
@@ -388,9 +388,9 @@ export class HumidityControlModeCCSupportedReport
 		return this._supportedModes;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

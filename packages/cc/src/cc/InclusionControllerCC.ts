@@ -121,9 +121,9 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				step: getEnumMemberName(InclusionControllerStep, this.step),
 				status: getEnumMemberName(
@@ -170,9 +170,9 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"included node id": this.includedNodeId,
 				step: getEnumMemberName(InclusionControllerStep, this.step),

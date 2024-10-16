@@ -226,13 +226,13 @@ export class LanguageCCSet extends LanguageCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this._country != undefined) {
 			message.country = this._country;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -259,13 +259,13 @@ export class LanguageCCReport extends LanguageCC {
 	@ccValue(LanguageCCValues.country)
 	public readonly country: MaybeNotKnown<string>;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this.country != undefined) {
 			message.country = this.country;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

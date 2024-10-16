@@ -670,9 +670,9 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"node ids": this.nodeIds.join(", "),
@@ -732,7 +732,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "(all groups)",
 		};
@@ -743,7 +743,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 			message.endpoints = endpointAddressesToString(this.endpoints);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -847,9 +847,9 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"maximum # of nodes": this.maxNodes,
@@ -895,9 +895,9 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -937,9 +937,9 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "group count": this.groupCount },
 		};
 	}

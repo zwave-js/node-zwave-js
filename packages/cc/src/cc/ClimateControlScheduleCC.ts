@@ -259,9 +259,9 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
 				switchpoints: `${
@@ -309,9 +309,9 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	)
 	public readonly schedule: readonly Switchpoint[];
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
 				schedule: `${
@@ -364,9 +364,9 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { weekday: getEnumMemberName(Weekday, this.weekday) },
 		};
 	}
@@ -387,9 +387,9 @@ export class ClimateControlScheduleCCChangedReport
 
 	public readonly changeCounter: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "change counter": this.changeCounter },
 		};
 	}
@@ -422,9 +422,9 @@ export class ClimateControlScheduleCCOverrideReport
 	@ccValue(ClimateControlScheduleCCValues.overrideState)
 	public readonly overrideState: SetbackState;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"override type": getEnumMemberName(
 					ScheduleOverrideType,
@@ -483,9 +483,9 @@ export class ClimateControlScheduleCCOverrideSet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"override type": getEnumMemberName(
 					ScheduleOverrideType,

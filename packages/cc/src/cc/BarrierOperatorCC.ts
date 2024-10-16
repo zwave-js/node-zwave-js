@@ -570,9 +570,9 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "target state": this.targetState },
 		};
 	}
@@ -621,9 +621,9 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	@ccValue(BarrierOperatorCCValues.position)
 	public readonly position: MaybeUnknown<number>;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"barrier position": maybeUnknownToString(this.position),
 				"barrier state": this.currentState != undefined
@@ -656,9 +656,9 @@ export class BarrierOperatorCCSignalingCapabilitiesReport
 	@ccValue(BarrierOperatorCCValues.supportedSubsystemTypes)
 	public readonly supportedSubsystemTypes: readonly SubsystemType[];
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported types": this.supportedSubsystemTypes
 					.map((t) => `\n· ${getEnumMemberName(SubsystemType, t)}`)
@@ -710,9 +710,9 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,
@@ -755,9 +755,9 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public readonly subsystemType: SubsystemType;
 	public readonly subsystemState: SubsystemState;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,
@@ -806,9 +806,9 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,

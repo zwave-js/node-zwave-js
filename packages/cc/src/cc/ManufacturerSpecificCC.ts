@@ -272,9 +272,9 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"manufacturer id": num2hex(this.manufacturerId),
 				"product type": num2hex(this.productType),
@@ -318,9 +318,9 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 	)
 	public readonly deviceId: string;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"device id type": getEnumMemberName(DeviceIdType, this.type),
 				"device id": this.deviceId,
@@ -364,9 +364,9 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"device id type": getEnumMemberName(
 					DeviceIdType,

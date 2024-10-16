@@ -667,7 +667,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -675,7 +675,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -733,7 +733,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};
@@ -742,7 +742,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -828,7 +828,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			startLevel: `${this.startLevel}${
 				this.ignoreStartLevel ? " (ignored)" : ""
@@ -839,7 +839,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -887,9 +887,9 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"switch type": getEnumMemberName(SwitchType, this.switchType),
 			},

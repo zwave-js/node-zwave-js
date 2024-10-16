@@ -211,9 +211,9 @@ export class LockCCSet extends LockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { locked: this.locked },
 		};
 	}
@@ -232,9 +232,9 @@ export class LockCCReport extends LockCC {
 	@ccValue(LockCCValues.locked)
 	public readonly locked: boolean;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { locked: this.locked },
 		};
 	}

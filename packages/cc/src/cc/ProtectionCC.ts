@@ -544,7 +544,7 @@ export class ProtectionCCSet extends ProtectionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -552,7 +552,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -577,7 +577,7 @@ export class ProtectionCCReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.rfProtectionState)
 	public readonly rf?: RFProtectionState;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -585,7 +585,7 @@ export class ProtectionCCReport extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -651,9 +651,9 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.supportedRFStates)
 	public readonly supportedRFStates: RFProtectionState[];
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supports exclusive control": this.supportsExclusiveControl,
 				"supports timeout": this.supportsTimeout,
@@ -689,9 +689,9 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
 	public readonly exclusiveControlNodeId: number;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -738,9 +738,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -761,9 +761,9 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 	@ccValue(ProtectionCCValues.timeout)
 	public readonly timeout: Timeout;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { timeout: this.timeout.toString() },
 		};
 	}
@@ -806,9 +806,9 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { timeout: this.timeout.toString() },
 		};
 	}

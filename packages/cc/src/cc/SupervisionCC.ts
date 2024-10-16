@@ -340,7 +340,7 @@ export class SupervisionCCReport extends SupervisionCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"session id": this.sessionId,
 			"more updates follow": this.moreUpdatesFollow,
@@ -350,7 +350,7 @@ export class SupervisionCCReport extends SupervisionCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -432,9 +432,9 @@ export class SupervisionCCGet extends SupervisionCC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"session id": this.sessionId,
 				"request updates": this.requestStatusUpdates,

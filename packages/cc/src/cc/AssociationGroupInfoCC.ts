@@ -520,9 +520,9 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				name: this.name,
@@ -560,9 +560,9 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -663,9 +663,9 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"is list mode": this.isListMode,
 				"has dynamic info": this.hasDynamicInfo,
@@ -739,7 +739,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.groupId != undefined) {
 			message["group id"] = this.groupId;
@@ -749,7 +749,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		}
 		message["refresh cache"] = this.refreshCache;
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -825,9 +825,9 @@ export class AssociationGroupInfoCCCommandListReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				commands: `${
@@ -886,9 +886,9 @@ export class AssociationGroupInfoCCCommandListGet
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"allow cache": this.allowCache,

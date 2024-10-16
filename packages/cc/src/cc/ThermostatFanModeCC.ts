@@ -371,12 +371,12 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatFanMode, this.mode),
 		};
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -402,7 +402,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	@ccValue(ThermostatFanModeCCValues.turnedOff)
 	public readonly off: boolean | undefined;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatFanMode, this.mode),
 		};
@@ -410,7 +410,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 			message.off = this.off;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -451,9 +451,9 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 	@ccValue(ThermostatFanModeCCValues.supportedFanModes)
 	public readonly supportedModes: ThermostatFanMode[];
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

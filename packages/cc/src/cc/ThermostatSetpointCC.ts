@@ -588,10 +588,10 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -683,10 +683,10 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getScale(this.scale);
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -738,9 +738,9 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -823,11 +823,11 @@ export class ThermostatSetpointCCCapabilitiesReport
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const minValueScale = getScale(this.minValueScale);
 		const maxValueScale = getScale(this.maxValueScale);
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -871,9 +871,9 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -938,9 +938,9 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported setpoint types": this.supportedSetpointTypes
 					.map(

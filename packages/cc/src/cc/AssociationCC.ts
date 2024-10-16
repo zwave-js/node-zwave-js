@@ -539,7 +539,7 @@ export class AssociationCCSet extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds.length
@@ -547,7 +547,7 @@ export class AssociationCCSet extends AssociationCC {
 				: "all nodes",
 		};
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -595,7 +595,7 @@ export class AssociationCCRemove extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds && this.nodeIds.length
@@ -603,7 +603,7 @@ export class AssociationCCRemove extends AssociationCC {
 				: "all nodes",
 		};
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -686,9 +686,9 @@ export class AssociationCCReport extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"max # of nodes": this.maxNodes,
@@ -732,9 +732,9 @@ export class AssociationCCGet extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -772,9 +772,9 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "group count": this.groupCount },
 		};
 	}
@@ -813,9 +813,9 @@ export class AssociationCCSpecificGroupReport extends AssociationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { group: this.group },
 		};
 	}

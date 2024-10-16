@@ -255,7 +255,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
@@ -263,7 +263,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 			message.timeout = `${this.timeout} s`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -306,7 +306,7 @@ export class PowerlevelCCReport extends PowerlevelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
@@ -314,7 +314,7 @@ export class PowerlevelCCReport extends PowerlevelCC {
 			message.timeout = `${this.timeout} s`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -362,9 +362,9 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"test node id": this.testNodeId,
 				"power level": getEnumMemberName(Powerlevel, this.powerlevel),
@@ -418,9 +418,9 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"test node id": this.testNodeId,
 				status: getEnumMemberName(PowerlevelTestStatus, this.status),

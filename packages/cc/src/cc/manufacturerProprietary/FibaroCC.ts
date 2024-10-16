@@ -418,7 +418,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.position != undefined) {
 			message.position = this.position;
@@ -427,7 +427,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 			message.tilt = this.tilt;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -491,7 +491,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		return this._tilt;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.position != undefined) {
 			message.position = this.position;
@@ -500,7 +500,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			message.tilt = this.tilt;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

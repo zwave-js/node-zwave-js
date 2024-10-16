@@ -154,9 +154,9 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			// Hide the default payload line
 			message: undefined,
 		};

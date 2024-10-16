@@ -1060,7 +1060,7 @@ export class MeterCCReport extends MeterCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const scale = getMeterScale(this.type, this.scale)
 			?? getUnknownMeterScale(this.scale);
 
@@ -1077,7 +1077,7 @@ export class MeterCCReport extends MeterCC {
 			message["prev. value"] = this.previousValue;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1160,15 +1160,15 @@ export class MeterCCGet extends MeterCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.rateType != undefined) {
 			message["rate type"] = getEnumMemberName(RateType, this.rateType);
 		}
 		if (this.scale != undefined) {
-			if (host) {
+			if (ctx) {
 				// Try to lookup the meter type to translate the scale
-				const type = this.getValue<number>(host, MeterCCValues.type);
+				const type = this.getValue<number>(ctx, MeterCCValues.type);
 				if (type != undefined) {
 					message.scale = (getMeterScale(type, this.scale)
 						?? getUnknownMeterScale(this.scale)).label;
@@ -1178,7 +1178,7 @@ export class MeterCCGet extends MeterCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1323,7 +1323,7 @@ export class MeterCCSupportedReport extends MeterCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"meter type": getMeterName(this.type),
 			"supports reset": this.supportsReset,
@@ -1340,7 +1340,7 @@ export class MeterCCSupportedReport extends MeterCC {
 				.join(", "),
 		};
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1420,7 +1420,7 @@ export class MeterCCReset extends MeterCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
 			message.type = getMeterName(this.type);
@@ -1436,7 +1436,7 @@ export class MeterCCReset extends MeterCC {
 			message["target value"] = this.targetValue;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

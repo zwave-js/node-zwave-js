@@ -730,9 +730,9 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported parameters": this.supportedParameters
 					.map(
@@ -786,9 +786,9 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 	)
 	public readonly duration: Duration;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				parameter: getEnumMemberName(
 					WindowCoveringParameter,
@@ -838,9 +838,9 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				parameter: getEnumMemberName(
 					WindowCoveringParameter,
@@ -917,7 +917,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { parameter, value } of this.targetValues) {
 			message[getEnumMemberName(WindowCoveringParameter, parameter)] =
@@ -927,7 +927,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -978,7 +978,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			parameter: getEnumMemberName(
 				WindowCoveringParameter,
@@ -990,7 +990,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1027,9 +1027,9 @@ export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				parameter: getEnumMemberName(
 					WindowCoveringParameter,

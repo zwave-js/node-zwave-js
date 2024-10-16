@@ -1712,7 +1712,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 		};
@@ -1766,7 +1766,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2061,7 +2061,7 @@ export class Security2CCNonceReport extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			SOS: this.SOS,
@@ -2071,7 +2071,7 @@ export class Security2CCNonceReport extends Security2CC {
 			message["receiver entropy"] = buffer2hex(this.receiverEI);
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -2136,9 +2136,9 @@ export class Security2CCNonceGet extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "sequence number": this.sequenceNumber },
 		};
 	}
@@ -2221,9 +2221,9 @@ export class Security2CCKEXReport extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				echo: this.echo,
 				"supported schemes": this.supportedKEXSchemes
@@ -2350,9 +2350,9 @@ export class Security2CCKEXSet extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				echo: this.echo,
 				"selected scheme": getEnumMemberName(
@@ -2398,9 +2398,9 @@ export class Security2CCKEXFail extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { reason: getEnumMemberName(KEXFailType, this.failType) },
 		};
 	}
@@ -2441,9 +2441,9 @@ export class Security2CCPublicKeyReport extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"is including node": this.includingNode,
 				"public key": buffer2hex(this.publicKey),
@@ -2487,9 +2487,9 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"security class": getEnumMemberName(
 					SecurityClass,
@@ -2532,9 +2532,9 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"security class": getEnumMemberName(
 					SecurityClass,
@@ -2582,9 +2582,9 @@ export class Security2CCTransferEnd extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"key verified": this.keyVerified,
 				"request complete": this.keyRequestComplete,
@@ -2627,9 +2627,9 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported CCs": this.supportedCCs
 					.map((cc) => getCCName(cc))

@@ -349,7 +349,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	public readonly severity: number | undefined;
 	public readonly duration: number | undefined;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sensor type": getEnumMemberName(AlarmSensorType, this.sensorType),
 			"alarm state": this.state,
@@ -361,7 +361,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 			message.duration = `${this.duration} seconds`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -424,9 +424,9 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"sensor type": getEnumMemberName(
 					AlarmSensorType,
@@ -467,9 +467,9 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return true;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported sensor types": this._supportedSensorTypes
 					.map((t) => getEnumMemberName(AlarmSensorType, t))

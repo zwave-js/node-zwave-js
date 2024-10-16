@@ -939,9 +939,9 @@ export class NotificationCCSet extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"notification type": getNotificationName(this.notificationType),
 				status: this.notificationStatus,
@@ -1134,7 +1134,7 @@ export class NotificationCCReport extends NotificationCC {
 
 	public sequenceNumber: number | undefined;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (this.alarmType) {
 			message = {
@@ -1221,7 +1221,7 @@ export class NotificationCCReport extends NotificationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1478,7 +1478,7 @@ export class NotificationCCGet extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.alarmType != undefined) {
 			message["V1 alarm type"] = this.alarmType;
@@ -1495,7 +1495,7 @@ export class NotificationCCGet extends NotificationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1561,9 +1561,9 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supports V1 alarm": this.supportsV1Alarm,
 				"supported notification types": this.supportedNotificationTypes
@@ -1693,9 +1693,9 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"notification type": getNotificationName(this.notificationType),
 				"supported events": this.supportedEvents
@@ -1745,9 +1745,9 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"notification type": getNotificationName(this.notificationType),
 			},

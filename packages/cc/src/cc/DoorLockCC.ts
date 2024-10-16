@@ -857,9 +857,9 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"target mode": getEnumMemberName(DoorLockMode, this.mode),
 			},
@@ -969,7 +969,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.lockTimeout)
 	public readonly lockTimeout?: number; // in seconds
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current mode": getEnumMemberName(DoorLockMode, this.currentMode),
 			"active outside handles": this.outsideHandlesCanOpenDoor.join(", "),
@@ -999,7 +999,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			message["lock timeout"] = `${this.lockTimeout} seconds`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1119,7 +1119,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 		return true;
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"operation type": getEnumMemberName(
 				DoorLockOperationType,
@@ -1150,7 +1150,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			message["block-to-block enabled"] = this.blockToBlock;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1273,7 +1273,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const insideHandles = isArray(
 				this.insideHandlesCanOpenDoorConfiguration,
 			)
@@ -1312,7 +1312,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 			message["enable block-to-block"] = this.blockToBlock;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1396,9 +1396,9 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	@ccValue(DoorLockCCValues.blockToBlockSupported)
 	public readonly blockToBlockSupported: boolean;
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				door: this.doorSupported,
 				bolt: this.boltSupported,

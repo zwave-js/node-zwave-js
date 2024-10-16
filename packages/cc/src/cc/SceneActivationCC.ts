@@ -169,13 +169,13 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = { "scene id": this.sceneId };
 		if (this.dimmingDuration != undefined) {
 			message["dimming duration"] = this.dimmingDuration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
