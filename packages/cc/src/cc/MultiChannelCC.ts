@@ -131,7 +131,7 @@ export const MultiChannelCCValues = Object.freeze({
  * This function gives an estimate if this is the case (i.e. all endpoints have a different device class)
  */
 function areEndpointsUnnecessary(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	nodeId: number,
 	endpointIndizes: number[],
 ): boolean {
@@ -146,7 +146,7 @@ function areEndpointsUnnecessary(
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId = MultiChannelCCValues.endpointDeviceClass
 			.endpoint(endpoint);
-		const deviceClass = applHost.getValueDB(nodeId).getValue<{
+		const deviceClass = ctx.getValueDB(nodeId).getValue<{
 			generic: number;
 			specific: number;
 		}>(devClassValueId);
