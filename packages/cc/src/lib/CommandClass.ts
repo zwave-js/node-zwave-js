@@ -37,9 +37,11 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetDeviceConfig,
+	GetInterviewOptions,
 	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
+	LookupManufacturer,
 	ZWaveApplicationHost,
 } from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
@@ -51,7 +53,7 @@ import {
 	staticExtends,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import type { ValueIDProperties } from "./API";
+import type { CCAPIHost, CCAPINode, ValueIDProperties } from "./API";
 import {
 	getCCCommand,
 	getCCCommandConstructor,
@@ -142,6 +144,24 @@ export type CCNode =
 	& SetSecurityClass
 	& ListenBehavior
 	& QueryNodeStatus;
+
+export type InterviewContext =
+	& CCAPIHost<
+		& CCAPINode
+		& GetCCs
+		& SupportsCC
+		& ControlsCC
+		& QuerySecurityClasses
+		& SetSecurityClass
+		& GetEndpoint<EndpointId & GetCCs & SupportsCC & ControlsCC & ModifyCCs>
+		& GetAllEndpoints<EndpointId & SupportsCC & ControlsCC>
+	>
+	& GetInterviewOptions
+	& LookupManufacturer;
+
+export type RefreshValuesContext = CCAPIHost<
+	CCAPINode & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+>;
 
 export function getEffectiveCCVersion(
 	ctx: GetSupportedCCVersion,
@@ -515,14 +535,14 @@ export class CommandClass implements CCId {
 	/**
 	 * Performs the interview procedure for this CC according to SDS14223
 	 */
-	public async interview(_applHost: ZWaveApplicationHost): Promise<void> {
+	public async interview(_ctx: InterviewContext): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
 	/**
 	 * Refreshes all dynamic values of this CC
 	 */
-	public async refreshValues(_applHost: ZWaveApplicationHost): Promise<void> {
+	public async refreshValues(_ctx: RefreshValuesContext): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 

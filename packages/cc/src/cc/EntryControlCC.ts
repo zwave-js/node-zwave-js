@@ -34,6 +34,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -271,19 +273,19 @@ export class EntryControlCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Entry Control"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -293,13 +295,13 @@ export class EntryControlCC extends CommandClass {
 		// we must associate ourselves with that channel
 		try {
 			await ccUtils.assignLifelineIssueingCommand(
-				applHost,
+				ctx,
 				endpoint,
 				this.ccId,
 				EntryControlCommand.Notification,
 			);
 		} catch {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Configuring associations to receive ${
 					getCCName(
@@ -310,7 +312,7 @@ export class EntryControlCC extends CommandClass {
 			});
 		}
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control supported keys...",
 			direction: "outbound",
@@ -318,7 +320,7 @@ export class EntryControlCC extends CommandClass {
 
 		const supportedKeys = await api.getSupportedKeys();
 		if (supportedKeys) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`received entry control supported keys: ${supportedKeys.toString()}`,
@@ -326,7 +328,7 @@ export class EntryControlCC extends CommandClass {
 			});
 		}
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control supported events...",
 			direction: "outbound",
@@ -334,7 +336,7 @@ export class EntryControlCC extends CommandClass {
 
 		const eventCapabilities = await api.getEventCapabilities();
 		if (eventCapabilities) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received entry control supported keys:
 data types:            ${
@@ -355,26 +357,26 @@ max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 			});
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Entry Control"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control configuration...",
 			direction: "outbound",
@@ -382,7 +384,7 @@ max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 
 		const conf = await api.getConfiguration();
 		if (conf) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received entry control configuration:
 key cache size:    ${conf.keyCacheSize}

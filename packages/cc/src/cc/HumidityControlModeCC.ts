@@ -33,6 +33,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -187,26 +189,26 @@ export class HumidityControlModeCC extends CommandClass {
 	declare ccCommand: HumidityControlModeCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Humidity Control Mode"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported humidity control modes...",
 			direction: "outbound",
@@ -224,13 +226,13 @@ export class HumidityControlModeCC extends CommandClass {
 					)
 					.join("")
 			}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported humidity control modes timed out, skipping interview...",
@@ -239,34 +241,34 @@ export class HumidityControlModeCC extends CommandClass {
 			return;
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Humidity Control Mode"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the current status
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current humidity control mode...",
 			direction: "outbound",
 		});
 		const currentMode = await api.get();
 		if (currentMode) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "received current humidity control mode: "
 					+ getEnumMemberName(HumidityControlMode, currentMode),

@@ -35,6 +35,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -220,26 +222,26 @@ export class ThermostatModeCC extends CommandClass {
 	declare ccCommand: ThermostatModeCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Thermostat Mode"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported thermostat modes...",
 			direction: "outbound",
@@ -254,13 +256,13 @@ export class ThermostatModeCC extends CommandClass {
 					)
 					.join("")
 			}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported thermostat modes timed out, skipping interview...",
@@ -269,34 +271,34 @@ export class ThermostatModeCC extends CommandClass {
 			return;
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Thermostat Mode"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the current status
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current thermostat mode...",
 			direction: "outbound",
 		});
 		const currentStatus = await api.get();
 		if (currentStatus) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "received current thermostat mode: "
 					+ getEnumMemberName(ThermostatMode, currentStatus.mode),

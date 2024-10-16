@@ -6,11 +6,7 @@ import {
 	type SupervisionResult,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -24,6 +20,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -119,37 +117,37 @@ export class ThermostatSetbackCC extends CommandClass {
 	declare ccCommand: ThermostatSetbackCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Thermostat Setback"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the thermostat state
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying the current thermostat state...",
 			direction: "outbound",
@@ -159,7 +157,7 @@ export class ThermostatSetbackCC extends CommandClass {
 			const logMessage = `received current state:
 setback type:  ${getEnumMemberName(SetbackType, setbackResp.setbackType)}
 setback state: ${setbackResp.setbackState}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",

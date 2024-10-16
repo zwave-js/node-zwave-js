@@ -5,19 +5,15 @@ import {
 	MessagePriority,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -123,25 +119,25 @@ export class ZWavePlusCC extends CommandClass {
 	declare ccCommand: ZWavePlusCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Z-Wave Plus Info"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Z-Wave+ information...",
 			direction: "outbound",
@@ -155,7 +151,7 @@ role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
 node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
 installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
 user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -163,7 +159,7 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 

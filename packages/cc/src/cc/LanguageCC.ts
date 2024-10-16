@@ -12,11 +12,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
@@ -25,6 +21,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -115,36 +113,36 @@ export class LanguageCC extends CommandClass {
 	declare ccCommand: LanguageCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Language,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "requesting language setting...",
 			direction: "outbound",
 		});
@@ -154,7 +152,7 @@ export class LanguageCC extends CommandClass {
 			const logMessage = `received current language setting: ${language}${
 				country != undefined ? `-${country}` : ""
 			}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});

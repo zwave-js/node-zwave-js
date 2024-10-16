@@ -44,6 +44,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -262,12 +264,12 @@ export class BasicCC extends CommandClass {
 	declare ccCommand: BasicCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -277,13 +279,13 @@ export class BasicCC extends CommandClass {
 		endpoint.addCC(CommandClasses.Basic, { isSupported: true });
 
 		// try to query the current state
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remove Basic CC support again when there was no response
 		if (
-			this.getValue(applHost, BasicCCValues.currentValue) == undefined
+			this.getValue(ctx, BasicCCValues.currentValue) == undefined
 		) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"No response to Basic Get command, assuming Basic CC is unsupported...",
@@ -297,24 +299,24 @@ export class BasicCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Basic,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// try to query the current state
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Basic CC state...",
 			direction: "outbound",
@@ -329,7 +331,7 @@ current value:      ${basicResponse.currentValue}`;
 target value:       ${basicResponse.targetValue}
 remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			}
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",

@@ -59,6 +59,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -1047,45 +1049,45 @@ export class ConfigurationCC extends CommandClass {
 	declare ccCommand: ConfigurationCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Configuration,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		const deviceConfig = applHost.getDeviceConfig?.(node.id);
+		const deviceConfig = ctx.getDeviceConfig?.(node.id);
 		const paramInfo = getParamInformationFromConfigFile(
-			applHost,
+			ctx,
 			node.id,
 			this.endpointIndex,
 		);
 		if (paramInfo) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`${this.constructor.name}: Loading configuration parameters from device config`,
 				direction: "none",
 			});
-			this.deserializeParamInformationFromConfig(applHost, paramInfo);
+			this.deserializeParamInformationFromConfig(ctx, paramInfo);
 		}
 		const documentedParamNumbers = new Set(
 			Array.from(paramInfo?.keys() ?? []).map((k) => k.parameter),
 		);
 
 		if (api.version >= 3) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "finding first configuration parameter...",
 				direction: "outbound",
@@ -1095,7 +1097,7 @@ export class ConfigurationCC extends CommandClass {
 			if (param0props) {
 				param = param0props.nextParameter;
 				if (param === 0) {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`didn't report any config params, trying #1 just to be sure...`,
@@ -1104,7 +1106,7 @@ export class ConfigurationCC extends CommandClass {
 					param = 1;
 				}
 			} else {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Finding first configuration parameter timed out, skipping interview...",
@@ -1114,7 +1116,7 @@ export class ConfigurationCC extends CommandClass {
 			}
 
 			while (param > 0) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying parameter #${param} information...`,
 					direction: "outbound",
@@ -1126,7 +1128,7 @@ export class ConfigurationCC extends CommandClass {
 					() => undefined,
 				);
 				if (!props) {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`Querying parameter #${param} information timed out, skipping scan...`,
@@ -1183,7 +1185,7 @@ is advanced (UI):    ${!!properties.isAdvanced}
 has bulk support:    ${!properties.noBulkSupport}
 alters capabilities: ${!!properties.altersCapabilities}`;
 				}
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -1200,20 +1202,20 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			}
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Configuration,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
@@ -1222,7 +1224,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		if (api.version < 3) {
 			// V1/V2: Query all values defined in the config file
 			const paramInfo = getParamInformationFromConfigFile(
-				applHost,
+				ctx,
 				node.id,
 				this.endpointIndex,
 			);
@@ -1238,7 +1240,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					alreadyQueried.add(param.parameter);
 
 					// Query the current value
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`querying parameter #${param.parameter} value...`,
@@ -1247,14 +1249,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					// ... at least try to
 					const paramValue = await api.get(param.parameter);
 					if (typeof paramValue === "number") {
-						applHost.logNode(node.id, {
+						ctx.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								`parameter #${param.parameter} has value: ${paramValue}`,
 							direction: "inbound",
 						});
 					} else if (!paramValue) {
-						applHost.logNode(node.id, {
+						ctx.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								`received no value for parameter #${param.parameter}`,
@@ -1264,7 +1266,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					}
 				}
 			} else {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`${this.constructor.name}: skipping interview because CC version is < 3 and there is no config file`,
@@ -1274,22 +1276,22 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		} else {
 			// V3+: Query the values of discovered parameters
 			const parameters = distinct(
-				this.getDefinedValueIDs(applHost)
+				this.getDefinedValueIDs(ctx)
 					.map((v) => v.property)
 					.filter((p) => typeof p === "number"),
 			);
 			for (const param of parameters) {
 				if (
-					this.getParamInformation(applHost, param).readable !== false
+					this.getParamInformation(ctx, param).readable !== false
 				) {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying parameter #${param} value...`,
 						direction: "outbound",
 					});
 					await api.get(param);
 				} else {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`not querying parameter #${param} value, because it is writeonly`,

@@ -47,6 +47,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -546,32 +548,32 @@ export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Color Switch"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported colors...",
 			direction: "outbound",
 		});
 		const supportedColors = await api.getSupported();
 		if (!supportedColors) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported colors timed out, skipping interview...",
@@ -580,7 +582,7 @@ export class ColorSwitchCC extends CommandClass {
 			return;
 		}
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `received supported colors:${
 				supportedColors
@@ -594,17 +596,17 @@ export class ColorSwitchCC extends CommandClass {
 		for (const color of supportedColors) {
 			const currentColorChannelValue = ColorSwitchCCValues
 				.currentColorChannel(color);
-			this.setMetadata(applHost, currentColorChannelValue);
+			this.setMetadata(ctx, currentColorChannelValue);
 
 			const targetColorChannelValue = ColorSwitchCCValues
 				.targetColorChannel(color);
-			this.setMetadata(applHost, targetColorChannelValue);
+			this.setMetadata(ctx, targetColorChannelValue);
 		}
 		// And the compound one
 		const currentColorValue = ColorSwitchCCValues.currentColor;
-		this.setMetadata(applHost, currentColorValue);
+		this.setMetadata(ctx, currentColorValue);
 		const targetColorValue = ColorSwitchCCValues.targetColor;
-		this.setMetadata(applHost, targetColorValue);
+		this.setMetadata(ctx, targetColorValue);
 
 		// Create the collective HEX color values
 		const supportsHex = [
@@ -613,37 +615,37 @@ export class ColorSwitchCC extends CommandClass {
 			ColorComponent.Blue,
 		].every((c) => supportedColors.includes(c));
 		this.setValue(
-			applHost,
+			ctx,
 			ColorSwitchCCValues.supportsHexColor,
 			supportsHex,
 		);
 		if (supportsHex) {
 			const hexColorValue = ColorSwitchCCValues.hexColor;
-			this.setMetadata(applHost, hexColorValue);
+			this.setMetadata(ctx, hexColorValue);
 		}
 
 		// Query all color components
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Color Switch"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const supportedColors: readonly ColorComponent[] = this.getValue(
-			applHost,
+			ctx,
 			ColorSwitchCCValues.supportedColorComponents,
 		) ?? [];
 
@@ -653,7 +655,7 @@ export class ColorSwitchCC extends CommandClass {
 			if (!isEnumMember(ColorComponent, color)) continue;
 
 			const colorName = getEnumMemberName(ColorComponent, color);
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current color state (${colorName})`,
 				direction: "outbound",

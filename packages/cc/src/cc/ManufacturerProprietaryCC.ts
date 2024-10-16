@@ -4,10 +4,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
@@ -16,6 +13,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -225,20 +224,20 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
 		// Read the manufacturer ID from Manufacturer Specific CC
 		this.manufacturerId = this.getValue(
-			applHost,
+			ctx,
 			ManufacturerSpecificCCValues.manufacturerId,
 		)!;
 		const pcInstance = this.createSpecificInstance();
 		if (pcInstance) {
-			await pcInstance.interview(applHost);
+			await pcInstance.interview(ctx);
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message:
 					`${this.constructor.name}: skipping interview refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",
@@ -246,26 +245,26 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
 		if (this.manufacturerId == undefined) {
 			// Read the manufacturer ID from Manufacturer Specific CC
 			this.manufacturerId = this.getValue(
-				applHost,
+				ctx,
 				ManufacturerSpecificCCValues.manufacturerId,
 			)!;
 		}
 		const pcInstance = this.createSpecificInstance();
 		if (pcInstance) {
-			await pcInstance.refreshValues(applHost);
+			await pcInstance.refreshValues(ctx);
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message:
 					`${this.constructor.name}: skipping value refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",

@@ -34,6 +34,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -299,11 +300,11 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: `${this.constructor.name}: setting metadata`,
 			direction: "none",
 		});
@@ -313,14 +314,14 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 			const levelValue = SceneActuatorConfigurationCCValues.level(
 				sceneId,
 			);
-			this.ensureMetadata(applHost, levelValue);
+			this.ensureMetadata(ctx, levelValue);
 
 			const dimmingDurationValue = SceneActuatorConfigurationCCValues
 				.dimmingDuration(sceneId);
-			this.ensureMetadata(applHost, dimmingDurationValue);
+			this.ensureMetadata(ctx, dimmingDurationValue);
 		}
 
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	// `refreshValues()` would create 255 `Get` commands to be issued to the node

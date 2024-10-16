@@ -11,11 +11,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -33,9 +29,9 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -582,25 +578,25 @@ export class WindowCoveringCC extends CommandClass {
 	declare ccCommand: WindowCoveringCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Window Covering"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported window covering parameters...",
 			direction: "outbound",
@@ -615,7 +611,7 @@ ${
 					)
 					.join("\n")
 			}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -625,31 +621,31 @@ ${
 			for (const param of supported) {
 				// Default values
 				this.setMetadata(
-					applHost,
+					ctx,
 					WindowCoveringCCValues.currentValue(param),
 				);
 				this.setMetadata(
-					applHost,
+					ctx,
 					WindowCoveringCCValues.targetValue(param),
 				);
 				this.setMetadata(
-					applHost,
+					ctx,
 					WindowCoveringCCValues.duration(param),
 				);
 
 				// Level change values
 				this.setMetadata(
-					applHost,
+					ctx,
 					WindowCoveringCCValues.levelChangeUp(param),
 				);
 				this.setMetadata(
-					applHost,
+					ctx,
 					WindowCoveringCCValues.levelChangeDown(param),
 				);
 
 				// And for the odd parameters (with position support), query the position
 				if (param % 2 === 1) {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying position for parameter ${
 							getEnumMemberName(
@@ -665,7 +661,7 @@ ${
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public translatePropertyKey(

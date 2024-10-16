@@ -9,11 +9,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
 	getEnumMemberName,
@@ -24,9 +20,9 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -248,25 +244,25 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Firmware Update Meta Data"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying firmware update capabilities...",
 			direction: "outbound",
@@ -291,13 +287,13 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 			} else {
 				logMessage += `\nfirmware upgradeable: false`;
 			}
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Firmware update capability query timed out",
 				direction: "inbound",
@@ -305,7 +301,7 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 

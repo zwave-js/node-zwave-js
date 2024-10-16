@@ -39,6 +39,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -1158,32 +1160,32 @@ export class IrrigationCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Irrigation,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system info...",
 			direction: "outbound",
 		});
 		const systemInfo = await api.getSystemInfo();
 		if (!systemInfo) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Time out while querying irrigation system info, skipping interview...",
@@ -1196,7 +1198,7 @@ supports master valve: ${systemInfo.supportsMasterValve}
 no. of valves:         ${systemInfo.numValves}
 no. of valve tables:   ${systemInfo.numValveTables}
 max. valve table size: ${systemInfo.maxValveTableSize}`;
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
@@ -1205,39 +1207,39 @@ max. valve table size: ${systemInfo.maxValveTableSize}`;
 		// For each valve, create the values to start/stop a run
 		for (let i = 1; i <= systemInfo.numValves; i++) {
 			this.ensureMetadata(
-				applHost,
+				ctx,
 				IrrigationCCValues.valveRunDuration(i),
 			);
 			this.ensureMetadata(
-				applHost,
+				ctx,
 				IrrigationCCValues.valveRunStartStop(i),
 			);
 		}
 		// And create a shutoff value
-		this.ensureMetadata(applHost, IrrigationCCValues.shutoffSystem);
+		this.ensureMetadata(ctx, IrrigationCCValues.shutoffSystem);
 
 		// Query current values
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Irrigation,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the current system config
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system configuration...",
 			direction: "outbound",
@@ -1266,7 +1268,7 @@ moisture sensor polarity: ${
 					)
 				}`;
 			}
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -1275,7 +1277,7 @@ moisture sensor polarity: ${
 
 		// and status
 		// Query the current system config
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system status...",
 			direction: "outbound",
@@ -1283,15 +1285,15 @@ moisture sensor polarity: ${
 		await api.getSystemStatus();
 
 		// for each valve, query the current status and configuration
-		if (IrrigationCC.supportsMasterValveCached(applHost, endpoint)) {
-			applHost.logNode(node.id, {
+		if (IrrigationCC.supportsMasterValveCached(ctx, endpoint)) {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying master valve configuration...",
 				direction: "outbound",
 			});
 			await api.getValveConfig("master");
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying master valve status...",
 				direction: "outbound",
@@ -1301,10 +1303,10 @@ moisture sensor polarity: ${
 
 		for (
 			let i = 1;
-			i <= (IrrigationCC.getNumValvesCached(applHost, endpoint) ?? 0);
+			i <= (IrrigationCC.getNumValvesCached(ctx, endpoint) ?? 0);
 			i++
 		) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying configuration for valve ${
 					padStart(
@@ -1317,7 +1319,7 @@ moisture sensor polarity: ${
 			});
 			await api.getValveConfig(i);
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying status for valve ${
 					padStart(

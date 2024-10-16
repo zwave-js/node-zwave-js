@@ -44,6 +44,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -421,34 +423,34 @@ export class BarrierOperatorCC extends CommandClass {
 	declare ccCommand: BarrierOperatorCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Barrier Operator"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Create targetState value if it does not exist
-		this.ensureMetadata(applHost, BarrierOperatorCCValues.targetState);
+		this.ensureMetadata(ctx, BarrierOperatorCCValues.targetState);
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "Querying signaling capabilities...",
 			direction: "outbound",
 		});
 		const resp = await api.getSignalingCapabilities();
 		if (resp) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: `Received supported subsystem types: ${
 					resp
 						.map((t) =>
@@ -465,7 +467,7 @@ export class BarrierOperatorCC extends CommandClass {
 				// for valid values and throws otherwise.
 				if (!isEnumMember(SubsystemType, subsystemType)) continue;
 
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: `Enabling subsystem ${
 						getEnumMemberName(
 							SubsystemType,
@@ -479,27 +481,27 @@ export class BarrierOperatorCC extends CommandClass {
 			}
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Barrier Operator"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const supportedSubsystems: SubsystemType[] = this.getValue(
-			applHost,
+			ctx,
 			BarrierOperatorCCValues.supportedSubsystemTypes,
 		) ?? [];
 
@@ -508,7 +510,7 @@ export class BarrierOperatorCC extends CommandClass {
 			// for valid values and throws otherwise.
 			if (!isEnumMember(SubsystemType, subsystemType)) continue;
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: `Querying event signaling state for subsystem ${
 					getEnumMemberName(
 						SubsystemType,
@@ -519,7 +521,7 @@ export class BarrierOperatorCC extends CommandClass {
 			});
 			const state = await api.getEventSignaling(subsystemType);
 			if (state != undefined) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: `Subsystem ${
 						getEnumMemberName(
 							SubsystemType,
@@ -531,7 +533,7 @@ export class BarrierOperatorCC extends CommandClass {
 			}
 		}
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "querying current barrier state...",
 			direction: "outbound",
 		});

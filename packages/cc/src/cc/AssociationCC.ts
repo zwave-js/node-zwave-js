@@ -28,6 +28,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -388,19 +390,19 @@ export class AssociationCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Association,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -411,20 +413,20 @@ export class AssociationCC extends CommandClass {
 		// multi channel association groups
 
 		// Find out how many groups are supported
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying number of association groups...",
 			direction: "outbound",
 		});
 		const groupCount = await api.getGroupCount();
 		if (groupCount != undefined) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `supports ${groupCount} association groups`,
 				direction: "inbound",
 			});
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying association groups timed out, skipping interview...",
@@ -434,48 +436,48 @@ export class AssociationCC extends CommandClass {
 		}
 
 		// Query each association group for its members
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Skip the remaining Association CC interview in favor of Multi Channel Association if possible
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
 				direction: "none",
 			});
-			this.setInterviewComplete(applHost, true);
+			this.setInterviewComplete(ctx, true);
 			return;
 		}
 
 		// And set up lifeline associations
-		await ccUtils.configureLifelineAssociations(applHost, endpoint);
+		await ccUtils.configureLifelineAssociations(ctx, endpoint);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Association,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const groupCount = AssociationCC.getGroupCountCached(
-			applHost,
+			ctx,
 			endpoint,
 		);
 
 		// Query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying association group #${groupId}...`,
 				direction: "outbound",
@@ -486,7 +488,7 @@ export class AssociationCC extends CommandClass {
 					`received information for association group #${groupId}:
 maximum # of nodes: ${group.maxNodes}
 currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

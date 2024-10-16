@@ -36,6 +36,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -521,19 +523,19 @@ export class MultilevelSwitchCC extends CommandClass {
 	declare ccCommand: MultilevelSwitchCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Multilevel Switch"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -541,14 +543,14 @@ export class MultilevelSwitchCC extends CommandClass {
 
 		if (api.version >= 3) {
 			// Find out which kind of switch this is
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting switch type...",
 				direction: "outbound",
 			});
 			const switchType = await api.getSupported();
 			if (switchType != undefined) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `has switch type ${
 						getEnumMemberName(
@@ -562,29 +564,29 @@ export class MultilevelSwitchCC extends CommandClass {
 		} else {
 			// requesting the switch type automatically creates the up/down actions
 			// We need to do this manually for V1 and V2
-			this.createMetadataForLevelChangeActions(applHost);
+			this.createMetadataForLevelChangeActions(ctx);
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Multilevel Switch"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting current switch state...",
 			direction: "outbound",

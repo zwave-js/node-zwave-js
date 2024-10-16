@@ -39,6 +39,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -341,19 +343,19 @@ export class ThermostatSetpointCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Thermostat Setpoint"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -384,7 +386,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					type,
 				);
 				// Every time, query the current value
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`querying current value of setpoint ${setpointName}...`,
@@ -406,7 +408,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					// We're sure about the interpretation - this should not happen
 					logMessage = `setpoint ${setpointName} is not supported`;
 				}
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -415,7 +417,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// Remember which setpoint types are actually supported
 			this.setValue(
-				applHost,
+				ctx,
 				ThermostatSetpointCCValues.supportedSetpointTypes,
 				supportedSetpointTypes,
 			);
@@ -424,7 +426,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// Query the supported setpoint types
 			let setpointTypes: ThermostatSetpointType[] = [];
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving supported setpoint types...",
 				direction: "outbound",
@@ -439,13 +441,13 @@ export class ThermostatSetpointCC extends CommandClass {
 						)
 						.map((name) => `· ${name}`)
 						.join("\n");
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported setpoint types timed out, skipping interview...",
@@ -460,7 +462,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					type,
 				);
 				// Find out the capabilities of this setpoint
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`retrieving capabilities for setpoint ${setpointName}...`,
@@ -478,7 +480,7 @@ export class ThermostatSetpointCC extends CommandClass {
 						`received capabilities for setpoint ${setpointName}:
 minimum value: ${setpointCaps.minValue} ${minValueUnit}
 maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -487,28 +489,28 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 			}
 
 			// Query the current value for all setpoint types
-			await this.refreshValues(applHost);
+			await this.refreshValues(ctx);
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Thermostat Setpoint"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const setpointTypes: ThermostatSetpointType[] = this.getValue(
-			applHost,
+			ctx,
 			ThermostatSetpointCCValues.supportedSetpointTypes,
 		) ?? [];
 
@@ -519,7 +521,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				type,
 			);
 			// Every time, query the current value
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying current value of setpoint ${setpointName}...`,
@@ -531,7 +533,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 					`received current value of setpoint ${setpointName}: ${setpoint.value} ${
 						setpoint.scale.unit ?? ""
 					}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

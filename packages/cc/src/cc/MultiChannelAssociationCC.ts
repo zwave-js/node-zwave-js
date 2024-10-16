@@ -29,6 +29,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -460,38 +462,38 @@ export class MultiChannelAssociationCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const mcAPI = CCAPI.create(
 			CommandClasses["Multi Channel Association"],
-			applHost,
+			ctx,
 			endpoint,
 		);
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First find out how many groups are supported as multi channel
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying number of multi channel association groups...",
 			direction: "outbound",
 		});
 		const mcGroupCount = await mcAPI.getGroupCount();
 		if (mcGroupCount != undefined) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`supports ${mcGroupCount} multi channel association groups`,
 				direction: "inbound",
 			});
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying multi channel association groups timed out, skipping interview...",
@@ -501,48 +503,48 @@ export class MultiChannelAssociationCC extends CommandClass {
 		}
 
 		// Query each association group for its members
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// And set up lifeline associations
-		await ccUtils.configureLifelineAssociations(applHost, endpoint);
+		await ccUtils.configureLifelineAssociations(ctx, endpoint);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const mcAPI = CCAPI.create(
 			CommandClasses["Multi Channel Association"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const assocAPI = CCAPI.create(
 			CommandClasses.Association,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const mcGroupCount: number = this.getValue(
-			applHost,
+			ctx,
 			MultiChannelAssociationCCValues.groupCount,
 		) ?? 0;
 
 		// Some devices report more association groups than multi channel association groups, so we need this info here
 		const assocGroupCount: number =
-			this.getValue(applHost, AssociationCCValues.groupCount)
+			this.getValue(ctx, AssociationCCValues.groupCount)
 			|| mcGroupCount;
 
 		// Then query each multi channel association group
 		for (let groupId = 1; groupId <= mcGroupCount; groupId++) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying multi channel association group #${groupId}...`,
@@ -567,7 +569,7 @@ currently assigned endpoints: ${
 						})
 						.join("")
 				}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -576,7 +578,7 @@ currently assigned endpoints: ${
 
 		// Check if there are more non-multi-channel association groups we haven't queried yet
 		if (assocAPI.isSupported() && assocGroupCount > mcGroupCount) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying additional non-multi-channel association groups...`,
@@ -587,7 +589,7 @@ currently assigned endpoints: ${
 				groupId <= assocGroupCount;
 				groupId++
 			) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying association group #${groupId}...`,
 					direction: "outbound",
@@ -598,7 +600,7 @@ currently assigned endpoints: ${
 					`received information for association group #${groupId}:
 maximum # of nodes:           ${group.maxNodes}
 currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

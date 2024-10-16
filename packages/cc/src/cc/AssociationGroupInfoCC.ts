@@ -24,6 +24,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -340,7 +342,10 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		return (
 			// First query the Multi Channel Association CC
-			(endpoint.supportsCC(CommandClasses["Multi Channel Association"])
+			// And fall back to 0
+			(endpoint.supportsCC(
+				CommandClasses["Multi Channel Association"],
+			)
 				&& MultiChannelAssociationCC.getGroupCountCached(
 					ctx,
 					endpoint,
@@ -348,23 +353,22 @@ export class AssociationGroupInfoCC extends CommandClass {
 			// Then the Association CC
 			|| (endpoint.supportsCC(CommandClasses.Association)
 				&& AssociationCC.getGroupCountCached(ctx, endpoint))
-			// And fall back to 0
 			|| 0
 		);
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Association Group Information"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -372,13 +376,13 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		const associationGroupCount = AssociationGroupInfoCC
 			.getAssociationGroupCountCached(
-				applHost,
+				ctx,
 				endpoint,
 			);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// First get the group's name
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying name...`,
 				direction: "outbound",
@@ -387,7 +391,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			if (name) {
 				const logMessage =
 					`Association group #${groupId} has name "${name}"`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -395,7 +399,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			}
 
 			// Then the command list
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`Association group #${groupId}: Querying command list...`,
@@ -406,37 +410,37 @@ export class AssociationGroupInfoCC extends CommandClass {
 		}
 
 		// Finally query each group for its information
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Association Group Information"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
 		// Query the information for each group (this is the only thing that could be dynamic)
 		const associationGroupCount = AssociationGroupInfoCC
 			.getAssociationGroupCountCached(
-				applHost,
+				ctx,
 				endpoint,
 			);
 		const hasDynamicInfo = this.getValue<boolean>(
-			applHost,
+			ctx,
 			AssociationGroupInfoCCValues.hasDynamicInfo,
 		);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Then its information
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying info...`,
 				direction: "outbound",
@@ -452,7 +456,7 @@ profile:         ${
 							info.profile,
 						)
 					}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

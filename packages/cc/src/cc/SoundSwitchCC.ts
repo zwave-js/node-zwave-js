@@ -11,11 +11,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
@@ -30,10 +26,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	type CCResponsePredicate,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -374,37 +370,37 @@ export class SoundSwitchCC extends CommandClass {
 	declare ccCommand: SoundSwitchCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Sound Switch"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "requesting tone count...",
 			direction: "outbound",
 		});
 		const toneCount = await api.getToneCount();
 		if (toneCount != undefined) {
 			const logMessage = `supports ${toneCount} tones`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying tone count timed out, skipping interview...",
 				level: "warn",
@@ -412,7 +408,7 @@ export class SoundSwitchCC extends CommandClass {
 			return;
 		}
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "requesting current sound configuration...",
 			direction: "outbound",
 		});
@@ -421,7 +417,7 @@ export class SoundSwitchCC extends CommandClass {
 			const logMessage = `received current sound configuration:
 default tone ID: ${config.defaultToneId}
 default volume: ${config.defaultVolume}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -429,7 +425,7 @@ default volume: ${config.defaultVolume}`;
 
 		const metadataStates: Record<number, string> = {};
 		for (let toneId = 1; toneId <= toneCount; toneId++) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: `requesting info for tone #${toneId}`,
 				direction: "outbound",
 			});
@@ -438,7 +434,7 @@ default volume: ${config.defaultVolume}`;
 			const logMessage = `received info for tone #${toneId}:
 name:     ${info.name}
 duration: ${info.duration} seconds`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -446,7 +442,7 @@ duration: ${info.duration} seconds`;
 		}
 
 		// Remember tone count and info on the default tone ID metadata
-		this.setMetadata(applHost, SoundSwitchCCValues.defaultToneId, {
+		this.setMetadata(ctx, SoundSwitchCCValues.defaultToneId, {
 			...SoundSwitchCCValues.defaultToneId.meta,
 			min: 1,
 			max: toneCount,
@@ -454,7 +450,7 @@ duration: ${info.duration} seconds`;
 		});
 
 		// Remember tone count and info on the tone ID metadata
-		this.setMetadata(applHost, SoundSwitchCCValues.toneId, {
+		this.setMetadata(ctx, SoundSwitchCCValues.toneId, {
 			...SoundSwitchCCValues.toneId.meta,
 			min: 0,
 			max: toneCount,
@@ -466,7 +462,7 @@ duration: ${info.duration} seconds`;
 		});
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 

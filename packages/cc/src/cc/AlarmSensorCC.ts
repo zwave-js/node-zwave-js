@@ -24,6 +24,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -170,39 +172,39 @@ export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 
 		// Skip the interview in favor of Notification CC if possible
 		if (endpoint.supportsCC(CommandClasses.Notification)) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`${this.constructor.name}: skipping interview because Notification CC is supported...`,
 				direction: "none",
 			});
-			this.setInterviewComplete(applHost, true);
+			this.setInterviewComplete(ctx, true);
 			return;
 		}
 
 		const api = CCAPI.create(
 			CommandClasses["Alarm Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Find out which sensor types this sensor supports
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported sensor types...",
 			direction: "outbound",
@@ -215,13 +217,13 @@ export class AlarmSensorCC extends CommandClass {
 					.map((name) => `\n· ${name}`)
 					.join("")
 			}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported sensor types timed out, skipping interview...",
@@ -231,27 +233,27 @@ export class AlarmSensorCC extends CommandClass {
 		}
 
 		// Query (all of) the sensor's current value(s)
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Alarm Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const supportedSensorTypes: readonly AlarmSensorType[] =
-			this.getValue(applHost, AlarmSensorCCValues.supportedSensorTypes)
+			this.getValue(ctx, AlarmSensorCCValues.supportedSensorTypes)
 				?? [];
 
 		// Always query (all of) the sensor's current value(s)
@@ -262,7 +264,7 @@ export class AlarmSensorCC extends CommandClass {
 
 			const sensorName = getEnumMemberName(AlarmSensorType, type);
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current value for ${sensorName}...`,
 				direction: "outbound",
@@ -279,7 +281,7 @@ severity: ${currentValue.severity}`;
 					message += `
 duration: ${currentValue.duration}`;
 				}
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message,
 					direction: "inbound",

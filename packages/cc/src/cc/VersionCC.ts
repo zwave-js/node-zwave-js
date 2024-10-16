@@ -15,19 +15,15 @@ import {
 	securityClassOrder,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -415,9 +411,9 @@ export class VersionCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
 		// SDS13782: In a Multi Channel device, the Version Command Class MUST be supported by the Root Device, while
 		// the Version Command Class SHOULD NOT be supported by individual End Points.
@@ -427,18 +423,18 @@ export class VersionCC extends CommandClass {
 		// implemented by the Multi Channel device; also in cases where the actual Command Class is only
 		// provided by an End Point.
 
-		const endpoint = this.getEndpoint(applHost)!;
+		const endpoint = this.getEndpoint(ctx)!;
 
 		// Use the CC API of the root device for all queries
 		const api = CCAPI.create(
 			CommandClasses.Version,
-			applHost,
+			ctx,
 			node,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -449,7 +445,7 @@ export class VersionCC extends CommandClass {
 			// but there are Z-Wave certification tests that require us to query all CCs
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented === 0) {
-				applHost.logNode(
+				ctx.logNode(
 					node.id,
 					`  skipping query for ${CommandClasses[cc]} (${
 						num2hex(
@@ -460,7 +456,7 @@ export class VersionCC extends CommandClass {
 				return;
 			}
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `  querying the CC version for ${getCCName(cc)}...`,
 				direction: "outbound",
@@ -524,12 +520,12 @@ export class VersionCC extends CommandClass {
 					}
 				}
 
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 				});
 			} else {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `CC version query for ${
 						getCCName(
@@ -551,7 +547,7 @@ export class VersionCC extends CommandClass {
 			await queryCCVersion(CommandClasses.Version);
 
 			// Step 2: Query node versions
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying node versions...",
 				direction: "outbound",
@@ -568,7 +564,7 @@ export class VersionCC extends CommandClass {
 					logMessage +=
 						`\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
 				}
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -577,7 +573,7 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Step 3: Query all other CC versions
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying CC versions...",
 			direction: "outbound",
@@ -603,7 +599,7 @@ export class VersionCC extends CommandClass {
 		// Step 4: Query VersionCC capabilities (root device only)
 		if (this.endpointIndex === 0 && api.version >= 3) {
 			// Step 4a: Support for SoftwareGet
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying if Z-Wave Software Get is supported...",
 				direction: "outbound",
@@ -611,7 +607,7 @@ export class VersionCC extends CommandClass {
 			const capsResponse = await api.getCapabilities();
 			if (capsResponse) {
 				const { supportsZWaveSoftwareGet } = capsResponse;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `Z-Wave Software Get is${
 						supportsZWaveSoftwareGet ? "" : " not"
@@ -621,13 +617,13 @@ export class VersionCC extends CommandClass {
 
 				if (supportsZWaveSoftwareGet) {
 					// Step 4b: Query Z-Wave Software versions
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying Z-Wave software versions...",
 						direction: "outbound",
 					});
 					await api.getZWaveSoftware();
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "received Z-Wave software versions",
 						direction: "inbound",
@@ -637,7 +633,7 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 

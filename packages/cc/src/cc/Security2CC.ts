@@ -40,7 +40,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -48,10 +47,10 @@ import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	type CCResponseRole,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -661,19 +660,19 @@ export class Security2CC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
 		const securityManager = getSecurityManager(
-			applHost.ownNodeId,
-			applHost,
+			ctx.ownNodeId,
+			ctx,
 			this.nodeId,
 		);
 
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Security 2"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
@@ -696,7 +695,7 @@ export class Security2CC extends CommandClass {
 			];
 		} else {
 			// For endpoint interviews, the security class MUST be known
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: endpoint.index,
 				message:
 					`Cannot query securely supported commands for endpoint because the node's security class isn't known...`,
@@ -720,7 +719,7 @@ export class Security2CC extends CommandClass {
 			if (
 				!securityManager?.hasKeysForSecurityClass(secClass)
 			) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: endpoint.index,
 					message: `Cannot query securely supported commands (${
 						getEnumMemberName(
@@ -733,7 +732,7 @@ export class Security2CC extends CommandClass {
 				continue;
 			}
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Querying securely supported commands (${
 					getEnumMemberName(
@@ -770,7 +769,7 @@ export class Security2CC extends CommandClass {
 				) {
 					if (attempts < MAX_ATTEMPTS) {
 						// We definitely know the highest security class
-						applHost.logNode(node.id, {
+						ctx.logNode(node.id, {
 							endpoint: endpoint.index,
 							message: `Querying securely supported commands (${
 								getEnumMemberName(
@@ -783,7 +782,7 @@ export class Security2CC extends CommandClass {
 						await wait(500);
 						continue;
 					} else if (endpoint.index > 0) {
-						applHost.logNode(node.id, {
+						ctx.logNode(node.id, {
 							endpoint: endpoint.index,
 							message: `Querying securely supported commands (${
 								getEnumMemberName(
@@ -802,7 +801,7 @@ export class Security2CC extends CommandClass {
 
 						break;
 					} else {
-						applHost.logNode(node.id, {
+						ctx.logNode(node.id, {
 							endpoint: endpoint.index,
 							message: `Querying securely supported commands (${
 								getEnumMemberName(
@@ -829,7 +828,7 @@ export class Security2CC extends CommandClass {
 					// unless we were sure about the security class
 					node.setSecurityClass(secClass, false);
 
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						message: `The node was NOT granted the security class ${
 							getEnumMemberName(
 								SecurityClass,
@@ -846,7 +845,7 @@ export class Security2CC extends CommandClass {
 				// Mark the security class as granted unless we were sure about the security class
 				node.setSecurityClass(secClass, true);
 
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: `The node was granted the security class ${
 						getEnumMemberName(
 							SecurityClass,
@@ -872,7 +871,7 @@ export class Security2CC extends CommandClass {
 				for (const cc of supportedCCs) {
 					logLines.push(`· ${getCCName(cc)}`);
 				}
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: endpoint.index,
 					message: logLines.join("\n"),
 					direction: "inbound",
@@ -896,7 +895,7 @@ export class Security2CC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */

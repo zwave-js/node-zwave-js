@@ -8,19 +8,15 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -180,24 +176,24 @@ export class ManufacturerSpecificCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Manufacturer Specific"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
-		if (node.id !== applHost.ownNodeId) {
-			applHost.logNode(node.id, {
+		if (node.id !== ctx.ownNodeId) {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Interviewing ${this.ccName}...`,
 				direction: "none",
 			});
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying manufacturer information...",
 				direction: "outbound",
@@ -207,14 +203,14 @@ export class ManufacturerSpecificCC extends CommandClass {
 				const logMessage =
 					`received response for manufacturer information:
   manufacturer: ${
-						applHost.lookupManufacturer(
+						ctx.lookupManufacturer(
 							mfResp.manufacturerId,
 						)
 						|| "unknown"
 					} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -223,7 +219,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 

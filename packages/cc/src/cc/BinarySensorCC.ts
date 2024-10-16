@@ -29,6 +29,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -191,19 +193,19 @@ export class BinarySensorCC extends CommandClass {
 	declare ccCommand: BinarySensorCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Binary Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -211,7 +213,7 @@ export class BinarySensorCC extends CommandClass {
 
 		// Find out which sensor types this sensor supports
 		if (api.version >= 2) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported sensor types...",
 				direction: "outbound",
@@ -226,13 +228,13 @@ export class BinarySensorCC extends CommandClass {
 						.map((name) => `\n· ${name}`)
 						.join("")
 				}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -242,20 +244,20 @@ export class BinarySensorCC extends CommandClass {
 			}
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Binary Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
@@ -263,14 +265,14 @@ export class BinarySensorCC extends CommandClass {
 
 		// Query (all of) the sensor's current value(s)
 		if (api.version === 1) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current value...",
 				direction: "outbound",
 			});
 			const currentValue = await api.get();
 			if (currentValue != undefined) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `received current value: ${currentValue}`,
 					direction: "inbound",
@@ -279,7 +281,7 @@ export class BinarySensorCC extends CommandClass {
 		} else {
 			const supportedSensorTypes: readonly BinarySensorType[] =
 				this.getValue(
-					applHost,
+					ctx,
 					BinarySensorCCValues.supportedSensorTypes,
 				) ?? [];
 
@@ -289,14 +291,14 @@ export class BinarySensorCC extends CommandClass {
 				if (!isEnumMember(BinarySensorType, type)) continue;
 
 				const sensorName = getEnumMemberName(BinarySensorType, type);
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying current value for ${sensorName}...`,
 					direction: "outbound",
 				});
 				const currentValue = await api.get(type);
 				if (currentValue != undefined) {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`received current value for ${sensorName}: ${currentValue}`,

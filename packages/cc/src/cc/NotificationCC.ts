@@ -58,7 +58,9 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	InvalidCC,
+	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -568,19 +570,19 @@ export class NotificationCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Notification,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -590,13 +592,13 @@ export class NotificationCC extends CommandClass {
 		// we must associate ourselves with that channel
 		try {
 			await ccUtils.assignLifelineIssueingCommand(
-				applHost,
+				ctx,
 				endpoint,
 				this.ccId,
 				NotificationCommand.Report,
 			);
 		} catch {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Configuring associations to receive ${
 					getCCName(
@@ -609,7 +611,7 @@ export class NotificationCC extends CommandClass {
 
 		let supportsV1Alarm = false;
 		if (api.version >= 2) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported notification types...",
 				direction: "outbound",
@@ -617,7 +619,7 @@ export class NotificationCC extends CommandClass {
 
 			const suppResponse = await api.getSupported();
 			if (!suppResponse) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported notification types timed out, skipping interview...",
@@ -641,7 +643,7 @@ export class NotificationCC extends CommandClass {
 					.map((name) => `\n· ${name}`)
 					.join("")
 			}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -653,7 +655,7 @@ export class NotificationCC extends CommandClass {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
 
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`querying supported notification events for ${name}...`,
@@ -662,7 +664,7 @@ export class NotificationCC extends CommandClass {
 					const supportedEvents = await api.getSupportedEvents(type);
 					if (supportedEvents) {
 						supportedNotificationEvents.set(type, supportedEvents);
-						applHost.logNode(node.id, {
+						ctx.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								`received supported notification events for ${name}: ${
@@ -678,24 +680,24 @@ export class NotificationCC extends CommandClass {
 
 			// Determine whether the node is a push or pull node
 			let notificationMode = this.getValue<"push" | "pull">(
-				applHost,
+				ctx,
 				NotificationCCValues.notificationMode,
 			);
 			if (notificationMode !== "push" && notificationMode !== "pull") {
 				notificationMode = await this.determineNotificationMode(
-					applHost,
+					ctx,
 					api,
 					supportedNotificationEvents,
 				);
 				this.setValue(
-					applHost,
+					ctx,
 					NotificationCCValues.notificationMode,
 					notificationMode,
 				);
 			}
 
 			if (notificationMode === "pull") {
-				await this.refreshValues(applHost);
+				await this.refreshValues(ctx);
 			} /* if (notificationMode === "push") */ else {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
@@ -703,7 +705,7 @@ export class NotificationCC extends CommandClass {
 					const notification = getNotification(type);
 
 					// Enable reports for each notification type
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `enabling notifications for ${name}...`,
 						direction: "outbound",
@@ -735,11 +737,11 @@ export class NotificationCC extends CommandClass {
 									// * do this only if the last update was more than 5 minutes ago
 									// * schedule an auto-idle if the last update was less than 5 minutes ago but before the current applHost start
 									if (
-										this.getValue(applHost, value)
+										this.getValue(ctx, value)
 											== undefined
 									) {
 										this.setValue(
-											applHost,
+											ctx,
 											value,
 											0, /* idle */
 										);
@@ -754,12 +756,12 @@ export class NotificationCC extends CommandClass {
 
 		// Only create metadata for V1 values if necessary
 		if (api.version === 1 || supportsV1Alarm) {
-			this.ensureMetadata(applHost, NotificationCCValues.alarmType);
-			this.ensureMetadata(applHost, NotificationCCValues.alarmLevel);
+			this.ensureMetadata(ctx, NotificationCCValues.alarmType);
+			this.ensureMetadata(ctx, NotificationCCValues.alarmLevel);
 		}
 
 		// Also create metadata for values mapped through compat config
-		const mappings = applHost.getDeviceConfig?.(this.nodeId as number)
+		const mappings = ctx.getDeviceConfig?.(this.nodeId as number)
 			?.compat?.alarmMapping;
 		if (mappings) {
 			// Find all mappings to a valid notification variable
@@ -793,11 +795,11 @@ export class NotificationCC extends CommandClass {
 
 				// Create or update the metadata
 				const metadata = getNotificationValueMetadata(
-					this.getMetadata(applHost, notificationValue),
+					this.getMetadata(ctx, notificationValue),
 					notification,
 					valueConfig,
 				);
-				this.setMetadata(applHost, notificationValue, metadata);
+				this.setMetadata(ctx, notificationValue, metadata);
 
 				// Set the value to idle if it has no value yet
 				if (valueConfig.idle) {
@@ -805,10 +807,10 @@ export class NotificationCC extends CommandClass {
 					// * do this only if the last update was more than 5 minutes ago
 					// * schedule an auto-idle if the last update was less than 5 minutes ago but before the current applHost start
 					if (
-						this.getValue(applHost, notificationValue) == undefined
+						this.getValue(ctx, notificationValue) == undefined
 					) {
 						this.setValue(
-							applHost,
+							ctx,
 							notificationValue,
 							0, /* idle */
 						);
@@ -818,13 +820,13 @@ export class NotificationCC extends CommandClass {
 
 			// Remember supported notification types and events in the cache
 			this.setValue(
-				applHost,
+				ctx,
 				NotificationCCValues.supportedNotificationTypes,
 				[...supportedNotifications.keys()],
 			);
 			for (const [type, events] of supportedNotifications) {
 				this.setValue(
-					applHost,
+					ctx,
 					NotificationCCValues.supportedNotificationEvents(type),
 					[...events],
 				);
@@ -832,19 +834,19 @@ export class NotificationCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 		// Refreshing values only works on pull nodes
-		if (NotificationCC.getNotificationMode(applHost, node) === "pull") {
-			const endpoint = this.getEndpoint(applHost)!;
+		if (NotificationCC.getNotificationMode(ctx, node) === "pull") {
+			const endpoint = this.getEndpoint(ctx)!;
 			const api = CCAPI.create(
 				CommandClasses.Notification,
-				applHost,
+				ctx,
 				endpoint,
 			).withOptions({
 				priority: MessagePriority.NodeQuery,
@@ -852,7 +854,7 @@ export class NotificationCC extends CommandClass {
 
 			// Load supported notification types and events from cache
 			const supportedNotificationTypes = this.getValue<readonly number[]>(
-				applHost,
+				ctx,
 				NotificationCCValues.supportedNotificationTypes,
 			) ?? [];
 			const supportedNotificationNames = supportedNotificationTypes.map(
@@ -864,7 +866,7 @@ export class NotificationCC extends CommandClass {
 				const name = supportedNotificationNames[i];
 
 				// Always query each notification for its current status
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying notification status for ${name}...`,
 					direction: "outbound",
@@ -882,7 +884,7 @@ export class NotificationCC extends CommandClass {
 
 			// Remember when we did this
 			this.setValue(
-				applHost,
+				ctx,
 				NotificationCCValues.lastRefresh,
 				Date.now(),
 			);

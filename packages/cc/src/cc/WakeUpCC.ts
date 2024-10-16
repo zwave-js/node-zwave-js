@@ -31,6 +31,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -224,31 +225,31 @@ export class WakeUpCC extends CommandClass {
 	declare ccCommand: WakeUpCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Wake Up"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (node.id === applHost.ownNodeId) {
-			applHost.logNode(
+		if (node.id === ctx.ownNodeId) {
+			ctx.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,
 			);
 		} else if (node.isFrequentListening) {
-			applHost.logNode(
+			ctx.logNode(
 				node.id,
 				`skipping wakeup configuration for frequent listening device`,
 			);
@@ -260,7 +261,7 @@ export class WakeUpCC extends CommandClass {
 
 			// Retrieve the allowed wake up intervals and wake on demand support if possible
 			if (api.version >= 2) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"retrieving wakeup capabilities from the device...",
@@ -274,7 +275,7 @@ minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds
 wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -288,7 +289,7 @@ wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 			// We have no intention of changing the interval (maybe some time in the future)
 			// So for now get the current interval and just set the controller ID
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving wakeup interval from the device...",
 				direction: "outbound",
@@ -299,7 +300,7 @@ wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 				const logMessage = `received wakeup configuration:
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -313,7 +314,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 				currentControllerNodeId = 0; // assume not set
 			}
 
-			const ownNodeId = applHost.ownNodeId;
+			const ownNodeId = ctx.ownNodeId;
 			// Only change the destination if necessary
 			if (currentControllerNodeId !== ownNodeId) {
 				// Spec compliance: Limit the interval to the allowed range, but...
@@ -330,18 +331,18 @@ controller node: ${wakeupResp.controllerNodeId}`;
 					);
 				}
 
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "configuring wakeup destination node",
 					direction: "outbound",
 				});
 				await api.setInterval(desiredInterval, ownNodeId);
 				this.setValue(
-					applHost,
+					ctx,
 					WakeUpCCValues.controllerNodeId,
 					ownNodeId,
 				);
-				applHost.logNode(
+				ctx.logNode(
 					node.id,
 					"wakeup destination node changed!",
 				);
@@ -349,7 +350,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 

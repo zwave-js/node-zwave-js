@@ -36,6 +36,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -377,23 +379,23 @@ export class SceneControllerConfigurationCC extends CommandClass {
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		const groupCount = SceneControllerConfigurationCC.getGroupCountCached(
-			applHost,
+			ctx,
 			endpoint,
 		);
 		if (groupCount === 0) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`skipping Scene Controller Configuration interview because Association group count is unknown`,
@@ -409,41 +411,41 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			const sceneIdValue = SceneControllerConfigurationCCValues.sceneId(
 				groupId,
 			);
-			this.ensureMetadata(applHost, sceneIdValue);
+			this.ensureMetadata(ctx, sceneIdValue);
 
 			const dimmingDurationValue = SceneControllerConfigurationCCValues
 				.dimmingDuration(groupId);
-			this.ensureMetadata(applHost, dimmingDurationValue);
+			this.ensureMetadata(ctx, dimmingDurationValue);
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Scene Controller Configuration"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const groupCount = SceneControllerConfigurationCC.getGroupCountCached(
-			applHost,
+			ctx,
 			endpoint,
 		);
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "querying all scene controller configurations...",
 			direction: "outbound",
 		});
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying scene configuration for group #${groupId}...`,
@@ -455,7 +457,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 					`received scene configuration for group #${groupId}:
 scene ID:         ${group.sceneId}
 dimming duration: ${group.dimmingDuration.toString()}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

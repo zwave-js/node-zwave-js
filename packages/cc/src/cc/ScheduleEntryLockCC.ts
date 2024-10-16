@@ -32,6 +32,7 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -697,25 +698,25 @@ export class ScheduleEntryLockCC extends CommandClass {
 	declare ccCommand: ScheduleEntryLockCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Schedule Entry Lock"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying supported number of schedule slots...",
 			direction: "outbound",
@@ -729,7 +730,7 @@ day of year:     ${slotsResp.numYearDaySlots}`;
 				logMessage += `
 daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 			}
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -742,7 +743,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 			&& (!endpoint.supportsCC(CommandClasses.Time)
 				|| endpoint.getCCVersion(CommandClasses.Time) < 2)
 		) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "setting timezone information...",
 				direction: "outbound",
@@ -753,7 +754,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	/**

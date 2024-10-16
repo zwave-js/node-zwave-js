@@ -54,6 +54,8 @@ import {
 	type CCResponsePredicate,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -395,19 +397,19 @@ export class MultilevelSensorCC extends CommandClass {
 	declare ccCommand: MultilevelSensorCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Multilevel Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -415,7 +417,7 @@ export class MultilevelSensorCC extends CommandClass {
 
 		if (api.version >= 5) {
 			// Query the supported sensor types
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving supported sensor types...",
 				direction: "outbound",
@@ -427,13 +429,13 @@ export class MultilevelSensorCC extends CommandClass {
 						.map((t) => getSensorName(t))
 						.map((name) => `· ${name}`)
 						.join("\n");
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -445,7 +447,7 @@ export class MultilevelSensorCC extends CommandClass {
 			// As well as the supported scales for each sensor
 
 			for (const type of sensorTypes) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying supported scales for ${
 						getSensorName(type)
@@ -463,13 +465,13 @@ export class MultilevelSensorCC extends CommandClass {
 							)
 							.map((name) => `· ${name}`)
 							.join("\n");
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				} else {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Querying supported scales timed out, skipping interview...",
@@ -480,29 +482,29 @@ export class MultilevelSensorCC extends CommandClass {
 			}
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Multilevel Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(ctx);
 
 		if (api.version <= 4) {
 			// Sensors up to V4 only support a single value
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current sensor reading...",
 				direction: "outbound",
@@ -518,7 +520,7 @@ sensor type: ${getSensorName(mlsResponse.type)}
 value:       ${mlsResponse.value}${
 					sensorScale?.unit ? ` ${sensorScale.unit}` : ""
 				}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -533,7 +535,7 @@ value:       ${mlsResponse.value}${
 			}) || [];
 
 			for (const type of sensorTypes) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying ${
 						getSensorName(type)
@@ -546,7 +548,7 @@ value:       ${mlsResponse.value}${
 					const logMessage = `received current ${
 						getSensorName(type)
 					} sensor reading: ${value.value} ${value.scale.unit || ""}`;
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",

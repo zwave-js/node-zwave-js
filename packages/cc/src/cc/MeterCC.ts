@@ -63,6 +63,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -278,23 +280,29 @@ export function isAccumulatedValue(
 	switch (meterType) {
 		case 0x01: // Electric
 			return (
+				// kVarh
+				// Pulse count
 				scale === 0x00 // kWh
 				|| scale === 0x01 // kVAh
-				|| scale === 0x03 // Pulse count
-				|| scale === 0x08 // kVarh
+				|| scale === 0x03
+				|| scale === 0x08
 			);
 		case 0x02: // Gas
 			return (
+				// Pulse count
+				// ft³
 				scale === 0x00 // m³
-				|| scale === 0x01 // ft³
-				|| scale === 0x03 // Pulse count
+				|| scale === 0x01
+				|| scale === 0x03
 			);
 		case 0x03: // Water
 			return (
+				// Pulse count
+				// US gallons
 				scale === 0x00 // m³
 				|| scale === 0x01 // ft³
-				|| scale === 0x02 // US gallons
-				|| scale === 0x03 // Pulse count
+				|| scale === 0x02
+				|| scale === 0x03
 			);
 		case 0x04: // Heating
 			return scale === 0x00; // kWh
@@ -638,26 +646,26 @@ export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Meter,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		if (api.version >= 2) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying meter support...",
 				direction: "outbound",
@@ -684,13 +692,13 @@ supported rate types: ${
 						.join("")
 				}
 supports reset:       ${suppResp.supportsReset}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying meter support timed out, skipping interview...",
@@ -701,48 +709,48 @@ supports reset:       ${suppResp.supportsReset}`;
 		}
 
 		// Query current meter values
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Meter,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		if (api.version === 1) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying default meter value...`,
 				direction: "outbound",
 			});
 			await api.get();
 		} else {
-			const type: number = this.getValue(applHost, MeterCCValues.type)
+			const type: number = this.getValue(ctx, MeterCCValues.type)
 				?? 0;
 
 			const supportedScales: readonly number[] =
-				this.getValue(applHost, MeterCCValues.supportedScales) ?? [];
+				this.getValue(ctx, MeterCCValues.supportedScales) ?? [];
 
 			const supportedRateTypes: readonly RateType[] =
-				this.getValue(applHost, MeterCCValues.supportedRateTypes) ?? [];
+				this.getValue(ctx, MeterCCValues.supportedRateTypes) ?? [];
 
 			const rateTypes = supportedRateTypes.length
 				? supportedRateTypes
 				: [undefined];
 			for (const rateType of rateTypes) {
 				for (const scale of supportedScales) {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying meter value (type = ${
 							getMeterName(type)

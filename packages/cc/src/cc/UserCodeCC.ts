@@ -46,6 +46,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -887,19 +889,19 @@ export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["User Code"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -907,13 +909,13 @@ export class UserCodeCC extends CommandClass {
 
 		// Query capabilities first to determine what needs to be done when refreshing
 		if (api.version >= 2) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: "querying capabilities...",
 				direction: "outbound",
 			});
 			const caps = await api.getCapabilities();
 			if (!caps) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"User Code capabilities query timed out, skipping interview...",
@@ -923,13 +925,13 @@ export class UserCodeCC extends CommandClass {
 			}
 		}
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "querying number of user codes...",
 			direction: "outbound",
 		});
 		const supportedUsers = await api.getUsersCount();
 		if (supportedUsers == undefined) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying number of user codes timed out, skipping interview...",
@@ -939,71 +941,71 @@ export class UserCodeCC extends CommandClass {
 		}
 
 		for (let userId = 1; userId <= supportedUsers; userId++) {
-			setUserCodeMetadata.call(this, applHost, userId);
+			setUserCodeMetadata.call(this, ctx, userId);
 		}
 
 		// Synchronize user codes and settings
-		if (applHost.getInterviewOptions()?.queryAllUserCodes) {
-			await this.refreshValues(applHost);
+		if (ctx.getInterviewOptions()?.queryAllUserCodes) {
+			await this.refreshValues(ctx);
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["User Code"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const supportsAdminCode: boolean = UserCodeCC.supportsAdminCodeCached(
-			applHost,
+			ctx,
 			endpoint,
 		);
 		const supportsUserCodeChecksum: boolean = this.getValue(
-			applHost,
+			ctx,
 			UserCodeCCValues.supportsUserCodeChecksum,
 		) ?? false;
 		const supportedKeypadModes: readonly KeypadMode[] =
-			this.getValue(applHost, UserCodeCCValues.supportedKeypadModes)
+			this.getValue(ctx, UserCodeCCValues.supportedKeypadModes)
 				?? [];
 		const supportedUsers: number =
-			this.getValue(applHost, UserCodeCCValues.supportedUsers) ?? 0;
+			this.getValue(ctx, UserCodeCCValues.supportedUsers) ?? 0;
 		const supportsMultipleUserCodeReport = !!this.getValue(
-			applHost,
+			ctx,
 			UserCodeCCValues.supportsMultipleUserCodeReport,
 		);
 
 		// Check for changed values and codes
 		if (api.version >= 2) {
 			if (supportsAdminCode) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: "querying admin code...",
 					direction: "outbound",
 				});
 				await api.getAdminCode();
 			}
 			if (supportedKeypadModes.length > 1) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: "querying active keypad mode...",
 					direction: "outbound",
 				});
 				await api.getKeypadMode();
 			}
 			const storedUserCodeChecksum: number =
-				this.getValue(applHost, UserCodeCCValues.userCodeChecksum) ?? 0;
+				this.getValue(ctx, UserCodeCCValues.userCodeChecksum) ?? 0;
 
 			let currentUserCodeChecksum: number | undefined = 0;
 			if (supportsUserCodeChecksum) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message: "retrieving current user code checksum...",
 					direction: "outbound",
 				});
@@ -1013,7 +1015,7 @@ export class UserCodeCC extends CommandClass {
 				!supportsUserCodeChecksum
 				|| currentUserCodeChecksum !== storedUserCodeChecksum
 			) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					message:
 						"checksum changed or is not supported, querying all user codes...",
 					direction: "outbound",
@@ -1027,7 +1029,7 @@ export class UserCodeCC extends CommandClass {
 						if (response) {
 							nextUserId = response.nextUserId;
 						} else {
-							applHost.logNode(node.id, {
+							ctx.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message:
 									`Querying user code #${nextUserId} timed out, skipping the remaining interview...`,
@@ -1045,7 +1047,7 @@ export class UserCodeCC extends CommandClass {
 			}
 		} else {
 			// V1
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: "querying all user codes...",
 				direction: "outbound",
 			});

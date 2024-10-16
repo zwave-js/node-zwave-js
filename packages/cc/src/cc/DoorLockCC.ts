@@ -38,6 +38,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -596,19 +598,19 @@ export class DoorLockCC extends CommandClass {
 	declare ccCommand: DoorLockCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Door Lock"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -624,7 +626,7 @@ export class DoorLockCC extends CommandClass {
 		let latchSupported = true;
 
 		if (api.version >= 4) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting lock capabilities...",
 				direction: "outbound",
@@ -656,7 +658,7 @@ supports auto-relock:      ${resp.autoRelockSupported}
 supports hold-and-release: ${resp.holdAndReleaseSupported}
 supports twist assist:     ${resp.twistAssistSupported}
 supports block to block:   ${resp.blockToBlockSupported}`;
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -668,7 +670,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 
 				// Update metadata of settable states
 				const targetModeValue = DoorLockCCValues.targetMode;
-				this.setMetadata(applHost, targetModeValue, {
+				this.setMetadata(ctx, targetModeValue, {
 					...targetModeValue.meta,
 					states: enumValuesToMetadataStates(
 						DoorLockMode,
@@ -677,7 +679,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				});
 
 				const operationTypeValue = DoorLockCCValues.operationType;
-				this.setMetadata(applHost, operationTypeValue, {
+				this.setMetadata(ctx, operationTypeValue, {
 					...operationTypeValue.meta,
 					states: enumValuesToMetadataStates(
 						DoorLockOperationType,
@@ -692,50 +694,50 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 		if (!hadCriticalTimeout) {
 			// Save support information for the status values
 			const doorStatusValue = DoorLockCCValues.doorStatus;
-			if (doorSupported) this.setMetadata(applHost, doorStatusValue);
+			if (doorSupported) this.setMetadata(ctx, doorStatusValue);
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.doorSupported,
 				doorSupported,
 			);
 
 			const latchStatusValue = DoorLockCCValues.latchStatus;
-			if (latchSupported) this.setMetadata(applHost, latchStatusValue);
+			if (latchSupported) this.setMetadata(ctx, latchStatusValue);
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.latchSupported,
 				latchSupported,
 			);
 
 			const boltStatusValue = DoorLockCCValues.boltStatus;
-			if (boltSupported) this.setMetadata(applHost, boltStatusValue);
+			if (boltSupported) this.setMetadata(ctx, boltStatusValue);
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.boltSupported,
 				boltSupported,
 			);
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		if (!hadCriticalTimeout) this.setInterviewComplete(applHost, true);
+		if (!hadCriticalTimeout) this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Door Lock"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting lock configuration...",
 			direction: "outbound",
@@ -773,14 +775,14 @@ twist assist                   ${!!config.twistAssist}
 block to block                 ${!!config.blockToBlock}`;
 			}
 
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		}
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting current lock status...",
 			direction: "outbound",
@@ -810,7 +812,7 @@ bolt status:        ${status.boltStatus}`;
 				logMessage += `
 latch status:       ${status.latchStatus}`;
 			}
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",

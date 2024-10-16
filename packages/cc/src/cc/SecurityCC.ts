@@ -33,9 +33,9 @@ import { randomBytes } from "node:crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -379,19 +379,19 @@ export class SecurityCC extends CommandClass {
 	}
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Security,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "Querying securely supported commands (S0)...",
 			direction: "outbound",
 		});
@@ -408,7 +408,7 @@ export class SecurityCC extends CommandClass {
 				controlledCCs = resp.controlledCCs;
 				break;
 			} else if (attempts < MAX_ATTEMPTS) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`Querying securely supported commands (S0), attempt ${attempts}/${MAX_ATTEMPTS} failed. Retrying in 500ms...`,
@@ -420,7 +420,7 @@ export class SecurityCC extends CommandClass {
 
 		if (!supportedCCs || !controlledCCs) {
 			if (node.hasSecurityClass(SecurityClass.S0_Legacy) === true) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "Querying securely supported commands (S0) failed",
 					level: "warn",
@@ -429,7 +429,7 @@ export class SecurityCC extends CommandClass {
 			} else {
 				// We didn't know if the node was secure and it didn't respond,
 				// assume that it doesn't have the S0 security class
-				applHost.logNode(
+				ctx.logNode(
 					node.id,
 					`The node was not granted the S0 security class. Continuing interview non-securely.`,
 				);
@@ -449,7 +449,7 @@ export class SecurityCC extends CommandClass {
 		for (const cc of controlledCCs) {
 			logLines.push(`· ${getCCName(cc)}`);
 		}
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: logLines.join("\n"),
 			direction: "inbound",
 		});
@@ -485,14 +485,14 @@ export class SecurityCC extends CommandClass {
 		// We know for sure that the node is included securely
 		if (node.hasSecurityClass(SecurityClass.S0_Legacy) !== true) {
 			node.setSecurityClass(SecurityClass.S0_Legacy, true);
-			applHost.logNode(
+			ctx.logNode(
 				node.id,
 				`The node was granted the S0 security class`,
 			);
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */

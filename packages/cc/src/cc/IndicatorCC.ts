@@ -38,6 +38,8 @@ import {
 	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -692,26 +694,26 @@ export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Indicator,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		if (api.version > 1) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "scanning supported indicator IDs...",
 				direction: "outbound",
@@ -722,7 +724,7 @@ export class IndicatorCC extends CommandClass {
 			do {
 				const supportedResponse = await api.getSupported(curId);
 				if (!supportedResponse) {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Time out while scanning supported indicator IDs, skipping interview...",
@@ -739,7 +741,7 @@ export class IndicatorCC extends CommandClass {
 
 			// The IDs are not stored by the report CCs so store them here once we have all of them
 			this.setValue(
-				applHost,
+				ctx,
 				IndicatorCCValues.supportedIndicatorIds,
 				supportedIndicatorIds,
 			);
@@ -748,7 +750,7 @@ export class IndicatorCC extends CommandClass {
 					", ",
 				)
 			}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -758,7 +760,7 @@ export class IndicatorCC extends CommandClass {
 				const manufacturerDefinedIndicatorIds = supportedIndicatorIds
 					.filter((id) => isManufacturerDefinedIndicator(id));
 				if (manufacturerDefinedIndicatorIds.length > 0) {
-					applHost.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"retrieving description for manufacturer-defined indicator IDs...",
@@ -773,27 +775,27 @@ export class IndicatorCC extends CommandClass {
 		}
 
 		// Query current values
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Indicator,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		if (api.version === 1) {
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting current indicator value...",
 				direction: "outbound",
@@ -801,11 +803,11 @@ export class IndicatorCC extends CommandClass {
 			await api.get();
 		} else {
 			const supportedIndicatorIds: number[] = this.getValue(
-				applHost,
+				ctx,
 				IndicatorCCValues.supportedIndicatorIds,
 			) ?? [];
 			for (const indicatorId of supportedIndicatorIds) {
-				applHost.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `requesting current indicator value (id = ${
 						num2hex(
