@@ -4,6 +4,7 @@ import {
 	NOT_KNOWN,
 	NodeIDType,
 	SecurityClass,
+	type SecurityManagers,
 	securityClassOrder,
 } from "@zwave-js/core";
 import {
@@ -68,14 +69,13 @@ export class MockController {
 		};
 
 		const securityClasses = new Map<number, Map<SecurityClass, boolean>>();
+
+		const self = this;
 		this.encodingContext = {
 			homeId: this.homeId,
 			ownNodeId: this.ownNodeId,
 			// TODO: LR is not supported in mocks
 			nodeIdType: NodeIDType.Short,
-			securityManager: undefined,
-			securityManager2: undefined,
-			securityManagerLR: undefined,
 			hasSecurityClass(
 				nodeId: number,
 				securityClass: SecurityClass,
@@ -118,6 +118,15 @@ export class MockController {
 				return (endpoint ?? node).implementedCCs.get(cc)?.version ?? 0;
 			},
 			getDeviceConfig: () => undefined,
+			get securityManager() {
+				return self.securityManagers.securityManager;
+			},
+			get securityManager2() {
+				return self.securityManagers.securityManager2;
+			},
+			get securityManagerLR() {
+				return self.securityManagers.securityManagerLR;
+			},
 		};
 		this.parsingContext = {
 			...this.encodingContext,
@@ -128,6 +137,12 @@ export class MockController {
 
 	public homeId: number;
 	public ownNodeId: number;
+
+	public securityManagers: SecurityManagers = {
+		securityManager: undefined,
+		securityManager2: undefined,
+		securityManagerLR: undefined,
+	};
 
 	public encodingContext: MessageEncodingContext;
 	public parsingContext: MessageParsingContext;

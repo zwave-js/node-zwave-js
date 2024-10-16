@@ -48,7 +48,7 @@ integrationTest(
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
 			mockNode.securityManagers.securityManager2 = sm2Node;
-			// The fixtures define Access Control as granted, but we want the node to send commands using Unauthenticated
+			// The fixtures define Access Control as granted, but we want the prode to send commands using Unauthenticated
 			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
