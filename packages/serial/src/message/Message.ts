@@ -95,7 +95,11 @@ export type MessageOptions =
 	| MessageDeserializationOptions;
 
 export interface MessageEncodingContext
-	extends Readonly<SecurityManagers>, HostIDs, GetSupportedCCVersion
+	extends
+		Readonly<SecurityManagers>,
+		HostIDs,
+		GetSupportedCCVersion,
+		GetDeviceConfig
 {
 	/** How many bytes a node ID occupies in serial API commands */
 	nodeIdType: NodeIDType;

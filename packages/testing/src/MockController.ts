@@ -115,9 +115,11 @@ export class MockController {
 				const endpoint = node.endpoints.get(endpointIndex);
 				return (endpoint ?? node).implementedCCs.get(cc)?.version ?? 0;
 			},
+			getDeviceConfig: () => undefined,
 		};
 		this.parsingContext = {
 			...this.encodingContext,
+			getDeviceConfig: () => undefined,
 		};
 
 		void this.execute();

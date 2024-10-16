@@ -666,6 +666,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this.hasSecurityClass(nodeId, securityClass),
 			setSecurityClass: (nodeId, securityClass, granted) =>
 				this.setSecurityClass(nodeId, securityClass, granted),
+			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
 		};
 		this.messageEncodingContext = {
 			getHighestSecurityClass: (nodeId) =>
@@ -676,6 +677,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this.setSecurityClass(nodeId, securityClass, granted),
 			getSupportedCCVersion: (cc, nodeId, endpointIndex) =>
 				this.getSupportedCCVersion(cc, nodeId, endpointIndex),
+			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
 		};
 
 		this.immediateQueue = new TransactionQueue({

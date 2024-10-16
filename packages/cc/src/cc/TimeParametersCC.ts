@@ -15,6 +15,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetDeviceConfig,
 	GetValueDB,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
@@ -64,7 +65,7 @@ export const TimeParametersCCValues = Object.freeze({
  * Determines if the node expects local time instead of UTC.
  */
 function shouldUseLocalTime(
-	applHost: ZWaveApplicationHost,
+	ctx: GetDeviceConfig,
 	endpoint: EndpointId & SupportsCC & ControlsCC,
 ): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
@@ -76,7 +77,7 @@ function shouldUseLocalTime(
 	// Incidentally, this is also true when they don't support TimeCC at all
 
 	// Use UTC though when the device config file explicitly requests it
-	const forceUTC = !!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
+	const forceUTC = !!ctx.getDeviceConfig?.(endpoint.nodeId)?.compat
 		?.useUTCInTimeParametersCC;
 	if (forceUTC) return false;
 

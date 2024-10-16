@@ -868,11 +868,11 @@ export class IndicatorCC extends CommandClass {
 	}
 
 	public static getSupportedPropertyIDsCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		indicatorId: number,
 	): MaybeNotKnown<number[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				IndicatorCCValues.supportedPropertyIDs(indicatorId).endpoint(

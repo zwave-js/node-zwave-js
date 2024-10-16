@@ -16,6 +16,7 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetDeviceConfig,
 	GetValueDB,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
@@ -323,16 +324,14 @@ export class AssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getGroupCountCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): number {
-		return (
-			applHost
-				.getValueDB(endpoint.nodeId)
-				.getValue(
-					AssociationCCValues.groupCount.endpoint(endpoint.index),
-				) || 0
-		);
+		return ctx
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				AssociationCCValues.groupCount.endpoint(endpoint.index),
+			) || 0;
 	}
 
 	/**
@@ -340,12 +339,12 @@ export class AssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getMaxNodesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB & GetDeviceConfig,
 		endpoint: EndpointId,
 		groupId: number,
 	): number {
 		return (
-			applHost
+			ctx
 				.getValueDB(endpoint.nodeId)
 				.getValue(
 					AssociationCCValues.maxNodes(groupId).endpoint(
@@ -354,7 +353,7 @@ export class AssociationCC extends CommandClass {
 				)
 				// If the information is not available, fall back to the configuration file if possible
 				// This can happen on some legacy devices which have "hidden" association groups
-				?? applHost
+				?? ctx
 					.getDeviceConfig?.(endpoint.nodeId)
 					?.getAssociationConfigForEndpoint(endpoint.index, groupId)
 					?.maxNodes
@@ -367,12 +366,12 @@ export class AssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getAllDestinationsCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
-		const groupCount = this.getGroupCountCached(applHost, endpoint);
-		const valueDB = applHost.getValueDB(endpoint.nodeId);
+		const groupCount = this.getGroupCountCached(ctx, endpoint);
+		const valueDB = ctx.getValueDB(endpoint.nodeId);
 		for (let i = 1; i <= groupCount; i++) {
 			// Add all root destinations
 			const nodes = valueDB.getValue<number[]>(

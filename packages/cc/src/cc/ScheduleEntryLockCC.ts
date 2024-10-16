@@ -116,7 +116,7 @@ function toPropertyKey(
 /** Caches information about a schedule */
 function persistSchedule(
 	this: ScheduleEntryLockCC,
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	scheduleKind: ScheduleEntryLockScheduleKind,
 	userId: number,
 	slotId: number,
@@ -134,20 +134,20 @@ function persistSchedule(
 	);
 
 	if (schedule != undefined) {
-		this.setValue(applHost, scheduleValue, schedule);
+		this.setValue(ctx, scheduleValue, schedule);
 	} else {
-		this.removeValue(applHost, scheduleValue);
+		this.removeValue(ctx, scheduleValue);
 	}
 }
 
 /** Updates the schedule kind assumed to be active for user in the cache */
 function setUserCodeScheduleKindCached(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 	userId: number,
 	scheduleKind: ScheduleEntryLockScheduleKind,
 ): void {
-	applHost
+	ctx
 		.getValueDB(endpoint.nodeId)
 		.setValue(
 			ScheduleEntryLockCCValues.scheduleKind(userId).endpoint(
@@ -159,13 +159,13 @@ function setUserCodeScheduleKindCached(
 
 /** Updates whether scheduling is active for one or all user(s) in the cache */
 function setUserCodeScheduleEnabledCached(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 	userId: number | undefined,
 	enabled: boolean,
 ): void {
 	const setEnabled = (userId: number) => {
-		applHost
+		ctx
 			.getValueDB(endpoint.nodeId)
 			.setValue(
 				ScheduleEntryLockCCValues.userEnabled(userId).endpoint(
@@ -177,7 +177,7 @@ function setUserCodeScheduleEnabledCached(
 
 	if (userId == undefined) {
 		// Enable/disable all users
-		const numUsers = UserCodeCC.getSupportedUsersCached(applHost, endpoint)
+		const numUsers = UserCodeCC.getSupportedUsersCached(ctx, endpoint)
 			?? 0;
 
 		for (let userId = 1; userId <= numUsers; userId++) {
@@ -761,18 +761,16 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 * This only works AFTER the interview process
 	 */
 	public static getNumWeekDaySlotsCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): number {
-		return (
-			applHost
-				.getValueDB(endpoint.nodeId)
-				.getValue(
-					ScheduleEntryLockCCValues.numWeekDaySlots.endpoint(
-						endpoint.index,
-					),
-				) || 0
-		);
+		return ctx
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				ScheduleEntryLockCCValues.numWeekDaySlots.endpoint(
+					endpoint.index,
+				),
+			) || 0;
 	}
 
 	/**
@@ -780,18 +778,16 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 * This only works AFTER the interview process
 	 */
 	public static getNumYearDaySlotsCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): number {
-		return (
-			applHost
-				.getValueDB(endpoint.nodeId)
-				.getValue(
-					ScheduleEntryLockCCValues.numYearDaySlots.endpoint(
-						endpoint.index,
-					),
-				) || 0
-		);
+		return ctx
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				ScheduleEntryLockCCValues.numYearDaySlots.endpoint(
+					endpoint.index,
+				),
+			) || 0;
 	}
 
 	/**
@@ -799,18 +795,16 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 * This only works AFTER the interview process
 	 */
 	public static getNumDailyRepeatingSlotsCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): number {
-		return (
-			applHost
-				.getValueDB(endpoint.nodeId)
-				.getValue(
-					ScheduleEntryLockCCValues.numDailyRepeatingSlots.endpoint(
-						endpoint.index,
-					),
-				) || 0
-		);
+		return ctx
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				ScheduleEntryLockCCValues.numDailyRepeatingSlots.endpoint(
+					endpoint.index,
+				),
+			) || 0;
 	}
 
 	/**
@@ -822,11 +816,11 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 * only the desired ones.
 	 */
 	public static getUserCodeScheduleEnabledCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		userId: number,
 	): boolean {
-		return !!applHost
+		return !!ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				ScheduleEntryLockCCValues.userEnabled(userId).endpoint(
@@ -844,11 +838,11 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 * which will automatically switch the user to that scheduling kind.
 	 */
 	public static getUserCodeScheduleKindCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<ScheduleEntryLockScheduleKind> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue<ScheduleEntryLockScheduleKind>(
 				ScheduleEntryLockCCValues.scheduleKind(userId).endpoint(
@@ -904,7 +898,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	 * This only works AFTER the interview process.
 	 */
 	public static getScheduleCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind,
 		userId: number,
@@ -915,7 +909,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 		| ScheduleEntryLockDailyRepeatingSchedule
 		| false
 	> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				ScheduleEntryLockCCValues.schedule(

@@ -254,10 +254,10 @@ export const DoorLockCCValues = Object.freeze({
 });
 
 function shouldAutoCreateLatchStatusValue(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 ): boolean {
-	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	const valueDB = ctx.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
 		DoorLockCCValues.latchSupported.endpoint(endpoint.index),
@@ -265,10 +265,10 @@ function shouldAutoCreateLatchStatusValue(
 }
 
 function shouldAutoCreateBoltStatusValue(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 ): boolean {
-	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	const valueDB = ctx.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
 		DoorLockCCValues.boltSupported.endpoint(endpoint.index),
@@ -276,10 +276,10 @@ function shouldAutoCreateBoltStatusValue(
 }
 
 function shouldAutoCreateDoorStatusValue(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 ): boolean {
-	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	const valueDB = ctx.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
 		DoorLockCCValues.doorSupported.endpoint(endpoint.index),
@@ -287,10 +287,10 @@ function shouldAutoCreateDoorStatusValue(
 }
 
 function shouldAutoCreateTwistAssistConfigValue(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 ): boolean {
-	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	const valueDB = ctx.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
 		DoorLockCCValues.twistAssistSupported.endpoint(endpoint.index),
@@ -298,10 +298,10 @@ function shouldAutoCreateTwistAssistConfigValue(
 }
 
 function shouldAutoCreateBlockToBlockConfigValue(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 ): boolean {
-	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	const valueDB = ctx.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
 		DoorLockCCValues.blockToBlockSupported.endpoint(endpoint.index),
@@ -309,10 +309,10 @@ function shouldAutoCreateBlockToBlockConfigValue(
 }
 
 function shouldAutoCreateAutoRelockConfigValue(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 ): boolean {
-	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	const valueDB = ctx.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
 		DoorLockCCValues.autoRelockSupported.endpoint(endpoint.index),
@@ -320,10 +320,10 @@ function shouldAutoCreateAutoRelockConfigValue(
 }
 
 function shouldAutoCreateHoldAndReleaseConfigValue(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 ): boolean {
-	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	const valueDB = ctx.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	return !!valueDB.getValue(
 		DoorLockCCValues.holdAndReleaseSupported.endpoint(endpoint.index),

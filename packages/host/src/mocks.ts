@@ -55,7 +55,7 @@ export function createTestingHost<
 		securityManager: undefined,
 		securityManager2: undefined,
 		securityManagerLR: undefined,
-		getDeviceConfig: undefined,
+		getDeviceConfig: () => undefined,
 		lookupManufacturer: () => undefined,
 		logNode: () => {},
 		// options: {

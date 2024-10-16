@@ -257,11 +257,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	/** Returns the name of an association group */
 	public static getGroupNameCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<string> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				AssociationGroupInfoCCValues.groupName(groupId).endpoint(
@@ -272,11 +272,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	/** Returns the association profile for an association group */
 	public static getGroupProfileCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<AssociationGroupInfoProfile> {
-		return applHost.getValueDB(endpoint.nodeId).getValue<{
+		return ctx.getValueDB(endpoint.nodeId).getValue<{
 			profile: AssociationGroupInfoProfile;
 		}>(
 			AssociationGroupInfoCCValues.groupInfo(groupId).endpoint(
@@ -288,11 +288,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	/** Returns the dictionary of all commands issued by the given association group */
 	public static getIssuedCommandsCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<ReadonlyMap<CommandClasses, readonly number[]>> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				AssociationGroupInfoCCValues.commands(groupId).endpoint(
@@ -332,7 +332,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	private static getAssociationGroupCountCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId & SupportsCC,
 	): number {
 		// The association group count is either determined by the
@@ -342,12 +342,12 @@ export class AssociationGroupInfoCC extends CommandClass {
 			// First query the Multi Channel Association CC
 			(endpoint.supportsCC(CommandClasses["Multi Channel Association"])
 				&& MultiChannelAssociationCC.getGroupCountCached(
-					applHost,
+					ctx,
 					endpoint,
 				))
 			// Then the Association CC
 			|| (endpoint.supportsCC(CommandClasses.Association)
-				&& AssociationCC.getGroupCountCached(applHost, endpoint))
+				&& AssociationCC.getGroupCountCached(ctx, endpoint))
 			// And fall back to 0
 			|| 0
 		);

@@ -13,6 +13,7 @@ import {
 	type NodeId,
 	type PhysicalNodes,
 	type QueryNodeStatus,
+	type SecurityManagers,
 	type SendCommandOptions,
 	type SupervisionResult,
 	type SupportsCC,
@@ -26,7 +27,19 @@ import {
 	getCCName,
 	stripUndefined,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost } from "@zwave-js/host";
+import type {
+	GetCommunicationTimeouts,
+	GetDeviceConfig,
+	GetNode,
+	GetSafeCCVersion,
+	GetSupportedCCVersion,
+	GetUserPreferences,
+	GetValueDB,
+	HostIDs,
+	LogNode,
+	SchedulePoll,
+	SendCommand,
+} from "@zwave-js/host";
 import {
 	type AllOrNone,
 	type OnlyMethods,
@@ -153,6 +166,21 @@ export interface SchedulePollOptions {
 	transition?: "fast" | "slow";
 }
 
+// Defines the necessary traits the host passed to a CC API must have
+export type CCAPIHost =
+	& HostIDs
+	& GetNode<CCAPINode>
+	& GetValueDB
+	& GetSupportedCCVersion
+	& GetSafeCCVersion
+	& SecurityManagers
+	& GetDeviceConfig
+	& SendCommand
+	& GetCommunicationTimeouts
+	& GetUserPreferences
+	& SchedulePoll
+	& LogNode;
+
 // Defines the necessary traits a node passed to a CC API must have
 export type CCAPINode = NodeId & ListenBehavior & QueryNodeStatus;
 
@@ -188,7 +216,7 @@ export type VirtualCCAPIEndpoint = CCAPIEndpoint & VirtualEndpointId;
  */
 export class CCAPI {
 	public constructor(
-		protected readonly applHost: ZWaveApplicationHost<CCAPINode>,
+		protected readonly applHost: CCAPIHost,
 		protected readonly endpoint: CCAPIEndpoint,
 	) {
 		this.ccId = getCommandClass(this);
@@ -196,7 +224,7 @@ export class CCAPI {
 
 	public static create<T extends CommandClasses>(
 		ccId: T,
-		applHost: ZWaveApplicationHost<CCAPINode>,
+		applHost: CCAPIHost,
 		endpoint: CCAPIEndpoint,
 		requireSupport?: boolean,
 	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
@@ -612,7 +640,7 @@ export class CCAPI {
 }
 
 function overrideQueriesWrapper(
-	applHost: ZWaveApplicationHost,
+	applHost: GetValueDB & LogNode,
 	endpoint: PhysicalCCAPIEndpoint,
 	ccId: CommandClasses,
 	method: string,
@@ -752,7 +780,7 @@ function overrideQueriesWrapper(
 /** A CC API that is only available for physical endpoints */
 export class PhysicalCCAPI extends CCAPI {
 	public constructor(
-		applHost: ZWaveApplicationHost<CCAPINode>,
+		applHost: CCAPIHost,
 		endpoint: CCAPIEndpoint,
 	) {
 		super(applHost, endpoint);
@@ -763,7 +791,7 @@ export class PhysicalCCAPI extends CCAPI {
 }
 
 export type APIConstructor<T extends CCAPI = CCAPI> = new (
-	applHost: ZWaveApplicationHost<CCAPINode>,
+	applHost: CCAPIHost,
 	endpoint: CCAPIEndpoint,
 ) => T;
 

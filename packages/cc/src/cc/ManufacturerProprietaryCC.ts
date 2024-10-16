@@ -10,7 +10,7 @@ import type {
 } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI, type CCAPIEndpoint, type CCAPINode } from "../lib/API";
+import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
 import {
 	type CCCommandOptions,
 	type CCNode,
@@ -42,7 +42,7 @@ export type ManufacturerProprietaryCCConstructor<
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
 	public constructor(
-		applHost: ZWaveApplicationHost<CCAPINode>,
+		applHost: CCAPIHost,
 		endpoint: CCAPIEndpoint,
 	) {
 		super(applHost, endpoint);

@@ -36,6 +36,8 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetDeviceConfig,
+	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
 	ZWaveApplicationHost,
@@ -605,7 +607,7 @@ export class CommandClass implements CCId {
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
 	public getNode<T extends NodeId>(
-		applHost: ZWaveApplicationHost<T>,
+		applHost: GetNode<T>,
 	): T | undefined {
 		if (this.isSinglecast()) {
 			return applHost.getNode(this.nodeId);
@@ -617,7 +619,7 @@ export class CommandClass implements CCId {
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
 	public getNodeUnsafe<T extends NodeId>(
-		applHost: ZWaveApplicationHost<T>,
+		applHost: GetNode<T>,
 	): T | undefined {
 		try {
 			return this.getNode(applHost);
@@ -632,16 +634,16 @@ export class CommandClass implements CCId {
 	}
 
 	public getEndpoint<T extends EndpointId>(
-		applHost: ZWaveApplicationHost<NodeId & GetEndpoint<T>>,
+		applHost: GetNode<NodeId & GetEndpoint<T>>,
 	): T | undefined {
 		return this.getNode(applHost)?.getEndpoint(this.endpointIndex);
 	}
 
 	/** Returns the value DB for this CC's node */
-	protected getValueDB(host: GetValueDB): ValueDB {
+	protected getValueDB(ctx: GetValueDB): ValueDB {
 		if (this.isSinglecast()) {
 			try {
-				return host.getValueDB(this.nodeId);
+				return ctx.getValueDB(this.nodeId);
 			} catch {
 				throw new ZWaveError(
 					"The node for this CC does not exist or the driver is not ready yet",
@@ -661,11 +663,11 @@ export class CommandClass implements CCId {
 	 * @param meta Will be used in place of the predefined metadata when given
 	 */
 	protected ensureMetadata(
-		host: GetValueDB,
+		ctx: GetValueDB,
 		ccValue: CCValue,
 		meta?: ValueMetadata,
 	): void {
-		const valueDB = this.getValueDB(host);
+		const valueDB = this.getValueDB(ctx);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		if (!valueDB.hasMetadata(valueId)) {
 			valueDB.setMetadata(valueId, meta ?? ccValue.meta);
@@ -677,10 +679,10 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected removeMetadata(
-		host: GetValueDB,
+		ctx: GetValueDB,
 		ccValue: CCValue,
 	): void {
-		const valueDB = this.getValueDB(host);
+		const valueDB = this.getValueDB(ctx);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.setMetadata(valueId, undefined);
 	}
@@ -691,11 +693,11 @@ export class CommandClass implements CCId {
 	 * @param meta Will be used in place of the predefined metadata when given
 	 */
 	protected setMetadata(
-		host: GetValueDB,
+		ctx: GetValueDB,
 		ccValue: CCValue,
 		meta?: ValueMetadata,
 	): void {
-		const valueDB = this.getValueDB(host);
+		const valueDB = this.getValueDB(ctx);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.setMetadata(valueId, meta ?? ccValue.meta);
 	}
@@ -705,10 +707,10 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getMetadata<T extends ValueMetadata>(
-		host: GetValueDB,
+		ctx: GetValueDB,
 		ccValue: CCValue,
 	): T | undefined {
-		const valueDB = this.getValueDB(host);
+		const valueDB = this.getValueDB(ctx);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		return valueDB.getMetadata(valueId) as any;
 	}
@@ -718,11 +720,11 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected setValue(
-		host: GetValueDB,
+		ctx: GetValueDB,
 		ccValue: CCValue,
 		value: unknown,
 	): void {
-		const valueDB = this.getValueDB(host);
+		const valueDB = this.getValueDB(ctx);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.setValue(valueId, value);
 	}
@@ -732,10 +734,10 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected removeValue(
-		host: GetValueDB,
+		ctx: GetValueDB,
 		ccValue: CCValue,
 	): void {
-		const valueDB = this.getValueDB(host);
+		const valueDB = this.getValueDB(ctx);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.removeValue(valueId);
 	}
@@ -745,10 +747,10 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getValue<T>(
-		host: GetValueDB,
+		ctx: GetValueDB,
 		ccValue: CCValue,
 	): T | undefined {
-		const valueDB = this.getValueDB(host);
+		const valueDB = this.getValueDB(ctx);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		return valueDB.getValue(valueId);
 	}
@@ -758,10 +760,10 @@ export class CommandClass implements CCId {
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */
 	protected getValueTimestamp(
-		host: GetValueDB,
+		ctx: GetValueDB,
 		ccValue: CCValue,
 	): number | undefined {
-		const valueDB = this.getValueDB(host);
+		const valueDB = this.getValueDB(ctx);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		return valueDB.getTimestamp(valueId);
 	}
@@ -799,14 +801,14 @@ export class CommandClass implements CCId {
 	}
 
 	private shouldAutoCreateValue(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB & GetDeviceConfig,
 		value: StaticCCValue,
 	): boolean {
 		return (
 			value.options.autoCreate === true
 			|| (typeof value.options.autoCreate === "function"
 				&& value.options.autoCreate(
-					applHost,
+					ctx,
 					{
 						virtual: false,
 						nodeId: this.nodeId as number,
@@ -818,7 +820,7 @@ export class CommandClass implements CCId {
 
 	/** Returns a list of all value names that are defined for this CommandClass */
 	public getDefinedValueIDs(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB & GetSupportedCCVersion & GetDeviceConfig,
 		includeInternal: boolean = false,
 	): ValueID[] {
 		// In order to compare value ids, we need them to be strings
@@ -839,7 +841,7 @@ export class CommandClass implements CCId {
 		};
 
 		// Return all value IDs for this CC...
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(ctx);
 		// ...which either have metadata or a value
 		const existingValueIds: ValueID[] = [
 			...valueDB.getValues(this.ccId),
@@ -852,7 +854,7 @@ export class CommandClass implements CCId {
 				&& this.nodeId !== NODE_ID_BROADCAST
 				&& this.nodeId !== NODE_ID_BROADCAST_LR
 			// On singlecast CCs, use the version the node reported support for,
-			? applHost.getSupportedCCVersion(
+			? ctx.getSupportedCCVersion(
 				this.ccId,
 				this.nodeId,
 				this.endpointIndex,
@@ -877,7 +879,7 @@ export class CommandClass implements CCId {
 			if (value.options.internal && !includeInternal) continue;
 
 			// And determine if this value should be automatically "created"
-			if (!this.shouldAutoCreateValue(applHost, value)) continue;
+			if (!this.shouldAutoCreateValue(ctx, value)) continue;
 
 			existingValueIds.push(value.endpoint(this.endpointIndex));
 		}

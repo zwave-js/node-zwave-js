@@ -27,6 +27,8 @@ import {
 import type {
 	CCEncodingContext,
 	CCParsingContext,
+	GetDeviceConfig,
+	GetSupportedCCVersion,
 	GetValueDB,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
@@ -155,7 +157,7 @@ function createConfigurationCCInstance(
 }
 
 function normalizeConfigurationCCAPISetOptions(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: CCAPIEndpoint,
 	options: ConfigurationCCAPISetOptions,
 ): NormalizedConfigurationCCAPISetOptions {
@@ -163,7 +165,7 @@ function normalizeConfigurationCCAPISetOptions(
 		// Variant 3: Partial param, look it up in the device config
 		const ccc = createConfigurationCCInstance(endpoint);
 		const paramInfo = ccc.getParamInformation(
-			applHost,
+			ctx,
 			options.parameter,
 			options.bitMask,
 		);
@@ -192,7 +194,7 @@ function normalizeConfigurationCCAPISetOptions(
 		// Variant 1: Normal parameter, defined in a config file
 		const ccc = createConfigurationCCInstance(endpoint);
 		const paramInfo = ccc.getParamInformation(
-			applHost,
+			ctx,
 			options.parameter,
 			options.bitMask,
 		);
@@ -212,7 +214,7 @@ function normalizeConfigurationCCAPISetOptions(
 }
 
 function bulkMergePartialParamValues(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: CCAPIEndpoint,
 	options: NormalizedConfigurationCCAPISetOptions[],
 ): (NormalizedConfigurationCCAPISetOptions & { bitMask?: undefined })[] {
@@ -236,7 +238,7 @@ function bulkMergePartialParamValues(
 			allParams.push({
 				parameter,
 				value: ccc.composePartialParamValues(
-					applHost,
+					ctx,
 					parameter,
 					partials.map((p) => ({
 						bitMask: p.bitMask!,
@@ -277,11 +279,11 @@ function reInterpretSignedValue(
 }
 
 function getParamInformationFromConfigFile(
-	applHost: ZWaveApplicationHost,
+	ctx: GetDeviceConfig,
 	nodeId: number,
 	endpointIndex: number,
 ): ParamInfoMap | undefined {
-	const deviceConfig = applHost.getDeviceConfig?.(nodeId);
+	const deviceConfig = ctx.getDeviceConfig?.(nodeId);
 	if (endpointIndex === 0) {
 		return (
 			deviceConfig?.paramInformation
@@ -1368,13 +1370,13 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Returns stored config parameter metadata for this CC's node
 	 */
 	public getParamInformation(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		parameter: number,
 		valueBitMask?: number,
 	): ConfigurationMetadata {
 		return (
 			this.getMetadata(
-				applHost,
+				ctx,
 				ConfigurationCCValues.paramInformation(parameter, valueBitMask),
 			) ?? {
 				...ValueMetadata.Any,
@@ -1387,17 +1389,17 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * and does not include partial parameters.
 	 */
 	public getQueriedParamInfos(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB & GetSupportedCCVersion & GetDeviceConfig,
 	): Record<number, ConfigurationMetadata> {
 		const parameters = distinct(
-			this.getDefinedValueIDs(applHost)
+			this.getDefinedValueIDs(ctx)
 				.map((v) => v.property)
 				.filter((p) => typeof p === "number"),
 		);
 		return composeObject(
 			parameters.map((p) => [
 				p as any,
-				this.getParamInformation(applHost, p),
+				this.getParamInformation(ctx, p),
 			]),
 		);
 	}
@@ -1406,10 +1408,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Returns stored config parameter metadata for all partial config params addressed with the given parameter number
 	 */
 	public getPartialParamInfos(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		parameter: number,
 	): (ValueID & { metadata: ConfigurationMetadata })[] {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(ctx);
 		return valueDB.findMetadata(
 			(id) =>
 				id.commandClass === this.ccId
@@ -1423,12 +1425,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Computes the full value of a parameter after applying a partial param value
 	 */
 	public composePartialParamValue(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		parameter: number,
 		bitMask: number,
 		partialValue: number,
 	): number {
-		return this.composePartialParamValues(applHost, parameter, [
+		return this.composePartialParamValues(ctx, parameter, [
 			{ bitMask, partialValue },
 		]);
 	}
@@ -1437,14 +1439,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Computes the full value of a parameter after applying multiple partial param values
 	 */
 	public composePartialParamValues(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		parameter: number,
 		partials: {
 			bitMask: number;
 			partialValue: number;
 		}[],
 	): number {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(ctx);
 		// Add the other values together
 		const otherValues = valueDB.findValues(
 			(id) =>

@@ -1059,10 +1059,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedUsersCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(UserCodeCCValues.supportedUsers.endpoint(endpoint.index));
 	}
@@ -1072,10 +1072,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedKeypadModesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<KeypadMode[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				UserCodeCCValues.supportedKeypadModes.endpoint(endpoint.index),
@@ -1087,10 +1087,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedUserIDStatusesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<UserIDStatus[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				UserCodeCCValues.supportedUserIDStatuses.endpoint(
@@ -1104,10 +1104,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedASCIICharsCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<string> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				UserCodeCCValues.supportedASCIIChars.endpoint(endpoint.index),
@@ -1119,10 +1119,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static supportsAdminCodeCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): boolean {
-		const valueDB = applHost
+		const valueDB = ctx
 			.getValueDB(endpoint.nodeId);
 		return valueDB.getValue<boolean>(
 			UserCodeCCValues.supportsAdminCode.endpoint(
@@ -1140,10 +1140,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static supportsAdminCodeDeactivationCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): boolean {
-		const valueDB = applHost
+		const valueDB = ctx
 			.getValueDB(endpoint.nodeId);
 		return valueDB.getValue<boolean>(
 			UserCodeCCValues.supportsAdminCodeDeactivation.endpoint(
@@ -1162,10 +1162,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static supportsMultipleUserCodeSetCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): boolean {
-		return !!applHost
+		return !!ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue<boolean>(
 				UserCodeCCValues.supportsMultipleUserCodeSet.endpoint(
@@ -1179,11 +1179,11 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the user IDs have been queried.
 	 */
 	public static getUserIdStatusCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<UserIDStatus> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue<UserIDStatus>(
 				UserCodeCCValues.userIdStatus(userId).endpoint(endpoint.index),
@@ -1195,11 +1195,11 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the user IDs have been queried.
 	 */
 	public static getUserCodeCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		userId: number,
 	): MaybeNotKnown<string | Buffer> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue<string | Buffer>(
 				UserCodeCCValues.userCode(userId).endpoint(endpoint.index),

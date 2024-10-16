@@ -293,10 +293,10 @@ duration: ${currentValue.duration}`;
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedSensorTypesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<AlarmSensorType[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				AlarmSensorCCValues.supportedSensorTypes.endpoint(

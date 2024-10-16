@@ -371,18 +371,16 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getGroupCountCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): number {
-		return (
-			applHost
-				.getValueDB(endpoint.nodeId)
-				.getValue(
-					MultiChannelAssociationCCValues.groupCount.endpoint(
-						endpoint.index,
-					),
-				) || 0
-		);
+		return ctx
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				MultiChannelAssociationCCValues.groupCount.endpoint(
+					endpoint.index,
+				),
+			) || 0;
 	}
 
 	/**
@@ -390,19 +388,17 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getMaxNodesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		groupId: number,
 	): number {
-		return (
-			applHost
-				.getValueDB(endpoint.nodeId)
-				.getValue(
-					MultiChannelAssociationCCValues.maxNodes(groupId).endpoint(
-						endpoint.index,
-					),
-				) ?? 0
-		);
+		return ctx
+			.getValueDB(endpoint.nodeId)
+			.getValue(
+				MultiChannelAssociationCCValues.maxNodes(groupId).endpoint(
+					endpoint.index,
+				),
+			) ?? 0;
 	}
 
 	/**
@@ -410,12 +406,12 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getAllDestinationsCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
-		const groupCount = this.getGroupCountCached(applHost, endpoint);
-		const valueDB = applHost.getValueDB(endpoint.nodeId);
+		const groupCount = this.getGroupCountCached(ctx, endpoint);
+		const valueDB = ctx.getValueDB(endpoint.nodeId);
 		for (let i = 1; i <= groupCount; i++) {
 			const groupDestinations: AssociationAddress[] = [];
 			// Add all node destinations

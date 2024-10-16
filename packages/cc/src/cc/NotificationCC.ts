@@ -215,10 +215,10 @@ export const NotificationCCValues = Object.freeze({
 });
 
 function shouldAutoCreateSimpleDoorSensorValue(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB,
 	endpoint: EndpointId,
 ): boolean {
-	const valueDB = applHost.tryGetValueDB(endpoint.nodeId);
+	const valueDB = ctx.tryGetValueDB(endpoint.nodeId);
 	if (!valueDB) return false;
 	const supportedACEvents = valueDB.getValue<readonly number[]>(
 		NotificationCCValues.supportedNotificationEvents(

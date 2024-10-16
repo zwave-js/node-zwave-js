@@ -35,7 +35,7 @@ export interface GetNextCallbackId {
 
 /** Allows querying device configuration for a node */
 export interface GetDeviceConfig {
-	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
+	getDeviceConfig(nodeId: number): DeviceConfig | undefined;
 }
 
 export interface GetSupportedCCVersion {
@@ -178,8 +178,7 @@ export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 		GetUserPreferences,
 		GetCommunicationTimeouts,
 		LogNode
-{
-}
+{}
 
 /** Allows scheduling a value refresh (poll) for a later time */
 export interface SchedulePoll {

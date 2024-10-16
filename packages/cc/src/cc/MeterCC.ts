@@ -787,10 +787,10 @@ supports reset:       ${suppResp.supportsReset}`;
 	 * This only works AFTER the interview process
 	 */
 	public static getMeterTypeCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(MeterCCValues.type.endpoint(endpoint.index));
 	}
@@ -800,10 +800,10 @@ supports reset:       ${suppResp.supportsReset}`;
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedScalesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<number[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(MeterCCValues.supportedScales.endpoint(endpoint.index));
 	}
@@ -813,10 +813,10 @@ supports reset:       ${suppResp.supportsReset}`;
 	 * This only works AFTER the interview process
 	 */
 	public static supportsResetCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<boolean> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(MeterCCValues.supportsReset.endpoint(endpoint.index));
 	}
@@ -826,10 +826,10 @@ supports reset:       ${suppResp.supportsReset}`;
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedRateTypesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<RateType[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				MeterCCValues.supportedRateTypes.endpoint(endpoint.index),

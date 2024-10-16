@@ -187,6 +187,8 @@ export class MockNode {
 				const endpoint = this.endpoints.get(endpointIndex);
 				return (endpoint ?? this).implementedCCs.get(cc)?.version ?? 0;
 			},
+			// Mock nodes don't care about device configuration files
+			getDeviceConfig: () => undefined,
 		};
 	}
 

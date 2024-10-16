@@ -14,6 +14,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetDeviceConfig,
 	GetValueDB,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
@@ -469,15 +470,13 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 * or the AssociationCC.
 	 */
 	public static getGroupCountCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB & GetDeviceConfig,
 		endpoint: EndpointId,
 	): number {
-		return (
-			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
-				?.forceSceneControllerGroupCount
-				?? AssociationCC.getGroupCountCached(applHost, endpoint)
-				?? 0
-		);
+		return ctx.getDeviceConfig?.(endpoint.nodeId)?.compat
+			?.forceSceneControllerGroupCount
+			?? AssociationCC.getGroupCountCached(ctx, endpoint)
+			?? 0;
 	}
 }
 

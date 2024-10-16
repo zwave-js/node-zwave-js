@@ -312,10 +312,10 @@ export class BinarySensorCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedSensorTypesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<BinarySensorType[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				BinarySensorCCValues.supportedSensorTypes.endpoint(

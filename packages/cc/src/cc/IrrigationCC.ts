@@ -1119,10 +1119,10 @@ export class IrrigationCC extends CommandClass {
 	 * This only works AFTER the node has been interviewed.
 	 */
 	public static getMaxValveTableSizeCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				IrrigationCCValues.maxValveTableSize.endpoint(endpoint.index),
@@ -1134,10 +1134,10 @@ export class IrrigationCC extends CommandClass {
 	 * This only works AFTER the node has been interviewed.
 	 */
 	public static getNumValvesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<number> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(IrrigationCCValues.numValves.endpoint(endpoint.index));
 	}
@@ -1147,10 +1147,10 @@ export class IrrigationCC extends CommandClass {
 	 * This only works AFTER the node has been interviewed.
 	 */
 	public static supportsMasterValveCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): boolean {
-		return !!applHost
+		return !!ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				IrrigationCCValues.supportsMasterValve.endpoint(endpoint.index),

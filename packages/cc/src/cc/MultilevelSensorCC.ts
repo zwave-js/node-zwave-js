@@ -27,7 +27,9 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetUserPreferences,
 	GetValueDB,
+	LogNode,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
@@ -107,13 +109,13 @@ export const MultilevelSensorCCValues = Object.freeze({
  * followed by the most recently used scale, otherwile falls back to the first supported one.
  */
 function getPreferredSensorScale(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB & GetUserPreferences & LogNode,
 	nodeId: number,
 	endpointIndex: number,
 	sensorType: number,
 	supportedScales: readonly number[],
 ): number {
-	const preferences = applHost.getUserPreferences();
+	const preferences = ctx.getUserPreferences();
 	const sensor = getSensor(sensorType);
 	// If the sensor type is unknown, we have no default. Use the user-provided scale or 0
 	if (!sensor) {
@@ -137,13 +139,13 @@ function getPreferredSensorScale(
 	if (preferred == undefined) {
 		const sensorName = getSensorName(sensorType);
 		const sensorValue = MultilevelSensorCCValues.value(sensorName);
-		const metadata = applHost
+		const metadata = ctx
 			.tryGetValueDB(nodeId)
 			?.getMetadata(sensorValue.endpoint(endpointIndex));
 		const scale = metadata?.ccSpecific?.scale;
 		if (typeof scale === "number" && supportedScales.includes(scale)) {
 			preferred = scale;
-			applHost.logNode(nodeId, {
+			ctx.logNode(nodeId, {
 				endpoint: endpointIndex,
 				message:
 					`No scale preference for sensor type ${sensorType}, using the last-used scale ${preferred}`,
@@ -153,7 +155,7 @@ function getPreferredSensorScale(
 	// Then fall back to the first supported scale
 	if (preferred == undefined) {
 		preferred = supportedScales[0] ?? 0;
-		applHost.logNode(nodeId, {
+		ctx.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`No scale preference for sensor type ${sensorType}, using the first supported scale ${preferred}`,
@@ -173,7 +175,7 @@ function getPreferredSensorScale(
 
 	if (typeof preferred === "string") {
 		// Looking up failed
-		applHost.logNode(nodeId, {
+		ctx.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`Preferred scale "${preferred}" for sensor type ${sensorType} not found, using the first supported scale ${
@@ -188,7 +190,7 @@ function getPreferredSensorScale(
 		// No info about supported scales, just use the preferred one
 		return preferred;
 	} else if (!supportedScales.includes(preferred)) {
-		applHost.logNode(nodeId, {
+		ctx.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`Preferred scale ${preferred} not supported for sensor type ${sensorType}, using the first supported scale`,
@@ -574,10 +576,10 @@ value:       ${mlsResponse.value}${
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedSensorTypesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 	): MaybeNotKnown<number[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				MultilevelSensorCCValues.supportedSensorTypes.endpoint(
@@ -591,11 +593,11 @@ value:       ${mlsResponse.value}${
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedScalesCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		sensorType: number,
 	): MaybeNotKnown<number[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				MultilevelSensorCCValues.supportedScales(sensorType).endpoint(
