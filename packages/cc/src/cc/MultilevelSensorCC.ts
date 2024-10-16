@@ -162,7 +162,7 @@ function getPreferredSensorScale(
 	if (typeof preferred === "string") {
 		for (const [key, scale] of Object.entries(sensor.scales)) {
 			if (scale.label === preferred || scale.unit === preferred) {
-				preferred = key;
+				preferred = parseInt(key, 10);
 				break;
 			}
 		}
