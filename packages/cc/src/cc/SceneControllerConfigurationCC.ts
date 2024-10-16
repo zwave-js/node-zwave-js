@@ -381,7 +381,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -392,7 +392,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			endpoint,
 		);
 		if (groupCount === 0) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`skipping Scene Controller Configuration interview because Association group count is unknown`,
@@ -437,12 +437,12 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			endpoint,
 		);
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "querying all scene controller configurations...",
 			direction: "outbound",
 		});
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying scene configuration for group #${groupId}...`,
@@ -454,7 +454,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 					`received scene configuration for group #${groupId}:
 scene ID:         ${group.sceneId}
 dimming duration: ${group.dimmingDuration.toString()}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

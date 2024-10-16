@@ -235,14 +235,14 @@ export class TimeParametersCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Synchronize the node's time
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "setting current time...",
 			direction: "outbound",

@@ -232,14 +232,14 @@ export class ThermostatModeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported thermostat modes...",
 			direction: "outbound",
@@ -254,13 +254,13 @@ export class ThermostatModeCC extends CommandClass {
 					)
 					.join("")
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported thermostat modes timed out, skipping interview...",
@@ -289,14 +289,14 @@ export class ThermostatModeCC extends CommandClass {
 		});
 
 		// Query the current status
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current thermostat mode...",
 			direction: "outbound",
 		});
 		const currentStatus = await api.get();
 		if (currentStatus) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "received current thermostat mode: "
 					+ getEnumMemberName(ThermostatMode, currentStatus.mode),

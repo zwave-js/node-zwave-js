@@ -135,13 +135,13 @@ export class ZWavePlusCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Z-Wave+ information...",
 			direction: "outbound",
@@ -155,7 +155,7 @@ role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
 node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
 installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
 user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",

@@ -176,7 +176,7 @@ export class DoorLockLoggingCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -201,7 +201,7 @@ export class DoorLockLoggingCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported number of records...",
 			direction: "outbound",
@@ -209,7 +209,7 @@ export class DoorLockLoggingCC extends CommandClass {
 		const recordsCount = await api.getRecordsCount();
 
 		if (!recordsCount) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Door Lock Logging records count query timed out, skipping interview...",
@@ -221,7 +221,7 @@ export class DoorLockLoggingCC extends CommandClass {
 		const recordsCountLogMessage = `supports ${recordsCount} record${
 			recordsCount === 1 ? "" : "s"
 		}`;
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: recordsCountLogMessage,
 			direction: "inbound",

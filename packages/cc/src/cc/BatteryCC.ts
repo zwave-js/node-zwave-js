@@ -282,7 +282,7 @@ export class BatteryCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -308,7 +308,7 @@ export class BatteryCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying battery status...",
 			direction: "outbound",
@@ -335,7 +335,7 @@ needs to be replaced or charged: ${
 is low temperature               ${batteryStatus.lowTemperatureStatus}
 is disconnected:                 ${batteryStatus.disconnected}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -344,7 +344,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 
 		if (api.version >= 2) {
 			// always query the health
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying battery health...",
 				direction: "outbound",
@@ -355,7 +355,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 				const logMessage = `received response for battery health:
 max. capacity: ${batteryHealth.maximumCapacity} %
 temperature:   ${batteryHealth.temperature} °C`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

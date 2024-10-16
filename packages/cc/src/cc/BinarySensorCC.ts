@@ -203,7 +203,7 @@ export class BinarySensorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -211,7 +211,7 @@ export class BinarySensorCC extends CommandClass {
 
 		// Find out which sensor types this sensor supports
 		if (api.version >= 2) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported sensor types...",
 				direction: "outbound",
@@ -226,13 +226,13 @@ export class BinarySensorCC extends CommandClass {
 						.map((name) => `\n· ${name}`)
 						.join("")
 				}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -263,14 +263,14 @@ export class BinarySensorCC extends CommandClass {
 
 		// Query (all of) the sensor's current value(s)
 		if (api.version === 1) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current value...",
 				direction: "outbound",
 			});
 			const currentValue = await api.get();
 			if (currentValue != undefined) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `received current value: ${currentValue}`,
 					direction: "inbound",
@@ -289,14 +289,14 @@ export class BinarySensorCC extends CommandClass {
 				if (!isEnumMember(BinarySensorType, type)) continue;
 
 				const sensorName = getEnumMemberName(BinarySensorType, type);
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying current value for ${sensorName}...`,
 					direction: "outbound",
 				});
 				const currentValue = await api.get(type);
 				if (currentValue != undefined) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`received current value for ${sensorName}: ${currentValue}`,

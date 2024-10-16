@@ -709,13 +709,13 @@ export class ScheduleEntryLockCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying supported number of schedule slots...",
 			direction: "outbound",
@@ -729,7 +729,7 @@ day of year:     ${slotsResp.numYearDaySlots}`;
 				logMessage += `
 daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -742,7 +742,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 			&& (!endpoint.supportsCC(CommandClasses.Time)
 				|| endpoint.getCCVersion(CommandClasses.Time) < 2)
 		) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "setting timezone information...",
 				direction: "outbound",

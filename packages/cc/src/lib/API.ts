@@ -340,9 +340,10 @@ export class CCAPI {
 		// Figure out the delay. If a non-zero duration was given or this is a "fast" transition,
 		// use/add the short delay. Otherwise, default to the long delay.
 		const durationMs = duration?.toMilliseconds() ?? 0;
+		const timeouts = this.applHost.getCommunicationTimeouts();
 		const additionalDelay = !!durationMs || transition === "fast"
-			? this.applHost.options.timeouts.refreshValueAfterTransition
-			: this.applHost.options.timeouts.refreshValue;
+			? timeouts.refreshValueAfterTransition
+			: timeouts.refreshValue;
 		const timeoutMs = durationMs + additionalDelay;
 
 		if (this.isSinglecast()) {
@@ -628,7 +629,7 @@ function overrideQueriesWrapper(
 		);
 		if (!match) return fallback.call(this, ...args);
 
-		applHost.controllerLog.logNode(endpoint.nodeId, {
+		applHost.logNode(endpoint.nodeId, {
 			message: `API call ${method} for ${
 				getCCName(
 					ccId,
@@ -680,7 +681,7 @@ function overrideQueriesWrapper(
 								value,
 							);
 						} else {
-							applHost.controllerLog.logNode(endpoint.nodeId, {
+							applHost.logNode(endpoint.nodeId, {
 								message:
 									`Failed to persist value ${prop} during overridden API call: value does not exist`,
 								level: "error",
@@ -688,7 +689,7 @@ function overrideQueriesWrapper(
 							});
 						}
 					} catch (e) {
-						applHost.controllerLog.logNode(endpoint.nodeId, {
+						applHost.logNode(endpoint.nodeId, {
 							message:
 								`Failed to persist value ${prop} during overridden API call: ${
 									getErrorMessage(
@@ -720,7 +721,7 @@ function overrideQueriesWrapper(
 								},
 							);
 						} else {
-							applHost.controllerLog.logNode(endpoint.nodeId, {
+							applHost.logNode(endpoint.nodeId, {
 								message:
 									`Failed to extend value metadata ${prop} during overridden API call: value does not exist`,
 								level: "error",
@@ -728,7 +729,7 @@ function overrideQueriesWrapper(
 							});
 						}
 					} catch (e) {
-						applHost.controllerLog.logNode(endpoint.nodeId, {
+						applHost.logNode(endpoint.nodeId, {
 							message:
 								`Failed to extend value metadata ${prop} during overridden API call: ${
 									getErrorMessage(

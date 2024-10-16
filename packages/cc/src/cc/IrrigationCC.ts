@@ -1170,20 +1170,20 @@ export class IrrigationCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system info...",
 			direction: "outbound",
 		});
 		const systemInfo = await api.getSystemInfo();
 		if (!systemInfo) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Time out while querying irrigation system info, skipping interview...",
@@ -1196,7 +1196,7 @@ supports master valve: ${systemInfo.supportsMasterValve}
 no. of valves:         ${systemInfo.numValves}
 no. of valve tables:   ${systemInfo.numValveTables}
 max. valve table size: ${systemInfo.maxValveTableSize}`;
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
@@ -1237,7 +1237,7 @@ max. valve table size: ${systemInfo.maxValveTableSize}`;
 		});
 
 		// Query the current system config
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system configuration...",
 			direction: "outbound",
@@ -1266,7 +1266,7 @@ moisture sensor polarity: ${
 					)
 				}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -1275,7 +1275,7 @@ moisture sensor polarity: ${
 
 		// and status
 		// Query the current system config
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying irrigation system status...",
 			direction: "outbound",
@@ -1284,14 +1284,14 @@ moisture sensor polarity: ${
 
 		// for each valve, query the current status and configuration
 		if (IrrigationCC.supportsMasterValveCached(applHost, endpoint)) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying master valve configuration...",
 				direction: "outbound",
 			});
 			await api.getValveConfig("master");
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying master valve status...",
 				direction: "outbound",
@@ -1304,7 +1304,7 @@ moisture sensor polarity: ${
 			i <= (IrrigationCC.getNumValvesCached(applHost, endpoint) ?? 0);
 			i++
 		) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying configuration for valve ${
 					padStart(
@@ -1317,7 +1317,7 @@ moisture sensor polarity: ${
 			});
 			await api.getValveConfig(i);
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying status for valve ${
 					padStart(

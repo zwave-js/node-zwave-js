@@ -386,25 +386,25 @@ export class SoundSwitchCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "requesting tone count...",
 			direction: "outbound",
 		});
 		const toneCount = await api.getToneCount();
 		if (toneCount != undefined) {
 			const logMessage = `supports ${toneCount} tones`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying tone count timed out, skipping interview...",
 				level: "warn",
@@ -412,7 +412,7 @@ export class SoundSwitchCC extends CommandClass {
 			return;
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "requesting current sound configuration...",
 			direction: "outbound",
 		});
@@ -421,7 +421,7 @@ export class SoundSwitchCC extends CommandClass {
 			const logMessage = `received current sound configuration:
 default tone ID: ${config.defaultToneId}
 default volume: ${config.defaultVolume}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -429,7 +429,7 @@ default volume: ${config.defaultVolume}`;
 
 		const metadataStates: Record<number, string> = {};
 		for (let toneId = 1; toneId <= toneCount; toneId++) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: `requesting info for tone #${toneId}`,
 				direction: "outbound",
 			});
@@ -438,7 +438,7 @@ default volume: ${config.defaultVolume}`;
 			const logMessage = `received info for tone #${toneId}:
 name:     ${info.name}
 duration: ${info.duration} seconds`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});

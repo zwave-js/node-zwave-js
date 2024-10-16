@@ -608,7 +608,7 @@ export class DoorLockCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -624,7 +624,7 @@ export class DoorLockCC extends CommandClass {
 		let latchSupported = true;
 
 		if (api.version >= 4) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting lock capabilities...",
 				direction: "outbound",
@@ -656,7 +656,7 @@ supports auto-relock:      ${resp.autoRelockSupported}
 supports hold-and-release: ${resp.holdAndReleaseSupported}
 supports twist assist:     ${resp.twistAssistSupported}
 supports block to block:   ${resp.blockToBlockSupported}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -735,7 +735,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting lock configuration...",
 			direction: "outbound",
@@ -773,14 +773,14 @@ twist assist                   ${!!config.twistAssist}
 block to block                 ${!!config.blockToBlock}`;
 			}
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting current lock status...",
 			direction: "outbound",
@@ -810,7 +810,7 @@ bolt status:        ${status.boltStatus}`;
 				logMessage += `
 latch status:       ${status.latchStatus}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",

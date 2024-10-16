@@ -236,19 +236,19 @@ export class WakeUpCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		if (node.id === applHost.ownNodeId) {
-			applHost.controllerLog.logNode(
+			applHost.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,
 			);
 		} else if (node.isFrequentListening) {
-			applHost.controllerLog.logNode(
+			applHost.logNode(
 				node.id,
 				`skipping wakeup configuration for frequent listening device`,
 			);
@@ -260,7 +260,7 @@ export class WakeUpCC extends CommandClass {
 
 			// Retrieve the allowed wake up intervals and wake on demand support if possible
 			if (api.version >= 2) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"retrieving wakeup capabilities from the device...",
@@ -274,7 +274,7 @@ minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds
 wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -288,7 +288,7 @@ wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 			// We have no intention of changing the interval (maybe some time in the future)
 			// So for now get the current interval and just set the controller ID
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving wakeup interval from the device...",
 				direction: "outbound",
@@ -299,7 +299,7 @@ wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 				const logMessage = `received wakeup configuration:
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -330,7 +330,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 					);
 				}
 
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "configuring wakeup destination node",
 					direction: "outbound",
@@ -341,7 +341,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 					WakeUpCCValues.controllerNodeId,
 					ownNodeId,
 				);
-				applHost.controllerLog.logNode(
+				applHost.logNode(
 					node.id,
 					"wakeup destination node changed!",
 				);

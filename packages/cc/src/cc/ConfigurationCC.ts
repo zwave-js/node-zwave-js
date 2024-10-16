@@ -550,7 +550,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				isSignedPartial(valueBitMask, paramInfo.format),
 			);
 		}
-		this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+		this.applHost.logNode(this.endpoint.nodeId, {
 			endpoint: this.endpoint.index,
 			message:
 				`Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value.toString()})`,
@@ -982,7 +982,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		this.assertPhysicalEndpoint(this.endpoint);
 
 		// TODO: Reduce the priority of the messages
-		this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+		this.applHost.logNode(this.endpoint.nodeId, {
 			endpoint: this.endpoint.index,
 			message: `Scanning available parameters...`,
 		});
@@ -990,7 +990,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
-			this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+			this.applHost.logNode(this.endpoint.nodeId, {
 				endpoint: this.endpoint.index,
 				message: `  trying param ${param}...`,
 				direction: "outbound",
@@ -1010,7 +1010,7 @@ export class ConfigurationCCAPI extends CCAPI {
 							.valueSize
 					}
     value     = ${originalValue.toString()}`;
-					this.applHost.controllerLog.logNode(this.endpoint.nodeId, {
+					this.applHost.logNode(this.endpoint.nodeId, {
 						endpoint: this.endpoint.index,
 						message: logMessage,
 						direction: "inbound",
@@ -1051,7 +1051,7 @@ export class ConfigurationCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -1064,7 +1064,7 @@ export class ConfigurationCC extends CommandClass {
 			this.endpointIndex,
 		);
 		if (paramInfo) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`${this.constructor.name}: Loading configuration parameters from device config`,
@@ -1077,7 +1077,7 @@ export class ConfigurationCC extends CommandClass {
 		);
 
 		if (api.version >= 3) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "finding first configuration parameter...",
 				direction: "outbound",
@@ -1087,7 +1087,7 @@ export class ConfigurationCC extends CommandClass {
 			if (param0props) {
 				param = param0props.nextParameter;
 				if (param === 0) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`didn't report any config params, trying #1 just to be sure...`,
@@ -1096,7 +1096,7 @@ export class ConfigurationCC extends CommandClass {
 					param = 1;
 				}
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Finding first configuration parameter timed out, skipping interview...",
@@ -1106,7 +1106,7 @@ export class ConfigurationCC extends CommandClass {
 			}
 
 			while (param > 0) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying parameter #${param} information...`,
 					direction: "outbound",
@@ -1118,7 +1118,7 @@ export class ConfigurationCC extends CommandClass {
 					() => undefined,
 				);
 				if (!props) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`Querying parameter #${param} information timed out, skipping scan...`,
@@ -1175,7 +1175,7 @@ is advanced (UI):    ${!!properties.isAdvanced}
 has bulk support:    ${!properties.noBulkSupport}
 alters capabilities: ${!!properties.altersCapabilities}`;
 				}
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -1230,7 +1230,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					alreadyQueried.add(param.parameter);
 
 					// Query the current value
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`querying parameter #${param.parameter} value...`,
@@ -1239,14 +1239,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					// ... at least try to
 					const paramValue = await api.get(param.parameter);
 					if (typeof paramValue === "number") {
-						applHost.controllerLog.logNode(node.id, {
+						applHost.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								`parameter #${param.parameter} has value: ${paramValue}`,
 							direction: "inbound",
 						});
 					} else if (!paramValue) {
-						applHost.controllerLog.logNode(node.id, {
+						applHost.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								`received no value for parameter #${param.parameter}`,
@@ -1256,7 +1256,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					}
 				}
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`${this.constructor.name}: skipping interview because CC version is < 3 and there is no config file`,
@@ -1274,14 +1274,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				if (
 					this.getParamInformation(applHost, param).readable !== false
 				) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying parameter #${param} value...`,
 						direction: "outbound",
 					});
 					await api.get(param);
 				} else {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`not querying parameter #${param} value, because it is writeonly`,

@@ -401,7 +401,7 @@ export class AssociationCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -412,20 +412,20 @@ export class AssociationCC extends CommandClass {
 		// multi channel association groups
 
 		// Find out how many groups are supported
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying number of association groups...",
 			direction: "outbound",
 		});
 		const groupCount = await api.getGroupCount();
 		if (groupCount != undefined) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `supports ${groupCount} association groups`,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying association groups timed out, skipping interview...",
@@ -439,7 +439,7 @@ export class AssociationCC extends CommandClass {
 
 		// Skip the remaining Association CC interview in favor of Multi Channel Association if possible
 		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
@@ -476,7 +476,7 @@ export class AssociationCC extends CommandClass {
 
 		// Query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying association group #${groupId}...`,
 				direction: "outbound",
@@ -487,7 +487,7 @@ export class AssociationCC extends CommandClass {
 					`received information for association group #${groupId}:
 maximum # of nodes: ${group.maxNodes}
 currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

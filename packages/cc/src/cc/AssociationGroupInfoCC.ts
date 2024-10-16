@@ -364,7 +364,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -378,7 +378,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// First get the group's name
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying name...`,
 				direction: "outbound",
@@ -387,7 +387,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			if (name) {
 				const logMessage =
 					`Association group #${groupId} has name "${name}"`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -395,7 +395,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			}
 
 			// Then the command list
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`Association group #${groupId}: Querying command list...`,
@@ -436,7 +436,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Then its information
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying info...`,
 				direction: "outbound",
@@ -452,7 +452,7 @@ profile:         ${
 							info.profile,
 						)
 					}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

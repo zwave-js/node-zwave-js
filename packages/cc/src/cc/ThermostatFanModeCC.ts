@@ -251,14 +251,14 @@ export class ThermostatFanModeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported thermostat fan modes...",
 			direction: "outbound",
@@ -274,13 +274,13 @@ export class ThermostatFanModeCC extends CommandClass {
 					)
 					.join("")
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported thermostat fan modes timed out, skipping interview...",
@@ -308,7 +308,7 @@ export class ThermostatFanModeCC extends CommandClass {
 		});
 
 		// Query the current status
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current thermostat fan mode...",
 			direction: "outbound",
@@ -324,7 +324,7 @@ export class ThermostatFanModeCC extends CommandClass {
 			if (currentStatus.off != undefined) {
 				logMessage += ` (turned off)`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",

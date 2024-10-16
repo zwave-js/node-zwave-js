@@ -113,10 +113,11 @@ function getPreferredSensorScale(
 	sensorType: number,
 	supportedScales: readonly number[],
 ): number {
+	const preferences = applHost.getUserPreferences();
 	const sensor = getSensor(sensorType);
 	// If the sensor type is unknown, we have no default. Use the user-provided scale or 0
 	if (!sensor) {
-		const preferred = applHost.options.preferences?.scales[sensorType];
+		const preferred = preferences?.scales[sensorType];
 		// We cannot look up strings for unknown sensor types, so this must be a number or we use the fallback
 		if (typeof preferred !== "number") return 0;
 		return preferred;
@@ -126,11 +127,11 @@ function getPreferredSensorScale(
 	let preferred: number | string | undefined;
 	// Named scales apply to multiple sensor types. To be able to override the scale for single types
 	// we need to look at the preferences by sensor type first
-	preferred = applHost.options.preferences?.scales[sensorType];
+	preferred = preferences?.scales[sensorType];
 	// If the scale is named, we can then try to use the named preference
 	const scaleGroupName = sensor.scaleGroupName;
 	if (preferred == undefined && scaleGroupName) {
-		preferred = applHost.options.preferences?.scales[scaleGroupName];
+		preferred = preferences?.scales[scaleGroupName];
 	}
 	// Then attempt reading the scale from the corresponding value
 	if (preferred == undefined) {
@@ -142,7 +143,7 @@ function getPreferredSensorScale(
 		const scale = metadata?.ccSpecific?.scale;
 		if (typeof scale === "number" && supportedScales.includes(scale)) {
 			preferred = scale;
-			applHost.controllerLog.logNode(nodeId, {
+			applHost.logNode(nodeId, {
 				endpoint: endpointIndex,
 				message:
 					`No scale preference for sensor type ${sensorType}, using the last-used scale ${preferred}`,
@@ -152,7 +153,7 @@ function getPreferredSensorScale(
 	// Then fall back to the first supported scale
 	if (preferred == undefined) {
 		preferred = supportedScales[0] ?? 0;
-		applHost.controllerLog.logNode(nodeId, {
+		applHost.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`No scale preference for sensor type ${sensorType}, using the first supported scale ${preferred}`,
@@ -172,7 +173,7 @@ function getPreferredSensorScale(
 
 	if (typeof preferred === "string") {
 		// Looking up failed
-		applHost.controllerLog.logNode(nodeId, {
+		applHost.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`Preferred scale "${preferred}" for sensor type ${sensorType} not found, using the first supported scale ${
@@ -187,7 +188,7 @@ function getPreferredSensorScale(
 		// No info about supported scales, just use the preferred one
 		return preferred;
 	} else if (!supportedScales.includes(preferred)) {
-		applHost.controllerLog.logNode(nodeId, {
+		applHost.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`Preferred scale ${preferred} not supported for sensor type ${sensorType}, using the first supported scale`,
@@ -397,7 +398,7 @@ export class MultilevelSensorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -405,7 +406,7 @@ export class MultilevelSensorCC extends CommandClass {
 
 		if (api.version >= 5) {
 			// Query the supported sensor types
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving supported sensor types...",
 				direction: "outbound",
@@ -417,13 +418,13 @@ export class MultilevelSensorCC extends CommandClass {
 						.map((t) => getSensorName(t))
 						.map((name) => `· ${name}`)
 						.join("\n");
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -435,7 +436,7 @@ export class MultilevelSensorCC extends CommandClass {
 			// As well as the supported scales for each sensor
 
 			for (const type of sensorTypes) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying supported scales for ${
 						getSensorName(type)
@@ -453,13 +454,13 @@ export class MultilevelSensorCC extends CommandClass {
 							)
 							.map((name) => `· ${name}`)
 							.join("\n");
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				} else {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Querying supported scales timed out, skipping interview...",
@@ -492,7 +493,7 @@ export class MultilevelSensorCC extends CommandClass {
 
 		if (api.version <= 4) {
 			// Sensors up to V4 only support a single value
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current sensor reading...",
 				direction: "outbound",
@@ -508,7 +509,7 @@ sensor type: ${getSensorName(mlsResponse.type)}
 value:       ${mlsResponse.value}${
 					sensorScale?.unit ? ` ${sensorScale.unit}` : ""
 				}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -523,7 +524,7 @@ value:       ${mlsResponse.value}${
 			}) || [];
 
 			for (const type of sensorTypes) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying ${
 						getSensorName(type)
@@ -536,7 +537,7 @@ value:       ${mlsResponse.value}${
 					const logMessage = `received current ${
 						getSensorName(type)
 					} sensor reading: ${value.value} ${value.scale.unit || ""}`;
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",

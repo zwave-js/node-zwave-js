@@ -191,13 +191,13 @@ export class ManufacturerSpecificCC extends CommandClass {
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
 		if (node.id !== applHost.ownNodeId) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Interviewing ${this.ccName}...`,
 				direction: "none",
 			});
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying manufacturer information...",
 				direction: "outbound",
@@ -214,7 +214,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 					} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

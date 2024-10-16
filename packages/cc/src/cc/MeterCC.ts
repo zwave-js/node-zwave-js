@@ -643,14 +643,14 @@ export class MeterCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		if (api.version >= 2) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying meter support...",
 				direction: "outbound",
@@ -677,13 +677,13 @@ supported rate types: ${
 						.join("")
 				}
 supports reset:       ${suppResp.supportsReset}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying meter support timed out, skipping interview...",
@@ -714,7 +714,7 @@ supports reset:       ${suppResp.supportsReset}`;
 		});
 
 		if (api.version === 1) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying default meter value...`,
 				direction: "outbound",
@@ -735,7 +735,7 @@ supports reset:       ${suppResp.supportsReset}`;
 				: [undefined];
 			for (const rateType of rateTypes) {
 				for (const scale of supportedScales) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying meter value (type = ${
 							getMeterName(type)

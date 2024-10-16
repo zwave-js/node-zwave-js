@@ -303,7 +303,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: `${this.constructor.name}: setting metadata`,
 			direction: "none",
 		});
@@ -334,7 +334,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	// 	].withOptions({
 	// 		priority: MessagePriority.NodeQuery,
 	// 	});
-	// 	this.applHost.controllerLog.logNode(node.id, {
+	// 	this.applHost.logNode(node.id, {
 	// 		message: "querying all scene actuator configs...",
 	// 		direction: "outbound",
 	// 	});

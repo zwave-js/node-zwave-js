@@ -144,6 +144,23 @@ export interface SendCommand {
 	): Promise<SendCommandReturnType<TResponse>>;
 }
 
+/** Allows reading options to use for interviewing devices */
+export interface GetInterviewOptions {
+	getInterviewOptions(): ZWaveHostOptions["interview"];
+}
+
+/** Allows reading user preferences */
+export interface GetUserPreferences {
+	getUserPreferences(): ZWaveHostOptions["preferences"];
+}
+
+/** Allows reading user preferences */
+export interface GetCommunicationTimeouts {
+	getCommunicationTimeouts(): ZWaveHostOptions["timeouts"];
+}
+
+export type LogNode = Pick<ControllerLogger, "logNode">;
+
 export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 	extends
 		GetValueDB,
@@ -156,12 +173,12 @@ export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 		SchedulePoll,
 		GetSupportedCCVersion,
 		GetSafeCCVersion,
-		SendCommand
+		SendCommand,
+		GetInterviewOptions,
+		GetUserPreferences,
+		GetCommunicationTimeouts,
+		LogNode
 {
-	options: ZWaveHostOptions;
-
-	// TODO: There's probably a better fitting name for this now
-	controllerLog: ControllerLogger;
 }
 
 /** Allows scheduling a value refresh (poll) for a later time */

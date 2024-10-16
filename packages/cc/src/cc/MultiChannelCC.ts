@@ -449,7 +449,7 @@ export class MultiChannelCC extends CommandClass {
 		const removeEndpoints = applHost.getDeviceConfig?.(node.id)?.compat
 			?.removeEndpoints;
 		if (removeEndpoints === "*") {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`Skipping ${this.ccName} interview b/c all endpoints are ignored by the device config file...`,
@@ -458,7 +458,7 @@ export class MultiChannelCC extends CommandClass {
 			return;
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -479,14 +479,14 @@ export class MultiChannelCC extends CommandClass {
 		const valueDB = this.getValueDB(applHost);
 
 		// Step 1: Retrieve general information about end points
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying device endpoint information...",
 			direction: "outbound",
 		});
 		const multiResponse = await api.getEndpoints();
 		if (!multiResponse) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying device endpoint information timed out, aborting interview...",
@@ -503,7 +503,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			logMessage +=
 				`\nendpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
 		}
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
@@ -523,7 +523,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		};
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
 			// Step 2a: Find all endpoints
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying all endpoints...",
 				direction: "outbound",
@@ -533,7 +533,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			if (foundEndpoints) allEndpoints.push(...foundEndpoints);
 			if (!allEndpoints.length) {
 				// Create a sequential list of endpoints
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`Endpoint query returned no results, assuming that endpoints are sequential`,
@@ -541,7 +541,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				});
 				addSequentialEndpoints();
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `received endpoints: ${
 						allEndpoints
@@ -553,7 +553,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			}
 		} else {
 			// Step 2b: Assume that the endpoints are in sequential order
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`does not support EndPointFind, assuming that endpoints are sequential`,
@@ -564,7 +564,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 
 		// Step 2.5: remove ignored endpoints
 		if (removeEndpoints?.length) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`The following endpoints are ignored through the config file: ${
@@ -587,7 +587,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				&& ccVersion >= 4
 			) {
 				// Find members of aggregated end point
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`querying members of aggregated endpoint #${endpoint}...`,
@@ -595,7 +595,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				});
 				const members = await api.getAggregatedMembers(endpoint);
 				if (members) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`aggregated endpoint #${endpoint} has members ${
@@ -611,7 +611,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			// When the device reports identical capabilities for all endpoints,
 			// we don't need to query them all
 			if (multiResponse.identicalCapabilities && hasQueriedCapabilities) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`all endpoints identical, skipping capability query for endpoint #${endpoint}...`,
@@ -639,7 +639,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				continue;
 			}
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying capabilities for endpoint #${endpoint}...`,
 				direction: "outbound",
@@ -656,13 +656,13 @@ supported CCs:`;
 				for (const cc of caps.supportedCCs) {
 					logMessage += `\n  · ${getCCName(cc)}`;
 				}
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`Querying endpoint #${endpoint} capabilities timed out, aborting interview...`,
@@ -682,13 +682,13 @@ supported CCs:`;
 				?.preserveEndpoints;
 			if (!preserve) {
 				allEndpoints = [];
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message:
 						`Endpoints seem unnecessary b/c they have different device classes, ignoring all...`,
 				});
 			} else if (preserve === "*") {
 				// preserve all endpoints, do nothing
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message:
 						`Endpoints seem unnecessary, but are configured to be preserved.`,
 				});
@@ -696,7 +696,7 @@ supported CCs:`;
 				allEndpoints = allEndpoints.filter((ep) =>
 					preserve.includes(ep)
 				);
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: `Endpoints seem unnecessary, but endpoints ${
 						allEndpoints.join(
 							", ",
@@ -743,7 +743,7 @@ supported CCs:`;
 			);
 		const endpointCounts = new Map<CommandClasses, number>();
 		for (const ccId of supportedCCs) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: `Querying endpoint count for CommandClass ${
 					getCCName(
 						ccId,
@@ -755,7 +755,7 @@ supported CCs:`;
 			if (endpointCount != undefined) {
 				endpointCounts.set(ccId, endpointCount);
 
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: `CommandClass ${
 						getCCName(
 							ccId,

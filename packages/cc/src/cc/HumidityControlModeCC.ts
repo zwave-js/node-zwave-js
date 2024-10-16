@@ -199,14 +199,14 @@ export class HumidityControlModeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported humidity control modes...",
 			direction: "outbound",
@@ -224,13 +224,13 @@ export class HumidityControlModeCC extends CommandClass {
 					)
 					.join("")
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported humidity control modes timed out, skipping interview...",
@@ -259,14 +259,14 @@ export class HumidityControlModeCC extends CommandClass {
 		});
 
 		// Query the current status
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current humidity control mode...",
 			direction: "outbound",
 		});
 		const currentMode = await api.get();
 		if (currentMode) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "received current humidity control mode: "
 					+ getEnumMemberName(HumidityControlMode, currentMode),

@@ -105,7 +105,7 @@ export class ThermostatFanStateCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -131,14 +131,14 @@ export class ThermostatFanStateCC extends CommandClass {
 		});
 
 		// Query the current status
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current thermostat fan state...",
 			direction: "outbound",
 		});
 		const currentStatus = await api.get();
 		if (currentStatus) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "received current thermostat fan state: "
 					+ getEnumMemberName(ThermostatFanState, currentStatus),

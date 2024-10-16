@@ -259,7 +259,7 @@ export class BasicCC extends CommandClass {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -275,7 +275,7 @@ export class BasicCC extends CommandClass {
 		if (
 			this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"No response to Basic Get command, assuming Basic CC is unsupported...",
@@ -306,7 +306,7 @@ export class BasicCC extends CommandClass {
 		});
 
 		// try to query the current state
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Basic CC state...",
 			direction: "outbound",
@@ -321,7 +321,7 @@ current value:      ${basicResponse.currentValue}`;
 target value:       ${basicResponse.targetValue}
 remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",

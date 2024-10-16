@@ -329,7 +329,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing Fibaro Venetian Blind CC...`,
 			direction: "none",
@@ -344,7 +344,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "Requesting venetian blind position and tilt...",
 			direction: "outbound",
 		});
@@ -358,7 +358,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 			const logMessage = `received venetian blind state:
 position: ${resp.position}
 tilt:     ${resp.tilt}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});

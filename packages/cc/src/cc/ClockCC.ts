@@ -96,7 +96,7 @@ export class ClockCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -121,7 +121,7 @@ export class ClockCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "requesting current clock setting...",
 			direction: "outbound",
 		});
@@ -134,7 +134,7 @@ export class ClockCC extends CommandClass {
 			}${response.hour < 10 ? "0" : ""}${response.hour}:${
 				response.minute < 10 ? "0" : ""
 			}${response.minute}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});

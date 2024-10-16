@@ -56,25 +56,31 @@ export function createTestingHost<
 		securityManager2: undefined,
 		securityManagerLR: undefined,
 		getDeviceConfig: undefined,
-		controllerLog: new Proxy({} as any, {
-			get() {
-				return () => {
-					/* intentionally empty */
-				};
-			},
-		}),
 		lookupManufacturer: () => undefined,
-		options: {
-			attempts: {
-				nodeInterview: 1,
-				// openSerialPort: 1,
-				sendData: 3,
-				controller: 3,
-			},
-			timeouts: {
+		logNode: () => {},
+		// options: {
+		// 	attempts: {
+		// 		nodeInterview: 1,
+		// 		// openSerialPort: 1,
+		// 		sendData: 3,
+		// 		controller: 3,
+		// 	},
+		// 	timeouts: {
+		// 		refreshValue: 5000,
+		// 		refreshValueAfterTransition: 1000,
+		// 	},
+		// },
+		getInterviewOptions() {
+			return {};
+		},
+		getUserPreferences() {
+			return undefined;
+		},
+		getCommunicationTimeouts() {
+			return {
 				refreshValue: 5000,
 				refreshValueAfterTransition: 1000,
-			},
+			};
 		},
 		getNode(nodeId) {
 			return nodes.get(nodeId);

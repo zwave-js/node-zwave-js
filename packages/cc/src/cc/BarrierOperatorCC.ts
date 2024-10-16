@@ -433,7 +433,7 @@ export class BarrierOperatorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -442,13 +442,13 @@ export class BarrierOperatorCC extends CommandClass {
 		// Create targetState value if it does not exist
 		this.ensureMetadata(applHost, BarrierOperatorCCValues.targetState);
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "Querying signaling capabilities...",
 			direction: "outbound",
 		});
 		const resp = await api.getSignalingCapabilities();
 		if (resp) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: `Received supported subsystem types: ${
 					resp
 						.map((t) =>
@@ -465,7 +465,7 @@ export class BarrierOperatorCC extends CommandClass {
 				// for valid values and throws otherwise.
 				if (!isEnumMember(SubsystemType, subsystemType)) continue;
 
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: `Enabling subsystem ${
 						getEnumMemberName(
 							SubsystemType,
@@ -508,7 +508,7 @@ export class BarrierOperatorCC extends CommandClass {
 			// for valid values and throws otherwise.
 			if (!isEnumMember(SubsystemType, subsystemType)) continue;
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: `Querying event signaling state for subsystem ${
 					getEnumMemberName(
 						SubsystemType,
@@ -519,7 +519,7 @@ export class BarrierOperatorCC extends CommandClass {
 			});
 			const state = await api.getEventSignaling(subsystemType);
 			if (state != undefined) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: `Subsystem ${
 						getEnumMemberName(
 							SubsystemType,
@@ -531,7 +531,7 @@ export class BarrierOperatorCC extends CommandClass {
 			}
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "querying current barrier state...",
 			direction: "outbound",
 		});

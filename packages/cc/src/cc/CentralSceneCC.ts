@@ -232,7 +232,7 @@ export class CentralSceneCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -248,7 +248,7 @@ export class CentralSceneCC extends CommandClass {
 				CentralSceneCommand.Notification,
 			);
 		} catch {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Configuring associations to receive ${
 					getCCName(
@@ -259,7 +259,7 @@ export class CentralSceneCC extends CommandClass {
 			});
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying supported scenes...",
 			direction: "outbound",
@@ -269,13 +269,13 @@ export class CentralSceneCC extends CommandClass {
 			const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported scenes timed out, skipping interview...",
@@ -286,7 +286,7 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 
 		// The slow refresh capability should be enabled whenever possible
 		if (api.version >= 3 && ccSupported?.supportsSlowRefresh) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Enabling slow refresh capability...",
 				direction: "outbound",

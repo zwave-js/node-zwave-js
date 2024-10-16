@@ -238,7 +238,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		if (pcInstance) {
 			await pcInstance.interview(applHost);
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message:
 					`${this.constructor.name}: skipping interview refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",
@@ -265,7 +265,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		if (pcInstance) {
 			await pcInstance.refreshValues(applHost);
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message:
 					`${this.constructor.name}: skipping value refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",

@@ -58,6 +58,7 @@ import {
 	EncapsulationFlags,
 	type KeyPair,
 	type LogConfig,
+	type LogNodeOptions,
 	MAX_SUPERVISION_SESSION_ID,
 	MAX_TRANSPORT_SERVICE_SESSION_ID,
 	MPANState,
@@ -113,6 +114,7 @@ import type {
 	HostIDs,
 	NodeSchedulePollOptions,
 	ZWaveApplicationHost,
+	ZWaveHostOptions,
 } from "@zwave-js/host";
 import {
 	type BootloaderChunk,
@@ -858,13 +860,20 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	private _controllerLog: ControllerLogger;
-	/**
-	 * **!!! INTERNAL !!!**
-	 *
-	 * Not intended to be used by applications
-	 */
+	/** @internal */
 	public get controllerLog(): ControllerLogger {
 		return this._controllerLog;
+	}
+
+	public logNode(
+		nodeId: number,
+		message: string,
+		level?: LogNodeOptions["level"],
+	): void;
+	public logNode(nodeId: number, options: LogNodeOptions): void;
+	public logNode(...args: any[]): void {
+		// @ts-expect-error
+		this._controllerLog.logNode(...args);
 	}
 
 	private _controller: ZWaveController | undefined;
@@ -1092,6 +1101,33 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			defaultOptions.preferences.scales,
 			scales,
 		);
+	}
+
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public getUserPreferences(): ZWaveHostOptions["preferences"] {
+		return this._options.preferences;
+	}
+
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public getInterviewOptions(): ZWaveHostOptions["interview"] {
+		return this._options.interview;
+	}
+
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public getCommunicationTimeouts(): ZWaveHostOptions["timeouts"] {
+		return this._options.timeouts;
 	}
 
 	/**

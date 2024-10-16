@@ -119,7 +119,7 @@ export class LanguageCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -144,7 +144,7 @@ export class LanguageCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "requesting language setting...",
 			direction: "outbound",
 		});
@@ -154,7 +154,7 @@ export class LanguageCC extends CommandClass {
 			const logMessage = `received current language setting: ${language}${
 				country != undefined ? `-${country}` : ""
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});

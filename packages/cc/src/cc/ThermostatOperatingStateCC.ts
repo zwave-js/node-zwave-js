@@ -109,7 +109,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -135,7 +135,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 		});
 
 		// Query the current state
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying thermostat operating state...",
 			direction: "outbound",
@@ -143,7 +143,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 
 		const state = await api.get();
 		if (state) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received current thermostat operating state: ${
 					getEnumMemberName(

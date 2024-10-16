@@ -283,7 +283,7 @@ export class EntryControlCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -299,7 +299,7 @@ export class EntryControlCC extends CommandClass {
 				EntryControlCommand.Notification,
 			);
 		} catch {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Configuring associations to receive ${
 					getCCName(
@@ -310,7 +310,7 @@ export class EntryControlCC extends CommandClass {
 			});
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control supported keys...",
 			direction: "outbound",
@@ -318,7 +318,7 @@ export class EntryControlCC extends CommandClass {
 
 		const supportedKeys = await api.getSupportedKeys();
 		if (supportedKeys) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`received entry control supported keys: ${supportedKeys.toString()}`,
@@ -326,7 +326,7 @@ export class EntryControlCC extends CommandClass {
 			});
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control supported events...",
 			direction: "outbound",
@@ -334,7 +334,7 @@ export class EntryControlCC extends CommandClass {
 
 		const eventCapabilities = await api.getEventCapabilities();
 		if (eventCapabilities) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received entry control supported keys:
 data types:            ${
@@ -374,7 +374,7 @@ max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control configuration...",
 			direction: "outbound",
@@ -382,7 +382,7 @@ max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 
 		const conf = await api.getConfiguration();
 		if (conf) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received entry control configuration:
 key cache size:    ${conf.keyCacheSize}

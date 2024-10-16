@@ -474,28 +474,28 @@ export class MultiChannelAssociationCC extends CommandClass {
 			endpoint,
 		);
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First find out how many groups are supported as multi channel
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying number of multi channel association groups...",
 			direction: "outbound",
 		});
 		const mcGroupCount = await mcAPI.getGroupCount();
 		if (mcGroupCount != undefined) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`supports ${mcGroupCount} multi channel association groups`,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying multi channel association groups timed out, skipping interview...",
@@ -546,7 +546,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 
 		// Then query each multi channel association group
 		for (let groupId = 1; groupId <= mcGroupCount; groupId++) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying multi channel association group #${groupId}...`,
@@ -571,7 +571,7 @@ currently assigned endpoints: ${
 						})
 						.join("")
 				}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -580,7 +580,7 @@ currently assigned endpoints: ${
 
 		// Check if there are more non-multi-channel association groups we haven't queried yet
 		if (assocAPI.isSupported() && assocGroupCount > mcGroupCount) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying additional non-multi-channel association groups...`,
@@ -591,7 +591,7 @@ currently assigned endpoints: ${
 				groupId <= assocGroupCount;
 				groupId++
 			) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying association group #${groupId}...`,
 					direction: "outbound",
@@ -602,7 +602,7 @@ currently assigned endpoints: ${
 					`received information for association group #${groupId}:
 maximum # of nodes:           ${group.maxNodes}
 currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

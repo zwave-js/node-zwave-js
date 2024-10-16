@@ -594,13 +594,13 @@ export class WindowCoveringCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported window covering parameters...",
 			direction: "outbound",
@@ -615,7 +615,7 @@ ${
 					)
 					.join("\n")
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -649,7 +649,7 @@ ${
 
 				// And for the odd parameters (with position support), query the position
 				if (param % 2 === 1) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying position for parameter ${
 							getEnumMemberName(

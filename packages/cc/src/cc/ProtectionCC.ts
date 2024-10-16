@@ -370,7 +370,7 @@ export class ProtectionCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -382,7 +382,7 @@ export class ProtectionCC extends CommandClass {
 
 		// First find out what the device supports
 		if (api.version >= 2) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: "querying protection capabilities...",
 				direction: "outbound",
 			});
@@ -407,7 +407,7 @@ RF protection states:    ${
 						.map((str) => `\n· ${str}`)
 						.join("")
 				}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -445,7 +445,7 @@ RF protection states:    ${
 		);
 
 		// Query the current state
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "querying protection status...",
 			direction: "outbound",
 		});
@@ -457,7 +457,7 @@ local: ${getEnumMemberName(LocalProtectionState, protectionResp.local)}`;
 				logMessage += `
 rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -465,13 +465,13 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 
 		if (supportsTimeout) {
 			// Query the current timeout
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: "querying protection timeout...",
 				direction: "outbound",
 			});
 			const timeout = await api.getTimeout();
 			if (timeout) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: `received timeout: ${timeout.toString()}`,
 					direction: "inbound",
 				});
@@ -480,13 +480,13 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 
 		if (supportsExclusiveControl) {
 			// Query the current timeout
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: "querying exclusive control node...",
 				direction: "outbound",
 			});
 			const nodeId = await api.getExclusiveControl();
 			if (nodeId != undefined) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: (nodeId !== 0
 						? `Node ${padStart(nodeId.toString(), 3, "0")}`
 						: `no node`) + ` has exclusive control`,

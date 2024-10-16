@@ -215,7 +215,7 @@ export class NodeNamingAndLocationCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -240,25 +240,25 @@ export class NodeNamingAndLocationCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "retrieving node name...",
 			direction: "outbound",
 		});
 		const name = await api.getName();
 		if (name != undefined) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: `is named "${name}"`,
 				direction: "inbound",
 			});
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "retrieving node location...",
 			direction: "outbound",
 		});
 		const location = await api.getLocation();
 		if (location != undefined) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: `received location: ${location}`,
 				direction: "inbound",
 			});

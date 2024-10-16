@@ -558,20 +558,20 @@ export class ColorSwitchCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported colors...",
 			direction: "outbound",
 		});
 		const supportedColors = await api.getSupported();
 		if (!supportedColors) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported colors timed out, skipping interview...",
@@ -580,7 +580,7 @@ export class ColorSwitchCC extends CommandClass {
 			return;
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `received supported colors:${
 				supportedColors
@@ -653,7 +653,7 @@ export class ColorSwitchCC extends CommandClass {
 			if (!isEnumMember(ColorComponent, color)) continue;
 
 			const colorName = getEnumMemberName(ColorComponent, color);
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current color state (${colorName})`,
 				direction: "outbound",

@@ -143,7 +143,7 @@ export class LockCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -168,13 +168,13 @@ export class LockCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "requesting current lock state...",
 			direction: "outbound",
 		});
 		const locked = await api.get();
 		const logMessage = `the lock is ${locked ? "locked" : "unlocked"}`;
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});

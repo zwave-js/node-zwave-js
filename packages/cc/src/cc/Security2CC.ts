@@ -696,7 +696,7 @@ export class Security2CC extends CommandClass {
 			];
 		} else {
 			// For endpoint interviews, the security class MUST be known
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: endpoint.index,
 				message:
 					`Cannot query securely supported commands for endpoint because the node's security class isn't known...`,
@@ -720,7 +720,7 @@ export class Security2CC extends CommandClass {
 			if (
 				!securityManager?.hasKeysForSecurityClass(secClass)
 			) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: endpoint.index,
 					message: `Cannot query securely supported commands (${
 						getEnumMemberName(
@@ -733,7 +733,7 @@ export class Security2CC extends CommandClass {
 				continue;
 			}
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Querying securely supported commands (${
 					getEnumMemberName(
@@ -770,7 +770,7 @@ export class Security2CC extends CommandClass {
 				) {
 					if (attempts < MAX_ATTEMPTS) {
 						// We definitely know the highest security class
-						applHost.controllerLog.logNode(node.id, {
+						applHost.logNode(node.id, {
 							endpoint: endpoint.index,
 							message: `Querying securely supported commands (${
 								getEnumMemberName(
@@ -783,7 +783,7 @@ export class Security2CC extends CommandClass {
 						await wait(500);
 						continue;
 					} else if (endpoint.index > 0) {
-						applHost.controllerLog.logNode(node.id, {
+						applHost.logNode(node.id, {
 							endpoint: endpoint.index,
 							message: `Querying securely supported commands (${
 								getEnumMemberName(
@@ -802,7 +802,7 @@ export class Security2CC extends CommandClass {
 
 						break;
 					} else {
-						applHost.controllerLog.logNode(node.id, {
+						applHost.logNode(node.id, {
 							endpoint: endpoint.index,
 							message: `Querying securely supported commands (${
 								getEnumMemberName(
@@ -829,7 +829,7 @@ export class Security2CC extends CommandClass {
 					// unless we were sure about the security class
 					node.setSecurityClass(secClass, false);
 
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						message: `The node was NOT granted the security class ${
 							getEnumMemberName(
 								SecurityClass,
@@ -846,7 +846,7 @@ export class Security2CC extends CommandClass {
 				// Mark the security class as granted unless we were sure about the security class
 				node.setSecurityClass(secClass, true);
 
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: `The node was granted the security class ${
 						getEnumMemberName(
 							SecurityClass,
@@ -872,7 +872,7 @@ export class Security2CC extends CommandClass {
 				for (const cc of supportedCCs) {
 					logLines.push(`· ${getCCName(cc)}`);
 				}
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: endpoint.index,
 					message: logLines.join("\n"),
 					direction: "inbound",

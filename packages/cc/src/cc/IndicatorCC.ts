@@ -704,14 +704,14 @@ export class IndicatorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		if (api.version > 1) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "scanning supported indicator IDs...",
 				direction: "outbound",
@@ -722,7 +722,7 @@ export class IndicatorCC extends CommandClass {
 			do {
 				const supportedResponse = await api.getSupported(curId);
 				if (!supportedResponse) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Time out while scanning supported indicator IDs, skipping interview...",
@@ -748,7 +748,7 @@ export class IndicatorCC extends CommandClass {
 					", ",
 				)
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -758,7 +758,7 @@ export class IndicatorCC extends CommandClass {
 				const manufacturerDefinedIndicatorIds = supportedIndicatorIds
 					.filter((id) => isManufacturerDefinedIndicator(id));
 				if (manufacturerDefinedIndicatorIds.length > 0) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"retrieving description for manufacturer-defined indicator IDs...",
@@ -793,7 +793,7 @@ export class IndicatorCC extends CommandClass {
 		});
 
 		if (api.version === 1) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting current indicator value...",
 				direction: "outbound",
@@ -805,7 +805,7 @@ export class IndicatorCC extends CommandClass {
 				IndicatorCCValues.supportedIndicatorIds,
 			) ?? [];
 			for (const indicatorId of supportedIndicatorIds) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `requesting current indicator value (id = ${
 						num2hex(
@@ -1080,7 +1080,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			} else {
 				if (this.isSinglecast()) {
 					// Don't!
-					applHost.controllerLog.logNode(this.nodeId, {
+					applHost.logNode(this.nodeId, {
 						message:
 							`ignoring V1 indicator report because the node supports V2 indicators`,
 						direction: "none",

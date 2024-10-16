@@ -260,13 +260,13 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying firmware update capabilities...",
 			direction: "outbound",
@@ -291,13 +291,13 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 			} else {
 				logMessage += `\nfirmware upgradeable: false`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Firmware update capability query timed out",
 				direction: "inbound",

@@ -754,7 +754,7 @@ export async function configureLifelineAssociations(
 	}
 
 	if (lifelineGroups.length === 0) {
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: endpoint.index,
 			message:
 				"No information about Lifeline associations, cannot assign ourselves!",
@@ -768,7 +768,7 @@ export async function configureLifelineAssociations(
 		return;
 	}
 
-	applHost.controllerLog.logNode(node.id, {
+	applHost.logNode(node.id, {
 		endpoint: endpoint.index,
 		message: `Checking/assigning lifeline groups: ${
 			lifelineGroups.join(
@@ -815,7 +815,7 @@ supports multi channel associations: ${!!mcInstance}`,
 			}
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: endpoint.index,
 			message: `Configuring lifeline group #${group}:
 group supports multi channel:  ${groupSupportsMultiChannelAssociation}
@@ -903,7 +903,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			&& mcAPI.isSupported()
 			&& groupSupportsMultiChannelAssociation
 		) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: endpoint.index,
 				message:
 					`Found invalid lifeline associations in group #${group}, removing them...`,
@@ -935,7 +935,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			if (isAssignedAsNodeAssociation(endpoint)) {
 				// We already have the correct association
 				hasLifeline = true;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: endpoint.index,
 					message:
 						`Lifeline group #${group} is already assigned with a node association`,
@@ -948,7 +948,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 					> 0
 			) {
 				// We can use a node association, but first remove any possible endpoint associations
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: endpoint.index,
 					message:
 						`Assigning lifeline group #${group} with a node association via Association CC...`,
@@ -972,14 +972,14 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				hasLifeline = !!groupReport?.nodeIds.includes(ownNodeId);
 
 				if (hasLifeline) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: endpoint.index,
 						message:
 							`Lifeline group #${group} was assigned with a node association via Association CC`,
 						direction: "none",
 					});
 				} else {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: endpoint.index,
 						message:
 							`Assigning lifeline group #${group} with a node association via Association CC did not work`,
@@ -995,7 +995,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				&& mcInstance!.getMaxNodesCached(applHost, endpoint, group) > 0
 			) {
 				// We can use a node association, but first remove any possible endpoint associations
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: endpoint.index,
 					message:
 						`Assigning lifeline group #${group} with a node association via Multi Channel Association CC...`,
@@ -1017,14 +1017,14 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				hasLifeline = !!groupReport?.nodeIds.includes(ownNodeId);
 
 				if (hasLifeline) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: endpoint.index,
 						message:
 							`Lifeline group #${group} was assigned with a node association via Multi Channel Association CC`,
 						direction: "none",
 					});
 				} else {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: endpoint.index,
 						message:
 							`Assigning lifeline group #${group} with a node association via Multi Channel Association CC did not work`,
@@ -1040,7 +1040,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			if (isAssignedAsEndpointAssociation(endpoint)) {
 				// We already have the correct association
 				hasLifeline = true;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: endpoint.index,
 					message:
 						`Lifeline group #${group} is already assigned with an endpoint association`,
@@ -1052,7 +1052,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				&& mcInstance!.getMaxNodesCached(applHost, endpoint, group) > 0
 			) {
 				// We can use a multi channel association, but first remove any possible node associations
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: endpoint.index,
 					message:
 						`Assigning lifeline group #${group} with a multi channel association...`,
@@ -1086,14 +1086,14 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				);
 
 				if (hasLifeline) {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: endpoint.index,
 						message:
 							`Lifeline group #${group} was assigned with a multi channel association`,
 						direction: "none",
 					});
 				} else {
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: endpoint.index,
 						message:
 							`Assigning lifeline group #${group} with a multi channel association did not work`,
@@ -1118,7 +1118,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			const rootMustUseNodeAssociation = !nodeSupportsMultiChannel
 				|| rootAssocConfig?.multiChannel === false;
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: endpoint.index,
 				message:
 					`Checking root device for fallback assignment of lifeline group #${group}:
@@ -1131,7 +1131,7 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 				if (isAssignedAsEndpointAssociation(node)) {
 					// We already have the correct association
 					hasLifeline = true;
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: endpoint.index,
 						message:
 							`Lifeline group #${group} is already assigned with a multi channel association on the root device`,
@@ -1149,7 +1149,7 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 						node,
 					);
 					if (rootMCAPI.isSupported()) {
-						applHost.controllerLog.logNode(node.id, {
+						applHost.logNode(node.id, {
 							endpoint: endpoint.index,
 							message:
 								`Assigning lifeline group #${group} with a multi channel association on the root device...`,
@@ -1187,7 +1187,7 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 		}
 
 		if (!hasLifeline) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: endpoint.index,
 				message:
 					`All attempts to assign lifeline group #${group} failed, skipping...`,
@@ -1234,7 +1234,7 @@ export async function assignLifelineIssueingCommand(
 					(a) => a.nodeId === applHost.ownNodeId,
 				)
 			) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: endpoint.index,
 					message: `Configuring associations to receive ${
 						getCCName(

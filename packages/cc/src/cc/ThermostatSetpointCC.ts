@@ -353,7 +353,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -384,7 +384,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					type,
 				);
 				// Every time, query the current value
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`querying current value of setpoint ${setpointName}...`,
@@ -406,7 +406,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					// We're sure about the interpretation - this should not happen
 					logMessage = `setpoint ${setpointName} is not supported`;
 				}
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -424,7 +424,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// Query the supported setpoint types
 			let setpointTypes: ThermostatSetpointType[] = [];
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving supported setpoint types...",
 				direction: "outbound",
@@ -439,13 +439,13 @@ export class ThermostatSetpointCC extends CommandClass {
 						)
 						.map((name) => `· ${name}`)
 						.join("\n");
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported setpoint types timed out, skipping interview...",
@@ -460,7 +460,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					type,
 				);
 				// Find out the capabilities of this setpoint
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						`retrieving capabilities for setpoint ${setpointName}...`,
@@ -478,7 +478,7 @@ export class ThermostatSetpointCC extends CommandClass {
 						`received capabilities for setpoint ${setpointName}:
 minimum value: ${setpointCaps.minValue} ${minValueUnit}
 maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -519,7 +519,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				type,
 			);
 			// Every time, query the current value
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`querying current value of setpoint ${setpointName}...`,
@@ -531,7 +531,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 					`received current value of setpoint ${setpointName}: ${setpoint.value} ${
 						setpoint.scale.unit ?? ""
 					}`;
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

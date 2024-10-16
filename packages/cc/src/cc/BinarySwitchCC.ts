@@ -246,7 +246,7 @@ export class BinarySwitchCC extends CommandClass {
 	): Promise<void> {
 		const node = this.getNode(applHost)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -272,7 +272,7 @@ export class BinarySwitchCC extends CommandClass {
 		});
 
 		// Query the current state
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Binary Switch state...",
 			direction: "outbound",
@@ -287,7 +287,7 @@ current value:      ${resp.currentValue}`;
 target value:       ${resp.targetValue}
 remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",

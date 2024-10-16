@@ -898,7 +898,7 @@ export class UserCodeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -906,13 +906,13 @@ export class UserCodeCC extends CommandClass {
 
 		// Query capabilities first to determine what needs to be done when refreshing
 		if (api.version >= 2) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: "querying capabilities...",
 				direction: "outbound",
 			});
 			const caps = await api.getCapabilities();
 			if (!caps) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"User Code capabilities query timed out, skipping interview...",
@@ -922,13 +922,13 @@ export class UserCodeCC extends CommandClass {
 			}
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			message: "querying number of user codes...",
 			direction: "outbound",
 		});
 		const supportedUsers = await api.getUsersCount();
 		if (supportedUsers == undefined) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying number of user codes timed out, skipping interview...",
@@ -942,7 +942,7 @@ export class UserCodeCC extends CommandClass {
 		}
 
 		// Synchronize user codes and settings
-		if (applHost.options.interview?.queryAllUserCodes) {
+		if (applHost.getInterviewOptions()?.queryAllUserCodes) {
 			await this.refreshValues(applHost);
 		}
 
@@ -984,14 +984,14 @@ export class UserCodeCC extends CommandClass {
 		// Check for changed values and codes
 		if (api.version >= 2) {
 			if (supportsAdminCode) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: "querying admin code...",
 					direction: "outbound",
 				});
 				await api.getAdminCode();
 			}
 			if (supportedKeypadModes.length > 1) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: "querying active keypad mode...",
 					direction: "outbound",
 				});
@@ -1002,7 +1002,7 @@ export class UserCodeCC extends CommandClass {
 
 			let currentUserCodeChecksum: number | undefined = 0;
 			if (supportsUserCodeChecksum) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message: "retrieving current user code checksum...",
 					direction: "outbound",
 				});
@@ -1012,7 +1012,7 @@ export class UserCodeCC extends CommandClass {
 				!supportsUserCodeChecksum
 				|| currentUserCodeChecksum !== storedUserCodeChecksum
 			) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					message:
 						"checksum changed or is not supported, querying all user codes...",
 					direction: "outbound",
@@ -1026,7 +1026,7 @@ export class UserCodeCC extends CommandClass {
 						if (response) {
 							nextUserId = response.nextUserId;
 						} else {
-							applHost.controllerLog.logNode(node.id, {
+							applHost.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message:
 									`Querying user code #${nextUserId} timed out, skipping the remaining interview...`,
@@ -1044,7 +1044,7 @@ export class UserCodeCC extends CommandClass {
 			}
 		} else {
 			// V1
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				message: "querying all user codes...",
 				direction: "outbound",
 			});

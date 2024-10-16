@@ -516,7 +516,7 @@ export class NotificationCC extends CommandClass {
 			}
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `determining whether this node is pull or push...`,
 			direction: "outbound",
@@ -573,7 +573,7 @@ export class NotificationCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -589,7 +589,7 @@ export class NotificationCC extends CommandClass {
 				NotificationCommand.Report,
 			);
 		} catch {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Configuring associations to receive ${
 					getCCName(
@@ -602,7 +602,7 @@ export class NotificationCC extends CommandClass {
 
 		let supportsV1Alarm = false;
 		if (api.version >= 2) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported notification types...",
 				direction: "outbound",
@@ -610,7 +610,7 @@ export class NotificationCC extends CommandClass {
 
 			const suppResponse = await api.getSupported();
 			if (!suppResponse) {
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported notification types timed out, skipping interview...",
@@ -634,7 +634,7 @@ export class NotificationCC extends CommandClass {
 					.map((name) => `\n· ${name}`)
 					.join("")
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -646,7 +646,7 @@ export class NotificationCC extends CommandClass {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
 
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							`querying supported notification events for ${name}...`,
@@ -655,7 +655,7 @@ export class NotificationCC extends CommandClass {
 					const supportedEvents = await api.getSupportedEvents(type);
 					if (supportedEvents) {
 						supportedNotificationEvents.set(type, supportedEvents);
-						applHost.controllerLog.logNode(node.id, {
+						applHost.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								`received supported notification events for ${name}: ${
@@ -696,7 +696,7 @@ export class NotificationCC extends CommandClass {
 					const notification = getNotification(type);
 
 					// Enable reports for each notification type
-					applHost.controllerLog.logNode(node.id, {
+					applHost.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `enabling notifications for ${name}...`,
 						direction: "outbound",
@@ -857,7 +857,7 @@ export class NotificationCC extends CommandClass {
 				const name = supportedNotificationNames[i];
 
 				// Always query each notification for its current status
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying notification status for ${name}...`,
 					direction: "outbound",
@@ -1053,7 +1053,7 @@ export class NotificationCCReport extends NotificationCC {
 						&& supportedNotificationEvents.includes(this.alarmLevel)
 					) {
 						// This alarm frame corresponds to a valid notification event
-						applHost.controllerLog.logNode(
+						applHost.logNode(
 							this.nodeId as number,
 							`treating V1 Alarm frame as Notification Report`,
 						);
@@ -1075,7 +1075,7 @@ export class NotificationCCReport extends NotificationCC {
 							|| m.from.alarmLevel === this.alarmLevel),
 				);
 				if (match) {
-					applHost.controllerLog.logNode(
+					applHost.logNode(
 						this.nodeId as number,
 						`compat mapping found, treating V1 Alarm frame as Notification Report`,
 					);
@@ -1323,7 +1323,7 @@ export class NotificationCCReport extends NotificationCC {
 								userId: this.eventParameters[2],
 							};
 						} else {
-							applHost.controllerLog.logNode(
+							applHost.logNode(
 								this.nodeId as number,
 								`Failed to parse Notification CC event parameters, ignoring them...`,
 								"error",

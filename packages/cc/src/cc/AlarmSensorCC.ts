@@ -177,7 +177,7 @@ export class AlarmSensorCC extends CommandClass {
 
 		// Skip the interview in favor of Notification CC if possible
 		if (endpoint.supportsCC(CommandClasses.Notification)) {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`${this.constructor.name}: skipping interview because Notification CC is supported...`,
@@ -195,14 +195,14 @@ export class AlarmSensorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Find out which sensor types this sensor supports
-		applHost.controllerLog.logNode(node.id, {
+		applHost.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported sensor types...",
 			direction: "outbound",
@@ -215,13 +215,13 @@ export class AlarmSensorCC extends CommandClass {
 					.map((name) => `\n· ${name}`)
 					.join("")
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported sensor types timed out, skipping interview...",
@@ -262,7 +262,7 @@ export class AlarmSensorCC extends CommandClass {
 
 			const sensorName = getEnumMemberName(AlarmSensorType, type);
 
-			applHost.controllerLog.logNode(node.id, {
+			applHost.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current value for ${sensorName}...`,
 				direction: "outbound",
@@ -279,7 +279,7 @@ severity: ${currentValue.severity}`;
 					message += `
 duration: ${currentValue.duration}`;
 				}
-				applHost.controllerLog.logNode(node.id, {
+				applHost.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message,
 					direction: "inbound",
