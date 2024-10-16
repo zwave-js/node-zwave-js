@@ -14,7 +14,6 @@ import type {
 	ControlsCC,
 	EndpointId,
 	GetCCs,
-	GetEndpointNode,
 	IsCCSecure,
 	MaybeNotKnown,
 	ModifyCCs,
@@ -46,14 +45,7 @@ import type { ZWaveNode } from "./Node";
  * Each endpoint may have different capabilities (device class/supported CCs)
  */
 export class Endpoint
-	implements
-		EndpointId,
-		SupportsCC,
-		ControlsCC,
-		IsCCSecure,
-		ModifyCCs,
-		GetCCs,
-		GetEndpointNode<ZWaveNode>
+	implements EndpointId, SupportsCC, ControlsCC, IsCCSecure, ModifyCCs, GetCCs
 {
 	public constructor(
 		/** The id of the node this endpoint belongs to */
