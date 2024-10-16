@@ -1007,7 +1007,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return [...this.controller.nodes.values()];
 	}
 
-	public getNodeUnsafe(msg: Message): ZWaveNode | undefined {
+	public tryGetNode(msg: Message): ZWaveNode | undefined {
 		const nodeId = msg.getNodeId();
 		if (nodeId != undefined) return this.controller.nodes.get(nodeId);
 	}
@@ -3501,7 +3501,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			}, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
-				const node = this.getNodeUnsafe(msg);
+				const node = this.tryGetNode(msg);
 				if (node) node.lastSeen = new Date();
 
 				// Ensure there are no errors
@@ -3510,7 +3510,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			// And update statistics
 			if (!!this._controller) {
 				if (isCommandClassContainer(msg)) {
-					this.getNodeUnsafe(msg)?.incrementStatistics("commandsRX");
+					this.tryGetNode(msg)?.incrementStatistics("commandsRX");
 				} else {
 					this._controller.incrementStatistics("messagesRX");
 				}
@@ -3526,7 +3526,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					if (response) await this.writeHeader(response);
 					if (!!this._controller) {
 						if (isCommandClassContainer(msg)) {
-							this.getNodeUnsafe(msg)?.incrementStatistics(
+							this.tryGetNode(msg)?.incrementStatistics(
 								"commandsDroppedRX",
 							);
 
@@ -3538,7 +3538,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 								&& msg.command instanceof InvalidCC
 							) {
 								// If it was, we need to notify the sender that we couldn't decode the command
-								const node = this.getNodeUnsafe(msg);
+								const node = this.tryGetNode(msg);
 								if (node) {
 									const endpoint = node.getEndpoint(
 										msg.command.endpointIndex,
@@ -3606,7 +3606,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					msg.command
 						instanceof SecurityCCCommandEncapsulationNonceGet
 				) {
-					void this.getNodeUnsafe(msg)?.handleSecurityNonceGet();
+					void this.tryGetNode(msg)?.handleSecurityNonceGet();
 				}
 
 				// Transport Service commands must be handled before assembling partial CCs
@@ -3822,7 +3822,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (!encapS2) return false;
 
 		// With the MGRP extension present
-		const node = this.getNodeUnsafe(msg);
+		const node = this.tryGetNode(msg);
 		if (!node) return false;
 		const groupId = encapS2.getMulticastGroupId();
 		if (groupId == undefined) return false;
@@ -4007,7 +4007,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		},
 		error: ZWaveError,
 	): boolean {
-		const node = this.getNodeUnsafe(transaction.message);
+		const node = this.tryGetNode(transaction.message);
 		if (!node) return false; // This should never happen, but whatever
 
 		const messagePart1 = isSendData(transaction.message)
@@ -4172,7 +4172,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			|| this._recoveryPhase
 				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
 		) {
-			const node = this.getNodeUnsafe(transaction.message);
+			const node = this.tryGetNode(transaction.message);
 			if (!node) return false; // This should never happen, but whatever
 
 			// The controller is still timing out transmitting after a soft reset, don't try again.
@@ -4980,7 +4980,7 @@ ${handlers.length} left`,
 		let handlers: RequestHandlerEntry[] | undefined;
 
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			const node = this.getNodeUnsafe(msg);
+			const node = this.tryGetNode(msg);
 			if (node) {
 				// We have received an unsolicited message from a dead node, bring it back to life
 				if (node.status === NodeStatus.Dead) {
@@ -5427,7 +5427,7 @@ ${handlers.length} left`,
 		result: Message | undefined,
 	): void {
 		// Update statistics
-		const node = this.getNodeUnsafe(msg);
+		const node = this.tryGetNode(msg);
 		let success = true;
 		if (isSendData(msg) || isNodeQuery(msg)) {
 			// This shouldn't happen, but just in case
@@ -5528,7 +5528,7 @@ ${handlers.length} left`,
 		}
 
 		const message = transaction.message;
-		const targetNode = message.getNodeUnsafe(this);
+		const targetNode = message.tryGetNode(this);
 
 		// Messages to the controller may always be sent...
 		if (!targetNode) return true;
@@ -5949,7 +5949,7 @@ ${handlers.length} left`,
 
 		let node: ZWaveNode | undefined;
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			node = this.getNodeUnsafe(msg);
+			node = this.tryGetNode(msg);
 		}
 
 		if (options.priority == undefined) {
@@ -7073,7 +7073,7 @@ ${handlers.length} left`,
 
 	/** Determines time in milliseconds to wait for a report from a node */
 	public getReportTimeout(msg: Message): number {
-		const node = this.getNodeUnsafe(msg);
+		const node = this.tryGetNode(msg);
 
 		return (
 			// If there's a message-specific timeout, use that

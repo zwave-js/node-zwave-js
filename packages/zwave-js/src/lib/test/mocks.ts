@@ -389,7 +389,7 @@ export function createTestEndpoint(
 		> {
 			throw new Error("Function not implemented.");
 		},
-		getNodeUnsafe: function(): IZWaveNode | undefined {
+		tryGetNode: function(): IZWaveNode | undefined {
 			return host.nodes.get(options.nodeId);
 		},
 	};

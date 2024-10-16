@@ -194,8 +194,8 @@ export class Transaction implements Comparable<Transaction> {
 			_this: Transaction,
 			_other: Transaction,
 		): CompareResult | undefined => {
-			const thisNode = _this.message.getNodeUnsafe(this.driver);
-			const otherNode = _other.message.getNodeUnsafe(this.driver);
+			const thisNode = _this.message.tryGetNode(this.driver);
+			const otherNode = _other.message.tryGetNode(this.driver);
 
 			// We don't require existence of the node object
 			// If any transaction is not for a node, it targets the controller
@@ -222,8 +222,8 @@ export class Transaction implements Comparable<Transaction> {
 			_this: Transaction,
 			_other: Transaction,
 		): CompareResult | undefined => {
-			const thisNode = _this.message.getNodeUnsafe(this.driver);
-			const otherNode = _other.message.getNodeUnsafe(this.driver);
+			const thisNode = _this.message.tryGetNode(this.driver);
+			const otherNode = _other.message.tryGetNode(this.driver);
 			if (thisNode && otherNode) {
 				// Both nodes exist
 				const thisListening = thisNode.isListening

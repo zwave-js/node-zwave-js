@@ -40,8 +40,8 @@ test("should deserialize and serialize correctly", (t) => {
 		]),
 	];
 	for (const original of okayMessages) {
-		const parsed = new Message({ data: original });
-		t.deepEqual(parsed.serialize(), original);
+		const parsed = new Message({ data: original, ctx: {} as any });
+		t.deepEqual(parsed.serialize({} as any), original);
 	}
 });
 
@@ -53,7 +53,7 @@ test("should serialize correctly when the payload is null", (t) => {
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	t.deepEqual(message.serialize(), expected);
+	t.deepEqual(message.serialize({} as any), expected);
 });
 
 test("should throw the correct error when parsing a faulty message", (t) => {
@@ -92,10 +92,14 @@ test("should throw the correct error when parsing a faulty message", (t) => {
 		],
 	];
 	for (const [message, msg, code] of brokenMessages) {
-		assertZWaveError(t, () => new Message({ data: message }), {
-			messageMatches: msg,
-			errorCode: code,
-		});
+		assertZWaveError(
+			t,
+			() => new Message({ data: message, ctx: {} as any }),
+			{
+				messageMatches: msg,
+				errorCode: code,
+			},
+		);
 	}
 });
 
@@ -321,7 +325,7 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 	@messageTypes(undefined as any, 0xff as any)
 	class FakeMessageWithoutMessageType extends Message {}
 
-	assertZWaveError(t, () => new FakeMessageWithoutMessageType(host), {
+	assertZWaveError(t, () => new FakeMessageWithoutMessageType(), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /message type/i,
 	});
@@ -341,31 +345,31 @@ test(`the constructor should throw when no function type is specified`, (t) => {
 	@messageTypes(MessageType.Request, undefined as any)
 	class FakeMessageWithoutFunctionType extends Message {}
 
-	assertZWaveError(t, () => new FakeMessageWithoutFunctionType(host), {
+	assertZWaveError(t, () => new FakeMessageWithoutFunctionType(), {
 		errorCode: ZWaveErrorCodes.Argument_Invalid,
 		messageMatches: /function type/i,
 	});
 });
 
-test("getNodeUnsafe() returns undefined when the controller is not initialized yet", (t) => {
+test("tryGetNode() returns undefined when the controller is not initialized yet", (t) => {
 	const host = createTestingHost();
 	const msg = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	t.is(msg.getNodeUnsafe(host), undefined);
+	t.is(msg.tryGetNode(host), undefined);
 });
 
-test("getNodeUnsafe() returns undefined when the message is no node query", (t) => {
+test("tryGetNode() returns undefined when the message is no node query", (t) => {
 	const host = createTestingHost();
 	const msg = new Message({
 		type: MessageType.Request,
 		functionType: 0xff as any,
 	});
-	t.is(msg.getNodeUnsafe(host), undefined);
+	t.is(msg.tryGetNode(host), undefined);
 });
 
-test("getNodeUnsafe() returns the associated node otherwise", (t) => {
+test("tryGetNode() returns the associated node otherwise", (t) => {
 	const host = createTestingHost();
 	host.setNode(1, {} as any);
 
@@ -376,9 +380,9 @@ test("getNodeUnsafe() returns the associated node otherwise", (t) => {
 
 	// This node exists
 	(msg as any as INodeQuery).nodeId = 1;
-	t.is(msg.getNodeUnsafe(host), host.getNode(1));
+	t.is(msg.tryGetNode(host), host.getNode(1));
 
 	// This one does
 	(msg as any as INodeQuery).nodeId = 2;
-	t.is(msg.getNodeUnsafe(host), undefined);
+	t.is(msg.tryGetNode(host), undefined);
 });

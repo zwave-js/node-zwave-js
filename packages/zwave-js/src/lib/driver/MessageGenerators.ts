@@ -230,7 +230,7 @@ export const maybeTransportServiceGenerator: MessageGeneratorImplementation =
 			);
 		}
 
-		const node = msg.getNodeUnsafe(driver);
+		const node = msg.tryGetNode(driver);
 		const mayUseTransportService =
 			node?.supportsCC(CommandClasses["Transport Service"])
 			&& node.getCCVersion(CommandClasses["Transport Service"]) >= 2;

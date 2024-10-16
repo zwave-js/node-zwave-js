@@ -14,9 +14,9 @@ import {
 } from "@zwave-js/core";
 import type {
 	GetDeviceConfig,
+	GetNode,
 	GetSupportedCCVersion,
 	HostIDs,
-	ZWaveApplicationHost,
 } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
@@ -453,11 +453,11 @@ export class Message {
 	/**
 	 * Returns the node this message is linked to or undefined
 	 */
-	public getNodeUnsafe<T extends NodeId>(
-		applHost: ZWaveApplicationHost<T>,
+	public tryGetNode<T extends NodeId>(
+		ctx: GetNode<T>,
 	): T | undefined {
 		const nodeId = this.getNodeId();
-		if (nodeId != undefined) return applHost.getNode(nodeId);
+		if (nodeId != undefined) return ctx.getNode(nodeId);
 	}
 
 	private _transmissionTimestamp: number | undefined;

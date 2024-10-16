@@ -618,7 +618,7 @@ export class CommandClass implements CCId {
 	 * @internal
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe<T extends NodeId>(
+	public tryGetNode<T extends NodeId>(
 		ctx: GetNode<T>,
 	): T | undefined {
 		try {

@@ -888,7 +888,7 @@ export type APIMethodsOf<CC extends CCNameOrId> = Omit<
 	OnlyMethods<CCToAPI<CC>>,
 	| "ccId"
 	| "getNode"
-	| "getNodeUnsafe"
+	| "tryGetNode"
 	| "isSetValueOptimistic"
 	| "isSupported"
 	| "pollValue"
