@@ -726,7 +726,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			...this.messageEncodingContext,
 			ownNodeId: this.controller.ownNodeId!,
 			homeId: this.controller.homeId!,
-			nodeIdType: this.nodeIdType,
+			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
 			securityManager: this.securityManager,
 			securityManager2: this.securityManager2,
 			securityManagerLR: this.securityManagerLR,
@@ -740,7 +740,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			...this.messageParsingContext,
 			ownNodeId: this.controller.ownNodeId!,
 			homeId: this.controller.homeId!,
-			nodeIdType: this.nodeIdType,
+			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
 			securityManager: this.securityManager,
 			securityManager2: this.securityManager2,
 			securityManagerLR: this.securityManagerLR,
@@ -983,10 +983,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.controller.ownNodeId!;
 	}
 
-	public get nodeIdType(): NodeIDType {
-		return this._controller?.nodeIdType ?? NodeIDType.Short;
-	}
-
 	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
 	public getNode(nodeId: number): ZWaveNode | undefined {
 		return this.controller.nodes.get(nodeId);
@@ -1042,6 +1038,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.controller.nodes.get(nodeId)?.deviceConfig;
 	}
 
+	public lookupManufacturer(manufacturerId: number): string | undefined {
+		return this.configManager.lookupManufacturer(manufacturerId);
+	}
+
 	public getHighestSecurityClass(
 		nodeId: number,
 	): MaybeNotKnown<SecurityClass> {
@@ -1072,16 +1072,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		// This is needed for the ZWaveHost interface
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		node.setSecurityClass(securityClass, granted);
-	}
-
-	/**
-	 * **!!! INTERNAL !!!**
-	 *
-	 * Not intended to be used by applications. Use `node.isControllerNode` instead!
-	 */
-	public isControllerNode(nodeId: number): boolean {
-		// This is needed for the ZWaveHost interface
-		return nodeId === this.ownNodeId;
 	}
 
 	/** Updates the logging configuration without having to restart the driver. */

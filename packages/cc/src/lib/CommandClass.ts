@@ -143,12 +143,16 @@ export type CCNode =
 
 export function getEffectiveCCVersion(
 	ctx: GetSupportedCCVersion,
-	cc: CommandClass,
+	cc: CCId,
 	defaultVersion?: number,
 ): number {
 	// For multicast and broadcast CCs, just use the highest implemented version to serialize
 	// Older nodes will ignore the additional fields
-	if (!cc.isSinglecast()) {
+	if (
+		typeof cc.nodeId !== "number"
+		|| cc.nodeId === NODE_ID_BROADCAST
+		|| cc.nodeId === NODE_ID_BROADCAST_LR
+	) {
 		return getImplementedVersion(cc.ccId);
 	}
 	// For singlecast CCs, set the CC version as high as possible

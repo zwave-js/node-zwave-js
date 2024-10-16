@@ -43,7 +43,6 @@ import { V } from "../lib/Values";
 import {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
-	type FirmwareUpdateInitResult,
 	type FirmwareUpdateMetaData,
 	FirmwareUpdateMetaDataCommand,
 	FirmwareUpdateRequestStatus,
@@ -161,12 +160,12 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 	/**
 	 * Requests the device to start the firmware update process.
-	 * WARNING: This method may wait up to 60 seconds for a reply.
+	 * This does not wait for the reply - that is up to the caller of this method.
 	 */
 	@validateArgs()
 	public async requestUpdate(
 		options: FirmwareUpdateMetaDataCCRequestGetOptions,
-	): Promise<FirmwareUpdateInitResult> {
+	): Promise<void> {
 		this.assertSupportsCommand(
 			FirmwareUpdateMetaDataCommand,
 			FirmwareUpdateMetaDataCommand.RequestGet,
@@ -177,29 +176,12 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		// Since the response may take longer than with other commands,
-		// we do not use the built-in waiting functionality, which would block
-		// all other communication.
 
 		await this.applHost.sendCommand(cc, {
 			...this.commandOptions,
 			// Do not wait for Nonce Reports
 			s2VerifyDelivery: false,
 		});
-		const result = await this.applHost
-			.waitForCommand<
-				FirmwareUpdateMetaDataCCRequestReport
-			>(
-				(cc) =>
-					cc instanceof FirmwareUpdateMetaDataCCRequestReport
-					&& cc.nodeId === this.endpoint.nodeId,
-				60000,
-			);
-		return pick(result, [
-			"status",
-			"resume",
-			"nonSecureTransfer",
-		]);
 	}
 
 	/**

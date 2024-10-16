@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { ConfigManager } from "@zwave-js/config";
 import {
 	type EndpointId,
 	type GetEndpoint,
 	type IsCCSecure,
-	NodeIDType,
 	type NodeId,
 	type QuerySecurityClasses,
 	type SetSecurityClass,
@@ -54,8 +52,6 @@ export function createTestingHost<
 	const ret: TestingHost<TNode> = {
 		homeId: options.homeId ?? 0x7e570001,
 		ownNodeId: options.ownNodeId ?? 1,
-		nodeIdType: NodeIDType.Short,
-		isControllerNode: (nodeId) => nodeId === ret.ownNodeId,
 		securityManager: undefined,
 		securityManager2: undefined,
 		securityManagerLR: undefined,
@@ -67,7 +63,7 @@ export function createTestingHost<
 				};
 			},
 		}),
-		configManager: new ConfigManager(),
+		lookupManufacturer: () => undefined,
 		options: {
 			attempts: {
 				nodeInterview: 1,
@@ -114,15 +110,6 @@ export function createTestingHost<
 		tryGetValueDB: (nodeId) => {
 			return ret.getValueDB(nodeId);
 		},
-		isCCSecure: (ccId, nodeId, endpointIndex = 0) => {
-			const node = nodes.get(nodeId);
-			const endpoint = node?.getEndpoint(endpointIndex);
-			return (
-				node?.isSecure !== false
-				&& !!(endpoint ?? node)?.isCCSecure(ccId)
-				&& !!(ret.securityManager || ret.securityManager2)
-			);
-		},
 		// getHighestSecurityClass: (nodeId) => {
 		// 	const node = nodes.getOrThrow(nodeId);
 		// 	return node.getHighestSecurityClass();
@@ -136,9 +123,6 @@ export function createTestingHost<
 		// 	node.setSecurityClass(securityClass, granted);
 		// },
 		sendCommand: async (_command, _options) => {
-			return undefined as any;
-		},
-		waitForCommand: async (_predicate, _timeout) => {
 			return undefined as any;
 		},
 		schedulePoll: (_nodeId, _valueId, _options) => {

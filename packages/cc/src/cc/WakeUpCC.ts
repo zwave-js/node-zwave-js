@@ -242,7 +242,7 @@ export class WakeUpCC extends CommandClass {
 			direction: "none",
 		});
 
-		if (applHost.isControllerNode(node.id)) {
+		if (node.id === applHost.ownNodeId) {
 			applHost.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,

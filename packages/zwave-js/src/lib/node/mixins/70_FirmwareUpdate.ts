@@ -1,10 +1,10 @@
 import {
-	type FirmwareUpdateInitResult,
 	type FirmwareUpdateMetaData,
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
 	type FirmwareUpdateMetaDataCCMetaDataGet,
 	FirmwareUpdateMetaDataCCReport,
+	FirmwareUpdateMetaDataCCRequestReport,
 	FirmwareUpdateMetaDataCCStatusReport,
 	type FirmwareUpdateOptions,
 	type FirmwareUpdateProgress,
@@ -636,7 +636,7 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 	}
 
 	/** Kicks off a firmware update of a single target. Returns whether the node accepted resuming and non-secure transfer */
-	private *beginFirmwareUpdateInternal(
+	private async *beginFirmwareUpdateInternal(
 		data: Buffer,
 		target: number,
 		meta: FirmwareUpdateMetaData,
@@ -655,21 +655,30 @@ export abstract class FirmwareUpdateMixin extends SchedulePollMixin
 			direction: "outbound",
 		});
 
-		// Request the node to start the upgrade. Pause the task until this is done,
-		// since the call can block for a long time
-		const result: FirmwareUpdateInitResult = yield () =>
-			api.requestUpdate({
-				// TODO: Should manufacturer id and firmware id be provided externally?
-				manufacturerId: meta.manufacturerId,
-				firmwareId: target == 0
-					? meta.firmwareId
-					: meta.additionalFirmwareIDs[target - 1],
-				firmwareTarget: target,
-				fragmentSize,
-				checksum,
-				resume,
-				nonSecureTransfer,
-			});
+		// Request the node to start the upgrade
+		await api.requestUpdate({
+			// TODO: Should manufacturer id and firmware id be provided externally?
+			manufacturerId: meta.manufacturerId,
+			firmwareId: target == 0
+				? meta.firmwareId
+				: meta.additionalFirmwareIDs[target - 1],
+			firmwareTarget: target,
+			fragmentSize,
+			checksum,
+			resume,
+			nonSecureTransfer,
+		});
+		// Pause the task until the response is received, because that can take
+		// up to a minute
+		const result: FirmwareUpdateMetaDataCCRequestReport = yield () =>
+			this.driver
+				.waitForCommand<FirmwareUpdateMetaDataCCRequestReport>(
+					(cc) =>
+						cc instanceof FirmwareUpdateMetaDataCCRequestReport
+						&& cc.nodeId === this.id,
+					60000,
+				);
+
 		switch (result.status) {
 			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:
 				throw new ZWaveError(

@@ -1,11 +1,10 @@
-import type { ConfigManager, DeviceConfig } from "@zwave-js/config";
+import type { DeviceConfig } from "@zwave-js/config";
 import type {
 	CCId,
 	CommandClasses,
 	ControllerLogger,
 	FrameType,
 	MaybeNotKnown,
-	NodeIDType,
 	NodeId,
 	SecurityClass,
 	SecurityManagers,
@@ -49,6 +48,19 @@ export interface GetSupportedCCVersion {
 		nodeId: number,
 		endpointIndex?: number,
 	): number;
+}
+
+export interface GetSafeCCVersion {
+	/**
+	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
+	 * Returns 1 if the node claims that it does not support a CC.
+	 * Returns `undefined` for CCs that are not implemented in this library yet.
+	 */
+	getSafeCCVersion(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
+	): number | undefined;
 }
 
 /** Additional context needed for deserializing CCs */
@@ -118,6 +130,20 @@ export interface GetAllNodes<T extends NodeId> {
 	getAllNodes(): T[];
 }
 
+/** Allows looking up Z-Wave manufacturers by manufacturer ID */
+export interface LookupManufacturer {
+	/** Looks up the name of the manufacturer with the given ID in the configuration DB */
+	lookupManufacturer(manufacturerId: number): string | undefined;
+}
+
+/** Allows sending commands to one or more nodes */
+export interface SendCommand {
+	sendCommand<TResponse extends CCId | undefined = undefined>(
+		command: CCId,
+		options?: SendCommandOptions,
+	): Promise<SendCommandReturnType<TResponse>>;
+}
+
 export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 	extends
 		GetValueDB,
@@ -125,65 +151,25 @@ export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
 		GetNode<TNode>,
 		GetAllNodes<TNode>,
 		SecurityManagers,
-		GetDeviceConfig
+		GetDeviceConfig,
+		LookupManufacturer,
+		SchedulePoll,
+		GetSupportedCCVersion,
+		GetSafeCCVersion,
+		SendCommand
 {
-	/** Gives access to the configuration files */
-	configManager: ConfigManager;
-
 	options: ZWaveHostOptions;
-
-	readonly nodeIdType?: NodeIDType;
 
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;
+}
 
-	/** Whether the node with the given ID is the controller */
-	isControllerNode(nodeId: number): boolean;
-
-	sendCommand<TResponse extends CCId | undefined = undefined>(
-		command: CCId,
-		options?: SendCommandOptions,
-	): Promise<SendCommandReturnType<TResponse>>;
-
-	waitForCommand<T extends CCId>(
-		predicate: (cc: CCId) => boolean,
-		timeout: number,
-	): Promise<T>;
-
+/** Allows scheduling a value refresh (poll) for a later time */
+export interface SchedulePoll {
 	schedulePoll(
 		nodeId: number,
 		valueId: ValueID,
 		options: NodeSchedulePollOptions,
-	): boolean;
-
-	/**
-	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
-	 * Returns 1 if the node claims that it does not support a CC.
-	 * Returns `undefined` for CCs that are not implemented in this library yet.
-	 */
-	getSafeCCVersion(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
-	): number | undefined;
-
-	/**
-	 * Retrieves the maximum version of a command class the given node/endpoint has reported support for.
-	 * Returns 0 when the CC is not supported or that information is not known yet.
-	 */
-	getSupportedCCVersion(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
-	): number;
-
-	/**
-	 * Determines whether a CC must be secure for a given node and endpoint.
-	 */
-	isCCSecure(
-		cc: CommandClasses,
-		nodeId: number,
-		endpointIndex?: number,
 	): boolean;
 }
 

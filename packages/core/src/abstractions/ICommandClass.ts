@@ -20,6 +20,7 @@ export interface SecurityManagers {
 /** A basic abstraction of a Z-Wave Command Class providing access to the relevant functionality */
 export interface CCId {
 	nodeId: number | MulticastDestination;
+	endpointIndex?: number;
 	ccId: CommandClasses;
 	ccCommand?: number;
 }

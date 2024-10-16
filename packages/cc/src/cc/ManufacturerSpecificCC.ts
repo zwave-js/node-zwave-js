@@ -190,7 +190,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
-		if (!applHost.isControllerNode(node.id)) {
+		if (node.id !== applHost.ownNodeId) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Interviewing ${this.ccName}...`,
@@ -207,7 +207,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 				const logMessage =
 					`received response for manufacturer information:
   manufacturer: ${
-						applHost.configManager.lookupManufacturer(
+						applHost.lookupManufacturer(
 							mfResp.manufacturerId,
 						)
 						|| "unknown"
