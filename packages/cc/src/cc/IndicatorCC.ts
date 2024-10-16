@@ -850,10 +850,10 @@ export class IndicatorCC extends CommandClass {
 		return super.translateProperty(ctx, property, propertyKey);
 	}
 
-	protected supportsV2Indicators(applHost: ZWaveApplicationHost): boolean {
+	protected supportsV2Indicators(ctx: GetValueDB): boolean {
 		// First test if there are any indicator ids defined
 		const supportedIndicatorIds = this.getValue<number[]>(
-			applHost,
+			ctx,
 			IndicatorCCValues.supportedIndicatorIds,
 		);
 		if (!supportedIndicatorIds?.length) return false;
@@ -861,7 +861,7 @@ export class IndicatorCC extends CommandClass {
 		return supportedIndicatorIds.some(
 			(indicatorId) =>
 				!!this.getValue<number[]>(
-					applHost,
+					ctx,
 					IndicatorCCValues.supportedPropertyIDs(indicatorId),
 				)?.length,
 		);
@@ -1119,7 +1119,7 @@ export class IndicatorCCReport extends IndicatorCC {
 	public readonly values: IndicatorObject[] | undefined;
 
 	private setIndicatorValue(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		value: IndicatorObject,
 	): void {
 		// Manufacturer-defined indicators may need a custom label
@@ -1127,7 +1127,7 @@ export class IndicatorCCReport extends IndicatorCC {
 				value.indicatorId,
 			)
 			? this.getValue<string>(
-				applHost,
+				ctx,
 				IndicatorCCValues.indicatorDescription(value.indicatorId),
 			)
 			: undefined;
@@ -1147,8 +1147,8 @@ export class IndicatorCCReport extends IndicatorCC {
 			value.indicatorId,
 			value.propertyId,
 		);
-		this.setMetadata(applHost, valueV2, metadata);
-		this.setValue(applHost, valueV2, value.value);
+		this.setMetadata(ctx, valueV2, metadata);
+		this.setValue(ctx, valueV2, value.value);
 	}
 
 	public serialize(ctx: CCEncodingContext): Buffer {

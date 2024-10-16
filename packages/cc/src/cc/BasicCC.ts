@@ -1,12 +1,17 @@
 import {
 	CommandClasses,
+	type ControlsCC,
 	Duration,
+	type EndpointId,
+	type GetEndpoint,
 	type MaybeNotKnown,
 	type MaybeUnknown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type NodeId,
 	type SupervisionResult,
+	type SupportsCC,
 	type ValueID,
 	ValueMetadata,
 	maybeUnknownToString,
@@ -15,6 +20,9 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetDeviceConfig,
+	GetNode,
+	GetSupportedCCVersion,
 	GetValueDB,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
@@ -330,12 +338,18 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 	}
 
 	public override getDefinedValueIDs(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 	): ValueID[] {
 		const ret: ValueID[] = [];
-		const endpoint = this.getEndpoint(applHost)!;
+		const endpoint = this.getEndpoint(ctx)!;
 
-		const compat = applHost.getDeviceConfig?.(endpoint.nodeId)?.compat;
+		const compat = ctx.getDeviceConfig?.(endpoint.nodeId)?.compat;
 		if (compat?.mapBasicSet === "event") {
 			// Add the compat event value if it should be exposed
 			ret.push(BasicCCValues.compatEvent.endpoint(endpoint.index));
@@ -344,7 +358,7 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 		if (endpoint.supportsCC(this.ccId)) {
 			// Defer to the base implementation if Basic CC is supported.
 			// This implies that no other actuator CC is supported.
-			ret.push(...super.getDefinedValueIDs(applHost));
+			ret.push(...super.getDefinedValueIDs(ctx));
 		} else if (endpoint.controlsCC(CommandClasses.Basic)) {
 			// During the interview, we mark Basic CC as controlled only if we want to expose currentValue
 			ret.push(BasicCCValues.currentValue.endpoint(endpoint.index));

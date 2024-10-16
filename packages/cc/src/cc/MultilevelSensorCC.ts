@@ -7,12 +7,16 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import type {
+	ControlsCC,
 	EndpointId,
+	GetEndpoint,
 	MessageOrCCLogEntry,
 	MessageRecord,
+	NodeId,
 	Scale,
 	SinglecastCC,
 	SupervisionResult,
+	SupportsCC,
 	ValueID,
 } from "@zwave-js/core/safe";
 import {
@@ -27,6 +31,9 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetDeviceConfig,
+	GetNode,
+	GetSupportedCCVersion,
 	GetUserPreferences,
 	GetValueDB,
 	LogNode,
@@ -551,15 +558,21 @@ value:       ${mlsResponse.value}${
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 	): boolean {
 		// Poll the device when all of the supported values were last updated longer than 6 hours ago.
 		// This may lead to some values not being updated, but the user may have disabled some unnecessary
 		// reports to reduce traffic.
-		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		const valueDB = ctx.tryGetValueDB(this.nodeId);
 		if (!valueDB) return true;
 
-		const values = this.getDefinedValueIDs(applHost).filter((v) =>
+		const values = this.getDefinedValueIDs(ctx).filter((v) =>
 			MultilevelSensorCCValues.value.is(v)
 		);
 		return values.every((v) => {

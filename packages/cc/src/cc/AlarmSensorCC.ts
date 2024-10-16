@@ -306,7 +306,7 @@ duration: ${currentValue.duration}`;
 	}
 
 	protected createMetadataForSensorType(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		sensorType: AlarmSensorType,
 	): void {
 		const stateValue = AlarmSensorCCValues.state(sensorType);
@@ -314,9 +314,9 @@ duration: ${currentValue.duration}`;
 		const durationValue = AlarmSensorCCValues.duration(sensorType);
 
 		// Always create metadata if it does not exist
-		this.ensureMetadata(applHost, stateValue);
-		this.ensureMetadata(applHost, severityValue);
-		this.ensureMetadata(applHost, durationValue);
+		this.ensureMetadata(ctx, stateValue);
+		this.ensureMetadata(ctx, severityValue);
+		this.ensureMetadata(ctx, durationValue);
 	}
 }
 

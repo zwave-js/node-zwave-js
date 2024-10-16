@@ -325,11 +325,11 @@ export class BinarySensorCC extends CommandClass {
 	}
 
 	public setMappedBasicValue(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		value: number,
 	): boolean {
 		this.setValue(
-			applHost,
+			ctx,
 			BinarySensorCCValues.state(BinarySensorType.Any),
 			value > 0,
 		);

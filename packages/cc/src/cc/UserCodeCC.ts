@@ -17,6 +17,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetSupportedCCVersion,
 	GetValueDB,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
@@ -186,17 +187,17 @@ function validateCode(code: string, supportedChars: string): boolean {
 
 function setUserCodeMetadata(
 	this: UserCodeCC,
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB & GetSupportedCCVersion,
 	userId: number,
 	userCode?: string | Buffer,
 ) {
 	const statusValue = UserCodeCCValues.userIdStatus(userId);
 	const codeValue = UserCodeCCValues.userCode(userId);
 
-	const ccVersion = getEffectiveCCVersion(applHost, this);
+	const ccVersion = getEffectiveCCVersion(ctx, this);
 
 	const supportedUserIDStatuses: UserIDStatus[] =
-		this.getValue(applHost, UserCodeCCValues.supportedUserIDStatuses)
+		this.getValue(ctx, UserCodeCCValues.supportedUserIDStatuses)
 			?? (ccVersion === 1
 				? [
 					UserIDStatus.Available,
@@ -211,7 +212,7 @@ function setUserCodeMetadata(
 					UserIDStatus.PassageMode,
 				]);
 
-	this.ensureMetadata(applHost, statusValue, {
+	this.ensureMetadata(ctx, statusValue, {
 		...statusValue.meta,
 		states: enumValuesToMetadataStates(
 			UserIDStatus,
@@ -227,14 +228,14 @@ function setUserCodeMetadata(
 		maxLength: 10,
 		label: `User Code (${userId})`,
 	};
-	if (this.getMetadata(applHost, codeValue)?.type !== codeMetadata.type) {
-		this.setMetadata(applHost, codeValue, codeMetadata);
+	if (this.getMetadata(ctx, codeValue)?.type !== codeMetadata.type) {
+		this.setMetadata(ctx, codeValue, codeMetadata);
 	}
 }
 
 function persistUserCode(
 	this: UserCodeCC,
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB & GetSupportedCCVersion,
 	userId: number,
 	userIdStatus: UserIDStatus,
 	userCode: string | Buffer,
@@ -245,15 +246,15 @@ function persistUserCode(
 	// Check if this code is supported
 	if (userIdStatus === UserIDStatus.StatusNotAvailable) {
 		// It is not, remove all values if any exist
-		this.removeValue(applHost, statusValue);
-		this.removeValue(applHost, codeValue);
-		this.removeMetadata(applHost, statusValue);
-		this.removeMetadata(applHost, codeValue);
+		this.removeValue(ctx, statusValue);
+		this.removeValue(ctx, codeValue);
+		this.removeMetadata(ctx, statusValue);
+		this.removeMetadata(ctx, codeValue);
 	} else {
 		// Always create metadata in case it does not exist
-		setUserCodeMetadata.call(this, applHost, userId, userCode);
-		this.setValue(applHost, statusValue, userIdStatus);
-		this.setValue(applHost, codeValue, userCode);
+		setUserCodeMetadata.call(this, ctx, userId, userCode);
+		this.setValue(ctx, statusValue, userIdStatus);
+		this.setValue(ctx, codeValue, userCode);
 	}
 
 	return true;

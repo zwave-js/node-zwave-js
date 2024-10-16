@@ -852,7 +852,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	}
 
 	public static getScheduleCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.WeekDay,
 		userId: number,
@@ -860,7 +860,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	): MaybeNotKnown<ScheduleEntryLockWeekDaySchedule | false>;
 
 	public static getScheduleCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.YearDay,
 		userId: number,
@@ -868,7 +868,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 	): MaybeNotKnown<ScheduleEntryLockYearDaySchedule | false>;
 
 	public static getScheduleCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind.DailyRepeating,
 		userId: number,
@@ -877,7 +877,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 
 	// Catch-all overload for applications which haven't narrowed `scheduleKind`
 	public static getScheduleCached(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		scheduleKind: ScheduleEntryLockScheduleKind,
 		userId: number,

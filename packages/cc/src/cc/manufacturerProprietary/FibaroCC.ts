@@ -12,6 +12,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetDeviceConfig,
 	GetValueDB,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
@@ -91,10 +92,10 @@ export function getFibaroVenetianBlindTiltMetadata(): ValueMetadata {
 }
 
 function getSupportedFibaroCCIDs(
-	applHost: ZWaveApplicationHost,
+	ctx: GetDeviceConfig,
 	nodeId: number,
 ): FibaroCCIDs[] {
-	const proprietaryConfig = applHost.getDeviceConfig?.(
+	const proprietaryConfig = ctx.getDeviceConfig?.(
 		nodeId,
 	)?.proprietary;
 	if (proprietaryConfig && isArray(proprietaryConfig.fibaroCCs)) {

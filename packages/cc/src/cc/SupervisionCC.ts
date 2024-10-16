@@ -21,8 +21,8 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetNode,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
@@ -199,13 +199,13 @@ export class SupervisionCC extends CommandClass {
 	 * Returns whether a node supports the given CC with Supervision encapsulation.
 	 */
 	public static getCCSupportedWithSupervision(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		ccId: CommandClasses,
 	): boolean {
 		// By default assume supervision is supported for all CCs, unless we've remembered one not to be
 		return (
-			applHost
+			ctx
 				.getValueDB(endpoint.nodeId)
 				.getValue(
 					SupervisionCCValues.ccSupported(ccId).endpoint(
@@ -219,12 +219,12 @@ export class SupervisionCC extends CommandClass {
 	 * Remembers whether a node supports the given CC with Supervision encapsulation.
 	 */
 	public static setCCSupportedWithSupervision(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		endpoint: EndpointId,
 		ccId: CommandClasses,
 		supported: boolean,
 	): void {
-		applHost
+		ctx
 			.getValueDB(endpoint.nodeId)
 			.setValue(
 				SupervisionCCValues.ccSupported(ccId).endpoint(endpoint.index),
@@ -234,9 +234,11 @@ export class SupervisionCC extends CommandClass {
 
 	/** Returns whether this is a valid command to send supervised */
 	public static mayUseSupervision<T extends CommandClass>(
-		applHost: ZWaveApplicationHost<
-			NodeId & SupportsCC & GetEndpoint<EndpointId>
-		>,
+		ctx:
+			& GetValueDB
+			& GetNode<
+				NodeId & SupportsCC & GetEndpoint<EndpointId>
+			>,
 		command: T,
 	): command is SinglecastCC<T> {
 		// Supervision may only be used for singlecast CCs that expect no response
@@ -245,9 +247,9 @@ export class SupervisionCC extends CommandClass {
 		if (command.expectsCCResponse()) return false;
 
 		// with a valid node and endpoint
-		const node = command.getNode(applHost);
+		const node = command.getNode(ctx);
 		if (!node) return false;
-		const endpoint = command.getEndpoint(applHost);
+		const endpoint = command.getEndpoint(ctx);
 		if (!endpoint) return false;
 
 		// and only if ...
@@ -258,7 +260,7 @@ export class SupervisionCC extends CommandClass {
 			&& shouldUseSupervision(command)
 			// ... and we haven't previously determined that the node doesn't properly support it
 			&& SupervisionCC.getCCSupportedWithSupervision(
-				applHost,
+				ctx,
 				endpoint,
 				command.ccId,
 			)

@@ -669,14 +669,14 @@ ${
 	}
 
 	public translatePropertyKey(
-		_applHost: ZWaveApplicationHost,
-		_property: string | number,
+		ctx: GetValueDB,
+		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
 		if (typeof propertyKey === "number") {
 			return getEnumMemberName(WindowCoveringParameter, propertyKey);
 		}
-		return super.translatePropertyKey(_applHost, _property, propertyKey);
+		return super.translatePropertyKey(ctx, property, propertyKey);
 	}
 }
 

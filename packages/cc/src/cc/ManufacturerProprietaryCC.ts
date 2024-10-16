@@ -42,10 +42,10 @@ export type ManufacturerProprietaryCCConstructor<
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
 	public constructor(
-		applHost: CCAPIHost,
+		host: CCAPIHost,
 		endpoint: CCAPIEndpoint,
 	) {
-		super(applHost, endpoint);
+		super(host, endpoint);
 
 		// Read the manufacturer ID from Manufacturer Specific CC
 		const manufacturerId = this.getValueDB().getValue<number>(
@@ -60,7 +60,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 				SpecificAPIConstructor != undefined
 				&& new.target !== SpecificAPIConstructor
 			) {
-				return new SpecificAPIConstructor(applHost, endpoint);
+				return new SpecificAPIConstructor(host, endpoint);
 			}
 		}
 	}

@@ -1,8 +1,13 @@
 import { timespan } from "@zwave-js/core";
 import type {
+	ControlsCC,
+	EndpointId,
+	GetEndpoint,
 	MessageOrCCLogEntry,
 	MessageRecord,
+	NodeId,
 	SinglecastCC,
+	SupportsCC,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -15,6 +20,9 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetDeviceConfig,
+	GetNode,
+	GetSupportedCCVersion,
 	GetValueDB,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
@@ -366,10 +374,16 @@ temperature:   ${batteryHealth.temperature} °C`;
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 	): boolean {
 		// Check when the battery state was last updated
-		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		const valueDB = ctx.tryGetValueDB(this.nodeId);
 		if (!valueDB) return true;
 
 		const lastUpdated = valueDB.getTimestamp(

@@ -11,8 +11,10 @@ import {
 } from "@zwave-js/core";
 import {
 	CommandClasses,
+	type ControlsCC,
 	Duration,
 	type EndpointId,
+	type GetEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -20,6 +22,7 @@ import {
 	type NodeId,
 	type SinglecastCC,
 	type SupervisionResult,
+	type SupportsCC,
 	type ValueID,
 	ValueMetadata,
 	type ValueMetadataNumeric,
@@ -33,7 +36,11 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	GetDeviceConfig,
+	GetNode,
+	GetSupportedCCVersion,
 	GetValueDB,
+	LogNode,
 	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
@@ -491,11 +498,11 @@ export class NotificationCC extends CommandClass {
 	}
 
 	private async determineNotificationMode(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: GetValueDB & GetNode<NodeId & SupportsCC> & LogNode,
 		api: NotificationCCAPI,
 		supportedNotificationEvents: ReadonlyMap<number, readonly number[]>,
 	): Promise<"push" | "pull"> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
 		// SDS14223: If the supporting node does not support the Association Command Class,
 		// it may be concluded that the supporting node implements Pull Mode and discovery may be aborted.
@@ -505,7 +512,7 @@ export class NotificationCC extends CommandClass {
 			try {
 				const groupsIssueingNotifications = AssociationGroupInfoCC
 					.findGroupsForIssuedCommand(
-						applHost,
+						ctx,
 						node,
 						this.ccId,
 						NotificationCommand.Report,
@@ -516,7 +523,7 @@ export class NotificationCC extends CommandClass {
 			}
 		}
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `determining whether this node is pull or push...`,
 			direction: "outbound",
@@ -552,10 +559,10 @@ export class NotificationCC extends CommandClass {
 
 	/** Whether the node implements push or pull notifications */
 	public static getNotificationMode(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		node: NodeId,
 	): MaybeNotKnown<"push" | "pull"> {
-		return applHost
+		return ctx
 			.getValueDB(node.id)
 			.getValue(NotificationCCValues.notificationMode.id);
 	}
@@ -884,18 +891,24 @@ export class NotificationCC extends CommandClass {
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 	): boolean {
 		// Pull-mode nodes must be polled regularly
 
 		const isPullMode = NotificationCC.getNotificationMode(
-			applHost,
-			this.getNode(applHost)!,
+			ctx,
+			this.getNode(ctx)!,
 		) === "pull";
 		if (!isPullMode) return false;
 
 		const lastUpdated = this.getValue<number>(
-			applHost,
+			ctx,
 			NotificationCCValues.lastRefresh,
 		);
 
@@ -1226,7 +1239,7 @@ export class NotificationCCReport extends NotificationCC {
 		};
 	}
 
-	private parseEventParameters(applHost: ZWaveApplicationHost): void {
+	private parseEventParameters(ctx: LogNode): void {
 		// This only makes sense for V2+ notifications
 		if (
 			this.notificationType == undefined
@@ -1323,7 +1336,7 @@ export class NotificationCCReport extends NotificationCC {
 								userId: this.eventParameters[2],
 							};
 						} else {
-							applHost.logNode(
+							ctx.logNode(
 								this.nodeId as number,
 								`Failed to parse Notification CC event parameters, ignoring them...`,
 								"error",

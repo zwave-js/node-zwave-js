@@ -1,26 +1,11 @@
-import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CommandClass, type CommandClassOptions } from "./CommandClass";
-
-/** Defines the static side of an encapsulating command class */
-export interface EncapsulatingCommandClassStatic {
-	new (
-		applHost: ZWaveApplicationHost,
-		options: CommandClassOptions,
-	): EncapsulatingCommandClass;
-
-	encapsulate(
-		applHost: ZWaveApplicationHost,
-		cc: CommandClass,
-	): EncapsulatingCommandClass;
-}
+import { CommandClass } from "./CommandClass";
 
 export type EncapsulatedCommandClass = CommandClass & {
 	encapsulatingCC: EncapsulatingCommandClass;
 };
 
 export type EncapsulatingCommandClass = CommandClass & {
-	constructor: EncapsulatingCommandClassStatic;
 	encapsulated: EncapsulatedCommandClass;
 };
 
@@ -57,22 +42,7 @@ export function getInnermostCommandClass(cc: CommandClass): CommandClass {
 	}
 }
 
-/** Defines the static side of an encapsulating command class */
-export interface MultiEncapsulatingCommandClassStatic {
-	new (
-		applHost: ZWaveApplicationHost,
-		options: CommandClassOptions,
-	): MultiEncapsulatingCommandClass;
-
-	requiresEncapsulation(cc: CommandClass): boolean;
-	encapsulate(
-		applHost: ZWaveApplicationHost,
-		CCs: CommandClass[],
-	): MultiEncapsulatingCommandClass;
-}
-
 export interface MultiEncapsulatingCommandClass {
-	constructor: MultiEncapsulatingCommandClassStatic;
 	encapsulated: EncapsulatedCommandClass[];
 }
 

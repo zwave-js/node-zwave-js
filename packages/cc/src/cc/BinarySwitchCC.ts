@@ -296,10 +296,10 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 	}
 
 	public setMappedBasicValue(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		value: number,
 	): boolean {
-		this.setValue(applHost, BinarySwitchCCValues.currentValue, value > 0);
+		this.setValue(ctx, BinarySwitchCCValues.currentValue, value > 0);
 		return true;
 	}
 }

@@ -654,7 +654,7 @@ export async function removeAssociations(
 }
 
 export function getLifelineGroupIds(
-	applHost: GetValueDB & GetDeviceConfig,
+	ctx: GetValueDB & GetDeviceConfig,
 	endpoint: EndpointId & SupportsCC,
 ): number[] {
 	// For now only support this for the root endpoint - i.e. node
@@ -671,7 +671,7 @@ export function getLifelineGroupIds(
 
 	// We have a device config file that tells us which (additional) association to assign
 	let associations: ReadonlyMap<number, AssociationConfig> | undefined;
-	const deviceConfig = applHost.getDeviceConfig?.(endpoint.nodeId);
+	const deviceConfig = ctx.getDeviceConfig?.(endpoint.nodeId);
 	if (endpoint.index === 0) {
 		// The root endpoint's associations may be configured separately or as part of "endpoints"
 		associations = deviceConfig?.associations

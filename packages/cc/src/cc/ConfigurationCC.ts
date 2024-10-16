@@ -3,12 +3,17 @@ import {
 	CommandClasses,
 	ConfigValueFormat,
 	type ConfigurationMetadata,
+	type ControlsCC,
+	type EndpointId,
+	type GetEndpoint,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type NodeId,
 	type SupervisionResult,
 	SupervisionStatus,
+	type SupportsCC,
 	type ValueID,
 	ValueMetadata,
 	ZWaveError,
@@ -28,6 +33,7 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetDeviceConfig,
+	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
 	ZWaveApplicationHost,
@@ -1299,20 +1305,20 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * If this is true, we don't trust what the node reports
 	 */
 	protected paramExistsInConfigFile(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB & GetDeviceConfig,
 		parameter: number,
 		valueBitMask?: number,
 	): boolean {
 		if (
 			this.getValue(
-				applHost,
+				ctx,
 				ConfigurationCCValues.isParamInformationFromConfig,
 			) !== true
 		) {
 			return false;
 		}
 		const paramInformation = getParamInformationFromConfigFile(
-			applHost,
+			ctx,
 			this.nodeId as number,
 			this.endpointIndex,
 		);
@@ -1336,7 +1342,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Stores config parameter metadata for this CC's node
 	 */
 	public extendParamInformation(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB & GetDeviceConfig,
 		parameter: number,
 		valueBitMask: number | undefined,
 		info: Partial<ConfigurationMetadata>,
@@ -1344,14 +1350,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Don't trust param information that a node reports if we have already loaded it from a config file
 		if (
 			valueBitMask === undefined
-			&& this.paramExistsInConfigFile(applHost, parameter)
+			&& this.paramExistsInConfigFile(ctx, parameter)
 		) {
 			return;
 		}
 
 		// Retrieve the base metadata
 		const metadata = this.getParamInformation(
-			applHost,
+			ctx,
 			parameter,
 			valueBitMask,
 		);
@@ -1359,7 +1365,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		Object.assign(metadata, info);
 		// And store it back
 		this.setMetadata(
-			applHost,
+			ctx,
 			ConfigurationCCValues.paramInformation(parameter, valueBitMask),
 			metadata,
 		);
@@ -1389,7 +1395,13 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * and does not include partial parameters.
 	 */
 	public getQueriedParamInfos(
-		ctx: GetValueDB & GetSupportedCCVersion & GetDeviceConfig,
+		ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 	): Record<number, ConfigurationMetadata> {
 		const parameters = distinct(
 			this.getDefinedValueIDs(ctx)
@@ -1473,10 +1485,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 	/** Deserializes the config parameter info from a config file */
 	public deserializeParamInformationFromConfig(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB & GetDeviceConfig,
 		config: ParamInfoMap,
 	): void {
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(ctx);
 
 		// Clear old param information
 		for (const meta of valueDB.getAllMetadata(this.ccId)) {
@@ -1496,7 +1508,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 		// Allow overwriting the param info (mark it as unloaded)
 		this.setValue(
-			applHost,
+			ctx,
 			ConfigurationCCValues.isParamInformationFromConfig,
 			false,
 		);
@@ -1531,7 +1543,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				isFromConfig: true,
 			});
 			this.extendParamInformation(
-				applHost,
+				ctx,
 				param.parameter,
 				param.valueBitMask,
 				paramInfo,
@@ -1540,7 +1552,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 		// Remember that we loaded the param information from a config file
 		this.setValue(
-			applHost,
+			ctx,
 			ConfigurationCCValues.isParamInformationFromConfig,
 			true,
 		);

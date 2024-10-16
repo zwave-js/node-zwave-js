@@ -532,7 +532,13 @@ export class CommandClass implements CCId {
 	 */
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		_applHost: ZWaveApplicationHost,
+		_ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 	): boolean {
 		// This needs to be overwritten per command class.
 		// In the default implementation, don't require a refresh
@@ -564,7 +570,7 @@ export class CommandClass implements CCId {
 	 * @param _value The value of the received BasicCC
 	 */
 	public setMappedBasicValue(
-		_applHost: ZWaveApplicationHost,
+		_ctx: GetValueDB,
 		_value: number,
 	): boolean {
 		// By default, don't map
@@ -820,7 +826,13 @@ export class CommandClass implements CCId {
 
 	/** Returns a list of all value names that are defined for this CommandClass */
 	public getDefinedValueIDs(
-		ctx: GetValueDB & GetSupportedCCVersion & GetDeviceConfig,
+		ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 		includeInternal: boolean = false,
 	): ValueID[] {
 		// In order to compare value ids, we need them to be strings

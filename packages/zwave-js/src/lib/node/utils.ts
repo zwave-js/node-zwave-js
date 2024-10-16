@@ -19,10 +19,10 @@ import {
 } from "@zwave-js/core";
 import type {
 	GetDeviceConfig,
+	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
 	HostIDs,
-	ZWaveApplicationHost,
 } from "@zwave-js/host";
 
 function getValue<T>(
@@ -309,14 +309,21 @@ export function filterRootApplicationCCValueIDs<T extends ValueID>(
 
 /** Returns a list of all value names that are defined on all endpoints of this node */
 export function getDefinedValueIDs(
-	applHost: ZWaveApplicationHost,
+	ctx:
+		& HostIDs
+		& GetValueDB
+		& GetDeviceConfig
+		& GetSupportedCCVersion
+		& GetNode<
+			NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+		>,
 	node:
 		& NodeId
 		& SupportsCC
 		& ControlsCC
 		& GetEndpoint<EndpointId & SupportsCC & ControlsCC>,
 ): TranslatedValueID[] {
-	return getDefinedValueIDsInternal(applHost, node, false);
+	return getDefinedValueIDsInternal(ctx, node, false);
 }
 
 /**
@@ -324,7 +331,14 @@ export function getDefinedValueIDs(
  * Returns a list of all value names that are defined on all endpoints of this node
  */
 export function getDefinedValueIDsInternal(
-	ctx: HostIDs & GetValueDB & GetDeviceConfig & GetSupportedCCVersion,
+	ctx:
+		& HostIDs
+		& GetValueDB
+		& GetDeviceConfig
+		& GetSupportedCCVersion
+		& GetNode<
+			NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+		>,
 	node:
 		& NodeId
 		& SupportsCC

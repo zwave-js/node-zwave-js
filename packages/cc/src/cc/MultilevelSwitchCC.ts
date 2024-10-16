@@ -593,24 +593,24 @@ export class MultilevelSwitchCC extends CommandClass {
 	}
 
 	public setMappedBasicValue(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		value: number,
 	): boolean {
-		this.setValue(applHost, MultilevelSwitchCCValues.currentValue, value);
+		this.setValue(ctx, MultilevelSwitchCCValues.currentValue, value);
 		return true;
 	}
 
 	protected createMetadataForLevelChangeActions(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		// SDS13781: The Primary Switch Type SHOULD be 0x02 (Up/Down)
 		switchType: SwitchType = SwitchType["Down/Up"],
 	): void {
 		this.ensureMetadata(
-			applHost,
+			ctx,
 			MultilevelSwitchCCValues.levelChangeUp(switchType),
 		);
 		this.ensureMetadata(
-			applHost,
+			ctx,
 			MultilevelSwitchCCValues.levelChangeDown(switchType),
 		);
 	}
