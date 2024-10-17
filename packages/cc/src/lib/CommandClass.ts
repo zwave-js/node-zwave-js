@@ -492,7 +492,7 @@ export class CommandClass implements CCId {
 	}
 
 	/** Generates a representation of this CC for the log */
-	public toLogEntry(_host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(_ctx?: GetValueDB): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
 		const message: MessageRecord = {};
 		if (this.constructor === CommandClass) {
@@ -1253,7 +1253,7 @@ export class InvalidCC extends CommandClass {
 	}
 	public readonly reason?: string | ZWaveErrorCodes;
 
-	public toLogEntry(_host?: GetValueDB): MessageOrCCLogEntry {
+	public toLogEntry(_ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
 			tags: [this.ccName, "INVALID"],
 			message: this.reason != undefined
