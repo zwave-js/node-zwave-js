@@ -1,6 +1,7 @@
 import { getImplementedVersion } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
+	type CommandClassInfo,
 	type CommandClasses,
 	type FLiRS,
 	type InterviewStage,
@@ -16,7 +17,7 @@ import {
 import type {
 	BaseTestEndpoint,
 	BaseTestNode,
-	GetSafeCCVersion,
+	GetNode,
 	GetValueDB,
 } from "@zwave-js/host";
 import {
@@ -209,34 +210,35 @@ export interface CreateTestNodeOptions {
 	interviewStage?: InterviewStage;
 	isSecure?: MaybeNotKnown<boolean>;
 
-	numEndpoints?: number;
-
-	supportsCC?: (cc: CommandClasses) => boolean;
-	controlsCC?: (cc: CommandClasses) => boolean;
-	isCCSecure?: (cc: CommandClasses) => boolean;
-	getCCVersion?: (cc: CommandClasses) => number;
+	commandClasses?: Partial<
+		Record<
+			CommandClasses,
+			Partial<CommandClassInfo>
+		>
+	>;
+	endpoints?: Record<
+		number,
+		Omit<CreateTestEndpointOptions, "index" | "nodeId">
+	>;
 }
 
-export type TestNode<T extends BaseTestNode> = T & {
+export type TestNode = BaseTestNode & {
 	setEndpoint(endpoint: CreateTestEndpointOptions): void;
 };
 
 export function createTestNode(
-	host: GetValueDB & GetSafeCCVersion,
+	host: GetValueDB & GetNode<BaseTestNode>,
 	options: CreateTestNodeOptions,
-): TestNode<BaseTestNode> {
+): TestNode {
 	const endpointCache = new Map<number, BaseTestEndpoint>();
 	const securityClasses = new Map<SecurityClass, boolean>();
 
-	const ret: TestNode<BaseTestNode> = {
+	const ret: TestNode = {
 		id: options.id,
 		...createTestEndpoint(host, {
 			nodeId: options.id,
 			index: 0,
-			supportsCC: options.supportsCC,
-			controlsCC: options.controlsCC,
-			isCCSecure: options.isCCSecure,
-			getCCVersion: options.getCCVersion,
+			commandClasses: options.commandClasses,
 		}),
 
 		isListening: options.isListening ?? true,
@@ -257,34 +259,24 @@ export function createTestNode(
 				createTestEndpoint(host, {
 					nodeId: options.id,
 					index: endpoint.index,
-					supportsCC: endpoint.supportsCC ?? options.supportsCC,
-					controlsCC: endpoint.controlsCC ?? options.controlsCC,
-					isCCSecure: endpoint.isCCSecure ?? options.isCCSecure,
-					getCCVersion: endpoint.getCCVersion ?? options.getCCVersion,
+					commandClasses: endpoint.commandClasses,
 				}),
 			);
 		},
 
 		getEndpoint: ((index: number) => {
-			// When the endpoint count is known, return undefined for non-existent endpoints
-			if (
-				options.numEndpoints != undefined
-				&& index > options.numEndpoints
-			) {
-				return undefined;
-			}
+			if (index === 0) return ret;
 
 			if (!endpointCache.has(index)) {
-				ret.setEndpoint(
-					createTestEndpoint(host, {
-						nodeId: options.id,
-						index,
-						supportsCC: options.supportsCC,
-						controlsCC: options.controlsCC,
-						isCCSecure: options.isCCSecure,
-						getCCVersion: options.getCCVersion,
-					}),
-				);
+				if (!options.endpoints?.[index]) {
+					return undefined;
+				}
+
+				ret.setEndpoint({
+					nodeId: options.id,
+					index,
+					commandClasses: options.endpoints[index].commandClasses,
+				});
 			}
 			return endpointCache.get(index);
 		}) as BaseTestNode["getEndpoint"],
@@ -340,11 +332,16 @@ export function createTestNode(
 	endpointCache.set(0, ret);
 
 	// If the number of endpoints are given, use them as the individual endpoint count
-	if (options.numEndpoints != undefined) {
+	if (options.endpoints) {
 		nodeUtils.setIndividualEndpointCount(
 			host,
 			ret.id,
-			options.numEndpoints,
+			Object.keys(options.endpoints).length,
+		);
+		nodeUtils.setEndpointIndizes(
+			host,
+			ret.id,
+			Object.keys(options.endpoints).map((index) => parseInt(index, 10)),
 		);
 		nodeUtils.setAggregatedEndpointCount(host, ret.id, 0);
 		nodeUtils.setMultiChannelInterviewComplete(host, ret.id, true);
@@ -356,30 +353,46 @@ export function createTestNode(
 export interface CreateTestEndpointOptions {
 	nodeId: number;
 	index: number;
-	supportsCC?: (cc: CommandClasses) => boolean;
-	controlsCC?: (cc: CommandClasses) => boolean;
-	isCCSecure?: (cc: CommandClasses) => boolean;
-	getCCVersion?: (cc: CommandClasses) => number;
+	commandClasses?: Partial<
+		Record<
+			CommandClasses,
+			Partial<CommandClassInfo>
+		>
+	>;
 }
 
 export function createTestEndpoint(
-	host: GetSafeCCVersion,
+	host: GetNode<BaseTestNode>,
 	options: CreateTestEndpointOptions,
 ): BaseTestEndpoint {
 	const ret: BaseTestEndpoint = {
 		virtual: false,
 		nodeId: options.nodeId,
 		index: options.index,
-		supportsCC: options.supportsCC ?? (() => true),
-		controlsCC: options.controlsCC ?? (() => false),
-		isCCSecure: options.isCCSecure ?? (() => false),
-		getCCVersion: (cc) =>
-			options.getCCVersion?.(cc)
-				?? host.getSafeCCVersion(cc, options.nodeId, options.index)
-				?? 0,
-		// tryGetNode: function(): IZWaveNode | undefined {
-		// 	return host.nodes.get(options.nodeId);
-		// },
+		supportsCC: (cc) => {
+			const ccInfo = options.commandClasses?.[cc];
+			if (!ccInfo) return false;
+			return ccInfo.isSupported ?? true;
+		},
+		controlsCC: (cc) => {
+			const ccInfo = options.commandClasses?.[cc];
+			if (!ccInfo) return false;
+			return ccInfo.isControlled ?? false;
+		},
+		isCCSecure: (cc) => {
+			const ccInfo = options.commandClasses?.[cc];
+			if (!ccInfo) return false;
+			return ccInfo.secure ?? false;
+		},
+		getCCVersion: (cc) => {
+			const ccInfo = options.commandClasses?.[cc];
+			const defaultVersion = ccInfo?.isSupported
+				? getImplementedVersion(cc)
+				: 0;
+			return ccInfo?.version
+				?? host.getNode(options.nodeId)?.getCCVersion(cc)
+				?? defaultVersion;
+		},
 	};
 
 	return ret;

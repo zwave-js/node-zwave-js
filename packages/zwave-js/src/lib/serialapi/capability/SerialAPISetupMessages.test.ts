@@ -1,9 +1,6 @@
-import { createTestingHost } from "@zwave-js/host";
 import { Message } from "@zwave-js/serial";
 import test from "ava";
 import { SerialAPISetup_GetSupportedCommandsResponse } from "./SerialAPISetupMessages";
-
-const host = createTestingHost();
 
 test("GetSupportedCommandsResponse with extended bitmask parses correctly (pre-7.19.1 encoding)", (t) => {
 	const data = Buffer.from(

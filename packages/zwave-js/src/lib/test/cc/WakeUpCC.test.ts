@@ -4,11 +4,8 @@ import {
 	WakeUpCCNoMoreInformation,
 } from "@zwave-js/cc";
 import { generateAuthKey, generateEncryptionKey } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import { randomBytes } from "node:crypto";
-
-const host = createTestingHost();
 
 test("WakeUpCCNoMoreInformation should expect no response", (t) => {
 	const cc = new WakeUpCCNoMoreInformation({
@@ -41,7 +38,7 @@ test("SecurityCC/WakeUpCCNoMoreInformation should expect NO response", (t) => {
 	};
 
 	const ccRequest = SecurityCC.encapsulate(
-		host.ownNodeId,
+		1,
 		securityManager as any,
 		new WakeUpCCNoMoreInformation({
 			nodeId: 2,

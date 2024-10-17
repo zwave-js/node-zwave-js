@@ -7,10 +7,7 @@ import {
 	InvalidCC,
 	isEncapsulatingCommandClass,
 } from "@zwave-js/cc";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 test("should be detected as an encapsulating CC", (t) => {
 	const basicCCSet = new BasicCCSet({

@@ -11,7 +11,7 @@ import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import * as nodeUtils from "../../node/utils";
-import { createTestNode } from "../mocks";
+import { type CreateTestNodeOptions, createTestNode } from "../mocks";
 
 const host = createTestingHost();
 
@@ -99,28 +99,22 @@ test("deserializing an unsupported command should return an unspecified version 
 	t.is(basicCC.constructor, BasicCC);
 });
 
-test("getDefinedValueIDs() should include the target value for all endpoints except the node itself", (t) => {
+test.only("getDefinedValueIDs() should include the target value for all endpoints except the node itself", (t) => {
 	// Repro for GH#377
+	const commandClasses: CreateTestNodeOptions["commandClasses"] = {
+		[CommandClasses.Basic]: {
+			version: 1,
+		},
+		[CommandClasses["Multi Channel"]]: {
+			version: 2,
+		},
+	};
 	const node2 = createTestNode(host, {
 		id: 2,
-		numEndpoints: 2,
-		supportsCC(cc) {
-			switch (cc) {
-				case CommandClasses.Basic:
-				case CommandClasses["Multi Channel"]:
-					return true;
-			}
-			return false;
-		},
-		getCCVersion(cc) {
-			switch (cc) {
-				case CommandClasses.Basic:
-					// We only support V1, so no report of the target value
-					return 1;
-				case CommandClasses["Multi Channel"]:
-					return 2;
-			}
-			return 0;
+		commandClasses,
+		endpoints: {
+			1: { commandClasses },
+			2: { commandClasses },
 		},
 	});
 	host.setNode(node2.id, node2);

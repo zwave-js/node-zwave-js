@@ -6,10 +6,13 @@ import {
 	type CommandClass,
 	type FirmwareUpdateResult,
 	type ICommandClassContainer,
+	type InterviewContext,
 	InvalidCC,
 	KEXFailType,
 	MultiChannelCC,
+	type PersistValuesContext,
 	type Powerlevel,
+	type RefreshValuesContext,
 	Security2CC,
 	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,
@@ -598,7 +601,11 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * instance or its associated nodes.
  */
 export class Driver extends TypedEventEmitter<DriverEventCallbacks>
-	implements CCAPIHost
+	implements
+		CCAPIHost,
+		InterviewContext,
+		RefreshValuesContext,
+		PersistValuesContext
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
@@ -992,17 +999,17 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.controller.ownNodeId!;
 	}
 
-	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	/** @internal Used for compatibility with the CCAPIHost interface */
 	public getNode(nodeId: number): ZWaveNode | undefined {
 		return this.controller.nodes.get(nodeId);
 	}
 
-	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	/** @internal Used for compatibility with the CCAPIHost interface */
 	public getNodeOrThrow(nodeId: number): ZWaveNode {
 		return this.controller.nodes.getOrThrow(nodeId);
 	}
 
-	/** @internal Used for compatibility with the ZWaveApplicationHost interface */
+	/** @internal Used for compatibility with the CCAPIHost interface */
 	public getAllNodes(): ZWaveNode[] {
 		return [...this.controller.nodes.values()];
 	}
@@ -2931,14 +2938,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/**
 	 * **!!! INTERNAL !!!**
 	 *
-	 * Not intended to be used by applications
+	 * Not intended to be used by applications.
+	 * Needed for compatibility with CCAPIHost
 	 */
 	public schedulePoll(
 		nodeId: number,
 		valueId: ValueID,
 		options: NodeSchedulePollOptions,
 	): boolean {
-		// Needed for ZWaveApplicationHost
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.schedulePoll(valueId, options);
 	}

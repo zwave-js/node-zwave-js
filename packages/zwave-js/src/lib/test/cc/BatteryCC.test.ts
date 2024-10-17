@@ -7,10 +7,7 @@ import {
 	BatteryReplacementStatus,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 test("the Get command should serialize correctly", (t) => {
 	const batteryCC = new BatteryCCGet({ nodeId: 1 });

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/require-await */
 import {
 	type ControlsCC,
 	type EndpointId,
@@ -15,15 +14,16 @@ import {
 } from "@zwave-js/core";
 import { createThrowingMap } from "@zwave-js/shared";
 import type {
-	GetSafeCCVersion,
+	GetAllNodes,
+	GetDeviceConfig,
+	GetNode,
 	GetSupportedCCVersion,
+	GetValueDB,
 	HostIDs,
-	ZWaveApplicationHost,
+	LogNode,
 } from "./ZWaveHost";
 
-export interface CreateTestingHostOptions
-	extends HostIDs, GetSafeCCVersion, Partial<GetSupportedCCVersion>
-{}
+export interface CreateTestingHostOptions extends HostIDs, GetDeviceConfig {}
 
 export type BaseTestEndpoint =
 	& EndpointId
@@ -42,38 +42,42 @@ export type BaseTestNode =
 	& IsCCSecure
 	& GetEndpoint<BaseTestEndpoint>;
 
-export type TestingHost<
-	TNode extends BaseTestNode,
-> =
-	& ZWaveApplicationHost<TNode>
-	& {
-		setNode(nodeId: number, node: TNode): void;
-	};
+export interface TestingHost extends
+	HostIDs,
+	GetValueDB,
+	// GetSafeCCVersion,
+	GetSupportedCCVersion,
+	GetAllNodes<BaseTestNode>,
+	GetNode<BaseTestNode>,
+	GetDeviceConfig,
+	LogNode
+{
+	setNode(nodeId: number, node: BaseTestNode): void;
+}
 
 /** Creates a {@link ZWaveApplicationHost} that can be used for testing */
-export function createTestingHost<
-	TNode extends BaseTestNode,
->(
+export function createTestingHost(
 	options: Partial<CreateTestingHostOptions> = {},
-): TestingHost<TNode> {
+): TestingHost {
 	const valuesStorage = new Map();
 	const metadataStorage = new Map();
 	const valueDBCache = new Map<number, ValueDB>();
-	const nodes = createThrowingMap<number, TNode>((nodeId) => {
+	const nodes = createThrowingMap<number, BaseTestNode>((nodeId) => {
 		throw new ZWaveError(
 			`Node ${nodeId} was not found!`,
 			ZWaveErrorCodes.Controller_NodeNotFound,
 		);
 	});
 
-	const ret: TestingHost<TNode> = {
+	const ret: TestingHost = {
 		homeId: options.homeId ?? 0x7e570001,
 		ownNodeId: options.ownNodeId ?? 1,
-		securityManager: undefined,
-		securityManager2: undefined,
-		securityManagerLR: undefined,
-		getDeviceConfig: () => undefined,
-		lookupManufacturer: () => undefined,
+		getDeviceConfig: options.getDeviceConfig ?? (() => undefined),
+		// securityManager: undefined,
+		// securityManager2: undefined,
+		// securityManagerLR: undefined,
+		// getDeviceConfig: () => undefined,
+		// lookupManufacturer: () => undefined,
 		logNode: () => {},
 		// options: {
 		// 	attempts: {
@@ -87,18 +91,18 @@ export function createTestingHost<
 		// 		refreshValueAfterTransition: 1000,
 		// 	},
 		// },
-		getInterviewOptions() {
-			return {};
-		},
-		getUserPreferences() {
-			return undefined;
-		},
-		getCommunicationTimeouts() {
-			return {
-				refreshValue: 5000,
-				refreshValueAfterTransition: 1000,
-			};
-		},
+		// getInterviewOptions() {
+		// 	return {};
+		// },
+		// getUserPreferences() {
+		// 	return undefined;
+		// },
+		// getCommunicationTimeouts() {
+		// 	return {
+		// 		refreshValue: 5000,
+		// 		refreshValueAfterTransition: 1000,
+		// 	};
+		// },
 		getNode(nodeId) {
 			return nodes.get(nodeId);
 		},
@@ -111,11 +115,14 @@ export function createTestingHost<
 		setNode(nodeId, node) {
 			nodes.set(nodeId, node);
 		},
-		getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
+		// getSafeCCVersion: options.getSafeCCVersion ?? (() => 100),
 		getSupportedCCVersion: (cc, nodeId, endpoint) => {
-			return options.getSupportedCCVersion?.(cc, nodeId, endpoint)
-				?? options.getSafeCCVersion?.(cc, nodeId, endpoint)
-				?? 100;
+			return nodes.get(nodeId)?.getEndpoint(endpoint ?? 0)?.getCCVersion(
+				cc,
+			) ?? 0;
+			// 	return options.getSupportedCCVersion?.(cc, nodeId, endpoint)
+			// 		?? options.getSafeCCVersion?.(cc, nodeId, endpoint)
+			// 		?? 100;
 		},
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
@@ -145,12 +152,12 @@ export function createTestingHost<
 		// 	const node = nodes.getOrThrow(nodeId);
 		// 	node.setSecurityClass(securityClass, granted);
 		// },
-		sendCommand: async (_command, _options) => {
-			return undefined as any;
-		},
-		schedulePoll: (_nodeId, _valueId, _options) => {
-			return false;
-		},
+		// sendCommand: async (_command, _options) => {
+		// 	return undefined as any;
+		// },
+		// schedulePoll: (_nodeId, _valueId, _options) => {
+		// 	return false;
+		// },
 	};
 	return ret;
 }

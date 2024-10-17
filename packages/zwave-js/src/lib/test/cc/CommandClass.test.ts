@@ -10,11 +10,8 @@ import {
 	implementedVersion,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
 import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
-
-const host = createTestingHost();
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
@@ -82,7 +79,7 @@ test("getImplementedVersion() should return the implemented version for a numeri
 
 test("getImplementedVersion() should return 0 for a non-existing CC", (t) => {
 	const cc = -1;
-	t.is(getImplementedVersion(cc), 0);
+	t.is(getImplementedVersion(cc as any), 0);
 });
 
 test("getImplementedVersion() should work with inheritance", (t) => {

@@ -16,10 +16,8 @@ import {
 	ZWaveErrorCodes,
 	assertZWaveError,
 } from "@zwave-js/core";
-import { type GetSupportedCCVersion, createTestingHost } from "@zwave-js/host";
+import { type GetSupportedCCVersion } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

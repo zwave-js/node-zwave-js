@@ -6,7 +6,6 @@ import type { INodeQuery } from "./INodeQuery";
 import { Message, messageTypes } from "./Message";
 
 test("should deserialize and serialize correctly", (t) => {
-	const host = createTestingHost();
 	// actual messages from OZW
 	const okayMessages = [
 		Buffer.from([
@@ -46,7 +45,6 @@ test("should deserialize and serialize correctly", (t) => {
 });
 
 test("should serialize correctly when the payload is null", (t) => {
-	const host = createTestingHost();
 	// synthetic message
 	const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
 	const message = new Message({
@@ -57,7 +55,6 @@ test("should serialize correctly when the payload is null", (t) => {
 });
 
 test("should throw the correct error when parsing a faulty message", (t) => {
-	const host = createTestingHost();
 	// fake messages to produce certain errors
 	const brokenMessages: [Buffer, string, ZWaveErrorCodes][] = [
 		// too short (<5 bytes)
@@ -252,7 +249,6 @@ test("isComplete() should work correctly", (t) => {
 });
 
 test("toJSON() should return a semi-readable JSON representation", (t) => {
-	const host = createTestingHost();
 	const msg1 = new Message({
 		type: MessageType.Request,
 		functionType: FunctionType.GetControllerVersion,
@@ -312,7 +308,6 @@ test("getConstructor() should return `Message` for an unknown packet type", (t) 
 });
 
 test(`the constructor should throw when no message type is specified`, (t) => {
-	const host = createTestingHost();
 	assertZWaveError(
 		t,
 		() => new Message({ functionType: 0xff as any }),
@@ -332,7 +327,6 @@ test(`the constructor should throw when no message type is specified`, (t) => {
 });
 
 test(`the constructor should throw when no function type is specified`, (t) => {
-	const host = createTestingHost();
 	assertZWaveError(
 		t,
 		() => new Message({ type: MessageType.Request }),
