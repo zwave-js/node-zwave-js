@@ -16,7 +16,6 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
