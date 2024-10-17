@@ -4331,11 +4331,11 @@ export function zwaveDataRateToString(rate: ZWaveDataRate): string;
 // @public
 export class ZWaveError extends Error {
     constructor(message: string, code: ZWaveErrorCodes,
-    context?: unknown | undefined,
+    context?: unknown,
     transactionSource?: string | undefined);
     // (undocumented)
     readonly code: ZWaveErrorCodes;
-    readonly context?: unknown | undefined;
+    readonly context?: unknown;
     // (undocumented)
     readonly message: string;
     readonly transactionSource?: string | undefined;

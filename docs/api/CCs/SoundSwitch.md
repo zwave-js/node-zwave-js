@@ -71,7 +71,7 @@ async getPlaying(): Promise<Pick<SoundSwitchCCTonePlayReport, "toneId" | "volume
 - **stateful:** true
 - **secret:** false
 - **value type:** `"number"`
-- **min. value:** 0
+- **min. value:** 1
 - **max. value:** 254
 
 ### `defaultVolume`

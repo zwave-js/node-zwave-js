@@ -13,9 +13,11 @@ import type { ConfigValueFormat } from '@zwave-js/core';
 import { FunctionType } from '@zwave-js/serial/safe';
 import { ICommandClass } from '@zwave-js/core';
 import type { KeypadMode } from '@zwave-js/cc';
+import type { MaybeUnknown } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import type { MockPortBinding } from '@zwave-js/serial/mock';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
+import type { SwitchType } from '@zwave-js/cc';
 import type { ThermostatMode } from '@zwave-js/cc';
 import type { ThermostatSetpointType } from '@zwave-js/cc';
 import type { UserIDStatus } from '@zwave-js/cc';
@@ -32,6 +34,14 @@ export interface BinarySensorCCCapabilities {
     getValue?: (sensorType: number | undefined) => boolean | undefined;
     // (undocumented)
     supportedSensorTypes: number[];
+}
+
+// Warning: (ae-missing-release-tag) "BinarySwitchCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface BinarySwitchCCCapabilities {
+    // (undocumented)
+    defaultValue?: MaybeUnknown<boolean>;
 }
 
 // Warning: (ae-missing-release-tag) "ccCaps" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -51,7 +61,9 @@ export type CCSpecificCapabilities = {
     [CommandClasses.Configuration]: ConfigurationCCCapabilities;
     [CommandClasses.Notification]: NotificationCCCapabilities;
     [48]: BinarySensorCCCapabilities;
+    [0x25]: BinarySwitchCCCapabilities;
     [49]: MultilevelSensorCCCapabilities;
+    [0x26]: MultilevelSwitchCCCapabilities;
     [51]: ColorSwitchCCCapabilities;
     [121]: SoundSwitchCCCapabilities;
     [106]: WindowCoveringCCCapabilities;
@@ -436,6 +448,16 @@ export interface MultilevelSensorCCCapabilities {
     }>;
 }
 
+// Warning: (ae-missing-release-tag) "MultilevelSwitchCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface MultilevelSwitchCCCapabilities {
+    // (undocumented)
+    defaultValue?: MaybeUnknown<number>;
+    // (undocumented)
+    primarySwitchType: SwitchType;
+}
+
 // Warning: (ae-missing-release-tag) "NotificationCCCapabilities" is part of the package's API, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public (undocumented)
@@ -536,21 +558,21 @@ export interface WindowCoveringCCCapabilities {
 
 // Warnings were encountered during analysis:
 //
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:478:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ColorSwitchCC.ts:478:9 - (TS2345) Argument of type '("index" | "warmWhite" | "coldWhite" | "red" | "green" | "blue" | "amber" | "cyan" | "purple" | undefined)[]' is not assignable to parameter of type 'readonly (string | number | symbol)[]'.
 //   Type 'string | undefined' is not assignable to type 'string | number | symbol'.
 //     Type 'undefined' is not assignable to type 'string | number | symbol'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1273:41 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1273:41 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1280:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1280:20 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1398:40 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/ConfigurationCC.ts:1398:40 - (TS2345) Argument of type 'string | number' is not assignable to parameter of type 'number'.
 //   Type 'string' is not assignable to type 'number'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1456:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1456:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MGRPExtension | undefined'.
 //   Property 'groupId' is missing in type 'Security2Extension' but required in type 'MGRPExtension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1467:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1467:3 - (TS2322) Type 'Security2Extension | undefined' is not assignable to type 'MPANExtension | undefined'.
 //   Type 'Security2Extension' is missing the following properties from type 'MPANExtension': groupId, innerMPANState
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1481:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
-// /home/dominic/Repositories/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1542:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1481:25 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
+// /home/runner/work/node-zwave-js/node-zwave-js/packages/cc/src/cc/Security2CC.ts:1542:19 - (TS2339) Property 'senderEI' does not exist on type 'Security2Extension'.
 
 // (No @packageDocumentation comment for this package)
 
