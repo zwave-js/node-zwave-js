@@ -22,7 +22,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -1106,7 +1105,6 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	}
 
 	public mergePartialCCs(
-		applHost: ZWaveApplicationHost,
 		partials: MultiChannelCCEndPointFindReport[],
 		_ctx: CCParsingContext,
 	): void {

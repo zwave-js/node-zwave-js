@@ -18,7 +18,6 @@ import type {
 	CCParsingContext,
 	GetDeviceConfig,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -667,7 +666,6 @@ export class AssociationCCReport extends AssociationCC {
 	}
 
 	public mergePartialCCs(
-		applHost: ZWaveApplicationHost,
 		partials: AssociationCCReport[],
 		_ctx: CCParsingContext,
 	): void {

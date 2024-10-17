@@ -323,15 +323,15 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	// `refreshValues()` would create 255 `Get` commands to be issued to the node
 	// Therefore, I think we should not implement it. Here is how it would be implemented
 	//
-	// public async refreshValues(applHost: ZWaveApplicationHost<CCNode>): Promise<void> {
-	// 	const node = this.getNode(applHost)!;
-	// 	const endpoint = this.getEndpoint(applHost)!;
+	// public async refreshValues(ctx: RefreshValuesContext): Promise<void> {
+	// 	const node = this.getNode(ctx)!;
+	// 	const endpoint = this.getEndpoint(ctx)!;
 	// 	const api = endpoint.commandClasses[
 	// 		"Scene Actuator Configuration"
 	// 	].withOptions({
 	// 		priority: MessagePriority.NodeQuery,
 	// 	});
-	// 	this.applHost.logNode(node.id, {
+	// 	ctx.logNode(node.id, {
 	// 		message: "querying all scene actuator configs...",
 	// 		direction: "outbound",
 	// 	});

@@ -25,7 +25,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { wait } from "alcalzone-shared/async";
@@ -754,7 +753,6 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	}
 
 	public mergePartialCCs(
-		applHost: ZWaveApplicationHost,
 		partials: SecurityCCCommandEncapsulation[],
 		ctx: CCParsingContext,
 	): void {
@@ -1044,7 +1042,6 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public controlledCCs: CommandClasses[];
 
 	public mergePartialCCs(
-		applHost: ZWaveApplicationHost,
 		partials: SecurityCCCommandsSupportedReport[],
 	): void {
 		// Concat the lists of CCs

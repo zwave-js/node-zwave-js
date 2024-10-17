@@ -43,7 +43,6 @@ import type {
 	GetValueDB,
 	LogNode,
 	LookupManufacturer,
-	ZWaveApplicationHost,
 } from "@zwave-js/host";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
@@ -1048,7 +1047,6 @@ export class CommandClass implements CCId {
 
 	/** Include previously received partial responses into a final CC */
 	public mergePartialCCs(
-		_applHost: ZWaveApplicationHost,
 		_partials: CommandClass[],
 		_ctx: CCParsingContext,
 	): void {

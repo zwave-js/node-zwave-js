@@ -36,7 +36,6 @@ import type {
 	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -2389,7 +2388,6 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	}
 
 	public mergePartialCCs(
-		applHost: ZWaveApplicationHost,
 		partials: ConfigurationCCNameReport[],
 		_ctx: CCParsingContext,
 	): void {
@@ -2548,7 +2546,6 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	}
 
 	public mergePartialCCs(
-		applHost: ZWaveApplicationHost,
 		partials: ConfigurationCCInfoReport[],
 		_ctx: CCParsingContext,
 	): void {

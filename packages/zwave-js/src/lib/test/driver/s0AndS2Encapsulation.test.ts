@@ -110,7 +110,7 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs(undefined as any, [], {} as any);
+					receivedCC.mergePartialCCs([], {} as any);
 				}
 				return undefined;
 			},

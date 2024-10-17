@@ -11,7 +11,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
 import {
@@ -343,7 +342,6 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	}
 
 	public mergePartialCCs(
-		applHost: ZWaveApplicationHost,
 		partials: [
 			TransportServiceCCFirstSegment,
 			...TransportServiceCCSubsequentSegment[],

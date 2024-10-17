@@ -207,7 +207,6 @@ integrationTest(
 							receivedCC instanceof SecurityCCCommandEncapsulation
 						) {
 							receivedCC.mergePartialCCs(
-								undefined as any,
 								[],
 								{} as any,
 							);

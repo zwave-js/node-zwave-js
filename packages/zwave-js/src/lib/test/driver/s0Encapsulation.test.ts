@@ -169,7 +169,7 @@ integrationTest("Communication via Security S0 works", {
 			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs(undefined as any, [], {} as any);
+					receivedCC.mergePartialCCs([], {} as any);
 				}
 				// This just decodes - we need to call further handlers
 				return undefined;

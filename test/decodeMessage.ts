@@ -8,7 +8,7 @@ import {
 	NodeIDType,
 	SPANState,
 	SecurityClass,
-	SecurityManager,
+	type SecurityManager,
 	SecurityManager2,
 	generateAuthKey,
 	generateEncryptionKey,
@@ -97,10 +97,10 @@ import { Message } from "@zwave-js/serial";
 		getHighestSecurityClass: () => SecurityClass.S2_AccessControl,
 		hasSecurityClass: () => true,
 	};
-	const msg = Message.from(host as any, { data, ctx: ctx as any });
+	const msg = Message.from({ data, ctx: ctx as any });
 
 	if (isCommandClassContainer(msg)) {
-		msg.command.mergePartialCCs(host as any, [], {} as any);
+		msg.command.mergePartialCCs([], {} as any);
 	}
 	msg;
 	debugger;

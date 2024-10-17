@@ -14,12 +14,16 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { createThrowingMap } from "@zwave-js/shared";
-import type { HostIDs, ZWaveApplicationHost } from "./ZWaveHost";
+import type {
+	GetSafeCCVersion,
+	GetSupportedCCVersion,
+	HostIDs,
+	ZWaveApplicationHost,
+} from "./ZWaveHost";
 
-export interface CreateTestingHostOptions extends HostIDs {
-	getSafeCCVersion: ZWaveApplicationHost["getSafeCCVersion"];
-	getSupportedCCVersion?: ZWaveApplicationHost["getSupportedCCVersion"];
-}
+export interface CreateTestingHostOptions
+	extends HostIDs, GetSafeCCVersion, Partial<GetSupportedCCVersion>
+{}
 
 export type BaseTestEndpoint =
 	& EndpointId

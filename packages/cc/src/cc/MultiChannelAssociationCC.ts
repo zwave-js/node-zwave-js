@@ -19,7 +19,6 @@ import type {
 	CCEncodingContext,
 	CCParsingContext,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -818,7 +817,6 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	}
 
 	public mergePartialCCs(
-		applHost: ZWaveApplicationHost,
 		partials: MultiChannelAssociationCCReport[],
 		_ctx: CCParsingContext,
 	): void {

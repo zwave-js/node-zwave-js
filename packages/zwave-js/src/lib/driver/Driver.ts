@@ -1,5 +1,6 @@
 import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
 import {
+	type CCAPIHost,
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	type CommandClass,
@@ -113,7 +114,6 @@ import type {
 	CCEncodingContext,
 	HostIDs,
 	NodeSchedulePollOptions,
-	ZWaveApplicationHost,
 	ZWaveHostOptions,
 } from "@zwave-js/host";
 import {
@@ -598,7 +598,7 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * instance or its associated nodes.
  */
 export class Driver extends TypedEventEmitter<DriverEventCallbacks>
-	implements ZWaveApplicationHost</* TNode = */ ZWaveNode>
+	implements CCAPIHost
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
@@ -4460,7 +4460,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					// this is the final one, merge the previous responses
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
-						command.mergePartialCCs(this, session, {
+						command.mergePartialCCs(session, {
 							sourceNodeId: msg.command.nodeId as number,
 							...this.getCCParsingContext(),
 						});
