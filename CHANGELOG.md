@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 13.9.1 (2024-10-17)
 ### Bugfixes
 * Fixed an issue where preferred scales were not being found when set as a string (#7286)
 
