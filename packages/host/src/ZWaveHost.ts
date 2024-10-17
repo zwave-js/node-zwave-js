@@ -161,25 +161,6 @@ export interface GetCommunicationTimeouts {
 
 export type LogNode = Pick<ControllerLogger, "logNode">;
 
-export interface ZWaveApplicationHost<TNode extends NodeId = NodeId>
-	extends
-		GetValueDB,
-		HostIDs,
-		GetNode<TNode>,
-		GetAllNodes<TNode>,
-		SecurityManagers,
-		GetDeviceConfig,
-		LookupManufacturer,
-		SchedulePoll,
-		GetSupportedCCVersion,
-		GetSafeCCVersion,
-		SendCommand,
-		GetInterviewOptions,
-		GetUserPreferences,
-		GetCommunicationTimeouts,
-		LogNode
-{}
-
 /** Allows scheduling a value refresh (poll) for a later time */
 export interface SchedulePoll {
 	schedulePoll(

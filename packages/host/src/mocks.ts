@@ -42,20 +42,20 @@ export type BaseTestNode =
 	& IsCCSecure
 	& GetEndpoint<BaseTestEndpoint>;
 
-export interface TestingHost extends
-	HostIDs,
-	GetValueDB,
-	// GetSafeCCVersion,
-	GetSupportedCCVersion,
-	GetAllNodes<BaseTestNode>,
-	GetNode<BaseTestNode>,
-	GetDeviceConfig,
-	LogNode
+export interface TestingHost
+	extends
+		HostIDs,
+		GetValueDB,
+		GetSupportedCCVersion,
+		GetAllNodes<BaseTestNode>,
+		GetNode<BaseTestNode>,
+		GetDeviceConfig,
+		LogNode
 {
 	setNode(nodeId: number, node: BaseTestNode): void;
 }
 
-/** Creates a {@link ZWaveApplicationHost} that can be used for testing */
+/** Creates a {@link TestingHost} that can be used instead of a real driver instance in tests */
 export function createTestingHost(
 	options: Partial<CreateTestingHostOptions> = {},
 ): TestingHost {
