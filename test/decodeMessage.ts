@@ -5,8 +5,10 @@ import "zwave-js";
 import { isCommandClassContainer } from "@zwave-js/cc";
 import { ConfigManager } from "@zwave-js/config";
 import {
+	NodeIDType,
 	SPANState,
 	SecurityClass,
+	type SecurityManager,
 	SecurityManager2,
 	generateAuthKey,
 	generateEncryptionKey,
@@ -19,7 +21,7 @@ import { Message } from "@zwave-js/serial";
 
 	// The data to decode
 	const data = Buffer.from(
-		"012900a8000102209f035a0112c1a5ab925f01ee99f1c610bc6c0422f7fd5923f8f1688d1999114000b5d5",
+		"011100a800000100820343050200a7007f7f25",
 		"hex",
 	);
 	// The nonce needed to decode it
@@ -53,7 +55,7 @@ import { Message } from "@zwave-js/serial";
 	});
 
 	console.log(Message.getMessageLength(data));
-	const host: any = {
+	const host = {
 		getSafeCCVersion: () => 1,
 		getSupportedCCVersion: () => 1,
 		configManager,
@@ -81,21 +83,24 @@ import { Message } from "@zwave-js/serial";
 		get nodes() {
 			return host.controller.nodes;
 		},
+		isCCSecure: () => true,
+		nodeIdType: NodeIDType.Long,
+	};
+	const ctx = {
 		securityManager: {
 			getNonce: () => nonce,
 			deleteNonce() {},
 			authKey: generateAuthKey(networkKey),
 			encryptionKey: generateEncryptionKey(networkKey),
-		},
+		} as unknown as SecurityManager,
 		securityManager2: sm2,
 		getHighestSecurityClass: () => SecurityClass.S2_AccessControl,
 		hasSecurityClass: () => true,
-		isCCSecure: () => true,
 	};
-	const msg = Message.from(host, { data });
+	const msg = Message.from({ data, ctx: ctx as any });
 
 	if (isCommandClassContainer(msg)) {
-		msg.command.mergePartialCCs(host, []);
+		msg.command.mergePartialCCs([], {} as any);
 	}
 	msg;
 	debugger;

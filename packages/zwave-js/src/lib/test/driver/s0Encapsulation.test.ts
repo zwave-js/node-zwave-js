@@ -31,26 +31,26 @@ integrationTest("Communication via Security S0 works", {
 			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			nonceTimeout: 100000,
 		});
-		mockNode.host.securityManager = sm0Node;
+		mockNode.securityManagers.securityManager = sm0Node;
 
 		// Create a security manager for the controller
 		const sm0Ctrlr = new SecurityManager({
-			ownNodeId: controller.host.ownNodeId,
+			ownNodeId: controller.ownNodeId,
 			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			nonceTimeout: 100000,
 		});
-		controller.host.securityManager = sm0Ctrlr;
+		controller.securityManagers.securityManager = sm0Ctrlr;
 
 		// Respond to S0 Nonce Get
 		const respondToS0NonceGet: MockNodeBehavior = {
 			handleCC(controller, self, receivedCC) {
 				if (receivedCC instanceof SecurityCCNonceGet) {
 					const nonce = sm0Node.generateNonce(
-						controller.host.ownNodeId,
+						controller.ownNodeId,
 						8,
 					);
-					const cc = new SecurityCCNonceReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+					const cc = new SecurityCCNonceReport({
+						nodeId: controller.ownNodeId,
 						nonce,
 					});
 					return { action: "sendCC", cc };
@@ -67,8 +67,8 @@ integrationTest("Communication via Security S0 works", {
 					&& receivedCC.encapsulated
 						instanceof SecurityCCCommandsSupportedGet
 				) {
-					const nonceGet = new SecurityCCNonceGet(self.host, {
-						nodeId: controller.host.ownNodeId,
+					const nonceGet = new SecurityCCNonceGet({
+						nodeId: controller.ownNodeId,
 					});
 					await self.sendToController(
 						createMockZWaveRequestFrame(nonceGet, {
@@ -88,15 +88,16 @@ integrationTest("Communication via Security S0 works", {
 					);
 					const receiverNonce = nonceReport.payload.nonce;
 
-					const response = new SecurityCCCommandsSupportedReport(
-						self.host,
-						{
-							nodeId: controller.host.ownNodeId,
-							supportedCCs: [CommandClasses.Basic],
-							controlledCCs: [],
-						},
+					const response = new SecurityCCCommandsSupportedReport({
+						nodeId: controller.ownNodeId,
+						supportedCCs: [CommandClasses.Basic],
+						controlledCCs: [],
+					});
+					const cc = SecurityCC.encapsulate(
+						self.id,
+						self.securityManagers.securityManager!,
+						response,
 					);
-					const cc = SecurityCC.encapsulate(self.host, response);
 					cc.nonce = receiverNonce;
 
 					await self.sendToController(
@@ -119,8 +120,8 @@ integrationTest("Communication via Security S0 works", {
 					receivedCC instanceof SecurityCCCommandEncapsulation
 					&& receivedCC.encapsulated instanceof BasicCCGet
 				) {
-					const nonceGet = new SecurityCCNonceGet(self.host, {
-						nodeId: controller.host.ownNodeId,
+					const nonceGet = new SecurityCCNonceGet({
+						nodeId: controller.ownNodeId,
 					});
 					await self.sendToController(
 						createMockZWaveRequestFrame(nonceGet, {
@@ -140,11 +141,15 @@ integrationTest("Communication via Security S0 works", {
 					);
 					const receiverNonce = nonceReport.payload.nonce;
 
-					const response = new BasicCCReport(self.host, {
-						nodeId: controller.host.ownNodeId,
+					const response = new BasicCCReport({
+						nodeId: controller.ownNodeId,
 						currentValue: ++queryCount,
 					});
-					const cc = SecurityCC.encapsulate(self.host, response);
+					const cc = SecurityCC.encapsulate(
+						self.id,
+						self.securityManagers.securityManager!,
+						response,
+					);
 					cc.nonce = receiverNonce;
 
 					await self.sendToController(
@@ -164,7 +169,7 @@ integrationTest("Communication via Security S0 works", {
 			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs(undefined as any, []);
+					receivedCC.mergePartialCCs([], {} as any);
 				}
 				// This just decodes - we need to call further handlers
 				return undefined;

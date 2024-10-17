@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	type MulticastCC,
 	type MulticastDestination,
+	NODE_ID_BROADCAST,
 	type SerializableTXReport,
 	type SinglecastCC,
 	type TXReport,
@@ -15,12 +16,13 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { CCEncodingContext } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageOrigin,
 	MessageType,
@@ -46,21 +48,21 @@ export const MAX_SEND_ATTEMPTS = 5;
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
 				options.origin === MessageOrigin.Host
 				&& (new.target as any) !== SendDataRequest
 			) {
-				return new SendDataRequest(host, options);
+				return new SendDataRequest(options);
 			} else if (
 				options.origin !== MessageOrigin.Host
 				&& (new.target as any) !== SendDataRequestTransmitReport
 			) {
-				return new SendDataRequestTransmitReport(host, options);
+				return new SendDataRequestTransmitReport(options);
 			}
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -79,16 +81,15 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SendDataRequestOptions<CCType>,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			let offset = 0;
 			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 				this.payload,
-				host.nodeIdType,
+				options.ctx.nodeIdType,
 				offset,
 			);
 			offset += nodeIdBytes;
@@ -103,10 +104,14 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			);
 
 			if (options.parseCCs !== false) {
-				this.command = CommandClass.from(host, {
+				this.command = CommandClass.from({
 					nodeId,
 					data: this.payload,
 					origin: options.origin,
+					context: {
+						sourceNodeId: nodeId,
+						...options.ctx,
+					},
 				}) as SinglecastCC<CCType>;
 			} else {
 				// Little hack for testing with a network mock. This will be parsed in the next step.
@@ -155,9 +160,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	// Cache the serialized CC, so we can check if it needs to be fragmented
 	private _serializedCC: Buffer | undefined;
 	/** @internal */
-	public serializeCC(): Buffer {
+	public serializeCC(ctx: CCEncodingContext): Buffer {
 		if (!this._serializedCC) {
-			this._serializedCC = this.command.serialize();
+			this._serializedCC = this.command.serialize(ctx);
 		}
 		return this._serializedCC;
 	}
@@ -168,9 +173,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.callbackId = undefined;
 	}
 
-	public serialize(): Buffer {
-		const nodeId = encodeNodeID(this.command.nodeId, this.host.nodeIdType);
-		const serializedCC = this.serializeCC();
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		const nodeId = encodeNodeID(this.command.nodeId, ctx.nodeIdType);
+		const serializedCC = this.serializeCC(ctx);
 		this.payload = Buffer.concat([
 			nodeId,
 			Buffer.from([serializedCC.length]),
@@ -178,7 +184,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			Buffer.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -186,7 +192,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			...super.toLogEntry(),
 			message: {
 				"transmit options": num2hex(this.transmitOptions),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -219,12 +225,11 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataRequestTransmitReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -245,7 +250,8 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 	private _txReport: SerializableTXReport | undefined;
 	public txReport: TXReport | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		this.payload = Buffer.from([
 			this.callbackId,
 			this.transmitStatus,
@@ -257,7 +263,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 			]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public isOK(): boolean {
@@ -268,7 +274,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status":
 					getEnumMemberName(TransmitStatus, this.transmitStatus)
 					+ (this.txReport
@@ -289,10 +295,9 @@ export interface SendDataResponseOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message implements SuccessIndicator {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SendDataResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.wasSent = this.payload[0] !== 0;
 		} else {
@@ -302,9 +307,9 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 
 	public wasSent: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasSent ? 1 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	isOK(): boolean {
@@ -322,26 +327,23 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticast)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
 				options.origin === MessageOrigin.Host
 				&& (new.target as any) !== SendDataMulticastRequest
 			) {
-				return new SendDataMulticastRequest(host, options);
+				return new SendDataMulticastRequest(options);
 			} else if (
 				options.origin !== MessageOrigin.Host
 				&& (new.target as any)
 					!== SendDataMulticastRequestTransmitReport
 			) {
-				return new SendDataMulticastRequestTransmitReport(
-					host,
-					options,
-				);
+				return new SendDataMulticastRequestTransmitReport(options);
 			}
 		}
 
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -359,12 +361,11 @@ export class SendDataMulticastRequest<
 	CCType extends CommandClass = CommandClass,
 > extends SendDataMulticastRequestBase implements ICommandClassContainer {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastRequestOptions<CCType>,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			const numNodeIDs = this.payload[0];
@@ -373,7 +374,7 @@ export class SendDataMulticastRequest<
 			for (let i = 0; i < numNodeIDs; i++) {
 				const { nodeId, bytesRead } = parseNodeID(
 					this.payload,
-					host.nodeIdType,
+					options.ctx.nodeIdType,
 					offset,
 				);
 				nodeIds.push(nodeId);
@@ -395,10 +396,14 @@ export class SendDataMulticastRequest<
 			this.payload = serializedCC;
 
 			if (options.parseCCs !== false) {
-				this.command = CommandClass.from(host, {
+				this.command = CommandClass.from({
 					nodeId: this._nodeIds[0],
 					data: this.payload,
 					origin: options.origin,
+					context: {
+						sourceNodeId: NODE_ID_BROADCAST, // FIXME: Unknown?
+						...options.ctx,
+					},
 				}) as MulticastCC<CCType>;
 				this.command.nodeId = this._nodeIds;
 			} else {
@@ -457,9 +462,9 @@ export class SendDataMulticastRequest<
 	// Cache the serialized CC, so we can check if it needs to be fragmented
 	private _serializedCC: Buffer | undefined;
 	/** @internal */
-	public serializeCC(): Buffer {
+	public serializeCC(ctx: CCEncodingContext): Buffer {
 		if (!this._serializedCC) {
-			this._serializedCC = this.command.serialize();
+			this._serializedCC = this.command.serialize(ctx);
 		}
 		return this._serializedCC;
 	}
@@ -470,10 +475,11 @@ export class SendDataMulticastRequest<
 		this.callbackId = undefined;
 	}
 
-	public serialize(): Buffer {
-		const serializedCC = this.serializeCC();
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		const serializedCC = this.serializeCC(ctx);
 		const destinationNodeIDs = this.command.nodeId.map((id) =>
-			encodeNodeID(id, this.host.nodeIdType)
+			encodeNodeID(id, ctx.nodeIdType)
 		);
 		this.payload = Buffer.concat([
 			// # of target nodes, not # of bytes
@@ -485,7 +491,7 @@ export class SendDataMulticastRequest<
 			Buffer.from([this.transmitOptions, this.callbackId]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -494,7 +500,7 @@ export class SendDataMulticastRequest<
 			message: {
 				"target nodes": this.command.nodeId.join(", "),
 				"transmit options": num2hex(this.transmitOptions),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -512,12 +518,11 @@ export class SendDataMulticastRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastRequestTransmitReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -534,9 +539,10 @@ export class SendDataMulticastRequestTransmitReport
 		return this._transmitStatus;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		this.payload = Buffer.from([this.callbackId, this._transmitStatus]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public isOK(): boolean {
@@ -547,7 +553,7 @@ export class SendDataMulticastRequestTransmitReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,
@@ -566,12 +572,11 @@ export class SendDataMulticastResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.wasSent = this.payload[0] !== 0;
 		} else {
@@ -581,9 +586,9 @@ export class SendDataMulticastResponse extends Message
 
 	public wasSent: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasSent ? 1 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public isOK(): boolean {

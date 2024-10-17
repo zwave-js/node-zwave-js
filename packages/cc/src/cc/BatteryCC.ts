@@ -1,8 +1,13 @@
 import { timespan } from "@zwave-js/core";
 import type {
+	ControlsCC,
+	EndpointId,
+	GetEndpoint,
 	MessageOrCCLogEntry,
 	MessageRecord,
+	NodeId,
 	SinglecastCC,
+	SupportsCC,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -14,9 +19,11 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	GetDeviceConfig,
+	GetNode,
+	GetSupportedCCVersion,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import { type AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {
@@ -30,6 +37,9 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -228,11 +238,11 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 	public async get() {
 		this.assertSupportsCommand(BatteryCommand, BatteryCommand.Get);
 
-		const cc = new BatteryCCGet(this.applHost, {
+		const cc = new BatteryCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<BatteryCCReport>(
+		const response = await this.host.sendCommand<BatteryCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -256,11 +266,11 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 	public async getHealth() {
 		this.assertSupportsCommand(BatteryCommand, BatteryCommand.HealthGet);
 
-		const cc = new BatteryCCHealthGet(this.applHost, {
+		const cc = new BatteryCCHealthGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<BatteryCCHealthReport>(
+		const response = await this.host.sendCommand<BatteryCCHealthReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -276,34 +286,38 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 export class BatteryCC extends CommandClass {
 	declare ccCommand: BatteryCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Query the Battery status
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Battery,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying battery status...",
 			direction: "outbound",
@@ -315,7 +329,7 @@ export class BatteryCC extends CommandClass {
 level:                           ${batteryStatus.level}${
 				batteryStatus.isLow ? " (low)" : ""
 			}`;
-			if (this.version >= 2) {
+			if (api.version >= 2) {
 				logMessage += `
 status:                          ${
 					BatteryChargingStatus[batteryStatus.chargingStatus!]
@@ -330,16 +344,16 @@ needs to be replaced or charged: ${
 is low temperature               ${batteryStatus.lowTemperatureStatus}
 is disconnected:                 ${batteryStatus.disconnected}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		}
 
-		if (this.version >= 2) {
+		if (api.version >= 2) {
 			// always query the health
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying battery health...",
 				direction: "outbound",
@@ -350,7 +364,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 				const logMessage = `received response for battery health:
 max. capacity: ${batteryHealth.maximumCapacity} %
 temperature:   ${batteryHealth.temperature} °C`;
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -361,10 +375,16 @@ temperature:   ${batteryHealth.temperature} °C`;
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost,
+		ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 	): boolean {
 		// Check when the battery state was last updated
-		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		const valueDB = ctx.tryGetValueDB(this.nodeId);
 		if (!valueDB) return true;
 
 		const lastUpdated = valueDB.getTimestamp(
@@ -410,10 +430,9 @@ export type BatteryCCReportOptions =
 @CCCommand(BatteryCommand.Report)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BatteryCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -454,15 +473,15 @@ export class BatteryCCReport extends BatteryCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Naïve heuristic for a full battery
 		if (this.level >= 90) {
 			// Some devices send Notification CC Reports with battery information,
 			// or this information is mapped from legacy V1 alarm values.
 			// We may need to idle the corresponding values when the battery is full
-			const notificationCCVersion = applHost.getSupportedCCVersion(
+			const notificationCCVersion = ctx.getSupportedCCVersion(
 				CommandClasses.Notification,
 				this.nodeId as number,
 				this.endpointIndex,
@@ -479,9 +498,9 @@ export class BatteryCCReport extends BatteryCC {
 						"Battery level status",
 					);
 				// If not undefined and not idle
-				if (this.getValue(applHost, batteryLevelStatusValue)) {
+				if (this.getValue(ctx, batteryLevelStatusValue)) {
 					this.setValue(
-						applHost,
+						ctx,
 						batteryLevelStatusValue,
 						0, /* idle */
 					);
@@ -522,7 +541,7 @@ export class BatteryCCReport extends BatteryCC {
 	@ccValue(BatteryCCValues.lowTemperatureStatus)
 	public readonly lowTemperatureStatus: boolean | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.isLow ? 0xff : this.level]);
 		if (this.chargingStatus != undefined) {
 			this.payload = Buffer.concat([
@@ -544,10 +563,10 @@ export class BatteryCCReport extends BatteryCC {
 				]),
 			]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			level: this.level,
 			"is low": this.isLow,
@@ -583,7 +602,7 @@ export class BatteryCCReport extends BatteryCC {
 			message.disconnected = this.disconnected;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -596,10 +615,9 @@ export class BatteryCCGet extends BatteryCC {}
 @CCCommand(BatteryCommand.HealthReport)
 export class BatteryCCHealthReport extends BatteryCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 
@@ -615,12 +633,12 @@ export class BatteryCCHealthReport extends BatteryCC {
 		this.temperatureScale = scale;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Update the temperature unit in the value DB
 		const temperatureValue = BatteryCCValues.temperature;
-		this.setMetadata(applHost, temperatureValue, {
+		this.setMetadata(ctx, temperatureValue, {
 			...temperatureValue.meta,
 			unit: this.temperatureScale === 0x00 ? "°C" : undefined,
 		});
@@ -636,9 +654,9 @@ export class BatteryCCHealthReport extends BatteryCC {
 
 	private readonly temperatureScale: number | undefined;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				temperature: this.temperature != undefined
 					? this.temperature

@@ -4,10 +4,7 @@ import {
 	SceneActivationCommand,
 } from "@zwave-js/cc";
 import { CommandClasses, Duration } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -19,7 +16,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Set command (without Duration) should serialize correctly", (t) => {
-	const cc = new SceneActivationCCSet(host, {
+	const cc = new SceneActivationCCSet({
 		nodeId: 2,
 		sceneId: 55,
 	});
@@ -30,11 +27,11 @@ test("the Set command (without Duration) should serialize correctly", (t) => {
 			0xff, // default duration
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command (with Duration) should serialize correctly", (t) => {
-	const cc = new SceneActivationCCSet(host, {
+	const cc = new SceneActivationCCSet({
 		nodeId: 2,
 		sceneId: 56,
 		dimmingDuration: new Duration(1, "minutes"),
@@ -46,7 +43,7 @@ test("the Set command (with Duration) should serialize correctly", (t) => {
 			0x80, // 1 minute
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should be deserialized correctly", (t) => {
@@ -57,9 +54,10 @@ test("the Set command should be deserialized correctly", (t) => {
 			0x00, // 0 seconds
 		]),
 	);
-	const cc = new SceneActivationCCSet(host, {
+	const cc = new SceneActivationCCSet({
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.sceneId, 15);
@@ -70,9 +68,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new SceneActivationCC(host, {
+	const cc: any = new SceneActivationCC({
 		nodeId: 2,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, SceneActivationCC);
 });

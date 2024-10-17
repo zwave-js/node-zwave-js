@@ -8,11 +8,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -20,6 +16,8 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -126,11 +124,11 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			DoorLockLoggingCommand.RecordsSupportedGet,
 		);
 
-		const cc = new DoorLockLoggingCCRecordsSupportedGet(this.applHost, {
+		const cc = new DoorLockLoggingCCRecordsSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			DoorLockLoggingCCRecordsSupportedReport
 		>(
 			cc,
@@ -149,12 +147,12 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 			DoorLockLoggingCommand.RecordGet,
 		);
 
-		const cc = new DoorLockLoggingCCRecordGet(this.applHost, {
+		const cc = new DoorLockLoggingCCRecordGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			recordNumber,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			DoorLockLoggingCCRecordReport
 		>(
 			cc,
@@ -170,33 +168,37 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 export class DoorLockLoggingCC extends CommandClass {
 	declare ccCommand: DoorLockLoggingCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Door Lock Logging"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported number of records...",
 			direction: "outbound",
@@ -204,7 +206,7 @@ export class DoorLockLoggingCC extends CommandClass {
 		const recordsCount = await api.getRecordsCount();
 
 		if (!recordsCount) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Door Lock Logging records count query timed out, skipping interview...",
@@ -216,7 +218,7 @@ export class DoorLockLoggingCC extends CommandClass {
 		const recordsCountLogMessage = `supports ${recordsCount} record${
 			recordsCount === 1 ? "" : "s"
 		}`;
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: recordsCountLogMessage,
 			direction: "inbound",
@@ -227,10 +229,9 @@ export class DoorLockLoggingCC extends CommandClass {
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
 export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 
 		this.recordsCount = this.payload[0];
@@ -239,9 +240,9 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	@ccValue(DoorLockLoggingCCValues.recordsCount)
 	public readonly recordsCount: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported no. of records": this.recordsCount,
 			},
@@ -263,10 +264,9 @@ export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {}
 @CCCommand(DoorLockLoggingCommand.RecordReport)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 11);
 
 		this.recordNumber = this.payload[0];
@@ -315,7 +315,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public readonly recordNumber: number;
 	public readonly record?: DoorLockLoggingRecord;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord;
 
 		if (!this.record) {
@@ -338,7 +338,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			}
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -366,12 +366,11 @@ function testResponseForDoorLockLoggingRecordGet(
 )
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| DoorLockLoggingCCRecordGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -384,14 +383,14 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 
 	public recordNumber: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.recordNumber]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "record number": this.recordNumber },
 		};
 	}

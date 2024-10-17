@@ -11,11 +11,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
@@ -33,6 +29,7 @@ import {
 	type CCResponsePredicate,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -119,11 +116,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.TonesNumberGet,
 		);
 
-		const cc = new SoundSwitchCCTonesNumberGet(this.applHost, {
+		const cc = new SoundSwitchCCTonesNumberGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SoundSwitchCCTonesNumberReport
 		>(
 			cc,
@@ -140,12 +137,12 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.ToneInfoGet,
 		);
 
-		const cc = new SoundSwitchCCToneInfoGet(this.applHost, {
+		const cc = new SoundSwitchCCToneInfoGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			toneId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SoundSwitchCCToneInfoReport
 		>(
 			cc,
@@ -164,13 +161,13 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.ConfigurationSet,
 		);
 
-		const cc = new SoundSwitchCCConfigurationSet(this.applHost, {
+		const cc = new SoundSwitchCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			defaultToneId,
 			defaultVolume,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -180,11 +177,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.ConfigurationGet,
 		);
 
-		const cc = new SoundSwitchCCConfigurationGet(this.applHost, {
+		const cc = new SoundSwitchCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SoundSwitchCCConfigurationReport
 		>(
 			cc,
@@ -212,13 +209,13 @@ export class SoundSwitchCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new SoundSwitchCCTonePlaySet(this.applHost, {
+		const cc = new SoundSwitchCCTonePlaySet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			toneId,
 			volume,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async stopPlaying(): Promise<SupervisionResult | undefined> {
@@ -227,13 +224,13 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.TonePlaySet,
 		);
 
-		const cc = new SoundSwitchCCTonePlaySet(this.applHost, {
+		const cc = new SoundSwitchCCTonePlaySet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			toneId: 0x00,
 			volume: 0x00,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -243,11 +240,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			SoundSwitchCommand.TonePlayGet,
 		);
 
-		const cc = new SoundSwitchCCTonePlayGet(this.applHost, {
+		const cc = new SoundSwitchCCTonePlayGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SoundSwitchCCTonePlayReport
 		>(
 			cc,
@@ -372,36 +369,38 @@ export class SoundSwitchCCAPI extends CCAPI {
 export class SoundSwitchCC extends CommandClass {
 	declare ccCommand: SoundSwitchCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Sound Switch"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "requesting tone count...",
 			direction: "outbound",
 		});
 		const toneCount = await api.getToneCount();
 		if (toneCount != undefined) {
 			const logMessage = `supports ${toneCount} tones`;
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying tone count timed out, skipping interview...",
 				level: "warn",
@@ -409,7 +408,7 @@ export class SoundSwitchCC extends CommandClass {
 			return;
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "requesting current sound configuration...",
 			direction: "outbound",
 		});
@@ -418,7 +417,7 @@ export class SoundSwitchCC extends CommandClass {
 			const logMessage = `received current sound configuration:
 default tone ID: ${config.defaultToneId}
 default volume: ${config.defaultVolume}`;
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -426,7 +425,7 @@ default volume: ${config.defaultVolume}`;
 
 		const metadataStates: Record<number, string> = {};
 		for (let toneId = 1; toneId <= toneCount; toneId++) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: `requesting info for tone #${toneId}`,
 				direction: "outbound",
 			});
@@ -435,7 +434,7 @@ default volume: ${config.defaultVolume}`;
 			const logMessage = `received info for tone #${toneId}:
 name:     ${info.name}
 duration: ${info.duration} seconds`;
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -443,7 +442,7 @@ duration: ${info.duration} seconds`;
 		}
 
 		// Remember tone count and info on the default tone ID metadata
-		this.setMetadata(applHost, SoundSwitchCCValues.defaultToneId, {
+		this.setMetadata(ctx, SoundSwitchCCValues.defaultToneId, {
 			...SoundSwitchCCValues.defaultToneId.meta,
 			min: 1,
 			max: toneCount,
@@ -451,7 +450,7 @@ duration: ${info.duration} seconds`;
 		});
 
 		// Remember tone count and info on the tone ID metadata
-		this.setMetadata(applHost, SoundSwitchCCValues.toneId, {
+		this.setMetadata(ctx, SoundSwitchCCValues.toneId, {
 			...SoundSwitchCCValues.toneId.meta,
 			min: 0,
 			max: toneCount,
@@ -463,7 +462,7 @@ duration: ${info.duration} seconds`;
 		});
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 
@@ -477,12 +476,11 @@ export interface SoundSwitchCCTonesNumberReportOptions
 @CCCommand(SoundSwitchCommand.TonesNumberReport)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCTonesNumberReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.toneCount = this.payload[0];
@@ -493,14 +491,14 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 
 	public toneCount: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.toneCount]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "# of tones": this.toneCount },
 		};
 	}
@@ -520,12 +518,11 @@ export interface SoundSwitchCCToneInfoReportOptions extends CCCommandOptions {
 @CCCommand(SoundSwitchCommand.ToneInfoReport)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCToneInfoReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.toneId = this.payload[0];
@@ -546,18 +543,18 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public readonly duration: number;
 	public readonly name: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.toneId, 0, 0, this.name.length]),
 			Buffer.from(this.name, "utf8"),
 		]);
 		this.payload.writeUInt16BE(this.duration, 1);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"tone id": this.toneId,
 				duration: `${this.duration} seconds`,
@@ -586,12 +583,11 @@ export interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 )
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCToneInfoGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.toneId = this.payload[0];
@@ -602,14 +598,14 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 
 	public toneId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.toneId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "tone id": this.toneId },
 		};
 	}
@@ -625,12 +621,11 @@ export interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
 @useSupervision()
 export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCConfigurationSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.defaultVolume = this.payload[0];
@@ -644,14 +639,14 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public defaultVolume: number;
 	public defaultToneId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"default volume": `${this.defaultVolume} %`,
 				"default tone id": this.defaultToneId,
@@ -669,12 +664,11 @@ export interface SoundSwitchCCConfigurationReportOptions {
 @CCCommand(SoundSwitchCommand.ConfigurationReport)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SoundSwitchCCConfigurationReportOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.defaultVolume = clamp(this.payload[0], 0, 100);
@@ -691,14 +685,14 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	@ccValue(SoundSwitchCCValues.defaultToneId)
 	public defaultToneId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"default volume": `${this.defaultVolume} %`,
 				"default tone id": this.defaultToneId,
@@ -722,12 +716,11 @@ export interface SoundSwitchCCTonePlaySetOptions {
 @useSupervision()
 export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SoundSwitchCCTonePlaySetOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.toneId = this.payload[0];
@@ -743,12 +736,12 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public toneId: ToneId | number;
 	public volume?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.toneId, this.volume ?? 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -756,7 +749,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -772,12 +765,11 @@ export interface SoundSwitchCCTonePlayReportOptions {
 @CCCommand(SoundSwitchCommand.TonePlayReport)
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SoundSwitchCCTonePlayReportOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.toneId = this.payload[0];
@@ -796,12 +788,12 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	@ccValue(SoundSwitchCCValues.volume)
 	public volume?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.toneId, this.volume ?? 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -809,7 +801,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

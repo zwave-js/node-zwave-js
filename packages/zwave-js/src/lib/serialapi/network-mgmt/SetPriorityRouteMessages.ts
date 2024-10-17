@@ -10,12 +10,12 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	type SuccessIndicator,
 	expectedResponse,
@@ -39,12 +39,11 @@ export type SetPriorityRouteRequestOptions =
 @expectedResponse(FunctionType.SetPriorityRoute)
 export class SetPriorityRouteRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| (MessageBaseOptions & SetPriorityRouteRequestOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -79,10 +78,10 @@ export class SetPriorityRouteRequest extends Message {
 	public repeaters: number[] | undefined;
 	public routeSpeed: ZWaveDataRate | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const nodeId = encodeNodeID(
 			this.destinationNodeId,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
 		if (this.repeaters == undefined || this.routeSpeed == undefined) {
 			// Remove the priority route
@@ -101,7 +100,7 @@ export class SetPriorityRouteRequest extends Message {
 			]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -132,14 +131,13 @@ export class SetPriorityRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		// Byte(s) 0/1 are the node ID - this is missing from the Host API specs
 		const { /* nodeId, */ bytesRead } = parseNodeID(
 			this.payload,
-			this.host.nodeIdType,
+			options.ctx.nodeIdType,
 			0,
 		);
 

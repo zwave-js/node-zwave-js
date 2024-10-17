@@ -3,8 +3,10 @@ import {
 	MessagePriority,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -51,14 +53,14 @@ interface RemoveNodeFromNetworkRequestOptions extends MessageBaseOptions {
 // no expected response, the controller will respond with multiple RemoveNodeFromNetworkRequests
 @priority(MessagePriority.Controller)
 export class RemoveNodeFromNetworkRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== RemoveNodeFromNetworkRequestStatusReport
 		) {
-			return new RemoveNodeFromNetworkRequestStatusReport(host, options);
+			return new RemoveNodeFromNetworkRequestStatusReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -94,10 +96,9 @@ export class RemoveNodeFromNetworkRequest
 	extends RemoveNodeFromNetworkRequestBase
 {
 	public constructor(
-		host: ZWaveHost,
 		options: RemoveNodeFromNetworkRequestOptions = {},
 	) {
-		super(host, options);
+		super(options);
 
 		this.removeNodeType = options.removeNodeType;
 		this.highPower = !!options.highPower;
@@ -111,14 +112,15 @@ export class RemoveNodeFromNetworkRequest
 	/** Whether to exclude network wide */
 	public networkWide: boolean = false;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		let data: number = this.removeNodeType || RemoveNodeType.Any;
 		if (this.highPower) data |= RemoveNodeFlags.HighPower;
 		if (this.networkWide) data |= RemoveNodeFlags.NetworkWide;
 
 		this.payload = Buffer.from([data, this.callbackId]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -127,10 +129,9 @@ export class RemoveNodeFromNetworkRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.callbackId = this.payload[0];
 		this.status = this.payload[1];
 		switch (this.status) {
@@ -150,7 +151,7 @@ export class RemoveNodeFromNetworkRequestStatusReport
 				// the payload contains the node ID
 				const { nodeId } = parseNodeID(
 					this.payload.subarray(2),
-					this.host.nodeIdType,
+					options.ctx.nodeIdType,
 				);
 				this.statusContext = { nodeId };
 				break;

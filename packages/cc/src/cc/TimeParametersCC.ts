@@ -1,6 +1,5 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
@@ -8,11 +7,16 @@ import {
 	formatDate,
 	validatePayload,
 } from "@zwave-js/core";
-import { type MaybeNotKnown } from "@zwave-js/core/safe";
+import {
+	type ControlsCC,
+	type EndpointId,
+	type MaybeNotKnown,
+	type SupportsCC,
+} from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	GetDeviceConfig,
+	GetValueDB,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -28,6 +32,8 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -59,8 +65,8 @@ export const TimeParametersCCValues = Object.freeze({
  * Determines if the node expects local time instead of UTC.
  */
 function shouldUseLocalTime(
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	ctx: GetDeviceConfig,
+	endpoint: EndpointId & SupportsCC & ControlsCC,
 ): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
 	// so they need to interpret the set time as local time instead of UTC.
@@ -71,7 +77,7 @@ function shouldUseLocalTime(
 	// Incidentally, this is also true when they don't support TimeCC at all
 
 	// Use UTC though when the device config file explicitly requests it
-	const forceUTC = !!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
+	const forceUTC = !!ctx.getDeviceConfig?.(endpoint.nodeId)?.compat
 		?.useUTCInTimeParametersCC;
 	if (forceUTC) return false;
 
@@ -171,11 +177,11 @@ export class TimeParametersCCAPI extends CCAPI {
 			TimeParametersCommand.Get,
 		);
 
-		const cc = new TimeParametersCCGet(this.applHost, {
+		const cc = new TimeParametersCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			TimeParametersCCReport
 		>(
 			cc,
@@ -199,15 +205,15 @@ export class TimeParametersCCAPI extends CCAPI {
 			)!
 			: this.endpoint;
 
-		const useLocalTime = shouldUseLocalTime(this.applHost, endpointToCheck);
+		const useLocalTime = shouldUseLocalTime(this.host, endpointToCheck);
 
-		const cc = new TimeParametersCCSet(this.applHost, {
+		const cc = new TimeParametersCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			dateAndTime,
 			useLocalTime,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -217,25 +223,27 @@ export class TimeParametersCCAPI extends CCAPI {
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Time Parameters"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Synchronize the node's time
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "setting current time...",
 			direction: "outbound",
@@ -243,17 +251,16 @@ export class TimeParametersCC extends CommandClass {
 		await api.set(new Date());
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 
 @CCCommand(TimeParametersCommand.Report)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 7);
 		const dateSegments = {
 			year: this.payload.readUInt16BE(0),
@@ -270,16 +277,16 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(ctx: PersistValuesContext): boolean {
 		// If necessary, fix the date and time before persisting it
-		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
+		const local = shouldUseLocalTime(ctx, this.getEndpoint(ctx)!);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
 			this._dateAndTime = segmentsToDate(segments, local);
 		}
 
-		return super.persistValues(applHost);
+		return super.persistValues(ctx);
 	}
 
 	private _dateAndTime: Date;
@@ -288,9 +295,9 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		return this._dateAndTime;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"date and time": formatDate(
 					this.dateAndTime,
@@ -315,12 +322,11 @@ export interface TimeParametersCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeParametersCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 7);
 			const dateSegments = {
@@ -349,24 +355,24 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
+	public persistValues(ctx: PersistValuesContext): boolean {
 		// We do not actually persist anything here, but we need access to the node
 		// in order to interpret the date segments correctly
 
-		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
+		const local = shouldUseLocalTime(ctx, this.getEndpoint(ctx)!);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
 			this.dateAndTime = segmentsToDate(segments, local);
 		}
 
-		return super.persistValues(applHost);
+		return super.persistValues(ctx);
 	}
 
 	public dateAndTime: Date;
 	private useLocalTime?: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const dateSegments = dateToSegments(
 			this.dateAndTime,
 			!!this.useLocalTime,
@@ -382,12 +388,12 @@ export class TimeParametersCCSet extends TimeParametersCC {
 			dateSegments.second,
 		]);
 		this.payload.writeUInt16BE(dateSegments.year, 0);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"date and time": formatDate(
 					this.dateAndTime,

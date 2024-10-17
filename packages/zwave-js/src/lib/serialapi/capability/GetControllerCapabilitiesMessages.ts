@@ -1,10 +1,10 @@
 import { ControllerCapabilityFlags, MessagePriority } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -31,12 +31,11 @@ export interface GetControllerCapabilitiesResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetControllerCapabilitiesResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			const capabilityFlags = this.payload[0];
@@ -76,7 +75,7 @@ export class GetControllerCapabilitiesResponse extends Message {
 	public isStaticUpdateController: boolean;
 	public noNodesIncluded: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			(this.isSecondary ? ControllerCapabilityFlags.Secondary : 0)
 			| (this.isUsingHomeIdFromOtherNetwork
@@ -93,6 +92,6 @@ export class GetControllerCapabilitiesResponse extends Message {
 				? ControllerCapabilityFlags.NoNodesIncluded
 				: 0),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

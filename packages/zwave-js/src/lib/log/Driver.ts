@@ -197,7 +197,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 			if (queue.length > 0) {
 				for (const trns of queue.transactions) {
 					// TODO: This formatting should be shared with the other logging methods
-					const node = trns.message.getNodeUnsafe(this.driver);
+					const node = trns.message.tryGetNode(this.driver);
 					const prefix = trns.message.type === MessageType.Request
 						? "[REQ]"
 						: "[RES]";

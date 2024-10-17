@@ -98,15 +98,15 @@ const respondToThermostatSetpointGet: MockNodeBehavior = {
 
 			let cc: ThermostatSetpointCCReport;
 			if (value !== undefined) {
-				cc = new ThermostatSetpointCCReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+				cc = new ThermostatSetpointCCReport({
+					nodeId: controller.ownNodeId,
 					type: setpointType,
 					value,
 					scale: scale ?? 0,
 				});
 			} else {
-				cc = new ThermostatSetpointCCReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+				cc = new ThermostatSetpointCCReport({
+					nodeId: controller.ownNodeId,
 					type: ThermostatSetpointType["N/A"],
 					scale: 0,
 					value: 0,
@@ -128,8 +128,8 @@ const respondToThermostatSetpointSupportedGet: MockNodeBehavior = {
 				),
 			};
 
-			const cc = new ThermostatSetpointCCSupportedReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new ThermostatSetpointCCSupportedReport({
+				nodeId: controller.ownNodeId,
 				supportedSetpointTypes: Object.keys(capabilities.setpoints).map(
 					(k) => parseInt(k),
 				),
@@ -155,8 +155,8 @@ const respondToThermostatSetpointCapabilitiesGet: MockNodeBehavior = {
 
 			let cc: ThermostatSetpointCCCapabilitiesReport;
 			if (setpointCaps) {
-				cc = new ThermostatSetpointCCCapabilitiesReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+				cc = new ThermostatSetpointCCCapabilitiesReport({
+					nodeId: controller.ownNodeId,
 					type: setpointType,
 					minValue: setpointCaps.minValue,
 					maxValue: setpointCaps.maxValue,
@@ -164,8 +164,8 @@ const respondToThermostatSetpointCapabilitiesGet: MockNodeBehavior = {
 					maxValueScale: setpointCaps.scale === "°C" ? 0 : 1,
 				});
 			} else {
-				cc = new ThermostatSetpointCCCapabilitiesReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+				cc = new ThermostatSetpointCCCapabilitiesReport({
+					nodeId: controller.ownNodeId,
 					type: ThermostatSetpointType["N/A"],
 					minValue: 0,
 					maxValue: 0,

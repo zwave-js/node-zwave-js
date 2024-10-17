@@ -51,8 +51,8 @@ integrationTest(
 			const respondToMultilevelSwitchGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof MultilevelSwitchCCGet) {
-						const cc = new MultilevelSwitchCCReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new MultilevelSwitchCCReport({
+							nodeId: controller.ownNodeId,
 							targetValue: 88,
 							currentValue: 88,
 						});
@@ -64,22 +64,18 @@ integrationTest(
 		},
 
 		testBody: async (t, driver, node, mockController, mockNode) => {
-			const nif = new ApplicationUpdateRequestNodeInfoReceived(
-				mockController.host,
-				{
-					nodeInformation: {
-						nodeId: node.id,
-						basicDeviceClass:
-							mockNode.capabilities.basicDeviceClass,
-						genericDeviceClass:
-							mockNode.capabilities.genericDeviceClass,
-						specificDeviceClass:
-							mockNode.capabilities.specificDeviceClass,
-						supportedCCs: [...mockNode.implementedCCs.keys()],
-					},
+			const nif = new ApplicationUpdateRequestNodeInfoReceived({
+				nodeInformation: {
+					nodeId: node.id,
+					basicDeviceClass: mockNode.capabilities.basicDeviceClass,
+					genericDeviceClass:
+						mockNode.capabilities.genericDeviceClass,
+					specificDeviceClass:
+						mockNode.capabilities.specificDeviceClass,
+					supportedCCs: [...mockNode.implementedCCs.keys()],
 				},
-			);
-			await mockController.sendToHost(nif.serialize());
+			});
+			await mockController.sendMessageToHost(nif);
 
 			await wait(100);
 

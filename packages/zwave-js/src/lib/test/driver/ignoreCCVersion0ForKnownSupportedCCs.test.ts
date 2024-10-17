@@ -54,8 +54,8 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = smNode;
-			mockNode.host.getHighestSecurityClass = () =>
+			mockNode.securityManagers.securityManager2 = smNode;
+			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
@@ -65,19 +65,22 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.host.securityManager2 = smCtrlr;
-			controller.host.getHighestSecurityClass = () =>
-				SecurityClass.S2_Unauthenticated;
+			controller.securityManagers.securityManager2 = smCtrlr;
+			controller.parsingContext.getHighestSecurityClass =
+				controller.encodingContext.getHighestSecurityClass =
+					() => SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new Security2CCNonceReport({
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
+							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -99,10 +102,12 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							const cc = new Security2CCNonceReport({
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
+								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -125,17 +130,18 @@ integrationTest(
 							instanceof Security2CCCommandsSupportedGet
 					) {
 						let cc: CommandClass =
-							new Security2CCCommandsSupportedReport(
-								self.host,
-								{
-									nodeId: controller.host.ownNodeId,
-									supportedCCs: [
-										// The node supports Version CC securely
-										CommandClasses.Version,
-									],
-								},
-							);
-						cc = Security2CC.encapsulate(self.host, cc);
+							new Security2CCCommandsSupportedReport({
+								nodeId: controller.ownNodeId,
+								supportedCCs: [
+									// The node supports Version CC securely
+									CommandClasses.Version,
+								],
+							});
+						cc = Security2CC.encapsulate(
+							cc,
+							self.id,
+							self.securityManagers,
+						);
 						return { action: "sendCC", cc };
 					}
 				},
@@ -152,16 +158,16 @@ integrationTest(
 						&& receivedCC.encapsulated.requestedCC
 							=== CommandClasses["Security 2"]
 					) {
-						let cc: CommandClass = new VersionCCCommandClassReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								requestedCC:
-									receivedCC.encapsulated.requestedCC,
-								ccVersion: 0,
-							},
+						let cc: CommandClass = new VersionCCCommandClassReport({
+							nodeId: controller.ownNodeId,
+							requestedCC: receivedCC.encapsulated.requestedCC,
+							ccVersion: 0,
+						});
+						cc = Security2CC.encapsulate(
+							cc,
+							self.id,
+							self.securityManagers,
 						);
-						cc = Security2CC.encapsulate(self.host, cc);
 						return { action: "sendCC", cc };
 					}
 				},
@@ -194,26 +200,26 @@ integrationTest(
 				networkKey: driver.options.securityKeys!.S0_Legacy!,
 				nonceTimeout: 100000,
 			});
-			mockNode.host.securityManager = sm0Node;
+			mockNode.securityManagers.securityManager = sm0Node;
 
 			// Create a security manager for the controller
 			const sm0Ctrlr = new SecurityManager({
-				ownNodeId: controller.host.ownNodeId,
+				ownNodeId: controller.ownNodeId,
 				networkKey: driver.options.securityKeys!.S0_Legacy!,
 				nonceTimeout: 100000,
 			});
-			controller.host.securityManager = sm0Ctrlr;
+			controller.securityManagers.securityManager = sm0Ctrlr;
 
 			// Respond to S0 Nonce Get
 			const respondToS0NonceGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof SecurityCCNonceGet) {
 						const nonce = sm0Node.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 							8,
 						);
-						const cc = new SecurityCCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new SecurityCCNonceReport({
+							nodeId: controller.ownNodeId,
 							nonce,
 						});
 						return { action: "sendCC", cc };
@@ -229,8 +235,8 @@ integrationTest(
 						&& receivedCC.encapsulated
 							instanceof SecurityCCCommandsSupportedGet
 					) {
-						const nonceGet = new SecurityCCNonceGet(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const nonceGet = new SecurityCCNonceGet({
+							nodeId: controller.ownNodeId,
 						});
 						await self.sendToController(
 							createMockZWaveRequestFrame(nonceGet, {
@@ -252,18 +258,19 @@ integrationTest(
 						const receiverNonce = nonceReport.payload.nonce;
 
 						const response: CommandClass =
-							new SecurityCCCommandsSupportedReport(
-								self.host,
-								{
-									nodeId: controller.host.ownNodeId,
-									supportedCCs: [
-										// The node supports Version CC securely
-										CommandClasses.Version,
-									],
-									controlledCCs: [],
-								},
-							);
-						const cc = SecurityCC.encapsulate(self.host, response);
+							new SecurityCCCommandsSupportedReport({
+								nodeId: controller.ownNodeId,
+								supportedCCs: [
+									// The node supports Version CC securely
+									CommandClasses.Version,
+								],
+								controlledCCs: [],
+							});
+						const cc = SecurityCC.encapsulate(
+							self.id,
+							self.securityManagers.securityManager!,
+							response,
+						);
 						cc.nonce = receiverNonce;
 						await self.sendToController(
 							createMockZWaveRequestFrame(cc, {
@@ -288,8 +295,8 @@ integrationTest(
 							=== CommandClasses.Security
 					) {
 						await wait(100);
-						const nonceGet = new SecurityCCNonceGet(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const nonceGet = new SecurityCCNonceGet({
+							nodeId: controller.ownNodeId,
 						});
 						await self.sendToController(
 							createMockZWaveRequestFrame(nonceGet, {
@@ -311,17 +318,18 @@ integrationTest(
 						const receiverNonce = nonceReport.payload.nonce;
 
 						const response: CommandClass =
-							new VersionCCCommandClassReport(
-								self.host,
-								{
-									nodeId: controller.host.ownNodeId,
-									requestedCC:
-										receivedCC.encapsulated.requestedCC,
-									ccVersion: 0,
-								},
-							);
+							new VersionCCCommandClassReport({
+								nodeId: controller.ownNodeId,
+								requestedCC:
+									receivedCC.encapsulated.requestedCC,
+								ccVersion: 0,
+							});
 
-						const cc = SecurityCC.encapsulate(self.host, response);
+						const cc = SecurityCC.encapsulate(
+							self.id,
+							self.securityManagers.securityManager!,
+							response,
+						);
 						cc.nonce = receiverNonce;
 						await self.sendToController(
 							createMockZWaveRequestFrame(cc, {
@@ -342,7 +350,10 @@ integrationTest(
 					if (
 						receivedCC instanceof SecurityCCCommandEncapsulation
 					) {
-						receivedCC.mergePartialCCs(undefined as any, []);
+						receivedCC.mergePartialCCs(
+							[],
+							{} as any,
+						);
 					}
 
 					return undefined;

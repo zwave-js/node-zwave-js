@@ -4,8 +4,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -28,10 +30,9 @@ export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.SetRFReceiveMode)
 export class SetRFReceiveModeRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SetRFReceiveModeRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -44,10 +45,10 @@ export class SetRFReceiveModeRequest extends Message {
 
 	public enabled: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.enabled ? 0x01 : 0x00]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -65,10 +66,9 @@ export class SetRFReceiveModeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 

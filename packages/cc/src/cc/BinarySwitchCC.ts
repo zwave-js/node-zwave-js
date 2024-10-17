@@ -14,11 +14,7 @@ import {
 	parseMaybeBoolean,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import type { AllOrNone } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -36,6 +32,9 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -100,11 +99,11 @@ export class BinarySwitchCCAPI extends CCAPI {
 			BinarySwitchCommand.Get,
 		);
 
-		const cc = new BinarySwitchCCGet(this.applHost, {
+		const cc = new BinarySwitchCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<BinarySwitchCCReport>(
+		const response = await this.host.sendCommand<BinarySwitchCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -133,13 +132,13 @@ export class BinarySwitchCCAPI extends CCAPI {
 			BinarySwitchCommand.Set,
 		);
 
-		const cc = new BinarySwitchCCSet(this.applHost, {
+		const cc = new BinarySwitchCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
 			duration,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
@@ -194,7 +193,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 							);
 						// and optimistically update the currentValue
 						for (const node of affectedNodes) {
-							this.applHost
+							this.host
 								.tryGetValueDB(node.id)
 								?.setValue(currentValueValueId, value);
 						}
@@ -239,34 +238,38 @@ export class BinarySwitchCCAPI extends CCAPI {
 export class BinarySwitchCC extends CommandClass {
 	declare ccCommand: BinarySwitchCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Binary Switch"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the current state
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Binary Switch state...",
 			direction: "outbound",
@@ -281,7 +284,7 @@ current value:      ${resp.currentValue}`;
 target value:       ${resp.targetValue}
 remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 			}
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -290,10 +293,10 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 	}
 
 	public setMappedBasicValue(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		value: number,
 	): boolean {
-		this.setValue(applHost, BinarySwitchCCValues.currentValue, value > 0);
+		this.setValue(ctx, BinarySwitchCCValues.currentValue, value > 0);
 		return true;
 	}
 }
@@ -308,10 +311,9 @@ export interface BinarySwitchCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.targetValue = !!this.payload[0];
@@ -327,14 +329,15 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	public targetValue: boolean;
 	public duration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.targetValue ? 0xff : 0x00,
 			(this.duration ?? Duration.default()).serializeSet(),
 		]);
 
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 		if (
-			this.version < 2 && this.host.getDeviceConfig?.(
+			ccVersion < 2 && ctx.getDeviceConfig?.(
 				this.nodeId as number,
 			)?.compat?.encodeCCsUsingTargetVersion
 		) {
@@ -342,10 +345,10 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			this.payload = this.payload.subarray(0, 1);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -353,7 +356,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -373,12 +376,11 @@ export type BinarySwitchCCReportOptions =
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BinarySwitchCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -404,7 +406,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	@ccValue(BinarySwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			encodeMaybeBoolean(this.currentValue ?? UNKNOWN_STATE),
 		]);
@@ -417,10 +419,10 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 				]),
 			]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": maybeUnknownToString(this.currentValue),
 		};
@@ -431,7 +433,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

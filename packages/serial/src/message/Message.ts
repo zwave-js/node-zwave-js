@@ -1,14 +1,23 @@
 import {
-	type IZWaveNode,
+	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	type MessagePriority,
+	type NodeIDType,
+	type NodeId,
+	type SecurityClass,
+	type SecurityManagers,
 	ZWaveError,
 	ZWaveErrorCodes,
 	createReflectionDecorator,
 	getNodeTag,
 	highResTimestamp,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type {
+	GetDeviceConfig,
+	GetNode,
+	GetSupportedCCVersion,
+	HostIDs,
+} from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { MessageHeaders } from "../MessageHeaders";
@@ -16,12 +25,10 @@ import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
 
 export type MessageConstructor<T extends Message> = new (
-	host: ZWaveHost,
 	options?: MessageOptions,
 ) => T;
 
 export type DeserializingMessageConstructor<T extends Message> = new (
-	host: ZWaveHost,
 	options: MessageDeserializationOptions,
 ) => T;
 
@@ -29,6 +36,26 @@ export type DeserializingMessageConstructor<T extends Message> = new (
 export enum MessageOrigin {
 	Controller,
 	Host,
+}
+
+export interface MessageParsingContext
+	extends Readonly<SecurityManagers>, HostIDs, GetDeviceConfig
+{
+	/** How many bytes a node ID occupies in serial API commands */
+	nodeIdType: NodeIDType;
+
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
+
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): MaybeNotKnown<boolean>;
+
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
 }
 
 export interface MessageDeserializationOptions {
@@ -40,6 +67,8 @@ export interface MessageDeserializationOptions {
 	sdkVersion?: string;
 	/** Optional context used during deserialization */
 	context?: unknown;
+	// FIXME: This is a terrible property name when context already exists
+	ctx: MessageParsingContext;
 }
 
 /**
@@ -67,13 +96,36 @@ export type MessageOptions =
 	| MessageCreationOptions
 	| MessageDeserializationOptions;
 
+export interface MessageEncodingContext
+	extends
+		Readonly<SecurityManagers>,
+		HostIDs,
+		GetSupportedCCVersion,
+		GetDeviceConfig
+{
+	/** How many bytes a node ID occupies in serial API commands */
+	nodeIdType: NodeIDType;
+
+	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
+
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): MaybeNotKnown<boolean>;
+
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
+}
+
 /**
  * Represents a Z-Wave message for communication with the serial interface
  */
 export class Message {
 	public constructor(
-		public readonly host: ZWaveHost,
-		options: MessageOptions = {},
+		public readonly options: MessageOptions = {},
 	) {
 		// decide which implementation we follow
 		if (gotDeserializationOptions(options)) {
@@ -145,7 +197,7 @@ export class Message {
 			this.expectedCallback = options.expectedCallback
 				?? getExpectedCallback(this);
 
-			this._callbackId = options.callbackId;
+			this.callbackId = options.callbackId;
 
 			this.payload = options.payload || Buffer.allocUnsafe(0);
 		}
@@ -165,28 +217,23 @@ export class Message {
 		| undefined;
 	public payload: Buffer; // TODO: Length limit 255
 
-	private _callbackId: number | undefined;
-	/**
-	 * Used to map requests to responses.
-	 *
-	 * WARNING: Accessing this property will generate a new callback ID if this message had none.
-	 * If you want to compare the callback ID, use `hasCallbackId()` beforehand to check if the callback ID is already defined.
-	 */
-	public get callbackId(): number {
-		if (this._callbackId == undefined) {
-			this._callbackId = this.host.getNextCallbackId();
+	/** Used to map requests to callbacks */
+	public callbackId: number | undefined;
+
+	protected assertCallbackId(): asserts this is this & {
+		callbackId: number;
+	} {
+		if (this.callbackId == undefined) {
+			throw new ZWaveError(
+				"Callback ID required but not set",
+				ZWaveErrorCodes.PacketFormat_Invalid,
+			);
 		}
-		return this._callbackId;
-	}
-	public set callbackId(v: number | undefined) {
-		this._callbackId = v;
 	}
 
-	/**
-	 * Tests whether this message's callback ID is defined
-	 */
-	public hasCallbackId(): boolean {
-		return this._callbackId != undefined;
+	/** Returns whether the callback ID is set */
+	public hasCallbackId(): this is this & { callbackId: number } {
+		return this.callbackId != undefined;
 	}
 
 	/**
@@ -209,7 +256,8 @@ export class Message {
 	}
 
 	/** Serializes this message into a Buffer */
-	public serialize(): Buffer {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const ret = Buffer.allocUnsafe(this.payload.length + 5);
 		ret[0] = MessageHeaders.SOF;
 		// length of the following data, including the checksum
@@ -251,7 +299,6 @@ export class Message {
 
 	/** Creates an instance of the message that is serialized in the given buffer */
 	public static from(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 		contextStore?: Map<FunctionType, Record<string, unknown>>,
 	): Message {
@@ -266,7 +313,7 @@ export class Message {
 			}
 		}
 
-		const ret = new Constructor(host, options);
+		const ret = new Constructor(options);
 		return ret;
 	}
 
@@ -379,11 +426,7 @@ export class Message {
 		// To prevent this from triggering the unresponsive controller detection we need to forward these messages as if they were correct
 		if (msg.functionType !== 0 as any) {
 			// If a received request included a callback id, enforce that the response contains the same
-			if (
-				this.hasCallbackId()
-				&& (!msg.hasCallbackId()
-					|| this._callbackId !== msg._callbackId)
-			) {
+			if (this.callbackId !== msg.callbackId) {
 				return false;
 			}
 		}
@@ -410,11 +453,11 @@ export class Message {
 	/**
 	 * Returns the node this message is linked to or undefined
 	 */
-	public getNodeUnsafe(
-		applHost: ZWaveApplicationHost,
-	): IZWaveNode | undefined {
+	public tryGetNode<T extends NodeId>(
+		ctx: GetNode<T>,
+	): T | undefined {
 		const nodeId = this.getNodeId();
-		if (nodeId != undefined) return applHost.nodes.get(nodeId);
+		if (nodeId != undefined) return ctx.getNode(nodeId);
 	}
 
 	private _transmissionTimestamp: number | undefined;

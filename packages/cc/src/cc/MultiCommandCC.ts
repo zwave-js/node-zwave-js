@@ -1,11 +1,11 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	EncapsulationFlags,
 	type MaybeNotKnown,
+	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
@@ -45,12 +45,12 @@ export class MultiCommandCCAPI extends CCAPI {
 		);
 
 		// FIXME: This should not be on the API but rather on the applHost level
-		const cc = new MultiCommandCCCommandEncapsulation(this.applHost, {
+		const cc = new MultiCommandCCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
 			encapsulated: commands,
 		});
 		cc.endpointIndex = this.endpoint.index;
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -68,10 +68,9 @@ export class MultiCommandCC extends CommandClass {
 	}
 
 	public static encapsulate(
-		host: ZWaveHost,
 		CCs: CommandClass[],
 	): MultiCommandCCCommandEncapsulation {
-		const ret = new MultiCommandCCCommandEncapsulation(host, {
+		const ret = new MultiCommandCCCommandEncapsulation({
 			nodeId: CCs[0].nodeId,
 			encapsulated: CCs,
 		});
@@ -105,12 +104,11 @@ export interface MultiCommandCCCommandEncapsulationOptions
 // When sending commands encapsulated in this CC, responses to GET-type commands likely won't be encapsulated
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiCommandCCCommandEncapsulationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const numCommands = this.payload[0];
@@ -121,7 +119,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 				const cmdLength = this.payload[offset];
 				validatePayload(this.payload.length >= offset + 1 + cmdLength);
 				this.encapsulated.push(
-					CommandClass.from(this.host, {
+					CommandClass.from({
 						data: this.payload.subarray(
 							offset + 1,
 							offset + 1 + cmdLength,
@@ -129,7 +127,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 						fromEncapsulation: true,
 						encapCC: this,
 						origin: options.origin,
-						frameType: options.frameType,
+						context: options.context,
 					}),
 				);
 				offset += 1 + cmdLength;
@@ -144,21 +142,21 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 
 	public encapsulated: CommandClass[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const buffers: Buffer[] = [];
 		buffers.push(Buffer.from([this.encapsulated.length]));
 		for (const cmd of this.encapsulated) {
-			const cmdBuffer = cmd.serialize();
+			const cmdBuffer = cmd.serialize(ctx);
 			buffers.push(Buffer.from([cmdBuffer.length]));
 			buffers.push(cmdBuffer);
 		}
 		this.payload = Buffer.concat(buffers);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			// Hide the default payload line
 			message: undefined,
 		};

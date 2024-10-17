@@ -7,10 +7,10 @@ import {
 	createSimpleReflectionDecorator,
 	validatePayload,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import type {
 	DeserializingMessageConstructor,
 	MessageBaseOptions,
+	MessageEncodingContext,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
@@ -70,8 +70,8 @@ function testResponseForFirmwareUpdateNVMRequest(
 @priority(MessagePriority.Controller)
 @expectedResponse(testResponseForFirmwareUpdateNVMRequest)
 export class FirmwareUpdateNVMRequest extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions = {}) {
-		super(host, options);
+	public constructor(options: MessageOptions = {}) {
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -84,13 +84,13 @@ export class FirmwareUpdateNVMRequest extends Message {
 
 	public command: FirmwareUpdateNVMCommand;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.command]),
 			this.payload,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -110,17 +110,16 @@ export class FirmwareUpdateNVMRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.FirmwareUpdateNVM)
 export class FirmwareUpdateNVMResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = this.payload[0];
 
 		const CommandConstructor = getSubCommandResponseConstructor(
 			this.command,
 		);
 		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
-			return new CommandConstructor(host, options);
+			return new CommandConstructor(options);
 		}
 
 		this.payload = this.payload.subarray(1);
@@ -150,10 +149,9 @@ export class FirmwareUpdateNVM_InitRequest extends FirmwareUpdateNVMRequest {}
 @subCommandResponse(FirmwareUpdateNVMCommand.Init)
 export class FirmwareUpdateNVM_InitResponse extends FirmwareUpdateNVMResponse {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.supported = this.payload[0] !== 0;
 	}
 
@@ -181,12 +179,11 @@ export class FirmwareUpdateNVM_SetNewImageRequest
 	extends FirmwareUpdateNVMRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| FirmwareUpdateNVM_SetNewImageRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = FirmwareUpdateNVMCommand.SetNewImage;
 
 		if (gotDeserializationOptions(options)) {
@@ -201,10 +198,10 @@ export class FirmwareUpdateNVM_SetNewImageRequest
 
 	public newImage: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.newImage ? 1 : 0]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -221,10 +218,9 @@ export class FirmwareUpdateNVM_SetNewImageResponse
 	extends FirmwareUpdateNVMResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.changed = this.payload[0] !== 0;
 	}
 
@@ -251,10 +247,9 @@ export class FirmwareUpdateNVM_GetNewImageResponse
 	extends FirmwareUpdateNVMResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.newImage = this.payload[0] !== 0;
 	}
 
@@ -284,12 +279,11 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 	extends FirmwareUpdateNVMRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| FirmwareUpdateNVM_UpdateCRC16RequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = FirmwareUpdateNVMCommand.UpdateCRC16;
 
 		if (gotDeserializationOptions(options)) {
@@ -313,13 +307,13 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 		return 30000;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(7);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.blockLength, 3);
 		this.payload.writeUInt16BE(this.crcSeed, 5);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -338,10 +332,9 @@ export class FirmwareUpdateNVM_UpdateCRC16Response
 	extends FirmwareUpdateNVMResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 2);
 		this.crc16 = this.payload.readUint16BE(0);
 	}
@@ -374,10 +367,9 @@ export class FirmwareUpdateNVM_IsValidCRC16Response
 	extends FirmwareUpdateNVMResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.isValid = this.payload[0] !== 0;
 		// There are two more bytes containing the CRC result, but we don't care about that
 	}
@@ -405,12 +397,11 @@ export interface FirmwareUpdateNVM_WriteRequestOptions
 @subCommandRequest(FirmwareUpdateNVMCommand.Write)
 export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| FirmwareUpdateNVM_WriteRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = FirmwareUpdateNVMCommand.Write;
 
 		if (gotDeserializationOptions(options)) {
@@ -427,12 +418,12 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 	public offset: number;
 	public buffer: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([Buffer.allocUnsafe(5), this.buffer]);
 		this.payload.writeUintBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -452,10 +443,9 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 @subCommandResponse(FirmwareUpdateNVMCommand.Write)
 export class FirmwareUpdateNVM_WriteResponse extends FirmwareUpdateNVMResponse {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.overwritten = this.payload[0] !== 0;
 	}
 

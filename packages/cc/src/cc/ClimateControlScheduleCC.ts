@@ -9,7 +9,7 @@ import {
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -110,13 +110,13 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			ClimateControlScheduleCommand.Set,
 		);
 
-		const cc = new ClimateControlScheduleCCSet(this.applHost, {
+		const cc = new ClimateControlScheduleCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			weekday,
 			switchPoints,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -128,12 +128,12 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			ClimateControlScheduleCommand.Get,
 		);
 
-		const cc = new ClimateControlScheduleCCGet(this.applHost, {
+		const cc = new ClimateControlScheduleCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			weekday,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ClimateControlScheduleCCReport
 		>(
 			cc,
@@ -148,11 +148,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			ClimateControlScheduleCommand.ChangedGet,
 		);
 
-		const cc = new ClimateControlScheduleCCChangedGet(this.applHost, {
+		const cc = new ClimateControlScheduleCCChangedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ClimateControlScheduleCCChangedReport
 		>(
 			cc,
@@ -168,11 +168,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			ClimateControlScheduleCommand.OverrideGet,
 		);
 
-		const cc = new ClimateControlScheduleCCOverrideGet(this.applHost, {
+		const cc = new ClimateControlScheduleCCOverrideGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ClimateControlScheduleCCOverrideReport
 		>(
 			cc,
@@ -196,13 +196,13 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			ClimateControlScheduleCommand.OverrideSet,
 		);
 
-		const cc = new ClimateControlScheduleCCOverrideSet(this.applHost, {
+		const cc = new ClimateControlScheduleCCOverrideSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			overrideType: type,
 			overrideState: state,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -223,12 +223,11 @@ export interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -243,7 +242,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public switchPoints: Switchpoint[];
 	public weekday: Weekday;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// Make sure we have exactly 9 entries
 		const allSwitchPoints = this.switchPoints.slice(0, 9); // maximum 9
 		while (allSwitchPoints.length < 9) {
@@ -257,12 +256,12 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 			Buffer.from([this.weekday & 0b111]),
 			...allSwitchPoints.map((sp) => encodeSwitchpoint(sp)),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
 				switchpoints: `${
@@ -287,10 +286,9 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 @CCCommand(ClimateControlScheduleCommand.Report)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 28); // 1 + 9 * 3
 		this.weekday = this.payload[0] & 0b111;
@@ -311,9 +309,9 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	)
 	public readonly schedule: readonly Switchpoint[];
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
 				schedule: `${
@@ -344,12 +342,11 @@ export interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ClimateControlScheduleCCReport)
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -362,14 +359,14 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 
 	public weekday: Weekday;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.weekday & 0b111]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { weekday: getEnumMemberName(Weekday, this.weekday) },
 		};
 	}
@@ -380,10 +377,9 @@ export class ClimateControlScheduleCCChangedReport
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this.changeCounter = this.payload[0];
@@ -391,9 +387,9 @@ export class ClimateControlScheduleCCChangedReport
 
 	public readonly changeCounter: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "change counter": this.changeCounter },
 		};
 	}
@@ -410,10 +406,9 @@ export class ClimateControlScheduleCCOverrideReport
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 		this.overrideType = this.payload[0] & 0b11;
@@ -427,9 +422,9 @@ export class ClimateControlScheduleCCOverrideReport
 	@ccValue(ClimateControlScheduleCCValues.overrideState)
 	public readonly overrideState: SetbackState;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"override type": getEnumMemberName(
 					ScheduleOverrideType,
@@ -461,12 +456,11 @@ export class ClimateControlScheduleCCOverrideSet
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCOverrideSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -481,17 +475,17 @@ export class ClimateControlScheduleCCOverrideSet
 	public overrideType: ScheduleOverrideType;
 	public overrideState: SetbackState;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.overrideType & 0b11,
 			encodeSetbackState(this.overrideState),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"override type": getEnumMemberName(
 					ScheduleOverrideType,

@@ -1,14 +1,18 @@
 import { JsonlDB, type JsonlDBOptions } from "@alcalzone/jsonl-db";
 import {
+	type CCAPIHost,
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	type CommandClass,
 	type FirmwareUpdateResult,
 	type ICommandClassContainer,
+	type InterviewContext,
 	InvalidCC,
 	KEXFailType,
 	MultiChannelCC,
+	type PersistValuesContext,
 	type Powerlevel,
+	type RefreshValuesContext,
 	Security2CC,
 	Security2CCCommandsSupportedGet,
 	Security2CCCommandsSupportedReport,
@@ -49,15 +53,16 @@ import {
 	externalConfigDir,
 } from "@zwave-js/config";
 import {
+	type CCId,
 	CommandClasses,
 	ControllerLogger,
 	ControllerRole,
 	ControllerStatus,
 	Duration,
 	EncapsulationFlags,
-	type ICommandClass,
 	type KeyPair,
 	type LogConfig,
+	type LogNodeOptions,
 	MAX_SUPERVISION_SESSION_ID,
 	MAX_TRANSPORT_SERVICE_SESSION_ID,
 	MPANState,
@@ -109,8 +114,10 @@ import {
 	wasControllerReset,
 } from "@zwave-js/core";
 import type {
+	CCEncodingContext,
+	HostIDs,
 	NodeSchedulePollOptions,
-	ZWaveApplicationHost,
+	ZWaveHostOptions,
 } from "@zwave-js/host";
 import {
 	type BootloaderChunk,
@@ -118,7 +125,9 @@ import {
 	FunctionType,
 	type INodeQuery,
 	Message,
+	type MessageEncodingContext,
 	MessageHeaders,
+	type MessageParsingContext,
 	MessageType,
 	type SuccessIndicator,
 	XModemMessageHeaders,
@@ -134,7 +143,6 @@ import {
 } from "@zwave-js/serial";
 import {
 	AsyncQueue,
-	type ReadonlyThrowingMap,
 	type ThrowingMap,
 	TypedEventEmitter,
 	buffer2hex,
@@ -203,6 +211,10 @@ import {
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
 
+import { type ZWaveNodeBase } from "../node/mixins/00_Base";
+import { type NodeWakeup } from "../node/mixins/30_Wakeup";
+import { type NodeValues } from "../node/mixins/40_Values";
+import { type SchedulePoll } from "../node/mixins/60_ScheduledPoll";
 import {
 	SendTestFrameRequest,
 	SendTestFrameTransmitReport,
@@ -539,7 +551,7 @@ interface AwaitedThing<T> {
 
 type AwaitedMessageHeader = AwaitedThing<MessageHeaders>;
 type AwaitedMessageEntry = AwaitedThing<Message>;
-type AwaitedCommandEntry = AwaitedThing<ICommandClass>;
+type AwaitedCommandEntry = AwaitedThing<CCId>;
 export type AwaitedBootloaderChunkEntry = AwaitedThing<BootloaderChunk>;
 
 interface TransportServiceSession {
@@ -589,7 +601,11 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * instance or its associated nodes.
  */
 export class Driver extends TypedEventEmitter<DriverEventCallbacks>
-	implements ZWaveApplicationHost
+	implements
+		CCAPIHost,
+		InterviewContext,
+		RefreshValuesContext,
+		PersistValuesContext
 {
 	public constructor(
 		private port: string | ZWaveSerialPortImplementation,
@@ -650,6 +666,31 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				this._options.storage.deviceConfigPriorityDir,
 		});
 
+		const self = this;
+		this.messageParsingContext = {
+			getHighestSecurityClass: (nodeId) =>
+				this.getHighestSecurityClass(nodeId),
+			hasSecurityClass: (nodeId, securityClass) =>
+				this.hasSecurityClass(nodeId, securityClass),
+			setSecurityClass: (nodeId, securityClass, granted) =>
+				this.setSecurityClass(nodeId, securityClass, granted),
+			getDeviceConfig: (nodeId) => this.getDeviceConfig(nodeId),
+			get securityManager() {
+				return self.securityManager;
+			},
+			get securityManager2() {
+				return self.securityManager2;
+			},
+			get securityManagerLR() {
+				return self.securityManagerLR;
+			},
+		};
+		this.messageEncodingContext = {
+			...this.messageParsingContext,
+			getSupportedCCVersion: (cc, nodeId, endpointIndex) =>
+				this.getSupportedCCVersion(cc, nodeId, endpointIndex),
+		};
+
 		this.immediateQueue = new TransactionQueue({
 			name: "immediate",
 			mayStartNextTransaction: (t) => {
@@ -683,6 +724,37 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
+
+	private messageParsingContext: Omit<
+		MessageParsingContext,
+		keyof HostIDs | "nodeIdType"
+	>;
+	private messageEncodingContext: Omit<
+		MessageEncodingContext,
+		keyof HostIDs | "nodeIdType"
+	>;
+
+	private getCCEncodingContext(): MessageEncodingContext & CCEncodingContext {
+		// FIXME: The type system isn't helping here. We need the security managers to encode CCs
+		// but not for messages, yet those implicitly encode CCs
+		return {
+			...this.messageEncodingContext,
+			ownNodeId: this.controller.ownNodeId!,
+			homeId: this.controller.homeId!,
+			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
+		};
+	}
+
+	private getCCParsingContext() {
+		// FIXME: The type system isn't helping here. We need the security managers to decode CCs
+		// but not for messages, yet those implicitly decode CCs
+		return {
+			...this.messageParsingContext,
+			ownNodeId: this.controller.ownNodeId!,
+			homeId: this.controller.homeId!,
+			nodeIdType: this._controller?.nodeIdType ?? NodeIDType.Short,
+		};
+	}
 
 	// We have multiple queues to achieve multiple "layers" of communication priority:
 	// The default queue for most messages
@@ -795,13 +867,20 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	}
 
 	private _controllerLog: ControllerLogger;
-	/**
-	 * **!!! INTERNAL !!!**
-	 *
-	 * Not intended to be used by applications
-	 */
+	/** @internal */
 	public get controllerLog(): ControllerLogger {
 		return this._controllerLog;
+	}
+
+	public logNode(
+		nodeId: number,
+		message: string,
+		level?: LogNodeOptions["level"],
+	): void;
+	public logNode(nodeId: number, options: LogNodeOptions): void;
+	public logNode(...args: any[]): void {
+		// @ts-expect-error
+		this._controllerLog.logNode(...args);
 	}
 
 	private _controller: ZWaveController | undefined;
@@ -920,21 +999,22 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.controller.ownNodeId!;
 	}
 
-	public get nodeIdType(): NodeIDType {
-		return this._controller?.nodeIdType ?? NodeIDType.Short;
+	/** @internal Used for compatibility with the CCAPIHost interface */
+	public getNode(nodeId: number): ZWaveNode | undefined {
+		return this.controller.nodes.get(nodeId);
 	}
 
-	/**
-	 * **!!! INTERNAL !!!**
-	 *
-	 * Not intended to be used by applications. Use `controller.nodes` instead!
-	 */
-	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
-		// This is needed for the ZWaveHost interface
-		return this.controller.nodes;
+	/** @internal Used for compatibility with the CCAPIHost interface */
+	public getNodeOrThrow(nodeId: number): ZWaveNode {
+		return this.controller.nodes.getOrThrow(nodeId);
 	}
 
-	public getNodeUnsafe(msg: Message): ZWaveNode | undefined {
+	/** @internal Used for compatibility with the CCAPIHost interface */
+	public getAllNodes(): ZWaveNode[] {
+		return [...this.controller.nodes.values()];
+	}
+
+	public tryGetNode(msg: Message): ZWaveNode | undefined {
 		const nodeId = msg.getNodeId();
 		if (nodeId != undefined) return this.controller.nodes.get(nodeId);
 	}
@@ -974,6 +1054,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		return this.controller.nodes.get(nodeId)?.deviceConfig;
 	}
 
+	public lookupManufacturer(manufacturerId: number): string | undefined {
+		return this.configManager.lookupManufacturer(manufacturerId);
+	}
+
 	public getHighestSecurityClass(
 		nodeId: number,
 	): MaybeNotKnown<SecurityClass> {
@@ -1006,16 +1090,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		node.setSecurityClass(securityClass, granted);
 	}
 
-	/**
-	 * **!!! INTERNAL !!!**
-	 *
-	 * Not intended to be used by applications. Use `node.isControllerNode` instead!
-	 */
-	public isControllerNode(nodeId: number): boolean {
-		// This is needed for the ZWaveHost interface
-		return nodeId === this.ownNodeId;
-	}
-
 	/** Updates the logging configuration without having to restart the driver. */
 	public updateLogConfig(config: Partial<LogConfig>): void {
 		this._logContainer.updateConfiguration(config);
@@ -1034,6 +1108,33 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			defaultOptions.preferences.scales,
 			scales,
 		);
+	}
+
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public getUserPreferences(): ZWaveHostOptions["preferences"] {
+		return this._options.preferences;
+	}
+
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public getInterviewOptions(): ZWaveHostOptions["interview"] {
+		return this._options.interview;
+	}
+
+	/**
+	 * **!!! INTERNAL !!!**
+	 *
+	 * Not intended to be used by applications
+	 */
+	public getCommunicationTimeouts(): ZWaveHostOptions["timeouts"] {
+		return this._options.timeouts;
 	}
 
 	/**
@@ -2687,7 +2788,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	};
 
 	/** Checks if there are any pending messages for the given node */
-	private hasPendingMessages(node: ZWaveNode): boolean {
+	private hasPendingMessages(node: ZWaveNodeBase & SchedulePoll): boolean {
 		// First check if there are messages in the queue
 		if (
 			this.hasPendingTransactions(
@@ -2698,7 +2799,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		}
 
 		// Then check if there are scheduled polls
-		return node.scheduledPolls.size > 0;
+		return node.hasScheduledPolls();
 	}
 
 	/** Checks if there are any pending transactions that match the given predicate */
@@ -2741,7 +2842,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
 	 * Returns the highest implemented version if the node's CC version is unknown.
-	 * Throws if the CC is not implemented in this library yet.
+	 * Returns `undefined` for CCs that are not implemented in this library yet.
 	 *
 	 * @param cc The command class whose version should be retrieved
 	 * @param nodeId The node for which the CC version should be retrieved
@@ -2751,7 +2852,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		cc: CommandClasses,
 		nodeId: number,
 		endpointIndex: number = 0,
-	): number {
+	): number | undefined {
+		const implementedVersion = getImplementedVersion(cc);
+		if (
+			implementedVersion === 0
+			|| implementedVersion === Number.POSITIVE_INFINITY
+		) {
+			return undefined;
+		}
 		const supportedVersion = this.getSupportedCCVersion(
 			cc,
 			nodeId,
@@ -2759,28 +2867,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		);
 		if (supportedVersion === 0) {
 			// Unknown, use the highest implemented version
-			const implementedVersion = getImplementedVersion(cc);
-			if (
-				implementedVersion !== 0
-				&& implementedVersion !== Number.POSITIVE_INFINITY
-			) {
-				return implementedVersion;
-			}
-		} else {
-			// For supported versions find the maximum version supported by both the
-			// node and this library
-			const implementedVersion = getImplementedVersion(cc);
-			if (
-				implementedVersion !== 0
-				&& implementedVersion !== Number.POSITIVE_INFINITY
-			) {
-				return Math.min(supportedVersion, implementedVersion);
-			}
+			return implementedVersion;
 		}
-		throw new ZWaveError(
-			"Cannot retrieve the version of a CC that is not implemented",
-			ZWaveErrorCodes.CC_NotImplemented,
-		);
+
+		return Math.min(supportedVersion, implementedVersion);
 	}
 
 	/**
@@ -2848,14 +2938,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 	/**
 	 * **!!! INTERNAL !!!**
 	 *
-	 * Not intended to be used by applications
+	 * Not intended to be used by applications.
+	 * Needed for compatibility with CCAPIHost
 	 */
 	public schedulePoll(
 		nodeId: number,
 		valueId: ValueID,
 		options: NodeSchedulePollOptions,
 	): boolean {
-		// Needed for ZWaveApplicationHost
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.schedulePoll(valueId, options);
 	}
@@ -2950,7 +3040,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		try {
 			this.isSoftResetting = true;
-			await this.sendMessage(new SoftResetRequest(this), {
+			await this.sendMessage(new SoftResetRequest(), {
 				supportCheck: false,
 				pauseSendThread: true,
 			});
@@ -3010,7 +3100,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 
 		try {
 			this.isSoftResetting = true;
-			await this.sendMessage(new SoftResetRequest(this), {
+			await this.sendMessage(new SoftResetRequest(), {
 				supportCheck: false,
 				pauseSendThread: true,
 			});
@@ -3102,7 +3192,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			try {
 				// And resume sending - this requires us to unpause the send thread
 				this.unpauseSendQueue();
-				await this.sendMessage(new GetControllerVersionRequest(this), {
+				await this.sendMessage(new GetControllerVersionRequest(), {
 					supportCheck: false,
 					priority: MessagePriority.ControllerImmediate,
 				});
@@ -3411,13 +3501,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.from(this, {
+			msg = Message.from({
 				data,
 				sdkVersion: this._controller?.sdkVersion,
+				ctx: this.getCCParsingContext(),
 			}, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
-				const node = this.getNodeUnsafe(msg);
+				const node = this.tryGetNode(msg);
 				if (node) node.lastSeen = new Date();
 
 				// Ensure there are no errors
@@ -3426,7 +3517,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			// And update statistics
 			if (!!this._controller) {
 				if (isCommandClassContainer(msg)) {
-					this.getNodeUnsafe(msg)?.incrementStatistics("commandsRX");
+					this.tryGetNode(msg)?.incrementStatistics("commandsRX");
 				} else {
 					this._controller.incrementStatistics("messagesRX");
 				}
@@ -3442,7 +3533,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					if (response) await this.writeHeader(response);
 					if (!!this._controller) {
 						if (isCommandClassContainer(msg)) {
-							this.getNodeUnsafe(msg)?.incrementStatistics(
+							this.tryGetNode(msg)?.incrementStatistics(
 								"commandsDroppedRX",
 							);
 
@@ -3454,7 +3545,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 								&& msg.command instanceof InvalidCC
 							) {
 								// If it was, we need to notify the sender that we couldn't decode the command
-								const node = this.getNodeUnsafe(msg);
+								const node = this.tryGetNode(msg);
 								if (node) {
 									const endpoint = node.getEndpoint(
 										msg.command.endpointIndex,
@@ -3522,7 +3613,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					msg.command
 						instanceof SecurityCCCommandEncapsulationNonceGet
 				) {
-					void this.getNodeUnsafe(msg)?.handleSecurityNonceGet();
+					void this.tryGetNode(msg)?.handleSecurityNonceGet();
 				}
 
 				// Transport Service commands must be handled before assembling partial CCs
@@ -3738,7 +3829,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		if (!encapS2) return false;
 
 		// With the MGRP extension present
-		const node = this.getNodeUnsafe(msg);
+		const node = this.tryGetNode(msg);
 		if (!node) return false;
 		const groupId = encapS2.getMulticastGroupId();
 		if (groupId == undefined) return false;
@@ -3923,7 +4014,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		},
 		error: ZWaveError,
 	): boolean {
-		const node = this.getNodeUnsafe(transaction.message);
+		const node = this.tryGetNode(transaction.message);
 		if (!node) return false; // This should never happen, but whatever
 
 		const messagePart1 = isSendData(transaction.message)
@@ -4088,7 +4179,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			|| this._recoveryPhase
 				=== ControllerRecoveryPhase.CallbackTimeoutAfterReset
 		) {
-			const node = this.getNodeUnsafe(transaction.message);
+			const node = this.tryGetNode(transaction.message);
 			if (!node) return false; // This should never happen, but whatever
 
 			// The controller is still timing out transmitting after a soft reset, don't try again.
@@ -4376,7 +4467,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 					// this is the final one, merge the previous responses
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
-						command.mergePartialCCs(this, session);
+						command.mergePartialCCs(session, {
+							sourceNodeId: msg.command.nodeId as number,
+							...this.getCCParsingContext(),
+						});
 						// Ensure there are no errors
 						assertValidCCs(msg);
 					} catch (e) {
@@ -4465,7 +4559,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 							level: "debug",
 							direction: "outbound",
 						});
-						const cc = new TransportServiceCCSegmentRequest(this, {
+						const cc = new TransportServiceCCSegmentRequest({
 							nodeId: command.nodeId,
 							sessionId: command.sessionId,
 							datagramOffset: offset,
@@ -4482,7 +4576,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 							level: "debug",
 							direction: "outbound",
 						});
-						const cc = new TransportServiceCCSegmentComplete(this, {
+						const cc = new TransportServiceCCSegmentComplete({
 							nodeId: command.nodeId,
 							sessionId: command.sessionId,
 						});
@@ -4530,7 +4624,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 				});
 			} else {
 				// This belongs to a session we don't know... tell the sending node to try again
-				const cc = new TransportServiceCCSegmentWait(this, {
+				const cc = new TransportServiceCCSegmentWait({
 					nodeId: command.nodeId,
 					pendingSegments: 0,
 				});
@@ -4893,7 +4987,7 @@ ${handlers.length} left`,
 		let handlers: RequestHandlerEntry[] | undefined;
 
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			const node = this.getNodeUnsafe(msg);
+			const node = this.tryGetNode(msg);
 			if (node) {
 				// We have received an unsolicited message from a dead node, bring it back to life
 				if (node.status === NodeStatus.Dead) {
@@ -5178,17 +5272,27 @@ ${handlers.length} left`,
 
 		// 3.
 		if (SupervisionCC.requiresEncapsulation(cmd)) {
-			cmd = SupervisionCC.encapsulate(this, cmd);
+			cmd = SupervisionCC.encapsulate(
+				cmd,
+				this.getNextSupervisionSessionId(cmd.nodeId as number),
+			);
 		}
 
 		// 4.
 		if (MultiChannelCC.requiresEncapsulation(cmd)) {
-			cmd = MultiChannelCC.encapsulate(this, cmd);
+			const multiChannelCCVersion = this.getSupportedCCVersion(
+				CommandClasses["Multi Channel"],
+				cmd.nodeId as number,
+			);
+
+			cmd = multiChannelCCVersion === 1
+				? MultiChannelCC.encapsulateV1(cmd)
+				: MultiChannelCC.encapsulate(cmd);
 		}
 
 		// 5.
 		if (CRC16CC.requiresEncapsulation(cmd)) {
-			cmd = CRC16CC.encapsulate(this, cmd);
+			cmd = CRC16CC.encapsulate(cmd);
 		} else {
 			// The command must be S2-encapsulated, if ...
 			let maybeS2 = false;
@@ -5204,17 +5308,26 @@ ${handlers.length} left`,
 				maybeS2 = true;
 			}
 			if (maybeS2 && Security2CC.requiresEncapsulation(cmd)) {
-				cmd = Security2CC.encapsulate(this, cmd, {
-					securityClass: options.s2OverrideSecurityClass,
-					multicastOutOfSync: !!options.s2MulticastOutOfSync,
-					multicastGroupId: options.s2MulticastGroupId,
-					verifyDelivery: options.s2VerifyDelivery,
-				});
+				cmd = Security2CC.encapsulate(
+					cmd,
+					this.ownNodeId,
+					this,
+					{
+						securityClass: options.s2OverrideSecurityClass,
+						multicastOutOfSync: !!options.s2MulticastOutOfSync,
+						multicastGroupId: options.s2MulticastGroupId,
+						verifyDelivery: options.s2VerifyDelivery,
+					},
+				);
 			}
 
 			// This check will return false for S2-encapsulated commands
 			if (SecurityCC.requiresEncapsulation(cmd)) {
-				cmd = SecurityCC.encapsulate(this, cmd);
+				cmd = SecurityCC.encapsulate(
+					this.ownNodeId,
+					this.securityManager!,
+					cmd,
+				);
 			}
 		}
 		return cmd;
@@ -5272,7 +5385,7 @@ ${handlers.length} left`,
 
 		// Do not persist values for a node or endpoint that does not exist
 		const endpoint = this.tryGetEndpoint(cc);
-		const node = endpoint?.getNodeUnsafe();
+		const node = endpoint?.tryGetNode();
 		if (!node) return false;
 
 		// Do not persist values for a CC that was force-removed via config
@@ -5321,7 +5434,7 @@ ${handlers.length} left`,
 		result: Message | undefined,
 	): void {
 		// Update statistics
-		const node = this.getNodeUnsafe(msg);
+		const node = this.tryGetNode(msg);
 		let success = true;
 		if (isSendData(msg) || isNodeQuery(msg)) {
 			// This shouldn't happen, but just in case
@@ -5422,7 +5535,7 @@ ${handlers.length} left`,
 		}
 
 		const message = transaction.message;
-		const targetNode = message.getNodeUnsafe(this);
+		const targetNode = message.tryGetNode(this);
 
 		// Messages to the controller may always be sent...
 		if (!targetNode) return true;
@@ -5697,8 +5810,14 @@ ${handlers.length} left`,
 		msg: Message,
 		transactionSource?: string,
 	): Promise<Message | undefined> {
+		// Give the command a callback ID if it needs one
+		if (msg.needsCallbackId() && !msg.hasCallbackId()) {
+			msg.callbackId = this.getNextCallbackId();
+		}
+
 		const machine = createSerialAPICommandMachine(
 			msg,
+			msg.serialize(this.getCCEncodingContext()),
 			{
 				sendData: (data) => this.writeSerial(data),
 				sendDataAbort: () => this.abortSendData(),
@@ -5837,7 +5956,7 @@ ${handlers.length} left`,
 
 		let node: ZWaveNode | undefined;
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			node = this.getNodeUnsafe(msg);
+			node = this.tryGetNode(msg);
 		}
 
 		if (options.priority == undefined) {
@@ -5897,6 +6016,7 @@ ${handlers.length} left`,
 		// Create the transaction
 		const { generator, resultPromise } = createMessageGenerator(
 			this,
+			this.getCCEncodingContext(),
 			msg,
 			(msg, _result) => {
 				this.handleSerialAPICommandResult(msg, options, _result);
@@ -6029,12 +6149,13 @@ ${handlers.length} left`,
 				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
 			) {
 				// Prioritize Bridge commands when they are supported
-				msg = new SendDataBridgeRequest(this, {
+				msg = new SendDataBridgeRequest({
+					sourceNodeId: this.ownNodeId,
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
 			} else {
-				msg = new SendDataRequest(this, {
+				msg = new SendDataRequest({
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
@@ -6046,12 +6167,13 @@ ${handlers.length} left`,
 				)
 			) {
 				// Prioritize Bridge commands when they are supported
-				msg = new SendDataMulticastBridgeRequest(this, {
+				msg = new SendDataMulticastBridgeRequest({
+					sourceNodeId: this.ownNodeId,
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
 			} else {
-				msg = new SendDataMulticastRequest(this, {
+				msg = new SendDataMulticastRequest({
 					command,
 					maxSendAttempts: this._options.attempts.sendData,
 				});
@@ -6090,7 +6212,7 @@ ${handlers.length} left`,
 	 * @param options (optional) Options regarding the message transmission
 	 */
 	private async sendCommandInternal<
-		TResponse extends ICommandClass = ICommandClass,
+		TResponse extends CCId = CCId,
 	>(
 		command: CommandClass,
 		options: Omit<
@@ -6139,9 +6261,10 @@ ${handlers.length} left`,
 		},
 	): Promise<SupervisionResult | undefined> {
 		// Create the encapsulating CC so we have a session ID
+		const sessionId = this.getNextSupervisionSessionId(command.nodeId);
 		command = SupervisionCC.encapsulate(
-			this,
 			command,
+			sessionId,
 			options.requestStatusUpdates,
 		);
 
@@ -6172,7 +6295,7 @@ ${handlers.length} left`,
 	 * @param options (optional) Options regarding the message transmission
 	 */
 	public async sendCommand<
-		TResponse extends ICommandClass | undefined = undefined,
+		TResponse extends CCId | undefined = undefined,
 	>(
 		command: CommandClass,
 		options?: SendCommandOptions,
@@ -6181,8 +6304,15 @@ ${handlers.length} left`,
 			command.encapsulationFlags = options.encapsulationFlags;
 		}
 
-		// For S2 multicast, the Security encapsulation flag does not get set automatically by the CC constructor
-		if (options?.s2MulticastGroupId != undefined) {
+		// Use security encapsulation for CCs that are only supported securely, and multicast commands
+		if (
+			this.isCCSecure(
+				command.ccId,
+				command.nodeId as number,
+				command.endpointIndex,
+			)
+			|| options?.s2MulticastGroupId != undefined
+		) {
 			command.toggleEncapsulationFlag(EncapsulationFlags.Security, true);
 		}
 
@@ -6250,8 +6380,10 @@ ${handlers.length} left`,
 
 	private async abortSendData(): Promise<void> {
 		try {
-			const abort = new SendDataAbort(this);
-			await this.writeSerial(abort.serialize());
+			const abort = new SendDataAbort();
+			await this.writeSerial(
+				abort.serialize(this.getCCEncodingContext()),
+			);
 			this.driverLog.logMessage(abort, {
 				direction: "outbound",
 			});
@@ -6369,12 +6501,12 @@ ${handlers.length} left`,
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming command classes
 	 */
-	public waitForCommand<T extends ICommandClass>(
-		predicate: (cc: ICommandClass) => boolean,
+	public waitForCommand<T extends CCId>(
+		predicate: (cc: CCId) => boolean,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
-			const promise = createDeferredPromise<ICommandClass>();
+			const promise = createDeferredPromise<CCId>();
 			const entry: AwaitedCommandEntry = {
 				predicate,
 				handler: (cc) => promise.resolve(cc),
@@ -6408,8 +6540,8 @@ ${handlers.length} left`,
 	 * Calls the given handler function every time a CommandClass is received that matches the given predicate.
 	 * @param predicate A predicate function to test all incoming command classes
 	 */
-	public registerCommandHandler<T extends ICommandClass>(
-		predicate: (cc: ICommandClass) => boolean,
+	public registerCommandHandler<T extends CCId>(
+		predicate: (cc: CCId) => boolean,
 		handler: (cc: T) => void,
 	): {
 		unregister: () => void;
@@ -6830,7 +6962,9 @@ ${handlers.length} left`,
 	 * @internal
 	 * Marks a node for a later sleep command. Every call refreshes the period until the node actually goes to sleep
 	 */
-	public debounceSendNodeToSleep(node: ZWaveNode): void {
+	public debounceSendNodeToSleep(
+		node: ZWaveNodeBase & SchedulePoll & NodeValues & NodeWakeup,
+	): void {
 		// TODO: This should be a single command to the send thread
 		// Delete old timers if any exist
 		if (this.sendNodeToSleepTimers.has(node.id)) {
@@ -6838,7 +6972,9 @@ ${handlers.length} left`,
 		}
 
 		// Sends a node to sleep if it has no more messages.
-		const sendNodeToSleep = (node: ZWaveNode): void => {
+		const sendNodeToSleep = (
+			node: ZWaveNodeBase & SchedulePoll & NodeWakeup,
+		): void => {
 			this.sendNodeToSleepTimers.delete(node.id);
 			if (!this.hasPendingMessages(node)) {
 				void node.sendNoMoreInformation().catch(() => {
@@ -6881,7 +7017,10 @@ ${handlers.length} left`,
 			msg = commandOrMsg;
 		} else {
 			const SendDataConstructor = this.getSendDataSinglecastConstructor();
-			msg = new SendDataConstructor(this, { command: commandOrMsg });
+			msg = new SendDataConstructor({
+				sourceNodeId: this.ownNodeId,
+				command: commandOrMsg,
+			});
 		}
 		if (!ignoreEncapsulation) {
 			msg.command = this.encapsulateCommands(
@@ -6935,12 +7074,13 @@ ${handlers.length} left`,
 	}
 
 	public exceedsMaxPayloadLength(msg: SendDataMessage): boolean {
-		return msg.serializeCC().length > this.getMaxPayloadLength(msg);
+		return msg.serializeCC(this.getCCEncodingContext()).length
+			> this.getMaxPayloadLength(msg);
 	}
 
 	/** Determines time in milliseconds to wait for a report from a node */
 	public getReportTimeout(msg: Message): number {
-		const node = this.getNodeUnsafe(msg);
+		const node = this.tryGetNode(msg);
 
 		return (
 			// If there's a message-specific timeout, use that
@@ -7352,7 +7492,7 @@ ${handlers.length} left`,
 		const result = await this.sendMessage<
 			Message & SuccessIndicator
 		>(
-			new SendTestFrameRequest(this, {
+			new SendTestFrameRequest({
 				testNodeId: nodeId,
 				powerlevel,
 			}),

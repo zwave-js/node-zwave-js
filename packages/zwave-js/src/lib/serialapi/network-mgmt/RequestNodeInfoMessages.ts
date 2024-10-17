@@ -4,13 +4,13 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	type INodeQuery,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	type SuccessIndicator,
 	expectedCallback,
@@ -33,10 +33,9 @@ export class RequestNodeInfoResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | RequestNodeInfoResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.wasSent = this.payload[0] !== 0;
 		} else {
@@ -50,9 +49,9 @@ export class RequestNodeInfoResponse extends Message
 		return this.wasSent;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasSent ? 0x01 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -84,14 +83,13 @@ function testCallbackForRequestNodeInfoRequest(
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	public constructor(
-		host: ZWaveHost,
 		options: RequestNodeInfoRequestOptions | MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.nodeId = parseNodeID(
 				this.payload,
-				this.host.nodeIdType,
+				options.ctx.nodeIdType,
 				0,
 			).nodeId;
 		} else {
@@ -106,9 +104,9 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 		return false;
 	}
 
-	public serialize(): Buffer {
-		this.payload = encodeNodeID(this.nodeId, this.host.nodeIdType);
-		return super.serialize();
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.payload = encodeNodeID(this.nodeId, ctx.nodeIdType);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

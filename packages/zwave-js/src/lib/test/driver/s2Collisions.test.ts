@@ -56,8 +56,8 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = smNode;
-			mockNode.host.getHighestSecurityClass = () =>
+			mockNode.securityManagers.securityManager2 = smNode;
+			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
@@ -75,19 +75,22 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.host.securityManager2 = smCtrlr;
-			controller.host.getHighestSecurityClass = () =>
-				SecurityClass.S2_Unauthenticated;
+			controller.securityManagers.securityManager2 = smCtrlr;
+			controller.parsingContext.getHighestSecurityClass =
+				controller.encodingContext.getHighestSecurityClass =
+					() => SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new Security2CCNonceReport({
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
+							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -109,10 +112,12 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							const cc = new Security2CCNonceReport({
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
+								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -133,16 +138,17 @@ integrationTest(
 						&& receivedCC.encapsulated
 							instanceof SupervisionCCGet
 					) {
-						let cc: CommandClass = new SupervisionCCReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								sessionId: receivedCC.encapsulated.sessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Success,
-							},
+						let cc: CommandClass = new SupervisionCCReport({
+							nodeId: controller.ownNodeId,
+							sessionId: receivedCC.encapsulated.sessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Success,
+						});
+						cc = Security2CC.encapsulate(
+							cc,
+							self.id,
+							self.securityManagers,
 						);
-						cc = Security2CC.encapsulate(self.host, cc);
 						return { action: "sendCC", cc };
 					}
 				},
@@ -162,11 +168,12 @@ integrationTest(
 
 			// Now create a collision by having both parties send at the same time
 			const nodeToHost = Security2CC.encapsulate(
-				mockNode.host,
-				new BinarySwitchCCReport(mockNode.host, {
-					nodeId: mockController.host.ownNodeId,
+				new BinarySwitchCCReport({
+					nodeId: mockController.ownNodeId,
 					currentValue: true,
 				}),
+				mockNode.id,
+				mockNode.securityManagers,
 			);
 			const p1 = mockNode.sendToController(
 				createMockZWaveRequestFrame(nodeToHost, {
@@ -221,8 +228,8 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = smNode;
-			mockNode.host.getHighestSecurityClass = () =>
+			mockNode.securityManagers.securityManager2 = smNode;
+			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
@@ -240,19 +247,22 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.host.securityManager2 = smCtrlr;
-			controller.host.getHighestSecurityClass = () =>
-				SecurityClass.S2_Unauthenticated;
+			controller.securityManagers.securityManager2 = smCtrlr;
+			controller.parsingContext.getHighestSecurityClass =
+				controller.encodingContext.getHighestSecurityClass =
+					() => SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new Security2CCNonceReport({
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
+							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -274,10 +284,12 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							const cc = new Security2CCNonceReport({
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
+								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -302,11 +314,12 @@ integrationTest(
 
 			// Now create a collision by having both parties send at the same time
 			const nodeToHost = Security2CC.encapsulate(
-				mockNode.host,
-				new BasicCCReport(mockNode.host, {
-					nodeId: mockController.host.ownNodeId,
+				new BasicCCReport({
+					nodeId: mockController.ownNodeId,
 					currentValue: 99,
 				}),
+				mockNode.id,
+				mockNode.securityManagers,
 			);
 			const p1 = mockNode.sendToController(
 				createMockZWaveRequestFrame(nodeToHost, {
@@ -355,8 +368,8 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = smNode;
-			mockNode.host.getHighestSecurityClass = () =>
+			mockNode.securityManagers.securityManager2 = smNode;
+			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
@@ -374,19 +387,21 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.host.securityManager2 = smCtrlr;
-			controller.host.getHighestSecurityClass = () =>
-				SecurityClass.S2_Unauthenticated;
+			controller.parsingContext.getHighestSecurityClass =
+				controller.encodingContext.getHighestSecurityClass =
+					() => SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new Security2CCNonceReport({
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
+							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -408,10 +423,12 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							const cc = new Security2CCNonceReport({
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
+								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -432,16 +449,17 @@ integrationTest(
 						&& receivedCC.encapsulated
 							instanceof SupervisionCCGet
 					) {
-						let cc: CommandClass = new SupervisionCCReport(
-							self.host,
-							{
-								nodeId: controller.host.ownNodeId,
-								sessionId: receivedCC.encapsulated.sessionId,
-								moreUpdatesFollow: false,
-								status: SupervisionStatus.Success,
-							},
+						let cc: CommandClass = new SupervisionCCReport({
+							nodeId: controller.ownNodeId,
+							sessionId: receivedCC.encapsulated.sessionId,
+							moreUpdatesFollow: false,
+							status: SupervisionStatus.Success,
+						});
+						cc = Security2CC.encapsulate(
+							cc,
+							self.id,
+							self.securityManagers,
 						);
-						cc = Security2CC.encapsulate(self.host, cc);
 						return { action: "sendCC", cc };
 					}
 				},
@@ -465,19 +483,22 @@ integrationTest(
 			const turnOff = node.commandClasses["Binary Switch"].set(false);
 
 			// Node sends supervised Binary Switch report at the same time
-			let nodeToHost: CommandClass = new BinarySwitchCCReport(
-				mockNode.host,
-				{
-					nodeId: mockController.host.ownNodeId,
-					currentValue: true,
-				},
-			);
+			let nodeToHost: CommandClass = new BinarySwitchCCReport({
+				nodeId: mockController.ownNodeId,
+				currentValue: true,
+			});
 			nodeToHost = SupervisionCC.encapsulate(
-				mockNode.host,
 				nodeToHost,
+				driver.getNextSupervisionSessionId(
+					mockController.ownNodeId,
+				),
 				false,
 			);
-			nodeToHost = Security2CC.encapsulate(mockNode.host, nodeToHost);
+			nodeToHost = Security2CC.encapsulate(
+				nodeToHost,
+				mockNode.id,
+				mockNode.securityManagers,
+			);
 
 			const report = mockNode.sendToController(
 				createMockZWaveRequestFrame(nodeToHost, {
@@ -503,9 +524,8 @@ integrationTest(
 
 			// // Now create a collision by having both parties send at the same time
 			// const nodeToHost = Security2CC.encapsulate(
-			// 	mockNode.host,
-			// 	new BasicCCReport(mockNode.host, {
-			// 		nodeId: mockController.host.ownNodeId,
+			// 	new BasicCCReport({
+			// 		nodeId: mockController.ownNodeId,
 			// 		currentValue: 99,
 			// 	}),
 			// );

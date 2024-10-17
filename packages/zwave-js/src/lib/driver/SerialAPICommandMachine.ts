@@ -141,6 +141,7 @@ export type SerialAPICommandMachineParams = {
 
 export function getSerialAPICommandMachineConfig(
 	message: Message,
+	messageData: Buffer,
 	{
 		timestamp,
 		logOutgoingMessage,
@@ -161,7 +162,7 @@ export function getSerialAPICommandMachineConfig(
 		initial: "sending",
 		context: {
 			msg: message,
-			data: message.serialize(),
+			data: messageData,
 			attempts: 0,
 			maxAttempts: attemptsConfig.controller,
 		},
@@ -449,12 +450,14 @@ export function getSerialAPICommandMachineOptions(
 
 export function createSerialAPICommandMachine(
 	message: Message,
+	messageData: Buffer,
 	implementations: SerialAPICommandServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
 	return createMachine<SerialAPICommandContext, SerialAPICommandEvent>(
 		getSerialAPICommandMachineConfig(
 			message,
+			messageData,
 			implementations,
 			params.attempts,
 		),

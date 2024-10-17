@@ -12,12 +12,12 @@ import {
 	getChipTypeAndVersion,
 	getZWaveChipType,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -38,12 +38,11 @@ export interface GetSerialApiInitDataResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetSerialApiInitDataResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			const apiVersion = this.payload[0];
@@ -117,7 +116,7 @@ export class GetSerialApiInitDataResponse extends Message {
 
 	public zwaveChipType?: string | UnknownZWaveChipType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		let chipType: UnknownZWaveChipType | undefined;
 		if (typeof this.zwaveChipType === "string") {
 			chipType = getChipTypeAndVersion(this.zwaveChipType);
@@ -152,7 +151,7 @@ export class GetSerialApiInitDataResponse extends Message {
 			this.payload[3 + NUM_NODEMASK_BYTES + 1] = chipType.version;
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	// public toLogEntry(): MessageOrCCLogEntry {

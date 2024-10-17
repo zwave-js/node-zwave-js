@@ -5,12 +5,12 @@ import {
 	encodeCCList,
 	parseCCList,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	gotDeserializationOptions,
 	messageTypes,
@@ -59,10 +59,9 @@ export interface SerialAPIStartedRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Normal)
 export class SerialAPIStartedRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SerialAPIStartedRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.wakeUpReason = this.payload[0];
@@ -108,7 +107,7 @@ export class SerialAPIStartedRequest extends Message {
 	public controlledCCs: CommandClasses[];
 	public supportsLongRange: boolean = false;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const numCCBytes = ccList.length;
 
@@ -122,7 +121,7 @@ export class SerialAPIStartedRequest extends Message {
 		ccList.copy(this.payload, 6);
 		this.payload[6 + numCCBytes] = this.supportsLongRange ? 0b1 : 0;
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

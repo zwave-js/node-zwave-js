@@ -1,6 +1,6 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
@@ -11,11 +11,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -23,6 +19,9 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -129,12 +128,12 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 	public async get(sensorType?: AlarmSensorType) {
 		this.assertSupportsCommand(AlarmSensorCommand, AlarmSensorCommand.Get);
 
-		const cc = new AlarmSensorCCGet(this.applHost, {
+		const cc = new AlarmSensorCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = await this.applHost.sendCommand<AlarmSensorCCReport>(
+		const response = await this.host.sendCommand<AlarmSensorCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -148,11 +147,11 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 			AlarmSensorCommand.SupportedGet,
 		);
 
-		const cc = new AlarmSensorCCSupportedGet(this.applHost, {
+		const cc = new AlarmSensorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AlarmSensorCCSupportedReport
 		>(
 			cc,
@@ -168,38 +167,40 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 
 		// Skip the interview in favor of Notification CC if possible
 		if (endpoint.supportsCC(CommandClasses.Notification)) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`${this.constructor.name}: skipping interview because Notification CC is supported...`,
 				direction: "none",
 			});
-			this.setInterviewComplete(applHost, true);
+			this.setInterviewComplete(ctx, true);
 			return;
 		}
 
 		const api = CCAPI.create(
 			CommandClasses["Alarm Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Find out which sensor types this sensor supports
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported sensor types...",
 			direction: "outbound",
@@ -212,13 +213,13 @@ export class AlarmSensorCC extends CommandClass {
 					.map((name) => `\n· ${name}`)
 					.join("")
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported sensor types timed out, skipping interview...",
@@ -228,25 +229,27 @@ export class AlarmSensorCC extends CommandClass {
 		}
 
 		// Query (all of) the sensor's current value(s)
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Alarm Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		const supportedSensorTypes: readonly AlarmSensorType[] =
-			this.getValue(applHost, AlarmSensorCCValues.supportedSensorTypes)
+			this.getValue(ctx, AlarmSensorCCValues.supportedSensorTypes)
 				?? [];
 
 		// Always query (all of) the sensor's current value(s)
@@ -257,7 +260,7 @@ export class AlarmSensorCC extends CommandClass {
 
 			const sensorName = getEnumMemberName(AlarmSensorType, type);
 
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current value for ${sensorName}...`,
 				direction: "outbound",
@@ -274,7 +277,7 @@ severity: ${currentValue.severity}`;
 					message += `
 duration: ${currentValue.duration}`;
 				}
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message,
 					direction: "inbound",
@@ -288,10 +291,10 @@ duration: ${currentValue.duration}`;
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedSensorTypesCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 	): MaybeNotKnown<AlarmSensorType[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				AlarmSensorCCValues.supportedSensorTypes.endpoint(
@@ -301,7 +304,7 @@ duration: ${currentValue.duration}`;
 	}
 
 	protected createMetadataForSensorType(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		sensorType: AlarmSensorType,
 	): void {
 		const stateValue = AlarmSensorCCValues.state(sensorType);
@@ -309,19 +312,18 @@ duration: ${currentValue.duration}`;
 		const durationValue = AlarmSensorCCValues.duration(sensorType);
 
 		// Always create metadata if it does not exist
-		this.ensureMetadata(applHost, stateValue);
-		this.ensureMetadata(applHost, severityValue);
-		this.ensureMetadata(applHost, durationValue);
+		this.ensureMetadata(ctx, stateValue);
+		this.ensureMetadata(ctx, severityValue);
+		this.ensureMetadata(ctx, durationValue);
 	}
 }
 
 @CCCommand(AlarmSensorCommand.Report)
 export class AlarmSensorCCReport extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 5, this.payload[1] !== 0xff);
 		// Alarm Sensor reports may be forwarded by a different node, in this case
 		// (and only then!) the payload contains the original node ID
@@ -345,7 +347,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	public readonly severity: number | undefined;
 	public readonly duration: number | undefined;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sensor type": getEnumMemberName(AlarmSensorType, this.sensorType),
 			"alarm state": this.state,
@@ -357,23 +359,23 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 			message.duration = `${this.duration} seconds`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 		// Create metadata if it does not exist
-		this.createMetadataForSensorType(applHost, this.sensorType);
+		this.createMetadataForSensorType(ctx, this.sensorType);
 
 		const stateValue = AlarmSensorCCValues.state(this.sensorType);
 		const severityValue = AlarmSensorCCValues.severity(this.sensorType);
 		const durationValue = AlarmSensorCCValues.duration(this.sensorType);
 
-		this.setValue(applHost, stateValue, this.state);
-		this.setValue(applHost, severityValue, this.severity);
-		this.setValue(applHost, durationValue, this.duration);
+		this.setValue(ctx, stateValue, this.state);
+		this.setValue(ctx, severityValue, this.severity);
+		this.setValue(ctx, durationValue, this.duration);
 
 		return true;
 	}
@@ -399,10 +401,9 @@ export interface AlarmSensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AlarmSensorCCReport, testResponseForAlarmSensorGet)
 export class AlarmSensorCCGet extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AlarmSensorCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -416,14 +417,14 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 
 	public sensorType: AlarmSensorType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.sensorType]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"sensor type": getEnumMemberName(
 					AlarmSensorType,
@@ -437,10 +438,9 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 @CCCommand(AlarmSensorCommand.SupportedReport)
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 		const bitMaskLength = this.payload[0];
 		validatePayload(this.payload.length >= 1 + bitMaskLength);
@@ -456,18 +456,18 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return this._supportedSensorTypes;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 		// Create metadata for each sensor type
 		for (const type of this._supportedSensorTypes) {
-			this.createMetadataForSensorType(applHost, type);
+			this.createMetadataForSensorType(ctx, type);
 		}
 		return true;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported sensor types": this._supportedSensorTypes
 					.map((t) => getEnumMemberName(AlarmSensorType, t))

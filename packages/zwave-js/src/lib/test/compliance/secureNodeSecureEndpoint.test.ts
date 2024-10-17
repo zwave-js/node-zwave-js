@@ -95,8 +95,8 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			mockNode.host.securityManager2 = smNode;
-			mockNode.host.getHighestSecurityClass = () =>
+			mockNode.securityManagers.securityManager2 = smNode;
+			mockNode.encodingContext.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
 			// Create a security manager for the controller
@@ -114,19 +114,22 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			controller.host.securityManager2 = smCtrlr;
-			controller.host.getHighestSecurityClass = () =>
-				SecurityClass.S2_Unauthenticated;
+			controller.securityManagers.securityManager2 = smCtrlr;
+			controller.parsingContext.getHighestSecurityClass =
+				controller.encodingContext.getHighestSecurityClass =
+					() => SecurityClass.S2_Unauthenticated;
 
 			// Respond to Nonce Get
 			const respondToNonceGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof Security2CCNonceGet) {
 						const nonce = smNode.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 						);
-						const cc = new Security2CCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new Security2CCNonceReport({
+							nodeId: controller.ownNodeId,
+							ownNodeId: self.id,
+							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,
@@ -148,10 +151,12 @@ integrationTest(
 								=== ZWaveErrorCodes.Security2CC_NoSPAN
 						) {
 							const nonce = smNode.generateNonce(
-								controller.host.ownNodeId,
+								controller.ownNodeId,
 							);
-							const cc = new Security2CCNonceReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							const cc = new Security2CCNonceReport({
+								nodeId: controller.ownNodeId,
+								ownNodeId: self.id,
+								securityManagers: self.securityManagers,
 								SOS: true,
 								MOS: false,
 								receiverEI: nonce,
@@ -173,12 +178,13 @@ integrationTest(
 							instanceof Security2CCCommandsSupportedGet
 					) {
 						const isHighestGranted = receivedCC.securityClass
-							=== self.host.getHighestSecurityClass(self.id);
+							=== self.encodingContext.getHighestSecurityClass(
+								self.id,
+							);
 
 						const cc = Security2CC.encapsulate(
-							self.host,
-							new Security2CCCommandsSupportedReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							new Security2CCCommandsSupportedReport({
+								nodeId: controller.ownNodeId,
 								supportedCCs: isHighestGranted
 									? [...mockNode.implementedCCs.entries()]
 										.filter(
@@ -192,6 +198,8 @@ integrationTest(
 										.map(([ccId]) => ccId)
 									: [],
 							}),
+							self.id,
+							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
 					}
@@ -208,13 +216,14 @@ integrationTest(
 							instanceof MultiChannelCCEndPointGet
 					) {
 						const cc = Security2CC.encapsulate(
-							self.host,
-							new MultiChannelCCEndPointReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							new MultiChannelCCEndPointReport({
+								nodeId: controller.ownNodeId,
 								countIsDynamic: false,
 								identicalCapabilities: false,
 								individualCount: self.endpoints.size,
 							}),
+							self.id,
+							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
 					}
@@ -232,14 +241,15 @@ integrationTest(
 					) {
 						const request = receivedCC.encapsulated;
 						const cc = Security2CC.encapsulate(
-							self.host,
-							new MultiChannelCCEndPointFindReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							new MultiChannelCCEndPointFindReport({
+								nodeId: controller.ownNodeId,
 								genericClass: request.genericClass,
 								specificClass: request.specificClass,
 								foundEndpoints: [...self.endpoints.keys()],
 								reportsToFollow: 0,
 							}),
+							self.id,
+							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
 					}
@@ -259,9 +269,8 @@ integrationTest(
 							receivedCC.encapsulated.requestedEndpoint,
 						)!;
 						const cc = Security2CC.encapsulate(
-							self.host,
-							new MultiChannelCCCapabilityReport(self.host, {
-								nodeId: controller.host.ownNodeId,
+							new MultiChannelCCCapabilityReport({
+								nodeId: controller.ownNodeId,
 								endpointIndex: endpoint.index,
 								genericDeviceClass:
 									endpoint?.capabilities.genericDeviceClass
@@ -275,6 +284,8 @@ integrationTest(
 									...endpoint.implementedCCs.keys(),
 								],
 							}),
+							self.id,
+							self.securityManagers,
 						);
 						return { action: "sendCC", cc };
 					}

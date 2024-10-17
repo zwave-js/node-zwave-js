@@ -35,8 +35,8 @@ const respondToColorSwitchSupportedGet: MockNodeBehavior = {
 					receivedCC.endpointIndex,
 				),
 			};
-			const cc = new ColorSwitchCCSupportedReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new ColorSwitchCCSupportedReport({
+				nodeId: controller.ownNodeId,
 				supportedColorComponents: Object.keys(
 					capabilities.colorComponents,
 				).map(
@@ -74,8 +74,8 @@ const respondToColorSwitchGet: MockNodeBehavior = {
 			};
 			const component = receivedCC.colorComponent;
 			if (component in capabilities.colorComponents) {
-				const cc = new ColorSwitchCCReport(self.host, {
-					nodeId: controller.host.ownNodeId,
+				const cc = new ColorSwitchCCReport({
+					nodeId: controller.ownNodeId,
 					colorComponent: component,
 					currentValue:
 						(self.state.get(StateKeys.component(component))

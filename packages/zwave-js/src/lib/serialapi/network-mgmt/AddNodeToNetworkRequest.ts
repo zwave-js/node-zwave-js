@@ -1,16 +1,21 @@
 import {
 	type BasicDeviceClass,
 	type CommandClasses,
+	type ListenBehavior,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type NodeId,
 	NodeType,
 	Protocols,
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type { GetAllNodes } from "@zwave-js/host";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -68,10 +73,10 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 }
 
 export function computeNeighborDiscoveryTimeout(
-	host: ZWaveApplicationHost,
+	host: GetAllNodes<NodeId & ListenBehavior>,
 	nodeType: NodeType,
 ): number {
-	const allNodes = [...host.nodes.values()];
+	const allNodes = [...host.getAllNodes()];
 	const numListeningNodes = allNodes.filter((n) => n.isListening).length;
 	const numFlirsNodes = allNodes.filter((n) => n.isFrequentListening).length;
 	const numNodes = allNodes.length;
@@ -89,14 +94,14 @@ export function computeNeighborDiscoveryTimeout(
 // no expected response, the controller will respond with multiple AddNodeToNetworkRequests
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== AddNodeToNetworkRequestStatusReport
 		) {
-			return new AddNodeToNetworkRequestStatusReport(host, options);
+			return new AddNodeToNetworkRequestStatusReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -130,10 +135,9 @@ function testCallbackForAddNodeRequest(
 @expectedCallback(testCallbackForAddNodeRequest)
 export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: AddNodeToNetworkRequestOptions = {},
 	) {
-		super(host, options);
+		super(options);
 
 		this.addNodeType = options.addNodeType;
 		this.highPower = !!options.highPower;
@@ -147,14 +151,15 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	/** Whether to include network wide */
 	public networkWide: boolean = false;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		let data: number = this.addNodeType || AddNodeType.Any;
 		if (this.highPower) data |= AddNodeFlags.HighPower;
 		if (this.networkWide) data |= AddNodeFlags.NetworkWide;
 
 		this.payload = Buffer.from([data, this.callbackId]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -183,14 +188,14 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 }
 
 export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const control: number = AddNodeType.SmartStartListen
 			| AddNodeFlags.NetworkWide;
 		// The Serial API does not send a callback, so disable waiting for one
 		this.callbackId = 0;
 
 		this.payload = Buffer.from([control, this.callbackId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -205,10 +210,9 @@ export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 
 export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: AddNodeDSKToNetworkRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.nwiHomeId = options.nwiHomeId;
 		this.authHomeId = options.authHomeId;
@@ -227,7 +231,8 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	/** Whether to include as long-range or not */
 	public protocol: Protocols;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		let control: number = AddNodeType.SmartStartDSK;
 		if (this.highPower) control |= AddNodeFlags.HighPower;
 		if (this.networkWide) control |= AddNodeFlags.NetworkWide;
@@ -241,7 +246,7 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 			this.authHomeId,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -270,10 +275,9 @@ export class AddNodeToNetworkRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.callbackId = this.payload[0];
 		this.status = this.payload[1];
 		switch (this.status) {
@@ -287,7 +291,7 @@ export class AddNodeToNetworkRequestStatusReport
 			case AddNodeStatus.Done: {
 				const { nodeId } = parseNodeID(
 					this.payload,
-					host.nodeIdType,
+					options.ctx.nodeIdType,
 					2,
 				);
 				this.statusContext = { nodeId };
@@ -299,7 +303,7 @@ export class AddNodeToNetworkRequestStatusReport
 				// the payload contains a node information frame
 				this.statusContext = parseNodeUpdatePayload(
 					this.payload.subarray(2),
-					host.nodeIdType,
+					options.ctx.nodeIdType,
 				);
 				break;
 			}
@@ -320,7 +324,7 @@ export class AddNodeToNetworkRequestStatusReport
 			...super.toLogEntry(),
 			message: {
 				status: getEnumMemberName(AddNodeStatus, this.status),
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}

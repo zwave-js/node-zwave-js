@@ -5,12 +5,12 @@ import {
 	encodeNodeID,
 	parseNodeBitMask,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	messageTypes,
@@ -27,8 +27,8 @@ interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-	public constructor(host: ZWaveHost, options: GetRoutingInfoRequestOptions) {
-		super(host, options);
+	public constructor(options: GetRoutingInfoRequestOptions) {
+		super(options);
 		this.sourceNodeId = options.nodeId;
 		this.removeNonRepeaters = !!options.removeNonRepeaters;
 		this.removeBadLinks = !!options.removeBadLinks;
@@ -38,8 +38,8 @@ export class GetRoutingInfoRequest extends Message {
 	public removeNonRepeaters: boolean;
 	public removeBadLinks: boolean;
 
-	public serialize(): Buffer {
-		const nodeId = encodeNodeID(this.sourceNodeId, this.host.nodeIdType);
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		const nodeId = encodeNodeID(this.sourceNodeId, ctx.nodeIdType);
 		const optionsByte = (this.removeBadLinks ? 0b1000_0000 : 0)
 			| (this.removeNonRepeaters ? 0b0100_0000 : 0);
 		this.payload = Buffer.concat([
@@ -49,7 +49,7 @@ export class GetRoutingInfoRequest extends Message {
 				0, // callbackId - this must be 0 as per the docs
 			]),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -66,10 +66,9 @@ export class GetRoutingInfoRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (this.payload.length === NUM_NODEMASK_BYTES) {
 			// the payload contains a bit mask of all neighbor nodes

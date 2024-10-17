@@ -1,19 +1,19 @@
 import {
 	CommandClasses,
-	type IVirtualEndpoint,
-	type IZWaveEndpoint,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type { CCEncodingContext } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { CCAPI } from "../lib/API";
+import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
 import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -34,16 +34,16 @@ export type ManufacturerProprietaryCCConstructor<
 		typeof ManufacturerProprietaryCC,
 > = T & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
-	new (host: ZWaveHost, options: any): InstanceType<T>;
+	new (options: any): InstanceType<T>;
 };
 
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
 	public constructor(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint | IVirtualEndpoint,
+		host: CCAPIHost,
+		endpoint: CCAPIEndpoint,
 	) {
-		super(applHost, endpoint);
+		super(host, endpoint);
 
 		// Read the manufacturer ID from Manufacturer Specific CC
 		const manufacturerId = this.getValueDB().getValue<number>(
@@ -58,7 +58,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 				SpecificAPIConstructor != undefined
 				&& new.target !== SpecificAPIConstructor
 			) {
-				return new SpecificAPIConstructor(applHost, endpoint);
+				return new SpecificAPIConstructor(host, endpoint);
 			}
 		}
 	}
@@ -68,20 +68,20 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		manufacturerId: number,
 		data?: Buffer,
 	): Promise<void> {
-		const cc = new ManufacturerProprietaryCC(this.applHost, {
+		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			manufacturerId,
 		});
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async sendAndReceiveData(manufacturerId: number, data?: Buffer) {
-		const cc = new ManufacturerProprietaryCC(this.applHost, {
+		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			manufacturerId,
@@ -89,7 +89,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		});
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			ManufacturerProprietaryCC
 		>(
 			cc,
@@ -134,12 +134,11 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
 
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ManufacturerProprietaryCCOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -156,7 +155,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				&& new.target !== PCConstructor
 				&& !staticExtends(new.target, PCConstructor)
 			) {
-				return new PCConstructor(host, options);
+				return new PCConstructor(options);
 			}
 
 			// If the constructor is correct, update the payload for subclass deserialization
@@ -192,7 +191,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		return this.manufacturerId;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const manufacturerId = this.getManufacturerIdOrThrow();
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
@@ -205,7 +204,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			]),
 			this.payload,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public createSpecificInstance(): ManufacturerProprietaryCC | undefined {
@@ -215,7 +214,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				this.manufacturerId,
 			);
 			if (PCConstructor) {
-				return new PCConstructor(this.host, {
+				return new PCConstructor({
 					nodeId: this.nodeId,
 					endpoint: this.endpointIndex,
 				});
@@ -223,19 +222,21 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		}
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
 		// Read the manufacturer ID from Manufacturer Specific CC
 		this.manufacturerId = this.getValue(
-			applHost,
+			ctx,
 			ManufacturerSpecificCCValues.manufacturerId,
 		)!;
 		const pcInstance = this.createSpecificInstance();
 		if (pcInstance) {
-			await pcInstance.interview(applHost);
+			await pcInstance.interview(ctx);
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message:
 					`${this.constructor.name}: skipping interview refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",
@@ -243,24 +244,26 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
 		if (this.manufacturerId == undefined) {
 			// Read the manufacturer ID from Manufacturer Specific CC
 			this.manufacturerId = this.getValue(
-				applHost,
+				ctx,
 				ManufacturerSpecificCCValues.manufacturerId,
 			)!;
 		}
 		const pcInstance = this.createSpecificInstance();
 		if (pcInstance) {
-			await pcInstance.refreshValues(applHost);
+			await pcInstance.refreshValues(ctx);
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message:
 					`${this.constructor.name}: skipping value refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",

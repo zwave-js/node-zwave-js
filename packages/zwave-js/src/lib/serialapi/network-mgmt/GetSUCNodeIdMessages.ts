@@ -1,10 +1,10 @@
 import { MessagePriority, encodeNodeID, parseNodeID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -24,15 +24,14 @@ export interface GetSUCNodeIdResponseOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.GetSUCNodeId)
 export class GetSUCNodeIdResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | GetSUCNodeIdResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.sucNodeId = parseNodeID(
 				this.payload,
-				this.host.nodeIdType,
+				options.ctx.nodeIdType,
 				0,
 			).nodeId;
 		} else {
@@ -43,8 +42,8 @@ export class GetSUCNodeIdResponse extends Message {
 	/** The node id of the SUC or 0 if none is present */
 	public sucNodeId: number;
 
-	public serialize(): Buffer {
-		this.payload = encodeNodeID(this.sucNodeId, this.host.nodeIdType);
-		return super.serialize();
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.payload = encodeNodeID(this.sucNodeId, ctx.nodeIdType);
+		return super.serialize(ctx);
 	}
 }

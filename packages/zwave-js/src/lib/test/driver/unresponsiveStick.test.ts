@@ -19,7 +19,7 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const doNotRespond: MockControllerBehavior = {
-				onHostMessage(host, controller, msg) {
+				onHostMessage(controller, msg) {
 					if (!shouldRespond) {
 						// Soft reset should restore normal operation
 						if (msg instanceof SoftResetRequest) {
@@ -50,7 +50,7 @@ integrationTest(
 				{ supportCheck: false },
 			);
 
-			t.is(ids.ownNodeId, mockController.host.ownNodeId);
+			t.is(ids.ownNodeId, mockController.ownNodeId);
 		},
 	},
 );
@@ -72,7 +72,7 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const doNotRespond: MockControllerBehavior = {
-				onHostMessage(host, controller, msg) {
+				onHostMessage(controller, msg) {
 					if (!shouldRespond) return true;
 
 					return false;
@@ -144,7 +144,7 @@ integrationTest(
 
 		async customSetup(driver, mockController, mockNode) {
 			const doNotRespond: MockControllerBehavior = {
-				onHostMessage(host, controller, msg) {
+				onHostMessage(controller, msg) {
 					if (!shouldRespond) {
 						return true;
 					}

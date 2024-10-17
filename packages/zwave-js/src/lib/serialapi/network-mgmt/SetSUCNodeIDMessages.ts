@@ -6,8 +6,10 @@ import {
 	ZWaveErrorCodes,
 	encodeNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -28,7 +30,8 @@ export enum SetSUCNodeIdStatus {
 }
 
 export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
-	sucNodeId?: number;
+	ownNodeId: number;
+	sucNodeId: number;
 	enableSUC: boolean;
 	enableSIS: boolean;
 	transmitOptions?: TransmitOptions;
@@ -37,14 +40,14 @@ export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Request, FunctionType.SetSUCNodeId)
 @priority(MessagePriority.Controller)
 export class SetSUCNodeIdRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== SetSUCNodeIdRequestStatusReport
 		) {
-			return new SetSUCNodeIdRequestStatusReport(host, options);
+			return new SetSUCNodeIdRequestStatusReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -52,21 +55,21 @@ export class SetSUCNodeIdRequestBase extends Message {
 @expectedCallback(FunctionType.SetSUCNodeId)
 export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions | SetSUCNodeIdRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.sucNodeId = options.sucNodeId ?? host.ownNodeId;
+			this.sucNodeId = options.sucNodeId;
 			this.enableSUC = options.enableSUC;
 			this.enableSIS = options.enableSIS;
 			this.transmitOptions = options.transmitOptions
 				?? TransmitOptions.DEFAULT;
+			this._ownNodeId = options.ownNodeId;
 		}
 	}
 
@@ -75,8 +78,11 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public enableSIS: boolean;
 	public transmitOptions: TransmitOptions;
 
-	public serialize(): Buffer {
-		const nodeId = encodeNodeID(this.sucNodeId, this.host.nodeIdType);
+	private _ownNodeId: number;
+
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		const nodeId = encodeNodeID(this.sucNodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([
 			nodeId,
 			Buffer.from([
@@ -87,11 +93,11 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 			]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public expectsCallback(): boolean {
-		if (this.sucNodeId === this.host.ownNodeId) return false;
+		if (this.sucNodeId === this._ownNodeId) return false;
 		return super.expectsCallback();
 	}
 }
@@ -99,10 +105,9 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 @messageTypes(MessageType.Response, FunctionType.SetSUCNodeId)
 export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this._wasExecuted = this.payload[0] !== 0;
 	}
 
@@ -127,10 +132,9 @@ export class SetSUCNodeIdRequestStatusReport extends SetSUCNodeIdRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.callbackId = this.payload[0];
 		this._status = this.payload[1];

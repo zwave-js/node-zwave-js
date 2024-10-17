@@ -5,11 +5,11 @@ import {
 	encodeCCList,
 	getCCName,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	type MessageEncodingContext,
 	MessageType,
 	messageTypes,
 	priority,
@@ -30,10 +30,9 @@ export interface SetApplicationNodeInformationRequestOptions
 @priority(MessagePriority.Controller)
 export class SetApplicationNodeInformationRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: SetApplicationNodeInformationRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.isListening = options.isListening;
 		this.genericDeviceClass = options.genericDeviceClass;
 		this.specificDeviceClass = options.specificDeviceClass;
@@ -47,7 +46,7 @@ export class SetApplicationNodeInformationRequest extends Message {
 	public supportedCCs: CommandClasses[];
 	public controlledCCs: CommandClasses[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const ccList = encodeCCList(this.supportedCCs, this.controlledCCs);
 		const ccListLength = Math.min(ccList.length, 35);
 		this.payload = Buffer.from([
@@ -58,7 +57,7 @@ export class SetApplicationNodeInformationRequest extends Message {
 			...ccList.subarray(0, ccListLength),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

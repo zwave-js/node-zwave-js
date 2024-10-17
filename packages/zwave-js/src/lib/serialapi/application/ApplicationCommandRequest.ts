@@ -10,12 +10,12 @@ import {
 	encodeNodeID,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	gotDeserializationOptions,
 	messageTypes,
@@ -50,12 +50,11 @@ export class ApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ApplicationCommandRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// first byte is a status flag
 			const status = this.payload[0];
@@ -85,17 +84,20 @@ export class ApplicationCommandRequest extends Message
 			let offset = 1;
 			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 				this.payload,
-				host.nodeIdType,
+				options.ctx.nodeIdType,
 				offset,
 			);
 			offset += nodeIdBytes;
 			// and a command class
 			const commandLength = this.payload[offset++];
-			this.command = CommandClass.from(this.host, {
+			this.command = CommandClass.from({
 				data: this.payload.subarray(offset, offset + commandLength),
 				nodeId,
 				origin: options.origin,
-				frameType: this.frameType,
+				context: {
+					sourceNodeId: nodeId,
+					...options.ctx,
+				},
 			}) as SinglecastCC<CommandClass>;
 		} else {
 			// TODO: This logic is unsound
@@ -131,7 +133,7 @@ export class ApplicationCommandRequest extends Message
 		return super.getNodeId();
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const statusByte = (this.frameType === "broadcast"
 			? ApplicationCommandStatusFlags.TypeBroad
 			: this.frameType === "multicast"
@@ -139,10 +141,10 @@ export class ApplicationCommandRequest extends Message
 			: 0)
 			| (this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
 
-		const serializedCC = this.command.serialize();
+		const serializedCC = this.command.serialize(ctx);
 		const nodeId = encodeNodeID(
-			this.getNodeId() ?? this.host.ownNodeId,
-			this.host.nodeIdType,
+			this.getNodeId() ?? ctx.ownNodeId,
+			ctx.nodeIdType,
 		);
 		this.payload = Buffer.concat([
 			Buffer.from([statusByte]),
@@ -151,7 +153,7 @@ export class ApplicationCommandRequest extends Message
 			serializedCC,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

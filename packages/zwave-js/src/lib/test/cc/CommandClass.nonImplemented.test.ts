@@ -9,7 +9,7 @@ integrationTest(
 
 		async testBody(t, driver, node, mockController, mockNode) {
 			// This CC will never be supported (certification requirement)
-			const cc = new CommandClass(driver, {
+			const cc = new CommandClass({
 				nodeId: 2,
 				ccId: CommandClasses["Anti-Theft"],
 				ccCommand: 0x02,

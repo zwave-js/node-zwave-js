@@ -1,10 +1,10 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
 import { MessagePriority } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageOrigin,
 	MessageType,
@@ -17,36 +17,37 @@ import {
 @messageTypes(MessageType.Request, FunctionType.HardReset)
 @priority(MessagePriority.Controller)
 export class HardResetRequestBase extends Message {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
+	public constructor(options?: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
 				options.origin === MessageOrigin.Host
 				&& (new.target as any) !== HardResetRequest
 			) {
-				return new HardResetRequest(host, options);
+				return new HardResetRequest(options);
 			} else if (
 				options.origin !== MessageOrigin.Host
 				&& (new.target as any) !== HardResetCallback
 			) {
-				return new HardResetCallback(host, options);
+				return new HardResetCallback(options);
 			}
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
 @expectedCallback(FunctionType.HardReset)
 export class HardResetRequest extends HardResetRequestBase {
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		this.payload = Buffer.from([this.callbackId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}
@@ -54,10 +55,9 @@ export class HardResetRequest extends HardResetRequestBase {
 
 export class HardResetCallback extends HardResetRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.callbackId = this.payload[0];
 	}
 
@@ -65,7 +65,7 @@ export class HardResetCallback extends HardResetRequestBase {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 			},
 		};
 	}

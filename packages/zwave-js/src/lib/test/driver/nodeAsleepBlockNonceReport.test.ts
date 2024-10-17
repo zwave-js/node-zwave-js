@@ -31,26 +31,26 @@ integrationTest(
 				networkKey: driver.options.securityKeys!.S0_Legacy!,
 				nonceTimeout: 100000,
 			});
-			mockNode.host.securityManager = sm0Node;
+			mockNode.securityManagers.securityManager = sm0Node;
 
 			// Create a security manager for the controller
 			const sm0Ctrlr = new SecurityManager({
-				ownNodeId: controller.host.ownNodeId,
+				ownNodeId: controller.ownNodeId,
 				networkKey: driver.options.securityKeys!.S0_Legacy!,
 				nonceTimeout: 100000,
 			});
-			controller.host.securityManager = sm0Ctrlr;
+			controller.securityManagers.securityManager = sm0Ctrlr;
 
 			// Respond to S0 Nonce Get
 			const respondToS0NonceGet: MockNodeBehavior = {
 				handleCC(controller, self, receivedCC) {
 					if (receivedCC instanceof SecurityCCNonceGet) {
 						const nonce = sm0Node.generateNonce(
-							controller.host.ownNodeId,
+							controller.ownNodeId,
 							8,
 						);
-						const cc = new SecurityCCNonceReport(self.host, {
-							nodeId: controller.host.ownNodeId,
+						const cc = new SecurityCCNonceReport({
+							nodeId: controller.ownNodeId,
 							nonce,
 						});
 						return { action: "sendCC", cc };
@@ -67,7 +67,10 @@ integrationTest(
 						receivedCC
 							instanceof SecurityCCCommandEncapsulation
 					) {
-						receivedCC.mergePartialCCs(undefined as any, []);
+						receivedCC.mergePartialCCs(
+							[],
+							{} as any,
+						);
 					}
 					// This just decodes - we need to call further handlers
 					return undefined;
@@ -81,8 +84,8 @@ integrationTest(
 			node.markAsAsleep();
 			mockNode.autoAckControllerFrames = false;
 
-			let nonceRequest = new SecurityCCNonceGet(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+			let nonceRequest = new SecurityCCNonceGet({
+				nodeId: mockController.ownNodeId,
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(nonceRequest, {
@@ -119,8 +122,8 @@ integrationTest(
 			mockNode.autoAckControllerFrames = true;
 
 			// And subsequent requests must be answered
-			nonceRequest = new SecurityCCNonceGet(mockNode.host, {
-				nodeId: mockController.host.ownNodeId,
+			nonceRequest = new SecurityCCNonceGet({
+				nodeId: mockController.ownNodeId,
 			});
 			await mockNode.sendToController(
 				createMockZWaveRequestFrame(nonceRequest, {

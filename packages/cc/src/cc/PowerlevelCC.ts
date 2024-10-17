@@ -9,7 +9,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";
@@ -53,12 +53,12 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	public async setNormalPowerlevel(): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Set);
 
-		const cc = new PowerlevelCCSet(this.applHost, {
+		const cc = new PowerlevelCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			powerlevel: Powerlevel["Normal Power"],
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -68,13 +68,13 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Set);
 
-		const cc = new PowerlevelCCSet(this.applHost, {
+		const cc = new PowerlevelCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			powerlevel,
 			timeout,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getPowerlevel(): Promise<
@@ -82,11 +82,11 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Get);
 
-		const cc = new PowerlevelCCGet(this.applHost, {
+		const cc = new PowerlevelCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<PowerlevelCCReport>(
+		const response = await this.host.sendCommand<PowerlevelCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -101,12 +101,12 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 	): Promise<void> {
 		this.assertSupportsCommand(PowerlevelCommand, PowerlevelCommand.Report);
 
-		const cc = new PowerlevelCCReport(this.applHost, {
+		const cc = new PowerlevelCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -126,7 +126,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
-		const testNode = this.applHost.nodes.getOrThrow(testNodeId);
+		const testNode = this.host.getNodeOrThrow(testNodeId);
 		if (testNode.isFrequentListening) {
 			throw new ZWaveError(
 				`Node ${testNodeId} is FLiRS and therefore cannot be used for a powerlevel test.`,
@@ -140,14 +140,14 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new PowerlevelCCTestNodeSet(this.applHost, {
+		const cc = new PowerlevelCCTestNodeSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			testNodeId,
 			powerlevel,
 			testFrameCount,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getNodeTestStatus(): Promise<
@@ -163,11 +163,11 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			PowerlevelCommand.TestNodeGet,
 		);
 
-		const cc = new PowerlevelCCTestNodeGet(this.applHost, {
+		const cc = new PowerlevelCCTestNodeGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			PowerlevelCCTestNodeReport
 		>(
 			cc,
@@ -191,12 +191,12 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 			PowerlevelCommand.TestNodeReport,
 		);
 
-		const cc = new PowerlevelCCTestNodeReport(this.applHost, {
+		const cc = new PowerlevelCCTestNodeReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -224,10 +224,9 @@ export type PowerlevelCCSetOptions =
 @useSupervision()
 export class PowerlevelCCSet extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | PowerlevelCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.powerlevel = this.payload[0];
@@ -251,12 +250,12 @@ export class PowerlevelCCSet extends PowerlevelCC {
 	public powerlevel: Powerlevel;
 	public timeout?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.powerlevel, this.timeout ?? 0x00]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
@@ -264,7 +263,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 			message.timeout = `${this.timeout} s`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -282,12 +281,11 @@ export type PowerlevelCCReportOptions = {
 @CCCommand(PowerlevelCommand.Report)
 export class PowerlevelCCReport extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (PowerlevelCCReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.powerlevel = this.payload[0];
@@ -303,12 +301,12 @@ export class PowerlevelCCReport extends PowerlevelCC {
 	public readonly powerlevel: Powerlevel;
 	public readonly timeout?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.powerlevel, this.timeout ?? 0x00]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
@@ -316,7 +314,7 @@ export class PowerlevelCCReport extends PowerlevelCC {
 			message.timeout = `${this.timeout} s`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -337,12 +335,11 @@ export interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
 @useSupervision()
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| PowerlevelCCTestNodeSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.testNodeId = this.payload[0];
@@ -359,15 +356,15 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public powerlevel: Powerlevel;
 	public testFrameCount: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.testNodeId, this.powerlevel, 0, 0]);
 		this.payload.writeUInt16BE(this.testFrameCount, 2);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"test node id": this.testNodeId,
 				"power level": getEnumMemberName(Powerlevel, this.powerlevel),
@@ -387,12 +384,11 @@ export interface PowerlevelCCTestNodeReportOptions {
 @CCCommand(PowerlevelCommand.TestNodeReport)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (PowerlevelCCTestNodeReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
@@ -410,7 +406,7 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public status: PowerlevelTestStatus;
 	public acknowledgedFrames: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.testNodeId,
 			this.status,
@@ -419,12 +415,12 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 			0,
 		]);
 		this.payload.writeUInt16BE(this.acknowledgedFrames, 2);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"test node id": this.testNodeId,
 				status: getEnumMemberName(PowerlevelTestStatus, this.status),

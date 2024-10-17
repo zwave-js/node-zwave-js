@@ -1,6 +1,8 @@
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -44,14 +46,14 @@ export enum RemoveFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.RemoveFailedNode)
 @priority(MessagePriority.Controller)
 export class RemoveFailedNodeRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== RemoveFailedNodeRequestStatusReport
 		) {
-			return new RemoveFailedNodeRequestStatusReport(host, options);
+			return new RemoveFailedNodeRequestStatusReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -64,10 +66,9 @@ interface RemoveFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedCallback(FunctionType.RemoveFailedNode)
 export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	public constructor(
-		host: ZWaveHost,
 		options: RemoveFailedNodeRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.failedNodeId = options.failedNodeId;
 	}
 
@@ -75,10 +76,11 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	/** The node that should be removed */
 	public failedNodeId: number;
 
-	public serialize(): Buffer {
-		const nodeId = encodeNodeID(this.failedNodeId, this.host.nodeIdType);
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		const nodeId = encodeNodeID(this.failedNodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -87,10 +89,9 @@ export class RemoveFailedNodeRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.callbackId = this.payload[0];
 		this._removeStatus = this.payload[1];
@@ -111,10 +112,9 @@ export class RemoveFailedNodeResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this._removeStatus = this.payload[0];
 	}
 

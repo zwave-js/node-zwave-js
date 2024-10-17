@@ -42,13 +42,13 @@ import {
 import { type IndicatorObject } from "@zwave-js/cc/IndicatorCC";
 import {
 	BasicDeviceClass,
+	type CCId,
 	CommandClasses,
 	type ControllerCapabilities,
 	ControllerRole,
 	ControllerStatus,
 	EMPTY_ROUTE,
 	type Firmware,
-	type ICommandClass,
 	LongRangeChannel,
 	MAX_NODES,
 	type MaybeNotKnown,
@@ -1144,7 +1144,7 @@ export class ZWaveController
 		const apiCaps = await this.driver.sendMessage<
 			GetSerialApiCapabilitiesResponse
 		>(
-			new GetSerialApiCapabilitiesRequest(this.driver),
+			new GetSerialApiCapabilitiesRequest(),
 			{
 				supportCheck: false,
 			},
@@ -1175,7 +1175,7 @@ export class ZWaveController
 		const version = await this.driver.sendMessage<
 			GetControllerVersionResponse
 		>(
-			new GetControllerVersionRequest(this.driver),
+			new GetControllerVersionRequest(),
 			{
 				supportCheck: false,
 			},
@@ -1196,7 +1196,7 @@ export class ZWaveController
 			const protocol = await this.driver.sendMessage<
 				GetProtocolVersionResponse
 			>(
-				new GetProtocolVersionRequest(this.driver),
+				new GetProtocolVersionRequest(),
 			);
 
 			this._protocolVersion = protocol.protocolVersion;
@@ -1236,7 +1236,7 @@ export class ZWaveController
 			const setupCaps = await this.driver.sendMessage<
 				SerialAPISetup_GetSupportedCommandsResponse
 			>(
-				new SerialAPISetup_GetSupportedCommandsRequest(this.driver),
+				new SerialAPISetup_GetSupportedCommandsRequest(),
 			);
 			this._supportedSerialAPISetupCommands = setupCaps.supportedCommands;
 			this.driver.controllerLog.print(
@@ -1689,7 +1689,7 @@ export class ZWaveController
 	public async identify(): Promise<void> {
 		this.driver.controllerLog.print(`querying controller IDs...`);
 		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
-			new GetControllerIdRequest(this.driver),
+			new GetControllerIdRequest(),
 			{ supportCheck: false },
 		);
 		this._homeId = ids.homeId;
@@ -1716,7 +1716,7 @@ export class ZWaveController
 			const resp = await this.driver.sendMessage<
 				SerialAPISetup_SetTXStatusReportResponse
 			>(
-				new SerialAPISetup_SetTXStatusReportRequest(this.driver, {
+				new SerialAPISetup_SetTXStatusReportRequest({
 					enabled: true,
 				}),
 			);
@@ -1730,7 +1730,7 @@ export class ZWaveController
 		// find the SUC
 		this.driver.controllerLog.print(`finding SUC...`);
 		const suc = await this.driver.sendMessage<GetSUCNodeIdResponse>(
-			new GetSUCNodeIdRequest(this.driver),
+			new GetSUCNodeIdRequest(),
 			{ supportCheck: false },
 		);
 		this._sucNodeId = suc.sucNodeId;
@@ -1792,7 +1792,7 @@ export class ZWaveController
 			const resp = await this.driver.sendMessage<
 				SetSerialApiTimeoutsResponse
 			>(
-				new SetSerialApiTimeoutsRequest(this.driver, {
+				new SetSerialApiTimeoutsRequest({
 					ackTimeout: ack,
 					byteTimeout: byte,
 				}),
@@ -1926,7 +1926,7 @@ export class ZWaveController
 				const nodesResponse = await this.driver.sendMessage<
 					GetLongRangeNodesResponse
 				>(
-					new GetLongRangeNodesRequest(this.driver, {
+					new GetLongRangeNodesRequest({
 						segmentNumber: segment,
 					}),
 				);
@@ -1946,7 +1946,7 @@ export class ZWaveController
 	public async setControllerNIF(): Promise<void> {
 		this.driver.controllerLog.print("Updating the controller NIF...");
 		await this.driver.sendMessage(
-			new SetApplicationNodeInformationRequest(this.driver, {
+			new SetApplicationNodeInformationRequest({
 				isListening: true,
 				...determineNIF(),
 			}),
@@ -1978,7 +1978,7 @@ export class ZWaveController
 			}
 
 			this.driver.controllerLog.print("performing hard reset...");
-			await this.driver.sendMessage(new HardResetRequest(this.driver), {
+			await this.driver.sendMessage(new HardResetRequest(), {
 				supportCheck: false,
 			});
 
@@ -2003,7 +2003,7 @@ export class ZWaveController
 		try {
 			this.driver.controllerLog.print("Shutting down the Z-Wave API...");
 			const response = await this.driver.sendMessage<ShutdownResponse>(
-				new ShutdownRequest(this.driver),
+				new ShutdownRequest(),
 			);
 			if (response.success) {
 				this.driver.controllerLog.print("Z-Wave API was shut down");
@@ -2036,7 +2036,7 @@ export class ZWaveController
 					"Starting hardware watchdog...",
 				);
 				await this.driver.sendMessage(
-					new StartWatchdogRequest(this.driver),
+					new StartWatchdogRequest(),
 				);
 
 				return true;
@@ -2063,7 +2063,7 @@ export class ZWaveController
 					"Stopping hardware watchdog...",
 				);
 				await this.driver.sendMessage(
-					new StopWatchdogRequest(this.driver),
+					new StopWatchdogRequest(),
 				);
 
 				return true;
@@ -2159,7 +2159,7 @@ export class ZWaveController
 
 			// kick off the inclusion process
 			await this.driver.sendMessage(
-				new AddNodeToNetworkRequest(this.driver, {
+				new AddNodeToNetworkRequest({
 					addNodeType: AddNodeType.Any,
 					highPower: true,
 					networkWide: true,
@@ -2230,7 +2230,7 @@ export class ZWaveController
 			);
 
 			await this.driver.sendMessage(
-				new AddNodeDSKToNetworkRequest(this.driver, {
+				new AddNodeDSKToNetworkRequest({
 					nwiHomeId: nwiHomeIdFromDSK(dskBuffer),
 					authHomeId: authHomeIdFromDSK(dskBuffer),
 					protocol,
@@ -2255,7 +2255,7 @@ export class ZWaveController
 	 */
 	public async stopInclusionNoCallback(): Promise<void> {
 		await this.driver.sendMessage(
-			new AddNodeToNetworkRequest(this.driver, {
+			new AddNodeToNetworkRequest({
 				callbackId: 0, // disable callbacks
 				addNodeType: AddNodeType.Stop,
 				highPower: true,
@@ -2276,7 +2276,7 @@ export class ZWaveController
 		const response = await this.driver.sendMessage<
 			AddNodeToNetworkRequestStatusReport
 		>(
-			new AddNodeToNetworkRequest(this.driver, {
+			new AddNodeToNetworkRequest({
 				addNodeType: AddNodeType.Stop,
 				highPower: true,
 				networkWide: true,
@@ -2310,7 +2310,7 @@ export class ZWaveController
 		try {
 			// stop the inclusion process
 			await this.driver.sendMessage(
-				new AddNodeToNetworkRequest(this.driver, {
+				new AddNodeToNetworkRequest({
 					addNodeType: AddNodeType.Stop,
 					highPower: true,
 					networkWide: true,
@@ -2364,7 +2364,7 @@ export class ZWaveController
 			);
 			try {
 				await this.driver.sendMessage(
-					new EnableSmartStartListenRequest(this.driver, {}),
+					new EnableSmartStartListenRequest({}),
 				);
 				this.driver.controllerLog.print(
 					`Smart Start listening mode enabled`,
@@ -2408,7 +2408,7 @@ export class ZWaveController
 			);
 			try {
 				await this.driver.sendMessage(
-					new AddNodeToNetworkRequest(this.driver, {
+					new AddNodeToNetworkRequest({
 						callbackId: 0, // disable callbacks
 						addNodeType: AddNodeType.Stop,
 						highPower: true,
@@ -2450,7 +2450,7 @@ export class ZWaveController
 			);
 			try {
 				await this.driver.sendMessage(
-					new AddNodeToNetworkRequest(this.driver, {
+					new AddNodeToNetworkRequest({
 						callbackId: 0, // disable callbacks
 						addNodeType: AddNodeType.Stop,
 						highPower: true,
@@ -2505,7 +2505,7 @@ export class ZWaveController
 		try {
 			// kick off the inclusion process
 			await this.driver.sendMessage(
-				new RemoveNodeFromNetworkRequest(this.driver, {
+				new RemoveNodeFromNetworkRequest({
 					removeNodeType: RemoveNodeType.Any,
 					highPower: true,
 					networkWide: true,
@@ -2542,7 +2542,7 @@ export class ZWaveController
 	 */
 	public async stopExclusionNoCallback(): Promise<void> {
 		await this.driver.sendMessage(
-			new RemoveNodeFromNetworkRequest(this.driver, {
+			new RemoveNodeFromNetworkRequest({
 				callbackId: 0, // disable callbacks
 				removeNodeType: RemoveNodeType.Stop,
 				highPower: true,
@@ -2567,7 +2567,7 @@ export class ZWaveController
 		try {
 			// kick off the inclusion process
 			await this.driver.sendMessage(
-				new RemoveNodeFromNetworkRequest(this.driver, {
+				new RemoveNodeFromNetworkRequest({
 					removeNodeType: RemoveNodeType.Stop,
 					highPower: true,
 					networkWide: true,
@@ -5111,7 +5111,8 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			Message & SuccessIndicator
 		>(
-			new SetSUCNodeIdRequest(this.driver, {
+			new SetSUCNodeIdRequest({
+				ownNodeId: this.ownNodeId!,
 				sucNodeId: nodeId,
 				enableSUC,
 				enableSIS,
@@ -5166,9 +5167,17 @@ export class ZWaveController
 		await this.deleteSUCReturnRoutes(nodeId);
 
 		try {
+			// Some controllers have a bug where they incorrectly respond
+			// to an AssignSUCReturnRouteRequest with DeleteSUCReturnRoute
+			const disableCallbackFunctionTypeCheck = !!this.driver
+				.getDeviceConfig?.(this.ownNodeId!)
+				?.compat
+				?.disableCallbackFunctionTypeCheck
+				?.includes(FunctionType.AssignSUCReturnRoute);
 			const result = await this.driver.sendMessage(
-				new AssignSUCReturnRouteRequest(this.driver, {
+				new AssignSUCReturnRouteRequest({
 					nodeId,
+					disableCallbackFunctionTypeCheck,
 				}),
 			);
 
@@ -5280,7 +5289,7 @@ export class ZWaveController
 			// We are always listening
 			const targetWakeup = false;
 
-			const cc = new ZWaveProtocolCCAssignSUCReturnRoute(this.driver, {
+			const cc = new ZWaveProtocolCCAssignSUCReturnRoute({
 				nodeId,
 				// Empty routes are marked with a nodeId of 0
 				destinationNodeId: isEmpty ? 0 : this.ownNodeId ?? 1,
@@ -5308,14 +5317,11 @@ export class ZWaveController
 
 		// If a priority route was passed, tell the node to use it
 		if (priorityRouteIndex >= 0) {
-			const cc = new ZWaveProtocolCCAssignSUCReturnRoutePriority(
-				this.driver,
-				{
-					nodeId,
-					targetNodeId: this.ownNodeId ?? 1,
-					routeNumber: priorityRouteIndex,
-				},
-			);
+			const cc = new ZWaveProtocolCCAssignSUCReturnRoutePriority({
+				nodeId,
+				targetNodeId: this.ownNodeId ?? 1,
+				routeNumber: priorityRouteIndex,
+			});
 			try {
 				await this.driver.sendZWaveProtocolCC(cc);
 			} catch {
@@ -5366,9 +5372,17 @@ export class ZWaveController
 		});
 
 		try {
+			// Some controllers have a bug where they incorrectly respond
+			// to an DeleteSUCReturnRouteRequest with a different function type
+			const disableCallbackFunctionTypeCheck = !!this.driver
+				.getDeviceConfig?.(this.ownNodeId!)
+				?.compat
+				?.disableCallbackFunctionTypeCheck
+				?.includes(FunctionType.DeleteSUCReturnRoute);
 			const result = await this.driver.sendMessage(
-				new DeleteSUCReturnRouteRequest(this.driver, {
+				new DeleteSUCReturnRouteRequest({
 					nodeId,
+					disableCallbackFunctionTypeCheck,
 				}),
 			);
 
@@ -5479,7 +5493,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				AssignReturnRouteRequestTransmitReport
 			>(
-				new AssignReturnRouteRequest(this.driver, {
+				new AssignReturnRouteRequest({
 					nodeId,
 					destinationNodeId,
 				}),
@@ -5585,7 +5599,7 @@ export class ZWaveController
 				? this.nodes.get(destinationNodeId)?.isFrequentListening
 				: undefined;
 
-			const cc = new ZWaveProtocolCCAssignReturnRoute(this.driver, {
+			const cc = new ZWaveProtocolCCAssignReturnRoute({
 				nodeId,
 				// Empty routes are marked with a nodeId of 0
 				destinationNodeId: isEmpty ? 0 : destinationNodeId,
@@ -5613,14 +5627,11 @@ export class ZWaveController
 
 		// If a priority route was passed, tell the node to use it
 		if (priorityRouteIndex >= 0) {
-			const cc = new ZWaveProtocolCCAssignReturnRoutePriority(
-				this.driver,
-				{
-					nodeId,
-					targetNodeId: destinationNodeId,
-					routeNumber: priorityRouteIndex,
-				},
-			);
+			const cc = new ZWaveProtocolCCAssignReturnRoutePriority({
+				nodeId,
+				targetNodeId: destinationNodeId,
+				routeNumber: priorityRouteIndex,
+			});
 			try {
 				await this.driver.sendZWaveProtocolCC(cc);
 			} catch {
@@ -5692,7 +5703,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				DeleteReturnRouteRequestTransmitReport
 			>(
-				new DeleteReturnRouteRequest(this.driver, {
+				new DeleteReturnRouteRequest({
 					nodeId,
 				}),
 			);
@@ -5748,7 +5759,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				AssignReturnRouteRequestTransmitReport
 			>(
-				new AssignPriorityReturnRouteRequest(this.driver, {
+				new AssignPriorityReturnRouteRequest({
 					nodeId,
 					destinationNodeId,
 					repeaters,
@@ -5865,7 +5876,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				AssignPrioritySUCReturnRouteRequestTransmitReport
 			>(
-				new AssignPrioritySUCReturnRouteRequest(this.driver, {
+				new AssignPrioritySUCReturnRouteRequest({
 					nodeId,
 					repeaters,
 					routeSpeed,
@@ -5970,7 +5981,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				Message & SuccessIndicator
 			>(
-				new SetPriorityRouteRequest(this.driver, {
+				new SetPriorityRouteRequest({
 					destinationNodeId,
 					repeaters,
 					routeSpeed,
@@ -6007,7 +6018,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				Message & SuccessIndicator
 			>(
-				new SetPriorityRouteRequest(this.driver, {
+				new SetPriorityRouteRequest({
 					destinationNodeId,
 					// no repeaters = remove
 				}),
@@ -6049,7 +6060,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				GetPriorityRouteResponse
 			>(
-				new GetPriorityRouteRequest(this.driver, {
+				new GetPriorityRouteRequest({
 					destinationNodeId,
 				}),
 			);
@@ -6301,7 +6312,7 @@ export class ZWaveController
 	 */
 	public async isFailedNode(nodeId: number): Promise<boolean> {
 		const result = await this.driver.sendMessage<IsFailedNodeResponse>(
-			new IsFailedNodeRequest(this.driver, { failedNodeId: nodeId }),
+			new IsFailedNodeRequest({ failedNodeId: nodeId }),
 		);
 		return result.result;
 	}
@@ -6346,7 +6357,7 @@ export class ZWaveController
 
 		const result = await this.driver.sendMessage<
 			RemoveFailedNodeRequestStatusReport | RemoveFailedNodeResponse
-		>(new RemoveFailedNodeRequest(this.driver, { failedNodeId: nodeId }));
+		>(new RemoveFailedNodeRequest({ failedNodeId: nodeId }));
 
 		if (result instanceof RemoveFailedNodeResponse) {
 			// This implicates that the process was unsuccessful.
@@ -6455,7 +6466,7 @@ export class ZWaveController
 		this._inclusionOptions = options;
 
 		const result = await this.driver.sendMessage<ReplaceFailedNodeResponse>(
-			new ReplaceFailedNodeRequest(this.driver, {
+			new ReplaceFailedNodeRequest({
 				failedNodeId: nodeId,
 			}),
 		);
@@ -6528,7 +6539,7 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_SetRFRegionResponse
 			| SerialAPISetup_CommandUnsupportedResponse
-		>(new SerialAPISetup_SetRFRegionRequest(this.driver, { region }));
+		>(new SerialAPISetup_SetRFRegionRequest({ region }));
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
 				`Your hardware does not support setting the RF region!`,
@@ -6546,7 +6557,7 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_GetRFRegionResponse
 			| SerialAPISetup_CommandUnsupportedResponse
-		>(new SerialAPISetup_GetRFRegionRequest(this.driver));
+		>(new SerialAPISetup_GetRFRegionRequest());
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
 				`Your hardware does not support getting the RF region!`,
@@ -6566,7 +6577,7 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_GetSupportedRegionsResponse
 			| SerialAPISetup_CommandUnsupportedResponse
-		>(new SerialAPISetup_GetSupportedRegionsRequest(this.driver));
+		>(new SerialAPISetup_GetSupportedRegionsRequest());
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
 				`Your hardware does not support getting the supported RF regions!`,
@@ -6592,7 +6603,7 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_GetRegionInfoResponse
 			| SerialAPISetup_CommandUnsupportedResponse
-		>(new SerialAPISetup_GetRegionInfoRequest(this.driver, { region }));
+		>(new SerialAPISetup_GetRegionInfoRequest({ region }));
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
 				`Your hardware does not support getting the RF region info!`,
@@ -6682,15 +6693,12 @@ export class ZWaveController
 				SerialAPISetupCommand.SetPowerlevel16Bit,
 			)
 		) {
-			request = new SerialAPISetup_SetPowerlevel16BitRequest(
-				this.driver,
-				{
-					powerlevel,
-					measured0dBm,
-				},
-			);
+			request = new SerialAPISetup_SetPowerlevel16BitRequest({
+				powerlevel,
+				measured0dBm,
+			});
 		} else {
-			request = new SerialAPISetup_SetPowerlevelRequest(this.driver, {
+			request = new SerialAPISetup_SetPowerlevelRequest({
 				powerlevel,
 				measured0dBm,
 			});
@@ -6724,9 +6732,9 @@ export class ZWaveController
 				SerialAPISetupCommand.GetPowerlevel16Bit,
 			)
 		) {
-			request = new SerialAPISetup_GetPowerlevel16BitRequest(this.driver);
+			request = new SerialAPISetup_GetPowerlevel16BitRequest();
 		} else {
-			request = new SerialAPISetup_GetPowerlevelRequest(this.driver);
+			request = new SerialAPISetup_GetPowerlevelRequest();
 		}
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_GetPowerlevelResponse
@@ -6747,10 +6755,9 @@ export class ZWaveController
 	public async setMaxLongRangePowerlevel(
 		limit: number,
 	): Promise<boolean> {
-		const request = new SerialAPISetup_SetLongRangeMaximumTxPowerRequest(
-			this.driver,
-			{ limit },
-		);
+		const request = new SerialAPISetup_SetLongRangeMaximumTxPowerRequest({
+			limit,
+		});
 
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_SetLongRangeMaximumTxPowerResponse
@@ -6772,9 +6779,7 @@ export class ZWaveController
 
 	/** Request the maximum TX powerlevel setting for Z-Wave Long Range */
 	public async getMaxLongRangePowerlevel(): Promise<number> {
-		const request = new SerialAPISetup_GetLongRangeMaximumTxPowerRequest(
-			this.driver,
-		);
+		const request = new SerialAPISetup_GetLongRangeMaximumTxPowerRequest();
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_GetLongRangeMaximumTxPowerResponse
 			| SerialAPISetup_CommandUnsupportedResponse
@@ -6813,10 +6818,7 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			SetLongRangeChannelResponse
 		>(
-			new SetLongRangeChannelRequest(
-				this.driver,
-				{ channel },
-			),
+			new SetLongRangeChannelRequest({ channel }),
 		);
 
 		if (result.success) {
@@ -6832,7 +6834,7 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			GetLongRangeChannelResponse
 		>(
-			new GetLongRangeChannelRequest(this.driver),
+			new GetLongRangeChannelRequest(),
 		);
 
 		const channel = result.autoChannelSelectionActive
@@ -6865,7 +6867,7 @@ export class ZWaveController
 			| SerialAPISetup_SetNodeIDTypeResponse
 			| SerialAPISetup_CommandUnsupportedResponse
 		>(
-			new SerialAPISetup_SetNodeIDTypeRequest(this.driver, {
+			new SerialAPISetup_SetNodeIDTypeRequest({
 				nodeIdType,
 			}),
 		);
@@ -6911,7 +6913,7 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			| SerialAPISetup_GetMaximumPayloadSizeResponse
 			| SerialAPISetup_CommandUnsupportedResponse
-		>(new SerialAPISetup_GetMaximumPayloadSizeRequest(this.driver), {
+		>(new SerialAPISetup_GetMaximumPayloadSizeRequest(), {
 			supportCheck: false,
 		});
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
@@ -6932,9 +6934,7 @@ export class ZWaveController
 			| SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse
 			| SerialAPISetup_CommandUnsupportedResponse
 		>(
-			new SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest(
-				this.driver,
-			),
+			new SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest(),
 		);
 		if (result instanceof SerialAPISetup_CommandUnsupportedResponse) {
 			throw new ZWaveError(
@@ -6977,7 +6977,7 @@ export class ZWaveController
 		const resp = await this.driver.sendMessage<
 			RequestNodeNeighborUpdateReport
 		>(
-			new RequestNodeNeighborUpdateRequest(this.driver, {
+			new RequestNodeNeighborUpdateRequest({
 				nodeId,
 				discoveryTimeout,
 			}),
@@ -7016,7 +7016,7 @@ export class ZWaveController
 		});
 		try {
 			const resp = await this.driver.sendMessage<GetRoutingInfoResponse>(
-				new GetRoutingInfoRequest(this.driver, {
+				new GetRoutingInfoRequest({
 					nodeId,
 					removeBadLinks: false,
 					removeNonRepeaters: onlyRepeaters,
@@ -7065,7 +7065,7 @@ export class ZWaveController
 		const initData = await this.driver.sendMessage<
 			GetSerialApiInitDataResponse
 		>(
-			new GetSerialApiInitDataRequest(this.driver),
+			new GetSerialApiInitDataRequest(),
 		);
 
 		this.driver.controllerLog.print(
@@ -7121,7 +7121,7 @@ export class ZWaveController
 		const result = await this.driver.sendMessage<
 			GetControllerCapabilitiesResponse
 		>(
-			new GetControllerCapabilitiesRequest(this.driver),
+			new GetControllerCapabilitiesRequest(),
 			{ supportCheck: false },
 		);
 
@@ -7183,7 +7183,7 @@ export class ZWaveController
 				`Turning RF ${enabled ? "on" : "off"}...`,
 			);
 			const ret = await this.driver.sendMessage<SetRFReceiveModeResponse>(
-				new SetRFReceiveModeRequest(this.driver, { enabled }),
+				new SetRFReceiveModeRequest({ enabled }),
 			);
 			return ret.isOK();
 		} catch (e) {
@@ -7226,7 +7226,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			FirmwareUpdateNVM_InitResponse
 		>(
-			new FirmwareUpdateNVM_InitRequest(this.driver),
+			new FirmwareUpdateNVM_InitRequest(),
 		);
 		return ret.supported;
 	}
@@ -7240,7 +7240,7 @@ export class ZWaveController
 		value: boolean = true,
 	): Promise<void> {
 		await this.driver.sendMessage<FirmwareUpdateNVM_SetNewImageResponse>(
-			new FirmwareUpdateNVM_SetNewImageRequest(this.driver, {
+			new FirmwareUpdateNVM_SetNewImageRequest({
 				newImage: value,
 			}),
 		);
@@ -7255,7 +7255,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			FirmwareUpdateNVM_GetNewImageResponse
 		>(
-			new FirmwareUpdateNVM_GetNewImageRequest(this.driver),
+			new FirmwareUpdateNVM_GetNewImageRequest(),
 		);
 		return ret.newImage;
 	}
@@ -7273,7 +7273,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			FirmwareUpdateNVM_UpdateCRC16Response
 		>(
-			new FirmwareUpdateNVM_UpdateCRC16Request(this.driver, {
+			new FirmwareUpdateNVM_UpdateCRC16Request({
 				offset,
 				blockLength,
 				crcSeed,
@@ -7292,7 +7292,7 @@ export class ZWaveController
 		buffer: Buffer,
 	): Promise<void> {
 		await this.driver.sendMessage<FirmwareUpdateNVM_WriteResponse>(
-			new FirmwareUpdateNVM_WriteRequest(this.driver, {
+			new FirmwareUpdateNVM_WriteRequest({
 				offset,
 				buffer,
 			}),
@@ -7308,7 +7308,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			FirmwareUpdateNVM_IsValidCRC16Response
 		>(
-			new FirmwareUpdateNVM_IsValidCRC16Request(this.driver),
+			new FirmwareUpdateNVM_IsValidCRC16Request(),
 		);
 		return ret.isValid;
 	}
@@ -7320,7 +7320,7 @@ export class ZWaveController
 	 */
 	public async getNVMId(): Promise<NVMId> {
 		const ret = await this.driver.sendMessage<GetNVMIdResponse>(
-			new GetNVMIdRequest(this.driver),
+			new GetNVMIdRequest(),
 		);
 		return pick(ret, ["nvmManufacturerId", "memoryType", "memorySize"]);
 	}
@@ -7332,7 +7332,7 @@ export class ZWaveController
 	 */
 	public async externalNVMReadByte(offset: number): Promise<number> {
 		const ret = await this.driver.sendMessage<ExtNVMReadLongByteResponse>(
-			new ExtNVMReadLongByteRequest(this.driver, { offset }),
+			new ExtNVMReadLongByteRequest({ offset }),
 		);
 		return ret.byte;
 	}
@@ -7351,7 +7351,7 @@ export class ZWaveController
 		data: number,
 	): Promise<boolean> {
 		const ret = await this.driver.sendMessage<ExtNVMWriteLongByteResponse>(
-			new ExtNVMWriteLongByteRequest(this.driver, { offset, byte: data }),
+			new ExtNVMWriteLongByteRequest({ offset, byte: data }),
 		);
 		return ret.success;
 	}
@@ -7366,7 +7366,7 @@ export class ZWaveController
 		length: number,
 	): Promise<Buffer> {
 		const ret = await this.driver.sendMessage<ExtNVMReadLongBufferResponse>(
-			new ExtNVMReadLongBufferRequest(this.driver, {
+			new ExtNVMReadLongBufferRequest({
 				offset,
 				length,
 			}),
@@ -7386,7 +7386,7 @@ export class ZWaveController
 		length: number,
 	): Promise<{ buffer: Buffer; endOfFile: boolean }> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
-			new NVMOperationsReadRequest(this.driver, {
+			new NVMOperationsReadRequest({
 				offset,
 				length,
 			}),
@@ -7426,7 +7426,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			ExtendedNVMOperationsResponse
 		>(
-			new ExtendedNVMOperationsReadRequest(this.driver, {
+			new ExtendedNVMOperationsReadRequest({
 				offset,
 				length,
 			}),
@@ -7472,7 +7472,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			ExtNVMWriteLongBufferResponse
 		>(
-			new ExtNVMWriteLongBufferRequest(this.driver, {
+			new ExtNVMWriteLongBufferRequest({
 				offset,
 				buffer,
 			}),
@@ -7495,7 +7495,7 @@ export class ZWaveController
 		buffer: Buffer,
 	): Promise<{ endOfFile: boolean }> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
-			new NVMOperationsWriteRequest(this.driver, {
+			new NVMOperationsWriteRequest({
 				offset,
 				buffer,
 			}),
@@ -7538,7 +7538,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			ExtendedNVMOperationsResponse
 		>(
-			new ExtendedNVMOperationsWriteRequest(this.driver, {
+			new ExtendedNVMOperationsWriteRequest({
 				offset,
 				buffer,
 			}),
@@ -7582,7 +7582,7 @@ export class ZWaveController
 	 */
 	public async externalNVMOpen(): Promise<number> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
-			new NVMOperationsOpenRequest(this.driver),
+			new NVMOperationsOpenRequest(),
 		);
 		if (!ret.isOK()) {
 			throw new ZWaveError(
@@ -7607,7 +7607,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			ExtendedNVMOperationsResponse
 		>(
-			new ExtendedNVMOperationsOpenRequest(this.driver),
+			new ExtendedNVMOperationsOpenRequest(),
 		);
 		if (!ret.isOK()) {
 			throw new ZWaveError(
@@ -7635,7 +7635,7 @@ export class ZWaveController
 	 */
 	public async externalNVMClose(): Promise<void> {
 		const ret = await this.driver.sendMessage<NVMOperationsResponse>(
-			new NVMOperationsCloseRequest(this.driver),
+			new NVMOperationsCloseRequest(),
 		);
 		if (!ret.isOK()) {
 			throw new ZWaveError(
@@ -7656,7 +7656,7 @@ export class ZWaveController
 		const ret = await this.driver.sendMessage<
 			ExtendedNVMOperationsResponse
 		>(
-			new ExtendedNVMOperationsCloseRequest(this.driver),
+			new ExtendedNVMOperationsCloseRequest(),
 		);
 		if (!ret.isOK()) {
 			throw new ZWaveError(
@@ -8090,7 +8090,7 @@ export class ZWaveController
 		rssiChannel3?: RSSI;
 	}> {
 		const ret = await this.driver.sendMessage<GetBackgroundRSSIResponse>(
-			new GetBackgroundRSSIRequest(this.driver),
+			new GetBackgroundRSSIRequest(),
 		);
 		const rssi = pick(ret, [
 			"rssiChannel0",
@@ -8810,7 +8810,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				Message & SuccessIndicator
 			>(
-				new SetLearnModeRequest(this.driver, {
+				new SetLearnModeRequest({
 					intent: LearnModeIntent.Inclusion,
 				}),
 			);
@@ -8844,7 +8844,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				Message & SuccessIndicator
 			>(
-				new SetLearnModeRequest(this.driver, {
+				new SetLearnModeRequest({
 					// TODO: We should be using .Stop here for the non-legacy
 					// inclusion/exclusion, but that command results in a
 					// negative response on current firmwares, even though it works.
@@ -8880,7 +8880,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				Message & SuccessIndicator
 			>(
-				new SetLearnModeRequest(this.driver, {
+				new SetLearnModeRequest({
 					intent: LearnModeIntent.NetworkWideExclusion,
 				}),
 			);
@@ -8916,7 +8916,7 @@ export class ZWaveController
 			const result = await this.driver.sendMessage<
 				Message & SuccessIndicator
 			>(
-				new SetLearnModeRequest(this.driver, {
+				new SetLearnModeRequest({
 					// TODO: We should be using .Stop here for the non-legacy
 					// inclusion/exclusion, but that command results in a
 					// negative response on current firmwares, even though it works.
@@ -9675,7 +9675,7 @@ export class ZWaveController
 		const supportsS2 = supportedCCs.includes(CommandClasses["Security 2"]);
 
 		let initTimeout: number;
-		let initPredicate: (cc: ICommandClass) => boolean;
+		let initPredicate: (cc: CCId) => boolean;
 
 		// KEX Get must be received:
 		// - no later than 10..30 seconds after the inclusion if S0 is supported

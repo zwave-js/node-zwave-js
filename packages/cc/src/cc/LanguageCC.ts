@@ -12,11 +12,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
@@ -24,6 +20,8 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -77,11 +75,11 @@ export class LanguageCCAPI extends CCAPI {
 	public async get() {
 		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Get);
 
-		const cc = new LanguageCCGet(this.applHost, {
+		const cc = new LanguageCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<LanguageCCReport>(
+		const response = await this.host.sendCommand<LanguageCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -97,13 +95,13 @@ export class LanguageCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Set);
 
-		const cc = new LanguageCCSet(this.applHost, {
+		const cc = new LanguageCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			language,
 			country,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -113,33 +111,37 @@ export class LanguageCCAPI extends CCAPI {
 export class LanguageCC extends CommandClass {
 	declare ccCommand: LanguageCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Language,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "requesting language setting...",
 			direction: "outbound",
 		});
@@ -149,7 +151,7 @@ export class LanguageCC extends CommandClass {
 			const logMessage = `received current language setting: ${language}${
 				country != undefined ? `-${country}` : ""
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -167,10 +169,9 @@ export interface LanguageCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class LanguageCCSet extends LanguageCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | LanguageCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -215,20 +216,20 @@ export class LanguageCCSet extends LanguageCC {
 		this._country = value;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(!!this._country ? 5 : 3);
 		this.payload.write(this._language, 0, "ascii");
 		if (!!this._country) this.payload.write(this._country, 3, "ascii");
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this._country != undefined) {
 			message.country = this._country;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -237,10 +238,9 @@ export class LanguageCCSet extends LanguageCC {
 @CCCommand(LanguageCommand.Report)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		// if (gotDeserializationOptions(options)) {
 		validatePayload(this.payload.length >= 3);
 		this.language = this.payload.toString("ascii", 0, 3);
@@ -256,13 +256,13 @@ export class LanguageCCReport extends LanguageCC {
 	@ccValue(LanguageCCValues.country)
 	public readonly country: MaybeNotKnown<string>;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this.country != undefined) {
 			message.country = this.country;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

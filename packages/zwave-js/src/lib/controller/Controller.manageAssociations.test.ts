@@ -7,43 +7,35 @@ import {
 import { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
 import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-import { createTestNode } from "../test/mocks";
+import { type CreateTestNodeOptions, createTestNode } from "../test/mocks";
 
 test("associations between insecure nodes are allowed", (t) => {
 	// This test simulates two Zooz ZEN76 switches, included insecurely
-	const host = createTestingHost({
-		getSupportedCCVersion(cc, nodeId, endpointIndex) {
-			switch (cc) {
-				case CommandClasses["Association Group Information"]:
-					return 1;
-				case CommandClasses.Association:
-					return 3;
-				case CommandClasses["Multi Channel Association"]:
-					return 4;
-				case CommandClasses.Basic:
-					return 2;
-				case CommandClasses["Binary Switch"]:
-					return 2;
-			}
-			return 0;
+	const host = createTestingHost();
+
+	const commandClasses: CreateTestNodeOptions["commandClasses"] = {
+		[CommandClasses["Association Group Information"]]: {
+			version: 1,
 		},
-	});
+		[CommandClasses.Association]: {
+			version: 3,
+		},
+		[CommandClasses["Multi Channel Association"]]: {
+			version: 4,
+		},
+		[CommandClasses.Basic]: {
+			version: 2,
+		},
+		[CommandClasses["Binary Switch"]]: {
+			version: 2,
+		},
+	};
 
 	const node2 = createTestNode(host, {
 		id: 2,
-		supportsCC(cc) {
-			switch (cc) {
-				case CommandClasses["Association Group Information"]:
-				case CommandClasses.Association:
-				case CommandClasses["Multi Channel Association"]:
-				case CommandClasses.Basic:
-				case CommandClasses["Binary Switch"]:
-					return true;
-			}
-			return false;
-		},
+		commandClasses,
 	});
-	host.nodes.set(node2.id, node2);
+	host.setNode(node2.id, node2);
 
 	node2.setSecurityClass(SecurityClass.S0_Legacy, false);
 	node2.setSecurityClass(SecurityClass.S2_AccessControl, false);
@@ -52,19 +44,9 @@ test("associations between insecure nodes are allowed", (t) => {
 
 	const node3 = createTestNode(host, {
 		id: 3,
-		supportsCC(cc) {
-			switch (cc) {
-				case CommandClasses["Association Group Information"]:
-				case CommandClasses.Association:
-				case CommandClasses["Multi Channel Association"]:
-				case CommandClasses.Basic:
-				case CommandClasses["Binary Switch"]:
-					return true;
-			}
-			return false;
-		},
+		commandClasses,
 	});
-	host.nodes.set(node3.id, node3);
+	host.setNode(node3.id, node3);
 
 	node3.setSecurityClass(SecurityClass.S0_Legacy, false);
 	node3.setSecurityClass(SecurityClass.S2_AccessControl, false);

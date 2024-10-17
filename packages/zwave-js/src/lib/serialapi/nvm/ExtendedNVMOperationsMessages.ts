@@ -6,8 +6,10 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -45,13 +47,13 @@ export class ExtendedNVMOperationsRequest extends Message {
 	// This must be set in subclasses
 	public command!: ExtendedNVMOperationsCommand;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.command]),
 			this.payload,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -73,8 +75,8 @@ export class ExtendedNVMOperationsRequest extends Message {
 export class ExtendedNVMOperationsOpenRequest
 	extends ExtendedNVMOperationsRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = ExtendedNVMOperationsCommand.Open;
 	}
 }
@@ -84,8 +86,8 @@ export class ExtendedNVMOperationsOpenRequest
 export class ExtendedNVMOperationsCloseRequest
 	extends ExtendedNVMOperationsRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = ExtendedNVMOperationsCommand.Close;
 	}
 }
@@ -103,12 +105,11 @@ export class ExtendedNVMOperationsReadRequest
 	extends ExtendedNVMOperationsRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ExtendedNVMOperationsReadRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = ExtendedNVMOperationsCommand.Read;
 
 		if (gotDeserializationOptions(options)) {
@@ -138,12 +139,12 @@ export class ExtendedNVMOperationsReadRequest
 	public length: number;
 	public offset: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(5);
 		this.payload[0] = this.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -172,12 +173,11 @@ export class ExtendedNVMOperationsWriteRequest
 	extends ExtendedNVMOperationsRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ExtendedNVMOperationsWriteRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = ExtendedNVMOperationsCommand.Write;
 
 		if (gotDeserializationOptions(options)) {
@@ -207,12 +207,12 @@ export class ExtendedNVMOperationsWriteRequest
 	public offset: number;
 	public buffer: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(1 + 4 + this.buffer.length);
 		this.payload[0] = this.buffer.length;
 		this.payload.writeUInt32BE(this.offset, 1);
 		this.buffer.copy(this.payload, 5);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -237,10 +237,9 @@ export class ExtendedNVMOperationsResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 		this.status = this.payload[0];

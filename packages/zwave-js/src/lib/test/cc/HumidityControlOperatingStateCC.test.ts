@@ -5,10 +5,7 @@ import {
 	HumidityControlOperatingStateCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -20,7 +17,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new HumidityControlOperatingStateCCGet(host, {
+	const cc = new HumidityControlOperatingStateCCGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -28,7 +25,7 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlOperatingStateCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -38,9 +35,10 @@ test("the Report command should be deserialized correctly", (t) => {
 			HumidityControlOperatingState.Humidifying, // state
 		]),
 	);
-	const cc = new HumidityControlOperatingStateCCReport(host, {
+	const cc = new HumidityControlOperatingStateCCReport({
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.state, HumidityControlOperatingState.Humidifying);

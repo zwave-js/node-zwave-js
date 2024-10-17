@@ -1,27 +1,45 @@
 import { type CompatOverrideQueries } from "@zwave-js/config";
 import {
 	CommandClasses,
+	type ControlsCC,
 	type Duration,
-	type IVirtualEndpoint,
-	type IZWaveEndpoint,
-	type IZWaveNode,
+	type EndpointId,
+	type GetEndpoint,
+	type ListenBehavior,
 	type MaybeNotKnown,
 	NODE_ID_BROADCAST,
 	NODE_ID_BROADCAST_LR,
 	NOT_KNOWN,
+	type NodeId,
+	type PhysicalNodes,
+	type QueryNodeStatus,
+	type SecurityManagers,
 	type SendCommandOptions,
 	type SupervisionResult,
+	type SupportsCC,
 	type TXReport,
 	type ValueChangeOptions,
 	type ValueDB,
 	type ValueID,
+	type VirtualEndpointId,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getCCName,
-	isZWaveError,
 	stripUndefined,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost } from "@zwave-js/host";
+import type {
+	GetCommunicationTimeouts,
+	GetDeviceConfig,
+	GetNode,
+	GetSafeCCVersion,
+	GetSupportedCCVersion,
+	GetUserPreferences,
+	GetValueDB,
+	HostIDs,
+	LogNode,
+	SchedulePoll,
+	SendCommand,
+} from "@zwave-js/host";
 import {
 	type AllOrNone,
 	type OnlyMethods,
@@ -148,22 +166,66 @@ export interface SchedulePollOptions {
 	transition?: "fast" | "slow";
 }
 
+// Defines the necessary traits the host passed to a CC API must have
+export type CCAPIHost<TNode extends CCAPINode = CCAPINode> =
+	& HostIDs
+	& GetNode<TNode>
+	& GetValueDB
+	& GetSupportedCCVersion
+	& GetSafeCCVersion
+	& SecurityManagers
+	& GetDeviceConfig
+	& SendCommand
+	& GetCommunicationTimeouts
+	& GetUserPreferences
+	& SchedulePoll
+	& LogNode;
+
+// Defines the necessary traits a node passed to a CC API must have
+export type CCAPINode = NodeId & ListenBehavior & QueryNodeStatus;
+
+// Defines the necessary traits an endpoint passed to a CC API must have
+export type CCAPIEndpoint =
+	& (
+		| (
+			// Physical endpoints must let us query their controlled CCs
+			EndpointId & ControlsCC
+		)
+		| (
+			// Virtual endpoints must let us query their physical nodes,
+			// the CCs those nodes implement, and access the endpoints of those
+			// physical nodes
+			VirtualEndpointId & {
+				node: PhysicalNodes<
+					& NodeId
+					& SupportsCC
+					& ControlsCC
+					& GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+				>;
+			}
+		)
+	)
+	& SupportsCC;
+
+export type PhysicalCCAPIEndpoint = CCAPIEndpoint & EndpointId;
+export type VirtualCCAPIEndpoint = CCAPIEndpoint & VirtualEndpointId;
+
 /**
  * The base class for all CC APIs exposed via `Node.commandClasses.<CCName>`
  * @publicAPI
  */
 export class CCAPI {
 	public constructor(
-		protected readonly applHost: ZWaveApplicationHost,
-		protected readonly endpoint: IZWaveEndpoint | IVirtualEndpoint,
+		protected readonly host: CCAPIHost,
+		protected readonly endpoint: CCAPIEndpoint,
 	) {
 		this.ccId = getCommandClass(this);
 	}
 
 	public static create<T extends CommandClasses>(
 		ccId: T,
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint | IVirtualEndpoint,
+		host: CCAPIHost,
+		endpoint: CCAPIEndpoint,
 		requireSupport?: boolean,
 	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
 		const APIConstructor = getAPI(ccId);
@@ -178,7 +240,7 @@ export class CCAPI {
 				ZWaveErrorCodes.CC_NoAPI,
 			);
 		}
-		const apiInstance = new APIConstructor(applHost, endpoint);
+		const apiInstance = new APIConstructor(host, endpoint);
 
 		// Only require support for physical endpoints by default
 		requireSupport ??= !endpoint.virtual;
@@ -227,12 +289,12 @@ export class CCAPI {
 						&& !endpoint.virtual
 						&& typeof fallback === "function"
 					) {
-						const overrides = applHost.getDeviceConfig?.(
+						const overrides = host.getDeviceConfig?.(
 							endpoint.nodeId,
 						)?.compat?.overrideQueries;
 						if (overrides?.hasOverride(ccId)) {
 							return overrideQueriesWrapper(
-								applHost,
+								host,
 								endpoint,
 								ccId,
 								property,
@@ -306,16 +368,17 @@ export class CCAPI {
 		// Figure out the delay. If a non-zero duration was given or this is a "fast" transition,
 		// use/add the short delay. Otherwise, default to the long delay.
 		const durationMs = duration?.toMilliseconds() ?? 0;
+		const timeouts = this.host.getCommunicationTimeouts();
 		const additionalDelay = !!durationMs || transition === "fast"
-			? this.applHost.options.timeouts.refreshValueAfterTransition
-			: this.applHost.options.timeouts.refreshValue;
+			? timeouts.refreshValueAfterTransition
+			: timeouts.refreshValue;
 		const timeoutMs = durationMs + additionalDelay;
 
 		if (this.isSinglecast()) {
-			const node = this.endpoint.getNodeUnsafe();
+			const node = this.host.getNode(this.endpoint.nodeId);
 			if (!node) return false;
 
-			return this.applHost.schedulePoll(
+			return this.host.schedulePoll(
 				node.id,
 				{
 					commandClass: this.ccId,
@@ -335,7 +398,7 @@ export class CCAPI {
 			);
 			let ret = false;
 			for (const node of supportingNodes) {
-				ret ||= this.applHost.schedulePoll(
+				ret ||= this.host.schedulePoll(
 					node.id,
 					{
 						commandClass: this.ccId,
@@ -358,11 +421,11 @@ export class CCAPI {
 	 */
 	public get version(): number {
 		if (this.isSinglecast()) {
-			return this.applHost.getSafeCCVersion(
+			return this.host.getSafeCCVersion(
 				this.ccId,
 				this.endpoint.nodeId,
 				this.endpoint.index,
-			);
+			) ?? 0;
 		} else {
 			return getImplementedVersion(this.ccId);
 		}
@@ -416,8 +479,8 @@ export class CCAPI {
 	}
 
 	protected assertPhysicalEndpoint(
-		endpoint: IZWaveEndpoint | IVirtualEndpoint,
-	): asserts endpoint is IZWaveEndpoint {
+		endpoint: EndpointId | VirtualEndpointId,
+	): asserts endpoint is EndpointId {
 		if (endpoint.virtual) {
 			throw new ZWaveError(
 				`This method is not supported for virtual nodes!`,
@@ -516,7 +579,9 @@ export class CCAPI {
 		}) as any;
 	}
 
-	protected isSinglecast(): this is this & { endpoint: IZWaveEndpoint } {
+	protected isSinglecast(): this is this & {
+		endpoint: PhysicalCCAPIEndpoint;
+	} {
 		return (
 			!this.endpoint.virtual
 			&& typeof this.endpoint.nodeId === "number"
@@ -526,7 +591,7 @@ export class CCAPI {
 	}
 
 	protected isMulticast(): this is this & {
-		endpoint: IVirtualEndpoint & {
+		endpoint: VirtualCCAPIEndpoint & {
 			nodeId: number[];
 		};
 	} {
@@ -534,7 +599,7 @@ export class CCAPI {
 	}
 
 	protected isBroadcast(): this is this & {
-		endpoint: IVirtualEndpoint & {
+		endpoint: VirtualCCAPIEndpoint & {
 			nodeId: typeof NODE_ID_BROADCAST | typeof NODE_ID_BROADCAST_LR;
 		};
 	} {
@@ -545,37 +610,11 @@ export class CCAPI {
 		);
 	}
 
-	/**
-	 * Returns the node this CC API is linked to. Throws if the controller is not yet ready.
-	 */
-	public getNode(): IZWaveNode | undefined {
-		if (this.isSinglecast()) {
-			return this.applHost.nodes.get(this.endpoint.nodeId);
-		}
-	}
-
-	/**
-	 * @internal
-	 * Returns the node this CC API is linked to (or undefined if the node doesn't exist)
-	 */
-	public getNodeUnsafe(): IZWaveNode | undefined {
-		try {
-			return this.getNode();
-		} catch (e) {
-			// This was expected
-			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
-				return undefined;
-			}
-			// Something else happened
-			throw e;
-		}
-	}
-
 	/** Returns the value DB for this CC API's node (if it can be safely accessed) */
 	protected tryGetValueDB(): ValueDB | undefined {
 		if (!this.isSinglecast()) return;
 		try {
-			return this.applHost.getValueDB(this.endpoint.nodeId);
+			return this.host.getValueDB(this.endpoint.nodeId);
 		} catch {
 			return;
 		}
@@ -585,7 +624,7 @@ export class CCAPI {
 	protected getValueDB(): ValueDB {
 		if (this.isSinglecast()) {
 			try {
-				return this.applHost.getValueDB(this.endpoint.nodeId);
+				return this.host.getValueDB(this.endpoint.nodeId);
 			} catch {
 				throw new ZWaveError(
 					"The node for this CC does not exist or the driver is not ready yet",
@@ -601,8 +640,8 @@ export class CCAPI {
 }
 
 function overrideQueriesWrapper(
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint,
+	ctx: GetValueDB & LogNode,
+	endpoint: PhysicalCCAPIEndpoint,
 	ccId: CommandClasses,
 	method: string,
 	overrides: CompatOverrideQueries,
@@ -618,7 +657,7 @@ function overrideQueriesWrapper(
 		);
 		if (!match) return fallback.call(this, ...args);
 
-		applHost.controllerLog.logNode(endpoint.nodeId, {
+		ctx.logNode(endpoint.nodeId, {
 			message: `API call ${method} for ${
 				getCCName(
 					ccId,
@@ -630,7 +669,7 @@ function overrideQueriesWrapper(
 
 		const ccValues = getCCValues(ccId);
 		if (ccValues) {
-			const valueDB = applHost.getValueDB(endpoint.nodeId);
+			const valueDB = ctx.getValueDB(endpoint.nodeId);
 
 			const prop2value = (prop: string): CCValue | undefined => {
 				// We use a simplistic parser to support dynamic value IDs:
@@ -670,7 +709,7 @@ function overrideQueriesWrapper(
 								value,
 							);
 						} else {
-							applHost.controllerLog.logNode(endpoint.nodeId, {
+							ctx.logNode(endpoint.nodeId, {
 								message:
 									`Failed to persist value ${prop} during overridden API call: value does not exist`,
 								level: "error",
@@ -678,7 +717,7 @@ function overrideQueriesWrapper(
 							});
 						}
 					} catch (e) {
-						applHost.controllerLog.logNode(endpoint.nodeId, {
+						ctx.logNode(endpoint.nodeId, {
 							message:
 								`Failed to persist value ${prop} during overridden API call: ${
 									getErrorMessage(
@@ -710,7 +749,7 @@ function overrideQueriesWrapper(
 								},
 							);
 						} else {
-							applHost.controllerLog.logNode(endpoint.nodeId, {
+							ctx.logNode(endpoint.nodeId, {
 								message:
 									`Failed to extend value metadata ${prop} during overridden API call: value does not exist`,
 								level: "error",
@@ -718,7 +757,7 @@ function overrideQueriesWrapper(
 							});
 						}
 					} catch (e) {
-						applHost.controllerLog.logNode(endpoint.nodeId, {
+						ctx.logNode(endpoint.nodeId, {
 							message:
 								`Failed to extend value metadata ${prop} during overridden API call: ${
 									getErrorMessage(
@@ -741,19 +780,19 @@ function overrideQueriesWrapper(
 /** A CC API that is only available for physical endpoints */
 export class PhysicalCCAPI extends CCAPI {
 	public constructor(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint | IVirtualEndpoint,
+		host: CCAPIHost,
+		endpoint: CCAPIEndpoint,
 	) {
-		super(applHost, endpoint);
+		super(host, endpoint);
 		this.assertPhysicalEndpoint(endpoint);
 	}
 
-	declare protected readonly endpoint: IZWaveEndpoint;
+	declare protected readonly endpoint: PhysicalCCAPIEndpoint;
 }
 
 export type APIConstructor<T extends CCAPI = CCAPI> = new (
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint | IVirtualEndpoint,
+	host: CCAPIHost,
+	endpoint: CCAPIEndpoint,
 ) => T;
 
 // This type is auto-generated by maintenance/generateCCAPIInterface.ts
@@ -849,7 +888,7 @@ export type APIMethodsOf<CC extends CCNameOrId> = Omit<
 	OnlyMethods<CCToAPI<CC>>,
 	| "ccId"
 	| "getNode"
-	| "getNodeUnsafe"
+	| "tryGetNode"
 	| "isSetValueOptimistic"
 	| "isSupported"
 	| "pollValue"

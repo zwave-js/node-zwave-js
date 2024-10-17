@@ -1,20 +1,17 @@
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type SupportsCC,
 	encodeCCId,
 	getCCName,
 	parseCCId,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -22,6 +19,9 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -109,12 +109,12 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.NameGet,
 		);
 
-		const cc = new AssociationGroupInfoCCNameGet(this.applHost, {
+		const cc = new AssociationGroupInfoCCNameGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AssociationGroupInfoCCNameReport
 		>(
 			cc,
@@ -130,14 +130,14 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.NameReport,
 		);
 
-		const cc = new AssociationGroupInfoCCNameReport(this.applHost, {
+		const cc = new AssociationGroupInfoCCNameReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
 			name,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -148,13 +148,13 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.InfoGet,
 		);
 
-		const cc = new AssociationGroupInfoCCInfoGet(this.applHost, {
+		const cc = new AssociationGroupInfoCCInfoGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
 			refreshCache,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AssociationGroupInfoCCInfoReport
 		>(
 			cc,
@@ -181,13 +181,13 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.InfoReport,
 		);
 
-		const cc = new AssociationGroupInfoCCInfoReport(this.applHost, {
+		const cc = new AssociationGroupInfoCCInfoReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -202,13 +202,13 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.CommandListGet,
 		);
 
-		const cc = new AssociationGroupInfoCCCommandListGet(this.applHost, {
+		const cc = new AssociationGroupInfoCCCommandListGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
 			allowCache,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			AssociationGroupInfoCCCommandListReport
 		>(
 			cc,
@@ -227,14 +227,14 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			AssociationGroupInfoCommand.CommandListReport,
 		);
 
-		const cc = new AssociationGroupInfoCCCommandListReport(this.applHost, {
+		const cc = new AssociationGroupInfoCCCommandListReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			groupId,
 			commands,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -255,11 +255,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	/** Returns the name of an association group */
 	public static getGroupNameCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<string> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				AssociationGroupInfoCCValues.groupName(groupId).endpoint(
@@ -270,11 +270,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	/** Returns the association profile for an association group */
 	public static getGroupProfileCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<AssociationGroupInfoProfile> {
-		return applHost.getValueDB(endpoint.nodeId).getValue<{
+		return ctx.getValueDB(endpoint.nodeId).getValue<{
 			profile: AssociationGroupInfoProfile;
 		}>(
 			AssociationGroupInfoCCValues.groupInfo(groupId).endpoint(
@@ -286,11 +286,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	/** Returns the dictionary of all commands issued by the given association group */
 	public static getIssuedCommandsCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 		groupId: number,
 	): MaybeNotKnown<ReadonlyMap<CommandClasses, readonly number[]>> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				AssociationGroupInfoCCValues.commands(groupId).endpoint(
@@ -300,20 +300,20 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	public static findGroupsForIssuedCommand(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId & SupportsCC,
 		ccId: CommandClasses,
 		command: number,
 	): number[] {
 		const ret: number[] = [];
 		const associationGroupCount = this.getAssociationGroupCountCached(
-			applHost,
+			ctx,
 			endpoint,
 		);
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Scan the issued commands of all groups if there's a match
 			const issuedCommands = this.getIssuedCommandsCached(
-				applHost,
+				ctx,
 				endpoint,
 				groupId,
 			);
@@ -330,37 +330,41 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	private static getAssociationGroupCountCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId & SupportsCC,
 	): number {
 		// The association group count is either determined by the
 		// Association CC or the Multi Channel Association CC
 
 		return (
 			// First query the Multi Channel Association CC
-			(endpoint.supportsCC(CommandClasses["Multi Channel Association"])
+			// And fall back to 0
+			(endpoint.supportsCC(
+				CommandClasses["Multi Channel Association"],
+			)
 				&& MultiChannelAssociationCC.getGroupCountCached(
-					applHost,
+					ctx,
 					endpoint,
 				))
 			// Then the Association CC
 			|| (endpoint.supportsCC(CommandClasses.Association)
-				&& AssociationCC.getGroupCountCached(applHost, endpoint))
-			// And fall back to 0
+				&& AssociationCC.getGroupCountCached(ctx, endpoint))
 			|| 0
 		);
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Association Group Information"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -368,13 +372,13 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		const associationGroupCount = AssociationGroupInfoCC
 			.getAssociationGroupCountCached(
-				applHost,
+				ctx,
 				endpoint,
 			);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// First get the group's name
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying name...`,
 				direction: "outbound",
@@ -383,7 +387,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			if (name) {
 				const logMessage =
 					`Association group #${groupId} has name "${name}"`;
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -391,7 +395,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			}
 
 			// Then the command list
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					`Association group #${groupId}: Querying command list...`,
@@ -402,35 +406,37 @@ export class AssociationGroupInfoCC extends CommandClass {
 		}
 
 		// Finally query each group for its information
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Association Group Information"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
 		// Query the information for each group (this is the only thing that could be dynamic)
 		const associationGroupCount = AssociationGroupInfoCC
 			.getAssociationGroupCountCached(
-				applHost,
+				ctx,
 				endpoint,
 			);
 		const hasDynamicInfo = this.getValue<boolean>(
-			applHost,
+			ctx,
 			AssociationGroupInfoCCValues.hasDynamicInfo,
 		);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Then its information
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying info...`,
 				direction: "outbound",
@@ -446,7 +452,7 @@ profile:         ${
 							info.profile,
 						)
 					}`;
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -467,12 +473,11 @@ export interface AssociationGroupInfoCCNameReportOptions
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -493,9 +498,9 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public readonly groupId: number;
 	public readonly name: string;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
+		const valueDB = this.getValueDB(ctx);
 
 		valueDB.setValue(
 			AssociationGroupInfoCCValues.groupName(this.groupId).endpoint(
@@ -507,17 +512,17 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.groupId, this.name.length]),
 			Buffer.from(this.name, "utf8"),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				name: this.name,
@@ -535,12 +540,11 @@ export interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCNameReport)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.groupId = this.payload[0];
@@ -551,14 +555,14 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 
 	public groupId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.groupId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -581,7 +585,6 @@ export interface AssociationGroupInfoCCInfoReportSpecificOptions {
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (
@@ -589,7 +592,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 				& CCCommandOptions
 			),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -625,13 +628,13 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 	public readonly groups: readonly AssociationGroupInfo[];
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		for (const group of this.groups) {
 			const { groupId, mode, profile, eventCode } = group;
 			this.setValue(
-				applHost,
+				ctx,
 				AssociationGroupInfoCCValues.groupInfo(groupId),
 				{
 					mode,
@@ -643,7 +646,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.alloc(1 + this.groups.length * 7, 0);
 
 		this.payload[0] = (this.isListMode ? 0b1000_0000 : 0)
@@ -657,12 +660,12 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			// The remaining bytes are zero
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"is list mode": this.isListMode,
 				"has dynamic info": this.hasDynamicInfo,
@@ -701,12 +704,11 @@ export type AssociationGroupInfoCCInfoGetOptions =
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCInfoGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			const optionByte = this.payload[0];
@@ -726,7 +728,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public listMode?: boolean;
 	public groupId?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const isListMode = this.listMode === true;
 		const optionByte = (this.refreshCache ? 0b1000_0000 : 0)
 			| (isListMode ? 0b0100_0000 : 0);
@@ -734,10 +736,10 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 			optionByte,
 			isListMode ? 0 : this.groupId!,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.groupId != undefined) {
 			message["group id"] = this.groupId;
@@ -747,7 +749,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		}
 		message["refresh cache"] = this.refreshCache;
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -766,12 +768,11 @@ export class AssociationGroupInfoCCCommandListReport
 	extends AssociationGroupInfoCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -806,7 +807,7 @@ export class AssociationGroupInfoCCCommandListReport
 	)
 	public readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		// To make it easier to encode possible extended CCs, we first
 		// allocate as much space as we may need, then trim it again
 		this.payload = Buffer.allocUnsafe(2 + this.commands.size * 3);
@@ -821,12 +822,12 @@ export class AssociationGroupInfoCCCommandListReport
 		}
 		this.payload[1] = offset - 2; // list length
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				commands: `${
@@ -859,12 +860,11 @@ export class AssociationGroupInfoCCCommandListGet
 	extends AssociationGroupInfoCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.allowCache = !!(this.payload[0] & 0b1000_0000);
@@ -878,17 +878,17 @@ export class AssociationGroupInfoCCCommandListGet
 	public allowCache: boolean;
 	public groupId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.allowCache ? 0b1000_0000 : 0,
 			this.groupId,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"group id": this.groupId,
 				"allow cache": this.allowCache,

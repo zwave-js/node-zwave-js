@@ -1,7 +1,10 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
 import { MessagePriority, encodeNodeID } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import type { MultiStageCallback, SuccessIndicator } from "@zwave-js/serial";
+import type {
+	MessageEncodingContext,
+	MultiStageCallback,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -33,14 +36,14 @@ export interface RequestNodeNeighborUpdateRequestOptions
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
 @priority(MessagePriority.Controller)
 export class RequestNodeNeighborUpdateRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== RequestNodeNeighborUpdateReport
 		) {
-			return new RequestNodeNeighborUpdateReport(host, options);
+			return new RequestNodeNeighborUpdateReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -49,10 +52,9 @@ export class RequestNodeNeighborUpdateRequest
 	extends RequestNodeNeighborUpdateRequestBase
 {
 	public constructor(
-		host: ZWaveHost,
 		options: RequestNodeNeighborUpdateRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.nodeId = options.nodeId;
 		this.discoveryTimeout = options.discoveryTimeout;
 	}
@@ -60,10 +62,11 @@ export class RequestNodeNeighborUpdateRequest
 	public nodeId: number;
 	public discoveryTimeout: number;
 
-	public serialize(): Buffer {
-		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public getCallbackTimeout(): number | undefined {
@@ -73,7 +76,9 @@ export class RequestNodeNeighborUpdateRequest
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "callback id": this.callbackId },
+			message: {
+				"callback id": this.callbackId ?? "(not set)",
+			},
 		};
 	}
 }
@@ -83,10 +88,9 @@ export class RequestNodeNeighborUpdateReport
 	implements SuccessIndicator, MultiStageCallback
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.callbackId = this.payload[0];
 		this._updateStatus = this.payload[1];
@@ -109,7 +113,7 @@ export class RequestNodeNeighborUpdateReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"update status": getEnumMemberName(
 					NodeNeighborUpdateStatus,
 					this._updateStatus,

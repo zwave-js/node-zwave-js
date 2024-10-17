@@ -10,7 +10,6 @@ import {
 	supervisionResultToSetValueResult,
 } from "@zwave-js/cc/safe";
 import {
-	type IVirtualNode,
 	SecurityClass,
 	SupervisionStatus,
 	type TranslatedValueID,
@@ -59,7 +58,7 @@ function groupNodesBySecurityClass(
 	return ret;
 }
 
-export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
+export class VirtualNode extends VirtualEndpoint {
 	public constructor(
 		public readonly id: number | undefined,
 		driver: Driver,
@@ -179,7 +178,7 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value
 				// for each node that was affected by this command
-				const affectedNodes = endpointInstance.node.physicalNodes
+				const affectedNodes = this.physicalNodes
 					.filter((node) =>
 						node
 							.getEndpoint(endpointInstance.index)

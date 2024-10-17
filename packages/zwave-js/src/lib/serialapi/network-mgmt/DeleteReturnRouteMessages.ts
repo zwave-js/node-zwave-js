@@ -6,8 +6,11 @@ import {
 	ZWaveErrorCodes,
 	encodeNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
+import type {
+	INodeQuery,
+	MessageEncodingContext,
+	SuccessIndicator,
+} from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
@@ -26,14 +29,14 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @priority(MessagePriority.Normal)
 export class DeleteReturnRouteRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options)
 			&& (new.target as any) !== DeleteReturnRouteRequestTransmitReport
 		) {
-			return new DeleteReturnRouteRequestTransmitReport(host, options);
+			return new DeleteReturnRouteRequestTransmitReport(options);
 		}
-		super(host, options);
+		super(options);
 	}
 }
 
@@ -47,12 +50,11 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| DeleteReturnRouteRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -65,11 +67,12 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 
 	public nodeId: number;
 
-	public serialize(): Buffer {
-		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -78,10 +81,9 @@ export class DeleteReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.hasStarted = this.payload[0] !== 0;
 	}
 
@@ -104,10 +106,9 @@ export class DeleteReturnRouteRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		this.callbackId = this.payload[0];
 		this.transmitStatus = this.payload[1];
@@ -126,7 +127,7 @@ export class DeleteReturnRouteRequestTransmitReport
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,

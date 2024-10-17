@@ -15,11 +15,7 @@ import {
 	securityClassOrder,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
@@ -27,6 +23,7 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -226,15 +223,8 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			case VersionCommand.CapabilitiesGet:
 			case VersionCommand.CapabilitiesReport:
 			case VersionCommand.ZWaveSoftwareReport:
-				// The API might have been created before the versions were determined,
-				// so `this.version` may contains a wrong value
-				return (
-					this.applHost.getSafeCCVersion(
-						this.ccId,
-						this.endpoint.nodeId,
-						this.endpoint.index,
-					) >= 3
-				);
+				return this.version >= 3;
+
 			case VersionCommand.ZWaveSoftwareGet: {
 				return this.getValueDB().getValue<boolean>(
 					VersionCCValues.supportsZWaveSoftwareGet.endpoint(
@@ -250,11 +240,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 	public async get() {
 		this.assertSupportsCommand(VersionCommand, VersionCommand.Get);
 
-		const cc = new VersionCCGet(this.applHost, {
+		const cc = new VersionCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<VersionCCReport>(
+		const response = await this.host.sendCommand<VersionCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -272,12 +262,12 @@ export class VersionCCAPI extends PhysicalCCAPI {
 	public async sendReport(options: VersionCCReportOptions): Promise<void> {
 		this.assertSupportsCommand(VersionCommand, VersionCommand.Report);
 
-		const cc = new VersionCCReport(this.applHost, {
+		const cc = new VersionCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -289,12 +279,12 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CommandClassGet,
 		);
 
-		const cc = new VersionCCCommandClassGet(this.applHost, {
+		const cc = new VersionCCCommandClassGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedCC,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			VersionCCCommandClassReport
 		>(
 			cc,
@@ -330,13 +320,13 @@ export class VersionCCAPI extends PhysicalCCAPI {
 				break;
 		}
 
-		const cc = new VersionCCCommandClassReport(this.applHost, {
+		const cc = new VersionCCCommandClassReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			requestedCC,
 			ccVersion,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -346,11 +336,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CapabilitiesGet,
 		);
 
-		const cc = new VersionCCCapabilitiesGet(this.applHost, {
+		const cc = new VersionCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			VersionCCCapabilitiesReport
 		>(
 			cc,
@@ -367,13 +357,13 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.CapabilitiesReport,
 		);
 
-		const cc = new VersionCCCapabilitiesReport(this.applHost, {
+		const cc = new VersionCCCapabilitiesReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			// At this time, we do not support responding to Z-Wave Software Get
 			supportsZWaveSoftwareGet: false,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -383,11 +373,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			VersionCommand.ZWaveSoftwareGet,
 		);
 
-		const cc = new VersionCCZWaveSoftwareGet(this.applHost, {
+		const cc = new VersionCCZWaveSoftwareGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			VersionCCZWaveSoftwareReport
 		>(
 			cc,
@@ -420,8 +410,10 @@ export class VersionCC extends CommandClass {
 		return [CommandClasses["Manufacturer Specific"]];
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
 		// SDS13782: In a Multi Channel device, the Version Command Class MUST be supported by the Root Device, while
 		// the Version Command Class SHOULD NOT be supported by individual End Points.
@@ -431,18 +423,18 @@ export class VersionCC extends CommandClass {
 		// implemented by the Multi Channel device; also in cases where the actual Command Class is only
 		// provided by an End Point.
 
-		const endpoint = this.getEndpoint(applHost)!;
+		const endpoint = this.getEndpoint(ctx)!;
 
 		// Use the CC API of the root device for all queries
 		const api = CCAPI.create(
 			CommandClasses.Version,
-			applHost,
+			ctx,
 			node,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -453,7 +445,7 @@ export class VersionCC extends CommandClass {
 			// but there are Z-Wave certification tests that require us to query all CCs
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented === 0) {
-				applHost.controllerLog.logNode(
+				ctx.logNode(
 					node.id,
 					`  skipping query for ${CommandClasses[cc]} (${
 						num2hex(
@@ -464,7 +456,7 @@ export class VersionCC extends CommandClass {
 				return;
 			}
 
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `  querying the CC version for ${getCCName(cc)}...`,
 				direction: "outbound",
@@ -528,12 +520,12 @@ export class VersionCC extends CommandClass {
 					}
 				}
 
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 				});
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `CC version query for ${
 						getCCName(
@@ -553,15 +545,9 @@ export class VersionCC extends CommandClass {
 		if (this.endpointIndex === 0) {
 			// Step 1: Query Version CC version
 			await queryCCVersion(CommandClasses.Version);
-			// The CC instance was created before the versions were determined, so `this.version` contains a wrong value
-			this.version = applHost.getSafeCCVersion(
-				CommandClasses.Version,
-				node.id,
-				this.endpointIndex,
-			);
 
 			// Step 2: Query node versions
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying node versions...",
 				direction: "outbound",
@@ -578,7 +564,7 @@ export class VersionCC extends CommandClass {
 					logMessage +=
 						`\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
 				}
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -587,7 +573,7 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Step 3: Query all other CC versions
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying CC versions...",
 			direction: "outbound",
@@ -611,9 +597,9 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Step 4: Query VersionCC capabilities (root device only)
-		if (this.endpointIndex === 0 && this.version >= 3) {
+		if (this.endpointIndex === 0 && api.version >= 3) {
 			// Step 4a: Support for SoftwareGet
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying if Z-Wave Software Get is supported...",
 				direction: "outbound",
@@ -621,7 +607,7 @@ export class VersionCC extends CommandClass {
 			const capsResponse = await api.getCapabilities();
 			if (capsResponse) {
 				const { supportsZWaveSoftwareGet } = capsResponse;
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `Z-Wave Software Get is${
 						supportsZWaveSoftwareGet ? "" : " not"
@@ -631,13 +617,13 @@ export class VersionCC extends CommandClass {
 
 				if (supportsZWaveSoftwareGet) {
 					// Step 4b: Query Z-Wave Software versions
-					applHost.controllerLog.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying Z-Wave software versions...",
 						direction: "outbound",
 					});
 					await api.getZWaveSoftware();
-					applHost.controllerLog.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "received Z-Wave software versions",
 						direction: "inbound",
@@ -647,7 +633,7 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 
@@ -662,19 +648,19 @@ export interface VersionCCReportOptions {
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (VersionCCReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 5);
 			this.libraryType = this.payload[0];
 			this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
 			this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
-			if (this.version >= 2 && this.payload.length >= 7) {
+			if (this.payload.length >= 7) {
+				// V2+
 				this.hardwareVersion = this.payload[5];
 				const additionalFirmwares = this.payload[6];
 				validatePayload(
@@ -727,7 +713,7 @@ export class VersionCCReport extends VersionCC {
 	@ccValue(VersionCCValues.hardwareVersion)
 	public readonly hardwareVersion: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.libraryType,
 			...this.protocolVersion
@@ -756,10 +742,10 @@ export class VersionCCReport extends VersionCC {
 			this.payload = Buffer.concat([this.payload, firmwaresBuffer]);
 		}
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"library type": getEnumMemberName(
 				ZWaveLibraryTypes,
@@ -772,7 +758,7 @@ export class VersionCCReport extends VersionCC {
 			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -791,12 +777,11 @@ export interface VersionCCCommandClassReportOptions extends CCCommandOptions {
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| VersionCCCommandClassReportOptions
 			| CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.requestedCC = this.payload[0];
@@ -810,14 +795,14 @@ export class VersionCCCommandClassReport extends VersionCC {
 	public ccVersion: number;
 	public requestedCC: CommandClasses;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.requestedCC, this.ccVersion]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				CC: getCCName(this.requestedCC),
 				version: this.ccVersion,
@@ -846,12 +831,11 @@ function testResponseForVersionCommandClassGet(
 )
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| VersionCCCommandClassGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.requestedCC = this.payload[0];
@@ -862,14 +846,14 @@ export class VersionCCCommandClassGet extends VersionCC {
 
 	public requestedCC: CommandClasses;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.requestedCC]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -883,12 +867,11 @@ export interface VersionCCCapabilitiesReportOptions {
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (VersionCCCapabilitiesReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -902,16 +885,16 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 	@ccValue(VersionCCValues.supportsZWaveSoftwareGet)
 	public supportsZWaveSoftwareGet: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			(this.supportsZWaveSoftwareGet ? 0b100 : 0) | 0b11,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supports Z-Wave Software Get command":
 					this.supportsZWaveSoftwareGet,
@@ -927,10 +910,9 @@ export class VersionCCCapabilitiesGet extends VersionCC {}
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 23);
 		this.sdkVersion = parseVersion(this.payload);
@@ -989,7 +971,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 	@ccValue(VersionCCValues.applicationBuildNumber)
 	public readonly applicationBuildNumber: number;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"SDK version": this.sdkVersion,
 		};
@@ -1014,7 +996,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			message["application build number"] = this.applicationBuildNumber;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}

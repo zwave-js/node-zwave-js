@@ -47,7 +47,7 @@ test.beforeEach((t) => {
 	const node = new ZWaveNode(
 		2,
 		driver,
-		new DeviceClass(driver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
+		new DeviceClass(0x04, 0x01, 0x01), // Portable Remote Controller
 	);
 	(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
 		node.id,

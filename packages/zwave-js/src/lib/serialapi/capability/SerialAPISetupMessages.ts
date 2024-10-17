@@ -10,9 +10,9 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import type {
 	DeserializingMessageConstructor,
+	MessageEncodingContext,
 	SuccessIndicator,
 } from "@zwave-js/serial";
 import {
@@ -86,8 +86,8 @@ function testResponseForSerialAPISetupRequest(
 @priority(MessagePriority.Controller)
 @expectedResponse(testResponseForSerialAPISetupRequest)
 export class SerialAPISetupRequest extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions = {}) {
-		super(host, options);
+	public constructor(options: MessageOptions = {}) {
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -100,13 +100,13 @@ export class SerialAPISetupRequest extends Message {
 
 	public command: SerialAPISetupCommand;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.command]),
 			this.payload,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -126,17 +126,16 @@ export class SerialAPISetupRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.SerialAPISetup)
 export class SerialAPISetupResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = this.payload[0];
 
 		const CommandConstructor = getSubCommandResponseConstructor(
 			this.command,
 		);
 		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
-			return new CommandConstructor(host, options);
+			return new CommandConstructor(options);
 		}
 
 		this.payload = this.payload.subarray(1);
@@ -163,10 +162,9 @@ export class SerialAPISetup_CommandUnsupportedResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		// The payload contains which command is unsupported
 		this.command = this.payload[0];
 	}
@@ -190,8 +188,8 @@ export class SerialAPISetup_CommandUnsupportedResponse
 export class SerialAPISetup_GetSupportedCommandsRequest
 	extends SerialAPISetupRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = SerialAPISetupCommand.GetSupportedCommands;
 	}
 }
@@ -201,10 +199,9 @@ export class SerialAPISetup_GetSupportedCommandsResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 
 		if (this.payload.length > 1) {
@@ -266,12 +263,11 @@ export class SerialAPISetup_SetTXStatusReportRequest
 	extends SerialAPISetupRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetTXStatusReportOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = SerialAPISetupCommand.SetTxStatusReport;
 
 		if (gotDeserializationOptions(options)) {
@@ -286,10 +282,10 @@ export class SerialAPISetup_SetTXStatusReportRequest
 
 	public enabled: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.enabled ? 0xff : 0x00]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -307,10 +303,9 @@ export class SerialAPISetup_SetTXStatusReportResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -340,12 +335,11 @@ export interface SerialAPISetup_SetNodeIDTypeOptions
 @subCommandRequest(SerialAPISetupCommand.SetNodeIDType)
 export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetNodeIDTypeOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = SerialAPISetupCommand.SetNodeIDType;
 
 		if (gotDeserializationOptions(options)) {
@@ -360,10 +354,10 @@ export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
 
 	public nodeIdType: NodeIDType;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.nodeIdType]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -382,10 +376,9 @@ export class SerialAPISetup_SetNodeIDTypeResponse extends SerialAPISetupResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -408,8 +401,8 @@ export class SerialAPISetup_SetNodeIDTypeResponse extends SerialAPISetupResponse
 
 @subCommandRequest(SerialAPISetupCommand.GetRFRegion)
 export class SerialAPISetup_GetRFRegionRequest extends SerialAPISetupRequest {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = SerialAPISetupCommand.GetRFRegion;
 	}
 }
@@ -417,10 +410,9 @@ export class SerialAPISetup_GetRFRegionRequest extends SerialAPISetupRequest {
 @subCommandResponse(SerialAPISetupCommand.GetRFRegion)
 export class SerialAPISetup_GetRFRegionResponse extends SerialAPISetupResponse {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.region = this.payload[0];
 	}
 
@@ -444,12 +436,11 @@ export interface SerialAPISetup_SetRFRegionOptions extends MessageBaseOptions {
 @subCommandRequest(SerialAPISetupCommand.SetRFRegion)
 export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetRFRegionOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = SerialAPISetupCommand.SetRFRegion;
 
 		if (gotDeserializationOptions(options)) {
@@ -464,9 +455,9 @@ export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 
 	public region: RFRegion;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.region]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -483,10 +474,9 @@ export class SerialAPISetup_SetRFRegionResponse extends SerialAPISetupResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -509,8 +499,8 @@ export class SerialAPISetup_SetRFRegionResponse extends SerialAPISetupResponse
 
 @subCommandRequest(SerialAPISetupCommand.GetPowerlevel)
 export class SerialAPISetup_GetPowerlevelRequest extends SerialAPISetupRequest {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = SerialAPISetupCommand.GetPowerlevel;
 	}
 }
@@ -520,10 +510,9 @@ export class SerialAPISetup_GetPowerlevelResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 2);
 		// The values are in 0.1 dBm, signed
 		this.powerlevel = this.payload.readInt8(0) / 10;
@@ -560,12 +549,11 @@ export interface SerialAPISetup_SetPowerlevelOptions
 @subCommandRequest(SerialAPISetupCommand.SetPowerlevel)
 export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetPowerlevelOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = SerialAPISetupCommand.SetPowerlevel;
 
 		if (gotDeserializationOptions(options)) {
@@ -594,13 +582,13 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 	public powerlevel: number;
 	public measured0dBm: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
 		// The values are in 0.1 dBm
 		this.payload.writeInt8(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt8(Math.round(this.measured0dBm * 10), 1);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -621,10 +609,9 @@ export class SerialAPISetup_SetPowerlevelResponse extends SerialAPISetupResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -649,8 +636,8 @@ export class SerialAPISetup_SetPowerlevelResponse extends SerialAPISetupResponse
 export class SerialAPISetup_GetPowerlevel16BitRequest
 	extends SerialAPISetupRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = SerialAPISetupCommand.GetPowerlevel16Bit;
 	}
 }
@@ -660,10 +647,9 @@ export class SerialAPISetup_GetPowerlevel16BitResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 4);
 		// The values are in 0.1 dBm, signed
 		this.powerlevel = this.payload.readInt16BE(0) / 10;
@@ -702,12 +688,11 @@ export class SerialAPISetup_SetPowerlevel16BitRequest
 	extends SerialAPISetupRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetPowerlevel16BitOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = SerialAPISetupCommand.SetPowerlevel16Bit;
 
 		if (gotDeserializationOptions(options)) {
@@ -736,13 +721,13 @@ export class SerialAPISetup_SetPowerlevel16BitRequest
 	public powerlevel: number;
 	public measured0dBm: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(4);
 		// The values are in 0.1 dBm
 		this.payload.writeInt16BE(Math.round(this.powerlevel * 10), 0);
 		this.payload.writeInt16BE(Math.round(this.measured0dBm * 10), 2);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -764,10 +749,9 @@ export class SerialAPISetup_SetPowerlevel16BitResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -792,8 +776,8 @@ export class SerialAPISetup_SetPowerlevel16BitResponse
 export class SerialAPISetup_GetLongRangeMaximumTxPowerRequest
 	extends SerialAPISetupRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = SerialAPISetupCommand.GetLongRangeMaximumTxPower;
 	}
 }
@@ -803,10 +787,9 @@ export class SerialAPISetup_GetLongRangeMaximumTxPowerResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 2);
 		// The values are in 0.1 dBm, signed
 		this.limit = this.payload.readInt16BE(0) / 10;
@@ -840,12 +823,11 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest
 	extends SerialAPISetupRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetLongRangeMaximumTxPowerOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = SerialAPISetupCommand.SetLongRangeMaximumTxPower;
 
 		if (gotDeserializationOptions(options)) {
@@ -868,12 +850,12 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerRequest
 	/** The maximum LR TX power in dBm */
 	public limit: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(2);
 		// The values are in 0.1 dBm, signed
 		this.payload.writeInt16BE(Math.round(this.limit * 10), 0);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -894,10 +876,9 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -922,8 +903,8 @@ export class SerialAPISetup_SetLongRangeMaximumTxPowerResponse
 export class SerialAPISetup_GetMaximumPayloadSizeRequest
 	extends SerialAPISetupRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = SerialAPISetupCommand.GetMaximumPayloadSize;
 	}
 }
@@ -933,10 +914,9 @@ export class SerialAPISetup_GetMaximumPayloadSizeResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.maxPayloadSize = this.payload[0];
 	}
 
@@ -957,8 +937,8 @@ export class SerialAPISetup_GetMaximumPayloadSizeResponse
 export class SerialAPISetup_GetLongRangeMaximumPayloadSizeRequest
 	extends SerialAPISetupRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = SerialAPISetupCommand.GetLongRangeMaximumPayloadSize;
 	}
 }
@@ -968,10 +948,9 @@ export class SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.maxPayloadSize = this.payload[0];
 	}
 
@@ -992,8 +971,8 @@ export class SerialAPISetup_GetLongRangeMaximumPayloadSizeResponse
 export class SerialAPISetup_GetSupportedRegionsRequest
 	extends SerialAPISetupRequest
 {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 		this.command = SerialAPISetupCommand.GetSupportedRegions;
 	}
 }
@@ -1003,10 +982,9 @@ export class SerialAPISetup_GetSupportedRegionsResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 1);
 
 		const numRegions = this.payload[0];
@@ -1029,12 +1007,11 @@ export interface SerialAPISetup_GetRegionInfoOptions
 @subCommandRequest(SerialAPISetupCommand.GetRegionInfo)
 export class SerialAPISetup_GetRegionInfoRequest extends SerialAPISetupRequest {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_GetRegionInfoOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.command = SerialAPISetupCommand.GetRegionInfo;
 
 		if (gotDeserializationOptions(options)) {
@@ -1049,9 +1026,9 @@ export class SerialAPISetup_GetRegionInfoRequest extends SerialAPISetupRequest {
 
 	public region: RFRegion;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.region]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -1071,10 +1048,9 @@ export class SerialAPISetup_GetRegionInfoResponse
 	extends SerialAPISetupResponse
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.region = this.payload[0];
 		this.supportsZWave = !!(this.payload[1] & 0b1);
 		this.supportsLongRange = !!(this.payload[1] & 0b10);

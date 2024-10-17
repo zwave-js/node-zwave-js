@@ -9,11 +9,7 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -29,6 +25,8 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -133,11 +131,11 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			NodeNamingAndLocationCommand.NameGet,
 		);
 
-		const cc = new NodeNamingAndLocationCCNameGet(this.applHost, {
+		const cc = new NodeNamingAndLocationCCNameGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			NodeNamingAndLocationCCNameReport
 		>(
 			cc,
@@ -153,12 +151,12 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			NodeNamingAndLocationCommand.NameSet,
 		);
 
-		const cc = new NodeNamingAndLocationCCNameSet(this.applHost, {
+		const cc = new NodeNamingAndLocationCCNameSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			name,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getLocation(): Promise<MaybeNotKnown<string>> {
@@ -167,11 +165,11 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			NodeNamingAndLocationCommand.LocationGet,
 		);
 
-		const cc = new NodeNamingAndLocationCCLocationGet(this.applHost, {
+		const cc = new NodeNamingAndLocationCCLocationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			NodeNamingAndLocationCCLocationReport
 		>(
 			cc,
@@ -189,12 +187,12 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			NodeNamingAndLocationCommand.LocationSet,
 		);
 
-		const cc = new NodeNamingAndLocationCCLocationSet(this.applHost, {
+		const cc = new NodeNamingAndLocationCCLocationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			location,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -209,51 +207,55 @@ export class NodeNamingAndLocationCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Node Naming and Location"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "retrieving node name...",
 			direction: "outbound",
 		});
 		const name = await api.getName();
 		if (name != undefined) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: `is named "${name}"`,
 				direction: "inbound",
 			});
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "retrieving node location...",
 			direction: "outbound",
 		});
 		const location = await api.getLocation();
 		if (location != undefined) {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: `received location: ${location}`,
 				direction: "inbound",
 			});
@@ -272,12 +274,11 @@ export interface NodeNamingAndLocationCCNameSetOptions
 @useSupervision()
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCNameSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -291,7 +292,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 
 	public name: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const encoding = isASCII(this.name) ? "ascii" : "utf16le";
 		this.payload = Buffer.allocUnsafe(
 			1 + this.name.length * (encoding === "ascii" ? 1 : 2),
@@ -309,12 +310,12 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 			0,
 			Math.min(16, nameAsBuffer.length),
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { name: this.name },
 		};
 	}
@@ -323,10 +324,9 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
 		let nameBuffer = this.payload.subarray(1);
 		if (encoding === "utf16le") {
@@ -340,9 +340,9 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	@ccValue(NodeNamingAndLocationCCValues.name)
 	public readonly name: string;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { name: this.name },
 		};
 	}
@@ -365,12 +365,11 @@ export class NodeNamingAndLocationCCLocationSet
 	extends NodeNamingAndLocationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCLocationSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -384,7 +383,7 @@ export class NodeNamingAndLocationCCLocationSet
 
 	public location: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const encoding = isASCII(this.location) ? "ascii" : "utf16le";
 		this.payload = Buffer.allocUnsafe(
 			1 + this.location.length * (encoding === "ascii" ? 1 : 2),
@@ -402,12 +401,12 @@ export class NodeNamingAndLocationCCLocationSet
 			0,
 			Math.min(16, locationAsBuffer.length),
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { location: this.location },
 		};
 	}
@@ -418,10 +417,9 @@ export class NodeNamingAndLocationCCLocationReport
 	extends NodeNamingAndLocationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
+		super(options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
 		let locationBuffer = this.payload.subarray(1);
 		if (encoding === "utf16le") {
@@ -435,9 +433,9 @@ export class NodeNamingAndLocationCCLocationReport
 	@ccValue(NodeNamingAndLocationCCValues.location)
 	public readonly location: string;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { location: this.location },
 		};
 	}

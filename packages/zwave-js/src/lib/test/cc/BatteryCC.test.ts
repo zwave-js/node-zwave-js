@@ -7,18 +7,15 @@ import {
 	BatteryReplacementStatus,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
 
-const host = createTestingHost();
-
 test("the Get command should serialize correctly", (t) => {
-	const batteryCC = new BatteryCCGet(host, { nodeId: 1 });
+	const batteryCC = new BatteryCCGet({ nodeId: 1 });
 	const expected = Buffer.from([
 		CommandClasses.Battery, // CC
 		BatteryCommand.Get, // CC Command
 	]);
-	t.deepEqual(batteryCC.serialize(), expected);
+	t.deepEqual(batteryCC.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly: when the battery is not low", (t) => {
@@ -27,9 +24,10 @@ test("the Report command (v1) should be deserialized correctly: when the battery
 		BatteryCommand.Report, // CC Command
 		55, // current value
 	]);
-	const batteryCC = new BatteryCC(host, {
+	const batteryCC = new BatteryCC({
 		nodeId: 7,
 		data: ccData,
+		context: {} as any,
 	}) as BatteryCCReport;
 
 	t.is(batteryCC.level, 55);
@@ -42,9 +40,10 @@ test("the Report command (v1) should be deserialized correctly: when the battery
 		BatteryCommand.Report, // CC Command
 		0xff, // current value
 	]);
-	const batteryCC = new BatteryCC(host, {
+	const batteryCC = new BatteryCC({
 		nodeId: 7,
 		data: ccData,
+		context: {} as any,
 	}) as BatteryCCReport;
 
 	t.is(batteryCC.level, 0);
@@ -59,9 +58,10 @@ test("the Report command (v2) should be deserialized correctly: all flags set", 
 		0b00_1111_00,
 		1, // disconnected
 	]);
-	const batteryCC = new BatteryCC(host, {
+	const batteryCC = new BatteryCC({
 		nodeId: 7,
 		data: ccData,
+		context: {} as any,
 	}) as BatteryCCReport;
 
 	t.true(batteryCC.rechargeable);
@@ -79,9 +79,10 @@ test("the Report command (v2) should be deserialized correctly: charging status"
 		0b10_000000, // Maintaining
 		0,
 	]);
-	const batteryCC = new BatteryCC(host, {
+	const batteryCC = new BatteryCC({
 		nodeId: 7,
 		data: ccData,
+		context: {} as any,
 	}) as BatteryCCReport;
 
 	t.is(batteryCC.chargingStatus, BatteryChargingStatus.Maintaining);
@@ -95,9 +96,10 @@ test("the Report command (v2) should be deserialized correctly: recharge or repl
 		0b11, // Maintaining
 		0,
 	]);
-	const batteryCC = new BatteryCC(host, {
+	const batteryCC = new BatteryCC({
 		nodeId: 7,
 		data: ccData,
+		context: {} as any,
 	}) as BatteryCCReport;
 
 	t.is(batteryCC.rechargeOrReplace, BatteryReplacementStatus.Now);
@@ -108,9 +110,10 @@ test("deserializing an unsupported command should return an unspecified version 
 		CommandClasses.Battery, // CC
 		255, // not a valid command
 	]);
-	const basicCC: any = new BatteryCC(host, {
+	const basicCC: any = new BatteryCC({
 		nodeId: 7,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(basicCC.constructor, BatteryCC);
 });

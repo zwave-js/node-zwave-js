@@ -40,17 +40,17 @@ valueDB2.setValue(DoorLockCCValues.boltSupported.id, true);
 valueDB2.setValue(DoorLockCCValues.latchSupported.id, true);
 
 test("the OperationGet command should serialize correctly", (t) => {
-	const cc = new DoorLockCCOperationGet(host, { nodeId: 1 });
+	const cc = new DoorLockCCOperationGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			DoorLockCommand.OperationGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the OperationSet command should serialize correctly", (t) => {
-	const cc = new DoorLockCCOperationSet(host, {
+	const cc = new DoorLockCCOperationSet({
 		nodeId: 2,
 		mode: DoorLockMode.OutsideUnsecured,
 	});
@@ -60,7 +60,7 @@ test("the OperationSet command should serialize correctly", (t) => {
 			0x20, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the OperationReport command (v1-v3) should be deserialized correctly", (t) => {
@@ -74,9 +74,10 @@ test("the OperationReport command (v1-v3) should be deserialized correctly", (t)
 			20, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCOperationReport(host, {
+	const cc = new DoorLockCCOperationReport({
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.currentMode, DoorLockMode.InsideUnsecuredWithTimeout);
@@ -103,9 +104,10 @@ test("the OperationReport command (v4) should be deserialized correctly", (t) =>
 			0x01, // 1 second left
 		]),
 	);
-	const cc = new DoorLockCCOperationReport(host, {
+	const cc = new DoorLockCCOperationReport({
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 	cc.persistValues(host);
 
@@ -128,13 +130,13 @@ test("the OperationReport command (v4) should be deserialized correctly", (t) =>
 });
 
 test("the ConfigurationGet command should serialize correctly", (t) => {
-	const cc = new DoorLockCCConfigurationGet(host, { nodeId: 1 });
+	const cc = new DoorLockCCConfigurationGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			DoorLockCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationReport command (v1-v3) should be deserialized correctly", (t) => {
@@ -147,9 +149,10 @@ test("the ConfigurationReport command (v1-v3) should be deserialized correctly",
 			20, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport(host, {
+	const cc = new DoorLockCCConfigurationReport({
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.operationType, DoorLockOperationType.Timed);
@@ -182,9 +185,10 @@ test("the ConfigurationReport command must ignore invalid timeouts (constant)", 
 			20, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport(host, {
+	const cc = new DoorLockCCConfigurationReport({
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
@@ -200,9 +204,10 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid minu
 			20, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport(host, {
+	const cc = new DoorLockCCConfigurationReport({
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
@@ -218,9 +223,10 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid seco
 			0xff, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport(host, {
+	const cc = new DoorLockCCConfigurationReport({
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
@@ -242,9 +248,10 @@ test("the ConfigurationReport command (v4) should be deserialized correctly", (t
 			0b01, // flags
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport(host, {
+	const cc = new DoorLockCCConfigurationReport({
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.autoRelockTime, 0xff01);
@@ -254,7 +261,7 @@ test("the ConfigurationReport command (v4) should be deserialized correctly", (t
 });
 
 test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
-	const cc = new DoorLockCCConfigurationSet(host, {
+	const cc = new DoorLockCCConfigurationSet({
 		nodeId: 2,
 		operationType: DoorLockOperationType.Timed,
 		outsideHandlesCanOpenDoorConfiguration: [false, true, true, true],
@@ -279,17 +286,17 @@ test("the ConfigurationSet command (v4) should serialize correctly", (t) => {
 			0b1,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CapabilitiesGet command should serialize correctly", (t) => {
-	const cc = new DoorLockCCCapabilitiesGet(host, { nodeId: 1 });
+	const cc = new DoorLockCCCapabilitiesGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			DoorLockCommand.CapabilitiesGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the CapabilitiesReport command should be deserialized correctly", (t) => {
@@ -307,9 +314,10 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 			0b1010, // feature flags
 		]),
 	);
-	const cc = new DoorLockCCCapabilitiesReport(host, {
+	const cc = new DoorLockCCCapabilitiesReport({
 		nodeId: 1,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedOperationTypes, [
@@ -341,7 +349,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 // 			1, // duration
 // 		]),
 // 	);
-// 	const cc = new DoorLockCCReport(host, { data: ccData });
+// 	const cc = new DoorLockCCReport({ data: ccData });
 
 // 	t.is(cc.currentValue, 55);
 // 	t.is(cc.targetValue, 66);
@@ -354,7 +362,7 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 // 		1,
 // 		Buffer.from([255]), // not a valid command
 // 	);
-// 	const cc: any = new DoorLockCC(host, {
+// 	const cc: any = new DoorLockCC({
 // 		data: serializedCC,
 // 	});
 // 	t.is(cc.constructor, DoorLockCC);

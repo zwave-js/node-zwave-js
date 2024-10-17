@@ -6,10 +6,7 @@ import {
 	LanguageCommand,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -21,17 +18,17 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new LanguageCCGet(host, { nodeId: 1 });
+	const cc = new LanguageCCGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			LanguageCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (w/o country code)", (t) => {
-	const cc = new LanguageCCSet(host, {
+	const cc = new LanguageCCSet({
 		nodeId: 2,
 		language: "deu",
 	});
@@ -44,11 +41,11 @@ test("the Set command should serialize correctly (w/o country code)", (t) => {
 			0x75,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly (w/ country code)", (t) => {
-	const cc = new LanguageCCSet(host, {
+	const cc = new LanguageCCSet({
 		nodeId: 2,
 		language: "deu",
 		country: "DE",
@@ -65,7 +62,7 @@ test("the Set command should serialize correctly (w/ country code)", (t) => {
 			0x45,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly (w/o country code)", (t) => {
@@ -78,9 +75,10 @@ test("the Report command should be deserialized correctly (w/o country code)", (
 			0x75,
 		]),
 	);
-	const cc = new LanguageCCReport(host, {
+	const cc = new LanguageCCReport({
 		nodeId: 4,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.language, "deu");
@@ -100,9 +98,10 @@ test("the Report command should be deserialized correctly (w/ country code)", (t
 			0x45,
 		]),
 	);
-	const cc = new LanguageCCReport(host, {
+	const cc = new LanguageCCReport({
 		nodeId: 4,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.language, "deu");
@@ -113,9 +112,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new LanguageCC(host, {
+	const cc: any = new LanguageCC({
 		nodeId: 4,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, LanguageCC);
 });

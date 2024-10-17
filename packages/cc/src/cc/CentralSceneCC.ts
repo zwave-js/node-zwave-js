@@ -14,11 +14,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -35,6 +31,8 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -113,11 +111,11 @@ export class CentralSceneCCAPI extends CCAPI {
 			CentralSceneCommand.SupportedGet,
 		);
 
-		const cc = new CentralSceneCCSupportedGet(this.applHost, {
+		const cc = new CentralSceneCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			CentralSceneCCSupportedReport
 		>(
 			cc,
@@ -139,11 +137,11 @@ export class CentralSceneCCAPI extends CCAPI {
 			CentralSceneCommand.ConfigurationGet,
 		);
 
-		const cc = new CentralSceneCCConfigurationGet(this.applHost, {
+		const cc = new CentralSceneCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			CentralSceneCCConfigurationReport
 		>(
 			cc,
@@ -163,12 +161,12 @@ export class CentralSceneCCAPI extends CCAPI {
 			CentralSceneCommand.ConfigurationSet,
 		);
 
-		const cc = new CentralSceneCCConfigurationSet(this.applHost, {
+		const cc = new CentralSceneCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			slowRefresh,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	protected override get [SET_VALUE](): SetValueImplementation {
@@ -218,18 +216,20 @@ export class CentralSceneCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Central Scene"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -239,13 +239,13 @@ export class CentralSceneCC extends CommandClass {
 		// we must associate ourselves with that channel
 		try {
 			await ccUtils.assignLifelineIssueingCommand(
-				applHost,
+				ctx,
 				endpoint,
 				this.ccId,
 				CentralSceneCommand.Notification,
 			);
 		} catch {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Configuring associations to receive ${
 					getCCName(
@@ -256,7 +256,7 @@ export class CentralSceneCC extends CommandClass {
 			});
 		}
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying supported scenes...",
 			direction: "outbound",
@@ -266,13 +266,13 @@ export class CentralSceneCC extends CommandClass {
 			const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported scenes timed out, skipping interview...",
@@ -282,8 +282,8 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 		}
 
 		// The slow refresh capability should be enabled whenever possible
-		if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
-			applHost.controllerLog.logNode(node.id, {
+		if (api.version >= 3 && ccSupported?.supportsSlowRefresh) {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Enabling slow refresh capability...",
 				direction: "outbound",
@@ -292,38 +292,34 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 }
 
 @CCCommand(CentralSceneCommand.Notification)
 export class CentralSceneCCNotification extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 3);
 		this.sequenceNumber = this.payload[0];
 		this.keyAttribute = this.payload[1] & 0b111;
 		this.sceneNumber = this.payload[2];
-		if (
-			this.keyAttribute === CentralSceneKeys.KeyHeldDown
-			&& this.version >= 3
-		) {
+		if (this.keyAttribute === CentralSceneKeys.KeyHeldDown) {
 			// A receiving node MUST ignore this field if the command is not
 			// carrying the Key Held Down key attribute.
 			this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// In case the interview is not yet completed, we still create some basic metadata
 		const sceneValue = CentralSceneCCValues.scene(this.sceneNumber);
-		this.ensureMetadata(applHost, sceneValue);
+		this.ensureMetadata(ctx, sceneValue);
 
 		// The spec behavior is pretty complicated, so we cannot just store
 		// the value and call it a day. Handling of these notifications will
@@ -337,7 +333,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 	public readonly sceneNumber: number;
 	public readonly slowRefresh: boolean | undefined;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"key attribute": getEnumMemberName(
@@ -350,7 +346,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 			message["slow refresh"] = this.slowRefresh;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -359,16 +355,13 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 @CCCommand(CentralSceneCommand.SupportedReport)
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 2);
 		this.sceneCount = this.payload[0];
-		if (this.version >= 3) {
-			this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
-		}
+		this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
 		const numEntries = identicalKeyAttributes ? 1 : this.sceneCount;
@@ -395,13 +388,13 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Create/extend metadata for all scenes
 		for (let i = 1; i <= this.sceneCount; i++) {
 			const sceneValue = CentralSceneCCValues.scene(i);
-			this.setMetadata(applHost, sceneValue, {
+			this.setMetadata(ctx, sceneValue, {
 				...sceneValue.meta,
 				states: enumValuesToMetadataStates(
 					CentralSceneKeys,
@@ -433,7 +426,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return this._supportedKeyAttributes;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"scene count": this.sceneCount,
 			"supports slow refresh": maybeUnknownToString(
@@ -446,7 +439,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -459,10 +452,9 @@ export class CentralSceneCCSupportedGet extends CentralSceneCC {}
 @CCCommand(CentralSceneCommand.ConfigurationReport)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		validatePayload(this.payload.length >= 1);
 		this.slowRefresh = !!(this.payload[0] & 0b1000_0000);
@@ -471,9 +463,9 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	@ccValue(CentralSceneCCValues.slowRefresh)
 	public readonly slowRefresh: boolean;
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "slow refresh": this.slowRefresh },
 		};
 	}
@@ -494,12 +486,11 @@ export interface CentralSceneCCConfigurationSetOptions
 @useSupervision()
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| CentralSceneCCConfigurationSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -512,14 +503,14 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 
 	public slowRefresh: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.slowRefresh ? 0b1000_0000 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "slow refresh": this.slowRefresh },
 		};
 	}

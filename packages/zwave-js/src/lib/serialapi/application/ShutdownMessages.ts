@@ -1,5 +1,4 @@
 import { type MessageOrCCLogEntry, MessagePriority } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -23,10 +22,9 @@ export class ShutdownRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.Shutdown)
 export class ShutdownResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 

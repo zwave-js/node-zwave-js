@@ -52,8 +52,8 @@ const respondToEnergyProductionGet: MockNodeBehavior = {
 				) as unknown as keyof typeof capabilities.values
 			];
 
-			const cc = new EnergyProductionCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new EnergyProductionCCReport({
+				nodeId: controller.ownNodeId,
 				parameter: receivedCC.parameter,
 				value: result?.value ?? 0,
 				scale: getEnergyProductionScale(

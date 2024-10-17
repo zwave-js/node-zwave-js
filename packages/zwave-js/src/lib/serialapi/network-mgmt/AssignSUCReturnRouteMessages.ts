@@ -4,13 +4,13 @@ import {
 	TransmitStatus,
 	encodeNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	type INodeQuery,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageOrigin,
 	MessageType,
@@ -26,31 +26,29 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.AssignSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignSUCReturnRouteRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(options: MessageOptions) {
 		if (gotDeserializationOptions(options)) {
 			if (
 				options.origin === MessageOrigin.Host
 				&& (new.target as any) !== AssignSUCReturnRouteRequest
 			) {
-				return new AssignSUCReturnRouteRequest(host, options);
+				return new AssignSUCReturnRouteRequest(options);
 			} else if (
 				options.origin !== MessageOrigin.Host
 				&& (new.target as any)
 					!== AssignSUCReturnRouteRequestTransmitReport
 			) {
-				return new AssignSUCReturnRouteRequestTransmitReport(
-					host,
-					options,
-				);
+				return new AssignSUCReturnRouteRequestTransmitReport(options);
 			}
 		}
 
-		super(host, options);
+		super(options);
 	}
 }
 
 export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
+	disableCallbackFunctionTypeCheck?: boolean;
 }
 
 function testAssignSUCReturnRouteCallback(
@@ -58,13 +56,7 @@ function testAssignSUCReturnRouteCallback(
 	callback: Message,
 ): boolean {
 	// Some controllers have a bug where they incorrectly respond with DeleteSUCReturnRoute
-	if (
-		callback.host
-			.getDeviceConfig?.(callback.host.ownNodeId)
-			?.compat
-			?.disableCallbackFunctionTypeCheck
-			?.includes(FunctionType.AssignSUCReturnRoute)
-	) {
+	if (sent.disableCallbackFunctionTypeCheck) {
 		return true;
 	}
 	return callback.functionType === FunctionType.AssignSUCReturnRoute;
@@ -76,27 +68,30 @@ export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| AssignSUCReturnRouteRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.nodeId = this.payload[0];
 			this.callbackId = this.payload[1];
 		} else {
 			this.nodeId = options.nodeId;
+			this.disableCallbackFunctionTypeCheck =
+				options.disableCallbackFunctionTypeCheck;
 		}
 	}
 
 	public nodeId: number;
+	public readonly disableCallbackFunctionTypeCheck?: boolean;
 
-	public serialize(): Buffer {
-		const nodeId = encodeNodeID(this.nodeId, this.host.nodeIdType);
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
+		const nodeId = encodeNodeID(this.nodeId, ctx.nodeIdType);
 		this.payload = Buffer.concat([nodeId, Buffer.from([this.callbackId])]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -109,12 +104,11 @@ export class AssignSUCReturnRouteResponse extends Message
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| AssignSUCReturnRouteResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.wasExecuted = this.payload[0] !== 0;
 		} else {
@@ -128,9 +122,9 @@ export class AssignSUCReturnRouteResponse extends Message
 
 	public wasExecuted: boolean;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.wasExecuted ? 0x01 : 0]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -153,12 +147,11 @@ export class AssignSUCReturnRouteRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| AssignSUCReturnRouteRequestTransmitReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -178,16 +171,17 @@ export class AssignSUCReturnRouteRequestTransmitReport
 
 	public transmitStatus: TransmitStatus;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.assertCallbackId();
 		this.payload = Buffer.from([this.callbackId, this.transmitStatus]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"callback id": this.callbackId,
+				"callback id": this.callbackId ?? "(not set)",
 				"transmit status": getEnumMemberName(
 					TransmitStatus,
 					this.transmitStatus,

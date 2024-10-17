@@ -34,8 +34,8 @@ const respondToThermostatSetbackGet: MockNodeBehavior = {
 					?? "Unused"
 			) as SetbackState;
 
-			const cc = new ThermostatSetbackCCReport(self.host, {
-				nodeId: controller.host.ownNodeId,
+			const cc = new ThermostatSetbackCCReport({
+				nodeId: controller.ownNodeId,
 				setbackType,
 				setbackState,
 			});

@@ -11,11 +11,7 @@ import {
 	getCCName,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -33,6 +29,8 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -207,7 +205,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		// Undefined `dimmingDuration` defaults to 0 seconds to simplify the call
 		// for actuators that don't support non-instant `dimmingDuration`
 		// Undefined `level` uses the actuator's current value (override = 0).
-		const cc = new SceneActuatorConfigurationCCSet(this.applHost, {
+		const cc = new SceneActuatorConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
@@ -216,7 +214,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			level,
 		});
 
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getActive(): Promise<
@@ -232,12 +230,12 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			SceneActuatorConfigurationCommand.Get,
 		);
 
-		const cc = new SceneActuatorConfigurationCCGet(this.applHost, {
+		const cc = new SceneActuatorConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId: 0,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SceneActuatorConfigurationCCReport
 		>(
 			cc,
@@ -272,12 +270,12 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		const cc = new SceneActuatorConfigurationCCGet(this.applHost, {
+		const cc = new SceneActuatorConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId: sceneId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			SceneActuatorConfigurationCCReport
 		>(
 			cc,
@@ -297,10 +295,12 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	declare ccCommand: SceneActuatorConfigurationCommand;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: `${this.constructor.name}: setting metadata`,
 			direction: "none",
 		});
@@ -310,28 +310,28 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 			const levelValue = SceneActuatorConfigurationCCValues.level(
 				sceneId,
 			);
-			this.ensureMetadata(applHost, levelValue);
+			this.ensureMetadata(ctx, levelValue);
 
 			const dimmingDurationValue = SceneActuatorConfigurationCCValues
 				.dimmingDuration(sceneId);
-			this.ensureMetadata(applHost, dimmingDurationValue);
+			this.ensureMetadata(ctx, dimmingDurationValue);
 		}
 
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
 	// `refreshValues()` would create 255 `Get` commands to be issued to the node
 	// Therefore, I think we should not implement it. Here is how it would be implemented
 	//
-	// public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-	// 	const node = this.getNode(applHost)!;
-	// 	const endpoint = this.getEndpoint(applHost)!;
+	// public async refreshValues(ctx: RefreshValuesContext): Promise<void> {
+	// 	const node = this.getNode(ctx)!;
+	// 	const endpoint = this.getEndpoint(ctx)!;
 	// 	const api = endpoint.commandClasses[
 	// 		"Scene Actuator Configuration"
 	// 	].withOptions({
 	// 		priority: MessagePriority.NodeQuery,
 	// 	});
-	// 	this.applHost.controllerLog.logNode(node.id, {
+	// 	ctx.logNode(node.id, {
 	// 		message: "querying all scene actuator configs...",
 	// 		direction: "outbound",
 	// 	});
@@ -356,12 +356,11 @@ export class SceneActuatorConfigurationCCSet
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActuatorConfigurationCCSetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -385,17 +384,17 @@ export class SceneActuatorConfigurationCCSet
 	public dimmingDuration: Duration;
 	public level?: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([
 			this.sceneId,
 			this.dimmingDuration.serializeSet(),
 			this.level != undefined ? 0b1000_0000 : 0,
 			this.level ?? 0xff,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			sceneId: this.sceneId,
 			dimmingDuration: this.dimmingDuration.toString(),
@@ -405,7 +404,7 @@ export class SceneActuatorConfigurationCCSet
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -416,10 +415,9 @@ export class SceneActuatorConfigurationCCReport
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		validatePayload(this.payload.length >= 3);
 		this.sceneId = this.payload[0];
 
@@ -434,8 +432,8 @@ export class SceneActuatorConfigurationCCReport
 	public readonly level?: number;
 	public readonly dimmingDuration?: Duration;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Do not persist values for an inactive scene
 		if (
@@ -449,19 +447,19 @@ export class SceneActuatorConfigurationCCReport
 		const levelValue = SceneActuatorConfigurationCCValues.level(
 			this.sceneId,
 		);
-		this.ensureMetadata(applHost, levelValue);
+		this.ensureMetadata(ctx, levelValue);
 
 		const dimmingDurationValue = SceneActuatorConfigurationCCValues
 			.dimmingDuration(this.sceneId);
-		this.ensureMetadata(applHost, dimmingDurationValue);
+		this.ensureMetadata(ctx, dimmingDurationValue);
 
-		this.setValue(applHost, levelValue, this.level);
-		this.setValue(applHost, dimmingDurationValue, this.dimmingDuration);
+		this.setValue(ctx, levelValue, this.level);
+		this.setValue(ctx, dimmingDurationValue, this.dimmingDuration);
 
 		return true;
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			sceneId: this.sceneId,
 		};
@@ -473,7 +471,7 @@ export class SceneActuatorConfigurationCCReport
 		}
 
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -504,12 +502,11 @@ export class SceneActuatorConfigurationCCGet
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActuatorConfigurationCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -523,14 +520,14 @@ export class SceneActuatorConfigurationCCGet
 
 	public sceneId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.sceneId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: { "scene id": this.sceneId },
 		};
 	}

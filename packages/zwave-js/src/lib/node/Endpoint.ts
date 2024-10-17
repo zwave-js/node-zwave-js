@@ -10,7 +10,15 @@ import {
 	normalizeCCNameOrId,
 } from "@zwave-js/cc";
 import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
-import type { IZWaveEndpoint, MaybeNotKnown } from "@zwave-js/core";
+import type {
+	ControlsCC,
+	EndpointId,
+	GetCCs,
+	IsCCSecure,
+	MaybeNotKnown,
+	ModifyCCs,
+	SupportsCC,
+} from "@zwave-js/core";
 import {
 	BasicDeviceClass,
 	CacheBackedMap,
@@ -36,7 +44,9 @@ import type { ZWaveNode } from "./Node";
  *
  * Each endpoint may have different capabilities (device class/supported CCs)
  */
-export class Endpoint implements IZWaveEndpoint {
+export class Endpoint
+	implements EndpointId, SupportsCC, ControlsCC, IsCCSecure, ModifyCCs, GetCCs
+{
 	public constructor(
 		/** The id of the node this endpoint belongs to */
 		public readonly nodeId: number,
@@ -102,7 +112,7 @@ export class Endpoint implements IZWaveEndpoint {
 
 	/** Can be used to distinguish multiple endpoints of a node */
 	public get endpointLabel(): string | undefined {
-		return this.getNodeUnsafe()?.deviceConfig?.endpoints?.get(this.index)
+		return this.tryGetNode()?.deviceConfig?.endpoints?.get(this.index)
 			?.label;
 	}
 
@@ -196,7 +206,7 @@ export class Endpoint implements IZWaveEndpoint {
 	public wasCCRemovedViaConfig(cc: CommandClasses): boolean {
 		if (this.supportsCC(cc)) return false;
 
-		const compatConfig = this.getNodeUnsafe()?.deviceConfig?.compat;
+		const compatConfig = this.tryGetNode()?.deviceConfig?.compat;
 		if (!compatConfig) return false;
 
 		const removedEndpoints = compatConfig.removeCCs?.get(cc);
@@ -230,7 +240,7 @@ export class Endpoint implements IZWaveEndpoint {
 		// an unnecessary Version CC interview for each endpoint or an incorrect V1 for endpoints
 
 		if (ret === 0 && this.index > 0) {
-			return this.getNodeUnsafe()!.getCCVersion(cc);
+			return this.tryGetNode()!.getCCVersion(cc);
 		}
 		return ret;
 	}
@@ -251,7 +261,7 @@ export class Endpoint implements IZWaveEndpoint {
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		return CommandClass.createInstanceUnchecked(this.driver, this, cc);
+		return CommandClass.createInstanceUnchecked(this, cc);
 	}
 
 	/**
@@ -263,7 +273,7 @@ export class Endpoint implements IZWaveEndpoint {
 	): T | undefined {
 		const ccId = typeof cc === "number" ? cc : getCommandClassStatic(cc);
 		if (this.supportsCC(ccId) || this.controlsCC(ccId)) {
-			return CommandClass.createInstanceUnchecked(this.driver, this, cc);
+			return CommandClass.createInstanceUnchecked(this, cc);
 		}
 	}
 
@@ -434,20 +444,20 @@ export class Endpoint implements IZWaveEndpoint {
 	/**
 	 * Returns the node this endpoint belongs to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe(): ZWaveNode | undefined {
+	public tryGetNode(): ZWaveNode | undefined {
 		return this.driver.controller.nodes.get(this.nodeId);
 	}
 
 	/** Z-Wave+ Icon (for management) */
 	public get installerIcon(): MaybeNotKnown<number> {
-		return this.getNodeUnsafe()?.getValue(
+		return this.tryGetNode()?.getValue(
 			ZWavePlusCCValues.installerIcon.endpoint(this.index),
 		);
 	}
 
 	/** Z-Wave+ Icon (for end users) */
 	public get userIcon(): MaybeNotKnown<number> {
-		return this.getNodeUnsafe()?.getValue(
+		return this.tryGetNode()?.getValue(
 			ZWavePlusCCValues.userIcon.endpoint(this.index),
 		);
 	}

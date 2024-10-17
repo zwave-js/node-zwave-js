@@ -11,13 +11,13 @@ import {
 	parseNodeID,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	type DeserializingMessageConstructor,
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	type MessageOptions,
 	MessageType,
 	type SuccessIndicator,
@@ -54,8 +54,8 @@ const {
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		super(host, options);
+	public constructor(options?: MessageOptions) {
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.updateType = this.payload[0];
@@ -67,7 +67,7 @@ export class ApplicationUpdateRequest extends Message {
 				CommandConstructor
 				&& (new.target as any) !== CommandConstructor
 			) {
-				return new CommandConstructor(host, options);
+				return new CommandConstructor(options);
 			}
 
 			this.payload = this.payload.subarray(1);
@@ -78,12 +78,12 @@ export class ApplicationUpdateRequest extends Message {
 
 	public readonly updateType: ApplicationUpdateTypes;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.updateType]),
 			this.payload,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -97,17 +97,16 @@ export class ApplicationUpdateRequestWithNodeInfo
 	extends ApplicationUpdateRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ApplicationUpdateRequestWithNodeInfoOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.nodeInformation = parseNodeUpdatePayload(
 				this.payload,
-				this.host.nodeIdType,
+				options.ctx.nodeIdType,
 			);
 			this.nodeId = this.nodeInformation.nodeId;
 		} else {
@@ -119,12 +118,12 @@ export class ApplicationUpdateRequestWithNodeInfo
 	public nodeId: number;
 	public nodeInformation: NodeUpdatePayload;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = encodeNodeUpdatePayload(
 			this.nodeInformation,
-			this.host.nodeIdType,
+			ctx.nodeIdType,
 		);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -153,12 +152,11 @@ export class ApplicationUpdateRequestNodeRemoved
 	extends ApplicationUpdateRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
-		const { nodeId } = parseNodeID(this.payload, host.nodeIdType, 0);
+		const { nodeId } = parseNodeID(this.payload, options.ctx.nodeIdType, 0);
 		this.nodeId = nodeId;
 		// byte 1/2 is 0, meaning unknown
 	}
@@ -170,14 +168,13 @@ class ApplicationUpdateRequestSmartStartHomeIDReceivedBase
 	extends ApplicationUpdateRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		let offset = 0;
 		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
 			this.payload,
-			host.nodeIdType,
+			options.ctx.nodeIdType,
 			offset,
 		);
 		offset += nodeIdBytes;
@@ -245,12 +242,11 @@ export class ApplicationUpdateRequestSUCIdChanged
 	extends ApplicationUpdateRequest
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 
-		const { nodeId } = parseNodeID(this.payload, host.nodeIdType, 0);
+		const { nodeId } = parseNodeID(this.payload, options.ctx.nodeIdType, 0);
 		this.sucNodeID = nodeId;
 		// byte 1/2 is 0, meaning unknown
 	}

@@ -25,7 +25,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new HumidityControlModeCCGet(host, {
+	const cc = new HumidityControlModeCCGet({
 		nodeId,
 	});
 	const expected = buildCCBuffer(
@@ -33,11 +33,11 @@ test("the Get command should serialize correctly", (t) => {
 			HumidityControlModeCommand.Get, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly", (t) => {
-	const cc = new HumidityControlModeCCSet(host, {
+	const cc = new HumidityControlModeCCSet({
 		nodeId,
 		mode: HumidityControlMode.Auto,
 	});
@@ -47,7 +47,7 @@ test("the Set command should serialize correctly", (t) => {
 			0x03, // target value
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command should be deserialized correctly", (t) => {
@@ -57,9 +57,10 @@ test("the Report command should be deserialized correctly", (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const cc = new HumidityControlModeCCReport(host, {
+	const cc = new HumidityControlModeCCReport({
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.mode, HumidityControlMode.Auto);
@@ -72,9 +73,10 @@ test("the Report command should set the correct value", (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const report = new HumidityControlModeCCReport(host, {
+	const report = new HumidityControlModeCCReport({
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	report.persistValues(host);
 
@@ -92,9 +94,10 @@ test("the Report command should set the correct metadata", (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const cc = new HumidityControlModeCCReport(host, {
+	const cc = new HumidityControlModeCCReport({
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	cc.persistValues(host);
 
@@ -109,7 +112,7 @@ test("the Report command should set the correct metadata", (t) => {
 });
 
 test("the SupportedGet command should serialize correctly", (t) => {
-	const cc = new HumidityControlModeCCSupportedGet(host, {
+	const cc = new HumidityControlModeCCSupportedGet({
 		nodeId,
 	});
 	const expected = buildCCBuffer(
@@ -117,7 +120,7 @@ test("the SupportedGet command should serialize correctly", (t) => {
 			HumidityControlModeCommand.SupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the SupportedReport command should be deserialized correctly", (t) => {
@@ -127,9 +130,10 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
 	);
-	const cc = new HumidityControlModeCCSupportedReport(host, {
+	const cc = new HumidityControlModeCCSupportedReport({
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedModes, [
@@ -145,9 +149,10 @@ test("the SupportedReport command should set the correct metadata", (t) => {
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
 	);
-	const cc = new HumidityControlModeCCSupportedReport(host, {
+	const cc = new HumidityControlModeCCSupportedReport({
 		nodeId,
 		data: ccData,
+		context: {} as any,
 	});
 	cc.persistValues(host);
 

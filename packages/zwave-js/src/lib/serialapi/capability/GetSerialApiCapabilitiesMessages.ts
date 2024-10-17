@@ -1,10 +1,10 @@
 import { MessagePriority, encodeBitMask, parseBitMask } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -33,12 +33,11 @@ export interface GetSerialApiCapabilitiesResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetSerialApiCapabilitiesResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// The first 8 bytes are the api version, manufacturer id, product type and product id
@@ -67,7 +66,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 	public productId: number;
 	public supportedFunctionTypes: FunctionType[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(8 + NUM_FUNCTION_BYTES);
 
 		const firmwareBytes = this.firmwareVersion
@@ -86,6 +85,6 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		);
 		functionBitMask.copy(this.payload, 8);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

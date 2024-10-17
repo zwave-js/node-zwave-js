@@ -4,7 +4,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { ZWaveHost, ZWaveValueHost } from "@zwave-js/host";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
@@ -57,13 +57,13 @@ export class InclusionControllerCCAPI extends CCAPI {
 			InclusionControllerCommand.Initiate,
 		);
 
-		const cc = new InclusionControllerCCInitiate(this.applHost, {
+		const cc = new InclusionControllerCCInitiate({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			includedNodeId: nodeId,
 			step,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Indicate to the other node that the given inclusion step has been completed */
@@ -76,13 +76,13 @@ export class InclusionControllerCCAPI extends CCAPI {
 			InclusionControllerCommand.Complete,
 		);
 
-		const cc = new InclusionControllerCCComplete(this.applHost, {
+		const cc = new InclusionControllerCCComplete({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			step,
 			status,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -95,12 +95,11 @@ export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
 @CCCommand(InclusionControllerCommand.Complete)
 export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| InclusionControllerCCCompleteOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.step = this.payload[0];
@@ -117,14 +116,14 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public step: InclusionControllerStep;
 	public status: InclusionControllerStatus;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.step, this.status]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				step: getEnumMemberName(InclusionControllerStep, this.step),
 				status: getEnumMemberName(
@@ -145,12 +144,11 @@ export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
 @CCCommand(InclusionControllerCommand.Initiate)
 export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| InclusionControllerCCInitiateOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.includedNodeId = this.payload[0];
@@ -167,14 +165,14 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public includedNodeId: number;
 	public step: InclusionControllerStep;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.includedNodeId, this.step]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"included node id": this.includedNodeId,
 				step: getEnumMemberName(InclusionControllerStep, this.step),

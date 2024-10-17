@@ -7,12 +7,16 @@ import {
 	timespan,
 } from "@zwave-js/core";
 import type {
-	IZWaveEndpoint,
+	ControlsCC,
+	EndpointId,
+	GetEndpoint,
 	MessageOrCCLogEntry,
 	MessageRecord,
+	NodeId,
 	Scale,
 	SinglecastCC,
 	SupervisionResult,
+	SupportsCC,
 	ValueID,
 } from "@zwave-js/core/safe";
 import {
@@ -26,9 +30,13 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
+	CCEncodingContext,
+	GetDeviceConfig,
+	GetNode,
+	GetSupportedCCVersion,
+	GetUserPreferences,
+	GetValueDB,
+	LogNode,
 } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -44,6 +52,10 @@ import {
 	type CCResponsePredicate,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
+	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -105,16 +117,17 @@ export const MultilevelSensorCCValues = Object.freeze({
  * followed by the most recently used scale, otherwile falls back to the first supported one.
  */
 function getPreferredSensorScale(
-	applHost: ZWaveApplicationHost,
+	ctx: GetValueDB & GetUserPreferences & LogNode,
 	nodeId: number,
 	endpointIndex: number,
 	sensorType: number,
 	supportedScales: readonly number[],
 ): number {
+	const preferences = ctx.getUserPreferences();
 	const sensor = getSensor(sensorType);
 	// If the sensor type is unknown, we have no default. Use the user-provided scale or 0
 	if (!sensor) {
-		const preferred = applHost.options.preferences?.scales[sensorType];
+		const preferred = preferences?.scales[sensorType];
 		// We cannot look up strings for unknown sensor types, so this must be a number or we use the fallback
 		if (typeof preferred !== "number") return 0;
 		return preferred;
@@ -124,23 +137,23 @@ function getPreferredSensorScale(
 	let preferred: number | string | undefined;
 	// Named scales apply to multiple sensor types. To be able to override the scale for single types
 	// we need to look at the preferences by sensor type first
-	preferred = applHost.options.preferences?.scales[sensorType];
+	preferred = preferences?.scales[sensorType];
 	// If the scale is named, we can then try to use the named preference
 	const scaleGroupName = sensor.scaleGroupName;
 	if (preferred == undefined && scaleGroupName) {
-		preferred = applHost.options.preferences?.scales[scaleGroupName];
+		preferred = preferences?.scales[scaleGroupName];
 	}
 	// Then attempt reading the scale from the corresponding value
 	if (preferred == undefined) {
 		const sensorName = getSensorName(sensorType);
 		const sensorValue = MultilevelSensorCCValues.value(sensorName);
-		const metadata = applHost
+		const metadata = ctx
 			.tryGetValueDB(nodeId)
 			?.getMetadata(sensorValue.endpoint(endpointIndex));
 		const scale = metadata?.ccSpecific?.scale;
 		if (typeof scale === "number" && supportedScales.includes(scale)) {
 			preferred = scale;
-			applHost.controllerLog.logNode(nodeId, {
+			ctx.logNode(nodeId, {
 				endpoint: endpointIndex,
 				message:
 					`No scale preference for sensor type ${sensorType}, using the last-used scale ${preferred}`,
@@ -150,7 +163,7 @@ function getPreferredSensorScale(
 	// Then fall back to the first supported scale
 	if (preferred == undefined) {
 		preferred = supportedScales[0] ?? 0;
-		applHost.controllerLog.logNode(nodeId, {
+		ctx.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`No scale preference for sensor type ${sensorType}, using the first supported scale ${preferred}`,
@@ -170,7 +183,7 @@ function getPreferredSensorScale(
 
 	if (typeof preferred === "string") {
 		// Looking up failed
-		applHost.controllerLog.logNode(nodeId, {
+		ctx.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`Preferred scale "${preferred}" for sensor type ${sensorType} not found, using the first supported scale ${
@@ -185,7 +198,7 @@ function getPreferredSensorScale(
 		// No info about supported scales, just use the preferred one
 		return preferred;
 	} else if (!supportedScales.includes(preferred)) {
-		applHost.controllerLog.logNode(nodeId, {
+		ctx.logNode(nodeId, {
 			endpoint: endpointIndex,
 			message:
 				`Preferred scale ${preferred} not supported for sensor type ${sensorType}, using the first supported scale`,
@@ -267,7 +280,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 				}) ?? [];
 
 			preferredScale = getPreferredSensorScale(
-				this.applHost,
+				this.host,
 				this.endpoint.nodeId,
 				this.endpoint.index,
 				sensorType,
@@ -275,13 +288,13 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		const cc = new MultilevelSensorCCGet(this.applHost, {
+		const cc = new MultilevelSensorCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sensorType,
 			scale: scale ?? preferredScale,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			MultilevelSensorCCReport
 		>(
 			cc,
@@ -318,11 +331,11 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			MultilevelSensorCommand.GetSupportedSensor,
 		);
 
-		const cc = new MultilevelSensorCCGetSupportedSensor(this.applHost, {
+		const cc = new MultilevelSensorCCGetSupportedSensor({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			MultilevelSensorCCSupportedSensorReport
 		>(
 			cc,
@@ -340,12 +353,12 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			MultilevelSensorCommand.GetSupportedScale,
 		);
 
-		const cc = new MultilevelSensorCCGetSupportedScale(this.applHost, {
+		const cc = new MultilevelSensorCCGetSupportedScale({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			MultilevelSensorCCSupportedScaleReport
 		>(
 			cc,
@@ -365,14 +378,14 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			MultilevelSensorCommand.Report,
 		);
 
-		const cc = new MultilevelSensorCCReport(this.applHost, {
+		const cc = new MultilevelSensorCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			type: sensorType,
 			scale,
 			value,
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -382,26 +395,28 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 export class MultilevelSensorCC extends CommandClass {
 	declare ccCommand: MultilevelSensorCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Multilevel Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (this.version >= 5) {
+		if (api.version >= 5) {
 			// Query the supported sensor types
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving supported sensor types...",
 				direction: "outbound",
@@ -413,13 +428,13 @@ export class MultilevelSensorCC extends CommandClass {
 						.map((t) => getSensorName(t))
 						.map((name) => `· ${name}`)
 						.join("\n");
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -431,7 +446,7 @@ export class MultilevelSensorCC extends CommandClass {
 			// As well as the supported scales for each sensor
 
 			for (const type of sensorTypes) {
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying supported scales for ${
 						getSensorName(type)
@@ -449,13 +464,13 @@ export class MultilevelSensorCC extends CommandClass {
 							)
 							.map((name) => `· ${name}`)
 							.join("\n");
-					applHost.controllerLog.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				} else {
-					applHost.controllerLog.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Querying supported scales timed out, skipping interview...",
@@ -466,27 +481,29 @@ export class MultilevelSensorCC extends CommandClass {
 			}
 		}
 
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses["Multilevel Sensor"],
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
+		const valueDB = this.getValueDB(ctx);
 
-		if (this.version <= 4) {
+		if (api.version <= 4) {
 			// Sensors up to V4 only support a single value
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current sensor reading...",
 				direction: "outbound",
@@ -502,7 +519,7 @@ sensor type: ${getSensorName(mlsResponse.type)}
 value:       ${mlsResponse.value}${
 					sensorScale?.unit ? ` ${sensorScale.unit}` : ""
 				}`;
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -517,7 +534,7 @@ value:       ${mlsResponse.value}${
 			}) || [];
 
 			for (const type of sensorTypes) {
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying ${
 						getSensorName(type)
@@ -530,7 +547,7 @@ value:       ${mlsResponse.value}${
 					const logMessage = `received current ${
 						getSensorName(type)
 					} sensor reading: ${value.value} ${value.scale.unit || ""}`;
-					applHost.controllerLog.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -542,15 +559,21 @@ value:       ${mlsResponse.value}${
 
 	public shouldRefreshValues(
 		this: SinglecastCC<this>,
-		applHost: ZWaveApplicationHost,
+		ctx:
+			& GetValueDB
+			& GetSupportedCCVersion
+			& GetDeviceConfig
+			& GetNode<
+				NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+			>,
 	): boolean {
 		// Poll the device when all of the supported values were last updated longer than 6 hours ago.
 		// This may lead to some values not being updated, but the user may have disabled some unnecessary
 		// reports to reduce traffic.
-		const valueDB = applHost.tryGetValueDB(this.nodeId);
+		const valueDB = ctx.tryGetValueDB(this.nodeId);
 		if (!valueDB) return true;
 
-		const values = this.getDefinedValueIDs(applHost).filter((v) =>
+		const values = this.getDefinedValueIDs(ctx).filter((v) =>
 			MultilevelSensorCCValues.value.is(v)
 		);
 		return values.every((v) => {
@@ -567,10 +590,10 @@ value:       ${mlsResponse.value}${
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedSensorTypesCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 	): MaybeNotKnown<number[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				MultilevelSensorCCValues.supportedSensorTypes.endpoint(
@@ -584,11 +607,11 @@ value:       ${mlsResponse.value}${
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedScalesCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 		sensorType: number,
 	): MaybeNotKnown<number[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				MultilevelSensorCCValues.supportedScales(sensorType).endpoint(
@@ -598,7 +621,7 @@ value:       ${mlsResponse.value}${
 	}
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -607,7 +630,7 @@ value:       ${mlsResponse.value}${
 			const sensor = getSensor(propertyKey);
 			if (sensor) return sensor.label;
 		}
-		return super.translatePropertyKey(applHost, property, propertyKey);
+		return super.translatePropertyKey(ctx, property, propertyKey);
 	}
 }
 
@@ -622,12 +645,11 @@ export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
 @useSupervision()
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -647,8 +669,8 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		const sensor = getSensor(this.type);
 		const scale = getSensorScale(
@@ -657,15 +679,17 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		) ?? getUnknownScale(this.scale);
 
 		// Filter out unknown sensor types and scales, unless the strict validation is disabled
-		const measurementValidation = !this.host.getDeviceConfig?.(
+		const measurementValidation = !ctx.getDeviceConfig?.(
 			this.nodeId as number,
 		)?.compat?.disableStrictMeasurementValidation;
 
+		const ccVersion = getEffectiveCCVersion(ctx, this);
+
 		if (measurementValidation) {
 			// Filter out unsupported sensor types and scales if possible
-			if (this.version >= 5) {
+			if (ccVersion >= 5) {
 				const supportedSensorTypes = this.getValue<number[]>(
-					applHost,
+					ctx,
 					MultilevelSensorCCValues.supportedSensorTypes,
 				);
 				if (supportedSensorTypes?.length) {
@@ -677,7 +701,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				}
 
 				const supportedScales = this.getValue<number[]>(
-					applHost,
+					ctx,
 					MultilevelSensorCCValues.supportedScales(this.type),
 				);
 				if (supportedScales?.length) {
@@ -704,7 +728,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		const sensorName = getSensorName(this.type);
 		const sensorValue = MultilevelSensorCCValues.value(sensorName);
 
-		this.setMetadata(applHost, sensorValue, {
+		this.setMetadata(ctx, sensorValue, {
 			...sensorValue.meta,
 			unit: scale.unit,
 			ccSpecific: {
@@ -712,7 +736,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				scale: scale.key,
 			},
 		});
-		this.setValue(applHost, sensorValue, this.value);
+		this.setValue(ctx, sensorValue, this.value);
 
 		return true;
 	}
@@ -721,17 +745,17 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public scale: number;
 	public value: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.type]),
 			encodeFloatWithScale(this.value, this.scale),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"sensor type": getSensorName(this.type),
 				scale: (getSensorScale(this.type, this.scale)
@@ -767,12 +791,11 @@ export type MultilevelSensorCCGetOptions =
 )
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			if (this.payload.length >= 2) {
 				this.sensorType = this.payload[0];
@@ -789,7 +812,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public sensorType: number | undefined;
 	public scale: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (
 			this.sensorType != undefined
 			&& this.scale != undefined
@@ -799,10 +822,10 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 				(this.scale & 0b11) << 3,
 			]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (
 			this.sensorType != undefined
@@ -819,7 +842,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 			};
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -837,12 +860,11 @@ export class MultilevelSensorCCSupportedSensorReport
 	extends MultilevelSensorCC
 {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCSupportedSensorReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -856,14 +878,14 @@ export class MultilevelSensorCCSupportedSensorReport
 	@ccValue(MultilevelSensorCCValues.supportedSensorTypes)
 	public supportedSensorTypes: readonly number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = encodeBitMask(this.supportedSensorTypes);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"supported sensor types": this.supportedSensorTypes
 					.map((t) => `\n· ${getSensorName(t)}`)
@@ -888,12 +910,11 @@ export interface MultilevelSensorCCSupportedScaleReportOptions
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCSupportedScaleReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -917,17 +938,17 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	)
 	public readonly supportedScales: readonly number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.sensorType]),
 			encodeBitMask(this.supportedScales, 4, 0),
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"sensor type": getSensorName(this.sensorType),
 				"supported scales": this.supportedScales
@@ -955,12 +976,11 @@ export interface MultilevelSensorCCGetSupportedScaleOptions
 @expectedCCResponse(MultilevelSensorCCSupportedScaleReport)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetSupportedScaleOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.sensorType = this.payload[0];
@@ -971,14 +991,14 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 
 	public sensorType: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.sensorType]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"sensor type": getSensorName(this.sensorType),
 			},

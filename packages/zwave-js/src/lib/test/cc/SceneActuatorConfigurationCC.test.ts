@@ -6,10 +6,7 @@ import {
 	SceneActuatorConfigurationCommand,
 } from "@zwave-js/cc";
 import { CommandClasses, Duration } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -21,7 +18,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 test("the Get command should serialize correctly", (t) => {
-	const cc = new SceneActuatorConfigurationCCGet(host, {
+	const cc = new SceneActuatorConfigurationCCGet({
 		nodeId: 2,
 		sceneId: 1,
 	});
@@ -31,11 +28,11 @@ test("the Get command should serialize correctly", (t) => {
 			1,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly with level", (t) => {
-	const cc = new SceneActuatorConfigurationCCSet(host, {
+	const cc = new SceneActuatorConfigurationCCSet({
 		nodeId: 2,
 		sceneId: 2,
 		level: 0x00,
@@ -50,11 +47,11 @@ test("the Set command should serialize correctly with level", (t) => {
 			0x00, // level
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Set command should serialize correctly with undefined level", (t) => {
-	const cc = new SceneActuatorConfigurationCCSet(host, {
+	const cc = new SceneActuatorConfigurationCCSet({
 		nodeId: 2,
 		sceneId: 2,
 		// level: undefined,
@@ -69,7 +66,7 @@ test("the Set command should serialize correctly with undefined level", (t) => {
 			0xff, // level
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the Report command (v1) should be deserialized correctly", (t) => {
@@ -81,9 +78,10 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x05, // dimmingDuration
 		]),
 	);
-	const cc = new SceneActuatorConfigurationCCReport(host, {
+	const cc = new SceneActuatorConfigurationCCReport({
 		nodeId: 2,
 		data: ccData,
+		context: {} as any,
 	});
 
 	t.is(cc.sceneId, 55);
@@ -95,9 +93,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new SceneActuatorConfigurationCC(host, {
+	const cc: any = new SceneActuatorConfigurationCC({
 		nodeId: 2,
 		data: serializedCC,
+		context: {} as any,
 	});
 	t.is(cc.constructor, SceneActuatorConfigurationCC);
 });

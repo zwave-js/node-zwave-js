@@ -1,9 +1,6 @@
-import { createTestingHost } from "@zwave-js/host";
 import { Message } from "@zwave-js/serial";
 import test from "ava";
 import { SerialAPISetup_GetSupportedCommandsResponse } from "./SerialAPISetupMessages";
-
-const host = createTestingHost();
 
 test("GetSupportedCommandsResponse with extended bitmask parses correctly (pre-7.19.1 encoding)", (t) => {
 	const data = Buffer.from(
@@ -11,7 +8,11 @@ test("GetSupportedCommandsResponse with extended bitmask parses correctly (pre-7
 		"hex",
 	);
 
-	const msg = Message.from(host, { data, sdkVersion: "7.19.0" });
+	const msg = Message.from({
+		data,
+		sdkVersion: "7.19.0",
+		ctx: {} as any,
+	});
 	t.true(msg instanceof SerialAPISetup_GetSupportedCommandsResponse);
 	const supported = (msg as SerialAPISetup_GetSupportedCommandsResponse)
 		.supportedCommands;
@@ -28,7 +29,11 @@ test("GetSupportedCommandsResponse with extended bitmask parses correctly (post-
 		"hex",
 	);
 
-	const msg = Message.from(host, { data, sdkVersion: "7.19.1" });
+	const msg = Message.from({
+		data,
+		sdkVersion: "7.19.1",
+		ctx: {} as any,
+	});
 	t.true(msg instanceof SerialAPISetup_GetSupportedCommandsResponse);
 	const supported = (msg as SerialAPISetup_GetSupportedCommandsResponse)
 		.supportedCommands;

@@ -13,7 +13,6 @@ import {
 	parseNodeBitMask,
 	parseNodeID,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
@@ -33,10 +32,11 @@ export class BridgeApplicationCommandRequest extends Message
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
+		this._ownNodeId = options.ctx.ownNodeId;
+
 		// if (gotDeserializationOptions(options)) {
 		// first byte is a status flag
 		const status = this.payload[0];
@@ -62,21 +62,24 @@ export class BridgeApplicationCommandRequest extends Message
 
 		let offset = 1;
 		const { nodeId: destinationNodeId, bytesRead: dstNodeIdBytes } =
-			parseNodeID(this.payload, host.nodeIdType, offset);
+			parseNodeID(this.payload, options.ctx.nodeIdType, offset);
 		offset += dstNodeIdBytes;
 		const { nodeId: sourceNodeId, bytesRead: srcNodeIdBytes } = parseNodeID(
 			this.payload,
-			host.nodeIdType,
+			options.ctx.nodeIdType,
 			offset,
 		);
 		offset += srcNodeIdBytes;
 		// Parse the CC
 		const commandLength = this.payload[offset++];
-		this.command = CommandClass.from(this.host, {
+		this.command = CommandClass.from({
 			data: this.payload.subarray(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 			origin: options.origin,
-			frameType: this.frameType,
+			context: {
+				sourceNodeId,
+				...options.ctx,
+			},
 		}) as SinglecastCC<CommandClass>;
 		offset += commandLength;
 
@@ -107,6 +110,8 @@ export class BridgeApplicationCommandRequest extends Message
 	public readonly fromForeignHomeId: boolean;
 	public readonly rssi?: RSSI;
 
+	private _ownNodeId: number;
+
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
 	public command: SinglecastCC<CommandClass>; // TODO: why is this a SinglecastCC?
 
@@ -122,7 +127,7 @@ export class BridgeApplicationCommandRequest extends Message
 		if (this.frameType !== "singlecast") {
 			message.type = this.frameType;
 		}
-		if (this.targetNodeId !== this.host.ownNodeId) {
+		if (this.targetNodeId !== this._ownNodeId) {
 			if (typeof this.targetNodeId === "number") {
 				message["target node"] = this.targetNodeId;
 			} else if (this.targetNodeId.length === 1) {

@@ -1,7 +1,6 @@
-import type { ConfigManager } from "@zwave-js/config";
 import {
 	CommandClasses,
-	type IZWaveEndpoint,
+	type EndpointId,
 	Indicator,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
@@ -16,11 +15,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveValueHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp, roundTo } from "alcalzone-shared/math";
@@ -38,6 +33,9 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -202,7 +200,6 @@ export const IndicatorCCValues = Object.freeze({
  * Looks up the configured metadata for the given indicator and property
  */
 function getIndicatorMetadata(
-	configManager: ConfigManager,
 	indicatorId: Indicator,
 	propertyId: number,
 	overrideIndicatorLabel?: string,
@@ -306,7 +303,6 @@ export class IndicatorCCAPI extends CCAPI {
 				const indicatorId = property;
 				const propertyId = propertyKey;
 				const expectedType = getIndicatorMetadata(
-					this.applHost.configManager,
 					indicatorId,
 					propertyId,
 				).type as "number" | "boolean";
@@ -360,12 +356,12 @@ export class IndicatorCCAPI extends CCAPI {
 	): Promise<MaybeNotKnown<number | IndicatorObject[]>> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Get);
 
-		const cc = new IndicatorCCGet(this.applHost, {
+		const cc = new IndicatorCCGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = await this.applHost.sendCommand<IndicatorCCReport>(
+		const response = await this.host.sendCommand<IndicatorCCReport>(
 			cc,
 			this.commandOptions,
 		);
@@ -380,12 +376,29 @@ export class IndicatorCCAPI extends CCAPI {
 	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Set);
 
-		const cc = new IndicatorCCSet(this.applHost, {
+		if (this.version === 1 && typeof value !== "number") {
+			throw new ZWaveError(
+				`Node ${this.endpoint
+					.nodeId as number} only supports IndicatorCC V1 which requires a single value to be set`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			this.version >= 2
+			&& isArray(value)
+			&& value.length > MAX_INDICATOR_OBJECTS
+		) {
+			throw new ZWaveError(
+				`Only ${MAX_INDICATOR_OBJECTS} indicator values can be set at a time!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const cc = new IndicatorCCSet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...(typeof value === "number" ? { value } : { values: value }),
 		});
-		return this.applHost.sendCommand(cc, this.commandOptions);
+		return this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -397,13 +410,13 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.Report,
 		);
 
-		const cc = new IndicatorCCReport(this.applHost, {
+		const cc = new IndicatorCCReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...options,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -420,12 +433,12 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.SupportedGet,
 		);
 
-		const cc = new IndicatorCCSupportedGet(this.applHost, {
+		const cc = new IndicatorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IndicatorCCSupportedReport
 		>(
 			cc,
@@ -454,7 +467,7 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.SupportedReport,
 		);
 
-		const cc = new IndicatorCCSupportedReport(this.applHost, {
+		const cc = new IndicatorCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
@@ -462,7 +475,7 @@ export class IndicatorCCAPI extends CCAPI {
 			nextIndicatorId,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -475,14 +488,14 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.DescriptionReport,
 		);
 
-		const cc = new IndicatorCCDescriptionReport(this.applHost, {
+		const cc = new IndicatorCCDescriptionReport({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
 			description,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		await this.host.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -551,7 +564,7 @@ export class IndicatorCCAPI extends CCAPI {
 		}
 
 		const supportedPropertyIDs = IndicatorCC.getSupportedPropertyIDsCached(
-			this.applHost,
+			this.host,
 			this.endpoint,
 			indicatorId,
 		);
@@ -655,12 +668,12 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCommand.DescriptionGet,
 		);
 
-		const cc = new IndicatorCCDescriptionGet(this.applHost, {
+		const cc = new IndicatorCCDescriptionGet({
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = await this.applHost.sendCommand<
+		const response = await this.host.sendCommand<
 			IndicatorCCDescriptionReport
 		>(
 			cc,
@@ -676,25 +689,27 @@ export class IndicatorCCAPI extends CCAPI {
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 
-	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async interview(
+		ctx: InterviewContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Indicator,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		applHost.controllerLog.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		if (this.version > 1) {
-			applHost.controllerLog.logNode(node.id, {
+		if (api.version > 1) {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "scanning supported indicator IDs...",
 				direction: "outbound",
@@ -705,7 +720,7 @@ export class IndicatorCC extends CommandClass {
 			do {
 				const supportedResponse = await api.getSupported(curId);
 				if (!supportedResponse) {
-					applHost.controllerLog.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Time out while scanning supported indicator IDs, skipping interview...",
@@ -722,7 +737,7 @@ export class IndicatorCC extends CommandClass {
 
 			// The IDs are not stored by the report CCs so store them here once we have all of them
 			this.setValue(
-				applHost,
+				ctx,
 				IndicatorCCValues.supportedIndicatorIds,
 				supportedIndicatorIds,
 			);
@@ -731,17 +746,17 @@ export class IndicatorCC extends CommandClass {
 					", ",
 				)
 			}`;
-			applHost.controllerLog.logNode(node.id, {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 
-			if (this.version >= 4) {
+			if (api.version >= 4) {
 				const manufacturerDefinedIndicatorIds = supportedIndicatorIds
 					.filter((id) => isManufacturerDefinedIndicator(id));
 				if (manufacturerDefinedIndicatorIds.length > 0) {
-					applHost.controllerLog.logNode(node.id, {
+					ctx.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"retrieving description for manufacturer-defined indicator IDs...",
@@ -756,25 +771,27 @@ export class IndicatorCC extends CommandClass {
 		}
 
 		// Query current values
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
+		this.setInterviewComplete(ctx, true);
 	}
 
-	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		const node = this.getNode(applHost)!;
-		const endpoint = this.getEndpoint(applHost)!;
+	public async refreshValues(
+		ctx: RefreshValuesContext,
+	): Promise<void> {
+		const node = this.getNode(ctx)!;
+		const endpoint = this.getEndpoint(ctx)!;
 		const api = CCAPI.create(
 			CommandClasses.Indicator,
-			applHost,
+			ctx,
 			endpoint,
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		if (this.version === 1) {
-			applHost.controllerLog.logNode(node.id, {
+		if (api.version === 1) {
+			ctx.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting current indicator value...",
 				direction: "outbound",
@@ -782,11 +799,11 @@ export class IndicatorCC extends CommandClass {
 			await api.get();
 		} else {
 			const supportedIndicatorIds: number[] = this.getValue(
-				applHost,
+				ctx,
 				IndicatorCCValues.supportedIndicatorIds,
 			) ?? [];
 			for (const indicatorId of supportedIndicatorIds) {
-				applHost.controllerLog.logNode(node.id, {
+				ctx.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `requesting current indicator value (id = ${
 						num2hex(
@@ -801,7 +818,7 @@ export class IndicatorCC extends CommandClass {
 	}
 
 	public translatePropertyKey(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -816,11 +833,11 @@ export class IndicatorCC extends CommandClass {
 			const prop = getIndicatorProperty(propertyKey);
 			if (prop) return prop.label;
 		}
-		return super.translatePropertyKey(applHost, property, propertyKey);
+		return super.translatePropertyKey(ctx, property, propertyKey);
 	}
 
 	public translateProperty(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
@@ -828,13 +845,13 @@ export class IndicatorCC extends CommandClass {
 			// The indicator corresponds to our property
 			if (property in Indicator) return Indicator[property];
 		}
-		return super.translateProperty(applHost, property, propertyKey);
+		return super.translateProperty(ctx, property, propertyKey);
 	}
 
-	protected supportsV2Indicators(applHost: ZWaveApplicationHost): boolean {
+	protected supportsV2Indicators(ctx: GetValueDB): boolean {
 		// First test if there are any indicator ids defined
 		const supportedIndicatorIds = this.getValue<number[]>(
-			applHost,
+			ctx,
 			IndicatorCCValues.supportedIndicatorIds,
 		);
 		if (!supportedIndicatorIds?.length) return false;
@@ -842,18 +859,18 @@ export class IndicatorCC extends CommandClass {
 		return supportedIndicatorIds.some(
 			(indicatorId) =>
 				!!this.getValue<number[]>(
-					applHost,
+					ctx,
 					IndicatorCCValues.supportedPropertyIDs(indicatorId),
 				)?.length,
 		);
 	}
 
 	public static getSupportedPropertyIDsCached(
-		applHost: ZWaveApplicationHost,
-		endpoint: IZWaveEndpoint,
+		ctx: GetValueDB,
+		endpoint: EndpointId,
 		indicatorId: number,
 	): MaybeNotKnown<number[]> {
-		return applHost
+		return ctx
 			.getValueDB(endpoint.nodeId)
 			.getValue(
 				IndicatorCCValues.supportedPropertyIDs(indicatorId).endpoint(
@@ -882,12 +899,11 @@ export type IndicatorCCSetOptions =
 @useSupervision()
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCSetOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 
@@ -910,27 +926,10 @@ export class IndicatorCCSet extends IndicatorCC {
 				}
 			}
 		} else {
-			if (this.version === 1) {
-				if (!("value" in options)) {
-					throw new ZWaveError(
-						`Node ${this
-							.nodeId as number} only supports IndicatorCC V1 which requires a single value to be set`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
+			if ("value" in options) {
 				this.indicator0Value = options.value;
 			} else {
-				if ("value" in options) {
-					this.indicator0Value = options.value;
-				} else {
-					if (options.values.length > MAX_INDICATOR_OBJECTS) {
-						throw new ZWaveError(
-							`Only ${MAX_INDICATOR_OBJECTS} indicator values can be set at a time!`,
-							ZWaveErrorCodes.Argument_Invalid,
-						);
-					}
-					this.values = options.values;
-				}
+				this.values = options.values;
 			}
 		}
 	}
@@ -938,7 +937,7 @@ export class IndicatorCCSet extends IndicatorCC {
 	public indicator0Value: number | undefined;
 	public values: IndicatorObject[] | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (this.values != undefined) {
 			// V2+
 			this.payload = Buffer.alloc(2 + 3 * this.values.length, 0);
@@ -960,10 +959,10 @@ export class IndicatorCCSet extends IndicatorCC {
 			// V1
 			this.payload = Buffer.from([this.indicator0Value ?? 0]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
 			message["indicator 0 value"] = this.indicator0Value;
@@ -981,7 +980,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			}`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -999,12 +998,11 @@ export type IndicatorCCReportSpecificOptions =
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCReportSpecificOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -1068,19 +1066,19 @@ export class IndicatorCCReport extends IndicatorCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		if (this.indicator0Value != undefined) {
-			if (!this.supportsV2Indicators(applHost)) {
+			if (!this.supportsV2Indicators(ctx)) {
 				// Publish the value
 				const valueV1 = IndicatorCCValues.valueV1;
-				this.setMetadata(applHost, valueV1);
-				this.setValue(applHost, valueV1, this.indicator0Value);
+				this.setMetadata(ctx, valueV1);
+				this.setValue(ctx, valueV1, this.indicator0Value);
 			} else {
 				if (this.isSinglecast()) {
 					// Don't!
-					applHost.controllerLog.logNode(this.nodeId, {
+					ctx.logNode(this.nodeId, {
 						message:
 							`ignoring V1 indicator report because the node supports V2 indicators`,
 						direction: "none",
@@ -1091,7 +1089,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		} else if (this.values) {
 			// Store the simple values first
 			for (const value of this.values) {
-				this.setIndicatorValue(applHost, value);
+				this.setIndicatorValue(ctx, value);
 			}
 
 			// Then group values into the convenience properties
@@ -1105,7 +1103,7 @@ export class IndicatorCCReport extends IndicatorCC {
 				if (timeout?.seconds) timeoutString += `${timeout.seconds}s`;
 
 				this.setValue(
-					applHost,
+					ctx,
 					IndicatorCCValues.timeout,
 					timeoutString,
 				);
@@ -1119,7 +1117,7 @@ export class IndicatorCCReport extends IndicatorCC {
 	public readonly values: IndicatorObject[] | undefined;
 
 	private setIndicatorValue(
-		applHost: ZWaveApplicationHost,
+		ctx: GetValueDB,
 		value: IndicatorObject,
 	): void {
 		// Manufacturer-defined indicators may need a custom label
@@ -1127,13 +1125,12 @@ export class IndicatorCCReport extends IndicatorCC {
 				value.indicatorId,
 			)
 			? this.getValue<string>(
-				applHost,
+				ctx,
 				IndicatorCCValues.indicatorDescription(value.indicatorId),
 			)
 			: undefined;
 
 		const metadata = getIndicatorMetadata(
-			applHost.configManager,
 			value.indicatorId,
 			value.propertyId,
 			overrideIndicatorLabel,
@@ -1148,11 +1145,11 @@ export class IndicatorCCReport extends IndicatorCC {
 			value.indicatorId,
 			value.propertyId,
 		);
-		this.setMetadata(applHost, valueV2, metadata);
-		this.setValue(applHost, valueV2, value.value);
+		this.setMetadata(ctx, valueV2, metadata);
+		this.setValue(ctx, valueV2, value.value);
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (this.values != undefined) {
 			// V2+
 			this.payload = Buffer.alloc(2 + 3 * this.values.length, 0);
@@ -1174,10 +1171,10 @@ export class IndicatorCCReport extends IndicatorCC {
 			// V1
 			this.payload = Buffer.from([this.indicator0Value ?? 0]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
 			message["indicator 0 value"] = this.indicator0Value;
@@ -1195,7 +1192,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			}`;
 		}
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message,
 		};
 	}
@@ -1210,10 +1207,9 @@ export interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			if (this.payload.length > 0) {
 				this.indicatorId = this.payload[0];
@@ -1225,16 +1221,16 @@ export class IndicatorCCGet extends IndicatorCC {
 
 	public indicatorId: number | undefined;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		if (this.indicatorId != undefined) {
 			this.payload = Buffer.from([this.indicatorId]);
 		}
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				indicator: getIndicatorName(this.indicatorId),
 			},
@@ -1252,12 +1248,11 @@ export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedReportOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -1281,13 +1276,13 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		if (this.indicatorId !== 0x00) {
 			// Remember which property IDs are supported
 			this.setValue(
-				applHost,
+				ctx,
 				IndicatorCCValues.supportedPropertyIDs(this.indicatorId),
 				this.supportedProperties,
 			);
@@ -1299,7 +1294,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly nextIndicatorId: number;
 	public readonly supportedProperties: readonly number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const bitmask = this.supportedProperties.length > 0
 			? encodeBitMask(this.supportedProperties, undefined, 0)
 			: Buffer.from([]);
@@ -1312,12 +1307,12 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			bitmask,
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				indicator: getIndicatorName(this.indicatorId),
 				"supported properties": `${
@@ -1354,12 +1349,11 @@ function testResponseForIndicatorSupportedGet(
 )
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.indicatorId = this.payload[0];
@@ -1370,14 +1364,14 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 
 	public indicatorId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.indicatorId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				indicator: getIndicatorName(this.indicatorId),
 			},
@@ -1394,12 +1388,11 @@ export interface IndicatorCCDescriptionReportOptions {
 @CCCommand(IndicatorCommand.DescriptionReport)
 export class IndicatorCCDescriptionReport extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCDescriptionReportOptions & CCCommandOptions),
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -1418,12 +1411,12 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 	public indicatorId: number;
 	public description: string;
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		if (this.description) {
 			this.setValue(
-				applHost,
+				ctx,
 				IndicatorCCValues.indicatorDescription(this.indicatorId),
 				this.description,
 			);
@@ -1432,18 +1425,18 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 		return true;
 	}
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		const description = Buffer.from(this.description, "utf8");
 		this.payload = Buffer.concat([
 			Buffer.from([this.indicatorId, description.length]),
 			description,
 		]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"indicator ID": this.indicatorId,
 				description: this.description || "(none)",
@@ -1471,12 +1464,11 @@ function testResponseForIndicatorDescriptionGet(
 )
 export class IndicatorCCDescriptionGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCDescriptionGetOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.indicatorId = this.payload[0];
@@ -1493,14 +1485,14 @@ export class IndicatorCCDescriptionGet extends IndicatorCC {
 
 	public indicatorId: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: CCEncodingContext): Buffer {
 		this.payload = Buffer.from([this.indicatorId]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
-	public toLogEntry(host?: ZWaveValueHost): MessageOrCCLogEntry {
+	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(host),
+			...super.toLogEntry(ctx),
 			message: {
 				"indicator ID": this.indicatorId,
 			},

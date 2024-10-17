@@ -36,14 +36,14 @@ test.serial(
 	"should not crash if a message is received that cannot be deserialized",
 	async (t) => {
 		const { driver, controller } = t.context;
-		const req = new ApplicationCommandRequest(driver, {
-			command: new WakeUpCCIntervalSet(driver, {
+		const req = new ApplicationCommandRequest({
+			command: new WakeUpCCIntervalSet({
 				nodeId: 1,
 				controllerNodeId: 2,
 				wakeUpInterval: 5,
 			}),
 		});
-		controller.serial.emitData(req.serialize());
+		controller.serial.emitData(req.serialize(driver));
 		await controller.expectHostACK(1000);
 		t.pass();
 	},

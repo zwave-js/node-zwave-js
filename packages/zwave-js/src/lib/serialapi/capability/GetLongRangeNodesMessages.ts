@@ -5,12 +5,12 @@ import {
 	encodeLongRangeNodeBitMask,
 	parseLongRangeNodeBitMask,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -27,12 +27,11 @@ export interface GetLongRangeNodesRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetLongRangeNodesRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetLongRangeNodesRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.segmentNumber = this.payload[0];
@@ -43,9 +42,9 @@ export class GetLongRangeNodesRequest extends Message {
 
 	public segmentNumber: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.from([this.segmentNumber]);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }
 
@@ -58,12 +57,11 @@ export interface GetLongRangeNodesResponseOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.GetLongRangeNodes)
 export class GetLongRangeNodesResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetLongRangeNodesResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			this.moreNodes = this.payload[0] != 0;
@@ -95,7 +93,7 @@ export class GetLongRangeNodesResponse extends Message {
 	public segmentNumber: number;
 	public nodeIds: readonly number[];
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(
 			3 + NUM_LR_NODEMASK_SEGMENT_BYTES,
 		);
@@ -110,7 +108,7 @@ export class GetLongRangeNodesResponse extends Message {
 		);
 		nodeBitMask.copy(this.payload, 3);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	private listStartNode(): number {

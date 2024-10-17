@@ -1,10 +1,10 @@
 import { MessagePriority } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -29,12 +29,11 @@ export interface GetControllerVersionResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetControllerVersionResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// The payload consists of a zero-terminated string and a uint8 for the controller type
@@ -49,12 +48,12 @@ export class GetControllerVersionResponse extends Message {
 	public controllerType: ZWaveLibraryTypes;
 	public libraryVersion: string;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from(`${this.libraryVersion}\0`, "ascii"),
 			Buffer.from([this.controllerType]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

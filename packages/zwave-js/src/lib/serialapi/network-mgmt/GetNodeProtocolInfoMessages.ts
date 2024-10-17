@@ -12,12 +12,12 @@ import {
 	parseNodeID,
 	parseNodeProtocolInfo,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -35,15 +35,14 @@ interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetNodeProtocolInfoRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetNodeProtocolInfoRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.requestedNodeId =
-				parseNodeID(this.payload, this.host.nodeIdType, 0).nodeId;
+				parseNodeID(this.payload, options.ctx.nodeIdType, 0).nodeId;
 		} else {
 			this.requestedNodeId = options.requestedNodeId;
 		}
@@ -53,9 +52,9 @@ export class GetNodeProtocolInfoRequest extends Message {
 	// but this is a message to the controller
 	public requestedNodeId: number;
 
-	public serialize(): Buffer {
-		this.payload = encodeNodeID(this.requestedNodeId, this.host.nodeIdType);
-		return super.serialize();
+	public serialize(ctx: MessageEncodingContext): Buffer {
+		this.payload = encodeNodeID(this.requestedNodeId, ctx.nodeIdType);
+		return super.serialize(ctx);
 	}
 }
 
@@ -66,12 +65,11 @@ interface GetNodeProtocolInfoResponseOptions
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| GetNodeProtocolInfoResponseOptions,
 	) {
-		super(host, options);
+		super(options);
 
 		if (gotDeserializationOptions(options)) {
 			// The context should contain the node ID the protocol info was requested for.
@@ -143,7 +141,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		const protocolInfo = encodeNodeProtocolInfo({
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,
@@ -165,6 +163,6 @@ export class GetNodeProtocolInfoResponse extends Message {
 			]),
 		]);
 
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 }

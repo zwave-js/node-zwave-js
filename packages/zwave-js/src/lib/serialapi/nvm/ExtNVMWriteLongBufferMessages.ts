@@ -4,12 +4,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
 	type MessageDeserializationOptions,
+	type MessageEncodingContext,
 	MessageType,
 	expectedResponse,
 	gotDeserializationOptions,
@@ -30,12 +30,11 @@ export interface ExtNVMWriteLongBufferRequestOptions
 @expectedResponse(FunctionType.ExtNVMWriteLongBuffer)
 export class ExtNVMWriteLongBufferRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ExtNVMWriteLongBufferRequestOptions,
 	) {
-		super(host, options);
+		super(options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -62,12 +61,12 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 	public offset: number;
 	public buffer: Buffer;
 
-	public serialize(): Buffer {
+	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.allocUnsafe(5 + this.buffer.length);
 		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 		this.buffer.copy(this.payload, 5);
-		return super.serialize();
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -86,10 +85,9 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.ExtNVMWriteLongBuffer)
 export class ExtNVMWriteLongBufferResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
-		super(host, options);
+		super(options);
 		this.success = this.payload[0] !== 0;
 	}
 

@@ -12,10 +12,7 @@ import {
 	EntryControlEventTypes,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
 import test from "ava";
-
-const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -45,9 +42,10 @@ test("the Notification command should deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCNotification(host, {
+	const cc = new EntryControlCCNotification({
 		nodeId: 1,
 		data,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.sequenceNumber, 1);
@@ -57,7 +55,7 @@ test("the Notification command should deserialize correctly", (t) => {
 });
 
 test("the ConfigurationGet command should serialize correctly", (t) => {
-	const cc = new EntryControlCCConfigurationGet(host, {
+	const cc = new EntryControlCCConfigurationGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -65,11 +63,11 @@ test("the ConfigurationGet command should serialize correctly", (t) => {
 			EntryControlCommand.ConfigurationGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationSet command should serialize correctly", (t) => {
-	const cc = new EntryControlCCConfigurationSet(host, {
+	const cc = new EntryControlCCConfigurationSet({
 		nodeId: 1,
 		keyCacheSize: 1,
 		keyCacheTimeout: 2,
@@ -81,7 +79,7 @@ test("the ConfigurationSet command should serialize correctly", (t) => {
 			0x2,
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the ConfigurationReport command should be deserialize correctly", (t) => {
@@ -93,9 +91,10 @@ test("the ConfigurationReport command should be deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCConfigurationReport(host, {
+	const cc = new EntryControlCCConfigurationReport({
 		nodeId: 1,
 		data,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.keyCacheSize, 1);
@@ -103,7 +102,7 @@ test("the ConfigurationReport command should be deserialize correctly", (t) => {
 });
 
 test("the EventSupportedGet command should serialize correctly", (t) => {
-	const cc = new EntryControlCCEventSupportedGet(host, {
+	const cc = new EntryControlCCEventSupportedGet({
 		nodeId: 1,
 	});
 	const expected = buildCCBuffer(
@@ -111,7 +110,7 @@ test("the EventSupportedGet command should serialize correctly", (t) => {
 			EntryControlCommand.EventSupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the EventSupportedReport command should be deserialize correctly", (t) => {
@@ -132,9 +131,10 @@ test("the EventSupportedReport command should be deserialize correctly", (t) => 
 		]),
 	);
 
-	const cc = new EntryControlCCEventSupportedReport(host, {
+	const cc = new EntryControlCCEventSupportedReport({
 		nodeId: 1,
 		data,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedDataTypes, [EntryControlDataTypes.ASCII]);
@@ -151,13 +151,13 @@ test("the EventSupportedReport command should be deserialize correctly", (t) => 
 });
 
 test("the KeySupportedGet command should serialize correctly", (t) => {
-	const cc = new EntryControlCCKeySupportedGet(host, { nodeId: 1 });
+	const cc = new EntryControlCCKeySupportedGet({ nodeId: 1 });
 	const expected = buildCCBuffer(
 		Buffer.from([
 			EntryControlCommand.KeySupportedGet, // CC Command
 		]),
 	);
-	t.deepEqual(cc.serialize(), expected);
+	t.deepEqual(cc.serialize({} as any), expected);
 });
 
 test("the KeySupportedReport command should be deserialize correctly", (t) => {
@@ -169,9 +169,10 @@ test("the KeySupportedReport command should be deserialize correctly", (t) => {
 		]),
 	);
 
-	const cc = new EntryControlCCKeySupportedReport(host, {
+	const cc = new EntryControlCCKeySupportedReport({
 		nodeId: 1,
 		data,
+		context: {} as any,
 	});
 
 	t.deepEqual(cc.supportedKeys, [1, 3, 4, 6]);
