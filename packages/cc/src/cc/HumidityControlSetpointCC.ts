@@ -17,11 +17,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -35,10 +31,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -593,8 +589,8 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		this.scale = scale;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		const scale = getScale(this.scale);
 
@@ -602,22 +598,22 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 			this.type,
 		);
 		const existingMetadata = this.getMetadata<ValueMetadataNumeric>(
-			applHost,
+			ctx,
 			setpointValue,
 		);
 
 		// Update the metadata when it is missing or the unit has changed
 		if (existingMetadata?.unit !== scale.unit) {
-			this.setMetadata(applHost, setpointValue, {
+			this.setMetadata(ctx, setpointValue, {
 				...(existingMetadata ?? setpointValue.meta),
 				unit: scale.unit,
 			});
 		}
-		this.setValue(applHost, setpointValue, this._value);
+		this.setValue(ctx, setpointValue, this._value);
 
 		// Remember the device-preferred setpoint scale so it can be used in SET commands
 		this.setValue(
-			applHost,
+			ctx,
 			HumidityControlSetpointCCValues.setpointScale(this.type),
 			this.scale,
 		);
@@ -858,14 +854,14 @@ export class HumidityControlSetpointCCCapabilitiesReport
 			parseFloatWithScale(this.payload.subarray(1 + bytesRead)));
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Predefine the metadata
 		const setpointValue = HumidityControlSetpointCCValues.setpoint(
 			this.type,
 		);
-		this.setMetadata(applHost, setpointValue, {
+		this.setMetadata(ctx, setpointValue, {
 			...setpointValue.meta,
 			min: this._minValue,
 			max: this._maxValue,

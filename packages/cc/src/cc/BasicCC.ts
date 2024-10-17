@@ -24,7 +24,6 @@ import type {
 	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { type AllOrNone, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -41,10 +40,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -457,14 +456,14 @@ export class BasicCCReport extends BasicCC {
 	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
+	public persistValues(ctx: PersistValuesContext): boolean {
 		// Basic CC Report persists its values itself, since there are some
 		// specific rules when which value may be persisted.
 		// These rules are essentially encoded in the getDefinedValueIDs overload,
 		// so we simply reuse that here.
 
 		// Figure out which values may be persisted.
-		const definedValueIDs = this.getDefinedValueIDs(applHost);
+		const definedValueIDs = this.getDefinedValueIDs(ctx);
 		const shouldPersistCurrentValue = definedValueIDs.some((vid) =>
 			BasicCCValues.currentValue.is(vid)
 		);
@@ -477,21 +476,21 @@ export class BasicCCReport extends BasicCC {
 
 		if (this.currentValue !== undefined && shouldPersistCurrentValue) {
 			this.setValue(
-				applHost,
+				ctx,
 				BasicCCValues.currentValue,
 				this.currentValue,
 			);
 		}
 		if (this.targetValue !== undefined && shouldPersistTargetValue) {
 			this.setValue(
-				applHost,
+				ctx,
 				BasicCCValues.targetValue,
 				this.targetValue,
 			);
 		}
 		if (this.duration !== undefined && shouldPersistDuration) {
 			this.setValue(
-				applHost,
+				ctx,
 				BasicCCValues.duration,
 				this.duration,
 			);

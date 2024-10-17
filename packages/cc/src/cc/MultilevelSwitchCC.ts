@@ -13,11 +13,7 @@ import {
 	parseMaybeNumber,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -33,10 +29,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -878,9 +874,9 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	@ccValue(MultilevelSwitchCCValues.switchType)
 	public readonly switchType: SwitchType;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
-		this.createMetadataForLevelChangeActions(applHost, this.switchType);
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
+		this.createMetadataForLevelChangeActions(ctx, this.switchType);
 		return true;
 	}
 

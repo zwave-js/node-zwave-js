@@ -11,20 +11,16 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -368,18 +364,18 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		};
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 		// Create metadata if it does not exist
-		this.createMetadataForSensorType(applHost, this.sensorType);
+		this.createMetadataForSensorType(ctx, this.sensorType);
 
 		const stateValue = AlarmSensorCCValues.state(this.sensorType);
 		const severityValue = AlarmSensorCCValues.severity(this.sensorType);
 		const durationValue = AlarmSensorCCValues.duration(this.sensorType);
 
-		this.setValue(applHost, stateValue, this.state);
-		this.setValue(applHost, severityValue, this.severity);
-		this.setValue(applHost, durationValue, this.duration);
+		this.setValue(ctx, stateValue, this.state);
+		this.setValue(ctx, severityValue, this.severity);
+		this.setValue(ctx, durationValue, this.duration);
 
 		return true;
 	}
@@ -460,11 +456,11 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return this._supportedSensorTypes;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 		// Create metadata for each sensor type
 		for (const type of this._supportedSensorTypes) {
-			this.createMetadataForSensorType(applHost, type);
+			this.createMetadataForSensorType(ctx, type);
 		}
 		return true;
 	}

@@ -56,10 +56,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -1651,16 +1651,16 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	public valueSize: number;
 	private valueFormat?: ConfigValueFormat; // only used for serialization
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
-		const ccVersion = getEffectiveCCVersion(applHost, this);
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 
 		// This parameter may be a partial param in the following cases:
 		// * a config file defines it as such
 		// * it was reported by the device as a bit field
 		const partialParams = this.getPartialParamInfos(
-			applHost,
+			ctx,
 			this.parameter,
 		);
 
@@ -1672,19 +1672,19 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		} else {
 			// Check if the initial assumption of SignedInteger holds true
 			const oldParamInformation = this.getParamInformation(
-				applHost,
+				ctx,
 				this.parameter,
 			);
 			cachedValueFormat = oldParamInformation.format;
 
 			// On older CC versions, these reports may be the only way we can retrieve the value size
 			// Therefore we store it here
-			this.extendParamInformation(applHost, this.parameter, undefined, {
+			this.extendParamInformation(ctx, this.parameter, undefined, {
 				valueSize: this.valueSize,
 			});
 			if (
 				ccVersion < 3
-				&& !this.paramExistsInConfigFile(applHost, this.parameter)
+				&& !this.paramExistsInConfigFile(ctx, this.parameter)
 				&& oldParamInformation.min == undefined
 				&& oldParamInformation.max == undefined
 			) {
@@ -1692,7 +1692,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 					|| oldParamInformation.format
 						=== ConfigValueFormat.SignedInteger;
 				this.extendParamInformation(
-					applHost,
+					ctx,
 					this.parameter,
 					undefined,
 					getIntegerLimits(this.valueSize as any, isSigned),
@@ -1719,7 +1719,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			for (const param of partialParams) {
 				if (typeof param.propertyKey === "number") {
 					this.setValue(
-						applHost,
+						ctx,
 						ConfigurationCCValues.paramInformation(
 							this.parameter,
 							param.propertyKey,
@@ -1738,7 +1738,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		} else {
 			// This is a single param
 			this.setValue(
-				applHost,
+				ctx,
 				ConfigurationCCValues.paramInformation(this.parameter),
 				this.value,
 			);
@@ -2154,15 +2154,15 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Store every received parameter
 		// eslint-disable-next-line prefer-const
 		for (let [parameter, value] of this._values.entries()) {
 			// Check if the initial assumption of SignedInteger holds true
 			const oldParamInformation = this.getParamInformation(
-				applHost,
+				ctx,
 				parameter,
 			);
 			if (
@@ -2180,7 +2180,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 			}
 
 			this.setValue(
-				applHost,
+				ctx,
 				ConfigurationCCValues.paramInformation(parameter),
 				value,
 			);
@@ -2333,19 +2333,19 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	public name: string;
 	public readonly reportsToFollow: number;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Bitfield parameters that are not documented in a config file
 		// are split into multiple partial parameters. We need to set the name for
 		// all of them.
 		const partialParams = this.getPartialParamInfos(
-			applHost,
+			ctx,
 			this.parameter,
 		);
 
 		if (partialParams.length === 0) {
-			this.extendParamInformation(applHost, this.parameter, undefined, {
+			this.extendParamInformation(ctx, this.parameter, undefined, {
 				label: this.name,
 			});
 		} else {
@@ -2360,7 +2360,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 				if (bitNumber != undefined) {
 					label += ` (bit ${bitNumber})`;
 				}
-				this.extendParamInformation(applHost, paramNumber, bitMask, {
+				this.extendParamInformation(ctx, paramNumber, bitMask, {
 					label,
 				});
 			}
@@ -2479,15 +2479,15 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public info: string;
 	public readonly reportsToFollow: number;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Bitfield parameters that are not documented in a config file
 		// are split into multiple partial parameters. We need to set the description for
 		// all of them. However, these can get very long, so we put the reported
 		// description on the first partial param, and refer to it from the others
 		const partialParams = this.getPartialParamInfos(
-			applHost,
+			ctx,
 			this.parameter,
 		).sort(
 			(a, b) =>
@@ -2496,7 +2496,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		);
 
 		if (partialParams.length === 0) {
-			this.extendParamInformation(applHost, this.parameter, undefined, {
+			this.extendParamInformation(ctx, this.parameter, undefined, {
 				description: this.info,
 			});
 		} else {
@@ -2511,7 +2511,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 					? `Refer to ${firstParamLabel}`
 					: this.info;
 
-				this.extendParamInformation(applHost, paramNumber, bitMask, {
+				this.extendParamInformation(ctx, paramNumber, bitMask, {
 					description,
 				});
 
@@ -2519,7 +2519,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 				// following partial params
 				if (firstParamLabel == undefined) {
 					firstParamLabel =
-						this.getParamInformation(applHost, paramNumber, bitMask)
+						this.getParamInformation(ctx, paramNumber, bitMask)
 							.label ?? `parameter ${paramNumber} - ${bitMask}`;
 				}
 			}
@@ -2712,8 +2712,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// If we actually received parameter info, store it
 		if (this.valueSize > 0) {
@@ -2732,7 +2732,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 
 			if (this.valueFormat !== ConfigValueFormat.BitField) {
 				// Do not override param information from a config file
-				if (!this.paramExistsInConfigFile(applHost, this.parameter)) {
+				if (!this.paramExistsInConfigFile(ctx, this.parameter)) {
 					const paramInfo = stripUndefined(
 						{
 							...baseInfo,
@@ -2743,7 +2743,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 					);
 
 					this.extendParamInformation(
-						applHost,
+						ctx,
 						this.parameter,
 						undefined,
 						paramInfo,
@@ -2759,7 +2759,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 						!!(mask & bits)
 						// Do not override param information from a config file
 						&& !this.paramExistsInConfigFile(
-							applHost,
+							ctx,
 							this.parameter,
 							mask,
 						)
@@ -2774,7 +2774,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 						);
 
 						this.extendParamInformation(
-							applHost,
+							ctx,
 							this.parameter,
 							mask,
 							paramInfo,

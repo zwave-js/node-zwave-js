@@ -14,11 +14,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -33,10 +29,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -318,12 +314,12 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// In case the interview is not yet completed, we still create some basic metadata
 		const sceneValue = CentralSceneCCValues.scene(this.sceneNumber);
-		this.ensureMetadata(applHost, sceneValue);
+		this.ensureMetadata(ctx, sceneValue);
 
 		// The spec behavior is pretty complicated, so we cannot just store
 		// the value and call it a day. Handling of these notifications will
@@ -392,13 +388,13 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Create/extend metadata for all scenes
 		for (let i = 1; i <= this.sceneCount; i++) {
 			const sceneValue = CentralSceneCCValues.scene(i);
-			this.setMetadata(applHost, sceneValue, {
+			this.setMetadata(ctx, sceneValue, {
 				...sceneValue.meta,
 				states: enumValuesToMetadataStates(
 					CentralSceneKeys,

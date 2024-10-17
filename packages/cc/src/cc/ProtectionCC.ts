@@ -14,11 +14,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -33,10 +29,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -616,12 +612,12 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// update metadata (partially) for the local and rf values
 		const localStateValue = ProtectionCCValues.localProtectionState;
-		this.setMetadata(applHost, localStateValue, {
+		this.setMetadata(ctx, localStateValue, {
 			...localStateValue.meta,
 			states: enumValuesToMetadataStates(
 				LocalProtectionState,
@@ -630,7 +626,7 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		});
 
 		const rfStateValue = ProtectionCCValues.rfProtectionState;
-		this.setMetadata(applHost, rfStateValue, {
+		this.setMetadata(ctx, rfStateValue, {
 			...rfStateValue.meta,
 			states: enumValuesToMetadataStates(
 				RFProtectionState,

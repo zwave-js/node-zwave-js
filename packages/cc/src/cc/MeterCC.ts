@@ -35,7 +35,6 @@ import type {
 	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
@@ -60,10 +59,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -951,17 +950,17 @@ export class MeterCCReport extends MeterCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
-		const ccVersion = getEffectiveCCVersion(applHost, this);
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 
 		const meter = getMeter(this.type);
 		const scale = getMeterScale(this.type, this.scale)
 			?? getUnknownMeterScale(this.scale);
 
 		// Filter out unknown meter types and scales, unless the strict validation is disabled
-		const measurementValidation = !applHost.getDeviceConfig?.(
+		const measurementValidation = !ctx.getDeviceConfig?.(
 			this.nodeId as number,
 		)?.compat?.disableStrictMeasurementValidation;
 
@@ -976,7 +975,7 @@ export class MeterCCReport extends MeterCC {
 			// Filter out unsupported meter types, scales and rate types if possible
 			if (ccVersion >= 2) {
 				const expectedType = this.getValue<number>(
-					applHost,
+					ctx,
 					MeterCCValues.type,
 				);
 				if (expectedType != undefined) {
@@ -986,7 +985,7 @@ export class MeterCCReport extends MeterCC {
 				}
 
 				const supportedScales = this.getValue<number[]>(
-					applHost,
+					ctx,
 					MeterCCValues.supportedScales,
 				);
 				if (supportedScales?.length) {
@@ -996,7 +995,7 @@ export class MeterCCReport extends MeterCC {
 				}
 
 				const supportedRateTypes = this.getValue<RateType[]>(
-					applHost,
+					ctx,
 					MeterCCValues.supportedRateTypes,
 				);
 				if (supportedRateTypes?.length) {
@@ -1017,7 +1016,7 @@ export class MeterCCReport extends MeterCC {
 			this.rateType,
 			this.scale,
 		);
-		this.setMetadata(applHost, valueValue, {
+		this.setMetadata(ctx, valueValue, {
 			...valueValue.meta,
 			label: getValueLabel(this.type, this.scale, this.rateType),
 			unit: scale.label,
@@ -1027,7 +1026,7 @@ export class MeterCCReport extends MeterCC {
 				rateType: this.rateType,
 			},
 		});
-		this.setValue(applHost, valueValue, this.value);
+		this.setValue(ctx, valueValue, this.value);
 
 		return true;
 	}
@@ -1273,15 +1272,15 @@ export class MeterCCSupportedReport extends MeterCC {
 	@ccValue(MeterCCValues.supportedRateTypes)
 	public readonly supportedRateTypes: readonly RateType[];
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 		if (!this.supportsReset) return true;
 
-		const ccVersion = getEffectiveCCVersion(applHost, this);
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 
 		// Create reset values
 		if (ccVersion < 6) {
-			this.ensureMetadata(applHost, MeterCCValues.resetAll);
+			this.ensureMetadata(ctx, MeterCCValues.resetAll);
 		} else {
 			for (const scale of this.supportedScales) {
 				// Only accumulated values can be reset
@@ -1293,7 +1292,7 @@ export class MeterCCSupportedReport extends MeterCC {
 						rateType,
 						scale,
 					);
-					this.ensureMetadata(applHost, resetSingleValue, {
+					this.ensureMetadata(ctx, resetSingleValue, {
 						...resetSingleValue.meta,
 						label: `Reset ${
 							getValueLabel(

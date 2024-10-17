@@ -14,7 +14,6 @@ import type {
 	CCEncodingContext,
 	GetDeviceConfig,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -31,8 +30,10 @@ import {
 } from "../../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	type CommandClassDeserializationOptions,
+	type InterviewContext,
+	type PersistValuesContext,
+	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../../lib/CommandClass";
 import { expectedCCResponse } from "../../lib/CommandClassDecorators";
@@ -247,33 +248,33 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 	public fibaroCCCommand?: number;
 
 	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: InterviewContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
 		// Iterate through all supported Fibaro CCs and interview them
-		const supportedFibaroCCIDs = getSupportedFibaroCCIDs(applHost, node.id);
+		const supportedFibaroCCIDs = getSupportedFibaroCCIDs(ctx, node.id);
 		for (const ccId of supportedFibaroCCIDs) {
 			const SubConstructor = getFibaroCCConstructor(ccId);
 			if (SubConstructor) {
 				const instance = new SubConstructor({ nodeId: node.id });
-				await instance.interview(applHost);
+				await instance.interview(ctx);
 			}
 		}
 	}
 
 	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
+		ctx: RefreshValuesContext,
 	): Promise<void> {
-		const node = this.getNode(applHost)!;
+		const node = this.getNode(ctx)!;
 
 		// Iterate through all supported Fibaro CCs and let them refresh their values
-		const supportedFibaroCCIDs = getSupportedFibaroCCIDs(applHost, node.id);
+		const supportedFibaroCCIDs = getSupportedFibaroCCIDs(ctx, node.id);
 		for (const ccId of supportedFibaroCCIDs) {
 			const SubConstructor = getFibaroCCConstructor(ccId);
 			if (SubConstructor) {
 				const instance = new SubConstructor({ nodeId: node.id });
-				await instance.refreshValues(applHost);
+				await instance.refreshValues(ctx);
 			}
 		}
 	}
@@ -325,31 +326,27 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 		}
 	}
 
-	public async interview(
-		applHost: ZWaveApplicationHost<CCNode>,
-	): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async interview(ctx: InterviewContext): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing Fibaro Venetian Blind CC...`,
 			direction: "none",
 		});
 
 		// Nothing special, just get the values
-		await this.refreshValues(applHost);
+		await this.refreshValues(ctx);
 	}
 
-	public async refreshValues(
-		applHost: ZWaveApplicationHost<CCNode>,
-	): Promise<void> {
-		const node = this.getNode(applHost)!;
+	public async refreshValues(ctx: RefreshValuesContext): Promise<void> {
+		const node = this.getNode(ctx)!;
 
-		applHost.logNode(node.id, {
+		ctx.logNode(node.id, {
 			message: "Requesting venetian blind position and tilt...",
 			direction: "outbound",
 		});
-		const resp = await applHost.sendCommand<FibaroVenetianBlindCCReport>(
+		const resp = await ctx.sendCommand<FibaroVenetianBlindCCReport>(
 			new FibaroVenetianBlindCCGet({
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
@@ -359,7 +356,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 			const logMessage = `received venetian blind state:
 position: ${resp.position}
 tilt:     ${resp.tilt}`;
-			applHost.logNode(node.id, {
+			ctx.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -454,9 +451,9 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
+		const valueDB = this.getValueDB(ctx);
 
 		if (this.position != undefined) {
 			const positionValueId = getFibaroVenetianBlindPositionValueId(

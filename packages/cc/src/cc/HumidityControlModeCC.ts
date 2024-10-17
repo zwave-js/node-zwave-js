@@ -12,11 +12,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -30,10 +26,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -368,12 +364,12 @@ export class HumidityControlModeCCSupportedReport
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Use this information to create the metadata for the mode property
 		const modeValue = HumidityControlModeCCValues.mode;
-		this.setMetadata(applHost, modeValue, {
+		this.setMetadata(ctx, modeValue, {
 			...modeValue.meta,
 			states: enumValuesToMetadataStates(
 				HumidityControlMode,

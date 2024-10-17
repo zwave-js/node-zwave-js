@@ -41,6 +41,7 @@ import type {
 	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
+	LogNode,
 	LookupManufacturer,
 	ZWaveApplicationHost,
 } from "@zwave-js/host";
@@ -162,6 +163,15 @@ export type InterviewContext =
 export type RefreshValuesContext = CCAPIHost<
 	CCAPINode & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
 >;
+
+export type PersistValuesContext =
+	& GetValueDB
+	& GetSupportedCCVersion
+	& GetDeviceConfig
+	& GetNode<
+		NodeId & GetEndpoint<EndpointId & SupportsCC & ControlsCC>
+	>
+	& LogNode;
 
 export function getEffectiveCCVersion(
 	ctx: GetSupportedCCVersion,
@@ -961,17 +971,17 @@ export class CommandClass implements CCId {
 	 * Persists all values for this CC instance into the value DB which are annotated with @ccValue.
 	 * Returns `true` if the process succeeded, `false` if the value DB cannot be accessed.
 	 */
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
+	public persistValues(ctx: PersistValuesContext): boolean {
 		let valueDB: ValueDB;
 		try {
-			valueDB = this.getValueDB(applHost);
+			valueDB = this.getValueDB(ctx);
 		} catch {
 			return false;
 		}
 
 		// To determine which value IDs to expose, we need to know the CC version
 		// that we're doing this for
-		const supportedVersion = applHost.getSupportedCCVersion(
+		const supportedVersion = ctx.getSupportedCCVersion(
 			this.ccId,
 			// Values are only persisted for singlecast, so we know nodeId is a number
 			this.nodeId as number,
@@ -1002,7 +1012,7 @@ export class CommandClass implements CCId {
 					// ... or if we know which CC version the node supports
 					// and the value may be automatically created
 					|| (supportedVersion >= value.options.minVersion
-						&& this.shouldAutoCreateValue(applHost, value)));
+						&& this.shouldAutoCreateValue(ctx, value)));
 
 			if (createMetadata && !valueDB.hasMetadata(valueId)) {
 				valueDB.setMetadata(valueId, value.meta);

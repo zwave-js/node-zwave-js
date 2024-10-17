@@ -11,11 +11,7 @@ import {
 	getCCName,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -31,10 +27,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -436,8 +432,8 @@ export class SceneActuatorConfigurationCCReport
 	public readonly level?: number;
 	public readonly dimmingDuration?: Duration;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Do not persist values for an inactive scene
 		if (
@@ -451,14 +447,14 @@ export class SceneActuatorConfigurationCCReport
 		const levelValue = SceneActuatorConfigurationCCValues.level(
 			this.sceneId,
 		);
-		this.ensureMetadata(applHost, levelValue);
+		this.ensureMetadata(ctx, levelValue);
 
 		const dimmingDurationValue = SceneActuatorConfigurationCCValues
 			.dimmingDuration(this.sceneId);
-		this.ensureMetadata(applHost, dimmingDurationValue);
+		this.ensureMetadata(ctx, dimmingDurationValue);
 
-		this.setValue(applHost, levelValue, this.level);
-		this.setValue(applHost, dimmingDurationValue, this.dimmingDuration);
+		this.setValue(ctx, levelValue, this.level);
+		this.setValue(ctx, dimmingDurationValue, this.dimmingDuration);
 
 		return true;
 	}

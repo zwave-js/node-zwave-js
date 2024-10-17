@@ -15,11 +15,7 @@ import {
 	parseFloatWithScale,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -36,10 +32,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -1728,51 +1724,51 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public readonly errorHighFlow?: boolean;
 	public readonly errorLowFlow?: boolean;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// connected
 		const valveConnectedValue = IrrigationCCValues.valveConnected(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, valveConnectedValue);
-		this.setValue(applHost, valveConnectedValue, this.connected);
+		this.ensureMetadata(ctx, valveConnectedValue);
+		this.setValue(ctx, valveConnectedValue, this.connected);
 
 		// nominalCurrent
 		const nominalCurrentValue = IrrigationCCValues.nominalCurrent(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, nominalCurrentValue);
-		this.setValue(applHost, nominalCurrentValue, this.nominalCurrent);
+		this.ensureMetadata(ctx, nominalCurrentValue);
+		this.setValue(ctx, nominalCurrentValue, this.nominalCurrent);
 
 		// errorShortCircuit
 		const errorShortCircuitValue = IrrigationCCValues.errorShortCircuit(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, errorShortCircuitValue);
-		this.setValue(applHost, errorShortCircuitValue, this.errorShortCircuit);
+		this.ensureMetadata(ctx, errorShortCircuitValue);
+		this.setValue(ctx, errorShortCircuitValue, this.errorShortCircuit);
 
 		// errorHighCurrent
 		const errorHighCurrentValue = IrrigationCCValues.errorHighCurrent(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, errorHighCurrentValue);
-		this.setValue(applHost, errorHighCurrentValue, this.errorHighCurrent);
+		this.ensureMetadata(ctx, errorHighCurrentValue);
+		this.setValue(ctx, errorHighCurrentValue, this.errorHighCurrent);
 
 		// errorLowCurrent
 		const errorLowCurrentValue = IrrigationCCValues.errorLowCurrent(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, errorLowCurrentValue);
-		this.setValue(applHost, errorLowCurrentValue, this.errorLowCurrent);
+		this.ensureMetadata(ctx, errorLowCurrentValue);
+		this.setValue(ctx, errorLowCurrentValue, this.errorLowCurrent);
 
 		if (this.errorMaximumFlow != undefined) {
 			const errorMaximumFlowValue = IrrigationCCValues.errorMaximumFlow(
 				this.valveId,
 			);
-			this.ensureMetadata(applHost, errorMaximumFlowValue);
+			this.ensureMetadata(ctx, errorMaximumFlowValue);
 			this.setValue(
-				applHost,
+				ctx,
 				errorMaximumFlowValue,
 				this.errorMaximumFlow,
 			);
@@ -1782,16 +1778,16 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 			const errorHighFlowValue = IrrigationCCValues.errorHighFlow(
 				this.valveId,
 			);
-			this.ensureMetadata(applHost, errorHighFlowValue);
-			this.setValue(applHost, errorHighFlowValue, this.errorHighFlow);
+			this.ensureMetadata(ctx, errorHighFlowValue);
+			this.setValue(ctx, errorHighFlowValue, this.errorHighFlow);
 		}
 
 		if (this.errorLowFlow != undefined) {
 			const errorLowFlowValue = IrrigationCCValues.errorLowFlow(
 				this.valveId,
 			);
-			this.ensureMetadata(applHost, errorLowFlowValue);
-			this.setValue(applHost, errorLowFlowValue, this.errorLowFlow);
+			this.ensureMetadata(ctx, errorLowFlowValue);
+			this.setValue(ctx, errorLowFlowValue, this.errorLowFlow);
 		}
 
 		return true;
@@ -2013,15 +2009,15 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		this.useMoistureSensor = !!(this.payload[offset] & 0b10);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// nominalCurrentHighThreshold
 		const nominalCurrentHighThresholdValue = IrrigationCCValues
 			.nominalCurrentHighThreshold(this.valveId);
-		this.ensureMetadata(applHost, nominalCurrentHighThresholdValue);
+		this.ensureMetadata(ctx, nominalCurrentHighThresholdValue);
 		this.setValue(
-			applHost,
+			ctx,
 			nominalCurrentHighThresholdValue,
 			this.nominalCurrentHighThreshold,
 		);
@@ -2029,45 +2025,45 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		// nominalCurrentLowThreshold
 		const nominalCurrentLowThresholdValue = IrrigationCCValues
 			.nominalCurrentLowThreshold(this.valveId);
-		this.ensureMetadata(applHost, nominalCurrentLowThresholdValue);
+		this.ensureMetadata(ctx, nominalCurrentLowThresholdValue);
 		this.setValue(
-			applHost,
+			ctx,
 			nominalCurrentLowThresholdValue,
 			this.nominalCurrentLowThreshold,
 		);
 
 		// maximumFlow
 		const maximumFlowValue = IrrigationCCValues.maximumFlow(this.valveId);
-		this.ensureMetadata(applHost, maximumFlowValue);
-		this.setValue(applHost, maximumFlowValue, this.maximumFlow);
+		this.ensureMetadata(ctx, maximumFlowValue);
+		this.setValue(ctx, maximumFlowValue, this.maximumFlow);
 
 		// highFlowThreshold
 		const highFlowThresholdValue = IrrigationCCValues.highFlowThreshold(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, highFlowThresholdValue);
-		this.setValue(applHost, highFlowThresholdValue, this.highFlowThreshold);
+		this.ensureMetadata(ctx, highFlowThresholdValue);
+		this.setValue(ctx, highFlowThresholdValue, this.highFlowThreshold);
 
 		// lowFlowThreshold
 		const lowFlowThresholdValue = IrrigationCCValues.lowFlowThreshold(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, lowFlowThresholdValue);
-		this.setValue(applHost, lowFlowThresholdValue, this.lowFlowThreshold);
+		this.ensureMetadata(ctx, lowFlowThresholdValue);
+		this.setValue(ctx, lowFlowThresholdValue, this.lowFlowThreshold);
 
 		// useRainSensor
 		const useRainSensorValue = IrrigationCCValues.useRainSensor(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, useRainSensorValue);
-		this.setValue(applHost, useRainSensorValue, this.useRainSensor);
+		this.ensureMetadata(ctx, useRainSensorValue);
+		this.setValue(ctx, useRainSensorValue, this.useRainSensor);
 
 		// useMoistureSensor
 		const useMoistureSensorValue = IrrigationCCValues.useMoistureSensor(
 			this.valveId,
 		);
-		this.ensureMetadata(applHost, useMoistureSensorValue);
-		this.setValue(applHost, useMoistureSensorValue, this.useMoistureSensor);
+		this.ensureMetadata(ctx, useMoistureSensorValue);
+		this.setValue(ctx, useMoistureSensorValue, this.useMoistureSensor);
 
 		return true;
 	}

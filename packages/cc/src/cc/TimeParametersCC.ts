@@ -17,7 +17,6 @@ import type {
 	CCEncodingContext,
 	GetDeviceConfig,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -31,10 +30,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -278,16 +277,16 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
+	public persistValues(ctx: PersistValuesContext): boolean {
 		// If necessary, fix the date and time before persisting it
-		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
+		const local = shouldUseLocalTime(ctx, this.getEndpoint(ctx)!);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
 			this._dateAndTime = segmentsToDate(segments, local);
 		}
 
-		return super.persistValues(applHost);
+		return super.persistValues(ctx);
 	}
 
 	private _dateAndTime: Date;
@@ -356,18 +355,18 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
+	public persistValues(ctx: PersistValuesContext): boolean {
 		// We do not actually persist anything here, but we need access to the node
 		// in order to interpret the date segments correctly
 
-		const local = shouldUseLocalTime(applHost, this.getEndpoint(applHost)!);
+		const local = shouldUseLocalTime(ctx, this.getEndpoint(ctx)!);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
 			this.dateAndTime = segmentsToDate(segments, local);
 		}
 
-		return super.persistValues(applHost);
+		return super.persistValues(ctx);
 	}
 
 	public dateAndTime: Date;

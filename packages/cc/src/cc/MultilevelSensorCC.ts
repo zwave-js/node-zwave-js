@@ -37,7 +37,6 @@ import type {
 	GetUserPreferences,
 	GetValueDB,
 	LogNode,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -50,11 +49,11 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	type CCResponsePredicate,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -670,8 +669,8 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		const sensor = getSensor(this.type);
 		const scale = getSensorScale(
@@ -680,17 +679,17 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		) ?? getUnknownScale(this.scale);
 
 		// Filter out unknown sensor types and scales, unless the strict validation is disabled
-		const measurementValidation = !applHost.getDeviceConfig?.(
+		const measurementValidation = !ctx.getDeviceConfig?.(
 			this.nodeId as number,
 		)?.compat?.disableStrictMeasurementValidation;
 
-		const ccVersion = getEffectiveCCVersion(applHost, this);
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 
 		if (measurementValidation) {
 			// Filter out unsupported sensor types and scales if possible
 			if (ccVersion >= 5) {
 				const supportedSensorTypes = this.getValue<number[]>(
-					applHost,
+					ctx,
 					MultilevelSensorCCValues.supportedSensorTypes,
 				);
 				if (supportedSensorTypes?.length) {
@@ -702,7 +701,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				}
 
 				const supportedScales = this.getValue<number[]>(
-					applHost,
+					ctx,
 					MultilevelSensorCCValues.supportedScales(this.type),
 				);
 				if (supportedScales?.length) {
@@ -729,7 +728,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		const sensorName = getSensorName(this.type);
 		const sensorValue = MultilevelSensorCCValues.value(sensorName);
 
-		this.setMetadata(applHost, sensorValue, {
+		this.setMetadata(ctx, sensorValue, {
 			...sensorValue.meta,
 			unit: scale.unit,
 			ccSpecific: {
@@ -737,7 +736,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				scale: scale.key,
 			},
 		});
-		this.setValue(applHost, sensorValue, this.value);
+		this.setValue(ctx, sensorValue, this.value);
 
 		return true;
 	}

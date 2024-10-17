@@ -13,11 +13,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type EndpointId, type MaybeNotKnown } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
 import {
 	type AllOrNone,
 	formatDate,
@@ -29,10 +25,10 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
@@ -1245,12 +1241,12 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		persistSchedule.call(
 			this,
-			applHost,
+			ctx,
 			ScheduleEntryLockScheduleKind.WeekDay,
 			this.userId,
 			this.slotId,
@@ -1575,12 +1571,12 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 	public stopHour?: number;
 	public stopMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		persistSchedule.call(
 			this,
-			applHost,
+			ctx,
 			ScheduleEntryLockScheduleKind.YearDay,
 			this.userId,
 			this.slotId,
@@ -1981,12 +1977,12 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 	public durationHour?: number;
 	public durationMinute?: number;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		persistSchedule.call(
 			this,
-			applHost,
+			ctx,
 			ScheduleEntryLockScheduleKind.DailyRepeating,
 			this.userId,
 			this.slotId,

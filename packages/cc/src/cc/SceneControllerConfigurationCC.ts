@@ -16,7 +16,6 @@ import type {
 	CCEncodingContext,
 	GetDeviceConfig,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -33,10 +32,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -561,8 +560,8 @@ export class SceneControllerConfigurationCCReport
 	public readonly sceneId: number;
 	public readonly dimmingDuration: Duration;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// If groupId = 0, values are meaningless
 		if (this.groupId === 0) return false;
@@ -570,13 +569,13 @@ export class SceneControllerConfigurationCCReport
 		const sceneIdValue = SceneControllerConfigurationCCValues.sceneId(
 			this.groupId,
 		);
-		this.ensureMetadata(applHost, sceneIdValue);
+		this.ensureMetadata(ctx, sceneIdValue);
 		const dimmingDurationValue = SceneControllerConfigurationCCValues
 			.dimmingDuration(this.groupId);
-		this.ensureMetadata(applHost, dimmingDurationValue);
+		this.ensureMetadata(ctx, dimmingDurationValue);
 
-		this.setValue(applHost, sceneIdValue, this.sceneId);
-		this.setValue(applHost, dimmingDurationValue, this.dimmingDuration);
+		this.setValue(ctx, sceneIdValue, this.sceneId);
+		this.setValue(ctx, dimmingDurationValue, this.dimmingDuration);
 
 		return true;
 	}

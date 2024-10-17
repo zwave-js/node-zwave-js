@@ -14,11 +14,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
 	isEnumMember,
@@ -41,10 +37,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -741,15 +737,15 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 		this.subsystemState = this.payload[1];
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		const signalingStateValue = BarrierOperatorCCValues.signalingState(
 			this.subsystemType,
 		);
 
-		this.ensureMetadata(applHost, signalingStateValue);
-		this.setValue(applHost, signalingStateValue, this.subsystemState);
+		this.ensureMetadata(ctx, signalingStateValue);
+		this.setValue(ctx, signalingStateValue, this.subsystemState);
 
 		return true;
 	}

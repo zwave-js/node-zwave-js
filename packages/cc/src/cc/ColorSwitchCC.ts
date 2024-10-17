@@ -16,11 +16,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown, encodeBitMask } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import {
 	type AllOrNone,
 	getEnumMemberName,
@@ -44,10 +40,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -772,19 +768,19 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
+	public persistValues(ctx: PersistValuesContext): boolean {
 		// Duration is stored globally instead of per component
-		if (!super.persistValues(applHost)) return false;
+		if (!super.persistValues(ctx)) return false;
 
 		// Update compound current value
 		const colorTableKey = colorComponentToTableKey(this.colorComponent);
 		if (colorTableKey) {
 			const compoundCurrentColorValue = ColorSwitchCCValues.currentColor;
 			const compoundCurrentColor: Partial<Record<ColorKey, number>> =
-				this.getValue(applHost, compoundCurrentColorValue) ?? {};
+				this.getValue(ctx, compoundCurrentColorValue) ?? {};
 			compoundCurrentColor[colorTableKey] = this.currentValue;
 			this.setValue(
-				applHost,
+				ctx,
 				compoundCurrentColorValue,
 				compoundCurrentColor,
 			);
@@ -794,10 +790,10 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 				const compoundTargetColorValue =
 					ColorSwitchCCValues.targetColor;
 				const compoundTargetColor: Partial<Record<ColorKey, number>> =
-					this.getValue(applHost, compoundTargetColorValue) ?? {};
+					this.getValue(ctx, compoundTargetColorValue) ?? {};
 				compoundTargetColor[colorTableKey] = this.targetValue;
 				this.setValue(
-					applHost,
+					ctx,
 					compoundTargetColorValue,
 					compoundTargetColor,
 				);
@@ -806,7 +802,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 		// Update collective hex value if required
 		const supportsHex = !!this.getValue(
-			applHost,
+			ctx,
 			ColorSwitchCCValues.supportsHexColor,
 		);
 		if (
@@ -817,7 +813,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		) {
 			const hexColorValue = ColorSwitchCCValues.hexColor;
 
-			const hexValue: string = this.getValue(applHost, hexColorValue)
+			const hexValue: string = this.getValue(ctx, hexColorValue)
 				?? "000000";
 			const byteOffset = ColorComponent.Blue - this.colorComponent;
 			const byteMask = 0xff << (byteOffset * 8);
@@ -825,7 +821,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			hexValueNumeric = (hexValueNumeric & ~byteMask)
 				| (this.currentValue << (byteOffset * 8));
 			this.setValue(
-				applHost,
+				ctx,
 				hexColorValue,
 				hexValueNumeric.toString(16).padStart(6, "0"),
 			);

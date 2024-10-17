@@ -41,7 +41,6 @@ import type {
 	GetSupportedCCVersion,
 	GetValueDB,
 	LogNode,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -55,11 +54,11 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	InvalidCC,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -1034,10 +1033,10 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
-		const ccVersion = getEffectiveCCVersion(applHost, this);
+		const ccVersion = getEffectiveCCVersion(ctx, this);
 
 		// Check if we need to re-interpret the alarm values somehow
 		if (
@@ -1050,7 +1049,7 @@ export class NotificationCCReport extends NotificationCC {
 				// to send Alarm frames instead (GH#1034)
 				const supportedNotificationTypes = this.getValue<
 					readonly number[]
-				>(applHost, NotificationCCValues.supportedNotificationTypes);
+				>(ctx, NotificationCCValues.supportedNotificationTypes);
 				if (
 					isArray(supportedNotificationTypes)
 					&& supportedNotificationTypes.includes(this.alarmType)
@@ -1058,7 +1057,7 @@ export class NotificationCCReport extends NotificationCC {
 					const supportedNotificationEvents = this.getValue<
 						readonly number[]
 					>(
-						applHost,
+						ctx,
 						NotificationCCValues.supportedNotificationEvents(
 							this.alarmType,
 						),
@@ -1068,7 +1067,7 @@ export class NotificationCCReport extends NotificationCC {
 						&& supportedNotificationEvents.includes(this.alarmLevel)
 					) {
 						// This alarm frame corresponds to a valid notification event
-						applHost.logNode(
+						ctx.logNode(
 							this.nodeId as number,
 							`treating V1 Alarm frame as Notification Report`,
 						);
@@ -1080,7 +1079,7 @@ export class NotificationCCReport extends NotificationCC {
 				}
 			} else {
 				// V1 Alarm, check if there is a compat option to map this V1 report to a V2+ report
-				const mapping = applHost.getDeviceConfig?.(
+				const mapping = ctx.getDeviceConfig?.(
 					this.nodeId as number,
 				)?.compat?.alarmMapping;
 				const match = mapping?.find(
@@ -1090,7 +1089,7 @@ export class NotificationCCReport extends NotificationCC {
 							|| m.from.alarmLevel === this.alarmLevel),
 				);
 				if (match) {
-					applHost.logNode(
+					ctx.logNode(
 						this.nodeId as number,
 						`compat mapping found, treating V1 Alarm frame as Notification Report`,
 					);
@@ -1117,17 +1116,17 @@ export class NotificationCCReport extends NotificationCC {
 		}
 
 		// Now we can interpret the event parameters and turn them into something useful
-		this.parseEventParameters(applHost);
+		this.parseEventParameters(ctx);
 
 		if (this.alarmType != undefined) {
 			const alarmTypeValue = NotificationCCValues.alarmType;
-			this.ensureMetadata(applHost, alarmTypeValue);
-			this.setValue(applHost, alarmTypeValue, this.alarmType);
+			this.ensureMetadata(ctx, alarmTypeValue);
+			this.setValue(ctx, alarmTypeValue, this.alarmType);
 		}
 		if (this.alarmLevel != undefined) {
 			const alarmLevelValue = NotificationCCValues.alarmLevel;
-			this.ensureMetadata(applHost, alarmLevelValue);
-			this.setValue(applHost, alarmLevelValue, this.alarmLevel);
+			this.ensureMetadata(ctx, alarmLevelValue);
+			this.setValue(ctx, alarmLevelValue, this.alarmLevel);
 		}
 
 		return true;
@@ -1635,12 +1634,12 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Store which events this notification supports
 		this.setValue(
-			applHost,
+			ctx,
 			NotificationCCValues.supportedNotificationEvents(
 				this.notificationType,
 			),
@@ -1653,7 +1652,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		if (!notification) {
 			// This is an unknown notification
 			this.setMetadata(
-				applHost,
+				ctx,
 				NotificationCCValues.unknownNotificationType(
 					this.notificationType,
 				),
@@ -1675,12 +1674,12 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 					const metadata = getNotificationValueMetadata(
 						isFirst
 							? undefined
-							: this.getMetadata(applHost, notificationValue),
+							: this.getMetadata(ctx, notificationValue),
 						notification,
 						valueConfig,
 					);
 
-					this.setMetadata(applHost, notificationValue, metadata);
+					this.setMetadata(ctx, notificationValue, metadata);
 
 					isFirst = false;
 				}

@@ -15,11 +15,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp, roundTo } from "alcalzone-shared/math";
@@ -35,10 +31,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -1070,19 +1066,19 @@ export class IndicatorCCReport extends IndicatorCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		if (this.indicator0Value != undefined) {
-			if (!this.supportsV2Indicators(applHost)) {
+			if (!this.supportsV2Indicators(ctx)) {
 				// Publish the value
 				const valueV1 = IndicatorCCValues.valueV1;
-				this.setMetadata(applHost, valueV1);
-				this.setValue(applHost, valueV1, this.indicator0Value);
+				this.setMetadata(ctx, valueV1);
+				this.setValue(ctx, valueV1, this.indicator0Value);
 			} else {
 				if (this.isSinglecast()) {
 					// Don't!
-					applHost.logNode(this.nodeId, {
+					ctx.logNode(this.nodeId, {
 						message:
 							`ignoring V1 indicator report because the node supports V2 indicators`,
 						direction: "none",
@@ -1093,7 +1089,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		} else if (this.values) {
 			// Store the simple values first
 			for (const value of this.values) {
-				this.setIndicatorValue(applHost, value);
+				this.setIndicatorValue(ctx, value);
 			}
 
 			// Then group values into the convenience properties
@@ -1107,7 +1103,7 @@ export class IndicatorCCReport extends IndicatorCC {
 				if (timeout?.seconds) timeoutString += `${timeout.seconds}s`;
 
 				this.setValue(
-					applHost,
+					ctx,
 					IndicatorCCValues.timeout,
 					timeoutString,
 				);
@@ -1280,13 +1276,13 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		if (this.indicatorId !== 0x00) {
 			// Remember which property IDs are supported
 			this.setValue(
-				applHost,
+				ctx,
 				IndicatorCCValues.supportedPropertyIDs(this.indicatorId),
 				this.supportedProperties,
 			);
@@ -1415,12 +1411,12 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 	public indicatorId: number;
 	public description: string;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		if (this.description) {
 			this.setValue(
-				applHost,
+				ctx,
 				IndicatorCCValues.indicatorDescription(this.indicatorId),
 				this.description,
 			);

@@ -14,11 +14,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -32,10 +28,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -434,8 +430,8 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Update the supported modes if a mode is used that wasn't previously
 		// reported to be supported. This shouldn't happen, but well... it does anyways
@@ -443,7 +439,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		const supportedModesValue = ThermostatModeCCValues.supportedModes;
 
 		const supportedModes = this.getValue<ThermostatMode[]>(
-			applHost,
+			ctx,
 			supportedModesValue,
 		);
 
@@ -455,14 +451,14 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			supportedModes.push(this.mode);
 			supportedModes.sort();
 
-			this.setMetadata(applHost, thermostatModeValue, {
+			this.setMetadata(ctx, thermostatModeValue, {
 				...thermostatModeValue.meta,
 				states: enumValuesToMetadataStates(
 					ThermostatMode,
 					supportedModes,
 				),
 			});
-			this.setValue(applHost, supportedModesValue, supportedModes);
+			this.setValue(ctx, supportedModesValue, supportedModes);
 		}
 		return true;
 	}
@@ -535,12 +531,12 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Use this information to create the metadata for the mode property
 		const thermostatModeValue = ThermostatModeCCValues.thermostatMode;
-		this.setMetadata(applHost, thermostatModeValue, {
+		this.setMetadata(ctx, thermostatModeValue, {
 			...thermostatModeValue.meta,
 			states: enumValuesToMetadataStates(
 				ThermostatMode,

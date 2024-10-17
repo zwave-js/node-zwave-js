@@ -19,7 +19,6 @@ import type {
 	CCEncodingContext,
 	GetSupportedCCVersion,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
@@ -43,10 +42,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
@@ -1375,12 +1374,12 @@ export class UserCodeCCReport extends UserCodeCC
 	public readonly userIdStatus: UserIDStatus;
 	public readonly userCode: string | Buffer;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		persistUserCode.call(
 			this,
-			applHost,
+			ctx,
 			this.userId,
 			this.userIdStatus,
 			this.userCode,
@@ -1746,17 +1745,17 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Update the keypad modes metadata
 		const supportedKeypadModes: KeypadMode[] = this.getValue(
-			applHost,
+			ctx,
 			UserCodeCCValues.supportedKeypadModes,
 		) ?? [this.keypadMode];
 
 		const keypadModeValue = UserCodeCCValues.keypadMode;
-		this.setMetadata(applHost, keypadModeValue, {
+		this.setMetadata(ctx, keypadModeValue, {
 			...keypadModeValue.meta,
 			states: enumValuesToMetadataStates(
 				KeypadMode,
@@ -2021,13 +2020,13 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		this.nextUserId = this.payload.readUInt16BE(offset);
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			persistUserCode.call(
 				this,
-				applHost,
+				ctx,
 				userId,
 				userIdStatus,
 				userCode,

@@ -8,11 +8,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -23,10 +19,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -224,11 +220,11 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 	public readonly scale: EnergyProductionScale;
 	public readonly value: number;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		const valueValue = EnergyProductionCCValues.value(this.parameter);
-		this.setMetadata(applHost, valueValue, {
+		this.setMetadata(ctx, valueValue, {
 			...valueValue.meta,
 			unit: this.scale.unit,
 			ccSpecific: {
@@ -236,7 +232,7 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 				scale: this.scale.key,
 			},
 		});
-		this.setValue(applHost, valueValue, this.value);
+		this.setValue(ctx, valueValue, this.value);
 
 		return true;
 	}

@@ -24,7 +24,6 @@ import type {
 	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
-	ZWaveApplicationHost,
 } from "@zwave-js/host/safe";
 import { type AllOrNone, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import {
@@ -36,10 +35,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -474,15 +473,15 @@ export class BatteryCCReport extends BatteryCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Naïve heuristic for a full battery
 		if (this.level >= 90) {
 			// Some devices send Notification CC Reports with battery information,
 			// or this information is mapped from legacy V1 alarm values.
 			// We may need to idle the corresponding values when the battery is full
-			const notificationCCVersion = applHost.getSupportedCCVersion(
+			const notificationCCVersion = ctx.getSupportedCCVersion(
 				CommandClasses.Notification,
 				this.nodeId as number,
 				this.endpointIndex,
@@ -499,9 +498,9 @@ export class BatteryCCReport extends BatteryCC {
 						"Battery level status",
 					);
 				// If not undefined and not idle
-				if (this.getValue(applHost, batteryLevelStatusValue)) {
+				if (this.getValue(ctx, batteryLevelStatusValue)) {
 					this.setValue(
-						applHost,
+						ctx,
 						batteryLevelStatusValue,
 						0, /* idle */
 					);
@@ -634,12 +633,12 @@ export class BatteryCCHealthReport extends BatteryCC {
 		this.temperatureScale = scale;
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Update the temperature unit in the value DB
 		const temperatureValue = BatteryCCValues.temperature;
-		this.setMetadata(applHost, temperatureValue, {
+		this.setMetadata(ctx, temperatureValue, {
 			...temperatureValue.meta,
 			unit: this.temperatureScale === 0x00 ? "°C" : undefined,
 		});

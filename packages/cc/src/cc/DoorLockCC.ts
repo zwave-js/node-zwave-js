@@ -15,11 +15,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -35,10 +31,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -908,39 +904,39 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Only store the door/bolt/latch status if the lock supports it
 		const supportsDoorStatus = !!this.getValue(
-			applHost,
+			ctx,
 			DoorLockCCValues.doorSupported,
 		);
 		if (supportsDoorStatus) {
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.doorStatus,
 				this.doorStatus,
 			);
 		}
 		const supportsBoltStatus = !!this.getValue(
-			applHost,
+			ctx,
 			DoorLockCCValues.boltSupported,
 		);
 		if (supportsBoltStatus) {
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.boltStatus,
 				this.boltStatus,
 			);
 		}
 		const supportsLatchStatus = !!this.getValue(
-			applHost,
+			ctx,
 			DoorLockCCValues.latchSupported,
 		);
 		if (supportsLatchStatus) {
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.latchStatus,
 				this.latchStatus,
 			);
@@ -1069,50 +1065,50 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 	public readonly twistAssist?: boolean;
 	public readonly blockToBlock?: boolean;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Only store the autoRelockTime etc. params if the lock supports it
 		const supportsAutoRelock = !!this.getValue(
-			applHost,
+			ctx,
 			DoorLockCCValues.autoRelockSupported,
 		);
 		if (supportsAutoRelock) {
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.autoRelockTime,
 				this.autoRelockTime,
 			);
 		}
 		const supportsHoldAndRelease = !!this.getValue(
-			applHost,
+			ctx,
 			DoorLockCCValues.holdAndReleaseSupported,
 		);
 		if (supportsHoldAndRelease) {
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.holdAndReleaseTime,
 				this.holdAndReleaseTime,
 			);
 		}
 		const supportsTwistAssist = !!this.getValue(
-			applHost,
+			ctx,
 			DoorLockCCValues.twistAssistSupported,
 		);
 		if (supportsTwistAssist) {
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.twistAssist,
 				this.twistAssist,
 			);
 		}
 		const supportsBlockToBlock = !!this.getValue(
-			applHost,
+			ctx,
 			DoorLockCCValues.blockToBlockSupported,
 		);
 		if (supportsBlockToBlock) {
 			this.setValue(
-				applHost,
+				ctx,
 				DoorLockCCValues.blockToBlock,
 				this.blockToBlock,
 			);

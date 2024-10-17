@@ -29,10 +29,10 @@ import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	getEffectiveCCVersion,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -933,21 +933,21 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		const deviceClassValue = MultiChannelCCValues.endpointDeviceClass;
 		const ccsValue = MultiChannelCCValues.endpointCCs;
 
 		if (this.wasRemoved) {
-			this.removeValue(applHost, deviceClassValue);
-			this.removeValue(applHost, ccsValue);
+			this.removeValue(ctx, deviceClassValue);
+			this.removeValue(ctx, ccsValue);
 		} else {
-			this.setValue(applHost, deviceClassValue, {
+			this.setValue(ctx, deviceClassValue, {
 				generic: this.genericDeviceClass,
 				specific: this.specificDeviceClass,
 			});
-			this.setValue(applHost, ccsValue, this.supportedCCs);
+			this.setValue(ctx, ccsValue, this.supportedCCs);
 		}
 		return true;
 	}

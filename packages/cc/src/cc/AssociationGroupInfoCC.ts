@@ -11,20 +11,16 @@ import {
 	parseCCId,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -502,9 +498,9 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public readonly groupId: number;
 	public readonly name: string;
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
+		const valueDB = this.getValueDB(ctx);
 
 		valueDB.setValue(
 			AssociationGroupInfoCCValues.groupName(this.groupId).endpoint(
@@ -632,13 +628,13 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 	public readonly groups: readonly AssociationGroupInfo[];
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		for (const group of this.groups) {
 			const { groupId, mode, profile, eventCode } = group;
 			this.setValue(
-				applHost,
+				ctx,
 				AssociationGroupInfoCCValues.groupInfo(groupId),
 				{
 					mode,

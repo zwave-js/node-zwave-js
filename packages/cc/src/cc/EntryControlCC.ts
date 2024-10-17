@@ -13,11 +13,7 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { buffer2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -31,10 +27,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -570,19 +566,19 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		this.maxKeyCacheTimeout = this.payload[offset + 3];
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Store min/max cache size and timeout as metadata
 		const keyCacheSizeValue = EntryControlCCValues.keyCacheSize;
-		this.setMetadata(applHost, keyCacheSizeValue, {
+		this.setMetadata(ctx, keyCacheSizeValue, {
 			...keyCacheSizeValue.meta,
 			min: this.minKeyCacheSize,
 			max: this.maxKeyCacheSize,
 		});
 
 		const keyCacheTimeoutValue = EntryControlCCValues.keyCacheTimeout;
-		this.setMetadata(applHost, keyCacheTimeoutValue, {
+		this.setMetadata(ctx, keyCacheTimeoutValue, {
 			...keyCacheTimeoutValue.meta,
 			min: this.minKeyCacheTimeout,
 			max: this.maxKeyCacheTimeout,

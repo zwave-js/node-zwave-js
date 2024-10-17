@@ -10,11 +10,7 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type {
-	CCEncodingContext,
-	GetValueDB,
-	ZWaveApplicationHost,
-} from "@zwave-js/host/safe";
+import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -26,10 +22,10 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
-	type CCNode,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
+	type PersistValuesContext,
 	type RefreshValuesContext,
 	gotDeserializationOptions,
 } from "../lib/CommandClass";
@@ -367,14 +363,14 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		}
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost<CCNode>): boolean {
-		if (!super.persistValues(applHost)) return false;
+	public persistValues(ctx: PersistValuesContext): boolean {
+		if (!super.persistValues(ctx)) return false;
 
 		// Workaround for devices reporting with sensor type Any -> find first supported sensor type and use that
 		let sensorType = this.type;
 		if (sensorType === BinarySensorType.Any) {
 			const supportedSensorTypes = this.getValue<BinarySensorType[]>(
-				applHost,
+				ctx,
 				BinarySensorCCValues.supportedSensorTypes,
 			);
 			if (supportedSensorTypes?.length) {
@@ -383,8 +379,8 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		}
 
 		const binarySensorValue = BinarySensorCCValues.state(sensorType);
-		this.setMetadata(applHost, binarySensorValue, binarySensorValue.meta);
-		this.setValue(applHost, binarySensorValue, this.value);
+		this.setMetadata(ctx, binarySensorValue, binarySensorValue.meta);
+		this.setValue(ctx, binarySensorValue, this.value);
 
 		return true;
 	}
