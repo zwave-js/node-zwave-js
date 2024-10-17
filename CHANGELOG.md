@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where preferred scales were not being found when set as a string (#7286)
+
 ## 13.9.0 (2024-10-14)
 ### Features
 * Zniffer: allow filtering frames when saving the capture (#7279)
