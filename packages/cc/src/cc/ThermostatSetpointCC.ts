@@ -37,7 +37,6 @@ import {
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -540,7 +539,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 }
 
 // @publicAPI
-export interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCSetOptions {
 	setpointType: ThermostatSetpointType;
 	value: number;
 	scale: number;
@@ -550,25 +549,32 @@ export interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatSetpointCCSetOptions,
+		options: ThermostatSetpointCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.setpointType = this.payload[0] & 0b1111;
-			// parseFloatWithScale does its own validation
-			const { value, scale } = parseFloatWithScale(
-				this.payload.subarray(1),
-			);
-			this.value = value;
-			this.scale = scale;
-		} else {
-			this.setpointType = options.setpointType;
-			this.value = options.value;
-			this.scale = options.scale;
-		}
+		this.setpointType = options.setpointType;
+		this.value = options.value;
+		this.scale = options.scale;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatSetpointCCSet {
+		validatePayload(payload.length >= 1);
+		const setpointType: ThermostatSetpointType = payload[0] & 0b1111;
+
+		// parseFloatWithScale does its own validation
+		const { value, scale } = parseFloatWithScale(
+			payload.subarray(1),
+		);
+
+		return new ThermostatSetpointCCSet({
+			nodeId: options.context.sourceNodeId,
+			setpointType,
+			value,
+			scale,
+		});
 	}
 
 	public setpointType: ThermostatSetpointType;
@@ -602,7 +608,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 }
 
 // @publicAPI
-export interface ThermostatSetpointCCReportOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCReportOptions {
 	type: ThermostatSetpointType;
 	value: number;
 	scale: number;
@@ -611,33 +617,43 @@ export interface ThermostatSetpointCCReportOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatSetpointCCReportOptions,
+		options: ThermostatSetpointCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.type = this.payload[0] & 0b1111;
-			if (this.type === 0) {
-				// Not supported
-				this.value = 0;
-				this.scale = 0;
-				return;
-			}
+		this.type = options.type;
+		this.value = options.value;
+		this.scale = options.scale;
+	}
 
-			// parseFloatWithScale does its own validation
-			const { value, scale } = parseFloatWithScale(
-				this.payload.subarray(1),
-			);
-			this.value = value;
-			this.scale = scale;
-		} else {
-			this.type = options.type;
-			this.value = options.value;
-			this.scale = options.scale;
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatSetpointCCReport {
+		validatePayload(payload.length >= 1);
+		const type: ThermostatSetpointType = payload[0] & 0b1111;
+
+		if (type === 0) {
+			// Not supported
+			return new ThermostatSetpointCCReport({
+				nodeId: options.context.sourceNodeId,
+				type,
+				value: 0,
+				scale: 0,
+			});
 		}
+
+		// parseFloatWithScale does its own validation
+		const { value, scale } = parseFloatWithScale(
+			payload.subarray(1),
+		);
+
+		return new ThermostatSetpointCCReport({
+			nodeId: options.context.sourceNodeId,
+			type,
+			value,
+			scale,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -705,7 +721,7 @@ function testResponseForThermostatSetpointGet(
 }
 
 // @publicAPI
-export interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
+export interface ThermostatSetpointCCGetOptions {
 	setpointType: ThermostatSetpointType;
 }
 
@@ -716,17 +732,23 @@ export interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 )
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatSetpointCCGetOptions,
+		options: ThermostatSetpointCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.setpointType = this.payload[0] & 0b1111;
-		} else {
-			this.setpointType = options.setpointType;
-		}
+		this.setpointType = options.setpointType;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatSetpointCCGet {
+		validatePayload(payload.length >= 1);
+		const setpointType: ThermostatSetpointType = payload[0] & 0b1111;
+
+		return new ThermostatSetpointCCGet({
+			nodeId: options.context.sourceNodeId,
+			setpointType,
+		});
 	}
 
 	public setpointType: ThermostatSetpointType;
@@ -750,9 +772,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 }
 
 // @publicAPI
-export interface ThermostatSetpointCCCapabilitiesReportOptions
-	extends CCCommandOptions
-{
+export interface ThermostatSetpointCCCapabilitiesReportOptions {
 	type: ThermostatSetpointType;
 	minValue: number;
 	minValueScale: number;
@@ -766,30 +786,42 @@ export class ThermostatSetpointCCCapabilitiesReport
 {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ThermostatSetpointCCCapabilitiesReportOptions,
+			& ThermostatSetpointCCCapabilitiesReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.type = this.payload[0];
-			let bytesRead: number;
-			// parseFloatWithScale does its own validation
-			({
-				value: this.minValue,
-				scale: this.minValueScale,
-				bytesRead,
-			} = parseFloatWithScale(this.payload.subarray(1)));
-			({ value: this.maxValue, scale: this.maxValueScale } =
-				parseFloatWithScale(this.payload.subarray(1 + bytesRead)));
-		} else {
-			this.type = options.type;
-			this.minValue = options.minValue;
-			this.minValueScale = options.minValueScale;
-			this.maxValue = options.maxValue;
-			this.maxValueScale = options.maxValueScale;
-		}
+		this.type = options.type;
+		this.minValue = options.minValue;
+		this.minValueScale = options.minValueScale;
+		this.maxValue = options.maxValue;
+		this.maxValueScale = options.maxValueScale;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatSetpointCCCapabilitiesReport {
+		validatePayload(payload.length >= 1);
+		const type: ThermostatSetpointType = payload[0];
+		// parseFloatWithScale does its own validation
+		const {
+			value: minValue,
+			scale: minValueScale,
+			bytesRead,
+		} = parseFloatWithScale(payload.subarray(1));
+		const { value: maxValue, scale: maxValueScale } = parseFloatWithScale(
+			payload.subarray(1 + bytesRead),
+		);
+
+		return new ThermostatSetpointCCCapabilitiesReport({
+			nodeId: options.context.sourceNodeId,
+			type,
+			minValue,
+			minValueScale,
+			maxValue,
+			maxValueScale,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -839,9 +871,7 @@ export class ThermostatSetpointCCCapabilitiesReport
 }
 
 // @publicAPI
-export interface ThermostatSetpointCCCapabilitiesGetOptions
-	extends CCCommandOptions
-{
+export interface ThermostatSetpointCCCapabilitiesGetOptions {
 	setpointType: ThermostatSetpointType;
 }
 
@@ -849,17 +879,23 @@ export interface ThermostatSetpointCCCapabilitiesGetOptions
 @expectedCCResponse(ThermostatSetpointCCCapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatSetpointCCCapabilitiesGetOptions,
+		options: ThermostatSetpointCCCapabilitiesGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.setpointType = this.payload[0] & 0b1111;
-		} else {
-			this.setpointType = options.setpointType;
-		}
+		this.setpointType = options.setpointType;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatSetpointCCCapabilitiesGet {
+		validatePayload(payload.length >= 1);
+		const setpointType: ThermostatSetpointType = payload[0] & 0b1111;
+
+		return new ThermostatSetpointCCCapabilitiesGet({
+			nodeId: options.context.sourceNodeId,
+			setpointType,
+		});
 	}
 
 	public setpointType: ThermostatSetpointType;
@@ -883,42 +919,46 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 }
 
 // @publicAPI
-export interface ThermostatSetpointCCSupportedReportOptions
-	extends CCCommandOptions
-{
+export interface ThermostatSetpointCCSupportedReportOptions {
 	supportedSetpointTypes: ThermostatSetpointType[];
 }
 
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatSetpointCCSupportedReportOptions,
+		options: ThermostatSetpointCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			const bitMask = this.payload;
-			const supported = parseBitMask(
-				bitMask,
-				ThermostatSetpointType["N/A"],
+		if (options.supportedSetpointTypes.length === 0) {
+			throw new ZWaveError(
+				`At least one setpoint type must be supported`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-			// We use this command only when we are sure that bitmask interpretation A is used
-			// FIXME: Figure out if we can do this without the CC version
-			this.supportedSetpointTypes = supported.map(
-				(i) => thermostatSetpointTypeMap[i],
-			);
-		} else {
-			if (options.supportedSetpointTypes.length === 0) {
-				throw new ZWaveError(
-					`At least one setpoint type must be supported`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.supportedSetpointTypes = options.supportedSetpointTypes;
 		}
+		this.supportedSetpointTypes = options.supportedSetpointTypes;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatSetpointCCSupportedReport {
+		validatePayload(payload.length >= 1);
+		const bitMask = payload;
+		const supported = parseBitMask(
+			bitMask,
+			ThermostatSetpointType["N/A"],
+		);
+		// We use this command only when we are sure that bitmask interpretation A is used
+		// FIXME: Figure out if we can do this without the CC version
+		const supportedSetpointTypes: ThermostatSetpointType[] = supported.map(
+			(i) => thermostatSetpointTypeMap[i],
+		);
+
+		return new ThermostatSetpointCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			supportedSetpointTypes,
+		});
 	}
 
 	@ccValue(ThermostatSetpointCCValues.supportedSetpointTypes)

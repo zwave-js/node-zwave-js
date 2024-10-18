@@ -33,7 +33,6 @@ import {
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -306,48 +305,57 @@ export class ThermostatModeCC extends CommandClass {
 
 // @publicAPI
 export type ThermostatModeCCSetOptions =
-	& CCCommandOptions
-	& (
-		| {
-			mode: Exclude<
-				ThermostatMode,
-				(typeof ThermostatMode)["Manufacturer specific"]
-			>;
-		}
-		| {
-			mode: (typeof ThermostatMode)["Manufacturer specific"];
-			manufacturerData: Buffer;
-		}
-	);
+	| {
+		mode: Exclude<
+			ThermostatMode,
+			(typeof ThermostatMode)["Manufacturer specific"]
+		>;
+	}
+	| {
+		mode: (typeof ThermostatMode)["Manufacturer specific"];
+		manufacturerData: Buffer;
+	};
 
 @CCCommand(ThermostatModeCommand.Set)
 @useSupervision()
 export class ThermostatModeCCSet extends ThermostatModeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatModeCCSetOptions,
+		options: ThermostatModeCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			const manufacturerDataLength = (this.payload[0] >>> 5) & 0b111;
-			this.mode = this.payload[0] & 0b11111;
-			if (manufacturerDataLength > 0) {
-				validatePayload(
-					this.payload.length >= 1 + manufacturerDataLength,
-				);
-				this.manufacturerData = this.payload.subarray(
-					1,
-					1 + manufacturerDataLength,
-				);
-			}
-		} else {
-			this.mode = options.mode;
-			if ("manufacturerData" in options) {
-				this.manufacturerData = options.manufacturerData;
-			}
+		this.mode = options.mode;
+		if ("manufacturerData" in options) {
+			this.manufacturerData = options.manufacturerData;
 		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatModeCCSet {
+		validatePayload(payload.length >= 1);
+		const mode: ThermostatMode = payload[0] & 0b11111;
+		if (mode !== ThermostatMode["Manufacturer specific"]) {
+			return new ThermostatModeCCSet({
+				nodeId: options.context.sourceNodeId,
+				mode,
+			});
+		}
+
+		const manufacturerDataLength = (payload[0] >>> 5) & 0b111;
+		validatePayload(
+			payload.length >= 1 + manufacturerDataLength,
+		);
+		const manufacturerData = payload.subarray(
+			1,
+			1 + manufacturerDataLength,
+		);
+
+		return new ThermostatModeCCSet({
+			nodeId: options.context.sourceNodeId,
+			mode,
+			manufacturerData,
+		});
 	}
 
 	public mode: ThermostatMode;
@@ -385,49 +393,58 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 
 // @publicAPI
 export type ThermostatModeCCReportOptions =
-	& CCCommandOptions
-	& (
-		| {
-			mode: Exclude<
-				ThermostatMode,
-				(typeof ThermostatMode)["Manufacturer specific"]
-			>;
-			manufacturerData?: undefined;
-		}
-		| {
-			mode: (typeof ThermostatMode)["Manufacturer specific"];
-			manufacturerData?: Buffer;
-		}
-	);
+	| {
+		mode: Exclude<
+			ThermostatMode,
+			(typeof ThermostatMode)["Manufacturer specific"]
+		>;
+		manufacturerData?: undefined;
+	}
+	| {
+		mode: (typeof ThermostatMode)["Manufacturer specific"];
+		manufacturerData?: Buffer;
+	};
 
 @CCCommand(ThermostatModeCommand.Report)
 export class ThermostatModeCCReport extends ThermostatModeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatModeCCReportOptions,
+		options: ThermostatModeCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.mode = this.payload[0] & 0b11111;
+		this.mode = options.mode;
+		this.manufacturerData = options.manufacturerData;
+	}
 
-			// V3+
-			const manufacturerDataLength = this.payload[0] >>> 5;
-			if (manufacturerDataLength > 0) {
-				validatePayload(
-					this.payload.length >= 1 + manufacturerDataLength,
-				);
-				this.manufacturerData = this.payload.subarray(
-					1,
-					1 + manufacturerDataLength,
-				);
-			}
-		} else {
-			this.mode = options.mode;
-			this.manufacturerData = options.manufacturerData;
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatModeCCReport {
+		validatePayload(payload.length >= 1);
+		const mode: ThermostatMode = payload[0] & 0b11111;
+
+		if (mode !== ThermostatMode["Manufacturer specific"]) {
+			return new ThermostatModeCCReport({
+				nodeId: options.context.sourceNodeId,
+				mode,
+			});
 		}
+
+		// V3+
+		const manufacturerDataLength = payload[0] >>> 5;
+		validatePayload(
+			payload.length >= 1 + manufacturerDataLength,
+		);
+		const manufacturerData = payload.subarray(
+			1,
+			1 + manufacturerDataLength,
+		);
+
+		return new ThermostatModeCCReport({
+			nodeId: options.context.sourceNodeId,
+			mode,
+			manufacturerData,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -507,28 +524,32 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 export class ThermostatModeCCGet extends ThermostatModeCC {}
 
 // @publicAPI
-export interface ThermostatModeCCSupportedReportOptions
-	extends CCCommandOptions
-{
+export interface ThermostatModeCCSupportedReportOptions {
 	supportedModes: ThermostatMode[];
 }
 
 @CCCommand(ThermostatModeCommand.SupportedReport)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatModeCCSupportedReportOptions,
+		options: ThermostatModeCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			this.supportedModes = parseBitMask(
-				this.payload,
-				ThermostatMode.Off,
-			);
-		} else {
-			this.supportedModes = options.supportedModes;
-		}
+		this.supportedModes = options.supportedModes;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatModeCCSupportedReport {
+		const supportedModes: ThermostatMode[] = parseBitMask(
+			payload,
+			ThermostatMode.Off,
+		);
+
+		return new ThermostatModeCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			supportedModes,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {

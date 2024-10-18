@@ -372,7 +372,7 @@ export class SupervisionCCReport extends SupervisionCC {
 }
 
 // @publicAPI
-export interface SupervisionCCGetOptions extends CCCommandOptions {
+export interface SupervisionCCGetOptions {
 	requestStatusUpdates: boolean;
 	encapsulated: CommandClass;
 	sessionId: number;
@@ -389,27 +389,37 @@ function testResponseForSupervisionCCGet(
 @expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | SupervisionCCGetOptions,
+		options: SupervisionCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.requestStatusUpdates = !!(this.payload[0] & 0b1_0_000000);
-			this.sessionId = this.payload[0] & 0b111111;
+		this.sessionId = options.sessionId;
+		this.requestStatusUpdates = options.requestStatusUpdates;
+		this.encapsulated = options.encapsulated;
+		options.encapsulated.encapsulatingCC = this as any;
+	}
 
-			this.encapsulated = CommandClass.from({
-				data: this.payload.subarray(2),
-				fromEncapsulation: true,
-				encapCC: this,
-				origin: options.origin,
-				context: options.context,
-			});
-		} else {
-			this.sessionId = options.sessionId;
-			this.requestStatusUpdates = options.requestStatusUpdates;
-			this.encapsulated = options.encapsulated;
-			options.encapsulated.encapsulatingCC = this as any;
-		}
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SupervisionCCGet {
+		validatePayload(payload.length >= 3);
+		const requestStatusUpdates = !!(payload[0] & 0b1_0_000000);
+		const sessionId = payload[0] & 0b111111;
+		const encapsulated: CommandClass = CommandClass.from({
+			data: payload.subarray(2),
+			fromEncapsulation: true,
+			// FIXME: 🐔 🥚
+			encapCC: this,
+			origin: options.origin,
+			context: options.context,
+		});
+
+		return new SupervisionCCGet({
+			nodeId: options.context.sourceNodeId,
+			requestStatusUpdates,
+			sessionId,
+			encapsulated,
+		});
 	}
 
 	public requestStatusUpdates: boolean;

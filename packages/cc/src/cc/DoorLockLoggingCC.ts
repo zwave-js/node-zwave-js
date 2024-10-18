@@ -18,7 +18,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -226,15 +225,35 @@ export class DoorLockLoggingCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface DoorLockLoggingCCRecordsSupportedReportOptions {
+	recordsCount: number;
+}
+
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
 export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options:
+			& DoorLockLoggingCCRecordsSupportedReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 1);
 
-		this.recordsCount = this.payload[0];
+		// TODO: Check implementation:
+		this.recordsCount = options.recordsCount;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): DoorLockLoggingCCRecordsSupportedReport {
+		validatePayload(payload.length >= 1);
+		const recordsCount = payload[0];
+
+		return new DoorLockLoggingCCRecordsSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			recordsCount,
+		});
 	}
 
 	@ccValue(DoorLockLoggingCCValues.recordsCount)
@@ -261,37 +280,51 @@ function eventTypeToLabel(eventType: DoorLockLoggingEventType): string {
 @expectedCCResponse(DoorLockLoggingCCRecordsSupportedReport)
 export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {}
 
+// @publicAPI
+export interface DoorLockLoggingCCRecordReportOptions {
+	recordNumber: number;
+	record?: DoorLockLoggingRecord;
+}
+
 @CCCommand(DoorLockLoggingCommand.RecordReport)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: DoorLockLoggingCCRecordReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 11);
 
-		this.recordNumber = this.payload[0];
-		const recordStatus = this.payload[5] >>> 5;
-		if (recordStatus === DoorLockLoggingRecordStatus.Empty) {
-			return;
-		} else {
+		// TODO: Check implementation:
+		this.recordNumber = options.recordNumber;
+		this.record = options.record;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): DoorLockLoggingCCRecordReport {
+		validatePayload(payload.length >= 11);
+		const recordNumber = payload[0];
+		const recordStatus = payload[5] >>> 5;
+		let record: DoorLockLoggingRecord | undefined;
+		if (recordStatus !== DoorLockLoggingRecordStatus.Empty) {
 			const dateSegments = {
-				year: this.payload.readUInt16BE(1),
-				month: this.payload[3],
-				day: this.payload[4],
-				hour: this.payload[5] & 0b11111,
-				minute: this.payload[6],
-				second: this.payload[7],
+				year: payload.readUInt16BE(1),
+				month: payload[3],
+				day: payload[4],
+				hour: payload[5] & 0b11111,
+				minute: payload[6],
+				second: payload[7],
 			};
 
-			const eventType = this.payload[8];
-			const recordUserID = this.payload[9];
-			const userCodeLength = this.payload[10];
+			const eventType = payload[8];
+			const recordUserID = payload[9];
+			const userCodeLength = payload[10];
 			validatePayload(
 				userCodeLength <= 10,
-				this.payload.length >= 11 + userCodeLength,
+				payload.length >= 11 + userCodeLength,
 			);
 
-			const userCodeBuffer = this.payload.subarray(
+			const userCodeBuffer = payload.subarray(
 				11,
 				11 + userCodeLength,
 			);
@@ -302,7 +335,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				? userCodeString
 				: userCodeBuffer;
 
-			this.record = {
+			record = {
 				eventType: eventType,
 				label: eventTypeToLabel(eventType),
 				timestamp: segmentsToDate(dateSegments).toISOString(),
@@ -310,6 +343,12 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				userCode,
 			};
 		}
+
+		return new DoorLockLoggingCCRecordReport({
+			nodeId: options.context.sourceNodeId,
+			recordNumber,
+			record,
+		});
 	}
 
 	public readonly recordNumber: number;
@@ -345,7 +384,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 }
 
 // @publicAPI
-export interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
+export interface DoorLockLoggingCCRecordGetOptions {
 	recordNumber: number;
 }
 
@@ -366,19 +405,24 @@ function testResponseForDoorLockLoggingRecordGet(
 )
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| DoorLockLoggingCCRecordGetOptions,
+		options: DoorLockLoggingCCRecordGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.recordNumber = options.recordNumber;
-		}
+		this.recordNumber = options.recordNumber;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): DoorLockLoggingCCRecordGet {
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new DoorLockLoggingCCRecordGet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public recordNumber: number;

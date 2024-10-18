@@ -1199,7 +1199,7 @@ export class IndicatorCCReport extends IndicatorCC {
 }
 
 // @publicAPI
-export interface IndicatorCCGetOptions extends CCCommandOptions {
+export interface IndicatorCCGetOptions {
 	indicatorId?: number;
 }
 
@@ -1207,16 +1207,26 @@ export interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
+		options: IndicatorCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			if (this.payload.length > 0) {
-				this.indicatorId = this.payload[0];
-			}
-		} else {
-			this.indicatorId = options.indicatorId;
+		this.indicatorId = options.indicatorId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): IndicatorCCGet {
+		let indicatorId: number | undefined;
+
+		if (payload.length > 0) {
+			indicatorId = payload[0];
 		}
+
+		return new IndicatorCCGet({
+			nodeId: options.context.sourceNodeId,
+			indicatorId,
+		});
 	}
 
 	public indicatorId: number | undefined;
@@ -1239,7 +1249,7 @@ export class IndicatorCCGet extends IndicatorCC {
 }
 
 // @publicAPI
-export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
+export interface IndicatorCCSupportedReportOptions {
 	indicatorId: number;
 	nextIndicatorId: number;
 	supportedProperties: readonly number[];
@@ -1248,32 +1258,42 @@ export interface IndicatorCCSupportedReportOptions extends CCCommandOptions {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| IndicatorCCSupportedReportOptions,
+		options: IndicatorCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.indicatorId = this.payload[0];
-			this.nextIndicatorId = this.payload[1];
-			const bitMaskLength = this.payload[2] & 0b11111;
-			if (bitMaskLength === 0) {
-				this.supportedProperties = [];
-			} else {
-				validatePayload(this.payload.length >= 3 + bitMaskLength);
-				// The bit mask starts at 0, but bit 0 is not used
-				this.supportedProperties = parseBitMask(
-					this.payload.subarray(3, 3 + bitMaskLength),
-					0,
-				).filter((v) => v !== 0);
-			}
+		this.indicatorId = options.indicatorId;
+		this.nextIndicatorId = options.nextIndicatorId;
+		this.supportedProperties = options.supportedProperties;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): IndicatorCCSupportedReport {
+		validatePayload(payload.length >= 3);
+		const indicatorId = payload[0];
+		const nextIndicatorId = payload[1];
+		const bitMaskLength = payload[2] & 0b11111;
+		let supportedProperties: readonly number[];
+
+		if (bitMaskLength === 0) {
+			supportedProperties = [];
 		} else {
-			this.indicatorId = options.indicatorId;
-			this.nextIndicatorId = options.nextIndicatorId;
-			this.supportedProperties = options.supportedProperties;
+			validatePayload(payload.length >= 3 + bitMaskLength);
+			// The bit mask starts at 0, but bit 0 is not used
+			supportedProperties = parseBitMask(
+				payload.subarray(3, 3 + bitMaskLength),
+				0,
+			).filter((v) => v !== 0);
 		}
+
+		return new IndicatorCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			indicatorId,
+			nextIndicatorId,
+			supportedProperties,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -1331,7 +1351,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 }
 
 // @publicAPI
-export interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
+export interface IndicatorCCSupportedGetOptions {
 	indicatorId: number;
 }
 
@@ -1349,17 +1369,23 @@ function testResponseForIndicatorSupportedGet(
 )
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| IndicatorCCSupportedGetOptions,
+		options: IndicatorCCSupportedGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.indicatorId = this.payload[0];
-		} else {
-			this.indicatorId = options.indicatorId;
-		}
+		this.indicatorId = options.indicatorId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): IndicatorCCSupportedGet {
+		validatePayload(payload.length >= 1);
+		const indicatorId = payload[0];
+
+		return new IndicatorCCSupportedGet({
+			nodeId: options.context.sourceNodeId,
+			indicatorId,
+		});
 	}
 
 	public indicatorId: number;
@@ -1446,7 +1472,7 @@ export class IndicatorCCDescriptionReport extends IndicatorCC {
 }
 
 // @publicAPI
-export interface IndicatorCCDescriptionGetOptions extends CCCommandOptions {
+export interface IndicatorCCDescriptionGetOptions {
 	indicatorId: number;
 }
 
@@ -1464,23 +1490,29 @@ function testResponseForIndicatorDescriptionGet(
 )
 export class IndicatorCCDescriptionGet extends IndicatorCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| IndicatorCCDescriptionGetOptions,
+		options: IndicatorCCDescriptionGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.indicatorId = this.payload[0];
-		} else {
-			this.indicatorId = options.indicatorId;
-			if (!isManufacturerDefinedIndicator(this.indicatorId)) {
-				throw new ZWaveError(
-					"The indicator ID must be between 0x80 and 0x9f",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
+		this.indicatorId = options.indicatorId;
+		if (!isManufacturerDefinedIndicator(this.indicatorId)) {
+			throw new ZWaveError(
+				"The indicator ID must be between 0x80 and 0x9f",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): IndicatorCCDescriptionGet {
+		validatePayload(payload.length >= 1);
+		const indicatorId = payload[0];
+
+		return new IndicatorCCDescriptionGet({
+			nodeId: options.context.sourceNodeId,
+			indicatorId,
+		});
 	}
 
 	public indicatorId: number;

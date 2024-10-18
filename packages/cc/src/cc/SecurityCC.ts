@@ -556,32 +556,37 @@ export class SecurityCC extends CommandClass {
 	}
 }
 
-interface SecurityCCNonceReportOptions extends CCCommandOptions {
+interface SecurityCCNonceReportOptions {
 	nonce: Buffer;
 }
 
 @CCCommand(SecurityCommand.NonceReport)
 export class SecurityCCNonceReport extends SecurityCC {
 	constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| SecurityCCNonceReportOptions,
+		options: SecurityCCNonceReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload.withReason("Invalid nonce length")(
-				this.payload.length === HALF_NONCE_SIZE,
+		if (options.nonce.length !== HALF_NONCE_SIZE) {
+			throw new ZWaveError(
+				`Nonce must have length ${HALF_NONCE_SIZE}!`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-			this.nonce = this.payload;
-		} else {
-			if (options.nonce.length !== HALF_NONCE_SIZE) {
-				throw new ZWaveError(
-					`Nonce must have length ${HALF_NONCE_SIZE}!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.nonce = options.nonce;
 		}
+		this.nonce = options.nonce;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SecurityCCNonceReport {
+		validatePayload.withReason("Invalid nonce length")(
+			payload.length === HALF_NONCE_SIZE,
+		);
+
+		return new SecurityCCNonceReport({
+			nodeId: options.context.sourceNodeId,
+			nonce: payload,
+		});
 	}
 
 	public nonce: Buffer;
@@ -604,9 +609,7 @@ export class SecurityCCNonceReport extends SecurityCC {
 export class SecurityCCNonceGet extends SecurityCC {}
 
 // @publicAPI
-export interface SecurityCCCommandEncapsulationOptions
-	extends CCCommandOptions
-{
+export interface SecurityCCCommandEncapsulationOptions {
 	ownNodeId: number;
 	securityManager: SecurityManager;
 	encapsulated: CommandClass;
@@ -628,85 +631,97 @@ function getCCResponseForCommandEncapsulation(
 )
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| SecurityCCCommandEncapsulationOptions,
+		options: SecurityCCCommandEncapsulationOptions & CCCommandOptions,
 	) {
 		super(options);
-
 		this.securityManager = this.assertSecurity(options);
 
-		if (gotDeserializationOptions(options)) {
-			// HALF_NONCE_SIZE bytes iv, 1 byte frame control, at least 1 CC byte, 1 byte nonce id, 8 bytes auth code
-			validatePayload(
-				this.payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
+		this.encapsulated = options.encapsulated;
+		this.encapsulated.encapsulatingCC = this as any;
+		if (options.alternativeNetworkKey) {
+			this.authKey = generateAuthKey(options.alternativeNetworkKey);
+			this.encryptionKey = generateEncryptionKey(
+				options.alternativeNetworkKey,
 			);
-			const iv = this.payload.subarray(0, HALF_NONCE_SIZE);
-			const encryptedPayload = this.payload.subarray(HALF_NONCE_SIZE, -9);
-			const nonceId = this.payload.at(-9)!;
-			const authCode = this.payload.subarray(-8);
-
-			// Retrieve the used nonce from the nonce store
-			const nonce = this.securityManager.getNonce(nonceId);
-			// Only accept the message if the nonce hasn't expired
-			validatePayload.withReason(
-				`Nonce ${
-					num2hex(
-						nonceId,
-					)
-				} expired, cannot decode security encapsulated command.`,
-			)(!!nonce);
-			// and mark the nonce as used
-			this.securityManager.deleteNonce(nonceId);
-
+		} else {
 			this.authKey = this.securityManager.authKey;
 			this.encryptionKey = this.securityManager.encryptionKey;
-
-			// Validate the encrypted data
-			const authData = getAuthenticationData(
-				iv,
-				nonce!,
-				this.ccCommand,
-				this.nodeId,
-				options.context.ownNodeId,
-				encryptedPayload,
-			);
-			const expectedAuthCode = computeMAC(authData, this.authKey);
-			// Only accept messages with a correct auth code
-			validatePayload.withReason(
-				"Invalid auth code, won't accept security encapsulated command.",
-			)(authCode.equals(expectedAuthCode));
-
-			// Decrypt the encapsulated CC
-			const frameControlAndDecryptedCC = decryptAES128OFB(
-				encryptedPayload,
-				this.encryptionKey,
-				Buffer.concat([iv, nonce!]),
-			);
-			const frameControl = frameControlAndDecryptedCC[0];
-			this.sequenceCounter = frameControl & 0b1111;
-			this.sequenced = !!(frameControl & 0b1_0000);
-			this.secondFrame = !!(frameControl & 0b10_0000);
-
-			this.decryptedCCBytes = frameControlAndDecryptedCC.subarray(1);
-
-			// Remember for debugging purposes
-			this.authData = authData;
-			this.authCode = authCode;
-			this.iv = iv;
-		} else {
-			this.encapsulated = options.encapsulated;
-			options.encapsulated.encapsulatingCC = this as any;
-			if (options.alternativeNetworkKey) {
-				this.authKey = generateAuthKey(options.alternativeNetworkKey);
-				this.encryptionKey = generateEncryptionKey(
-					options.alternativeNetworkKey,
-				);
-			} else {
-				this.authKey = this.securityManager.authKey;
-				this.encryptionKey = this.securityManager.encryptionKey;
-			}
 		}
+
+		// Remember for debugging purposes
+		this.authData = options.authData;
+		this.authCode = options.authCode;
+		this.iv = options.iv;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SecurityCCCommandEncapsulation {
+		// HALF_NONCE_SIZE bytes iv, 1 byte frame control, at least 1 CC byte, 1 byte nonce id, 8 bytes auth code
+		validatePayload(
+			payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
+		);
+		const iv = payload.subarray(0, HALF_NONCE_SIZE);
+		const encryptedPayload = payload.subarray(HALF_NONCE_SIZE, -9);
+		const nonceId = payload.at(-9)!;
+		const authCode = payload.subarray(-8);
+
+		// Retrieve the used nonce from the nonce store
+		const nonce = this.securityManager.getNonce(nonceId);
+		// Only accept the message if the nonce hasn't expired
+		validatePayload.withReason(
+			`Nonce ${
+				num2hex(
+					nonceId,
+				)
+			} expired, cannot decode security encapsulated command.`,
+		)(!!nonce);
+		// and mark the nonce as used
+		this.securityManager.deleteNonce(nonceId);
+		const authKey: Buffer = this.securityManager.authKey;
+		const encryptionKey: Buffer = this.securityManager.encryptionKey;
+
+		// Validate the encrypted data
+		const authData = getAuthenticationData(
+			iv,
+			nonce,
+			SecurityCommand.CommandEncapsulation,
+			options.context.sourceNodeId,
+			options.context.ownNodeId,
+			encryptedPayload,
+		);
+		const expectedAuthCode = computeMAC(authData, authKey);
+		// Only accept messages with a correct auth code
+		validatePayload.withReason(
+			"Invalid auth code, won't accept security encapsulated command.",
+		)(authCode.equals(expectedAuthCode));
+
+		// Decrypt the encapsulated CC
+		const frameControlAndDecryptedCC = decryptAES128OFB(
+			encryptedPayload,
+			encryptionKey,
+			Buffer.concat([iv, nonce!]),
+		);
+		const frameControl = frameControlAndDecryptedCC[0];
+		const sequenceCounter = frameControl & 0b1111;
+		const sequenced = !!(frameControl & 0b1_0000);
+		const secondFrame = !!(frameControl & 0b10_0000);
+		const decryptedCCBytes: Buffer | undefined = frameControlAndDecryptedCC
+			.subarray(1);
+
+		return new SecurityCCCommandEncapsulation({
+			nodeId: options.context.sourceNodeId,
+			authKey,
+			encryptionKey,
+			sequenceCounter,
+			sequenced,
+			secondFrame,
+			decryptedCCBytes,
+			authData,
+			authCode,
+			iv,
+		});
 	}
 
 	private securityManager: SecurityManager;
@@ -947,7 +962,7 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 export class SecurityCCNetworkKeyVerify extends SecurityCC {}
 
 // @publicAPI
-export interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
+export interface SecurityCCNetworkKeySetOptions {
 	networkKey: Buffer;
 }
 
@@ -955,23 +970,29 @@ export interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
 @expectedCCResponse(SecurityCCNetworkKeyVerify)
 export class SecurityCCNetworkKeySet extends SecurityCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| SecurityCCNetworkKeySetOptions,
+		options: SecurityCCNetworkKeySetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 16);
-			this.networkKey = this.payload.subarray(0, 16);
-		} else {
-			if (options.networkKey.length !== 16) {
-				throw new ZWaveError(
-					`The network key must have length 16!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.networkKey = options.networkKey;
+		if (options.networkKey.length !== 16) {
+			throw new ZWaveError(
+				`The network key must have length 16!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+		this.networkKey = options.networkKey;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SecurityCCNetworkKeySet {
+		validatePayload(payload.length >= 16);
+		const networkKey: Buffer = payload.subarray(0, 16);
+
+		return new SecurityCCNetworkKeySet({
+			nodeId: options.context.sourceNodeId,
+			networkKey,
+		});
 	}
 
 	public networkKey: Buffer;
@@ -989,9 +1010,8 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 }
 
 // @publicAPI
-export interface SecurityCCCommandsSupportedReportOptions
-	extends CCCommandOptions
-{
+export interface SecurityCCCommandsSupportedReportOptions {
+	reportsToFollow: number;
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 }
@@ -999,35 +1019,37 @@ export interface SecurityCCCommandsSupportedReportOptions
 @CCCommand(SecurityCommand.CommandsSupportedReport)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| SecurityCCCommandsSupportedReportOptions,
+		options: SecurityCCCommandsSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.reportsToFollow = this.payload[0];
-			const list = parseCCList(this.payload.subarray(1));
-			this.supportedCCs = list.supportedCCs;
-			this.controlledCCs = list.controlledCCs;
-		} else {
-			this.supportedCCs = options.supportedCCs;
-			this.controlledCCs = options.controlledCCs;
-			// TODO: properly split the CCs into multiple reports
-			this.reportsToFollow = 0;
-		}
+		this.supportedCCs = options.supportedCCs;
+		this.controlledCCs = options.controlledCCs;
+		// TODO: properly split the CCs into multiple reports
+		this.reportsToFollow = 0;
 	}
 
-	public readonly reportsToFollow: number;
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SecurityCCCommandsSupportedReport {
+		validatePayload(payload.length >= 1);
+		const reportsToFollow = payload[0];
+		const list = parseCCList(payload.subarray(1));
+		const supportedCCs: CommandClasses[] = list.supportedCCs;
+		const controlledCCs: CommandClasses[] = list.controlledCCs;
 
-	public serialize(ctx: CCEncodingContext): Buffer {
-		this.payload = Buffer.concat([
-			Buffer.from([this.reportsToFollow]),
-			encodeCCList(this.supportedCCs, this.controlledCCs),
-		]);
-		return super.serialize(ctx);
+		return new SecurityCCCommandsSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			reportsToFollow,
+			supportedCCs,
+			controlledCCs,
+		});
 	}
+
+	public reportsToFollow: number;
+	public supportedCCs: CommandClasses[];
+	public controlledCCs: CommandClasses[];
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		// Nothing special we can distinguish sessions with
@@ -1037,9 +1059,6 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public expectMoreMessages(): boolean {
 		return this.reportsToFollow > 0;
 	}
-
-	public supportedCCs: CommandClasses[];
-	public controlledCCs: CommandClasses[];
 
 	public mergePartialCCs(
 		partials: SecurityCCCommandsSupportedReport[],
@@ -1051,6 +1070,14 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		this.controlledCCs = [...partials, this]
 			.map((report) => report.controlledCCs)
 			.reduce((prev, cur) => prev.concat(...cur), []);
+	}
+
+	public serialize(ctx: CCEncodingContext): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.reportsToFollow]),
+			encodeCCList(this.supportedCCs, this.controlledCCs),
+		]);
+		return super.serialize(ctx);
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {

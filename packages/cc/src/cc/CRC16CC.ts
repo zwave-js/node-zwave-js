@@ -12,7 +12,6 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -22,6 +21,11 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import { CRC16Command } from "../lib/_Types";
+
+const headerBuffer = Buffer.from([
+	CommandClasses["CRC-16 Encapsulation"],
+	CRC16Command.CommandEncapsulation,
+]);
 
 // @noSetValueAPI
 // @noInterview This CC only has a single encapsulation command
@@ -87,7 +91,7 @@ export class CRC16CC extends CommandClass {
 }
 
 // @publicAPI
-export interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
+export interface CRC16CCCommandEncapsulationOptions {
 	encapsulated: CommandClass;
 }
 
@@ -106,39 +110,44 @@ function getCCResponseForCommandEncapsulation(
 )
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| CRC16CCCommandEncapsulationOptions,
+		options: CRC16CCCommandEncapsulationOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
+		this.encapsulated = options.encapsulated;
+		options.encapsulated.encapsulatingCC = this as any;
+	}
 
-			const ccBuffer = this.payload.subarray(0, -2);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): CRC16CCCommandEncapsulation {
+		validatePayload(payload.length >= 3);
 
-			// Verify the CRC
-			let expectedCRC = CRC16_CCITT(this.headerBuffer);
-			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
-			const actualCRC = this.payload.readUInt16BE(
-				this.payload.length - 2,
-			);
-			validatePayload(expectedCRC === actualCRC);
+		const ccBuffer = payload.subarray(0, -2);
 
-			this.encapsulated = CommandClass.from({
-				data: ccBuffer,
-				fromEncapsulation: true,
-				encapCC: this,
-				origin: options.origin,
-				context: options.context,
-			});
-		} else {
-			this.encapsulated = options.encapsulated;
-			options.encapsulated.encapsulatingCC = this as any;
-		}
+		// Verify the CRC
+		let expectedCRC = CRC16_CCITT(headerBuffer);
+		expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
+		const actualCRC = payload.readUInt16BE(
+			payload.length - 2,
+		);
+		validatePayload(expectedCRC === actualCRC);
+		const encapsulated: CommandClass = CommandClass.from({
+			data: ccBuffer,
+			fromEncapsulation: true,
+			// FIXME: 🐔 🥚
+			encapCC: this,
+			origin: options.origin,
+			context: options.context,
+		});
+
+		return new CRC16CCCommandEncapsulation({
+			nodeId: options.context.sourceNodeId,
+			encapsulated,
+		});
 	}
 
 	public encapsulated: CommandClass;
-	private readonly headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 
 	public serialize(ctx: CCEncodingContext): Buffer {
 		const commandBuffer = this.encapsulated.serialize(ctx);
@@ -147,7 +156,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 
 		// Compute and save the CRC16 in the payload
 		// The CC header is included in the CRC computation
-		let crc = CRC16_CCITT(this.headerBuffer);
+		let crc = CRC16_CCITT(headerBuffer);
 		crc = CRC16_CCITT(commandBuffer, crc);
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 

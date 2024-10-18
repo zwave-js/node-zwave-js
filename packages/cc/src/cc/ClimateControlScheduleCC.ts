@@ -18,7 +18,6 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -214,7 +213,7 @@ export class ClimateControlScheduleCC extends CommandClass {
 }
 
 // @publicAPI
-export interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
+export interface ClimateControlScheduleCCSetOptions {
 	weekday: Weekday;
 	switchPoints: Switchpoint[];
 }
@@ -223,20 +222,25 @@ export interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ClimateControlScheduleCCSetOptions,
+		options: ClimateControlScheduleCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.switchPoints = options.switchPoints;
-			this.weekday = options.weekday;
-		}
+		this.switchPoints = options.switchPoints;
+		this.weekday = options.weekday;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ClimateControlScheduleCCSet {
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ClimateControlScheduleCCSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public switchPoints: Switchpoint[];
@@ -283,22 +287,46 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	}
 }
 
+// @publicAPI
+export interface ClimateControlScheduleCCReportOptions {
+	weekday: Weekday;
+	schedule: Switchpoint[];
+}
+
 @CCCommand(ClimateControlScheduleCommand.Report)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ClimateControlScheduleCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 28); // 1 + 9 * 3
-		this.weekday = this.payload[0] & 0b111;
+		// TODO: Check implementation:
+		this.weekday = options.weekday;
+		this.schedule = options.schedule;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ClimateControlScheduleCCReport {
+		validatePayload(payload.length >= 28);
+		const weekday: Weekday = payload[0] & 0b111;
 		const allSwitchpoints: Switchpoint[] = [];
 		for (let i = 0; i <= 8; i++) {
 			allSwitchpoints.push(
-				decodeSwitchpoint(this.payload.subarray(1 + 3 * i)),
+				decodeSwitchpoint(payload.subarray(1 + 3 * i)),
 			);
 		}
-		this.schedule = allSwitchpoints.filter((sp) => sp.state !== "Unused");
+
+		const schedule: Switchpoint[] = allSwitchpoints.filter((sp) =>
+			sp.state !== "Unused"
+		);
+
+		return new ClimateControlScheduleCCReport({
+			nodeId: options.context.sourceNodeId,
+			weekday,
+			schedule,
+		});
 	}
 
 	public readonly weekday: Weekday;
@@ -334,7 +362,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 }
 
 // @publicAPI
-export interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
+export interface ClimateControlScheduleCCGetOptions {
 	weekday: Weekday;
 }
 
@@ -342,19 +370,24 @@ export interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ClimateControlScheduleCCReport)
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ClimateControlScheduleCCGetOptions,
+		options: ClimateControlScheduleCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.weekday = options.weekday;
-		}
+		this.weekday = options.weekday;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ClimateControlScheduleCCGet {
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ClimateControlScheduleCCGet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public weekday: Weekday;
@@ -372,17 +405,37 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	}
 }
 
+// @publicAPI
+export interface ClimateControlScheduleCCChangedReportOptions {
+	changeCounter: number;
+}
+
 @CCCommand(ClimateControlScheduleCommand.ChangedReport)
 export class ClimateControlScheduleCCChangedReport
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options:
+			& ClimateControlScheduleCCChangedReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.changeCounter = this.payload[0];
+		// TODO: Check implementation:
+		this.changeCounter = options.changeCounter;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ClimateControlScheduleCCChangedReport {
+		validatePayload(payload.length >= 1);
+		const changeCounter = payload[0];
+
+		return new ClimateControlScheduleCCChangedReport({
+			nodeId: options.context.sourceNodeId,
+			changeCounter,
+		});
 	}
 
 	public readonly changeCounter: number;
@@ -401,19 +454,42 @@ export class ClimateControlScheduleCCChangedGet
 	extends ClimateControlScheduleCC
 {}
 
+// @publicAPI
+export interface ClimateControlScheduleCCOverrideReportOptions {
+	overrideType: ScheduleOverrideType;
+	overrideState: SetbackState;
+}
+
 @CCCommand(ClimateControlScheduleCommand.OverrideReport)
 export class ClimateControlScheduleCCOverrideReport
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options:
+			& ClimateControlScheduleCCOverrideReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 2);
-		this.overrideType = this.payload[0] & 0b11;
-		this.overrideState = decodeSetbackState(this.payload[1])
-			|| this.payload[1];
+		// TODO: Check implementation:
+		this.overrideType = options.overrideType;
+		this.overrideState = options.overrideState;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ClimateControlScheduleCCOverrideReport {
+		validatePayload(payload.length >= 2);
+		const overrideType: ScheduleOverrideType = payload[0] & 0b11;
+		const overrideState: SetbackState = decodeSetbackState(payload[1])
+			|| payload[1];
+
+		return new ClimateControlScheduleCCOverrideReport({
+			nodeId: options.context.sourceNodeId,
+			overrideType,
+			overrideState,
+		});
 	}
 
 	@ccValue(ClimateControlScheduleCCValues.overrideType)
@@ -443,9 +519,7 @@ export class ClimateControlScheduleCCOverrideGet
 {}
 
 // @publicAPI
-export interface ClimateControlScheduleCCOverrideSetOptions
-	extends CCCommandOptions
-{
+export interface ClimateControlScheduleCCOverrideSetOptions {
 	overrideType: ScheduleOverrideType;
 	overrideState: SetbackState;
 }
@@ -456,20 +530,25 @@ export class ClimateControlScheduleCCOverrideSet
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ClimateControlScheduleCCOverrideSetOptions,
+		options: ClimateControlScheduleCCOverrideSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.overrideType = options.overrideType;
-			this.overrideState = options.overrideState;
-		}
+		this.overrideType = options.overrideType;
+		this.overrideState = options.overrideState;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ClimateControlScheduleCCOverrideSet {
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ClimateControlScheduleCCOverrideSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public overrideType: ScheduleOverrideType;

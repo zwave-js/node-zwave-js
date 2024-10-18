@@ -35,7 +35,6 @@ import {
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -496,7 +495,7 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 }
 
 // @publicAPI
-export interface ProtectionCCSetOptions extends CCCommandOptions {
+export interface ProtectionCCSetOptions {
 	local: LocalProtectionState;
 	rf?: RFProtectionState;
 }
@@ -505,19 +504,26 @@ export interface ProtectionCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ProtectionCCSet extends ProtectionCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ProtectionCCSetOptions,
+		options: ProtectionCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.local = options.local;
-			this.rf = options.rf;
-		}
+		this.local = options.local;
+		this.rf = options.rf;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ProtectionCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ProtectionCCSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public local: LocalProtectionState;
@@ -556,17 +562,40 @@ export class ProtectionCCSet extends ProtectionCC {
 	}
 }
 
+// @publicAPI
+export interface ProtectionCCReportOptions {
+	local: LocalProtectionState;
+	rf?: RFProtectionState;
+}
+
 @CCCommand(ProtectionCommand.Report)
 export class ProtectionCCReport extends ProtectionCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ProtectionCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 1);
-		this.local = this.payload[0] & 0b1111;
-		if (this.payload.length >= 2) {
-			this.rf = this.payload[1] & 0b1111;
+
+		// TODO: Check implementation:
+		this.local = options.local;
+		this.rf = options.rf;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ProtectionCCReport {
+		validatePayload(payload.length >= 1);
+		const local: LocalProtectionState = payload[0] & 0b1111;
+		let rf: RFProtectionState | undefined;
+		if (payload.length >= 2) {
+			rf = payload[1] & 0b1111;
 		}
+
+		return new ProtectionCCReport({
+			nodeId: options.context.sourceNodeId,
+			local,
+			rf,
+		});
 	}
 
 	@ccValue(ProtectionCCValues.localProtectionState)
@@ -593,23 +622,51 @@ export class ProtectionCCReport extends ProtectionCC {
 @expectedCCResponse(ProtectionCCReport)
 export class ProtectionCCGet extends ProtectionCC {}
 
+// @publicAPI
+export interface ProtectionCCSupportedReportOptions {
+	supportsTimeout: boolean;
+	supportsExclusiveControl: boolean;
+	supportedLocalStates: LocalProtectionState[];
+	supportedRFStates: RFProtectionState[];
+}
+
 @CCCommand(ProtectionCommand.SupportedReport)
 export class ProtectionCCSupportedReport extends ProtectionCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ProtectionCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 5);
-		this.supportsTimeout = !!(this.payload[0] & 0b1);
-		this.supportsExclusiveControl = !!(this.payload[0] & 0b10);
-		this.supportedLocalStates = parseBitMask(
-			this.payload.subarray(1, 3),
+
+		// TODO: Check implementation:
+		this.supportsTimeout = options.supportsTimeout;
+		this.supportsExclusiveControl = options.supportsExclusiveControl;
+		this.supportedLocalStates = options.supportedLocalStates;
+		this.supportedRFStates = options.supportedRFStates;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ProtectionCCSupportedReport {
+		validatePayload(payload.length >= 5);
+		const supportsTimeout = !!(payload[0] & 0b1);
+		const supportsExclusiveControl = !!(payload[0] & 0b10);
+		const supportedLocalStates: LocalProtectionState[] = parseBitMask(
+			payload.subarray(1, 3),
 			LocalProtectionState.Unprotected,
 		);
-		this.supportedRFStates = parseBitMask(
-			this.payload.subarray(3, 5),
+		const supportedRFStates: RFProtectionState[] = parseBitMask(
+			payload.subarray(3, 5),
 			RFProtectionState.Unprotected,
 		);
+
+		return new ProtectionCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			supportsTimeout,
+			supportsExclusiveControl,
+			supportedLocalStates,
+			supportedRFStates,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -674,14 +731,33 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 @expectedCCResponse(ProtectionCCSupportedReport)
 export class ProtectionCCSupportedGet extends ProtectionCC {}
 
+// @publicAPI
+export interface ProtectionCCExclusiveControlReportOptions {
+	exclusiveControlNodeId: number;
+}
+
 @CCCommand(ProtectionCommand.ExclusiveControlReport)
 export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ProtectionCCExclusiveControlReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 1);
-		this.exclusiveControlNodeId = this.payload[0];
+
+		// TODO: Check implementation:
+		this.exclusiveControlNodeId = options.exclusiveControlNodeId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ProtectionCCExclusiveControlReport {
+		validatePayload(payload.length >= 1);
+		const exclusiveControlNodeId = payload[0];
+
+		return new ProtectionCCExclusiveControlReport({
+			nodeId: options.context.sourceNodeId,
+			exclusiveControlNodeId,
+		});
 	}
 
 	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
@@ -702,9 +778,7 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 export class ProtectionCCExclusiveControlGet extends ProtectionCC {}
 
 // @publicAPI
-export interface ProtectionCCExclusiveControlSetOptions
-	extends CCCommandOptions
-{
+export interface ProtectionCCExclusiveControlSetOptions {
 	exclusiveControlNodeId: number;
 }
 
@@ -713,20 +787,25 @@ export interface ProtectionCCExclusiveControlSetOptions
 @useSupervision()
 export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ProtectionCCExclusiveControlSetOptions,
+		options: ProtectionCCExclusiveControlSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.exclusiveControlNodeId = options.exclusiveControlNodeId;
-		}
+		this.exclusiveControlNodeId = options.exclusiveControlNodeId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ProtectionCCExclusiveControlSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ProtectionCCExclusiveControlSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public exclusiveControlNodeId: number;
@@ -746,14 +825,33 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	}
 }
 
+// @publicAPI
+export interface ProtectionCCTimeoutReportOptions {
+	timeout: Timeout;
+}
+
 @CCCommand(ProtectionCommand.TimeoutReport)
 export class ProtectionCCTimeoutReport extends ProtectionCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ProtectionCCTimeoutReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 1);
-		this.timeout = Timeout.parse(this.payload[0]);
+
+		// TODO: Check implementation:
+		this.timeout = options.timeout;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ProtectionCCTimeoutReport {
+		validatePayload(payload.length >= 1);
+		const timeout: Timeout = Timeout.parse(payload[0]);
+
+		return new ProtectionCCTimeoutReport({
+			nodeId: options.context.sourceNodeId,
+			timeout,
+		});
 	}
 
 	@ccValue(ProtectionCCValues.timeout)
@@ -772,7 +870,7 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 export class ProtectionCCTimeoutGet extends ProtectionCC {}
 
 // @publicAPI
-export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
+export interface ProtectionCCTimeoutSetOptions {
 	timeout: Timeout;
 }
 
@@ -781,20 +879,25 @@ export interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ProtectionCCTimeoutSet extends ProtectionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ProtectionCCTimeoutSetOptions,
+		options: ProtectionCCTimeoutSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.timeout = options.timeout;
-		}
+		this.timeout = options.timeout;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ProtectionCCTimeoutSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ProtectionCCTimeoutSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public timeout: Timeout;

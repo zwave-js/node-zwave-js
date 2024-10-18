@@ -919,7 +919,7 @@ daily repeating: ${slotsResp.numDailyRepeatingSlots}`;
 }
 
 // @publicAPI
-export interface ScheduleEntryLockCCEnableSetOptions extends CCCommandOptions {
+export interface ScheduleEntryLockCCEnableSetOptions {
 	userId: number;
 	enabled: boolean;
 }
@@ -928,19 +928,26 @@ export interface ScheduleEntryLockCCEnableSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCEnableSetOptions,
+		options: ScheduleEntryLockCCEnableSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userId = this.payload[0];
-			this.enabled = this.payload[1] === 0x01;
-		} else {
-			this.userId = options.userId;
-			this.enabled = options.enabled;
-		}
+		this.userId = options.userId;
+		this.enabled = options.enabled;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCEnableSet {
+		validatePayload(payload.length >= 2);
+		const userId = payload[0];
+		const enabled: boolean = payload[1] === 0x01;
+
+		return new ScheduleEntryLockCCEnableSet({
+			nodeId: options.context.sourceNodeId,
+			userId,
+			enabled,
+		});
 	}
 
 	public userId: number;
@@ -963,9 +970,7 @@ export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 }
 
 // @publicAPI
-export interface ScheduleEntryLockCCEnableAllSetOptions
-	extends CCCommandOptions
-{
+export interface ScheduleEntryLockCCEnableAllSetOptions {
 	enabled: boolean;
 }
 
@@ -973,17 +978,23 @@ export interface ScheduleEntryLockCCEnableAllSetOptions
 @useSupervision()
 export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCEnableAllSetOptions,
+		options: ScheduleEntryLockCCEnableAllSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.enabled = this.payload[0] === 0x01;
-		} else {
-			this.enabled = options.enabled;
-		}
+		this.enabled = options.enabled;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCEnableAllSet {
+		validatePayload(payload.length >= 1);
+		const enabled: boolean = payload[0] === 0x01;
+
+		return new ScheduleEntryLockCCEnableAllSet({
+			nodeId: options.context.sourceNodeId,
+			enabled,
+		});
 	}
 
 	public enabled: boolean;
@@ -1004,9 +1015,7 @@ export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 }
 
 // @publicAPI
-export interface ScheduleEntryLockCCSupportedReportOptions
-	extends CCCommandOptions
-{
+export interface ScheduleEntryLockCCSupportedReportOptions {
 	numWeekDaySlots: number;
 	numYearDaySlots: number;
 	numDailyRepeatingSlots?: number;
@@ -1015,23 +1024,32 @@ export interface ScheduleEntryLockCCSupportedReportOptions
 @CCCommand(ScheduleEntryLockCommand.SupportedReport)
 export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCSupportedReportOptions,
+		options: ScheduleEntryLockCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.numWeekDaySlots = this.payload[0];
-			this.numYearDaySlots = this.payload[1];
-			if (this.payload.length >= 3) {
-				this.numDailyRepeatingSlots = this.payload[2];
-			}
-		} else {
-			this.numWeekDaySlots = options.numWeekDaySlots;
-			this.numYearDaySlots = options.numYearDaySlots;
-			this.numDailyRepeatingSlots = options.numDailyRepeatingSlots;
+		this.numWeekDaySlots = options.numWeekDaySlots;
+		this.numYearDaySlots = options.numYearDaySlots;
+		this.numDailyRepeatingSlots = options.numDailyRepeatingSlots;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCSupportedReport {
+		validatePayload(payload.length >= 2);
+		const numWeekDaySlots = payload[0];
+		const numYearDaySlots = payload[1];
+		let numDailyRepeatingSlots: number | undefined;
+		if (payload.length >= 3) {
+			numDailyRepeatingSlots = payload[2];
 		}
+
+		return new ScheduleEntryLockCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			numWeekDaySlots,
+			numYearDaySlots,
+			numDailyRepeatingSlots,
+		});
 	}
 
 	@ccValue(ScheduleEntryLockCCValues.numWeekDaySlots)
@@ -1072,7 +1090,6 @@ export class ScheduleEntryLockCCSupportedGet extends ScheduleEntryLockCC {}
 
 /** @publicAPI */
 export type ScheduleEntryLockCCWeekDayScheduleSetOptions =
-	& CCCommandOptions
 	& ScheduleEntryLockSlotId
 	& (
 		| {
@@ -1088,39 +1105,63 @@ export type ScheduleEntryLockCCWeekDayScheduleSetOptions =
 export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCWeekDayScheduleSetOptions,
+			& ScheduleEntryLockCCWeekDayScheduleSetOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.action = this.payload[0];
-			validatePayload(
-				this.action === ScheduleEntryLockSetAction.Set
-					|| this.action === ScheduleEntryLockSetAction.Erase,
-			);
-			this.userId = this.payload[1];
-			this.slotId = this.payload[2];
-			if (this.action === ScheduleEntryLockSetAction.Set) {
-				validatePayload(this.payload.length >= 8);
-				this.weekday = this.payload[3];
-				this.startHour = this.payload[4];
-				this.startMinute = this.payload[5];
-				this.stopHour = this.payload[6];
-				this.stopMinute = this.payload[7];
-			}
-		} else {
-			this.userId = options.userId;
-			this.slotId = options.slotId;
-			this.action = options.action;
-			if (options.action === ScheduleEntryLockSetAction.Set) {
-				this.weekday = options.weekday;
-				this.startHour = options.startHour;
-				this.startMinute = options.startMinute;
-				this.stopHour = options.stopHour;
-				this.stopMinute = options.stopMinute;
-			}
+		this.userId = options.userId;
+		this.slotId = options.slotId;
+		this.action = options.action;
+		if (options.action === ScheduleEntryLockSetAction.Set) {
+			this.weekday = options.weekday;
+			this.startHour = options.startHour;
+			this.startMinute = options.startMinute;
+			this.stopHour = options.stopHour;
+			this.stopMinute = options.stopMinute;
 		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCWeekDayScheduleSet {
+		validatePayload(payload.length >= 3);
+		const action: ScheduleEntryLockSetAction = payload[0];
+
+		validatePayload(
+			action === ScheduleEntryLockSetAction.Set
+				|| action === ScheduleEntryLockSetAction.Erase,
+		);
+		const userId = payload[1];
+		const slotId = payload[2];
+
+		if (action !== ScheduleEntryLockSetAction.Set) {
+			return new ScheduleEntryLockCCWeekDayScheduleSet({
+				nodeId: options.context.sourceNodeId,
+				action,
+				userId,
+				slotId,
+			});
+		}
+
+		validatePayload(payload.length >= 8);
+		const weekday: ScheduleEntryLockWeekday = payload[3];
+		const startHour = payload[4];
+		const startMinute = payload[5];
+		const stopHour = payload[6];
+		const stopMinute = payload[7];
+
+		return new ScheduleEntryLockCCWeekDayScheduleSet({
+			nodeId: options.context.sourceNodeId,
+			action,
+			userId,
+			slotId,
+			weekday,
+			startHour,
+			startMinute,
+			stopHour,
+			stopMinute,
+		});
 	}
 
 	public userId: number;
@@ -1187,7 +1228,6 @@ export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 
 // @publicAPI
 export type ScheduleEntryLockCCWeekDayScheduleReportOptions =
-	& CCCommandOptions
 	& ScheduleEntryLockSlotId
 	& AllOrNone<ScheduleEntryLockWeekDaySchedule>;
 
@@ -1197,40 +1237,77 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCWeekDayScheduleReportOptions,
+			& ScheduleEntryLockCCWeekDayScheduleReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userId = this.payload[0];
-			this.slotId = this.payload[1];
-			if (this.payload.length >= 7) {
-				if (this.payload[2] !== 0xff) {
-					this.weekday = this.payload[2];
-				}
-				if (this.payload[3] !== 0xff) {
-					this.startHour = this.payload[3];
-				}
-				if (this.payload[4] !== 0xff) {
-					this.startMinute = this.payload[4];
-				}
-				if (this.payload[5] !== 0xff) {
-					this.stopHour = this.payload[5];
-				}
-				if (this.payload[6] !== 0xff) {
-					this.stopMinute = this.payload[6];
-				}
+		this.userId = options.userId;
+		this.slotId = options.slotId;
+		this.weekday = options.weekday;
+		this.startHour = options.startHour;
+		this.startMinute = options.startMinute;
+		this.stopHour = options.stopHour;
+		this.stopMinute = options.stopMinute;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCWeekDayScheduleReport {
+		validatePayload(payload.length >= 2);
+		const userId = payload[0];
+		const slotId = payload[1];
+
+		let ccOptions: ScheduleEntryLockCCWeekDayScheduleReportOptions = {
+			userId,
+			slotId,
+		};
+
+		let weekday: ScheduleEntryLockWeekday | undefined;
+		let startHour: number | undefined;
+		let startMinute: number | undefined;
+		let stopHour: number | undefined;
+		let stopMinute: number | undefined;
+
+		if (payload.length >= 7) {
+			if (payload[2] !== 0xff) {
+				weekday = payload[2];
 			}
-		} else {
-			this.userId = options.userId;
-			this.slotId = options.slotId;
-			this.weekday = options.weekday;
-			this.startHour = options.startHour;
-			this.startMinute = options.startMinute;
-			this.stopHour = options.stopHour;
-			this.stopMinute = options.stopMinute;
+			if (payload[3] !== 0xff) {
+				startHour = payload[3];
+			}
+			if (payload[4] !== 0xff) {
+				startMinute = payload[4];
+			}
+			if (payload[5] !== 0xff) {
+				stopHour = payload[5];
+			}
+			if (payload[6] !== 0xff) {
+				stopMinute = payload[6];
+			}
 		}
+
+		if (
+			weekday != undefined
+			&& startHour != undefined
+			&& startMinute != undefined
+			&& stopHour != undefined
+			&& stopMinute != undefined
+		) {
+			ccOptions = {
+				...ccOptions,
+				weekday,
+				startHour,
+				startMinute,
+				stopHour,
+				stopMinute,
+			};
+		}
+
+		return new ScheduleEntryLockCCWeekDayScheduleReport({
+			nodeId: options.context.sourceNodeId,
+			...ccOptions,
+		});
 	}
 
 	public userId: number;
@@ -1312,26 +1389,34 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 
 // @publicAPI
 export type ScheduleEntryLockCCWeekDayScheduleGetOptions =
-	& CCCommandOptions
-	& ScheduleEntryLockSlotId;
+	ScheduleEntryLockSlotId;
 
 @CCCommand(ScheduleEntryLockCommand.WeekDayScheduleGet)
 @expectedCCResponse(ScheduleEntryLockCCWeekDayScheduleReport)
 export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCWeekDayScheduleGetOptions,
+			& ScheduleEntryLockCCWeekDayScheduleGetOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userId = this.payload[0];
-			this.slotId = this.payload[1];
-		} else {
-			this.userId = options.userId;
-			this.slotId = options.slotId;
-		}
+		this.userId = options.userId;
+		this.slotId = options.slotId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCWeekDayScheduleGet {
+		validatePayload(payload.length >= 2);
+		const userId = payload[0];
+		const slotId = payload[1];
+
+		return new ScheduleEntryLockCCWeekDayScheduleGet({
+			nodeId: options.context.sourceNodeId,
+			userId,
+			slotId,
+		});
 	}
 
 	public userId: number;
@@ -1355,7 +1440,6 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 
 /** @publicAPI */
 export type ScheduleEntryLockCCYearDayScheduleSetOptions =
-	& CCCommandOptions
 	& ScheduleEntryLockSlotId
 	& (
 		| {
@@ -1371,49 +1455,78 @@ export type ScheduleEntryLockCCYearDayScheduleSetOptions =
 export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCYearDayScheduleSetOptions,
+			& ScheduleEntryLockCCYearDayScheduleSetOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.action = this.payload[0];
-			validatePayload(
-				this.action === ScheduleEntryLockSetAction.Set
-					|| this.action === ScheduleEntryLockSetAction.Erase,
-			);
-			this.userId = this.payload[1];
-			this.slotId = this.payload[2];
-			if (this.action === ScheduleEntryLockSetAction.Set) {
-				validatePayload(this.payload.length >= 13);
-				this.startYear = this.payload[3];
-				this.startMonth = this.payload[4];
-				this.startDay = this.payload[5];
-				this.startHour = this.payload[6];
-				this.startMinute = this.payload[7];
-				this.stopYear = this.payload[8];
-				this.stopMonth = this.payload[9];
-				this.stopDay = this.payload[10];
-				this.stopHour = this.payload[11];
-				this.stopMinute = this.payload[12];
-			}
-		} else {
-			this.userId = options.userId;
-			this.slotId = options.slotId;
-			this.action = options.action;
-			if (options.action === ScheduleEntryLockSetAction.Set) {
-				this.startYear = options.startYear;
-				this.startMonth = options.startMonth;
-				this.startDay = options.startDay;
-				this.startHour = options.startHour;
-				this.startMinute = options.startMinute;
-				this.stopYear = options.stopYear;
-				this.stopMonth = options.stopMonth;
-				this.stopDay = options.stopDay;
-				this.stopHour = options.stopHour;
-				this.stopMinute = options.stopMinute;
-			}
+		this.userId = options.userId;
+		this.slotId = options.slotId;
+		this.action = options.action;
+		if (options.action === ScheduleEntryLockSetAction.Set) {
+			this.startYear = options.startYear;
+			this.startMonth = options.startMonth;
+			this.startDay = options.startDay;
+			this.startHour = options.startHour;
+			this.startMinute = options.startMinute;
+			this.stopYear = options.stopYear;
+			this.stopMonth = options.stopMonth;
+			this.stopDay = options.stopDay;
+			this.stopHour = options.stopHour;
+			this.stopMinute = options.stopMinute;
 		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCYearDayScheduleSet {
+		validatePayload(payload.length >= 3);
+		const action: ScheduleEntryLockSetAction = payload[0];
+
+		validatePayload(
+			action === ScheduleEntryLockSetAction.Set
+				|| action === ScheduleEntryLockSetAction.Erase,
+		);
+		const userId = payload[1];
+		const slotId = payload[2];
+
+		if (action !== ScheduleEntryLockSetAction.Set) {
+			return new ScheduleEntryLockCCYearDayScheduleSet({
+				nodeId: options.context.sourceNodeId,
+				action,
+				userId,
+				slotId,
+			});
+		}
+
+		validatePayload(payload.length >= 13);
+		const startYear = payload[3];
+		const startMonth = payload[4];
+		const startDay = payload[5];
+		const startHour = payload[6];
+		const startMinute = payload[7];
+		const stopYear = payload[8];
+		const stopMonth = payload[9];
+		const stopDay = payload[10];
+		const stopHour = payload[11];
+		const stopMinute = payload[12];
+
+		return new ScheduleEntryLockCCYearDayScheduleSet({
+			nodeId: options.context.sourceNodeId,
+			action,
+			userId,
+			slotId,
+			startYear,
+			startMonth,
+			startDay,
+			startHour,
+			startMinute,
+			stopYear,
+			stopMonth,
+			stopDay,
+			stopHour,
+			stopMinute,
+		});
 	}
 
 	public userId: number;
@@ -1492,7 +1605,6 @@ export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 
 // @publicAPI
 export type ScheduleEntryLockCCYearDayScheduleReportOptions =
-	& CCCommandOptions
 	& ScheduleEntryLockSlotId
 	& AllOrNone<ScheduleEntryLockYearDaySchedule>;
 
@@ -1502,60 +1614,112 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCYearDayScheduleReportOptions,
+			& ScheduleEntryLockCCYearDayScheduleReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userId = this.payload[0];
-			this.slotId = this.payload[1];
-			if (this.payload.length >= 12) {
-				if (this.payload[2] !== 0xff) {
-					this.startYear = this.payload[2];
-				}
-				if (this.payload[3] !== 0xff) {
-					this.startMonth = this.payload[3];
-				}
-				if (this.payload[4] !== 0xff) {
-					this.startDay = this.payload[4];
-				}
-				if (this.payload[5] !== 0xff) {
-					this.startHour = this.payload[5];
-				}
-				if (this.payload[6] !== 0xff) {
-					this.startMinute = this.payload[6];
-				}
-				if (this.payload[7] !== 0xff) {
-					this.stopYear = this.payload[7];
-				}
-				if (this.payload[8] !== 0xff) {
-					this.stopMonth = this.payload[8];
-				}
-				if (this.payload[9] !== 0xff) {
-					this.stopDay = this.payload[9];
-				}
-				if (this.payload[10] !== 0xff) {
-					this.stopHour = this.payload[10];
-				}
-				if (this.payload[11] !== 0xff) {
-					this.stopMinute = this.payload[11];
-				}
+		this.userId = options.userId;
+		this.slotId = options.slotId;
+		this.startYear = options.startYear;
+		this.startMonth = options.startMonth;
+		this.startDay = options.startDay;
+		this.startHour = options.startHour;
+		this.startMinute = options.startMinute;
+		this.stopYear = options.stopYear;
+		this.stopMonth = options.stopMonth;
+		this.stopDay = options.stopDay;
+		this.stopHour = options.stopHour;
+		this.stopMinute = options.stopMinute;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCYearDayScheduleReport {
+		validatePayload(payload.length >= 2);
+		const userId = payload[0];
+		const slotId = payload[1];
+
+		let ccOptions: ScheduleEntryLockCCYearDayScheduleReportOptions = {
+			userId,
+			slotId,
+		};
+
+		let startYear: number | undefined;
+		let startMonth: number | undefined;
+		let startDay: number | undefined;
+		let startHour: number | undefined;
+		let startMinute: number | undefined;
+		let stopYear: number | undefined;
+		let stopMonth: number | undefined;
+		let stopDay: number | undefined;
+		let stopHour: number | undefined;
+		let stopMinute: number | undefined;
+
+		if (payload.length >= 12) {
+			if (payload[2] !== 0xff) {
+				startYear = payload[2];
 			}
-		} else {
-			this.userId = options.userId;
-			this.slotId = options.slotId;
-			this.startYear = options.startYear;
-			this.startMonth = options.startMonth;
-			this.startDay = options.startDay;
-			this.startHour = options.startHour;
-			this.startMinute = options.startMinute;
-			this.stopYear = options.stopYear;
-			this.stopMonth = options.stopMonth;
-			this.stopDay = options.stopDay;
-			this.stopHour = options.stopHour;
-			this.stopMinute = options.stopMinute;
+			if (payload[3] !== 0xff) {
+				startMonth = payload[3];
+			}
+			if (payload[4] !== 0xff) {
+				startDay = payload[4];
+			}
+			if (payload[5] !== 0xff) {
+				startHour = payload[5];
+			}
+			if (payload[6] !== 0xff) {
+				startMinute = payload[6];
+			}
+			if (payload[7] !== 0xff) {
+				stopYear = payload[7];
+			}
+			if (payload[8] !== 0xff) {
+				stopMonth = payload[8];
+			}
+			if (payload[9] !== 0xff) {
+				stopDay = payload[9];
+			}
+			if (payload[10] !== 0xff) {
+				stopHour = payload[10];
+			}
+			if (payload[11] !== 0xff) {
+				stopMinute = payload[11];
+			}
 		}
+
+		if (
+			startYear != undefined
+			&& startMonth != undefined
+			&& startDay != undefined
+			&& startHour != undefined
+			&& startMinute != undefined
+			&& stopYear != undefined
+			&& stopMonth != undefined
+			&& stopDay != undefined
+			&& stopHour != undefined
+			&& stopMinute != undefined
+		) {
+			ccOptions = {
+				...ccOptions,
+				startYear,
+				startMonth,
+				startDay,
+				startHour,
+				startMinute,
+				stopYear,
+				stopMonth,
+				stopDay,
+				stopHour,
+				stopMinute,
+			};
+		}
+
+		return new ScheduleEntryLockCCYearDayScheduleReport({
+			nodeId: options.context.sourceNodeId,
+			...ccOptions,
+		});
 	}
 
 	public userId: number;
@@ -1655,26 +1819,34 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 
 // @publicAPI
 export type ScheduleEntryLockCCYearDayScheduleGetOptions =
-	& CCCommandOptions
-	& ScheduleEntryLockSlotId;
+	ScheduleEntryLockSlotId;
 
 @CCCommand(ScheduleEntryLockCommand.YearDayScheduleGet)
 @expectedCCResponse(ScheduleEntryLockCCYearDayScheduleReport)
 export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCYearDayScheduleGetOptions,
+			& ScheduleEntryLockCCYearDayScheduleGetOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userId = this.payload[0];
-			this.slotId = this.payload[1];
-		} else {
-			this.userId = options.userId;
-			this.slotId = options.slotId;
-		}
+		this.userId = options.userId;
+		this.slotId = options.slotId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCYearDayScheduleGet {
+		validatePayload(payload.length >= 2);
+		const userId = payload[0];
+		const slotId = payload[1];
+
+		return new ScheduleEntryLockCCYearDayScheduleGet({
+			nodeId: options.context.sourceNodeId,
+			userId,
+			slotId,
+		});
 	}
 
 	public userId: number;
@@ -1697,9 +1869,7 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 }
 
 // @publicAPI
-export interface ScheduleEntryLockCCTimeOffsetSetOptions
-	extends CCCommandOptions
-{
+export interface ScheduleEntryLockCCTimeOffsetSetOptions {
 	standardOffset: number;
 	dstOffset: number;
 }
@@ -1708,19 +1878,24 @@ export interface ScheduleEntryLockCCTimeOffsetSetOptions
 @useSupervision()
 export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCTimeOffsetSetOptions,
+		options: ScheduleEntryLockCCTimeOffsetSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			const { standardOffset, dstOffset } = parseTimezone(this.payload);
-			this.standardOffset = standardOffset;
-			this.dstOffset = dstOffset;
-		} else {
-			this.standardOffset = options.standardOffset;
-			this.dstOffset = options.dstOffset;
-		}
+		this.standardOffset = options.standardOffset;
+		this.dstOffset = options.dstOffset;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCTimeOffsetSet {
+		const { standardOffset, dstOffset } = parseTimezone(payload);
+
+		return new ScheduleEntryLockCCTimeOffsetSet({
+			nodeId: options.context.sourceNodeId,
+			standardOffset,
+			dstOffset,
+		});
 	}
 
 	public standardOffset: number;
@@ -1746,9 +1921,7 @@ export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 }
 
 // @publicAPI
-export interface ScheduleEntryLockCCTimeOffsetReportOptions
-	extends CCCommandOptions
-{
+export interface ScheduleEntryLockCCTimeOffsetReportOptions {
 	standardOffset: number;
 	dstOffset: number;
 }
@@ -1756,19 +1929,24 @@ export interface ScheduleEntryLockCCTimeOffsetReportOptions
 @CCCommand(ScheduleEntryLockCommand.TimeOffsetReport)
 export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCTimeOffsetReportOptions,
+		options: ScheduleEntryLockCCTimeOffsetReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			const { standardOffset, dstOffset } = parseTimezone(this.payload);
-			this.standardOffset = standardOffset;
-			this.dstOffset = dstOffset;
-		} else {
-			this.standardOffset = options.standardOffset;
-			this.dstOffset = options.dstOffset;
-		}
+		this.standardOffset = options.standardOffset;
+		this.dstOffset = options.dstOffset;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCTimeOffsetReport {
+		const { standardOffset, dstOffset } = parseTimezone(payload);
+
+		return new ScheduleEntryLockCCTimeOffsetReport({
+			nodeId: options.context.sourceNodeId,
+			standardOffset,
+			dstOffset,
+		});
 	}
 
 	public standardOffset: number;
@@ -1799,7 +1977,6 @@ export class ScheduleEntryLockCCTimeOffsetGet extends ScheduleEntryLockCC {}
 
 /** @publicAPI */
 export type ScheduleEntryLockCCDailyRepeatingScheduleSetOptions =
-	& CCCommandOptions
 	& ScheduleEntryLockSlotId
 	& (
 		| {
@@ -1817,42 +1994,66 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCDailyRepeatingScheduleSetOptions,
+			& ScheduleEntryLockCCDailyRepeatingScheduleSetOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.action = this.payload[0];
-			validatePayload(
-				this.action === ScheduleEntryLockSetAction.Set
-					|| this.action === ScheduleEntryLockSetAction.Erase,
-			);
-			this.userId = this.payload[1];
-			this.slotId = this.payload[2];
-			if (this.action === ScheduleEntryLockSetAction.Set) {
-				validatePayload(this.payload.length >= 8);
-				this.weekdays = parseBitMask(
-					this.payload.subarray(3, 4),
-					ScheduleEntryLockWeekday.Sunday,
-				);
-				this.startHour = this.payload[4];
-				this.startMinute = this.payload[5];
-				this.durationHour = this.payload[6];
-				this.durationMinute = this.payload[7];
-			}
-		} else {
-			this.userId = options.userId;
-			this.slotId = options.slotId;
-			this.action = options.action;
-			if (options.action === ScheduleEntryLockSetAction.Set) {
-				this.weekdays = options.weekdays;
-				this.startHour = options.startHour;
-				this.startMinute = options.startMinute;
-				this.durationHour = options.durationHour;
-				this.durationMinute = options.durationMinute;
-			}
+		this.userId = options.userId;
+		this.slotId = options.slotId;
+		this.action = options.action;
+		if (options.action === ScheduleEntryLockSetAction.Set) {
+			this.weekdays = options.weekdays;
+			this.startHour = options.startHour;
+			this.startMinute = options.startMinute;
+			this.durationHour = options.durationHour;
+			this.durationMinute = options.durationMinute;
 		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCDailyRepeatingScheduleSet {
+		validatePayload(payload.length >= 3);
+		const action: ScheduleEntryLockSetAction = payload[0];
+
+		validatePayload(
+			action === ScheduleEntryLockSetAction.Set
+				|| action === ScheduleEntryLockSetAction.Erase,
+		);
+		const userId = payload[1];
+		const slotId = payload[2];
+
+		if (action !== ScheduleEntryLockSetAction.Set) {
+			return new ScheduleEntryLockCCDailyRepeatingScheduleSet({
+				nodeId: options.context.sourceNodeId,
+				action,
+				userId,
+				slotId,
+			});
+		}
+
+		validatePayload(payload.length >= 8);
+		const weekdays: ScheduleEntryLockWeekday[] = parseBitMask(
+			payload.subarray(3, 4),
+			ScheduleEntryLockWeekday.Sunday,
+		);
+		const startHour = payload[4];
+		const startMinute = payload[5];
+		const durationHour = payload[6];
+		const durationMinute = payload[7];
+
+		return new ScheduleEntryLockCCDailyRepeatingScheduleSet({
+			nodeId: options.context.sourceNodeId,
+			action,
+			userId,
+			slotId,
+			weekdays,
+			startHour,
+			startMinute,
+			durationHour,
+			durationMinute,
+		});
 	}
 
 	public userId: number;
@@ -2060,8 +2261,7 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 
 // @publicAPI
 export type ScheduleEntryLockCCDailyRepeatingScheduleGetOptions =
-	& CCCommandOptions
-	& ScheduleEntryLockSlotId;
+	ScheduleEntryLockSlotId;
 
 @CCCommand(ScheduleEntryLockCommand.DailyRepeatingScheduleGet)
 @expectedCCResponse(ScheduleEntryLockCCDailyRepeatingScheduleReport)
@@ -2070,18 +2270,27 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ScheduleEntryLockCCDailyRepeatingScheduleGetOptions,
+			& ScheduleEntryLockCCDailyRepeatingScheduleGetOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userId = this.payload[0];
-			this.slotId = this.payload[1];
-		} else {
-			this.userId = options.userId;
-			this.slotId = options.slotId;
-		}
+		this.userId = options.userId;
+		this.slotId = options.slotId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ScheduleEntryLockCCDailyRepeatingScheduleGet {
+		validatePayload(payload.length >= 2);
+		const userId = payload[0];
+		const slotId = payload[1];
+
+		return new ScheduleEntryLockCCDailyRepeatingScheduleGet({
+			nodeId: options.context.sourceNodeId,
+			userId,
+			slotId,
+		});
 	}
 
 	public userId: number;

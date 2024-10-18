@@ -497,7 +497,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 }
 
 // @publicAPI
-export interface AssociationCCSetOptions extends CCCommandOptions {
+export interface AssociationCCSetOptions {
 	groupId: number;
 	nodeIds: number[];
 }
@@ -506,29 +506,38 @@ export interface AssociationCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | AssociationCCSetOptions,
+		options: AssociationCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.groupId = this.payload[0];
-			this.nodeIds = [...this.payload.subarray(1)];
-		} else {
-			if (options.groupId < 1) {
-				throw new ZWaveError(
-					"The group id must be positive!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			if (options.nodeIds.some((n) => n < 1 || n > MAX_NODES)) {
-				throw new ZWaveError(
-					`All node IDs must be between 1 and ${MAX_NODES}!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.groupId = options.groupId;
-			this.nodeIds = options.nodeIds;
+		if (options.groupId < 1) {
+			throw new ZWaveError(
+				"The group id must be positive!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+		if (options.nodeIds.some((n) => n < 1 || n > MAX_NODES)) {
+			throw new ZWaveError(
+				`All node IDs must be between 1 and ${MAX_NODES}!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.groupId = options.groupId;
+		this.nodeIds = options.nodeIds;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): AssociationCCSet {
+		validatePayload(payload.length >= 2);
+		const groupId = payload[0];
+		const nodeIds = [...payload.subarray(1)];
+
+		return new AssociationCCSet({
+			nodeId: options.context.sourceNodeId,
+			groupId,
+			nodeIds,
+		});
 	}
 
 	public groupId: number;
@@ -699,7 +708,7 @@ export class AssociationCCReport extends AssociationCC {
 }
 
 // @publicAPI
-export interface AssociationCCGetOptions extends CCCommandOptions {
+export interface AssociationCCGetOptions {
 	groupId: number;
 }
 
@@ -707,21 +716,29 @@ export interface AssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationCCReport)
 export class AssociationCCGet extends AssociationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | AssociationCCGetOptions,
+		options: AssociationCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.groupId = this.payload[0];
-		} else {
-			if (options.groupId < 1) {
-				throw new ZWaveError(
-					"The group id must be positive!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.groupId = options.groupId;
+		if (options.groupId < 1) {
+			throw new ZWaveError(
+				"The group id must be positive!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+		this.groupId = options.groupId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): AssociationCCGet {
+		validatePayload(payload.length >= 1);
+		const groupId = payload[0];
+
+		return new AssociationCCGet({
+			nodeId: options.context.sourceNodeId,
+			groupId,
+		});
 	}
 
 	public groupId: number;
@@ -740,9 +757,7 @@ export class AssociationCCGet extends AssociationCC {
 }
 
 // @publicAPI
-export interface AssociationCCSupportedGroupingsReportOptions
-	extends CCCommandOptions
-{
+export interface AssociationCCSupportedGroupingsReportOptions {
 	groupCount: number;
 }
 
@@ -750,17 +765,25 @@ export interface AssociationCCSupportedGroupingsReportOptions
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| AssociationCCSupportedGroupingsReportOptions,
+			& AssociationCCSupportedGroupingsReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.groupCount = this.payload[0];
-		} else {
-			this.groupCount = options.groupCount;
-		}
+		this.groupCount = options.groupCount;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): AssociationCCSupportedGroupingsReport {
+		validatePayload(payload.length >= 1);
+		const groupCount = payload[0];
+
+		return new AssociationCCSupportedGroupingsReport({
+			nodeId: options.context.sourceNodeId,
+			groupCount,
+		});
 	}
 
 	@ccValue(AssociationCCValues.groupCount)

@@ -5,7 +5,6 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { CCEncodingContext } from "@zwave-js/host/safe";
-import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
 import {
@@ -14,7 +13,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -105,7 +103,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 }
 
 // @publicAPI
-export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
+export interface ManufacturerProprietaryCCOptions {
 	manufacturerId?: number;
 	unspecifiedExpectsResponse?: boolean;
 }
@@ -134,42 +132,39 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
 
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ManufacturerProprietaryCCOptions,
+		options: ManufacturerProprietaryCCOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
-			this.manufacturerId = ((this.ccCommand as unknown as number) << 8)
-				+ this.payload[0];
+		this.manufacturerId = options.manufacturerId
+			?? getManufacturerId(this);
+		this.unspecifiedExpectsResponse = options.unspecifiedExpectsResponse;
 
-			// Try to parse the proprietary command
-			const PCConstructor = getManufacturerProprietaryCCConstructor(
-				this.manufacturerId,
-			);
-			if (
-				PCConstructor
-				&& new.target !== PCConstructor
-				&& !staticExtends(new.target, PCConstructor)
-			) {
-				return new PCConstructor(options);
-			}
+		// To use this CC, a manufacturer ID must exist in the value DB
+		// If it doesn't, the interview procedure will throw.
+	}
 
-			// If the constructor is correct, update the payload for subclass deserialization
-			this.payload = this.payload.subarray(1);
-		} else {
-			this.manufacturerId = options.manufacturerId
-				?? getManufacturerId(this);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ManufacturerProprietaryCC {
+		validatePayload(payload.length >= 1);
+		// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
+		const manufacturerId = ((this.ccCommand as unknown as number) << 8)
+			+ payload[0];
 
-			this.unspecifiedExpectsResponse =
-				options.unspecifiedExpectsResponse;
-
-			// To use this CC, a manufacturer ID must exist in the value DB
-			// If it doesn't, the interview procedure will throw.
+		// Try to parse the proprietary command
+		const PCConstructor = getManufacturerProprietaryCCConstructor(
+			manufacturerId,
+		);
+		if (PCConstructor) {
+			return PCConstructor.parse(payload.subarray(1), options);
 		}
+
+		return new ManufacturerProprietaryCC({
+			nodeId: options.context.sourceNodeId,
+			manufacturerId,
+		});
 	}
 
 	public manufacturerId?: number;

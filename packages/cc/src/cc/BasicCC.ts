@@ -25,7 +25,7 @@ import type {
 	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
-import { type AllOrNone, pick } from "@zwave-js/shared/safe";
+import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -46,7 +46,6 @@ import {
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -370,7 +369,7 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 }
 
 // @publicAPI
-export interface BasicCCSetOptions extends CCCommandOptions {
+export interface BasicCCSetOptions {
 	targetValue: number;
 }
 
@@ -378,15 +377,23 @@ export interface BasicCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class BasicCCSet extends BasicCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | BasicCCSetOptions,
+		options: BasicCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.targetValue = this.payload[0];
-		} else {
-			this.targetValue = options.targetValue;
-		}
+		this.targetValue = options.targetValue;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): BasicCCSet {
+		validatePayload(payload.length >= 1);
+		const targetValue = payload[0];
+
+		return new BasicCCSet({
+			nodeId: options.context.sourceNodeId,
+			targetValue,
+		});
 	}
 
 	public targetValue: number;
@@ -405,50 +412,57 @@ export class BasicCCSet extends BasicCC {
 }
 
 // @publicAPI
-export type BasicCCReportOptions =
-	& CCCommandOptions
-	& {
-		currentValue: number;
-	}
-	& AllOrNone<{
-		targetValue: number;
-		duration: Duration;
-	}>;
+export interface BasicCCReportOptions {
+	currentValue: number;
+	targetValue?: MaybeUnknown<number>;
+	duration?: Duration;
+}
 
 @CCCommand(BasicCommand.Report)
 export class BasicCCReport extends BasicCC {
 	// @noCCValues See comment in the constructor
 	public constructor(
-		options: CommandClassDeserializationOptions | BasicCCReportOptions,
+		options: BasicCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this._currentValue =
-				// 0xff is a legacy value for 100% (99)
-				this.payload[0] === 0xff
-					? 99
-					: parseMaybeNumber(this.payload[0]);
-
-			if (this.payload.length >= 3) {
-				this.targetValue = parseMaybeNumber(this.payload[1]);
-				this.duration = Duration.parseReport(this.payload[2]);
-			}
-		} else {
-			this._currentValue = options.currentValue;
-			if ("targetValue" in options) {
-				this.targetValue = options.targetValue;
-				this.duration = options.duration;
-			}
+		this.currentValue = options.currentValue;
+		if ("targetValue" in options) {
+			this.targetValue = options.targetValue;
+			this.duration = options.duration;
 		}
 	}
 
-	private _currentValue: MaybeUnknown<number> | undefined;
-	@ccValue(BasicCCValues.currentValue)
-	public get currentValue(): MaybeUnknown<number> | undefined {
-		return this._currentValue;
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): BasicCCReport {
+		validatePayload(payload.length >= 1);
+		const currentValue: MaybeUnknown<number> | undefined =
+			// 0xff is a legacy value for 100% (99)
+			payload[0] === 0xff
+				? 99
+				: parseMaybeNumber(payload[0]);
+		validatePayload(currentValue != undefined);
+
+		let targetValue: MaybeUnknown<number> | undefined;
+		let duration: Duration | undefined;
+
+		if (payload.length >= 3) {
+			targetValue = parseMaybeNumber(payload[1]);
+			duration = Duration.parseReport(payload[2]);
+		}
+
+		return new BasicCCReport({
+			nodeId: options.context.sourceNodeId,
+			currentValue,
+			targetValue,
+			duration,
+		});
 	}
+
+	@ccValue(BasicCCValues.currentValue)
+	public currentValue: MaybeUnknown<number> | undefined;
 
 	@ccValue(BasicCCValues.targetValue)
 	public readonly targetValue: MaybeUnknown<number> | undefined;

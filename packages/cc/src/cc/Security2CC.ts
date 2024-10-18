@@ -1005,9 +1005,7 @@ export class Security2CC extends CommandClass {
 }
 
 // @publicAPI
-export interface Security2CCMessageEncapsulationOptions
-	extends CCCommandOptions
-{
+export interface Security2CCMessageEncapsulationOptions {
 	ownNodeId: number;
 	securityManagers: Readonly<SecurityManagers>;
 	/** Can be used to override the default security class for the command */
@@ -1083,360 +1081,374 @@ export type MulticastContext =
 )
 export class Security2CCMessageEncapsulation extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| Security2CCMessageEncapsulationOptions,
+		options: Security2CCMessageEncapsulationOptions & CCCommandOptions,
 	) {
 		super(options);
 
 		// Make sure that we can send/receive secure commands
 		this.securityManager = this.assertSecurity(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			// Check the sequence number to avoid duplicates
-			this._sequenceNumber = this.payload[0];
-			const sendingNodeId = this.nodeId as number;
-
-			// Ensure the node has a security class
-			const securityClass = options.context.getHighestSecurityClass(
-				sendingNodeId,
+		if (!options.encapsulated && !options.extensions?.length) {
+			throw new ZWaveError(
+				"Security S2 encapsulation requires an encapsulated CC and/or extensions",
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-			validatePayload.withReason("No security class granted")(
-				securityClass !== SecurityClass.None,
+		}
+
+		this.securityClass = options.securityClass;
+		if (options.encapsulated) {
+			this.encapsulated = options.encapsulated;
+			options.encapsulated.encapsulatingCC = this as any;
+		}
+
+		this.verifyDelivery = options.verifyDelivery !== false;
+
+		this.extensions = options.extensions ?? [];
+		if (
+			typeof this.nodeId !== "number"
+			&& !this.extensions.some((e) => e instanceof MGRPExtension)
+		) {
+			throw new ZWaveError(
+				"Multicast Security S2 encapsulation requires the MGRP extension",
+				ZWaveErrorCodes.Security2CC_MissingExtension,
 			);
+		}
+	}
 
-			const hasExtensions = !!(this.payload[1] & 0b1);
-			const hasEncryptedExtensions = !!(this.payload[1] & 0b10);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): Security2CCMessageEncapsulation {
+		validatePayload(payload.length >= 2);
+		// Check the sequence number to avoid duplicates
+		const sequenceNumber: number | undefined = payload[0];
+		const sendingNodeId = this.nodeId as number;
 
-			let offset = 2;
-			this.extensions = [];
-			let mustDiscardCommand = false;
+		// Ensure the node has a security class
+		const securityClass = options.context.getHighestSecurityClass(
+			sendingNodeId,
+		);
+		validatePayload.withReason("No security class granted")(
+			securityClass !== SecurityClass.None,
+		);
 
-			const parseExtensions = (buffer: Buffer, wasEncrypted: boolean) => {
-				while (true) {
-					if (buffer.length < offset + 2) {
-						// An S2 extension was expected, but the buffer is too short
-						mustDiscardCommand = true;
-						return;
-					}
+		const hasExtensions = !!(payload[1] & 0b1);
+		const hasEncryptedExtensions = !!(payload[1] & 0b10);
 
-					// The length field could be too large, which would cause part of the actual ciphertext
-					// to be ignored. Try to avoid this for known extensions by checking the actual and expected length.
-					const { actual: actualLength, expected: expectedLength } =
-						Security2Extension
-							.getExtensionLength(
-								buffer.subarray(offset),
-							);
+		let offset = 2;
+		const extensions: Security2Extension[] = [];
+		let mustDiscardCommand = false;
 
-					// Parse the extension using the expected length if possible
-					const extensionLength = expectedLength ?? actualLength;
-					if (extensionLength < 2) {
-						// An S2 extension was expected, but the length is too short
-						mustDiscardCommand = true;
-						return;
-					} else if (
-						extensionLength
-							> buffer.length
-								- offset
-								- (wasEncrypted
-									? 0
-									: SECURITY_S2_AUTH_TAG_LENGTH)
-					) {
-						// The supposed length is longer than the space the extensions may occupy
-						mustDiscardCommand = true;
-						return;
-					}
-
-					const extensionData = buffer.subarray(
-						offset,
-						offset + extensionLength,
-					);
-					offset += extensionLength;
-
-					const ext = Security2Extension.from(extensionData);
-
-					switch (validateS2Extension(ext, wasEncrypted)) {
-						case ValidateS2ExtensionResult.OK:
-							if (
-								expectedLength != undefined
-								&& actualLength !== expectedLength
-							) {
-								// The extension length field does not match, ignore the extension
-							} else {
-								this.extensions.push(ext);
-							}
-							break;
-						case ValidateS2ExtensionResult.DiscardExtension:
-							// Do nothing
-							break;
-						case ValidateS2ExtensionResult.DiscardCommand:
-							mustDiscardCommand = true;
-							break;
-					}
-
-					// Check if that was the last extension
-					if (!ext.moreToFollow) break;
+		const parseExtensions = (buffer: Buffer, wasEncrypted: boolean) => {
+			while (true) {
+				if (buffer.length < offset + 2) {
+					// An S2 extension was expected, but the buffer is too short
+					mustDiscardCommand = true;
+					return;
 				}
-			};
-			if (hasExtensions) parseExtensions(this.payload, false);
 
-			const ctx = ((): MulticastContext => {
-				const multicastGroupId = this.getMulticastGroupId();
-				if (
-					options.context.frameType === "multicast"
-					|| options.context.frameType === "broadcast"
-				) {
-					if (multicastGroupId == undefined) {
-						validatePayload.fail(
-							"Multicast frames without MGRP extension",
+				// The length field could be too large, which would cause part of the actual ciphertext
+				// to be ignored. Try to avoid this for known extensions by checking the actual and expected length.
+				const { actual: actualLength, expected: expectedLength } =
+					Security2Extension
+						.getExtensionLength(
+							buffer.subarray(offset),
 						);
-					}
-					return {
-						isMulticast: true,
-						groupId: multicastGroupId,
-					};
-				} else {
-					return { isMulticast: false, groupId: multicastGroupId };
-				}
-			})();
 
-			// If a command is to be discarded before decryption,
-			// we still need to increment the SPAN or MPAN state
-			if (mustDiscardCommand) {
-				if (ctx.isMulticast) {
-					this.securityManager.nextPeerMPAN(
-						sendingNodeId,
-						ctx.groupId,
-					);
-				} else {
-					this.securityManager.nextNonce(sendingNodeId);
+				// Parse the extension using the expected length if possible
+				const extensionLength = expectedLength ?? actualLength;
+				if (extensionLength < 2) {
+					// An S2 extension was expected, but the length is too short
+					mustDiscardCommand = true;
+					return;
+				} else if (
+					extensionLength
+						> buffer.length
+							- offset
+							- (wasEncrypted
+								? 0
+								: SECURITY_S2_AUTH_TAG_LENGTH)
+				) {
+					// The supposed length is longer than the space the extensions may occupy
+					mustDiscardCommand = true;
+					return;
 				}
-				validatePayload.fail(
-					"Invalid S2 extension",
+
+				const extensionData = buffer.subarray(
+					offset,
+					offset + extensionLength,
 				);
-			}
+				offset += extensionLength;
 
-			let prevSequenceNumber: number | undefined;
-			let mpanState:
-				| ReturnType<SecurityManager2["getPeerMPAN"]>
-				| undefined;
-			if (ctx.isMulticast) {
-				mpanState = this.securityManager.getPeerMPAN(
-					sendingNodeId,
-					ctx.groupId,
-				);
-			} else {
-				// Don't accept duplicate Singlecast commands
-				prevSequenceNumber = validateSequenceNumber.call(
-					this,
-					this.securityManager,
-					this._sequenceNumber,
-				);
+				const ext = Security2Extension.from(extensionData);
 
-				// When a node receives a singlecast message after a multicast group was marked out of sync,
-				// it must forget about the group.
-				if (ctx.groupId == undefined) {
-					this.securityManager.resetOutOfSyncMPANs(
-						sendingNodeId,
-					);
-				}
-			}
-
-			const unencryptedPayload = this.payload.subarray(0, offset);
-			const ciphertext = this.payload.subarray(
-				offset,
-				-SECURITY_S2_AUTH_TAG_LENGTH,
-			);
-			const authTag = this.payload.subarray(-SECURITY_S2_AUTH_TAG_LENGTH);
-			this.authTag = authTag;
-
-			const messageLength = super.computeEncapsulationOverhead()
-				+ this.payload.length;
-
-			const authData = getAuthenticationData(
-				sendingNodeId,
-				this.getDestinationIDRX(options.context.ownNodeId),
-				options.context.homeId,
-				messageLength,
-				unencryptedPayload,
-			);
-
-			let decrypt: () => DecryptionResult;
-			if (ctx.isMulticast) {
-				// For incoming multicast commands, make sure we have an MPAN
-				if (mpanState?.type !== MPANState.MPAN) {
-					// If we don't, mark the MPAN as out of sync, so we can respond accordingly on the singlecast followup
-					this.securityManager.storePeerMPAN(
-						sendingNodeId,
-						ctx.groupId,
-						{ type: MPANState.OutOfSync },
-					);
-					failNoMPAN();
+				switch (validateS2Extension(ext, wasEncrypted)) {
+					case ValidateS2ExtensionResult.OK:
+						if (
+							expectedLength != undefined
+							&& actualLength !== expectedLength
+						) {
+							// The extension length field does not match, ignore the extension
+						} else {
+							this.extensions.push(ext);
+						}
+						break;
+					case ValidateS2ExtensionResult.DiscardExtension:
+						// Do nothing
+						break;
+					case ValidateS2ExtensionResult.DiscardCommand:
+						mustDiscardCommand = true;
+						break;
 				}
 
-				decrypt = () =>
-					this.decryptMulticast(
-						sendingNodeId,
-						ctx.groupId,
-						ciphertext,
-						authData,
-						authTag,
-					);
-			} else {
-				// Decrypt payload and verify integrity
-				const spanState = this.securityManager.getSPANState(
-					sendingNodeId,
-				);
-
-				// If we are not able to establish an SPAN yet, fail the decryption
-				if (spanState.type === SPANState.None) {
-					failNoSPAN();
-				} else if (spanState.type === SPANState.RemoteEI) {
-					// TODO: The specs are not clear how to handle this case
-					// For now, do the same as if we didn't have any EI
-					failNoSPAN();
-				}
-
-				decrypt = () =>
-					this.decryptSinglecast(
-						options.context,
-						sendingNodeId,
-						prevSequenceNumber!,
-						ciphertext,
-						authData,
-						authTag,
-						spanState,
-					);
+				// Check if that was the last extension
+				if (!ext.moreToFollow) break;
 			}
+		};
+		if (hasExtensions) parseExtensions(payload, false);
 
-			let plaintext: Buffer | undefined;
-			let authOK = false;
-			let key: Buffer | undefined;
-			let iv: Buffer | undefined;
-			let decryptionSecurityClass: SecurityClass | undefined;
-
-			// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
-			// the Receiver SHOULD try decrypting the message with one or more of the following SPAN values,
-			// stopping when decryption is successful or the maximum number of iterations is reached.
-
-			// If the Receiver is unable to decrypt the S2 MC frame with the current MPAN, the Receiver MAY try
-			// decrypting the frame with one or more of the subsequent MPAN values, stopping when decryption is
-			// successful or the maximum number of iterations is reached.
-			const decryptAttempts = ctx.isMulticast
-				? MAX_DECRYPT_ATTEMPTS_MULTICAST
-				: ctx.groupId != undefined
-				? MAX_DECRYPT_ATTEMPTS_SC_FOLLOWUP
-				: MAX_DECRYPT_ATTEMPTS_SINGLECAST;
-
-			for (let i = 0; i < decryptAttempts; i++) {
-				({
-					plaintext,
-					authOK,
-					key,
-					iv,
-					securityClass: decryptionSecurityClass,
-				} = decrypt());
-				if (!!authOK && !!plaintext) break;
-				// No need to try further SPANs if we just got the sender's EI
-				if (!!this.getSenderEI()) break;
-			}
-
-			// If authentication fails, do so with an error code that instructs the
-			// applHost to tell the node we have no nonce
-			if (!authOK || !plaintext) {
-				if (ctx.isMulticast) {
-					// Mark the MPAN as out of sync
-					this.securityManager.storePeerMPAN(
-						sendingNodeId,
-						ctx.groupId,
-						{ type: MPANState.OutOfSync },
-					);
-					validatePayload.fail(
-						ZWaveErrorCodes.Security2CC_CannotDecodeMulticast,
-					);
-				} else {
-					validatePayload.fail(
-						ZWaveErrorCodes.Security2CC_CannotDecode,
-					);
-				}
-			} else if (!ctx.isMulticast && ctx.groupId != undefined) {
-				// After reception of a singlecast followup, the MPAN state must be increased
-				this.securityManager.tryIncrementPeerMPAN(
-					sendingNodeId,
-					ctx.groupId,
-				);
-			}
-
-			// Remember which security class was used to decrypt this message, so we can discard it later
-			this.securityClass = decryptionSecurityClass;
-
-			offset = 0;
-			if (hasEncryptedExtensions) parseExtensions(plaintext, true);
-
-			// Before we can continue, check if the command must be discarded
-			if (mustDiscardCommand) {
-				validatePayload.fail("Invalid extension");
-			}
-
-			// If the MPAN extension was received, store the MPAN
-			if (!ctx.isMulticast) {
-				const mpanExtension = this.getMPANExtension();
-				if (mpanExtension) {
-					this.securityManager.storePeerMPAN(
-						sendingNodeId,
-						mpanExtension.groupId,
-						{
-							type: MPANState.MPAN,
-							currentMPAN: mpanExtension.innerMPANState,
-						},
-					);
-				}
-			}
-
-			// Not every S2 message includes an encapsulated CC
-			const decryptedCCBytes = plaintext.subarray(offset);
-			if (decryptedCCBytes.length > 0) {
-				// make sure this contains a complete CC command that's worth splitting
-				validatePayload(decryptedCCBytes.length >= 2);
-				// and deserialize the CC
-				this.encapsulated = CommandClass.from({
-					data: decryptedCCBytes,
-					fromEncapsulation: true,
-					encapCC: this,
-					context: options.context,
-				});
-			}
-			this.plaintext = decryptedCCBytes;
-			this.key = key;
-			this.iv = iv;
-		} else {
-			if (!options.encapsulated && !options.extensions?.length) {
-				throw new ZWaveError(
-					"Security S2 encapsulation requires an encapsulated CC and/or extensions",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.securityClass = options.securityClass;
-			if (options.encapsulated) {
-				this.encapsulated = options.encapsulated;
-				options.encapsulated.encapsulatingCC = this as any;
-			}
-
-			this.verifyDelivery = options.verifyDelivery !== false;
-
-			this.extensions = options.extensions ?? [];
+		const ctx = ((): MulticastContext => {
+			const multicastGroupId = this.getMulticastGroupId();
 			if (
-				typeof this.nodeId !== "number"
-				&& !this.extensions.some((e) => e instanceof MGRPExtension)
+				options.context.frameType === "multicast"
+				|| options.context.frameType === "broadcast"
 			) {
-				throw new ZWaveError(
-					"Multicast Security S2 encapsulation requires the MGRP extension",
-					ZWaveErrorCodes.Security2CC_MissingExtension,
+				if (multicastGroupId == undefined) {
+					validatePayload.fail(
+						"Multicast frames without MGRP extension",
+					);
+				}
+				return {
+					isMulticast: true,
+					groupId: multicastGroupId,
+				};
+			} else {
+				return { isMulticast: false, groupId: multicastGroupId };
+			}
+		})();
+
+		// If a command is to be discarded before decryption,
+		// we still need to increment the SPAN or MPAN state
+		if (mustDiscardCommand) {
+			if (ctx.isMulticast) {
+				this.securityManager.nextPeerMPAN(
+					sendingNodeId,
+					ctx.groupId,
+				);
+			} else {
+				this.securityManager.nextNonce(sendingNodeId);
+			}
+			validatePayload.fail(
+				"Invalid S2 extension",
+			);
+		}
+
+		let prevSequenceNumber: number | undefined;
+		let mpanState:
+			| ReturnType<SecurityManager2["getPeerMPAN"]>
+			| undefined;
+		if (ctx.isMulticast) {
+			mpanState = this.securityManager.getPeerMPAN(
+				sendingNodeId,
+				ctx.groupId,
+			);
+		} else {
+			// Don't accept duplicate Singlecast commands
+			prevSequenceNumber = validateSequenceNumber.call(
+				this,
+				this.securityManager,
+				this._sequenceNumber,
+			);
+
+			// When a node receives a singlecast message after a multicast group was marked out of sync,
+			// it must forget about the group.
+			if (ctx.groupId == undefined) {
+				this.securityManager.resetOutOfSyncMPANs(
+					sendingNodeId,
 				);
 			}
 		}
+
+		const unencryptedPayload = payload.subarray(0, offset);
+		const ciphertext = payload.subarray(
+			offset,
+			-SECURITY_S2_AUTH_TAG_LENGTH,
+		);
+		const authTag = payload.subarray(-SECURITY_S2_AUTH_TAG_LENGTH);
+		let authTag: Buffer | undefined = authTag;
+		const messageLength = super.computeEncapsulationOverhead()
+			+ payload.length;
+
+		const authData = getAuthenticationData(
+			sendingNodeId,
+			this.getDestinationIDRX(options.context.ownNodeId),
+			options.context.homeId,
+			messageLength,
+			unencryptedPayload,
+		);
+
+		let decrypt: () => DecryptionResult;
+		if (ctx.isMulticast) {
+			// For incoming multicast commands, make sure we have an MPAN
+			if (mpanState?.type !== MPANState.MPAN) {
+				// If we don't, mark the MPAN as out of sync, so we can respond accordingly on the singlecast followup
+				this.securityManager.storePeerMPAN(
+					sendingNodeId,
+					ctx.groupId,
+					{ type: MPANState.OutOfSync },
+				);
+				failNoMPAN();
+			}
+
+			decrypt = () =>
+				this.decryptMulticast(
+					sendingNodeId,
+					ctx.groupId,
+					ciphertext,
+					authData,
+					authTag,
+				);
+		} else {
+			// Decrypt payload and verify integrity
+			const spanState = this.securityManager.getSPANState(
+				sendingNodeId,
+			);
+
+			// If we are not able to establish an SPAN yet, fail the decryption
+			if (spanState.type === SPANState.None) {
+				failNoSPAN();
+			} else if (spanState.type === SPANState.RemoteEI) {
+				// TODO: The specs are not clear how to handle this case
+				// For now, do the same as if we didn't have any EI
+				failNoSPAN();
+			}
+
+			decrypt = () =>
+				this.decryptSinglecast(
+					options.context,
+					sendingNodeId,
+					prevSequenceNumber!,
+					ciphertext,
+					authData,
+					authTag,
+					spanState,
+				);
+		}
+
+		let plaintext: Buffer | undefined;
+		let authOK = false;
+		let key: Buffer | undefined;
+		let iv: Buffer | undefined;
+		let decryptionSecurityClass: SecurityClass | undefined;
+
+		// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
+		// the Receiver SHOULD try decrypting the message with one or more of the following SPAN values,
+		// stopping when decryption is successful or the maximum number of iterations is reached.
+
+		// If the Receiver is unable to decrypt the S2 MC frame with the current MPAN, the Receiver MAY try
+		// decrypting the frame with one or more of the subsequent MPAN values, stopping when decryption is
+		// successful or the maximum number of iterations is reached.
+		const decryptAttempts = ctx.isMulticast
+			? MAX_DECRYPT_ATTEMPTS_MULTICAST
+			: ctx.groupId != undefined
+			? MAX_DECRYPT_ATTEMPTS_SC_FOLLOWUP
+			: MAX_DECRYPT_ATTEMPTS_SINGLECAST;
+
+		for (let i = 0; i < decryptAttempts; i++) {
+			({
+				plaintext,
+				authOK,
+				key,
+				iv,
+				securityClass: decryptionSecurityClass,
+			} = decrypt());
+			if (!!authOK && !!plaintext) break;
+			// No need to try further SPANs if we just got the sender's EI
+			if (!!this.getSenderEI()) break;
+		}
+
+		// If authentication fails, do so with an error code that instructs the
+		// applHost to tell the node we have no nonce
+		if (!authOK || !plaintext) {
+			if (ctx.isMulticast) {
+				// Mark the MPAN as out of sync
+				this.securityManager.storePeerMPAN(
+					sendingNodeId,
+					ctx.groupId,
+					{ type: MPANState.OutOfSync },
+				);
+				validatePayload.fail(
+					ZWaveErrorCodes.Security2CC_CannotDecodeMulticast,
+				);
+			} else {
+				validatePayload.fail(
+					ZWaveErrorCodes.Security2CC_CannotDecode,
+				);
+			}
+		} else if (!ctx.isMulticast && ctx.groupId != undefined) {
+			// After reception of a singlecast followup, the MPAN state must be increased
+			this.securityManager.tryIncrementPeerMPAN(
+				sendingNodeId,
+				ctx.groupId,
+			);
+		}
+
+		// Remember which security class was used to decrypt this message, so we can discard it later
+		let securityClass: SecurityClass | undefined = decryptionSecurityClass;
+
+		offset = 0;
+		if (hasEncryptedExtensions) parseExtensions(plaintext, true);
+
+		// Before we can continue, check if the command must be discarded
+		if (mustDiscardCommand) {
+			validatePayload.fail("Invalid extension");
+		}
+
+		// If the MPAN extension was received, store the MPAN
+		if (!ctx.isMulticast) {
+			const mpanExtension = this.getMPANExtension();
+			if (mpanExtension) {
+				this.securityManager.storePeerMPAN(
+					sendingNodeId,
+					mpanExtension.groupId,
+					{
+						type: MPANState.MPAN,
+						currentMPAN: mpanExtension.innerMPANState,
+					},
+				);
+			}
+		}
+
+		// Not every S2 message includes an encapsulated CC
+		const decryptedCCBytes = plaintext.subarray(offset);
+		let encapsulated: CommandClass | undefined;
+
+		if (decryptedCCBytes.length > 0) {
+			// make sure this contains a complete CC command that's worth splitting
+			validatePayload(decryptedCCBytes.length >= 2);
+			// and deserialize the CC
+			encapsulated = CommandClass.from({
+				data: decryptedCCBytes,
+				fromEncapsulation: true,
+				encapCC: this,
+				context: options.context,
+			});
+		}
+		let plaintext: Buffer | undefined = decryptedCCBytes;
+		let key: Buffer | undefined = key;
+		let iv: Buffer | undefined = iv;
+
+		return new Security2CCMessageEncapsulation({
+			nodeId: options.context.sourceNodeId,
+			_sequenceNumber: sequenceNumber,
+			extensions,
+			authTag,
+			securityClass,
+			encapsulated,
+			plaintext,
+			key,
+			iv,
+		});
 	}
 
 	private securityManager: SecurityManager2;
@@ -2372,22 +2384,30 @@ export class Security2CCKEXSet extends Security2CC {
 }
 
 // @publicAPI
-export interface Security2CCKEXFailOptions extends CCCommandOptions {
+export interface Security2CCKEXFailOptions {
 	failType: KEXFailType;
 }
 
 @CCCommand(Security2Command.KEXFail)
 export class Security2CCKEXFail extends Security2CC {
 	public constructor(
-		options: CommandClassDeserializationOptions | Security2CCKEXFailOptions,
+		options: Security2CCKEXFailOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.failType = this.payload[0];
-		} else {
-			this.failType = options.failType;
-		}
+		this.failType = options.failType;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): Security2CCKEXFail {
+		validatePayload(payload.length >= 1);
+		const failType: KEXFailType = payload[0];
+
+		return new Security2CCKEXFail({
+			nodeId: options.context.sourceNodeId,
+			failType,
+		});
 	}
 
 	public failType: KEXFailType;
@@ -2406,7 +2426,7 @@ export class Security2CCKEXFail extends Security2CC {
 }
 
 // @publicAPI
-export interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
+export interface Security2CCPublicKeyReportOptions {
 	includingNode: boolean;
 	publicKey: Buffer;
 }
@@ -2414,19 +2434,26 @@ export interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.PublicKeyReport)
 export class Security2CCPublicKeyReport extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| Security2CCPublicKeyReportOptions,
+		options: Security2CCPublicKeyReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 17);
-			this.includingNode = !!(this.payload[0] & 0b1);
-			this.publicKey = this.payload.subarray(1);
-		} else {
-			this.includingNode = options.includingNode;
-			this.publicKey = options.publicKey;
-		}
+		this.includingNode = options.includingNode;
+		this.publicKey = options.publicKey;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): Security2CCPublicKeyReport {
+		validatePayload(payload.length >= 17);
+		const includingNode = !!(payload[0] & 0b1);
+		const publicKey: Buffer = payload.subarray(1);
+
+		return new Security2CCPublicKeyReport({
+			nodeId: options.context.sourceNodeId,
+			includingNode,
+			publicKey,
+		});
 	}
 
 	public includingNode: boolean;
@@ -2452,7 +2479,7 @@ export class Security2CCPublicKeyReport extends Security2CC {
 }
 
 // @publicAPI
-export interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
+export interface Security2CCNetworkKeyReportOptions {
 	grantedKey: SecurityClass;
 	networkKey: Buffer;
 }
@@ -2460,19 +2487,26 @@ export interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.NetworkKeyReport)
 export class Security2CCNetworkKeyReport extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| Security2CCNetworkKeyReportOptions,
+		options: Security2CCNetworkKeyReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 17);
-			this.grantedKey = bitMaskToSecurityClass(this.payload, 0);
-			this.networkKey = this.payload.subarray(1, 17);
-		} else {
-			this.grantedKey = options.grantedKey;
-			this.networkKey = options.networkKey;
-		}
+		this.grantedKey = options.grantedKey;
+		this.networkKey = options.networkKey;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): Security2CCNetworkKeyReport {
+		validatePayload(payload.length >= 17);
+		const grantedKey: SecurityClass = bitMaskToSecurityClass(payload, 0);
+		const networkKey = payload.subarray(1, 17);
+
+		return new Security2CCNetworkKeyReport({
+			nodeId: options.context.sourceNodeId,
+			grantedKey,
+			networkKey,
+		});
 	}
 
 	public grantedKey: SecurityClass;
@@ -2502,7 +2536,7 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 }
 
 // @publicAPI
-export interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
+export interface Security2CCNetworkKeyGetOptions {
 	requestedKey: SecurityClass;
 }
 
@@ -2511,17 +2545,23 @@ export interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
 // FIXME: maybe use the dynamic @expectedCCResponse instead?
 export class Security2CCNetworkKeyGet extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| Security2CCNetworkKeyGetOptions,
+		options: Security2CCNetworkKeyGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.requestedKey = bitMaskToSecurityClass(this.payload, 0);
-		} else {
-			this.requestedKey = options.requestedKey;
-		}
+		this.requestedKey = options.requestedKey;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): Security2CCNetworkKeyGet {
+		validatePayload(payload.length >= 1);
+		const requestedKey: SecurityClass = bitMaskToSecurityClass(payload, 0);
+
+		return new Security2CCNetworkKeyGet({
+			nodeId: options.context.sourceNodeId,
+			requestedKey,
+		});
 	}
 
 	public requestedKey: SecurityClass;
@@ -2548,7 +2588,7 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 export class Security2CCNetworkKeyVerify extends Security2CC {}
 
 // @publicAPI
-export interface Security2CCTransferEndOptions extends CCCommandOptions {
+export interface Security2CCTransferEndOptions {
 	keyVerified: boolean;
 	keyRequestComplete: boolean;
 }
@@ -2556,19 +2596,26 @@ export interface Security2CCTransferEndOptions extends CCCommandOptions {
 @CCCommand(Security2Command.TransferEnd)
 export class Security2CCTransferEnd extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| Security2CCTransferEndOptions,
+		options: Security2CCTransferEndOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.keyVerified = !!(this.payload[0] & 0b10);
-			this.keyRequestComplete = !!(this.payload[0] & 0b1);
-		} else {
-			this.keyVerified = options.keyVerified;
-			this.keyRequestComplete = options.keyRequestComplete;
-		}
+		this.keyVerified = options.keyVerified;
+		this.keyRequestComplete = options.keyRequestComplete;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): Security2CCTransferEnd {
+		validatePayload(payload.length >= 1);
+		const keyVerified = !!(payload[0] & 0b10);
+		const keyRequestComplete = !!(payload[0] & 0b1);
+
+		return new Security2CCTransferEnd({
+			nodeId: options.context.sourceNodeId,
+			keyVerified,
+			keyRequestComplete,
+		});
 	}
 
 	public keyVerified: boolean;
@@ -2593,30 +2640,34 @@ export class Security2CCTransferEnd extends Security2CC {
 }
 
 // @publicAPI
-export interface Security2CCCommandsSupportedReportOptions
-	extends CCCommandOptions
-{
+export interface Security2CCCommandsSupportedReportOptions {
 	supportedCCs: CommandClasses[];
 }
 
 @CCCommand(Security2Command.CommandsSupportedReport)
 export class Security2CCCommandsSupportedReport extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| Security2CCCommandsSupportedReportOptions,
+		options: Security2CCCommandsSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			const CCs = parseCCList(this.payload);
-			// SDS13783: A sending node MAY terminate the list of supported command classes with the
-			// COMMAND_CLASS_MARK command class identifier.
-			// A receiving node MUST stop parsing the list of supported command classes if it detects the
-			// COMMAND_CLASS_MARK command class identifier in the Security 2 Commands Supported Report
-			this.supportedCCs = CCs.supportedCCs;
-		} else {
-			this.supportedCCs = options.supportedCCs;
-		}
+		this.supportedCCs = options.supportedCCs;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): Security2CCCommandsSupportedReport {
+		const CCs = parseCCList(payload);
+		// SDS13783: A sending node MAY terminate the list of supported command classes with the
+		// COMMAND_CLASS_MARK command class identifier.
+		// A receiving node MUST stop parsing the list of supported command classes if it detects the
+		// COMMAND_CLASS_MARK command class identifier in the Security 2 Commands Supported Report
+		const supportedCCs = CCs.supportedCCs;
+
+		return new Security2CCCommandsSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			supportedCCs,
+		});
 	}
 
 	public readonly supportedCCs: CommandClasses[];

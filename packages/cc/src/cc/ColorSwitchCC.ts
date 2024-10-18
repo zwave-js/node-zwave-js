@@ -885,7 +885,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 }
 
 // @publicAPI
-export interface ColorSwitchCCGetOptions extends CCCommandOptions {
+export interface ColorSwitchCCGetOptions {
 	colorComponent: ColorComponent;
 }
 
@@ -900,15 +900,23 @@ function testResponseForColorSwitchGet(
 @expectedCCResponse(ColorSwitchCCReport, testResponseForColorSwitchGet)
 export class ColorSwitchCCGet extends ColorSwitchCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ColorSwitchCCGetOptions,
+		options: ColorSwitchCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this._colorComponent = this.payload[0];
-		} else {
-			this._colorComponent = options.colorComponent;
-		}
+		this._colorComponent = options.colorComponent;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ColorSwitchCCGet {
+		validatePayload(payload.length >= 1);
+		const colorComponent: ColorComponent = payload[0];
+
+		return new ColorSwitchCCGet({
+			nodeId: options.context.sourceNodeId,
+			colorComponent,
+		});
 	}
 
 	private _colorComponent: ColorComponent;
@@ -1151,7 +1159,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 }
 
 // @publicAPI
-export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
+export interface ColorSwitchCCStopLevelChangeOptions {
 	colorComponent: ColorComponent;
 }
 
@@ -1159,17 +1167,23 @@ export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
 @useSupervision()
 export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ColorSwitchCCStopLevelChangeOptions,
+		options: ColorSwitchCCStopLevelChangeOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.colorComponent = this.payload[0];
-		} else {
-			this.colorComponent = options.colorComponent;
-		}
+		this.colorComponent = options.colorComponent;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ColorSwitchCCStopLevelChange {
+		validatePayload(payload.length >= 1);
+		const colorComponent: ColorComponent = payload[0];
+
+		return new ColorSwitchCCStopLevelChange({
+			nodeId: options.context.sourceNodeId,
+			colorComponent,
+		});
 	}
 
 	public readonly colorComponent: ColorComponent;

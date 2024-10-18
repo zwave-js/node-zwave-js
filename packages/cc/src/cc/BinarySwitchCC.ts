@@ -15,7 +15,6 @@ import {
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
-import type { AllOrNone } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -35,7 +34,6 @@ import {
 	type InterviewContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -302,7 +300,7 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 }
 
 // @publicAPI
-export interface BinarySwitchCCSetOptions extends CCCommandOptions {
+export interface BinarySwitchCCSetOptions {
 	targetValue: boolean;
 	duration?: Duration | string;
 }
@@ -311,19 +309,30 @@ export interface BinarySwitchCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions,
+		options: BinarySwitchCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.targetValue = !!this.payload[0];
-			if (this.payload.length >= 2) {
-				this.duration = Duration.parseSet(this.payload[1]);
-			}
-		} else {
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): BinarySwitchCCSet {
+		validatePayload(payload.length >= 1);
+		const targetValue = !!payload[0];
+		let duration: Duration | undefined;
+
+		if (payload.length >= 2) {
+			duration = Duration.parseSet(payload[1]);
 		}
+
+		return new BinarySwitchCCSet({
+			nodeId: options.context.sourceNodeId,
+			targetValue,
+			duration,
+		});
 	}
 
 	public targetValue: boolean;
@@ -363,38 +372,47 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 }
 
 // @publicAPI
-export type BinarySwitchCCReportOptions =
-	& CCCommandOptions
-	& {
-		currentValue: MaybeUnknown<boolean>;
-	}
-	& AllOrNone<{
-		targetValue: MaybeUnknown<boolean>;
-		duration: Duration | string;
-	}>;
+export interface BinarySwitchCCReportOptions {
+	currentValue?: MaybeUnknown<boolean>;
+	targetValue?: MaybeUnknown<boolean>;
+	duration?: Duration | string;
+}
 
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| BinarySwitchCCReportOptions,
+		options: BinarySwitchCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.currentValue = parseMaybeBoolean(this.payload[0]);
+		this.currentValue = options.currentValue;
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
 
-			if (this.payload.length >= 3) {
-				this.targetValue = parseMaybeBoolean(this.payload[1]);
-				this.duration = Duration.parseReport(this.payload[2]);
-			}
-		} else {
-			this.currentValue = options.currentValue;
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): BinarySwitchCCReport {
+		validatePayload(payload.length >= 1);
+		const currentValue: MaybeUnknown<boolean> | undefined =
+			parseMaybeBoolean(
+				payload[0],
+			);
+		let targetValue: MaybeUnknown<boolean> | undefined;
+		let duration: Duration | undefined;
+
+		if (payload.length >= 3) {
+			targetValue = parseMaybeBoolean(payload[1]);
+			duration = Duration.parseReport(payload[2]);
 		}
+
+		return new BinarySwitchCCReport({
+			nodeId: options.context.sourceNodeId,
+			currentValue,
+			targetValue,
+			duration,
+		});
 	}
 
 	@ccValue(BinarySwitchCCValues.currentValue)

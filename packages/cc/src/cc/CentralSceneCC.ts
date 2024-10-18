@@ -33,7 +33,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -296,22 +295,50 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 	}
 }
 
+// @publicAPI
+export interface CentralSceneCCNotificationOptions {
+	sequenceNumber: number;
+	keyAttribute: CentralSceneKeys;
+	sceneNumber: number;
+	slowRefresh?: boolean;
+}
+
 @CCCommand(CentralSceneCommand.Notification)
 export class CentralSceneCCNotification extends CentralSceneCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: CentralSceneCCNotificationOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 3);
-		this.sequenceNumber = this.payload[0];
-		this.keyAttribute = this.payload[1] & 0b111;
-		this.sceneNumber = this.payload[2];
-		if (this.keyAttribute === CentralSceneKeys.KeyHeldDown) {
+		// TODO: Check implementation:
+		this.sequenceNumber = options.sequenceNumber;
+		this.keyAttribute = options.keyAttribute;
+		this.sceneNumber = options.sceneNumber;
+		this.slowRefresh = options.slowRefresh;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): CentralSceneCCNotification {
+		validatePayload(payload.length >= 3);
+		const sequenceNumber = payload[0];
+		const keyAttribute: CentralSceneKeys = payload[1] & 0b111;
+		const sceneNumber = payload[2];
+		let slowRefresh: boolean | undefined;
+		if (keyAttribute === CentralSceneKeys.KeyHeldDown) {
 			// A receiving node MUST ignore this field if the command is not
 			// carrying the Key Held Down key attribute.
-			this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
+			slowRefresh = !!(payload[1] & 0b1000_0000);
 		}
+
+		return new CentralSceneCCNotification({
+			nodeId: options.context.sourceNodeId,
+			sequenceNumber,
+			keyAttribute,
+			sceneNumber,
+			slowRefresh,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -352,40 +379,75 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 	}
 }
 
+// @publicAPI
+export interface CentralSceneCCSupportedReportOptions {
+	sceneCount: number;
+	supportsSlowRefresh: MaybeNotKnown<boolean>;
+	supportedKeyAttributes: Record<number, readonly CentralSceneKeys[]>;
+}
+
 @CCCommand(CentralSceneCommand.SupportedReport)
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: CentralSceneCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 2);
-		this.sceneCount = this.payload[0];
-		this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
-		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
-		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
-		const numEntries = identicalKeyAttributes ? 1 : this.sceneCount;
+		// TODO: Check implementation:
+		this.sceneCount = options.sceneCount;
+		this.supportsSlowRefresh = options.supportsSlowRefresh;
+		for (
+			const [scene, keys] of Object.entries(
+				options.supportedKeyAttributes,
+			)
+		) {
+			this._supportedKeyAttributes.set(
+				parseInt(scene),
+				keys,
+			);
+		}
+	}
 
-		validatePayload(this.payload.length >= 2 + bitMaskBytes * numEntries);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): CentralSceneCCSupportedReport {
+		validatePayload(payload.length >= 2);
+		const sceneCount = payload[0];
+		const supportsSlowRefresh: MaybeNotKnown<boolean> =
+			!!(payload[1] & 0b1000_0000);
+		const bitMaskBytes = (payload[1] & 0b110) >>> 1;
+		const identicalKeyAttributes = !!(payload[1] & 0b1);
+		const numEntries = identicalKeyAttributes ? 1 : sceneCount;
+		validatePayload(payload.length >= 2 + bitMaskBytes * numEntries);
+		const supportedKeyAttributes: Record<
+			number,
+			readonly CentralSceneKeys[]
+		> = {};
 		for (let i = 0; i < numEntries; i++) {
-			const mask = this.payload.subarray(
+			const mask = payload.subarray(
 				2 + i * bitMaskBytes,
 				2 + (i + 1) * bitMaskBytes,
 			);
-			this._supportedKeyAttributes.set(
-				i + 1,
-				parseBitMask(mask, CentralSceneKeys.KeyPressed),
+			supportedKeyAttributes[i + 1] = parseBitMask(
+				mask,
+				CentralSceneKeys.KeyPressed,
 			);
 		}
+
 		if (identicalKeyAttributes) {
 			// The key attributes are only transmitted for scene 1, copy them to the others
-			for (let i = 2; i <= this.sceneCount; i++) {
-				this._supportedKeyAttributes.set(
-					i,
-					this._supportedKeyAttributes.get(1)!,
-				);
+			for (let i = 2; i <= sceneCount; i++) {
+				supportedKeyAttributes[i] = supportedKeyAttributes[1];
 			}
 		}
+
+		return new CentralSceneCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			sceneCount,
+			supportsSlowRefresh,
+			supportedKeyAttributes,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -449,15 +511,33 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 @expectedCCResponse(CentralSceneCCSupportedReport)
 export class CentralSceneCCSupportedGet extends CentralSceneCC {}
 
+// @publicAPI
+export interface CentralSceneCCConfigurationReportOptions {
+	slowRefresh: boolean;
+}
+
 @CCCommand(CentralSceneCommand.ConfigurationReport)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: CentralSceneCCConfigurationReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.slowRefresh = !!(this.payload[0] & 0b1000_0000);
+		// TODO: Check implementation:
+		this.slowRefresh = options.slowRefresh;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): CentralSceneCCConfigurationReport {
+		validatePayload(payload.length >= 1);
+		const slowRefresh = !!(payload[0] & 0b1000_0000);
+
+		return new CentralSceneCCConfigurationReport({
+			nodeId: options.context.sourceNodeId,
+			slowRefresh,
+		});
 	}
 
 	@ccValue(CentralSceneCCValues.slowRefresh)
@@ -476,9 +556,7 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 export class CentralSceneCCConfigurationGet extends CentralSceneCC {}
 
 // @publicAPI
-export interface CentralSceneCCConfigurationSetOptions
-	extends CCCommandOptions
-{
+export interface CentralSceneCCConfigurationSetOptions {
 	slowRefresh: boolean;
 }
 
@@ -486,19 +564,24 @@ export interface CentralSceneCCConfigurationSetOptions
 @useSupervision()
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| CentralSceneCCConfigurationSetOptions,
+		options: CentralSceneCCConfigurationSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.slowRefresh = options.slowRefresh;
-		}
+		this.slowRefresh = options.slowRefresh;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): CentralSceneCCConfigurationSet {
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new CentralSceneCCConfigurationSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public slowRefresh: boolean;

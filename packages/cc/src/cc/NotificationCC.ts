@@ -921,7 +921,7 @@ export class NotificationCC extends CommandClass {
 }
 
 // @publicAPI
-export interface NotificationCCSetOptions extends CCCommandOptions {
+export interface NotificationCCSetOptions {
 	notificationType: number;
 	notificationStatus: boolean;
 }
@@ -930,18 +930,28 @@ export interface NotificationCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | NotificationCCSetOptions,
+		options: NotificationCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.notificationType = this.payload[0];
-			this.notificationStatus = this.payload[1] === 0xff;
-		} else {
-			this.notificationType = options.notificationType;
-			this.notificationStatus = options.notificationStatus;
-		}
+		this.notificationType = options.notificationType;
+		this.notificationStatus = options.notificationStatus;
 	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): NotificationCCSet {
+		validatePayload(payload.length >= 2);
+		const notificationType = payload[0];
+		const notificationStatus = payload[1] === 0xff;
+
+		return new NotificationCCSet({
+			nodeId: options.context.sourceNodeId,
+			notificationType,
+			notificationStatus,
+		});
+	}
+
 	public notificationType: number;
 	public notificationStatus: boolean;
 
@@ -1435,7 +1445,8 @@ export class NotificationCCReport extends NotificationCC {
 	}
 }
 
-type NotificationCCGetSpecificOptions =
+// @publicAPI
+export type NotificationCCGetOptions =
 	| {
 		alarmType: number;
 	}
@@ -1443,34 +1454,45 @@ type NotificationCCGetSpecificOptions =
 		notificationType: number;
 		notificationEvent?: number;
 	};
-// @publicAPI
-export type NotificationCCGetOptions =
-	& CCCommandOptions
-	& NotificationCCGetSpecificOptions;
 
 @CCCommand(NotificationCommand.Get)
 @expectedCCResponse(NotificationCCReport)
 export class NotificationCCGet extends NotificationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
+		options: NotificationCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.alarmType = this.payload[0] || undefined;
-			if (this.payload.length >= 2) {
-				this.notificationType = this.payload[1] || undefined;
-				if (this.payload.length >= 3 && this.notificationType != 0xff) {
-					this.notificationEvent = this.payload[2];
-				}
-			}
+		if ("alarmType" in options) {
+			this.alarmType = options.alarmType;
 		} else {
-			if ("alarmType" in options) {
-				this.alarmType = options.alarmType;
-			} else {
-				this.notificationType = options.notificationType;
-				this.notificationEvent = options.notificationEvent;
+			this.notificationType = options.notificationType;
+			this.notificationEvent = options.notificationEvent;
+		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): NotificationCCGet {
+		validatePayload(payload.length >= 1);
+
+		if (payload.length >= 2) {
+			const notificationType = payload[1];
+			let notificationEvent: number | undefined;
+			if (payload.length >= 3 && notificationType != 0xff) {
+				notificationEvent = payload[2];
 			}
+			return new NotificationCCGet({
+				nodeId: options.context.sourceNodeId,
+				notificationType,
+				notificationEvent,
+			});
+		} else {
+			const alarmType = payload[0];
+			return new NotificationCCGet({
+				nodeId: options.context.sourceNodeId,
+				alarmType,
+			});
 		}
 	}
 
@@ -1516,7 +1538,7 @@ export class NotificationCCGet extends NotificationCC {
 }
 
 // @publicAPI
-export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
+export interface NotificationCCSupportedReportOptions {
 	supportsV1Alarm: boolean;
 	supportedNotificationTypes: number[];
 }
@@ -1524,34 +1546,40 @@ export interface NotificationCCSupportedReportOptions extends CCCommandOptions {
 @CCCommand(NotificationCommand.SupportedReport)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
-		options:
-			| NotificationCCSupportedReportOptions
-			| CommandClassDeserializationOptions,
+		options: NotificationCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
-			const numBitMaskBytes = this.payload[0] & 0b0001_1111;
-			validatePayload(
-				numBitMaskBytes > 0,
-				this.payload.length >= 1 + numBitMaskBytes,
-			);
-			const notificationBitMask = this.payload.subarray(
-				1,
-				1 + numBitMaskBytes,
-			);
-			this.supportedNotificationTypes = parseBitMask(
-				notificationBitMask,
-				// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
-				0,
-			);
-		} else {
-			this.supportsV1Alarm = options.supportsV1Alarm;
-			this.supportedNotificationTypes =
-				options.supportedNotificationTypes;
-		}
+		this.supportsV1Alarm = options.supportsV1Alarm;
+		this.supportedNotificationTypes = options.supportedNotificationTypes;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): NotificationCCSupportedReport {
+		validatePayload(payload.length >= 1);
+		const supportsV1Alarm = !!(payload[0] & 0b1000_0000);
+		const numBitMaskBytes = payload[0] & 0b0001_1111;
+		validatePayload(
+			numBitMaskBytes > 0,
+			payload.length >= 1 + numBitMaskBytes,
+		);
+		const notificationBitMask = payload.subarray(
+			1,
+			1 + numBitMaskBytes,
+		);
+		const supportedNotificationTypes = parseBitMask(
+			notificationBitMask,
+			// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
+			0,
+		);
+
+		return new NotificationCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			supportsV1Alarm,
+			supportedNotificationTypes,
+		});
 	}
 
 	@ccValue(NotificationCCValues.supportsV1Alarm)
@@ -1595,9 +1623,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 export class NotificationCCSupportedGet extends NotificationCC {}
 
 // @publicAPI
-export interface NotificationCCEventSupportedReportOptions
-	extends CCCommandOptions
-{
+export interface NotificationCCEventSupportedReportOptions {
 	notificationType: number;
 	supportedEvents: number[];
 }
@@ -1605,33 +1631,44 @@ export interface NotificationCCEventSupportedReportOptions
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| NotificationCCEventSupportedReportOptions,
+		options: NotificationCCEventSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.notificationType = this.payload[0];
-			const numBitMaskBytes = this.payload[1] & 0b000_11111;
-			if (numBitMaskBytes === 0) {
-				// Notification type is not supported
-				this.supportedEvents = [];
-				return;
-			}
+		this.notificationType = options.notificationType;
+		this.supportedEvents = options.supportedEvents;
+	}
 
-			validatePayload(this.payload.length >= 2 + numBitMaskBytes);
-			const eventBitMask = this.payload.subarray(2, 2 + numBitMaskBytes);
-			this.supportedEvents = parseBitMask(
-				eventBitMask,
-				// In this mask, bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
-				0,
-			);
-		} else {
-			this.notificationType = options.notificationType;
-			this.supportedEvents = options.supportedEvents;
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): NotificationCCEventSupportedReport {
+		validatePayload(payload.length >= 1);
+		const notificationType = payload[0];
+		const numBitMaskBytes = payload[1] & 0b000_11111;
+
+		if (numBitMaskBytes === 0) {
+			// Notification type is not supported
+			return new NotificationCCEventSupportedReport({
+				nodeId: options.context.sourceNodeId,
+				notificationType,
+				supportedEvents: [],
+			});
 		}
+
+		validatePayload(payload.length >= 2 + numBitMaskBytes);
+		const eventBitMask = payload.subarray(2, 2 + numBitMaskBytes);
+		const supportedEvents = parseBitMask(
+			eventBitMask,
+			// In this mask, bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
+			0,
+		);
+
+		return new NotificationCCEventSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			notificationType,
+			supportedEvents,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -1729,9 +1766,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 }
 
 // @publicAPI
-export interface NotificationCCEventSupportedGetOptions
-	extends CCCommandOptions
-{
+export interface NotificationCCEventSupportedGetOptions {
 	notificationType: number;
 }
 
@@ -1739,17 +1774,23 @@ export interface NotificationCCEventSupportedGetOptions
 @expectedCCResponse(NotificationCCEventSupportedReport)
 export class NotificationCCEventSupportedGet extends NotificationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| NotificationCCEventSupportedGetOptions,
+		options: NotificationCCEventSupportedGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.notificationType = this.payload[0];
-		} else {
-			this.notificationType = options.notificationType;
-		}
+		this.notificationType = options.notificationType;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): NotificationCCEventSupportedGet {
+		validatePayload(payload.length >= 1);
+		const notificationType = payload[0];
+
+		return new NotificationCCEventSupportedGet({
+			nodeId: options.context.sourceNodeId,
+			notificationType,
+		});
 	}
 
 	public notificationType: number;

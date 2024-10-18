@@ -22,7 +22,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -160,7 +159,7 @@ export class LanguageCC extends CommandClass {
 }
 
 // @publicAPI
-export interface LanguageCCSetOptions extends CCCommandOptions {
+export interface LanguageCCSetOptions {
 	language: string;
 	country?: string;
 }
@@ -169,20 +168,27 @@ export interface LanguageCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class LanguageCCSet extends LanguageCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | LanguageCCSetOptions,
+		options: LanguageCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			// Populate properties from options object
-			this._language = options.language;
-			this._country = options.country;
-		}
+		// Populate properties from options object
+		this._language = options.language;
+		this._country = options.country;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): LanguageCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new LanguageCCSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	private _language: string;
@@ -235,19 +241,41 @@ export class LanguageCCSet extends LanguageCC {
 	}
 }
 
+// @publicAPI
+export interface LanguageCCReportOptions {
+	language: string;
+	country: MaybeNotKnown<string>;
+}
+
 @CCCommand(LanguageCommand.Report)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: LanguageCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
+
+		// TODO: Check implementation:
+		this.language = options.language;
+		this.country = options.country;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): LanguageCCReport {
 		// if (gotDeserializationOptions(options)) {
-		validatePayload(this.payload.length >= 3);
-		this.language = this.payload.toString("ascii", 0, 3);
-		if (this.payload.length >= 5) {
-			this.country = this.payload.toString("ascii", 3, 5);
+		validatePayload(payload.length >= 3);
+		const language = payload.toString("ascii", 0, 3);
+		let country: MaybeNotKnown<string>;
+		if (payload.length >= 5) {
+			country = payload.toString("ascii", 3, 5);
 		}
-		// }
+
+		return new LanguageCCReport({
+			nodeId: options.context.sourceNodeId,
+			language,
+			country,
+		});
 	}
 
 	@ccValue(LanguageCCValues.language)

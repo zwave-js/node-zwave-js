@@ -24,7 +24,6 @@ import {
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -187,7 +186,7 @@ export class EnergyProductionCC extends CommandClass {
 }
 
 // @publicAPI
-export interface EnergyProductionCCReportOptions extends CCCommandOptions {
+export interface EnergyProductionCCReportOptions {
 	parameter: EnergyProductionParameter;
 	scale: EnergyProductionScale;
 	value: number;
@@ -196,24 +195,34 @@ export interface EnergyProductionCCReportOptions extends CCCommandOptions {
 @CCCommand(EnergyProductionCommand.Report)
 export class EnergyProductionCCReport extends EnergyProductionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| EnergyProductionCCReportOptions,
+		options: EnergyProductionCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.parameter = this.payload[0];
-			const { value, scale } = parseFloatWithScale(
-				this.payload.subarray(1),
-			);
-			this.value = value;
-			this.scale = getEnergyProductionScale(this.parameter, scale);
-		} else {
-			this.parameter = options.parameter;
-			this.value = options.value;
-			this.scale = options.scale;
-		}
+		this.parameter = options.parameter;
+		this.value = options.value;
+		this.scale = options.scale;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): EnergyProductionCCReport {
+		validatePayload(payload.length >= 2);
+		const parameter: EnergyProductionParameter = payload[0];
+		const { value, scale: rawScale } = parseFloatWithScale(
+			payload.subarray(1),
+		);
+		const scale: EnergyProductionScale = getEnergyProductionScale(
+			parameter,
+			rawScale,
+		);
+
+		return new EnergyProductionCCReport({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+			value,
+			scale,
+		});
 	}
 
 	public readonly parameter: EnergyProductionParameter;
@@ -261,7 +270,7 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 }
 
 // @publicAPI
-export interface EnergyProductionCCGetOptions extends CCCommandOptions {
+export interface EnergyProductionCCGetOptions {
 	parameter: EnergyProductionParameter;
 }
 
@@ -279,17 +288,23 @@ function testResponseForEnergyProductionGet(
 )
 export class EnergyProductionCCGet extends EnergyProductionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| EnergyProductionCCGetOptions,
+		options: EnergyProductionCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.parameter = this.payload[0];
-		} else {
-			this.parameter = options.parameter;
-		}
+		this.parameter = options.parameter;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): EnergyProductionCCGet {
+		validatePayload(payload.length >= 1);
+		const parameter: EnergyProductionParameter = payload[0];
+
+		return new EnergyProductionCCGet({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+		});
 	}
 
 	public parameter: EnergyProductionParameter;

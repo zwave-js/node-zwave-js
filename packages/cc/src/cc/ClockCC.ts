@@ -21,7 +21,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -140,7 +139,7 @@ export class ClockCC extends CommandClass {
 }
 
 // @publicAPI
-export interface ClockCCSetOptions extends CCCommandOptions {
+export interface ClockCCSetOptions {
 	weekday: Weekday;
 	hour: number;
 	minute: number;
@@ -150,20 +149,27 @@ export interface ClockCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class ClockCCSet extends ClockCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ClockCCSetOptions,
+		options: ClockCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.weekday = options.weekday;
-			this.hour = options.hour;
-			this.minute = options.minute;
-		}
+		this.weekday = options.weekday;
+		this.hour = options.hour;
+		this.minute = options.minute;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ClockCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ClockCCSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public weekday: Weekday;
@@ -199,22 +205,46 @@ export class ClockCCSet extends ClockCC {
 	}
 }
 
+// @publicAPI
+export interface ClockCCReportOptions {
+	weekday: Weekday;
+	hour: number;
+	minute: number;
+}
+
 @CCCommand(ClockCommand.Report)
 export class ClockCCReport extends ClockCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ClockCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 2);
 
-		this.weekday = this.payload[0] >>> 5;
-		this.hour = this.payload[0] & 0b11111;
-		this.minute = this.payload[1];
+		// TODO: Check implementation:
+		this.weekday = options.weekday;
+		this.hour = options.hour;
+		this.minute = options.minute;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ClockCCReport {
+		validatePayload(payload.length >= 2);
+		const weekday: Weekday = payload[0] >>> 5;
+		const hour = payload[0] & 0b11111;
+		const minute = payload[1];
 		validatePayload(
-			this.weekday <= Weekday.Sunday,
-			this.hour <= 23,
-			this.minute <= 59,
+			weekday <= Weekday.Sunday,
+			hour <= 23,
+			minute <= 59,
 		);
+
+		return new ClockCCReport({
+			nodeId: options.context.sourceNodeId,
+			weekday,
+			hour,
+			minute,
+		});
 	}
 
 	public readonly weekday: Weekday;

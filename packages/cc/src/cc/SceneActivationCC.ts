@@ -23,7 +23,6 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -126,7 +125,7 @@ export class SceneActivationCC extends CommandClass {
 }
 
 // @publicAPI
-export interface SceneActivationCCSetOptions extends CCCommandOptions {
+export interface SceneActivationCCSetOptions {
 	sceneId: number;
 	dimmingDuration?: Duration | string;
 }
@@ -135,24 +134,32 @@ export interface SceneActivationCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| SceneActivationCCSetOptions,
+		options: SceneActivationCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.sceneId = this.payload[0];
-			// Per the specs, dimmingDuration is required, but as always the real world is different...
-			if (this.payload.length >= 2) {
-				this.dimmingDuration = Duration.parseSet(this.payload[1]);
-			}
+		this.sceneId = options.sceneId;
+		this.dimmingDuration = Duration.from(options.dimmingDuration);
+	}
 
-			validatePayload(this.sceneId >= 1, this.sceneId <= 255);
-		} else {
-			this.sceneId = options.sceneId;
-			this.dimmingDuration = Duration.from(options.dimmingDuration);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SceneActivationCCSet {
+		validatePayload(payload.length >= 1);
+		const sceneId = payload[0];
+		validatePayload(sceneId >= 1, sceneId <= 255);
+
+		// Per the specs, dimmingDuration is required, but as always the real world is different...
+		let dimmingDuration: Duration | undefined;
+		if (payload.length >= 2) {
+			dimmingDuration = Duration.parseSet(payload[1]);
 		}
+
+		return new SceneActivationCCSet({
+			nodeId: options.context.sourceNodeId,
+			sceneId,
+			dimmingDuration,
+		});
 	}
 
 	@ccValue(SceneActivationCCValues.sceneId)

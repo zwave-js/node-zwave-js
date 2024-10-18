@@ -615,7 +615,7 @@ export class MultilevelSwitchCC extends CommandClass {
 }
 
 // @publicAPI
-export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
+export interface MultilevelSwitchCCSetOptions {
 	targetValue: number;
 	// Version >= 2:
 	duration?: Duration | string;
@@ -625,22 +625,30 @@ export interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSwitchCCSetOptions,
+		options: MultilevelSwitchCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.targetValue = this.payload[0];
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
 
-			if (this.payload.length >= 2) {
-				this.duration = Duration.parseReport(this.payload[1]);
-			}
-		} else {
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): MultilevelSwitchCCSet {
+		validatePayload(payload.length >= 1);
+		const targetValue = payload[0];
+		let duration: Duration | undefined;
+
+		if (payload.length >= 2) {
+			duration = Duration.parseReport(payload[1]);
 		}
+
+		return new MultilevelSwitchCCSet({
+			nodeId: options.context.sourceNodeId,
+			targetValue,
+			duration,
+		});
 	}
 
 	public targetValue: number;
@@ -680,37 +688,48 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 }
 
 // @publicAPI
-export interface MultilevelSwitchCCReportOptions extends CCCommandOptions {
-	currentValue: MaybeUnknown<number>;
-	targetValue: MaybeUnknown<number>;
+export interface MultilevelSwitchCCReportOptions {
+	currentValue?: MaybeUnknown<number>;
+	targetValue?: MaybeUnknown<number>;
 	duration?: Duration | string;
 }
 
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSwitchCCReportOptions,
+		options: MultilevelSwitchCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.currentValue =
-				// 0xff is a legacy value for 100% (99)
-				this.payload[0] === 0xff
-					? 99
-					: parseMaybeNumber(this.payload[0]);
-			if (this.payload.length >= 3) {
-				this.targetValue = parseMaybeNumber(this.payload[1]);
-				this.duration = Duration.parseReport(this.payload[2]);
-			}
-		} else {
-			this.currentValue = options.currentValue;
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+		this.currentValue = options.currentValue;
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): MultilevelSwitchCCReport {
+		validatePayload(payload.length >= 1);
+		const currentValue: MaybeUnknown<number> | undefined =
+			// 0xff is a legacy value for 100% (99)
+			payload[0] === 0xff
+				? 99
+				: parseMaybeNumber(payload[0]);
+		let targetValue: MaybeUnknown<number> | undefined;
+		let duration: Duration | undefined;
+
+		if (payload.length >= 3) {
+			targetValue = parseMaybeNumber(payload[1]);
+			duration = Duration.parseReport(payload[2]);
 		}
+
+		return new MultilevelSwitchCCReport({
+			nodeId: options.context.sourceNodeId,
+			currentValue,
+			targetValue,
+			duration,
+		});
 	}
 
 	@ccValue(MultilevelSwitchCCValues.targetValue)

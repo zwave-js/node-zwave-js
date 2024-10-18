@@ -27,7 +27,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -264,9 +263,7 @@ export class NodeNamingAndLocationCC extends CommandClass {
 }
 
 // @publicAPI
-export interface NodeNamingAndLocationCCNameSetOptions
-	extends CCCommandOptions
-{
+export interface NodeNamingAndLocationCCNameSetOptions {
 	name: string;
 }
 
@@ -274,20 +271,25 @@ export interface NodeNamingAndLocationCCNameSetOptions
 @useSupervision()
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| NodeNamingAndLocationCCNameSetOptions,
+		options: NodeNamingAndLocationCCNameSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.name = options.name;
-		}
+		this.name = options.name;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): NodeNamingAndLocationCCNameSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new NodeNamingAndLocationCCNameSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public name: string;
@@ -353,9 +355,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 export class NodeNamingAndLocationCCNameGet extends NodeNamingAndLocationCC {}
 
 // @publicAPI
-export interface NodeNamingAndLocationCCLocationSetOptions
-	extends CCCommandOptions
-{
+export interface NodeNamingAndLocationCCLocationSetOptions {
 	location: string;
 }
 
@@ -365,20 +365,25 @@ export class NodeNamingAndLocationCCLocationSet
 	extends NodeNamingAndLocationCC
 {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| NodeNamingAndLocationCCLocationSetOptions,
+		options: NodeNamingAndLocationCCLocationSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.location = options.location;
-		}
+		this.location = options.location;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): NodeNamingAndLocationCCLocationSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new NodeNamingAndLocationCCLocationSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public location: string;

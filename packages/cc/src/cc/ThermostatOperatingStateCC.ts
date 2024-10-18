@@ -17,6 +17,7 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -158,17 +159,35 @@ export class ThermostatOperatingStateCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface ThermostatOperatingStateCCReportOptions {
+	state: ThermostatOperatingState;
+}
+
 @CCCommand(ThermostatOperatingStateCommand.Report)
 export class ThermostatOperatingStateCCReport
 	extends ThermostatOperatingStateCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ThermostatOperatingStateCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.state = this.payload[0];
+		// TODO: Check implementation:
+		this.state = options.state;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatOperatingStateCCReport {
+		validatePayload(payload.length >= 1);
+		const state: ThermostatOperatingState = payload[0];
+
+		return new ThermostatOperatingStateCCReport({
+			nodeId: options.context.sourceNodeId,
+			state,
+		});
 	}
 
 	@ccValue(ThermostatOperatingStateCCValues.operatingState)
