@@ -22,7 +22,6 @@ import {
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -318,28 +317,56 @@ duration: ${currentValue.duration}`;
 	}
 }
 
+// @publicAPI
+export interface AlarmSensorCCReportOptions {
+	sensorType: AlarmSensorType;
+	state: boolean;
+	severity?: number;
+	duration?: number;
+}
+
 @CCCommand(AlarmSensorCommand.Report)
 export class AlarmSensorCCReport extends AlarmSensorCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: AlarmSensorCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 5, this.payload[1] !== 0xff);
-		// Alarm Sensor reports may be forwarded by a different node, in this case
-		// (and only then!) the payload contains the original node ID
-		const sourceNodeId = this.payload[0];
-		if (sourceNodeId !== 0) {
-			this.nodeId = sourceNodeId;
-		}
-		this.sensorType = this.payload[1];
+
+		// TODO: Check implementation:
+		this.sensorType = options.sensorType;
+		this.state = options.state;
+		this.severity = options.severity;
+		this.duration = options.duration;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): AlarmSensorCCReport {
+		validatePayload(payload.length >= 5, payload[1] !== 0xff);
+		const sourceNodeId = payload[0];
+
+		const sensorType: AlarmSensorType = payload[1];
 		// Any positive value gets interpreted as alarm
-		this.state = this.payload[2] > 0;
+		const state: boolean = payload[2] > 0;
 		// Severity only ranges from 1 to 100
-		if (this.payload[2] > 0 && this.payload[2] <= 0x64) {
-			this.severity = this.payload[2];
+		let severity: number | undefined;
+		if (payload[2] > 0 && payload[2] <= 0x64) {
+			severity = payload[2];
 		}
+
 		// ignore zero durations
-		this.duration = this.payload.readUInt16BE(3) || undefined;
+		const duration = payload.readUInt16BE(3) || undefined;
+
+		return new AlarmSensorCCReport({
+			// Alarm Sensor reports may be forwarded by a different node, in this case
+			// (and only then!) the payload contains the original node ID
+			nodeId: sourceNodeId || options.context.sourceNodeId,
+			sensorType,
+			state,
+			severity,
+			duration,
+		});
 	}
 
 	public readonly sensorType: AlarmSensorType;
@@ -393,7 +420,7 @@ function testResponseForAlarmSensorGet(
 }
 
 // @publicAPI
-export interface AlarmSensorCCGetOptions extends CCCommandOptions {
+export interface AlarmSensorCCGetOptions {
 	sensorType?: AlarmSensorType;
 }
 
@@ -401,18 +428,25 @@ export interface AlarmSensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AlarmSensorCCReport, testResponseForAlarmSensorGet)
 export class AlarmSensorCCGet extends AlarmSensorCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | AlarmSensorCCGetOptions,
+		options: AlarmSensorCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.sensorType = options.sensorType ?? AlarmSensorType.Any;
-		}
+		this.sensorType = options.sensorType ?? AlarmSensorType.Any;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): AlarmSensorCCGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new AlarmSensorCCGet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public sensorType: AlarmSensorType;
@@ -435,31 +469,47 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 	}
 }
 
+// @publicAPI
+export interface AlarmSensorCCSupportedReportOptions {
+	supportedSensorTypes: AlarmSensorType[];
+}
+
 @CCCommand(AlarmSensorCommand.SupportedReport)
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: AlarmSensorCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 1);
-		const bitMaskLength = this.payload[0];
-		validatePayload(this.payload.length >= 1 + bitMaskLength);
-		this._supportedSensorTypes = parseBitMask(
-			this.payload.subarray(1, 1 + bitMaskLength),
-			AlarmSensorType["General Purpose"],
-		);
+
+		// TODO: Check implementation:
+		this.supportedSensorTypes = options.supportedSensorTypes;
 	}
 
-	private _supportedSensorTypes: AlarmSensorType[];
-	@ccValue(AlarmSensorCCValues.supportedSensorTypes)
-	public get supportedSensorTypes(): readonly AlarmSensorType[] {
-		return this._supportedSensorTypes;
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): AlarmSensorCCSupportedReport {
+		validatePayload(payload.length >= 1);
+		const bitMaskLength = payload[0];
+		validatePayload(payload.length >= 1 + bitMaskLength);
+		const supportedSensorTypes: AlarmSensorType[] = parseBitMask(
+			payload.subarray(1, 1 + bitMaskLength),
+			AlarmSensorType["General Purpose"],
+		);
+
+		return new AlarmSensorCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			supportedSensorTypes,
+		});
 	}
+
+	@ccValue(AlarmSensorCCValues.supportedSensorTypes)
+	public supportedSensorTypes: AlarmSensorType[];
 
 	public persistValues(ctx: PersistValuesContext): boolean {
 		if (!super.persistValues(ctx)) return false;
 		// Create metadata for each sensor type
-		for (const type of this._supportedSensorTypes) {
+		for (const type of this.supportedSensorTypes) {
 			this.createMetadataForSensorType(ctx, type);
 		}
 		return true;
@@ -469,7 +519,7 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return {
 			...super.toLogEntry(ctx),
 			message: {
-				"supported sensor types": this._supportedSensorTypes
+				"supported sensor types": this.supportedSensorTypes
 					.map((t) => getEnumMemberName(AlarmSensorType, t))
 					.join(", "),
 			},

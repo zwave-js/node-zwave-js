@@ -284,25 +284,47 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 @expectedCCResponse(ManufacturerSpecificCCReport)
 export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {}
 
+// @publicAPI
+export interface ManufacturerSpecificCCDeviceSpecificReportOptions {
+	type: DeviceIdType;
+	deviceId: string;
+}
+
 @CCCommand(ManufacturerSpecificCommand.DeviceSpecificReport)
 export class ManufacturerSpecificCCDeviceSpecificReport
 	extends ManufacturerSpecificCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options:
+			& ManufacturerSpecificCCDeviceSpecificReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 2);
-		this.type = this.payload[0] & 0b111;
-		const dataFormat = this.payload[1] >>> 5;
-		const dataLength = this.payload[1] & 0b11111;
+		// TODO: Check implementation:
+		this.type = options.type;
+		this.deviceId = options.deviceId;
+	}
 
-		validatePayload(dataLength > 0, this.payload.length >= 2 + dataLength);
-		const deviceIdData = this.payload.subarray(2, 2 + dataLength);
-		this.deviceId = dataFormat === 0
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ManufacturerSpecificCCDeviceSpecificReport {
+		validatePayload(payload.length >= 2);
+		const type: DeviceIdType = payload[0] & 0b111;
+		const dataFormat = payload[1] >>> 5;
+		const dataLength = payload[1] & 0b11111;
+		validatePayload(dataLength > 0, payload.length >= 2 + dataLength);
+		const deviceIdData = payload.subarray(2, 2 + dataLength);
+		const deviceId: string = dataFormat === 0
 			? deviceIdData.toString("utf8")
 			: "0x" + deviceIdData.toString("hex");
+
+		return new ManufacturerSpecificCCDeviceSpecificReport({
+			nodeId: options.context.sourceNodeId,
+			type,
+			deviceId,
+		});
 	}
 
 	public readonly type: DeviceIdType;
@@ -326,9 +348,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 }
 
 // @publicAPI
-export interface ManufacturerSpecificCCDeviceSpecificGetOptions
-	extends CCCommandOptions
-{
+export interface ManufacturerSpecificCCDeviceSpecificGetOptions {
 	deviceIdType: DeviceIdType;
 }
 
@@ -339,18 +359,25 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| ManufacturerSpecificCCDeviceSpecificGetOptions,
+			& ManufacturerSpecificCCDeviceSpecificGetOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.deviceIdType = options.deviceIdType;
-		}
+		this.deviceIdType = options.deviceIdType;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ManufacturerSpecificCCDeviceSpecificGet {
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ManufacturerSpecificCCDeviceSpecificGet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public deviceIdType: DeviceIdType;

@@ -34,7 +34,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -255,26 +254,45 @@ export class TimeParametersCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface TimeParametersCCReportOptions {
+	dateAndTime: Date;
+}
+
 @CCCommand(TimeParametersCommand.Report)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: TimeParametersCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 7);
+
+		// TODO: Check implementation:
+		this.dateAndTime = options.dateAndTime;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): TimeParametersCCReport {
+		validatePayload(payload.length >= 7);
 		const dateSegments = {
-			year: this.payload.readUInt16BE(0),
-			month: this.payload[2],
-			day: this.payload[3],
-			hour: this.payload[4],
-			minute: this.payload[5],
-			second: this.payload[6],
+			year: payload.readUInt16BE(0),
+			month: payload[2],
+			day: payload[3],
+			hour: payload[4],
+			minute: payload[5],
+			second: payload[6],
 		};
-		this._dateAndTime = segmentsToDate(
+		const dateAndTime: Date = segmentsToDate(
 			dateSegments,
 			// Assume we can use UTC and correct this assumption in persistValues
 			false,
 		);
+
+		return new TimeParametersCCReport({
+			nodeId: options.context.sourceNodeId,
+			dateAndTime,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -283,17 +301,14 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
 			const segments = dateToSegments(this.dateAndTime, false);
-			this._dateAndTime = segmentsToDate(segments, local);
+			this.dateAndTime = segmentsToDate(segments, local);
 		}
 
 		return super.persistValues(ctx);
 	}
 
-	private _dateAndTime: Date;
 	@ccValue(TimeParametersCCValues.dateAndTime)
-	public get dateAndTime(): Date {
-		return this._dateAndTime;
-	}
+	public dateAndTime: Date;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		return {
@@ -313,7 +328,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 export class TimeParametersCCGet extends TimeParametersCC {}
 
 // @publicAPI
-export interface TimeParametersCCSetOptions extends CCCommandOptions {
+export interface TimeParametersCCSetOptions {
 	dateAndTime: Date;
 	useLocalTime?: boolean;
 }
@@ -322,37 +337,43 @@ export interface TimeParametersCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| TimeParametersCCSetOptions,
+		options: TimeParametersCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 7);
-			const dateSegments = {
-				year: this.payload.readUInt16BE(0),
-				month: this.payload[2],
-				day: this.payload[3],
-				hour: this.payload[4],
-				minute: this.payload[5],
-				second: this.payload[6],
-			};
-			validatePayload(
-				dateSegments.month >= 1 && dateSegments.month <= 12,
-				dateSegments.day >= 1 && dateSegments.day <= 31,
-				dateSegments.hour >= 0 && dateSegments.hour <= 23,
-				dateSegments.minute >= 0 && dateSegments.minute <= 59,
-				dateSegments.second >= 0 && dateSegments.second <= 59,
-			);
-			this.dateAndTime = segmentsToDate(
-				dateSegments,
-				// Assume we can use UTC and correct this assumption in persistValues
-				false,
-			);
-		} else {
-			this.dateAndTime = options.dateAndTime;
-			this.useLocalTime = options.useLocalTime;
-		}
+		this.dateAndTime = options.dateAndTime;
+		this.useLocalTime = options.useLocalTime;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): TimeParametersCCSet {
+		validatePayload(payload.length >= 7);
+		const dateSegments = {
+			year: payload.readUInt16BE(0),
+			month: payload[2],
+			day: payload[3],
+			hour: payload[4],
+			minute: payload[5],
+			second: payload[6],
+		};
+		validatePayload(
+			dateSegments.month >= 1 && dateSegments.month <= 12,
+			dateSegments.day >= 1 && dateSegments.day <= 31,
+			dateSegments.hour >= 0 && dateSegments.hour <= 23,
+			dateSegments.minute >= 0 && dateSegments.minute <= 59,
+			dateSegments.second >= 0 && dateSegments.second <= 59,
+		);
+		const dateAndTime = segmentsToDate(
+			dateSegments,
+			// Assume we can use UTC and correct this assumption in persistValues
+			false,
+		);
+
+		return new TimeParametersCCSet({
+			nodeId: options.context.sourceNodeId,
+			dateAndTime,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {

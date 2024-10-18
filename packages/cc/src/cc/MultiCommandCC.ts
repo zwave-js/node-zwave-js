@@ -12,7 +12,6 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -94,9 +93,7 @@ export class MultiCommandCC extends CommandClass {
 }
 
 // @publicAPI
-export interface MultiCommandCCCommandEncapsulationOptions
-	extends CCCommandOptions
-{
+export interface MultiCommandCCCommandEncapsulationOptions {
 	encapsulated: CommandClass[];
 }
 
@@ -104,40 +101,47 @@ export interface MultiCommandCCCommandEncapsulationOptions
 // When sending commands encapsulated in this CC, responses to GET-type commands likely won't be encapsulated
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultiCommandCCCommandEncapsulationOptions,
+		options: MultiCommandCCCommandEncapsulationOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			const numCommands = this.payload[0];
-			this.encapsulated = [];
-			let offset = 1;
-			for (let i = 0; i < numCommands; i++) {
-				validatePayload(this.payload.length >= offset + 1);
-				const cmdLength = this.payload[offset];
-				validatePayload(this.payload.length >= offset + 1 + cmdLength);
-				this.encapsulated.push(
-					CommandClass.from({
-						data: this.payload.subarray(
-							offset + 1,
-							offset + 1 + cmdLength,
-						),
-						fromEncapsulation: true,
-						encapCC: this,
-						origin: options.origin,
-						context: options.context,
-					}),
-				);
-				offset += 1 + cmdLength;
-			}
-		} else {
-			this.encapsulated = options.encapsulated;
-			for (const cc of options.encapsulated) {
-				cc.encapsulatingCC = this as any;
-			}
+		this.encapsulated = options.encapsulated;
+		for (const cc of options.encapsulated) {
+			cc.encapsulatingCC = this as any;
 		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): MultiCommandCCCommandEncapsulation {
+		validatePayload(payload.length >= 1);
+		const numCommands = payload[0];
+		const encapsulated: CommandClass[] = [];
+		let offset = 1;
+		for (let i = 0; i < numCommands; i++) {
+			validatePayload(payload.length >= offset + 1);
+			const cmdLength = payload[offset];
+			validatePayload(payload.length >= offset + 1 + cmdLength);
+			encapsulated.push(
+				CommandClass.from({
+					data: payload.subarray(
+						offset + 1,
+						offset + 1 + cmdLength,
+					),
+					fromEncapsulation: true,
+					// FIXME: 🐔 🥚
+					encapCC: this,
+					origin: options.origin,
+					context: options.context,
+				}),
+			);
+			offset += 1 + cmdLength;
+		}
+
+		return new MultiCommandCCCommandEncapsulation({
+			nodeId: options.context.sourceNodeId,
+			encapsulated,
+		});
 	}
 
 	public encapsulated: CommandClass[];

@@ -31,7 +31,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -342,9 +341,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 }
 
 // @publicAPI
-export interface SceneActuatorConfigurationCCSetOptions
-	extends CCCommandOptions
-{
+export interface SceneActuatorConfigurationCCSetOptions {
 	sceneId: number;
 	dimmingDuration: Duration;
 	level?: number;
@@ -356,28 +353,33 @@ export class SceneActuatorConfigurationCCSet
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| SceneActuatorConfigurationCCSetOptions,
+		options: SceneActuatorConfigurationCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
+		if (options.sceneId < 1 || options.sceneId > 255) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				`The scene id ${options.sceneId} must be between 1 and 255!`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else {
-			if (options.sceneId < 1 || options.sceneId > 255) {
-				throw new ZWaveError(
-					`The scene id ${options.sceneId} must be between 1 and 255!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.sceneId = options.sceneId;
-			this.dimmingDuration = options.dimmingDuration;
-			this.level = options.level;
 		}
+		this.sceneId = options.sceneId;
+		this.dimmingDuration = options.dimmingDuration;
+		this.level = options.level;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SceneActuatorConfigurationCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new SceneActuatorConfigurationCCSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public sceneId: number;
@@ -410,22 +412,49 @@ export class SceneActuatorConfigurationCCSet
 	}
 }
 
+// @publicAPI
+export interface SceneActuatorConfigurationCCReportOptions {
+	sceneId: number;
+	level?: number;
+	dimmingDuration?: Duration;
+}
+
 @CCCommand(SceneActuatorConfigurationCommand.Report)
 export class SceneActuatorConfigurationCCReport
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: SceneActuatorConfigurationCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 3);
-		this.sceneId = this.payload[0];
 
-		if (this.sceneId !== 0) {
-			this.level = this.payload[1];
-			this.dimmingDuration = Duration.parseReport(this.payload[2])
+		// TODO: Check implementation:
+		this.sceneId = options.sceneId;
+		this.level = options.level;
+		this.dimmingDuration = options.dimmingDuration;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SceneActuatorConfigurationCCReport {
+		validatePayload(payload.length >= 3);
+		const sceneId = payload[0];
+
+		let level: number | undefined;
+		let dimmingDuration: Duration | undefined;
+		if (sceneId !== 0) {
+			level = payload[1];
+			dimmingDuration = Duration.parseReport(payload[2])
 				?? Duration.unknown();
 		}
+
+		return new SceneActuatorConfigurationCCReport({
+			nodeId: options.context.sourceNodeId,
+			sceneId,
+			level,
+			dimmingDuration,
+		});
 	}
 
 	public readonly sceneId: number;
@@ -487,9 +516,7 @@ function testResponseForSceneActuatorConfigurationGet(
 }
 
 // @publicAPI
-export interface SceneActuatorConfigurationCCGetOptions
-	extends CCCommandOptions
-{
+export interface SceneActuatorConfigurationCCGetOptions {
 	sceneId: number;
 }
 
@@ -502,20 +529,25 @@ export class SceneActuatorConfigurationCCGet
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| SceneActuatorConfigurationCCGetOptions,
+		options: SceneActuatorConfigurationCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.sceneId = options.sceneId;
-		}
+		this.sceneId = options.sceneId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): SceneActuatorConfigurationCCGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new SceneActuatorConfigurationCCGet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public sceneId: number;

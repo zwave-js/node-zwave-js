@@ -11,7 +11,6 @@ import {
 	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -87,7 +86,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 }
 
 // @publicAPI
-export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
+export interface InclusionControllerCCCompleteOptions {
 	step: InclusionControllerStep;
 	status: InclusionControllerStatus;
 }
@@ -95,22 +94,30 @@ export interface InclusionControllerCCCompleteOptions extends CCCommandOptions {
 @CCCommand(InclusionControllerCommand.Complete)
 export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| InclusionControllerCCCompleteOptions,
+		options: InclusionControllerCCCompleteOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.step = this.payload[0];
-			validatePayload.withReason("Invalid inclusion controller step")(
-				this.step in InclusionControllerStep,
-			);
-			this.status = this.payload[1];
-		} else {
-			this.step = options.step;
-			this.status = options.status;
-		}
+		this.step = options.step;
+		this.status = options.status;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): InclusionControllerCCComplete {
+		validatePayload(payload.length >= 2);
+		const step: InclusionControllerStep = payload[0];
+
+		validatePayload.withReason("Invalid inclusion controller step")(
+			step in InclusionControllerStep,
+		);
+		const status: InclusionControllerStatus = payload[1];
+
+		return new InclusionControllerCCComplete({
+			nodeId: options.context.sourceNodeId,
+			step,
+			status,
+		});
 	}
 
 	public step: InclusionControllerStep;
@@ -136,7 +143,7 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 }
 
 // @publicAPI
-export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
+export interface InclusionControllerCCInitiateOptions {
 	includedNodeId: number;
 	step: InclusionControllerStep;
 }
@@ -144,22 +151,30 @@ export interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
 @CCCommand(InclusionControllerCommand.Initiate)
 export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| InclusionControllerCCInitiateOptions,
+		options: InclusionControllerCCInitiateOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.includedNodeId = this.payload[0];
-			this.step = this.payload[1];
-			validatePayload.withReason("Invalid inclusion controller step")(
-				this.step in InclusionControllerStep,
-			);
-		} else {
-			this.includedNodeId = options.includedNodeId;
-			this.step = options.step;
-		}
+		this.includedNodeId = options.includedNodeId;
+		this.step = options.step;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): InclusionControllerCCInitiate {
+		validatePayload(payload.length >= 2);
+		const includedNodeId = payload[0];
+		const step: InclusionControllerStep = payload[1];
+
+		validatePayload.withReason("Invalid inclusion controller step")(
+			step in InclusionControllerStep,
+		);
+
+		return new InclusionControllerCCInitiate({
+			nodeId: options.context.sourceNodeId,
+			includedNodeId,
+			step,
+		});
 	}
 
 	public includedNodeId: number;
