@@ -32,7 +32,6 @@ import {
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -677,34 +676,37 @@ ${
 }
 
 // @publicAPI
-export interface WindowCoveringCCSupportedReportOptions
-	extends CCCommandOptions
-{
+export interface WindowCoveringCCSupportedReportOptions {
 	supportedParameters: readonly WindowCoveringParameter[];
 }
 
 @CCCommand(WindowCoveringCommand.SupportedReport)
 export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| WindowCoveringCCSupportedReportOptions,
+		options: WindowCoveringCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
+		this.supportedParameters = options.supportedParameters;
+	}
 
-			const numBitmaskBytes = this.payload[0] & 0b1111;
-			validatePayload(this.payload.length >= 1 + numBitmaskBytes);
-			const bitmask = this.payload.subarray(1, 1 + numBitmaskBytes);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WindowCoveringCCSupportedReport {
+		validatePayload(payload.length >= 1);
 
-			this.supportedParameters = parseBitMask(
-				bitmask,
-				WindowCoveringParameter["Outbound Left (no position)"],
-			);
-		} else {
-			this.supportedParameters = options.supportedParameters;
-		}
+		const numBitmaskBytes = payload[0] & 0b1111;
+		validatePayload(payload.length >= 1 + numBitmaskBytes);
+		const bitmask = payload.subarray(1, 1 + numBitmaskBytes);
+		const supportedParameters: WindowCoveringParameter[] = parseBitMask(
+			bitmask,
+			WindowCoveringParameter["Outbound Left (no position)"],
+		);
+
+		return new WindowCoveringCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			supportedParameters,
+		});
 	}
 
 	@ccValue(WindowCoveringCCValues.supportedParameters)
@@ -750,18 +752,46 @@ export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 @expectedCCResponse(WindowCoveringCCSupportedReport)
 export class WindowCoveringCCSupportedGet extends WindowCoveringCC {}
 
+// @publicAPI
+export interface WindowCoveringCCReportOptions {
+	parameter: WindowCoveringParameter;
+	currentValue: number;
+	targetValue: number;
+	duration: Duration;
+}
+
 @CCCommand(WindowCoveringCommand.Report)
 export class WindowCoveringCCReport extends WindowCoveringCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WindowCoveringCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 4);
-		this.parameter = this.payload[0];
-		this.currentValue = this.payload[1];
-		this.targetValue = this.payload[2];
-		this.duration = Duration.parseReport(this.payload[3])
+
+		// TODO: Check implementation:
+		this.parameter = options.parameter;
+		this.currentValue = options.currentValue;
+		this.targetValue = options.targetValue;
+		this.duration = options.duration;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WindowCoveringCCReport {
+		validatePayload(payload.length >= 4);
+		const parameter: WindowCoveringParameter = payload[0];
+		const currentValue = payload[1];
+		const targetValue = payload[2];
+		const duration = Duration.parseReport(payload[3])
 			?? Duration.unknown();
+
+		return new WindowCoveringCCReport({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+			currentValue,
+			targetValue,
+			duration,
+		});
 	}
 
 	public readonly parameter: WindowCoveringParameter;
@@ -799,7 +829,7 @@ export class WindowCoveringCCReport extends WindowCoveringCC {
 }
 
 // @publicAPI
-export interface WindowCoveringCCGetOptions extends CCCommandOptions {
+export interface WindowCoveringCCGetOptions {
 	parameter: WindowCoveringParameter;
 }
 
@@ -814,17 +844,23 @@ function testResponseForWindowCoveringGet(
 @expectedCCResponse(WindowCoveringCCReport, testResponseForWindowCoveringGet)
 export class WindowCoveringCCGet extends WindowCoveringCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| WindowCoveringCCGetOptions,
+		options: WindowCoveringCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.parameter = this.payload[0];
-		} else {
-			this.parameter = options.parameter;
-		}
+		this.parameter = options.parameter;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WindowCoveringCCGet {
+		validatePayload(payload.length >= 1);
+		const parameter: WindowCoveringParameter = payload[0];
+
+		return new WindowCoveringCCGet({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+		});
 	}
 
 	public parameter: WindowCoveringParameter;
@@ -848,7 +884,7 @@ export class WindowCoveringCCGet extends WindowCoveringCC {
 }
 
 // @publicAPI
-export interface WindowCoveringCCSetOptions extends CCCommandOptions {
+export interface WindowCoveringCCSetOptions {
 	targetValues: {
 		parameter: WindowCoveringParameter;
 		value: number;
@@ -860,33 +896,44 @@ export interface WindowCoveringCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class WindowCoveringCCSet extends WindowCoveringCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| WindowCoveringCCSetOptions,
+		options: WindowCoveringCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			const numEntries = this.payload[0] & 0b11111;
+		this.targetValues = options.targetValues;
+		this.duration = Duration.from(options.duration);
+	}
 
-			validatePayload(this.payload.length >= 1 + numEntries * 2);
-			this.targetValues = [];
-			for (let i = 0; i < numEntries; i++) {
-				const offset = 1 + i * 2;
-				this.targetValues.push({
-					parameter: this.payload[offset],
-					value: this.payload[offset + 1],
-				});
-			}
-			if (this.payload.length >= 2 + numEntries * 2) {
-				this.duration = Duration.parseSet(
-					this.payload[1 + numEntries * 2],
-				);
-			}
-		} else {
-			this.targetValues = options.targetValues;
-			this.duration = Duration.from(options.duration);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WindowCoveringCCSet {
+		validatePayload(payload.length >= 1);
+		const numEntries = payload[0] & 0b11111;
+
+		validatePayload(payload.length >= 1 + numEntries * 2);
+		const targetValues: WindowCoveringCCSetOptions["targetValues"] = [];
+
+		for (let i = 0; i < numEntries; i++) {
+			const offset = 1 + i * 2;
+			targetValues.push({
+				parameter: payload[offset],
+				value: payload[offset + 1],
+			});
 		}
+
+		let duration: Duration | undefined;
+
+		if (payload.length >= 2 + numEntries * 2) {
+			duration = Duration.parseSet(
+				payload[1 + numEntries * 2],
+			);
+		}
+
+		return new WindowCoveringCCSet({
+			nodeId: options.context.sourceNodeId,
+			targetValues,
+			duration,
+		});
 	}
 
 	public targetValues: {
@@ -930,9 +977,7 @@ export class WindowCoveringCCSet extends WindowCoveringCC {
 }
 
 // @publicAPI
-export interface WindowCoveringCCStartLevelChangeOptions
-	extends CCCommandOptions
-{
+export interface WindowCoveringCCStartLevelChangeOptions {
 	parameter: WindowCoveringParameter;
 	direction: keyof typeof LevelChangeDirection;
 	duration?: Duration | string;
@@ -942,23 +987,35 @@ export interface WindowCoveringCCStartLevelChangeOptions
 @useSupervision()
 export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| WindowCoveringCCStartLevelChangeOptions,
+		options: WindowCoveringCCStartLevelChangeOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.direction = !!(this.payload[0] & 0b0100_0000) ? "down" : "up";
-			this.parameter = this.payload[1];
-			if (this.payload.length >= 3) {
-				this.duration = Duration.parseSet(this.payload[2]);
-			}
-		} else {
-			this.parameter = options.parameter;
-			this.direction = options.direction;
-			this.duration = Duration.from(options.duration);
+		this.parameter = options.parameter;
+		this.direction = options.direction;
+		this.duration = Duration.from(options.duration);
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WindowCoveringCCStartLevelChange {
+		validatePayload(payload.length >= 2);
+		const direction = !!(payload[0] & 0b0100_0000)
+			? "down"
+			: "up";
+		const parameter: WindowCoveringParameter = payload[1];
+		let duration: Duration | undefined;
+
+		if (payload.length >= 3) {
+			duration = Duration.parseSet(payload[2]);
 		}
+
+		return new WindowCoveringCCStartLevelChange({
+			nodeId: options.context.sourceNodeId,
+			direction,
+			parameter,
+			duration,
+		});
 	}
 
 	public parameter: WindowCoveringParameter;
@@ -993,9 +1050,7 @@ export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 }
 
 // @publicAPI
-export interface WindowCoveringCCStopLevelChangeOptions
-	extends CCCommandOptions
-{
+export interface WindowCoveringCCStopLevelChangeOptions {
 	parameter: WindowCoveringParameter;
 }
 
@@ -1003,17 +1058,23 @@ export interface WindowCoveringCCStopLevelChangeOptions
 @useSupervision()
 export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| WindowCoveringCCStopLevelChangeOptions,
+		options: WindowCoveringCCStopLevelChangeOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.parameter = this.payload[0];
-		} else {
-			this.parameter = options.parameter;
-		}
+		this.parameter = options.parameter;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WindowCoveringCCStopLevelChange {
+		validatePayload(payload.length >= 1);
+		const parameter: WindowCoveringParameter = payload[0];
+
+		return new WindowCoveringCCStopLevelChange({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+		});
 	}
 
 	public parameter: WindowCoveringParameter;

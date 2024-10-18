@@ -61,7 +61,6 @@ import {
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -1603,7 +1602,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 }
 
 /** @publicAPI */
-export interface ConfigurationCCReportOptions extends CCCommandOptions {
+export interface ConfigurationCCReportOptions {
 	parameter: number;
 	value: ConfigValue;
 	valueSize: number;
@@ -1613,36 +1612,45 @@ export interface ConfigurationCCReportOptions extends CCCommandOptions {
 @CCCommand(ConfigurationCommand.Report)
 export class ConfigurationCCReport extends ConfigurationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ConfigurationCCReportOptions,
+		options: ConfigurationCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			// All fields must be present
-			validatePayload(this.payload.length > 2);
-			this.parameter = this.payload[0];
-			this.valueSize = this.payload[1] & 0b111;
-			// Ensure we received a valid report
-			validatePayload(
-				this.valueSize >= 1,
-				this.valueSize <= 4,
-				this.payload.length >= 2 + this.valueSize,
-			);
-			// Default to parsing the value as SignedInteger, like the specs say.
-			// We try to re-interpret the value in persistValues()
-			this.value = parseValue(
-				this.payload.subarray(2),
-				this.valueSize,
-				ConfigValueFormat.SignedInteger,
-			);
-		} else {
-			this.parameter = options.parameter;
-			this.value = options.value;
-			this.valueSize = options.valueSize;
-			this.valueFormat = options.valueFormat;
-		}
+		this.parameter = options.parameter;
+		this.value = options.value;
+		this.valueSize = options.valueSize;
+		this.valueFormat = options.valueFormat;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCReport {
+		// All fields must be present
+		validatePayload(payload.length > 2);
+		const parameter = payload[0];
+		const valueSize = payload[1] & 0b111;
+
+		// Ensure we received a valid report
+		validatePayload(
+			valueSize >= 1,
+			valueSize <= 4,
+			payload.length >= 2 + valueSize,
+		);
+		// Default to parsing the value as SignedInteger, like the specs say.
+		// We try to re-interpret the value in persistValues()
+		const value = parseValue(
+			payload.subarray(2),
+			valueSize,
+			ConfigValueFormat.SignedInteger,
+		);
+
+		return new ConfigurationCCReport({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+			valueSize,
+			value,
+		});
 	}
 
 	public parameter: number;
@@ -1784,7 +1792,7 @@ function testResponseForConfigurationGet(
 }
 
 // @publicAPI
-export interface ConfigurationCCGetOptions extends CCCommandOptions {
+export interface ConfigurationCCGetOptions {
 	parameter: number;
 	/**
 	 * If this is `true`, responses with different parameters than expected are accepted
@@ -1797,18 +1805,25 @@ export interface ConfigurationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCReport, testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
+		options: ConfigurationCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.parameter = this.payload[0];
-			this.allowUnexpectedResponse = false;
-		} else {
-			this.parameter = options.parameter;
-			this.allowUnexpectedResponse = options.allowUnexpectedResponse
-				?? false;
-		}
+		this.parameter = options.parameter;
+		this.allowUnexpectedResponse = options.allowUnexpectedResponse
+			?? false;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCGet {
+		validatePayload(payload.length >= 1);
+		const parameter = payload[0];
+
+		return new ConfigurationCCGet({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+		});
 	}
 
 	public parameter: number;
@@ -1829,58 +1844,66 @@ export class ConfigurationCCGet extends ConfigurationCC {
 
 // @publicAPI
 export type ConfigurationCCSetOptions =
-	& CCCommandOptions
-	& (
-		| {
-			parameter: number;
-			resetToDefault: true;
-		}
-		| {
-			parameter: number;
-			resetToDefault?: false;
-			valueSize: number;
-			/** How the value is encoded. Defaults to SignedInteger */
-			valueFormat?: ConfigValueFormat;
-			value: ConfigValue;
-		}
-	);
+	| {
+		parameter: number;
+		resetToDefault: true;
+	}
+	| {
+		parameter: number;
+		resetToDefault?: false;
+		valueSize: number;
+		/** How the value is encoded. Defaults to SignedInteger */
+		valueFormat?: ConfigValueFormat;
+		value: ConfigValue;
+	};
 
 @CCCommand(ConfigurationCommand.Set)
 @useSupervision()
 export class ConfigurationCCSet extends ConfigurationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ConfigurationCCSetOptions,
+		options: ConfigurationCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.parameter = this.payload[0];
-			this.resetToDefault = !!(this.payload[1] & 0b1000_0000);
-			this.valueSize = this.payload[1] & 0b111;
-
-			// Ensure we received a valid report
-			validatePayload(
-				this.valueSize >= 1,
-				this.valueSize <= 4,
-				this.payload.length >= 2 + this.valueSize,
-			);
-			// Parse the value as signed integer. We don't know the format here.
-			this.value = parseValue(
-				this.payload.subarray(2),
-				this.valueSize,
-				ConfigValueFormat.SignedInteger,
-			);
-		} else {
-			this.parameter = options.parameter;
-			this.resetToDefault = !!options.resetToDefault;
-			if (!options.resetToDefault) {
-				// TODO: Default to the stored value size
-				this.valueSize = options.valueSize;
-				this.valueFormat = options.valueFormat
-					?? ConfigValueFormat.SignedInteger;
-				this.value = options.value;
-			}
+		this.parameter = options.parameter;
+		this.resetToDefault = !!options.resetToDefault;
+		if (!options.resetToDefault) {
+			// TODO: Default to the stored value size
+			this.valueSize = options.valueSize;
+			this.valueFormat = options.valueFormat
+				?? ConfigValueFormat.SignedInteger;
+			this.value = options.value;
 		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCSet {
+		validatePayload(payload.length >= 2);
+		const parameter = payload[0];
+		const resetToDefault = !!(payload[1] & 0b1000_0000);
+		const valueSize: number | undefined = payload[1] & 0b111;
+
+		// Ensure we received a valid report
+		validatePayload(
+			valueSize >= 1,
+			valueSize <= 4,
+			payload.length >= 2 + valueSize,
+		);
+		// Parse the value as signed integer. We don't know the format here.
+		const value: number | undefined = parseValue(
+			payload.subarray(2),
+			valueSize,
+			ConfigValueFormat.SignedInteger,
+		);
+
+		return new ConfigurationCCSet({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+			resetToDefault,
+			valueSize,
+			value,
+		});
 	}
 
 	public resetToDefault: boolean;
@@ -1958,7 +1981,6 @@ export class ConfigurationCCSet extends ConfigurationCC {
 
 // @publicAPI
 export type ConfigurationCCBulkSetOptions =
-	& CCCommandOptions
 	& {
 		parameters: number[];
 		handshake?: boolean;
@@ -1984,43 +2006,48 @@ function getResponseForBulkSet(cc: ConfigurationCCBulkSet) {
 @useSupervision()
 export class ConfigurationCCBulkSet extends ConfigurationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ConfigurationCCBulkSetOptions,
+		options: ConfigurationCCBulkSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
+		this._parameters = options.parameters;
+		if (this._parameters.length < 1) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				`In a ConfigurationCC.BulkSet, parameters must be a non-empty array`,
+				ZWaveErrorCodes.CC_Invalid,
 			);
-		} else {
-			this._parameters = options.parameters;
-			if (this._parameters.length < 1) {
-				throw new ZWaveError(
-					`In a ConfigurationCC.BulkSet, parameters must be a non-empty array`,
-					ZWaveErrorCodes.CC_Invalid,
-				);
-			} else if (!isConsecutiveArray(this._parameters)) {
-				throw new ZWaveError(
-					`A ConfigurationCC.BulkSet can only be used for consecutive parameters`,
-					ZWaveErrorCodes.CC_Invalid,
-				);
-			}
-			this._handshake = !!options.handshake;
-			this._resetToDefault = !!options.resetToDefault;
-			if (!!options.resetToDefault) {
-				this._valueSize = 1;
-				this._valueFormat = ConfigValueFormat.SignedInteger;
-				this._values = this._parameters.map(() => 0);
-			} else {
-				this._valueSize = options.valueSize;
-				this._valueFormat = options.valueFormat
-					?? ConfigValueFormat.SignedInteger;
-				this._values = options.values;
-			}
+		} else if (!isConsecutiveArray(this._parameters)) {
+			throw new ZWaveError(
+				`A ConfigurationCC.BulkSet can only be used for consecutive parameters`,
+				ZWaveErrorCodes.CC_Invalid,
+			);
 		}
+		this._handshake = !!options.handshake;
+		this._resetToDefault = !!options.resetToDefault;
+		if (!!options.resetToDefault) {
+			this._valueSize = 1;
+			this._valueFormat = ConfigValueFormat.SignedInteger;
+			this._values = this._parameters.map(() => 0);
+		} else {
+			this._valueSize = options.valueSize;
+			this._valueFormat = options.valueFormat
+				?? ConfigValueFormat.SignedInteger;
+			this._values = options.values;
+		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCBulkSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ConfigurationCCBulkSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	private _parameters: number[];
@@ -2120,37 +2147,66 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 	}
 }
 
+// @publicAPI
+export interface ConfigurationCCBulkReportOptions {
+	reportsToFollow: number;
+	defaultValues: boolean;
+	isHandshakeResponse: boolean;
+	valueSize: number;
+	values: Record<number, ConfigValue>;
+}
+
 @CCCommand(ConfigurationCommand.BulkReport)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ConfigurationCCBulkReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		// Ensure we received enough bytes for the preamble
-		validatePayload(this.payload.length >= 5);
-		const firstParameter = this.payload.readUInt16BE(0);
-		const numParams = this.payload[2];
-		this._reportsToFollow = this.payload[3];
-		this._defaultValues = !!(this.payload[4] & 0b1000_0000);
-		this._isHandshakeResponse = !!(this.payload[4] & 0b0100_0000);
-		this._valueSize = this.payload[4] & 0b111;
+		// TODO: Check implementation:
+		this.reportsToFollow = options.reportsToFollow;
+		this.defaultValues = options.defaultValues;
+		this.isHandshakeResponse = options.isHandshakeResponse;
+		this.valueSize = options.valueSize;
+		for (const [param, value] of Object.entries(options.values)) {
+			this._values.set(parseInt(param), value);
+		}
+	}
 
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCBulkReport {
+		// Ensure we received enough bytes for the preamble
+		validatePayload(payload.length >= 5);
+		const firstParameter = payload.readUInt16BE(0);
+		const numParams = payload[2];
+		const reportsToFollow = payload[3];
+		const defaultValues = !!(payload[4] & 0b1000_0000);
+		const isHandshakeResponse = !!(payload[4] & 0b0100_0000);
+		const valueSize = payload[4] & 0b111;
 		// Ensure the payload is long enough for all reported values
-		validatePayload(this.payload.length >= 5 + numParams * this._valueSize);
+		validatePayload(payload.length >= 5 + numParams * valueSize);
+		const values: Record<number, ConfigValue> = {};
 		for (let i = 0; i < numParams; i++) {
 			const param = firstParameter + i;
-			this._values.set(
-				param,
-				// Default to parsing the value as SignedInteger, like the specs say.
-				// We try to re-interpret the value in persistValues()
-				parseValue(
-					this.payload.subarray(5 + i * this.valueSize),
-					this.valueSize,
-					ConfigValueFormat.SignedInteger,
-				),
+			// Default to parsing the value as SignedInteger, like the specs say.
+			// We try to re-interpret the value in persistValues()
+			values[param] = parseValue(
+				payload.subarray(5 + i * valueSize),
+				valueSize,
+				ConfigValueFormat.SignedInteger,
 			);
 		}
+
+		return new ConfigurationCCBulkReport({
+			nodeId: options.context.sourceNodeId,
+			reportsToFollow,
+			defaultValues,
+			isHandshakeResponse,
+			valueSize,
+			values,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -2172,7 +2228,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				// Re-interpret the value with the new format
 				value = reInterpretSignedValue(
 					value,
-					this._valueSize,
+					this.valueSize,
 					oldParamInformation.format,
 				);
 				this._values.set(parameter, value);
@@ -2188,9 +2244,14 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		return true;
 	}
 
-	private _reportsToFollow: number;
-	public get reportsToFollow(): number {
-		return this._reportsToFollow;
+	public reportsToFollow: number;
+	public defaultValues: boolean;
+	public isHandshakeResponse: boolean;
+	public valueSize: number;
+
+	private _values = new Map<number, ConfigValue>();
+	public get values(): ReadonlyMap<number, ConfigValue> {
+		return this._values;
 	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
@@ -2199,34 +2260,14 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 	}
 
 	public expectMoreMessages(): boolean {
-		return this._reportsToFollow > 0;
-	}
-
-	private _defaultValues: boolean;
-	public get defaultValues(): boolean {
-		return this._defaultValues;
-	}
-
-	private _isHandshakeResponse: boolean;
-	public get isHandshakeResponse(): boolean {
-		return this._isHandshakeResponse;
-	}
-
-	private _valueSize: number;
-	public get valueSize(): number {
-		return this._valueSize;
-	}
-
-	private _values = new Map<number, ConfigValue>();
-	public get values(): ReadonlyMap<number, ConfigValue> {
-		return this._values;
+		return this.reportsToFollow > 0;
 	}
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"handshake response": this._isHandshakeResponse,
-			"default values": this._defaultValues,
-			"value size": this._valueSize,
+			"handshake response": this.isHandshakeResponse,
+			"default values": this.defaultValues,
+			"value size": this.valueSize,
 			"reports to follow": this.reportsToFollow,
 		};
 		if (this._values.size > 0) {
@@ -2245,7 +2286,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 }
 
 // @publicAPI
-export interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
+export interface ConfigurationCCBulkGetOptions {
 	parameters: number[];
 }
 
@@ -2253,26 +2294,31 @@ export interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCBulkReport)
 export class ConfigurationCCBulkGet extends ConfigurationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ConfigurationCCBulkGetOptions,
+		options: ConfigurationCCBulkGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
+		this._parameters = options.parameters.sort();
+		if (!isConsecutiveArray(this.parameters)) {
 			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+				`A ConfigurationCC.BulkGet can only be used for consecutive parameters`,
+				ZWaveErrorCodes.CC_Invalid,
 			);
-		} else {
-			this._parameters = options.parameters.sort();
-			if (!isConsecutiveArray(this.parameters)) {
-				throw new ZWaveError(
-					`A ConfigurationCC.BulkGet can only be used for consecutive parameters`,
-					ZWaveErrorCodes.CC_Invalid,
-				);
-			}
 		}
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCBulkGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ConfigurationCCBulkGet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	private _parameters: number[];
@@ -2296,7 +2342,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 }
 
 /** @publicAPI */
-export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
+export interface ConfigurationCCNameReportOptions {
 	parameter: number;
 	name: string;
 	reportsToFollow: number;
@@ -2305,27 +2351,36 @@ export interface ConfigurationCCNameReportOptions extends CCCommandOptions {
 @CCCommand(ConfigurationCommand.NameReport)
 export class ConfigurationCCNameReport extends ConfigurationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ConfigurationCCNameReportOptions,
+		options: ConfigurationCCNameReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			// Parameter and # of reports must be present
-			validatePayload(this.payload.length >= 3);
-			this.parameter = this.payload.readUInt16BE(0);
-			this.reportsToFollow = this.payload[2];
-			if (this.reportsToFollow > 0) {
-				// If more reports follow, the info must at least be one byte
-				validatePayload(this.payload.length >= 4);
-			}
-			this.name = this.payload.subarray(3).toString("utf8");
-		} else {
-			this.parameter = options.parameter;
-			this.name = options.name;
-			this.reportsToFollow = options.reportsToFollow;
+		this.parameter = options.parameter;
+		this.name = options.name;
+		this.reportsToFollow = options.reportsToFollow;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCNameReport {
+		// Parameter and # of reports must be present
+		validatePayload(payload.length >= 3);
+		const parameter = payload.readUInt16BE(0);
+		const reportsToFollow = payload[2];
+
+		if (reportsToFollow > 0) {
+			// If more reports follow, the info must at least be one byte
+			validatePayload(payload.length >= 4);
 		}
+		const name: string = payload.subarray(3).toString("utf8");
+
+		return new ConfigurationCCNameReport({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+			reportsToFollow,
+			name,
+		});
 	}
 
 	public readonly parameter: number;
@@ -2413,15 +2468,23 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCNameReport)
 export class ConfigurationCCNameGet extends ConfigurationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
+		options: ConfigurationCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.parameter = this.payload.readUInt16BE(0);
-		} else {
-			this.parameter = options.parameter;
-		}
+		this.parameter = options.parameter;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCNameGet {
+		validatePayload(payload.length >= 2);
+		const parameter = payload.readUInt16BE(0);
+
+		return new ConfigurationCCNameGet({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+		});
 	}
 
 	public parameter: number;
@@ -2441,7 +2504,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 }
 
 /** @publicAPI */
-export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
+export interface ConfigurationCCInfoReportOptions {
 	parameter: number;
 	info: string;
 	reportsToFollow: number;
@@ -2450,27 +2513,36 @@ export interface ConfigurationCCInfoReportOptions extends CCCommandOptions {
 @CCCommand(ConfigurationCommand.InfoReport)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ConfigurationCCInfoReportOptions,
+		options: ConfigurationCCInfoReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			// Parameter and # of reports must be present
-			validatePayload(this.payload.length >= 3);
-			this.parameter = this.payload.readUInt16BE(0);
-			this.reportsToFollow = this.payload[2];
-			if (this.reportsToFollow > 0) {
-				// If more reports follow, the info must at least be one byte
-				validatePayload(this.payload.length >= 4);
-			}
-			this.info = this.payload.subarray(3).toString("utf8");
-		} else {
-			this.parameter = options.parameter;
-			this.info = options.info;
-			this.reportsToFollow = options.reportsToFollow;
+		this.parameter = options.parameter;
+		this.info = options.info;
+		this.reportsToFollow = options.reportsToFollow;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCInfoReport {
+		// Parameter and # of reports must be present
+		validatePayload(payload.length >= 3);
+		const parameter = payload.readUInt16BE(0);
+		const reportsToFollow = payload[2];
+
+		if (reportsToFollow > 0) {
+			// If more reports follow, the info must at least be one byte
+			validatePayload(payload.length >= 4);
 		}
+		const info: string = payload.subarray(3).toString("utf8");
+
+		return new ConfigurationCCInfoReport({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+			reportsToFollow,
+			info,
+		});
 	}
 
 	public readonly parameter: number;
@@ -2571,15 +2643,23 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCInfoReport)
 export class ConfigurationCCInfoGet extends ConfigurationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
+		options: ConfigurationCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.parameter = this.payload.readUInt16BE(0);
-		} else {
-			this.parameter = options.parameter;
-		}
+		this.parameter = options.parameter;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCInfoGet {
+		validatePayload(payload.length >= 2);
+		const parameter = payload.readUInt16BE(0);
+
+		return new ConfigurationCCInfoGet({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+		});
 	}
 
 	public parameter: number;
@@ -2599,9 +2679,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 }
 
 /** @publicAPI */
-export interface ConfigurationCCPropertiesReportOptions
-	extends CCCommandOptions
-{
+export interface ConfigurationCCPropertiesReportOptions {
 	parameter: number;
 	valueSize: number;
 	valueFormat: ConfigValueFormat;
@@ -2618,95 +2696,128 @@ export interface ConfigurationCCPropertiesReportOptions
 @CCCommand(ConfigurationCommand.PropertiesReport)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ConfigurationCCPropertiesReportOptions,
+		options: ConfigurationCCPropertiesReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.parameter = this.payload.readUInt16BE(0);
-			this.valueFormat = (this.payload[2] & 0b111000) >>> 3;
-			this.valueSize = this.payload[2] & 0b111;
-
-			// GH#1309 Some devices don't tell us the first parameter if we query #0
-			// Instead, they contain 0x000000
-			if (this.valueSize === 0 && this.payload.length < 5) {
-				this.nextParameter = 0;
-				return;
-			}
-
-			// Ensure the payload contains the two bytes for next parameter
-			const nextParameterOffset = 3 + 3 * this.valueSize;
-			validatePayload(this.payload.length >= nextParameterOffset + 2);
-
-			if (this.valueSize > 0) {
-				if (this.valueFormat === ConfigValueFormat.BitField) {
-					this.minValue = 0;
-				} else {
-					this.minValue = parseValue(
-						this.payload.subarray(3),
-						this.valueSize,
-						this.valueFormat,
-					);
-				}
-				this.maxValue = parseValue(
-					this.payload.subarray(3 + this.valueSize),
-					this.valueSize,
-					this.valueFormat,
+		this.parameter = options.parameter;
+		this.valueSize = options.valueSize;
+		this.valueFormat = options.valueFormat;
+		if (this.valueSize > 0) {
+			if (options.minValue == undefined) {
+				throw new ZWaveError(
+					"The minimum value must be set when the value size is non-zero",
+					ZWaveErrorCodes.Argument_Invalid,
 				);
-				this.defaultValue = parseValue(
-					this.payload.subarray(3 + 2 * this.valueSize),
-					this.valueSize,
-					this.valueFormat,
+			} else if (options.maxValue == undefined) {
+				throw new ZWaveError(
+					"The maximum value must be set when the value size is non-zero",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			} else if (options.defaultValue == undefined) {
+				throw new ZWaveError(
+					"The default value must be set when the value size is non-zero",
+					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-
-			this.nextParameter = this.payload.readUInt16BE(
-				nextParameterOffset,
-			);
-
-			if (this.payload.length >= nextParameterOffset + 3) {
-				// V4 adds an options byte after the next parameter and two bits in byte 2
-				const options1 = this.payload[2];
-				const options2 = this.payload[3 + 3 * this.valueSize + 2];
-				this.altersCapabilities = !!(options1 & 0b1000_0000);
-				this.isReadonly = !!(options1 & 0b0100_0000);
-				this.isAdvanced = !!(options2 & 0b1);
-				this.noBulkSupport = !!(options2 & 0b10);
-			}
-		} else {
-			this.parameter = options.parameter;
-			this.valueSize = options.valueSize;
-			this.valueFormat = options.valueFormat;
-			if (this.valueSize > 0) {
-				if (options.minValue == undefined) {
-					throw new ZWaveError(
-						"The minimum value must be set when the value size is non-zero",
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				} else if (options.maxValue == undefined) {
-					throw new ZWaveError(
-						"The maximum value must be set when the value size is non-zero",
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				} else if (options.defaultValue == undefined) {
-					throw new ZWaveError(
-						"The default value must be set when the value size is non-zero",
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-				this.minValue = options.minValue;
-				this.maxValue = options.maxValue;
-				this.defaultValue = options.defaultValue;
-			}
-			this.nextParameter = options.nextParameter;
-			this.altersCapabilities = options.altersCapabilities;
-			this.isReadonly = options.isReadonly;
-			this.isAdvanced = options.isAdvanced;
-			this.noBulkSupport = options.noBulkSupport;
+			this.minValue = options.minValue;
+			this.maxValue = options.maxValue;
+			this.defaultValue = options.defaultValue;
 		}
+		this.nextParameter = options.nextParameter;
+		this.altersCapabilities = options.altersCapabilities;
+		this.isReadonly = options.isReadonly;
+		this.isAdvanced = options.isAdvanced;
+		this.noBulkSupport = options.noBulkSupport;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCPropertiesReport {
+		validatePayload(payload.length >= 3);
+		const parameter = payload.readUInt16BE(0);
+		const valueFormat: ConfigValueFormat = (payload[2] & 0b111000) >>> 3;
+		const valueSize = payload[2] & 0b111;
+
+		// GH#1309 Some devices don't tell us the first parameter if we query #0
+		// Instead, they contain 0x000000
+		let nextParameter;
+
+		if (valueSize === 0 && payload.length < 5) {
+			nextParameter = 0;
+			return new ConfigurationCCPropertiesReport({
+				nodeId: options.context.sourceNodeId,
+				parameter,
+				valueFormat,
+				valueSize,
+				nextParameter,
+			});
+		}
+
+		// Ensure the payload contains the two bytes for next parameter
+		const nextParameterOffset = 3 + 3 * valueSize;
+		validatePayload(payload.length >= nextParameterOffset + 2);
+
+		let minValue: MaybeNotKnown<number>;
+		let maxValue: MaybeNotKnown<number>;
+		let defaultValue: MaybeNotKnown<number>;
+
+		if (valueSize > 0) {
+			if (valueFormat === ConfigValueFormat.BitField) {
+				minValue = 0;
+			} else {
+				minValue = parseValue(
+					payload.subarray(3),
+					valueSize,
+					valueFormat,
+				);
+			}
+			maxValue = parseValue(
+				payload.subarray(3 + valueSize),
+				valueSize,
+				valueFormat,
+			);
+			defaultValue = parseValue(
+				payload.subarray(3 + 2 * valueSize),
+				valueSize,
+				valueFormat,
+			);
+		}
+
+		nextParameter = payload.readUInt16BE(
+			nextParameterOffset,
+		);
+
+		let altersCapabilities: MaybeNotKnown<boolean>;
+		let isReadonly: MaybeNotKnown<boolean>;
+		let isAdvanced: MaybeNotKnown<boolean>;
+		let noBulkSupport: MaybeNotKnown<boolean>;
+
+		if (payload.length >= nextParameterOffset + 3) {
+			// V4 adds an options byte after the next parameter and two bits in byte 2
+			const options1 = payload[2];
+			const options2 = payload[3 + 3 * valueSize + 2];
+			altersCapabilities = !!(options1 & 0b1000_0000);
+			isReadonly = !!(options1 & 0b0100_0000);
+			isAdvanced = !!(options2 & 0b1);
+			noBulkSupport = !!(options2 & 0b10);
+		}
+
+		return new ConfigurationCCPropertiesReport({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+			valueFormat,
+			valueSize,
+			nextParameter,
+			minValue,
+			maxValue,
+			defaultValue,
+			altersCapabilities,
+			isReadonly,
+			isAdvanced,
+			noBulkSupport,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -2893,15 +3004,23 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCPropertiesReport)
 export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
+		options: ConfigurationCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.parameter = this.payload.readUInt16BE(0);
-		} else {
-			this.parameter = options.parameter;
-		}
+		this.parameter = options.parameter;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ConfigurationCCPropertiesGet {
+		validatePayload(payload.length >= 2);
+		const parameter = payload.readUInt16BE(0);
+
+		return new ConfigurationCCPropertiesGet({
+			nodeId: options.context.sourceNodeId,
+			parameter,
+		});
 	}
 
 	public parameter: number;

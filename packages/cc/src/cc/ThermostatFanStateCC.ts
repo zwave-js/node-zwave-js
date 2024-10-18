@@ -17,6 +17,7 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -149,15 +150,33 @@ export class ThermostatFanStateCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface ThermostatFanStateCCReportOptions {
+	state: ThermostatFanState;
+}
+
 @CCCommand(ThermostatFanStateCommand.Report)
 export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ThermostatFanStateCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length == 1);
-		this.state = this.payload[0] & 0b1111;
+		// TODO: Check implementation:
+		this.state = options.state;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatFanStateCCReport {
+		validatePayload(payload.length == 1);
+		const state: ThermostatFanState = payload[0] & 0b1111;
+
+		return new ThermostatFanStateCCReport({
+			nodeId: options.context.sourceNodeId,
+			state,
+		});
 	}
 
 	@ccValue(ThermostatFanStateCCValues.fanState)

@@ -860,7 +860,7 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 }
 
 // @publicAPI
-export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
+export interface MultiChannelAssociationCCGetOptions {
 	groupId: number;
 }
 
@@ -868,23 +868,29 @@ export interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelAssociationCCReport)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| MultiChannelAssociationCCGetOptions,
+		options: MultiChannelAssociationCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.groupId = this.payload[0];
-		} else {
-			if (options.groupId < 1) {
-				throw new ZWaveError(
-					"The group id must be positive!",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.groupId = options.groupId;
+		if (options.groupId < 1) {
+			throw new ZWaveError(
+				"The group id must be positive!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+		this.groupId = options.groupId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): MultiChannelAssociationCCGet {
+		validatePayload(payload.length >= 1);
+		const groupId = payload[0];
+
+		return new MultiChannelAssociationCCGet({
+			nodeId: options.context.sourceNodeId,
+			groupId,
+		});
 	}
 
 	public groupId: number;
@@ -903,9 +909,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 }
 
 // @publicAPI
-export interface MultiChannelAssociationCCSupportedGroupingsReportOptions
-	extends CCCommandOptions
-{
+export interface MultiChannelAssociationCCSupportedGroupingsReportOptions {
 	groupCount: number;
 }
 
@@ -915,17 +919,25 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| MultiChannelAssociationCCSupportedGroupingsReportOptions,
+			& MultiChannelAssociationCCSupportedGroupingsReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.groupCount = this.payload[0];
-		} else {
-			this.groupCount = options.groupCount;
-		}
+		this.groupCount = options.groupCount;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): MultiChannelAssociationCCSupportedGroupingsReport {
+		validatePayload(payload.length >= 1);
+		const groupCount = payload[0];
+
+		return new MultiChannelAssociationCCSupportedGroupingsReport({
+			nodeId: options.context.sourceNodeId,
+			groupCount,
+		});
 	}
 
 	@ccValue(MultiChannelAssociationCCValues.groupCount)

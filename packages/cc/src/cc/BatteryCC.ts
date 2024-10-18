@@ -40,7 +40,6 @@ import {
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -401,7 +400,6 @@ temperature:   ${batteryHealth.temperature} °C`;
 
 // @publicAPI
 export type BatteryCCReportOptions =
-	& CCCommandOptions
 	& (
 		| {
 			isLow?: false;
@@ -430,47 +428,75 @@ export type BatteryCCReportOptions =
 @CCCommand(BatteryCommand.Report)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | BatteryCCReportOptions,
+		options: BatteryCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.level = this.payload[0];
-			if (this.level === 0xff) {
-				this.level = 0;
-				this.isLow = true;
-			} else {
-				this.isLow = false;
-			}
+		this.level = options.isLow ? 0 : options.level;
+		this.isLow = !!options.isLow;
+		this.chargingStatus = options.chargingStatus;
+		this.rechargeable = options.rechargeable;
+		this.backup = options.backup;
+		this.overheating = options.overheating;
+		this.lowFluid = options.lowFluid;
+		this.rechargeOrReplace = options.rechargeOrReplace;
+		this.disconnected = options.disconnected;
+		this.lowTemperatureStatus = options.lowTemperatureStatus;
+	}
 
-			if (this.payload.length >= 3) {
-				// Starting with V2
-				this.chargingStatus = this.payload[1] >>> 6;
-				this.rechargeable = !!(this.payload[1] & 0b0010_0000);
-				this.backup = !!(this.payload[1] & 0b0001_0000);
-				this.overheating = !!(this.payload[1] & 0b1000);
-				this.lowFluid = !!(this.payload[1] & 0b0100);
-				this.rechargeOrReplace = !!(this.payload[1] & 0b10)
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): BatteryCCReport {
+		let ccOptions: BatteryCCReportOptions;
+
+		validatePayload(payload.length >= 1);
+		const level = payload[0];
+
+		if (level === 0xff) {
+			ccOptions = {
+				isLow: true,
+			};
+		} else {
+			ccOptions = {
+				isLow: false,
+				level,
+			};
+		}
+
+		if (payload.length >= 3) {
+			// Starting with V2
+			const chargingStatus: BatteryChargingStatus = payload[1] >>> 6;
+			const rechargeable = !!(payload[1] & 0b0010_0000);
+			const backup = !!(payload[1] & 0b0001_0000);
+			const overheating = !!(payload[1] & 0b1000);
+			const lowFluid = !!(payload[1] & 0b0100);
+			const rechargeOrReplace: BatteryReplacementStatus =
+				!!(payload[1] & 0b10)
 					? BatteryReplacementStatus.Now
-					: !!(this.payload[1] & 0b1)
+					: !!(payload[1] & 0b1)
 					? BatteryReplacementStatus.Soon
 					: BatteryReplacementStatus.No;
-				this.lowTemperatureStatus = !!(this.payload[2] & 0b10);
-				this.disconnected = !!(this.payload[2] & 0b1);
-			}
-		} else {
-			this.level = options.isLow ? 0 : options.level;
-			this.isLow = !!options.isLow;
-			this.chargingStatus = options.chargingStatus;
-			this.rechargeable = options.rechargeable;
-			this.backup = options.backup;
-			this.overheating = options.overheating;
-			this.lowFluid = options.lowFluid;
-			this.rechargeOrReplace = options.rechargeOrReplace;
-			this.disconnected = options.disconnected;
-			this.lowTemperatureStatus = options.lowTemperatureStatus;
+			const lowTemperatureStatus = !!(payload[2] & 0b10);
+			const disconnected = !!(payload[2] & 0b1);
+
+			ccOptions = {
+				...ccOptions,
+				chargingStatus,
+				rechargeable,
+				backup,
+				overheating,
+				lowFluid,
+				rechargeOrReplace,
+				lowTemperatureStatus,
+				disconnected,
+			};
 		}
+
+		return new BatteryCCReport({
+			nodeId: options.context.sourceNodeId,
+			...ccOptions,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -612,25 +638,48 @@ export class BatteryCCReport extends BatteryCC {
 @expectedCCResponse(BatteryCCReport)
 export class BatteryCCGet extends BatteryCC {}
 
+// @publicAPI
+export interface BatteryCCHealthReportOptions {
+	maximumCapacity?: number;
+	temperature?: number;
+	temperatureScale?: number;
+}
+
 @CCCommand(BatteryCommand.HealthReport)
 export class BatteryCCHealthReport extends BatteryCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: BatteryCCHealthReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 2);
+		// TODO: Check implementation:
+		this.maximumCapacity = options.maximumCapacity;
+		this.temperature = options.temperature;
+		this.temperatureScale = options.temperatureScale;
+	}
 
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): BatteryCCHealthReport {
+		validatePayload(payload.length >= 2);
 		// Parse maximum capacity. 0xff means unknown
-		this.maximumCapacity = this.payload[0];
-		if (this.maximumCapacity === 0xff) this.maximumCapacity = undefined;
-
-		const { value: temperature, scale } = parseFloatWithScale(
-			this.payload.subarray(1),
+		let maximumCapacity: number | undefined = payload[0];
+		if (maximumCapacity === 0xff) maximumCapacity = undefined;
+		const {
+			value: temperature,
+			scale: temperatureScale,
+		} = parseFloatWithScale(
+			payload.subarray(1),
 			true, // The temperature field may be omitted
 		);
-		this.temperature = temperature;
-		this.temperatureScale = scale;
+
+		return new BatteryCCHealthReport({
+			nodeId: options.context.sourceNodeId,
+			maximumCapacity,
+			temperature,
+			temperatureScale,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {

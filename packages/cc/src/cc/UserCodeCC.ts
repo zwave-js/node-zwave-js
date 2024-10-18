@@ -1315,7 +1315,7 @@ export class UserCodeCCSet extends UserCodeCC {
 }
 
 // @publicAPI
-export interface UserCodeCCReportOptions extends CCCommandOptions {
+export interface UserCodeCCReportOptions {
 	userId: number;
 	userIdStatus: UserIDStatus;
 	userCode?: string | Buffer;
@@ -1326,48 +1326,59 @@ export class UserCodeCCReport extends UserCodeCC
 	implements NotificationEventPayload
 {
 	public constructor(
-		options: CommandClassDeserializationOptions | UserCodeCCReportOptions,
+		options: UserCodeCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userId = this.payload[0];
-			this.userIdStatus = this.payload[1];
+		this.userId = options.userId;
+		this.userIdStatus = options.userIdStatus;
+		this.userCode = options.userCode ?? "";
+	}
 
-			if (
-				this.payload.length === 2
-				&& (this.userIdStatus === UserIDStatus.Available
-					|| this.userIdStatus === UserIDStatus.StatusNotAvailable)
-			) {
-				// The user code is not set or not available and this report contains no user code
-				this.userCode = "";
-			} else {
-				// The specs require the user code to be at least 4 digits
-				validatePayload(this.payload.length >= 6);
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCReport {
+		validatePayload(payload.length >= 2);
+		const userId = payload[0];
+		const userIdStatus: UserIDStatus = payload[1];
+		let userCode: string | Buffer;
 
-				let userCodeBuffer = this.payload.subarray(2);
-				// Specs say infer user code from payload length, manufacturers send zero-padded strings
-				while (userCodeBuffer.at(-1) === 0) {
-					userCodeBuffer = userCodeBuffer.subarray(0, -1);
-				}
-				// Specs say ASCII 0-9, manufacturers don't care :)
-				// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
-				const userCodeString = userCodeBuffer.toString("utf8");
-				if (isPrintableASCII(userCodeString)) {
-					this.userCode = userCodeString;
-				} else if (isPrintableASCIIWithWhitespace(userCodeString)) {
-					// Ignore leading and trailing whitespace in V1 reports if the rest is ASCII
-					this.userCode = userCodeString.trim();
-				} else {
-					this.userCode = userCodeBuffer;
-				}
-			}
+		if (
+			payload.length === 2
+			&& (userIdStatus === UserIDStatus.Available
+				|| userIdStatus === UserIDStatus.StatusNotAvailable)
+		) {
+			// The user code is not set or not available and this report contains no user code
+			userCode = "";
 		} else {
-			this.userId = options.userId;
-			this.userIdStatus = options.userIdStatus;
-			this.userCode = options.userCode ?? "";
+			// The specs require the user code to be at least 4 digits
+			validatePayload(payload.length >= 6);
+
+			let userCodeBuffer = payload.subarray(2);
+			// Specs say infer user code from payload length, manufacturers send zero-padded strings
+			while (userCodeBuffer.at(-1) === 0) {
+				userCodeBuffer = userCodeBuffer.subarray(0, -1);
+			}
+			// Specs say ASCII 0-9, manufacturers don't care :)
+			// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
+			const userCodeString = userCodeBuffer.toString("utf8");
+			if (isPrintableASCII(userCodeString)) {
+				userCode = userCodeString;
+			} else if (isPrintableASCIIWithWhitespace(userCodeString)) {
+				// Ignore leading and trailing whitespace in V1 reports if the rest is ASCII
+				userCode = userCodeString.trim();
+			} else {
+				userCode = userCodeBuffer;
+			}
 		}
+
+		return new UserCodeCCReport({
+			nodeId: options.context.sourceNodeId,
+			userId,
+			userIdStatus,
+			userCode,
+		});
 	}
 
 	public readonly userId: number;
@@ -1420,7 +1431,7 @@ export class UserCodeCCReport extends UserCodeCC
 }
 
 // @publicAPI
-export interface UserCodeCCGetOptions extends CCCommandOptions {
+export interface UserCodeCCGetOptions {
 	userId: number;
 }
 
@@ -1428,15 +1439,23 @@ export interface UserCodeCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(UserCodeCCReport)
 export class UserCodeCCGet extends UserCodeCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | UserCodeCCGetOptions,
+		options: UserCodeCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.userId = this.payload[0];
-		} else {
-			this.userId = options.userId;
-		}
+		this.userId = options.userId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCGet {
+		validatePayload(payload.length >= 1);
+		const userId = payload[0];
+
+		return new UserCodeCCGet({
+			nodeId: options.context.sourceNodeId,
+			userId,
+		});
 	}
 
 	public userId: number;
@@ -1455,31 +1474,40 @@ export class UserCodeCCGet extends UserCodeCC {
 }
 
 // @publicAPI
-export interface UserCodeCCUsersNumberReportOptions extends CCCommandOptions {
+export interface UserCodeCCUsersNumberReportOptions {
 	supportedUsers: number;
 }
 
 @CCCommand(UserCodeCommand.UsersNumberReport)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCUsersNumberReportOptions,
+		options: UserCodeCCUsersNumberReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			if (this.payload.length >= 3) {
-				// V2+
-				this.supportedUsers = this.payload.readUInt16BE(1);
-			} else {
-				// V1
-				this.supportedUsers = this.payload[0];
-			}
+		this.supportedUsers = options.supportedUsers;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCUsersNumberReport {
+		validatePayload(payload.length >= 1);
+
+		let supportedUsers;
+
+		if (payload.length >= 3) {
+			// V2+
+			supportedUsers = payload.readUInt16BE(1);
 		} else {
-			this.supportedUsers = options.supportedUsers;
+			// V1
+			supportedUsers = payload[0];
 		}
+
+		return new UserCodeCCUsersNumberReport({
+			nodeId: options.context.sourceNodeId,
+			supportedUsers,
+		});
 	}
 
 	@ccValue(UserCodeCCValues.supportedUsers)
@@ -1506,7 +1534,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 export class UserCodeCCUsersNumberGet extends UserCodeCC {}
 
 // @publicAPI
-export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
+export interface UserCodeCCCapabilitiesReportOptions {
 	supportsAdminCode: boolean;
 	supportsAdminCodeDeactivation: boolean;
 	supportsUserCodeChecksum: boolean;
@@ -1520,79 +1548,92 @@ export interface UserCodeCCCapabilitiesReportOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.CapabilitiesReport)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCCapabilitiesReportOptions,
+		options: UserCodeCCCapabilitiesReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			let offset = 0;
+		this.supportsAdminCode = options.supportsAdminCode;
+		this.supportsAdminCodeDeactivation =
+			options.supportsAdminCodeDeactivation;
+		this.supportsUserCodeChecksum = options.supportsUserCodeChecksum;
+		this.supportsMultipleUserCodeReport =
+			options.supportsMultipleUserCodeReport;
+		this.supportsMultipleUserCodeSet = options.supportsMultipleUserCodeSet;
+		this.supportedUserIDStatuses = options.supportedUserIDStatuses;
+		this.supportedKeypadModes = options.supportedKeypadModes;
+		this.supportedASCIIChars = options.supportedASCIIChars;
+	}
 
-			validatePayload(this.payload.length >= offset + 1);
-			this.supportsAdminCode = !!(this.payload[offset] & 0b100_00000);
-			this.supportsAdminCodeDeactivation = !!(
-				this.payload[offset] & 0b010_00000
-			);
-			const statusBitMaskLength = this.payload[offset] & 0b000_11111;
-			offset += 1;
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCCapabilitiesReport {
+		let offset = 0;
 
-			validatePayload(
-				this.payload.length >= offset + statusBitMaskLength + 1,
-			);
-			this.supportedUserIDStatuses = parseBitMask(
-				this.payload.subarray(offset, offset + statusBitMaskLength),
-				UserIDStatus.Available,
-			);
-			offset += statusBitMaskLength;
+		validatePayload(payload.length >= offset + 1);
+		const supportsAdminCode = !!(payload[offset] & 0b100_00000);
+		const supportsAdminCodeDeactivation = !!(
+			payload[offset] & 0b010_00000
+		);
+		const statusBitMaskLength = payload[offset] & 0b000_11111;
+		offset += 1;
 
-			this.supportsUserCodeChecksum = !!(
-				this.payload[offset] & 0b100_00000
-			);
-			this.supportsMultipleUserCodeReport = !!(
-				this.payload[offset] & 0b010_00000
-			);
-			this.supportsMultipleUserCodeSet = !!(
-				this.payload[offset] & 0b001_00000
-			);
-			const keypadModesBitMaskLength = this.payload[offset] & 0b000_11111;
-			offset += 1;
+		validatePayload(
+			payload.length >= offset + statusBitMaskLength + 1,
+		);
+		const supportedUserIDStatuses: UserIDStatus[] = parseBitMask(
+			payload.subarray(offset, offset + statusBitMaskLength),
+			UserIDStatus.Available,
+		);
 
-			validatePayload(
-				this.payload.length >= offset + keypadModesBitMaskLength + 1,
-			);
-			this.supportedKeypadModes = parseBitMask(
-				this.payload.subarray(
-					offset,
-					offset + keypadModesBitMaskLength,
-				),
-				KeypadMode.Normal,
-			);
-			offset += keypadModesBitMaskLength;
+		offset += statusBitMaskLength;
+		const supportsUserCodeChecksum = !!(
+			payload[offset] & 0b100_00000
+		);
+		const supportsMultipleUserCodeReport = !!(
+			payload[offset] & 0b010_00000
+		);
+		const supportsMultipleUserCodeSet = !!(
+			payload[offset] & 0b001_00000
+		);
+		const keypadModesBitMaskLength = payload[offset] & 0b000_11111;
+		offset += 1;
 
-			const keysBitMaskLength = this.payload[offset] & 0b000_11111;
-			offset += 1;
+		validatePayload(
+			payload.length >= offset + keypadModesBitMaskLength + 1,
+		);
+		const supportedKeypadModes: KeypadMode[] = parseBitMask(
+			payload.subarray(
+				offset,
+				offset + keypadModesBitMaskLength,
+			),
+			KeypadMode.Normal,
+		);
 
-			validatePayload(this.payload.length >= offset + keysBitMaskLength);
-			this.supportedASCIIChars = Buffer.from(
-				parseBitMask(
-					this.payload.subarray(offset, offset + keysBitMaskLength),
-					0,
-				),
-			).toString("ascii");
-		} else {
-			this.supportsAdminCode = options.supportsAdminCode;
-			this.supportsAdminCodeDeactivation =
-				options.supportsAdminCodeDeactivation;
-			this.supportsUserCodeChecksum = options.supportsUserCodeChecksum;
-			this.supportsMultipleUserCodeReport =
-				options.supportsMultipleUserCodeReport;
-			this.supportsMultipleUserCodeSet =
-				options.supportsMultipleUserCodeSet;
-			this.supportedUserIDStatuses = options.supportedUserIDStatuses;
-			this.supportedKeypadModes = options.supportedKeypadModes;
-			this.supportedASCIIChars = options.supportedASCIIChars;
-		}
+		offset += keypadModesBitMaskLength;
+
+		const keysBitMaskLength = payload[offset] & 0b000_11111;
+		offset += 1;
+
+		validatePayload(payload.length >= offset + keysBitMaskLength);
+		const supportedASCIIChars = Buffer.from(
+			parseBitMask(
+				payload.subarray(offset, offset + keysBitMaskLength),
+				0,
+			),
+		).toString("ascii");
+
+		return new UserCodeCCCapabilitiesReport({
+			nodeId: options.context.sourceNodeId,
+			supportsAdminCode,
+			supportsAdminCodeDeactivation,
+			supportedUserIDStatuses,
+			supportsUserCodeChecksum,
+			supportsMultipleUserCodeReport,
+			supportsMultipleUserCodeSet,
+			supportedKeypadModes,
+			supportedASCIIChars,
+		});
 	}
 
 	@ccValue(UserCodeCCValues.supportsAdminCode)
@@ -1688,7 +1729,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 export class UserCodeCCCapabilitiesGet extends UserCodeCC {}
 
 // @publicAPI
-export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
+export interface UserCodeCCKeypadModeSetOptions {
 	keypadMode: KeypadMode;
 }
 
@@ -1696,17 +1737,23 @@ export interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 @useSupervision()
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCKeypadModeSetOptions,
+		options: UserCodeCCKeypadModeSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.keypadMode = this.payload[0];
-		} else {
-			this.keypadMode = options.keypadMode;
-		}
+		this.keypadMode = options.keypadMode;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCKeypadModeSet {
+		validatePayload(payload.length >= 1);
+		const keypadMode: KeypadMode = payload[0];
+
+		return new UserCodeCCKeypadModeSet({
+			nodeId: options.context.sourceNodeId,
+			keypadMode,
+		});
 	}
 
 	public keypadMode: KeypadMode;
@@ -1725,24 +1772,30 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 }
 
 // @publicAPI
-export interface UserCodeCCKeypadModeReportOptions extends CCCommandOptions {
+export interface UserCodeCCKeypadModeReportOptions {
 	keypadMode: KeypadMode;
 }
 
 @CCCommand(UserCodeCommand.KeypadModeReport)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCKeypadModeReportOptions,
+		options: UserCodeCCKeypadModeReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.keypadMode = this.payload[0];
-		} else {
-			this.keypadMode = options.keypadMode;
-		}
+		this.keypadMode = options.keypadMode;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCKeypadModeReport {
+		validatePayload(payload.length >= 1);
+		const keypadMode: KeypadMode = payload[0];
+
+		return new UserCodeCCKeypadModeReport({
+			nodeId: options.context.sourceNodeId,
+			keypadMode,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -1789,7 +1842,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 export class UserCodeCCKeypadModeGet extends UserCodeCC {}
 
 // @publicAPI
-export interface UserCodeCCAdminCodeSetOptions extends CCCommandOptions {
+export interface UserCodeCCAdminCodeSetOptions {
 	adminCode: string;
 }
 
@@ -1797,21 +1850,27 @@ export interface UserCodeCCAdminCodeSetOptions extends CCCommandOptions {
 @useSupervision()
 export class UserCodeCCAdminCodeSet extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCAdminCodeSetOptions,
+		options: UserCodeCCAdminCodeSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			const codeLength = this.payload[0] & 0b1111;
-			validatePayload(this.payload.length >= 1 + codeLength);
-			this.adminCode = this.payload
-				.subarray(1, 1 + codeLength)
-				.toString("ascii");
-		} else {
-			this.adminCode = options.adminCode;
-		}
+		this.adminCode = options.adminCode;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCAdminCodeSet {
+		validatePayload(payload.length >= 1);
+		const codeLength = payload[0] & 0b1111;
+		validatePayload(payload.length >= 1 + codeLength);
+		const adminCode = payload
+			.subarray(1, 1 + codeLength)
+			.toString("ascii");
+
+		return new UserCodeCCAdminCodeSet({
+			nodeId: options.context.sourceNodeId,
+			adminCode,
+		});
 	}
 
 	public adminCode: string;
@@ -1833,28 +1892,34 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 }
 
 // @publicAPI
-export interface UserCodeCCAdminCodeReportOptions extends CCCommandOptions {
+export interface UserCodeCCAdminCodeReportOptions {
 	adminCode: string;
 }
 
 @CCCommand(UserCodeCommand.AdminCodeReport)
 export class UserCodeCCAdminCodeReport extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCAdminCodeReportOptions,
+		options: UserCodeCCAdminCodeReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			const codeLength = this.payload[0] & 0b1111;
-			validatePayload(this.payload.length >= 1 + codeLength);
-			this.adminCode = this.payload
-				.subarray(1, 1 + codeLength)
-				.toString("ascii");
-		} else {
-			this.adminCode = options.adminCode;
-		}
+		this.adminCode = options.adminCode;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCAdminCodeReport {
+		validatePayload(payload.length >= 1);
+		const codeLength = payload[0] & 0b1111;
+		validatePayload(payload.length >= 1 + codeLength);
+		const adminCode = payload
+			.subarray(1, 1 + codeLength)
+			.toString("ascii");
+
+		return new UserCodeCCAdminCodeReport({
+			nodeId: options.context.sourceNodeId,
+			adminCode,
+		});
 	}
 
 	@ccValue(UserCodeCCValues.adminCode)
@@ -1881,26 +1946,30 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 export class UserCodeCCAdminCodeGet extends UserCodeCC {}
 
 // @publicAPI
-export interface UserCodeCCUserCodeChecksumReportOptions
-	extends CCCommandOptions
-{
+export interface UserCodeCCUserCodeChecksumReportOptions {
 	userCodeChecksum: number;
 }
 
 @CCCommand(UserCodeCommand.UserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCUserCodeChecksumReportOptions,
+		options: UserCodeCCUserCodeChecksumReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userCodeChecksum = this.payload.readUInt16BE(0);
-		} else {
-			this.userCodeChecksum = options.userCodeChecksum;
-		}
+		this.userCodeChecksum = options.userCodeChecksum;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCUserCodeChecksumReport {
+		validatePayload(payload.length >= 2);
+		const userCodeChecksum = payload.readUInt16BE(0);
+
+		return new UserCodeCCUserCodeChecksumReport({
+			nodeId: options.context.sourceNodeId,
+			userCodeChecksum,
+		});
 	}
 
 	@ccValue(UserCodeCCValues.userCodeChecksum)
@@ -1925,7 +1994,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 export class UserCodeCCUserCodeChecksumGet extends UserCodeCC {}
 
 // @publicAPI
-export interface UserCodeCCExtendedUserCodeSetOptions extends CCCommandOptions {
+export interface UserCodeCCExtendedUserCodeSetOptions {
 	userCodes: UserCodeCCSetOptions[];
 }
 
@@ -1939,20 +2008,25 @@ export interface UserCode {
 @useSupervision()
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCExtendedUserCodeSetOptions,
+		options: UserCodeCCExtendedUserCodeSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.userCodes = options.userCodes;
-		}
+		this.userCodes = options.userCodes;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCExtendedUserCodeSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new UserCodeCCExtendedUserCodeSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public userCodes: UserCodeCCSetOptions[];
@@ -1996,28 +2070,48 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	}
 }
 
+// @publicAPI
+export interface UserCodeCCExtendedUserCodeReportOptions {
+	userCodes: UserCode[];
+	nextUserId: number;
+}
+
 @CCCommand(UserCodeCommand.ExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: UserCodeCCExtendedUserCodeReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 1);
-		const numCodes = this.payload[0];
+
+		// TODO: Check implementation:
+		this.userCodes = options.userCodes;
+		this.nextUserId = options.nextUserId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCExtendedUserCodeReport {
+		validatePayload(payload.length >= 1);
+		const numCodes = payload[0];
 		let offset = 1;
 		const userCodes: UserCode[] = [];
 		// parse each user code
 		for (let i = 0; i < numCodes; i++) {
 			const { code, bytesRead } = parseExtendedUserCode(
-				this.payload.subarray(offset),
+				payload.subarray(offset),
 			);
 			userCodes.push(code);
 			offset += bytesRead;
 		}
-		this.userCodes = userCodes;
+		validatePayload(payload.length >= offset + 2);
+		const nextUserId = payload.readUInt16BE(offset);
 
-		validatePayload(this.payload.length >= offset + 2);
-		this.nextUserId = this.payload.readUInt16BE(offset);
+		return new UserCodeCCExtendedUserCodeReport({
+			nodeId: options.context.sourceNodeId,
+			userCodes,
+			nextUserId,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -2056,7 +2150,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 }
 
 // @publicAPI
-export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
+export interface UserCodeCCExtendedUserCodeGetOptions {
 	userId: number;
 	reportMore?: boolean;
 }
@@ -2065,21 +2159,26 @@ export interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
 @expectedCCResponse(UserCodeCCExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| UserCodeCCExtendedUserCodeGetOptions,
+		options: UserCodeCCExtendedUserCodeGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.userId = options.userId;
-			this.reportMore = !!options.reportMore;
-		}
+		this.userId = options.userId;
+		this.reportMore = !!options.reportMore;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): UserCodeCCExtendedUserCodeGet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new UserCodeCCExtendedUserCodeGet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public userId: number;

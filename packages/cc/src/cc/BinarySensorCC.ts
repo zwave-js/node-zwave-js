@@ -336,7 +336,7 @@ export class BinarySensorCC extends CommandClass {
 }
 
 // @publicAPI
-export interface BinarySensorCCReportOptions extends CCCommandOptions {
+export interface BinarySensorCCReportOptions {
 	type?: BinarySensorType;
 	value: boolean;
 }
@@ -344,23 +344,31 @@ export interface BinarySensorCCReportOptions extends CCCommandOptions {
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
-		options:
-			| BinarySensorCCReportOptions
-			| CommandClassDeserializationOptions,
+		options: BinarySensorCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.value = this.payload[0] === 0xff;
-			this.type = BinarySensorType.Any;
-			if (this.payload.length >= 2) {
-				this.type = this.payload[1];
-			}
-		} else {
-			this.type = options.type ?? BinarySensorType.Any;
-			this.value = options.value;
+		this.type = options.type ?? BinarySensorType.Any;
+		this.value = options.value;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): BinarySensorCCReport {
+		validatePayload(payload.length >= 1);
+		const value = payload[0] === 0xff;
+		let type: BinarySensorType = BinarySensorType.Any;
+
+		if (payload.length >= 2) {
+			type = payload[1];
 		}
+
+		return new BinarySensorCCReport({
+			nodeId: options.context.sourceNodeId,
+			value,
+			type,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -419,7 +427,7 @@ function testResponseForBinarySensorGet(
 }
 
 // @publicAPI
-export interface BinarySensorCCGetOptions extends CCCommandOptions {
+export interface BinarySensorCCGetOptions {
 	sensorType?: BinarySensorType;
 }
 
@@ -427,16 +435,26 @@ export interface BinarySensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(BinarySensorCCReport, testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | BinarySensorCCGetOptions,
+		options: BinarySensorCCGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			if (this.payload.length >= 1) {
-				this.sensorType = this.payload[0];
-			}
-		} else {
-			this.sensorType = options.sensorType;
+		this.sensorType = options.sensorType;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): BinarySensorCCGet {
+		let sensorType: BinarySensorType | undefined;
+
+		if (payload.length >= 1) {
+			sensorType = payload[0];
 		}
+
+		return new BinarySensorCCGet({
+			nodeId: options.context.sourceNodeId,
+			sensorType,
+		});
 	}
 
 	public sensorType: BinarySensorType | undefined;

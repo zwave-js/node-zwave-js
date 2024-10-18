@@ -28,7 +28,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -351,7 +350,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 }
 
 // @publicAPI
-export interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
+export interface WakeUpCCIntervalSetOptions {
 	wakeUpInterval: number;
 	controllerNodeId: number;
 }
@@ -360,19 +359,26 @@ export interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
 @useSupervision()
 export class WakeUpCCIntervalSet extends WakeUpCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| WakeUpCCIntervalSetOptions,
+		options: WakeUpCCIntervalSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 4);
-			this.wakeUpInterval = this.payload.readUIntBE(0, 3);
-			this.controllerNodeId = this.payload[3];
-		} else {
-			this.wakeUpInterval = options.wakeUpInterval;
-			this.controllerNodeId = options.controllerNodeId;
-		}
+		this.wakeUpInterval = options.wakeUpInterval;
+		this.controllerNodeId = options.controllerNodeId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WakeUpCCIntervalSet {
+		validatePayload(payload.length >= 4);
+		const wakeUpInterval = payload.readUIntBE(0, 3);
+		const controllerNodeId = payload[3];
+
+		return new WakeUpCCIntervalSet({
+			nodeId: options.context.sourceNodeId,
+			wakeUpInterval,
+			controllerNodeId,
+		});
 	}
 
 	public wakeUpInterval: number;
@@ -400,16 +406,37 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 	}
 }
 
+// @publicAPI
+export interface WakeUpCCIntervalReportOptions {
+	wakeUpInterval: number;
+	controllerNodeId: number;
+}
+
 @CCCommand(WakeUpCommand.IntervalReport)
 export class WakeUpCCIntervalReport extends WakeUpCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WakeUpCCIntervalReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 4);
-		this.wakeUpInterval = this.payload.readUIntBE(0, 3);
-		this.controllerNodeId = this.payload[3];
+		// TODO: Check implementation:
+		this.wakeUpInterval = options.wakeUpInterval;
+		this.controllerNodeId = options.controllerNodeId;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WakeUpCCIntervalReport {
+		validatePayload(payload.length >= 4);
+		const wakeUpInterval = payload.readUIntBE(0, 3);
+		const controllerNodeId = payload[3];
+
+		return new WakeUpCCIntervalReport({
+			nodeId: options.context.sourceNodeId,
+			wakeUpInterval,
+			controllerNodeId,
+		});
 	}
 
 	@ccValue(WakeUpCCValues.wakeUpInterval)
@@ -439,25 +466,53 @@ export class WakeUpCCWakeUpNotification extends WakeUpCC {}
 @CCCommand(WakeUpCommand.NoMoreInformation)
 export class WakeUpCCNoMoreInformation extends WakeUpCC {}
 
+// @publicAPI
+export interface WakeUpCCIntervalCapabilitiesReportOptions {
+	minWakeUpInterval: number;
+	maxWakeUpInterval: number;
+	defaultWakeUpInterval: number;
+	wakeUpIntervalSteps: number;
+	wakeUpOnDemandSupported: boolean;
+}
+
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: WakeUpCCIntervalCapabilitiesReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 12);
-		this.minWakeUpInterval = this.payload.readUIntBE(0, 3);
-		this.maxWakeUpInterval = this.payload.readUIntBE(3, 3);
-		this.defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
-		this.wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
+		// TODO: Check implementation:
+		this.minWakeUpInterval = options.minWakeUpInterval;
+		this.maxWakeUpInterval = options.maxWakeUpInterval;
+		this.defaultWakeUpInterval = options.defaultWakeUpInterval;
+		this.wakeUpIntervalSteps = options.wakeUpIntervalSteps;
+		this.wakeUpOnDemandSupported = options.wakeUpOnDemandSupported;
+	}
 
-		if (this.payload.length >= 13) {
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): WakeUpCCIntervalCapabilitiesReport {
+		validatePayload(payload.length >= 12);
+		const minWakeUpInterval = payload.readUIntBE(0, 3);
+		const maxWakeUpInterval = payload.readUIntBE(3, 3);
+		const defaultWakeUpInterval = payload.readUIntBE(6, 3);
+		const wakeUpIntervalSteps = payload.readUIntBE(9, 3);
+		let wakeUpOnDemandSupported = false;
+		if (payload.length >= 13) {
 			// V3+
-			this.wakeUpOnDemandSupported = !!(this.payload[12] & 0b1);
-		} else {
-			this.wakeUpOnDemandSupported = false;
+			wakeUpOnDemandSupported = !!(payload[12] & 0b1);
 		}
+
+		return new WakeUpCCIntervalCapabilitiesReport({
+			nodeId: options.context.sourceNodeId,
+			minWakeUpInterval,
+			maxWakeUpInterval,
+			defaultWakeUpInterval,
+			wakeUpIntervalSteps,
+			wakeUpOnDemandSupported,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {

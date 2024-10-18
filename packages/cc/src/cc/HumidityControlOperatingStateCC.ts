@@ -16,6 +16,7 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
+	type CCCommandOptions,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -160,17 +161,37 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 	}
 }
 
+// @publicAPI
+export interface HumidityControlOperatingStateCCReportOptions {
+	state: HumidityControlOperatingState;
+}
+
 @CCCommand(HumidityControlOperatingStateCommand.Report)
 export class HumidityControlOperatingStateCCReport
 	extends HumidityControlOperatingStateCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options:
+			& HumidityControlOperatingStateCCReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.state = this.payload[0] & 0b1111;
+		// TODO: Check implementation:
+		this.state = options.state;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): HumidityControlOperatingStateCCReport {
+		validatePayload(payload.length >= 1);
+		const state: HumidityControlOperatingState = payload[0] & 0b1111;
+
+		return new HumidityControlOperatingStateCCReport({
+			nodeId: options.context.sourceNodeId,
+			state,
+		});
 	}
 
 	@ccValue(HumidityControlOperatingStateCCValues.state)

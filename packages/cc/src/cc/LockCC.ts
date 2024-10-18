@@ -28,7 +28,6 @@ import {
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -179,7 +178,7 @@ export class LockCC extends CommandClass {
 }
 
 // @publicAPI
-export interface LockCCSetOptions extends CCCommandOptions {
+export interface LockCCSetOptions {
 	locked: boolean;
 }
 
@@ -187,18 +186,25 @@ export interface LockCCSetOptions extends CCCommandOptions {
 @useSupervision()
 export class LockCCSet extends LockCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | LockCCSetOptions,
+		options: LockCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.locked = options.locked;
-		}
+		this.locked = options.locked;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): LockCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new LockCCSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public locked: boolean;
@@ -216,14 +222,33 @@ export class LockCCSet extends LockCC {
 	}
 }
 
+// @publicAPI
+export interface LockCCReportOptions {
+	locked: boolean;
+}
+
 @CCCommand(LockCommand.Report)
 export class LockCCReport extends LockCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: LockCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 1);
-		this.locked = this.payload[0] === 1;
+
+		// TODO: Check implementation:
+		this.locked = options.locked;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): LockCCReport {
+		validatePayload(payload.length >= 1);
+		const locked = payload[0] === 1;
+
+		return new LockCCReport({
+			nodeId: options.context.sourceNodeId,
+			locked,
+		});
 	}
 
 	@ccValue(LockCCValues.locked)

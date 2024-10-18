@@ -32,7 +32,6 @@ import {
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -341,21 +340,26 @@ export type ThermostatFanModeCCSetOptions = CCCommandOptions & {
 @useSupervision()
 export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatFanModeCCSetOptions,
+		options: ThermostatFanModeCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.mode = options.mode;
-			this.off = options.off;
-		}
+		this.mode = options.mode;
+		this.off = options.off;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatFanModeCCSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new ThermostatFanModeCCSet({
+			nodeId: options.context.sourceNodeId,
+		});
 	}
 
 	public mode: ThermostatFanMode;
@@ -380,18 +384,38 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	}
 }
 
+// @publicAPI
+export interface ThermostatFanModeCCReportOptions {
+	mode: ThermostatFanMode;
+	off?: boolean;
+}
+
 @CCCommand(ThermostatFanModeCommand.Report)
 export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ThermostatFanModeCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 1);
-		this.mode = this.payload[0] & 0b1111;
+		// TODO: Check implementation:
+		this.mode = options.mode;
+		this.off = options.off;
+	}
 
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatFanModeCCReport {
+		validatePayload(payload.length >= 1);
+		const mode: ThermostatFanMode = payload[0] & 0b1111;
 		// V3+
-		this.off = !!(this.payload[0] & 0b1000_0000);
+		const off = !!(payload[0] & 0b1000_0000);
+
+		return new ThermostatFanModeCCReport({
+			nodeId: options.context.sourceNodeId,
+			mode,
+			off,
+		});
 	}
 
 	@ccValue(ThermostatFanModeCCValues.fanMode)
@@ -418,16 +442,35 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 @expectedCCResponse(ThermostatFanModeCCReport)
 export class ThermostatFanModeCCGet extends ThermostatFanModeCC {}
 
+// @publicAPI
+export interface ThermostatFanModeCCSupportedReportOptions {
+	supportedModes: ThermostatFanMode[];
+}
+
 @CCCommand(ThermostatFanModeCommand.SupportedReport)
 export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: ThermostatFanModeCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		this.supportedModes = parseBitMask(
-			this.payload,
+
+		// TODO: Check implementation:
+		this.supportedModes = options.supportedModes;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): ThermostatFanModeCCSupportedReport {
+		const supportedModes: ThermostatFanMode[] = parseBitMask(
+			payload,
 			ThermostatFanMode["Auto low"],
 		);
+
+		return new ThermostatFanModeCCSupportedReport({
+			nodeId: options.context.sourceNodeId,
+			supportedModes,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {

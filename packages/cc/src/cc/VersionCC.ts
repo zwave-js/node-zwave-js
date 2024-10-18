@@ -769,7 +769,7 @@ export class VersionCCReport extends VersionCC {
 export class VersionCCGet extends VersionCC {}
 
 // @publicAPI
-export interface VersionCCCommandClassReportOptions extends CCCommandOptions {
+export interface VersionCCCommandClassReportOptions {
 	requestedCC: CommandClasses;
 	ccVersion: number;
 }
@@ -777,19 +777,26 @@ export interface VersionCCCommandClassReportOptions extends CCCommandOptions {
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
 	public constructor(
-		options:
-			| VersionCCCommandClassReportOptions
-			| CommandClassDeserializationOptions,
+		options: VersionCCCommandClassReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.requestedCC = this.payload[0];
-			this.ccVersion = this.payload[1];
-		} else {
-			this.requestedCC = options.requestedCC;
-			this.ccVersion = options.ccVersion;
-		}
+		this.requestedCC = options.requestedCC;
+		this.ccVersion = options.ccVersion;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): VersionCCCommandClassReport {
+		validatePayload(payload.length >= 2);
+		const requestedCC: CommandClasses = payload[0];
+		const ccVersion = payload[1];
+
+		return new VersionCCCommandClassReport({
+			nodeId: options.context.sourceNodeId,
+			requestedCC,
+			ccVersion,
+		});
 	}
 
 	public ccVersion: number;
@@ -812,7 +819,7 @@ export class VersionCCCommandClassReport extends VersionCC {
 }
 
 // @publicAPI
-export interface VersionCCCommandClassGetOptions extends CCCommandOptions {
+export interface VersionCCCommandClassGetOptions {
 	requestedCC: CommandClasses;
 }
 
@@ -831,17 +838,23 @@ function testResponseForVersionCommandClassGet(
 )
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| VersionCCCommandClassGetOptions,
+		options: VersionCCCommandClassGetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.requestedCC = this.payload[0];
-		} else {
-			this.requestedCC = options.requestedCC;
-		}
+		this.requestedCC = options.requestedCC;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): VersionCCCommandClassGet {
+		validatePayload(payload.length >= 1);
+		const requestedCC: CommandClasses = payload[0];
+
+		return new VersionCCCommandClassGet({
+			nodeId: options.context.sourceNodeId,
+			requestedCC,
+		});
 	}
 
 	public requestedCC: CommandClasses;
@@ -907,41 +920,92 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 @expectedCCResponse(VersionCCCapabilitiesReport)
 export class VersionCCCapabilitiesGet extends VersionCC {}
 
+// @publicAPI
+export interface VersionCCZWaveSoftwareReportOptions {
+	sdkVersion: string;
+	applicationFrameworkAPIVersion: string;
+	applicationFrameworkBuildNumber: number;
+	hostInterfaceVersion: string;
+	hostInterfaceBuildNumber: number;
+	zWaveProtocolVersion: string;
+	zWaveProtocolBuildNumber: number;
+	applicationVersion: string;
+	applicationBuildNumber: number;
+}
+
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
-		options: CommandClassDeserializationOptions,
+		options: VersionCCZWaveSoftwareReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		validatePayload(this.payload.length >= 23);
-		this.sdkVersion = parseVersion(this.payload);
-		this.applicationFrameworkAPIVersion = parseVersion(
-			this.payload.subarray(3),
+		// TODO: Check implementation:
+		this.sdkVersion = options.sdkVersion;
+		this.applicationFrameworkAPIVersion =
+			options.applicationFrameworkAPIVersion;
+		this.applicationFrameworkBuildNumber =
+			options.applicationFrameworkBuildNumber;
+		this.hostInterfaceVersion = options.hostInterfaceVersion;
+		this.hostInterfaceBuildNumber = options.hostInterfaceBuildNumber;
+		this.zWaveProtocolVersion = options.zWaveProtocolVersion;
+		this.zWaveProtocolBuildNumber = options.zWaveProtocolBuildNumber;
+		this.applicationVersion = options.applicationVersion;
+		this.applicationBuildNumber = options.applicationBuildNumber;
+	}
+
+	public static parse(
+		payload: Buffer,
+		options: CommandClassDeserializationOptions,
+	): VersionCCZWaveSoftwareReport {
+		validatePayload(payload.length >= 23);
+		const sdkVersion = parseVersion(payload);
+		const applicationFrameworkAPIVersion = parseVersion(
+			payload.subarray(3),
 		);
-		if (this.applicationFrameworkAPIVersion !== "unused") {
-			this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(6);
+		let applicationFrameworkBuildNumber;
+		if (applicationFrameworkAPIVersion !== "unused") {
+			applicationFrameworkBuildNumber = payload.readUInt16BE(6);
 		} else {
-			this.applicationFrameworkBuildNumber = 0;
+			applicationFrameworkBuildNumber = 0;
 		}
-		this.hostInterfaceVersion = parseVersion(this.payload.subarray(8));
-		if (this.hostInterfaceVersion !== "unused") {
-			this.hostInterfaceBuildNumber = this.payload.readUInt16BE(11);
+
+		const hostInterfaceVersion = parseVersion(payload.subarray(8));
+		let hostInterfaceBuildNumber;
+		if (hostInterfaceVersion !== "unused") {
+			hostInterfaceBuildNumber = payload.readUInt16BE(11);
 		} else {
-			this.hostInterfaceBuildNumber = 0;
+			hostInterfaceBuildNumber = 0;
 		}
-		this.zWaveProtocolVersion = parseVersion(this.payload.subarray(13));
-		if (this.zWaveProtocolVersion !== "unused") {
-			this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(16);
+
+		const zWaveProtocolVersion = parseVersion(payload.subarray(13));
+		let zWaveProtocolBuildNumber;
+		if (zWaveProtocolVersion !== "unused") {
+			zWaveProtocolBuildNumber = payload.readUInt16BE(16);
 		} else {
-			this.zWaveProtocolBuildNumber = 0;
+			zWaveProtocolBuildNumber = 0;
 		}
-		this.applicationVersion = parseVersion(this.payload.subarray(18));
-		if (this.applicationVersion !== "unused") {
-			this.applicationBuildNumber = this.payload.readUInt16BE(21);
+
+		const applicationVersion = parseVersion(payload.subarray(18));
+		let applicationBuildNumber;
+		if (applicationVersion !== "unused") {
+			applicationBuildNumber = payload.readUInt16BE(21);
 		} else {
-			this.applicationBuildNumber = 0;
+			applicationBuildNumber = 0;
 		}
+
+		return new VersionCCZWaveSoftwareReport({
+			nodeId: options.context.sourceNodeId,
+			sdkVersion,
+			applicationFrameworkAPIVersion,
+			applicationFrameworkBuildNumber,
+			hostInterfaceVersion,
+			hostInterfaceBuildNumber,
+			zWaveProtocolVersion,
+			zWaveProtocolBuildNumber,
+			applicationVersion,
+			applicationBuildNumber,
+		});
 	}
 
 	@ccValue(VersionCCValues.sdkVersion)
