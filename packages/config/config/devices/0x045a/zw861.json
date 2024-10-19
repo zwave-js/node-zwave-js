@@ -1,0 +1,94 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "ZW861",
+	"description": "Door Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x035D"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Enable/Disable send Basic Set to group 2",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Set Basic Set value for group 2",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "When door open is detected, send Basic Set 0xFF,When door close is not detected，send Basic Set 0x00",
+					"value": 0
+				},
+				{
+					"label": "When door open is detected, send Basic Set 0x00,When door close is not detected，send Basic Set 0xFF",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Enable led indication for alarm",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},		
+               {
+			"#": "4",
+			"label": "Battery change report threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the user guide of hub to enter inclusion mode.\n2. Click the Z-Wave button 3 times quickly, enter Include Mode.\n3.The LED will fast blink green during the inclusion, and then solid green for 2 seconds to indicate the inclusion is successful, otherwise the LED will solid red for 2 seconds in which you need to repeat the process form step 1.",
+		"exclusion": "1.Follow the user guide of hub to enter exclusion mode.\n2.Click the Z-Wave button 3 times quickly, enter Exclusion Mode.\n3.LED will fast blink green during the exclusion, and then solid green for 2 seconds to indicate that the exclusion is successful, otherwise the LED will solid red for 2 seconds in which you need to repeat the process form step 1.",
+		"reset": "Press and hold the Config Button more than 20s. The LED indicator will flash during the process and turn red, the Door Window Sensor will reset itself to factory default by sending a Device Reset Locally Notification to gateway when the button is released.\nNote:Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}
