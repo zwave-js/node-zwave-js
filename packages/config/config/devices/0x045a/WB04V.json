@@ -156,7 +156,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Motor 1:Run To Travel Point",
+			"label": "Motor 1:Run Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -176,7 +176,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Motor 2:Run ToTravel Point",
+			"label": "Motor 2:Run Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
