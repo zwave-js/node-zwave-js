@@ -44,7 +44,7 @@
 	},
 	"paramInformation": [{
 			"#": "1",
-			"label": "Set Direction Of Motor Channel 1",
+			"label": "Set Direction For Motor 1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Set Direction Of Motor Channel 2",
+			"label": "Set Direction For Motor 2",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Set Status Of Motor Channel 1",
+			"label": "Set Status For Motor 1",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Set Status Of Motor Channel 2",
+			"label": "Set Status For Motor 2",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -116,7 +116,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Set Travel Point Of Motor Channel 1",
+			"label": "Set Travel Point For Motor 1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Set Travel Point Of Motor Channel 2",
+			"label": "Set Travel Point For Motor 2",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -156,7 +156,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Run To Travel Point Of Motor Channel 1",
+			"label": "Run To Travel Point For Motor 1",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -176,7 +176,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Run ToTravel Point Of Motor Channel 2",
+			"label": "Run ToTravel Point For Motor 2",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -196,7 +196,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Delete Travel Point Of Motor Channel 1",
+			"label": "Delete Travel Point For Motor 1",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -220,7 +220,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Delete Travel Point Of Motor Channel 1",
+			"label": "Delete Travel Point For Motor 2",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -244,7 +244,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Set Moving Way Of Motor Channel 1",
+			"label": "Set Moving Way For Motor 1",
 			"valueSize": 1,
                         "unit": "",
 			"minValue": 0,
@@ -253,7 +253,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Set Moving Way Of Motor Channel 1",
+			"label": "Set Moving Way For Motor 2",
 			"valueSize": 1,
                         "unit": "",
 			"minValue": 0,
