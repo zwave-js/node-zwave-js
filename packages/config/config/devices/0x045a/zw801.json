@@ -1,0 +1,346 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "ZW801",
+	"description": "Eco Swtich",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0321"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Led indicator modes",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable, LED will only be used for network operation indicator, such as inclusion, exclusion, factory reset",
+					"value": 0
+				},
+				{
+					"label": "Load status indicate mode, Display load On/Off Status",
+					"value": 1
+				},
+				{
+					"label": "Energy indicate mode",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Restores state after power failure",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Forced to OFF (regardless of state prior to power outage)",
+					"value": 0
+				},
+				{
+					"label": "Forced to ON (regardless of state prior to power outage)",
+					"value": 1
+				},
+				{
+					"label": "Remembers and restores on/off status after power failure",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Load status report command setting",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send nothing",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Report",
+					"value": 1
+				},
+				{
+					"label": "Send Switch Binary Report",
+					"value": 2
+				},
+				{
+					"label": "Send Basic Report and Switch Binary Report",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Enable or disable scene control",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled scene control",
+					"value": 0
+				},
+				{
+					"label": "Enabled scene control",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Enable or disable Relay control",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Button, External switch, and Z-Wave control enabled",
+					"value": 0
+				},
+				{
+					"label": "Config Button and External switch control disabled, Z-Wave control enabled",
+					"value": 1
+				},
+				{
+					"label": "Button, External switch, and Z-Wave control disabled",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "External switch type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Automatic identification",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (device changes status when switch changes status)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch (one-button switch)",
+					"value": 2
+				},
+				{
+					"label": "Toggle switch with fixed actions (always toggle up for on, always toggle down for off)",
+					"value": 3
+				},
+				{
+					"label": "3-way impulse control",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "External switch pair",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Auto turn-off timer",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "9",
+			"label": "Auto turn-on timer",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"label": "Overheat protection",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Over-load protection",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 3840,
+			"defaultValue": 1650
+		},
+		{
+			"#": "12",
+			"label": "Over-voltage protection",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 135
+		},
+		{
+			"#": "13",
+			"label": "kWh report threshold",
+			"valueSize": 2,
+			"unit": "0.1kWh ",
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 10
+		},
+		{
+			"#": "14",
+			"label": "Watt report threshold",
+			"valueSize": 2,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 50
+		},
+		{
+			"#": "15",
+			"label": "Voltage  report threshold",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 0
+		},
+		{
+			"#": "16",
+			"label": "Current report threshold",
+			"valueSize": 1,
+			"unit": "0.1A",
+			"minValue": 0,
+			"maxValue": 150,
+			"defaultValue": 0
+		},
+		{
+			"#": "17",
+			"label": "kWh report percentage threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "18",
+			"label": "Watt report percentage threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "19",
+			"label": "Watt report percentage threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "20",
+			"label": "Current report percentage threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "21",
+			"label": "Watt automatic report interval time",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600
+		},
+		{
+			"#": "22",
+			"label": "kWh automatic report interval time",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600
+		},
+		{
+			"#": "23",
+			"label": "Voltage automatic report interval time",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "24",
+			"label": "Current  automatic report interval time",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the user guide of hub to enter inclusion mode.\n2. Click the Z-Wave button 3 times quickly, enter Include Mode.\n3.The LED will fast blink green during the inclusion, and then solid green for 2 seconds to indicate the inclusion is successful, otherwise the LED will solid red for 2 seconds in which you need to repeat the process form step 1.",
+		"exclusion": "1.Follow the user guide of hub to enter exclusion mode.\n2.Click the Z-Wave button 3 times quickly, enter Exclusion Mode.\n3.LED will fast blink green during the exclusion, and then solid green for 2 seconds to indicate that the exclusion is successful, otherwise the LED will solid red for 2 seconds in which you need to repeat the process form step 1.",
+		"reset": "Press the Config Button quickly twice and followed hold more than 10s. The LED indicator will flash during the process and turn red, the Eco Switch will reset itself to factory default by sending a Device Reset Locally Notification to gateway when the button is released.\nNote:Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}
