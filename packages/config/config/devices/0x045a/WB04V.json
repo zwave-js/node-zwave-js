@@ -44,7 +44,7 @@
 	},
 	"paramInformation": [{
 			"#": "1",
-			"label": "Set Direction: Motor 1",
+			"label": "Motor 1:Set Direction",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Set Direction: Motor 2",
+			"label": "Motor 2:Set Direction",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Set Status: Motor 1",
+			"label": "Motor 1:Set Status",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Set Status: Motor 2",
+			"label": "Motor 2:Set Status",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -116,7 +116,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Set Travel Point: Motor 1",
+			"label": "Motor 1:Set Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Set Travel Point: Motor 2",
+			"label": "Motor 2:Set Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -156,7 +156,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Run To Travel Point: Motor 1",
+			"label": "Motor 1:Run To Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -176,7 +176,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Run ToTravel Point: Motor 2",
+			"label": "Motor 2:Run ToTravel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -196,7 +196,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Delete Travel Point: Motor 1",
+			"label": "Motor 1:Delete Travel Point",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -220,7 +220,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Delete Travel Point: Motor 2",
+			"label": "Motor 2:Delete Travel Point",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -244,7 +244,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Set Moving Way: Motor 1",
+			"label": "Motor 1:Set Moving Way",
 			"valueSize": 1,
                         "unit": "",
 			"minValue": 0,
@@ -253,7 +253,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Set Moving Way: Motor 2",
+			"label": "Motor 2:Set Moving Way",
 			"valueSize": 1,
                         "unit": "",
 			"minValue": 0,
