@@ -32,7 +32,7 @@
 	},
 	"paramInformation": [{
 			"#": "1",
-			"label": "Enable Manual Pull-start",
+			"label": "Enable Manual Pull-Start",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -116,7 +116,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Calibrate The Travel Point",
+			"label": "Calibrate Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Delete The Travel Point",
+			"label": "Delete Travel Point",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -204,7 +204,7 @@
 					"value": 2
 				},
 				{
-					"label": "Send Window Covering Report",
+					"label": "Send window covering report",
 					"value": 3
 				},
 				{
@@ -212,15 +212,15 @@
 					"value": 4
 				},
 				{
-					"label": "Send Basic Report and Window Covering Report",
+					"label": "Send Basic Report and window covering report",
 					"value": 5
 				},
 				{
-					"label": "Send Multilevel Switch Report and Window Covering Report",
+					"label": "Send Multilevel Switch Report and window covering report",
 					"value": 6
 				},
 				{
-					"label": "Send Basic Report and Multilevel Switch Report and Window Covering Report",
+					"label": "Send Basic Report and Multilevel Switch Report and window covering report",
 					"value": 7
 				}
 			]
