@@ -1,0 +1,634 @@
+{
+	"manufacturer": "ZVIDAR",
+	"manufacturerId": "0x045a",
+	"label": "ZW802",
+	"description": "Eco Dual Swtich",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0322"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "EP1 On/Off Control",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "EP2 On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Led indicator modes",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable, LED will only be used for network operation indicator, such as inclusion, exclusion, factory reset",
+					"value": 0
+				},
+				{
+					"label": "Load status indicate mode, Display load On/Off Status",
+					"value": 1
+				},
+				{
+					"label": "Energy indicate mode",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Restore state after power failure, OUT1",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Forced to OFF (regardless of state prior to power outage)",
+					"value": 0
+				},
+				{
+					"label": "Forced to ON (regardless of state prior to power outage)",
+					"value": 1
+				},
+				{
+					"label": "Remembers and restores on/off status after power failure",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Restore state after power failure, OUT2",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Forced to OFF (regardless of state prior to power outage)",
+					"value": 0
+				},
+				{
+					"label": "Forced to ON (regardless of state prior to power outage)",
+					"value": 1
+				},
+				{
+					"label": "Remembers and restores on/off status after power failure",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Load status report command setting",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send nothing",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Report",
+					"value": 1
+				},
+				{
+					"label": "Send Switch Binary Report",
+					"value": 2
+				},
+				{
+					"label": "Send Basic Report and Switch Binary Report",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Enable or disable scene control",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled scene control",
+					"value": 0
+				},
+				{
+					"label": "Enabled scene control",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Enable or disable Relay control",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Button, External switch, and Z-Wave control enabled",
+					"value": 0
+				},
+				{
+					"label": "Config Button and External switch control disabled, Z-Wave control enabled",
+					"value": 1
+				},
+				{
+					"label": "Button, External switch, and Z-Wave control disabled",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "External switch 1 type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Automatic identification",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (device changes status when switch changes status)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch (one-button switch)",
+					"value": 2
+				},
+				{
+					"label": "Toggle switch with fixed actions (always toggle up for on, always toggle down for off)",
+					"value": 3
+				},
+				{
+					"label": "3-way impulse control",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "External switch 2 type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Automatic identification",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (device changes status when switch changes status)",
+					"value": 1
+				},
+				{
+					"label": "Momentary switch (one-button switch)",
+					"value": 2
+				},
+				{
+					"label": "Toggle switch with fixed actions (always toggle up for on, always toggle down for off)",
+					"value": 3
+				},
+				{
+					"label": "3-way impulse control",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "External switch pair",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Auto turn-off timer, OUT1",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "11",
+			"label": "Auto turn-on timer, OUT1",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "12",
+			"label": "Auto turn-off timer, OUT2",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "13",
+			"label": "Auto turn-on timer, OUT2",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "14",
+			"label": "Overheat protection",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Over-load protection",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 1200,
+			"defaultValue": 550
+		},
+		{
+			"#": "16",
+			"label": "Over-voltage protection",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 135
+		},
+		{
+			"#": "17",
+			"label": "kWh report threshold, Whole",
+			"valueSize": 2,
+			"unit": "0.1kWh ",
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 10
+		},
+		{
+			"#": "18",
+			"label": "kWh report threshold, OUT1",
+			"valueSize": 2,
+			"unit": "0.1kWh ",
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "19",
+			"label": "kWh report threshold, OUT2",
+			"valueSize": 2,
+			"unit": "0.1kWh ",
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "20",
+			"label": "Watt report threshold, Whole",
+			"valueSize": 2,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 1200,
+			"defaultValue": 50
+		},
+		{
+			"#": "21",
+			"label": "Watt report threshold, OUT1",
+			"valueSize": 2,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 1200,
+			"defaultValue": 50
+		},
+		{
+			"#": "22",
+			"label": "Watt report threshold, OUT2",
+			"valueSize": 2,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 1200,
+			"defaultValue": 50
+		},
+		{
+			"#": "23",
+			"label": "Voltage  report threshold, Whole",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 0
+		},
+		{
+			"#": "24",
+			"label": "Voltage  report threshold, OUT1",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 0
+		},
+		{
+			"#": "25",
+			"label": "Voltage  report threshold, OUT2",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 0
+		},
+		{
+			"#": "26",
+			"label": "Current report threshold, Whole",
+			"valueSize": 1,
+			"unit": "0.1A",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0
+		},
+		{
+			"#": "27",
+			"label": "Current report threshold, OUT1",
+			"valueSize": 1,
+			"unit": "0.1A",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0
+		},
+		{
+			"#": "28",
+			"label": "Current report threshold, OUT2",
+			"valueSize": 1,
+			"unit": "0.1A",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0
+		},
+		{
+			"#": "29",
+			"label": "kWh report % threshold, Whole",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "30",
+			"label": "kWh report % threshold, OUT1",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "31",
+			"label": "kWh report % threshold, OUT2",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "32",
+			"label": "Watt report % threshold, Whole",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "33",
+			"label": "Watt report % threshold, OUT1",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "34",
+			"label": "Watt report % threshold, OUT2",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "35",
+			"label": "Voltage report % threshold, Whole",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "36",
+			"label": "Voltage report % threshold, OUT1",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "37",
+			"label": "Voltage report % threshold, OUT2",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "38",
+			"label": "Current report % threshold, Whole",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "39",
+			"label": "Current report % threshold, OUT1",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "40",
+			"label": "Current report % threshold, OUT2",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "41",
+			"label": "Watt automatic report interval, Whole",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600
+		},
+		{
+			"#": "42",
+			"label": "Watt automatic report interval, OUT1",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "43",
+			"label": "Watt automatic report interval, OUT2",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "44",
+			"label": "kWh automatic report interval, Whole",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600
+		},
+		{
+			"#": "45",
+			"label": "kWh automatic report interval, OUT1",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "46",
+			"label": "kWh automatic report interval, OUT2",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "47",
+			"label": "Voltage automatic report interval, Whole",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "48",
+			"label": "Voltage automatic report interval, OUT1",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "49",
+			"label": "Voltage automatic report interval, OUT2",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "50",
+			"label": "Current  automatic report interval, Whole",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "51",
+			"label": "Current  automatic report interval, OUT1",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		},
+		{
+			"#": "52",
+			"label": "Current  automatic report interval, OUT2",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the user guide of hub to enter inclusion mode.\n2. Click the Z-Wave button 3 times quickly, enter Include Mode.\n3.The LED will fast blink green during the inclusion, and then solid green for 2 seconds to indicate the inclusion is successful, otherwise the LED will solid red for 2 seconds in which you need to repeat the process form step 1.",
+		"exclusion": "1.Follow the user guide of hub to enter exclusion mode.\n2.Click the Z-Wave button 3 times quickly, enter Exclusion Mode.\n3.LED will fast blink green during the exclusion, and then solid green for 2 seconds to indicate that the exclusion is successful, otherwise the LED will solid red for 2 seconds in which you need to repeat the process form step 1.",
+		"reset": "Press the Config Button quickly twice and followed hold more than 10s. The LED indicator will flash during the process and turn red, the Eco Dual Switch will reset itself to factory default by sending a Device Reset Locally Notification to gateway when the button is released.\nNote:Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}
