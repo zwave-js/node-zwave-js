@@ -32,7 +32,7 @@
 	},
 	"paramInformation": [{
 			"#": "1",
-			"label": "Enable manual pull-start",
+			"label": "Enable Manual Pull-start",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -48,7 +48,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Set motor direction",
+			"label": "Set Motor Direction",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -64,7 +64,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Manually set open borders",
+			"label": "Manually Set Open Borders",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -80,7 +80,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Manually set close borders",
+			"label": "Manually Set Close Borders",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Set motor status",
+			"label": "Set Motor Status",
 			"valueSize": 1,
 			"defaultValue": 3,
 			"allowManualEntry": false,
@@ -116,7 +116,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Calibrate the travel point",
+			"label": "Calibrate The Travel Point",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -136,31 +136,31 @@
 		},
 		{
 			"#": "7",
-			"label": "Delete the travel point",
+			"label": "Delete The Travel Point",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [{
-					"label": "Delete All travel",
+					"label": "Delete all travel",
 					"value": 0
 				},
 				{
-					"label": "Delete Up travel",
+					"label": "Delete up travel",
 					"value": 1
 				},
 				{
-					"label": "Delete Down travel",
+					"label": "Delete down travel",
 					"value": 2
 				},
 				{
-					"label": "Delete Third travel",
+					"label": "Delete third travel",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "8",
-			"label": "Low battery level alarm threshold",
+			"label": "Low Battery Level Alarm Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -169,7 +169,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Battery auto report interval time",
+			"label": "Battery Auto Report Interval Time",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -178,7 +178,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Battery change report threshold",
+			"label": "Battery Change Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -187,7 +187,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Curtain status report command setting",
+			"label": "Curtain Status Report Command Setting",
 			"valueSize": 1,
 			"defaultValue": 6,
 			"allowManualEntry": false,
@@ -200,7 +200,7 @@
 					"value": 1
 				},
 				{
-					"label": "Send Switch Multilevel Report",
+					"label": "Send Multilevel Switch Report",
 					"value": 2
 				},
 				{
@@ -208,7 +208,7 @@
 					"value": 3
 				},
 				{
-					"label": "Send Basic Report and Switch Multilevel Report",
+					"label": "Send Basic Report and Multilevel Switch Report",
 					"value": 4
 				},
 				{
@@ -216,11 +216,11 @@
 					"value": 5
 				},
 				{
-					"label": "Send Switch Multilevel Report and Window Covering Report",
+					"label": "Send Multilevel Switch Report and Window Covering Report",
 					"value": 6
 				},
 				{
-					"label": "Send Basic Report and Switch Multilevel Report and Window Covering Report",
+					"label": "Send Basic Report and Multilevel Switch Report and Window Covering Report",
 					"value": 7
 				}
 			]
