@@ -24,11 +24,10 @@ import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -525,16 +524,13 @@ export class AssociationCCSet extends AssociationCC {
 		this.nodeIds = options.nodeIds;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): AssociationCCSet {
-		validatePayload(payload.length >= 2);
-		const groupId = payload[0];
-		const nodeIds = [...payload.subarray(1)];
+	public static from(raw: CCRaw, ctx: CCParsingContext): AssociationCCSet {
+		validatePayload(raw.payload.length >= 2);
+		const groupId = raw.payload[0];
+		const nodeIds = [...raw.payload.subarray(1)];
 
 		return new AssociationCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			groupId,
 			nodeIds,
 		});
@@ -574,23 +570,29 @@ export interface AssociationCCRemoveOptions {
 @useSupervision()
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (AssociationCCRemoveOptions & CCCommandOptions),
+		options: AssociationCCRemoveOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			if (this.payload[0] !== 0) {
-				this.groupId = this.payload[0];
-			}
-			this.nodeIds = [...this.payload.subarray(1)];
-		} else {
-			// When removing associations, we allow invalid node IDs.
-			// See GH#3606 - it is possible that those exist.
-			this.groupId = options.groupId;
-			this.nodeIds = options.nodeIds;
+		// When removing associations, we allow invalid node IDs.
+		// See GH#3606 - it is possible that those exist.
+		this.groupId = options.groupId;
+		this.nodeIds = options.nodeIds;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): AssociationCCRemove {
+		validatePayload(raw.payload.length >= 1);
+
+		let groupId: number | undefined;
+		if (raw.payload[0] !== 0) {
+			groupId = raw.payload[0];
 		}
+		const nodeIds = [...raw.payload.subarray(1)];
+
+		return new AssociationCCRemove({
+			nodeId: ctx.sourceNodeId,
+			groupId,
+			nodeIds,
+		});
 	}
 
 	public groupId?: number;
@@ -629,24 +631,30 @@ export interface AssociationCCReportSpecificOptions {
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (AssociationCCReportSpecificOptions & CCCommandOptions),
+		options: AssociationCCReportSpecificOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.groupId = this.payload[0];
-			this.maxNodes = this.payload[1];
-			this.reportsToFollow = this.payload[2];
-			this.nodeIds = [...this.payload.subarray(3)];
-		} else {
-			this.groupId = options.groupId;
-			this.maxNodes = options.maxNodes;
-			this.nodeIds = options.nodeIds;
-			this.reportsToFollow = options.reportsToFollow;
-		}
+		this.groupId = options.groupId;
+		this.maxNodes = options.maxNodes;
+		this.nodeIds = options.nodeIds;
+		this.reportsToFollow = options.reportsToFollow;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): AssociationCCReport {
+		validatePayload(raw.payload.length >= 3);
+		const groupId = raw.payload[0];
+		const maxNodes = raw.payload[1];
+		const reportsToFollow = raw.payload[2];
+		const nodeIds = [...raw.payload.subarray(3)];
+
+		return new AssociationCCReport({
+			nodeId: ctx.sourceNodeId,
+			groupId,
+			maxNodes,
+			reportsToFollow,
+			nodeIds,
+		});
 	}
 
 	public groupId: number;
@@ -728,15 +736,12 @@ export class AssociationCCGet extends AssociationCC {
 		this.groupId = options.groupId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): AssociationCCGet {
-		validatePayload(payload.length >= 1);
-		const groupId = payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): AssociationCCGet {
+		validatePayload(raw.payload.length >= 1);
+		const groupId = raw.payload[0];
 
 		return new AssociationCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			groupId,
 		});
 	}
@@ -773,15 +778,15 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		this.groupCount = options.groupCount;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): AssociationCCSupportedGroupingsReport {
-		validatePayload(payload.length >= 1);
-		const groupCount = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const groupCount = raw.payload[0];
 
 		return new AssociationCCSupportedGroupingsReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			groupCount,
 		});
 	}
@@ -814,18 +819,24 @@ export interface AssociationCCSpecificGroupReportOptions {
 @CCCommand(AssociationCommand.SpecificGroupReport)
 export class AssociationCCSpecificGroupReport extends AssociationCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (AssociationCCSpecificGroupReportOptions & CCCommandOptions),
+		options: AssociationCCSpecificGroupReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.group = this.payload[0];
-		} else {
-			this.group = options.group;
-		}
+		this.group = options.group;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): AssociationCCSpecificGroupReport {
+		validatePayload(raw.payload.length >= 1);
+		const group = raw.payload[0];
+
+		return new AssociationCCSpecificGroupReport({
+			nodeId: ctx.sourceNodeId,
+			group,
+		});
 	}
 
 	public group: number;

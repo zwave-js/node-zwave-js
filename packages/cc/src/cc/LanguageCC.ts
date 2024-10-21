@@ -12,12 +12,17 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -176,10 +181,7 @@ export class LanguageCCSet extends LanguageCC {
 		this._country = options.country;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): LanguageCCSet {
+	public static from(raw: CCRaw, ctx: CCParsingContext): LanguageCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -187,7 +189,7 @@ export class LanguageCCSet extends LanguageCC {
 		);
 
 		return new LanguageCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -259,20 +261,17 @@ export class LanguageCCReport extends LanguageCC {
 		this.country = options.country;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): LanguageCCReport {
+	public static from(raw: CCRaw, ctx: CCParsingContext): LanguageCCReport {
 		// if (gotDeserializationOptions(options)) {
-		validatePayload(payload.length >= 3);
-		const language = payload.toString("ascii", 0, 3);
+		validatePayload(raw.payload.length >= 3);
+		const language = raw.payload.toString("ascii", 0, 3);
 		let country: MaybeNotKnown<string>;
-		if (payload.length >= 5) {
-			country = payload.toString("ascii", 3, 5);
+		if (raw.payload.length >= 5) {
+			country = raw.payload.toString("ascii", 3, 5);
 		}
 
 		return new LanguageCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			language,
 			country,
 		});

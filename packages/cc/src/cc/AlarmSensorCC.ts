@@ -11,14 +11,18 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -339,29 +343,26 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		this.duration = options.duration;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): AlarmSensorCCReport {
-		validatePayload(payload.length >= 5, payload[1] !== 0xff);
-		const sourceNodeId = payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): AlarmSensorCCReport {
+		validatePayload(raw.payload.length >= 5, raw.payload[1] !== 0xff);
+		const sourceNodeId = raw.payload[0];
 
-		const sensorType: AlarmSensorType = payload[1];
+		const sensorType: AlarmSensorType = raw.payload[1];
 		// Any positive value gets interpreted as alarm
-		const state: boolean = payload[2] > 0;
+		const state: boolean = raw.payload[2] > 0;
 		// Severity only ranges from 1 to 100
 		let severity: number | undefined;
-		if (payload[2] > 0 && payload[2] <= 0x64) {
-			severity = payload[2];
+		if (raw.payload[2] > 0 && raw.payload[2] <= 0x64) {
+			severity = raw.payload[2];
 		}
 
 		// ignore zero durations
-		const duration = payload.readUInt16BE(3) || undefined;
+		const duration = raw.payload.readUInt16BE(3) || undefined;
 
 		return new AlarmSensorCCReport({
 			// Alarm Sensor reports may be forwarded by a different node, in this case
 			// (and only then!) the payload contains the original node ID
-			nodeId: sourceNodeId || options.context.sourceNodeId,
+			nodeId: sourceNodeId || ctx.sourceNodeId,
 			sensorType,
 			state,
 			severity,
@@ -434,10 +435,7 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 		this.sensorType = options.sensorType ?? AlarmSensorType.Any;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): AlarmSensorCCGet {
+	public static from(raw: CCRaw, ctx: CCParsingContext): AlarmSensorCCGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -445,7 +443,7 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 		);
 
 		return new AlarmSensorCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -485,20 +483,20 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		this.supportedSensorTypes = options.supportedSensorTypes;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): AlarmSensorCCSupportedReport {
-		validatePayload(payload.length >= 1);
-		const bitMaskLength = payload[0];
-		validatePayload(payload.length >= 1 + bitMaskLength);
+		validatePayload(raw.payload.length >= 1);
+		const bitMaskLength = raw.payload[0];
+		validatePayload(raw.payload.length >= 1 + bitMaskLength);
 		const supportedSensorTypes: AlarmSensorType[] = parseBitMask(
-			payload.subarray(1, 1 + bitMaskLength),
+			raw.payload.subarray(1, 1 + bitMaskLength),
 			AlarmSensorType["General Purpose"],
 		);
 
 		return new AlarmSensorCCSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedSensorTypes,
 		});
 	}

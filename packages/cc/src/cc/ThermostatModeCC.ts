@@ -14,7 +14,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -28,6 +32,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -329,30 +334,27 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 		}
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): ThermostatModeCCSet {
-		validatePayload(payload.length >= 1);
-		const mode: ThermostatMode = payload[0] & 0b11111;
+	public static from(raw: CCRaw, ctx: CCParsingContext): ThermostatModeCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const mode: ThermostatMode = raw.payload[0] & 0b11111;
 		if (mode !== ThermostatMode["Manufacturer specific"]) {
 			return new ThermostatModeCCSet({
-				nodeId: options.context.sourceNodeId,
+				nodeId: ctx.sourceNodeId,
 				mode,
 			});
 		}
 
-		const manufacturerDataLength = (payload[0] >>> 5) & 0b111;
+		const manufacturerDataLength = (raw.payload[0] >>> 5) & 0b111;
 		validatePayload(
-			payload.length >= 1 + manufacturerDataLength,
+			raw.payload.length >= 1 + manufacturerDataLength,
 		);
-		const manufacturerData = payload.subarray(
+		const manufacturerData = raw.payload.subarray(
 			1,
 			1 + manufacturerDataLength,
 		);
 
 		return new ThermostatModeCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			mode,
 			manufacturerData,
 		});
@@ -416,32 +418,32 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		this.manufacturerData = options.manufacturerData;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ThermostatModeCCReport {
-		validatePayload(payload.length >= 1);
-		const mode: ThermostatMode = payload[0] & 0b11111;
+		validatePayload(raw.payload.length >= 1);
+		const mode: ThermostatMode = raw.payload[0] & 0b11111;
 
 		if (mode !== ThermostatMode["Manufacturer specific"]) {
 			return new ThermostatModeCCReport({
-				nodeId: options.context.sourceNodeId,
+				nodeId: ctx.sourceNodeId,
 				mode,
 			});
 		}
 
 		// V3+
-		const manufacturerDataLength = payload[0] >>> 5;
+		const manufacturerDataLength = raw.payload[0] >>> 5;
 		validatePayload(
-			payload.length >= 1 + manufacturerDataLength,
+			raw.payload.length >= 1 + manufacturerDataLength,
 		);
-		const manufacturerData = payload.subarray(
+		const manufacturerData = raw.payload.subarray(
 			1,
 			1 + manufacturerDataLength,
 		);
 
 		return new ThermostatModeCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			mode,
 			manufacturerData,
 		});
@@ -537,17 +539,17 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		this.supportedModes = options.supportedModes;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ThermostatModeCCSupportedReport {
 		const supportedModes: ThermostatMode[] = parseBitMask(
-			payload,
+			raw.payload,
 			ThermostatMode.Off,
 		);
 
 		return new ThermostatModeCCSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedModes,
 		});
 	}

@@ -10,13 +10,18 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -157,10 +162,7 @@ export class ClockCCSet extends ClockCC {
 		this.minute = options.minute;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): ClockCCSet {
+	public static from(raw: CCRaw, ctx: CCParsingContext): ClockCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -168,7 +170,7 @@ export class ClockCCSet extends ClockCC {
 		);
 
 		return new ClockCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -225,14 +227,11 @@ export class ClockCCReport extends ClockCC {
 		this.minute = options.minute;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): ClockCCReport {
-		validatePayload(payload.length >= 2);
-		const weekday: Weekday = payload[0] >>> 5;
-		const hour = payload[0] & 0b11111;
-		const minute = payload[1];
+	public static from(raw: CCRaw, ctx: CCParsingContext): ClockCCReport {
+		validatePayload(raw.payload.length >= 2);
+		const weekday: Weekday = raw.payload[0] >>> 5;
+		const hour = raw.payload[0] & 0b11111;
+		const minute = raw.payload[1];
 		validatePayload(
 			weekday <= Weekday.Sunday,
 			hour <= 23,
@@ -240,7 +239,7 @@ export class ClockCCReport extends ClockCC {
 		);
 
 		return new ClockCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			weekday,
 			hour,
 			minute,

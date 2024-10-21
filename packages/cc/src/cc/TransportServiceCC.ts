@@ -15,6 +15,7 @@ import type {
 import { buffer2hex } from "@zwave-js/shared/safe";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	type CCResponseRole,
 	CommandClass,
 	type CommandClassDeserializationOptions,
@@ -119,48 +120,48 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		this.partialDatagram = options.partialDatagram;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): TransportServiceCCFirstSegment {
 		// Deserialization has already split the datagram size from the ccCommand.
 		// Therefore we have one more payload byte
 
-		validatePayload(payload.length >= 6); // 2 bytes dgram size, 1 byte sessid/ext, 1+ bytes payload, 2 bytes checksum
+		validatePayload(raw.payload.length >= 6); // 2 bytes dgram size, 1 byte sessid/ext, 1+ bytes payload, 2 bytes checksum
 
 		// Verify the CRC
 		const headerBuffer = Buffer.from([
 			CommandClasses["Transport Service"],
-			TransportServiceCommand.FirstSegment | payload[0],
+			TransportServiceCommand.FirstSegment | raw.payload[0],
 		]);
-		const ccBuffer = payload.subarray(1, -2);
+		const ccBuffer = raw.payload.subarray(1, -2);
 		let expectedCRC = CRC16_CCITT(headerBuffer);
 		expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
-		const actualCRC = payload.readUInt16BE(
-			payload.length - 2,
+		const actualCRC = raw.payload.readUInt16BE(
+			raw.payload.length - 2,
 		);
 		validatePayload(expectedCRC === actualCRC);
-		const datagramSize = payload.readUInt16BE(0);
-		const sessionId = payload[2] >>> 4;
+		const datagramSize = raw.payload.readUInt16BE(0);
+		const sessionId = raw.payload[2] >>> 4;
 		let payloadOffset = 3;
 
 		// If there is a header extension, read it
-		const hasHeaderExtension = !!(payload[2] & 0b1000);
+		const hasHeaderExtension = !!(raw.payload[2] & 0b1000);
 		let headerExtension: Buffer | undefined;
 
 		if (hasHeaderExtension) {
-			const extLength = payload[3];
-			headerExtension = payload.subarray(4, 4 + extLength);
+			const extLength = raw.payload[3];
+			headerExtension = raw.payload.subarray(4, 4 + extLength);
 			payloadOffset += 1 + extLength;
 		}
-		const partialDatagram: Buffer = payload.subarray(payloadOffset, -2);
+		const partialDatagram: Buffer = raw.payload.subarray(payloadOffset, -2);
 
 		// A node supporting the Transport Service Command Class, version 2
 		// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
 		validatePayload(partialDatagram.length <= MAX_SEGMENT_SIZE);
 
 		return new TransportServiceCCFirstSegment({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			datagramSize,
 			sessionId,
 			headerExtension,
@@ -262,50 +263,50 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		this.partialDatagram = options.partialDatagram;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): TransportServiceCCSubsequentSegment {
 		// Deserialization has already split the datagram size from the ccCommand.
 		// Therefore we have one more payload byte
 
-		validatePayload(payload.length >= 7); // 2 bytes dgram size, 1 byte sessid/ext/offset, 1 byte offset, 1+ bytes payload, 2 bytes checksum
+		validatePayload(raw.payload.length >= 7); // 2 bytes dgram size, 1 byte sessid/ext/offset, 1 byte offset, 1+ bytes payload, 2 bytes checksum
 
 		// Verify the CRC
 		const headerBuffer = Buffer.from([
 			CommandClasses["Transport Service"],
-			TransportServiceCommand.SubsequentSegment | payload[0],
+			TransportServiceCommand.SubsequentSegment | raw.payload[0],
 		]);
-		const ccBuffer = payload.subarray(1, -2);
+		const ccBuffer = raw.payload.subarray(1, -2);
 		let expectedCRC = CRC16_CCITT(headerBuffer);
 		expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
-		const actualCRC = payload.readUInt16BE(
-			payload.length - 2,
+		const actualCRC = raw.payload.readUInt16BE(
+			raw.payload.length - 2,
 		);
 		validatePayload(expectedCRC === actualCRC);
-		const datagramSize = payload.readUInt16BE(0);
-		const sessionId = payload[2] >>> 4;
-		const datagramOffset = ((payload[2] & 0b111) << 8)
-			+ payload[3];
+		const datagramSize = raw.payload.readUInt16BE(0);
+		const sessionId = raw.payload[2] >>> 4;
+		const datagramOffset = ((raw.payload[2] & 0b111) << 8)
+			+ raw.payload[3];
 		let payloadOffset = 4;
 
 		// If there is a header extension, read it
-		const hasHeaderExtension = !!(payload[2] & 0b1000);
+		const hasHeaderExtension = !!(raw.payload[2] & 0b1000);
 		let headerExtension: Buffer | undefined;
 
 		if (hasHeaderExtension) {
-			const extLength = payload[4];
-			headerExtension = payload.subarray(5, 5 + extLength);
+			const extLength = raw.payload[4];
+			headerExtension = raw.payload.subarray(5, 5 + extLength);
 			payloadOffset += 1 + extLength;
 		}
-		const partialDatagram: Buffer = payload.subarray(payloadOffset, -2);
+		const partialDatagram: Buffer = raw.payload.subarray(payloadOffset, -2);
 
 		// A node supporting the Transport Service Command Class, version 2
 		// MUST NOT send Transport Service segments with the Payload field longer than 39 bytes.
 		validatePayload(partialDatagram.length <= MAX_SEGMENT_SIZE);
 
 		return new TransportServiceCCSubsequentSegment({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			datagramSize,
 			sessionId,
 			datagramOffset,
@@ -486,17 +487,17 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		this.datagramOffset = options.datagramOffset;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): TransportServiceCCSegmentRequest {
-		validatePayload(payload.length >= 3);
-		const sessionId = payload[1] >>> 4;
-		const datagramOffset = ((payload[1] & 0b111) << 8)
-			+ payload[2];
+		validatePayload(raw.payload.length >= 3);
+		const sessionId = raw.payload[1] >>> 4;
+		const datagramOffset = ((raw.payload[1] & 0b111) << 8)
+			+ raw.payload[2];
 
 		return new TransportServiceCCSegmentRequest({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sessionId,
 			datagramOffset,
 		});
@@ -539,15 +540,15 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		this.sessionId = options.sessionId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): TransportServiceCCSegmentComplete {
-		validatePayload(payload.length >= 2);
-		const sessionId = payload[1] >>> 4;
+		validatePayload(raw.payload.length >= 2);
+		const sessionId = raw.payload[1] >>> 4;
 
 		return new TransportServiceCCSegmentComplete({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sessionId,
 		});
 	}
@@ -581,15 +582,15 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 		this.pendingSegments = options.pendingSegments;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): TransportServiceCCSegmentWait {
-		validatePayload(payload.length >= 2);
-		const pendingSegments = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const pendingSegments = raw.payload[1];
 
 		return new TransportServiceCCSegmentWait({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			pendingSegments,
 		});
 	}

@@ -14,6 +14,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
@@ -32,6 +33,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -503,9 +505,9 @@ export class SceneControllerConfigurationCCSet
 			?? Duration.default();
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SceneControllerConfigurationCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -514,7 +516,7 @@ export class SceneControllerConfigurationCCSet
 		);
 
 		return new SceneControllerConfigurationCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -565,18 +567,18 @@ export class SceneControllerConfigurationCCReport
 		this.dimmingDuration = options.dimmingDuration;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SceneControllerConfigurationCCReport {
-		validatePayload(payload.length >= 3);
-		const groupId = payload[0];
-		const sceneId = payload[1];
-		const dimmingDuration: Duration = Duration.parseReport(payload[2])
+		validatePayload(raw.payload.length >= 3);
+		const groupId = raw.payload[0];
+		const sceneId = raw.payload[1];
+		const dimmingDuration: Duration = Duration.parseReport(raw.payload[2])
 			?? Duration.unknown();
 
 		return new SceneControllerConfigurationCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			groupId,
 			sceneId,
 			dimmingDuration,
@@ -648,9 +650,9 @@ export class SceneControllerConfigurationCCGet
 		this.groupId = options.groupId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SceneControllerConfigurationCCGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -659,7 +661,7 @@ export class SceneControllerConfigurationCCGet
 		);
 
 		return new SceneControllerConfigurationCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 

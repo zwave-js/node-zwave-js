@@ -11,13 +11,18 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -241,14 +246,11 @@ export class TimeCCTimeReport extends TimeCC {
 		this.second = options.second;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): TimeCCTimeReport {
-		validatePayload(payload.length >= 3);
-		const hour = payload[0] & 0b11111;
-		const minute = payload[1];
-		const second = payload[2];
+	public static from(raw: CCRaw, ctx: CCParsingContext): TimeCCTimeReport {
+		validatePayload(raw.payload.length >= 3);
+		const hour = raw.payload[0] & 0b11111;
+		const minute = raw.payload[1];
+		const second = raw.payload[2];
 
 		validatePayload(
 			hour >= 0,
@@ -260,7 +262,7 @@ export class TimeCCTimeReport extends TimeCC {
 		);
 
 		return new TimeCCTimeReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			hour,
 			minute,
 			second,
@@ -318,17 +320,14 @@ export class TimeCCDateReport extends TimeCC {
 		this.day = options.day;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): TimeCCDateReport {
-		validatePayload(payload.length >= 4);
-		const year = payload.readUInt16BE(0);
-		const month = payload[2];
-		const day = payload[3];
+	public static from(raw: CCRaw, ctx: CCParsingContext): TimeCCDateReport {
+		validatePayload(raw.payload.length >= 4);
+		const year = raw.payload.readUInt16BE(0);
+		const month = raw.payload[2];
+		const day = raw.payload[3];
 
 		return new TimeCCDateReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			year,
 			month,
 			day,
@@ -392,10 +391,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 		this.dstEndDate = options.dstEnd;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): TimeCCTimeOffsetSet {
+	public static from(raw: CCRaw, ctx: CCParsingContext): TimeCCTimeOffsetSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -403,7 +399,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 		);
 
 		return new TimeCCTimeOffsetSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -463,32 +459,32 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 		this.dstEndDate = options.dstEnd;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): TimeCCTimeOffsetReport {
-		validatePayload(payload.length >= 9);
-		const { standardOffset, dstOffset } = parseTimezone(payload);
+		validatePayload(raw.payload.length >= 9);
+		const { standardOffset, dstOffset } = parseTimezone(raw.payload);
 		const currentYear = new Date().getUTCFullYear();
 		const dstStartDate: Date = new Date(
 			Date.UTC(
 				currentYear,
-				payload[3] - 1,
-				payload[4],
-				payload[5],
+				raw.payload[3] - 1,
+				raw.payload[4],
+				raw.payload[5],
 			),
 		);
 		const dstEndDate: Date = new Date(
 			Date.UTC(
 				currentYear,
-				payload[6] - 1,
-				payload[7],
-				payload[8],
+				raw.payload[6] - 1,
+				raw.payload[7],
+				raw.payload[8],
 			),
 		);
 
 		return new TimeCCTimeOffsetReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			standardOffset,
 			dstOffset,
 			dstStart: dstStartDate,

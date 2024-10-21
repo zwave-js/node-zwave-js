@@ -7,7 +7,7 @@ import {
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { GetValueDB } from "@zwave-js/host/safe";
+import type { CCParsingContext, GetValueDB } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
@@ -17,6 +17,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -181,15 +182,15 @@ export class HumidityControlOperatingStateCCReport
 		this.state = options.state;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): HumidityControlOperatingStateCCReport {
-		validatePayload(payload.length >= 1);
-		const state: HumidityControlOperatingState = payload[0] & 0b1111;
+		validatePayload(raw.payload.length >= 1);
+		const state: HumidityControlOperatingState = raw.payload[0] & 0b1111;
 
 		return new HumidityControlOperatingStateCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			state,
 		});
 	}

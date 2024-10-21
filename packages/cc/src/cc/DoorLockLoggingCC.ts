@@ -8,12 +8,17 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -243,15 +248,15 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 		this.recordsCount = options.recordsCount;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): DoorLockLoggingCCRecordsSupportedReport {
-		validatePayload(payload.length >= 1);
-		const recordsCount = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const recordsCount = raw.payload[0];
 
 		return new DoorLockLoggingCCRecordsSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			recordsCount,
 		});
 	}
@@ -298,33 +303,33 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		this.record = options.record;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): DoorLockLoggingCCRecordReport {
-		validatePayload(payload.length >= 11);
-		const recordNumber = payload[0];
-		const recordStatus = payload[5] >>> 5;
+		validatePayload(raw.payload.length >= 11);
+		const recordNumber = raw.payload[0];
+		const recordStatus = raw.payload[5] >>> 5;
 		let record: DoorLockLoggingRecord | undefined;
 		if (recordStatus !== DoorLockLoggingRecordStatus.Empty) {
 			const dateSegments = {
-				year: payload.readUInt16BE(1),
-				month: payload[3],
-				day: payload[4],
-				hour: payload[5] & 0b11111,
-				minute: payload[6],
-				second: payload[7],
+				year: raw.payload.readUInt16BE(1),
+				month: raw.payload[3],
+				day: raw.payload[4],
+				hour: raw.payload[5] & 0b11111,
+				minute: raw.payload[6],
+				second: raw.payload[7],
 			};
 
-			const eventType = payload[8];
-			const recordUserID = payload[9];
-			const userCodeLength = payload[10];
+			const eventType = raw.payload[8];
+			const recordUserID = raw.payload[9];
+			const userCodeLength = raw.payload[10];
 			validatePayload(
 				userCodeLength <= 10,
-				payload.length >= 11 + userCodeLength,
+				raw.payload.length >= 11 + userCodeLength,
 			);
 
-			const userCodeBuffer = payload.subarray(
+			const userCodeBuffer = raw.payload.subarray(
 				11,
 				11 + userCodeLength,
 			);
@@ -345,7 +350,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		}
 
 		return new DoorLockLoggingCCRecordReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			recordNumber,
 			record,
 		});
@@ -411,9 +416,9 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 		this.recordNumber = options.recordNumber;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): DoorLockLoggingCCRecordGet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -421,7 +426,7 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 		);
 
 		return new DoorLockLoggingCCRecordGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 

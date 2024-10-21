@@ -32,6 +32,7 @@ import { randomBytes } from "node:crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -575,17 +576,17 @@ export class SecurityCCNonceReport extends SecurityCC {
 		this.nonce = options.nonce;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SecurityCCNonceReport {
 		validatePayload.withReason("Invalid nonce length")(
-			payload.length === HALF_NONCE_SIZE,
+			raw.payload.length === HALF_NONCE_SIZE,
 		);
 
 		return new SecurityCCNonceReport({
-			nodeId: options.context.sourceNodeId,
-			nonce: payload,
+			nodeId: ctx.sourceNodeId,
+			nonce: raw.payload,
 		});
 	}
 
@@ -654,18 +655,18 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		this.iv = options.iv;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SecurityCCCommandEncapsulation {
 		// HALF_NONCE_SIZE bytes iv, 1 byte frame control, at least 1 CC byte, 1 byte nonce id, 8 bytes auth code
 		validatePayload(
-			payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
+			raw.payload.length >= HALF_NONCE_SIZE + 1 + 1 + 1 + 8,
 		);
-		const iv = payload.subarray(0, HALF_NONCE_SIZE);
-		const encryptedPayload = payload.subarray(HALF_NONCE_SIZE, -9);
-		const nonceId = payload.at(-9)!;
-		const authCode = payload.subarray(-8);
+		const iv = raw.payload.subarray(0, HALF_NONCE_SIZE);
+		const encryptedPayload = raw.payload.subarray(HALF_NONCE_SIZE, -9);
+		const nonceId = raw.payload.at(-9)!;
+		const authCode = raw.payload.subarray(-8);
 
 		// Retrieve the used nonce from the nonce store
 		const nonce = this.securityManager.getNonce(nonceId);
@@ -687,7 +688,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			iv,
 			nonce,
 			SecurityCommand.CommandEncapsulation,
-			options.context.sourceNodeId,
+			ctx.sourceNodeId,
 			options.context.ownNodeId,
 			encryptedPayload,
 		);
@@ -711,7 +712,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			.subarray(1);
 
 		return new SecurityCCCommandEncapsulation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			authKey,
 			encryptionKey,
 			sequenceCounter,
@@ -982,15 +983,15 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 		this.networkKey = options.networkKey;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SecurityCCNetworkKeySet {
-		validatePayload(payload.length >= 16);
-		const networkKey: Buffer = payload.subarray(0, 16);
+		validatePayload(raw.payload.length >= 16);
+		const networkKey: Buffer = raw.payload.subarray(0, 16);
 
 		return new SecurityCCNetworkKeySet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			networkKey,
 		});
 	}
@@ -1029,18 +1030,18 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		this.reportsToFollow = 0;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SecurityCCCommandsSupportedReport {
-		validatePayload(payload.length >= 1);
-		const reportsToFollow = payload[0];
-		const list = parseCCList(payload.subarray(1));
+		validatePayload(raw.payload.length >= 1);
+		const reportsToFollow = raw.payload[0];
+		const list = parseCCList(raw.payload.subarray(1));
 		const supportedCCs: CommandClasses[] = list.supportedCCs;
 		const controlledCCs: CommandClasses[] = list.controlledCCs;
 
 		return new SecurityCCCommandsSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			reportsToFollow,
 			supportedCCs,
 			controlledCCs,

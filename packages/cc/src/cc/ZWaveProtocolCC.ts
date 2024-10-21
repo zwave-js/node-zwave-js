@@ -20,9 +20,10 @@ import {
 	parseNodeProtocolInfoAndDeviceClass,
 	validatePayload,
 } from "@zwave-js/core";
-import type { CCEncodingContext } from "@zwave-js/host";
+import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -97,14 +98,14 @@ export class ZWaveProtocolCCNodeInformationFrame extends ZWaveProtocolCC
 		this.supportedCCs = options.supportedCCs;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCNodeInformationFrame {
-		const nif = parseNodeInformationFrame(payload);
+		const nif = parseNodeInformationFrame(raw.payload);
 
 		return new ZWaveProtocolCCNodeInformationFrame({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			...nif,
 		});
 	}
@@ -151,16 +152,16 @@ export class ZWaveProtocolCCAssignIDs extends ZWaveProtocolCC {
 		this.homeId = options.homeId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCAssignIDs {
-		validatePayload(payload.length >= 5);
-		const assignedNodeId = payload[0];
-		const homeId = payload.readUInt32BE(1);
+		validatePayload(raw.payload.length >= 5);
+		const assignedNodeId = raw.payload[0];
+		const homeId = raw.payload.readUInt32BE(1);
 
 		return new ZWaveProtocolCCAssignIDs({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			assignedNodeId,
 			homeId,
 		});
@@ -195,19 +196,19 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 		this.dataRate = options.dataRate ?? ZWaveDataRate["9k6"];
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCFindNodesInRange {
-		validatePayload(payload.length >= 1);
-		const speedPresent = payload[0] & 0b1000_0000;
-		const bitmaskLength = payload[0] & 0b0001_1111;
+		validatePayload(raw.payload.length >= 1);
+		const speedPresent = raw.payload[0] & 0b1000_0000;
+		const bitmaskLength = raw.payload[0] & 0b0001_1111;
 
-		validatePayload(payload.length >= 1 + bitmaskLength);
+		validatePayload(raw.payload.length >= 1 + bitmaskLength);
 		const candidateNodeIds = parseBitMask(
-			payload.subarray(1, 1 + bitmaskLength),
+			raw.payload.subarray(1, 1 + bitmaskLength),
 		);
-		const rest = payload.subarray(1 + bitmaskLength);
+		const rest = raw.payload.subarray(1 + bitmaskLength);
 
 		let dataRate: ZWaveDataRate;
 		let wakeUpTime: WakeUpTime;
@@ -231,7 +232,7 @@ export class ZWaveProtocolCCFindNodesInRange extends ZWaveProtocolCC {
 		}
 
 		return new ZWaveProtocolCCFindNodesInRange({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			candidateNodeIds,
 			dataRate,
 			wakeUpTime,
@@ -270,27 +271,27 @@ export class ZWaveProtocolCCRangeInfo extends ZWaveProtocolCC {
 		this.wakeUpTime = options.wakeUpTime;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCRangeInfo {
-		validatePayload(payload.length >= 1);
-		const bitmaskLength = payload[0] & 0b0001_1111;
+		validatePayload(raw.payload.length >= 1);
+		const bitmaskLength = raw.payload[0] & 0b0001_1111;
 
-		validatePayload(payload.length >= 1 + bitmaskLength);
+		validatePayload(raw.payload.length >= 1 + bitmaskLength);
 		const neighborNodeIds = parseBitMask(
-			payload.subarray(1, 1 + bitmaskLength),
+			raw.payload.subarray(1, 1 + bitmaskLength),
 		);
 
 		let wakeUpTime: WakeUpTime | undefined;
-		if (payload.length >= 2 + bitmaskLength) {
+		if (raw.payload.length >= 2 + bitmaskLength) {
 			wakeUpTime = parseWakeUpTime(
-				payload[1 + bitmaskLength],
+				raw.payload[1 + bitmaskLength],
 			);
 		}
 
 		return new ZWaveProtocolCCRangeInfo({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			neighborNodeIds,
 			wakeUpTime,
 		});
@@ -330,15 +331,15 @@ export class ZWaveProtocolCCCommandComplete extends ZWaveProtocolCC {
 		this.sequenceNumber = options.sequenceNumber;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCCommandComplete {
-		validatePayload(payload.length >= 1);
-		const sequenceNumber = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const sequenceNumber = raw.payload[0];
 
 		return new ZWaveProtocolCCCommandComplete({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sequenceNumber,
 		});
 	}
@@ -375,18 +376,18 @@ export class ZWaveProtocolCCTransferPresentation extends ZWaveProtocolCC {
 		this.excludeNode = options.excludeNode;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCTransferPresentation {
-		validatePayload(payload.length >= 1);
-		const option = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const option = raw.payload[0];
 		const supportsNWI = !!(option & 0b0001);
 		const excludeNode = !!(option & 0b0010);
 		const includeNode = !!(option & 0b0100);
 
 		return new ZWaveProtocolCCTransferPresentation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportsNWI,
 			excludeNode,
 			includeNode,
@@ -443,20 +444,20 @@ export class ZWaveProtocolCCTransferNodeInformation extends ZWaveProtocolCC
 		this.supportsBeaming = options.supportsBeaming;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCTransferNodeInformation {
-		validatePayload(payload.length >= 2);
-		const sequenceNumber = payload[0];
-		const sourceNodeId = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const sequenceNumber = raw.payload[0];
+		const sourceNodeId = raw.payload[1];
 
 		const { info } = parseNodeProtocolInfoAndDeviceClass(
-			payload.subarray(2),
+			raw.payload.subarray(2),
 		);
 
 		return new ZWaveProtocolCCTransferNodeInformation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sequenceNumber,
 			sourceNodeId,
 			...info,
@@ -507,22 +508,22 @@ export class ZWaveProtocolCCTransferRangeInformation extends ZWaveProtocolCC {
 		this.neighborNodeIds = options.neighborNodeIds;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCTransferRangeInformation {
-		validatePayload(payload.length >= 3);
-		const sequenceNumber = payload[0];
-		const testedNodeId = payload[1];
-		const bitmaskLength = payload[2];
+		validatePayload(raw.payload.length >= 3);
+		const sequenceNumber = raw.payload[0];
+		const testedNodeId = raw.payload[1];
+		const bitmaskLength = raw.payload[2];
 
-		validatePayload(payload.length >= 3 + bitmaskLength);
+		validatePayload(raw.payload.length >= 3 + bitmaskLength);
 		const neighborNodeIds = parseBitMask(
-			payload.subarray(3, 3 + bitmaskLength),
+			raw.payload.subarray(3, 3 + bitmaskLength),
 		);
 
 		return new ZWaveProtocolCCTransferRangeInformation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sequenceNumber,
 			testedNodeId,
 			neighborNodeIds,
@@ -561,15 +562,15 @@ export class ZWaveProtocolCCTransferEnd extends ZWaveProtocolCC {
 		this.status = options.status;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCTransferEnd {
-		validatePayload(payload.length >= 1);
-		const status: NetworkTransferStatus = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const status: NetworkTransferStatus = raw.payload[0];
 
 		return new ZWaveProtocolCCTransferEnd({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			status,
 		});
 	}
@@ -611,23 +612,23 @@ export class ZWaveProtocolCCAssignReturnRoute extends ZWaveProtocolCC {
 		this.destinationSpeed = options.destinationSpeed;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCAssignReturnRoute {
-		validatePayload(payload.length >= 7);
-		const destinationNodeId = payload[0];
-		const routeIndex = payload[1] >>> 4;
-		const numRepeaters = payload[1] & 0b1111;
-		const repeaters = [...payload.subarray(2, 2 + numRepeaters)];
-		const speedAndWakeup = payload[2 + numRepeaters];
+		validatePayload(raw.payload.length >= 7);
+		const destinationNodeId = raw.payload[0];
+		const routeIndex = raw.payload[1] >>> 4;
+		const numRepeaters = raw.payload[1] & 0b1111;
+		const repeaters = [...raw.payload.subarray(2, 2 + numRepeaters)];
+		const speedAndWakeup = raw.payload[2 + numRepeaters];
 		const destinationSpeed = bitmask2DataRate(
 			(speedAndWakeup >>> 3) & 0b111,
 		);
 		const destinationWakeUp: WakeUpTime = (speedAndWakeup >>> 1) & 0b11;
 
 		return new ZWaveProtocolCCAssignReturnRoute({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			destinationNodeId,
 			routeIndex,
 			repeaters,
@@ -688,17 +689,17 @@ export class ZWaveProtocolCCNewNodeRegistered extends ZWaveProtocolCC
 		this.supportedCCs = options.supportedCCs;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCNewNodeRegistered {
-		validatePayload(payload.length >= 1);
-		const newNodeId = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const newNodeId = raw.payload[0];
 
-		const nif = parseNodeInformationFrame(payload.subarray(1));
+		const nif = parseNodeInformationFrame(raw.payload.subarray(1));
 
 		return new ZWaveProtocolCCNewNodeRegistered({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			newNodeId,
 			...nif,
 		});
@@ -744,19 +745,19 @@ export class ZWaveProtocolCCNewRangeRegistered extends ZWaveProtocolCC {
 		this.neighborNodeIds = options.neighborNodeIds;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCNewRangeRegistered {
-		validatePayload(payload.length >= 2);
-		const testedNodeId = payload[0];
-		const numNeighbors = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const testedNodeId = raw.payload[0];
+		const numNeighbors = raw.payload[1];
 		const neighborNodeIds = [
-			...payload.subarray(2, 2 + numNeighbors),
+			...raw.payload.subarray(2, 2 + numNeighbors),
 		];
 
 		return new ZWaveProtocolCCNewRangeRegistered({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			testedNodeId,
 			neighborNodeIds,
 		});
@@ -793,15 +794,15 @@ export class ZWaveProtocolCCTransferNewPrimaryControllerComplete
 		this.genericDeviceClass = options.genericDeviceClass;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCTransferNewPrimaryControllerComplete {
-		validatePayload(payload.length >= 1);
-		const genericDeviceClass = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const genericDeviceClass = raw.payload[0];
 
 		return new ZWaveProtocolCCTransferNewPrimaryControllerComplete({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			genericDeviceClass,
 		});
 	}
@@ -835,17 +836,17 @@ export class ZWaveProtocolCCSUCNodeID extends ZWaveProtocolCC {
 		this.isSIS = options.isSIS;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCSUCNodeID {
-		validatePayload(payload.length >= 1);
-		const sucNodeId = payload[0];
-		const capabilities = payload[1] ?? 0;
+		validatePayload(raw.payload.length >= 1);
+		const sucNodeId = raw.payload[0];
+		const capabilities = raw.payload[1] ?? 0;
 		const isSIS = !!(capabilities & 0b1);
 
 		return new ZWaveProtocolCCSUCNodeID({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sucNodeId,
 			isSIS,
 		});
@@ -874,17 +875,17 @@ export class ZWaveProtocolCCSetSUC extends ZWaveProtocolCC {
 		this.enableSIS = options.enableSIS;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCSetSUC {
-		validatePayload(payload.length >= 2);
+		validatePayload(raw.payload.length >= 2);
 		// Byte 0 must be 0x01 or ignored
-		const capabilities = payload[1] ?? 0;
+		const capabilities = raw.payload[1] ?? 0;
 		const enableSIS = !!(capabilities & 0b1);
 
 		return new ZWaveProtocolCCSetSUC({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			enableSIS,
 		});
 	}
@@ -913,17 +914,17 @@ export class ZWaveProtocolCCSetSUCAck extends ZWaveProtocolCC {
 		this.isSIS = options.isSIS;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCSetSUCAck {
-		validatePayload(payload.length >= 2);
-		const accepted = payload[0] === 0x01;
-		const capabilities = payload[1] ?? 0;
+		validatePayload(raw.payload.length >= 2);
+		const accepted = raw.payload[0] === 0x01;
+		const capabilities = raw.payload[1] ?? 0;
 		const isSIS = !!(capabilities & 0b1);
 
 		return new ZWaveProtocolCCSetSUCAck({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			accepted,
 			isSIS,
 		});
@@ -966,17 +967,17 @@ export class ZWaveProtocolCCStaticRouteRequest extends ZWaveProtocolCC {
 		this.nodeIds = options.nodeIds;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCStaticRouteRequest {
-		validatePayload(payload.length >= 5);
-		const nodeIds = [...payload.subarray(0, 5)].filter(
+		validatePayload(raw.payload.length >= 5);
+		const nodeIds = [...raw.payload.subarray(0, 5)].filter(
 			(id) => id > 0 && id <= MAX_NODES,
 		);
 
 		return new ZWaveProtocolCCStaticRouteRequest({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			nodeIds,
 		});
 	}
@@ -1006,15 +1007,12 @@ export class ZWaveProtocolCCLost extends ZWaveProtocolCC {
 		this.lostNodeId = options.lostNodeId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): ZWaveProtocolCCLost {
-		validatePayload(payload.length >= 1);
-		const lostNodeId = payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): ZWaveProtocolCCLost {
+		validatePayload(raw.payload.length >= 1);
+		const lostNodeId = raw.payload[0];
 
 		return new ZWaveProtocolCCLost({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			lostNodeId,
 		});
 	}
@@ -1041,18 +1039,18 @@ export class ZWaveProtocolCCAcceptLost extends ZWaveProtocolCC {
 		this.accepted = options.accepted;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCAcceptLost {
-		validatePayload(payload.length >= 1);
+		validatePayload(raw.payload.length >= 1);
 		validatePayload(
-			payload[0] === 0x04 || payload[0] === 0x05,
+			raw.payload[0] === 0x04 || raw.payload[0] === 0x05,
 		);
-		const accepted = payload[0] === 0x05;
+		const accepted = raw.payload[0] === 0x05;
 
 		return new ZWaveProtocolCCAcceptLost({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			accepted,
 		});
 	}
@@ -1085,16 +1083,16 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
 		this.powerDampening = options.powerDampening;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCNOPPower {
 		let powerDampening;
 
-		if (payload.length >= 2) {
+		if (raw.payload.length >= 2) {
 			// Ignore byte 0
-			powerDampening = payload[1];
-		} else if (payload.length === 1) {
+			powerDampening = raw.payload[1];
+		} else if (raw.payload.length === 1) {
 			powerDampening = [
 				0xf0,
 				0xc8,
@@ -1111,14 +1109,14 @@ export class ZWaveProtocolCCNOPPower extends ZWaveProtocolCC {
 				0x24,
 				0x22,
 				0x20,
-			].indexOf(payload[0]);
+			].indexOf(raw.payload[0]);
 			if (powerDampening === -1) powerDampening = 0;
 		} else {
 			validatePayload.fail("Invalid payload length!");
 		}
 
 		return new ZWaveProtocolCCNOPPower({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			powerDampening,
 		});
 	}
@@ -1146,19 +1144,19 @@ export class ZWaveProtocolCCReservedIDs extends ZWaveProtocolCC {
 		this.reservedNodeIDs = options.reservedNodeIDs;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCReservedIDs {
-		validatePayload(payload.length >= 1);
-		const numNodeIDs = payload[0];
-		validatePayload(payload.length >= 1 + numNodeIDs);
+		validatePayload(raw.payload.length >= 1);
+		const numNodeIDs = raw.payload[0];
+		validatePayload(raw.payload.length >= 1 + numNodeIDs);
 		const reservedNodeIDs = [
-			...payload.subarray(1, 1 + numNodeIDs),
+			...raw.payload.subarray(1, 1 + numNodeIDs),
 		];
 
 		return new ZWaveProtocolCCReservedIDs({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			reservedNodeIDs,
 		});
 	}
@@ -1189,15 +1187,15 @@ export class ZWaveProtocolCCReserveNodeIDs extends ZWaveProtocolCC {
 		this.numNodeIDs = options.numNodeIDs;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCReserveNodeIDs {
-		validatePayload(payload.length >= 1);
-		const numNodeIDs = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const numNodeIDs = raw.payload[0];
 
 		return new ZWaveProtocolCCReserveNodeIDs({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			numNodeIDs,
 		});
 	}
@@ -1226,16 +1224,16 @@ export class ZWaveProtocolCCNodesExistReply extends ZWaveProtocolCC {
 		this.nodeListUpdated = options.nodeListUpdated;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCNodesExistReply {
-		validatePayload(payload.length >= 2);
-		const nodeMaskType = payload[0];
-		const nodeListUpdated = payload[1] === 0x01;
+		validatePayload(raw.payload.length >= 2);
+		const nodeMaskType = raw.payload[0];
+		const nodeListUpdated = raw.payload[1] === 0x01;
 
 		return new ZWaveProtocolCCNodesExistReply({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			nodeMaskType,
 			nodeListUpdated,
 		});
@@ -1280,18 +1278,18 @@ export class ZWaveProtocolCCNodesExist extends ZWaveProtocolCC {
 		this.nodeIDs = options.nodeIDs;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCNodesExist {
-		validatePayload(payload.length >= 2);
-		const nodeMaskType = payload[0];
-		const numNodeIDs = payload[1];
-		validatePayload(payload.length >= 2 + numNodeIDs);
-		const nodeIDs = [...payload.subarray(2, 2 + numNodeIDs)];
+		validatePayload(raw.payload.length >= 2);
+		const nodeMaskType = raw.payload[0];
+		const numNodeIDs = raw.payload[1];
+		validatePayload(raw.payload.length >= 2 + numNodeIDs);
+		const nodeIDs = [...raw.payload.subarray(2, 2 + numNodeIDs)];
 
 		return new ZWaveProtocolCCNodesExist({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			nodeMaskType,
 			nodeIDs,
 		});
@@ -1326,16 +1324,16 @@ export class ZWaveProtocolCCSetNWIMode extends ZWaveProtocolCC {
 		this.timeoutMinutes = options.timeoutMinutes;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCSetNWIMode {
-		validatePayload(payload.length >= 2);
-		const enabled = payload[0] === 0x01;
-		const timeoutMinutes: number | undefined = payload[1] || undefined;
+		validatePayload(raw.payload.length >= 2);
+		const enabled = raw.payload[0] === 0x01;
+		const timeoutMinutes: number | undefined = raw.payload[1] || undefined;
 
 		return new ZWaveProtocolCCSetNWIMode({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			enabled,
 			timeoutMinutes,
 		});
@@ -1376,16 +1374,16 @@ export class ZWaveProtocolCCAssignReturnRoutePriority extends ZWaveProtocolCC {
 		this.routeNumber = options.routeNumber;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCAssignReturnRoutePriority {
-		validatePayload(payload.length >= 2);
-		const targetNodeId = payload[0];
-		const routeNumber = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const targetNodeId = raw.payload[0];
+		const routeNumber = raw.payload[1];
 
 		return new ZWaveProtocolCCAssignReturnRoutePriority({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			targetNodeId,
 			routeNumber,
 		});
@@ -1429,15 +1427,15 @@ export class ZWaveProtocolCCSmartStartIncludedNodeInformation
 		this.nwiHomeId = options.nwiHomeId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ZWaveProtocolCCSmartStartIncludedNodeInformation {
-		validatePayload(payload.length >= 4);
-		const nwiHomeId: Buffer = payload.subarray(0, 4);
+		validatePayload(raw.payload.length >= 4);
+		const nwiHomeId: Buffer = raw.payload.subarray(0, 4);
 
 		return new ZWaveProtocolCCSmartStartIncludedNodeInformation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			nwiHomeId,
 		});
 	}

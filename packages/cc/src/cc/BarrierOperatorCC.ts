@@ -14,7 +14,11 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import {
 	getEnumMemberName,
 	isEnumMember,
@@ -37,6 +41,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -551,9 +556,9 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		this.targetState = options.targetState;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): BarrierOperatorCCSet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -561,7 +566,7 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		);
 
 		return new BarrierOperatorCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -598,13 +603,13 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		this.currentState = options.currentState;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): BarrierOperatorCCReport {
-		validatePayload(payload.length >= 1);
+		validatePayload(raw.payload.length >= 1);
 		// The payload byte encodes information about the state and position in a single value
-		const payloadValue = payload[0];
+		const payloadValue = raw.payload[0];
 		let position: MaybeUnknown<number>;
 		if (payloadValue <= 99) {
 			// known position
@@ -633,7 +638,7 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		}
 
 		return new BarrierOperatorCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			position,
 			currentState,
 		});
@@ -682,17 +687,17 @@ export class BarrierOperatorCCSignalingCapabilitiesReport
 		this.supportedSubsystemTypes = options.supportedSubsystemTypes;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): BarrierOperatorCCSignalingCapabilitiesReport {
 		const supportedSubsystemTypes: SubsystemType[] = parseBitMask(
-			payload,
+			raw.payload,
 			SubsystemType.Audible,
 		);
 
 		return new BarrierOperatorCCSignalingCapabilitiesReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedSubsystemTypes,
 		});
 	}
@@ -735,9 +740,9 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		this.subsystemState = options.subsystemState;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -746,7 +751,7 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		);
 
 		return new BarrierOperatorCCEventSignalingSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -795,16 +800,16 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 		this.subsystemState = options.subsystemState;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingReport {
-		validatePayload(payload.length >= 2);
-		const subsystemType: SubsystemType = payload[0];
-		const subsystemState: SubsystemState = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const subsystemType: SubsystemType = raw.payload[0];
+		const subsystemState: SubsystemState = raw.payload[1];
 
 		return new BarrierOperatorCCEventSignalingReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			subsystemType,
 			subsystemState,
 		});
@@ -858,9 +863,9 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		this.subsystemType = options.subsystemType;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -869,7 +874,7 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		);
 
 		return new BarrierOperatorCCEventSignalingGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 

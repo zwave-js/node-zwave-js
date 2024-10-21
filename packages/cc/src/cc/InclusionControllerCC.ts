@@ -4,11 +4,16 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -101,20 +106,20 @@ export class InclusionControllerCCComplete extends InclusionControllerCC {
 		this.status = options.status;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): InclusionControllerCCComplete {
-		validatePayload(payload.length >= 2);
-		const step: InclusionControllerStep = payload[0];
+		validatePayload(raw.payload.length >= 2);
+		const step: InclusionControllerStep = raw.payload[0];
 
 		validatePayload.withReason("Invalid inclusion controller step")(
 			step in InclusionControllerStep,
 		);
-		const status: InclusionControllerStatus = payload[1];
+		const status: InclusionControllerStatus = raw.payload[1];
 
 		return new InclusionControllerCCComplete({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			step,
 			status,
 		});
@@ -158,20 +163,20 @@ export class InclusionControllerCCInitiate extends InclusionControllerCC {
 		this.step = options.step;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): InclusionControllerCCInitiate {
-		validatePayload(payload.length >= 2);
-		const includedNodeId = payload[0];
-		const step: InclusionControllerStep = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const includedNodeId = raw.payload[0];
+		const step: InclusionControllerStep = raw.payload[1];
 
 		validatePayload.withReason("Invalid inclusion controller step")(
 			step in InclusionControllerStep,
 		);
 
 		return new InclusionControllerCCInitiate({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			includedNodeId,
 			step,
 		});

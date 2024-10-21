@@ -4,13 +4,13 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext } from "@zwave-js/host/safe";
+import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -144,25 +144,25 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		// If it doesn't, the interview procedure will throw.
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ManufacturerProprietaryCC {
-		validatePayload(payload.length >= 1);
-		// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
-		const manufacturerId = ((this.ccCommand as unknown as number) << 8)
-			+ payload[0];
-
+		validatePayload(raw.payload.length >= 1);
+		const manufacturerId = raw.payload.readUint16BE(0);
 		// Try to parse the proprietary command
 		const PCConstructor = getManufacturerProprietaryCCConstructor(
 			manufacturerId,
 		);
 		if (PCConstructor) {
-			return PCConstructor.parse(payload.subarray(1), options);
+			return PCConstructor.from(
+				raw.withPayload(raw.payload.subarray(2)),
+				ctx,
+			);
 		}
 
 		return new ManufacturerProprietaryCC({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			manufacturerId,
 		});
 	}

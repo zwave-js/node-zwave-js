@@ -6,7 +6,11 @@ import {
 	type SupervisionResult,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -17,11 +21,11 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -182,20 +186,20 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		this.setbackState = options.setbackState;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ThermostatSetbackCCSet {
-		validatePayload(payload.length >= 2);
-		const setbackType: SetbackType = payload[0] & 0b11;
+		validatePayload(raw.payload.length >= 2);
+		const setbackType: SetbackType = raw.payload[0] & 0b11;
 
 		// If we receive an unknown setback state, return the raw value
-		const rawSetbackState = payload.readInt8(1);
+		const rawSetbackState = raw.payload.readInt8(1);
 		const setbackState: SetbackState = decodeSetbackState(rawSetbackState)
 			|| rawSetbackState;
 
 		return new ThermostatSetbackCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			setbackType,
 			setbackState,
 		});
@@ -238,23 +242,31 @@ export interface ThermostatSetbackCCReportOptions {
 @CCCommand(ThermostatSetbackCommand.Report)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & ThermostatSetbackCCReportOptions),
+		options: ThermostatSetbackCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.setbackType = this.payload[0] & 0b11;
-			// If we receive an unknown setback state, return the raw value
-			const rawSetbackState = this.payload.readInt8(1);
-			this.setbackState = decodeSetbackState(rawSetbackState)
-				|| rawSetbackState;
-		} else {
-			this.setbackType = options.setbackType;
-			this.setbackState = options.setbackState;
-		}
+		this.setbackType = options.setbackType;
+		this.setbackState = options.setbackState;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ThermostatSetbackCCReport {
+		validatePayload(raw.payload.length >= 2);
+		const setbackType: SetbackType = raw.payload[0] & 0b11;
+
+		// If we receive an unknown setback state, return the raw value
+		const rawSetbackState = raw.payload.readInt8(1);
+		const setbackState: SetbackState = decodeSetbackState(rawSetbackState)
+			|| rawSetbackState;
+
+		return new ThermostatSetbackCCReport({
+			nodeId: ctx.sourceNodeId,
+			setbackType,
+			setbackState,
+		});
 	}
 
 	public readonly setbackType: SetbackType;

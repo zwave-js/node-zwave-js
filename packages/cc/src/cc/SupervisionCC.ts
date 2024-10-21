@@ -21,6 +21,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetNode,
 	GetValueDB,
 } from "@zwave-js/host/safe";
@@ -28,9 +29,9 @@ import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -291,29 +292,47 @@ export type SupervisionCCReportOptions =
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & SupervisionCCReportOptions),
+		options: SupervisionCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			this.moreUpdatesFollow = !!(this.payload[0] & 0b1_0_000000);
-			this.requestWakeUpOnDemand = !!(this.payload[0] & 0b0_1_000000);
-			this.sessionId = this.payload[0] & 0b111111;
-			this.status = this.payload[1];
-			this.duration = Duration.parseReport(this.payload[2]);
+		this.moreUpdatesFollow = options.moreUpdatesFollow;
+		this.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
+		this.sessionId = options.sessionId;
+		this.status = options.status;
+		if (options.status === SupervisionStatus.Working) {
+			this.duration = options.duration;
 		} else {
-			this.moreUpdatesFollow = options.moreUpdatesFollow;
-			this.requestWakeUpOnDemand = !!options.requestWakeUpOnDemand;
-			this.sessionId = options.sessionId;
-			this.status = options.status;
-			if (options.status === SupervisionStatus.Working) {
-				this.duration = options.duration;
-			} else {
-				this.duration = new Duration(0, "seconds");
-			}
+			this.duration = new Duration(0, "seconds");
+		}
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): SupervisionCCReport {
+		validatePayload(raw.payload.length >= 3);
+		const moreUpdatesFollow = !!(raw.payload[0] & 0b1_0_000000);
+		const requestWakeUpOnDemand = !!(raw.payload[0] & 0b0_1_000000);
+		const sessionId = raw.payload[0] & 0b111111;
+		const status: SupervisionStatus = raw.payload[1];
+
+		if (status === SupervisionStatus.Working) {
+			const duration = Duration.parseReport(raw.payload[2])
+				?? new Duration(0, "seconds");
+			return new SupervisionCCReport({
+				nodeId: ctx.sourceNodeId,
+				moreUpdatesFollow,
+				requestWakeUpOnDemand,
+				sessionId,
+				status,
+				duration,
+			});
+		} else {
+			return new SupervisionCCReport({
+				nodeId: ctx.sourceNodeId,
+				moreUpdatesFollow,
+				requestWakeUpOnDemand,
+				sessionId,
+				status,
+			});
 		}
 	}
 
@@ -398,15 +417,12 @@ export class SupervisionCCGet extends SupervisionCC {
 		options.encapsulated.encapsulatingCC = this as any;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): SupervisionCCGet {
-		validatePayload(payload.length >= 3);
-		const requestStatusUpdates = !!(payload[0] & 0b1_0_000000);
-		const sessionId = payload[0] & 0b111111;
+	public static from(raw: CCRaw, ctx: CCParsingContext): SupervisionCCGet {
+		validatePayload(raw.payload.length >= 3);
+		const requestStatusUpdates = !!(raw.payload[0] & 0b1_0_000000);
+		const sessionId = raw.payload[0] & 0b111111;
 		const encapsulated: CommandClass = CommandClass.from({
-			data: payload.subarray(2),
+			data: raw.payload.subarray(2),
 			fromEncapsulation: true,
 			// FIXME: 🐔 🥚
 			encapCC: this,
@@ -415,7 +431,7 @@ export class SupervisionCCGet extends SupervisionCC {
 		});
 
 		return new SupervisionCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			requestStatusUpdates,
 			sessionId,
 			encapsulated,

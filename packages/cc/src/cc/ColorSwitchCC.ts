@@ -16,9 +16,12 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown, encodeBitMask } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import {
-	type AllOrNone,
 	getEnumMemberName,
 	isEnumMember,
 	keysOf,
@@ -40,13 +43,12 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -684,23 +686,28 @@ export interface ColorSwitchCCSupportedReportOptions {
 @CCCommand(ColorSwitchCommand.SupportedReport)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (ColorSwitchCCSupportedReportOptions & CCCommandOptions),
+		options: ColorSwitchCCSupportedReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			// Docs say 'variable length', but the table shows 2 bytes.
-			validatePayload(this.payload.length >= 2);
+		this.supportedColorComponents = options.supportedColorComponents;
+	}
 
-			this.supportedColorComponents = parseBitMask(
-				this.payload.subarray(0, 2),
-				ColorComponent["Warm White"],
-			);
-		} else {
-			this.supportedColorComponents = options.supportedColorComponents;
-		}
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ColorSwitchCCSupportedReport {
+		// Docs say 'variable length', but the table shows 2 bytes.
+		validatePayload(raw.payload.length >= 2);
+		const supportedColorComponents: ColorComponent[] = parseBitMask(
+			raw.payload.subarray(0, 2),
+			ColorComponent["Warm White"],
+		);
+
+		return new ColorSwitchCCSupportedReport({
+			nodeId: ctx.sourceNodeId,
+			supportedColorComponents,
+		});
 	}
 
 	@ccValue(ColorSwitchCCValues.supportedColorComponents)
@@ -732,40 +739,45 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 export class ColorSwitchCCSupportedGet extends ColorSwitchCC {}
 
 // @publicAPI
-export type ColorSwitchCCReportOptions =
-	& {
-		colorComponent: ColorComponent;
-		currentValue: number;
-	}
-	& AllOrNone<{
-		targetValue: number;
-		duration: Duration | string;
-	}>;
+export interface ColorSwitchCCReportOptions {
+	colorComponent: ColorComponent;
+	currentValue: number;
+	targetValue?: number;
+	duration?: Duration | string;
+}
 
 @CCCommand(ColorSwitchCommand.Report)
 export class ColorSwitchCCReport extends ColorSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (ColorSwitchCCReportOptions & CCCommandOptions),
+		options: ColorSwitchCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.colorComponent = this.payload[0];
-			this.currentValue = this.payload[1];
+		this.colorComponent = options.colorComponent;
+		this.currentValue = options.currentValue;
+		this.targetValue = options.targetValue;
+		this.duration = Duration.from(options.duration);
+	}
 
-			if (this.payload.length >= 4) {
-				this.targetValue = this.payload[2];
-				this.duration = Duration.parseReport(this.payload[3]);
-			}
-		} else {
-			this.colorComponent = options.colorComponent;
-			this.currentValue = options.currentValue;
-			this.targetValue = options.targetValue;
-			this.duration = Duration.from(options.duration);
+	public static from(raw: CCRaw, ctx: CCParsingContext): ColorSwitchCCReport {
+		validatePayload(raw.payload.length >= 2);
+		const colorComponent: ColorComponent = raw.payload[0];
+		const currentValue = raw.payload[1];
+		let targetValue: number | undefined;
+		let duration: Duration | undefined;
+
+		if (raw.payload.length >= 4) {
+			targetValue = raw.payload[2];
+			duration = Duration.parseReport(raw.payload[3]);
 		}
+
+		return new ColorSwitchCCReport({
+			nodeId: ctx.sourceNodeId,
+			colorComponent,
+			currentValue,
+			targetValue,
+			duration,
+		});
 	}
 
 	public persistValues(ctx: PersistValuesContext): boolean {
@@ -906,15 +918,12 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		this._colorComponent = options.colorComponent;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): ColorSwitchCCGet {
-		validatePayload(payload.length >= 1);
-		const colorComponent: ColorComponent = payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): ColorSwitchCCGet {
+		validatePayload(raw.payload.length >= 1);
+		const colorComponent: ColorComponent = raw.payload[0];
 
 		return new ColorSwitchCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			colorComponent,
 		});
 	}
@@ -960,49 +969,55 @@ export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 @useSupervision()
 export class ColorSwitchCCSet extends ColorSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & ColorSwitchCCSetOptions),
+		options: ColorSwitchCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			const populatedColorCount = this.payload[0] & 0b11111;
-
-			validatePayload(this.payload.length >= 1 + populatedColorCount * 2);
-			this.colorTable = {};
-			let offset = 1;
-			for (let color = 0; color < populatedColorCount; color++) {
-				const component = this.payload[offset];
-				const value = this.payload[offset + 1];
-				const key = colorComponentToTableKey(component);
-				// @ts-expect-error
-				if (key) this.colorTable[key] = value;
-				offset += 2;
+		// Populate properties from options object
+		if ("hexColor" in options) {
+			const match = hexColorRegex.exec(options.hexColor);
+			if (!match) {
+				throw new ZWaveError(
+					`${options.hexColor} is not a valid HEX color string`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
 			}
-			if (this.payload.length > offset) {
-				this.duration = Duration.parseSet(this.payload[offset]);
-			}
+			this.colorTable = {
+				red: parseInt(match.groups!.red, 16),
+				green: parseInt(match.groups!.green, 16),
+				blue: parseInt(match.groups!.blue, 16),
+			};
 		} else {
-			// Populate properties from options object
-			if ("hexColor" in options) {
-				const match = hexColorRegex.exec(options.hexColor);
-				if (!match) {
-					throw new ZWaveError(
-						`${options.hexColor} is not a valid HEX color string`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-				this.colorTable = {
-					red: parseInt(match.groups!.red, 16),
-					green: parseInt(match.groups!.green, 16),
-					blue: parseInt(match.groups!.blue, 16),
-				};
-			} else {
-				this.colorTable = pick(options, colorTableKeys as any[]);
-			}
-			this.duration = Duration.from(options.duration);
+			this.colorTable = pick(options, colorTableKeys as any[]);
 		}
+		this.duration = Duration.from(options.duration);
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): ColorSwitchCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const populatedColorCount = raw.payload[0] & 0b11111;
+
+		validatePayload(raw.payload.length >= 1 + populatedColorCount * 2);
+		const colorTable: ColorTable = {};
+		let offset = 1;
+		for (let color = 0; color < populatedColorCount; color++) {
+			const component = raw.payload[offset];
+			const value = raw.payload[offset + 1];
+			const key = colorComponentToTableKey(component);
+			// @ts-expect-error
+			if (key) this.colorTable[key] = value;
+			offset += 2;
+		}
+
+		let duration: Duration | undefined;
+		if (raw.payload.length > offset) {
+			duration = Duration.parseSet(raw.payload[offset]);
+		}
+
+		return new ColorSwitchCCSet({
+			nodeId: ctx.sourceNodeId,
+			...colorTable,
+			duration,
+		});
 	}
 
 	public colorTable: ColorTable;
@@ -1081,31 +1096,40 @@ export type ColorSwitchCCStartLevelChangeOptions =
 @useSupervision()
 export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & ColorSwitchCCStartLevelChangeOptions),
+		options: ColorSwitchCCStartLevelChangeOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			const ignoreStartLevel = (this.payload[0] & 0b0_0_1_00000) >>> 5;
-			this.ignoreStartLevel = !!ignoreStartLevel;
-			const direction = (this.payload[0] & 0b0_1_0_00000) >>> 6;
-			this.direction = direction ? "down" : "up";
+		this.duration = Duration.from(options.duration);
+		this.ignoreStartLevel = options.ignoreStartLevel;
+		this.startLevel = options.startLevel ?? 0;
+		this.direction = options.direction;
+		this.colorComponent = options.colorComponent;
+	}
 
-			this.colorComponent = this.payload[1];
-			this.startLevel = this.payload[2];
-
-			if (this.payload.length >= 4) {
-				this.duration = Duration.parseSet(this.payload[3]);
-			}
-		} else {
-			this.duration = Duration.from(options.duration);
-			this.ignoreStartLevel = options.ignoreStartLevel;
-			this.startLevel = options.startLevel ?? 0;
-			this.direction = options.direction;
-			this.colorComponent = options.colorComponent;
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ColorSwitchCCStartLevelChange {
+		validatePayload(raw.payload.length >= 3);
+		const ignoreStartLevel = !!((raw.payload[0] & 0b0_0_1_00000) >>> 5);
+		const direction = ((raw.payload[0] & 0b0_1_0_00000) >>> 6)
+			? "down"
+			: "up";
+		const colorComponent: ColorComponent = raw.payload[1];
+		const startLevel = raw.payload[2];
+		let duration: Duration | undefined;
+		if (raw.payload.length >= 4) {
+			duration = Duration.parseSet(raw.payload[3]);
 		}
+
+		return new ColorSwitchCCStartLevelChange({
+			nodeId: ctx.sourceNodeId,
+			ignoreStartLevel,
+			direction,
+			colorComponent,
+			startLevel,
+			duration,
+		});
 	}
 
 	public duration: Duration | undefined;
@@ -1173,15 +1197,15 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 		this.colorComponent = options.colorComponent;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ColorSwitchCCStopLevelChange {
-		validatePayload(payload.length >= 1);
-		const colorComponent: ColorComponent = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const colorComponent: ColorComponent = raw.payload[0];
 
 		return new ColorSwitchCCStopLevelChange({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			colorComponent,
 		});
 	}

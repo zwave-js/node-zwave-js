@@ -8,16 +8,20 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -233,22 +237,30 @@ export interface ManufacturerSpecificCCReportOptions {
 @CCCommand(ManufacturerSpecificCommand.Report)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
-		options:
-			| (ManufacturerSpecificCCReportOptions & CCCommandOptions)
-			| CommandClassDeserializationOptions,
+		options: ManufacturerSpecificCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 6);
-			this.manufacturerId = this.payload.readUInt16BE(0);
-			this.productType = this.payload.readUInt16BE(2);
-			this.productId = this.payload.readUInt16BE(4);
-		} else {
-			this.manufacturerId = options.manufacturerId;
-			this.productType = options.productType;
-			this.productId = options.productId;
-		}
+		this.manufacturerId = options.manufacturerId;
+		this.productType = options.productType;
+		this.productId = options.productId;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): ManufacturerSpecificCCReport {
+		validatePayload(raw.payload.length >= 6);
+		const manufacturerId = raw.payload.readUInt16BE(0);
+		const productType = raw.payload.readUInt16BE(2);
+		const productId = raw.payload.readUInt16BE(4);
+
+		return new ManufacturerSpecificCCReport({
+			nodeId: ctx.sourceNodeId,
+			manufacturerId,
+			productType,
+			productId,
+		});
 	}
 
 	@ccValue(ManufacturerSpecificCCValues.manufacturerId)
@@ -306,22 +318,22 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 		this.deviceId = options.deviceId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ManufacturerSpecificCCDeviceSpecificReport {
-		validatePayload(payload.length >= 2);
-		const type: DeviceIdType = payload[0] & 0b111;
-		const dataFormat = payload[1] >>> 5;
-		const dataLength = payload[1] & 0b11111;
-		validatePayload(dataLength > 0, payload.length >= 2 + dataLength);
-		const deviceIdData = payload.subarray(2, 2 + dataLength);
+		validatePayload(raw.payload.length >= 2);
+		const type: DeviceIdType = raw.payload[0] & 0b111;
+		const dataFormat = raw.payload[1] >>> 5;
+		const dataLength = raw.payload[1] & 0b11111;
+		validatePayload(dataLength > 0, raw.payload.length >= 2 + dataLength);
+		const deviceIdData = raw.payload.subarray(2, 2 + dataLength);
 		const deviceId: string = dataFormat === 0
 			? deviceIdData.toString("utf8")
 			: "0x" + deviceIdData.toString("hex");
 
 		return new ManufacturerSpecificCCDeviceSpecificReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			type,
 			deviceId,
 		});
@@ -366,9 +378,9 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 		this.deviceIdType = options.deviceIdType;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ManufacturerSpecificCCDeviceSpecificGet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -376,7 +388,7 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 		);
 
 		return new ManufacturerSpecificCCDeviceSpecificGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 

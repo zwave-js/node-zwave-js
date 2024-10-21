@@ -15,6 +15,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetDeviceConfig,
 	GetValueDB,
 } from "@zwave-js/host/safe";
@@ -30,6 +31,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -270,18 +272,18 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		this.dateAndTime = options.dateAndTime;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): TimeParametersCCReport {
-		validatePayload(payload.length >= 7);
+		validatePayload(raw.payload.length >= 7);
 		const dateSegments = {
-			year: payload.readUInt16BE(0),
-			month: payload[2],
-			day: payload[3],
-			hour: payload[4],
-			minute: payload[5],
-			second: payload[6],
+			year: raw.payload.readUInt16BE(0),
+			month: raw.payload[2],
+			day: raw.payload[3],
+			hour: raw.payload[4],
+			minute: raw.payload[5],
+			second: raw.payload[6],
 		};
 		const dateAndTime: Date = segmentsToDate(
 			dateSegments,
@@ -290,7 +292,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		);
 
 		return new TimeParametersCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			dateAndTime,
 		});
 	}
@@ -344,18 +346,15 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		this.useLocalTime = options.useLocalTime;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): TimeParametersCCSet {
-		validatePayload(payload.length >= 7);
+	public static from(raw: CCRaw, ctx: CCParsingContext): TimeParametersCCSet {
+		validatePayload(raw.payload.length >= 7);
 		const dateSegments = {
-			year: payload.readUInt16BE(0),
-			month: payload[2],
-			day: payload[3],
-			hour: payload[4],
-			minute: payload[5],
-			second: payload[6],
+			year: raw.payload.readUInt16BE(0),
+			month: raw.payload[2],
+			day: raw.payload[3],
+			hour: raw.payload[4],
+			minute: raw.payload[5],
+			second: raw.payload[6],
 		};
 		validatePayload(
 			dateSegments.month >= 1 && dateSegments.month <= 12,
@@ -371,7 +370,7 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		);
 
 		return new TimeParametersCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			dateAndTime,
 		});
 	}

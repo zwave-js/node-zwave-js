@@ -14,7 +14,11 @@ import {
 	parseBitMask,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -29,6 +33,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -511,10 +516,7 @@ export class ProtectionCCSet extends ProtectionCC {
 		this.rf = options.rf;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): ProtectionCCSet {
+	public static from(raw: CCRaw, ctx: CCParsingContext): ProtectionCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -522,7 +524,7 @@ export class ProtectionCCSet extends ProtectionCC {
 		);
 
 		return new ProtectionCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -580,19 +582,16 @@ export class ProtectionCCReport extends ProtectionCC {
 		this.rf = options.rf;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): ProtectionCCReport {
-		validatePayload(payload.length >= 1);
-		const local: LocalProtectionState = payload[0] & 0b1111;
+	public static from(raw: CCRaw, ctx: CCParsingContext): ProtectionCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const local: LocalProtectionState = raw.payload[0] & 0b1111;
 		let rf: RFProtectionState | undefined;
-		if (payload.length >= 2) {
-			rf = payload[1] & 0b1111;
+		if (raw.payload.length >= 2) {
+			rf = raw.payload[1] & 0b1111;
 		}
 
 		return new ProtectionCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			local,
 			rf,
 		});
@@ -644,24 +643,24 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		this.supportedRFStates = options.supportedRFStates;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ProtectionCCSupportedReport {
-		validatePayload(payload.length >= 5);
-		const supportsTimeout = !!(payload[0] & 0b1);
-		const supportsExclusiveControl = !!(payload[0] & 0b10);
+		validatePayload(raw.payload.length >= 5);
+		const supportsTimeout = !!(raw.payload[0] & 0b1);
+		const supportsExclusiveControl = !!(raw.payload[0] & 0b10);
 		const supportedLocalStates: LocalProtectionState[] = parseBitMask(
-			payload.subarray(1, 3),
+			raw.payload.subarray(1, 3),
 			LocalProtectionState.Unprotected,
 		);
 		const supportedRFStates: RFProtectionState[] = parseBitMask(
-			payload.subarray(3, 5),
+			raw.payload.subarray(3, 5),
 			RFProtectionState.Unprotected,
 		);
 
 		return new ProtectionCCSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportsTimeout,
 			supportsExclusiveControl,
 			supportedLocalStates,
@@ -747,15 +746,15 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 		this.exclusiveControlNodeId = options.exclusiveControlNodeId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ProtectionCCExclusiveControlReport {
-		validatePayload(payload.length >= 1);
-		const exclusiveControlNodeId = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const exclusiveControlNodeId = raw.payload[0];
 
 		return new ProtectionCCExclusiveControlReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			exclusiveControlNodeId,
 		});
 	}
@@ -793,9 +792,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		this.exclusiveControlNodeId = options.exclusiveControlNodeId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ProtectionCCExclusiveControlSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -804,7 +803,7 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		);
 
 		return new ProtectionCCExclusiveControlSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -841,15 +840,15 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 		this.timeout = options.timeout;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ProtectionCCTimeoutReport {
-		validatePayload(payload.length >= 1);
-		const timeout: Timeout = Timeout.parse(payload[0]);
+		validatePayload(raw.payload.length >= 1);
+		const timeout: Timeout = Timeout.parse(raw.payload[0]);
 
 		return new ProtectionCCTimeoutReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			timeout,
 		});
 	}
@@ -885,9 +884,9 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 		this.timeout = options.timeout;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ProtectionCCTimeoutSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -896,7 +895,7 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 		);
 
 		return new ProtectionCCTimeoutSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 

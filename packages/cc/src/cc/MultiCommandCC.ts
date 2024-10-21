@@ -5,11 +5,16 @@ import {
 	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -110,21 +115,21 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		}
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiCommandCCCommandEncapsulation {
-		validatePayload(payload.length >= 1);
-		const numCommands = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const numCommands = raw.payload[0];
 		const encapsulated: CommandClass[] = [];
 		let offset = 1;
 		for (let i = 0; i < numCommands; i++) {
-			validatePayload(payload.length >= offset + 1);
-			const cmdLength = payload[offset];
-			validatePayload(payload.length >= offset + 1 + cmdLength);
+			validatePayload(raw.payload.length >= offset + 1);
+			const cmdLength = raw.payload[offset];
+			validatePayload(raw.payload.length >= offset + 1 + cmdLength);
 			encapsulated.push(
 				CommandClass.from({
-					data: payload.subarray(
+					data: raw.payload.subarray(
 						offset + 1,
 						offset + 1 + cmdLength,
 					),
@@ -139,7 +144,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		}
 
 		return new MultiCommandCCCommandEncapsulation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			encapsulated,
 		});
 	}

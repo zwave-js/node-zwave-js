@@ -14,7 +14,11 @@ import {
 	parseMaybeBoolean,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -29,6 +33,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -316,20 +321,17 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 		this.duration = Duration.from(options.duration);
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): BinarySwitchCCSet {
-		validatePayload(payload.length >= 1);
-		const targetValue = !!payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): BinarySwitchCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const targetValue = !!raw.payload[0];
 		let duration: Duration | undefined;
 
-		if (payload.length >= 2) {
-			duration = Duration.parseSet(payload[1]);
+		if (raw.payload.length >= 2) {
+			duration = Duration.parseSet(raw.payload[1]);
 		}
 
 		return new BinarySwitchCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			targetValue,
 			duration,
 		});
@@ -390,25 +392,25 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		this.duration = Duration.from(options.duration);
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): BinarySwitchCCReport {
-		validatePayload(payload.length >= 1);
+		validatePayload(raw.payload.length >= 1);
 		const currentValue: MaybeUnknown<boolean> | undefined =
 			parseMaybeBoolean(
-				payload[0],
+				raw.payload[0],
 			);
 		let targetValue: MaybeUnknown<boolean> | undefined;
 		let duration: Duration | undefined;
 
-		if (payload.length >= 3) {
-			targetValue = parseMaybeBoolean(payload[1]);
-			duration = Duration.parseReport(payload[2]);
+		if (raw.payload.length >= 3) {
+			targetValue = parseMaybeBoolean(raw.payload[1]);
+			duration = Duration.parseReport(raw.payload[2]);
 		}
 
 		return new BinarySwitchCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			currentValue,
 			targetValue,
 			duration,

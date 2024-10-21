@@ -10,7 +10,11 @@ import {
 	ValueMetadata,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -21,6 +25,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -141,22 +146,22 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		this.dimmingDuration = Duration.from(options.dimmingDuration);
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SceneActivationCCSet {
-		validatePayload(payload.length >= 1);
-		const sceneId = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const sceneId = raw.payload[0];
 		validatePayload(sceneId >= 1, sceneId <= 255);
 
 		// Per the specs, dimmingDuration is required, but as always the real world is different...
 		let dimmingDuration: Duration | undefined;
-		if (payload.length >= 2) {
-			dimmingDuration = Duration.parseSet(payload[1]);
+		if (raw.payload.length >= 2) {
+			dimmingDuration = Duration.parseSet(raw.payload[1]);
 		}
 
 		return new SceneActivationCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sceneId,
 			dimmingDuration,
 		});

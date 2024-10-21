@@ -9,15 +9,19 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -236,22 +240,20 @@ export class PowerlevelCCSet extends PowerlevelCC {
 		}
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): PowerlevelCCSet {
-		validatePayload(payload.length >= 2);
-		const powerlevel: Powerlevel = payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): PowerlevelCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const powerlevel: Powerlevel = raw.payload[0];
 
 		if (powerlevel === Powerlevel["Normal Power"]) {
 			return new PowerlevelCCSet({
-				nodeId: options.context.sourceNodeId,
+				nodeId: ctx.sourceNodeId,
 				powerlevel,
 			});
 		} else {
-			const timeout = payload[1];
+			validatePayload(raw.payload.length >= 2);
+			const timeout = raw.payload[1];
 			return new PowerlevelCCSet({
-				nodeId: options.context.sourceNodeId,
+				nodeId: ctx.sourceNodeId,
 				powerlevel,
 				timeout,
 			});
@@ -292,20 +294,31 @@ export type PowerlevelCCReportOptions = {
 @CCCommand(PowerlevelCommand.Report)
 export class PowerlevelCCReport extends PowerlevelCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (PowerlevelCCReportOptions & CCCommandOptions),
+		options: PowerlevelCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			this.powerlevel = this.payload[0];
-			if (this.powerlevel !== Powerlevel["Normal Power"]) {
-				this.timeout = this.payload[1];
-			}
+		this.powerlevel = options.powerlevel;
+		this.timeout = options.timeout;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): PowerlevelCCReport {
+		validatePayload(raw.payload.length >= 1);
+		const powerlevel: Powerlevel = raw.payload[0];
+
+		if (powerlevel === Powerlevel["Normal Power"]) {
+			return new PowerlevelCCReport({
+				nodeId: ctx.sourceNodeId,
+				powerlevel,
+			});
 		} else {
-			this.powerlevel = options.powerlevel;
-			this.timeout = options.timeout;
+			validatePayload(raw.payload.length >= 2);
+			const timeout = raw.payload[1];
+			return new PowerlevelCCReport({
+				nodeId: ctx.sourceNodeId,
+				powerlevel,
+				timeout,
+			});
 		}
 	}
 
@@ -354,17 +367,17 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 		this.testFrameCount = options.testFrameCount;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): PowerlevelCCTestNodeSet {
-		validatePayload(payload.length >= 4);
-		const testNodeId = payload[0];
-		const powerlevel: Powerlevel = payload[1];
-		const testFrameCount = payload.readUInt16BE(2);
+		validatePayload(raw.payload.length >= 4);
+		const testNodeId = raw.payload[0];
+		const powerlevel: Powerlevel = raw.payload[1];
+		const testFrameCount = raw.payload.readUInt16BE(2);
 
 		return new PowerlevelCCTestNodeSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			testNodeId,
 			powerlevel,
 			testFrameCount,
@@ -403,22 +416,30 @@ export interface PowerlevelCCTestNodeReportOptions {
 @CCCommand(PowerlevelCommand.TestNodeReport)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (PowerlevelCCTestNodeReportOptions & CCCommandOptions),
+		options: PowerlevelCCTestNodeReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 4);
-			this.testNodeId = this.payload[0];
-			this.status = this.payload[1];
-			this.acknowledgedFrames = this.payload.readUInt16BE(2);
-		} else {
-			this.testNodeId = options.testNodeId;
-			this.status = options.status;
-			this.acknowledgedFrames = options.acknowledgedFrames;
-		}
+		this.testNodeId = options.testNodeId;
+		this.status = options.status;
+		this.acknowledgedFrames = options.acknowledgedFrames;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): PowerlevelCCTestNodeReport {
+		validatePayload(raw.payload.length >= 4);
+		const testNodeId = raw.payload[0];
+		const status: PowerlevelTestStatus = raw.payload[1];
+		const acknowledgedFrames = raw.payload.readUInt16BE(2);
+
+		return new PowerlevelCCTestNodeReport({
+			nodeId: ctx.sourceNodeId,
+			testNodeId,
+			status,
+			acknowledgedFrames,
+		});
 	}
 
 	public testNodeId: number;

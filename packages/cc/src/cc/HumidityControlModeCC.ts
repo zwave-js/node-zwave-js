@@ -12,7 +12,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -26,6 +30,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -288,9 +293,9 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 		this.mode = options.mode;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): HumidityControlModeCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -299,7 +304,7 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 		);
 
 		return new HumidityControlModeCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -336,15 +341,15 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 		this.mode = options.mode;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): HumidityControlModeCCReport {
-		validatePayload(payload.length >= 1);
-		const mode: HumidityControlMode = payload[0] & 0b1111;
+		validatePayload(raw.payload.length >= 1);
+		const mode: HumidityControlMode = raw.payload[0] & 0b1111;
 
 		return new HumidityControlModeCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			mode,
 		});
 	}
@@ -384,13 +389,13 @@ export class HumidityControlModeCCSupportedReport
 		this.supportedModes = options.supportedModes;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): HumidityControlModeCCSupportedReport {
-		validatePayload(payload.length >= 1);
+		validatePayload(raw.payload.length >= 1);
 		const supportedModes: HumidityControlMode[] = parseBitMask(
-			payload,
+			raw.payload,
 			HumidityControlMode.Off,
 		);
 		if (!supportedModes.includes(HumidityControlMode.Off)) {
@@ -398,7 +403,7 @@ export class HumidityControlModeCCSupportedReport
 		}
 
 		return new HumidityControlModeCCSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedModes,
 		});
 	}

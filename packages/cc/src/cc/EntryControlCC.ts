@@ -13,7 +13,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { buffer2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -27,6 +31,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -412,18 +417,18 @@ export class EntryControlCCNotification extends EntryControlCC {
 		this.eventData = options.eventData;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): EntryControlCCNotification {
-		validatePayload(payload.length >= 4);
-		const sequenceNumber = payload[0];
-		let dataType: EntryControlDataTypes = payload[1] & 0b11;
-		const eventType: EntryControlEventTypes = payload[2];
-		const eventDataLength = payload[3];
+		validatePayload(raw.payload.length >= 4);
+		const sequenceNumber = raw.payload[0];
+		let dataType: EntryControlDataTypes = raw.payload[1] & 0b11;
+		const eventType: EntryControlEventTypes = raw.payload[2];
+		const eventDataLength = raw.payload[3];
 		validatePayload(eventDataLength >= 0 && eventDataLength <= 32);
 		const offset = 4;
-		validatePayload(payload.length >= offset + eventDataLength);
+		validatePayload(raw.payload.length >= offset + eventDataLength);
 		let eventData: string | Buffer | undefined;
 		if (eventDataLength > 0) {
 			// We shouldn't need to check this, since the specs are pretty clear which format to expect.
@@ -431,11 +436,11 @@ export class EntryControlCCNotification extends EntryControlCC {
 
 			// We also need to disable the strict validation for some devices to make them work
 			const noStrictValidation = !!options.context.getDeviceConfig?.(
-				options.context.sourceNodeId,
+				ctx.sourceNodeId,
 			)?.compat?.disableStrictEntryControlDataValidation;
 
 			eventData = Buffer.from(
-				payload.subarray(offset, offset + eventDataLength),
+				raw.payload.subarray(offset, offset + eventDataLength),
 			);
 			switch (dataType) {
 				case EntryControlDataTypes.Raw:
@@ -476,7 +481,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 		}
 
 		return new EntryControlCCNotification({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sequenceNumber,
 			dataType,
 			eventType,
@@ -532,20 +537,20 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		this.supportedKeys = options.supportedKeys;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): EntryControlCCKeySupportedReport {
-		validatePayload(payload.length >= 1);
-		const length = payload[0];
-		validatePayload(payload.length >= 1 + length);
+		validatePayload(raw.payload.length >= 1);
+		const length = raw.payload[0];
+		validatePayload(raw.payload.length >= 1 + length);
 		const supportedKeys = parseBitMask(
-			payload.subarray(1, 1 + length),
+			raw.payload.subarray(1, 1 + length),
 			0,
 		);
 
 		return new EntryControlCCKeySupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedKeys,
 		});
 	}
@@ -591,43 +596,43 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		this.maxKeyCacheTimeout = options.maxKeyCacheTimeout;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): EntryControlCCEventSupportedReport {
-		validatePayload(payload.length >= 1);
-		const dataTypeLength = payload[0] & 0b11;
+		validatePayload(raw.payload.length >= 1);
+		const dataTypeLength = raw.payload[0] & 0b11;
 		let offset = 1;
-		validatePayload(payload.length >= offset + dataTypeLength);
+		validatePayload(raw.payload.length >= offset + dataTypeLength);
 		const supportedDataTypes: EntryControlDataTypes[] = parseBitMask(
-			payload.subarray(offset, offset + dataTypeLength),
+			raw.payload.subarray(offset, offset + dataTypeLength),
 			EntryControlDataTypes.None,
 		);
 		offset += dataTypeLength;
-		validatePayload(payload.length >= offset + 1);
-		const eventTypeLength = payload[offset] & 0b11111;
+		validatePayload(raw.payload.length >= offset + 1);
+		const eventTypeLength = raw.payload[offset] & 0b11111;
 		offset += 1;
-		validatePayload(payload.length >= offset + eventTypeLength);
+		validatePayload(raw.payload.length >= offset + eventTypeLength);
 		const supportedEventTypes: EntryControlEventTypes[] = parseBitMask(
-			payload.subarray(offset, offset + eventTypeLength),
+			raw.payload.subarray(offset, offset + eventTypeLength),
 			EntryControlEventTypes.Caching,
 		);
 		offset += eventTypeLength;
-		validatePayload(payload.length >= offset + 4);
-		const minKeyCacheSize = payload[offset];
+		validatePayload(raw.payload.length >= offset + 4);
+		const minKeyCacheSize = raw.payload[offset];
 		validatePayload(
 			minKeyCacheSize >= 1 && minKeyCacheSize <= 32,
 		);
-		const maxKeyCacheSize = payload[offset + 1];
+		const maxKeyCacheSize = raw.payload[offset + 1];
 		validatePayload(
 			maxKeyCacheSize >= minKeyCacheSize
 				&& maxKeyCacheSize <= 32,
 		);
-		const minKeyCacheTimeout = payload[offset + 2];
-		const maxKeyCacheTimeout = payload[offset + 3];
+		const minKeyCacheTimeout = raw.payload[offset + 2];
+		const maxKeyCacheTimeout = raw.payload[offset + 3];
 
 		return new EntryControlCCEventSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedDataTypes,
 			supportedEventTypes,
 			minKeyCacheSize,
@@ -710,17 +715,17 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		this.keyCacheTimeout = options.keyCacheTimeout;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): EntryControlCCConfigurationReport {
-		validatePayload(payload.length >= 2);
-		const keyCacheSize = payload[0];
+		validatePayload(raw.payload.length >= 2);
+		const keyCacheSize = raw.payload[0];
 		validatePayload(keyCacheSize >= 1 && keyCacheSize <= 32);
-		const keyCacheTimeout = payload[1];
+		const keyCacheTimeout = raw.payload[1];
 
 		return new EntryControlCCConfigurationReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			keyCacheSize,
 			keyCacheTimeout,
 		});
@@ -764,9 +769,9 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 		this.keyCacheTimeout = options.keyCacheTimeout;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): EntryControlCCConfigurationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -775,7 +780,7 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 		);
 
 		return new EntryControlCCConfigurationSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 

@@ -6,10 +6,15 @@ import {
 	type MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -117,19 +122,19 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		options.encapsulated.encapsulatingCC = this as any;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): CRC16CCCommandEncapsulation {
-		validatePayload(payload.length >= 3);
+		validatePayload(raw.payload.length >= 3);
 
-		const ccBuffer = payload.subarray(0, -2);
+		const ccBuffer = raw.payload.subarray(0, -2);
 
 		// Verify the CRC
 		let expectedCRC = CRC16_CCITT(headerBuffer);
 		expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
-		const actualCRC = payload.readUInt16BE(
-			payload.length - 2,
+		const actualCRC = raw.payload.readUInt16BE(
+			raw.payload.length - 2,
 		);
 		validatePayload(expectedCRC === actualCRC);
 		const encapsulated: CommandClass = CommandClass.from({
@@ -142,7 +147,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		});
 
 		return new CRC16CCCommandEncapsulation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			encapsulated,
 		});
 	}

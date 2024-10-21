@@ -20,6 +20,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
 	GetSupportedCCVersion,
@@ -40,6 +41,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -383,15 +385,12 @@ export class BasicCCSet extends BasicCC {
 		this.targetValue = options.targetValue;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): BasicCCSet {
-		validatePayload(payload.length >= 1);
-		const targetValue = payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): BasicCCSet {
+		validatePayload(raw.payload.length >= 1);
+		const targetValue = raw.payload[0];
 
 		return new BasicCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			targetValue,
 		});
 	}
@@ -433,28 +432,25 @@ export class BasicCCReport extends BasicCC {
 		}
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): BasicCCReport {
-		validatePayload(payload.length >= 1);
+	public static from(raw: CCRaw, ctx: CCParsingContext): BasicCCReport {
+		validatePayload(raw.payload.length >= 1);
 		const currentValue: MaybeUnknown<number> | undefined =
 			// 0xff is a legacy value for 100% (99)
-			payload[0] === 0xff
+			raw.payload[0] === 0xff
 				? 99
-				: parseMaybeNumber(payload[0]);
+				: parseMaybeNumber(raw.payload[0]);
 		validatePayload(currentValue != undefined);
 
 		let targetValue: MaybeUnknown<number> | undefined;
 		let duration: Duration | undefined;
 
-		if (payload.length >= 3) {
-			targetValue = parseMaybeNumber(payload[1]);
-			duration = Duration.parseReport(payload[2]);
+		if (raw.payload.length >= 3) {
+			targetValue = parseMaybeNumber(raw.payload[1]);
+			duration = Duration.parseReport(raw.payload[2]);
 		}
 
 		return new BasicCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			currentValue,
 			targetValue,
 			duration,

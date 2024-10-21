@@ -15,16 +15,20 @@ import {
 	securityClassOrder,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -648,57 +652,63 @@ export interface VersionCCReportOptions {
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (VersionCCReportOptions & CCCommandOptions),
+		options: VersionCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 5);
-			this.libraryType = this.payload[0];
-			this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
-			this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
-			if (this.payload.length >= 7) {
-				// V2+
-				this.hardwareVersion = this.payload[5];
-				const additionalFirmwares = this.payload[6];
-				validatePayload(
-					this.payload.length >= 7 + 2 * additionalFirmwares,
-				);
-				for (let i = 0; i < additionalFirmwares; i++) {
-					this.firmwareVersions.push(
-						`${this.payload[7 + 2 * i]}.${
-							this.payload[7 + 2 * i + 1]
-						}`,
-					);
-				}
-			}
-		} else {
-			if (!/^\d+\.\d+(\.\d+)?$/.test(options.protocolVersion)) {
-				throw new ZWaveError(
-					`protocolVersion must be a string in the format "major.minor" or "major.minor.patch", received "${options.protocolVersion}"`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			} else if (
-				!options.firmwareVersions.every((fw) =>
-					/^\d+\.\d+(\.\d+)?$/.test(fw)
-				)
-			) {
-				throw new ZWaveError(
-					`firmwareVersions must be an array of strings in the format "major.minor" or "major.minor.patch", received "${
-						JSON.stringify(
-							options.firmwareVersions,
-						)
-					}"`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.libraryType = options.libraryType;
-			this.protocolVersion = options.protocolVersion;
-			this.firmwareVersions = options.firmwareVersions;
-			this.hardwareVersion = options.hardwareVersion;
+		if (!/^\d+\.\d+(\.\d+)?$/.test(options.protocolVersion)) {
+			throw new ZWaveError(
+				`protocolVersion must be a string in the format "major.minor" or "major.minor.patch", received "${options.protocolVersion}"`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			!options.firmwareVersions.every((fw) =>
+				/^\d+\.\d+(\.\d+)?$/.test(fw)
+			)
+		) {
+			throw new ZWaveError(
+				`firmwareVersions must be an array of strings in the format "major.minor" or "major.minor.patch", received "${
+					JSON.stringify(
+						options.firmwareVersions,
+					)
+				}"`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+		this.libraryType = options.libraryType;
+		this.protocolVersion = options.protocolVersion;
+		this.firmwareVersions = options.firmwareVersions;
+		this.hardwareVersion = options.hardwareVersion;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): VersionCCReport {
+		validatePayload(raw.payload.length >= 5);
+		const libraryType: ZWaveLibraryTypes = raw.payload[0];
+		const protocolVersion = `${raw.payload[1]}.${raw.payload[2]}`;
+		const firmwareVersions = [`${raw.payload[3]}.${raw.payload[4]}`];
+
+		let hardwareVersion: number | undefined;
+		if (raw.payload.length >= 7) {
+			// V2+
+			hardwareVersion = raw.payload[5];
+			const additionalFirmwares = raw.payload[6];
+			validatePayload(
+				raw.payload.length >= 7 + 2 * additionalFirmwares,
+			);
+			for (let i = 0; i < additionalFirmwares; i++) {
+				firmwareVersions.push(
+					`${raw.payload[7 + 2 * i]}.${raw.payload[7 + 2 * i + 1]}`,
+				);
+			}
+		}
+
+		return new VersionCCReport({
+			nodeId: ctx.sourceNodeId,
+			libraryType,
+			protocolVersion,
+			firmwareVersions,
+			hardwareVersion,
+		});
 	}
 
 	@ccValue(VersionCCValues.libraryType)
@@ -784,16 +794,16 @@ export class VersionCCCommandClassReport extends VersionCC {
 		this.ccVersion = options.ccVersion;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): VersionCCCommandClassReport {
-		validatePayload(payload.length >= 2);
-		const requestedCC: CommandClasses = payload[0];
-		const ccVersion = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const requestedCC: CommandClasses = raw.payload[0];
+		const ccVersion = raw.payload[1];
 
 		return new VersionCCCommandClassReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			requestedCC,
 			ccVersion,
 		});
@@ -844,15 +854,15 @@ export class VersionCCCommandClassGet extends VersionCC {
 		this.requestedCC = options.requestedCC;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): VersionCCCommandClassGet {
-		validatePayload(payload.length >= 1);
-		const requestedCC: CommandClasses = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const requestedCC: CommandClasses = raw.payload[0];
 
 		return new VersionCCCommandClassGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			requestedCC,
 		});
 	}
@@ -880,19 +890,25 @@ export interface VersionCCCapabilitiesReportOptions {
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (VersionCCCapabilitiesReportOptions & CCCommandOptions),
+		options: VersionCCCapabilitiesReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			const capabilities = this.payload[0];
-			this.supportsZWaveSoftwareGet = !!(capabilities & 0b100);
-		} else {
-			this.supportsZWaveSoftwareGet = options.supportsZWaveSoftwareGet;
-		}
+		this.supportsZWaveSoftwareGet = options.supportsZWaveSoftwareGet;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): VersionCCCapabilitiesReport {
+		validatePayload(raw.payload.length >= 1);
+		const capabilities = raw.payload[0];
+		const supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+
+		return new VersionCCCapabilitiesReport({
+			nodeId: ctx.sourceNodeId,
+			supportsZWaveSoftwareGet,
+		});
 	}
 
 	@ccValue(VersionCCValues.supportsZWaveSoftwareGet)
@@ -954,48 +970,48 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		this.applicationBuildNumber = options.applicationBuildNumber;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): VersionCCZWaveSoftwareReport {
-		validatePayload(payload.length >= 23);
-		const sdkVersion = parseVersion(payload);
+		validatePayload(raw.payload.length >= 23);
+		const sdkVersion = parseVersion(raw.payload);
 		const applicationFrameworkAPIVersion = parseVersion(
-			payload.subarray(3),
+			raw.payload.subarray(3),
 		);
 		let applicationFrameworkBuildNumber;
 		if (applicationFrameworkAPIVersion !== "unused") {
-			applicationFrameworkBuildNumber = payload.readUInt16BE(6);
+			applicationFrameworkBuildNumber = raw.payload.readUInt16BE(6);
 		} else {
 			applicationFrameworkBuildNumber = 0;
 		}
 
-		const hostInterfaceVersion = parseVersion(payload.subarray(8));
+		const hostInterfaceVersion = parseVersion(raw.payload.subarray(8));
 		let hostInterfaceBuildNumber;
 		if (hostInterfaceVersion !== "unused") {
-			hostInterfaceBuildNumber = payload.readUInt16BE(11);
+			hostInterfaceBuildNumber = raw.payload.readUInt16BE(11);
 		} else {
 			hostInterfaceBuildNumber = 0;
 		}
 
-		const zWaveProtocolVersion = parseVersion(payload.subarray(13));
+		const zWaveProtocolVersion = parseVersion(raw.payload.subarray(13));
 		let zWaveProtocolBuildNumber;
 		if (zWaveProtocolVersion !== "unused") {
-			zWaveProtocolBuildNumber = payload.readUInt16BE(16);
+			zWaveProtocolBuildNumber = raw.payload.readUInt16BE(16);
 		} else {
 			zWaveProtocolBuildNumber = 0;
 		}
 
-		const applicationVersion = parseVersion(payload.subarray(18));
+		const applicationVersion = parseVersion(raw.payload.subarray(18));
 		let applicationBuildNumber;
 		if (applicationVersion !== "unused") {
-			applicationBuildNumber = payload.readUInt16BE(21);
+			applicationBuildNumber = raw.payload.readUInt16BE(21);
 		} else {
 			applicationBuildNumber = 0;
 		}
 
 		return new VersionCCZWaveSoftwareReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sdkVersion,
 			applicationFrameworkAPIVersion,
 			applicationFrameworkBuildNumber,

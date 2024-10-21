@@ -8,7 +8,11 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -19,6 +23,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -203,14 +208,14 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		this.scale = options.scale;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): EnergyProductionCCReport {
-		validatePayload(payload.length >= 2);
-		const parameter: EnergyProductionParameter = payload[0];
+		validatePayload(raw.payload.length >= 2);
+		const parameter: EnergyProductionParameter = raw.payload[0];
 		const { value, scale: rawScale } = parseFloatWithScale(
-			payload.subarray(1),
+			raw.payload.subarray(1),
 		);
 		const scale: EnergyProductionScale = getEnergyProductionScale(
 			parameter,
@@ -218,7 +223,7 @@ export class EnergyProductionCCReport extends EnergyProductionCC {
 		);
 
 		return new EnergyProductionCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			parameter,
 			value,
 			scale,
@@ -294,15 +299,15 @@ export class EnergyProductionCCGet extends EnergyProductionCC {
 		this.parameter = options.parameter;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): EnergyProductionCCGet {
-		validatePayload(payload.length >= 1);
-		const parameter: EnergyProductionParameter = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const parameter: EnergyProductionParameter = raw.payload[0];
 
 		return new EnergyProductionCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			parameter,
 		});
 	}

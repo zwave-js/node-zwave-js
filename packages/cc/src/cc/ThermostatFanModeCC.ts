@@ -13,7 +13,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -27,6 +31,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -347,9 +352,9 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 		this.off = options.off;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ThermostatFanModeCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -358,7 +363,7 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 		);
 
 		return new ThermostatFanModeCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -402,17 +407,17 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		this.off = options.off;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ThermostatFanModeCCReport {
-		validatePayload(payload.length >= 1);
-		const mode: ThermostatFanMode = payload[0] & 0b1111;
+		validatePayload(raw.payload.length >= 1);
+		const mode: ThermostatFanMode = raw.payload[0] & 0b1111;
 		// V3+
-		const off = !!(payload[0] & 0b1000_0000);
+		const off = !!(raw.payload[0] & 0b1000_0000);
 
 		return new ThermostatFanModeCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			mode,
 			off,
 		});
@@ -458,17 +463,17 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 		this.supportedModes = options.supportedModes;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): ThermostatFanModeCCSupportedReport {
 		const supportedModes: ThermostatFanMode[] = parseBitMask(
-			payload,
+			raw.payload,
 			ThermostatFanMode["Auto low"],
 		);
 
 		return new ThermostatFanModeCCSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedModes,
 		});
 	}

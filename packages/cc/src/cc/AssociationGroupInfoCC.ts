@@ -11,18 +11,21 @@ import {
 	parseCCId,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -479,22 +482,22 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		this.name = options.name;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): AssociationGroupInfoCCNameReport {
-		validatePayload(payload.length >= 2);
-		const groupId = payload[0];
-		const nameLength = payload[1];
-		validatePayload(payload.length >= 2 + nameLength);
+		validatePayload(raw.payload.length >= 2);
+		const groupId = raw.payload[0];
+		const nameLength = raw.payload[1];
+		validatePayload(raw.payload.length >= 2 + nameLength);
 		// The specs don't allow 0-terminated string, but some devices use them
 		// So we need to cut them off
 		const name = cpp2js(
-			payload.subarray(2, 2 + nameLength).toString("utf8"),
+			raw.payload.subarray(2, 2 + nameLength).toString("utf8"),
 		);
 
 		return new AssociationGroupInfoCCNameReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			groupId,
 			name,
 		});
@@ -551,15 +554,15 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 		this.groupId = options.groupId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): AssociationGroupInfoCCNameGet {
-		validatePayload(payload.length >= 1);
-		const groupId = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const groupId = raw.payload[0];
 
 		return new AssociationGroupInfoCCNameGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			groupId,
 		});
 	}
@@ -597,39 +600,44 @@ export interface AssociationGroupInfoCCInfoReportSpecificOptions {
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
 		options:
-			| CommandClassDeserializationOptions
-			| (
-				& AssociationGroupInfoCCInfoReportSpecificOptions
-				& CCCommandOptions
-			),
+			& AssociationGroupInfoCCInfoReportSpecificOptions
+			& CCCommandOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.isListMode = !!(this.payload[0] & 0b1000_0000);
-			this.hasDynamicInfo = !!(this.payload[0] & 0b0100_0000);
+		this.isListMode = options.isListMode;
+		this.hasDynamicInfo = options.hasDynamicInfo;
+		this.groups = options.groups;
+	}
 
-			const groupCount = this.payload[0] & 0b0011_1111;
-			// each group requires 7 bytes of payload
-			validatePayload(this.payload.length >= 1 + groupCount * 7);
-			const _groups: AssociationGroupInfo[] = [];
-			for (let i = 0; i < groupCount; i++) {
-				const offset = 1 + i * 7;
-				// Parse the payload
-				const groupBytes = this.payload.subarray(offset, offset + 7);
-				const groupId = groupBytes[0];
-				const mode = 0; // groupBytes[1];
-				const profile = groupBytes.readUInt16BE(2);
-				const eventCode = 0; // groupBytes.readUInt16BE(5);
-				_groups.push({ groupId, mode, profile, eventCode });
-			}
-			this.groups = _groups;
-		} else {
-			this.isListMode = options.isListMode;
-			this.hasDynamicInfo = options.hasDynamicInfo;
-			this.groups = options.groups;
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): AssociationGroupInfoCCInfoReport {
+		validatePayload(raw.payload.length >= 1);
+		const isListMode = !!(raw.payload[0] & 0b1000_0000);
+		const hasDynamicInfo = !!(raw.payload[0] & 0b0100_0000);
+		const groupCount = raw.payload[0] & 0b0011_1111;
+		// each group requires 7 bytes of payload
+		validatePayload(raw.payload.length >= 1 + groupCount * 7);
+		const groups: AssociationGroupInfo[] = [];
+		for (let i = 0; i < groupCount; i++) {
+			const offset = 1 + i * 7;
+			// Parse the payload
+			const groupBytes = raw.payload.subarray(offset, offset + 7);
+			const groupId = groupBytes[0];
+			const mode = 0; // groupBytes[1];
+			const profile = groupBytes.readUInt16BE(2);
+			const eventCode = 0; // groupBytes.readUInt16BE(5);
+			groups.push({ groupId, mode, profile, eventCode });
 		}
+
+		return new AssociationGroupInfoCCInfoReport({
+			nodeId: ctx.sourceNodeId,
+			isListMode,
+			hasDynamicInfo,
+			groups,
+		});
 	}
 
 	public readonly isListMode: boolean;
@@ -722,22 +730,22 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		if ("groupId" in options) this.groupId = options.groupId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): AssociationGroupInfoCCInfoGet {
-		validatePayload(payload.length >= 2);
-		const optionByte = payload[0];
+		validatePayload(raw.payload.length >= 2);
+		const optionByte = raw.payload[0];
 		const refreshCache = !!(optionByte & 0b1000_0000);
 		const listMode: boolean | undefined = !!(optionByte & 0b0100_0000);
 		let groupId: number | undefined;
 
 		if (!listMode) {
-			groupId = payload[1];
+			groupId = raw.payload[1];
 		}
 
 		return new AssociationGroupInfoCCInfoGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			refreshCache,
 			listMode,
 			groupId,
@@ -796,15 +804,15 @@ export class AssociationGroupInfoCCCommandListReport
 		this.commands = options.commands;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): AssociationGroupInfoCCCommandListReport {
-		validatePayload(payload.length >= 2);
-		const groupId = payload[0];
-		const listLength = payload[1];
-		validatePayload(payload.length >= 2 + listLength);
-		const listBytes = payload.subarray(2, 2 + listLength);
+		validatePayload(raw.payload.length >= 2);
+		const groupId = raw.payload[0];
+		const listLength = raw.payload[1];
+		validatePayload(raw.payload.length >= 2 + listLength);
+		const listBytes = raw.payload.subarray(2, 2 + listLength);
 		// Parse all CC ids and commands
 		let offset = 0;
 		const commands = new Map<CommandClasses, number[]>();
@@ -817,7 +825,7 @@ export class AssociationGroupInfoCCCommandListReport
 		}
 
 		return new AssociationGroupInfoCCCommandListReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			groupId,
 			commands,
 		});
@@ -890,16 +898,16 @@ export class AssociationGroupInfoCCCommandListGet
 		this.groupId = options.groupId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): AssociationGroupInfoCCCommandListGet {
-		validatePayload(payload.length >= 2);
-		const allowCache = !!(payload[0] & 0b1000_0000);
-		const groupId = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const allowCache = !!(raw.payload[0] & 0b1000_0000);
+		const groupId = raw.payload[1];
 
 		return new AssociationGroupInfoCCCommandListGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			allowCache,
 			groupId,
 		});

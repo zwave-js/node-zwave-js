@@ -47,6 +47,7 @@ import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	type CCResponseRole,
 	CommandClass,
 	type CommandClassDeserializationOptions,
@@ -1115,13 +1116,13 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): Security2CCMessageEncapsulation {
-		validatePayload(payload.length >= 2);
+		validatePayload(raw.payload.length >= 2);
 		// Check the sequence number to avoid duplicates
-		const sequenceNumber: number | undefined = payload[0];
+		const sequenceNumber: number | undefined = raw.payload[0];
 		const sendingNodeId = this.nodeId as number;
 
 		// Ensure the node has a security class
@@ -1132,8 +1133,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			securityClass !== SecurityClass.None,
 		);
 
-		const hasExtensions = !!(payload[1] & 0b1);
-		const hasEncryptedExtensions = !!(payload[1] & 0b10);
+		const hasExtensions = !!(raw.payload[1] & 0b1);
+		const hasEncryptedExtensions = !!(raw.payload[1] & 0b10);
 
 		let offset = 2;
 		const extensions: Security2Extension[] = [];
@@ -1205,7 +1206,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				if (!ext.moreToFollow) break;
 			}
 		};
-		if (hasExtensions) parseExtensions(payload, false);
+		if (hasExtensions) parseExtensions(raw.payload, false);
 
 		const ctx = ((): MulticastContext => {
 			const multicastGroupId = this.getMulticastGroupId();
@@ -1269,15 +1270,15 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			}
 		}
 
-		const unencryptedPayload = payload.subarray(0, offset);
-		const ciphertext = payload.subarray(
+		const unencryptedPayload = raw.payload.subarray(0, offset);
+		const ciphertext = raw.payload.subarray(
 			offset,
 			-SECURITY_S2_AUTH_TAG_LENGTH,
 		);
-		const authTag = payload.subarray(-SECURITY_S2_AUTH_TAG_LENGTH);
+		const authTag = raw.payload.subarray(-SECURITY_S2_AUTH_TAG_LENGTH);
 		let authTag: Buffer | undefined = authTag;
 		const messageLength = super.computeEncapsulationOverhead()
-			+ payload.length;
+			+ raw.payload.length;
 
 		const authData = getAuthenticationData(
 			sendingNodeId,
@@ -1439,7 +1440,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		let iv: Buffer | undefined = iv;
 
 		return new Security2CCMessageEncapsulation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			_sequenceNumber: sequenceNumber,
 			extensions,
 			authTag,
@@ -1997,46 +1998,58 @@ export type Security2CCNonceReportOptions =
 @CCCommand(Security2Command.NonceReport)
 export class Security2CCNonceReport extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & Security2CCNonceReportOptions),
+		options: Security2CCNonceReportOptions & CCCommandOptions,
 	) {
 		super(options);
 
 		// Make sure that we can send/receive secure commands
 		this.securityManager = this.assertSecurity(options);
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this._sequenceNumber = this.payload[0];
-			// Don't accept duplicate commands
-			validateSequenceNumber.call(
-				this,
-				this.securityManager,
-				this._sequenceNumber,
+		this.SOS = options.SOS;
+		this.MOS = options.MOS;
+		if (options.SOS) this.receiverEI = options.receiverEI;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Security2CCNonceReport {
+		validatePayload(raw.payload.length >= 2);
+		const sequenceNumber = raw.payload[0];
+
+		// Don't accept duplicate commands
+		validateSequenceNumber.call(
+			this,
+			this.securityManager,
+			sequenceNumber,
+		);
+		const MOS = !!(raw.payload[1] & 0b10);
+		const SOS = !!(raw.payload[1] & 0b1);
+
+		validatePayload(MOS || SOS);
+
+		let receiverEI: Buffer | undefined;
+
+		if (SOS) {
+			// If the SOS flag is set, the REI field MUST be included in the command
+			validatePayload(raw.payload.length >= 18);
+			receiverEI = raw.payload.subarray(2, 18);
+
+			// In that case we also need to store it, so the next sent command
+			// can use it for encryption
+			this.securityManager.storeRemoteEI(
+				ctx.sourceNodeId,
+				receiverEI,
 			);
-
-			this.MOS = !!(this.payload[1] & 0b10);
-			this.SOS = !!(this.payload[1] & 0b1);
-			validatePayload(this.MOS || this.SOS);
-
-			if (this.SOS) {
-				// If the SOS flag is set, the REI field MUST be included in the command
-				validatePayload(this.payload.length >= 18);
-				this.receiverEI = this.payload.subarray(2, 18);
-
-				// In that case we also need to store it, so the next sent command
-				// can use it for encryption
-				this.securityManager.storeRemoteEI(
-					this.nodeId as number,
-					this.receiverEI,
-				);
-			}
-		} else {
-			this.SOS = options.SOS;
-			this.MOS = options.MOS;
-			if (options.SOS) this.receiverEI = options.receiverEI;
 		}
+
+		return new Security2CCNonceReport({
+			nodeId: ctx.sourceNodeId,
+			sequenceNumber,
+			MOS,
+			SOS,
+			receiverEI,
+		});
 	}
 
 	private securityManager!: SecurityManager2;
@@ -2101,27 +2114,29 @@ export class Security2CCNonceGet extends Security2CC {
 	// 250 ms before receiving the Security 2 Nonce Report Command.
 
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & Security2CCNonceGetOptions),
+		options: Security2CCNonceGetOptions & CCCommandOptions,
 	) {
 		super(options);
 
 		// Make sure that we can send/receive secure commands
 		this.securityManager = this.assertSecurity(options);
+	}
 
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this._sequenceNumber = this.payload[0];
-			// Don't accept duplicate commands
-			validateSequenceNumber.call(
-				this,
-				this.securityManager,
-				this._sequenceNumber,
-			);
-		} else {
-			// No options here
-		}
+	public static from(raw: CCRaw, ctx: CCParsingContext): Security2CCNonceGet {
+		validatePayload(raw.payload.length >= 1);
+		const sequenceNumber = raw.payload[0];
+
+		// Don't accept duplicate commands
+		validateSequenceNumber.call(
+			this,
+			this.securityManager,
+			sequenceNumber,
+		);
+
+		return new Security2CCNonceGet({
+			nodeId: ctx.sourceNodeId,
+			sequenceNumber,
+		});
 	}
 
 	private securityManager!: SecurityManager2;
@@ -2168,38 +2183,51 @@ export interface Security2CCKEXReportOptions {
 @CCCommand(Security2Command.KEXReport)
 export class Security2CCKEXReport extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & Security2CCKEXReportOptions),
+		options: Security2CCKEXReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 4);
-			this.requestCSA = !!(this.payload[0] & 0b10);
-			this.echo = !!(this.payload[0] & 0b1);
-			// Remember the reserved bits for the echo
-			this._reserved = this.payload[0] & 0b1111_1100;
-			// The bit mask starts at 0, but bit 0 is not used
-			this.supportedKEXSchemes = parseBitMask(
-				this.payload.subarray(1, 2),
-				0,
-			).filter((s) => s !== 0);
-			this.supportedECDHProfiles = parseBitMask(
-				this.payload.subarray(2, 3),
-				ECDHProfiles.Curve25519,
-			);
-			this.requestedKeys = parseBitMask(
-				this.payload.subarray(3, 4),
-				SecurityClass.S2_Unauthenticated,
-			);
-		} else {
-			this.requestCSA = options.requestCSA;
-			this.echo = options.echo;
-			this._reserved = options._reserved ?? 0;
-			this.supportedKEXSchemes = options.supportedKEXSchemes;
-			this.supportedECDHProfiles = options.supportedECDHProfiles;
-			this.requestedKeys = options.requestedKeys;
-		}
+		this.requestCSA = options.requestCSA;
+		this.echo = options.echo;
+		this._reserved = options._reserved ?? 0;
+		this.supportedKEXSchemes = options.supportedKEXSchemes;
+		this.supportedECDHProfiles = options.supportedECDHProfiles;
+		this.requestedKeys = options.requestedKeys;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): Security2CCKEXReport {
+		validatePayload(raw.payload.length >= 4);
+		const requestCSA = !!(raw.payload[0] & 0b10);
+		const echo = !!(raw.payload[0] & 0b1);
+
+		// Remember the reserved bits for the echo
+		const _reserved = raw.payload[0] & 0b1111_1100;
+
+		// The bit mask starts at 0, but bit 0 is not used
+		const supportedKEXSchemes: KEXSchemes[] = parseBitMask(
+			raw.payload.subarray(1, 2),
+			0,
+		).filter((s) => s !== 0);
+		const supportedECDHProfiles: ECDHProfiles[] = parseBitMask(
+			raw.payload.subarray(2, 3),
+			ECDHProfiles.Curve25519,
+		);
+		const requestedKeys: SecurityClass[] = parseBitMask(
+			raw.payload.subarray(3, 4),
+			SecurityClass.S2_Unauthenticated,
+		);
+
+		return new Security2CCKEXReport({
+			nodeId: ctx.sourceNodeId,
+			requestCSA,
+			echo,
+			_reserved,
+			supportedKEXSchemes,
+			supportedECDHProfiles,
+			requestedKeys,
+		});
 	}
 
 	public readonly _reserved: number;
@@ -2292,43 +2320,50 @@ function testExpectedResponseForKEXSet(
 @expectedCCResponse(getExpectedResponseForKEXSet, testExpectedResponseForKEXSet)
 export class Security2CCKEXSet extends Security2CC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & Security2CCKEXSetOptions),
+		options: Security2CCKEXSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 4);
-			this._reserved = this.payload[0] & 0b1111_1100;
-			this.permitCSA = !!(this.payload[0] & 0b10);
-			this.echo = !!(this.payload[0] & 0b1);
-			// The bit mask starts at 0, but bit 0 is not used
-			const selectedKEXSchemes = parseBitMask(
-				this.payload.subarray(1, 2),
-				0,
-			).filter((s) => s !== 0);
-			validatePayload(selectedKEXSchemes.length === 1);
-			this.selectedKEXScheme = selectedKEXSchemes[0];
+		this.permitCSA = options.permitCSA;
+		this.echo = options.echo;
+		this._reserved = options._reserved ?? 0;
+		this.selectedKEXScheme = options.selectedKEXScheme;
+		this.selectedECDHProfile = options.selectedECDHProfile;
+		this.grantedKeys = options.grantedKeys;
+	}
 
-			const selectedECDHProfiles = parseBitMask(
-				this.payload.subarray(2, 3),
-				ECDHProfiles.Curve25519,
-			);
-			validatePayload(selectedECDHProfiles.length === 1);
-			this.selectedECDHProfile = selectedECDHProfiles[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): Security2CCKEXSet {
+		validatePayload(raw.payload.length >= 4);
+		const _reserved = raw.payload[0] & 0b1111_1100;
+		const permitCSA = !!(raw.payload[0] & 0b10);
+		const echo = !!(raw.payload[0] & 0b1);
 
-			this.grantedKeys = parseBitMask(
-				this.payload.subarray(3, 4),
-				SecurityClass.S2_Unauthenticated,
-			);
-		} else {
-			this.permitCSA = options.permitCSA;
-			this.echo = options.echo;
-			this._reserved = options._reserved ?? 0;
-			this.selectedKEXScheme = options.selectedKEXScheme;
-			this.selectedECDHProfile = options.selectedECDHProfile;
-			this.grantedKeys = options.grantedKeys;
-		}
+		// The bit mask starts at 0, but bit 0 is not used
+		const selectedKEXSchemes = parseBitMask(
+			raw.payload.subarray(1, 2),
+			0,
+		).filter((s) => s !== 0);
+		validatePayload(selectedKEXSchemes.length === 1);
+		const selectedKEXScheme: KEXSchemes = selectedKEXSchemes[0];
+		const selectedECDHProfiles = parseBitMask(
+			raw.payload.subarray(2, 3),
+			ECDHProfiles.Curve25519,
+		);
+		validatePayload(selectedECDHProfiles.length === 1);
+		const selectedECDHProfile: ECDHProfiles = selectedECDHProfiles[0];
+		const grantedKeys: SecurityClass[] = parseBitMask(
+			raw.payload.subarray(3, 4),
+			SecurityClass.S2_Unauthenticated,
+		);
+
+		return new Security2CCKEXSet({
+			nodeId: ctx.sourceNodeId,
+			_reserved,
+			permitCSA,
+			echo,
+			selectedKEXScheme,
+			selectedECDHProfile,
+			grantedKeys,
+		});
 	}
 
 	public readonly _reserved: number;
@@ -2397,15 +2432,12 @@ export class Security2CCKEXFail extends Security2CC {
 		this.failType = options.failType;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): Security2CCKEXFail {
-		validatePayload(payload.length >= 1);
-		const failType: KEXFailType = payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): Security2CCKEXFail {
+		validatePayload(raw.payload.length >= 1);
+		const failType: KEXFailType = raw.payload[0];
 
 		return new Security2CCKEXFail({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			failType,
 		});
 	}
@@ -2441,16 +2473,16 @@ export class Security2CCPublicKeyReport extends Security2CC {
 		this.publicKey = options.publicKey;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): Security2CCPublicKeyReport {
-		validatePayload(payload.length >= 17);
-		const includingNode = !!(payload[0] & 0b1);
-		const publicKey: Buffer = payload.subarray(1);
+		validatePayload(raw.payload.length >= 17);
+		const includingNode = !!(raw.payload[0] & 0b1);
+		const publicKey: Buffer = raw.payload.subarray(1);
 
 		return new Security2CCPublicKeyReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			includingNode,
 			publicKey,
 		});
@@ -2494,16 +2526,19 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 		this.networkKey = options.networkKey;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): Security2CCNetworkKeyReport {
-		validatePayload(payload.length >= 17);
-		const grantedKey: SecurityClass = bitMaskToSecurityClass(payload, 0);
-		const networkKey = payload.subarray(1, 17);
+		validatePayload(raw.payload.length >= 17);
+		const grantedKey: SecurityClass = bitMaskToSecurityClass(
+			raw.payload,
+			0,
+		);
+		const networkKey = raw.payload.subarray(1, 17);
 
 		return new Security2CCNetworkKeyReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			grantedKey,
 			networkKey,
 		});
@@ -2551,15 +2586,18 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 		this.requestedKey = options.requestedKey;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): Security2CCNetworkKeyGet {
-		validatePayload(payload.length >= 1);
-		const requestedKey: SecurityClass = bitMaskToSecurityClass(payload, 0);
+		validatePayload(raw.payload.length >= 1);
+		const requestedKey: SecurityClass = bitMaskToSecurityClass(
+			raw.payload,
+			0,
+		);
 
 		return new Security2CCNetworkKeyGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			requestedKey,
 		});
 	}
@@ -2603,16 +2641,16 @@ export class Security2CCTransferEnd extends Security2CC {
 		this.keyRequestComplete = options.keyRequestComplete;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): Security2CCTransferEnd {
-		validatePayload(payload.length >= 1);
-		const keyVerified = !!(payload[0] & 0b10);
-		const keyRequestComplete = !!(payload[0] & 0b1);
+		validatePayload(raw.payload.length >= 1);
+		const keyVerified = !!(raw.payload[0] & 0b10);
+		const keyRequestComplete = !!(raw.payload[0] & 0b1);
 
 		return new Security2CCTransferEnd({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			keyVerified,
 			keyRequestComplete,
 		});
@@ -2653,11 +2691,11 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 		this.supportedCCs = options.supportedCCs;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): Security2CCCommandsSupportedReport {
-		const CCs = parseCCList(payload);
+		const CCs = parseCCList(raw.payload);
 		// SDS13783: A sending node MAY terminate the list of supported command classes with the
 		// COMMAND_CLASS_MARK command class identifier.
 		// A receiving node MUST stop parsing the list of supported command classes if it detects the
@@ -2665,7 +2703,7 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 		const supportedCCs = CCs.supportedCCs;
 
 		return new Security2CCCommandsSupportedReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedCCs,
 		});
 	}

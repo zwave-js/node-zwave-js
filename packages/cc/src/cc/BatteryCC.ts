@@ -20,6 +20,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
 	GetSupportedCCVersion,
@@ -35,6 +36,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -444,14 +446,11 @@ export class BatteryCCReport extends BatteryCC {
 		this.lowTemperatureStatus = options.lowTemperatureStatus;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): BatteryCCReport {
+	public static from(raw: CCRaw, ctx: CCParsingContext): BatteryCCReport {
 		let ccOptions: BatteryCCReportOptions;
 
-		validatePayload(payload.length >= 1);
-		const level = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const level = raw.payload[0];
 
 		if (level === 0xff) {
 			ccOptions = {
@@ -464,21 +463,21 @@ export class BatteryCCReport extends BatteryCC {
 			};
 		}
 
-		if (payload.length >= 3) {
+		if (raw.payload.length >= 3) {
 			// Starting with V2
-			const chargingStatus: BatteryChargingStatus = payload[1] >>> 6;
-			const rechargeable = !!(payload[1] & 0b0010_0000);
-			const backup = !!(payload[1] & 0b0001_0000);
-			const overheating = !!(payload[1] & 0b1000);
-			const lowFluid = !!(payload[1] & 0b0100);
+			const chargingStatus: BatteryChargingStatus = raw.payload[1] >>> 6;
+			const rechargeable = !!(raw.payload[1] & 0b0010_0000);
+			const backup = !!(raw.payload[1] & 0b0001_0000);
+			const overheating = !!(raw.payload[1] & 0b1000);
+			const lowFluid = !!(raw.payload[1] & 0b0100);
 			const rechargeOrReplace: BatteryReplacementStatus =
-				!!(payload[1] & 0b10)
+				!!(raw.payload[1] & 0b10)
 					? BatteryReplacementStatus.Now
-					: !!(payload[1] & 0b1)
+					: !!(raw.payload[1] & 0b1)
 					? BatteryReplacementStatus.Soon
 					: BatteryReplacementStatus.No;
-			const lowTemperatureStatus = !!(payload[2] & 0b10);
-			const disconnected = !!(payload[2] & 0b1);
+			const lowTemperatureStatus = !!(raw.payload[2] & 0b10);
+			const disconnected = !!(raw.payload[2] & 0b1);
 
 			ccOptions = {
 				...ccOptions,
@@ -494,7 +493,7 @@ export class BatteryCCReport extends BatteryCC {
 		}
 
 		return new BatteryCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			...ccOptions,
 		});
 	}
@@ -658,24 +657,24 @@ export class BatteryCCHealthReport extends BatteryCC {
 		this.temperatureScale = options.temperatureScale;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): BatteryCCHealthReport {
-		validatePayload(payload.length >= 2);
+		validatePayload(raw.payload.length >= 2);
 		// Parse maximum capacity. 0xff means unknown
-		let maximumCapacity: number | undefined = payload[0];
+		let maximumCapacity: number | undefined = raw.payload[0];
 		if (maximumCapacity === 0xff) maximumCapacity = undefined;
 		const {
 			value: temperature,
 			scale: temperatureScale,
 		} = parseFloatWithScale(
-			payload.subarray(1),
+			raw.payload.subarray(1),
 			true, // The temperature field may be omitted
 		);
 
 		return new BatteryCCHealthReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			maximumCapacity,
 			temperature,
 			temperatureScale,

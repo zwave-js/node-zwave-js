@@ -17,6 +17,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetSupportedCCVersion,
 	GetValueDB,
 } from "@zwave-js/host/safe";
@@ -42,13 +43,13 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -1234,58 +1235,68 @@ export type UserCodeCCSetOptions =
 @useSupervision()
 export class UserCodeCCSet extends UserCodeCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & UserCodeCCSetOptions),
+		options: UserCodeCCSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 2);
-			this.userId = this.payload[0];
-			this.userIdStatus = this.payload[1];
-			if (
-				this.userIdStatus !== UserIDStatus.Available
-				&& this.userIdStatus !== UserIDStatus.StatusNotAvailable
-			) {
-				this.userCode = this.payload.subarray(2);
-			} else {
-				this.userCode = Buffer.alloc(4, 0x00);
-			}
-		} else {
-			this.userId = options.userId;
-			this.userIdStatus = options.userIdStatus;
+		this.userId = options.userId;
+		this.userIdStatus = options.userIdStatus;
 
-			// Validate options
-			if (this.userId < 0) {
+		// Validate options
+		if (this.userId < 0) {
+			throw new ZWaveError(
+				`${this.constructor.name}: The user ID must be between greater than 0.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			this.userId === 0
+			&& this.userIdStatus !== UserIDStatus.Available
+		) {
+			throw new ZWaveError(
+				`${this.constructor.name}: User ID 0 may only be used to clear all user codes`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (this.userIdStatus === UserIDStatus.Available) {
+			this.userCode = "\0".repeat(4);
+		} else {
+			this.userCode = options.userCode!;
+			// Specs say ASCII 0-9, manufacturers don't care :)
+			if (this.userCode.length < 4 || this.userCode.length > 10) {
 				throw new ZWaveError(
-					`${this.constructor.name}: The user ID must be between greater than 0.`,
+					`${this.constructor.name}: The user code must have a length of 4 to 10 ${
+						typeof this.userCode === "string"
+							? "characters"
+							: "bytes"
+					}`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
-			} else if (
-				this.userId === 0
-				&& this.userIdStatus !== UserIDStatus.Available
-			) {
-				throw new ZWaveError(
-					`${this.constructor.name}: User ID 0 may only be used to clear all user codes`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			} else if (this.userIdStatus === UserIDStatus.Available) {
-				this.userCode = "\0".repeat(4);
-			} else {
-				this.userCode = options.userCode!;
-				// Specs say ASCII 0-9, manufacturers don't care :)
-				if (this.userCode.length < 4 || this.userCode.length > 10) {
-					throw new ZWaveError(
-						`${this.constructor.name}: The user code must have a length of 4 to 10 ${
-							typeof this.userCode === "string"
-								? "characters"
-								: "bytes"
-						}`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
 			}
 		}
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): UserCodeCCSet {
+		validatePayload(raw.payload.length >= 2);
+		const userId = raw.payload[0];
+		const userIdStatus: UserIDStatus = raw.payload[1];
+		if (userIdStatus === UserIDStatus.StatusNotAvailable) {
+			validatePayload.fail("Invalid user ID status");
+		}
+
+		if (userIdStatus === UserIDStatus.Available) {
+			return new UserCodeCCSet({
+				nodeId: ctx.sourceNodeId,
+				userId,
+				userIdStatus,
+			});
+		}
+
+		const userCode = raw.payload.subarray(2);
+
+		return new UserCodeCCSet({
+			nodeId: ctx.sourceNodeId,
+			userId,
+			userIdStatus,
+			userCode,
+		});
 	}
 
 	public userId: number;
@@ -1335,17 +1346,14 @@ export class UserCodeCCReport extends UserCodeCC
 		this.userCode = options.userCode ?? "";
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): UserCodeCCReport {
-		validatePayload(payload.length >= 2);
-		const userId = payload[0];
-		const userIdStatus: UserIDStatus = payload[1];
+	public static from(raw: CCRaw, ctx: CCParsingContext): UserCodeCCReport {
+		validatePayload(raw.payload.length >= 2);
+		const userId = raw.payload[0];
+		const userIdStatus: UserIDStatus = raw.payload[1];
 		let userCode: string | Buffer;
 
 		if (
-			payload.length === 2
+			raw.payload.length === 2
 			&& (userIdStatus === UserIDStatus.Available
 				|| userIdStatus === UserIDStatus.StatusNotAvailable)
 		) {
@@ -1353,9 +1361,9 @@ export class UserCodeCCReport extends UserCodeCC
 			userCode = "";
 		} else {
 			// The specs require the user code to be at least 4 digits
-			validatePayload(payload.length >= 6);
+			validatePayload(raw.payload.length >= 6);
 
-			let userCodeBuffer = payload.subarray(2);
+			let userCodeBuffer = raw.payload.subarray(2);
 			// Specs say infer user code from payload length, manufacturers send zero-padded strings
 			while (userCodeBuffer.at(-1) === 0) {
 				userCodeBuffer = userCodeBuffer.subarray(0, -1);
@@ -1374,7 +1382,7 @@ export class UserCodeCCReport extends UserCodeCC
 		}
 
 		return new UserCodeCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			userId,
 			userIdStatus,
 			userCode,
@@ -1445,15 +1453,12 @@ export class UserCodeCCGet extends UserCodeCC {
 		this.userId = options.userId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): UserCodeCCGet {
-		validatePayload(payload.length >= 1);
-		const userId = payload[0];
+	public static from(raw: CCRaw, ctx: CCParsingContext): UserCodeCCGet {
+		validatePayload(raw.payload.length >= 1);
+		const userId = raw.payload[0];
 
 		return new UserCodeCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			userId,
 		});
 	}
@@ -1488,24 +1493,24 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 		this.supportedUsers = options.supportedUsers;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCUsersNumberReport {
-		validatePayload(payload.length >= 1);
+		validatePayload(raw.payload.length >= 1);
 
 		let supportedUsers;
 
-		if (payload.length >= 3) {
+		if (raw.payload.length >= 3) {
 			// V2+
-			supportedUsers = payload.readUInt16BE(1);
+			supportedUsers = raw.payload.readUInt16BE(1);
 		} else {
 			// V1
-			supportedUsers = payload[0];
+			supportedUsers = raw.payload[0];
 		}
 
 		return new UserCodeCCUsersNumberReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedUsers,
 		});
 	}
@@ -1564,46 +1569,46 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		this.supportedASCIIChars = options.supportedASCIIChars;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCCapabilitiesReport {
 		let offset = 0;
 
-		validatePayload(payload.length >= offset + 1);
-		const supportsAdminCode = !!(payload[offset] & 0b100_00000);
+		validatePayload(raw.payload.length >= offset + 1);
+		const supportsAdminCode = !!(raw.payload[offset] & 0b100_00000);
 		const supportsAdminCodeDeactivation = !!(
-			payload[offset] & 0b010_00000
+			raw.payload[offset] & 0b010_00000
 		);
-		const statusBitMaskLength = payload[offset] & 0b000_11111;
+		const statusBitMaskLength = raw.payload[offset] & 0b000_11111;
 		offset += 1;
 
 		validatePayload(
-			payload.length >= offset + statusBitMaskLength + 1,
+			raw.payload.length >= offset + statusBitMaskLength + 1,
 		);
 		const supportedUserIDStatuses: UserIDStatus[] = parseBitMask(
-			payload.subarray(offset, offset + statusBitMaskLength),
+			raw.payload.subarray(offset, offset + statusBitMaskLength),
 			UserIDStatus.Available,
 		);
 
 		offset += statusBitMaskLength;
 		const supportsUserCodeChecksum = !!(
-			payload[offset] & 0b100_00000
+			raw.payload[offset] & 0b100_00000
 		);
 		const supportsMultipleUserCodeReport = !!(
-			payload[offset] & 0b010_00000
+			raw.payload[offset] & 0b010_00000
 		);
 		const supportsMultipleUserCodeSet = !!(
-			payload[offset] & 0b001_00000
+			raw.payload[offset] & 0b001_00000
 		);
-		const keypadModesBitMaskLength = payload[offset] & 0b000_11111;
+		const keypadModesBitMaskLength = raw.payload[offset] & 0b000_11111;
 		offset += 1;
 
 		validatePayload(
-			payload.length >= offset + keypadModesBitMaskLength + 1,
+			raw.payload.length >= offset + keypadModesBitMaskLength + 1,
 		);
 		const supportedKeypadModes: KeypadMode[] = parseBitMask(
-			payload.subarray(
+			raw.payload.subarray(
 				offset,
 				offset + keypadModesBitMaskLength,
 			),
@@ -1612,19 +1617,19 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 
 		offset += keypadModesBitMaskLength;
 
-		const keysBitMaskLength = payload[offset] & 0b000_11111;
+		const keysBitMaskLength = raw.payload[offset] & 0b000_11111;
 		offset += 1;
 
-		validatePayload(payload.length >= offset + keysBitMaskLength);
+		validatePayload(raw.payload.length >= offset + keysBitMaskLength);
 		const supportedASCIIChars = Buffer.from(
 			parseBitMask(
-				payload.subarray(offset, offset + keysBitMaskLength),
+				raw.payload.subarray(offset, offset + keysBitMaskLength),
 				0,
 			),
 		).toString("ascii");
 
 		return new UserCodeCCCapabilitiesReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportsAdminCode,
 			supportsAdminCodeDeactivation,
 			supportedUserIDStatuses,
@@ -1743,15 +1748,15 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 		this.keypadMode = options.keypadMode;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCKeypadModeSet {
-		validatePayload(payload.length >= 1);
-		const keypadMode: KeypadMode = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const keypadMode: KeypadMode = raw.payload[0];
 
 		return new UserCodeCCKeypadModeSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			keypadMode,
 		});
 	}
@@ -1785,15 +1790,15 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		this.keypadMode = options.keypadMode;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCKeypadModeReport {
-		validatePayload(payload.length >= 1);
-		const keypadMode: KeypadMode = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const keypadMode: KeypadMode = raw.payload[0];
 
 		return new UserCodeCCKeypadModeReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			keypadMode,
 		});
 	}
@@ -1856,19 +1861,19 @@ export class UserCodeCCAdminCodeSet extends UserCodeCC {
 		this.adminCode = options.adminCode;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCAdminCodeSet {
-		validatePayload(payload.length >= 1);
-		const codeLength = payload[0] & 0b1111;
-		validatePayload(payload.length >= 1 + codeLength);
-		const adminCode = payload
+		validatePayload(raw.payload.length >= 1);
+		const codeLength = raw.payload[0] & 0b1111;
+		validatePayload(raw.payload.length >= 1 + codeLength);
+		const adminCode = raw.payload
 			.subarray(1, 1 + codeLength)
 			.toString("ascii");
 
 		return new UserCodeCCAdminCodeSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			adminCode,
 		});
 	}
@@ -1905,19 +1910,19 @@ export class UserCodeCCAdminCodeReport extends UserCodeCC {
 		this.adminCode = options.adminCode;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCAdminCodeReport {
-		validatePayload(payload.length >= 1);
-		const codeLength = payload[0] & 0b1111;
-		validatePayload(payload.length >= 1 + codeLength);
-		const adminCode = payload
+		validatePayload(raw.payload.length >= 1);
+		const codeLength = raw.payload[0] & 0b1111;
+		validatePayload(raw.payload.length >= 1 + codeLength);
+		const adminCode = raw.payload
 			.subarray(1, 1 + codeLength)
 			.toString("ascii");
 
 		return new UserCodeCCAdminCodeReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			adminCode,
 		});
 	}
@@ -1959,15 +1964,15 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		this.userCodeChecksum = options.userCodeChecksum;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCUserCodeChecksumReport {
-		validatePayload(payload.length >= 2);
-		const userCodeChecksum = payload.readUInt16BE(0);
+		validatePayload(raw.payload.length >= 2);
+		const userCodeChecksum = raw.payload.readUInt16BE(0);
 
 		return new UserCodeCCUserCodeChecksumReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			userCodeChecksum,
 		});
 	}
@@ -2014,9 +2019,9 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		this.userCodes = options.userCodes;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCExtendedUserCodeSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2025,7 +2030,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		);
 
 		return new UserCodeCCExtendedUserCodeSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -2088,27 +2093,27 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		this.nextUserId = options.nextUserId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCExtendedUserCodeReport {
-		validatePayload(payload.length >= 1);
-		const numCodes = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const numCodes = raw.payload[0];
 		let offset = 1;
 		const userCodes: UserCode[] = [];
 		// parse each user code
 		for (let i = 0; i < numCodes; i++) {
 			const { code, bytesRead } = parseExtendedUserCode(
-				payload.subarray(offset),
+				raw.payload.subarray(offset),
 			);
 			userCodes.push(code);
 			offset += bytesRead;
 		}
-		validatePayload(payload.length >= offset + 2);
-		const nextUserId = payload.readUInt16BE(offset);
+		validatePayload(raw.payload.length >= offset + 2);
+		const nextUserId = raw.payload.readUInt16BE(offset);
 
 		return new UserCodeCCExtendedUserCodeReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			userCodes,
 			nextUserId,
 		});
@@ -2166,9 +2171,9 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		this.reportMore = !!options.reportMore;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): UserCodeCCExtendedUserCodeGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2177,7 +2182,7 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		);
 
 		return new UserCodeCCExtendedUserCodeGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 

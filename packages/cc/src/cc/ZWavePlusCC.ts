@@ -5,16 +5,19 @@ import {
 	MessagePriority,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -175,25 +178,32 @@ export interface ZWavePlusCCReportOptions {
 @CCCommand(ZWavePlusCommand.Report)
 export class ZWavePlusCCReport extends ZWavePlusCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & ZWavePlusCCReportOptions),
+		options: ZWavePlusCCReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 7);
-			this.zwavePlusVersion = this.payload[0];
-			this.roleType = this.payload[1];
-			this.nodeType = this.payload[2];
-			this.installerIcon = this.payload.readUInt16BE(3);
-			this.userIcon = this.payload.readUInt16BE(5);
-		} else {
-			this.zwavePlusVersion = options.zwavePlusVersion;
-			this.roleType = options.roleType;
-			this.nodeType = options.nodeType;
-			this.installerIcon = options.installerIcon;
-			this.userIcon = options.userIcon;
-		}
+		this.zwavePlusVersion = options.zwavePlusVersion;
+		this.roleType = options.roleType;
+		this.nodeType = options.nodeType;
+		this.installerIcon = options.installerIcon;
+		this.userIcon = options.userIcon;
+	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): ZWavePlusCCReport {
+		validatePayload(raw.payload.length >= 7);
+		const zwavePlusVersion = raw.payload[0];
+		const roleType: ZWavePlusRoleType = raw.payload[1];
+		const nodeType: ZWavePlusNodeType = raw.payload[2];
+		const installerIcon = raw.payload.readUInt16BE(3);
+		const userIcon = raw.payload.readUInt16BE(5);
+
+		return new ZWavePlusCCReport({
+			nodeId: ctx.sourceNodeId,
+			zwavePlusVersion,
+			roleType,
+			nodeType,
+			installerIcon,
+			userIcon,
+		});
 	}
 
 	@ccValue(ZWavePlusCCValues.zwavePlusVersion)

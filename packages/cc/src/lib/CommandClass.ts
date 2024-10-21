@@ -116,10 +116,6 @@ interface CommandClassCreationOptions extends CCCommandOptions {
 	origin?: undefined;
 }
 
-function gotCCCommandOptions(options: any): options is CCCommandOptions {
-	return typeof options.nodeId === "number" || isArray(options.nodeId);
-}
-
 export type CommandClassOptions =
 	| CommandClassCreationOptions
 	| CommandClassDeserializationOptions;
@@ -191,10 +187,60 @@ export function getEffectiveCCVersion(
 		|| (defaultVersion ?? getImplementedVersion(cc.ccId));
 }
 
+export class CCRaw {
+	public constructor(
+		public ccId: CommandClasses,
+		public ccCommand: number | undefined,
+		public payload: Buffer,
+	) {}
+
+	public static parse(data: Buffer): CCRaw {
+		const { ccId, bytesRead: ccIdLength } = parseCCId(data);
+		// There are so few exceptions that we can handle them here manually
+		if (ccId === CommandClasses["No Operation"]) {
+			return new CCRaw(ccId, undefined, Buffer.allocUnsafe(0));
+		}
+		let ccCommand: number | undefined = data[ccIdLength];
+		let payload = data.subarray(ccIdLength + 1);
+		if (ccId === CommandClasses["Transport Service"]) {
+			// Transport Service only uses the higher 5 bits for the command
+			// and re-uses the lower 3 bits of the ccCommand as payload
+			payload = Buffer.concat([
+				Buffer.from([ccCommand & 0b111]),
+				payload,
+			]);
+			ccCommand = ccCommand & 0b11111_000;
+		} else if (ccId === CommandClasses["Manufacturer Proprietary"]) {
+			// ManufacturerProprietaryCC has no CC command, so the first
+			// payload byte is stored in ccCommand.
+			payload = Buffer.concat([
+				Buffer.from([ccCommand]),
+				payload,
+			]);
+			ccCommand = undefined;
+		}
+
+		return new CCRaw(ccId, ccCommand, payload);
+	}
+
+	public withPayload(payload: Buffer): CCRaw {
+		return new CCRaw(this.ccId, this.ccCommand, payload);
+	}
+
+	public serialize(): Buffer {
+		const ccIdLength = this.ccId >= 0xf100 ? 2 : 1;
+		const data = Buffer.allocUnsafe(ccIdLength + 1 + this.payload.length);
+		data.writeUIntBE(this.ccId, 0, ccIdLength);
+		data[ccIdLength] = this.ccCommand ?? 0;
+		this.payload.copy(data, ccIdLength + 1);
+		return data;
+	}
+}
+
 // @publicAPI
 export class CommandClass implements CCId {
 	// empty constructor to parse messages
-	public constructor(options: CommandClassOptions) {
+	public constructor(options: CommandClassCreationOptions) {
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;
@@ -204,61 +250,132 @@ export class CommandClass implements CCId {
 				? MessageOrigin.Controller
 				: MessageOrigin.Host);
 
-		if (gotDeserializationOptions(options)) {
-			// For deserialized commands, try to invoke the correct subclass constructor
-			const CCConstructor =
-				getCCConstructor(CommandClass.getCommandClass(options.data))
-					?? CommandClass;
-			const ccId = CommandClass.getCommandClass(options.data);
-			const ccCommand = CCConstructor.getCCCommand(options.data);
-			if (ccCommand != undefined) {
-				const CommandConstructor = getCCCommandConstructor(
-					ccId,
-					ccCommand,
-				);
+		const {
+			nodeId,
+			endpoint = 0,
+			ccId = getCommandClass(this),
+			ccCommand = getCCCommand(this),
+			payload = Buffer.allocUnsafe(0),
+		} = options;
+
+		this.nodeId = nodeId;
+		this.endpointIndex = endpoint;
+		this.ccId = ccId;
+		this.ccCommand = ccCommand;
+		this.payload = payload;
+	}
+
+	public static parse(
+		payload: Buffer,
+		ctx: CCParsingContext,
+	): CommandClass {
+		const raw = CCRaw.parse(payload);
+
+		// Find the correct subclass constructor to invoke
+		const CCConstructor = getCCConstructor(raw.ccId);
+		if (!CCConstructor) {
+			// None -> fall back to the default constructor
+			return CommandClass.from(raw, ctx);
+		}
+
+		let CommandConstructor: CCConstructor<CommandClass> | undefined;
+		if (raw.ccCommand != undefined) {
+			CommandConstructor = getCCCommandConstructor(
+				raw.ccId,
+				raw.ccCommand,
+			);
+		}
+		// Not every CC has a constructor for its commands. In that case,
+		// call the CC constructor directly
+		try {
+			return (CommandConstructor ?? CCConstructor).from(raw, ctx);
+		} catch (e) {
+			// Indicate invalid payloads with a special CC type
+			if (
+				isZWaveError(e)
+				&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+			) {
+				const ccName = CommandConstructor?.name
+					?? `${getCCName(raw.ccId)} CC`;
+
+				// Preserve why the command was invalid
+				let reason: string | ZWaveErrorCodes | undefined;
 				if (
-					CommandConstructor
-					&& (new.target as any) !== CommandConstructor
+					typeof e.context === "string"
+					|| (typeof e.context === "number"
+						&& ZWaveErrorCodes[e.context] != undefined)
 				) {
-					return new CommandConstructor(options);
+					reason = e.context;
 				}
+
+				const ret = new InvalidCC({
+					nodeId: ctx.sourceNodeId,
+					ccId: raw.ccId,
+					ccName,
+					reason,
+				});
+
+				// FIXME: Handle in encapsulating CCs
+				// if (options.fromEncapsulation) {
+				// 	ret.encapsulatingCC = options.encapCC as any;
+				// }
+
+				return ret;
 			}
-
-			// If the constructor is correct or none was found, fall back to normal deserialization
-			if (options.fromEncapsulation) {
-				// Propagate the node ID and endpoint index from the encapsulating CC
-				this.nodeId = options.encapCC.nodeId;
-				if (!this.endpointIndex && options.encapCC.endpointIndex) {
-					this.endpointIndex = options.encapCC.endpointIndex;
-				}
-				// And remember which CC encapsulates this CC
-				this.encapsulatingCC = options.encapCC as any;
-			} else {
-				this.nodeId = options.nodeId;
-			}
-
-			this.frameType = options.context.frameType;
-
-			({
-				ccId: this.ccId,
-				ccCommand: this.ccCommand,
-				payload: this.payload,
-			} = this.deserialize(options.data));
-		} else if (gotCCCommandOptions(options)) {
-			const {
-				nodeId,
-				endpoint = 0,
-				ccId = getCommandClass(this),
-				ccCommand = getCCCommand(this),
-				payload = Buffer.allocUnsafe(0),
-			} = options;
-			this.nodeId = nodeId;
-			this.endpointIndex = endpoint;
-			this.ccId = ccId;
-			this.ccCommand = ccCommand;
-			this.payload = payload;
+			throw e;
 		}
 	}
+
+	public static from(raw: CCRaw, ctx: CCParsingContext): CommandClass {
+		// FIXME: Propagate frame type etc.
+		// FIXME: Refactor subclasses' parse() to override this
+		return new CommandClass({
+			nodeId: ctx.ownNodeId,
+			ccId: raw.ccId,
+			ccCommand: raw.ccCommand,
+			payload: raw.payload,
+		});
+	}
+
+	// // For deserialized commands, try to invoke the correct subclass constructor
+	// const CCConstructor =
+	// 	getCCConstructor(CommandClass.getCommandClass(options.data))
+	// 		?? CommandClass;
+	// const ccId = CommandClass.getCommandClass(options.data);
+	// const ccCommand = CCConstructor.getCCCommand(options.data);
+	// if (ccCommand != undefined) {
+	// 	const CommandConstructor = getCCCommandConstructor(
+	// 		ccId,
+	// 		ccCommand,
+	// 	);
+	// 	if (
+	// 		CommandConstructor
+	// 		&& (new.target as any) !== CommandConstructor
+	// 	) {
+	// 		return new CommandConstructor(options);
+	// 	}
+	// }
+
+	// // If the constructor is correct or none was found, fall back to normal deserialization
+	// if (options.fromEncapsulation) {
+	// 	// Propagate the node ID and endpoint index from the encapsulating CC
+	// 	this.nodeId = options.encapCC.nodeId;
+	// 	if (!this.endpointIndex && options.encapCC.endpointIndex) {
+	// 		this.endpointIndex = options.encapCC.endpointIndex;
+	// 	}
+	// 	// And remember which CC encapsulates this CC
+	// 	this.encapsulatingCC = options.encapCC as any;
+	// } else {
+	// 	this.nodeId = options.nodeId;
+	// }
+
+	// this.frameType = options.context.frameType;
+
+	// ({
+	// 	ccId: this.ccId,
+	// 	ccCommand: this.ccCommand,
+	// 	payload: this.payload,
+	// } = this.deserialize(options.data));
 
 	/** This CC's identifier */
 	public ccId!: CommandClasses;
@@ -414,63 +531,63 @@ export class CommandClass implements CCId {
 		return ret;
 	}
 
-	/**
-	 * Creates an instance of the CC that is serialized in the given buffer
-	 */
-	public static from(
-		options: CommandClassDeserializationOptions,
-	): CommandClass {
-		// Fall back to unspecified command class in case we receive one that is not implemented
-		const ccId = CommandClass.getCommandClass(options.data);
-		const Constructor = getCCConstructor(ccId) ?? CommandClass;
+	// /**
+	//  * Creates an instance of the CC that is serialized in the given buffer
+	//  */
+	// public static from(
+	// 	options: CommandClassDeserializationOptions,
+	// ): CommandClass {
+	// 	// Fall back to unspecified command class in case we receive one that is not implemented
+	// 	const ccId = CommandClass.getCommandClass(options.data);
+	// 	const Constructor = getCCConstructor(ccId) ?? CommandClass;
 
-		try {
-			return new Constructor(options);
-		} catch (e) {
-			// Indicate invalid payloads with a special CC type
-			if (
-				isZWaveError(e)
-				&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
-			) {
-				const nodeId = options.fromEncapsulation
-					? options.encapCC.nodeId
-					: options.nodeId;
-				let ccName: string | undefined;
-				const ccId = CommandClass.getCommandClass(options.data);
-				const ccCommand = CommandClass.getCCCommand(options.data);
-				if (ccCommand != undefined) {
-					ccName = getCCCommandConstructor(ccId, ccCommand)?.name;
-				}
-				// Fall back to the unspecified CC if the command cannot be determined
-				if (!ccName) {
-					ccName = `${getCCName(ccId)} CC`;
-				}
-				// Preserve why the command was invalid
-				let reason: string | ZWaveErrorCodes | undefined;
-				if (
-					typeof e.context === "string"
-					|| (typeof e.context === "number"
-						&& ZWaveErrorCodes[e.context] != undefined)
-				) {
-					reason = e.context;
-				}
+	// 	try {
+	// 		return new Constructor(options);
+	// 	} catch (e) {
+	// 		// Indicate invalid payloads with a special CC type
+	// 		if (
+	// 			isZWaveError(e)
+	// 			&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+	// 		) {
+	// 			const nodeId = options.fromEncapsulation
+	// 				? options.encapCC.nodeId
+	// 				: options.nodeId;
+	// 			let ccName: string | undefined;
+	// 			const ccId = CommandClass.getCommandClass(options.data);
+	// 			const ccCommand = CommandClass.getCCCommand(options.data);
+	// 			if (ccCommand != undefined) {
+	// 				ccName = getCCCommandConstructor(ccId, ccCommand)?.name;
+	// 			}
+	// 			// Fall back to the unspecified CC if the command cannot be determined
+	// 			if (!ccName) {
+	// 				ccName = `${getCCName(ccId)} CC`;
+	// 			}
+	// 			// Preserve why the command was invalid
+	// 			let reason: string | ZWaveErrorCodes | undefined;
+	// 			if (
+	// 				typeof e.context === "string"
+	// 				|| (typeof e.context === "number"
+	// 					&& ZWaveErrorCodes[e.context] != undefined)
+	// 			) {
+	// 				reason = e.context;
+	// 			}
 
-				const ret = new InvalidCC({
-					nodeId,
-					ccId,
-					ccName,
-					reason,
-				});
+	// 			const ret = new InvalidCC({
+	// 				nodeId,
+	// 				ccId,
+	// 				ccName,
+	// 				reason,
+	// 			});
 
-				if (options.fromEncapsulation) {
-					ret.encapsulatingCC = options.encapCC as any;
-				}
+	// 			if (options.fromEncapsulation) {
+	// 				ret.encapsulatingCC = options.encapCC as any;
+	// 			}
 
-				return ret;
-			}
-			throw e;
-		}
-	}
+	// 			return ret;
+	// 		}
+	// 		throw e;
+	// 	}
+	// }
 
 	/**
 	 * Create an instance of the given CC without checking whether it is supported.

@@ -31,6 +31,7 @@ import {
 } from "@zwave-js/core/safe";
 import type {
 	CCEncodingContext,
+	CCParsingContext,
 	GetDeviceConfig,
 	GetNode,
 	GetSupportedCCVersion,
@@ -49,6 +50,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	type CCResponsePredicate,
 	CommandClass,
 	type CommandClassDeserializationOptions,
@@ -655,20 +657,20 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			: options.scale.key;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultilevelSensorCCReport {
-		validatePayload(payload.length >= 1);
-		const type = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const type = raw.payload[0];
 
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(
-			payload.subarray(1),
+			raw.payload.subarray(1),
 		);
 
 		return new MultilevelSensorCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			type,
 			value,
 			scale,
@@ -806,20 +808,20 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		}
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultilevelSensorCCGet {
 		let sensorType: number | undefined;
 		let scale: number | undefined;
 
-		if (payload.length >= 2) {
-			sensorType = payload[0];
-			scale = (payload[1] >> 3) & 0b11;
+		if (raw.payload.length >= 2) {
+			sensorType = raw.payload[0];
+			scale = (raw.payload[1] >> 3) & 0b11;
 		}
 
 		return new MultilevelSensorCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sensorType,
 			scale,
 		});
@@ -883,15 +885,15 @@ export class MultilevelSensorCCSupportedSensorReport
 		this.supportedSensorTypes = options.supportedSensorTypes;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultilevelSensorCCSupportedSensorReport {
-		validatePayload(payload.length >= 1);
-		const supportedSensorTypes = parseBitMask(payload);
+		validatePayload(raw.payload.length >= 1);
+		const supportedSensorTypes = parseBitMask(raw.payload);
 
 		return new MultilevelSensorCCSupportedSensorReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedSensorTypes,
 		});
 	}
@@ -940,19 +942,19 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		this.supportedScales = options.supportedScales;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultilevelSensorCCSupportedScaleReport {
-		validatePayload(payload.length >= 2);
-		const sensorType = payload[0];
+		validatePayload(raw.payload.length >= 2);
+		const sensorType = raw.payload[0];
 		const supportedScales = parseBitMask(
-			Buffer.from([payload[1] & 0b1111]),
+			Buffer.from([raw.payload[1] & 0b1111]),
 			0,
 		);
 
 		return new MultilevelSensorCCSupportedScaleReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sensorType,
 			supportedScales,
 		});
@@ -1009,15 +1011,15 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		this.sensorType = options.sensorType;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultilevelSensorCCGetSupportedScale {
-		validatePayload(payload.length >= 1);
-		const sensorType = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const sensorType = raw.payload[0];
 
 		return new MultilevelSensorCCGetSupportedScale({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sensorType,
 		});
 	}

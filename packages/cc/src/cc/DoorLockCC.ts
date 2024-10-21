@@ -15,7 +15,11 @@ import {
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -31,6 +35,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -838,9 +843,9 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 		this.mode = options.mode;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): DoorLockCCOperationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -849,7 +854,7 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 		);
 
 		return new DoorLockCCOperationSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -902,36 +907,37 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		this.duration = options.duration;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): DoorLockCCOperationReport {
-		validatePayload(payload.length >= 5);
-		const currentMode: DoorLockMode = payload[0];
+		validatePayload(raw.payload.length >= 5);
+		const currentMode: DoorLockMode = raw.payload[0];
 		const outsideHandlesCanOpenDoor: DoorHandleStatus = [
-			!!(payload[1] & 0b0001_0000),
-			!!(payload[1] & 0b0010_0000),
-			!!(payload[1] & 0b0100_0000),
-			!!(payload[1] & 0b1000_0000),
+			!!(raw.payload[1] & 0b0001_0000),
+			!!(raw.payload[1] & 0b0010_0000),
+			!!(raw.payload[1] & 0b0100_0000),
+			!!(raw.payload[1] & 0b1000_0000),
 		];
 		const insideHandlesCanOpenDoor: DoorHandleStatus = [
-			!!(payload[1] & 0b0001),
-			!!(payload[1] & 0b0010),
-			!!(payload[1] & 0b0100),
-			!!(payload[1] & 0b1000),
+			!!(raw.payload[1] & 0b0001),
+			!!(raw.payload[1] & 0b0010),
+			!!(raw.payload[1] & 0b0100),
+			!!(raw.payload[1] & 0b1000),
 		];
-		const doorStatus: "closed" | "open" | undefined = !!(payload[2] & 0b1)
-			? "closed"
-			: "open";
+		const doorStatus: "closed" | "open" | undefined =
+			!!(raw.payload[2] & 0b1)
+				? "closed"
+				: "open";
 		const boltStatus: "unlocked" | "locked" | undefined =
-			!!(payload[2] & 0b10) ? "unlocked" : "locked";
+			!!(raw.payload[2] & 0b10) ? "unlocked" : "locked";
 		const latchStatus: "closed" | "open" | undefined =
-			!!(payload[2] & 0b100)
+			!!(raw.payload[2] & 0b100)
 				? "closed"
 				: "open";
 		// Ignore invalid timeout values
-		const lockTimeoutMinutes = payload[3];
-		const lockTimeoutSeconds = payload[4];
+		const lockTimeoutMinutes = raw.payload[3];
+		const lockTimeoutSeconds = raw.payload[4];
 		let lockTimeout: number | undefined;
 		if (lockTimeoutMinutes <= 253 && lockTimeoutSeconds <= 59) {
 			lockTimeout = lockTimeoutSeconds + lockTimeoutMinutes * 60;
@@ -939,13 +945,13 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 
 		let targetMode: DoorLockMode | undefined;
 		let duration: Duration | undefined;
-		if (payload.length >= 7) {
-			targetMode = payload[5];
-			duration = Duration.parseReport(payload[6]);
+		if (raw.payload.length >= 7) {
+			targetMode = raw.payload[5];
+			duration = Duration.parseReport(raw.payload[6]);
 		}
 
 		return new DoorLockCCOperationReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			currentMode,
 			outsideHandlesCanOpenDoor,
 			insideHandlesCanOpenDoor,
@@ -1093,28 +1099,28 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 		this.blockToBlock = options.blockToBlock;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): DoorLockCCConfigurationReport {
-		validatePayload(payload.length >= 4);
-		const operationType: DoorLockOperationType = payload[0];
+		validatePayload(raw.payload.length >= 4);
+		const operationType: DoorLockOperationType = raw.payload[0];
 		const outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus = [
-			!!(payload[1] & 0b0001_0000),
-			!!(payload[1] & 0b0010_0000),
-			!!(payload[1] & 0b0100_0000),
-			!!(payload[1] & 0b1000_0000),
+			!!(raw.payload[1] & 0b0001_0000),
+			!!(raw.payload[1] & 0b0010_0000),
+			!!(raw.payload[1] & 0b0100_0000),
+			!!(raw.payload[1] & 0b1000_0000),
 		];
 		const insideHandlesCanOpenDoorConfiguration: DoorHandleStatus = [
-			!!(payload[1] & 0b0001),
-			!!(payload[1] & 0b0010),
-			!!(payload[1] & 0b0100),
-			!!(payload[1] & 0b1000),
+			!!(raw.payload[1] & 0b0001),
+			!!(raw.payload[1] & 0b0010),
+			!!(raw.payload[1] & 0b0100),
+			!!(raw.payload[1] & 0b1000),
 		];
 		let lockTimeoutConfiguration: number | undefined;
 		if (operationType === DoorLockOperationType.Timed) {
-			const lockTimeoutMinutes = payload[2];
-			const lockTimeoutSeconds = payload[3];
+			const lockTimeoutMinutes = raw.payload[2];
+			const lockTimeoutSeconds = raw.payload[3];
 			if (lockTimeoutMinutes <= 0xfd && lockTimeoutSeconds <= 59) {
 				lockTimeoutConfiguration = lockTimeoutSeconds
 					+ lockTimeoutMinutes * 60;
@@ -1125,17 +1131,17 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 		let holdAndReleaseTime: number | undefined;
 		let twistAssist: boolean | undefined;
 		let blockToBlock: boolean | undefined;
-		if (payload.length >= 5) {
-			autoRelockTime = payload.readUInt16BE(4);
-			holdAndReleaseTime = payload.readUInt16BE(6);
+		if (raw.payload.length >= 5) {
+			autoRelockTime = raw.payload.readUInt16BE(4);
+			holdAndReleaseTime = raw.payload.readUInt16BE(6);
 
-			const flags = payload[8];
+			const flags = raw.payload[8];
 			twistAssist = !!(flags & 0b1);
 			blockToBlock = !!(flags & 0b10);
 		}
 
 		return new DoorLockCCConfigurationReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			operationType,
 			outsideHandlesCanOpenDoorConfiguration,
 			insideHandlesCanOpenDoorConfiguration,
@@ -1285,29 +1291,34 @@ export type DoorLockCCConfigurationSetOptions =
 @useSupervision()
 export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public constructor(
-		options:
-			| CommandClassDeserializationOptions
-			| (CCCommandOptions & DoorLockCCConfigurationSetOptions),
+		options: DoorLockCCConfigurationSetOptions & CCCommandOptions,
 	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.operationType = options.operationType;
-			this.outsideHandlesCanOpenDoorConfiguration =
-				options.outsideHandlesCanOpenDoorConfiguration;
-			this.insideHandlesCanOpenDoorConfiguration =
-				options.insideHandlesCanOpenDoorConfiguration;
-			this.lockTimeoutConfiguration = options.lockTimeoutConfiguration;
-			this.autoRelockTime = options.autoRelockTime;
-			this.holdAndReleaseTime = options.holdAndReleaseTime;
-			this.twistAssist = options.twistAssist;
-			this.blockToBlock = options.blockToBlock;
-		}
+		this.operationType = options.operationType;
+		this.outsideHandlesCanOpenDoorConfiguration =
+			options.outsideHandlesCanOpenDoorConfiguration;
+		this.insideHandlesCanOpenDoorConfiguration =
+			options.insideHandlesCanOpenDoorConfiguration;
+		this.lockTimeoutConfiguration = options.lockTimeoutConfiguration;
+		this.autoRelockTime = options.autoRelockTime;
+		this.holdAndReleaseTime = options.holdAndReleaseTime;
+		this.twistAssist = options.twistAssist;
+		this.blockToBlock = options.blockToBlock;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): DoorLockCCConfigurationSet {
+		// TODO: Deserialize payload
+		throw new ZWaveError(
+			`${this.constructor.name}: deserialization not implemented`,
+			ZWaveErrorCodes.Deserialization_NotImplemented,
+		);
+
+		return new DoorLockCCConfigurationSet({
+			nodeId: ctx.sourceNodeId,
+		});
 	}
 
 	public operationType: DoorLockOperationType;
@@ -1453,51 +1464,51 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		this.autoRelockSupported = options.autoRelockSupported;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): DoorLockCCCapabilitiesReport {
 		// parse variable length operation type bit mask
-		validatePayload(payload.length >= 1);
-		const bitMaskLength = payload[0] & 0b11111;
+		validatePayload(raw.payload.length >= 1);
+		const bitMaskLength = raw.payload[0] & 0b11111;
 		let offset = 1;
-		validatePayload(payload.length >= offset + bitMaskLength + 1);
+		validatePayload(raw.payload.length >= offset + bitMaskLength + 1);
 		const supportedOperationTypes: DoorLockOperationType[] = parseBitMask(
-			payload.subarray(offset, offset + bitMaskLength),
+			raw.payload.subarray(offset, offset + bitMaskLength),
 			// bit 0 is reserved, bitmask starts at 1
 			0,
 		);
 		offset += bitMaskLength;
 		// parse variable length door lock mode list
-		const listLength = payload[offset];
+		const listLength = raw.payload[offset];
 		offset += 1;
-		validatePayload(payload.length >= offset + listLength + 3);
+		validatePayload(raw.payload.length >= offset + listLength + 3);
 		const supportedDoorLockModes: DoorLockMode[] = [
-			...payload.subarray(offset, offset + listLength),
+			...raw.payload.subarray(offset, offset + listLength),
 		];
 		offset += listLength;
 		const supportedOutsideHandles: DoorHandleStatus = [
-			!!(payload[offset] & 0b0001_0000),
-			!!(payload[offset] & 0b0010_0000),
-			!!(payload[offset] & 0b0100_0000),
-			!!(payload[offset] & 0b1000_0000),
+			!!(raw.payload[offset] & 0b0001_0000),
+			!!(raw.payload[offset] & 0b0010_0000),
+			!!(raw.payload[offset] & 0b0100_0000),
+			!!(raw.payload[offset] & 0b1000_0000),
 		];
 		const supportedInsideHandles: DoorHandleStatus = [
-			!!(payload[offset] & 0b0001),
-			!!(payload[offset] & 0b0010),
-			!!(payload[offset] & 0b0100),
-			!!(payload[offset] & 0b1000),
+			!!(raw.payload[offset] & 0b0001),
+			!!(raw.payload[offset] & 0b0010),
+			!!(raw.payload[offset] & 0b0100),
+			!!(raw.payload[offset] & 0b1000),
 		];
-		const doorSupported = !!(payload[offset + 1] & 0b1);
-		const boltSupported = !!(payload[offset + 1] & 0b10);
-		const latchSupported = !!(payload[offset + 1] & 0b100);
-		const blockToBlockSupported = !!(payload[offset + 2] & 0b1);
-		const twistAssistSupported = !!(payload[offset + 2] & 0b10);
-		const holdAndReleaseSupported = !!(payload[offset + 2] & 0b100);
-		const autoRelockSupported = !!(payload[offset + 2] & 0b1000);
+		const doorSupported = !!(raw.payload[offset + 1] & 0b1);
+		const boltSupported = !!(raw.payload[offset + 1] & 0b10);
+		const latchSupported = !!(raw.payload[offset + 1] & 0b100);
+		const blockToBlockSupported = !!(raw.payload[offset + 2] & 0b1);
+		const twistAssistSupported = !!(raw.payload[offset + 2] & 0b10);
+		const holdAndReleaseSupported = !!(raw.payload[offset + 2] & 0b100);
+		const autoRelockSupported = !!(raw.payload[offset + 2] & 0b1000);
 
 		return new DoorLockCCCapabilitiesReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			supportedOperationTypes,
 			supportedDoorLockModes,
 			supportedOutsideHandles,

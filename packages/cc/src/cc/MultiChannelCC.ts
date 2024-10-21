@@ -28,6 +28,7 @@ import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -825,22 +826,22 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		this.aggregatedCount = options.aggregatedCount;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCEndPointReport {
-		validatePayload(payload.length >= 2);
-		const countIsDynamic = !!(payload[0] & 0b10000000);
-		const identicalCapabilities = !!(payload[0] & 0b01000000);
-		const individualCount = payload[1] & 0b01111111;
+		validatePayload(raw.payload.length >= 2);
+		const countIsDynamic = !!(raw.payload[0] & 0b10000000);
+		const identicalCapabilities = !!(raw.payload[0] & 0b01000000);
+		const individualCount = raw.payload[1] & 0b01111111;
 		let aggregatedCount: MaybeNotKnown<number>;
 
-		if (payload.length >= 3) {
-			aggregatedCount = payload[2] & 0b01111111;
+		if (raw.payload.length >= 3) {
+			aggregatedCount = raw.payload[2] & 0b01111111;
 		}
 
 		return new MultiChannelCCEndPointReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			countIsDynamic,
 			identicalCapabilities,
 			individualCount,
@@ -918,17 +919,17 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 		this.wasRemoved = options.wasRemoved;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCCapabilityReport {
 		// Only validate the bytes we expect to see here
 		// parseApplicationNodeInformation does its own validation
-		validatePayload(payload.length >= 1);
-		const endpointIndex = payload[0] & 0b01111111;
-		const isDynamic = !!(payload[0] & 0b10000000);
+		validatePayload(raw.payload.length >= 1);
+		const endpointIndex = raw.payload[0] & 0b01111111;
+		const isDynamic = !!(raw.payload[0] & 0b10000000);
 		const NIF = parseApplicationNodeInformation(
-			payload.subarray(1),
+			raw.payload.subarray(1),
 		);
 		const genericDeviceClass = NIF.genericDeviceClass;
 		const specificDeviceClass = NIF.specificDeviceClass;
@@ -940,7 +941,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 			&& specificDeviceClass === 0x00;
 
 		return new MultiChannelCCCapabilityReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			endpointIndex,
 			isDynamic,
 			genericDeviceClass,
@@ -1033,15 +1034,15 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 		this.requestedEndpoint = options.requestedEndpoint;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCCapabilityGet {
-		validatePayload(payload.length >= 1);
-		const requestedEndpoint = payload[0] & 0b01111111;
+		validatePayload(raw.payload.length >= 1);
+		const requestedEndpoint = raw.payload[0] & 0b01111111;
 
 		return new MultiChannelCCCapabilityGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			requestedEndpoint,
 		});
 	}
@@ -1082,23 +1083,23 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		this.reportsToFollow = options.reportsToFollow;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCEndPointFindReport {
-		validatePayload(payload.length >= 3);
-		const reportsToFollow = payload[0];
-		const genericClass = payload[1];
-		const specificClass = payload[2];
+		validatePayload(raw.payload.length >= 3);
+		const reportsToFollow = raw.payload[0];
+		const genericClass = raw.payload[1];
+		const specificClass = raw.payload[2];
 
 		// Some devices omit the endpoint list although that is not allowed in the specs
 		// therefore don't validatePayload here.
-		const foundEndpoints = [...payload.subarray(3)]
+		const foundEndpoints = [...raw.payload.subarray(3)]
 			.map((e) => e & 0b01111111)
 			.filter((e) => e !== 0);
 
 		return new MultiChannelCCEndPointFindReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			reportsToFollow,
 			genericClass,
 			specificClass,
@@ -1180,16 +1181,16 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		this.specificClass = options.specificClass;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCEndPointFind {
-		validatePayload(payload.length >= 2);
-		const genericClass = payload[0];
-		const specificClass = payload[1];
+		validatePayload(raw.payload.length >= 2);
+		const genericClass = raw.payload[0];
+		const specificClass = raw.payload[1];
 
 		return new MultiChannelCCEndPointFind({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			genericClass,
 			specificClass,
 		});
@@ -1238,19 +1239,19 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		this.members = options.members;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCAggregatedMembersReport {
-		validatePayload(payload.length >= 2);
-		const aggregatedEndpointIndex = payload[0] & 0b0111_1111;
-		const bitMaskLength = payload[1];
-		validatePayload(payload.length >= 2 + bitMaskLength);
-		const bitMask = payload.subarray(2, 2 + bitMaskLength);
+		validatePayload(raw.payload.length >= 2);
+		const aggregatedEndpointIndex = raw.payload[0] & 0b0111_1111;
+		const bitMaskLength = raw.payload[1];
+		validatePayload(raw.payload.length >= 2 + bitMaskLength);
+		const bitMask = raw.payload.subarray(2, 2 + bitMaskLength);
 		const members = parseBitMask(bitMask);
 
 		return new MultiChannelCCAggregatedMembersReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			aggregatedEndpointIndex,
 			members,
 		});
@@ -1291,9 +1292,9 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 		this.requestedEndpoint = options.requestedEndpoint;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCAggregatedMembersGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -1302,7 +1303,7 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 		);
 
 		return new MultiChannelCCAggregatedMembersGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -1381,27 +1382,27 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		this.destination = options.destination;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCCommandEncapsulation {
-		validatePayload(payload.length >= 2);
+		validatePayload(raw.payload.length >= 2);
 
 		let endpointIndex;
 		let destination: MultiChannelCCDestination;
 
 		if (
-			options.context.getDeviceConfig?.(options.context.sourceNodeId)
+			options.context.getDeviceConfig?.(ctx.sourceNodeId)
 				?.compat?.treatDestinationEndpointAsSource
 		) {
 			// This device incorrectly uses the destination field to indicate the source endpoint
-			endpointIndex = payload[1] & 0b0111_1111;
+			endpointIndex = raw.payload[1] & 0b0111_1111;
 			destination = 0;
 		} else {
 			// Parse normally
-			endpointIndex = payload[0] & 0b0111_1111;
-			const isBitMask = !!(payload[1] & 0b1000_0000);
-			destination = payload[1] & 0b0111_1111;
+			endpointIndex = raw.payload[0] & 0b0111_1111;
+			const isBitMask = !!(raw.payload[1] & 0b1000_0000);
+			destination = raw.payload[1] & 0b0111_1111;
 			if (isBitMask) {
 				destination = parseBitMask(
 					Buffer.from([destination]),
@@ -1410,7 +1411,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		}
 		// No need to validate further, each CC does it for itself
 		const encapsulated: CommandClass = CommandClass.from({
-			data: payload.subarray(2),
+			data: raw.payload.subarray(2),
 			fromEncapsulation: true,
 			// FIXME: 🐔 🥚
 			encapCC: this,
@@ -1419,7 +1420,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		});
 
 		return new MultiChannelCCCommandEncapsulation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			endpointIndex,
 			destination,
 			encapsulated,
@@ -1489,17 +1490,17 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 		this.endpointCount = options.endpointCount;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCV1Report {
 		// V1 won't be extended in the future, so do an exact check
-		validatePayload(payload.length === 2);
-		const requestedCC: CommandClasses = payload[0];
-		const endpointCount = payload[1];
+		validatePayload(raw.payload.length === 2);
+		const requestedCC: CommandClasses = raw.payload[0];
+		const endpointCount = raw.payload[1];
 
 		return new MultiChannelCCV1Report({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			requestedCC,
 			endpointCount,
 		});
@@ -1541,10 +1542,7 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 		this.requestedCC = options.requestedCC;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
-	): MultiChannelCCV1Get {
+	public static from(raw: CCRaw, ctx: CCParsingContext): MultiChannelCCV1Get {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -1552,7 +1550,7 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 		);
 
 		return new MultiChannelCCV1Get({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -1609,21 +1607,21 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		this.endpointIndex = this.encapsulated.endpointIndex;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): MultiChannelCCV1CommandEncapsulation {
-		validatePayload(payload.length >= 1);
-		const endpointIndex: any = payload[0];
+		validatePayload(raw.payload.length >= 1);
+		const endpointIndex: any = raw.payload[0];
 
 		// Some devices send invalid reports, i.e. MultiChannelCCV1CommandEncapsulation, but with V2+ binary format
 		// This would be a NoOp CC, but it makes no sense to encapsulate that.
-		const isV2withV1Header = payload.length >= 2
-			&& payload[1] === 0x00;
+		const isV2withV1Header = raw.payload.length >= 2
+			&& raw.payload[1] === 0x00;
 
 		// No need to validate further, each CC does it for itself
 		const encapsulated: CommandClass = CommandClass.from({
-			data: payload.subarray(isV2withV1Header ? 2 : 1),
+			data: raw.payload.subarray(isV2withV1Header ? 2 : 1),
 			fromEncapsulation: true,
 			// FIXME: 🐔 🥚
 			encapCC: this,
@@ -1632,7 +1630,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		});
 
 		return new MultiChannelCCV1CommandEncapsulation({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			endpointIndex,
 			encapsulated,
 		});

@@ -11,7 +11,11 @@ import {
 	getCCName,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
@@ -27,6 +31,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -367,9 +372,9 @@ export class SceneActuatorConfigurationCCSet
 		this.level = options.level;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SceneActuatorConfigurationCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -378,7 +383,7 @@ export class SceneActuatorConfigurationCCSet
 		);
 
 		return new SceneActuatorConfigurationCCSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -434,23 +439,23 @@ export class SceneActuatorConfigurationCCReport
 		this.dimmingDuration = options.dimmingDuration;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SceneActuatorConfigurationCCReport {
-		validatePayload(payload.length >= 3);
-		const sceneId = payload[0];
+		validatePayload(raw.payload.length >= 3);
+		const sceneId = raw.payload[0];
 
 		let level: number | undefined;
 		let dimmingDuration: Duration | undefined;
 		if (sceneId !== 0) {
-			level = payload[1];
-			dimmingDuration = Duration.parseReport(payload[2])
+			level = raw.payload[1];
+			dimmingDuration = Duration.parseReport(raw.payload[2])
 				?? Duration.unknown();
 		}
 
 		return new SceneActuatorConfigurationCCReport({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 			sceneId,
 			level,
 			dimmingDuration,
@@ -535,9 +540,9 @@ export class SceneActuatorConfigurationCCGet
 		this.sceneId = options.sceneId;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): SceneActuatorConfigurationCCGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -546,7 +551,7 @@ export class SceneActuatorConfigurationCCGet
 		);
 
 		return new SceneActuatorConfigurationCCGet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 

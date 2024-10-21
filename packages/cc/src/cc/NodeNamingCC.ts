@@ -9,7 +9,11 @@ import {
 	ZWaveErrorCodes,
 	validatePayload,
 } from "@zwave-js/core/safe";
-import type { CCEncodingContext, GetValueDB } from "@zwave-js/host/safe";
+import type {
+	CCEncodingContext,
+	CCParsingContext,
+	GetValueDB,
+} from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -23,6 +27,7 @@ import {
 } from "../lib/API";
 import {
 	type CCCommandOptions,
+	type CCRaw,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 	type InterviewContext,
@@ -277,9 +282,9 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 		this.name = options.name;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): NodeNamingAndLocationCCNameSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -288,7 +293,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 		);
 
 		return new NodeNamingAndLocationCCNameSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
@@ -371,9 +376,9 @@ export class NodeNamingAndLocationCCLocationSet
 		this.location = options.location;
 	}
 
-	public static parse(
-		payload: Buffer,
-		options: CommandClassDeserializationOptions,
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
 	): NodeNamingAndLocationCCLocationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -382,7 +387,7 @@ export class NodeNamingAndLocationCCLocationSet
 		);
 
 		return new NodeNamingAndLocationCCLocationSet({
-			nodeId: options.context.sourceNodeId,
+			nodeId: ctx.sourceNodeId,
 		});
 	}
 
