@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	MultilevelSwitchCC,
 	MultilevelSwitchCCGet,
 	MultilevelSwitchCCReport,
@@ -81,11 +82,11 @@ test("the Report command (V1) should be deserialized correctly", (t) => {
 			55, // current value
 		]),
 	);
-	const cc = new MultilevelSwitchCCReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as MultilevelSwitchCCReport;
+	t.is(cc.constructor, MultilevelSwitchCCReport);
 
 	t.is(cc.currentValue, 55);
 	t.is(cc.targetValue, undefined);
@@ -101,11 +102,11 @@ test("the Report command (v4) should be deserialized correctly", (t) => {
 			1, // duration
 		]),
 	);
-	const cc = new MultilevelSwitchCCReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as MultilevelSwitchCCReport;
+	t.is(cc.constructor, MultilevelSwitchCCReport);
 
 	t.is(cc.currentValue, 55);
 	t.is(cc.targetValue, 66);
@@ -166,11 +167,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new MultilevelSwitchCC({
-		nodeId: 2,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 2 } as any,
+	) as MultilevelSwitchCC;
 	t.is(cc.constructor, MultilevelSwitchCC);
 });
 

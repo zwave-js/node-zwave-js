@@ -6,6 +6,7 @@ import {
 	AssociationCCSupportedGroupingsGet,
 	AssociationCCSupportedGroupingsReport,
 	AssociationCommand,
+	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import test from "ava";
@@ -38,11 +39,11 @@ test("the SupportedGroupingsReport command should be deserialized correctly", (t
 			7, // # of groups
 		]),
 	);
-	const cc = new AssociationCCSupportedGroupingsReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as AssociationCCSupportedGroupingsReport;
+	t.is(cc.constructor, AssociationCCSupportedGroupingsReport);
 
 	t.is(cc.groupCount, 7);
 });
@@ -92,11 +93,11 @@ test("the Report command should be deserialized correctly", (t) => {
 			5,
 		]),
 	);
-	const cc = new AssociationCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as AssociationCCReport;
+	t.is(cc.constructor, AssociationCCReport);
 
 	t.is(cc.groupId, 5);
 	t.is(cc.maxNodes, 9);

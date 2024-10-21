@@ -286,7 +286,7 @@ export class CommandClass implements CCId {
 	public static from(raw: CCRaw, ctx: CCParsingContext): CommandClass {
 		// FIXME: Propagate frame type etc.
 		// FIXME: Refactor subclasses' parse() to override this
-		return new CommandClass({
+		return new this({
 			nodeId: ctx.ownNodeId,
 			ccId: raw.ccId,
 			ccCommand: raw.ccCommand,

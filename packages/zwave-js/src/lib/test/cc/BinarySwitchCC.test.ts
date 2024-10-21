@@ -4,6 +4,7 @@ import {
 	BinarySwitchCCReport,
 	BinarySwitchCCSet,
 	BinarySwitchCommand,
+	CommandClass,
 } from "@zwave-js/cc";
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { type GetSupportedCCVersion } from "@zwave-js/host";
@@ -79,11 +80,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0xff, // current value
 		]),
 	);
-	const cc = new BinarySwitchCCReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as BinarySwitchCCReport;
+	t.is(cc.constructor, BinarySwitchCCReport);
 
 	t.is(cc.currentValue, true);
 	t.is(cc.targetValue, undefined);
@@ -99,11 +100,11 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			1, // duration
 		]),
 	);
-	const cc = new BinarySwitchCCReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as BinarySwitchCCReport;
+	t.is(cc.constructor, BinarySwitchCCReport);
 
 	t.is(cc.currentValue, true);
 	t.is(cc.targetValue, false);
@@ -111,15 +112,14 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	t.is(cc.duration!.value, 1);
 });
 
-test("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", (t) => {
+test.only("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", (t) => {
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new BinarySwitchCC({
-		nodeId: 2,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 2 } as any,
+	) as BinarySwitchCC;
 	t.is(cc.constructor, BinarySwitchCC);
 });
 

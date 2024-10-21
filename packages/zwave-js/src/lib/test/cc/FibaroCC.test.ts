@@ -47,14 +47,13 @@ test("the Report command should be deserialized correctly", (t) => {
 			0x00, // Tilt
 		]),
 	);
-	const cc = CommandClass.from({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
-	t.true(cc instanceof FibaroVenetianBlindCCReport);
-	t.is((cc as FibaroVenetianBlindCCReport).position, 0);
-	t.is((cc as FibaroVenetianBlindCCReport).tilt, 0);
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as FibaroVenetianBlindCCReport;
+	t.is(cc.constructor, FibaroVenetianBlindCCReport);
+	t.is(cc.position, 0);
+	t.is(cc.tilt, 0);
 });
 
 test("FibaroVenetianBlindCCSet should expect no response", (t) => {
@@ -77,9 +76,8 @@ test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", (t)
 		nodeId: 2,
 		tilt: 7,
 	});
-	const ccResponse = new FibaroVenetianBlindCCReport({
-		nodeId: 2,
-		data: buildCCBuffer(
+	const ccResponse = CommandClass.parse(
+		buildCCBuffer(
 			Buffer.from([
 				FibaroVenetianBlindCCCommand.Report,
 				0x03, // with Tilt and Position
@@ -87,8 +85,8 @@ test("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", (t)
 				0x07, // Tilt
 			]),
 		),
-		context: {} as any,
-	});
+		{ sourceNodeId: 2 } as any,
+	) as FibaroVenetianBlindCCReport;
 
 	t.false(ccRequest.isExpectedCCResponse(ccResponse));
 });
@@ -97,9 +95,8 @@ test("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = expected", (t) =
 	const ccRequest = new FibaroVenetianBlindCCGet({
 		nodeId: 2,
 	});
-	const ccResponse = new FibaroVenetianBlindCCReport({
-		nodeId: 2,
-		data: buildCCBuffer(
+	const ccResponse = CommandClass.parse(
+		buildCCBuffer(
 			Buffer.from([
 				FibaroVenetianBlindCCCommand.Report,
 				0x03, // with Tilt and Position
@@ -107,8 +104,8 @@ test("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = expected", (t) =
 				0x07, // Tilt
 			]),
 		),
-		context: {} as any,
-	});
+		{ sourceNodeId: 2 } as any,
+	) as FibaroVenetianBlindCCReport;
 
 	t.true(ccRequest.isExpectedCCResponse(ccResponse));
 });

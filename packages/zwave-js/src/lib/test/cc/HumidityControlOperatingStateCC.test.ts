@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	HumidityControlOperatingState,
 	HumidityControlOperatingStateCCGet,
 	HumidityControlOperatingStateCCReport,
@@ -35,11 +36,11 @@ test("the Report command should be deserialized correctly", (t) => {
 			HumidityControlOperatingState.Humidifying, // state
 		]),
 	);
-	const cc = new HumidityControlOperatingStateCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as HumidityControlOperatingStateCCReport;
+	t.is(cc.constructor, HumidityControlOperatingStateCCReport);
 
 	t.is(cc.state, HumidityControlOperatingState.Humidifying);
 });

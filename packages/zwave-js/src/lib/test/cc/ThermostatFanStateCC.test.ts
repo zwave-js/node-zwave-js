@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	ThermostatFanState,
 	ThermostatFanStateCC,
 	ThermostatFanStateCCGet,
@@ -34,11 +35,11 @@ test("the Report command (v1 - v2) should be deserialized correctly", (t) => {
 			ThermostatFanState["Idle / off"], // state
 		]),
 	);
-	const cc = new ThermostatFanStateCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as ThermostatFanStateCCReport;
+	t.is(cc.constructor, ThermostatFanStateCCReport);
 
 	t.is(cc.state, ThermostatFanState["Idle / off"]);
 });
@@ -47,11 +48,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new ThermostatFanStateCC({
-		nodeId: 1,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as ThermostatFanStateCC;
 	t.is(cc.constructor, ThermostatFanStateCC);
 });
 

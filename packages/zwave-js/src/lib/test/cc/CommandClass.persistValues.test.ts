@@ -1,4 +1,4 @@
-import { CentralSceneCommand, CentralSceneKeys } from "@zwave-js/cc";
+import { CentralSceneKeys } from "@zwave-js/cc";
 import { BasicCCSet } from "@zwave-js/cc/BasicCC";
 import { CentralSceneCCNotification } from "@zwave-js/cc/CentralSceneCC";
 import { CommandClasses } from "@zwave-js/core";
@@ -93,14 +93,9 @@ test(`persistValues() should not store values marked as "events" (non-stateful)`
 
 	const cc = new CentralSceneCCNotification({
 		nodeId: node2.id,
-		data: Buffer.from([
-			CommandClasses["Central Scene"],
-			CentralSceneCommand.Notification,
-			1, // seq number
-			CentralSceneKeys.KeyPressed,
-			1, // scene number
-		]),
-		context: {} as any,
+		sequenceNumber: 1,
+		sceneNumber: 1,
+		keyAttribute: CentralSceneKeys.KeyPressed,
 	});
 
 	// Central Scene should use the value notification event instead of added/updated

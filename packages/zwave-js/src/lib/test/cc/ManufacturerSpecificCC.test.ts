@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	ManufacturerSpecificCCGet,
 	ManufacturerSpecificCCReport,
 	ManufacturerSpecificCommand,
@@ -37,11 +38,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			0x06,
 		]),
 	);
-	const cc = new ManufacturerSpecificCCReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as ManufacturerSpecificCCReport;
+	t.is(cc.constructor, ManufacturerSpecificCCReport);
 
 	t.is(cc.manufacturerId, 0x0102);
 	t.is(cc.productType, 0x0304);

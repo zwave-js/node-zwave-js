@@ -1,4 +1,4 @@
-import type { CommandClass } from "@zwave-js/cc";
+import { CommandClass } from "@zwave-js/cc";
 import {
 	BasicCCGet,
 	BasicCCReport,
@@ -150,11 +150,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new MultiChannelCC({
-		nodeId: 1,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as MultiChannelCC;
 	t.is(cc.constructor, MultiChannelCC);
 });
 

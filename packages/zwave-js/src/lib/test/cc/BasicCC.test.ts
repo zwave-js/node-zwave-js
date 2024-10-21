@@ -5,6 +5,7 @@ import {
 	BasicCCSet,
 	type BasicCCValues,
 	BasicCommand,
+	CommandClass,
 	getCCValues,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
@@ -55,11 +56,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			55, // current value
 		]),
 	);
-	const basicCC = new BasicCCReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const basicCC = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as BasicCCReport;
+	t.is(basicCC.constructor, BasicCCReport);
 
 	t.is(basicCC.currentValue, 55);
 	t.is(basicCC.targetValue, undefined);
@@ -75,11 +76,11 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			1, // duration
 		]),
 	);
-	const basicCC = new BasicCCReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const basicCC = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as BasicCCReport;
+	t.is(basicCC.constructor, BasicCCReport);
 
 	t.is(basicCC.currentValue, 55);
 	t.is(basicCC.targetValue, 66);
@@ -91,11 +92,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const basicCC: any = new BasicCC({
-		nodeId: 2,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const basicCC = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 2 } as any,
+	) as BasicCCReport;
 	t.is(basicCC.constructor, BasicCC);
 });
 
@@ -133,7 +133,7 @@ test.only("getDefinedValueIDs() should include the target value for all endpoint
 test("BasicCCSet should expect no response", (t) => {
 	const cc = new BasicCCSet({
 		nodeId: 2,
-		endpoint: 2,
+		endpointIndex: 2,
 		targetValue: 7,
 	});
 	t.false(cc.expectsCCResponse());
@@ -142,7 +142,7 @@ test("BasicCCSet should expect no response", (t) => {
 test("BasicCCSet => BasicCCReport = unexpected", (t) => {
 	const ccRequest = new BasicCCSet({
 		nodeId: 2,
-		endpoint: 2,
+		endpointIndex: 2,
 		targetValue: 7,
 	});
 	const ccResponse = new BasicCCReport({

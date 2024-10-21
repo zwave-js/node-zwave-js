@@ -42,13 +42,12 @@ test(`creating and serializing should work for unspecified commands`, (t) => {
 	);
 });
 
-test("from() returns an un-specialized instance when receiving a non-implemented CC", (t) => {
+test("parse() returns an un-specialized instance when receiving a non-implemented CC", (t) => {
 	// This is a Node Provisioning CC. Change it when that CC is implemented
-	const cc = CommandClass.from({
-		data: Buffer.from("78030100", "hex"),
-		nodeId: 5,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		Buffer.from("78030100", "hex"),
+		{ sourceNodeId: 5 } as any,
+	);
 	t.is(cc.constructor, CommandClass);
 	t.is(cc.nodeId, 5);
 	t.is(cc.ccId, 0x78);
@@ -56,14 +55,13 @@ test("from() returns an un-specialized instance when receiving a non-implemented
 	t.deepEqual(cc.payload, Buffer.from([0x01, 0x00]));
 });
 
-test("from() does not throw when the CC is implemented", (t) => {
+test("parse() does not throw when the CC is implemented", (t) => {
 	t.notThrows(() =>
-		CommandClass.from({
-			// CRC-16 with BasicCC
-			data: Buffer.from("560120024d26", "hex"),
-			nodeId: 5,
-			context: {} as any,
-		})
+		// CRC-16 with BasicCC
+		CommandClass.parse(
+			Buffer.from("560120024d26", "hex"),
+			{ sourceNodeId: 5 } as any,
+		)
 	);
 });
 

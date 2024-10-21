@@ -9,6 +9,7 @@ import {
 	ColorSwitchCCSupportedGet,
 	ColorSwitchCCSupportedReport,
 	ColorSwitchCommand,
+	CommandClass,
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
@@ -48,11 +49,11 @@ test("the SupportedReport command should deserialize correctly", (t) => {
 			0b0000_0001,
 		]),
 	);
-	const cc = new ColorSwitchCCSupportedReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as ColorSwitchCCSupportedReport;
+	t.is(cc.constructor, ColorSwitchCCSupportedReport);
 
 	t.deepEqual(cc.supportedColorComponents, [
 		ColorComponent["Warm White"],
@@ -91,11 +92,11 @@ test("the Report command should deserialize correctly (version 1)", (t) => {
 			0b1111_1111, // value: 255
 		]),
 	);
-	const cc = new ColorSwitchCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as ColorSwitchCCReport;
+	t.is(cc.constructor, ColorSwitchCCReport);
 
 	t.is(cc.colorComponent, ColorComponent.Red);
 	t.is(cc.currentValue, 255);
@@ -113,11 +114,11 @@ test("the Report command should deserialize correctly (version 3)", (t) => {
 			0b0000_0001, // duration: 1
 		]),
 	);
-	const cc = new ColorSwitchCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as ColorSwitchCCReport;
+	t.is(cc.constructor, ColorSwitchCCReport);
 
 	t.is(cc.colorComponent, ColorComponent.Red);
 	t.is(cc.currentValue, 128);

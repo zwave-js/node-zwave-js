@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	MultiChannelAssociationCCGet,
 	MultiChannelAssociationCCRemove,
 	MultiChannelAssociationCCReport,
@@ -38,11 +39,11 @@ test("the SupportedGroupingsReport command should be deserialized correctly", (t
 			7, // # of groups
 		]),
 	);
-	const cc = new MultiChannelAssociationCCSupportedGroupingsReport({
-		nodeId: 4,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 4 } as any,
+	) as MultiChannelAssociationCCSupportedGroupingsReport;
+	t.is(cc.constructor, MultiChannelAssociationCCSupportedGroupingsReport);
 
 	t.is(cc.groupCount, 7);
 });
@@ -160,11 +161,11 @@ test("the Report command should be deserialized correctly (node IDs only)", (t) 
 			5,
 		]),
 	);
-	const cc = new MultiChannelAssociationCCReport({
-		nodeId: 4,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 4 } as any,
+	) as MultiChannelAssociationCCReport;
+	t.is(cc.constructor, MultiChannelAssociationCCReport);
 
 	t.is(cc.groupId, 5);
 	t.is(cc.maxNodes, 9);
@@ -189,11 +190,11 @@ test("the Report command should be deserialized correctly (endpoint addresses on
 			0b11010111,
 		]),
 	);
-	const cc = new MultiChannelAssociationCCReport({
-		nodeId: 4,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 4 } as any,
+	) as MultiChannelAssociationCCReport;
+	t.is(cc.constructor, MultiChannelAssociationCCReport);
 
 	t.deepEqual(cc.nodeIds, []);
 	t.deepEqual(cc.endpoints, [
@@ -227,11 +228,11 @@ test("the Report command should be deserialized correctly (both options)", (t) =
 			0b11010111,
 		]),
 	);
-	const cc = new MultiChannelAssociationCCReport({
-		nodeId: 4,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 4 } as any,
+	) as MultiChannelAssociationCCReport;
+	t.is(cc.constructor, MultiChannelAssociationCCReport);
 
 	t.deepEqual(cc.nodeIds, [1, 5, 9]);
 	t.deepEqual(cc.endpoints, [

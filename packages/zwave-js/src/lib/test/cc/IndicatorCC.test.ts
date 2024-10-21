@@ -100,11 +100,11 @@ test("the Report command (v1) should be deserialized correctly", (t) => {
 			55, // value
 		]),
 	);
-	const cc = new IndicatorCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as IndicatorCCReport;
+	t.is(cc.constructor, IndicatorCCReport);
 
 	t.is(cc.indicator0Value, 55);
 	t.is(cc.values, undefined);
@@ -124,11 +124,11 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 			1, // value
 		]),
 	);
-	const cc = new IndicatorCCReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as IndicatorCCReport;
+	t.is(cc.constructor, IndicatorCCReport);
 	// Boolean indicators are only interpreted during persistValues
 	cc.persistValues(host);
 
@@ -151,11 +151,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new IndicatorCC({
-		nodeId: 1,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 1 } as any,
+	) as IndicatorCC;
 	t.is(cc.constructor, IndicatorCC);
 });
 

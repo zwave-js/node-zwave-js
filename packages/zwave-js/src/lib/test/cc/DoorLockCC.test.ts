@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	DoorLockCCCapabilitiesGet,
 	DoorLockCCCapabilitiesReport,
 	DoorLockCCConfigurationGet,
@@ -74,11 +75,11 @@ test("the OperationReport command (v1-v3) should be deserialized correctly", (t)
 			20, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCOperationReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockCCOperationReport;
+	t.is(cc.constructor, DoorLockCCOperationReport);
 
 	t.is(cc.currentMode, DoorLockMode.InsideUnsecuredWithTimeout);
 	t.deepEqual(cc.outsideHandlesCanOpenDoor, [false, false, false, true]);
@@ -104,11 +105,11 @@ test("the OperationReport command (v4) should be deserialized correctly", (t) =>
 			0x01, // 1 second left
 		]),
 	);
-	const cc = new DoorLockCCOperationReport({
-		nodeId: 2,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 2 } as any,
+	) as DoorLockCCOperationReport;
+	t.is(cc.constructor, DoorLockCCOperationReport);
 	cc.persistValues(host);
 
 	t.is(cc.currentMode, DoorLockMode.OutsideUnsecured);
@@ -149,11 +150,11 @@ test("the ConfigurationReport command (v1-v3) should be deserialized correctly",
 			20, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockCCConfigurationReport;
+	t.is(cc.constructor, DoorLockCCConfigurationReport);
 
 	t.is(cc.operationType, DoorLockOperationType.Timed);
 	t.deepEqual(cc.outsideHandlesCanOpenDoorConfiguration, [
@@ -185,11 +186,11 @@ test("the ConfigurationReport command must ignore invalid timeouts (constant)", 
 			20, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockCCConfigurationReport;
+	t.is(cc.constructor, DoorLockCCConfigurationReport);
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
 });
@@ -204,11 +205,11 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid minu
 			20, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockCCConfigurationReport;
+	t.is(cc.constructor, DoorLockCCConfigurationReport);
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
 });
@@ -223,11 +224,11 @@ test("the ConfigurationReport command must ignore invalid timeouts (invalid seco
 			0xff, // timeout seconds
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockCCConfigurationReport;
+	t.is(cc.constructor, DoorLockCCConfigurationReport);
 
 	t.is(cc.lockTimeoutConfiguration, undefined);
 });
@@ -248,11 +249,11 @@ test("the ConfigurationReport command (v4) should be deserialized correctly", (t
 			0b01, // flags
 		]),
 	);
-	const cc = new DoorLockCCConfigurationReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockCCConfigurationReport;
+	t.is(cc.constructor, DoorLockCCConfigurationReport);
 
 	t.is(cc.autoRelockTime, 0xff01);
 	t.is(cc.holdAndReleaseTime, 0x0203);
@@ -314,11 +315,11 @@ test("the CapabilitiesReport command should be deserialized correctly", (t) => {
 			0b1010, // feature flags
 		]),
 	);
-	const cc = new DoorLockCCCapabilitiesReport({
-		nodeId: 1,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 1 } as any,
+	) as DoorLockCCCapabilitiesReport;
+	t.is(cc.constructor, DoorLockCCCapabilitiesReport);
 
 	t.deepEqual(cc.supportedOperationTypes, [
 		DoorLockOperationType.Constant,

@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	LanguageCC,
 	LanguageCCGet,
 	LanguageCCReport,
@@ -75,11 +76,11 @@ test("the Report command should be deserialized correctly (w/o country code)", (
 			0x75,
 		]),
 	);
-	const cc = new LanguageCCReport({
-		nodeId: 4,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 4 } as any,
+	) as LanguageCCReport;
+	t.is(cc.constructor, LanguageCCReport);
 
 	t.is(cc.language, "deu");
 	t.is(cc.country, undefined);
@@ -98,11 +99,11 @@ test("the Report command should be deserialized correctly (w/ country code)", (t
 			0x45,
 		]),
 	);
-	const cc = new LanguageCCReport({
-		nodeId: 4,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: 4 } as any,
+	) as LanguageCCReport;
+	t.is(cc.constructor, LanguageCCReport);
 
 	t.is(cc.language, "deu");
 	t.is(cc.country, "DE");
@@ -112,11 +113,10 @@ test("deserializing an unsupported command should return an unspecified version 
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);
-	const cc: any = new LanguageCC({
-		nodeId: 4,
-		data: serializedCC,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		serializedCC,
+		{ sourceNodeId: 4 } as any,
+	) as LanguageCC;
 	t.is(cc.constructor, LanguageCC);
 });
 
