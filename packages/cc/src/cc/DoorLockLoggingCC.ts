@@ -425,9 +425,9 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new DoorLockLoggingCCRecordGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new DoorLockLoggingCCRecordGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public recordNumber: number;

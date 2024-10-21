@@ -90,15 +90,13 @@ export class ApplicationCommandRequest extends Message
 			offset += nodeIdBytes;
 			// and a command class
 			const commandLength = this.payload[offset++];
-			this.command = CommandClass.from({
-				data: this.payload.subarray(offset, offset + commandLength),
-				nodeId,
-				origin: options.origin,
-				context: {
+			this.command = CommandClass.parse(
+				this.payload.subarray(offset, offset + commandLength),
+				{
 					sourceNodeId: nodeId,
 					...options.ctx,
 				},
-			}) as SinglecastCC<CommandClass>;
+			) as SinglecastCC<CommandClass>;
 		} else {
 			// TODO: This logic is unsound
 			if (!options.command.isSinglecast()) {

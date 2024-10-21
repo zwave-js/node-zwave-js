@@ -303,9 +303,9 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new HumidityControlModeCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new HumidityControlModeCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public mode: HumidityControlMode;

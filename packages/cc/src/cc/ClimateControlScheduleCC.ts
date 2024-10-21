@@ -22,7 +22,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -243,9 +242,9 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ClimateControlScheduleCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ClimateControlScheduleCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public switchPoints: Switchpoint[];
@@ -390,9 +389,9 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ClimateControlScheduleCCGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ClimateControlScheduleCCGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public weekday: Weekday;
@@ -551,9 +550,9 @@ export class ClimateControlScheduleCCOverrideSet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ClimateControlScheduleCCOverrideSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ClimateControlScheduleCCOverrideSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public overrideType: ScheduleOverrideType;

@@ -382,9 +382,9 @@ export class SceneActuatorConfigurationCCSet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new SceneActuatorConfigurationCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new SceneActuatorConfigurationCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public sceneId: number;
@@ -550,9 +550,9 @@ export class SceneActuatorConfigurationCCGet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new SceneActuatorConfigurationCCGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new SceneActuatorConfigurationCCGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public sceneId: number;

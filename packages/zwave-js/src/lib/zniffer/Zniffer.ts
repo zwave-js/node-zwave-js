@@ -566,11 +566,9 @@ supported frequencies: ${
 
 				// TODO: Support parsing multicast S2 frames
 				try {
-					cc = CommandClass.from({
-						data: mpdu.payload,
-						fromEncapsulation: false,
-						nodeId: mpdu.sourceNodeId,
-						context: {
+					cc = CommandClass.parse(
+						mpdu.payload,
+						{
 							homeId: mpdu.homeId,
 							ownNodeId: destNodeId,
 							sourceNodeId: mpdu.sourceNodeId,
@@ -579,7 +577,7 @@ supported frequencies: ${
 							securityManagerLR: destSecurityManagerLR,
 							...this.parsingContext,
 						},
-					});
+					);
 				} catch (e: any) {
 					// Ignore
 					console.error(e.stack);

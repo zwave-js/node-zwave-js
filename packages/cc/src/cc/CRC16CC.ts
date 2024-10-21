@@ -16,7 +16,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -25,6 +24,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+
 import { CRC16Command } from "../lib/_Types";
 
 const headerBuffer = Buffer.from([
@@ -119,7 +119,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 	) {
 		super(options);
 		this.encapsulated = options.encapsulated;
-		options.encapsulated.encapsulatingCC = this as any;
+		this.encapsulated.encapsulatingCC = this as any;
 	}
 
 	public static from(
@@ -137,15 +137,8 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 			raw.payload.length - 2,
 		);
 		validatePayload(expectedCRC === actualCRC);
-		const encapsulated: CommandClass = CommandClass.from({
-			data: ccBuffer,
-			fromEncapsulation: true,
-			// FIXME: 🐔 🥚
-			encapCC: this,
-			origin: options.origin,
-			context: options.context,
-		});
 
+		const encapsulated = CommandClass.parse(ccBuffer, ctx);
 		return new CRC16CCCommandEncapsulation({
 			nodeId: ctx.sourceNodeId,
 			encapsulated,

@@ -35,7 +35,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 } from "../lib/CommandClass";
@@ -584,9 +583,9 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new CentralSceneCCConfigurationSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new CentralSceneCCConfigurationSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public slowRefresh: boolean;

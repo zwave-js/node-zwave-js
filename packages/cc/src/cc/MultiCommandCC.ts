@@ -16,7 +16,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -128,17 +127,13 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 			const cmdLength = raw.payload[offset];
 			validatePayload(raw.payload.length >= offset + 1 + cmdLength);
 			encapsulated.push(
-				CommandClass.from({
-					data: raw.payload.subarray(
+				CommandClass.parse(
+					raw.payload.subarray(
 						offset + 1,
 						offset + 1 + cmdLength,
 					),
-					fromEncapsulation: true,
-					// FIXME: 🐔 🥚
-					encapCC: this,
-					origin: options.origin,
-					context: options.context,
-				}),
+					ctx,
+				),
 			);
 			offset += 1 + cmdLength;
 		}

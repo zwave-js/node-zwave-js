@@ -30,7 +30,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	getEffectiveCCVersion,
@@ -1302,9 +1301,9 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new MultiChannelCCAggregatedMembersGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new MultiChannelCCAggregatedMembersGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public requestedEndpoint: number;
@@ -1378,7 +1377,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	) {
 		super(options);
 		this.encapsulated = options.encapsulated;
-		options.encapsulated.encapsulatingCC = this as any;
+		this.encapsulated.encapsulatingCC = this as any;
 		this.destination = options.destination;
 	}
 
@@ -1388,11 +1387,11 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	): MultiChannelCCCommandEncapsulation {
 		validatePayload(raw.payload.length >= 2);
 
-		let endpointIndex;
+		let endpointIndex: number;
 		let destination: MultiChannelCCDestination;
 
 		if (
-			options.context.getDeviceConfig?.(ctx.sourceNodeId)
+			ctx.getDeviceConfig?.(ctx.sourceNodeId)
 				?.compat?.treatDestinationEndpointAsSource
 		) {
 			// This device incorrectly uses the destination field to indicate the source endpoint
@@ -1410,18 +1409,10 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			}
 		}
 		// No need to validate further, each CC does it for itself
-		const encapsulated: CommandClass = CommandClass.from({
-			data: raw.payload.subarray(2),
-			fromEncapsulation: true,
-			// FIXME: 🐔 🥚
-			encapCC: this,
-			origin: options.origin,
-			context: options.context,
-		});
-
+		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
 		return new MultiChannelCCCommandEncapsulation({
 			nodeId: ctx.sourceNodeId,
-			endpointIndex,
+			endpoint: endpointIndex,
 			destination,
 			encapsulated,
 		});
@@ -1549,9 +1540,9 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new MultiChannelCCV1Get({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new MultiChannelCCV1Get({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public requestedCC: CommandClasses;
@@ -1620,18 +1611,14 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 			&& raw.payload[1] === 0x00;
 
 		// No need to validate further, each CC does it for itself
-		const encapsulated: CommandClass = CommandClass.from({
-			data: raw.payload.subarray(isV2withV1Header ? 2 : 1),
-			fromEncapsulation: true,
-			// FIXME: 🐔 🥚
-			encapCC: this,
-			origin: options.origin,
-			context: options.context,
-		});
+		const encapsulated = CommandClass.parse(
+			raw.payload.subarray(isV2withV1Header ? 2 : 1),
+			ctx,
+		);
 
 		return new MultiChannelCCV1CommandEncapsulation({
 			nodeId: ctx.sourceNodeId,
-			endpointIndex,
+			endpoint: endpointIndex,
 			encapsulated,
 		});
 	}

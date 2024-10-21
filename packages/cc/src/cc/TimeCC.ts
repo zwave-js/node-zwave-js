@@ -398,9 +398,9 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new TimeCCTimeOffsetSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new TimeCCTimeOffsetSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public standardOffset: number;

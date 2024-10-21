@@ -630,9 +630,9 @@ export class FirmwareUpdateMetaDataCCRequestGet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new FirmwareUpdateMetaDataCCRequestGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new FirmwareUpdateMetaDataCCRequestGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public manufacturerId: number;
@@ -770,9 +770,9 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new FirmwareUpdateMetaDataCCReport({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new FirmwareUpdateMetaDataCCReport({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public isLast: boolean;
@@ -999,9 +999,9 @@ export class FirmwareUpdateMetaDataCCActivationSet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new FirmwareUpdateMetaDataCCActivationSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new FirmwareUpdateMetaDataCCActivationSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public manufacturerId: number;
@@ -1123,9 +1123,9 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new FirmwareUpdateMetaDataCCPrepareGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new FirmwareUpdateMetaDataCCPrepareGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public manufacturerId: number;

@@ -515,9 +515,9 @@ export class SceneControllerConfigurationCCSet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new SceneControllerConfigurationCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new SceneControllerConfigurationCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public groupId: number;
@@ -660,9 +660,9 @@ export class SceneControllerConfigurationCCGet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new SceneControllerConfigurationCCGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new SceneControllerConfigurationCCGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public groupId: number;

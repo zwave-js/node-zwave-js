@@ -31,7 +31,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -414,22 +413,15 @@ export class SupervisionCCGet extends SupervisionCC {
 		this.sessionId = options.sessionId;
 		this.requestStatusUpdates = options.requestStatusUpdates;
 		this.encapsulated = options.encapsulated;
-		options.encapsulated.encapsulatingCC = this as any;
+		this.encapsulated.encapsulatingCC = this as any;
 	}
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): SupervisionCCGet {
 		validatePayload(raw.payload.length >= 3);
 		const requestStatusUpdates = !!(raw.payload[0] & 0b1_0_000000);
 		const sessionId = raw.payload[0] & 0b111111;
-		const encapsulated: CommandClass = CommandClass.from({
-			data: raw.payload.subarray(2),
-			fromEncapsulation: true,
-			// FIXME: 🐔 🥚
-			encapCC: this,
-			origin: options.origin,
-			context: options.context,
-		});
 
+		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
 		return new SupervisionCCGet({
 			nodeId: ctx.sourceNodeId,
 			requestStatusUpdates,

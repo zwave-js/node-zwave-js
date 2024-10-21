@@ -1656,9 +1656,9 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCSystemConfigSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCSystemConfigSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public masterValveDelay: number;
@@ -2042,9 +2042,9 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCValveInfoGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCValveInfoGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public valveId: ValveId;
@@ -2106,9 +2106,9 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCValveConfigSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCValveConfigSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public valveId: ValveId;
@@ -2365,9 +2365,9 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCValveConfigGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCValveConfigGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public valveId: ValveId;
@@ -2417,9 +2417,9 @@ export class IrrigationCCValveRun extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCValveRun({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCValveRun({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public valveId: ValveId;
@@ -2479,9 +2479,9 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCValveTableSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCValveTableSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public tableId: number;
@@ -2616,9 +2616,9 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCValveTableGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCValveTableGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public tableId: number;
@@ -2669,9 +2669,9 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCValveTableRun({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCValveTableRun({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public tableIDs: number[];
@@ -2722,9 +2722,9 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new IrrigationCCSystemShutoff({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new IrrigationCCSystemShutoff({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public duration?: number;

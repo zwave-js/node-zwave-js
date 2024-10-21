@@ -362,9 +362,9 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ThermostatFanModeCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ThermostatFanModeCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public mode: ThermostatFanMode;

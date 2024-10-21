@@ -204,9 +204,9 @@ export class LockCCSet extends LockCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new LockCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new LockCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public locked: boolean;

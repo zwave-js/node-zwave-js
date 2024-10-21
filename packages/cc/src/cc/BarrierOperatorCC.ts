@@ -43,7 +43,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -565,9 +564,9 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new BarrierOperatorCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new BarrierOperatorCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public targetState: BarrierState.Open | BarrierState.Closed;
@@ -750,9 +749,9 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new BarrierOperatorCCEventSignalingSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new BarrierOperatorCCEventSignalingSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public subsystemType: SubsystemType;
@@ -873,9 +872,9 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new BarrierOperatorCCEventSignalingGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new BarrierOperatorCCEventSignalingGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public subsystemType: SubsystemType;

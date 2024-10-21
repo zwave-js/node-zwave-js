@@ -4152,8 +4152,18 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	private handleDeviceResetLocallyNotification(
-		_cmd: DeviceResetLocallyCCNotification,
+		cmd: DeviceResetLocallyCCNotification,
 	): void {
+		if (cmd.endpointIndex !== 0) {
+			// The notification MUST be issued by the root device, otherwise it is likely a corrupted message
+			this.driver.controllerLog.logNode(this.id, {
+				message:
+					`Received reset locally notification from non-root endpoint - ignoring it...`,
+				direction: "inbound",
+			});
+			return;
+		}
+
 		// Handling this command can take a few seconds and require communication with the node.
 		// If it was received with Supervision, we need to acknowledge it immediately. Therefore
 		// defer the handling half a second.

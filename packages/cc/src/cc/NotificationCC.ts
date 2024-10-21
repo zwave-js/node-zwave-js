@@ -20,6 +20,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	type NodeId,
+	SecurityClass,
 	type SinglecastCC,
 	type SupervisionResult,
 	type SupportsCC,
@@ -57,7 +58,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	InvalidCC,
 	type PersistValuesContext,
@@ -294,7 +294,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	 * @internal
 	 */
 	public async getInternal(
-		options: NotificationCCGetSpecificOptions,
+		options: NotificationCCGetOptions,
 	): Promise<NotificationCCReport | undefined> {
 		this.assertSupportsCommand(
 			NotificationCommand,
@@ -331,7 +331,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 
 	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get(options: NotificationCCGetSpecificOptions) {
+	public async get(options: NotificationCCGetOptions) {
 		const response = await this.getInternal(options);
 		if (response) {
 			return pick(response, [
@@ -1267,7 +1267,7 @@ export class NotificationCCReport extends NotificationCC {
 		};
 	}
 
-	private parseEventParameters(ctx: LogNode): void {
+	private parseEventParameters(ctx: PersistValuesContext): void {
 		// This only makes sense for V2+ notifications
 		if (
 			this.notificationType == undefined
@@ -1316,14 +1316,20 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to parse the event parameters - if this fails, we should still handle the notification report
 				try {
 					// Convert CommandClass instances to a standardized object representation
-					const cc = CommandClass.from({
-						data: this.eventParameters,
-						fromEncapsulation: true,
-						encapCC: this,
-						// FIXME: persistValues needs access to the CCParsingContext
-						context: {} as any,
+					const cc = CommandClass.parse(this.eventParameters, {
+						...ctx,
+						sourceNodeId: this.nodeId as number,
+						// Security encapsulation is handled outside of this CC,
+						// so it is not needed here:
+						hasSecurityClass: () => false,
+						getHighestSecurityClass: () => SecurityClass.None,
+						setSecurityClass: () => {},
+						securityManager: undefined,
+						securityManager2: undefined,
+						securityManagerLR: undefined,
 					});
 					validatePayload(!(cc instanceof InvalidCC));
+					cc.encapsulatingCC = this as any;
 
 					if (isNotificationEventPayload(cc)) {
 						this.eventParameters = cc

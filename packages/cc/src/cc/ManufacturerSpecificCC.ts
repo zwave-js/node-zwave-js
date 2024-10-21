@@ -387,9 +387,9 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ManufacturerSpecificCCDeviceSpecificGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ManufacturerSpecificCCDeviceSpecificGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public deviceIdType: DeviceIdType;

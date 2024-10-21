@@ -29,7 +29,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -292,9 +291,9 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new NodeNamingAndLocationCCNameSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new NodeNamingAndLocationCCNameSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public name: string;
@@ -328,20 +327,37 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	}
 }
 
+// @publicAPI
+export interface NodeNamingAndLocationCCNameReportOptions {
+	name: string;
+}
+
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options: NodeNamingAndLocationCCNameReportOptions & CCCommandOptions,
 	) {
 		super(options);
-		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
-		let nameBuffer = this.payload.subarray(1);
+		this.name = options.name;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): NodeNamingAndLocationCCNameReport {
+		validatePayload(raw.payload.length >= 1);
+		const encoding = raw.payload[0] === 2 ? "utf16le" : "ascii";
+		let nameBuffer = raw.payload.subarray(1);
 		if (encoding === "utf16le") {
 			validatePayload(nameBuffer.length % 2 === 0);
 			// Z-Wave expects UTF16 BE
 			nameBuffer = nameBuffer.swap16();
 		}
-		this.name = nameBuffer.toString(encoding);
+
+		return new NodeNamingAndLocationCCNameReport({
+			nodeId: ctx.sourceNodeId,
+			name: nameBuffer.toString(encoding),
+		});
 	}
 
 	@ccValue(NodeNamingAndLocationCCValues.name)
@@ -386,9 +402,9 @@ export class NodeNamingAndLocationCCLocationSet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new NodeNamingAndLocationCCLocationSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new NodeNamingAndLocationCCLocationSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public location: string;
@@ -422,22 +438,41 @@ export class NodeNamingAndLocationCCLocationSet
 	}
 }
 
+// @publicAPI
+export interface NodeNamingAndLocationCCLocationReportOptions {
+	location: string;
+}
+
 @CCCommand(NodeNamingAndLocationCommand.LocationReport)
 export class NodeNamingAndLocationCCLocationReport
 	extends NodeNamingAndLocationCC
 {
 	public constructor(
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options:
+			& NodeNamingAndLocationCCLocationReportOptions
+			& CCCommandOptions,
 	) {
 		super(options);
-		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
-		let locationBuffer = this.payload.subarray(1);
+		this.location = options.location;
+	}
+
+	public static from(
+		raw: CCRaw,
+		ctx: CCParsingContext,
+	): NodeNamingAndLocationCCLocationReport {
+		validatePayload(raw.payload.length >= 1);
+		const encoding = raw.payload[0] === 2 ? "utf16le" : "ascii";
+		let locationBuffer = raw.payload.subarray(1);
 		if (encoding === "utf16le") {
 			validatePayload(locationBuffer.length % 2 === 0);
 			// Z-Wave expects UTF16 BE
 			locationBuffer = locationBuffer.swap16();
 		}
-		this.location = locationBuffer.toString(encoding);
+
+		return new NodeNamingAndLocationCCLocationReport({
+			nodeId: ctx.sourceNodeId,
+			location: locationBuffer.toString(encoding),
+		});
 	}
 
 	@ccValue(NodeNamingAndLocationCCValues.location)

@@ -37,7 +37,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -543,9 +542,9 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new HumidityControlSetpointCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new HumidityControlSetpointCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public setpointType: HumidityControlSetpointType;
@@ -577,9 +576,9 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 
 // @publicAPI
 export interface HumidityControlSetpointCCReportOptions {
-	type;
-	value;
+	type: HumidityControlSetpointType;
 	scale: number;
+	value: number;
 }
 
 @CCCommand(HumidityControlSetpointCommand.Report)
@@ -657,7 +656,6 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 
 	public type: HumidityControlSetpointType;
 	public scale: number;
-
 	public value: number;
 
 	public toLogEntry(ctx?: GetValueDB): MessageOrCCLogEntry {
@@ -711,9 +709,9 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new HumidityControlSetpointCCGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new HumidityControlSetpointCCGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public setpointType: HumidityControlSetpointType;
@@ -885,9 +883,9 @@ export class HumidityControlSetpointCCScaleSupportedGet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new HumidityControlSetpointCCScaleSupportedGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new HumidityControlSetpointCCScaleSupportedGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public setpointType: HumidityControlSetpointType;
@@ -1034,9 +1032,9 @@ export class HumidityControlSetpointCCCapabilitiesGet
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new HumidityControlSetpointCCCapabilitiesGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new HumidityControlSetpointCCCapabilitiesGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public setpointType: HumidityControlSetpointType;

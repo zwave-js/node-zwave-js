@@ -45,7 +45,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -2029,9 +2028,9 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new UserCodeCCExtendedUserCodeSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new UserCodeCCExtendedUserCodeSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public userCodes: UserCodeCCSetOptions[];
@@ -2181,9 +2180,9 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new UserCodeCCExtendedUserCodeGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new UserCodeCCExtendedUserCodeGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public userId: number;

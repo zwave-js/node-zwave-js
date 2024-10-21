@@ -41,6 +41,7 @@ import type {
 	GetNode,
 	GetSupportedCCVersion,
 	GetValueDB,
+	HostIDs,
 	LogNode,
 	LookupManufacturer,
 } from "@zwave-js/host";
@@ -160,6 +161,7 @@ export type RefreshValuesContext = CCAPIHost<
 >;
 
 export type PersistValuesContext =
+	& HostIDs
 	& GetValueDB
 	& GetSupportedCCVersion
 	& GetDeviceConfig

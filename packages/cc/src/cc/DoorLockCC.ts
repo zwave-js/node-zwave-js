@@ -853,9 +853,9 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new DoorLockCCOperationSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new DoorLockCCOperationSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public mode: DoorLockMode;
@@ -1316,9 +1316,9 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new DoorLockCCConfigurationSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new DoorLockCCConfigurationSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public operationType: DoorLockOperationType;

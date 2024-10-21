@@ -23,7 +23,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -169,9 +168,9 @@ export class ClockCCSet extends ClockCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ClockCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ClockCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public weekday: Weekday;

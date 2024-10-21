@@ -442,9 +442,9 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new AlarmSensorCCGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new AlarmSensorCCGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public sensorType: AlarmSensorType;

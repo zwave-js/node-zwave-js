@@ -33,7 +33,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -435,7 +434,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 			// But as always - manufacturers don't care and send ASCII data with 0 bytes...
 
 			// We also need to disable the strict validation for some devices to make them work
-			const noStrictValidation = !!options.context.getDeviceConfig?.(
+			const noStrictValidation = !!ctx.getDeviceConfig?.(
 				ctx.sourceNodeId,
 			)?.compat?.disableStrictEntryControlDataValidation;
 
@@ -779,9 +778,9 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new EntryControlCCConfigurationSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new EntryControlCCConfigurationSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public readonly keyCacheSize: number;

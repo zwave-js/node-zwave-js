@@ -18,7 +18,6 @@ import {
 	type CCRaw,
 	type CCResponseRole,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	CCCommand,
@@ -384,12 +383,8 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		}
 
 		// and deserialize the CC
-		this._encapsulated = CommandClass.from({
-			data: datagram,
-			fromEncapsulation: true,
-			encapCC: this,
-			context: ctx,
-		});
+		this._encapsulated = CommandClass.parse(datagram, ctx);
+		this._encapsulated.encapsulatingCC = this as any;
 	}
 
 	public serialize(ctx: CCEncodingContext): Buffer {

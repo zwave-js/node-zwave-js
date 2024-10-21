@@ -43,7 +43,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -412,7 +411,7 @@ export class BasicCCSet extends BasicCC {
 
 // @publicAPI
 export interface BasicCCReportOptions {
-	currentValue: number;
+	currentValue?: MaybeUnknown<number>;
 	targetValue?: MaybeUnknown<number>;
 	duration?: Duration;
 }
@@ -426,10 +425,8 @@ export class BasicCCReport extends BasicCC {
 		super(options);
 
 		this.currentValue = options.currentValue;
-		if ("targetValue" in options) {
-			this.targetValue = options.targetValue;
-			this.duration = options.duration;
-		}
+		this.targetValue = options.targetValue;
+		this.duration = options.duration;
 	}
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): BasicCCReport {

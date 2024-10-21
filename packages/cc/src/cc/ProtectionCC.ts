@@ -523,9 +523,9 @@ export class ProtectionCCSet extends ProtectionCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ProtectionCCSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ProtectionCCSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public local: LocalProtectionState;
@@ -802,9 +802,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ProtectionCCExclusiveControlSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ProtectionCCExclusiveControlSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public exclusiveControlNodeId: number;
@@ -894,9 +894,9 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ProtectionCCTimeoutSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ProtectionCCTimeoutSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	public timeout: Timeout;

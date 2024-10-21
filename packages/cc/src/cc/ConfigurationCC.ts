@@ -57,7 +57,6 @@ import {
 	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -2040,9 +2039,9 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ConfigurationCCBulkSet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ConfigurationCCBulkSet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	private _parameters: number[];
@@ -2311,9 +2310,9 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new ConfigurationCCBulkGet({
-			nodeId: ctx.sourceNodeId,
-		});
+		// return new ConfigurationCCBulkGet({
+		// 	nodeId: ctx.sourceNodeId,
+		// });
 	}
 
 	private _parameters: number[];
