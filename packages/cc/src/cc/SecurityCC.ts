@@ -637,6 +637,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.encapsulated = options.encapsulated;
 			this.encapsulated.encapsulatingCC = this as any;
 		} else {
+			this.decryptedCCBytes = options.decryptedCCBytes;
 			this.sequenced = options.sequenced;
 			this.secondFrame = options.secondFrame;
 			this.sequenceCounter = options.sequenceCounter;

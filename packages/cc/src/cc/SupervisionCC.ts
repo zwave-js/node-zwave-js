@@ -410,6 +410,8 @@ export class SupervisionCCGet extends SupervisionCC {
 		this.sessionId = options.sessionId;
 		this.requestStatusUpdates = options.requestStatusUpdates;
 		this.encapsulated = options.encapsulated;
+		// Supervision is inside MultiChannel CCs, so the endpoint must be copied
+		this.encapsulated.endpointIndex = this.endpointIndex;
 		this.encapsulated.encapsulatingCC = this as any;
 	}
 

@@ -91,7 +91,7 @@ function createLazySendDataPayload(
 	return () => {
 		try {
 			const cmd = CommandClass.parse(msg.payload, {
-				sourceNodeId: node.id,
+				sourceNodeId: controller.ownNodeId,
 				__internalIsMockNode: true,
 				...node.encodingContext,
 				...node.securityManagers,

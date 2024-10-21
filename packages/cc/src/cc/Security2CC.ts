@@ -1702,32 +1702,25 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public readonly verifyDelivery: boolean = true;
 
 	public sequenceNumber: number | undefined;
-
-	protected assertSequenceNumber(): asserts this is this & {
+	private ensureSequenceNumber(
+		securityManager: SecurityManager2,
+	): asserts this is this & {
 		sequenceNumber: number;
 	} {
 		if (this.sequenceNumber == undefined) {
-			throw new ZWaveError(
-				`Sending a Security S2 CC requires the sequence number to be sent!`,
-				ZWaveErrorCodes.Security2CC_NoSPAN,
-			);
+			if (this.isSinglecast()) {
+				this.sequenceNumber = securityManager.nextSequenceNumber(
+					this.nodeId,
+				);
+			} else {
+				const groupId = getDestinationIDTX.call(this);
+				this.sequenceNumber = securityManager
+					.nextMulticastSequenceNumber(
+						groupId,
+					);
+			}
 		}
 	}
-
-	// public get sequenceNumber(): number {
-	// 	if (this._sequenceNumber == undefined) {
-	// 		if (this.isSinglecast()) {
-	// 			this._sequenceNumber = this.securityManager
-	// 				.nextSequenceNumber(this.nodeId);
-	// 		} else {
-	// 			const groupId = getDestinationIDTX.call(this);
-	// 			return this.securityManager.nextMulticastSequenceNumber(
-	// 				groupId,
-	// 			);
-	// 		}
-	// 	}
-	// 	return this._sequenceNumber;
-	// }
 
 	public encapsulated?: CommandClass;
 	public extensions: Security2Extension[];
@@ -1822,7 +1815,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	public serialize(ctx: CCEncodingContext): Buffer {
 		const securityManager = assertSecurityTX(ctx, this.nodeId);
-		this.assertSequenceNumber();
+		this.ensureSequenceNumber(securityManager);
 
 		// Include Sender EI in the command if we only have the receiver's EI
 		this.maybeAddSPANExtension(ctx, securityManager);
@@ -2062,39 +2055,25 @@ export class Security2CCNonceReport extends Security2CC {
 	}
 
 	public sequenceNumber: number | undefined;
-
-	protected assertSequenceNumber(): asserts this is this & {
+	private ensureSequenceNumber(
+		securityManager: SecurityManager2,
+	): asserts this is this & {
 		sequenceNumber: number;
 	} {
 		if (this.sequenceNumber == undefined) {
-			throw new ZWaveError(
-				`Sending a Security S2 CC requires the sequence number to be sent!`,
-				ZWaveErrorCodes.Security2CC_NoSPAN,
+			this.sequenceNumber = securityManager.nextSequenceNumber(
+				this.nodeId as number,
 			);
 		}
 	}
-	// /**
-	//  * Return the sequence number of this command.
-	//  *
-	//  * **WARNING:** If the sequence number hasn't been set before, this will create a new one.
-	//  * When sending messages, this should only happen immediately before serializing.
-	//  */
-	// public get sequenceNumber(): number {
-	// 	if (this._sequenceNumber == undefined) {
-	// 		this._sequenceNumber = this.securityManager
-	// 			.nextSequenceNumber(
-	// 				this.nodeId as number,
-	// 			);
-	// 	}
-	// 	return this._sequenceNumber;
-	// }
 
 	public readonly SOS: boolean;
 	public readonly MOS: boolean;
 	public readonly receiverEI?: Buffer;
 
 	public serialize(ctx: CCEncodingContext): Buffer {
-		this.assertSequenceNumber();
+		const securityManager = assertSecurityTX(ctx, this.nodeId);
+		this.ensureSequenceNumber(securityManager);
 
 		this.payload = Buffer.from([
 			this.sequenceNumber,
@@ -2160,35 +2139,22 @@ export class Security2CCNonceGet extends Security2CC {
 	}
 
 	public sequenceNumber: number | undefined;
-
-	protected assertSequenceNumber(): asserts this is this & {
+	private ensureSequenceNumber(
+		securityManager: SecurityManager2,
+	): asserts this is this & {
 		sequenceNumber: number;
 	} {
 		if (this.sequenceNumber == undefined) {
-			throw new ZWaveError(
-				`Sending a Security S2 CC requires the sequence number to be sent!`,
-				ZWaveErrorCodes.Security2CC_NoSPAN,
+			this.sequenceNumber = securityManager.nextSequenceNumber(
+				this.nodeId as number,
 			);
 		}
 	}
-	// /**
-	//  * Return the sequence number of this command.
-	//  *
-	//  * **WARNING:** If the sequence number hasn't been set before, this will create a new one.
-	//  * When sending messages, this should only happen immediately before serializing.
-	//  */
-	// public get sequenceNumber(): number {
-	// 	if (this._sequenceNumber == undefined) {
-	// 		this._sequenceNumber = this.securityManager
-	// 			.nextSequenceNumber(
-	// 				this.nodeId as number,
-	// 			);
-	// 	}
-	// 	return this._sequenceNumber;
-	// }
 
 	public serialize(ctx: CCEncodingContext): Buffer {
-		this.assertSequenceNumber();
+		const securityManager = assertSecurityTX(ctx, this.nodeId);
+		this.ensureSequenceNumber(securityManager);
+
 		this.payload = Buffer.from([this.sequenceNumber]);
 		return super.serialize(ctx);
 	}

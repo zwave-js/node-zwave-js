@@ -25,7 +25,7 @@ import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
-	debug: true,
+	// debug: true,
 
 	// We need the cache to skip the CC interviews and mark S2 as supported
 	provisioningDirectory: path.join(
@@ -110,7 +110,12 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 			handleCC(controller, self, receivedCC) {
 				// We don't support sequenced commands here
 				if (receivedCC instanceof SecurityCCCommandEncapsulation) {
-					receivedCC.mergePartialCCs([], {} as any);
+					receivedCC.mergePartialCCs([], {
+						sourceNodeId: controller.ownNodeId,
+						__internalIsMockNode: true,
+						...self.encodingContext,
+						...self.securityManagers,
+					});
 				}
 				return undefined;
 			},

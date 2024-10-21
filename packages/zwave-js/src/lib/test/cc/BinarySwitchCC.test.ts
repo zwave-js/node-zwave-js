@@ -112,7 +112,7 @@ test("the Report command (v2) should be deserialized correctly", (t) => {
 	t.is(cc.duration!.value, 1);
 });
 
-test.only("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", (t) => {
+test("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", (t) => {
 	const serializedCC = buildCCBuffer(
 		Buffer.from([255]), // not a valid command
 	);

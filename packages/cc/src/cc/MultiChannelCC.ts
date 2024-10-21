@@ -43,6 +43,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import {
+	isEncapsulatingCommandClass,
+	isMultiEncapsulatingCommandClass,
+} from "../lib/EncapsulatingCommandClass";
 import { V } from "../lib/Values";
 import { MultiChannelCommand } from "../lib/_Types";
 
@@ -1373,6 +1377,21 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		super(options);
 		this.encapsulated = options.encapsulated;
 		this.encapsulated.encapsulatingCC = this as any;
+		// Propagate the endpoint index all the way down
+		let cur: CommandClass = this;
+		while (cur) {
+			if (isMultiEncapsulatingCommandClass(cur)) {
+				for (const cc of cur.encapsulated) {
+					cc.endpointIndex = this.endpointIndex;
+				}
+				break;
+			} else if (isEncapsulatingCommandClass(cur)) {
+				cur.encapsulated.endpointIndex = this.endpointIndex;
+				cur = cur.encapsulated;
+			} else {
+				break;
+			}
+		}
 		this.destination = options.destination;
 	}
 

@@ -108,6 +108,8 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		this.encapsulated = options.encapsulated;
 		for (const cc of options.encapsulated) {
 			cc.encapsulatingCC = this as any;
+			// Multi Command CC is inside Multi Channel CC, so the endpoint must be copied
+			cc.endpointIndex = this.endpointIndex;
 		}
 	}
 
