@@ -117,6 +117,7 @@ integrationTest(
 									nodeId: controller.ownNodeId,
 									supportedCCs: [CommandClasses.Basic],
 									controlledCCs: [],
+									reportsToFollow: 0,
 								});
 							const cc = SecurityCC.encapsulate(
 								self.id,

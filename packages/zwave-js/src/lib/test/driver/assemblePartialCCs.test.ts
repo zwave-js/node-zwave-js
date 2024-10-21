@@ -1,4 +1,5 @@
-import { AssociationCCReport } from "@zwave-js/cc/AssociationCC";
+import { CommandClass } from "@zwave-js/cc";
+import { type AssociationCCReport } from "@zwave-js/cc/AssociationCC";
 import { BasicCCSet } from "@zwave-js/cc/BasicCC";
 import { MultiCommandCCCommandEncapsulation } from "@zwave-js/cc/MultiCommandCC";
 import { SecurityCCCommandEncapsulation } from "@zwave-js/cc/SecurityCC";
@@ -61,9 +62,8 @@ test.serial(
 	"returns true when a partial CC is received that expects no more reports",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport({
-			nodeId: 2,
-			data: Buffer.from([
+		const cc = CommandClass.parse(
+			Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -73,8 +73,8 @@ test.serial(
 				2,
 				3,
 			]),
-			context: {} as any,
-		});
+			{ sourceNodeId: 2 } as any,
+		);
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
@@ -86,9 +86,8 @@ test.serial(
 	"returns false when a partial CC is received that expects more reports",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport({
-			nodeId: 2,
-			data: Buffer.from([
+		const cc = CommandClass.parse(
+			Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -98,8 +97,8 @@ test.serial(
 				2,
 				3,
 			]),
-			context: {} as any,
-		});
+			{ sourceNodeId: 2 } as any,
+		) as AssociationCCReport;
 		const msg = new ApplicationCommandRequest({
 			command: cc,
 		});
@@ -111,9 +110,8 @@ test.serial(
 	"returns true when the final partial CC is received and merges its data",
 	(t) => {
 		const { driver } = t.context;
-		const cc1 = new AssociationCCReport({
-			nodeId: 2,
-			data: Buffer.from([
+		const cc1 = CommandClass.parse(
+			Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -123,11 +121,10 @@ test.serial(
 				2,
 				3,
 			]),
-			context: {} as any,
-		});
-		const cc2 = new AssociationCCReport({
-			nodeId: 2,
-			data: Buffer.from([
+			{ sourceNodeId: 2 } as any,
+		) as AssociationCCReport;
+		const cc2 = CommandClass.parse(
+			Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -137,8 +134,8 @@ test.serial(
 				5,
 				6,
 			]),
-			context: {} as any,
-		});
+			{ sourceNodeId: 2 } as any,
+		) as AssociationCCReport;
 		const msg1 = new ApplicationCommandRequest({
 			command: cc1,
 		});
@@ -175,8 +172,6 @@ test.serial("supports nested partial/non-partial CCs", (t) => {
 	const cc1 = new BasicCCSet({ nodeId: 2, targetValue: 25 });
 	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
-		ownNodeId: driver.ownNodeId,
-		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
@@ -191,8 +186,6 @@ test.serial("supports nested partial/partial CCs (part 1)", (t) => {
 	const { driver } = t.context;
 	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
-		ownNodeId: driver.ownNodeId,
-		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
@@ -216,8 +209,6 @@ test.serial("supports nested partial/partial CCs (part 2)", (t) => {
 	const { driver } = t.context;
 	const cc = new SecurityCCCommandEncapsulation({
 		nodeId: 2,
-		ownNodeId: driver.ownNodeId,
-		securityManager: driver.securityManager!,
 		encapsulated: {} as any,
 	});
 	cc.encapsulated = undefined as any;
@@ -241,9 +232,8 @@ test.serial(
 	"returns false when a partial CC throws Deserialization_NotImplemented during merging",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport({
-			nodeId: 2,
-			data: Buffer.from([
+		const cc = CommandClass.parse(
+			Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -253,8 +243,8 @@ test.serial(
 				2,
 				3,
 			]),
-			context: {} as any,
-		});
+			{ sourceNodeId: 2 } as any,
+		) as AssociationCCReport;
 		cc.mergePartialCCs = () => {
 			throw new ZWaveError(
 				"not implemented",
@@ -272,9 +262,8 @@ test.serial(
 	"returns false when a partial CC throws CC_NotImplemented during merging",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport({
-			nodeId: 2,
-			data: Buffer.from([
+		const cc = CommandClass.parse(
+			Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -284,8 +273,8 @@ test.serial(
 				2,
 				3,
 			]),
-			context: {} as any,
-		});
+			{ sourceNodeId: 2 } as any,
+		) as AssociationCCReport;
 		cc.mergePartialCCs = () => {
 			throw new ZWaveError(
 				"not implemented",
@@ -303,9 +292,8 @@ test.serial(
 	"returns false when a partial CC throws PacketFormat_InvalidPayload during merging",
 	(t) => {
 		const { driver } = t.context;
-		const cc = new AssociationCCReport({
-			nodeId: 2,
-			data: Buffer.from([
+		const cc = CommandClass.parse(
+			Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
 				1,
@@ -315,8 +303,8 @@ test.serial(
 				2,
 				3,
 			]),
-			context: {} as any,
-		});
+			{ sourceNodeId: 2 } as any,
+		) as AssociationCCReport;
 		cc.mergePartialCCs = () => {
 			throw new ZWaveError(
 				"not implemented",
@@ -332,9 +320,8 @@ test.serial(
 
 test.serial("passes other errors during merging through", (t) => {
 	const { driver } = t.context;
-	const cc = new AssociationCCReport({
-		nodeId: 2,
-		data: Buffer.from([
+	const cc = CommandClass.parse(
+		Buffer.from([
 			CommandClasses.Association,
 			AssociationCommand.Report,
 			1,
@@ -344,8 +331,8 @@ test.serial("passes other errors during merging through", (t) => {
 			2,
 			3,
 		]),
-		context: {} as any,
-	});
+		{ sourceNodeId: 2 } as any,
+	) as AssociationCCReport;
 	cc.mergePartialCCs = () => {
 		throw new ZWaveError("invalid", ZWaveErrorCodes.Argument_Invalid);
 	};

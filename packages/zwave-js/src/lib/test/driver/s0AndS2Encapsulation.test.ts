@@ -25,7 +25,7 @@ import path from "node:path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
-	// debug: true,
+	debug: true,
 
 	// We need the cache to skip the CC interviews and mark S2 as supported
 	provisioningDirectory: path.join(
@@ -126,8 +126,6 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 					);
 					const cc = new Security2CCNonceReport({
 						nodeId: controller.ownNodeId,
-						ownNodeId: self.id,
-						securityManagers: self.securityManagers,
 						SOS: true,
 						MOS: false,
 						receiverEI: nonce,
@@ -153,8 +151,6 @@ integrationTest("S0 commands are S0-encapsulated, even when S2 is supported", {
 						);
 						const cc = new Security2CCNonceReport({
 							nodeId: controller.ownNodeId,
-							ownNodeId: self.id,
-							securityManagers: self.securityManagers,
 							SOS: true,
 							MOS: false,
 							receiverEI: nonce,

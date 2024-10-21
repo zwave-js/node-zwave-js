@@ -99,7 +99,7 @@ test("deserializing an unsupported command should return an unspecified version 
 	t.is(basicCC.constructor, BasicCC);
 });
 
-test.only("getDefinedValueIDs() should include the target value for all endpoints except the node itself", (t) => {
+test("getDefinedValueIDs() should include the target value for all endpoints except the node itself", (t) => {
 	// Repro for GH#377
 	const commandClasses: CreateTestNodeOptions["commandClasses"] = {
 		[CommandClasses.Basic]: {

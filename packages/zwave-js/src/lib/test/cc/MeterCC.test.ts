@@ -273,7 +273,7 @@ test("the Report command should validate that a known meter type is given", (t) 
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
-	t.is(cc.constructor, MeterCCReport);
+	t.is(report.constructor, MeterCCReport);
 
 	// Meter type 31 (does not exist)
 	assertZWaveError(t, () => report.persistValues(host), {
@@ -299,7 +299,7 @@ test("the Report command should validate that a known meter scale is given", (t)
 		ccData,
 		{ sourceNodeId: 1 } as any,
 	) as MeterCCReport;
-	t.is(cc.constructor, MeterCCReport);
+	t.is(report.constructor, MeterCCReport);
 
 	// Meter type 4, Scale 8 (does not exist)
 	assertZWaveError(t, () => report.persistValues(host), {

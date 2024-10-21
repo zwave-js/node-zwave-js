@@ -287,7 +287,7 @@ export class CommandClass implements CCId {
 		// FIXME: Propagate frame type etc.
 		// FIXME: Refactor subclasses' parse() to override this
 		return new this({
-			nodeId: ctx.ownNodeId,
+			nodeId: ctx.sourceNodeId,
 			ccId: raw.ccId,
 			ccCommand: raw.ccCommand,
 			payload: raw.payload,
@@ -558,7 +558,7 @@ export class CommandClass implements CCId {
 		if (Constructor) {
 			return new Constructor({
 				nodeId: endpoint.nodeId,
-				endpoint: endpoint.index,
+				endpointIndex: endpoint.index,
 			}) as T;
 		}
 	}

@@ -80,7 +80,7 @@ test("the CommandEncapsulation command should serialize correctly", (t) => {
 	let cc: CommandClass = new BasicCCSet({
 		nodeId: 2,
 		targetValue: 5,
-		endpoint: 7,
+		endpointIndex: 7,
 	});
 	cc = MultiChannelCC.encapsulate(cc);
 	const expected = buildCCBuffer(
@@ -187,7 +187,7 @@ test("MultiChannelCC/BasicCCGet should expect a response", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		new BasicCCGet({
 			nodeId: 2,
-			endpoint: 2,
+			endpointIndex: 2,
 		}),
 	);
 	t.true(ccRequest.expectsCCResponse());
@@ -197,7 +197,7 @@ test("MultiChannelCC/BasicCCGet (multicast) should expect NO response", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		new BasicCCGet({
 			nodeId: 2,
-			endpoint: 2,
+			endpointIndex: 2,
 		}),
 	);
 	// A multicast request never expects a response
@@ -209,7 +209,7 @@ test("MultiChannelCC/BasicCCSet should expect NO response", (t) => {
 	const ccRequest = MultiChannelCC.encapsulate(
 		new BasicCCSet({
 			nodeId: 2,
-			endpoint: 2,
+			endpointIndex: 2,
 			targetValue: 7,
 		}),
 	);
@@ -220,7 +220,7 @@ test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = expected", (t)
 	const ccRequest = MultiChannelCC.encapsulate(
 		new BasicCCGet({
 			nodeId: 2,
-			endpoint: 2,
+			endpointIndex: 2,
 		}),
 	);
 	const ccResponse = MultiChannelCC.encapsulate(
@@ -238,13 +238,13 @@ test("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCGet = unexpected", (t) 
 	const ccRequest = MultiChannelCC.encapsulate(
 		new BasicCCGet({
 			nodeId: 2,
-			endpoint: 2,
+			endpointIndex: 2,
 		}),
 	);
 	const ccResponse = MultiChannelCC.encapsulate(
 		new BasicCCGet({
 			nodeId: ccRequest.nodeId,
-			endpoint: 2,
+			endpointIndex: 2,
 		}),
 	);
 	ccResponse.endpointIndex = 2;
@@ -256,7 +256,7 @@ test("MultiChannelCC/BasicCCGet => MultiCommandCC/BasicCCReport = unexpected", (
 	const ccRequest = MultiChannelCC.encapsulate(
 		new BasicCCGet({
 			nodeId: 2,
-			endpoint: 2,
+			endpointIndex: 2,
 		}),
 	);
 	const ccResponse = MultiCommandCC.encapsulate([

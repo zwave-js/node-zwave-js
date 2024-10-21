@@ -999,7 +999,7 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 
 // @publicAPI
 export interface SecurityCCCommandsSupportedReportOptions {
-	reportsToFollow: number;
+	reportsToFollow?: number;
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 }
@@ -1014,7 +1014,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		this.supportedCCs = options.supportedCCs;
 		this.controlledCCs = options.controlledCCs;
 		// TODO: properly split the CCs into multiple reports
-		this.reportsToFollow = 0;
+		this.reportsToFollow = options.reportsToFollow ?? 0;
 	}
 
 	public static from(

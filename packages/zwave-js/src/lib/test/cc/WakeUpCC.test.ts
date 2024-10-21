@@ -10,7 +10,7 @@ import { randomBytes } from "node:crypto";
 test("WakeUpCCNoMoreInformation should expect no response", (t) => {
 	const cc = new WakeUpCCNoMoreInformation({
 		nodeId: 2,
-		endpoint: 2,
+		endpointIndex: 2,
 	});
 	t.false(cc.expectsCCResponse());
 });
@@ -19,7 +19,7 @@ test("MultiChannelCC/WakeUpCCNoMoreInformation should expect NO response", (t) =
 	const ccRequest = MultiChannelCC.encapsulate(
 		new WakeUpCCNoMoreInformation({
 			nodeId: 2,
-			endpoint: 2,
+			endpointIndex: 2,
 		}),
 	);
 	t.false(ccRequest.expectsCCResponse());
@@ -42,7 +42,7 @@ test("SecurityCC/WakeUpCCNoMoreInformation should expect NO response", (t) => {
 		securityManager as any,
 		new WakeUpCCNoMoreInformation({
 			nodeId: 2,
-			endpoint: 2,
+			endpointIndex: 2,
 		}),
 	);
 	t.false(ccRequest.expectsCCResponse());

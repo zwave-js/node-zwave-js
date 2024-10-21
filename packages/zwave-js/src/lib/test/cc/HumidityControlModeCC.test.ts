@@ -1,4 +1,5 @@
 import {
+	CommandClass,
 	HumidityControlMode,
 	HumidityControlModeCCGet,
 	HumidityControlModeCCReport,
@@ -57,11 +58,11 @@ test("the Report command should be deserialized correctly", (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const cc = new HumidityControlModeCCReport({
-		nodeId,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlModeCCReport;
+	t.is(cc.constructor, HumidityControlModeCCReport);
 
 	t.is(cc.mode, HumidityControlMode.Auto);
 });
@@ -73,11 +74,10 @@ test("the Report command should set the correct value", (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const report = new HumidityControlModeCCReport({
-		nodeId,
-		data: ccData,
-		context: {} as any,
-	});
+	const report = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlModeCCReport;
 	report.persistValues(host);
 
 	const currentValue = host.getValueDB(nodeId).getValue({
@@ -94,11 +94,10 @@ test("the Report command should set the correct metadata", (t) => {
 			HumidityControlMode.Auto, // current value
 		]),
 	);
-	const cc = new HumidityControlModeCCReport({
-		nodeId,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlModeCCReport;
 	cc.persistValues(host);
 
 	const currentValueMeta = host
@@ -130,11 +129,11 @@ test("the SupportedReport command should be deserialized correctly", (t) => {
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
 	);
-	const cc = new HumidityControlModeCCSupportedReport({
-		nodeId,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlModeCCSupportedReport;
+	t.is(cc.constructor, HumidityControlModeCCSupportedReport);
 
 	t.deepEqual(cc.supportedModes, [
 		HumidityControlMode.Off,
@@ -149,11 +148,10 @@ test("the SupportedReport command should set the correct metadata", (t) => {
 			(1 << HumidityControlMode.Off) | (1 << HumidityControlMode.Auto),
 		]),
 	);
-	const cc = new HumidityControlModeCCSupportedReport({
-		nodeId,
-		data: ccData,
-		context: {} as any,
-	});
+	const cc = CommandClass.parse(
+		ccData,
+		{ sourceNodeId: nodeId } as any,
+	) as HumidityControlModeCCSupportedReport;
 	cc.persistValues(host);
 
 	const currentValueMeta = host
