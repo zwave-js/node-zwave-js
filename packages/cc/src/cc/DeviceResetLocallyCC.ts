@@ -2,7 +2,6 @@ import {
 	CommandClasses,
 	type MaybeNotKnown,
 	TransmitOptions,
-	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import { type CCParsingContext } from "@zwave-js/host";

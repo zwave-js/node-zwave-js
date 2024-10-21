@@ -1,4 +1,4 @@
-import { CommandClasses, type WithAddress } from "@zwave-js/core/safe";
+import { CommandClasses } from "@zwave-js/core/safe";
 import { CommandClass } from "../lib/CommandClass";
 import {
 	CCCommand,
