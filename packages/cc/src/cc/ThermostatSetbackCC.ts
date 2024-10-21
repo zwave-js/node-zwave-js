@@ -4,6 +4,7 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
@@ -20,10 +21,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -81,7 +80,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 
 		const cc = new ThermostatSetbackCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatSetbackCCReport
@@ -106,7 +105,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 
 		const cc = new ThermostatSetbackCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			setbackType,
 			setbackState,
 		});
@@ -179,7 +178,7 @@ export interface ThermostatSetbackCCSetOptions {
 @useSupervision()
 export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	public constructor(
-		options: ThermostatSetbackCCSetOptions & CCCommandOptions,
+		options: WithAddress<ThermostatSetbackCCSetOptions>,
 	) {
 		super(options);
 		this.setbackType = options.setbackType;
@@ -242,7 +241,7 @@ export interface ThermostatSetbackCCReportOptions {
 @CCCommand(ThermostatSetbackCommand.Report)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public constructor(
-		options: ThermostatSetbackCCReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatSetbackCCReportOptions>,
 	) {
 		super(options);
 

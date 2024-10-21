@@ -4,6 +4,7 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type SupervisionResult,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	formatDate,
@@ -21,10 +22,8 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 } from "../lib/CommandClass";
 import {
@@ -65,7 +64,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<TimeCCTimeReport>(
 			cc,
@@ -86,7 +85,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			hour,
 			minute,
 			second,
@@ -100,7 +99,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCDateGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<TimeCCDateReport>(
 			cc,
@@ -121,7 +120,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCDateReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			year,
 			month,
 			day,
@@ -137,7 +136,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeOffsetSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			standardOffset: timezone.standardOffset,
 			dstOffset: timezone.dstOffset,
 			dstStart: timezone.startDate,
@@ -151,7 +150,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeOffsetGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			TimeCCTimeOffsetReport
@@ -177,7 +176,7 @@ export class TimeCCAPI extends CCAPI {
 
 		const cc = new TimeCCTimeOffsetReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			standardOffset: timezone.standardOffset,
 			dstOffset: timezone.dstOffset,
 			dstStart: timezone.startDate,
@@ -238,7 +237,7 @@ export interface TimeCCTimeReportOptions {
 @CCCommand(TimeCommand.TimeReport)
 export class TimeCCTimeReport extends TimeCC {
 	public constructor(
-		options: TimeCCTimeReportOptions & CCCommandOptions,
+		options: WithAddress<TimeCCTimeReportOptions>,
 	) {
 		super(options);
 		this.hour = options.hour;
@@ -312,7 +311,7 @@ export interface TimeCCDateReportOptions {
 @CCCommand(TimeCommand.DateReport)
 export class TimeCCDateReport extends TimeCC {
 	public constructor(
-		options: TimeCCDateReportOptions & CCCommandOptions,
+		options: WithAddress<TimeCCDateReportOptions>,
 	) {
 		super(options);
 		this.year = options.year;
@@ -382,7 +381,7 @@ export interface TimeCCTimeOffsetSetOptions {
 @useSupervision()
 export class TimeCCTimeOffsetSet extends TimeCC {
 	public constructor(
-		options: TimeCCTimeOffsetSetOptions & CCCommandOptions,
+		options: WithAddress<TimeCCTimeOffsetSetOptions>,
 	) {
 		super(options);
 		this.standardOffset = options.standardOffset;
@@ -450,7 +449,7 @@ export interface TimeCCTimeOffsetReportOptions {
 @CCCommand(TimeCommand.TimeOffsetReport)
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
-		options: TimeCCTimeOffsetReportOptions & CCCommandOptions,
+		options: WithAddress<TimeCCTimeOffsetReportOptions>,
 	) {
 		super(options);
 		this.standardOffset = options.standardOffset;

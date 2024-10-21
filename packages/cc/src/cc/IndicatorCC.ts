@@ -8,6 +8,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
@@ -34,10 +35,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -362,7 +361,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 		});
 		const response = await this.host.sendCommand<IndicatorCCReport>(
@@ -399,7 +398,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...(typeof value === "number" ? { value } : { values: value }),
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -407,7 +406,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 	@validateArgs()
 	public async sendReport(
-		options: IndicatorCCReportSpecificOptions,
+		options: IndicatorCCReportOptions,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			IndicatorCommand,
@@ -416,7 +415,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -439,7 +438,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 		});
 		const response = await this.host.sendCommand<
@@ -473,7 +472,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 			supportedProperties,
 			nextIndicatorId,
@@ -494,7 +493,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCDescriptionReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 			description,
 		});
@@ -674,7 +673,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 		const cc = new IndicatorCCDescriptionGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			indicatorId,
 		});
 		const response = await this.host.sendCommand<
@@ -904,7 +903,7 @@ export type IndicatorCCSetOptions =
 @useSupervision()
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		options: IndicatorCCSetOptions & CCCommandOptions,
+		options: WithAddress<IndicatorCCSetOptions>,
 	) {
 		super(options);
 		if ("value" in options) {
@@ -1002,7 +1001,7 @@ export class IndicatorCCSet extends IndicatorCC {
 }
 
 // @publicAPI
-export type IndicatorCCReportSpecificOptions =
+export type IndicatorCCReportOptions =
 	| {
 		value: number;
 	}
@@ -1013,7 +1012,7 @@ export type IndicatorCCReportSpecificOptions =
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
 	public constructor(
-		options: IndicatorCCReportSpecificOptions & CCCommandOptions,
+		options: WithAddress<IndicatorCCReportOptions>,
 	) {
 		super(options);
 
@@ -1231,7 +1230,7 @@ export interface IndicatorCCGetOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		options: IndicatorCCGetOptions & CCCommandOptions,
+		options: WithAddress<IndicatorCCGetOptions>,
 	) {
 		super(options);
 		this.indicatorId = options.indicatorId;
@@ -1279,7 +1278,7 @@ export interface IndicatorCCSupportedReportOptions {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		options: IndicatorCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<IndicatorCCSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -1390,7 +1389,7 @@ function testResponseForIndicatorSupportedGet(
 )
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		options: IndicatorCCSupportedGetOptions & CCCommandOptions,
+		options: WithAddress<IndicatorCCSupportedGetOptions>,
 	) {
 		super(options);
 		this.indicatorId = options.indicatorId;
@@ -1435,7 +1434,7 @@ export interface IndicatorCCDescriptionReportOptions {
 @CCCommand(IndicatorCommand.DescriptionReport)
 export class IndicatorCCDescriptionReport extends IndicatorCC {
 	public constructor(
-		options: IndicatorCCDescriptionReportOptions & CCCommandOptions,
+		options: WithAddress<IndicatorCCDescriptionReportOptions>,
 	) {
 		super(options);
 
@@ -1518,7 +1517,7 @@ function testResponseForIndicatorDescriptionGet(
 )
 export class IndicatorCCDescriptionGet extends IndicatorCC {
 	public constructor(
-		options: IndicatorCCDescriptionGetOptions & CCCommandOptions,
+		options: WithAddress<IndicatorCCDescriptionGetOptions>,
 	) {
 		super(options);
 		this.indicatorId = options.indicatorId;

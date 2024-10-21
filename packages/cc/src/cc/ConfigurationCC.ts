@@ -16,6 +16,7 @@ import {
 	type SupportsCC,
 	type ValueID,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodePartial,
@@ -54,7 +55,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -533,7 +533,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 			allowUnexpectedResponse,
 		});
@@ -602,7 +602,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		) {
 			const cc = new ConfigurationCCBulkGet({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				parameters: distinctParameters,
 			});
 			const response = await this.host.sendCommand<
@@ -622,7 +622,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			for (const parameter of distinctParameters) {
 				const cc = new ConfigurationCCGet({
 					nodeId: this.endpoint.nodeId,
-					endpoint: this.endpoint.index,
+					endpointIndex: this.endpoint.index,
 					parameter,
 				});
 				const response = await this.host.sendCommand<
@@ -692,7 +692,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 		const cc = new ConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			resetToDefault: false,
 			parameter: normalized.parameter,
 			value,
@@ -736,7 +736,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		if (canUseBulkSet) {
 			const cc = new ConfigurationCCBulkSet({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				parameters: allParams.map((v) => v.parameter),
 				valueSize: allParams[0].valueSize,
 				valueFormat: allParams[0].valueFormat,
@@ -784,7 +784,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			) {
 				const cc = new ConfigurationCCSet({
 					nodeId: this.endpoint.nodeId,
-					endpoint: this.endpoint.index,
+					endpointIndex: this.endpoint.index,
 					parameter,
 					value,
 					valueSize,
@@ -830,7 +830,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 			resetToDefault: true,
 		});
@@ -852,7 +852,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		) {
 			const cc = new ConfigurationCCBulkSet({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				parameters,
 				resetToDefault: true,
 			});
@@ -866,7 +866,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				(parameter) =>
 					new ConfigurationCCSet({
 						nodeId: this.endpoint.nodeId,
-						endpoint: this.endpoint.index,
+						endpointIndex: this.endpoint.index,
 						parameter,
 						resetToDefault: true,
 					}),
@@ -889,7 +889,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCDefaultReset({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
 	}
@@ -902,7 +902,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCPropertiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 		});
 		const response = await this.host.sendCommand<
@@ -935,7 +935,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCNameGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 		});
 		const response = await this.host.sendCommand<
@@ -955,7 +955,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const cc = new ConfigurationCCInfoGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 		});
 		const response = await this.host.sendCommand<
@@ -1612,7 +1612,7 @@ export interface ConfigurationCCReportOptions {
 @CCCommand(ConfigurationCommand.Report)
 export class ConfigurationCCReport extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCReportOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCReportOptions>,
 	) {
 		super(options);
 
@@ -1805,7 +1805,7 @@ export interface ConfigurationCCGetOptions {
 @expectedCCResponse(ConfigurationCCReport, testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCGetOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCGetOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;
@@ -1858,7 +1858,7 @@ export type ConfigurationCCSetOptions =
 @useSupervision()
 export class ConfigurationCCSet extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCSetOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCSetOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;
@@ -2000,7 +2000,7 @@ function getResponseForBulkSet(cc: ConfigurationCCBulkSet) {
 @useSupervision()
 export class ConfigurationCCBulkSet extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCBulkSetOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCBulkSetOptions>,
 	) {
 		super(options);
 		this._parameters = options.parameters;
@@ -2153,7 +2153,7 @@ export interface ConfigurationCCBulkReportOptions {
 @CCCommand(ConfigurationCommand.BulkReport)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCBulkReportOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCBulkReportOptions>,
 	) {
 		super(options);
 
@@ -2288,7 +2288,7 @@ export interface ConfigurationCCBulkGetOptions {
 @expectedCCResponse(ConfigurationCCBulkReport)
 export class ConfigurationCCBulkGet extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCBulkGetOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCBulkGetOptions>,
 	) {
 		super(options);
 		this._parameters = options.parameters.sort();
@@ -2345,7 +2345,7 @@ export interface ConfigurationCCNameReportOptions {
 @CCCommand(ConfigurationCommand.NameReport)
 export class ConfigurationCCNameReport extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCNameReportOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCNameReportOptions>,
 	) {
 		super(options);
 
@@ -2462,7 +2462,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCNameReport)
 export class ConfigurationCCNameGet extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCGetOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCGetOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;
@@ -2507,7 +2507,7 @@ export interface ConfigurationCCInfoReportOptions {
 @CCCommand(ConfigurationCommand.InfoReport)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCInfoReportOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCInfoReportOptions>,
 	) {
 		super(options);
 
@@ -2637,7 +2637,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCInfoReport)
 export class ConfigurationCCInfoGet extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCGetOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCGetOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;
@@ -2690,7 +2690,7 @@ export interface ConfigurationCCPropertiesReportOptions {
 @CCCommand(ConfigurationCommand.PropertiesReport)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCPropertiesReportOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCPropertiesReportOptions>,
 	) {
 		super(options);
 
@@ -2999,7 +2999,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCPropertiesReport)
 export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	public constructor(
-		options: ConfigurationCCGetOptions & CCCommandOptions,
+		options: WithAddress<ConfigurationCCGetOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;

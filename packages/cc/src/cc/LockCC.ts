@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
@@ -27,10 +28,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -76,7 +75,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 
 		const cc = new LockCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<LockCCReport>(
 			cc,
@@ -95,7 +94,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 
 		const cc = new LockCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			locked,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -191,7 +190,7 @@ export interface LockCCSetOptions {
 @useSupervision()
 export class LockCCSet extends LockCC {
 	public constructor(
-		options: LockCCSetOptions & CCCommandOptions,
+		options: WithAddress<LockCCSetOptions>,
 	) {
 		super(options);
 		this.locked = options.locked;
@@ -232,7 +231,7 @@ export interface LockCCReportOptions {
 @CCCommand(LockCommand.Report)
 export class LockCCReport extends LockCC {
 	public constructor(
-		options: LockCCReportOptions & CCCommandOptions,
+		options: WithAddress<LockCCReportOptions>,
 	) {
 		super(options);
 

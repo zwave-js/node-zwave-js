@@ -2,6 +2,7 @@ import type {
 	EndpointId,
 	MessageRecord,
 	SupervisionResult,
+	WithAddress,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -24,10 +25,8 @@ import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -206,7 +205,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCSupportedGroupingsGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MultiChannelAssociationCCSupportedGroupingsReport
@@ -226,7 +225,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCSupportedGroupingsReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupCount,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -245,7 +244,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 		});
 		const response = await this.host.sendCommand<
@@ -270,7 +269,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -290,7 +289,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new MultiChannelAssociationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -319,7 +318,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			for (const [group, destinations] of currentDestinations) {
 				const cc = new MultiChannelAssociationCCRemove({
 					nodeId: this.endpoint.nodeId,
-					endpoint: this.endpoint.index,
+					endpointIndex: this.endpoint.index,
 					groupId: group,
 					nodeIds: destinations
 						.filter((d) => d.endpoint != undefined)
@@ -340,7 +339,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 		} else {
 			const cc = new MultiChannelAssociationCCRemove({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				...options,
 			});
 			return this.host.sendCommand(cc, this.commandOptions);
@@ -623,7 +622,7 @@ export type MultiChannelAssociationCCSetOptions =
 @useSupervision()
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public constructor(
-		options: MultiChannelAssociationCCSetOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelAssociationCCSetOptions>,
 	) {
 		super(options);
 		if (options.groupId < 1) {
@@ -705,7 +704,7 @@ export interface MultiChannelAssociationCCRemoveOptions {
 @useSupervision()
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public constructor(
-		options: MultiChannelAssociationCCRemoveOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelAssociationCCRemoveOptions>,
 	) {
 		super(options);
 		// When removing associations, we allow invalid node IDs.
@@ -779,7 +778,7 @@ export interface MultiChannelAssociationCCReportOptions {
 @CCCommand(MultiChannelAssociationCommand.Report)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public constructor(
-		options: MultiChannelAssociationCCReportOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelAssociationCCReportOptions>,
 	) {
 		super(options);
 
@@ -897,7 +896,7 @@ export interface MultiChannelAssociationCCGetOptions {
 @expectedCCResponse(MultiChannelAssociationCCReport)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public constructor(
-		options: MultiChannelAssociationCCGetOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelAssociationCCGetOptions>,
 	) {
 		super(options);
 		if (options.groupId < 1) {
@@ -947,9 +946,9 @@ export class MultiChannelAssociationCCSupportedGroupingsReport
 	extends MultiChannelAssociationCC
 {
 	public constructor(
-		options:
-			& MultiChannelAssociationCCSupportedGroupingsReportOptions
-			& CCCommandOptions,
+		options: WithAddress<
+			MultiChannelAssociationCCSupportedGroupingsReportOptions
+		>,
 	) {
 		super(options);
 

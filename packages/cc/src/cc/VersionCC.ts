@@ -6,6 +6,7 @@ import {
 	type MessageRecord,
 	SecurityClass,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLibraryTypes,
@@ -24,10 +25,8 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 } from "../lib/CommandClass";
 import {
@@ -246,7 +245,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 		const cc = new VersionCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<VersionCCReport>(
 			cc,
@@ -268,7 +267,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 		const cc = new VersionCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -285,7 +284,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 		const cc = new VersionCCCommandClassGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			requestedCC,
 		});
 		const response = await this.host.sendCommand<
@@ -326,7 +325,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 		const cc = new VersionCCCommandClassReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			requestedCC,
 			ccVersion,
 		});
@@ -342,7 +341,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 		const cc = new VersionCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			VersionCCCapabilitiesReport
@@ -363,7 +362,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 		const cc = new VersionCCCapabilitiesReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			// At this time, we do not support responding to Z-Wave Software Get
 			supportsZWaveSoftwareGet: false,
 		});
@@ -379,7 +378,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 		const cc = new VersionCCZWaveSoftwareGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			VersionCCZWaveSoftwareReport
@@ -652,7 +651,7 @@ export interface VersionCCReportOptions {
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
-		options: VersionCCReportOptions & CCCommandOptions,
+		options: WithAddress<VersionCCReportOptions>,
 	) {
 		super(options);
 
@@ -787,7 +786,7 @@ export interface VersionCCCommandClassReportOptions {
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
 	public constructor(
-		options: VersionCCCommandClassReportOptions & CCCommandOptions,
+		options: WithAddress<VersionCCCommandClassReportOptions>,
 	) {
 		super(options);
 		this.requestedCC = options.requestedCC;
@@ -848,7 +847,7 @@ function testResponseForVersionCommandClassGet(
 )
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
-		options: VersionCCCommandClassGetOptions & CCCommandOptions,
+		options: WithAddress<VersionCCCommandClassGetOptions>,
 	) {
 		super(options);
 		this.requestedCC = options.requestedCC;
@@ -890,7 +889,7 @@ export interface VersionCCCapabilitiesReportOptions {
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
-		options: VersionCCCapabilitiesReportOptions & CCCommandOptions,
+		options: WithAddress<VersionCCCapabilitiesReportOptions>,
 	) {
 		super(options);
 
@@ -952,7 +951,7 @@ export interface VersionCCZWaveSoftwareReportOptions {
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
-		options: VersionCCZWaveSoftwareReportOptions & CCCommandOptions,
+		options: WithAddress<VersionCCZWaveSoftwareReportOptions>,
 	) {
 		super(options);
 

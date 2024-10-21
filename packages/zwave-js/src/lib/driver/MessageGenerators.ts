@@ -526,7 +526,7 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 			// No free nonce, request a new one
 			const cc = new SecurityCCNonceGet({
 				nodeId: nodeId,
-				endpoint: msg.command.endpointIndex,
+				endpointIndex: msg.command.endpointIndex,
 			});
 			const nonceResp = yield* sendCommandGenerator<
 				SecurityCCNonceReport
@@ -605,7 +605,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 			// No free nonce, request a new one
 			const cc = new Security2CCNonceGet({
 				nodeId: nodeId,
-				endpoint: msg.command.endpointIndex,
+				endpointIndex: msg.command.endpointIndex,
 			});
 			const nonceResp = yield* sendCommandGenerator<
 				Security2CCNonceReport

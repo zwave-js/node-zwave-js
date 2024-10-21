@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	type MaybeNotKnown,
 	TransmitOptions,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import { type CCParsingContext } from "@zwave-js/host";
@@ -37,7 +38,7 @@ export class DeviceResetLocallyCCAPI extends CCAPI {
 
 		const cc = new DeviceResetLocallyCCNotification({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 
 		try {

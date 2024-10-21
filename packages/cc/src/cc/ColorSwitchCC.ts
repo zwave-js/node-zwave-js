@@ -8,6 +8,7 @@ import {
 	type ValueDB,
 	type ValueID,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	isUnsupervisedOrSucceeded,
@@ -42,7 +43,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -211,7 +211,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		const cc = new ColorSwitchCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ColorSwitchCCSupportedReport
@@ -229,7 +229,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		const cc = new ColorSwitchCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			colorComponent: component,
 		});
 		const response = await this.host.sendCommand<ColorSwitchCCReport>(
@@ -249,7 +249,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		const cc = new ColorSwitchCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -367,7 +367,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		const cc = new ColorSwitchCCStartLevelChange({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -385,7 +385,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		const cc = new ColorSwitchCCStopLevelChange({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			colorComponent,
 		});
 
@@ -686,7 +686,7 @@ export interface ColorSwitchCCSupportedReportOptions {
 @CCCommand(ColorSwitchCommand.SupportedReport)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	public constructor(
-		options: ColorSwitchCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<ColorSwitchCCSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -749,7 +749,7 @@ export interface ColorSwitchCCReportOptions {
 @CCCommand(ColorSwitchCommand.Report)
 export class ColorSwitchCCReport extends ColorSwitchCC {
 	public constructor(
-		options: ColorSwitchCCReportOptions & CCCommandOptions,
+		options: WithAddress<ColorSwitchCCReportOptions>,
 	) {
 		super(options);
 
@@ -912,7 +912,7 @@ function testResponseForColorSwitchGet(
 @expectedCCResponse(ColorSwitchCCReport, testResponseForColorSwitchGet)
 export class ColorSwitchCCGet extends ColorSwitchCC {
 	public constructor(
-		options: ColorSwitchCCGetOptions & CCCommandOptions,
+		options: WithAddress<ColorSwitchCCGetOptions>,
 	) {
 		super(options);
 		this._colorComponent = options.colorComponent;
@@ -969,7 +969,7 @@ export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 @useSupervision()
 export class ColorSwitchCCSet extends ColorSwitchCC {
 	public constructor(
-		options: ColorSwitchCCSetOptions & CCCommandOptions,
+		options: WithAddress<ColorSwitchCCSetOptions>,
 	) {
 		super(options);
 		// Populate properties from options object
@@ -1096,7 +1096,7 @@ export type ColorSwitchCCStartLevelChangeOptions =
 @useSupervision()
 export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public constructor(
-		options: ColorSwitchCCStartLevelChangeOptions & CCCommandOptions,
+		options: WithAddress<ColorSwitchCCStartLevelChangeOptions>,
 	) {
 		super(options);
 		this.duration = Duration.from(options.duration);
@@ -1191,7 +1191,7 @@ export interface ColorSwitchCCStopLevelChangeOptions {
 @useSupervision()
 export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 	public constructor(
-		options: ColorSwitchCCStopLevelChangeOptions & CCCommandOptions,
+		options: WithAddress<ColorSwitchCCStopLevelChangeOptions>,
 	) {
 		super(options);
 		this.colorComponent = options.colorComponent;

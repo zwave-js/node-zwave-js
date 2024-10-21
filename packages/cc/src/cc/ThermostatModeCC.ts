@@ -6,6 +6,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
@@ -31,10 +32,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -136,7 +135,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 
 		const cc = new ThermostatModeCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatModeCCReport
@@ -186,7 +185,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 
 		const cc = new ThermostatModeCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			mode,
 			manufacturerData: manufacturerData as any,
 		});
@@ -203,7 +202,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 
 		const cc = new ThermostatModeCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatModeCCSupportedReport
@@ -325,7 +324,7 @@ export type ThermostatModeCCSetOptions =
 @useSupervision()
 export class ThermostatModeCCSet extends ThermostatModeCC {
 	public constructor(
-		options: ThermostatModeCCSetOptions & CCCommandOptions,
+		options: WithAddress<ThermostatModeCCSetOptions>,
 	) {
 		super(options);
 		this.mode = options.mode;
@@ -410,7 +409,7 @@ export type ThermostatModeCCReportOptions =
 @CCCommand(ThermostatModeCommand.Report)
 export class ThermostatModeCCReport extends ThermostatModeCC {
 	public constructor(
-		options: ThermostatModeCCReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatModeCCReportOptions>,
 	) {
 		super(options);
 
@@ -533,7 +532,7 @@ export interface ThermostatModeCCSupportedReportOptions {
 @CCCommand(ThermostatModeCommand.SupportedReport)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	public constructor(
-		options: ThermostatModeCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatModeCCSupportedReportOptions>,
 	) {
 		super(options);
 		this.supportedModes = options.supportedModes;

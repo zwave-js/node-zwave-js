@@ -8,6 +8,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -34,14 +35,11 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -469,7 +467,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 		const cc = new DoorLockCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			DoorLockCCCapabilitiesReport
@@ -503,7 +501,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 		const cc = new DoorLockCCOperationGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			DoorLockCCOperationReport
@@ -537,7 +535,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 		const cc = new DoorLockCCOperationSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			mode,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -554,7 +552,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 		const cc = new DoorLockCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...configuration,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -569,7 +567,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 		const cc = new DoorLockCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			DoorLockCCConfigurationReport
@@ -831,7 +829,7 @@ export interface DoorLockCCOperationSetOptions {
 @useSupervision()
 export class DoorLockCCOperationSet extends DoorLockCC {
 	public constructor(
-		options: DoorLockCCOperationSetOptions & CCCommandOptions,
+		options: WithAddress<DoorLockCCOperationSetOptions>,
 	) {
 		super(options);
 		if (options.mode === DoorLockMode.Unknown) {
@@ -891,7 +889,7 @@ export interface DoorLockCCOperationReportOptions {
 @CCCommand(DoorLockCommand.OperationReport)
 export class DoorLockCCOperationReport extends DoorLockCC {
 	public constructor(
-		options: DoorLockCCOperationReportOptions & CCCommandOptions,
+		options: WithAddress<DoorLockCCOperationReportOptions>,
 	) {
 		super(options);
 
@@ -1082,7 +1080,7 @@ export interface DoorLockCCConfigurationReportOptions {
 @CCCommand(DoorLockCommand.ConfigurationReport)
 export class DoorLockCCConfigurationReport extends DoorLockCC {
 	public constructor(
-		options: DoorLockCCConfigurationReportOptions & CCCommandOptions,
+		options: WithAddress<DoorLockCCConfigurationReportOptions>,
 	) {
 		super(options);
 
@@ -1291,7 +1289,7 @@ export type DoorLockCCConfigurationSetOptions =
 @useSupervision()
 export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public constructor(
-		options: DoorLockCCConfigurationSetOptions & CCCommandOptions,
+		options: WithAddress<DoorLockCCConfigurationSetOptions>,
 	) {
 		super(options);
 		this.operationType = options.operationType;
@@ -1446,7 +1444,7 @@ export interface DoorLockCCCapabilitiesReportOptions {
 @CCCommand(DoorLockCommand.CapabilitiesReport)
 export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	public constructor(
-		options: DoorLockCCCapabilitiesReportOptions & CCCommandOptions,
+		options: WithAddress<DoorLockCCCapabilitiesReportOptions>,
 	) {
 		super(options);
 

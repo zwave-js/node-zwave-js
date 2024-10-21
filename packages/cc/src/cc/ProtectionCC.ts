@@ -8,6 +8,7 @@ import {
 	type SupervisionResult,
 	Timeout,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -32,10 +33,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -226,7 +225,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 		const cc = new ProtectionCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<ProtectionCCReport>(
 			cc,
@@ -246,7 +245,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 		const cc = new ProtectionCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			local,
 			rf,
 		});
@@ -262,7 +261,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 		const cc = new ProtectionCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ProtectionCCSupportedReport
@@ -288,7 +287,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 		const cc = new ProtectionCCExclusiveControlGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ProtectionCCExclusiveControlReport
@@ -310,7 +309,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 		const cc = new ProtectionCCExclusiveControlSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			exclusiveControlNodeId: nodeId,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -324,7 +323,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 		const cc = new ProtectionCCTimeoutGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ProtectionCCTimeoutReport
@@ -346,7 +345,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 		const cc = new ProtectionCCTimeoutSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			timeout,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -509,7 +508,7 @@ export interface ProtectionCCSetOptions {
 @useSupervision()
 export class ProtectionCCSet extends ProtectionCC {
 	public constructor(
-		options: ProtectionCCSetOptions & CCCommandOptions,
+		options: WithAddress<ProtectionCCSetOptions>,
 	) {
 		super(options);
 		this.local = options.local;
@@ -573,7 +572,7 @@ export interface ProtectionCCReportOptions {
 @CCCommand(ProtectionCommand.Report)
 export class ProtectionCCReport extends ProtectionCC {
 	public constructor(
-		options: ProtectionCCReportOptions & CCCommandOptions,
+		options: WithAddress<ProtectionCCReportOptions>,
 	) {
 		super(options);
 
@@ -632,7 +631,7 @@ export interface ProtectionCCSupportedReportOptions {
 @CCCommand(ProtectionCommand.SupportedReport)
 export class ProtectionCCSupportedReport extends ProtectionCC {
 	public constructor(
-		options: ProtectionCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<ProtectionCCSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -738,7 +737,7 @@ export interface ProtectionCCExclusiveControlReportOptions {
 @CCCommand(ProtectionCommand.ExclusiveControlReport)
 export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	public constructor(
-		options: ProtectionCCExclusiveControlReportOptions & CCCommandOptions,
+		options: WithAddress<ProtectionCCExclusiveControlReportOptions>,
 	) {
 		super(options);
 
@@ -786,7 +785,7 @@ export interface ProtectionCCExclusiveControlSetOptions {
 @useSupervision()
 export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	public constructor(
-		options: ProtectionCCExclusiveControlSetOptions & CCCommandOptions,
+		options: WithAddress<ProtectionCCExclusiveControlSetOptions>,
 	) {
 		super(options);
 		this.exclusiveControlNodeId = options.exclusiveControlNodeId;
@@ -832,7 +831,7 @@ export interface ProtectionCCTimeoutReportOptions {
 @CCCommand(ProtectionCommand.TimeoutReport)
 export class ProtectionCCTimeoutReport extends ProtectionCC {
 	public constructor(
-		options: ProtectionCCTimeoutReportOptions & CCCommandOptions,
+		options: WithAddress<ProtectionCCTimeoutReportOptions>,
 	) {
 		super(options);
 
@@ -878,7 +877,7 @@ export interface ProtectionCCTimeoutSetOptions {
 @useSupervision()
 export class ProtectionCCTimeoutSet extends ProtectionCC {
 	public constructor(
-		options: ProtectionCCTimeoutSetOptions & CCCommandOptions,
+		options: WithAddress<ProtectionCCTimeoutSetOptions>,
 	) {
 		super(options);
 		this.timeout = options.timeout;

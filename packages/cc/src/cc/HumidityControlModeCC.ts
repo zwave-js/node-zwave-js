@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -29,10 +30,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -130,7 +129,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 
 		const cc = new HumidityControlModeCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			HumidityControlModeCCReport
@@ -154,7 +153,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 
 		const cc = new HumidityControlModeCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			mode,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -170,7 +169,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 
 		const cc = new HumidityControlModeCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			HumidityControlModeCCSupportedReport
@@ -287,7 +286,7 @@ export interface HumidityControlModeCCSetOptions {
 @useSupervision()
 export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	public constructor(
-		options: HumidityControlModeCCSetOptions & CCCommandOptions,
+		options: WithAddress<HumidityControlModeCCSetOptions>,
 	) {
 		super(options);
 		this.mode = options.mode;
@@ -333,7 +332,7 @@ export interface HumidityControlModeCCReportOptions {
 @CCCommand(HumidityControlModeCommand.Report)
 export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	public constructor(
-		options: HumidityControlModeCCReportOptions & CCCommandOptions,
+		options: WithAddress<HumidityControlModeCCReportOptions>,
 	) {
 		super(options);
 
@@ -381,7 +380,7 @@ export class HumidityControlModeCCSupportedReport
 	extends HumidityControlModeCC
 {
 	public constructor(
-		options: HumidityControlModeCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<HumidityControlModeCCSupportedReportOptions>,
 	) {
 		super(options);
 

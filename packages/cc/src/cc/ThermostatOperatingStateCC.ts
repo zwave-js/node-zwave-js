@@ -1,4 +1,4 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry, WithAddress } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
@@ -17,10 +17,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -89,7 +87,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 
 		const cc = new ThermostatOperatingStateCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatOperatingStateCCReport
@@ -170,7 +168,7 @@ export class ThermostatOperatingStateCCReport
 	extends ThermostatOperatingStateCC
 {
 	public constructor(
-		options: ThermostatOperatingStateCCReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatOperatingStateCCReportOptions>,
 	) {
 		super(options);
 

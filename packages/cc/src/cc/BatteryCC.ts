@@ -1,4 +1,4 @@
-import { timespan } from "@zwave-js/core";
+import { type WithAddress, timespan } from "@zwave-js/core";
 import type {
 	ControlsCC,
 	EndpointId,
@@ -35,10 +35,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -241,7 +239,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 
 		const cc = new BatteryCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<BatteryCCReport>(
 			cc,
@@ -269,7 +267,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 
 		const cc = new BatteryCCHealthGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<BatteryCCHealthReport>(
 			cc,
@@ -430,7 +428,7 @@ export type BatteryCCReportOptions =
 @CCCommand(BatteryCommand.Report)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
-		options: BatteryCCReportOptions & CCCommandOptions,
+		options: WithAddress<BatteryCCReportOptions>,
 	) {
 		super(options);
 
@@ -647,7 +645,7 @@ export interface BatteryCCHealthReportOptions {
 @CCCommand(BatteryCommand.HealthReport)
 export class BatteryCCHealthReport extends BatteryCC {
 	public constructor(
-		options: BatteryCCHealthReportOptions & CCCommandOptions,
+		options: WithAddress<BatteryCCHealthReportOptions>,
 	) {
 		super(options);
 

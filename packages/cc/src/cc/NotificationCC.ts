@@ -2,6 +2,7 @@ import {
 	type Notification,
 	type NotificationState,
 	type NotificationValue,
+	type WithAddress,
 	getNotification,
 	getNotificationEventName,
 	getNotificationName,
@@ -55,7 +56,6 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -303,7 +303,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NotificationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand<NotificationCCReport>(
@@ -323,7 +323,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NotificationCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -356,7 +356,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NotificationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			notificationType,
 			notificationStatus,
 		});
@@ -372,7 +372,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NotificationCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			NotificationCCSupportedReport
@@ -399,7 +399,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NotificationCCEventSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			notificationType,
 		});
 		const response = await this.host.sendCommand<
@@ -931,7 +931,7 @@ export interface NotificationCCSetOptions {
 @useSupervision()
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
-		options: NotificationCCSetOptions & CCCommandOptions,
+		options: WithAddress<NotificationCCSetOptions>,
 	) {
 		super(options);
 		this.notificationType = options.notificationType;
@@ -987,7 +987,7 @@ export type NotificationCCReportOptions = {
 @useSupervision()
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
-		options: NotificationCCReportOptions & CCCommandOptions,
+		options: WithAddress<NotificationCCReportOptions>,
 	) {
 		super(options);
 
@@ -1482,7 +1482,7 @@ export type NotificationCCGetOptions =
 @expectedCCResponse(NotificationCCReport)
 export class NotificationCCGet extends NotificationCC {
 	public constructor(
-		options: NotificationCCGetOptions & CCCommandOptions,
+		options: WithAddress<NotificationCCGetOptions>,
 	) {
 		super(options);
 		if ("alarmType" in options) {
@@ -1566,7 +1566,7 @@ export interface NotificationCCSupportedReportOptions {
 @CCCommand(NotificationCommand.SupportedReport)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
-		options: NotificationCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<NotificationCCSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -1651,7 +1651,7 @@ export interface NotificationCCEventSupportedReportOptions {
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {
 	public constructor(
-		options: NotificationCCEventSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<NotificationCCEventSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -1794,7 +1794,7 @@ export interface NotificationCCEventSupportedGetOptions {
 @expectedCCResponse(NotificationCCEventSupportedReport)
 export class NotificationCCEventSupportedGet extends NotificationCC {
 	public constructor(
-		options: NotificationCCEventSupportedGetOptions & CCCommandOptions,
+		options: WithAddress<NotificationCCEventSupportedGetOptions>,
 	) {
 		super(options);
 		this.notificationType = options.notificationType;

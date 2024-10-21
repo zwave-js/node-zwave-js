@@ -4,6 +4,7 @@ import {
 	type MessageOrCCLogEntry,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -18,11 +19,7 @@ import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	type CCRaw,
-	CommandClass,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -115,7 +112,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 
 		const cc = new ClimateControlScheduleCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			weekday,
 			switchPoints,
 		});
@@ -133,7 +130,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 
 		const cc = new ClimateControlScheduleCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			weekday,
 		});
 		const response = await this.host.sendCommand<
@@ -153,7 +150,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 
 		const cc = new ClimateControlScheduleCCChangedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ClimateControlScheduleCCChangedReport
@@ -173,7 +170,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 
 		const cc = new ClimateControlScheduleCCOverrideGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ClimateControlScheduleCCOverrideReport
@@ -201,7 +198,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 
 		const cc = new ClimateControlScheduleCCOverrideSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			overrideType: type,
 			overrideState: state,
 		});
@@ -226,7 +223,7 @@ export interface ClimateControlScheduleCCSetOptions {
 @useSupervision()
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public constructor(
-		options: ClimateControlScheduleCCSetOptions & CCCommandOptions,
+		options: WithAddress<ClimateControlScheduleCCSetOptions>,
 	) {
 		super(options);
 		this.switchPoints = options.switchPoints;
@@ -300,7 +297,7 @@ export interface ClimateControlScheduleCCReportOptions {
 @CCCommand(ClimateControlScheduleCommand.Report)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public constructor(
-		options: ClimateControlScheduleCCReportOptions & CCCommandOptions,
+		options: WithAddress<ClimateControlScheduleCCReportOptions>,
 	) {
 		super(options);
 
@@ -374,7 +371,7 @@ export interface ClimateControlScheduleCCGetOptions {
 @expectedCCResponse(ClimateControlScheduleCCReport)
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public constructor(
-		options: ClimateControlScheduleCCGetOptions & CCCommandOptions,
+		options: WithAddress<ClimateControlScheduleCCGetOptions>,
 	) {
 		super(options);
 		this.weekday = options.weekday;
@@ -419,9 +416,7 @@ export class ClimateControlScheduleCCChangedReport
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		options:
-			& ClimateControlScheduleCCChangedReportOptions
-			& CCCommandOptions,
+		options: WithAddress<ClimateControlScheduleCCChangedReportOptions>,
 	) {
 		super(options);
 
@@ -469,9 +464,7 @@ export class ClimateControlScheduleCCOverrideReport
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		options:
-			& ClimateControlScheduleCCOverrideReportOptions
-			& CCCommandOptions,
+		options: WithAddress<ClimateControlScheduleCCOverrideReportOptions>,
 	) {
 		super(options);
 
@@ -534,7 +527,7 @@ export class ClimateControlScheduleCCOverrideSet
 	extends ClimateControlScheduleCC
 {
 	public constructor(
-		options: ClimateControlScheduleCCOverrideSetOptions & CCCommandOptions,
+		options: WithAddress<ClimateControlScheduleCCOverrideSetOptions>,
 	) {
 		super(options);
 		this.overrideType = options.overrideType;

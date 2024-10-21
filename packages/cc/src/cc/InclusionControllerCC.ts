@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	type MessageOrCCLogEntry,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core";
 import { type MaybeNotKnown } from "@zwave-js/core/safe";
@@ -11,12 +12,7 @@ import type {
 } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	type CCRaw,
-	CommandClass,
-	type CommandClassDeserializationOptions,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -63,7 +59,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 
 		const cc = new InclusionControllerCCInitiate({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			includedNodeId: nodeId,
 			step,
 		});
@@ -82,7 +78,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 
 		const cc = new InclusionControllerCCComplete({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			step,
 			status,
 		});
@@ -99,7 +95,7 @@ export interface InclusionControllerCCCompleteOptions {
 @CCCommand(InclusionControllerCommand.Complete)
 export class InclusionControllerCCComplete extends InclusionControllerCC {
 	public constructor(
-		options: InclusionControllerCCCompleteOptions & CCCommandOptions,
+		options: WithAddress<InclusionControllerCCCompleteOptions>,
 	) {
 		super(options);
 		this.step = options.step;
@@ -156,7 +152,7 @@ export interface InclusionControllerCCInitiateOptions {
 @CCCommand(InclusionControllerCommand.Initiate)
 export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public constructor(
-		options: InclusionControllerCCInitiateOptions & CCCommandOptions,
+		options: WithAddress<InclusionControllerCCInitiateOptions>,
 	) {
 		super(options);
 		this.includedNodeId = options.includedNodeId;

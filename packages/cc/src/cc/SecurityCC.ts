@@ -7,6 +7,7 @@ import {
 	SecurityClass,
 	type SecurityManager,
 	TransmitOptions,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	computeMAC,
@@ -31,7 +32,6 @@ import { wait } from "alcalzone-shared/async";
 import { randomBytes } from "node:crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -163,7 +163,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		const cc = new SecurityCCNonceGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<SecurityCCNonceReport>(
 			cc,
@@ -213,7 +213,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		const cc = new SecurityCCNonceReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			nonce,
 		});
 
@@ -248,7 +248,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		const cc = new SecurityCCSchemeGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
 		// There is only one scheme, so we hardcode it
@@ -263,12 +263,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		let cc: CommandClass = new SecurityCCSchemeReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		if (encapsulated) {
 			cc = new SecurityCCCommandEncapsulation({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				encapsulated: cc,
 			});
 		}
@@ -283,7 +283,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		const cc = new SecurityCCSchemeInherit({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
 		// There is only one scheme, so we don't return anything here
@@ -297,12 +297,12 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		const keySet = new SecurityCCNetworkKeySet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			networkKey,
 		});
 		const cc = new SecurityCCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			encapsulated: keySet,
 			alternativeNetworkKey: Buffer.alloc(16, 0),
 		});
@@ -317,7 +317,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		const cc = new SecurityCCNetworkKeyVerify({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
 	}
@@ -331,7 +331,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		const cc = new SecurityCCCommandsSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			SecurityCCCommandsSupportedReport
@@ -355,7 +355,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 
 		const cc = new SecurityCCCommandsSupportedReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			supportedCCs,
 			controlledCCs,
 			reportsToFollow: 0,
@@ -555,7 +555,7 @@ interface SecurityCCNonceReportOptions {
 @CCCommand(SecurityCommand.NonceReport)
 export class SecurityCCNonceReport extends SecurityCC {
 	constructor(
-		options: SecurityCCNonceReportOptions & CCCommandOptions,
+		options: WithAddress<SecurityCCNonceReportOptions>,
 	) {
 		super(options);
 		if (options.nonce.length !== HALF_NONCE_SIZE) {
@@ -629,7 +629,7 @@ function getCCResponseForCommandEncapsulation(
 )
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
-		options: SecurityCCCommandEncapsulationOptions & CCCommandOptions,
+		options: WithAddress<SecurityCCCommandEncapsulationOptions>,
 	) {
 		super(options);
 
@@ -958,7 +958,7 @@ export interface SecurityCCNetworkKeySetOptions {
 @expectedCCResponse(SecurityCCNetworkKeyVerify)
 export class SecurityCCNetworkKeySet extends SecurityCC {
 	public constructor(
-		options: SecurityCCNetworkKeySetOptions & CCCommandOptions,
+		options: WithAddress<SecurityCCNetworkKeySetOptions>,
 	) {
 		super(options);
 		if (options.networkKey.length !== 16) {
@@ -1007,7 +1007,7 @@ export interface SecurityCCCommandsSupportedReportOptions {
 @CCCommand(SecurityCommand.CommandsSupportedReport)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public constructor(
-		options: SecurityCCCommandsSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<SecurityCCCommandsSupportedReportOptions>,
 	) {
 		super(options);
 

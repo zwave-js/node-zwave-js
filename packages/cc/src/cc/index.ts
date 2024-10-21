@@ -17,7 +17,7 @@ export {
 export type {
 	AssociationCCGetOptions,
 	AssociationCCRemoveOptions,
-	AssociationCCReportSpecificOptions,
+	AssociationCCReportOptions,
 	AssociationCCSetOptions,
 	AssociationCCSpecificGroupReportOptions,
 	AssociationCCSupportedGroupingsReportOptions,
@@ -38,7 +38,7 @@ export type {
 	AssociationGroupInfoCCCommandListGetOptions,
 	AssociationGroupInfoCCCommandListReportOptions,
 	AssociationGroupInfoCCInfoGetOptions,
-	AssociationGroupInfoCCInfoReportSpecificOptions,
+	AssociationGroupInfoCCInfoReportOptions,
 	AssociationGroupInfoCCNameGetOptions,
 	AssociationGroupInfoCCNameReportOptions,
 } from "./AssociationGroupInfoCC";
@@ -354,7 +354,7 @@ export type {
 	IndicatorCCDescriptionGetOptions,
 	IndicatorCCDescriptionReportOptions,
 	IndicatorCCGetOptions,
-	IndicatorCCReportSpecificOptions,
+	IndicatorCCReportOptions,
 	IndicatorCCSetOptions,
 	IndicatorCCSupportedGetOptions,
 	IndicatorCCSupportedReportOptions,

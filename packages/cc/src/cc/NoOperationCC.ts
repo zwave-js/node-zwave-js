@@ -1,4 +1,8 @@
-import { CommandClasses, MessagePriority } from "@zwave-js/core/safe";
+import {
+	CommandClasses,
+	MessagePriority,
+	type WithAddress,
+} from "@zwave-js/core/safe";
 import type { Message } from "@zwave-js/serial";
 import { PhysicalCCAPI } from "../lib/API";
 import { CommandClass } from "../lib/CommandClass";
@@ -18,7 +22,7 @@ export class NoOperationCCAPI extends PhysicalCCAPI {
 		await this.host.sendCommand(
 			new NoOperationCC({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 			}),
 			{
 				...this.commandOptions,

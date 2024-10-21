@@ -6,6 +6,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -32,7 +33,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -116,7 +116,7 @@ export class CentralSceneCCAPI extends CCAPI {
 
 		const cc = new CentralSceneCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			CentralSceneCCSupportedReport
@@ -142,7 +142,7 @@ export class CentralSceneCCAPI extends CCAPI {
 
 		const cc = new CentralSceneCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			CentralSceneCCConfigurationReport
@@ -166,7 +166,7 @@ export class CentralSceneCCAPI extends CCAPI {
 
 		const cc = new CentralSceneCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			slowRefresh,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -310,7 +310,7 @@ export interface CentralSceneCCNotificationOptions {
 @CCCommand(CentralSceneCommand.Notification)
 export class CentralSceneCCNotification extends CentralSceneCC {
 	public constructor(
-		options: CentralSceneCCNotificationOptions & CCCommandOptions,
+		options: WithAddress<CentralSceneCCNotificationOptions>,
 	) {
 		super(options);
 
@@ -393,7 +393,7 @@ export interface CentralSceneCCSupportedReportOptions {
 @CCCommand(CentralSceneCommand.SupportedReport)
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public constructor(
-		options: CentralSceneCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<CentralSceneCCSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -523,7 +523,7 @@ export interface CentralSceneCCConfigurationReportOptions {
 @CCCommand(CentralSceneCommand.ConfigurationReport)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public constructor(
-		options: CentralSceneCCConfigurationReportOptions & CCCommandOptions,
+		options: WithAddress<CentralSceneCCConfigurationReportOptions>,
 	) {
 		super(options);
 
@@ -568,7 +568,7 @@ export interface CentralSceneCCConfigurationSetOptions {
 @useSupervision()
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public constructor(
-		options: CentralSceneCCConfigurationSetOptions & CCCommandOptions,
+		options: WithAddress<CentralSceneCCConfigurationSetOptions>,
 	) {
 		super(options);
 		this.slowRefresh = options.slowRefresh;

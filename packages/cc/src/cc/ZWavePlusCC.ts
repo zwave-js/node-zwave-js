@@ -3,6 +3,7 @@ import {
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
 	MessagePriority,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
@@ -14,7 +15,6 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -85,7 +85,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 
 		const cc = new ZWavePlusCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<ZWavePlusCCReport>(
 			cc,
@@ -108,7 +108,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 
 		const cc = new ZWavePlusCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -178,7 +178,7 @@ export interface ZWavePlusCCReportOptions {
 @CCCommand(ZWavePlusCommand.Report)
 export class ZWavePlusCCReport extends ZWavePlusCC {
 	public constructor(
-		options: ZWavePlusCCReportOptions & CCCommandOptions,
+		options: WithAddress<ZWavePlusCCReportOptions>,
 	) {
 		super(options);
 		this.zwavePlusVersion = options.zwavePlusVersion;

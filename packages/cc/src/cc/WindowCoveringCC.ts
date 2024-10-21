@@ -6,6 +6,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
@@ -32,10 +33,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 } from "../lib/CommandClass";
 import {
@@ -476,7 +475,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 		const cc = new WindowCoveringCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			WindowCoveringCCSupportedReport
@@ -497,7 +496,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 		const cc = new WindowCoveringCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 		});
 		const response = await this.host.sendCommand<
@@ -526,7 +525,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 		const cc = new WindowCoveringCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			targetValues,
 			duration,
 		});
@@ -547,7 +546,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 		const cc = new WindowCoveringCCStartLevelChange({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 			direction,
 			duration,
@@ -567,7 +566,7 @@ export class WindowCoveringCCAPI extends CCAPI {
 
 		const cc = new WindowCoveringCCStopLevelChange({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 		});
 
@@ -688,7 +687,7 @@ export interface WindowCoveringCCSupportedReportOptions {
 @CCCommand(WindowCoveringCommand.SupportedReport)
 export class WindowCoveringCCSupportedReport extends WindowCoveringCC {
 	public constructor(
-		options: WindowCoveringCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<WindowCoveringCCSupportedReportOptions>,
 	) {
 		super(options);
 		this.supportedParameters = options.supportedParameters;
@@ -768,7 +767,7 @@ export interface WindowCoveringCCReportOptions {
 @CCCommand(WindowCoveringCommand.Report)
 export class WindowCoveringCCReport extends WindowCoveringCC {
 	public constructor(
-		options: WindowCoveringCCReportOptions & CCCommandOptions,
+		options: WithAddress<WindowCoveringCCReportOptions>,
 	) {
 		super(options);
 
@@ -849,7 +848,7 @@ function testResponseForWindowCoveringGet(
 @expectedCCResponse(WindowCoveringCCReport, testResponseForWindowCoveringGet)
 export class WindowCoveringCCGet extends WindowCoveringCC {
 	public constructor(
-		options: WindowCoveringCCGetOptions & CCCommandOptions,
+		options: WithAddress<WindowCoveringCCGetOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;
@@ -898,7 +897,7 @@ export interface WindowCoveringCCSetOptions {
 @useSupervision()
 export class WindowCoveringCCSet extends WindowCoveringCC {
 	public constructor(
-		options: WindowCoveringCCSetOptions & CCCommandOptions,
+		options: WithAddress<WindowCoveringCCSetOptions>,
 	) {
 		super(options);
 		this.targetValues = options.targetValues;
@@ -986,7 +985,7 @@ export interface WindowCoveringCCStartLevelChangeOptions {
 @useSupervision()
 export class WindowCoveringCCStartLevelChange extends WindowCoveringCC {
 	public constructor(
-		options: WindowCoveringCCStartLevelChangeOptions & CCCommandOptions,
+		options: WithAddress<WindowCoveringCCStartLevelChangeOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;
@@ -1057,7 +1056,7 @@ export interface WindowCoveringCCStopLevelChangeOptions {
 @useSupervision()
 export class WindowCoveringCCStopLevelChange extends WindowCoveringCC {
 	public constructor(
-		options: WindowCoveringCCStopLevelChangeOptions & CCCommandOptions,
+		options: WithAddress<WindowCoveringCCStopLevelChangeOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;

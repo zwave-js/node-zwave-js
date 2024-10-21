@@ -9,6 +9,7 @@ import {
 	NOT_KNOWN,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	maybeUnknownToString,
 	parseMaybeNumber,
 	validatePayload,
@@ -32,10 +33,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -234,7 +233,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MultilevelSwitchCCReport
@@ -265,7 +264,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			targetValue,
 			duration,
 		});
@@ -283,7 +282,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCStartLevelChange({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -298,7 +297,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCStopLevelChange({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -312,7 +311,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		const cc = new MultilevelSwitchCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MultilevelSwitchCCSupportedReport
@@ -629,7 +628,7 @@ export interface MultilevelSwitchCCSetOptions {
 @useSupervision()
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public constructor(
-		options: MultilevelSwitchCCSetOptions & CCCommandOptions,
+		options: WithAddress<MultilevelSwitchCCSetOptions>,
 	) {
 		super(options);
 		this.targetValue = options.targetValue;
@@ -701,7 +700,7 @@ export interface MultilevelSwitchCCReportOptions {
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
-		options: MultilevelSwitchCCReportOptions & CCCommandOptions,
+		options: WithAddress<MultilevelSwitchCCReportOptions>,
 	) {
 		super(options);
 
@@ -797,7 +796,7 @@ export type MultilevelSwitchCCStartLevelChangeOptions =
 @useSupervision()
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public constructor(
-		options: MultilevelSwitchCCStartLevelChangeOptions & CCCommandOptions,
+		options: WithAddress<MultilevelSwitchCCStartLevelChangeOptions>,
 	) {
 		super(options);
 		this.duration = Duration.from(options.duration);
@@ -886,7 +885,7 @@ export interface MultilevelSwitchCCSupportedReportOptions {
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public constructor(
-		options: MultilevelSwitchCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<MultilevelSwitchCCSupportedReportOptions>,
 	) {
 		super(options);
 

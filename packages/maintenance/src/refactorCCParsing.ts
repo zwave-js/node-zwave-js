@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { Project, SyntaxKind } from "ts-morph";
+import { type IntersectionTypeNode, Project, SyntaxKind } from "ts-morph";
 
 async function main() {
 	const project = new Project({
@@ -13,102 +13,55 @@ async function main() {
 	for (const file of sourceFiles) {
 		// const filePath = path.relative(process.cwd(), file.getFilePath());
 
-		const ccImplementations = file.getDescendantsOfKind(
-			SyntaxKind.ClassDeclaration,
-		).filter((cls) => {
-			const name = cls.getName();
-			if (!name) return false;
-			if (!name.includes("CC")) return false;
-			// if (name.endsWith("CC")) return false;
-			return true;
-		});
-
-		const parse = ccImplementations.map((cls) => {
-			const method = cls.getMethod("parse");
-			if (!method) return;
-			if (!method.isStatic()) return;
-
-			return method;
-		}).filter((m) => m != undefined);
-
-		if (!parse.length) continue;
-
 		// Add required imports
-		const hasRawImport = file.getImportDeclarations().some(
-			(decl) =>
-				decl.getNamedImports().some((imp) => imp.getName() === "CCRaw"),
-		);
-		if (!hasRawImport) {
-			const existing = file.getImportDeclaration((decl) =>
-				decl.getModuleSpecifierValue().endsWith("/lib/CommandClass")
-			);
-			if (!existing) {
-				file.addImportDeclaration({
-					moduleSpecifier: "../lib/CommandClass",
-					namedImports: [{
-						name: "CCRaw",
-						isTypeOnly: true,
-					}],
-				});
-			} else {
-				existing.addNamedImport({
-					name: "CCRaw",
-					isTypeOnly: true,
-				});
-			}
-		}
-
-		const hasCCParsingContextImport = file.getImportDeclarations().some(
+		const hasWithAddressImport = file.getImportDeclarations().some(
 			(decl) =>
 				decl.getNamedImports().some((imp) =>
-					imp.getName() === "CCParsingContext"
+					imp.getName() === "WithAddress"
 				),
 		);
-		if (!hasCCParsingContextImport) {
+		if (!hasWithAddressImport) {
 			const existing = file.getImportDeclaration((decl) =>
-				decl.getModuleSpecifierValue().startsWith("@zwave-js/host")
+				decl.getModuleSpecifierValue().startsWith("@zwave-js/core")
 			);
 			if (!existing) {
 				file.addImportDeclaration({
-					moduleSpecifier: "@zwave-js/host",
+					moduleSpecifier: "@zwave-js/core",
 					namedImports: [{
-						name: "CCParsingContext",
+						name: "WithAddress",
 						isTypeOnly: true,
 					}],
 				});
 			} else {
 				existing.addNamedImport({
-					name: "CCParsingContext",
+					name: "WithAddress",
 					isTypeOnly: true,
 				});
 			}
 		}
 
-		for (const impl of parse) {
-			// Update the method signature
-			impl.rename("from");
-			impl.getParameters().forEach((p) => p.remove());
-			impl.addParameter({
-				name: "raw",
-				type: "CCRaw",
-			});
-			impl.addParameter({
-				name: "ctx",
-				type: "CCParsingContext",
-			});
+		// Remove old imports
+		const oldImports = file.getImportDeclarations().map((decl) =>
+			decl.getNamedImports().find(
+				(imp) => imp.getName() === "CCCommandOptions",
+			)
+		).filter((i) => i != undefined);
+		for (const imp of oldImports) {
+			imp.remove();
+		}
 
-			// Replace "payload" with "raw.payload"
-			const idents = impl.getDescendantsOfKind(SyntaxKind.Identifier)
-				.filter((id) => id.getText() === "payload");
-			idents.forEach((id) => id.replaceWithText("raw.payload"));
-
-			// Replace "options.context.sourceNodeId" with "ctx.sourceNodeId"
-			const exprs = impl.getDescendantsOfKind(
-				SyntaxKind.PropertyAccessExpression,
-			).filter((expr) =>
-				expr.getText() === "options.context.sourceNodeId"
+		const oldTypes = file.getDescendantsOfKind(SyntaxKind.TypeReference)
+			.filter((ref) => ref.getText() === "CCCommandOptions")
+			.map((ref) => ref.getParentIfKind(SyntaxKind.IntersectionType))
+			.filter((typ): typ is IntersectionTypeNode =>
+				typ != undefined
+				&& !!typ.getParent().isKind(SyntaxKind.Parameter)
+				&& !!typ.getParent().getParent()?.isKind(SyntaxKind.Constructor)
 			);
-			exprs.forEach((expr) => expr.replaceWithText("ctx.sourceNodeId"));
+		for (const type of oldTypes) {
+			const otherType = type.getText().replace("& CCCommandOptions", "")
+				.replace("CCCommandOptions & ", "");
+			type.replaceWithText(`WithAddress<${otherType}>`);
 		}
 
 		await file.save();

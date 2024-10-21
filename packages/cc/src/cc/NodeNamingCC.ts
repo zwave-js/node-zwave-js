@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
@@ -26,7 +27,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -136,7 +136,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NodeNamingAndLocationCCNameGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			NodeNamingAndLocationCCNameReport
@@ -156,7 +156,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NodeNamingAndLocationCCNameSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			name,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -170,7 +170,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NodeNamingAndLocationCCLocationGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			NodeNamingAndLocationCCLocationReport
@@ -192,7 +192,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 
 		const cc = new NodeNamingAndLocationCCLocationSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			location,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -275,7 +275,7 @@ export interface NodeNamingAndLocationCCNameSetOptions {
 @useSupervision()
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
-		options: NodeNamingAndLocationCCNameSetOptions & CCCommandOptions,
+		options: WithAddress<NodeNamingAndLocationCCNameSetOptions>,
 	) {
 		super(options);
 		this.name = options.name;
@@ -335,7 +335,7 @@ export interface NodeNamingAndLocationCCNameReportOptions {
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
-		options: NodeNamingAndLocationCCNameReportOptions & CCCommandOptions,
+		options: WithAddress<NodeNamingAndLocationCCNameReportOptions>,
 	) {
 		super(options);
 		this.name = options.name;
@@ -386,7 +386,7 @@ export class NodeNamingAndLocationCCLocationSet
 	extends NodeNamingAndLocationCC
 {
 	public constructor(
-		options: NodeNamingAndLocationCCLocationSetOptions & CCCommandOptions,
+		options: WithAddress<NodeNamingAndLocationCCLocationSetOptions>,
 	) {
 		super(options);
 		this.location = options.location;
@@ -448,9 +448,7 @@ export class NodeNamingAndLocationCCLocationReport
 	extends NodeNamingAndLocationCC
 {
 	public constructor(
-		options:
-			& NodeNamingAndLocationCCLocationReportOptions
-			& CCCommandOptions,
+		options: WithAddress<NodeNamingAndLocationCCLocationReportOptions>,
 	) {
 		super(options);
 		this.location = options.location;

@@ -6,6 +6,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getCCName,
@@ -30,7 +31,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -117,7 +117,7 @@ export class EntryControlCCAPI extends CCAPI {
 
 		const cc = new EntryControlCCKeySupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			EntryControlCCKeySupportedReport
@@ -137,7 +137,7 @@ export class EntryControlCCAPI extends CCAPI {
 
 		const cc = new EntryControlCCEventSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			EntryControlCCEventSupportedReport
@@ -166,7 +166,7 @@ export class EntryControlCCAPI extends CCAPI {
 
 		const cc = new EntryControlCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			EntryControlCCConfigurationReport
@@ -191,7 +191,7 @@ export class EntryControlCCAPI extends CCAPI {
 
 		const cc = new EntryControlCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			keyCacheSize,
 			keyCacheTimeout,
 		});
@@ -405,7 +405,7 @@ export interface EntryControlCCNotificationOptions {
 @CCCommand(EntryControlCommand.Notification)
 export class EntryControlCCNotification extends EntryControlCC {
 	public constructor(
-		options: EntryControlCCNotificationOptions & CCCommandOptions,
+		options: WithAddress<EntryControlCCNotificationOptions>,
 	) {
 		super(options);
 
@@ -528,7 +528,7 @@ export interface EntryControlCCKeySupportedReportOptions {
 @CCCommand(EntryControlCommand.KeySupportedReport)
 export class EntryControlCCKeySupportedReport extends EntryControlCC {
 	public constructor(
-		options: EntryControlCCKeySupportedReportOptions & CCCommandOptions,
+		options: WithAddress<EntryControlCCKeySupportedReportOptions>,
 	) {
 		super(options);
 
@@ -582,7 +582,7 @@ export interface EntryControlCCEventSupportedReportOptions {
 @CCCommand(EntryControlCommand.EventSupportedReport)
 export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	public constructor(
-		options: EntryControlCCEventSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<EntryControlCCEventSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -705,7 +705,7 @@ export interface EntryControlCCConfigurationReportOptions {
 @CCCommand(EntryControlCommand.ConfigurationReport)
 export class EntryControlCCConfigurationReport extends EntryControlCC {
 	public constructor(
-		options: EntryControlCCConfigurationReportOptions & CCCommandOptions,
+		options: WithAddress<EntryControlCCConfigurationReportOptions>,
 	) {
 		super(options);
 
@@ -761,7 +761,7 @@ export interface EntryControlCCConfigurationSetOptions {
 @useSupervision()
 export class EntryControlCCConfigurationSet extends EntryControlCC {
 	public constructor(
-		options: EntryControlCCConfigurationSetOptions & CCCommandOptions,
+		options: WithAddress<EntryControlCCConfigurationSetOptions>,
 	) {
 		super(options);
 		this.keyCacheSize = options.keyCacheSize;

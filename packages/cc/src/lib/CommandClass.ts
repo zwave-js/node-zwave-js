@@ -1,5 +1,6 @@
 import {
 	type BroadcastCC,
+	type CCAddress,
 	type CCId,
 	CommandClasses,
 	type ControlsCC,
@@ -45,7 +46,6 @@ import type {
 	LogNode,
 	LookupManufacturer,
 } from "@zwave-js/host";
-import { MessageOrigin } from "@zwave-js/serial";
 import {
 	type JSONObject,
 	buffer2hex,
@@ -82,44 +82,12 @@ import {
 	defaultCCValueOptions,
 } from "./Values";
 
-export type CommandClassDeserializationOptions =
-	& {
-		data: Buffer;
-		origin?: MessageOrigin;
-		context: CCParsingContext;
-	}
-	& (
-		| {
-			fromEncapsulation?: false;
-			nodeId: number;
-		}
-		| {
-			fromEncapsulation: true;
-			encapCC: CommandClass;
-		}
-	);
-
-export function gotDeserializationOptions(
-	options: CommandClassOptions,
-): options is CommandClassDeserializationOptions {
-	return "data" in options && Buffer.isBuffer(options.data);
-}
-
-export interface CCCommandOptions {
-	nodeId: number | MulticastDestination;
-	endpoint?: number;
-}
-
-interface CommandClassCreationOptions extends CCCommandOptions {
+export interface CommandClassOptions extends CCAddress {
 	ccId?: number; // Used to overwrite the declared CC ID
 	ccCommand?: number; // undefined = NoOp
 	payload?: Buffer;
 	origin?: undefined;
 }
-
-export type CommandClassOptions =
-	| CommandClassCreationOptions
-	| CommandClassDeserializationOptions;
 
 // Defines the necessary traits an endpoint passed to a CC instance must have
 export type CCEndpoint =
@@ -242,26 +210,17 @@ export class CCRaw {
 // @publicAPI
 export class CommandClass implements CCId {
 	// empty constructor to parse messages
-	public constructor(options: CommandClassCreationOptions) {
-		// Default to the root endpoint - Inherited classes may override this behavior
-		this.endpointIndex =
-			("endpoint" in options ? options.endpoint : undefined) ?? 0;
-
-		this.origin = options.origin
-			?? (gotDeserializationOptions(options)
-				? MessageOrigin.Controller
-				: MessageOrigin.Host);
-
+	public constructor(options: CommandClassOptions) {
 		const {
 			nodeId,
-			endpoint = 0,
+			endpointIndex = 0,
 			ccId = getCommandClass(this),
 			ccCommand = getCCCommand(this),
 			payload = Buffer.allocUnsafe(0),
 		} = options;
 
 		this.nodeId = nodeId;
-		this.endpointIndex = endpoint;
+		this.endpointIndex = endpointIndex;
 		this.ccId = ccId;
 		this.ccCommand = ccCommand;
 		this.payload = payload;
@@ -313,14 +272,10 @@ export class CommandClass implements CCId {
 				const ret = new InvalidCC({
 					nodeId: ctx.sourceNodeId,
 					ccId: raw.ccId,
+					ccCommand: raw.ccCommand,
 					ccName,
 					reason,
 				});
-
-				// FIXME: Handle in encapsulating CCs
-				// if (options.fromEncapsulation) {
-				// 	ret.encapsulatingCC = options.encapCC as any;
-				// }
 
 				return ret;
 			}
@@ -394,8 +349,6 @@ export class CommandClass implements CCId {
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpointIndex: number;
-
-	public origin: MessageOrigin;
 
 	/**
 	 * Which encapsulation CCs this CC is/was/should be encapsulated with.
@@ -1352,13 +1305,13 @@ export class CommandClass implements CCId {
 	}
 }
 
-export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
+export interface InvalidCCOptions extends CommandClassOptions {
 	ccName: string;
 	reason?: string | ZWaveErrorCodes;
 }
 
 export class InvalidCC extends CommandClass {
-	public constructor(options: InvalidCCCreationOptions) {
+	public constructor(options: InvalidCCOptions) {
 		super(options);
 		this._ccName = options.ccName;
 		// Numeric reasons are used internally to communicate problems with a CC

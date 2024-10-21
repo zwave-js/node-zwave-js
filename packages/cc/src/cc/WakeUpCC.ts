@@ -6,6 +6,7 @@ import {
 	type SupervisionResult,
 	TransmitOptions,
 	ValueMetadata,
+	type WithAddress,
 	supervisedCommandSucceeded,
 	validatePayload,
 } from "@zwave-js/core/safe";
@@ -27,10 +28,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 } from "../lib/CommandClass";
@@ -138,7 +137,7 @@ export class WakeUpCCAPI extends CCAPI {
 
 		const cc = new WakeUpCCIntervalGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			WakeUpCCIntervalReport
@@ -160,7 +159,7 @@ export class WakeUpCCAPI extends CCAPI {
 
 		const cc = new WakeUpCCIntervalCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			WakeUpCCIntervalCapabilitiesReport
@@ -188,7 +187,7 @@ export class WakeUpCCAPI extends CCAPI {
 
 		const cc = new WakeUpCCIntervalSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			wakeUpInterval,
 			controllerNodeId,
 		});
@@ -203,7 +202,7 @@ export class WakeUpCCAPI extends CCAPI {
 
 		const cc = new WakeUpCCNoMoreInformation({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		await this.host.sendCommand(cc, {
 			...this.commandOptions,
@@ -364,7 +363,7 @@ export interface WakeUpCCIntervalSetOptions {
 @useSupervision()
 export class WakeUpCCIntervalSet extends WakeUpCC {
 	public constructor(
-		options: WakeUpCCIntervalSetOptions & CCCommandOptions,
+		options: WithAddress<WakeUpCCIntervalSetOptions>,
 	) {
 		super(options);
 		this.wakeUpInterval = options.wakeUpInterval;
@@ -417,7 +416,7 @@ export interface WakeUpCCIntervalReportOptions {
 @CCCommand(WakeUpCommand.IntervalReport)
 export class WakeUpCCIntervalReport extends WakeUpCC {
 	public constructor(
-		options: WakeUpCCIntervalReportOptions & CCCommandOptions,
+		options: WithAddress<WakeUpCCIntervalReportOptions>,
 	) {
 		super(options);
 
@@ -480,7 +479,7 @@ export interface WakeUpCCIntervalCapabilitiesReportOptions {
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	public constructor(
-		options: WakeUpCCIntervalCapabilitiesReportOptions & CCCommandOptions,
+		options: WithAddress<WakeUpCCIntervalCapabilitiesReportOptions>,
 	) {
 		super(options);
 

@@ -7,6 +7,7 @@ import {
 	type SupervisionResult,
 	ValueMetadata,
 	type ValueMetadataNumeric,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeFloatWithScale,
@@ -34,7 +35,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -210,7 +210,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 		const cc = new HumidityControlSetpointCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			setpointType,
 		});
 		const response = await this.host.sendCommand<
@@ -243,7 +243,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 		const cc = new HumidityControlSetpointCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			setpointType,
 			value,
 			scale,
@@ -262,7 +262,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 		const cc = new HumidityControlSetpointCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			setpointType,
 		});
 		const response = await this.host.sendCommand<
@@ -291,7 +291,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 		const cc = new HumidityControlSetpointCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			HumidityControlSetpointCCSupportedReport
@@ -313,7 +313,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 		const cc = new HumidityControlSetpointCCScaleSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			setpointType,
 		});
 		const response = await this.host.sendCommand<
@@ -524,7 +524,7 @@ export interface HumidityControlSetpointCCSetOptions {
 @useSupervision()
 export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	public constructor(
-		options: HumidityControlSetpointCCSetOptions & CCCommandOptions,
+		options: WithAddress<HumidityControlSetpointCCSetOptions>,
 	) {
 		super(options);
 		this.setpointType = options.setpointType;
@@ -584,7 +584,7 @@ export interface HumidityControlSetpointCCReportOptions {
 @CCCommand(HumidityControlSetpointCommand.Report)
 export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 	public constructor(
-		options: HumidityControlSetpointCCReportOptions & CCCommandOptions,
+		options: WithAddress<HumidityControlSetpointCCReportOptions>,
 	) {
 		super(options);
 
@@ -693,7 +693,7 @@ export interface HumidityControlSetpointCCGetOptions {
 )
 export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 	public constructor(
-		options: HumidityControlSetpointCCGetOptions & CCCommandOptions,
+		options: WithAddress<HumidityControlSetpointCCGetOptions>,
 	) {
 		super(options);
 		this.setpointType = options.setpointType;
@@ -744,9 +744,7 @@ export class HumidityControlSetpointCCSupportedReport
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		options:
-			& HumidityControlSetpointCCSupportedReportOptions
-			& CCCommandOptions,
+		options: WithAddress<HumidityControlSetpointCCSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -811,9 +809,9 @@ export class HumidityControlSetpointCCScaleSupportedReport
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		options:
-			& HumidityControlSetpointCCScaleSupportedReportOptions
-			& CCCommandOptions,
+		options: WithAddress<
+			HumidityControlSetpointCCScaleSupportedReportOptions
+		>,
 	) {
 		super(options);
 
@@ -865,9 +863,7 @@ export class HumidityControlSetpointCCScaleSupportedGet
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		options:
-			& HumidityControlSetpointCCScaleSupportedGetOptions
-			& CCCommandOptions,
+		options: WithAddress<HumidityControlSetpointCCScaleSupportedGetOptions>,
 	) {
 		super(options);
 		this.setpointType = options.setpointType;
@@ -922,9 +918,9 @@ export class HumidityControlSetpointCCCapabilitiesReport
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		options:
-			& HumidityControlSetpointCCCapabilitiesReportOptions
-			& CCCommandOptions,
+		options: WithAddress<
+			HumidityControlSetpointCCCapabilitiesReportOptions
+		>,
 	) {
 		super(options);
 
@@ -1014,9 +1010,7 @@ export class HumidityControlSetpointCCCapabilitiesGet
 	extends HumidityControlSetpointCC
 {
 	public constructor(
-		options:
-			& HumidityControlSetpointCCCapabilitiesGetOptions
-			& CCCommandOptions,
+		options: WithAddress<HumidityControlSetpointCCCapabilitiesGetOptions>,
 	) {
 		super(options);
 		this.setpointType = options.setpointType;

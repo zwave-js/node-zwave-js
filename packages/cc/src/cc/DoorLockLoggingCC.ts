@@ -4,6 +4,7 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
@@ -17,10 +18,8 @@ import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -130,7 +129,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 
 		const cc = new DoorLockLoggingCCRecordsSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			DoorLockLoggingCCRecordsSupportedReport
@@ -153,7 +152,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 
 		const cc = new DoorLockLoggingCCRecordGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			recordNumber,
 		});
 		const response = await this.host.sendCommand<
@@ -238,9 +237,7 @@ export interface DoorLockLoggingCCRecordsSupportedReportOptions {
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
 export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	public constructor(
-		options:
-			& DoorLockLoggingCCRecordsSupportedReportOptions
-			& CCCommandOptions,
+		options: WithAddress<DoorLockLoggingCCRecordsSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -294,7 +291,7 @@ export interface DoorLockLoggingCCRecordReportOptions {
 @CCCommand(DoorLockLoggingCommand.RecordReport)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public constructor(
-		options: DoorLockLoggingCCRecordReportOptions & CCCommandOptions,
+		options: WithAddress<DoorLockLoggingCCRecordReportOptions>,
 	) {
 		super(options);
 
@@ -410,7 +407,7 @@ function testResponseForDoorLockLoggingRecordGet(
 )
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 	public constructor(
-		options: DoorLockLoggingCCRecordGetOptions & CCCommandOptions,
+		options: WithAddress<DoorLockLoggingCCRecordGetOptions>,
 	) {
 		super(options);
 		this.recordNumber = options.recordNumber;

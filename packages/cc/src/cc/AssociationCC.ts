@@ -3,6 +3,7 @@ import type {
 	MaybeNotKnown,
 	MessageRecord,
 	SupervisionResult,
+	WithAddress,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -23,7 +24,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -107,7 +107,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationCCSupportedGroupingsGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			AssociationCCSupportedGroupingsReport
@@ -127,7 +127,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationCCSupportedGroupingsReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupCount,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -143,7 +143,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 		});
 		const response = await this.host.sendCommand<AssociationCCReport>(
@@ -160,7 +160,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 	@validateArgs()
 	public async sendReport(
-		options: AssociationCCReportSpecificOptions,
+		options: AssociationCCReportOptions,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			AssociationCommand,
@@ -169,7 +169,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -187,7 +187,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 			nodeIds,
 		});
@@ -223,7 +223,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationCCRemove({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -270,7 +270,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationCCSpecificGroupGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			AssociationCCSpecificGroupReport
@@ -295,7 +295,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationCCSpecificGroupReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			group,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -505,7 +505,7 @@ export interface AssociationCCSetOptions {
 @useSupervision()
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
-		options: AssociationCCSetOptions & CCCommandOptions,
+		options: WithAddress<AssociationCCSetOptions>,
 	) {
 		super(options);
 		if (options.groupId < 1) {
@@ -570,7 +570,7 @@ export interface AssociationCCRemoveOptions {
 @useSupervision()
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
-		options: AssociationCCRemoveOptions & CCCommandOptions,
+		options: WithAddress<AssociationCCRemoveOptions>,
 	) {
 		super(options);
 		// When removing associations, we allow invalid node IDs.
@@ -621,7 +621,7 @@ export class AssociationCCRemove extends AssociationCC {
 }
 
 // @publicAPI
-export interface AssociationCCReportSpecificOptions {
+export interface AssociationCCReportOptions {
 	groupId: number;
 	maxNodes: number;
 	nodeIds: number[];
@@ -631,7 +631,7 @@ export interface AssociationCCReportSpecificOptions {
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
-		options: AssociationCCReportSpecificOptions & CCCommandOptions,
+		options: WithAddress<AssociationCCReportOptions>,
 	) {
 		super(options);
 
@@ -724,7 +724,7 @@ export interface AssociationCCGetOptions {
 @expectedCCResponse(AssociationCCReport)
 export class AssociationCCGet extends AssociationCC {
 	public constructor(
-		options: AssociationCCGetOptions & CCCommandOptions,
+		options: WithAddress<AssociationCCGetOptions>,
 	) {
 		super(options);
 		if (options.groupId < 1) {
@@ -769,9 +769,7 @@ export interface AssociationCCSupportedGroupingsReportOptions {
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
-		options:
-			& AssociationCCSupportedGroupingsReportOptions
-			& CCCommandOptions,
+		options: WithAddress<AssociationCCSupportedGroupingsReportOptions>,
 	) {
 		super(options);
 
@@ -819,7 +817,7 @@ export interface AssociationCCSpecificGroupReportOptions {
 @CCCommand(AssociationCommand.SpecificGroupReport)
 export class AssociationCCSpecificGroupReport extends AssociationCC {
 	public constructor(
-		options: AssociationCCSpecificGroupReportOptions & CCCommandOptions,
+		options: WithAddress<AssociationCCSpecificGroupReportOptions>,
 	) {
 		super(options);
 

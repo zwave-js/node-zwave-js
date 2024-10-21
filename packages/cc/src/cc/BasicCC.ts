@@ -14,6 +14,7 @@ import {
 	type SupportsCC,
 	type ValueID,
 	ValueMetadata,
+	type WithAddress,
 	maybeUnknownToString,
 	parseMaybeNumber,
 	validatePayload,
@@ -40,7 +41,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -226,7 +226,7 @@ export class BasicCCAPI extends CCAPI {
 
 		const cc = new BasicCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<BasicCCReport>(
 			cc,
@@ -249,7 +249,7 @@ export class BasicCCAPI extends CCAPI {
 
 		const cc = new BasicCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			targetValue,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -378,7 +378,7 @@ export interface BasicCCSetOptions {
 @useSupervision()
 export class BasicCCSet extends BasicCC {
 	public constructor(
-		options: BasicCCSetOptions & CCCommandOptions,
+		options: WithAddress<BasicCCSetOptions>,
 	) {
 		super(options);
 		this.targetValue = options.targetValue;
@@ -420,7 +420,7 @@ export interface BasicCCReportOptions {
 export class BasicCCReport extends BasicCC {
 	// @noCCValues See comment in the constructor
 	public constructor(
-		options: BasicCCReportOptions & CCCommandOptions,
+		options: WithAddress<BasicCCReportOptions>,
 	) {
 		super(options);
 

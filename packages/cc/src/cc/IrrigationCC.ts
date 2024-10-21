@@ -8,6 +8,7 @@ import {
 	type SupervisionResult,
 	type ValueID,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeFloatWithScale,
@@ -35,14 +36,11 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
-	gotDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -608,7 +606,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCSystemInfoGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			IrrigationCCSystemInfoReport
@@ -635,7 +633,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCSystemStatusGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			IrrigationCCSystemStatusReport
@@ -673,7 +671,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCSystemConfigGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			IrrigationCCSystemConfigReport
@@ -703,7 +701,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCSystemConfigSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...config,
 		});
 
@@ -720,7 +718,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCValveInfoGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			valveId,
 		});
 		const response = await this.host.sendCommand<
@@ -754,7 +752,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCValveConfigSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -771,7 +769,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCValveConfigGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			valveId,
 		});
 		const response = await this.host.sendCommand<
@@ -805,7 +803,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCValveRun({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			valveId,
 			duration,
 		});
@@ -848,7 +846,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCValveTableSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			tableId,
 			entries,
 		});
@@ -867,7 +865,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCValveTableGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			tableId,
 		});
 		const response = await this.host.sendCommand<
@@ -892,7 +890,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCValveTableRun({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			tableIDs,
 		});
 
@@ -914,7 +912,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 		const cc = new IrrigationCCSystemShutoff({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			duration,
 		});
 
@@ -1360,7 +1358,7 @@ export interface IrrigationCCSystemInfoReportOptions {
 @CCCommand(IrrigationCommand.SystemInfoReport)
 export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCSystemInfoReportOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCSystemInfoReportOptions>,
 	) {
 		super(options);
 
@@ -1441,7 +1439,7 @@ export interface IrrigationCCSystemStatusReportOptions {
 @CCCommand(IrrigationCommand.SystemStatusReport)
 export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCSystemStatusReportOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCSystemStatusReportOptions>,
 	) {
 		super(options);
 
@@ -1636,7 +1634,7 @@ export type IrrigationCCSystemConfigSetOptions = {
 @useSupervision()
 export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCSystemConfigSetOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCSystemConfigSetOptions>,
 	) {
 		super(options);
 		this.masterValveDelay = options.masterValveDelay;
@@ -1724,7 +1722,7 @@ export interface IrrigationCCSystemConfigReportOptions {
 @CCCommand(IrrigationCommand.SystemConfigReport)
 export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCSystemConfigReportOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCSystemConfigReportOptions>,
 	) {
 		super(options);
 
@@ -1843,7 +1841,7 @@ export interface IrrigationCCValveInfoReportOptions {
 @CCCommand(IrrigationCommand.ValveInfoReport)
 export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveInfoReportOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveInfoReportOptions>,
 	) {
 		super(options);
 
@@ -2026,7 +2024,7 @@ function testResponseForIrrigationCommandWithValveId(
 )
 export class IrrigationCCValveInfoGet extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveInfoGetOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveInfoGetOptions>,
 	) {
 		super(options);
 		this.valveId = options.valveId;
@@ -2083,7 +2081,7 @@ export type IrrigationCCValveConfigSetOptions = {
 @useSupervision()
 export class IrrigationCCValveConfigSet extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveConfigSetOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveConfigSetOptions>,
 	) {
 		super(options);
 		this.valveId = options.valveId;
@@ -2173,7 +2171,7 @@ export interface IrrigationCCValveConfigReportOptions {
 @CCCommand(IrrigationCommand.ValveConfigReport)
 export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveConfigReportOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveConfigReportOptions>,
 	) {
 		super(options);
 
@@ -2349,7 +2347,7 @@ export interface IrrigationCCValveConfigGetOptions {
 )
 export class IrrigationCCValveConfigGet extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveConfigGetOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveConfigGetOptions>,
 	) {
 		super(options);
 		this.valveId = options.valveId;
@@ -2400,7 +2398,7 @@ export interface IrrigationCCValveRunOptions {
 @useSupervision()
 export class IrrigationCCValveRun extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveRunOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveRunOptions>,
 	) {
 		super(options);
 		this.valveId = options.valveId;
@@ -2462,7 +2460,7 @@ export interface IrrigationCCValveTableSetOptions {
 @useSupervision()
 export class IrrigationCCValveTableSet extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveTableSetOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveTableSetOptions>,
 	) {
 		super(options);
 		this.tableId = options.tableId;
@@ -2528,7 +2526,7 @@ export interface IrrigationCCValveTableReportOptions {
 @CCCommand(IrrigationCommand.ValveTableReport)
 export class IrrigationCCValveTableReport extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveTableReportOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveTableReportOptions>,
 	) {
 		super(options);
 
@@ -2600,7 +2598,7 @@ function testResponseForIrrigationValveTableGet(
 )
 export class IrrigationCCValveTableGet extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveTableGetOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveTableGetOptions>,
 	) {
 		super(options);
 		this.tableId = options.tableId;
@@ -2647,7 +2645,7 @@ export interface IrrigationCCValveTableRunOptions {
 @useSupervision()
 export class IrrigationCCValveTableRun extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCValveTableRunOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCValveTableRunOptions>,
 	) {
 		super(options);
 		this.tableIDs = options.tableIDs;
@@ -2706,7 +2704,7 @@ export interface IrrigationCCSystemShutoffOptions {
 @useSupervision()
 export class IrrigationCCSystemShutoff extends IrrigationCC {
 	public constructor(
-		options: IrrigationCCSystemShutoffOptions & CCCommandOptions,
+		options: WithAddress<IrrigationCCSystemShutoffOptions>,
 	) {
 		super(options);
 		this.duration = options.duration;

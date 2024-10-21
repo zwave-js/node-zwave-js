@@ -6,6 +6,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	type SupportsCC,
+	type WithAddress,
 	encodeCCId,
 	getCCName,
 	parseCCId,
@@ -20,7 +21,6 @@ import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -114,7 +114,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationGroupInfoCCNameGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 		});
 		const response = await this.host.sendCommand<
@@ -135,7 +135,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationGroupInfoCCNameReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 			name,
 		});
@@ -153,7 +153,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationGroupInfoCCInfoGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 			refreshCache,
 		});
@@ -177,7 +177,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 	@validateArgs()
 	public async reportGroupInfo(
-		options: AssociationGroupInfoCCInfoReportSpecificOptions,
+		options: AssociationGroupInfoCCInfoReportOptions,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
@@ -186,7 +186,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationGroupInfoCCInfoReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -207,7 +207,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationGroupInfoCCCommandListGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 			allowCache,
 		});
@@ -232,7 +232,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 		const cc = new AssociationGroupInfoCCCommandListReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 			commands,
 		});
@@ -474,7 +474,7 @@ export interface AssociationGroupInfoCCNameReportOptions {
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
-		options: AssociationGroupInfoCCNameReportOptions & CCCommandOptions,
+		options: WithAddress<AssociationGroupInfoCCNameReportOptions>,
 	) {
 		super(options);
 
@@ -548,7 +548,7 @@ export interface AssociationGroupInfoCCNameGetOptions {
 @expectedCCResponse(AssociationGroupInfoCCNameReport)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public constructor(
-		options: AssociationGroupInfoCCNameGetOptions & CCCommandOptions,
+		options: WithAddress<AssociationGroupInfoCCNameGetOptions>,
 	) {
 		super(options);
 		this.groupId = options.groupId;
@@ -590,7 +590,7 @@ export interface AssociationGroupInfo {
 }
 
 // @publicAPI
-export interface AssociationGroupInfoCCInfoReportSpecificOptions {
+export interface AssociationGroupInfoCCInfoReportOptions {
 	isListMode: boolean;
 	hasDynamicInfo: boolean;
 	groups: AssociationGroupInfo[];
@@ -599,9 +599,7 @@ export interface AssociationGroupInfoCCInfoReportSpecificOptions {
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
-		options:
-			& AssociationGroupInfoCCInfoReportSpecificOptions
-			& CCCommandOptions,
+		options: WithAddress<AssociationGroupInfoCCInfoReportOptions>,
 	) {
 		super(options);
 
@@ -722,7 +720,7 @@ export type AssociationGroupInfoCCInfoGetOptions =
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public constructor(
-		options: AssociationGroupInfoCCInfoGetOptions & CCCommandOptions,
+		options: WithAddress<AssociationGroupInfoCCInfoGetOptions>,
 	) {
 		super(options);
 		this.refreshCache = options.refreshCache;
@@ -794,9 +792,7 @@ export class AssociationGroupInfoCCCommandListReport
 	extends AssociationGroupInfoCC
 {
 	public constructor(
-		options:
-			& AssociationGroupInfoCCCommandListReportOptions
-			& CCCommandOptions,
+		options: WithAddress<AssociationGroupInfoCCCommandListReportOptions>,
 	) {
 		super(options);
 
@@ -891,7 +887,7 @@ export class AssociationGroupInfoCCCommandListGet
 	extends AssociationGroupInfoCC
 {
 	public constructor(
-		options: AssociationGroupInfoCCCommandListGetOptions & CCCommandOptions,
+		options: WithAddress<AssociationGroupInfoCCCommandListGetOptions>,
 	) {
 		super(options);
 		this.allowCache = options.allowCache;

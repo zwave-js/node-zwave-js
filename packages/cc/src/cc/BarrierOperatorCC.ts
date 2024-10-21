@@ -7,6 +7,7 @@ import {
 	type SupervisionResult,
 	UNKNOWN_STATE,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -40,7 +41,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -150,7 +150,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 		const cc = new BarrierOperatorCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			BarrierOperatorCCReport
@@ -174,7 +174,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 		const cc = new BarrierOperatorCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			targetState,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -191,7 +191,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 		const cc = new BarrierOperatorCCSignalingCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			BarrierOperatorCCSignalingCapabilitiesReport
@@ -213,7 +213,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 		const cc = new BarrierOperatorCCEventSignalingGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			subsystemType,
 		});
 		const response = await this.host.sendCommand<
@@ -237,7 +237,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 		const cc = new BarrierOperatorCCEventSignalingSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			subsystemType,
 			subsystemState,
 		});
@@ -549,7 +549,7 @@ export interface BarrierOperatorCCSetOptions {
 @useSupervision()
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	public constructor(
-		options: BarrierOperatorCCSetOptions & CCCommandOptions,
+		options: WithAddress<BarrierOperatorCCSetOptions>,
 	) {
 		super(options);
 		this.targetState = options.targetState;
@@ -593,7 +593,7 @@ export interface BarrierOperatorCCReportOptions {
 @CCCommand(BarrierOperatorCommand.Report)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	public constructor(
-		options: BarrierOperatorCCReportOptions & CCCommandOptions,
+		options: WithAddress<BarrierOperatorCCReportOptions>,
 	) {
 		super(options);
 
@@ -676,9 +676,9 @@ export class BarrierOperatorCCSignalingCapabilitiesReport
 	extends BarrierOperatorCC
 {
 	public constructor(
-		options:
-			& BarrierOperatorCCSignalingCapabilitiesReportOptions
-			& CCCommandOptions,
+		options: WithAddress<
+			BarrierOperatorCCSignalingCapabilitiesReportOptions
+		>,
 	) {
 		super(options);
 
@@ -732,7 +732,7 @@ export interface BarrierOperatorCCEventSignalingSetOptions {
 @useSupervision()
 export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	public constructor(
-		options: BarrierOperatorCCEventSignalingSetOptions & CCCommandOptions,
+		options: WithAddress<BarrierOperatorCCEventSignalingSetOptions>,
 	) {
 		super(options);
 		this.subsystemType = options.subsystemType;
@@ -788,9 +788,7 @@ export interface BarrierOperatorCCEventSignalingReportOptions {
 @CCCommand(BarrierOperatorCommand.EventSignalingReport)
 export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public constructor(
-		options:
-			& BarrierOperatorCCEventSignalingReportOptions
-			& CCCommandOptions,
+		options: WithAddress<BarrierOperatorCCEventSignalingReportOptions>,
 	) {
 		super(options);
 
@@ -856,7 +854,7 @@ export interface BarrierOperatorCCEventSignalingGetOptions {
 @expectedCCResponse(BarrierOperatorCCEventSignalingReport)
 export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 	public constructor(
-		options: BarrierOperatorCCEventSignalingGetOptions & CCCommandOptions,
+		options: WithAddress<BarrierOperatorCCEventSignalingGetOptions>,
 	) {
 		super(options);
 		this.subsystemType = options.subsystemType;

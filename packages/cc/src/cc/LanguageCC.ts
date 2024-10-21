@@ -2,6 +2,7 @@ import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
+	WithAddress,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -21,10 +22,8 @@ import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -81,7 +80,7 @@ export class LanguageCCAPI extends CCAPI {
 
 		const cc = new LanguageCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<LanguageCCReport>(
 			cc,
@@ -101,7 +100,7 @@ export class LanguageCCAPI extends CCAPI {
 
 		const cc = new LanguageCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			language,
 			country,
 		});
@@ -173,7 +172,7 @@ export interface LanguageCCSetOptions {
 @useSupervision()
 export class LanguageCCSet extends LanguageCC {
 	public constructor(
-		options: LanguageCCSetOptions & CCCommandOptions,
+		options: WithAddress<LanguageCCSetOptions>,
 	) {
 		super(options);
 		// Populate properties from options object
@@ -252,7 +251,7 @@ export interface LanguageCCReportOptions {
 @CCCommand(LanguageCommand.Report)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
-		options: LanguageCCReportOptions & CCCommandOptions,
+		options: WithAddress<LanguageCCReportOptions>,
 	) {
 		super(options);
 

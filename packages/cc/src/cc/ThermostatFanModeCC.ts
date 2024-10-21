@@ -6,6 +6,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	enumValuesToMetadataStates,
@@ -30,10 +31,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -180,7 +179,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 
 		const cc = new ThermostatFanModeCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatFanModeCCReport
@@ -205,7 +204,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 
 		const cc = new ThermostatFanModeCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			mode,
 			off,
 		});
@@ -222,7 +221,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 
 		const cc = new ThermostatFanModeCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatFanModeCCSupportedReport
@@ -336,16 +335,16 @@ export class ThermostatFanModeCC extends CommandClass {
 }
 
 // @publicAPI
-export type ThermostatFanModeCCSetOptions = CCCommandOptions & {
+export interface ThermostatFanModeCCSetOptions {
 	mode: ThermostatFanMode;
 	off?: boolean;
-};
+}
 
 @CCCommand(ThermostatFanModeCommand.Set)
 @useSupervision()
 export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	public constructor(
-		options: ThermostatFanModeCCSetOptions & CCCommandOptions,
+		options: WithAddress<ThermostatFanModeCCSetOptions>,
 	) {
 		super(options);
 		this.mode = options.mode;
@@ -398,7 +397,7 @@ export interface ThermostatFanModeCCReportOptions {
 @CCCommand(ThermostatFanModeCommand.Report)
 export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	public constructor(
-		options: ThermostatFanModeCCReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatFanModeCCReportOptions>,
 	) {
 		super(options);
 
@@ -455,7 +454,7 @@ export interface ThermostatFanModeCCSupportedReportOptions {
 @CCCommand(ThermostatFanModeCommand.SupportedReport)
 export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 	public constructor(
-		options: ThermostatFanModeCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatFanModeCCSupportedReportOptions>,
 	) {
 		super(options);
 

@@ -3,6 +3,7 @@ import {
 	CommandClasses,
 	type MessageOrCCLogEntry,
 	type SinglecastCC,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
@@ -14,7 +15,6 @@ import type {
 } from "@zwave-js/host/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	type CCResponseRole,
 	CommandClass,
@@ -110,7 +110,7 @@ export function isTransportServiceEncapsulation(
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	public constructor(
-		options: TransportServiceCCFirstSegmentOptions & CCCommandOptions,
+		options: WithAddress<TransportServiceCCFirstSegmentOptions>,
 	) {
 		super(options);
 		this.datagramSize = options.datagramSize;
@@ -252,7 +252,7 @@ export interface TransportServiceCCSubsequentSegmentOptions
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public constructor(
-		options: TransportServiceCCSubsequentSegmentOptions & CCCommandOptions,
+		options: WithAddress<TransportServiceCCSubsequentSegmentOptions>,
 	) {
 		super(options);
 		this.datagramSize = options.datagramSize;
@@ -475,7 +475,7 @@ function testResponseForSegmentRequest(
 @expectedCCResponse(TransportServiceCC, testResponseForSegmentRequest)
 export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public constructor(
-		options: TransportServiceCCSegmentRequestOptions & CCCommandOptions,
+		options: WithAddress<TransportServiceCCSegmentRequestOptions>,
 	) {
 		super(options);
 		this.sessionId = options.sessionId;
@@ -529,7 +529,7 @@ export interface TransportServiceCCSegmentCompleteOptions {
 @CCCommand(TransportServiceCommand.SegmentComplete)
 export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 	public constructor(
-		options: TransportServiceCCSegmentCompleteOptions & CCCommandOptions,
+		options: WithAddress<TransportServiceCCSegmentCompleteOptions>,
 	) {
 		super(options);
 		this.sessionId = options.sessionId;
@@ -571,7 +571,7 @@ export interface TransportServiceCCSegmentWaitOptions {
 @CCCommand(TransportServiceCommand.SegmentWait)
 export class TransportServiceCCSegmentWait extends TransportServiceCC {
 	public constructor(
-		options: TransportServiceCCSegmentWaitOptions & CCCommandOptions,
+		options: WithAddress<TransportServiceCCSegmentWaitOptions>,
 	) {
 		super(options);
 		this.pendingSegments = options.pendingSegments;

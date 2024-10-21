@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
@@ -8,7 +9,6 @@ import type { CCEncodingContext, CCParsingContext } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, type CCAPIEndpoint, type CCAPIHost } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -68,7 +68,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	): Promise<void> {
 		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			manufacturerId,
 		});
 		cc.payload = data ?? Buffer.allocUnsafe(0);
@@ -81,7 +81,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	public async sendAndReceiveData(manufacturerId: number, data?: Buffer) {
 		const cc = new ManufacturerProprietaryCC({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			manufacturerId,
 			unspecifiedExpectsResponse: true,
 		});
@@ -132,7 +132,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
 
 	public constructor(
-		options: ManufacturerProprietaryCCOptions & CCCommandOptions,
+		options: WithAddress<ManufacturerProprietaryCCOptions>,
 	) {
 		super(options);
 

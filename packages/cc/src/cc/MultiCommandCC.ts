@@ -3,6 +3,7 @@ import {
 	EncapsulationFlags,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
@@ -12,11 +13,7 @@ import type {
 } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	type CCRaw,
-	CommandClass,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -105,7 +102,7 @@ export interface MultiCommandCCCommandEncapsulationOptions {
 // When sending commands encapsulated in this CC, responses to GET-type commands likely won't be encapsulated
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
-		options: MultiCommandCCCommandEncapsulationOptions & CCCommandOptions,
+		options: WithAddress<MultiCommandCCCommandEncapsulationOptions>,
 	) {
 		super(options);
 		this.encapsulated = options.encapsulated;

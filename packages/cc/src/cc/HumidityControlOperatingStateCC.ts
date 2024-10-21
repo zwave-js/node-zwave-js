@@ -4,6 +4,7 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
+	type WithAddress,
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
@@ -16,10 +17,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -91,7 +90,7 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 
 		const cc = new HumidityControlOperatingStateCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			HumidityControlOperatingStateCCReport
@@ -172,9 +171,7 @@ export class HumidityControlOperatingStateCCReport
 	extends HumidityControlOperatingStateCC
 {
 	public constructor(
-		options:
-			& HumidityControlOperatingStateCCReportOptions
-			& CCCommandOptions,
+		options: WithAddress<HumidityControlOperatingStateCCReportOptions>,
 	) {
 		super(options);
 

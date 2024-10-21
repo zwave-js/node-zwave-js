@@ -1,4 +1,4 @@
-import { CommandClasses } from "@zwave-js/core";
+import { CommandClasses, type WithAddress } from "@zwave-js/core";
 import { CommandClass } from "../lib/CommandClass";
 import {
 	commandClass,

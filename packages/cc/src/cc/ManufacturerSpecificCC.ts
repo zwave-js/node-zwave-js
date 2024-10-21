@@ -1,4 +1,4 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry, WithAddress } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	type MaybeNotKnown,
@@ -17,10 +17,8 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 } from "../lib/CommandClass";
 import {
@@ -110,7 +108,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 
 		const cc = new ManufacturerSpecificCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ManufacturerSpecificCCReport
@@ -138,7 +136,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 
 		const cc = new ManufacturerSpecificCCDeviceSpecificGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			deviceIdType,
 		});
 		const response = await this.host.sendCommand<
@@ -161,7 +159,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 
 		const cc = new ManufacturerSpecificCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -237,7 +235,7 @@ export interface ManufacturerSpecificCCReportOptions {
 @CCCommand(ManufacturerSpecificCommand.Report)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
-		options: ManufacturerSpecificCCReportOptions & CCCommandOptions,
+		options: WithAddress<ManufacturerSpecificCCReportOptions>,
 	) {
 		super(options);
 
@@ -307,9 +305,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport
 	extends ManufacturerSpecificCC
 {
 	public constructor(
-		options:
-			& ManufacturerSpecificCCDeviceSpecificReportOptions
-			& CCCommandOptions,
+		options: WithAddress<ManufacturerSpecificCCDeviceSpecificReportOptions>,
 	) {
 		super(options);
 
@@ -370,9 +366,7 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 	extends ManufacturerSpecificCC
 {
 	public constructor(
-		options:
-			& ManufacturerSpecificCCDeviceSpecificGetOptions
-			& CCCommandOptions,
+		options: WithAddress<ManufacturerSpecificCCDeviceSpecificGetOptions>,
 	) {
 		super(options);
 		this.deviceIdType = options.deviceIdType;

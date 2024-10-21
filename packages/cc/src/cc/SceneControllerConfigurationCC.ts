@@ -7,6 +7,7 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getCCName,
@@ -32,10 +33,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -271,7 +270,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 
 		const cc = new SceneControllerConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 			sceneId,
 			dimmingDuration,
@@ -295,7 +294,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 
 		const cc = new SceneControllerConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId: 0,
 		});
 		const response = await this.host.sendCommand<
@@ -343,7 +342,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 
 		const cc = new SceneControllerConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			groupId,
 		});
 		const response = await this.host.sendCommand<
@@ -495,7 +494,7 @@ export class SceneControllerConfigurationCCSet
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		options: SceneControllerConfigurationCCSetOptions & CCCommandOptions,
+		options: WithAddress<SceneControllerConfigurationCCSetOptions>,
 	) {
 		super(options);
 		this.groupId = options.groupId;
@@ -557,7 +556,7 @@ export class SceneControllerConfigurationCCReport
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		options: SceneControllerConfigurationCCReportOptions & CCCommandOptions,
+		options: WithAddress<SceneControllerConfigurationCCReportOptions>,
 	) {
 		super(options);
 
@@ -644,7 +643,7 @@ export class SceneControllerConfigurationCCGet
 	extends SceneControllerConfigurationCC
 {
 	public constructor(
-		options: SceneControllerConfigurationCCGetOptions & CCCommandOptions,
+		options: WithAddress<SceneControllerConfigurationCCGetOptions>,
 	) {
 		super(options);
 		this.groupId = options.groupId;

@@ -4,6 +4,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	type SupervisionResult,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
@@ -28,10 +29,8 @@ import {
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 } from "../lib/CommandClass";
@@ -234,7 +233,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 			const cc = new ScheduleEntryLockCCEnableSet({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				userId,
 				enabled,
 			});
@@ -248,7 +247,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 			const cc = new ScheduleEntryLockCCEnableAllSet({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				enabled,
 			});
 
@@ -277,7 +276,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 
 		const result = await this.host.sendCommand<
@@ -335,7 +334,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCWeekDayScheduleSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...slot,
 			...(schedule
 				? {
@@ -392,7 +391,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCWeekDayScheduleGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...slot,
 		});
 		const result = await this.host.sendCommand<
@@ -462,7 +461,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCYearDayScheduleSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...slot,
 			...(schedule
 				? {
@@ -519,7 +518,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCYearDayScheduleGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...slot,
 		});
 		const result = await this.host.sendCommand<
@@ -572,7 +571,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCDailyRepeatingScheduleSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...slot,
 			...(schedule
 				? {
@@ -629,7 +628,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCDailyRepeatingScheduleGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...slot,
 		});
 		const result = await this.host.sendCommand<
@@ -658,7 +657,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCTimeOffsetGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const result = await this.host.sendCommand<
 			ScheduleEntryLockCCTimeOffsetReport
@@ -683,7 +682,7 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 		const cc = new ScheduleEntryLockCCTimeOffsetSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...timezone,
 		});
 
@@ -932,7 +931,7 @@ export interface ScheduleEntryLockCCEnableSetOptions {
 @useSupervision()
 export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 	public constructor(
-		options: ScheduleEntryLockCCEnableSetOptions & CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCEnableSetOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -982,7 +981,7 @@ export interface ScheduleEntryLockCCEnableAllSetOptions {
 @useSupervision()
 export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 	public constructor(
-		options: ScheduleEntryLockCCEnableAllSetOptions & CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCEnableAllSetOptions>,
 	) {
 		super(options);
 		this.enabled = options.enabled;
@@ -1028,7 +1027,7 @@ export interface ScheduleEntryLockCCSupportedReportOptions {
 @CCCommand(ScheduleEntryLockCommand.SupportedReport)
 export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 	public constructor(
-		options: ScheduleEntryLockCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCSupportedReportOptions>,
 	) {
 		super(options);
 		this.numWeekDaySlots = options.numWeekDaySlots;
@@ -1108,9 +1107,7 @@ export type ScheduleEntryLockCCWeekDayScheduleSetOptions =
 @useSupervision()
 export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCWeekDayScheduleSetOptions
-			& CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCWeekDayScheduleSetOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -1240,9 +1237,7 @@ export class ScheduleEntryLockCCWeekDayScheduleReport
 	extends ScheduleEntryLockCC
 {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCWeekDayScheduleReportOptions
-			& CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCWeekDayScheduleReportOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -1399,9 +1394,7 @@ export type ScheduleEntryLockCCWeekDayScheduleGetOptions =
 @expectedCCResponse(ScheduleEntryLockCCWeekDayScheduleReport)
 export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCWeekDayScheduleGetOptions
-			& CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCWeekDayScheduleGetOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -1458,9 +1451,7 @@ export type ScheduleEntryLockCCYearDayScheduleSetOptions =
 @useSupervision()
 export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCYearDayScheduleSetOptions
-			& CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCYearDayScheduleSetOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -1617,9 +1608,7 @@ export class ScheduleEntryLockCCYearDayScheduleReport
 	extends ScheduleEntryLockCC
 {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCYearDayScheduleReportOptions
-			& CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCYearDayScheduleReportOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -1829,9 +1818,7 @@ export type ScheduleEntryLockCCYearDayScheduleGetOptions =
 @expectedCCResponse(ScheduleEntryLockCCYearDayScheduleReport)
 export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCYearDayScheduleGetOptions
-			& CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCYearDayScheduleGetOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -1882,7 +1869,7 @@ export interface ScheduleEntryLockCCTimeOffsetSetOptions {
 @useSupervision()
 export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 	public constructor(
-		options: ScheduleEntryLockCCTimeOffsetSetOptions & CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCTimeOffsetSetOptions>,
 	) {
 		super(options);
 		this.standardOffset = options.standardOffset;
@@ -1933,7 +1920,7 @@ export interface ScheduleEntryLockCCTimeOffsetReportOptions {
 @CCCommand(ScheduleEntryLockCommand.TimeOffsetReport)
 export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
 	public constructor(
-		options: ScheduleEntryLockCCTimeOffsetReportOptions & CCCommandOptions,
+		options: WithAddress<ScheduleEntryLockCCTimeOffsetReportOptions>,
 	) {
 		super(options);
 		this.standardOffset = options.standardOffset;
@@ -1997,9 +1984,9 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleSet
 	extends ScheduleEntryLockCC
 {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCDailyRepeatingScheduleSetOptions
-			& CCCommandOptions,
+		options: WithAddress<
+			ScheduleEntryLockCCDailyRepeatingScheduleSetOptions
+		>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -2139,9 +2126,9 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleReport
 	extends ScheduleEntryLockCC
 {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCDailyRepeatingScheduleReportOptions
-			& CCCommandOptions,
+		options: WithAddress<
+			ScheduleEntryLockCCDailyRepeatingScheduleReportOptions
+		>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -2291,9 +2278,9 @@ export class ScheduleEntryLockCCDailyRepeatingScheduleGet
 	extends ScheduleEntryLockCC
 {
 	public constructor(
-		options:
-			& ScheduleEntryLockCCDailyRepeatingScheduleGetOptions
-			& CCCommandOptions,
+		options: WithAddress<
+			ScheduleEntryLockCCDailyRepeatingScheduleGetOptions
+		>,
 	) {
 		super(options);
 		this.userId = options.userId;

@@ -3,6 +3,7 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	ValueMetadata,
+	type WithAddress,
 	encodeFloatWithScale,
 	parseFloatWithScale,
 	validatePayload,
@@ -22,10 +23,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -114,7 +113,7 @@ export class EnergyProductionCCAPI extends CCAPI {
 
 		const cc = new EnergyProductionCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			parameter,
 		});
 		const response = await this.host.sendCommand<
@@ -200,7 +199,7 @@ export interface EnergyProductionCCReportOptions {
 @CCCommand(EnergyProductionCommand.Report)
 export class EnergyProductionCCReport extends EnergyProductionCC {
 	public constructor(
-		options: EnergyProductionCCReportOptions & CCCommandOptions,
+		options: WithAddress<EnergyProductionCCReportOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;
@@ -293,7 +292,7 @@ function testResponseForEnergyProductionGet(
 )
 export class EnergyProductionCCGet extends EnergyProductionCC {
 	public constructor(
-		options: EnergyProductionCCGetOptions & CCCommandOptions,
+		options: WithAddress<EnergyProductionCCGetOptions>,
 	) {
 		super(options);
 		this.parameter = options.parameter;

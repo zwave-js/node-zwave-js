@@ -7,6 +7,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	type SpecificDeviceClass,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeApplicationNodeInformation,
@@ -27,7 +28,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -217,7 +217,7 @@ export class MultiChannelCCAPI extends CCAPI {
 
 		const cc = new MultiChannelCCEndPointGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MultiChannelCCEndPointReport
@@ -246,7 +246,7 @@ export class MultiChannelCCAPI extends CCAPI {
 
 		const cc = new MultiChannelCCCapabilityGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
 		const response = await this.host.sendCommand<
@@ -285,7 +285,7 @@ export class MultiChannelCCAPI extends CCAPI {
 
 		const cc = new MultiChannelCCEndPointFind({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			genericClass,
 			specificClass,
 		});
@@ -309,7 +309,7 @@ export class MultiChannelCCAPI extends CCAPI {
 
 		const cc = new MultiChannelCCAggregatedMembersGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
 		const response = await this.host.sendCommand<
@@ -325,10 +325,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	// want to pay the cost of validating each call
 	// eslint-disable-next-line @zwave-js/ccapi-validate-args
 	public async sendEncapsulated(
-		options: Omit<
-			MultiChannelCCCommandEncapsulationOptions,
-			keyof CCCommandOptions
-		>,
+		options: MultiChannelCCCommandEncapsulationOptions,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
@@ -815,7 +812,7 @@ export interface MultiChannelCCEndPointReportOptions {
 @CCCommand(MultiChannelCommand.EndPointReport)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCEndPointReportOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCEndPointReportOptions>,
 	) {
 		super(options);
 
@@ -906,7 +903,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC
 	implements ApplicationNodeInformation
 {
 	public constructor(
-		options: MultiChannelCCCapabilityReportOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCCapabilityReportOptions>,
 	) {
 		super(options);
 
@@ -1027,7 +1024,7 @@ function testResponseForMultiChannelCapabilityGet(
 )
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCCapabilityGetOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCCapabilityGetOptions>,
 	) {
 		super(options);
 		this.requestedEndpoint = options.requestedEndpoint;
@@ -1072,7 +1069,7 @@ export interface MultiChannelCCEndPointFindReportOptions {
 @CCCommand(MultiChannelCommand.EndPointFindReport)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCEndPointFindReportOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCEndPointFindReportOptions>,
 	) {
 		super(options);
 
@@ -1173,7 +1170,7 @@ export interface MultiChannelCCEndPointFindOptions {
 @expectedCCResponse(MultiChannelCCEndPointFindReport)
 export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCEndPointFindOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCEndPointFindOptions>,
 	) {
 		super(options);
 		this.genericClass = options.genericClass;
@@ -1227,9 +1224,7 @@ export interface MultiChannelCCAggregatedMembersReportOptions {
 @CCCommand(MultiChannelCommand.AggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public constructor(
-		options:
-			& MultiChannelCCAggregatedMembersReportOptions
-			& CCCommandOptions,
+		options: WithAddress<MultiChannelCCAggregatedMembersReportOptions>,
 	) {
 		super(options);
 
@@ -1285,7 +1280,7 @@ export interface MultiChannelCCAggregatedMembersGetOptions {
 @expectedCCResponse(MultiChannelCCAggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCAggregatedMembersGetOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCAggregatedMembersGetOptions>,
 	) {
 		super(options);
 		this.requestedEndpoint = options.requestedEndpoint;
@@ -1373,7 +1368,7 @@ function testResponseForCommandEncapsulation(
 )
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCCommandEncapsulationOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCCommandEncapsulationOptions>,
 	) {
 		super(options);
 		this.encapsulated = options.encapsulated;
@@ -1412,7 +1407,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		const encapsulated = CommandClass.parse(raw.payload.subarray(2), ctx);
 		return new MultiChannelCCCommandEncapsulation({
 			nodeId: ctx.sourceNodeId,
-			endpoint: endpointIndex,
+			endpointIndex,
 			destination,
 			encapsulated,
 		});
@@ -1472,7 +1467,7 @@ export interface MultiChannelCCV1ReportOptions {
 @CCCommand(MultiChannelCommand.ReportV1)
 export class MultiChannelCCV1Report extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCV1ReportOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCV1ReportOptions>,
 	) {
 		super(options);
 
@@ -1527,7 +1522,7 @@ export interface MultiChannelCCV1GetOptions {
 @expectedCCResponse(MultiChannelCCV1Report, testResponseForMultiChannelV1Get)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCV1GetOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCV1GetOptions>,
 	) {
 		super(options);
 		this.requestedCC = options.requestedCC;
@@ -1590,7 +1585,7 @@ export interface MultiChannelCCV1CommandEncapsulationOptions {
 )
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		options: MultiChannelCCV1CommandEncapsulationOptions & CCCommandOptions,
+		options: WithAddress<MultiChannelCCV1CommandEncapsulationOptions>,
 	) {
 		super(options);
 		this.encapsulated = options.encapsulated;
@@ -1603,7 +1598,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		ctx: CCParsingContext,
 	): MultiChannelCCV1CommandEncapsulation {
 		validatePayload(raw.payload.length >= 1);
-		const endpointIndex: any = raw.payload[0];
+		const endpointIndex = raw.payload[0];
 
 		// Some devices send invalid reports, i.e. MultiChannelCCV1CommandEncapsulation, but with V2+ binary format
 		// This would be a NoOp CC, but it makes no sense to encapsulate that.
@@ -1618,7 +1613,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 
 		return new MultiChannelCCV1CommandEncapsulation({
 			nodeId: ctx.sourceNodeId,
-			endpoint: endpointIndex,
+			endpointIndex,
 			encapsulated,
 		});
 	}

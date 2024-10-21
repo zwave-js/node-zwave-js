@@ -6,6 +6,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	parseBitMask,
@@ -20,7 +21,6 @@ import { getEnumMemberName, isEnumMember, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -133,7 +133,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new AlarmSensorCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sensorType,
 		});
 		const response = await this.host.sendCommand<AlarmSensorCCReport>(
@@ -152,7 +152,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new AlarmSensorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			AlarmSensorCCSupportedReport
@@ -332,7 +332,7 @@ export interface AlarmSensorCCReportOptions {
 @CCCommand(AlarmSensorCommand.Report)
 export class AlarmSensorCCReport extends AlarmSensorCC {
 	public constructor(
-		options: AlarmSensorCCReportOptions & CCCommandOptions,
+		options: WithAddress<AlarmSensorCCReportOptions>,
 	) {
 		super(options);
 
@@ -429,7 +429,7 @@ export interface AlarmSensorCCGetOptions {
 @expectedCCResponse(AlarmSensorCCReport, testResponseForAlarmSensorGet)
 export class AlarmSensorCCGet extends AlarmSensorCC {
 	public constructor(
-		options: AlarmSensorCCGetOptions & CCCommandOptions,
+		options: WithAddress<AlarmSensorCCGetOptions>,
 	) {
 		super(options);
 		this.sensorType = options.sensorType ?? AlarmSensorType.Any;
@@ -475,7 +475,7 @@ export interface AlarmSensorCCSupportedReportOptions {
 @CCCommand(AlarmSensorCommand.SupportedReport)
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	public constructor(
-		options: AlarmSensorCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<AlarmSensorCCSupportedReportOptions>,
 	) {
 		super(options);
 

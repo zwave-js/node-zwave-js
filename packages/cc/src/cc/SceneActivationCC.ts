@@ -2,6 +2,7 @@ import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	SupervisionResult,
+	WithAddress,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -23,12 +24,7 @@ import {
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "../lib/API";
-import {
-	type CCCommandOptions,
-	type CCRaw,
-	CommandClass,
-	type CommandClassDeserializationOptions,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -114,7 +110,7 @@ export class SceneActivationCCAPI extends CCAPI {
 
 		const cc = new SceneActivationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sceneId,
 			dimmingDuration,
 		});
@@ -139,7 +135,7 @@ export interface SceneActivationCCSetOptions {
 @useSupervision()
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
-		options: SceneActivationCCSetOptions & CCCommandOptions,
+		options: WithAddress<SceneActivationCCSetOptions>,
 	) {
 		super(options);
 		this.sceneId = options.sceneId;

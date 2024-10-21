@@ -1,6 +1,7 @@
 import type {
 	MessageOrCCLogEntry,
 	SupervisionResult,
+	WithAddress,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -20,7 +21,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -56,7 +56,7 @@ export class ClockCCAPI extends CCAPI {
 
 		const cc = new ClockCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<ClockCCReport>(
 			cc,
@@ -77,7 +77,7 @@ export class ClockCCAPI extends CCAPI {
 
 		const cc = new ClockCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			hour,
 			minute,
 			weekday: weekday ?? Weekday.Unknown,
@@ -153,7 +153,7 @@ export interface ClockCCSetOptions {
 @useSupervision()
 export class ClockCCSet extends ClockCC {
 	public constructor(
-		options: ClockCCSetOptions & CCCommandOptions,
+		options: WithAddress<ClockCCSetOptions>,
 	) {
 		super(options);
 		this.weekday = options.weekday;
@@ -216,7 +216,7 @@ export interface ClockCCReportOptions {
 @CCCommand(ClockCommand.Report)
 export class ClockCCReport extends ClockCC {
 	public constructor(
-		options: ClockCCReportOptions & CCCommandOptions,
+		options: WithAddress<ClockCCReportOptions>,
 	) {
 		super(options);
 

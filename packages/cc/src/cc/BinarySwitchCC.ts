@@ -9,6 +9,7 @@ import {
 	type SupervisionResult,
 	UNKNOWN_STATE,
 	ValueMetadata,
+	type WithAddress,
 	encodeMaybeBoolean,
 	maybeUnknownToString,
 	parseMaybeBoolean,
@@ -32,10 +33,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 	getEffectiveCCVersion,
@@ -104,7 +103,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 
 		const cc = new BinarySwitchCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<BinarySwitchCCReport>(
 			cc,
@@ -137,7 +136,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 
 		const cc = new BinarySwitchCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			targetValue,
 			duration,
 		});
@@ -314,7 +313,7 @@ export interface BinarySwitchCCSetOptions {
 @useSupervision()
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
-		options: BinarySwitchCCSetOptions & CCCommandOptions,
+		options: WithAddress<BinarySwitchCCSetOptions>,
 	) {
 		super(options);
 		this.targetValue = options.targetValue;
@@ -383,7 +382,7 @@ export interface BinarySwitchCCReportOptions {
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
-		options: BinarySwitchCCReportOptions & CCCommandOptions,
+		options: WithAddress<BinarySwitchCCReportOptions>,
 	) {
 		super(options);
 

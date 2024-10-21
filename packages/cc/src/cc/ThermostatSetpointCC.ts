@@ -7,6 +7,7 @@ import {
 	type SupervisionResult,
 	ValueMetadata,
 	type ValueMetadataNumeric,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
@@ -35,10 +36,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -224,7 +223,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 		const cc = new ThermostatSetpointCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			setpointType,
 		});
 		const response = await this.host.sendCommand<
@@ -257,7 +256,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 		const cc = new ThermostatSetpointCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			setpointType,
 			value,
 			scale,
@@ -275,7 +274,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 		const cc = new ThermostatSetpointCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			setpointType,
 		});
 		const response = await this.host.sendCommand<
@@ -309,7 +308,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 		const cc = new ThermostatSetpointCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatSetpointCCSupportedReport
@@ -554,7 +553,7 @@ export interface ThermostatSetpointCCSetOptions {
 @useSupervision()
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
-		options: ThermostatSetpointCCSetOptions & CCCommandOptions,
+		options: WithAddress<ThermostatSetpointCCSetOptions>,
 	) {
 		super(options);
 		this.setpointType = options.setpointType;
@@ -622,7 +621,7 @@ export interface ThermostatSetpointCCReportOptions {
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
-		options: ThermostatSetpointCCReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatSetpointCCReportOptions>,
 	) {
 		super(options);
 
@@ -737,7 +736,7 @@ export interface ThermostatSetpointCCGetOptions {
 )
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
-		options: ThermostatSetpointCCGetOptions & CCCommandOptions,
+		options: WithAddress<ThermostatSetpointCCGetOptions>,
 	) {
 		super(options);
 		this.setpointType = options.setpointType;
@@ -790,9 +789,7 @@ export class ThermostatSetpointCCCapabilitiesReport
 	extends ThermostatSetpointCC
 {
 	public constructor(
-		options:
-			& ThermostatSetpointCCCapabilitiesReportOptions
-			& CCCommandOptions,
+		options: WithAddress<ThermostatSetpointCCCapabilitiesReportOptions>,
 	) {
 		super(options);
 
@@ -884,7 +881,7 @@ export interface ThermostatSetpointCCCapabilitiesGetOptions {
 @expectedCCResponse(ThermostatSetpointCCCapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public constructor(
-		options: ThermostatSetpointCCCapabilitiesGetOptions & CCCommandOptions,
+		options: WithAddress<ThermostatSetpointCCCapabilitiesGetOptions>,
 	) {
 		super(options);
 		this.setpointType = options.setpointType;
@@ -931,7 +928,7 @@ export interface ThermostatSetpointCCSupportedReportOptions {
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
-		options: ThermostatSetpointCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatSetpointCCSupportedReportOptions>,
 	) {
 		super(options);
 

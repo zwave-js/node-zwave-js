@@ -14,6 +14,7 @@ import {
 	SupervisionStatus,
 	type SupportsCC,
 	TransmitOptions,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	isTransmissionError,
@@ -27,11 +28,7 @@ import type {
 } from "@zwave-js/host/safe";
 import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { PhysicalCCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	type CCRaw,
-	CommandClass,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -93,7 +90,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 		} = options;
 		const cc = new SupervisionCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...cmdOptions,
 		});
 
@@ -157,7 +154,7 @@ export class SupervisionCC extends CommandClass {
 		const ret = new SupervisionCCGet({
 			nodeId: cc.nodeId,
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
-			endpoint: cc.endpointIndex,
+			endpointIndex: cc.endpointIndex,
 			encapsulated: cc,
 			sessionId,
 			requestStatusUpdates,
@@ -291,7 +288,7 @@ export type SupervisionCCReportOptions =
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
 	public constructor(
-		options: SupervisionCCReportOptions & CCCommandOptions,
+		options: WithAddress<SupervisionCCReportOptions>,
 	) {
 		super(options);
 
@@ -407,7 +404,7 @@ function testResponseForSupervisionCCGet(
 @expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
-		options: SupervisionCCGetOptions & CCCommandOptions,
+		options: WithAddress<SupervisionCCGetOptions>,
 	) {
 		super(options);
 		this.sessionId = options.sessionId;

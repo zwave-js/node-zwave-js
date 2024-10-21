@@ -6,6 +6,7 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	encodeBitMask,
 	parseBitMask,
 	validatePayload,
@@ -25,10 +26,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 	type RefreshValuesContext,
@@ -116,7 +115,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new BinarySensorCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sensorType,
 		});
 		const response = await this.host.sendCommand<BinarySensorCCReport>(
@@ -139,7 +138,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new BinarySensorCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			value,
 			type: sensorType,
 		});
@@ -156,7 +155,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new BinarySensorCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			BinarySensorCCSupportedReport
@@ -179,7 +178,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 		const cc = new BinarySensorCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			supportedSensorTypes: supported,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -348,7 +347,7 @@ export interface BinarySensorCCReportOptions {
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
-		options: BinarySensorCCReportOptions & CCCommandOptions,
+		options: WithAddress<BinarySensorCCReportOptions>,
 	) {
 		super(options);
 
@@ -439,7 +438,7 @@ export interface BinarySensorCCGetOptions {
 @expectedCCResponse(BinarySensorCCReport, testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
-		options: BinarySensorCCGetOptions & CCCommandOptions,
+		options: WithAddress<BinarySensorCCGetOptions>,
 	) {
 		super(options);
 		this.sensorType = options.sensorType;
@@ -486,7 +485,7 @@ export interface BinarySensorCCSupportedReportOptions {
 @CCCommand(BinarySensorCommand.SupportedReport)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
-		options: BinarySensorCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<BinarySensorCCSupportedReportOptions>,
 	) {
 		super(options);
 

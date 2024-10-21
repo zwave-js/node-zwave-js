@@ -4,6 +4,7 @@ import {
 	EncapsulationFlags,
 	type MaybeNotKnown,
 	type MessageOrCCLogEntry,
+	type WithAddress,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type {
@@ -12,11 +13,7 @@ import type {
 	GetValueDB,
 } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	type CCRaw,
-	CommandClass,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -57,7 +54,7 @@ export class CRC16CCAPI extends CCAPI {
 
 		const cc = new CRC16CCCommandEncapsulation({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			encapsulated: encapsulatedCC,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -115,7 +112,7 @@ function getCCResponseForCommandEncapsulation(
 )
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
-		options: CRC16CCCommandEncapsulationOptions & CCCommandOptions,
+		options: WithAddress<CRC16CCCommandEncapsulationOptions>,
 	) {
 		super(options);
 		this.encapsulated = options.encapsulated;

@@ -5,6 +5,7 @@ import {
 	MessagePriority,
 	type MessageRecord,
 	ValueMetadata,
+	type WithAddress,
 	enumValuesToMetadataStates,
 	validatePayload,
 } from "@zwave-js/core/safe";
@@ -17,10 +18,8 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type RefreshValuesContext,
 } from "../lib/CommandClass";
@@ -83,7 +82,7 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 
 		const cc = new ThermostatFanStateCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			ThermostatFanStateCCReport
@@ -159,7 +158,7 @@ export interface ThermostatFanStateCCReportOptions {
 @CCCommand(ThermostatFanStateCommand.Report)
 export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	public constructor(
-		options: ThermostatFanStateCCReportOptions & CCCommandOptions,
+		options: WithAddress<ThermostatFanStateCCReportOptions>,
 	) {
 		super(options);
 

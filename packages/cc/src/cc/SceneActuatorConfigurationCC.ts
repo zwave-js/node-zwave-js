@@ -6,6 +6,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	getCCName,
@@ -30,10 +31,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 } from "../lib/CommandClass";
@@ -211,7 +210,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		// Undefined `level` uses the actuator's current value (override = 0).
 		const cc = new SceneActuatorConfigurationCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sceneId,
 			dimmingDuration: Duration.from(dimmingDuration)
 				?? new Duration(0, "seconds"),
@@ -236,7 +235,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 
 		const cc = new SceneActuatorConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sceneId: 0,
 		});
 		const response = await this.host.sendCommand<
@@ -276,7 +275,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 
 		const cc = new SceneActuatorConfigurationCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			sceneId: sceneId,
 		});
 		const response = await this.host.sendCommand<
@@ -358,7 +357,7 @@ export class SceneActuatorConfigurationCCSet
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		options: SceneActuatorConfigurationCCSetOptions & CCCommandOptions,
+		options: WithAddress<SceneActuatorConfigurationCCSetOptions>,
 	) {
 		super(options);
 		if (options.sceneId < 1 || options.sceneId > 255) {
@@ -429,7 +428,7 @@ export class SceneActuatorConfigurationCCReport
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		options: SceneActuatorConfigurationCCReportOptions & CCCommandOptions,
+		options: WithAddress<SceneActuatorConfigurationCCReportOptions>,
 	) {
 		super(options);
 
@@ -534,7 +533,7 @@ export class SceneActuatorConfigurationCCGet
 	extends SceneActuatorConfigurationCC
 {
 	public constructor(
-		options: SceneActuatorConfigurationCCGetOptions & CCCommandOptions,
+		options: WithAddress<SceneActuatorConfigurationCCGetOptions>,
 	) {
 		super(options);
 		this.sceneId = options.sceneId;

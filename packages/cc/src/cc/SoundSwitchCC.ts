@@ -6,6 +6,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	supervisedCommandSucceeded,
@@ -29,11 +30,9 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	type CCResponsePredicate,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 } from "../lib/CommandClass";
 import {
@@ -122,7 +121,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 		const cc = new SoundSwitchCCTonesNumberGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			SoundSwitchCCTonesNumberReport
@@ -143,7 +142,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 		const cc = new SoundSwitchCCToneInfoGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			toneId,
 		});
 		const response = await this.host.sendCommand<
@@ -167,7 +166,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 		const cc = new SoundSwitchCCConfigurationSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			defaultToneId,
 			defaultVolume,
 		});
@@ -183,7 +182,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 		const cc = new SoundSwitchCCConfigurationGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			SoundSwitchCCConfigurationReport
@@ -215,7 +214,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 		const cc = new SoundSwitchCCTonePlaySet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			toneId,
 			volume,
 		});
@@ -230,7 +229,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 		const cc = new SoundSwitchCCTonePlaySet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			toneId: 0x00,
 			volume: 0x00,
 		});
@@ -246,7 +245,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 		const cc = new SoundSwitchCCTonePlayGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			SoundSwitchCCTonePlayReport
@@ -478,7 +477,7 @@ export interface SoundSwitchCCTonesNumberReportOptions {
 @CCCommand(SoundSwitchCommand.TonesNumberReport)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 	public constructor(
-		options: SoundSwitchCCTonesNumberReportOptions & CCCommandOptions,
+		options: WithAddress<SoundSwitchCCTonesNumberReportOptions>,
 	) {
 		super(options);
 		this.toneCount = options.toneCount;
@@ -526,7 +525,7 @@ export interface SoundSwitchCCToneInfoReportOptions {
 @CCCommand(SoundSwitchCommand.ToneInfoReport)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public constructor(
-		options: SoundSwitchCCToneInfoReportOptions & CCCommandOptions,
+		options: WithAddress<SoundSwitchCCToneInfoReportOptions>,
 	) {
 		super(options);
 		this.toneId = options.toneId;
@@ -600,7 +599,7 @@ export interface SoundSwitchCCToneInfoGetOptions {
 )
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	public constructor(
-		options: SoundSwitchCCToneInfoGetOptions & CCCommandOptions,
+		options: WithAddress<SoundSwitchCCToneInfoGetOptions>,
 	) {
 		super(options);
 		this.toneId = options.toneId;
@@ -644,7 +643,7 @@ export interface SoundSwitchCCConfigurationSetOptions {
 @useSupervision()
 export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public constructor(
-		options: SoundSwitchCCConfigurationSetOptions & CCCommandOptions,
+		options: WithAddress<SoundSwitchCCConfigurationSetOptions>,
 	) {
 		super(options);
 		this.defaultVolume = options.defaultVolume;
@@ -694,7 +693,7 @@ export interface SoundSwitchCCConfigurationReportOptions {
 @CCCommand(SoundSwitchCommand.ConfigurationReport)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	public constructor(
-		options: SoundSwitchCCConfigurationReportOptions & CCCommandOptions,
+		options: WithAddress<SoundSwitchCCConfigurationReportOptions>,
 	) {
 		super(options);
 		this.defaultVolume = options.defaultVolume;
@@ -753,7 +752,7 @@ export interface SoundSwitchCCTonePlaySetOptions {
 @useSupervision()
 export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public constructor(
-		options: SoundSwitchCCTonePlaySetOptions & CCCommandOptions,
+		options: WithAddress<SoundSwitchCCTonePlaySetOptions>,
 	) {
 		super(options);
 		this.toneId = options.toneId;
@@ -810,7 +809,7 @@ export interface SoundSwitchCCTonePlayReportOptions {
 @CCCommand(SoundSwitchCommand.TonePlayReport)
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	public constructor(
-		options: SoundSwitchCCTonePlayReportOptions & CCCommandOptions,
+		options: WithAddress<SoundSwitchCCTonePlayReportOptions>,
 	) {
 		super(options);
 		this.toneId = options.toneId;

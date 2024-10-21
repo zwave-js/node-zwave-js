@@ -4,6 +4,7 @@ import {
 	MessagePriority,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	formatDate,
 	validatePayload,
 } from "@zwave-js/core";
@@ -30,10 +31,8 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	type PersistValuesContext,
 } from "../lib/CommandClass";
@@ -180,7 +179,7 @@ export class TimeParametersCCAPI extends CCAPI {
 
 		const cc = new TimeParametersCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			TimeParametersCCReport
@@ -210,7 +209,7 @@ export class TimeParametersCCAPI extends CCAPI {
 
 		const cc = new TimeParametersCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			dateAndTime,
 			useLocalTime,
 		});
@@ -264,7 +263,7 @@ export interface TimeParametersCCReportOptions {
 @CCCommand(TimeParametersCommand.Report)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
-		options: TimeParametersCCReportOptions & CCCommandOptions,
+		options: WithAddress<TimeParametersCCReportOptions>,
 	) {
 		super(options);
 
@@ -339,7 +338,7 @@ export interface TimeParametersCCSetOptions {
 @useSupervision()
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
-		options: TimeParametersCCSetOptions & CCCommandOptions,
+		options: WithAddress<TimeParametersCCSetOptions>,
 	) {
 		super(options);
 		this.dateAndTime = options.dateAndTime;

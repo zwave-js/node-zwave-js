@@ -1,6 +1,7 @@
 import {
 	type FloatParameters,
 	type MaybeUnknown,
+	type WithAddress,
 	encodeBitMask,
 	encodeFloatWithScale,
 	getFloatParameters,
@@ -59,7 +60,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -371,7 +371,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		const response = await this.host.sendCommand<MeterCCReport>(
@@ -401,7 +401,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -462,7 +462,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			MeterCCSupportedReport
@@ -488,7 +488,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCSupportedReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -502,7 +502,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		const cc = new MeterCCReset({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -898,7 +898,7 @@ export interface MeterCCReportOptions {
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
-		options: MeterCCReportOptions & CCCommandOptions,
+		options: WithAddress<MeterCCReportOptions>,
 	) {
 		super(options);
 
@@ -1129,7 +1129,7 @@ export interface MeterCCGetOptions {
 @expectedCCResponse(MeterCCReport, testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
-		options: MeterCCGetOptions & CCCommandOptions,
+		options: WithAddress<MeterCCGetOptions>,
 	) {
 		super(options);
 		this.rateType = options.rateType;
@@ -1229,7 +1229,7 @@ export interface MeterCCSupportedReportOptions {
 @CCCommand(MeterCommand.SupportedReport)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
-		options: MeterCCSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<MeterCCSupportedReportOptions>,
 	) {
 		super(options);
 
@@ -1407,7 +1407,7 @@ export type MeterCCResetOptions = AllOrNone<{
 @useSupervision()
 export class MeterCCReset extends MeterCC {
 	public constructor(
-		options: MeterCCResetOptions & CCCommandOptions,
+		options: WithAddress<MeterCCResetOptions>,
 	) {
 		super(options);
 		this.type = options.type;

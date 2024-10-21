@@ -7,6 +7,7 @@ import {
 	type MessageRecord,
 	type SupervisionResult,
 	ValueMetadata,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	encodeBitMask,
@@ -42,7 +43,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
 	type InterviewContext,
@@ -452,7 +452,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		const cc = new UserCodeCCUsersNumberGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			UserCodeCCUsersNumberReport
@@ -485,7 +485,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 			const cc = new UserCodeCCExtendedUserCodeGet({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				userId,
 				reportMore: multiple,
 			});
@@ -510,7 +510,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 			const cc = new UserCodeCCGet({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				userId,
 			});
 			const response = await this.host.sendCommand<UserCodeCCReport>(
@@ -550,7 +550,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		const cc = new UserCodeCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			userId,
 			userIdStatus,
 			userCode,
@@ -661,7 +661,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		}
 		const cc = new UserCodeCCExtendedUserCodeSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			userCodes: codes,
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -695,7 +695,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 			const cc = new UserCodeCCSet({
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				endpointIndex: this.endpoint.index,
 				userId,
 				userIdStatus: UserIDStatus.Available,
 			});
@@ -712,7 +712,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		const cc = new UserCodeCCCapabilitiesGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			UserCodeCCCapabilitiesReport
@@ -742,7 +742,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		const cc = new UserCodeCCKeypadModeGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			UserCodeCCKeypadModeReport
@@ -786,7 +786,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		const cc = new UserCodeCCKeypadModeSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			keypadMode,
 		});
 
@@ -801,7 +801,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		const cc = new UserCodeCCAdminCodeGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			UserCodeCCAdminCodeReport
@@ -854,7 +854,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		const cc = new UserCodeCCAdminCodeSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			adminCode,
 		});
 
@@ -869,7 +869,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		const cc = new UserCodeCCUserCodeChecksumGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			UserCodeCCUserCodeChecksumReport
@@ -1234,7 +1234,7 @@ export type UserCodeCCSetOptions =
 @useSupervision()
 export class UserCodeCCSet extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCSetOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCSetOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -1336,7 +1336,7 @@ export class UserCodeCCReport extends UserCodeCC
 	implements NotificationEventPayload
 {
 	public constructor(
-		options: UserCodeCCReportOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCReportOptions>,
 	) {
 		super(options);
 
@@ -1446,7 +1446,7 @@ export interface UserCodeCCGetOptions {
 @expectedCCResponse(UserCodeCCReport)
 export class UserCodeCCGet extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCGetOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCGetOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;
@@ -1485,7 +1485,7 @@ export interface UserCodeCCUsersNumberReportOptions {
 @CCCommand(UserCodeCommand.UsersNumberReport)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCUsersNumberReportOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCUsersNumberReportOptions>,
 	) {
 		super(options);
 
@@ -1552,7 +1552,7 @@ export interface UserCodeCCCapabilitiesReportOptions {
 @CCCommand(UserCodeCommand.CapabilitiesReport)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCCapabilitiesReportOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCCapabilitiesReportOptions>,
 	) {
 		super(options);
 
@@ -1741,7 +1741,7 @@ export interface UserCodeCCKeypadModeSetOptions {
 @useSupervision()
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCKeypadModeSetOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCKeypadModeSetOptions>,
 	) {
 		super(options);
 		this.keypadMode = options.keypadMode;
@@ -1783,7 +1783,7 @@ export interface UserCodeCCKeypadModeReportOptions {
 @CCCommand(UserCodeCommand.KeypadModeReport)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCKeypadModeReportOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCKeypadModeReportOptions>,
 	) {
 		super(options);
 		this.keypadMode = options.keypadMode;
@@ -1854,7 +1854,7 @@ export interface UserCodeCCAdminCodeSetOptions {
 @useSupervision()
 export class UserCodeCCAdminCodeSet extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCAdminCodeSetOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCAdminCodeSetOptions>,
 	) {
 		super(options);
 		this.adminCode = options.adminCode;
@@ -1903,7 +1903,7 @@ export interface UserCodeCCAdminCodeReportOptions {
 @CCCommand(UserCodeCommand.AdminCodeReport)
 export class UserCodeCCAdminCodeReport extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCAdminCodeReportOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCAdminCodeReportOptions>,
 	) {
 		super(options);
 		this.adminCode = options.adminCode;
@@ -1957,7 +1957,7 @@ export interface UserCodeCCUserCodeChecksumReportOptions {
 @CCCommand(UserCodeCommand.UserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCUserCodeChecksumReportOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCUserCodeChecksumReportOptions>,
 	) {
 		super(options);
 		this.userCodeChecksum = options.userCodeChecksum;
@@ -2012,7 +2012,7 @@ export interface UserCode {
 @useSupervision()
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCExtendedUserCodeSetOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCExtendedUserCodeSetOptions>,
 	) {
 		super(options);
 		this.userCodes = options.userCodes;
@@ -2083,7 +2083,7 @@ export interface UserCodeCCExtendedUserCodeReportOptions {
 @CCCommand(UserCodeCommand.ExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCExtendedUserCodeReportOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCExtendedUserCodeReportOptions>,
 	) {
 		super(options);
 
@@ -2163,7 +2163,7 @@ export interface UserCodeCCExtendedUserCodeGetOptions {
 @expectedCCResponse(UserCodeCCExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public constructor(
-		options: UserCodeCCExtendedUserCodeGetOptions & CCCommandOptions,
+		options: WithAddress<UserCodeCCExtendedUserCodeGetOptions>,
 	) {
 		super(options);
 		this.userId = options.userId;

@@ -12,6 +12,7 @@ import {
 	SecurityClass,
 	type SecurityManager2,
 	TransmitOptions,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	decryptAES128CCM,
@@ -46,7 +47,6 @@ import { wait } from "alcalzone-shared/async";
 import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	type CCResponseRole,
 	CommandClass,
@@ -500,7 +500,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNonceReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			SOS: true,
 			MOS: false,
 			receiverEI,
@@ -546,7 +546,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNonceReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			SOS: false,
 			MOS: true,
 		});
@@ -589,7 +589,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCMessageEncapsulation({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			extensions: [
 				new MPANExtension({
 					groupId,
@@ -639,7 +639,7 @@ export class Security2CCAPI extends CCAPI {
 
 		let cc: CommandClass = new Security2CCCommandsSupportedGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		// Security2CCCommandsSupportedGet is special because we cannot reply on the applHost to do the automatic
 		// encapsulation because it would use a different security class. Therefore the entire possible stack
@@ -683,7 +683,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCCommandsSupportedReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			supportedCCs,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -695,7 +695,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCKEXGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<Security2CCKEXReport>(
 			cc,
@@ -724,7 +724,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCKEXReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...params,
 			echo: false,
 		});
@@ -739,7 +739,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCKEXSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...params,
 			echo: false,
 		});
@@ -757,7 +757,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCKEXReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...params,
 			echo: true,
 		});
@@ -775,7 +775,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCKEXSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...params,
 			echo: true,
 		});
@@ -788,7 +788,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCKEXFail({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			failType,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -805,7 +805,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCPublicKeyReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			includingNode,
 			publicKey,
 		});
@@ -822,7 +822,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNetworkKeyGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			requestedKey: securityClass,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -839,7 +839,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNetworkKeyReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			grantedKey: securityClass,
 			networkKey,
 		});
@@ -854,7 +854,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCNetworkKeyVerify({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
 	}
@@ -867,7 +867,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCTransferEnd({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			keyVerified: true,
 			keyRequestComplete: false,
 		});
@@ -886,7 +886,7 @@ export class Security2CCAPI extends CCAPI {
 
 		const cc = new Security2CCTransferEnd({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			keyVerified: false,
 			keyRequestComplete: true,
 		});
@@ -1318,7 +1318,7 @@ function testCCResponseForMessageEncapsulation(
 )
 export class Security2CCMessageEncapsulation extends Security2CC {
 	public constructor(
-		options: Security2CCMessageEncapsulationOptions & CCCommandOptions,
+		options: WithAddress<Security2CCMessageEncapsulationOptions>,
 	) {
 		super(options);
 
@@ -2001,7 +2001,7 @@ export type Security2CCNonceReportOptions =
 @CCCommand(Security2Command.NonceReport)
 export class Security2CCNonceReport extends Security2CC {
 	public constructor(
-		options: Security2CCNonceReportOptions & CCCommandOptions,
+		options: WithAddress<Security2CCNonceReportOptions>,
 	) {
 		super(options);
 
@@ -2134,7 +2134,7 @@ export class Security2CCNonceGet extends Security2CC {
 	// 250 ms before receiving the Security 2 Nonce Report Command.
 
 	public constructor(
-		options: Security2CCNonceGetOptions & CCCommandOptions,
+		options: WithAddress<Security2CCNonceGetOptions>,
 	) {
 		super(options);
 		this.sequenceNumber = options.sequenceNumber;
@@ -2216,7 +2216,7 @@ export interface Security2CCKEXReportOptions {
 @CCCommand(Security2Command.KEXReport)
 export class Security2CCKEXReport extends Security2CC {
 	public constructor(
-		options: Security2CCKEXReportOptions & CCCommandOptions,
+		options: WithAddress<Security2CCKEXReportOptions>,
 	) {
 		super(options);
 		this.requestCSA = options.requestCSA;
@@ -2353,7 +2353,7 @@ function testExpectedResponseForKEXSet(
 @expectedCCResponse(getExpectedResponseForKEXSet, testExpectedResponseForKEXSet)
 export class Security2CCKEXSet extends Security2CC {
 	public constructor(
-		options: Security2CCKEXSetOptions & CCCommandOptions,
+		options: WithAddress<Security2CCKEXSetOptions>,
 	) {
 		super(options);
 		this.permitCSA = options.permitCSA;
@@ -2459,7 +2459,7 @@ export interface Security2CCKEXFailOptions {
 @CCCommand(Security2Command.KEXFail)
 export class Security2CCKEXFail extends Security2CC {
 	public constructor(
-		options: Security2CCKEXFailOptions & CCCommandOptions,
+		options: WithAddress<Security2CCKEXFailOptions>,
 	) {
 		super(options);
 		this.failType = options.failType;
@@ -2499,7 +2499,7 @@ export interface Security2CCPublicKeyReportOptions {
 @CCCommand(Security2Command.PublicKeyReport)
 export class Security2CCPublicKeyReport extends Security2CC {
 	public constructor(
-		options: Security2CCPublicKeyReportOptions & CCCommandOptions,
+		options: WithAddress<Security2CCPublicKeyReportOptions>,
 	) {
 		super(options);
 		this.includingNode = options.includingNode;
@@ -2552,7 +2552,7 @@ export interface Security2CCNetworkKeyReportOptions {
 @CCCommand(Security2Command.NetworkKeyReport)
 export class Security2CCNetworkKeyReport extends Security2CC {
 	public constructor(
-		options: Security2CCNetworkKeyReportOptions & CCCommandOptions,
+		options: WithAddress<Security2CCNetworkKeyReportOptions>,
 	) {
 		super(options);
 		this.grantedKey = options.grantedKey;
@@ -2613,7 +2613,7 @@ export interface Security2CCNetworkKeyGetOptions {
 // FIXME: maybe use the dynamic @expectedCCResponse instead?
 export class Security2CCNetworkKeyGet extends Security2CC {
 	public constructor(
-		options: Security2CCNetworkKeyGetOptions & CCCommandOptions,
+		options: WithAddress<Security2CCNetworkKeyGetOptions>,
 	) {
 		super(options);
 		this.requestedKey = options.requestedKey;
@@ -2667,7 +2667,7 @@ export interface Security2CCTransferEndOptions {
 @CCCommand(Security2Command.TransferEnd)
 export class Security2CCTransferEnd extends Security2CC {
 	public constructor(
-		options: Security2CCTransferEndOptions & CCCommandOptions,
+		options: WithAddress<Security2CCTransferEndOptions>,
 	) {
 		super(options);
 		this.keyVerified = options.keyVerified;
@@ -2718,7 +2718,7 @@ export interface Security2CCCommandsSupportedReportOptions {
 @CCCommand(Security2Command.CommandsSupportedReport)
 export class Security2CCCommandsSupportedReport extends Security2CC {
 	public constructor(
-		options: Security2CCCommandsSupportedReportOptions & CCCommandOptions,
+		options: WithAddress<Security2CCCommandsSupportedReportOptions>,
 	) {
 		super(options);
 		this.supportedCCs = options.supportedCCs;

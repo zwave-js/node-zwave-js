@@ -5,6 +5,7 @@ import {
 	type MessageRecord,
 	NodeStatus,
 	type SupervisionResult,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
@@ -17,12 +18,7 @@ import type {
 import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";
-import {
-	type CCCommandOptions,
-	type CCRaw,
-	CommandClass,
-	type CommandClassDeserializationOptions,
-} from "../lib/CommandClass";
+import { type CCRaw, CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
@@ -59,7 +55,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 
 		const cc = new PowerlevelCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			powerlevel: Powerlevel["Normal Power"],
 		});
 		return this.host.sendCommand(cc, this.commandOptions);
@@ -74,7 +70,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 
 		const cc = new PowerlevelCCSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			powerlevel,
 			timeout,
 		});
@@ -88,7 +84,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 
 		const cc = new PowerlevelCCGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<PowerlevelCCReport>(
 			cc,
@@ -107,7 +103,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 
 		const cc = new PowerlevelCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -146,7 +142,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 
 		const cc = new PowerlevelCCTestNodeSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			testNodeId,
 			powerlevel,
 			testFrameCount,
@@ -169,7 +165,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 
 		const cc = new PowerlevelCCTestNodeGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			PowerlevelCCTestNodeReport
@@ -197,7 +193,7 @@ export class PowerlevelCCAPI extends PhysicalCCAPI {
 
 		const cc = new PowerlevelCCTestNodeReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -225,7 +221,7 @@ export type PowerlevelCCSetOptions =
 @useSupervision()
 export class PowerlevelCCSet extends PowerlevelCC {
 	public constructor(
-		options: PowerlevelCCSetOptions & CCCommandOptions,
+		options: WithAddress<PowerlevelCCSetOptions>,
 	) {
 		super(options);
 		this.powerlevel = options.powerlevel;
@@ -294,7 +290,7 @@ export type PowerlevelCCReportOptions = {
 @CCCommand(PowerlevelCommand.Report)
 export class PowerlevelCCReport extends PowerlevelCC {
 	public constructor(
-		options: PowerlevelCCReportOptions & CCCommandOptions,
+		options: WithAddress<PowerlevelCCReportOptions>,
 	) {
 		super(options);
 
@@ -359,7 +355,7 @@ export interface PowerlevelCCTestNodeSetOptions {
 @useSupervision()
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public constructor(
-		options: PowerlevelCCTestNodeSetOptions & CCCommandOptions,
+		options: WithAddress<PowerlevelCCTestNodeSetOptions>,
 	) {
 		super(options);
 		this.testNodeId = options.testNodeId;
@@ -416,7 +412,7 @@ export interface PowerlevelCCTestNodeReportOptions {
 @CCCommand(PowerlevelCommand.TestNodeReport)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public constructor(
-		options: PowerlevelCCTestNodeReportOptions & CCCommandOptions,
+		options: WithAddress<PowerlevelCCTestNodeReportOptions>,
 	) {
 		super(options);
 

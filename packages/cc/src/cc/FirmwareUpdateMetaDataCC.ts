@@ -5,6 +5,7 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
+	type WithAddress,
 	ZWaveError,
 	ZWaveErrorCodes,
 	validatePayload,
@@ -23,10 +24,8 @@ import {
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	type CCCommandOptions,
 	type CCRaw,
 	CommandClass,
-	type CommandClassDeserializationOptions,
 	type InterviewContext,
 	getEffectiveCCVersion,
 } from "../lib/CommandClass";
@@ -116,7 +115,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 		const cc = new FirmwareUpdateMetaDataCCMetaDataGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 		});
 		const response = await this.host.sendCommand<
 			FirmwareUpdateMetaDataCCMetaDataReport
@@ -152,7 +151,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 		const cc = new FirmwareUpdateMetaDataCCMetaDataReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		await this.host.sendCommand(cc, this.commandOptions);
@@ -173,7 +172,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 		const cc = new FirmwareUpdateMetaDataCCRequestGet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 
@@ -200,7 +199,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 		const cc = new FirmwareUpdateMetaDataCCReport({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			reportNumber: fragmentNumber,
 			isLast: isLastFragment,
 			firmwareData: data,
@@ -224,7 +223,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 		const cc = new FirmwareUpdateMetaDataCCActivationSet({
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			endpointIndex: this.endpoint.index,
 			...options,
 		});
 		const response = await this.host.sendCommand<
@@ -330,9 +329,7 @@ export class FirmwareUpdateMetaDataCCMetaDataReport
 	implements FirmwareUpdateMetaData
 {
 	public constructor(
-		options:
-			& FirmwareUpdateMetaDataCCMetaDataReportOptions
-			& CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCMetaDataReportOptions>,
 	) {
 		super(options);
 
@@ -520,9 +517,7 @@ export class FirmwareUpdateMetaDataCCRequestReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		options:
-			& FirmwareUpdateMetaDataCCRequestReportOptions
-			& CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCRequestReportOptions>,
 	) {
 		super(options);
 
@@ -604,7 +599,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		options: FirmwareUpdateMetaDataCCRequestGetOptions & CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCRequestGetOptions>,
 	) {
 		super(options);
 		this.manufacturerId = options.manufacturerId;
@@ -703,7 +698,7 @@ export interface FirmwareUpdateMetaDataCCGetOptions {
 // This is sent to us from the node, so we expect no response
 export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		options: FirmwareUpdateMetaDataCCGetOptions & CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCGetOptions>,
 	) {
 		super(options);
 
@@ -752,7 +747,7 @@ export interface FirmwareUpdateMetaDataCCReportOptions {
 // We send this in reply to the Get command and expect no response
 export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		options: FirmwareUpdateMetaDataCCReportOptions & CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCReportOptions>,
 	) {
 		super(options);
 		this.reportNumber = options.reportNumber;
@@ -831,7 +826,7 @@ export class FirmwareUpdateMetaDataCCStatusReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		options: FirmwareUpdateMetaDataCCStatusReportOptions & CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCStatusReportOptions>,
 	) {
 		super(options);
 
@@ -891,9 +886,7 @@ export class FirmwareUpdateMetaDataCCActivationReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		options:
-			& FirmwareUpdateMetaDataCCActivationReportOptions
-			& CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCActivationReportOptions>,
 	) {
 		super(options);
 
@@ -977,9 +970,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		options:
-			& FirmwareUpdateMetaDataCCActivationSetOptions
-			& CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCActivationSetOptions>,
 	) {
 		super(options);
 		this.manufacturerId = options.manufacturerId;
@@ -1048,9 +1039,7 @@ export class FirmwareUpdateMetaDataCCPrepareReport
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		options:
-			& FirmwareUpdateMetaDataCCPrepareReportOptions
-			& CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCPrepareReportOptions>,
 	) {
 		super(options);
 
@@ -1103,7 +1092,7 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	extends FirmwareUpdateMetaDataCC
 {
 	public constructor(
-		options: FirmwareUpdateMetaDataCCPrepareGetOptions & CCCommandOptions,
+		options: WithAddress<FirmwareUpdateMetaDataCCPrepareGetOptions>,
 	) {
 		super(options);
 		this.manufacturerId = options.manufacturerId;
