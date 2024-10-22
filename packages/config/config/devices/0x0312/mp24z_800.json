@@ -14,7 +14,7 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-  "paramInformation": [
+	"paramInformation": [
 		{
 			"#": "1",
 			"$import": "~/templates/master_template.json#led_indicator_three_options_inverted"
