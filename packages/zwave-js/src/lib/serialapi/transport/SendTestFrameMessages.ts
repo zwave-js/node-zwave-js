@@ -11,7 +11,6 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
@@ -26,14 +25,11 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.SendTestFrame)
 @priority(MessagePriority.Normal)
 export class SendTestFrameRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== SendTestFrameTransmitReport
-		) {
-			return new SendTestFrameTransmitReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendTestFrameRequestBase {
+		return SendTestFrameTransmitReport.from(raw, ctx);
 	}
 }
 
@@ -113,14 +109,12 @@ export class SendTestFrameResponse extends Message {
 		options: SendTestFrameResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-
-		// TODO: Check implementation:
 		this.wasSent = options.wasSent;
 	}
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendTestFrameResponse {
 		const wasSent = raw.payload[0] !== 0;
 
@@ -150,15 +144,13 @@ export class SendTestFrameTransmitReport extends SendTestFrameRequestBase
 		options: SendTestFrameTransmitReportOptions & MessageBaseOptions,
 	) {
 		super(options);
-
-		// TODO: Check implementation:
 		this.callbackId = options.callbackId;
 		this.transmitStatus = options.transmitStatus;
 	}
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendTestFrameTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];

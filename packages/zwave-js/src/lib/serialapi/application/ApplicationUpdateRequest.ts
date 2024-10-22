@@ -12,10 +12,10 @@ import {
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import {
-	type DeserializingMessageConstructor,
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
+	type MessageConstructor,
 	type MessageEncodingContext,
 	type MessageParsingContext,
 	type MessageRaw,
@@ -45,7 +45,7 @@ const {
 } = createSimpleReflectionDecorator<
 	ApplicationUpdateRequest,
 	[updateType: ApplicationUpdateTypes],
-	DeserializingMessageConstructor<ApplicationUpdateRequest>
+	MessageConstructor<ApplicationUpdateRequest>
 >({
 	name: "applicationUpdateType",
 });
@@ -79,7 +79,7 @@ export class ApplicationUpdateRequest extends Message {
 			return CommandConstructor.from(
 				raw.withPayload(payload),
 				ctx,
-			);
+			) as ApplicationUpdateRequest;
 		}
 
 		const ret = new ApplicationUpdateRequest({

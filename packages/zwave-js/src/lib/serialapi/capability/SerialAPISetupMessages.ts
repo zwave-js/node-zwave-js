@@ -11,7 +11,7 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import type {
-	DeserializingMessageConstructor,
+	MessageConstructor,
 	MessageEncodingContext,
 	MessageParsingContext,
 	MessageRaw,
@@ -57,7 +57,7 @@ const {
 } = createSimpleReflectionDecorator<
 	SerialAPISetupRequest,
 	[command: SerialAPISetupCommand],
-	DeserializingMessageConstructor<SerialAPISetupRequest>
+	MessageConstructor<SerialAPISetupRequest>
 >({
 	name: "subCommandRequest",
 });
@@ -69,7 +69,7 @@ const {
 } = createSimpleReflectionDecorator<
 	SerialAPISetupResponse,
 	[command: SerialAPISetupCommand],
-	DeserializingMessageConstructor<SerialAPISetupResponse>
+	MessageConstructor<SerialAPISetupResponse>
 >({
 	name: "subCommandResponse",
 });
@@ -111,7 +111,7 @@ export class SerialAPISetupRequest extends Message {
 			return CommandConstructor.from(
 				raw.withPayload(payload),
 				ctx,
-			);
+			) as SerialAPISetupRequest;
 		}
 
 		const ret = new SerialAPISetupRequest({
@@ -173,7 +173,7 @@ export class SerialAPISetupResponse extends Message {
 			return CommandConstructor.from(
 				raw.withPayload(payload),
 				ctx,
-			);
+			) as SerialAPISetupResponse;
 		}
 
 		const ret = new SerialAPISetupResponse({

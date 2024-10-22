@@ -6,8 +6,8 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import type {
-	DeserializingMessageConstructor,
 	MessageBaseOptions,
+	MessageConstructor,
 	MessageEncodingContext,
 	MessageParsingContext,
 	MessageRaw,
@@ -39,7 +39,7 @@ const {
 } = createSimpleReflectionDecorator<
 	FirmwareUpdateNVMRequest,
 	[command: FirmwareUpdateNVMCommand],
-	DeserializingMessageConstructor<FirmwareUpdateNVMRequest>
+	MessageConstructor<FirmwareUpdateNVMRequest>
 >({
 	name: "subCommandRequest",
 });
@@ -51,7 +51,7 @@ const {
 } = createSimpleReflectionDecorator<
 	FirmwareUpdateNVMResponse,
 	[command: FirmwareUpdateNVMCommand],
-	DeserializingMessageConstructor<FirmwareUpdateNVMResponse>
+	MessageConstructor<FirmwareUpdateNVMResponse>
 >({
 	name: "subCommandResponse",
 });
@@ -93,7 +93,7 @@ export class FirmwareUpdateNVMRequest extends Message {
 			return CommandConstructor.from(
 				raw.withPayload(payload),
 				ctx,
-			);
+			) as FirmwareUpdateNVMRequest;
 		}
 
 		const ret = new FirmwareUpdateNVMRequest({
@@ -155,7 +155,7 @@ export class FirmwareUpdateNVMResponse extends Message {
 			return CommandConstructor.from(
 				raw.withPayload(payload),
 				ctx,
-			);
+			) as FirmwareUpdateNVMResponse;
 		}
 
 		const ret = new FirmwareUpdateNVMResponse({

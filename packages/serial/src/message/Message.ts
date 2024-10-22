@@ -24,13 +24,9 @@ import { MessageHeaders } from "../MessageHeaders";
 import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
 
-export type MessageConstructor<T extends Message> = new (
-	options?: MessageOptions,
-) => T;
-
-export type DeserializingMessageConstructor<T extends Message> = new (
-	options: MessageDeserializationOptions,
-) => T;
+export type MessageConstructor<T extends Message> = typeof Message & {
+	new (options: MessageBaseOptions): T;
+};
 
 /** Where a serialized message originates from, to distinguish how certain messages need to be deserialized */
 export enum MessageOrigin {
@@ -240,7 +236,7 @@ export class Message {
 	public static parse(
 		data: Buffer,
 		ctx: MessageParsingContext,
-		contextStore?: Map<FunctionType, Record<string, unknown>>,
+		// contextStore?: Map<FunctionType, Record<string, unknown>>,
 	): Message {
 		const raw = MessageRaw.parse(data);
 
@@ -249,13 +245,13 @@ export class Message {
 
 		// Take the context out of the context store if it exists
 		// FIXME: Is there a better way to do this?
-		if (contextStore) {
-			const functionType = getFunctionTypeStatic(Constructor)!;
-			if (contextStore.has(functionType)) {
-				options.context = contextStore.get(functionType)!;
-				contextStore.delete(functionType);
-			}
-		}
+		// if (contextStore) {
+		// 	const functionType = getFunctionTypeStatic(Constructor)!;
+		// 	if (contextStore.has(functionType)) {
+		// 		options.context = contextStore.get(functionType)!;
+		// 		contextStore.delete(functionType);
+		// 	}
+		// }
 
 		return Constructor.from(raw, ctx);
 	}
@@ -263,6 +259,7 @@ export class Message {
 	/** Creates an instance of the message that is serialized in the given buffer */
 	public static from(
 		raw: MessageRaw,
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		ctx: MessageParsingContext,
 	): Message {
 		return new this({
