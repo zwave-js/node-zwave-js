@@ -372,8 +372,8 @@ export class SceneActuatorConfigurationCCSet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): SceneActuatorConfigurationCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -540,8 +540,8 @@ export class SceneActuatorConfigurationCCGet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): SceneActuatorConfigurationCCGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

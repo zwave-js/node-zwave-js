@@ -435,7 +435,7 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 		this.sensorType = options.sensorType ?? AlarmSensorType.Any;
 	}
 
-	public static from(raw: CCRaw, ctx: CCParsingContext): AlarmSensorCCGet {
+	public static from(_raw: CCRaw, _ctx: CCParsingContext): AlarmSensorCCGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

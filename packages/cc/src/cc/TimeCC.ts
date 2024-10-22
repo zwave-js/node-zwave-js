@@ -390,7 +390,10 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 		this.dstEndDate = options.dstEnd;
 	}
 
-	public static from(raw: CCRaw, ctx: CCParsingContext): TimeCCTimeOffsetSet {
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): TimeCCTimeOffsetSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

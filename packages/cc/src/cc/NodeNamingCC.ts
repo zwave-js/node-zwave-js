@@ -282,8 +282,8 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): NodeNamingAndLocationCCNameSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -393,8 +393,8 @@ export class NodeNamingAndLocationCCLocationSet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): NodeNamingAndLocationCCLocationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

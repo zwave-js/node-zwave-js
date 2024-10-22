@@ -373,8 +373,8 @@ export class ManufacturerSpecificCCDeviceSpecificGet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ManufacturerSpecificCCDeviceSpecificGet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

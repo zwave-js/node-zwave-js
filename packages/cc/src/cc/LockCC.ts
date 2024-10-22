@@ -196,7 +196,7 @@ export class LockCCSet extends LockCC {
 		this.locked = options.locked;
 	}
 
-	public static from(raw: CCRaw, ctx: CCParsingContext): LockCCSet {
+	public static from(_raw: CCRaw, _ctx: CCParsingContext): LockCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

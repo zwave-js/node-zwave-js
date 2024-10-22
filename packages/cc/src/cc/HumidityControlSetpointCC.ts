@@ -533,8 +533,8 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): HumidityControlSetpointCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -700,8 +700,8 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): HumidityControlSetpointCCGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -870,8 +870,8 @@ export class HumidityControlSetpointCCScaleSupportedGet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): HumidityControlSetpointCCScaleSupportedGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -1017,8 +1017,8 @@ export class HumidityControlSetpointCCCapabilitiesGet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): HumidityControlSetpointCCCapabilitiesGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

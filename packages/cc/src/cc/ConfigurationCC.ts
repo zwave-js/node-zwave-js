@@ -2030,8 +2030,8 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ConfigurationCCBulkSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2301,8 +2301,8 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ConfigurationCCBulkGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

@@ -515,7 +515,7 @@ export class ProtectionCCSet extends ProtectionCC {
 		this.rf = options.rf;
 	}
 
-	public static from(raw: CCRaw, ctx: CCParsingContext): ProtectionCCSet {
+	public static from(_raw: CCRaw, _ctx: CCParsingContext): ProtectionCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -792,8 +792,8 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ProtectionCCExclusiveControlSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -884,8 +884,8 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ProtectionCCTimeoutSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

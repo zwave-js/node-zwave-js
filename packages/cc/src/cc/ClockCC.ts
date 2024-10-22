@@ -161,7 +161,7 @@ export class ClockCCSet extends ClockCC {
 		this.minute = options.minute;
 	}
 
-	public static from(raw: CCRaw, ctx: CCParsingContext): ClockCCSet {
+	public static from(_raw: CCRaw, _ctx: CCParsingContext): ClockCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

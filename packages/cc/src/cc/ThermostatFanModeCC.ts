@@ -352,8 +352,8 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ThermostatFanModeCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

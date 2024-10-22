@@ -385,8 +385,8 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): FibaroVenetianBlindCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

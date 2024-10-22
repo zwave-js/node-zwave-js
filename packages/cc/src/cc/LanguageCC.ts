@@ -180,7 +180,7 @@ export class LanguageCCSet extends LanguageCC {
 		this._country = options.country;
 	}
 
-	public static from(raw: CCRaw, ctx: CCParsingContext): LanguageCCSet {
+	public static from(_raw: CCRaw, _ctx: CCParsingContext): LanguageCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

@@ -293,8 +293,8 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): HumidityControlModeCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

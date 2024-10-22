@@ -1645,8 +1645,8 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCSystemConfigSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2031,8 +2031,8 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCValveInfoGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2095,8 +2095,8 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCValveConfigSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2354,8 +2354,8 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCValveConfigGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2406,8 +2406,8 @@ export class IrrigationCCValveRun extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCValveRun {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2468,8 +2468,8 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCValveTableSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2605,8 +2605,8 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCValveTableGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2658,8 +2658,8 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCValveTableRun {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2711,8 +2711,8 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): IrrigationCCSystemShutoff {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

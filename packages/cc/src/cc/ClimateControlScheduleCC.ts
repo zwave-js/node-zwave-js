@@ -231,8 +231,8 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ClimateControlScheduleCCSet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -378,8 +378,8 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ClimateControlScheduleCCGet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -535,8 +535,8 @@ export class ClimateControlScheduleCCOverrideSet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): ClimateControlScheduleCCOverrideSet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

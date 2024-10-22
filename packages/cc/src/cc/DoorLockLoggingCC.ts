@@ -414,8 +414,8 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): DoorLockLoggingCCRecordGet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

@@ -556,8 +556,8 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): BarrierOperatorCCSet {
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,
@@ -740,8 +740,8 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -861,8 +861,8 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): BarrierOperatorCCEventSignalingGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

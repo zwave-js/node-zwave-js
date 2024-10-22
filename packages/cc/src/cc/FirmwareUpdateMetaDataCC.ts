@@ -616,8 +616,8 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): FirmwareUpdateMetaDataCCRequestGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -756,8 +756,8 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): FirmwareUpdateMetaDataCCReport {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -981,8 +981,8 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): FirmwareUpdateMetaDataCCActivationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -1103,8 +1103,8 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): FirmwareUpdateMetaDataCCPrepareGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

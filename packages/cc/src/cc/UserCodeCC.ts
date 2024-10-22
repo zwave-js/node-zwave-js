@@ -2019,8 +2019,8 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): UserCodeCCExtendedUserCodeSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -2171,8 +2171,8 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): UserCodeCCExtendedUserCodeGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

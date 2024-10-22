@@ -1291,8 +1291,8 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): MultiChannelCCAggregatedMembersGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -1547,7 +1547,10 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 		this.requestedCC = options.requestedCC;
 	}
 
-	public static from(raw: CCRaw, ctx: CCParsingContext): MultiChannelCCV1Get {
+	public static from(
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
+	): MultiChannelCCV1Get {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
 			`${this.constructor.name}: deserialization not implemented`,

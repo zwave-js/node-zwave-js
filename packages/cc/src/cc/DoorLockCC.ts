@@ -842,8 +842,8 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): DoorLockCCOperationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
@@ -1305,8 +1305,8 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): DoorLockCCConfigurationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(

@@ -769,8 +769,8 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 	}
 
 	public static from(
-		raw: CCRaw,
-		ctx: CCParsingContext,
+		_raw: CCRaw,
+		_ctx: CCParsingContext,
 	): EntryControlCCConfigurationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
