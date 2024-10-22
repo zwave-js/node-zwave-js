@@ -58,7 +58,7 @@ export interface ApplicationUpdateRequestOptions {
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
 	public constructor(
-		options: ApplicationUpdateRequestOptions & MessageBaseOptions,
+		options: ApplicationUpdateRequestOptions & MessageBaseOptions = {},
 	) {
 		super(options);
 

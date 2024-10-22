@@ -89,9 +89,9 @@ export function parseTXReport(
 	payload: Buffer,
 ): TXReport | undefined {
 	if (payload.length < 17) return;
+	const numRepeaters = payload[2];
 	const ret: TXReport = {
 		txTicks: payload.readUInt16BE(0),
-		numRepeaters: payload[2],
 		ackRSSI: includeACK ? parseRSSI(payload, 3) : undefined,
 		ackRepeaterRSSI: includeACK
 			? [
@@ -125,15 +125,14 @@ export function parseTXReport(
 			: undefined,
 	};
 	// Remove unused repeaters from arrays
-	const firstMissingRepeater = ret.repeaterNodeIds.indexOf(0);
 	ret.repeaterNodeIds = ret.repeaterNodeIds.slice(
 		0,
-		firstMissingRepeater,
+		numRepeaters,
 	) as any;
 	if (ret.ackRepeaterRSSI) {
 		ret.ackRepeaterRSSI = ret.ackRepeaterRSSI.slice(
 			0,
-			firstMissingRepeater,
+			numRepeaters,
 		) as any;
 	}
 

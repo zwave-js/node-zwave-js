@@ -130,6 +130,8 @@ export class MockController {
 		};
 		this.parsingContext = {
 			...this.encodingContext,
+			// FIXME: Take from the controller capabilities
+			sdkVersion: undefined,
 		};
 
 		void this.execute();
@@ -228,11 +230,10 @@ export class MockController {
 
 		let msg: Message;
 		try {
-			msg = Message.from({
-				data,
+			msg = Message.parse(data, {
+				...this.parsingContext,
 				origin: MessageOrigin.Host,
-				parseCCs: false,
-				ctx: this.parsingContext,
+				// FIXME: parseCCs: false should be used everywhere
 			});
 			this._receivedHostMessages.push(msg);
 			if (this.autoAckHostMessages) {

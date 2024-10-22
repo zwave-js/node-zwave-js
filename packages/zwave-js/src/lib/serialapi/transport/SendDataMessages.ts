@@ -22,7 +22,6 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
 	MessageOrigin,
 	type MessageParsingContext,
 	type MessageRaw,
@@ -48,21 +47,15 @@ export const MAX_SEND_ATTEMPTS = 5;
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (gotDeserializationOptions(options)) {
-			if (
-				options.origin === MessageOrigin.Host
-				&& (new.target as any) !== SendDataRequest
-			) {
-				return new SendDataRequest(options);
-			} else if (
-				options.origin !== MessageOrigin.Host
-				&& (new.target as any) !== SendDataRequestTransmitReport
-			) {
-				return new SendDataRequestTransmitReport(options);
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataRequestBase {
+		if (ctx.origin === MessageOrigin.Host) {
+			return SendDataRequest.from(raw, ctx);
+		} else {
+			return SendDataRequestTransmitReport.from(raw, ctx);
 		}
-		super(options);
 	}
 }
 
@@ -81,56 +74,67 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	implements ICommandClassContainer
 {
 	public constructor(
-		options: MessageDeserializationOptions | SendDataRequestOptions<CCType>,
+		options: SendDataRequestOptions<CCType> & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			let offset = 0;
-			const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
-				this.payload,
-				options.ctx.nodeIdType,
-				offset,
+		if (
+			!options.command.isSinglecast()
+			&& !options.command.isBroadcast()
+		) {
+			throw new ZWaveError(
+				`SendDataRequest can only be used for singlecast and broadcast CCs`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-			offset += nodeIdBytes;
-			this._nodeId = nodeId;
-
-			const serializedCCLength = this.payload[offset++];
-			this.transmitOptions = this.payload[offset + serializedCCLength];
-			this.callbackId = this.payload[offset + 1 + serializedCCLength];
-			this.payload = this.payload.subarray(
-				offset,
-				offset + serializedCCLength,
-			);
-
-			if (options.parseCCs !== false) {
-				this.command = CommandClass.parse(this.payload, {
-					sourceNodeId: nodeId,
-					...options.ctx,
-				}) as SinglecastCC<CCType>;
-			} else {
-				// Little hack for testing with a network mock. This will be parsed in the next step.
-				this.command = undefined as any;
-			}
-		} else {
-			if (
-				!options.command.isSinglecast()
-				&& !options.command.isBroadcast()
-			) {
-				throw new ZWaveError(
-					`SendDataRequest can only be used for singlecast and broadcast CCs`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.command = options.command;
-			this._nodeId = this.command.nodeId;
-			this.transmitOptions = options.transmitOptions
-				?? TransmitOptions.DEFAULT;
-			if (options.maxSendAttempts != undefined) {
-				this.maxSendAttempts = options.maxSendAttempts;
-			}
 		}
+
+		this.command = options.command;
+		this._nodeId = this.command.nodeId;
+		this.transmitOptions = options.transmitOptions
+			?? TransmitOptions.DEFAULT;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataRequest {
+		let offset = 0;
+		const { nodeId, bytesRead: nodeIdBytes } = parseNodeID(
+			raw.payload,
+			ctx.nodeIdType,
+			offset,
+		);
+		offset += nodeIdBytes;
+		const serializedCCLength = raw.payload[offset++];
+		const transmitOptions: TransmitOptions =
+			raw.payload[offset + serializedCCLength];
+		const callbackId = raw.payload[offset + 1 + serializedCCLength];
+
+		const ccPayload = raw.payload.subarray(
+			offset,
+			offset + serializedCCLength,
+		);
+
+		let command: SinglecastCC<CCType>;
+
+		if (options.parseCCs !== false) {
+			command = CommandClass.parse(ccPayload, {
+				sourceNodeId: nodeId,
+				...ctx,
+			}) as SinglecastCC<CCType>;
+		} else {
+			// Little hack for testing with a network mock. This will be parsed in the next step.
+			command = undefined as any;
+		}
+
+		return new SendDataRequest({
+			transmitOptions,
+			callbackId,
+			command,
+		});
 	}
 
 	/** The command this message contains */
@@ -230,7 +234,7 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendDataRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
@@ -306,7 +310,7 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendDataResponse {
 		const wasSent = raw.payload[0] !== 0;
 
@@ -337,23 +341,15 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticast)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (gotDeserializationOptions(options)) {
-			if (
-				options.origin === MessageOrigin.Host
-				&& (new.target as any) !== SendDataMulticastRequest
-			) {
-				return new SendDataMulticastRequest(options);
-			} else if (
-				options.origin !== MessageOrigin.Host
-				&& (new.target as any)
-					!== SendDataMulticastRequestTransmitReport
-			) {
-				return new SendDataMulticastRequestTransmitReport(options);
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastRequestBase {
+		if (ctx.origin === MessageOrigin.Host) {
+			return SendDataMulticastRequest.from(raw, ctx);
+		} else {
+			return SendDataMulticastRequestTransmitReport.from(raw, ctx);
 		}
-
-		super(options);
 	}
 }
 
@@ -369,76 +365,83 @@ export class SendDataMulticastRequest<
 	CCType extends CommandClass = CommandClass,
 > extends SendDataMulticastRequestBase implements ICommandClassContainer {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| SendDataMulticastRequestOptions<CCType>,
+		options: SendDataMulticastRequestOptions<CCType> & MessageBaseOptions,
 	) {
 		super(options);
 
-		if (gotDeserializationOptions(options)) {
-			const numNodeIDs = this.payload[0];
-			let offset = 1;
-			const nodeIds: number[] = [];
-			for (let i = 0; i < numNodeIDs; i++) {
-				const { nodeId, bytesRead } = parseNodeID(
-					this.payload,
-					options.ctx.nodeIdType,
-					offset,
-				);
-				nodeIds.push(nodeId);
-				offset += bytesRead;
-			}
-			this._nodeIds = nodeIds as MulticastDestination;
-
-			const serializedCCLength = this.payload[offset];
-			offset++;
-			const serializedCC = this.payload.subarray(
-				offset,
-				offset + serializedCCLength,
+		if (!options.command.isMulticast()) {
+			throw new ZWaveError(
+				`SendDataMulticastRequest can only be used for multicast CCs`,
+				ZWaveErrorCodes.Argument_Invalid,
 			);
-			offset += serializedCCLength;
-			this.transmitOptions = this.payload[offset];
-			offset++;
-			this.callbackId = this.payload[offset];
-
-			this.payload = serializedCC;
-
-			if (options.parseCCs !== false) {
-				this.command = CommandClass.parse(this.payload, {
-					sourceNodeId: NODE_ID_BROADCAST, // FIXME: Unknown?
-					...options.ctx,
-				}) as MulticastCC<CCType>;
-			} else {
-				// Little hack for testing with a network mock. This will be parsed in the next step.
-				this.command = undefined as any;
-			}
-		} else {
-			if (!options.command.isMulticast()) {
-				throw new ZWaveError(
-					`SendDataMulticastRequest can only be used for multicast CCs`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			} else if (options.command.nodeId.length === 0) {
-				throw new ZWaveError(
-					`At least one node must be targeted`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			} else if (
-				options.command.nodeId.some((n) => n < 1 || n > MAX_NODES)
-			) {
-				throw new ZWaveError(
-					`All node IDs must be between 1 and ${MAX_NODES}!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.command = options.command;
-			this.transmitOptions = options.transmitOptions
-				?? TransmitOptions.DEFAULT;
-			if (options.maxSendAttempts != undefined) {
-				this.maxSendAttempts = options.maxSendAttempts;
-			}
+		} else if (options.command.nodeId.length === 0) {
+			throw new ZWaveError(
+				`At least one node must be targeted`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			options.command.nodeId.some((n) => n < 1 || n > MAX_NODES)
+		) {
+			throw new ZWaveError(
+				`All node IDs must be between 1 and ${MAX_NODES}!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
+
+		this.command = options.command;
+		this.nodeIds = this.command.nodeId;
+		this.transmitOptions = options.transmitOptions
+			?? TransmitOptions.DEFAULT;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastRequest {
+		const numNodeIDs = raw.payload[0];
+		let offset = 1;
+		const nodeIds: number[] = [];
+		for (let i = 0; i < numNodeIDs; i++) {
+			const { nodeId, bytesRead } = parseNodeID(
+				raw.payload,
+				ctx.nodeIdType,
+				offset,
+			);
+			nodeIds.push(nodeId);
+			offset += bytesRead;
+		}
+		const serializedCCLength = raw.payload[offset];
+		offset++;
+		const serializedCC = raw.payload.subarray(
+			offset,
+			offset + serializedCCLength,
+		);
+		offset += serializedCCLength;
+		const transmitOptions: TransmitOptions = raw.payload[offset];
+
+		offset++;
+		const callbackId: any = raw.payload[offset];
+
+		let command: MulticastCC<CCType>;
+		if (options.parseCCs !== false) {
+			command = CommandClass.parse(serializedCC, {
+				sourceNodeId: NODE_ID_BROADCAST, // FIXME: Unknown?
+				...ctx,
+			}) as MulticastCC<CCType>;
+			command.nodeId = nodeIds;
+		} else {
+			// Little hack for testing with a network mock. This will be parsed in the next step.
+			command = undefined as any;
+		}
+
+		return new SendDataMulticastRequest({
+			transmitOptions,
+			callbackId,
+			command,
+		});
 	}
 
 	/** The command this message contains */
@@ -455,7 +458,7 @@ export class SendDataMulticastRequest<
 		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
 	}
 
-	private _nodeIds: MulticastDestination | undefined;
+	public nodeIds: MulticastDestination;
 	public override getNodeId(): number | undefined {
 		// This is multicast, getNodeId must return undefined here
 		return undefined;
@@ -529,7 +532,7 @@ export class SendDataMulticastRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendDataMulticastRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
@@ -583,7 +586,7 @@ export class SendDataMulticastResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendDataMulticastResponse {
 		const wasSent = raw.payload[0] !== 0;
 

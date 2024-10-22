@@ -62,48 +62,57 @@ async function main() {
 			if (ctorParams.length !== 1) return;
 			const ctorParam = ctorParams[0];
 
+			if (cls.getName()!.startsWith("SendDataMulticastRequest")) debugger;
+
 			// with a union type where one is MessageDeserializationOptions
 			const types = ctorParam.getDescendantsOfKind(
 				SyntaxKind.TypeReference,
-			);
+			).map((t) => t.getText());
 			let otherType: string | undefined;
 			if (
 				types.length === 1
-				&& types[0].getText() === "MessageDeserializationOptions"
+				&& types[0] === "MessageDeserializationOptions"
 			) {
 				// No other type, need to implement the constructor too
 				// There is also no if statement
 				return [cls.getName(), ctor, undefined, undefined] as const;
 			} else if (
 				types.length === 1
-				&& types[0].getText() === "MessageOptions"
+				&& types[0] === "MessageOptions"
 			) {
 				// Actually MessageBaseOptions | MessageDeserializationOptions
 				otherType = "MessageBaseOptions";
 			} else if (
 				types.length === 2
-				&& types.some((type) =>
-					type.getText() === "MessageDeserializationOptions"
-				)
+				&& types.includes("MessageDeserializationOptions")
 			) {
 				// ABCOptions | MessageDeserializationOptions
 				otherType = types.find(
-					(type) =>
-						type.getText() !== "MessageDeserializationOptions",
-				)?.getText();
+					(type) => type !== "MessageDeserializationOptions",
+				);
 			} else if (
 				types.length === 3
-				&& types.some((type) =>
-					type.getText() === "MessageDeserializationOptions"
+				&& types.includes("MessageDeserializationOptions")
+				&& types.some((generic) =>
+					types.some((type) => type.includes(`<${generic}>`))
 				)
-				&& types.some((type) => type.getText() === "MessageBaseOptions")
+			) {
+				// ABCOptions<Foo> | MessageDeserializationOptions
+				otherType = types.find(
+					(type) =>
+						types.some((other) => type.includes(`<${other}>`)),
+				);
+			} else if (
+				types.length === 3
+				&& types.includes("MessageDeserializationOptions")
+				&& types.includes("MessageBaseOptions")
 			) {
 				// (ABCOptions & MessageBaseOptions) | MessageDeserializationOptions
 				otherType = types.find(
 					(type) =>
-						type.getText() !== "MessageDeserializationOptions"
-						&& type.getText() !== "MessageBaseOptions",
-				)?.getText();
+						type !== "MessageDeserializationOptions"
+						&& type !== "MessageBaseOptions",
+				);
 			} else {
 				return;
 			}

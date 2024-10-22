@@ -684,6 +684,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 			get securityManagerLR() {
 				return self.securityManagerLR;
 			},
+			get sdkVersion() {
+				return self._controller?.sdkVersion;
+			},
 		};
 		this.messageEncodingContext = {
 			getHighestSecurityClass: (nodeId) =>
@@ -3517,11 +3520,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks>
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.from({
-				data,
-				sdkVersion: this._controller?.sdkVersion,
-				ctx: this.getCCParsingContext(),
-			}, this._requestContext);
+			msg = Message.parse(data, this.getCCParsingContext());
+			// FIXME: Parse CCs in the next step
+			// FIXME: What to do about _requestContext?
+			// msg = Message.from({
+			// 	data,
+			// 	sdkVersion: this._controller?.sdkVersion,
+			// 	ctx: this.getCCParsingContext(),
+			// }, this._requestContext);
 			if (isCommandClassContainer(msg)) {
 				// Whether successful or not, a message from a node should update last seen
 				const node = this.tryGetNode(msg);

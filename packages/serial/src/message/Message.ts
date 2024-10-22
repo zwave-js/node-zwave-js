@@ -42,6 +42,8 @@ export interface MessageParsingContext
 
 	sdkVersion: string | undefined;
 
+	origin?: MessageOrigin;
+
 	getHighestSecurityClass(nodeId: number): MaybeNotKnown<SecurityClass>;
 
 	hasSecurityClass(
@@ -198,7 +200,7 @@ export class MessageRaw {
  */
 export class Message {
 	public constructor(
-		options: MessageCreationOptions,
+		options: MessageCreationOptions = {},
 	) {
 		const {
 			// Try to determine the message type if none is given
