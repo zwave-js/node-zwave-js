@@ -17,7 +17,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -29,14 +28,11 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @priority(MessagePriority.Normal)
 export class DeleteReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== DeleteReturnRouteRequestTransmitReport
-		) {
-			return new DeleteReturnRouteRequestTransmitReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): DeleteReturnRouteRequestBase {
+		return DeleteReturnRouteRequestTransmitReport.from(raw, ctx);
 	}
 }
 
@@ -57,15 +53,15 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): DeleteReturnRouteRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new DeleteReturnRouteRequest({});
+		// return new DeleteReturnRouteRequest({});
 	}
 
 	public nodeId: number;
@@ -98,7 +94,7 @@ export class DeleteReturnRouteResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): DeleteReturnRouteResponse {
 		const hasStarted = raw.payload[0] !== 0;
 
@@ -143,7 +139,7 @@ export class DeleteReturnRouteRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): DeleteReturnRouteRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];

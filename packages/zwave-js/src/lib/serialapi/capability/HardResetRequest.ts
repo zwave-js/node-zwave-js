@@ -4,7 +4,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageEncodingContext,
-	type MessageOptions,
 	MessageOrigin,
 	type MessageParsingContext,
 	type MessageRaw,
@@ -17,21 +16,15 @@ import {
 @messageTypes(MessageType.Request, FunctionType.HardReset)
 @priority(MessagePriority.Controller)
 export class HardResetRequestBase extends Message {
-	public constructor(options?: MessageOptions) {
-		if (gotDeserializationOptions(options)) {
-			if (
-				options.origin === MessageOrigin.Host
-				&& (new.target as any) !== HardResetRequest
-			) {
-				return new HardResetRequest(options);
-			} else if (
-				options.origin !== MessageOrigin.Host
-				&& (new.target as any) !== HardResetCallback
-			) {
-				return new HardResetCallback(options);
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): HardResetRequestBase {
+		if (ctx.origin === MessageOrigin.Host) {
+			return HardResetRequest.from(raw, ctx);
+		} else {
+			return HardResetCallback.from(raw, ctx);
 		}
-		super(options);
 	}
 }
 
@@ -54,18 +47,9 @@ export class HardResetRequest extends HardResetRequestBase {
 }
 
 export class HardResetCallback extends HardResetRequestBase {
-	public constructor(
-		options: MessageBaseOptions,
-	) {
-		super(options);
-
-		// TODO: Check implementation:
-		this.callbackId = options.callbackId;
-	}
-
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): HardResetCallback {
 		const callbackId = raw.payload[0];
 

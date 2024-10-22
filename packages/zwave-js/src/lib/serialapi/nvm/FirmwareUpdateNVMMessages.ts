@@ -73,7 +73,7 @@ export interface FirmwareUpdateNVMRequestOptions {
 @expectedResponse(testResponseForFirmwareUpdateNVMRequest)
 export class FirmwareUpdateNVMRequest extends Message {
 	public constructor(
-		options: FirmwareUpdateNVMRequestOptions & MessageBaseOptions,
+		options: FirmwareUpdateNVMRequestOptions & MessageBaseOptions = {},
 	) {
 		super(options);
 		this.command = options.command ?? getSubCommandForRequest(this)!;

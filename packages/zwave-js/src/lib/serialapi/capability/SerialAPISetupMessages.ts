@@ -91,7 +91,7 @@ export interface SerialAPISetupRequestOptions {
 @expectedResponse(testResponseForSerialAPISetupRequest)
 export class SerialAPISetupRequest extends Message {
 	public constructor(
-		options: SerialAPISetupRequestOptions & MessageBaseOptions,
+		options: SerialAPISetupRequestOptions & MessageBaseOptions = {},
 	) {
 		super(options);
 		this.command = options.command ?? getSubCommandForRequest(this)!;

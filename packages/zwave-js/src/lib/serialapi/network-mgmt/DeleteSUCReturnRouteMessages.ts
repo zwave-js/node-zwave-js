@@ -15,7 +15,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageOrigin,
 	MessageType,
 	expectedCallback,
@@ -28,23 +27,15 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class DeleteSUCReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (gotDeserializationOptions(options)) {
-			if (
-				options.origin === MessageOrigin.Host
-				&& (new.target as any) !== DeleteSUCReturnRouteRequest
-			) {
-				return new DeleteSUCReturnRouteRequest(options);
-			} else if (
-				options.origin !== MessageOrigin.Host
-				&& (new.target as any)
-					!== DeleteSUCReturnRouteRequestTransmitReport
-			) {
-				return new DeleteSUCReturnRouteRequestTransmitReport(options);
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): DeleteSUCReturnRouteRequestBase {
+		if (ctx.origin === MessageOrigin.Host) {
+			return DeleteSUCReturnRouteRequest.from(raw, ctx);
+		} else {
+			return DeleteSUCReturnRouteRequestTransmitReport.from(raw, ctx);
 		}
-
-		super(options);
 	}
 }
 
@@ -80,7 +71,7 @@ export class DeleteSUCReturnRouteRequest extends DeleteSUCReturnRouteRequestBase
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): DeleteSUCReturnRouteRequest {
 		const nodeId = raw.payload[0];
 		const callbackId = raw.payload[1];
@@ -120,7 +111,7 @@ export class DeleteSUCReturnRouteResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): DeleteSUCReturnRouteResponse {
 		const wasExecuted = raw.payload[0] !== 0;
 
@@ -169,7 +160,7 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): DeleteSUCReturnRouteRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];

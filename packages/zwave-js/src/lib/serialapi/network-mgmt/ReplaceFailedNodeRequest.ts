@@ -9,7 +9,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageType,
 	expectedResponse,
 	messageTypes,
@@ -46,14 +45,11 @@ export enum ReplaceFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.ReplaceFailedNode)
 @priority(MessagePriority.Controller)
 export class ReplaceFailedNodeRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== ReplaceFailedNodeRequestStatusReport
-		) {
-			return new ReplaceFailedNodeRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): ReplaceFailedNodeRequestBase {
+		return ReplaceFailedNodeRequestStatusReport.from(raw, ctx);
 	}
 }
 
@@ -102,7 +98,7 @@ export class ReplaceFailedNodeResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): ReplaceFailedNodeResponse {
 		const replaceStatus: ReplaceFailedNodeStartFlags = raw.payload[0];
 
@@ -140,7 +136,7 @@ export class ReplaceFailedNodeRequestStatusReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): ReplaceFailedNodeRequestStatusReport {
 		const callbackId = raw.payload[0];
 		const replaceStatus: ReplaceFailedNodeStatus = raw.payload[1];

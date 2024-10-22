@@ -16,7 +16,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -40,14 +39,11 @@ export interface SetSUCNodeIdRequestOptions {
 @messageTypes(MessageType.Request, FunctionType.SetSUCNodeId)
 @priority(MessagePriority.Controller)
 export class SetSUCNodeIdRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== SetSUCNodeIdRequestStatusReport
-		) {
-			return new SetSUCNodeIdRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SetSUCNodeIdRequestBase {
+		return SetSUCNodeIdRequestStatusReport.from(raw, ctx);
 	}
 }
 
@@ -67,8 +63,8 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): SetSUCNodeIdRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
@@ -124,7 +120,7 @@ export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SetSUCNodeIdResponse {
 		const wasExecuted = raw.payload[0] !== 0;
 
@@ -166,7 +162,7 @@ export class SetSUCNodeIdRequestStatusReport extends SetSUCNodeIdRequestBase
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SetSUCNodeIdRequestStatusReport {
 		const callbackId = raw.payload[0];
 		const status: SetSUCNodeIdStatus = raw.payload[1];

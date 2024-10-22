@@ -10,7 +10,6 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
 	MessageOrigin,
 	type MessageParsingContext,
 	type MessageRaw,
@@ -26,23 +25,15 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.AssignSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignSUCReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (gotDeserializationOptions(options)) {
-			if (
-				options.origin === MessageOrigin.Host
-				&& (new.target as any) !== AssignSUCReturnRouteRequest
-			) {
-				return new AssignSUCReturnRouteRequest(options);
-			} else if (
-				options.origin !== MessageOrigin.Host
-				&& (new.target as any)
-					!== AssignSUCReturnRouteRequestTransmitReport
-			) {
-				return new AssignSUCReturnRouteRequestTransmitReport(options);
-			}
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignSUCReturnRouteRequestBase {
+		if (ctx.origin === MessageOrigin.Host) {
+			return AssignSUCReturnRouteRequest.from(raw, ctx);
+		} else {
+			return AssignSUCReturnRouteRequestTransmitReport.from(raw, ctx);
 		}
-
-		super(options);
 	}
 }
 
@@ -78,7 +69,7 @@ export class AssignSUCReturnRouteRequest extends AssignSUCReturnRouteRequestBase
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignSUCReturnRouteRequest {
 		const nodeId = raw.payload[0];
 		const callbackId = raw.payload[1];
@@ -118,7 +109,7 @@ export class AssignSUCReturnRouteResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignSUCReturnRouteResponse {
 		const wasExecuted = raw.payload[0] !== 0;
 
@@ -167,7 +158,7 @@ export class AssignSUCReturnRouteRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignSUCReturnRouteRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];

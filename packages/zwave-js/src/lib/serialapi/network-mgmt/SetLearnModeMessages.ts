@@ -10,7 +10,6 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
@@ -47,14 +46,11 @@ export enum LearnModeStatus {
 @messageTypes(MessageType.Request, FunctionType.SetLearnMode)
 @priority(MessagePriority.Controller)
 export class SetLearnModeRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== SetLearnModeCallback
-		) {
-			return new SetLearnModeCallback(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SetLearnModeRequestBase {
+		return SetLearnModeCallback.from(raw, ctx);
 	}
 }
 
@@ -73,8 +69,8 @@ export class SetLearnModeRequest extends SetLearnModeRequestBase {
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): SetLearnModeRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
@@ -124,7 +120,7 @@ export class SetLearnModeResponse extends Message implements SuccessIndicator {
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SetLearnModeResponse {
 		const success = raw.payload[0] !== 0;
 
@@ -170,7 +166,7 @@ export class SetLearnModeCallback extends SetLearnModeRequestBase
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SetLearnModeCallback {
 		const callbackId = raw.payload[0];
 		const status: LearnModeStatus = raw.payload[1];

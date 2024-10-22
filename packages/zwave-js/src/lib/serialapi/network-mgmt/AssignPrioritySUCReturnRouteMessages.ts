@@ -14,7 +14,6 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
@@ -29,17 +28,11 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.AssignPrioritySUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignPrioritySUCReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any)
-				!== AssignPrioritySUCReturnRouteRequestTransmitReport
-		) {
-			return new AssignPrioritySUCReturnRouteRequestTransmitReport(
-				options,
-			);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignPrioritySUCReturnRouteRequestBase {
+		return AssignPrioritySUCReturnRouteRequestTransmitReport.from(raw, ctx);
 	}
 }
 
@@ -76,15 +69,15 @@ export class AssignPrioritySUCReturnRouteRequest
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): AssignPrioritySUCReturnRouteRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new AssignPrioritySUCReturnRouteRequest({});
+		// return new AssignPrioritySUCReturnRouteRequest({});
 	}
 
 	public nodeId: number;
@@ -148,7 +141,7 @@ export class AssignPrioritySUCReturnRouteResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignPrioritySUCReturnRouteResponse {
 		const hasStarted = raw.payload[0] !== 0;
 
@@ -193,7 +186,7 @@ export class AssignPrioritySUCReturnRouteRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignPrioritySUCReturnRouteRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];

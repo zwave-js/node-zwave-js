@@ -14,7 +14,6 @@ import {
 	Message,
 	type MessageBaseOptions,
 	type MessageEncodingContext,
-	type MessageOptions,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
@@ -29,15 +28,11 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.AssignPriorityReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignPriorityReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any)
-				!== AssignPriorityReturnRouteRequestTransmitReport
-		) {
-			return new AssignPriorityReturnRouteRequestTransmitReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignPriorityReturnRouteRequestBase {
+		return AssignPriorityReturnRouteRequestTransmitReport.from(raw, ctx);
 	}
 }
 
@@ -80,8 +75,8 @@ export class AssignPriorityReturnRouteRequest
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): AssignPriorityReturnRouteRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
@@ -157,7 +152,7 @@ export class AssignPriorityReturnRouteResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignPriorityReturnRouteResponse {
 		const hasStarted = raw.payload[0] !== 0;
 
@@ -201,7 +196,7 @@ export class AssignPriorityReturnRouteRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignPriorityReturnRouteRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];

@@ -22,7 +22,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	messageTypes,
@@ -94,14 +93,11 @@ export function computeNeighborDiscoveryTimeout(
 // no expected response, the controller will respond with multiple AddNodeToNetworkRequests
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== AddNodeToNetworkRequestStatusReport
-		) {
-			return new AddNodeToNetworkRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AddNodeToNetworkRequestBase {
+		return AddNodeToNetworkRequestStatusReport.from(raw, ctx);
 	}
 }
 

@@ -17,7 +17,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -29,14 +28,11 @@ import { getEnumMemberName } from "@zwave-js/shared";
 @messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignReturnRouteRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== AssignReturnRouteRequestTransmitReport
-		) {
-			return new AssignReturnRouteRequestTransmitReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): AssignReturnRouteRequestBase {
+		return AssignReturnRouteRequestTransmitReport.from(raw, ctx);
 	}
 }
 
@@ -65,15 +61,15 @@ export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
 	}
 
 	public static from(
-		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_raw: MessageRaw,
+		_ctx: MessageParsingContext,
 	): AssignReturnRouteRequest {
 		throw new ZWaveError(
 			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
-		return new AssignReturnRouteRequest({});
+		// return new AssignReturnRouteRequest({});
 	}
 
 	public nodeId: number;
@@ -116,7 +112,7 @@ export class AssignReturnRouteResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignReturnRouteResponse {
 		const hasStarted = raw.payload[0] !== 0;
 
@@ -161,7 +157,7 @@ export class AssignReturnRouteRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): AssignReturnRouteRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];

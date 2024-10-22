@@ -66,7 +66,7 @@ export class NVMOperationsRequest extends Message {
 // =============================================================================
 
 export class NVMOperationsOpenRequest extends NVMOperationsRequest {
-	public constructor(options: MessageBaseOptions) {
+	public constructor(options: MessageBaseOptions = {}) {
 		super(options);
 		this.command = NVMOperationsCommand.Open;
 	}
@@ -75,7 +75,7 @@ export class NVMOperationsOpenRequest extends NVMOperationsRequest {
 // =============================================================================
 
 export class NVMOperationsCloseRequest extends NVMOperationsRequest {
-	public constructor(options: MessageBaseOptions) {
+	public constructor(options: MessageBaseOptions = {}) {
 		super(options);
 		this.command = NVMOperationsCommand.Close;
 	}

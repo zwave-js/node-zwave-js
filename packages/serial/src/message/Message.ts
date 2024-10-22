@@ -71,15 +71,6 @@ export interface MessageDeserializationOptions {
 	ctx: MessageParsingContext;
 }
 
-/**
- * Tests whether the given message constructor options contain a buffer for deserialization
- */
-export function gotDeserializationOptions(
-	options: Record<any, any> | undefined,
-): options is MessageDeserializationOptions {
-	return options != undefined && Buffer.isBuffer(options.data);
-}
-
 export interface MessageBaseOptions {
 	callbackId?: number;
 }

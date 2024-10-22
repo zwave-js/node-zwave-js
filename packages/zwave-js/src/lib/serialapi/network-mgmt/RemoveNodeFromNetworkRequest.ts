@@ -13,7 +13,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	messageTypes,
@@ -53,14 +52,11 @@ export interface RemoveNodeFromNetworkRequestOptions {
 // no expected response, the controller will respond with multiple RemoveNodeFromNetworkRequests
 @priority(MessagePriority.Controller)
 export class RemoveNodeFromNetworkRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== RemoveNodeFromNetworkRequestStatusReport
-		) {
-			return new RemoveNodeFromNetworkRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): RemoveNodeFromNetworkRequestBase {
+		return RemoveNodeFromNetworkRequestStatusReport.from(raw, ctx);
 	}
 }
 

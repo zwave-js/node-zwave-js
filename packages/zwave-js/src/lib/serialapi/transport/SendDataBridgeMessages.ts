@@ -23,7 +23,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -40,14 +39,11 @@ import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
 export class SendDataBridgeRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== SendDataBridgeRequestTransmitReport
-		) {
-			return new SendDataBridgeRequestTransmitReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataBridgeRequestBase {
+		return SendDataBridgeRequestTransmitReport.from(raw, ctx);
 	}
 }
 
@@ -200,7 +196,7 @@ export class SendDataBridgeRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendDataBridgeRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
@@ -262,7 +258,7 @@ export class SendDataBridgeResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendDataBridgeResponse {
 		const wasSent = raw.payload[0] !== 0;
 
@@ -288,15 +284,11 @@ export class SendDataBridgeResponse extends Message
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticastBridge)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastBridgeRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any)
-				!== SendDataMulticastBridgeRequestTransmitReport
-		) {
-			return new SendDataMulticastBridgeRequestTransmitReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): SendDataMulticastBridgeRequestBase {
+		return SendDataMulticastBridgeRequestTransmitReport.from(raw, ctx);
 	}
 }
 
@@ -444,7 +436,7 @@ export class SendDataMulticastBridgeRequestTransmitReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendDataMulticastBridgeRequestTransmitReport {
 		const callbackId = raw.payload[0];
 		const transmitStatus: TransmitStatus = raw.payload[1];
@@ -494,7 +486,7 @@ export class SendDataMulticastBridgeResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): SendDataMulticastBridgeResponse {
 		const wasSent = raw.payload[0] !== 0;
 

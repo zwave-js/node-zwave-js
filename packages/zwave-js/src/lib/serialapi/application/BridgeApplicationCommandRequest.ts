@@ -16,6 +16,7 @@ import {
 import {
 	FunctionType,
 	Message,
+	type MessageBaseOptions,
 	type MessageParsingContext,
 	type MessageRaw,
 	MessageType,
@@ -48,7 +49,6 @@ export class BridgeApplicationCommandRequest extends Message
 	) {
 		super(options);
 
-		// TODO: Check implementation:
 		this.routedBusy = options.routedBusy;
 		this.frameType = options.frameType;
 		this.isExploreFrame = options.isExploreFrame;

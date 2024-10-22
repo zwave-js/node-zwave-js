@@ -9,7 +9,6 @@ import {
 	FunctionType,
 	Message,
 	type MessageBaseOptions,
-	type MessageOptions,
 	MessageType,
 	expectedCallback,
 	expectedResponse,
@@ -46,14 +45,11 @@ export enum RemoveFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.RemoveFailedNode)
 @priority(MessagePriority.Controller)
 export class RemoveFailedNodeRequestBase extends Message {
-	public constructor(options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options)
-			&& (new.target as any) !== RemoveFailedNodeRequestStatusReport
-		) {
-			return new RemoveFailedNodeRequestStatusReport(options);
-		}
-		super(options);
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): RemoveFailedNodeRequestBase {
+		return RemoveFailedNodeRequestStatusReport.from(raw, ctx);
 	}
 }
 
@@ -106,7 +102,7 @@ export class RemoveFailedNodeRequestStatusReport
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): RemoveFailedNodeRequestStatusReport {
 		const callbackId = raw.payload[0];
 		const removeStatus: RemoveFailedNodeStatus = raw.payload[1];
@@ -143,7 +139,7 @@ export class RemoveFailedNodeResponse extends Message
 
 	public static from(
 		raw: MessageRaw,
-		ctx: MessageParsingContext,
+		_ctx: MessageParsingContext,
 	): RemoveFailedNodeResponse {
 		const removeStatus: RemoveFailedNodeStartFlags = raw.payload[0];
 
