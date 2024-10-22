@@ -56,7 +56,7 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	type CCRaw,
+	CCRaw,
 	CommandClass,
 	type InterviewContext,
 	InvalidCC,
@@ -1353,10 +1353,7 @@ export class NotificationCCReport extends NotificationCC {
 							=== ZWaveErrorCodes.PacketFormat_InvalidPayload
 						&& Buffer.isBuffer(this.eventParameters)
 					) {
-						const ccId = CommandClass.getCommandClass(
-							this.eventParameters,
-						);
-						const ccCommand = CommandClass.getCCCommand(
+						const { ccId, ccCommand } = CCRaw.parse(
 							this.eventParameters,
 						);
 						if (

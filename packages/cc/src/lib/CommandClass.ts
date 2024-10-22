@@ -86,7 +86,6 @@ export interface CommandClassOptions extends CCAddress {
 	ccId?: number; // Used to overwrite the declared CC ID
 	ccCommand?: number; // undefined = NoOp
 	payload?: Buffer;
-	origin?: undefined;
 }
 
 // Defines the necessary traits an endpoint passed to a CC instance must have
@@ -284,8 +283,6 @@ export class CommandClass implements CCId {
 	}
 
 	public static from(raw: CCRaw, ctx: CCParsingContext): CommandClass {
-		// FIXME: Propagate frame type etc.
-		// FIXME: Refactor subclasses' parse() to override this
 		return new this({
 			nodeId: ctx.sourceNodeId,
 			ccId: raw.ccId,
@@ -293,46 +290,6 @@ export class CommandClass implements CCId {
 			payload: raw.payload,
 		});
 	}
-
-	// // For deserialized commands, try to invoke the correct subclass constructor
-	// const CCConstructor =
-	// 	getCCConstructor(CommandClass.getCommandClass(options.data))
-	// 		?? CommandClass;
-	// const ccId = CommandClass.getCommandClass(options.data);
-	// const ccCommand = CCConstructor.getCCCommand(options.data);
-	// if (ccCommand != undefined) {
-	// 	const CommandConstructor = getCCCommandConstructor(
-	// 		ccId,
-	// 		ccCommand,
-	// 	);
-	// 	if (
-	// 		CommandConstructor
-	// 		&& (new.target as any) !== CommandConstructor
-	// 	) {
-	// 		return new CommandConstructor(options);
-	// 	}
-	// }
-
-	// // If the constructor is correct or none was found, fall back to normal deserialization
-	// if (options.fromEncapsulation) {
-	// 	// Propagate the node ID and endpoint index from the encapsulating CC
-	// 	this.nodeId = options.encapCC.nodeId;
-	// 	if (!this.endpointIndex && options.encapCC.endpointIndex) {
-	// 		this.endpointIndex = options.encapCC.endpointIndex;
-	// 	}
-	// 	// And remember which CC encapsulates this CC
-	// 	this.encapsulatingCC = options.encapCC as any;
-	// } else {
-	// 	this.nodeId = options.nodeId;
-	// }
-
-	// this.frameType = options.context.frameType;
-
-	// ({
-	// 	ccId: this.ccId,
-	// 	ccCommand: this.ccCommand,
-	// 	payload: this.payload,
-	// } = this.deserialize(options.data));
 
 	/** This CC's identifier */
 	public ccId!: CommandClasses;
@@ -405,29 +362,6 @@ export class CommandClass implements CCId {
 	}
 
 	/**
-	 * Deserializes a CC from a buffer that contains a serialized CC
-	 */
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	protected deserialize(data: Buffer) {
-		const ccId = CommandClass.getCommandClass(data);
-		const ccIdLength = this.isExtended() ? 2 : 1;
-		if (data.length > ccIdLength) {
-			// This is not a NoOp CC (contains command and payload)
-			const ccCommand = data[ccIdLength];
-			const payload = data.subarray(ccIdLength + 1);
-			return {
-				ccId,
-				ccCommand,
-				payload,
-			};
-		} else {
-			// NoOp CC (no command, no payload)
-			const payload = Buffer.allocUnsafe(0);
-			return { ccId, payload };
-		}
-	}
-
-	/**
 	 * Serializes this CommandClass to be embedded in a message payload or another CC
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -456,93 +390,6 @@ export class CommandClass implements CCId {
 	public prepareRetransmission(): void {
 		// Do nothing by default
 	}
-
-	/** Extracts the CC id from a buffer that contains a serialized CC */
-	public static getCommandClass(data: Buffer): CommandClasses {
-		return parseCCId(data).ccId;
-	}
-
-	/** Extracts the CC command from a buffer that contains a serialized CC  */
-	public static getCCCommand(data: Buffer): number | undefined {
-		if (data[0] === 0) return undefined; // NoOp
-		const isExtendedCC = data[0] >= 0xf1;
-		return isExtendedCC ? data[2] : data[1];
-	}
-
-	/**
-	 * Retrieves the correct constructor for the CommandClass in the given Buffer.
-	 * It is assumed that the buffer only contains the serialized CC. This throws if the CC is not implemented.
-	 */
-	public static getConstructor(ccData: Buffer): CCConstructor<CommandClass> {
-		const cc = CommandClass.getCommandClass(ccData);
-		const ret = getCCConstructor(cc);
-		if (!ret) {
-			const ccName = getCCName(cc);
-			throw new ZWaveError(
-				`The command class ${ccName} is not implemented`,
-				ZWaveErrorCodes.CC_NotImplemented,
-			);
-		}
-		return ret;
-	}
-
-	// /**
-	//  * Creates an instance of the CC that is serialized in the given buffer
-	//  */
-	// public static from(
-	// 	options: CommandClassDeserializationOptions,
-	// ): CommandClass {
-	// 	// Fall back to unspecified command class in case we receive one that is not implemented
-	// 	const ccId = CommandClass.getCommandClass(options.data);
-	// 	const Constructor = getCCConstructor(ccId) ?? CommandClass;
-
-	// 	try {
-	// 		return new Constructor(options);
-	// 	} catch (e) {
-	// 		// Indicate invalid payloads with a special CC type
-	// 		if (
-	// 			isZWaveError(e)
-	// 			&& e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
-	// 		) {
-	// 			const nodeId = options.fromEncapsulation
-	// 				? options.encapCC.nodeId
-	// 				: options.nodeId;
-	// 			let ccName: string | undefined;
-	// 			const ccId = CommandClass.getCommandClass(options.data);
-	// 			const ccCommand = CommandClass.getCCCommand(options.data);
-	// 			if (ccCommand != undefined) {
-	// 				ccName = getCCCommandConstructor(ccId, ccCommand)?.name;
-	// 			}
-	// 			// Fall back to the unspecified CC if the command cannot be determined
-	// 			if (!ccName) {
-	// 				ccName = `${getCCName(ccId)} CC`;
-	// 			}
-	// 			// Preserve why the command was invalid
-	// 			let reason: string | ZWaveErrorCodes | undefined;
-	// 			if (
-	// 				typeof e.context === "string"
-	// 				|| (typeof e.context === "number"
-	// 					&& ZWaveErrorCodes[e.context] != undefined)
-	// 			) {
-	// 				reason = e.context;
-	// 			}
-
-	// 			const ret = new InvalidCC({
-	// 				nodeId,
-	// 				ccId,
-	// 				ccName,
-	// 				reason,
-	// 			});
-
-	// 			if (options.fromEncapsulation) {
-	// 				ret.encapsulatingCC = options.encapCC as any;
-	// 			}
-
-	// 			return ret;
-	// 		}
-	// 		throw e;
-	// 	}
-	// }
 
 	/**
 	 * Create an instance of the given CC without checking whether it is supported.

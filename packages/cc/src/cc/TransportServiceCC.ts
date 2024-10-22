@@ -55,33 +55,6 @@ export class TransportServiceCC extends CommandClass
 {
 	declare ccCommand: TransportServiceCommand;
 	declare nodeId: number;
-
-	// Override the default helper method
-	public static getCCCommand(data: Buffer): number | undefined {
-		const originalCCCommand = super.getCCCommand(data)!;
-		// Transport Service only uses the higher 5 bits for the command
-		return originalCCCommand & 0b11111_000;
-	}
-
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	protected deserialize(data: Buffer) {
-		const ret = super.deserialize(data) as {
-			ccId: CommandClasses;
-			ccCommand: number;
-			payload: Buffer;
-		};
-		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
-		ret.payload = Buffer.concat([
-			Buffer.from([ret.ccCommand & 0b111]),
-			ret.payload,
-		]);
-		return ret;
-	}
-
-	/** Encapsulates a command that should be sent in multiple segments */
-	public static encapsulate(_cc: CommandClass): TransportServiceCC {
-		throw new Error("not implemented");
-	}
 }
 
 // @publicAPI
