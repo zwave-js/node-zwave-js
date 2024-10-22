@@ -95,6 +95,8 @@ function createLazySendDataPayload(
 				__internalIsMockNode: true,
 				...node.encodingContext,
 				...node.securityManagers,
+				// The frame type is always singlecast because the controller sends it to the node
+				frameType: "singlecast",
 			});
 			// Store the command because assertReceivedHostMessage needs it
 			// @ts-expect-error

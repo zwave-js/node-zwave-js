@@ -77,6 +77,7 @@ export class BridgeApplicationCommandRequest extends Message
 			{
 				sourceNodeId,
 				...options.ctx,
+				frameType: this.frameType,
 			},
 		) as SinglecastCC<CommandClass>;
 		offset += commandLength;

@@ -95,6 +95,7 @@ export class ApplicationCommandRequest extends Message
 				{
 					sourceNodeId: nodeId,
 					...options.ctx,
+					frameType: this.frameType,
 				},
 			) as SinglecastCC<CommandClass>;
 		} else {

@@ -436,7 +436,7 @@ export class BasicCCReport extends BasicCC {
 			raw.payload[0] === 0xff
 				? 99
 				: parseMaybeNumber(raw.payload[0]);
-		validatePayload(currentValue != undefined);
+		validatePayload(currentValue !== undefined);
 
 		let targetValue: MaybeUnknown<number> | undefined;
 		let duration: Duration | undefined;
