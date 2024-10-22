@@ -2,8 +2,6 @@ import {
 	type MessageOrCCLogEntry,
 	MessagePriority,
 	type MessageRecord,
-	ZWaveError,
-	ZWaveErrorCodes,
 	createSimpleReflectionDecorator,
 	validatePayload,
 } from "@zwave-js/core";
@@ -11,15 +9,14 @@ import type {
 	DeserializingMessageConstructor,
 	MessageBaseOptions,
 	MessageEncodingContext,
+	MessageParsingContext,
+	MessageRaw,
 } from "@zwave-js/serial";
 import {
 	FunctionType,
 	Message,
-	type MessageDeserializationOptions,
-	type MessageOptions,
 	MessageType,
 	expectedResponse,
-	gotDeserializationOptions,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
@@ -37,7 +34,7 @@ export enum FirmwareUpdateNVMCommand {
 // We need to define the decorators for Requests and Responses separately
 const {
 	decorator: subCommandRequest,
-	// lookupConstructor: getSubCommandRequestConstructor,
+	lookupConstructor: getSubCommandRequestConstructor,
 	lookupValue: getSubCommandForRequest,
 } = createSimpleReflectionDecorator<
 	FirmwareUpdateNVMRequest,
@@ -50,6 +47,7 @@ const {
 const {
 	decorator: subCommandResponse,
 	lookupConstructor: getSubCommandResponseConstructor,
+	lookupValue: getSubCommandForResponse,
 } = createSimpleReflectionDecorator<
 	FirmwareUpdateNVMResponse,
 	[command: FirmwareUpdateNVMCommand],
@@ -66,20 +64,43 @@ function testResponseForFirmwareUpdateNVMRequest(
 	return (sent as FirmwareUpdateNVMRequest).command === received.command;
 }
 
+export interface FirmwareUpdateNVMRequestOptions {
+	command?: FirmwareUpdateNVMCommand;
+}
+
 @messageTypes(MessageType.Request, FunctionType.FirmwareUpdateNVM)
 @priority(MessagePriority.Controller)
 @expectedResponse(testResponseForFirmwareUpdateNVMRequest)
 export class FirmwareUpdateNVMRequest extends Message {
-	public constructor(options: MessageOptions = {}) {
+	public constructor(
+		options: FirmwareUpdateNVMRequestOptions & MessageBaseOptions,
+	) {
 		super(options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+		this.command = options.command ?? getSubCommandForRequest(this)!;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): FirmwareUpdateNVMRequest {
+		const command: FirmwareUpdateNVMCommand = raw.payload[0];
+		const payload = raw.payload.subarray(1);
+
+		const CommandConstructor = getSubCommandRequestConstructor(
+			command,
+		);
+		if (CommandConstructor) {
+			return CommandConstructor.from(
+				raw.withPayload(payload),
+				ctx,
 			);
-		} else {
-			this.command = getSubCommandForRequest(this)!;
 		}
+
+		const ret = new FirmwareUpdateNVMRequest({
+			command,
+		});
+		ret.payload = payload;
+		return ret;
 	}
 
 	public command: FirmwareUpdateNVMCommand;
@@ -107,22 +128,41 @@ export class FirmwareUpdateNVMRequest extends Message {
 	}
 }
 
+export interface FirmwareUpdateNVMResponseOptions {
+	command?: FirmwareUpdateNVMCommand;
+}
+
 @messageTypes(MessageType.Response, FunctionType.FirmwareUpdateNVM)
 export class FirmwareUpdateNVMResponse extends Message {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: FirmwareUpdateNVMResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.command = this.payload[0];
+		this.command = options.command ?? getSubCommandForResponse(this)!;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		ctx: MessageParsingContext,
+	): FirmwareUpdateNVMResponse {
+		const command: FirmwareUpdateNVMCommand = raw.payload[0];
+		const payload = raw.payload.subarray(1);
 
 		const CommandConstructor = getSubCommandResponseConstructor(
-			this.command,
+			command,
 		);
-		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
-			return new CommandConstructor(options);
+		if (CommandConstructor) {
+			return CommandConstructor.from(
+				raw.withPayload(payload),
+				ctx,
+			);
 		}
 
-		this.payload = this.payload.subarray(1);
+		const ret = new FirmwareUpdateNVMResponse({
+			command,
+		});
+		ret.payload = payload;
+		return ret;
 	}
 
 	public command: FirmwareUpdateNVMCommand;
@@ -146,13 +186,29 @@ export class FirmwareUpdateNVMResponse extends Message {
 @subCommandRequest(FirmwareUpdateNVMCommand.Init)
 export class FirmwareUpdateNVM_InitRequest extends FirmwareUpdateNVMRequest {}
 
+export interface FirmwareUpdateNVM_InitResponseOptions {
+	supported: boolean;
+}
+
 @subCommandResponse(FirmwareUpdateNVMCommand.Init)
 export class FirmwareUpdateNVM_InitResponse extends FirmwareUpdateNVMResponse {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: FirmwareUpdateNVM_InitResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.supported = this.payload[0] !== 0;
+
+		this.supported = options.supported;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_InitResponse {
+		const supported = raw.payload[0] !== 0;
+
+		return new FirmwareUpdateNVM_InitResponse({
+			supported,
+		});
 	}
 
 	public readonly supported: boolean;
@@ -168,9 +224,7 @@ export class FirmwareUpdateNVM_InitResponse extends FirmwareUpdateNVMResponse {
 
 // =============================================================================
 
-export interface FirmwareUpdateNVM_SetNewImageRequestOptions
-	extends MessageBaseOptions
-{
+export interface FirmwareUpdateNVM_SetNewImageRequestOptions {
 	newImage: boolean;
 }
 
@@ -180,20 +234,23 @@ export class FirmwareUpdateNVM_SetNewImageRequest
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| FirmwareUpdateNVM_SetNewImageRequestOptions,
+			& FirmwareUpdateNVM_SetNewImageRequestOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		this.command = FirmwareUpdateNVMCommand.SetNewImage;
 
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.newImage = options.newImage;
-		}
+		this.newImage = options.newImage;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_SetNewImageRequest {
+		const newImage: boolean = raw.payload[0] !== 0;
+
+		return new FirmwareUpdateNVM_SetNewImageRequest({
+			newImage,
+		});
 	}
 
 	public newImage: boolean;
@@ -213,15 +270,33 @@ export class FirmwareUpdateNVM_SetNewImageRequest
 	}
 }
 
+export interface FirmwareUpdateNVM_SetNewImageResponseOptions {
+	changed: boolean;
+}
+
 @subCommandResponse(FirmwareUpdateNVMCommand.SetNewImage)
 export class FirmwareUpdateNVM_SetNewImageResponse
 	extends FirmwareUpdateNVMResponse
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& FirmwareUpdateNVM_SetNewImageResponseOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		this.changed = this.payload[0] !== 0;
+
+		this.changed = options.changed;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_SetNewImageResponse {
+		const changed = raw.payload[0] !== 0;
+
+		return new FirmwareUpdateNVM_SetNewImageResponse({
+			changed,
+		});
 	}
 
 	public readonly changed: boolean;
@@ -242,15 +317,33 @@ export class FirmwareUpdateNVM_GetNewImageRequest
 	extends FirmwareUpdateNVMRequest
 {}
 
+export interface FirmwareUpdateNVM_GetNewImageResponseOptions {
+	newImage: boolean;
+}
+
 @subCommandResponse(FirmwareUpdateNVMCommand.GetNewImage)
 export class FirmwareUpdateNVM_GetNewImageResponse
 	extends FirmwareUpdateNVMResponse
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& FirmwareUpdateNVM_GetNewImageResponseOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		this.newImage = this.payload[0] !== 0;
+
+		this.newImage = options.newImage;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_GetNewImageResponse {
+		const newImage: boolean = raw.payload[0] !== 0;
+
+		return new FirmwareUpdateNVM_GetNewImageResponse({
+			newImage,
+		});
 	}
 
 	public readonly newImage: boolean;
@@ -266,9 +359,7 @@ export class FirmwareUpdateNVM_GetNewImageResponse
 
 // =============================================================================
 
-export interface FirmwareUpdateNVM_UpdateCRC16RequestOptions
-	extends MessageBaseOptions
-{
+export interface FirmwareUpdateNVM_UpdateCRC16RequestOptions {
 	crcSeed: number;
 	offset: number;
 	blockLength: number;
@@ -280,22 +371,30 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 {
 	public constructor(
 		options:
-			| MessageDeserializationOptions
-			| FirmwareUpdateNVM_UpdateCRC16RequestOptions,
+			& FirmwareUpdateNVM_UpdateCRC16RequestOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
 		this.command = FirmwareUpdateNVMCommand.UpdateCRC16;
 
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.crcSeed = options.crcSeed;
-			this.offset = options.offset;
-			this.blockLength = options.blockLength;
-		}
+		this.crcSeed = options.crcSeed;
+		this.offset = options.offset;
+		this.blockLength = options.blockLength;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_UpdateCRC16Request {
+		const offset = raw.payload.readUIntBE(0, 3);
+		const blockLength = raw.payload.readUInt16BE(3);
+		const crcSeed = raw.payload.readUInt16BE(5);
+
+		return new FirmwareUpdateNVM_UpdateCRC16Request({
+			crcSeed,
+			offset,
+			blockLength,
+		});
 	}
 
 	public crcSeed: number;
@@ -327,16 +426,34 @@ export class FirmwareUpdateNVM_UpdateCRC16Request
 	}
 }
 
+export interface FirmwareUpdateNVM_UpdateCRC16ResponseOptions {
+	crc16: number;
+}
+
 @subCommandResponse(FirmwareUpdateNVMCommand.UpdateCRC16)
 export class FirmwareUpdateNVM_UpdateCRC16Response
 	extends FirmwareUpdateNVMResponse
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& FirmwareUpdateNVM_UpdateCRC16ResponseOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		validatePayload(this.payload.length >= 2);
-		this.crc16 = this.payload.readUint16BE(0);
+
+		this.crc16 = options.crc16;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_UpdateCRC16Response {
+		validatePayload(raw.payload.length >= 2);
+		const crc16 = raw.payload.readUInt16BE(0);
+
+		return new FirmwareUpdateNVM_UpdateCRC16Response({
+			crc16,
+		});
 	}
 
 	public readonly crc16: number;
@@ -362,16 +479,34 @@ export class FirmwareUpdateNVM_IsValidCRC16Request
 	}
 }
 
+export interface FirmwareUpdateNVM_IsValidCRC16ResponseOptions {
+	isValid: boolean;
+}
+
 @subCommandResponse(FirmwareUpdateNVMCommand.IsValidCRC16)
 export class FirmwareUpdateNVM_IsValidCRC16Response
 	extends FirmwareUpdateNVMResponse
 {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options:
+			& FirmwareUpdateNVM_IsValidCRC16ResponseOptions
+			& MessageBaseOptions,
 	) {
 		super(options);
-		this.isValid = this.payload[0] !== 0;
+
+		this.isValid = options.isValid;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_IsValidCRC16Response {
+		const isValid = raw.payload[0] !== 0;
 		// There are two more bytes containing the CRC result, but we don't care about that
+
+		return new FirmwareUpdateNVM_IsValidCRC16Response({
+			isValid,
+		});
 	}
 
 	public readonly isValid: boolean;
@@ -387,9 +522,7 @@ export class FirmwareUpdateNVM_IsValidCRC16Response
 
 // =============================================================================
 
-export interface FirmwareUpdateNVM_WriteRequestOptions
-	extends MessageBaseOptions
-{
+export interface FirmwareUpdateNVM_WriteRequestOptions {
 	offset: number;
 	buffer: Buffer;
 }
@@ -397,22 +530,26 @@ export interface FirmwareUpdateNVM_WriteRequestOptions
 @subCommandRequest(FirmwareUpdateNVMCommand.Write)
 export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 	public constructor(
-		options:
-			| MessageDeserializationOptions
-			| FirmwareUpdateNVM_WriteRequestOptions,
+		options: FirmwareUpdateNVM_WriteRequestOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.command = FirmwareUpdateNVMCommand.Write;
 
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
-		} else {
-			this.offset = options.offset;
-			this.buffer = options.buffer;
-		}
+		this.offset = options.offset;
+		this.buffer = options.buffer;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_WriteRequest {
+		const offset = raw.payload.readUIntBE(0, 3);
+		const bufferLength = raw.payload.readUInt16BE(3);
+		const buffer = raw.payload.subarray(5, 5 + bufferLength);
+
+		return new FirmwareUpdateNVM_WriteRequest({
+			offset,
+			buffer,
+		});
 	}
 
 	public offset: number;
@@ -420,7 +557,7 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 
 	public serialize(ctx: MessageEncodingContext): Buffer {
 		this.payload = Buffer.concat([Buffer.allocUnsafe(5), this.buffer]);
-		this.payload.writeUintBE(this.offset, 0, 3);
+		this.payload.writeUIntBE(this.offset, 0, 3);
 		this.payload.writeUInt16BE(this.buffer.length, 3);
 
 		return super.serialize(ctx);
@@ -440,13 +577,29 @@ export class FirmwareUpdateNVM_WriteRequest extends FirmwareUpdateNVMRequest {
 	}
 }
 
+export interface FirmwareUpdateNVM_WriteResponseOptions {
+	overwritten: boolean;
+}
+
 @subCommandResponse(FirmwareUpdateNVMCommand.Write)
 export class FirmwareUpdateNVM_WriteResponse extends FirmwareUpdateNVMResponse {
 	public constructor(
-		options: MessageDeserializationOptions,
+		options: FirmwareUpdateNVM_WriteResponseOptions & MessageBaseOptions,
 	) {
 		super(options);
-		this.overwritten = this.payload[0] !== 0;
+
+		this.overwritten = options.overwritten;
+	}
+
+	public static from(
+		raw: MessageRaw,
+		_ctx: MessageParsingContext,
+	): FirmwareUpdateNVM_WriteResponse {
+		const overwritten = raw.payload[0] !== 0;
+
+		return new FirmwareUpdateNVM_WriteResponse({
+			overwritten,
+		});
 	}
 
 	public readonly overwritten: boolean;

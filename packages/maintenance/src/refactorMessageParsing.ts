@@ -3,7 +3,6 @@ import {
 	type Node,
 	Project,
 	SyntaxKind,
-	type TypeReferenceNode,
 	VariableDeclarationKind,
 } from "ts-morph";
 
@@ -46,8 +45,8 @@ async function main() {
 
 			const name = cls.getName();
 			if (!name) return false;
-			if (name.endsWith("Base")) return false;
-			return name.endsWith("Request")
+			// if (name.endsWith("Base")) return false;
+			return name.includes("Request")
 				|| name.endsWith("Response")
 				|| name.endsWith("TransmitReport")
 				|| name.endsWith("StatusReport")
@@ -67,7 +66,7 @@ async function main() {
 			const types = ctorParam.getDescendantsOfKind(
 				SyntaxKind.TypeReference,
 			);
-			let otherType: TypeReferenceNode | undefined;
+			let otherType: string | undefined;
 			if (
 				types.length === 1
 				&& types[0].getText() === "MessageDeserializationOptions"
@@ -75,6 +74,12 @@ async function main() {
 				// No other type, need to implement the constructor too
 				// There is also no if statement
 				return [cls.getName(), ctor, undefined, undefined] as const;
+			} else if (
+				types.length === 1
+				&& types[0].getText() === "MessageOptions"
+			) {
+				// Actually MessageBaseOptions | MessageDeserializationOptions
+				otherType = "MessageBaseOptions";
 			} else if (
 				types.length === 2
 				&& types.some((type) =>
@@ -85,7 +90,7 @@ async function main() {
 				otherType = types.find(
 					(type) =>
 						type.getText() !== "MessageDeserializationOptions",
-				)!;
+				)?.getText();
 			} else if (
 				types.length === 3
 				&& types.some((type) =>
@@ -98,7 +103,7 @@ async function main() {
 					(type) =>
 						type.getText() !== "MessageDeserializationOptions"
 						&& type.getText() !== "MessageBaseOptions",
-				)!;
+				)?.getText();
 			} else {
 				return;
 			}
@@ -189,9 +194,13 @@ async function main() {
 
 		for (const [clsName, ctor, otherType, ifStatement] of ctors) {
 			// Update the constructor signature
-			if (otherType) {
+			if (otherType === "MessageBaseOptions") {
 				ctor.getParameters()[0].setType(
-					otherType.getText() + " & MessageBaseOptions",
+					"MessageBaseOptions",
+				);
+			} else if (otherType) {
+				ctor.getParameters()[0].setType(
+					otherType + " & MessageBaseOptions",
 				);
 			} else {
 				ctor.getParameters()[0].setType(
