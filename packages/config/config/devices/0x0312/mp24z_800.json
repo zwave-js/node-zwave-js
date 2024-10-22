@@ -43,9 +43,9 @@
 			"#": "6",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-    {
+		{
 			"#": "7",
 			"$import": "templates/minoston_template.json#led_indicator_brightness"
-    }
+		}
 	]
 }
