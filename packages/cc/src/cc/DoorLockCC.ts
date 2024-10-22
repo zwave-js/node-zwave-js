@@ -847,7 +847,7 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 	): DoorLockCCOperationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -1310,7 +1310,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 	): DoorLockCCConfigurationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

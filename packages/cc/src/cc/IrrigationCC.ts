@@ -1650,7 +1650,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	): IrrigationCCSystemConfigSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2036,7 +2036,7 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 	): IrrigationCCValveInfoGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2100,7 +2100,7 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 	): IrrigationCCValveConfigSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2359,7 +2359,7 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 	): IrrigationCCValveConfigGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2411,7 +2411,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
 	): IrrigationCCValveRun {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2473,7 +2473,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 	): IrrigationCCValveTableSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2610,7 +2610,7 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 	): IrrigationCCValveTableGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2663,7 +2663,7 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 	): IrrigationCCValveTableRun {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2716,7 +2716,7 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 	): IrrigationCCSystemShutoff {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

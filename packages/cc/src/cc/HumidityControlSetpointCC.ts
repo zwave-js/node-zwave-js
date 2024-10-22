@@ -538,7 +538,7 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	): HumidityControlSetpointCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -705,7 +705,7 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 	): HumidityControlSetpointCCGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -875,7 +875,7 @@ export class HumidityControlSetpointCCScaleSupportedGet
 	): HumidityControlSetpointCCScaleSupportedGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -1022,7 +1022,7 @@ export class HumidityControlSetpointCCCapabilitiesGet
 	): HumidityControlSetpointCCCapabilitiesGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

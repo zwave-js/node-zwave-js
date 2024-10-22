@@ -621,7 +621,7 @@ export class FirmwareUpdateMetaDataCCRequestGet
 	): FirmwareUpdateMetaDataCCRequestGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -761,7 +761,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	): FirmwareUpdateMetaDataCCReport {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -986,7 +986,7 @@ export class FirmwareUpdateMetaDataCCActivationSet
 	): FirmwareUpdateMetaDataCCActivationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -1108,7 +1108,7 @@ export class FirmwareUpdateMetaDataCCPrepareGet
 	): FirmwareUpdateMetaDataCCPrepareGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

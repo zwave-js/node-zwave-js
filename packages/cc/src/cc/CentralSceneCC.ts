@@ -579,7 +579,7 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 		_ctx: CCParsingContext,
 	): CentralSceneCCConfigurationSet {
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

@@ -232,7 +232,7 @@ export const consistentCCClasses = ESLintUtils.RuleCreator.withoutDocs({
 	): ${node.id!.name} {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			\`\${this.constructor.name}: deserialization not implemented\`,
+			\`\${this.name}: deserialization not implemented\`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 	}`,

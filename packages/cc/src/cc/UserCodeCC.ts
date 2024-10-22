@@ -2024,7 +2024,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	): UserCodeCCExtendedUserCodeSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2176,7 +2176,7 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	): UserCodeCCExtendedUserCodeGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

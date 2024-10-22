@@ -1296,7 +1296,7 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	): MultiChannelCCAggregatedMembersGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -1553,7 +1553,7 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 	): MultiChannelCCV1Get {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

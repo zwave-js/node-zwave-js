@@ -2035,7 +2035,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 	): ConfigurationCCBulkSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -2306,7 +2306,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 	): ConfigurationCCBulkGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

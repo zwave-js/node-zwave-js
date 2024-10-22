@@ -518,7 +518,7 @@ export class ProtectionCCSet extends ProtectionCC {
 	public static from(_raw: CCRaw, _ctx: CCParsingContext): ProtectionCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -797,7 +797,7 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	): ProtectionCCExclusiveControlSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -889,7 +889,7 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 	): ProtectionCCTimeoutSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

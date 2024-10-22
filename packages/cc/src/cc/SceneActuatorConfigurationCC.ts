@@ -377,7 +377,7 @@ export class SceneActuatorConfigurationCCSet
 	): SceneActuatorConfigurationCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -545,7 +545,7 @@ export class SceneActuatorConfigurationCCGet
 	): SceneActuatorConfigurationCCGet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

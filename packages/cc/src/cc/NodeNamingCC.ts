@@ -287,7 +287,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	): NodeNamingAndLocationCCNameSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 
@@ -398,7 +398,7 @@ export class NodeNamingAndLocationCCLocationSet
 	): NodeNamingAndLocationCCLocationSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

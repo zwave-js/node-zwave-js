@@ -199,7 +199,7 @@ export class LockCCSet extends LockCC {
 	public static from(_raw: CCRaw, _ctx: CCParsingContext): LockCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 

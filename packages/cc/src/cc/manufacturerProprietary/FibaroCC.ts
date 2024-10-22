@@ -390,7 +390,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	): FibaroVenetianBlindCCSet {
 		// TODO: Deserialize payload
 		throw new ZWaveError(
-			`${this.constructor.name}: deserialization not implemented`,
+			`${this.name}: deserialization not implemented`,
 			ZWaveErrorCodes.Deserialization_NotImplemented,
 		);
 	}
